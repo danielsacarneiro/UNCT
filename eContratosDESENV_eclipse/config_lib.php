@@ -1,17 +1,17 @@
 <?php
 function getPastaRoot(){
-    $aplicacao = "eContratos";
+    $aplicacao = "UNCT/eContratos";
     $ambiente = "";
     $arquivo = 'PROD'; 
     if (!file_exists($arquivo)) {
-        $aplicacao.= "DESENV";
+        $aplicacao.= "DESENV_eclipse";
     } 
     
     $path = $_SERVER['DOCUMENT_ROOT'];      
     $path .= "/wordpress/";
     define('caminho_wordpress', $path);
     
-    $path .= "$aplicacao";
+    $path .= $aplicacao;
     //include_once($path);
     
     return $path;

@@ -143,10 +143,10 @@
     function isPastaRaiz(){
         $retorno = false;
         
-        $pastaRaiz = "/wordpress";        
+        $pastaRaiz = "/wordpress/UNCT";        
         $nmPasta = getNomePastaArquivoPHP();
         
-        //echo $nmPasta;
+        //echo "$nmPasta<br>";
         $indice = getIndiceBarraOuPonto($nmPasta);        
         $nmPasta = substr($nmPasta, 0, $indice);                
         //echo "|$nmPasta";
