@@ -1,4 +1,5 @@
-select * from admfin.gfe_saldo_pagto_unificado
+select ct_contratada from contrato where ct_exercicio = 2017
+
 order by
 CTBEXERC_DT_ANO, UG_CD,  GFUGESTAO_CD, GFEPGMUNIF_SQ_DOC, TIPODOCCTB_CD;
 

@@ -315,7 +315,7 @@ function carregaGestorPessoa(){
         $comboLicom = $combo->getHtmlComObrigatorio(vocontrato::$nmAtrInLicomContrato,voContrato::$nmAtrInLicomContrato, $licom, false, false);
         ?>        
 		<TR>
-            <TH class="campoformulario" nowrap>LICOM:</TH>
+            <TH class="campoformulario" nowrap>LICON:</TH>
             <TD class="campoformulario" colspan="3"><?php echo utf8_decode($comboLicom);?></TD>
         </TR>
 		<TR>

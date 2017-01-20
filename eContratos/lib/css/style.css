@@ -1,0 +1,44 @@
+/*  Layout   */
+body{background-color:#CCC;margin-left:0px;margin-top:0px;margin-right:0px;margin-bottom:0px;width:100%;height:100%}
+div#central{width:759px;margin-top:5px;margin-left:13%}
+div#central { width:759px; margin-top:5px; margin-left:13%; }
+div#header { background-image:url(../imagens/bg_central.jpg); margin-bottom:0px; }
+div#conteudo { background-image:url(../imagens/bg_central.jpg); background-repeat:repeat-y; 
+margin-top:0px; padding-top:12px;  }
+.div_titlefield { margin-top: 4px;margin-left:145px;float:left;clear:both;}
+.div_formfield { margin-top: 4px;margin-left:70px;padding-left:0px;width:65px; float:left; height:25px;}
+.div_textfield { margin-top: 4px;margin-left:2px;float:left;height:25px; vertical-align:bottom}
+.div_formselect { margin-top: 4px;margin-left:70px;padding-left:30px;width:65px; float:left; height:25px;}
+.termos_contrato{margin-top: 4px;margin-left:30px;}
+.clearboth {clear:both;}
+.tabela{border:solid 1px; color:#ebebebe; margin-top:20px;};
+
+/*   Fontes de Texto         */
+.titulo1 {color : #000000; font-size : 11px; vertical-align:middle;
+font-family : Verdana, Arial, Helvetica, sans-serif; font-weight: bold;text-decoration:none}
+.titulo1-desativado {color : #d5d5d5; font-size : 11px; vertical-align:middle;
+font-family : Verdana, Arial, Helvetica, sans-serif; font-weight: bold;text-decoration:none}
+.texto1 {font-family: Verdana;font-size: 11px;font-weight: normal;
+color: #000;text-decoration: none; }
+.texto2 {font-family:Verdana,sans-serif;font-size:10px;color: #666;}
+.texto2_disponivel{font-family:Verdana,sans-serif;font-size:10px;color: #063;}
+.texto2_indisponivel{font-family:Verdana,sans-serif;font-size:10px;color: #cc0000;}
+.titulo4 {color : #cc0000; font-size : 13px; 
+font-family : Verdana, Arial, Helvetica, sans-serif;font-weight: bold;}
+
+/*  Campos de Formulários   */
+.textfield_1{border: 1px solid #999999; font-family: Verdana; font-size: 11px;
+color: #000000;text-decoration: none; background-color:#F4F4F4;}	
+.botao_enviar1{font-family:Tahoma; font-size:12px; width:80px;height:25px;
+color: #000; background-color: #D5D5D5; margin-right:20px;}
+.forca_senha{float:left; }
+.forca_senha_barra{background: url(../imagens/forca_senha_barra.gif) no-repeat 0px 0px;float:left;margin: 2px 0px; width: 102px;height:11px; margin-left:3px; }
+.textfield_erro{ border: solid 1px #CC6666;background-color: #FFF2F2;}
+.textfield_ok{ border: solid 1px #6ba24c;background-color:#F4F4F4;}
+
+/*  Imagens   */
+.icone_ajuda{margin-left:4px;vertical-align: middle;border:none;}
+
+/* CSS pop up hint box */
+#hintbox{position:absolute;top:0;background-color:lightyellow;width:150px;padding:3px;border:1px solid black;
+font-family:Verdana;font-size: 11px;line-height:18px;z-index:100;visibility: hidden;}

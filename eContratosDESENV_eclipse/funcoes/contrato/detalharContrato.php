@@ -280,7 +280,7 @@ function confirmar() {
         <TD class="campoformulario" colspan="3"><INPUT type="text" id="<?=vocontrato::$nmAtrTipoAutorizacaoContrato?>" name="<?=vocontrato::$nmAtrTipoAutorizacaoContrato?>"  value="<?php echo($tpAutorizacao);?>"  class="camporeadonly" size="10" <?=$readonly?>></TD>
     </TR>
 	<TR>
-        <TH class="campoformulario" nowrap>LICOM:</TH>
+        <TH class="campoformulario" nowrap>LICON:</TH>
         <TD class="campoformulario" colspan="3"><INPUT type="text" id="<?=vocontrato::$nmAtrInLicomContrato?>" name="<?=vocontrato::$nmAtrInLicomContrato?>"  value="<?php if($licom=="S")echo("SIM"); else echo("NÃO");?>"  class="camporeadonly" size="10" <?=$readonly?>></TD>
     </TR>
 	<TR>
