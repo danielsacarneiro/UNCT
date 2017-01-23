@@ -38,6 +38,7 @@ include_once(caminho_lib."voentidade.php");
 		static $nmAtrDocContratadaContrato =  	"ct_doc_contratada";
 		static $nmAtrNumEmpenhoContrato =  	"ct_num_empenho";
 		static $nmAtrTipoAutorizacaoContrato =  	"ct_tp_autorizacao";
+		static $nmAtrCdAutorizacaoContrato =  	"ct_cd_autorizacao";
 		static $nmAtrInLicomContrato =  	"ct_in_licom";
         static $nmAtrInImportacaoContrato =  	"ct_in_importacao";
 		static $nmAtrObservacaoContrato =  	"ct_observacao";
@@ -70,6 +71,7 @@ include_once(caminho_lib."voentidade.php");
         var $dataPublicacao; 
 		var $empenho ;			
 		var $tpAutorizacao ;
+		var $cdAutorizacao ;
 		var $licom ;
         var $importacao ;
 		var $obs ;
@@ -92,7 +94,7 @@ include_once(caminho_lib."voentidade.php");
     public function getNmClassProcesso(){
         return  "dbcontrato";
     }      
-    
+        	
     function getAtributosFilho(){
         $retorno = array(
             vocontrato::$nmAtrSqContrato,
@@ -119,6 +121,7 @@ include_once(caminho_lib."voentidade.php");
             vocontrato::$nmAtrDocContratadaContrato,
             vocontrato::$nmAtrNumEmpenhoContrato,
             vocontrato::$nmAtrTipoAutorizacaoContrato,
+        	vocontrato::$nmAtrCdAutorizacaoContrato,
             vocontrato::$nmAtrInLicomContrato,
             vocontrato::$nmAtrInImportacaoContrato,
             vocontrato::$nmAtrObservacaoContrato,
@@ -184,6 +187,7 @@ include_once(caminho_lib."voentidade.php");
         $this->dataPublicacao = $registrobanco[vocontrato::$nmAtrDataPublicacaoContrato];
 		$this->empenho = $registrobanco[vocontrato::$nmAtrNumEmpenhoContrato];		
 		$this->tpAutorizacao = $registrobanco[vocontrato::$nmAtrTipoAutorizacaoContrato];
+		$this->cdAutorizacao = $registrobanco[vocontrato::$nmAtrCdAutorizacaoContrato];
 		$this->licom = $registrobanco[vocontrato::$nmAtrInLicomContrato];
         $this->importacao = $registrobanco[vocontrato::$nmAtrInImportacaoContrato];
 		$this->obs = $registrobanco[vocontrato::$nmAtrObservacaoContrato];
@@ -228,6 +232,7 @@ include_once(caminho_lib."voentidade.php");
         $this->dtProposta = @$_POST[vocontrato::$nmAtrDtProposta];
 		$this->empenho = @$_POST[vocontrato::$nmAtrNumEmpenhoContrato];		
 		$this->tpAutorizacao = @$_POST[vocontrato::$nmAtrTipoAutorizacaoContrato];
+		$this->cdAutorizacao = @$_POST[vocontrato::$nmAtrCdAutorizacaoContrato];
 		$this->licom = @$_POST[vocontrato::$nmAtrInLicomContrato];
 		$this->obs = @$_POST[vocontrato::$nmAtrObservacaoContrato];
         
@@ -265,6 +270,10 @@ include_once(caminho_lib."voentidade.php");
         return $retorno;        
     }
         
+    function getValorChavePrimaria(){    	
+    	return $this->sq;
+    }
+    
 	function toString(){
 		
 		$retorno = $this->sq . "";				

@@ -1,5 +1,5 @@
 <?php
-include_once("dominio.class.php");
+include_once(caminho_util. "dominio.class.php");
 
   Class dominioEspeciesContrato extends dominio{
     

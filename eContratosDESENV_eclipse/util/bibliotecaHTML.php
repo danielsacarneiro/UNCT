@@ -323,11 +323,34 @@ include_once(caminho_wordpress. "wp-config.php");
         return $html;        
     }
     
-    function getSelectGestor(){        
+    function getSelectGestor(){
         $dbgestor = new dbgestor();
         $registros = $dbgestor->consultarSelect();
         
         $select = new select($registros);
         
     }
+    
+    function putObjetoSessao($ID, $voEntidade){
+    	session_start();
+    	$_SESSION[$ID] = $voEntidade;   
+    }
+    
+    function getObjetoSessao($ID){
+    	session_start();
+    	$objeto = $_SESSION[$ID];
+    	
+    	$isUsarSessao = @$_POST["utilizarSessao"] != "N";
+    	
+    	if(!$isUsarSessao)
+    		$objeto = null;    	
+    	
+    	return $objeto;
+    }
+
+    function removeObjetoSessao($ID){
+    	session_start();
+    	unset($_SESSION[$ID]);
+    }
+    
 ?>

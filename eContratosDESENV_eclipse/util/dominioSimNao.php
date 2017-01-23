@@ -2,18 +2,23 @@
 include_once("dominio.class.php");
 
   Class dominioSimNao extends dominio{
+  	static $DS_SIM  = "SIM";
+  	static $DS_NAO  = "NÃO";  
+  	
+  	static $CD_SIM  = "S";
+  	static $CD_NAO  = "N";  	 
 
 // ...............................................................
 // Construtor
 	function __construct () {        
 		$this->colecao = array(				   
-				   constantes::$CD_SIM => constantes::$DS_SIM,
-                   constantes::$CD_NAO => constantes::$DS_NAO
+				   self::$CD_SIM => self::$DS_SIM,
+				   self::$CD_NAO => self::$DS_NAO
 				   );        
 	}
 
 // ...............................................................
-// FunÃ§Ãµes ( Propriedades e mÃ©todos da classe )
+// Funções( Propriedades e metodos da classe )
 	
 }
 ?>

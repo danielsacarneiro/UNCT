@@ -1,4 +1,6 @@
 <?php  
+include_once("config_lib.php");
+include_once(caminho_vos."dbcontrato.php");
    
 function teste(){
     $dbteste = new dbcontrato(null);
@@ -28,5 +30,10 @@ function testarNomePasta(){
 }
 
 
-testarNomePasta();
+//testarNomePasta();
+
+$dbteste = new dbcontrato();
+echo $dbteste->getCdAutorizacao("ge");
+
+
 ?>

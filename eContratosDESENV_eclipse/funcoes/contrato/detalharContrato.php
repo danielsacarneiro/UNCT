@@ -1,8 +1,8 @@
 <?php
 include_once("../../config_lib.php");
 include(caminho_util."bibliotecaHTML.php");
-include_once(caminho_util."dominioTipoContrato.php");
-include_once(caminho_util."dominioEspeciesContrato.php");
+include_once("dominioTipoContrato.php");
+include_once("dominioEspeciesContrato.php");
 include_once(caminho_vos."dbcontrato.php");
 
 //inicia os parametros
@@ -32,6 +32,8 @@ $readonly = "readonly";
 	$colecao = $dbprocesso->limpaResultado();
 	$colecao = $dbprocesso->consultarContratoPorChave($voContrato, $isHistorico);	
 	$voContrato->getContratoBanco($colecao[0]);   
+	
+	putObjetoSessao($voContrato->getNmTabela(), $voContrato);
 
 	$nmGestor  = $voContrato->gestor;
 	$nmGestorPessoa  = $voContrato->nmGestorPessoa;
@@ -71,7 +73,6 @@ setCabecalho($titulo);
 
 ?>
 <!DOCTYPE html>
-<HTML lang="pt-BR">
 
 <HEAD>    
 <?=setTituloPagina(null)?>
@@ -276,8 +277,15 @@ function confirmar() {
         <TD class="campoformulario" colspan="3"><INPUT type="text" id="<?=vocontrato::$nmAtrNumEmpenhoContrato?>" name="<?=vocontrato::$nmAtrNumEmpenhoContrato?>"  value="<?php echo($empenho);?>"  class="camporeadonly" size="20" <?=$readonly?>></TD>
     </TR>
 	<TR>
+				<?php
+			include_once("dominioAutorizacao.php");
+			$autorizacao = new dominioAutorizacao();
+			$combo = new select($autorizacao->colecao);						
+			?>
+	
         <TH class="campoformulario" nowrap>Autorizacao Previa:</TH>
-        <TD class="campoformulario" colspan="3"><INPUT type="text" id="<?=vocontrato::$nmAtrTipoAutorizacaoContrato?>" name="<?=vocontrato::$nmAtrTipoAutorizacaoContrato?>"  value="<?php echo($tpAutorizacao);?>"  class="camporeadonly" size="10" <?=$readonly?>></TD>
+        <TD class="campoformulario" colspan="3"><?php echo $combo->getHtmlCombo(vocontrato::$nmAtrCdAutorizacaoContrato,vocontrato::$nmAtrCdAutorizacaoContrato, $voContrato->cdAutorizacao, true, "camporeadonly", true, " disabled");?>
+        <INPUT type="text" id="<?=vocontrato::$nmAtrTipoAutorizacaoContrato?>" name="<?=vocontrato::$nmAtrTipoAutorizacaoContrato?>"  value="<?php echo($tpAutorizacao);?>"  class="camporeadonly" size="10" <?=$readonly?>></TD>
     </TR>
 	<TR>
         <TH class="campoformulario" nowrap>LICON:</TH>

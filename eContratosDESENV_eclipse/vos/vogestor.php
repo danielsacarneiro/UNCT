@@ -60,6 +60,10 @@ include_once(caminho_lib."voentidade.php");
         //usuario de ultima manutencao sempre sera o id_user
         $this->cdUsuarioUltAlteracao = id_user;
 	}
+	
+	function getValorChavePrimaria(){
+		return $this->cd;
+	}	
                 
 	function toString(){		
 		$retorno.= $this->cd . ",";

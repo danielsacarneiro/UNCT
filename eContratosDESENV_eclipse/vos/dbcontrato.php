@@ -1,6 +1,6 @@
 <?php
 include_once(caminho_lib. "dbprocesso.obj.php");
-include_once(caminho_util. "dominioEspeciesContrato.php");
+include_once(caminho_funcoes . "/contrato/dominioEspeciesContrato.php");
 include_once (caminho_vos. "vocontrato.php");
 include_once (caminho_vos. "vousuario.php");
 include_once (caminho_filtros."filtroManterContrato.php");
@@ -27,78 +27,6 @@ include_once (caminho_util."bibliotecaFuncoesPrincipal.php");
         }        
     }
     	
-	/*function incluirContrato($voContrato){
-        $query = $this->incluirContratoSQL($voContrato);
-		//echo $query;		
-		$retorno = $this->cDb->atualizar($query);
-	    return $retorno;		
-	}	
-
-	function alterarContratoPorCima($voContrato){
-        $query = $this->alterarContratoSQL($voContrato);
-		//echo $query;		
-		$retorno = $this->cDb->atualizar($query);
-	    return $retorno;		
-	}
-    
-	function alterarContrato($voContrato){        
-        //Start transaction         
-        $this->cDb->retiraAutoCommit();        
-        try{
-            $this->validaAlteracao($voContrato);
-            $this->incluirHistorico($voContrato);
-            
-            //altera o registro sendo este o mais vigente
-            $this->alterarContratoPorCima($voContrato);              
-            //End transaction           
-            $this->cDb->commit();
-        }catch(Exception $e){
-            $this->cDb->rollback();
-            throw new Exception($e->getMessage());
-        }        
-                
-	  return $retorno;		
-	}
-    
-	function excluirContrato($voContrato){
-        //echo $voContrato->sqHist;
-        $isHistorico = $voContrato->sqHist != null;
-        if($isHistorico)
-            $retorno = $this->excluirContratoEmDefinitivo($voContrato, true);
-        else
-            $retorno = $this->excluirContratoHistoriando($voContrato);
-
-	    return $retorno;		
-	}	    
-
-	function excluirContratoEmDefinitivo($voContrato, $isHistorico){
-        $query = $this->excluirContratoSQL($voContrato, $isHistorico);
-		//echo $query;		
-		$retorno = $this->cDb->atualizar($query);
-	    return $retorno;		
-	}	    
-
-	function excluirContratoHistoriando($voContrato){        
-        //Start transaction         
-        $this->cDb->retiraAutoCommit();        
-        try{
-            $this->validaAlteracao($voContrato);
-            $this->incluirHistorico($voContrato);
-            
-            $this->excluirContratoEmDefinitivo($voContrato, false);              
-            //End transaction           
-            $this->cDb->commit();
-        }catch(Exception $e){
-            $this->cDb->rollback();
-            throw new Exception($e->getMessage());
-        }        
-                
-	  return $retorno;		
-	}	
-        
-	function consultarContrato($query, $isPorChave){        
-        return $this->consultarEntidade($query, $isTrazerApenasUmRegistro);				
-	}*/
 
 	function consultarContratoPorChave($voContrato, $isHistorico){
         $nmTabela = $voContrato->getNmTabelaEntidade($isHistorico);
@@ -145,30 +73,6 @@ include_once (caminho_util."bibliotecaFuncoesPrincipal.php");
 		//echo $query;
         return $this->consultarEntidade($query, false);
 	}
-        
-    /*function excluirContratoSQL($voContrato, $isHistorico){
-        $nmTabela = $voContrato->getNmTabelaEntidade($isHistorico);
-        
-		$query = " DELETE FROM " . $nmTabela . " \n";
-        $query .= "\n WHERE ";
-        //chave primaria
-        $query.= $voContrato->getValoresWhereSQLChave($isHistorico);
-
-	    return $query;        
-    }
-
-    function alterarContratoSQL($voContrato){        
-		$query = " UPDATE " . $voContrato->getNmTabela() . " \n";
-		$query .= " SET ";
-        $query .= $this->getSQLValuesUpdate($voContrato);
-        $query .= "\n WHERE ";
-        //chave primaria
-        //$query.= vocontrato::$nmAtrSqContrato . " = " . $voContrato->sq;
-        
-        $query.= $voContrato->getValoresWhereSQLChave(false);
-
-	    return $query;        
-    }*/
     
     function incluirSQL($voContrato){
         $atributosInsert = $voContrato->getTodosAtributos();
@@ -227,6 +131,7 @@ include_once (caminho_util."bibliotecaFuncoesPrincipal.php");
 		$retorno.= $this-> getVarComoString($voContrato->docContratada) . ",";
 		$retorno.= $this-> getVarComoString($voContrato->empenho) . ",";
 		$retorno.= $this-> getVarComoString($voContrato->tpAutorizacao) . ",";
+		$retorno.= $this-> getVarComoNumero($voContrato->cdAutorizacao) . ",";
         $retorno.= $this-> getVarComoString($voContrato->licom) . ",";
 		$retorno.= $this-> getVarComoString($voContrato->obs) . ",";		
 		$retorno.= $this-> getDecimalSQL($voContrato->vlGlobal) . ",";
@@ -322,6 +227,11 @@ include_once (caminho_util."bibliotecaFuncoesPrincipal.php");
             $sqlConector = ",";
         }
 
+        if($voContrato->cdAutorizacao != null){
+        	$retorno.= $sqlConector . vocontrato::$nmAtrCdAutorizacaoContrato . " = " . $this->getVarComoNumero($voContrato->cdAutorizacao);
+        	$sqlConector = ",";
+        }
+        
         if($voContrato->licom != null){
             $retorno.= $sqlConector . vocontrato::$nmAtrInLicomContrato . " = " . $this->getVarComoString($voContrato->licom);
             $sqlConector = ",";
@@ -491,6 +401,7 @@ include_once (caminho_util."bibliotecaFuncoesPrincipal.php");
 		$retorno.= $this-> getVarComoString($docContratada) . ",";
 		$retorno.= $this-> getVarComoString($sqEmpenho) . ",";
 		$retorno.= $this-> getVarComoString($tpAutorizacao) . ",";
+		$retorno.= $this-> getVarComoNumero($this->getCdAutorizacao($tpAutorizacao)) . ",";		
         $retorno.= $this-> getVarComoString($inLicom) . ",";
         $retorno.= $importação . ",";
 		$retorno.= $this-> getVarComoString($obs) . ",";		
@@ -501,6 +412,30 @@ include_once (caminho_util."bibliotecaFuncoesPrincipal.php");
 		return $retorno;				
 	}
            
+	function getCdAutorizacao($tipoAutorizacao){
+		include_once(caminho_funcoes."contrato/dominioAutorizacao.php");
+	
+		$retorno = dominioAutorizacao::$CD_AUTORIZ_NENHUM;
+		
+		$isPGE = mb_stripos($tipoAutorizacao, "pge") !== false;		
+		$isSAD = mb_stripos($tipoAutorizacao, "sad") !== false;		
+		$isGOV = mb_stripos($tipoAutorizacao, "gov") !== false;
+
+		
+		if($isPGE && $isSAD && $isGOV)
+			$retorno = dominioAutorizacao::$CD_AUTORIZ_SAD_PGE_GOV;
+		else if($isPGE && $isSAD)
+			$retorno = dominioAutorizacao::$CD_AUTORIZ_SAD_PGE;
+		else if($isPGE)
+			$retorno = dominioAutorizacao::$CD_AUTORIZ_PGE;
+		else if($isSAD)
+			$retorno = dominioAutorizacao::$CD_AUTORIZ_SAD;
+					
+		
+		return $retorno;
+		
+	}
+    
     function getCdEspecieContrato($param){
                         
         $retorno = null;

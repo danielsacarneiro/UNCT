@@ -2,7 +2,7 @@
 include_once("../../config_lib.php");
 include_once(caminho_util."bibliotecaHTML.php");
 include_once(caminho_util."constantes.class.php");
-include_once(caminho_util. "dominioTipoContrato.php");
+include_once("dominioTipoContrato.php");
 include_once(caminho_util. "select.php");
 include_once(caminho_vos . "dbcontrato.php");
 
@@ -220,7 +220,7 @@ function alterar() {
             </TR>					
             <TR>
 			<?php
-			include_once(caminho_util."dominioEspeciesContrato.php");
+			include_once("dominioEspeciesContrato.php");
 			$especiesContrato = new dominioEspeciesContrato();
 			$combo = new select($especiesContrato->colecao);						
 			?>
@@ -230,7 +230,7 @@ function alterar() {
                 </TD>												                
                 <TH class="campoformulario" nowrap>Modalidade:</TH>
 			<?php
-			include_once(caminho_util."dominioModalidadeLicitacao.php");
+			include_once("dominioModalidadeLicitacao.php");
 			$modalidades = new dominioModalidadeLicitacao();
 			$combo = new select($modalidades->colecao);						
 			?>
@@ -393,7 +393,9 @@ function alterar() {
                 if (is_array($colecao))
                         $tamanho = sizeof($colecao);
                 else 
-                        $tamanho = 0;								 
+                        $tamanho = 0;	
+                
+                $voSessao = getObjetoSessao($voContrato->getNmTabela());
                             
                 for ($i=0;$i<$tamanho;$i++) {
                         $voAtual = new vocontrato();
@@ -441,12 +443,18 @@ function alterar() {
                         }                        
                         $tagCelula = "class='$classColuna' " . $mensagemAlerta;
                         
-                        $tipo = $dominioTipoContrato->getDescricao($colecao[$i]["ct_tipo"]);                        
+                        $tipo = $dominioTipoContrato->getDescricao($colecao[$i]["ct_tipo"]); 
+                        
+                        $isSelecionado = $voAtual->isIgualChavePrimaria($voSessao);                        
+                        if($isSelecionado)
+                        	$checked = "checked";
+                        else
+                        	$checked = "";
                         
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados" <?=$msgAlertaSq?>>
-					<INPUT type="radio" id="rdb_consulta" name="rdb_consulta" value="<?php echo($chave);?>">
+					<INPUT type="radio" id="rdb_consulta" name="rdb_consulta" value="<?php echo($chave);?>" <?php echo $checked;?>>
                     </TD>
                     <TD class="tabeladadosalinhadodireita"><?php echo $colecao[$i]["ct_exercicio"];?></TD>
                     <TD class="tabeladadosalinhadodireita" ><?php echo complementarCharAEsquerda($colecao[$i]["ct_numero"], "0", 3)?></TD>

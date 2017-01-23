@@ -30,6 +30,7 @@ if($isInclusao){
 	$dbprocesso = new dbgestor(null);					
 	$colecao = $dbprocesso->consultarPorChave($vo, $isHistorico);	
 	$vo->getDadosBanco($colecao[0]);
+	putObjetoSessao($vo->getNmTabela(), $vo);
 
     $nmFuncao = "ALTERAR ";
 }

@@ -14,12 +14,6 @@
 
     static $DS_TIPO_CONTRATO  = "C-SAFI";
     static $DS_TIPO_CONVENIO  = "CV-SAFI";
-
-    static $CD_SIM  = "S";
-    static $CD_NAO  = "N";
-
-    static $DS_SIM  = "SIM";
-    static $DS_NAO  = "NÃO";
     
     static $CD_FUNCAO_EXCLUIR = "E";
     static $CD_FUNCAO_INCLUIR = "I";
@@ -29,6 +23,6 @@
     static $cd_usuario_admin = "administrator";
     static $cd_usuario_colaborador = "contributor";
     static $cd_usuario_visitante = "subscriber";    
-    	
+    static $TAMANHO_CODIGOS = 5;    	
 }
 ?>
