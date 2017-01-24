@@ -30,6 +30,7 @@ if($isInclusao){
 	$dbprocesso = new dbgestorpessoa(null);					
 	$colecao = $dbprocesso->consultarPorChave($vo, $isHistorico);	
 	$vo->getDadosBanco($colecao[0]);    
+	putObjetoSessao($vo->getNmTabela(), $vo);
 
     $nmFuncao = "ALTERAR ";
 }
@@ -93,10 +94,12 @@ function confirmar() {
             <DIV id="div_filtro" class="div_filtro">
             <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
             <TBODY>
-			<TR>
-                <TH class="campoformulario" nowrap width=1%>Código:</TH>
-                <TD class="campoformulario" colspan=3><INPUT type="text" value="<?php echo(complementarCharAEsquerda($vo->cd, "0", TAMANHO_CODIGOS));?>"  class="camporeadonlyalinhadodireita" size="5" readonly></TD>
-            </TR>                            
+	        <?php if(!$isInclusao){?>
+	        	<TR>
+	        	<TH class="campoformulario" nowrap width=1%>Código:</TH>
+	        	<TD class="campoformulario" colspan=3><INPUT type="text" value="<?php echo(complementarCharAEsquerda($vo->cd, "0", TAMANHO_CODIGOS));?>"  class="camporeadonlyalinhadodireita" size="5" readonly></TD>
+	        	</TR>        	 
+	        <?php }?>            
             <TR>
                 <TH class="campoformulario" nowrap>Órgão Gestor:</TH>
                 <TD class="campoformulario" colspan="3">

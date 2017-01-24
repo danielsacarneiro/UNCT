@@ -26,6 +26,8 @@ $readonly = "readonly";
 $dbprocesso = new dbgestorpessoa();					
 $colecao = $dbprocesso->consultarPorChave($vo, $isHistorico);	
 $vo->getDadosBanco($colecao[0]);
+putObjetoSessao($vo->getNmTabela(), $vo);
+
 $descricao = $colecao[0][vogestor::$nmAtrDescricao];
 $nome  = $vo->nome;
 $doc  = $vo->doc;

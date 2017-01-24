@@ -87,6 +87,10 @@ include_once(caminho_lib."voentidade.php");
         $retorno.= $this->nome . ",";		
 		return $retorno;		
 	}   
+	
+	function getValorChavePrimaria(){
+		return $this->cd;
+	}
 
 }
 ?>
