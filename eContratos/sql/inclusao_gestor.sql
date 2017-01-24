@@ -1,7 +1,23 @@
-select ct_contratada from contrato where ct_exercicio = 2017
+select ct_exercicio, ct_numero,ct_contratada from contrato 
+where ct_contratada like '% – %'
+group by ct_exercicio, ct_numero,ct_contratada ;
 
-order by
-CTBEXERC_DT_ANO, UG_CD,  GFUGESTAO_CD, GFEPGMUNIF_SQ_DOC, TIPODOCCTB_CD;
+select ct_tp_autorizacao from contrato
+group by ct_tp_autorizacao
+
+SELECT ASCII('–');
+SELECT ASCII('”');
+SELECT ASCII('"');
+
+
+select replace('S&B – LOCAÇÕES DE VEÍCULOS LTDA','–','-') as teste
+
+SELECT CHAR();
+
+
+select ct_exercicio, ct_numero,ct_objeto from contrato 
+where ct_exercicio = 2016 and ct_numero = 13
+group by ct_exercicio, ct_numero,ct_objeto ;
 
 
 BEGIN 

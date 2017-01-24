@@ -124,6 +124,24 @@
     static function getNmTabelaSequencial(){
         return static::getNmTabela() . voentidade::$nmTabelaSufixoSequencial;        
     }
+    
+    function isIgualChavePrimaria($voentidade){
+    	$chaveEntidade = "";
+    	if($voentidade != null)
+    		$chaveEntidade = $voentidade->getValorChavePrimaria();
+    	
+    		/*echo "chave sessao:" . $chaveEntidade . "<br>";
+    		echo "chave atual:" . $this->getValorChavePrimaria() . "<br>";*/
+    		
+    	    	
+    	return $this->getValorChavePrimaria() == $chaveEntidade; 
+    	
+    }    
+    
+    function getValorChaveHTML(){
+    	//pega do filho
+    	return $this->getValorChavePrimaria();
+    }    
             
 }
 ?>

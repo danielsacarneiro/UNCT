@@ -47,11 +47,14 @@ try{
     $classMensagem = "campomensagemverde";
     $msg = "OPERACÃO $nmFuncao REALIZADA COM SUCESSO";
     
+    putObjetoSessao($vo->getNmTabela(), $vo);
+    
 }catch(Exception $e) {
     $msgErro = $e->getMessage();
     $classMensagem = "campomensagemvermelho";
     $msg = "OPERACAO $nmFuncao FALHOU.$msgErro";
 }
+
 
 ?>
 <!DOCTYPE html>

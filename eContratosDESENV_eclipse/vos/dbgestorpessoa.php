@@ -30,8 +30,8 @@ include_once (caminho_util."bibliotecaFuncoesPrincipal.php");
         $query.= "\n TAB2 ON ";
         $query.= "TAB2.".vousuario::$nmAtrID. "=".vogestorpessoa::getNmTabela() . "." . vogestorpessoa::$nmAtrCdUsuarioUltAlteracao;
         $query.= " WHERE ";
-        $query.= $vo->getValoresWhereSQLChave($isHistorico);        
-        		
+        $query.= $vo->getValoresWhereSQLChave($isHistorico);        		
+        
 		//echo $query;
         return $this->consultarEntidade($query, true);
 	}

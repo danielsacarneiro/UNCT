@@ -149,9 +149,10 @@
         //echo "$nmPasta<br>";
         $indice = getIndiceBarraOuPonto($nmPasta);        
         $nmPasta = substr($nmPasta, 0, $indice);                
-        //echo "|$nmPasta";
+        //echo "|$nmPasta<br>";
+        //echo "|$pastaRaiz<br>";
         
-        if($pastaRaiz == $nmPasta)
+        if(strtoupper($pastaRaiz) == strtoupper($nmPasta))
             $retorno = true;        
                 
         return $retorno;

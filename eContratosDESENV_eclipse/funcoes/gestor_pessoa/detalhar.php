@@ -12,13 +12,8 @@ $vo = new vogestorpessoa();
 $chave = @$_GET["chave"];
 $array = explode("*",$chave);
 
-$vo->cd = $array[0];
-$vo->cdHistorico = $array[1];
-$isHistorico = ("S" == $vo->cdHistorico);    
-if($isHistorico){
-    $sqHist = $array[2];
-    $vo->sqHist = $sqHist;
-}
+$vo->getVOExplodeChave($chave);
+$isHistorico = ($vo->sqHist != null && $vo->sqHist != "");
 
 $readonly = "";
 $nmFuncao = "";
@@ -26,6 +21,8 @@ $readonly = "readonly";
 $dbprocesso = new dbgestorpessoa();					
 $colecao = $dbprocesso->consultarPorChave($vo, $isHistorico);	
 $vo->getDadosBanco($colecao[0]);
+putObjetoSessao($vo->getNmTabela(), $vo);
+
 $descricao = $colecao[0][vogestor::$nmAtrDescricao];
 $nome  = $vo->nome;
 $doc  = $vo->doc;

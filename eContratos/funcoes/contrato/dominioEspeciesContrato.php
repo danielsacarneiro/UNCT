@@ -1,0 +1,43 @@
+<?php
+include_once(caminho_util. "dominio.class.php");
+
+  Class dominioEspeciesContrato extends dominio{
+    
+// ...............................................................
+// Construtor
+	function __construct () {
+        		$this->colecao = array(
+				"01" => "Mater",
+                "02" => "Apostilamento",
+				"03" => "Termo Aditivo",
+                "04" => "Termo de Ajuste",
+                "05" => "Termo de Cessão de Uso",
+                "06" => "Termo de Rerratificação",
+                "07" => "Termo de Cooperação",
+                "08" => "Termo de Convalidação",
+                "09" => "Termo de Rescisão Amigável",
+                "10" => "Termo de Rescisão Unilateral",
+                "11" => "Termo de Rescisão Encerramento",
+				);
+	}
+    
+	function getDominioImportacaoPlanilha() {
+        //cooperacao e convalidacao seram considerados como MATER                
+        	$array = array(
+				"01" => "Mater*Convênio*Cooperação*Convalidação",
+                "02" => "Apostilamento*Apostuilamento",
+				"03" => "T.A",
+                "04" => "Ajuste",
+                "05" => "Cessão",                
+                "06" => "Rerratificação",
+                "09" => "Amigável",
+                "10" => "Unilateral",
+                "11" => "Encerramento"
+				);
+            
+            return $array;
+	}
+    
+	
+}
+?>

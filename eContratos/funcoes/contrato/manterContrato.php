@@ -1,8 +1,8 @@
 <?php
 include_once("../../config_lib.php");
 include_once(caminho_util."bibliotecaHTML.php");
-include_once(caminho_util."dominioTipoContrato.php");
-include_once(caminho_util."dominioEspeciesContrato.php");
+include_once("dominioTipoContrato.php");
+include_once("dominioEspeciesContrato.php");
 include_once(caminho_util."dominioSimNao.php");
 include_once(caminho_util."select.php");
 include_once(caminho_vos."vousuario.php");
@@ -41,6 +41,7 @@ if($isInclusao){
 	$colecao = $dbprocesso->limpaResultado();
 	$colecao = $dbprocesso->consultarContratoPorChave($voContrato, $isHistorico);	
 	$voContrato->getContratoBanco($colecao[0]);
+	putObjetoSessao($voContrato->getNmTabela(), $voContrato);
 
     $titulo = "ALTERAR CONTRATO";        
 }
@@ -307,8 +308,14 @@ function carregaGestorPessoa(){
             <TD class="campoformulario" colspan="3"><INPUT type="text" id="<?=vocontrato::$nmAtrNumEmpenhoContrato?>" name="<?=vocontrato::$nmAtrNumEmpenhoContrato?>"  value="<?php echo($empenho);?>"  class="camponaoobrigatorio" size="20" ></TD>
         </TR>
 		<TR>
+			<?php
+			include_once("dominioAutorizacao.php");
+			$autorizacao = new dominioAutorizacao();
+			$combo = new select($autorizacao->colecao);						
+			?>
             <TH class="campoformulario" nowrap>Autorização Prévia:</TH>
-            <TD class="campoformulario" colspan="3"><INPUT type="text" id="<?=vocontrato::$nmAtrTipoAutorizacaoContrato?>" name="<?=vocontrato::$nmAtrTipoAutorizacaoContrato?>"  value="<?php echo($tpAutorizacao);?>"  class="camponaoobrigatorio" size="10" ></TD>
+            <TD class="campoformulario" colspan="3"><?php echo $combo->getHtmlSelect(vocontrato::$nmAtrCdAutorizacaoContrato,vocontrato::$nmAtrCdAutorizacaoContrato, $voContrato->cdAutorizacao, true, "camponaoobrigatorio", true);?>
+            <INPUT type="text" id="<?=vocontrato::$nmAtrTipoAutorizacaoContrato?>" name="<?=vocontrato::$nmAtrTipoAutorizacaoContrato?>"  value="<?php echo($tpAutorizacao);?>"  class="camponaoobrigatorio" size="10" ></TD>
         </TR>
         <?php                    
         $combo = new select((new dominioSimNao())->colecao);        

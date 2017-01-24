@@ -1,4 +1,5 @@
 <?php
+header ('Content-type: text/html; charset=ISO-8859-1');
 
   Class constantes {	
 	
@@ -23,6 +24,13 @@
     static $cd_usuario_admin = "administrator";
     static $cd_usuario_colaborador = "contributor";
     static $cd_usuario_visitante = "subscriber";    
+
+    static $DS_SIM  = "SIM";
+    static $DS_NAO  = "NAO";
+     
+    static $CD_SIM  = "S";
+    static $CD_NAO  = "N";    
+    
     static $TAMANHO_CODIGOS = 5;    	
 }
 ?>

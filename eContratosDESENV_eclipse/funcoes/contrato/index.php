@@ -394,21 +394,21 @@ function alterar() {
                         $tamanho = sizeof($colecao);
                 else 
                         $tamanho = 0;	
-                
-                $voSessao = getObjetoSessao($voContrato->getNmTabela());
                             
                 for ($i=0;$i<$tamanho;$i++) {
                         $voAtual = new vocontrato();
-                        $voAtual->getContratoBanco($colecao[$i]);
+                        $voAtual->getDadosBanco($colecao[$i]);
                         $especie = getDsEspecie($voAtual);                    
+                                                
+                        $sq = $colecao[$i][vocontrato::$nmAtrSqContrato];
+                        $msgAlertaSq = "onMouseOver=toolTip('seq:".$sq."') onMouseOut=toolTip()";
                     
+                        /*
                         $sqHist = "";
                         if($isHistorico)
                             $sqHist = $colecao[$i][vocontrato::$nmAtrSqHist];
-                            
-                        $sq = $colecao[$i][vocontrato::$nmAtrSqContrato];
-                    
-                        $chave = $sq
+
+                         $chave = $sq
                                 . "*"
                                 . $colecao[$i][vocontrato::$nmAtrAnoContrato]
                                 . "*"
@@ -417,9 +417,7 @@ function alterar() {
                                 . $cdHistorico
                                 . "*"
                                 . $sqHist
-                                ;
-                        
-                        $msgAlertaSq = "onMouseOver=toolTip('seq:".$sq."') onMouseOut=toolTip()";
+                                ;*/                        
                 
                         $datainiSQL = $colecao[$i]["ct_dt_vigencia_inicio"];
                         $datafimSQL = $colecao[$i]["ct_dt_vigencia_fim"];																																									
@@ -444,17 +442,11 @@ function alterar() {
                         $tagCelula = "class='$classColuna' " . $mensagemAlerta;
                         
                         $tipo = $dominioTipoContrato->getDescricao($colecao[$i]["ct_tipo"]); 
-                        
-                        $isSelecionado = $voAtual->isIgualChavePrimaria($voSessao);                        
-                        if($isSelecionado)
-                        	$checked = "checked";
-                        else
-                        	$checked = "";
-                        
+                                                
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados" <?=$msgAlertaSq?>>
-					<INPUT type="radio" id="rdb_consulta" name="rdb_consulta" value="<?php echo($chave);?>" <?php echo $checked;?>>
+					<?=getHTMLRadioButtonConsulta("rdb_consulta", "rdb_consulta", $voAtual);?>
                     </TD>
                     <TD class="tabeladadosalinhadodireita"><?php echo $colecao[$i]["ct_exercicio"];?></TD>
                     <TD class="tabeladadosalinhadodireita" ><?php echo complementarCharAEsquerda($colecao[$i]["ct_numero"], "0", 3)?></TD>

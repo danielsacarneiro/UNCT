@@ -109,6 +109,8 @@ class dbprocesso{
 			//echo "$queryCount<br>";
 			//echo "$query<br>";
 			
+            //removeObjetoSessao($voentidade->getNmTabela());
+			
 			$retorno = $this->cDb->consultar($query);
 		}
         

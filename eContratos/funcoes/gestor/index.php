@@ -139,7 +139,9 @@ function alterar() {
                 if (is_array($colecao))
                         $tamanho = sizeof($colecao);
                 else 
-                        $tamanho = 0;								 
+                        $tamanho = 0;			
+                
+                $voSessao = getObjetoSessao($voGestor->getNmTabela());
                             
                 for ($i=0;$i<$tamanho;$i++) {
                         $voAtual = new vogestor();
@@ -156,11 +158,18 @@ function alterar() {
                                 . "*"
                                 . $sqHist
                                 ;
+                        
+                        $isSelecionado = $voAtual->isIgualChavePrimaria($voSessao);
+                        //$isSelecionado = $voSessao->cd == $voAtual->cd;
+                        if($isSelecionado)
+                        	$checked = "checked";
+                        else
+                        	$checked = "";                  
                                         
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados">
-					<INPUT type="radio" id="rdb_consulta" name="rdb_consulta" value="<?php echo($chave);?>">
+					<INPUT type="radio" id="rdb_consulta" name="rdb_consulta" value="<?php echo($chave);?>" <?=$checked;?>>
                     </TD>
                     <TD class="tabeladados"><?php echo complementarCharAEsquerda($colecao[$i][vogestor::$nmAtrCd], "0", TAMANHO_CODIGOS);?></TD>
                     <TD class="tabeladados"><?php echo $colecao[$i][vogestor::$nmAtrDescricao];?></TD>                    

@@ -1,9 +1,4 @@
 <?php
-/*include_once("mensagens.class.php");
-include_once("constantes.class.php");
-include_once("bibliotecaDataHora.php");
-include_once("dominioPermissaoUsuario.php");
-include_once("../../../wp-config.php");*/
 include_once("mensagens.class.php");
 include_once("constantes.class.php");
 include_once("bibliotecaDataHora.php");
@@ -323,6 +318,21 @@ include_once(caminho_wordpress. "wp-config.php");
         return $html;        
     }
     
+    function getHTMLRadioButtonConsulta($nmRadio, $idRadio, $voAtual){      	
+    	$voSessao = getObjetoSessao($voAtual->getNmTabela());
+    	$isSelecionado = $voAtual->isIgualChavePrimaria($voSessao);
+
+    	$checked = "";
+    	if($isSelecionado)
+    		$checked = "checked";
+    	
+    	$chave = $voAtual->getValorChaveHTML();
+    	$retorno = "<INPUT type='radio' id='".$idRadio."' name='".$nmRadio."' value='" . $chave ."' " . $checked . ">";
+    	//echo $chave;
+    	
+    	return $retorno;    	
+    }
+    
     function getSelectGestor(){
         $dbgestor = new dbgestor();
         $registros = $dbgestor->consultarSelect();
@@ -342,8 +352,10 @@ include_once(caminho_wordpress. "wp-config.php");
     	
     	$isUsarSessao = @$_POST["utilizarSessao"] != "N";
     	
-    	if(!$isUsarSessao)
-    		$objeto = null;    	
+    	if(!$isUsarSessao){
+    		$objeto = null;
+    		removeObjetoSessao($ID);
+    	}
     	
     	return $objeto;
     }

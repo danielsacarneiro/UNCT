@@ -1,5 +1,6 @@
 ALTER DATABASE unct CHARACTER SET utf8 COLLATE utf8_general_ci;
--- ALTER DATABASE unct CHARACTER SET Latin1 COLLATE latin1_swedish_ci;
+
+-- ALTER DATABASE unct CHARACTER SET Latin1 COLLATE latin1_general_ci;
 -- ALTER DATABASE `sua_base` CHARSET = Latin1 COLLATE = latin1_swedish_ci;
 
 drop table contrato_import;
@@ -62,7 +63,8 @@ CREATE TABLE contrato (
     ct_contratada VARCHAR(300),
     ct_doc_contratada VARCHAR(30),
     ct_num_empenho VARCHAR(50),    
-    ct_tp_autorizacao VARCHAR(15), -- CHAR(2),
+    ct_tp_autorizacao VARCHAR(15), 
+    ct_cd_autorizacao INT, 
     ct_in_licom CHAR(1),
 	ct_in_importacao CHAR(1) DEFAULT 'N',
     ct_observacao LONGTEXT,    
@@ -86,6 +88,11 @@ ALTER TABLE contrato ADD CONSTRAINT fk_ct_gestor FOREIGN KEY ( gt_cd ) REFERENCE
 ALTER TABLE contrato ADD CONSTRAINT fk_ct_gestor_pessoa FOREIGN KEY ( gp_cd ) REFERENCES gestor_pessoa (gp_cd) 
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;
+    
+UPDATE contrato SET 
+ct_contratada = replace(replace(replace(ct_contratada,'“','"'),'”','"'),'–','-'),
+ct_objeto = replace(replace(replace(ct_objeto,'“','"'),'”','"'),'–','-')
+-- WHERE ct_exercicio = 2016 and ct_numero = 13;
 
 
 drop table contrato_hist;
@@ -114,7 +121,8 @@ CREATE TABLE contrato_hist (
     ct_contratada VARCHAR(300),
     ct_doc_contratada VARCHAR(30),
     ct_num_empenho VARCHAR(50),    
-    ct_tp_autorizacao VARCHAR(15), -- CHAR(2),
+    ct_tp_autorizacao VARCHAR(15), 
+    ct_cd_autorizacao INT, 
     ct_in_licom CHAR(1),
 	ct_in_importacao CHAR(1),
     ct_observacao LONGTEXT,    

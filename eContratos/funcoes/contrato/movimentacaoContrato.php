@@ -1,8 +1,8 @@
 <?php
 include_once("../../config_lib.php");
 include(caminho_util."bibliotecaHTML.php");
-include_once(caminho_util."dominioTipoContrato.php");
-include_once(caminho_util."dominioEspeciesContrato.php");
+include_once("dominioTipoContrato.php");
+include_once("dominioEspeciesContrato.php");
 include(caminho_vos."dbcontrato.php");
 
 //inicia os parametros

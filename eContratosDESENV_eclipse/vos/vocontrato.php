@@ -158,7 +158,7 @@ include_once(caminho_lib."voentidade.php");
         return $retorno;    
     }
 
-	function getContratoBanco($registrobanco){		
+	function getDadosRegistroBanco($registrobanco){		
 		$this->sq = $registrobanco[vocontrato::$nmAtrSqContrato];
 		$this->cdContrato = $registrobanco[vocontrato::$nmAtrCdContrato];
 		$this->anoContrato = $registrobanco[vocontrato::$nmAtrAnoContrato];
@@ -278,11 +278,42 @@ include_once(caminho_lib."voentidade.php");
 		
 		$retorno = $this->sq . "";				
 		$retorno.= $this->anoContrato . ",";
-        $retorno.= $this->tipo . ",";
-		$retorno.= $this->cdContrato;
+		$retorno.= $this->cdContrato. ",";
+        $retorno.= $this->tipo;		
 		
 		return $retorno;		
 	}   
+		
+	//se a chaveHTML for igual a getValorChavePrimaria nao precisa desse metodo
+	//pq ja tem no voentidade
+	function getValorChaveHTML(){
+		 $chave = $this->sq
+					. "*"
+					. $this->anoContrato
+					. "*"
+					. $this->tipo
+					. "*"
+					. $this->cdContrato
+					. "*"					
+					. $this->cdEspecie
+					. "*"
+					. $this->sqHist
+					;
+		 	
+		return $chave;
+	}
+	
+	function getVOExplodeChave(){
+		$chave = @$_GET["chave"];
+		
+		$array = explode("*",$chave);		
+		$this->sq = $array[0];
+		$this->anoContrato = $array[1];
+		$this->tipo = $array[2];
+		$this->cdContrato = $array[3];
+		$this->cdEspecie = $array[4];
+		$this->sqHist = $array[5];
+	}	
 
 }
 ?>

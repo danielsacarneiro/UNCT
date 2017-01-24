@@ -160,18 +160,7 @@ function alterar() {
                 for ($i=0;$i<$tamanho;$i++) {
                         $voAtual = new vogestorpessoa();
                         $voAtual->getDadosBanco($colecao[$i]);
-                    
-                        $sqHist = "";
-                        if($isHistorico)
-                            $sqHist = $colecao[$i][vogestorpessoa::$nmAtrSqHist];
-                    
-                        $chave =  $colecao[$i][vogestorpessoa::$nmAtrCd]
-                                . "*"
-                                . $cdHistorico
-                                . "*"
-                                . $sqHist
-                                ;
-                        
+                                                                
                         $dsGestor = "";
                         if($colecao[$i][vogestorpessoa::$nmAtrCdGestor] != null)
                             $dsGestor = $colecao[$i][vogestorpessoa::$nmAtrCdGestor] . "-" . $colecao[$i][vogestor::$nmAtrDescricao];
@@ -179,7 +168,7 @@ function alterar() {
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados">
-					<INPUT type="radio" id="rdb_consulta" name="rdb_consulta" value="<?php echo($chave);?>">
+                    <?=getHTMLRadioButtonConsulta("rdb_consulta", "rdb_consulta", $voAtual);?>					
                     </TD>
                     <TD class="tabeladados"><?php echo complementarCharAEsquerda($colecao[$i][vogestorpessoa::$nmAtrCd], "0", TAMANHO_CODIGOS);?></TD>
                     <TD class="tabeladados"><?php echo $colecao[$i][vogestorpessoa::$nmAtrNome];?></TD>

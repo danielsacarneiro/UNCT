@@ -11,27 +11,15 @@ inicio();
 $voContrato = new voContrato();
 
 $classChaves = "camporeadonly";
-$readonly = "readonly";
-
-	$chave = @$_GET["chave"];
-	$array = explode("*",$chave);
+$readonly = "readonly";		
 	
-	$voContrato->sq = $array[0];
-	$voContrato->anoContrato = $array[1];
-	$voContrato->cdContrato = $array[2];
-    $voContrato->cdHistorico = $array[3];
-    
-    $isHistorico = ("S" == $voContrato->cdHistorico);
-    
-    if($isHistorico){
-        $sqHist = $array[4];
-        $voContrato->sqHist = $sqHist;
-    }
+	$voContrato->getVOExplodeChave($chave);	 
+    $isHistorico = ($voContrato->sqHist != null && $voContrato->sqHist != "");    
         
-	$dbprocesso = new dbcontrato(null);				
+	$dbprocesso = new dbcontrato();				
 	$colecao = $dbprocesso->limpaResultado();
 	$colecao = $dbprocesso->consultarContratoPorChave($voContrato, $isHistorico);	
-	$voContrato->getContratoBanco($colecao[0]);   
+	$voContrato->getDadosBanco($colecao[0]);	
 	
 	putObjetoSessao($voContrato->getNmTabela(), $voContrato);
 

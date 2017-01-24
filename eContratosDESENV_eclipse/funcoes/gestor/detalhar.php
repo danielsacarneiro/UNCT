@@ -26,6 +26,7 @@ $readonly = "readonly";
 $dbprocesso = new dbgestor(null);					
 $colecao = $dbprocesso->consultarPorChave($vo, $isHistorico);	
 $vo->getDadosBanco($colecao[0]);
+putObjetoSessao($vo->getNmTabela(), $vo);
     
 $dhInclusao = $vo->dhInclusao;
 $dhUltAlteracao = $vo->dhUltAlteracao;
