@@ -5,15 +5,15 @@
  */
 
 /*
- Descrição:
- - Contém funções para tratamento de radiobuttons
+ Descricao:
+ - Contem funcoes para tratamento de radiobuttons
 
- Dependências:
+ Dependencias:
  - biblioteca_funcoes_principal.js
 */
 
 // Verifica se algum "radiobutton" esta selecionado na colecao com nome "pNmRadioButton" passado como parametro.
-// Se  pSemMensagem igual a true, não exibe mensagem
+// Se  pSemMensagem igual a true, nao exibe mensagem
 // Utilizado em telas de consulta.
 function isRadioButtonConsultaSelecionado(pNmRadioButton, pSemMensagem) {
 	var i = 0;
@@ -22,7 +22,7 @@ function isRadioButtonConsultaSelecionado(pNmRadioButton, pSemMensagem) {
 	
 	if (radioButton == null) {
 		if (!pSemMensagem) {
-			exibirMensagem("Nenhum registro está disponível!");
+			exibirMensagem("Nenhum registro estÃ¡ disponÃ­vel!");
 		}
 		return false;
 	}
@@ -45,7 +45,7 @@ function isRadioButtonConsultaSelecionado(pNmRadioButton, pSemMensagem) {
 }
 
 // Verifica se algum "radiobutton" esta selecionado na colecao com nome "pNmRadioButton" passado como parametro.
-// Se  pSemMensagem igual a true, não exibe mensagem
+// Se  pSemMensagem igual a true, nao exibe mensagem
 // Utilizado em telas de consulta.
 function isRadioButtonSelecionado(pNmRadioButton, pSemMensagem) {
 	var i = 0;
@@ -68,24 +68,28 @@ function isRadioButtonSelecionado(pNmRadioButton, pSemMensagem) {
 	}
 	
 	if (!pSemMensagem) {
-		exibirMensagem(mensagemGlobal(62));
+		exibirMensagem("Selecione um registro!");
 	}
 	return false;
 }
 
-// Retorna um Array com os campos que compõem o valor do radiobutton "pRadioButton" passado como parâmetro
+// Retorna um Array com os campos que compoem o valor do radiobutton "pRadioButton" passado como parametro
 // Os campos devem estar separados pela constante CD_CAMPO_SEPARADOR
-function retornarValorRadioButtonSelecionadoComoArray(pNmRadioButton, pSemMensagem) {
-	var i;
 
-	radioButton = eval(pNmRadioButton);
+function retornarValorRadioButtonSelecionadoComoArray(pNmRadioButton, pSeparador, pSemMensagem) {
+	
+	var i;
+	
+	CD_CAMPO_SEPARADOR = pSeparador;	
+	
+	radioButton = eval(pNmRadioButton);	
 	
 	if (radioButton == null) {
 		if (!pSemMensagem) {
-			exibirMensagem(mensagemGlobal(60));
+			exibirMensagem("Selecione um registro.");
 		}	
 		return false;
-	}
+	}	
 	
 	if (radioButton.checked) {
 		// Quando existe apenas um radio button no formulario
@@ -113,7 +117,7 @@ function retornarValoresTodosRadioButtonComoString(pNmRadioButton, pSemMensagem)
 	
 	if (radioButton == null) {
 		if (!pSemMensagem) {
-			exibirMensagem(mensagemGlobal(60));
+			exibirMensagem("Selecione um registro!");
 		}
 		return false;
 	} 
@@ -136,7 +140,7 @@ function retornarValorRadioButtonSelecionado(pNmRadioButton) {
 	radioButton = eval(pNmRadioButton);
 	
 	if (radioButton == null) {
-		exibirMensagem(mensagemGlobal(60));
+		exibirMensagem("Selecione um registro!");
 		return false;
 	}
 	
@@ -154,7 +158,7 @@ function retornarValorRadioButtonSelecionado(pNmRadioButton) {
 	return "";
 }
 
-// Retorna um Array de Arrays com os campos que compõem o valor do radiobutton "pRadioButton" passado como parâmetro
+// Retorna um Array de Arrays com os campos que compoem o valor do radiobutton "pRadioButton" passado como parametro
 // Os campos devem estar separados pela constante CD_CAMPO_SEPARADOR
 function retornarValoresTodosRadioButtonComoArrayDeArray(pNmRadioButton, pSemMensagem) {
     var i;
@@ -164,11 +168,11 @@ function retornarValoresTodosRadioButtonComoArrayDeArray(pNmRadioButton, pSemMen
 
     if (radioButton == null) {
         if (!pSemMensagem) {
-           exibirMensagem(mensagemGlobal(60));
+           exibirMensagem("Selecione um registro!");
         }
         retorno = ""; 
     } else {
-        // Caso exista só um registro no formulário
+        // Caso exista so um registro no formulario
 		if (!radioButton.length) {
             valorRadioButton = radioButton.value;
             retorno = new Array(1); 

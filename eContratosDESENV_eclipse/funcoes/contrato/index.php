@@ -57,6 +57,7 @@ $numTotalRegistros = $filtroContrato->numTotalRegistros;
 <HEAD>
 <?=setTituloPagina(null)?>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>mensagens_globais.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_datahora.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_cnpfcnpj.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
@@ -83,26 +84,6 @@ function processarFiltroConsulta(pAcao, pEvento, pNaoUtilizarIdContextoSessao) {
 
 	document.frm_principal.nao_utilizar_id_contexto_sessao.value = pNaoUtilizarIdContextoSessao;
 	document.frm_principal.id_contexto_sessao.value = "";
-	submeterFormulario(pAcao, pEvento);
-}
-
-// Exibe o formulario de inclusao
-function exibirInclusao(pAcao, pEvento) {
-	submeterFormulario(pAcao, pEvento);
-}
-
-// Exibe o formulario de alteracao
-function exibirAlteracao(pAcao, pEvento) {
-	var array = retornarValorRadioButtonSelecionadoComoArray("document.frm_principal.rdb_consulta");
-    
-    if (!isFormularioValido() || !validarVigenciaRegistroAlteracao(3,4))
-			return;
-
-	if(array[7] == '<%=ConstantesGFU.CD_SITUACAO_INATIVO%>'){
-		exibirMensagem("Não é possível alterar um registro desativado.");
-		return;
-	}	
-	
 	submeterFormulario(pAcao, pEvento);
 }
 
@@ -145,15 +126,24 @@ function detalhar(isExcluir) {
 	location.href="detalharContrato.php?funcao=" + funcao + "&chave=" + chave;
 }
 
-function movimentacoes() {    
-    if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta"))
+
+function movimentacoes(){    
+    if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta")){
             return;
-    	
+    }
+  	
+	var array = retornarValorRadioButtonSelecionadoComoArray("document.frm_principal.rdb_consulta", "*", false);
+	especie = array[4];
+	if(especie != <?=constantes::$CD_ESPECIE_CONTRATO_MATER;?>){
+		alert("Operação permitida apenas para contrato Mater.");
+		return;
+	}
+
 	chave = document.frm_principal.rdb_consulta.value;
     url = "movimentacaoContrato.php?chave=" + chave;
-	//location.href=url;
+	
     abrirJanelaAuxiliar(url, true, false, false);
-    //popMe(url, "Movimentações", false);
+    
 }
 
 function excluir() {

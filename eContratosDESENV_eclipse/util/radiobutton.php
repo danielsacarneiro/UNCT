@@ -8,7 +8,7 @@ include_once ("select.php");
 // Construtor
 
 // ...............................................................
-// Funções ( Propriedades e métodos da classe )    
+// Funcoes ( Propriedades e metodos da classe )    
     function getHtmlRadio($idRadio, $nmRadio, $opcaoSelecionada, $comOpcaoTodos, $disabled) {
 		$html = "";
 		

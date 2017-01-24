@@ -1,7 +1,7 @@
 <?php
-include_once("dominio.class.php");
+include_once(caminho_util. "dominio.class.php");
 
-  Class dominioSimNao extends dominio{
+Class dominioSimNao extends dominio{
 // ...............................................................
 // Construtor
 	function __construct () {        
