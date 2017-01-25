@@ -1,9 +1,4 @@
 <?php
-/*include_once("mensagens.class.php");
-include_once("constantes.class.php");
-include_once("bibliotecaDataHora.php");
-include_once("dominioPermissaoUsuario.php");
-include_once("../../../wp-config.php");*/
 include_once("mensagens.class.php");
 include_once("constantes.class.php");
 include_once("bibliotecaDataHora.php");
@@ -64,7 +59,8 @@ include_once(caminho_wordpress. "wp-config.php");
         $codificacaoHTML = "\n<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'>";
         $html = $codificacaoHTML;
         $html.= "\n<TITLE>$titulo</TITLE>";
-        $html.= "<LINK href='" . $pastaCSS . "sefaz_pe.css' rel='stylesheet' type='text/css'>";        
+        $html.= "\n<LINK href='" . $pastaCSS . "sefaz_pe.css' rel='stylesheet' type='text/css'>\n";        
+        
         return $html;
     }
     
@@ -333,6 +329,7 @@ include_once(caminho_wordpress. "wp-config.php");
     	
     	$chave = $voAtual->getValorChaveHTML();
     	$retorno = "<INPUT type='radio' id='".$idRadio."' name='".$nmRadio."' value='" . $chave ."' " . $checked . ">";
+    	//echo $chave;
     	
     	return $retorno;    	
     }

@@ -28,19 +28,14 @@ if($isInclusao){
 }else{
     $classChaves = "camporeadonly";
     $readonlyChaves = "readonly";
-	$chave = @$_GET["chave"];
-	$array = explode("*",$chave);
 	
-	$voContrato->sq = $array[0];
-	$voContrato->anoContrato = $array[1];
-	$voContrato->cdContrato = $array[2];
-    $voContrato->cdHistorico = $array[3];
-    $isHistorico = ("S" == $voContrato->cdHistorico);        
+	$voContrato->getVOExplodeChave($chave);
+	$isHistorico = ($voContrato->sqHist != null && $voContrato->sqHist != "");
 	
 	$dbprocesso = new dbcontrato(null);				
 	$colecao = $dbprocesso->limpaResultado();
 	$colecao = $dbprocesso->consultarContratoPorChave($voContrato, $isHistorico);	
-	$voContrato->getContratoBanco($colecao[0]);
+	$voContrato->getDadosBanco($colecao[0]);
 	putObjetoSessao($voContrato->getNmTabela(), $voContrato);
 
     $titulo = "ALTERAR CONTRATO";        

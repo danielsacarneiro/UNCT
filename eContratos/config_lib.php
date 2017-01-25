@@ -17,6 +17,8 @@ function getPastaRoot(){
     return $path;
 }
 
+header ('Content-type: text/html; charset=ISO-8859-1');
+
 $base = getPastaRoot();
 define('caminho', $base."/");
 define('caminho_lib', "$base/lib/");

@@ -57,6 +57,7 @@ $numTotalRegistros = $filtroContrato->numTotalRegistros;
 <HEAD>
 <?=setTituloPagina(null)?>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>mensagens_globais.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_datahora.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_cnpfcnpj.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
@@ -83,26 +84,6 @@ function processarFiltroConsulta(pAcao, pEvento, pNaoUtilizarIdContextoSessao) {
 
 	document.frm_principal.nao_utilizar_id_contexto_sessao.value = pNaoUtilizarIdContextoSessao;
 	document.frm_principal.id_contexto_sessao.value = "";
-	submeterFormulario(pAcao, pEvento);
-}
-
-// Exibe o formulario de inclusao
-function exibirInclusao(pAcao, pEvento) {
-	submeterFormulario(pAcao, pEvento);
-}
-
-// Exibe o formulario de alteracao
-function exibirAlteracao(pAcao, pEvento) {
-	var array = retornarValorRadioButtonSelecionadoComoArray("document.frm_principal.rdb_consulta");
-    
-    if (!isFormularioValido() || !validarVigenciaRegistroAlteracao(3,4))
-			return;
-
-	if(array[7] == '<%=ConstantesGFU.CD_SITUACAO_INATIVO%>'){
-		exibirMensagem("Não é possível alterar um registro desativado.");
-		return;
-	}	
-	
 	submeterFormulario(pAcao, pEvento);
 }
 
@@ -145,15 +126,24 @@ function detalhar(isExcluir) {
 	location.href="detalharContrato.php?funcao=" + funcao + "&chave=" + chave;
 }
 
-function movimentacoes() {    
-    if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta"))
+
+function movimentacoes(){    
+    if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta")){
             return;
-    	
+    }
+  	
+	var array = retornarValorRadioButtonSelecionadoComoArray("document.frm_principal.rdb_consulta", "*", false);
+	especie = array[4];
+	if(especie != <?=constantes::$CD_ESPECIE_CONTRATO_MATER;?>){
+		alert("Operação permitida apenas para contrato Mater.");
+		return;
+	}
+
 	chave = document.frm_principal.rdb_consulta.value;
     url = "movimentacaoContrato.php?chave=" + chave;
-	//location.href=url;
+	
     abrirJanelaAuxiliar(url, true, false, false);
-    //popMe(url, "Movimentações", false);
+    
 }
 
 function excluir() {
@@ -394,21 +384,21 @@ function alterar() {
                         $tamanho = sizeof($colecao);
                 else 
                         $tamanho = 0;	
-                
-                $voSessao = getObjetoSessao($voContrato->getNmTabela());
                             
                 for ($i=0;$i<$tamanho;$i++) {
                         $voAtual = new vocontrato();
-                        $voAtual->getContratoBanco($colecao[$i]);
+                        $voAtual->getDadosBanco($colecao[$i]);
                         $especie = getDsEspecie($voAtual);                    
+                                                
+                        $sq = $colecao[$i][vocontrato::$nmAtrSqContrato];
+                        $msgAlertaSq = "onMouseOver=toolTip('seq:".$sq."') onMouseOut=toolTip()";
                     
+                        /*
                         $sqHist = "";
                         if($isHistorico)
                             $sqHist = $colecao[$i][vocontrato::$nmAtrSqHist];
-                            
-                        $sq = $colecao[$i][vocontrato::$nmAtrSqContrato];
-                    
-                        $chave = $sq
+
+                         $chave = $sq
                                 . "*"
                                 . $colecao[$i][vocontrato::$nmAtrAnoContrato]
                                 . "*"
@@ -417,9 +407,7 @@ function alterar() {
                                 . $cdHistorico
                                 . "*"
                                 . $sqHist
-                                ;
-                        
-                        $msgAlertaSq = "onMouseOver=toolTip('seq:".$sq."') onMouseOut=toolTip()";
+                                ;*/                        
                 
                         $datainiSQL = $colecao[$i]["ct_dt_vigencia_inicio"];
                         $datafimSQL = $colecao[$i]["ct_dt_vigencia_fim"];																																									
@@ -444,17 +432,11 @@ function alterar() {
                         $tagCelula = "class='$classColuna' " . $mensagemAlerta;
                         
                         $tipo = $dominioTipoContrato->getDescricao($colecao[$i]["ct_tipo"]); 
-                        
-                        $isSelecionado = $voAtual->isIgualChavePrimaria($voSessao);                        
-                        if($isSelecionado)
-                        	$checked = "checked";
-                        else
-                        	$checked = "";
-                        
+                                                
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados" <?=$msgAlertaSq?>>
-					<INPUT type="radio" id="rdb_consulta" name="rdb_consulta" value="<?php echo($chave);?>" <?php echo $checked;?>>
+					<?=getHTMLRadioButtonConsulta("rdb_consulta", "rdb_consulta", $voAtual);?>
                     </TD>
                     <TD class="tabeladadosalinhadodireita"><?php echo $colecao[$i]["ct_exercicio"];?></TD>
                     <TD class="tabeladadosalinhadodireita" ><?php echo complementarCharAEsquerda($colecao[$i]["ct_numero"], "0", 3)?></TD>

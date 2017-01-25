@@ -175,6 +175,8 @@ function cancela() {
                       <!--<TH class='headertabeladados' width='1%'>&nbsp;&nbsp;X</TH>-->
                         <TH class='headertabeladados' width='1%'>Espécie</TH>
                         <TH class='headertabeladados' width='50%'>Objeto</TH>
+                        <TH class='headertabeladados' width='1%' nowrap>Dt.Início</TH>
+                        <TH class='headertabeladados' width='1%' nowrap>Dt.Fim</TH>
                         <TH class='headertabeladados' width='1%' nowrap>Dt.Assinatura</TH>
                         <TH class='headertabeladados' width='1%' nowrap>Vl.Mensal</TH>
                         <TH class='headertabeladados' width='1%' nowrap>Vl.Global</TH>
@@ -209,6 +211,8 @@ function cancela() {
                         </TD>-->
                         <TD class='tabeladados'><?php echo $especie?></TD>
                         <TD class='tabeladados'><?php echo $colecaoMov[$i]["ct_objeto"]?></TD>
+                        <TD class='tabeladados' nowrap><?php echo getData($colecaoMov[$i][vocontrato::$nmAtrDtVigenciaInicialContrato])?></TD>
+                        <TD class='tabeladados' nowrap><?php echo getData($colecaoMov[$i][vocontrato::$nmAtrDtVigenciaFinalContrato])?></TD>											
                         <TD class='tabeladados'><?php echo getData($dtAssinatura)?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($colecaoMov[$i]["ct_valor_mensal"])?></TD>                    
                         <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($colecaoMov[$i]["ct_valor_global"])?></TD>

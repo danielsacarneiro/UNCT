@@ -28,7 +28,6 @@
         var $nmUsuarioInclusao;
         var $nmUsuarioUltAlteracao;
         
-        var $cdHistorico;
         var $sqHist;
     
 	function __construct() {
@@ -91,6 +90,8 @@
         $this->dhUltAlteracao = $registrobanco[voentidade::$nmAtrDhUltAlteracao];
         $this->cdUsuarioInclusao = $registrobanco[voentidade::$nmAtrCdUsuarioInclusao];
         $this->cdUsuarioUltAlteracao = $registrobanco[voentidade::$nmAtrCdUsuarioUltAlteracao];
+        $this->sqHist= $registrobanco[voentidade::$nmAtrSqHist];
+        //$this->cdHistorico = $registrobanco[voentidade::$nmAtrcdSqHist];
         
         $this->nmUsuarioInclusao = $registrobanco[voentidade::$nmAtrNmUsuarioInclusao];
         $this->nmUsuarioUltAlteracao = $registrobanco[voentidade::$nmAtrNmUsuarioUltAlteracao]; 		
@@ -142,6 +143,6 @@
     	//pega do filho
     	return $this->getValorChavePrimaria();
     }    
-            
+                
 }
 ?>

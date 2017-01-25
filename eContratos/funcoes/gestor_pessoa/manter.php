@@ -20,13 +20,9 @@ if($isInclusao){
 	$nmFuncao = "INCLUIR ";	
 }else{
     $readonly = "readonly";
-	$chave = @$_GET["chave"];
-	$array = explode("*",$chave);
-	
-	$vo->cd = $array[0];
-    $vo->cdHistorico = $array[1];
-    $isHistorico = ("S" == $vo->cdHistorico);        
-	
+    $vo->getVOExplodeChave($chave);
+    $isHistorico = ($vo->sqHist != null && $vo->sqHist != "");
+    
 	$dbprocesso = new dbgestorpessoa(null);					
 	$colecao = $dbprocesso->consultarPorChave($vo, $isHistorico);	
 	$vo->getDadosBanco($colecao[0]);    

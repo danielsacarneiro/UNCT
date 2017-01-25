@@ -91,6 +91,12 @@ include_once(caminho_lib."voentidade.php");
 	function getValorChavePrimaria(){
 		return $this->cd;
 	}
+	
+	function getVOExplodeChave(){
+		$chave = @$_GET["chave"];	
+		$array = explode("*",$chave);
+		$this->cd = $array[0];
+	}	
 
 }
 ?>
