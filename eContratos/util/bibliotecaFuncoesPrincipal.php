@@ -100,30 +100,32 @@
                 for ($i=0; $i<$totalResultado; $i++) {
                     $atrib = $arrayAtribRemover[$i];
                     $retorno = removeElementoArray($retorno, $atrib);
+                    //echo "<br>" . $i. $atrib;
                 }
             }
-            //echo "<br>"; var_dump($retorno);
+            //echo "<br>"; 
+            //var_dump($retorno);
             return $retorno;
     }
     
     function removeElementoArray($input, $elem){
         $key = array_search($elem, $input);
-        if($key){
+        if($key !== false){
             //echo "<br> removendo elemento: " . $input[$key];
-            //unset($input[$key]);
-            $input[$key] = null;
+            unset($input[$key]);
+            //$input[$key] = null;
         }
         
         return $input;
     }    
-
+    
     function getColecaoEntreSeparador($colecaoAtributos, $separador) {
             $retorno = "";
             if($colecaoAtributos != null){
                 $tamanho = count($colecaoAtributos);
                 //echo "<br> qtd registros: " . $tamanho;
                                
-                for ($i=1; $i<=$tamanho; $i++) {
+                for ($i=0; $i<=$tamanho; $i++) {
                     $atrib = $colecaoAtributos[$i];
                     if($atrib != null)
                         $retorno .= $atrib . $separador;

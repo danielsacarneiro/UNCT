@@ -144,7 +144,8 @@ include_once(caminho_lib."voentidade.php");
             vocontrato::$nmAtrSqEspecieContrato,
             vocontrato::$nmAtrObjetoContrato,
             vocontrato::$nmAtrDtAssinaturaContrato,
-            vocontrato::$nmAtrDtVigenciaFinalContrato,            
+        	vocontrato::$nmAtrDtVigenciaInicialContrato,
+        	vocontrato::$nmAtrDtVigenciaFinalContrato,            
             vocontrato::$nmAtrVlGlobalContrato,
             vocontrato::$nmAtrVlMensalContrato
         );

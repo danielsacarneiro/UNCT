@@ -1,6 +1,7 @@
 <?php  
 include_once("config_lib.php");
 include_once(caminho_vos."dbcontrato.php");
+include_once(caminho_util."bibliotecaFuncoesPrincipal.php");
    
 function teste(){
     $dbteste = new dbcontrato(null);
@@ -29,11 +30,28 @@ function testarNomePasta(){
    //include_once($path);   
 }
 
+include_once(caminho_vos."dbpessoavinculo.php");
+include_once(caminho_vos."vopessoavinculo.php");
+include_once(caminho_vos."dbpessoa.php");
+include_once(caminho_vos."vopessoa.php");
 
-//testarNomePasta();
+$vo = new vopessoa();
+//var_dump($vo->getTodosAtributos());
+//echo "<br>";
 
-$dbteste = new dbcontrato();
-echo $dbteste->getCdAutorizacao("ge");
+$db = new dbpessoa();
+echo $db->incluirSQL($vo);
+
+
+/*$a=array("a"=>"5","b"=>5,"c"=>"5");
+$a=array("a", "b", "c");
+echo array_search("c",$a);*/
+
+/*$array = array(vopessoa::$nmAtrCdUsuarioInclusao);
+
+$vo->varAtributos = removeColecaoAtributos($vo->varAtributos, $array);
+
+var_dump($vo->varAtributos);*/
 
 
 ?>

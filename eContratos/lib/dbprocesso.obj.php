@@ -137,11 +137,12 @@ class dbprocesso{
     
     function incluirQuery($voEntidade, $arrayAtribRemover){
         $atributosInsert = $voEntidade->getTodosAtributos();
-        //var_dump ($atributosInsert);            
+        //var_dump ($atributosInsert);        
         //var_dump($arrayAtribRemover);
 
         $atributosInsert = removeColecaoAtributos($atributosInsert, $arrayAtribRemover);
         //var_dump ($atributosInsert);
+        //echo "<br>";
         
         $atributosInsert = getColecaoEntreSeparador($atributosInsert, ",");
         

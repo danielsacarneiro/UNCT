@@ -159,8 +159,8 @@ include_once(caminho_wordpress. "wp-config.php");
 				);
 	 return $varAtributos;	
 	}    
-    
-    function incluirUsuarioDataHoraDetalhamento($voEntidade){
+    	
+	function incluirUsuarioDataHoraDetalhamento($voEntidade){
         $USUARIO_BATCH = "IMPORT.PLANILHA";
         $nmusuinclusao = $voEntidade->nmUsuarioInclusao;
         $nmusualteracao = $voEntidade->nmUsuarioUltAlteracao;        
@@ -334,6 +334,12 @@ include_once(caminho_wordpress. "wp-config.php");
     	return $retorno;    	
     }
     
+    function getRadioButton($idRadio, $nmRadio, $chave, $checked, $complementoHTML) {
+    	$retorno = "<INPUT type='radio' id='".$idRadio."' name='".$nmRadio."' value='" . $chave ."' " . $checked . ">";
+    	return  $retorno;
+    }
+    
+    
     function getSelectGestor(){
         $dbgestor = new dbgestor();
         $registros = $dbgestor->consultarSelect();
@@ -349,6 +355,9 @@ include_once(caminho_wordpress. "wp-config.php");
     
     function getObjetoSessao($ID){
     	session_start();
+    	
+    	/*$objeto = null;
+    	if(isset($_SESSION[$ID]))*/    	
     	$objeto = $_SESSION[$ID];
     	
     	$isUsarSessao = @$_POST["utilizarSessao"] != "N";

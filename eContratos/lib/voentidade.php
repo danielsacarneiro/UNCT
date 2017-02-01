@@ -42,8 +42,8 @@
     
     
     // ...............................................................
-    // Funções ( Propriedades e métodos da classe )     
-    function getSQLValuesInsertEntidade(){
+    // Funcoes ( Propriedades e metodos da classe )     
+    /*function getSQLValuesInsertEntidade(){
 		$retorno = "";        
         $userManutencao = $this-> cdUsuarioUltAlteracao;
         if($this-> cdUsuarioInclusao == null)
@@ -53,7 +53,42 @@
 		$retorno.= $this-> cdUsuarioUltAlteracao;
                 
 		return $retorno;                
+    }*/
+    
+    function getSQLValuesInsertEntidade(){
+    	$userManutencao = $this->cdUsuarioUltAlteracao;
+    	if($this-> cdUsuarioInclusao == null)
+    		$this-> cdUsuarioInclusao = $userManutencao;    		 
+    	
+    	$temAtributosParaChecar = $this->varAtributos != null;    	
+    	$temUsuarioInc = false;
+    	$temUsuarioAlt = false;
+    	$temDtInc = false;
+    	$temDtAlt = false;
+    	
+    	if($temAtributosParaChecar){
+    		$temUsuarioInc = array_search(self::$nmAtrCdUsuarioInclusao, $this->varAtributos);
+    		$temUsuarioAlt = array_search(self::$nmAtrCdUsuarioUltAlteracao, $this->varAtributos);
+    		$temDtInc = array_search(self::$nmAtrDhInclusao, $this->varAtributos);
+    		$temDtAlt = array_search(self::$nmAtrDhUltAlteracao, $this->varAtributos);    		
+    	}    	
+    	
+    	$retorno = ",";
+    	$conector = "";
+    	if($temUsuarioInc){
+    		$retorno.= $this-> cdUsuarioInclusao . $conector;
+    		$conector = ",";
+    	}
+    	
+    	if($temUsuarioAlt){
+    		$retorno.= $this-> cdUsuarioUltAlteracao . $conector;
+    		//$conector = ",";
+    	}    		
+    
+   		return $retorno;
     }
+    
+    
     
     function getSQLValuesUpdate(){
 		$retorno = "";        
@@ -103,12 +138,23 @@
         		
 	}
     
+    function removeAtributos($arrayAtribRemover){    	
+    	$this->varAtributos = removeColecaoAtributos($this->varAtributos, $arrayAtribRemover);
+    }
+    
+    function removeTodosAtributosPai(){
+    	unset($this->varAtributos);
+    }
+    
     function getTodosAtributos(){
-        //metodo da classe filha
-        $novosAtributos = $this->getAtributosFilho();
-        //tamanho + 5
-        $retorno = array_merge($novosAtributos, $this->varAtributos);        
-        return $retorno;    
+    	//metodo da classe filha
+    	$novosAtributos = $this->getAtributosFilho();
+    	$retorno = $novosAtributos; 
+    	//tamanho + 5
+    	if($this->varAtributos != null)
+    		$retorno = array_merge($novosAtributos, $this->varAtributos);
+    	
+    	return $retorno;
     }
     
     function getNmTabelaEntidade($isHistorico){

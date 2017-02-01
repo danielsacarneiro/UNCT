@@ -1,4 +1,15 @@
  /**
+  * Função abrirPasta
+  */
+ function abrirPasta(idCampoGestor, idDivResultado) {
+     // Declaração de Variáveis
+     var cdGestor   = "1";//document.getElementById(idCampoGestor).value;
+     var result = document.getElementById(idDivResultado);
+     imprimeResultado(result, "../../util/funcaoAbrirPastaAjax.php?" + idCampoGestor + "=" + cdGestor);     
+ }
+
+ 
+ /**
   * Função gestorPessoa
   */
  function getDadosGestorPessoa(idCampoGestor, idDivResultado) {
@@ -7,6 +18,26 @@
      var result = document.getElementById(idDivResultado);
      imprimeResultado(result, "../gestor_pessoa/comboGestorPessoaAjax.php?" + idCampoGestor + "=" + cdGestor);     
  }
+ 
+ /**
+  * consulta os gestores para serem atribuidos a um responsavel
+  * @param idCampoGestor
+  * @param idDivResultado
+  * @returns
+  */
+ function getDadosResponsavel(idCampoGestor, idDivResultado) {
+     // Declaração de Variáveis	 
+	 campoGestor = document.getElementById(idCampoGestor);
+	 var cdGestor   = "";
+	 if(campoGestor != null)
+		 cdGestor   = document.getElementById(idCampoGestor).value;     
+     
+     var result = document.getElementById(idDivResultado);
+     
+     imprimeResultado(result, "../pessoa/campoResponsavelAjax.php?" + idCampoGestor + "=" + cdGestor);     
+     
+ }
+ 
  
 /**
   * Função para criar um objeto XMLHTTPRequest

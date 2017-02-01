@@ -1,5 +1,9 @@
-input,select:invalid {  
-  border: 1px solid #FFA500;  
+input:invalid, select:invalid  {  
+  border: 1px solid #b03535;  
+}
+
+input:required, select:required {    
+  border: 1px solid #FFA500;
 }
 
 #header {
@@ -472,7 +476,7 @@ A.historico:visited {
 	color: blue;
 }
 
-A.titulotreemenu:link {
+A.titulotreemenu:link {	
 	color: Navy;
 	text-decoration: none;
 	font-family: Helvetica, Arial, sans-serif;
@@ -558,6 +562,29 @@ A.treelinkpreto:hover {
 	font-weight: bolder;
     font-size: 15px;
 }
+
+A.treelinkarquivo:link {
+	color: red;
+	text-decoration: none;
+	font-family: Helvetica, Arial, sans-serif;
+	font-weight: bolder;
+}
+
+A.treelinkarquivo:visited {
+	color: grey;
+	text-decoration: none;
+	font-family: Helvetica, Arial, sans-serif;
+	font-weight: bolder;	
+}
+
+A.treelinkarquivo:hover {
+	color: white;
+	font-family: Helvetica, Arial, sans-serif;
+	font-weight: bolder;
+	text-decoration: underline;
+    font-size: 15px;
+}
+
 
 A.barrapaginacaoanterior, A.barrapaginacaoproximo {
 	line-height: 10px;

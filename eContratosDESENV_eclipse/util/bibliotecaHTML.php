@@ -159,8 +159,8 @@ include_once(caminho_wordpress. "wp-config.php");
 				);
 	 return $varAtributos;	
 	}    
-    
-    function incluirUsuarioDataHoraDetalhamento($voEntidade){
+    	
+	function incluirUsuarioDataHoraDetalhamento($voEntidade){
         $USUARIO_BATCH = "IMPORT.PLANILHA";
         $nmusuinclusao = $voEntidade->nmUsuarioInclusao;
         $nmusualteracao = $voEntidade->nmUsuarioUltAlteracao;        
@@ -285,6 +285,11 @@ include_once(caminho_wordpress. "wp-config.php");
     }
     
     function getComponenteConsulta($comboOrdenacao, $cdAtrOrdenacao, $cdOrdenacao, $qtdRegistrosPorPag, $temHistorico, $cdHistorico){
+    	return getComponenteConsultaPaginacao($comboOrdenacao, $cdAtrOrdenacao, $cdOrdenacao, true, $qtdRegistrosPorPag, $temHistorico, $cdHistorico);
+    }
+    
+    
+    function getComponenteConsultaPaginacao($comboOrdenacao, $cdAtrOrdenacao, $cdOrdenacao, $temPaginacao, $qtdRegistrosPorPag, $temHistorico, $cdHistorico){
         $html = "";
                 
         $objetosPorPagina = new dominioQtdObjetosPagina();
@@ -305,9 +310,11 @@ include_once(caminho_wordpress. "wp-config.php");
                     . " Ordem: "
                     . $comboOrdem->getHtmlOpcao("cdOrdenacao","cdOrdenacao", $cdOrdenacao, false);            
         }        
-        		
-        $html .=    " Num.Registros por página: "
-                    . $comboQtdRegistros->getHtmlOpcao("qtdRegistrosPorPag","qtdRegistrosPorPag", $qtdRegistrosPorPag, false);
+        
+        if($temPaginacao){
+	        $html .=    " Num.Registros por página: "
+	                    . $comboQtdRegistros->getHtmlOpcao("qtdRegistrosPorPag","qtdRegistrosPorPag", $qtdRegistrosPorPag, false);
+        }
         
         if($temHistorico)
                 $html .=    " &nbsp;Histórico: "
@@ -319,20 +326,43 @@ include_once(caminho_wordpress. "wp-config.php");
         return $html;        
     }
     
-    function getHTMLRadioButtonConsulta($nmRadio, $idRadio, $voAtual){      	
-    	$voSessao = getObjetoSessao($voAtual->getNmTabela());
-    	$isSelecionado = $voAtual->isIgualChavePrimaria($voSessao);
+    function getHTMLRadioButtonConsulta($nmRadio, $idRadio, $voAtualOuChaveString){
+    	
+    	$isSelecionado = false;
+    	
+    	$ID = "";    	
+    	if ($voAtualOuChaveString instanceof voentidade){    	
+    		$ID = $voAtualOuChaveString->getNmTabela();
+    		$voSessao = getObjetoSessao($ID);
+    		$isSelecionado = $voAtualOuChaveString->isIgualChavePrimaria($voSessao);
+    		$chave = $voAtualOuChaveString->getValorChaveHTML();    		
+    	}else{
+    		//voAtual nao existe
+    		//a chave eh o proprio parametro
+    		$chave = $voAtualOuChaveString;    		
+    	}
+    	
+    	/*if($voAtual != null){    	
+    		$voSessao = getObjetoSessao($voAtual->getNmTabela());    	
+    		$isSelecionado = $voAtual->isIgualChavePrimaria($voSessao);
+    		$chave = $voAtual->getValorChaveHTML();
+    	}*/
 
     	$checked = "";
     	if($isSelecionado)
     		$checked = "checked";
     	
-    	$chave = $voAtual->getValorChaveHTML();
     	$retorno = "<INPUT type='radio' id='".$idRadio."' name='".$nmRadio."' value='" . $chave ."' " . $checked . ">";
     	//echo $chave;
     	
     	return $retorno;    	
     }
+    
+    function getRadioButton($idRadio, $nmRadio, $chave, $checked, $complementoHTML) {
+    	$retorno = "<INPUT type='radio' id='".$idRadio."' name='".$nmRadio."' value='" . $chave ."' " . $checked . ">";
+    	return  $retorno;
+    }
+    
     
     function getSelectGestor(){
         $dbgestor = new dbgestor();
@@ -349,6 +379,9 @@ include_once(caminho_wordpress. "wp-config.php");
     
     function getObjetoSessao($ID){
     	session_start();
+    	
+    	/*$objeto = null;
+    	if(isset($_SESSION[$ID]))*/    	
     	$objeto = $_SESSION[$ID];
     	
     	$isUsarSessao = @$_POST["utilizarSessao"] != "N";

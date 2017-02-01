@@ -54,7 +54,7 @@ include_once (caminho_util."bibliotecaFuncoesPrincipal.php");
     function getSQLValuesInsert($voGestor){
 		$retorno = "";
         //$retorno.= $this-> getVarComoNumero($voGestor->cd) . ",";
-        $retorno.= $this-> getVarComoString($voGestor->descricao) . ",";
+        $retorno.= $this-> getVarComoString($voGestor->descricao);
         
         $retorno.= $voGestor->getSQLValuesInsertEntidade();
 		        

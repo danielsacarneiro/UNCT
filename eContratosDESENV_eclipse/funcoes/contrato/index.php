@@ -14,42 +14,48 @@ setCabecalho($titulo);
 
 $voContrato = new voContrato();
 
-$filtroContrato  = new filtroManterContrato();
-$filtroContrato = filtroManter::verificaFiltroSessao($filtroContrato);
+$filtro  = new filtroManterContrato();
+$filtro = filtroManter::verificaFiltroSessao($filtro);
 
-$cdContrato = $filtroContrato->cdContrato;
-$anoContrato = $filtroContrato->anoContrato;
-$tipo = $filtroContrato->tipo;
+$cdContrato = $filtro->cdContrato;
+$anoContrato = $filtro->anoContrato;
+$tipo = $filtro->tipo;
     
-$modalidade  = $filtroContrato->modalidade;
-$especie  = $filtroContrato->especie;
-$cdEspecie  = $filtroContrato->cdEspecie;
-$nmGestor  = $filtroContrato->gestor;
-$nmContratada  = $filtroContrato->contratada;
-$docContratada = $filtroContrato->docContratada;
-$dsObjeto  = $filtroContrato->objeto;
-$dtVigenciaInicial  = $filtroContrato->dtVigenciaInicial;
-$dtVigenciaFinal  = $filtroContrato->dtVigenciaFinal;
-$dtVigencia  = $filtroContrato->dtVigencia;
-$dtInicio1  = $filtroContrato->dtInicio1;
-$dtInicio2  = $filtroContrato->dtInicio2;
-$dtFim1  = $filtroContrato->dtFim1;
-$dtFim2  = $filtroContrato->dtFim2;
-$cdHistorico = $filtroContrato->cdHistorico;
+$modalidade  = $filtro->modalidade;
+$especie  = $filtro->especie;
+$cdEspecie  = $filtro->cdEspecie;
+$nmGestor  = $filtro->gestor;
+$nmContratada  = $filtro->contratada;
+$docContratada = $filtro->docContratada;
+$dsObjeto  = $filtro->objeto;
+$dtVigenciaInicial  = $filtro->dtVigenciaInicial;
+$dtVigenciaFinal  = $filtro->dtVigenciaFinal;
+$dtVigencia  = $filtro->dtVigencia;
+$dtInicio1  = $filtro->dtInicio1;
+$dtInicio2  = $filtro->dtInicio2;
+$dtFim1  = $filtro->dtFim1;
+$dtFim2  = $filtro->dtFim2;
+$cdHistorico = $filtro->cdHistorico;
 $isHistorico = ("S" == $cdHistorico); 
-	
+
+if($filtro->cdConsultarArquivo == null){
+	$filtro->cdConsultarArquivo = "N";
+}
+
+
 $dbprocesso = new dbcontrato();
-$colecao = $dbprocesso->consultarComPaginacao($voContrato, $filtroContrato, $numTotalRegistros, $pagina, $qtdRegistrosPorPag);
+//$colecao = $dbprocesso->consultarComPaginacao($voContrato, $filtro, $numTotalRegistros, $pagina, $qtdRegistrosPorPag);
+$colecao = $dbprocesso->consultarFiltroManterContrato($voContrato, $filtro);
 
 //aqui verifica se pelo menos um filtro valido foi inserido
 //se nao, seta os filtros defalts para diminuir o retorno da consulta
 //o trecho deve ficar depois da consulta que eh quando sao setados no filtro os valores default
-if($filtroContrato->temValorDefaultSetado){
-	$anoContrato  = $filtroContrato->anoContrato;
+if($filtro->temValorDefaultSetado){
+	$anoContrato  = $filtro->anoContrato;
 }
 
-$qtdRegistrosPorPag = $filtroContrato->qtdRegistrosPorPag;
-$numTotalRegistros = $filtroContrato->numTotalRegistros;
+$qtdRegistrosPorPag = $filtro->qtdRegistrosPorPag;
+$numTotalRegistros = $filtro->numTotalRegistros;
 ?>
 
 <!DOCTYPE html>
@@ -194,7 +200,16 @@ function alterar() {
             <TR>
                 <TH class="campoformulario" nowrap>Ano Contrato Mater:</TH>
                 <TD class="campoformulario" ><INPUT type="text" id="<?=vocontrato::$nmAtrAnoContrato?>" name="<?=vocontrato::$nmAtrAnoContrato?>"  value="<?php echo($anoContrato);?>"  class="camponaoobrigatorio" size="6" maxlength="4" ></TD>
-                <TD class="campoformularioalinhadodireita" colspan="2">
+                
+				<?php 
+				include_once(caminho_util."radiobutton.php");
+				$arraySimNao = array("S" => "Sim",
+						"N" => "Não");		
+				$radioArquivo = new radiobutton($arraySimNao);				
+		?>									
+               <TH class="campoformulario" nowrap>Procurar em arquivos: 
+               						<?php echo $radioArquivo->getHtmlRadio("cdConsultarArquivo","cdConsultarArquivo", $filtro->cdConsultarArquivo, false, false);?>&nbsp;&nbsp;</TH>
+                <TD class="campoformularioalinhadodireita" colspan="1">
                     <a href="javascript:limparFormulario();" ><img  title="Limpar" src="<?=caminho_imagens?>borracha.jpg" width="20" height="20"></a>
                 </TD>
             </TR>
@@ -323,13 +338,13 @@ function alterar() {
                         	<INPUT type="text" 
                         	       id="<?=vocontrato::$nmAtrDhInclusao?>" 
                         	       name="<?=vocontrato::$nmAtrDhInclusao?>"
-                        			value="<?php echo($filtroContrato->dtInclusao);?>" 
+                        			value="<?php echo($filtro->dtInclusao);?>" 
                         			onkeyup="formatarCampoData(this, event, false);" 
                         			class="camponaoobrigatorio" 
                         			size="10" 
                         			maxlength="10" >
                 </TD>
-		</TR>										
+		</TR>	
 				<?php
 				include_once(caminho_util."dominioQtdObjetosPagina.php");
 				$objetosPorPagina = new dominioQtdObjetosPagina();
@@ -338,12 +353,9 @@ function alterar() {
 				$comboOrdenacao = new select(getAtributosOrdenacaoContrato());
 				//$cdOrdenacao = @$_POST["cdOrdenacao"];
 				//$cdAtrOrdenacao = @$_POST["cdAtrOrdenacao"];                      
-                $cdOrdenacao = $filtroContrato->cdOrdenacao;
-                $cdAtrOrdenacao = $filtroContrato->cdAtrOrdenacao;
+                $cdOrdenacao = $filtro->cdOrdenacao;
+                $cdAtrOrdenacao = $filtro->cdAtrOrdenacao;
                 
-                include_once(caminho_util."radiobutton.php");
-                $arraySimNao = array("S" => "Sim",
-                                     "N" => "Não");
                 $radioHistorico  = new radiobutton($arraySimNao);
 				?>
   		    <TR>
@@ -360,7 +372,16 @@ function alterar() {
 		</DIV>
   </TD>
 </TR>
-<TR>
+<?php 
+
+if($filtro->cdConsultarArquivo == "S"){
+	include("grid_arquivo.php");
+}else{
+	include("grid_contrato.php");
+}
+
+?>
+<!--<TR>
        <TD class="conteinertabeladados">
         <DIV id="div_tabeladados" class="tabeladados">
          <TABLE id="table_tabeladados" class="tabeladados" cellpadding="0" cellspacing="0">						
@@ -454,7 +475,7 @@ function alterar() {
 				}				
                 ?>
                 <TR>
-                    <TD class="tabeladadosalinhadocentro" colspan=12><?=$filtroContrato->paginacao->criarLinkPaginacaoGET()?></TD>
+                    <TD class="tabeladadosalinhadocentro" colspan=12><?=$filtro->paginacao->criarLinkPaginacaoGET()?></TD>
                 </TR>				
                 <TR>
                     <TD class="totalizadortabeladadosalinhadodireita" colspan=12>Total de registro(s) na página: <?=$i?></TD>
@@ -487,7 +508,7 @@ function alterar() {
                 </TBODY>
             </TABLE>
             </TD>
-        </TR>
+        </TR>-->
     </TBODY>
 </TABLE>
 </FORM>

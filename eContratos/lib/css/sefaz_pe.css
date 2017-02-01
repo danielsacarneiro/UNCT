@@ -1,5 +1,9 @@
-input,select:invalid {  
-  border: 1px solid #FFA500;  
+input:invalid, select:invalid  {  
+  border: 1px solid #b03535;  
+}
+
+input:required, select:required {    
+  border: 1px solid #FFA500;
 }
 
 #header {

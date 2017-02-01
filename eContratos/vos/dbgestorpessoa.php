@@ -75,7 +75,7 @@ include_once (caminho_util."bibliotecaFuncoesPrincipal.php");
         $retorno.= $this-> getVarComoString($voGestorPessoa->nome) . ",";
         $retorno.= $this-> getVarComoString($voGestorPessoa->doc) . ",";
         $retorno.= $this-> getVarComoString($voGestorPessoa->tel) . ",";
-        $retorno.= $this-> getVarComoString($voGestorPessoa->email) . ",";
+        $retorno.= $this-> getVarComoString($voGestorPessoa->email);
         
         $retorno.= $voGestorPessoa->getSQLValuesInsertEntidade();
 		        

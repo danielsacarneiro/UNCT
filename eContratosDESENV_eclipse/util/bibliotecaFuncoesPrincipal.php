@@ -100,15 +100,17 @@
                 for ($i=0; $i<$totalResultado; $i++) {
                     $atrib = $arrayAtribRemover[$i];
                     $retorno = removeElementoArray($retorno, $atrib);
+                    //echo "<br>" . $i. $atrib;
                 }
             }
-            //echo "<br>"; var_dump($retorno);
+            //echo "<br>"; 
+            //var_dump($retorno);
             return $retorno;
     }
     
     function removeElementoArray($input, $elem){
         $key = array_search($elem, $input);
-        if($key){
+        if($key !== false){
             //echo "<br> removendo elemento: " . $input[$key];
             //unset($input[$key]);
             $input[$key] = null;
@@ -116,17 +118,28 @@
         
         return $input;
     }    
-
+    
     function getColecaoEntreSeparador($colecaoAtributos, $separador) {
+    	return getColecaoEntreSeparadorAspas($colecaoAtributos, $separador, false);    	
+    }
+    
+    function getColecaoEntreSeparadorAspas($colecaoAtributos, $separador,$comAspas) {
             $retorno = "";
+            $aspas = "'";
             if($colecaoAtributos != null){
                 $tamanho = count($colecaoAtributos);
                 //echo "<br> qtd registros: " . $tamanho;
                                
-                for ($i=1; $i<=$tamanho; $i++) {
-                    $atrib = $colecaoAtributos[$i];
-                    if($atrib != null)
+                for ($i=0; $i<=$tamanho; $i++) {
+                    $atrib = $colecaoAtributos[$i];                    
+                    
+                    if($atrib != null){
+                    	
+                    	if($comAspas)
+                    		$atrib = $aspas . $atrib . $aspas;                    	
+                    	
                         $retorno .= $atrib . $separador;
+                    }
                    //echo "$retorno<br>";
                 }
                 $retorno = substr($retorno, 0, count($retorno)-2);

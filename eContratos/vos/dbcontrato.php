@@ -136,7 +136,7 @@ include_once (caminho_util."bibliotecaFuncoesPrincipal.php");
 		$retorno.= $this-> getVarComoString($voContrato->obs) . ",";		
 		$retorno.= $this-> getDecimalSQL($voContrato->vlGlobal) . ",";
 		$retorno.= $this-> getDecimalSQL($voContrato->vlMensal) . ",";
-        $retorno.= $this-> getDataSQL($voContrato->dtProposta) . ",";
+        $retorno.= $this-> getDataSQL($voContrato->dtProposta);
         
         $retorno.= $voContrato->getSQLValuesInsertEntidade();
 		        

@@ -27,13 +27,17 @@ cabecalho;
 	// SERVIÇO 1
 	f1 = new Tree('Manutenção de Tabelas');	
     f1.adicionarItem(new Link('Manter Gestores', '<?=caminho_funcoesHTML?>gestor', ''));
-    f1.adicionarItem(new Link('Manter Responsáveis', '<?=caminho_funcoesHTML?>gestor_pessoa', ''));
 	f.adicionarItem(f1);
+	
+	f2 = new Tree('Pessoas');	
+    f2.adicionarItem(new Link('Manter Pessoas', '<?=caminho_funcoesHTML?>pessoa', ''));
+    f2.adicionarItem(new Link('Manter Responsáveis', '<?=caminho_funcoesHTML?>gestor_pessoa', ''));    
+	f.adicionarItem(f2);
 
 	// SERVIÇO 2
-	f2 = new Tree('Contratos');
-	f2.adicionarItem(new Link("Manter Contratos", "<?=caminho_funcoesHTML?>contrato", ""));
-	f.adicionarItem(f2);
+	f3 = new Tree('Contratos');
+	f3.adicionarItem(new Link("Manter Contratos", "<?=caminho_funcoesHTML?>contrato", ""));
+	f.adicionarItem(f3);
 
 	/*
     // SERVIÇO 4

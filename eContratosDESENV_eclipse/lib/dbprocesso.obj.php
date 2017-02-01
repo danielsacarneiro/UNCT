@@ -70,7 +70,7 @@ class dbprocesso{
     
 	function consultarComPaginacao($voentidade, $filtro){
         $isHistorico = ("S" == $filtro->cdHistorico);       
-        $nmTabela = $voentidade->getNmTabelaEntidade($isHistorico);            
+        $nmTabela = $voentidade->getNmTabelaEntidade($isHistorico);
 
         $querySelect = "SELECT * ";
         $queryFrom = " FROM " . $nmTabela;
@@ -88,18 +88,23 @@ class dbprocesso{
 		
         if($consultar == "S"){
 			$filtroSQL = $filtro->getFiltroConsultaSQL($isHistorico);
-            $pagina = $filtro->paginacao->getPaginaAtual();
-                                    
-			//guarda o numero total de registros para nao ter que executar a consulta TODOS novamente
-            $numTotalRegistros = $filtro->numTotalRegistros = $this->getNumTotalRegistrosQuery("SELECT count(*) as " . dbprocesso::$nmCampoCount . $queryFrom . $filtroSQL);		
-
-            $qtdRegistrosPorPag = $filtro->qtdRegistrosPorPag;
-			//calcula o número de páginas arredondando o resultado para cima
-			$numPaginas = ceil($numTotalRegistros/$qtdRegistrosPorPag);
-			$filtro->paginacao->setNumTotalPaginas($numPaginas);            
 			
-			$inicio = ($qtdRegistrosPorPag*$pagina)-$qtdRegistrosPorPag;
-			$limite = " LIMIT $inicio,$qtdRegistrosPorPag";
+			//verifica se tem paginacao
+			$limite = "";
+			if($filtro->TemPaginacao){	
+				//ECHO "TEM PAGINACAO";
+	            $pagina = $filtro->paginacao->getPaginaAtual();                                    
+				//guarda o numero total de registros para nao ter que executar a consulta TODOS novamente
+	            $numTotalRegistros = $filtro->numTotalRegistros = $this->getNumTotalRegistrosQuery("SELECT count(*) as " . dbprocesso::$nmCampoCount . $queryFrom . $filtroSQL);		
+	
+	            $qtdRegistrosPorPag = $filtro->qtdRegistrosPorPag;
+				//calcula o número de páginas arredondando o resultado para cima
+				$numPaginas = ceil($numTotalRegistros/$qtdRegistrosPorPag);
+				$filtro->paginacao->setNumTotalPaginas($numPaginas);            
+				
+				$inicio = ($qtdRegistrosPorPag*$pagina)-$qtdRegistrosPorPag;
+				$limite = " LIMIT $inicio,$qtdRegistrosPorPag";
+			}
 			
             //aqui eh onde faz realmente a consulta a retornar
             $query = $querySelect . $queryFrom. " $filtroSQL ";			
@@ -137,11 +142,13 @@ class dbprocesso{
     
     function incluirQuery($voEntidade, $arrayAtribRemover){
         $atributosInsert = $voEntidade->getTodosAtributos();
-        //var_dump ($atributosInsert);            
+        //var_dump ($atributosInsert);        
+        //echo "<br>";
         //var_dump($arrayAtribRemover);
 
         $atributosInsert = removeColecaoAtributos($atributosInsert, $arrayAtribRemover);
         //var_dump ($atributosInsert);
+        //echo "<br>";
         
         $atributosInsert = getColecaoEntreSeparador($atributosInsert, ",");
         

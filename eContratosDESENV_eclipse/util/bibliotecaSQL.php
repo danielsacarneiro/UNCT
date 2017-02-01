@@ -1,5 +1,6 @@
 <?php
 include_once("constantes.class.php");
+include_once ("bibliotecaFuncoesPrincipal.php");
 
   //Class bibliotecaSQL {
   
@@ -108,4 +109,48 @@ include_once("constantes.class.php");
 				
 		return $retorno;
 	}	
+			
+	function getSQLStringFormatadaColecaoIN($colecaoValores, $isString){
+		$separador = ",";	
+		
+		return getColecaoEntreSeparadorAspas($colecaoValores, $separador, $isString);
+	}
+	
+	function getSQLStringArgumentosFormatadoColecao($colecaoValores, $nmAtributo, $operadorSQL, $operardorValor, $isString) {
+		$retorno = "";
+		$aspas = "'";
+		
+		$isOperadorSQLLIKE = (mb_stripos($operardorValor, "LIKE") !== false);
+		//echo $isOperadorSQLLIKE;
+		
+		if($colecaoValores != null){
+			$tamanho = count($colecaoValores);
+			//echo "<br> qtd registros: " . $tamanho;
+			 
+			for ($i=0; $i<$tamanho; $i++) {
+				$atrib = $colecaoValores[$i];
+	
+				if($atrib != null){
+					 
+					if($isString){
+						
+						if ($isOperadorSQLLIKE)
+							$atrib = "%" . $atrib . "%";
+						
+						$atrib = $aspas . $atrib . $aspas;
+					}						
+						 
+					$retorno .= "\n". $nmAtributo . $operardorValor . $atrib . $operadorSQL;
+				}
+				//echo "$retorno<br>";
+			}
+			//tamanho da string retirada do fim do retorno
+			$qtdCharFim = strlen($retorno) - strlen($operadorSQL);
+			//echo $qtdCharFim;
+			$retorno = substr($retorno, 0, $qtdCharFim);
+		}
+		//echo $retorno;
+		return $retorno;
+	}
+	
 ?>

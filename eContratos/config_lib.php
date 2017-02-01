@@ -56,5 +56,6 @@ define('caminho_imagens', $caminhoIMG);
 
 //variaveis HTML
 define('TAMANHO_CODIGOS', 5);
+define('CAMPO_SEPARADOR', "*");
 
 ?>
