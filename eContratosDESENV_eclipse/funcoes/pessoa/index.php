@@ -202,7 +202,7 @@ function alterar() {
         </TABLE>
         </DIV>
        </TD>
-       </TR>
+</TR>
         <TR>
             <TD class="conteinerbarraacoes">
             <TABLE id="table_barraacoes" class="barraacoes" cellpadding="0" cellspacing="0">

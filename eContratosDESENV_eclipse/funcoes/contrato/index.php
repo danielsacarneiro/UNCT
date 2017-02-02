@@ -42,6 +42,10 @@ if($filtro->cdConsultarArquivo == null){
 	$filtro->cdConsultarArquivo = "N";
 }
 
+$requiredArquivo = "";
+if($filtro->cdConsultarArquivo == "S"){
+	$requiredArquivo = "required";
+}
 
 $dbprocesso = new dbcontrato();
 //$colecao = $dbprocesso->consultarComPaginacao($voContrato, $filtro, $numTotalRegistros, $pagina, $qtdRegistrosPorPag);
@@ -72,10 +76,14 @@ $numTotalRegistros = $filtro->numTotalRegistros;
 <SCRIPT language="JavaScript" type="text/javascript">
 
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
-function isFormularioValido() {
-	if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta"))
-		return false;		
-	return true;
+function validaFormulario() {
+
+	isConsultarArquivo = document.frm_principal.cdConsultarArquivo.value;
+	if(isConsultarArquivo == "S")
+		document.frm_principal.<?=vocontrato::$nmAtrContratadaContrato?>.required = true;
+	else
+		document.frm_principal.<?=vocontrato::$nmAtrContratadaContrato?>.required = false;
+		
 }
 
 // Submete o filtro de consulta 
@@ -197,9 +205,17 @@ function alterar() {
     <DIV id="div_filtro" class="div_filtro">
     <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
         <TBODY>
+			<?php
+			$colecaoExer = array();
+            for ($i=anoDefault;$i>2000;$i--){            	
+            	$colecaoExer[$i]=$i;
+            }			            
+			$comboExercicio = new select($colecaoExer);
+			?>        
             <TR>
                 <TH class="campoformulario" nowrap>Ano Contrato Mater:</TH>
-                <TD class="campoformulario" ><INPUT type="text" id="<?=vocontrato::$nmAtrAnoContrato?>" name="<?=vocontrato::$nmAtrAnoContrato?>"  value="<?php echo($anoContrato);?>"  class="camponaoobrigatorio" size="6" maxlength="4" ></TD>
+                <TD class="campoformulario" ><?php echo $comboExercicio->getHtml(vocontrato::$nmAtrAnoContrato,voContrato::$nmAtrAnoContrato, $anoContrato);?>
+                <!-- <INPUT type="text" id="<?=vocontrato::$nmAtrAnoContrato?>" name="<?=vocontrato::$nmAtrAnoContrato?>"  value="<?php echo($anoContrato);?>"  class="camponaoobrigatorio" size="6" maxlength="4" >--></TD>
                 
 				<?php 
 				include_once(caminho_util."radiobutton.php");
@@ -208,7 +224,7 @@ function alterar() {
 				$radioArquivo = new radiobutton($arraySimNao);				
 		?>									
                <TH class="campoformulario" nowrap>Procurar em arquivos: 
-               						<?php echo $radioArquivo->getHtmlRadio("cdConsultarArquivo","cdConsultarArquivo", $filtro->cdConsultarArquivo, false, false);?>&nbsp;&nbsp;</TH>
+               						<?php echo $radioArquivo->getHtmlRadioButton("cdConsultarArquivo","cdConsultarArquivo", $filtro->cdConsultarArquivo, false, "onClick='validaFormulario();'");?>&nbsp;&nbsp;</TH>
                 <TD class="campoformularioalinhadodireita" colspan="1">
                     <a href="javascript:limparFormulario();" ><img  title="Limpar" src="<?=caminho_imagens?>borracha.jpg" width="20" height="20"></a>
                 </TD>
@@ -250,7 +266,7 @@ function alterar() {
             </TR>
 			<TR>
                 <TH class="campoformulario" nowrap>Nome Contratada:</TH>
-                <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vocontrato::$nmAtrContratadaContrato?>" name="<?=vocontrato::$nmAtrContratadaContrato?>"  value="<?php echo($nmContratada);?>"  class="camponaoobrigatorio" size="50" ></TD>
+                <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vocontrato::$nmAtrContratadaContrato?>" name="<?=vocontrato::$nmAtrContratadaContrato?>"  value="<?php echo($nmContratada);?>"  class="camponaoobrigatorio" size="50" <?=$requiredArquivo?>></TD>
                 <TH class="campoformulario" width="1%" nowrap>CNPJ/CPF Contratada:</TH>
                 <TD class="campoformulario" ><INPUT type="text" id="<?=vocontrato::$nmAtrDocContratadaContrato?>" name="<?=vocontrato::$nmAtrDocContratadaContrato?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($docContratada);?>" class="camponaoobrigatorio" size="20" maxlength="18"></TD>
             </TR>

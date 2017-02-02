@@ -36,7 +36,7 @@ include_once(caminho_wordpress. "wp-config.php");
         define('id_user', $idUsuario);
         define('name_user', $nomeUsuario);
         
-        define('anoDefault', date('Y')-1);
+        define('anoDefault', date('Y'));
         define('dtHoje', date('d/m/Y'));
         define('dtHojeSQL', date('Y/m/d'));        
     }

@@ -1,6 +1,29 @@
 <?php
 
-    function existeStr1NaStr2ComSeparador($str2, $str1comseparador){
+	function isColecaoVazia($recordset){		
+		return $recordset == null || $recordset == "";		
+	}
+    
+	function getColunaEmLinha($recordset, $nmColuna, $pSeparador){
+		$retorno = null;
+		
+		if(!isColecaoVazia($recordset)){
+			$tamanho = count($recordset);			
+		
+			for($i=0; $i<$tamanho;$i++){
+				$atrib = $recordset[$i][$nmColuna];
+				$retorno.=$atrib.$pSeparador;
+			}
+			
+			$qtdCharFim = strlen($retorno) - strlen($pSeparador);
+			//echo $qtdCharFim;
+			$retorno = substr($retorno, 0, $qtdCharFim);
+		}
+	
+		return $retorno;
+	}
+	
+	function existeStr1NaStr2ComSeparador($str2, $str1comseparador){
         $array = explode("*",$str1comseparador);
         $tamanho = count($array);
         $retorno = false;

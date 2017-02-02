@@ -10,11 +10,12 @@ include_once(caminho_util."biblioteca_htmlArquivo.php");
 <SCRIPT language="javascript">
 
 <?php
-$nmMenuPai = new pasta("menu_pai"); 
-criaMenu($nmMenuPai, true);
-//geraArvoreMenu($nmMenuPai, "../");
-geraArvoreMenu($nmMenuPai, "../");
-//geraArvoreMenu($nmMenuPai, "C:\CDcertisign");
+ini_set('max_execution_time', 120);
+
+$MenuPai = new pasta("menu_pai", $filtro, 1); 
+criaMenu($MenuPai, true);
+geraArvoreMenu($MenuPai, "../../");
+//geraArvoreMenu($MenuPai, "H:\UNCT\CONTRATOS JÁ ASSINADOS");
 
 ?>
 
@@ -31,7 +32,7 @@ geraArvoreMenu($nmMenuPai, "../");
                 
                 <TR class="dados">
                     <TD valign="top" bgcolor="#A5B9D7">
-					<SCRIPT><?=$nmMenuPai->nomeObj?>.escrever(false, 0);</SCRIPT>
+					<SCRIPT><?=$MenuPai->nomeObj?>.escrever(false, 0);</SCRIPT>
 					
 					<div id="nomeDIV">
 	                <?php	                 

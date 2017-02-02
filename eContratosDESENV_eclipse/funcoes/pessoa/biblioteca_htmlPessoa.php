@@ -55,7 +55,7 @@ function getComboGestorResponsavel($cdGestor){
 			
 			for($i=0;$i<$tam;$i++){
 				$retorno .= "<TR>\n";
-				$retorno .= "<TD class='tabeladados' width='1%'>" . getRadioButton(vogestor::$nmAtrCd, vogestor::$nmAtrCd, "", "", "") . "</TD>\n";
+				$retorno .= "<TD class='tabeladados' width='1%'>" . getRadioButton(vogestor::$nmAtrCd, vogestor::$nmAtrCd, $recordSet[$i][vogestor::$nmAtrCd],"","") . "</TD>\n";
 				$retorno .= "<TD class='tabeladados' width='1%'>" . complementarCharAEsquerda($recordSet[$i][vogestor::$nmAtrCd],"0", TAMANHO_CODIGOS) . "</TD>\n";
 				$retorno .= "<TD class='tabeladados' width='90%'>". $recordSet[$i][vogestor::$nmAtrDescricao] . "</TD>\n";
 				$retorno .= "</TR>\n";

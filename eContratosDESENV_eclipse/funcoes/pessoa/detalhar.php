@@ -19,10 +19,11 @@ $nmFuncao = "";
 $readonly = "readonly";
 $dbprocesso = new dbpessoa();					
 $colecao = $dbprocesso->consultarPorChave($vo, $isHistorico);	
-$vo->getDadosBanco($colecao[0]);
+$vo->getDadosBanco($colecao);
+
 putObjetoSessao($vo->getNmTabela(), $vo);
 
-$descricao = $colecao[0][vogestor::$nmAtrDescricao];
+$descricao = $colecao[vogestor::$nmAtrDescricao];
 $nome  = $vo->nome;
 $doc  = $vo->doc;
 $email  = $vo->email;
@@ -121,17 +122,48 @@ function confirmar() {
             </TR>
             <TR>
                 <TH class="campoformulario" nowrap>Vínculo:</TH>
-                <TD class="campoformulario" colspan="3">
-                     <?php
-                    include_once("biblioteca_htmlPessoa.php");
-                    echo getComboPessoaVinculo(vopessoavinculo::$nmAtrCd, vopessoavinculo::$nmAtrCd, $colecao[0][vopessoavinculo::$nmAtrCd], "camporeadonly", " disabled ");
-                    
-                    //quando trouxer o gestor
-                    if(false){
-                    ?>                    
-                    Órgão Gestor: <INPUT type="text" id="<?=vogestor::$nmAtrDescricao?>" name="<?=vogestor::$nmAtrDescricao?>"  value="<?php echo($descricao);?>>"  class="camporeadonly" size="50" readonly>
-                    <?php
-                    }?>
+		       <TD class="campoformulario" colspan=3>
+		         <TABLE id="campoformulario" class="campoformulario" cellpadding="0" cellspacing="0">						
+		             <TBODY>
+		                <?php	
+		                include_once("biblioteca_htmlPessoa.php");
+		                $vinculos = $colecao[vopessoavinculo::$nmAtrCd];
+		                $colecaoVinculo = explode(CAMPO_SEPARADOR,$vinculos);
+		                
+		                $gestores = $colecao[vogestor::$nmAtrDescricao];
+		                $gestor = "";
+		                if($gestores != null && $gestores !=""){
+		                	$colecaoGestores = explode(CAMPO_SEPARADOR,$gestores);
+		                	$gestor = $colecaoGestores[0];
+		                }                
+		                
+		                if (is_array($colecaoVinculo))
+		                        $tamanho = sizeof($colecaoVinculo);
+		                else 
+		                        $tamanho = 0;			
+		                
+		                $dominioPessoaVinculo = new dominioVinculoPessoa();
+		                            
+		                for ($i=0;$i<$tamanho;$i++) {
+		                        $cdVinculo = $colecaoVinculo[$i];		                       
+		                ?>
+		                <TR >
+		                    <TD class="tabeladados"><?php echo $cdVinculo;?></TD>
+		                    <TD class="tabeladados"><?php echo $dominioPessoaVinculo->getDescricao($cdVinculo);?></TD>
+			                <?php
+			                if($cdVinculo == dominioVinculoPessoa::$CD_VINCULO_RESPONSAVEL){
+			                ?>		                    
+		                    <TD class="tabeladados">Órgão Gestor: <?php echo $gestor;?></TD>
+			                <?php
+							}				
+			                ?>
+		                </TR>					
+		                <?php
+						}				
+		                ?>
+		            </TBODY>
+		        </TABLE>
+		       </TD>                    
             </TR>               
             
             

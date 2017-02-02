@@ -9,7 +9,11 @@ include_once ("select.php");
 
 // ...............................................................
 // Funcoes ( Propriedades e metodos da classe )    
-    function getHtmlRadio($idRadio, $nmRadio, $opcaoSelecionada, $comOpcaoTodos, $disabled) {
+  	function getHtmlRadio($idRadio, $nmRadio, $opcaoSelecionada, $comOpcaoTodos, $disabled) {
+  		return $this->getHtmlRadioButton($idRadio, $nmRadio, $opcaoSelecionada, $comOpcaoTodos, "");	
+  	}
+  	
+  	function getHtmlRadioButton($idRadio, $nmRadio, $opcaoSelecionada, $comOpcaoTodos, $javaScript) {
 		$html = "";
 		
         if($opcaoSelecionada == null)
@@ -22,23 +26,23 @@ include_once ("select.php");
 			$cd = $chaves[$i];
 			$ds = $this->colecao[$cd];
 			
-			$html .= $this->getRadioValue($idRadio, $nmRadio, $cd, $ds, $opcaoSelecionada);		
+			$html .= $this->getRadioValue($idRadio, $nmRadio, $cd, $ds, $opcaoSelecionada, $javaScript);		
 		}	
 		//inclui opcao vazio
 		if($comOpcaoTodos)
-			$html .= $this->getRadioValue($idRadio, $nmRadio,"", "Todos", null);
+			$html .= $this->getRadioValue($idRadio, $nmRadio,"", "Todos", null, $javaScript);
 
 		return $html;
 	}
 	    
-    function getRadioValue($idRadio, $nmRadio, $cd, $ds, $opcaoSelecionada) {
+    function getRadioValue($idRadio, $nmRadio, $cd, $ds, $opcaoSelecionada, $javaScript) {
 		$selected = "";
         
 		if($this->selected($cd, $opcaoSelecionada)){			
             $selected = "checked";
 		}
 		
-		return $html = "<input type='radio' id='$idRadio' name='$nmRadio' value='$cd' $selected>$ds</input>";
+		return $html = "<input type='radio' id='$idRadio' name='$nmRadio' value='$cd' $javaScript $selected>$ds</input>";
 	}
 		
 }

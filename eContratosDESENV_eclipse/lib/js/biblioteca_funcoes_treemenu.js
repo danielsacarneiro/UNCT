@@ -101,7 +101,6 @@ function retrairItemTree(id) {
     }
 }
 
-// Begin Class - Link
 function Link(label, href, seq, background, pInJanelaAuxiliar, pValue, pInSelecionado, pNmClasseCSS, pInComParametrosFramework) {
 
     // properties

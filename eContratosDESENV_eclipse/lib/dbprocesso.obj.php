@@ -68,6 +68,29 @@ class dbprocesso{
 	    return $retorno;
 	}
     
+	function atualizarEntidade($query){
+		//echo $query;
+		$retorno = $this->cDb->atualizar($query);
+		
+		return $retorno;
+	}
+	
+	function getEntidadePorChavePrimariaComValoresDiversosEmColunas($recordset, $colecaoAtr){
+		$retorno = null;
+		if(!isColecaoVazia($recordset) && !isColecaoVazia($colecaoAtr)){
+			
+			$tamanho = count($colecaoAtr);
+			$retorno = $recordset[0];
+			
+			for($i=0; $i<$tamanho;$i++){
+				$nmColuna = $colecaoAtr[$i];
+				$retorno[$nmColuna]= getColunaEmLinha($recordset, $nmColuna, CAMPO_SEPARADOR);
+			}				
+		}
+		
+		return $retorno;
+	}
+	
 	function consultarComPaginacao($voentidade, $filtro){
         $isHistorico = ("S" == $filtro->cdHistorico);       
         $nmTabela = $voentidade->getNmTabelaEntidade($isHistorico);
