@@ -54,16 +54,19 @@ ALTER TABLE pessoa_vinculo ADD CONSTRAINT fk_pessoa_vinculo FOREIGN KEY ( pe_cd 
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;
     
-drop table gestor_pessoa;
-CREATE TABLE gestor_pessoa (
+drop table pessoa_gestor;
+CREATE TABLE pessoa_gestor (
 	pe_cd INT,
 	gt_cd INT,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_ultalt INT,
         
-    CONSTRAINT pk PRIMARY KEY (gp_cd)
+    CONSTRAINT pk PRIMARY KEY (pe_cd, gt_cd)
 );
-ALTER TABLE gestor_pessoa ADD CONSTRAINT fk_gestor_pessoa FOREIGN KEY ( gt_cd ) REFERENCES gestor (gt_cd) 
+ALTER TABLE pessoa_gestor ADD CONSTRAINT fk_pessoa_gestor FOREIGN KEY ( gt_cd ) REFERENCES gestor (gt_cd) 
+	ON DELETE RESTRICT
+	ON UPDATE RESTRICT;
+ALTER TABLE pessoa_gestor ADD CONSTRAINT fk_pessoa_gestor2 FOREIGN KEY ( pe_cd ) REFERENCES pessoa (pe_cd) 
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;
 

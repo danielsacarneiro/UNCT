@@ -5,14 +5,17 @@
  */
 
 /*
- Descrição:
- - Contém funções de montagem de menu
+ Descriï¿½ï¿½o:
+ - Contï¿½m funï¿½ï¿½es de montagem de menu
 
- Dependências:
+ Dependï¿½ncias:
  - biblioteca_funcoes_principal.js
 */
 
-var pastaImagens = "imagens/";
+//_pastaImagensGlobal eh variavel global definida em config_lib.php
+//pois o local da imagem dependera do local da pagina php
+var pastaImagens = _pastaImagensGlobal;
+
 var _treeCount = 0;
 var _folderIcons = new Array(pastaImagens + "arrowhead1.gif", pastaImagens + "arrowhead1down.gif", pastaImagens + "arrowhead2.gif");
 var _linkIcon = pastaImagens + "arrowhead2.gif";
@@ -98,7 +101,6 @@ function retrairItemTree(id) {
     }
 }
 
-// Begin Class - Link
 function Link(label, href, seq, background, pInJanelaAuxiliar, pValue, pInSelecionado, pNmClasseCSS, pInComParametrosFramework) {
 
     // properties

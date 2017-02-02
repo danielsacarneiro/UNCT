@@ -68,14 +68,14 @@ function montarColecaoItens($pastaMenuPai, $enderecoPasta){
 	$dir = new FilesystemIterator($enderecoPasta);	
 	$filtro = $pastaMenuPai->filtro;
 	//$filter = new RegexIterator($dir, '/.(php|dat)$/');
-	$filter = new RegexIterator($dir, '/lib/');
+	$filter = new RegexIterator($dir, '/2d/');
 	
 	//echo "pasta que executou o montarColecaoItens:". $enderecoPasta. "\n";
 
 	$i = 0;
 	$retorno = "";
 	// atribui o valor de $dir para $file em loop
-	foreach($filter as $file){
+	foreach($dir as $file){
 		// verifica se o valor de $file é diferente de '.' ou '..'
 		// e é um diretório (isDir)
 		if ($file->isDir() || $file->isFile()){

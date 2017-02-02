@@ -17,7 +17,8 @@ class filtroManter{
         if($this->numTotalRegistros == null)
             $this->numTotalRegistros = 0;
 
-        $this->paginacao = null;
+        $this->paginacao = null;        
+        $this->TemPaginacao= $temPaginacao;
         
         if($temPaginacao){
             $this->paginacao = new paginacao($this->qtdRegistrosPorPag);

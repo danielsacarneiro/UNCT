@@ -30,8 +30,7 @@ cabecalho;
 	f.adicionarItem(f1);
 	
 	f2 = new Tree('Pessoas');	
-    f2.adicionarItem(new Link('Manter Pessoas', '<?=caminho_funcoesHTML?>pessoa', ''));
-    f2.adicionarItem(new Link('Manter Responsáveis', '<?=caminho_funcoesHTML?>gestor_pessoa', ''));    
+    f2.adicionarItem(new Link('Manter Pessoas', '<?=caminho_funcoesHTML?>pessoa', ''));    
 	f.adicionarItem(f2);
 
 	// SERVIÇO 2

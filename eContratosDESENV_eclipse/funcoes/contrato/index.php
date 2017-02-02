@@ -241,7 +241,7 @@ function alterar() {
             </TR>					
             <TR>
 			<?php
-			include_once("dominioEspeciesContrato.php");
+			//include_once("dominioEspeciesContrato.php");
 			$especiesContrato = new dominioEspeciesContrato();
 			$combo = new select($especiesContrato->colecao);						
 			?>

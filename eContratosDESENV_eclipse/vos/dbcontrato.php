@@ -288,14 +288,14 @@ include_once (caminho_util."biblioteca_htmlArquivo.php");
     
     /**
      *FUNCOES DE IMPORTACAO EXCLUSIVA
-     */
-    
+     */    
 	function incluirContratoImport($tipo, $linha){
         $voContrato = new vocontrato();
         
         $atributosInsert = $voContrato->getTodosAtributos();        
         $arrayAtribRemover = array(
-            vocontrato::$nmAtrDhInclusao,
+        	vocontrato::$nmAtrSqContrato,
+        	vocontrato::$nmAtrDhInclusao,
             vocontrato::$nmAtrDhUltAlteracao,
             vocontrato::$nmAtrCdUsuarioInclusao,
             vocontrato::$nmAtrCdUsuarioUltAlteracao

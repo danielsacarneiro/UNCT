@@ -32,6 +32,8 @@ class filtroManterContrato extends filtroManter{
 		$this->dtFim2  = @$_POST["dtFim2"];
         $this->dtInclusao  = @$_POST[voentidade::$nmAtrDhInclusao];
         
+        $this->cdConsultarArquivo = @$_POST["cdConsultarArquivo"];
+        
         //para o caso de ser necessario setar um filtro default para nao trazer todos os registros
         //$this->temValorDefaultSetado = false;
 	}

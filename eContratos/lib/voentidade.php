@@ -73,15 +73,15 @@
     		$temDtAlt = array_search(self::$nmAtrDhUltAlteracao, $this->varAtributos);    		
     	}    	
     	
-    	$retorno = ",";
-    	$conector = "";
+    	$retorno = "";
+    	$conector = ",";
     	if($temUsuarioInc){
-    		$retorno.= $this-> cdUsuarioInclusao . $conector;
+    		$retorno.= $conector . $this-> cdUsuarioInclusao ;
     		$conector = ",";
     	}
     	
     	if($temUsuarioAlt){
-    		$retorno.= $this-> cdUsuarioUltAlteracao . $conector;
+    		$retorno.= $conector . $this-> cdUsuarioUltAlteracao;
     		//$conector = ",";
     	}    		
     

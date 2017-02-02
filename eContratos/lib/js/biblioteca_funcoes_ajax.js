@@ -1,4 +1,15 @@
  /**
+  * Função abrirPasta
+  */
+ function abrirPasta(idCampoGestor, idDivResultado) {
+     // Declaração de Variáveis
+     var cdGestor   = "1";//document.getElementById(idCampoGestor).value;
+     var result = document.getElementById(idDivResultado);
+     imprimeResultado(result, "../../util/funcaoAbrirPastaAjax.php?" + idCampoGestor + "=" + cdGestor);     
+ }
+
+ 
+ /**
   * Função gestorPessoa
   */
  function getDadosGestorPessoa(idCampoGestor, idDivResultado) {

@@ -36,8 +36,7 @@ include_once(caminho_util. "dominio.class.php");
 				);
             
             return $array;
-	}
-    
-	
+	}	
 }
+
 ?>

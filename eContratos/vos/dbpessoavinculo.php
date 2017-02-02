@@ -28,7 +28,6 @@ include_once(caminho_lib. "dbprocesso.obj.php");
 
     function getSQLValuesInsert($vopessoavinculo){
 		$retorno = "";        
-        //$retorno.= $this-> getProximoSequencial(vopessoavinculo::$nmAtrCd, $vopessoavinculo) . ",";
         $retorno.= $this-> getVarComoNumero($vopessoavinculo->cd) . ",";
         $retorno.= $this-> getVarComoNumero($vopessoavinculo->cdPessoa);
         

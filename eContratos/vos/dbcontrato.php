@@ -5,6 +5,7 @@ include_once (caminho_vos. "vocontrato.php");
 include_once (caminho_vos. "vousuario.php");
 include_once (caminho_filtros."filtroManterContrato.php");
 include_once (caminho_util."bibliotecaFuncoesPrincipal.php");
+include_once (caminho_util."biblioteca_htmlArquivo.php");
 
 // .................................................................................................................
 // Classe select
@@ -26,8 +27,18 @@ include_once (caminho_util."bibliotecaFuncoesPrincipal.php");
             $this->rollback();
         }        
     }
+    
+    
+    function consultarFiltroManterContrato($voentidade, $filtro){    	
+    	$isArquivo = ("S" == $filtro->cdConsultarArquivo);
     	
-
+    	if($isArquivo){
+    		return "";
+    	}else{
+    		return $this->consultarComPaginacao($voentidade, $filtro);
+    	}    	
+    }
+        
 	function consultarContratoPorChave($voContrato, $isHistorico){
         $nmTabela = $voContrato->getNmTabelaEntidade($isHistorico);
         

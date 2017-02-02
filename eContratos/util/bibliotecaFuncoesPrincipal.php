@@ -1,6 +1,29 @@
 <?php
 
-    function existeStr1NaStr2ComSeparador($str2, $str1comseparador){
+	function isColecaoVazia($recordset){		
+		return $recordset == null || $recordset == "";		
+	}
+    
+	function getColunaEmLinha($recordset, $nmColuna, $pSeparador){
+		$retorno = null;
+		
+		if(!isColecaoVazia($recordset)){
+			$tamanho = count($recordset);			
+		
+			for($i=0; $i<$tamanho;$i++){
+				$atrib = $recordset[$i][$nmColuna];
+				$retorno.=$atrib.$pSeparador;
+			}
+			
+			$qtdCharFim = strlen($retorno) - strlen($pSeparador);
+			//echo $qtdCharFim;
+			$retorno = substr($retorno, 0, $qtdCharFim);
+		}
+	
+		return $retorno;
+	}
+	
+	function existeStr1NaStr2ComSeparador($str2, $str1comseparador){
         $array = explode("*",$str1comseparador);
         $tamanho = count($array);
         $retorno = false;
@@ -112,23 +135,34 @@
         $key = array_search($elem, $input);
         if($key !== false){
             //echo "<br> removendo elemento: " . $input[$key];
-            unset($input[$key]);
-            //$input[$key] = null;
+            //unset($input[$key]);
+            $input[$key] = null;
         }
         
         return $input;
     }    
     
     function getColecaoEntreSeparador($colecaoAtributos, $separador) {
+    	return getColecaoEntreSeparadorAspas($colecaoAtributos, $separador, false);    	
+    }
+    
+    function getColecaoEntreSeparadorAspas($colecaoAtributos, $separador,$comAspas) {
             $retorno = "";
+            $aspas = "'";
             if($colecaoAtributos != null){
                 $tamanho = count($colecaoAtributos);
                 //echo "<br> qtd registros: " . $tamanho;
                                
                 for ($i=0; $i<=$tamanho; $i++) {
-                    $atrib = $colecaoAtributos[$i];
-                    if($atrib != null)
+                    $atrib = $colecaoAtributos[$i];                    
+                    
+                    if($atrib != null){
+                    	
+                    	if($comAspas)
+                    		$atrib = $aspas . $atrib . $aspas;                    	
+                    	
                         $retorno .= $atrib . $separador;
+                    }
                    //echo "$retorno<br>";
                 }
                 $retorno = substr($retorno, 0, count($retorno)-2);

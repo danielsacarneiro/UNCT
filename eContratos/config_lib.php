@@ -54,6 +54,14 @@ define('caminho_css', $caminhoCSS);
 define('caminho_js', $caminhoJS);
 define('caminho_imagens', $caminhoIMG);
 
+//define uma variavem javascript para que as imagens em js sejam recuperadas corretamente
+$varGlobalJS = 
+"<script type='text/javascript'>\n"
+	. "var _pastaImagensGlobal = '" . caminho_imagens ."';\n"
+	. "</script>\n";
+
+echo $varGlobalJS;
+
 //variaveis HTML
 define('TAMANHO_CODIGOS', 5);
 define('CAMPO_SEPARADOR', "*");

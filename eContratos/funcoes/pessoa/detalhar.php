@@ -1,7 +1,6 @@
 <?php
 include_once("../../config_lib.php");
 include_once(caminho_util."bibliotecaHTML.php");
-include_once(caminho_vos."vousuario.php");
 include_once(caminho_vos."dbpessoa.php");
 
 //inicia os parametros
@@ -20,10 +19,11 @@ $nmFuncao = "";
 $readonly = "readonly";
 $dbprocesso = new dbpessoa();					
 $colecao = $dbprocesso->consultarPorChave($vo, $isHistorico);	
-$vo->getDadosBanco($colecao[0]);
+$vo->getDadosBanco($colecao);
+
 putObjetoSessao($vo->getNmTabela(), $vo);
 
-$descricao = $colecao[0][vogestor::$nmAtrDescricao];
+$descricao = $colecao[vogestor::$nmAtrDescricao];
 $nome  = $vo->nome;
 $doc  = $vo->doc;
 $email  = $vo->email;
@@ -35,7 +35,7 @@ $cdUsuarioUltAlteracao = $vo->cdUsuarioUltAlteracao;
 
 
 $nmFuncao = "DETALHAR ";
-$titulo = "RESPONSÁVEL";
+$titulo = "PESSOA";
 $complementoTit = "";
 $isExclusao = false;
 if($isHistorico)
@@ -84,7 +84,6 @@ function confirmar() {
 <FORM name="frm_principal" method="post" action="confirmar.php" onSubmit="return confirmar();">
 
 <INPUT type="hidden" id="funcao" name="funcao" value="<?=$funcao?>">
-<INPUT type="hidden" id="<?=vousuario::$nmAtrID?>" name="<?=vousuario::$nmAtrID?>" value="<?=id_user?>">
 <INPUT type="hidden" id="<?=vopessoa::$nmAtrCd?>" name="<?=vopessoa::$nmAtrCd?>" value="<?=$vo->cd?>">
  
 <TABLE id="table_conteiner" class="conteiner" cellpadding="0" cellspacing="0">
@@ -100,11 +99,7 @@ function confirmar() {
 			<TR>
                 <TH class="campoformulario" nowrap width=1%>Código:</TH>
                 <TD class="campoformulario" colspan=3><INPUT type="text" value="<?php echo(complementarCharAEsquerda($vo->cd, "0", TAMANHO_CODIGOS));?>"  class="camporeadonlyalinhadodireita" size="5" readonly></TD>
-            </TR>                            
-			<TR>
-                <TH class="campoformulario" nowrap width=1%>Órgão Gestor:</TH>
-                <TD class="campoformulario" colspan="3"><INPUT type="text" value="<?php echo($descricao);?>"  class="camporeadonly" size="50" readonly></TD>
-            </TR>                
+            </TR>                                            
 			<TR>
                 <TH class="campoformulario" nowrap width=1%>Nome:</TH>
                 <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>"  value="<?php echo($nome);?>"  class="camporeadonly" size="50" readonly></TD>
@@ -119,8 +114,59 @@ function confirmar() {
                 <TH class="campoformulario" nowrap width=1%>Telefone:</TH>
                 <TD class="campoformulario" width="1%" colspan=3><INPUT type="text" id="<?=vopessoa::$nmAtrTel?>" name="<?=vopessoa::$nmAtrTel?>"  value="<?php echo($vo->tel);?>"  class="camporeadonly" size="50" readonly></TD>
             </TR>
+			<TR>
+                <TH class="campoformulario" nowrap width=1%>Endereço:</TH>
+                <TD class="campoformulario" width="1%" colspan=3>
+                				<textarea rows="3" cols="60" id="<?=vopessoa::$nmAtrEndereco?>" name="<?=vopessoa::$nmAtrEndereco?>" class="camporeadonly" readonly><?php echo($vo->endereco);?></textarea>
+				</TD>
+            </TR>
+            <TR>
+                <TH class="campoformulario" nowrap>Vínculo:</TH>
+		       <TD class="campoformulario" colspan=3>
+		         <TABLE id="campoformulario" class="campoformulario" cellpadding="0" cellspacing="0">						
+		             <TBODY>
+		                <?php	
+		                include_once("biblioteca_htmlPessoa.php");
+		                $vinculos = $colecao[vopessoavinculo::$nmAtrCd];
+		                $colecaoVinculo = explode(CAMPO_SEPARADOR,$vinculos);
+		                
+		                $gestores = $colecao[vogestor::$nmAtrDescricao];
+		                $gestor = "";
+		                if($gestores != null && $gestores !=""){
+		                	$colecaoGestores = explode(CAMPO_SEPARADOR,$gestores);
+		                	$gestor = $colecaoGestores[0];
+		                }                
+		                
+		                if (is_array($colecaoVinculo))
+		                        $tamanho = sizeof($colecaoVinculo);
+		                else 
+		                        $tamanho = 0;			
+		                
+		                $dominioPessoaVinculo = new dominioVinculoPessoa();
+		                            
+		                for ($i=0;$i<$tamanho;$i++) {
+		                        $cdVinculo = $colecaoVinculo[$i];		                       
+		                ?>
+		                <TR >
+		                    <TD class="tabeladados"><?php echo $cdVinculo;?></TD>
+		                    <TD class="tabeladados"><?php echo $dominioPessoaVinculo->getDescricao($cdVinculo);?></TD>
+			                <?php
+			                if($cdVinculo == dominioVinculoPessoa::$CD_VINCULO_RESPONSAVEL){
+			                ?>		                    
+		                    <TD class="tabeladados">Órgão Gestor: <?php echo $gestor;?></TD>
+			                <?php
+							}				
+			                ?>
+		                </TR>					
+		                <?php
+						}				
+		                ?>
+		            </TBODY>
+		        </TABLE>
+		       </TD>                    
+            </TR>               
             
-
+            
         <?php if(!$isInclusao){
             echo "<TR>" . incluirUsuarioDataHoraDetalhamento($vo) .  "</TR>";
         }?>

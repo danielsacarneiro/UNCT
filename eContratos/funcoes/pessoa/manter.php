@@ -26,7 +26,7 @@ if($isInclusao){
     
 	$dbprocesso = new dbpessoa(null);					
 	$colecao = $dbprocesso->consultarPorChave($vo, $isHistorico);	
-	$vo->getDadosBanco($colecao[0]);    
+	$vo->getDadosBanco($colecao);    
 	putObjetoSessao($vo->getNmTabela(), $vo);
 
     $nmFuncao = "ALTERAR ";
@@ -108,6 +108,8 @@ function validaVinculo(){
 			document.frm_principal.<?=vogestor::$nmAtrDescricao?>.focus();
 			return false;	
 		}
+		/*else
+			alert(document.frm_principal.<?=vogestor::$nmAtrCd?>.value);*/
 	}
 	
 	return true;
@@ -190,7 +192,7 @@ function iniciar(){
                 <TD class="campoformulario" colspan="3">
                      <?php
                     include_once("biblioteca_htmlPessoa.php");
-                    echo getComboPessoaVinculo(vopessoavinculo::$nmAtrCd, vopessoavinculo::$nmAtrCd, "", "camponaoobrigatorio", " required onChange='verificaVinculo();' ");                    
+                    echo getComboPessoaVinculo(vopessoavinculo::$nmAtrCd, vopessoavinculo::$nmAtrCd, $colecao[vopessoavinculo::$nmAtrCd], "camponaoobrigatorio", " required onChange='verificaVinculo();' ");                    
                     ?>
                     <INPUT type="text" id="<?=vogestor::$nmAtrDescricao?>" name="<?=vogestor::$nmAtrDescricao?>"  onKeyUp="verificaVinculo();" value=""  class="campoobrigatorio" size="15">
 	                <div id="<?=$idDiv?>">

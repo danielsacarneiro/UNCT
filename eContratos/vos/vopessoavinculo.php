@@ -90,6 +90,7 @@ include_once(caminho_lib."voentidade.php");
 		$chave = @$_GET["chave"];	
 		$array = explode(CAMPO_SEPARADOR,$chave);
 		$this->cd = $array[0];
+		$this->cdPessoa = $array[1];
 	}	
 
 }

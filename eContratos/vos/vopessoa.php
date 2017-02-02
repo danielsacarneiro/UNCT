@@ -1,6 +1,6 @@
 <?php
-include_once(caminho_lib."voentidade.php");
-include_once(caminho_lib."vopessoavinculo.php");
+include_once(caminho_vos."vopessoavinculo.php");
+include_once(caminho_vos."vogestor.php");
 
   Class vopessoa extends voentidade{
         //var $nmTable = "contrato_import";
