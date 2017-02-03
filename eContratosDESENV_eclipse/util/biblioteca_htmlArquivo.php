@@ -31,6 +31,7 @@ Class pasta{
 	var $filtrarFilhos = true;
 	var $pathinfo;
 	var $dir = "";
+	static $barra = "\\\\";
 	// ...............................................................
 	// Funcoes ( Propriedades e metodos da classe )
 
@@ -58,12 +59,12 @@ Class pasta{
 function incluirArquivo($nmMenuPai, $item){
 
 	$nmclass = "'treelinkarquivo'";
-	$linkParametrosComplementares = "'','',true,'','',".$nmclass.",''";
+	$linkParametrosComplementares = "'','',false,'','',".$nmclass.",''";
 	//$linkParametrosComplementares = $nmclass;
 	//$javaScript = "'javascript:alert(0);'";
 	//$javaScript = "'". $nmMenuPai->nome . "\" . $item->nome . "'"
 	//$javaScript = "'". realpath($nmMenuPai->getPasta() . "/" . $item->nome) . "'";
-	$javaScript = "'". $nmMenuPai->getPasta() . "/" . $item->nome . "'";
+	$javaScript = "'". $nmMenuPai->getPasta() . pasta::$barra . $item->nome . "'";
 
 	$objArquivo = "new Link('" . $item->nome . "', " . $javaScript . " , $linkParametrosComplementares)";
 
@@ -109,7 +110,7 @@ function montarColecaoItens($pastaMenuPai){
 					//mesmo que eles nao tenham satisfacam o filtro
 					//isto permite trazer os arquivos que nao satisfacam o filtro, mas pertencam ao pai que satisfacam
 					$item->filtrarFilhos = false;
-					$item->setDir($enderecoPasta."/".$item->nome);
+					$item->setDir($enderecoPasta.pasta::$barra.$item->nome);
 					
 				}else{
 					$item = new arquivo($dname, ++$indice);
