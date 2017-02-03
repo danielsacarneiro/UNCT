@@ -12,10 +12,13 @@ include_once(caminho_util."biblioteca_htmlArquivo.php");
 <?php
 ini_set('max_execution_time', 120);
 
-$MenuPai = new pasta("menu_pai", $filtro, 1); 
+$MenuPai = new pasta("menu_pai", $filtro, 1);
+$MenuPai->setDir("H:/UNCT/CONTRATOS JÁ ASSINADOS");
+
 criaMenu($MenuPai, true);
-geraArvoreMenu($MenuPai, "../../");
-//geraArvoreMenu($MenuPai, "H:\UNCT\CONTRATOS JÁ ASSINADOS");
+geraArvoreMenu($MenuPai);
+
+$numTotalRegistros = $MenuPai->filtro->numTotalRegistros;
 
 ?>
 

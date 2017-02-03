@@ -346,7 +346,7 @@ include_once (caminho_util."biblioteca_htmlArquivo.php");
             $tpAutorizacao   = $linha["S"];
             $inLicom   = $linha["T"];	
             $obs = $linha["U"];            
-        }else{
+        }else {
             //convenio
             $gestor  = null;            
             $valorGlobal = $linha["F"];
@@ -360,11 +360,16 @@ include_once (caminho_util."biblioteca_htmlArquivo.php");
             
             $dtVigenciaInicio   = $linha["M"];
             $dtVigenciaFim   = $linha["N"];
-            $sqEmpenho   = $linha["P"];
+            
+            if($tipo == "V")
+            	$sqEmpenho   = $linha["P"];
+            else
+            	$sqEmpenho   = $linha["O"];
+            
             $tpAutorizacao   = null;
             $inLicom   = $linha["Q"];	
             $obs = $linha["R"];            
-        }
+        }        
 
         //recupera o sequencial da especie (aditivo, apostilamento) quando existir        
         $sqEspecie = substr($especie, 0, 3);

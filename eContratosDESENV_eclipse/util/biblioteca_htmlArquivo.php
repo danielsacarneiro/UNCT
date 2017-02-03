@@ -7,6 +7,7 @@ Class arquivo{
 	var $nome = "";
 	var $nomeSemExtensao = "";
 	var $isPasta = false;
+	var $dir = "";
 
 	// ...............................................................
 	// Funcoes ( Propriedades e metodos da classe )
@@ -27,6 +28,9 @@ Class pasta{
 	var $colecaoItens = "";
 	var $isPasta = true;
 	var $filtro; 
+	var $filtrarFilhos = true;
+	var $pathinfo;
+	var $dir = "";
 	// ...............................................................
 	// Funcoes ( Propriedades e metodos da classe )
 
@@ -39,19 +43,31 @@ Class pasta{
 		
 		$this->filtro = $filtro;
 	}
-				
+	
+	function setDir($caminho){
+		$this->dir = $caminho;
+		$this->pathinfo = pathinfo($this->dir);		
+	}
+	
+	function getPasta(){
+		return $this->pathinfo["dirname"];
+	}
+	
 }
 
 function incluirArquivo($nmMenuPai, $item){
 
 	$nmclass = "'treelinkarquivo'";
-	$linkParametrosComplementares = "'','','','','',".$nmclass.",''";
+	$linkParametrosComplementares = "'','',true,'','',".$nmclass.",''";
 	//$linkParametrosComplementares = $nmclass;
-	$javaScript = "'javascript:alert(0);'";
+	//$javaScript = "'javascript:alert(0);'";
+	//$javaScript = "'". $nmMenuPai->nome . "\" . $item->nome . "'"
+	//$javaScript = "'". realpath($nmMenuPai->getPasta() . "/" . $item->nome) . "'";
+	$javaScript = "'". $nmMenuPai->getPasta() . "/" . $item->nome . "'";
 
 	$objArquivo = "new Link('" . $item->nome . "', " . $javaScript . " , $linkParametrosComplementares)";
 
-	echo $nmMenuPai . ".adicionarItem(" . $objArquivo . ");\n";
+	echo $nmMenuPai->nomeObj . ".adicionarItem(" . $objArquivo . ");\n";
 }
 
 function criaMenu($item, $isMenuRaiz){	
@@ -63,14 +79,14 @@ function criaMenu($item, $isMenuRaiz){
 	
 }
 
-function montarColecaoItens($pastaMenuPai, $enderecoPasta){
+function montarColecaoItens($pastaMenuPai){
 	$indice = $pastaMenuPai->indice;
-	$dir = new FilesystemIterator($enderecoPasta);	
+	$dir = new FilesystemIterator($pastaMenuPai->dir);	
 	$filtro = $pastaMenuPai->filtro;
 	//$filter = new RegexIterator($dir, '/.(php|dat)$/');
-	$filter = new RegexIterator($dir, '/2d/');
-	
-	//echo "pasta que executou o montarColecaoItens:". $enderecoPasta. "\n";
+	//$filter = new RegexIterator($dir, '/2d/');	
+	//echo "pasta que executou o montarColecaoItens:". $enderecoPasta. "\n";	
+	$strFiltro = $filtro->contratada;
 
 	$i = 0;
 	$retorno = "";
@@ -80,25 +96,40 @@ function montarColecaoItens($pastaMenuPai, $enderecoPasta){
 		// e é um diretório (isDir)
 		if ($file->isDir() || $file->isFile()){
 			$dname = $file->getFilename();
-			//$item->isPasta = $file->isDir();
-			if ($file->isDir()){
-				$item = new pasta($dname,$filtro, ++$indice);
-			}else{
-				$item = new arquivo($dname, ++$indice);
+
+			//verifica se deve filtrar o nome dos filhos
+			//pega apenas os arquivos que satisfazem o filtro
+			if(!$pastaMenuPai->filtrarFilhos || existeStr1NaStr2ComSeparador($dname, $strFiltro)){			
+				//$item->isPasta = $file->isDir();
+				
+				$enderecoPasta = $pastaMenuPai->dir; 
+				if ($file->isDir()){
+					$item = new pasta($dname,$filtro, ++$indice);
+					//se o item foi encontrado, eh pq seus filhos devem ser considerados
+					//mesmo que eles nao tenham satisfacam o filtro
+					//isto permite trazer os arquivos que nao satisfacam o filtro, mas pertencam ao pai que satisfacam
+					$item->filtrarFilhos = false;
+					$item->setDir($enderecoPasta."/".$item->nome);
+					
+				}else{
+					$item = new arquivo($dname, ++$indice);
+					$item->dir=$enderecoPasta;
+				}
+				$retorno[$i] = $item;
+				$i++;
 			}
-			$retorno[$i] = $item;
-			$i++;
 		}
 		//echo $i;
 	}
+	$pastaMenuPai->filtro->numTotalRegistros = $i;
 
 	return $retorno;
 }
 
 
-function geraArvoreMenu($pastaMenuPai, $enderecoPasta){	
+function geraArvoreMenu($pastaMenuPai){	
 	
-	$colecao = montarColecaoItens($pastaMenuPai, $enderecoPasta);
+	$colecao = montarColecaoItens($pastaMenuPai);
 	if (is_array($colecao)){
 		$tamanho = sizeof($colecao);
 	}
@@ -112,10 +143,10 @@ function geraArvoreMenu($pastaMenuPai, $enderecoPasta){
 		if($item->isPasta){
 			criaMenu($item, false);
 			echo $pastaMenuPai->nomeObj . ".adicionarItem(" . $item->nomeObj . ");\n";			
-			geraArvoreMenu($item, $enderecoPasta."/".$item->nome);
+			geraArvoreMenu($item);
 		}
 		else{
-			incluirArquivo($pastaMenuPai->nomeObj, $item);
+			incluirArquivo($pastaMenuPai, $item);
 		}
 	}
 	
