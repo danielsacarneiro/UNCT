@@ -33,16 +33,25 @@ class filtroManterPessoa extends filtroManter{
             ;                        
 		}
             		
-		if($this->nome != null){
+		if($this->cd != null){
 			$filtro = $filtro . $conector
-						. $nmTabela. "." .vopessoa::$nmAtrNome
-						. " LIKE '%"
-						. utf8_encode($this->nome)
-						. "%'";
+						. $nmTabela. "." .vopessoa::$nmAtrCd
+						. " = "
+						. $this->cd;
 			
 			$conector  = "\n AND ";
 		}
         
+		if($this->nome != null){
+			$filtro = $filtro . $conector
+			. $nmTabela. "." .vopessoa::$nmAtrNome
+			. " LIKE '%"
+					. utf8_encode($this->nome)
+					. "%'";
+						
+					$conector  = "\n AND ";
+		}
+		
 		if($this->doc != null){
 			$filtro = $filtro . $conector
 						. $nmTabela. "." .vopessoa::$nmAtrDoc

@@ -131,6 +131,7 @@ function confirmar() {
 		                $colecaoVinculo = explode(CAMPO_SEPARADOR,$vinculos);
 		                
 		                $gestores = $colecao[vogestor::$nmAtrDescricao];
+		                $cdGestor = $colecao[vogestor::$nmAtrCd];
 		                $gestor = "";
 		                if($gestores != null && $gestores !=""){
 		                	$colecaoGestores = explode(CAMPO_SEPARADOR,$gestores);
@@ -153,7 +154,7 @@ function confirmar() {
 			                <?php
 			                if($cdVinculo == dominioVinculoPessoa::$CD_VINCULO_RESPONSAVEL){
 			                ?>		                    
-		                    <TD class="tabeladados">Órgão Gestor: <?php echo $gestor;?></TD>
+		                    <TD class="tabeladados">Órgão Gestor: <?php echo complementarCharAEsquerda($cdGestor, "0", TAMANHO_CODIGOS) . " - " . $gestor;?></TD>
 			                <?php
 							}				
 			                ?>

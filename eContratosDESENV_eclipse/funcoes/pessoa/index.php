@@ -119,14 +119,16 @@ function alterar() {
     <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
         <TBODY>
 			<TR>
-                <TH class="campoformulario" nowrap>Nome:</TH>
-                <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>"  value="<?php echo($nome);?>"  class="camponaoobrigatorio" size="50" ></TD>
-                <TH class="campoformulario" width="1%" nowrap>CNPJ/CPF:</TH>
-                <TD class="campoformulario" ><INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($doc);?>" class="camponaoobrigatorio" size="20" maxlength="18"></TD>
+                <TH class="campoformulario" nowrap>Código:</TH>
+                <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vopessoa::$nmAtrCd?>" name="<?=vopessoa::$nmAtrCd?>"  value="<?php if($filtro->cd != null) echo complementarCharAEsquerda($filtro->cd, "0", TAMANHO_CODIGOS);?>"  class="camponaoobrigatorio" size="7" ></TD>
+                <TH class="campoformulario" nowrap width="1%">Nome:</TH>
+                <TD class="campoformulario" ><INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>"  value="<?php echo($nome);?>"  class="camponaoobrigatorio" size="50" ></TD>
             </TR>            
             <TR>
+                <TH class="campoformulario" width="1%" nowrap>CNPJ/CPF:</TH>
+                <TD class="campoformulario" ><INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($doc);?>" class="camponaoobrigatorio" size="20" maxlength="18"></TD>
                 <TH class="campoformulario" nowrap>Vínculo:</TH>
-                <TD class="campoformulario" colspan="3">
+                <TD class="campoformulario" colspan="1">
                      <?php
                     include_once("biblioteca_htmlPessoa.php");
                     include_once(caminho_vos . "vopessoavinculo.php");
