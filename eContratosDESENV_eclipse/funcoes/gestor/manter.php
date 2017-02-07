@@ -5,7 +5,7 @@ include_once(caminho_vos."vousuario.php");
 include_once(caminho_vos."dbgestor.php");
 
 //inicia os parametros
-inicio();
+inicioComValidacaoUsuario(true);
 
 $vo = new vogestor();
 //var_dump($vo->varAtributos);

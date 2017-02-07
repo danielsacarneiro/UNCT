@@ -29,8 +29,9 @@ include_once(caminho_wordpress. "wp-config.php");
             $idUsuario = get_current_user_id();
             
         }else{
-            if($validarPermissaoAcesso)
-                auth_redirect();        
+            if($validarPermissaoAcesso){
+                auth_redirect();                
+            }
         }
         
         define('id_user', $idUsuario);
@@ -318,21 +319,20 @@ include_once(caminho_wordpress. "wp-config.php");
     
     	return $html;
     }
-    
-    function getLinkPesquisa($link, $parametros){
-    	$parametros = "?lupa=S&".$parametros;
-    	
-    	$pasta = pasta_imagens;
-    	
-    	$html = "<A id='lnkFramework' name='lnkFramework' " 
-    			. "href=\"javascript:abrirJanelaAuxiliar('".$link.$parametros."',true, false, false);\" "
-    			. " class='linkNormal' >"
-    			. "<img src='".$pasta."lupa.png'  width='22' height='22' border='0'></A>";
-    	
-    	
-    	return $html;
-    }    
 
+    function getLinkPesquisa($link){
+    	//$parametros = "?lupa=S&".$parametros;    	 
+    	$pasta = pasta_imagens;
+    	 
+    	$html = "<A id='lnkFramework' name='lnkFramework' "
+    			. "href=\"javascript:abrirJanelaAuxiliar('".$link."',true, false, false);\" "
+    					. " class='linkNormal' >"
+    							. "<img src='".$pasta."lupa.png'  width='22' height='22' border='0'></A>";
+    							 
+    							 
+		return $html;
+    }
+    
     function temPermissao(){
         $current_user = wp_get_current_user();
         $permissao_user = $current_user->roles;

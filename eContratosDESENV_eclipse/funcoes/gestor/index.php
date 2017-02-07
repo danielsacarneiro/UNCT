@@ -49,7 +49,7 @@ function selecionar() {
 		return;
 		
 	if (window.opener != null) {
-		array = retornarValorRadioButtonSelecionadoComoArray("document.frm_principal.rdb_consulta");
+		array = retornarValorRadioButtonSelecionadoComoArray("document.frm_principal.rdb_consulta", "*");
 		
 		cdGestor = array[0];
 		dsGestor = array[1];
