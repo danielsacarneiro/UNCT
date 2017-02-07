@@ -18,6 +18,7 @@ include_once (caminho_vos. "dbpessoagestor.php");
         
 		$query = "SELECT ".$nmTabela;
 		$query.= ".*, " . vopessoavinculo::getNmTabela() . "." .vopessoavinculo::$nmAtrCd;
+		$query.= ", " . vogestor::getNmTabela() . "." .vogestor::$nmAtrCd;
 		$query.= ", " . vogestor::getNmTabela() . "." .vogestor::$nmAtrDescricao;
         $query.= ", TAB1." .vousuario::$nmAtrName. " AS " . voentidade::$nmAtrNmUsuarioInclusao;
         $query.= ", TAB2." .vousuario::$nmAtrName. " AS " . voentidade::$nmAtrNmUsuarioUltAlteracao;

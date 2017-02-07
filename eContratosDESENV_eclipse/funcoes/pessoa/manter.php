@@ -26,7 +26,7 @@ if($isInclusao){
     
 	$dbprocesso = new dbpessoa(null);					
 	$colecao = $dbprocesso->consultarPorChave($vo, $isHistorico);	
-	$vo->getDadosBanco($colecao);    
+	$vo->getDadosBanco($colecao);
 	putObjetoSessao($vo->getNmTabela(), $vo);
 
     $nmFuncao = "ALTERAR ";
@@ -221,8 +221,8 @@ function abrirJanelaAuxiliarGestor(){
                     echo getComboPessoaVinculo(vopessoavinculo::$nmAtrCd, vopessoavinculo::$nmAtrCd, $colecao[vopessoavinculo::$nmAtrCd], "camponaoobrigatorio", " required onChange='verificaVinculo();' ");                    
                     ?>                     
                     <div id="<?=vogestor::getNmTabela()?>">
-	                    Órgão Gestor/Código:<INPUT type="text" id="<?=vogestor::$nmAtrCd?>" name="<?=vogestor::$nmAtrCd?>" value=""  class="camporeadonly" size="5" readonly>
-	                    Descrição: <INPUT type="text" id="<?=vogestor::$nmAtrDescricao?>" name="<?=vogestor::$nmAtrDescricao?>" value=""  class="camporeadonly" size="30" readonly>
+	                    Órgão Gestor/Código:<INPUT type="text" id="<?=vogestor::$nmAtrCd?>" name="<?=vogestor::$nmAtrCd?>" value="<?=complementarCharAEsquerda($colecao[vogestor::$nmAtrCd], "0", TAMANHO_CODIGOS)?>"  class="camporeadonly" size="5" readonly>
+	                    Descrição: <INPUT type="text" id="<?=vogestor::$nmAtrDescricao?>" name="<?=vogestor::$nmAtrDescricao?>" value="<?=$colecao[vogestor::$nmAtrDescricao]?>"   class="camporeadonly" size="30" readonly>
 	                    <?php echo getLinkPesquisa("../gestor");?>
                     </div>
                     <!-- <div id="<?=vogestor::getNmTabela()?>">
