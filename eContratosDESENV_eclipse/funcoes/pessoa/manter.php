@@ -50,12 +50,20 @@ $cdUsuarioUltAlteracao = $vo->cdUsuarioUltAlteracao;
 
 <HEAD>
 <?=setTituloPagina(null)?>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>mensagens_globais.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_cnpfcnpj.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_ajax.js"></script>
 
 <SCRIPT language="JavaScript" type="text/javascript">
+
+function transferirDadosOrgaoGestor(cdGestor, dsGestor) {		   
+	document.getElementsByName("<?=vogestor::$nmAtrCd?>").item(0).value = cdGestor;
+	document.getElementsByName("<?=vogestor::$nmAtrDescricao?>").item(0).value = dsGestor;
+}
+
+
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
 function isFormularioValido() {
 	if (!validaVinculo())
@@ -77,7 +85,6 @@ function confirmar() {
 }
 
 function carregaGestorPessoa(){    
-    
 	<?php
 		    $idDiv = "DIV";
 		    $idCampoGestor = vogestor::$nmAtrDescricao;
@@ -130,7 +137,7 @@ function verificaVinculo(){
 }
 
 function iniciar(){
-	document.frm_principal.<?=$idCampoGestor?>.style.display = "none";	
+	//document.frm_principal.<?=$idCampoGestor?>.style.display = "none";	
 }
 
 </SCRIPT>
@@ -192,15 +199,23 @@ function iniciar(){
                 <TD class="campoformulario" colspan="3">
                      <?php
                     include_once("biblioteca_htmlPessoa.php");
-                    echo getComboPessoaVinculo(vopessoavinculo::$nmAtrCd, vopessoavinculo::$nmAtrCd, $colecao[vopessoavinculo::$nmAtrCd], "camponaoobrigatorio", " required onChange='verificaVinculo();' ");                    
-                    ?>
-                    <INPUT type="text" id="<?=vogestor::$nmAtrDescricao?>" name="<?=vogestor::$nmAtrDescricao?>"  onKeyUp="verificaVinculo();" value=""  class="campoobrigatorio" size="15">
+                    echo getComboPessoaVinculo(vopessoavinculo::$nmAtrCd, vopessoavinculo::$nmAtrCd, $colecao[vopessoavinculo::$nmAtrCd], "camponaoobrigatorio", " required onChange='verificaVinculo();' ");
+                    echo getLinkPesquisa("../gestor","");
+                    ?>                     
+                    <div id="<?=vogestor::getNmTabela()?>">
+                    Órgão Gestor/Código:<INPUT type="text" id="<?=vogestor::$nmAtrCd?>" name="<?=vogestor::$nmAtrCd?>" value=""  class="camporeadonly" size="5" readonly>
+                    Descrição: <INPUT type="text" id="<?=vogestor::$nmAtrDescricao?>" name="<?=vogestor::$nmAtrDescricao?>" value=""  class="camporeadonly" size="20" readonly>
+                    </div>
+                    <!-- <div id="<?=vogestor::getNmTabela()?>">
+                    Órgão Gestor/Código:<INPUT type="text" id="<?=vogestor::$nmAtrCd?>" name="<?=vogestor::$nmAtrCd?>"  onKeyUp="verificaVinculo();" value=""  class="campoobrigatorio" size="5">
+                    Descrição: <INPUT type="text" id="<?=vogestor::$nmAtrDescricao?>" name="<?=vogestor::$nmAtrDescricao?>"  onKeyUp="verificaVinculo();" value=""  class="campoobrigatorio" size="15">
+                    </div>
 	                <div id="<?=$idDiv?>">
 	                <?php	                 
 	                 //echo getComboGestorResponsavel(new dbgestorpessoa(), vocontrato::$nmAtrCdGestorPessoaContrato, vocontrato::$nmAtrCdGestorPessoaContrato, $voContrato->cdGestor, $voContrato->cdGestorPessoa);                    
 	                //echo getComboGestorResponsavel("", "");
 	                 ?>
-	                </div>                    
+	                </div> -->                    
             </TR>               
 
         <?php if(!$isInclusao){

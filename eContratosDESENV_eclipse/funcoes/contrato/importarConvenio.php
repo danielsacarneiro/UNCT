@@ -29,11 +29,11 @@ $tipoContrato = @$_GET["tipo"];
 if($tipoContrato == null || $tipoContrato == "")
 	throw new Exception("selecione o tipo do contrato!");
 
-if($tipoContrato = "V"){
+if($tipoContrato == "V"){
 	$inputFileName = caminho.'planilha/UNCT_convenio.xlsx';
 }else{
 	$tipoContrato = "P";
-	$inputFileName = caminho.'planilha/UNCT_profisco.xlsx';
+	$inputFileName = caminho.'planilha/UNCT_profisco.xls';
 }
 
 $objPHPExcel = PHPExcel_IOFactory::load($inputFileName);

@@ -68,6 +68,8 @@ include_once(caminho_wordpress. "wp-config.php");
         
         $pastaImagens = subirNivelPasta(caminho_imagens, $qtdNiveisAcimaEmSeEncontraPagina);
         $pastaMenu = subirNivelPasta(caminho_menu, $qtdNiveisAcimaEmSeEncontraPagina);
+        
+        define('pasta_imagens', $pastaImagens);
 
         if($titulo != null)
             $titulo = " - " . $titulo;
@@ -251,30 +253,85 @@ include_once(caminho_wordpress. "wp-config.php");
                 
         return  $retorno;        
     }
-    
-    function getBotaoValidacaoAcesso($idBotao, $descricao, $classe, $isSubmit, $complementoHTML) {
-        $retorno = getBotao($idBotao, $descricao, $classe, $isSubmit, $complementoHTML);        
         
-        if(!temPermissao())
-            $retorno = "";
-        return  $retorno;        
+    function getBotaoValidacaoAcesso($idBotao, $descricao, $classe, $isSubmit, $imprimirNaLupa, $imprimirNaManutencao, $todosTemAcesso, $complementoHTML) {
+        $retorno = getBotao($idBotao, $descricao, $classe, $isSubmit, $complementoHTML);
+                
+        //vem do linkPesquisa ou do campo formulario
+        $lupa= @$_GET["lupa"];        
+        if($lupa == null)
+        	$lupa= @$_POST["lupa"];
+        
+        $isLupa = $lupa == "S";
+                
+        if($isLupa){
+        	//echo "EH LUPA";
+        	if(!$imprimirNaLupa)
+        		$retorno = "";
+        }else{
+        	//echo "NAO EH LUPA";
+        	if($imprimirNaManutencao){
+        		if(!temPermissao() && !$todosTemAcesso)
+        			$retorno = "";
+	        }else
+        		$retorno = "";
+        }
+            
+       	return  $retorno;        
     }
     
     function getBotaoConfirmar(){
-        return getBotaoValidacaoAcesso("bttconfirmar", "Confirmar", "botaofuncaop", true, " accesskey='c'");
+        return getBotaoValidacaoAcesso("bttconfirmar", "Confirmar", "botaofuncaop", true, false, true, false, " accesskey='c'");
     }
 
     function getBotaoAlterar(){
-        return getBotaoValidacaoAcesso("bttalterar", "Alterar", "botaofuncaop", false, "onClick='javascript:alterar();' accesskey='l'");
+        return getBotaoValidacaoAcesso("bttalterar", "Alterar", "botaofuncaop", false, false,true,false,"onClick='javascript:alterar();' accesskey='l'");
     }
 
     function getBotaoExcluir(){
-        return getBotaoValidacaoAcesso("bttexcluir", "Excluir", "botaofuncaop", false, "onClick='javascript:excluir();' accesskey='x'");
+        return getBotaoValidacaoAcesso("bttexcluir", "Excluir", "botaofuncaop", false,false,true,false, "onClick='javascript:excluir();' accesskey='x'");
     }
 
     function getBotaoIncluir(){
-        return getBotaoValidacaoAcesso("bttincluir", "Incluir", "botaofuncaop", false, "onClick='javascript:incluir();' accesskey='n'");
+        return getBotaoValidacaoAcesso("bttincluir", "Incluir", "botaofuncaop", false,false,true, false,"onClick='javascript:incluir();' accesskey='n'");
     }
+    
+    function getBotaoDetalhar(){
+    	return getBotaoValidacaoAcesso("bttdetalhar", "Detalhar", "botaofuncaop", false,true,true,true, "onClick='javascript:detalhar(false);' accesskey='d'");
+    }
+    
+    function getBotaoSelecionar(){    
+    	return getBotaoValidacaoAcesso("bttselecionar", "Selecionar", "botaofuncaop", false,true,false,true, "onClick='javascript:selecionar();' accesskey='s'");    	
+    }
+    
+    function getBotaoFechar(){
+    	return getBotaoValidacaoAcesso("bttfechar", "Fechar", "botaofuncaop", false,true,false,true, "onClick='javascript:window.close();' accesskey='f'");
+    }
+    
+    function getBotoesRodape(){
+    	$html =     "<TD class='botaofuncao'>". getBotaoDetalhar() ."</TD>\n";
+    	$html.=     "<TD class='botaofuncao'>".getBotaoSelecionar()."</TD>\n";
+    	$html.=     "<TD class='botaofuncao'>".getBotaoIncluir()."</TD>\n";
+    	$html.=     "<TD class='botaofuncao'>".getBotaoAlterar()."</TD>\n";
+    	$html.=     "<TD class='botaofuncao'>".getBotaoExcluir()."</TD>\n";
+    	$html.=     "<TD class='botaofuncao'>".getBotaoFechar()."</TD>\n";
+    
+    	return $html;
+    }
+    
+    function getLinkPesquisa($link, $parametros){
+    	$parametros = "?lupa=S&".$parametros;
+    	
+    	$pasta = pasta_imagens;
+    	
+    	$html = "<A id='lnkFramework' name='lnkFramework' " 
+    			. "href=\"javascript:abrirJanelaAuxiliar('".$link.$parametros."',true, false, false);\" "
+    			. " class='linkNormal' >"
+    			. "<img src='".$pasta."lupa.png'  width='22' height='22' border='0'></A>";
+    	
+    	
+    	return $html;
+    }    
 
     function temPermissao(){
         $current_user = wp_get_current_user();
@@ -322,7 +379,18 @@ include_once(caminho_wordpress. "wp-config.php");
 
         $html .= "&nbsp;<button id='localizar' class='botaoconsulta' type='submit'>Consultar</button></TD>
                     </TR>";
-    
+        
+        
+        //aqui guarda a informacao de ser o contexto de LUPA, quando ocultara alguns botoes
+        $lupa= @$_GET["lupa"];
+        if($lupa == null)
+        	$lupa= @$_POST["lupa"];
+        
+        if($lupa == null)
+        	$lupa = "N";
+        
+        $html .= "<INPUT type='hidden' name='lupa' id='lupa' value='".$lupa."'>";
+            
         return $html;        
     }
     
