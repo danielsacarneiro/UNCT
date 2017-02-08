@@ -111,7 +111,8 @@ include_once(caminho_vos."vogestor.php");
 	
 	static function getAtributosOrdenacao(){
 		$varAtributos = array(
-				self::$nmAtrNome => "Nome"
+				self::$nmAtrNome => "Nome",
+				vopessoavinculo::$nmAtrCd=> "Vinculo"
 		);
 		return $varAtributos;
 	}	

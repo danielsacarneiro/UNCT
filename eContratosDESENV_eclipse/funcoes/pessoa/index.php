@@ -132,7 +132,7 @@ function alterar() {
                      <?php
                     include_once("biblioteca_htmlPessoa.php");
                     include_once(caminho_vos . "vopessoavinculo.php");
-                    echo getComboPessoaVinculo(vopessoavinculo::$nmAtrCd, vopessoavinculo::$nmAtrCd, "", "camponaoobrigatorio", "");                                        
+                    echo getComboPessoaVinculo(vopessoavinculo::$nmAtrCd, vopessoavinculo::$nmAtrCd, $filtro->cdvinculo, "camponaoobrigatorio", "");                                        
                     ?>
             </TR>
             <TR>
@@ -169,14 +169,14 @@ function alterar() {
                 if (is_array($colecao))
                         $tamanho = sizeof($colecao);
                 else 
-                        $tamanho = 0;								 
-                            
+                        $tamanho = 0;
+                $domVinculo = new dominioVinculoPessoa();
                 for ($i=0;$i<$tamanho;$i++) {
                         $voAtual = new vopessoa();
                         $voAtual->getDadosBanco($colecao[$i]);
                                                                 
-                        $dsGestor = "";
-                                        
+                        $vinculo = $colecao[$i][vopessoavinculo::$nmAtrCd];
+                        $vinculo = $domVinculo->getDescricao($vinculo);
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados">
@@ -184,7 +184,7 @@ function alterar() {
                     </TD>
                     <TD class="tabeladados"><?php echo complementarCharAEsquerda($colecao[$i][vopessoa::$nmAtrCd], "0", TAMANHO_CODIGOS);?></TD>
                     <TD class="tabeladados"><?php echo $colecao[$i][vopessoa::$nmAtrNome];?></TD>
-                    <TD class="tabeladados"><?php echo $dsGestor;?></TD>
+                    <TD class="tabeladados"><?php echo $vinculo;?></TD>
                     <TD class="tabeladados"><?php echo $colecao[$i][vopessoa::$nmAtrEmail];?></TD>
                     <TD class="tabeladados" nowrap><?php echo $colecao[$i][vopessoa::$nmAtrTel]?></TD>
                 </TR>					

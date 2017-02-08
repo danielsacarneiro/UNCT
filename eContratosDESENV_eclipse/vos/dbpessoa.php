@@ -56,13 +56,16 @@ include_once (caminho_vos. "dbpessoagestor.php");
     	$atributosConsulta = vopessoa::getNmTabela() . "." .   vopessoa::$nmAtrCd;
     	$atributosConsulta .= "," . vopessoa::getNmTabela() . "." . vopessoa::$nmAtrNome;
     	$atributosConsulta .= "," . vopessoa::getNmTabela() . "." . vopessoa::$nmAtrEmail;
-    	$atributosConsulta .= "," . vopessoa::getNmTabela() . "." . vopessoa::$nmAtrTel;    	
+    	$atributosConsulta .= "," . vopessoa::getNmTabela() . "." . vopessoa::$nmAtrTel;
+    	$atributosConsulta .= "," . vopessoavinculo::getNmTabela() . "." . vopessoavinculo::$nmAtrCd;
     	
     	//$atributoVinculo = "(SELECT )"    	
     	
         $querySelect = "SELECT ". $atributosConsulta;
         
         $queryFrom = "\n FROM ". vopessoa::getNmTabela();
+        $queryFrom .= "\n INNER JOIN ". vopessoavinculo::getNmTabela();
+        $queryFrom .= "\n ON ". vopessoa::getNmTabela() . "." . vopessoa::$nmAtrCd . "=" . vopessoavinculo::getNmTabela() . "." . vopessoavinculo::$nmAtrCdPessoa;
         
         return $this->consultarComPaginacaoQuery($voentidade, $filtro, $querySelect, $queryFrom);
     }

@@ -82,7 +82,8 @@ function detalhar(isExcluir) {
             return;
     	
 	chave = document.frm_principal.rdb_consulta.value;	
-	location.href="detalhar.php?funcao=" + funcao + "&chave=" + chave;
+	lupa = document.frm_principal.lupa.value;
+	location.href="detalhar.php?funcao=" + funcao + "&chave=" + chave + "&lupa="+ lupa;
 }
 
 function excluir() {

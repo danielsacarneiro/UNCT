@@ -1,6 +1,7 @@
 <?php
 include_once(caminho_util."bibliotecaSQL.php");
 include_once(caminho_vos ."vopessoa.php");
+include_once(caminho_vos ."vopessoavinculo.php");
 include_once(caminho_lib ."filtroManter.php");
 
 class filtroManterPessoa extends filtroManter{
@@ -16,15 +17,18 @@ class filtroManterPessoa extends filtroManter{
         $this->cd = @$_POST[vopessoa::$nmAtrCd];
         //$this->cdGestor = @$_POST[vopessoa::$nmAtrCdGestor];
         $this->doc = @$_POST[vopessoa::$nmAtrDoc];
-        $this->nome = @$_POST[vopessoa::$nmAtrNome];        
+        $this->nome = @$_POST[vopessoa::$nmAtrNome];
+        $this->cdvinculo = @$_POST[vopessoavinculo::$nmAtrCd];
 	}
     	
 	function getFiltroConsultaSQL($isHistorico){
         $voPessoa= new vopessoa();
+        $voPessoaVinculo= new vopessoavinculo();
 		$filtro = "";
 		$conector  = "";
 
         $nmTabela = $voPessoa->getNmTabela($isHistorico);
+        $nmTabelaPessoaVinculo = $voPessoaVinculo->getNmTabela($isHistorico);
         
 		//seta os filtros obrigatorios        
 		if($this->isSetaValorDefault()){
@@ -42,6 +46,15 @@ class filtroManterPessoa extends filtroManter{
 			$conector  = "\n AND ";
 		}
         
+		if($this->cdvinculo != null){
+			$filtro = $filtro . $conector
+					. $nmTabelaPessoaVinculo. "." .vopessoavinculo::$nmAtrCd
+					. " = "
+					. $this->cdvinculo;
+						
+					$conector  = "\n AND ";
+		}
+		
 		if($this->nome != null){
 			$filtro = $filtro . $conector
 			. $nmTabela. "." .vopessoa::$nmAtrNome

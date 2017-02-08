@@ -255,15 +255,23 @@ include_once(caminho_wordpress. "wp-config.php");
         return  $retorno;        
     }
         
+    function isLupa(){
+    	//vem do linkPesquisa ou do campo formulario
+    	$lupa= @$_GET["lupa"];
+    	if($lupa == null || $lupa == ""){
+    		$lupa= @$_POST["lupa"];
+    	}
+    	
+       	if($lupa == null)
+    		$lupa = "N";    		
+    	
+    	return $lupa == "S";
+    }
+        
     function getBotaoValidacaoAcesso($idBotao, $descricao, $classe, $isSubmit, $imprimirNaLupa, $imprimirNaManutencao, $todosTemAcesso, $complementoHTML) {
         $retorno = getBotao($idBotao, $descricao, $classe, $isSubmit, $complementoHTML);
-                
-        //vem do linkPesquisa ou do campo formulario
-        $lupa= @$_GET["lupa"];        
-        if($lupa == null)
-        	$lupa= @$_POST["lupa"];
-        
-        $isLupa = $lupa == "S";
+                        
+        $isLupa = isLupa();
                 
         if($isLupa){
         	//echo "EH LUPA";
@@ -284,7 +292,11 @@ include_once(caminho_wordpress. "wp-config.php");
     function getBotaoConfirmar(){
         return getBotaoValidacaoAcesso("bttconfirmar", "Confirmar", "botaofuncaop", true, false, true, false, " accesskey='c'");
     }
-
+    
+    function getBotaoCancelar(){
+    	return getBotaoValidacaoAcesso("bttcancelar", "Cancelar", "botaofuncaop", false, true, true, false, "onClick='javascript:cancelar();' accesskey='r'");
+    }
+    
     function getBotaoAlterar(){
         return getBotaoValidacaoAcesso("bttalterar", "Alterar", "botaofuncaop", false, false,true,false,"onClick='javascript:alterar();' accesskey='l'");
     }
@@ -308,15 +320,62 @@ include_once(caminho_wordpress. "wp-config.php");
     function getBotaoFechar(){
     	return getBotaoValidacaoAcesso("bttfechar", "Fechar", "botaofuncaop", false,true,false,true, "onClick='javascript:window.close();' accesskey='f'");
     }
+        
+    function getRodape(){
+    	$isLupa = isLupa();
+    	//aqui guarda a informacao de ser o contexto de LUPA, quando ocultara alguns botoes
+    	$lupa = "N";
+    	if($isLupa)
+    		$lupa = "S";
+    		 
+    	$retorno = "<INPUT type='hidden' name='lupa' id='lupa' value='".$lupa."'>\n";
+    	return $retorno;
+    }
     
     function getBotoesRodape(){
-    	$html =     "<TD class='botaofuncao'>". getBotaoDetalhar() ."</TD>\n";
-    	$html.=     "<TD class='botaofuncao'>".getBotaoSelecionar()."</TD>\n";
-    	$html.=     "<TD class='botaofuncao'>".getBotaoIncluir()."</TD>\n";
-    	$html.=     "<TD class='botaofuncao'>".getBotaoAlterar()."</TD>\n";
-    	$html.=     "<TD class='botaofuncao'>".getBotaoExcluir()."</TD>\n";
-    	$html.=     "<TD class='botaofuncao'>".getBotaoFechar()."</TD>\n";
-    
+    	
+    	$isManutencao = false;
+    	$isDetalhamento = false;
+    	$funcao = @$_GET["funcao"];
+    	
+    	if($funcao == constantes::$CD_FUNCAO_DETALHAR){
+    		$isDetalhamento = true;
+    	}else if($funcao == constantes::$CD_FUNCAO_EXCLUIR
+    			|| $funcao == constantes::$CD_FUNCAO_INCLUIR
+    			|| $funcao == constantes::$CD_FUNCAO_ALTERAR){
+    		    			    			
+    			$isManutencao = true;
+    	}
+    	        	 
+    	$html = "";
+
+    	if(!$isManutencao && !$isDetalhamento && getBotaoDetalhar() != "")
+    			$html.=     "<TD class='botaofuncao'>".getBotaoDetalhar()."</TD>\n";    			 
+    	
+    	if(!$isDetalhamento && getBotaoSelecionar() != "")
+    		$html.=     "<TD class='botaofuncao'>". getBotaoSelecionar() ."</TD>\n";
+    	
+    	if(!$isManutencao){    		 
+    		if(getBotaoIncluir() != "")
+	    		$html.=     "<TD class='botaofuncao'>".getBotaoIncluir()."</TD>\n";
+	    	if(getBotaoAlterar() != "")
+	    		$html.=     "<TD class='botaofuncao'>".getBotaoAlterar()."</TD>\n";
+	    	if(getBotaoExcluir() != "")
+	    		$html.=     "<TD class='botaofuncao'>".getBotaoExcluir()."</TD>\n";
+    	}
+    	else{
+    		if(getBotaoConfirmar() != "")
+    			$html.=     "<TD class='botaofuncao'>".getBotaoConfirmar()."</TD>\n";    		
+    	}        	    	
+    	
+    	if(getBotaoCancelar() != "" && ($isDetalhamento || $isManutencao) )
+    		$html.=     "<TD class='botaofuncao'>".getBotaoCancelar()."</TD>\n";
+    	
+    	if(getBotaoFechar() != "")
+    		$html.=     "<TD class='botaofuncao'>".getBotaoFechar()."</TD>\n";
+    	
+    	$html.=getRodape();
+    	    
     	return $html;
     }
 
@@ -379,18 +438,7 @@ include_once(caminho_wordpress. "wp-config.php");
 
         $html .= "&nbsp;<button id='localizar' class='botaoconsulta' type='submit'>Consultar</button></TD>
                     </TR>";
-        
-        
-        //aqui guarda a informacao de ser o contexto de LUPA, quando ocultara alguns botoes
-        $lupa= @$_GET["lupa"];
-        if($lupa == null)
-        	$lupa= @$_POST["lupa"];
-        
-        if($lupa == null)
-        	$lupa = "N";
-        
-        $html .= "<INPUT type='hidden' name='lupa' id='lupa' value='".$lupa."'>";
-            
+                    
         return $html;        
     }
     
