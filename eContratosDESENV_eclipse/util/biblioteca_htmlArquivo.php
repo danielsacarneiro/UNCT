@@ -59,14 +59,13 @@ Class pasta{
 function incluirArquivo($nmMenuPai, $item){
 
 	$nmclass = "'treelinkarquivo'";
-	$linkParametrosComplementares = "'','',false,'','',".$nmclass.",''";
-	//$linkParametrosComplementares = $nmclass;
-	//$javaScript = "'javascript:alert(0);'";
-	//$javaScript = "'". $nmMenuPai->nome . "\" . $item->nome . "'"
-	//$javaScript = "'". realpath($nmMenuPai->getPasta() . "/" . $item->nome) . "'";
-	$javaScript = "'". $nmMenuPai->getPasta() . pasta::$barra . $item->nome . "'";
+	$linkParametrosComplementares = "'','',false,'','',".$nmclass.",'', true";
 
+	$javaScript = "'". $item->dir. pasta::$barra . $item->nome . "'";
+		
 	$objArquivo = "new Link('" . $item->nome . "', " . $javaScript . " , $linkParametrosComplementares)";
+	
+	//$objArquivo = "new LinkArquivo('" . $item->nome . "', " . $javaScript . " , false, ".$nmclass.")";
 
 	echo $nmMenuPai->nomeObj . ".adicionarItem(" . $objArquivo . ");\n";
 }
@@ -96,12 +95,14 @@ function montarColecaoItens($pastaMenuPai){
 		// verifica se o valor de $file é diferente de '.' ou '..'
 		// e é um diretório (isDir)
 		if ($file->isDir() || $file->isFile()){
+			
 			$dname = $file->getFilename();
 
 			//verifica se deve filtrar o nome dos filhos
 			//pega apenas os arquivos que satisfazem o filtro
 			if(!$pastaMenuPai->filtrarFilhos || existeStr1NaStr2ComSeparador($dname, $strFiltro)){			
 				//$item->isPasta = $file->isDir();
+				//echo "alert('".$dname."');\n";
 				
 				$enderecoPasta = $pastaMenuPai->dir; 
 				if ($file->isDir()){
@@ -112,10 +113,16 @@ function montarColecaoItens($pastaMenuPai){
 					$item->filtrarFilhos = false;
 					$item->setDir($enderecoPasta.pasta::$barra.$item->nome);
 					
+					//echo "alert('".$item->getPasta()."');\n";
+					
 				}else{
 					$item = new arquivo($dname, ++$indice);
 					$item->dir=$enderecoPasta;
+					//$item->setDir($enderecoPasta);
+					//echo "alert('".$enderecoPasta."');\n";
 				}
+				
+				
 				$retorno[$i] = $item;
 				$i++;
 			}
