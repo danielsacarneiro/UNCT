@@ -28,12 +28,6 @@ $nome  = $vo->nome;
 $doc  = $vo->doc;
 $email  = $vo->email;
     
-$dhInclusao = $vo->dhInclusao;
-$dhUltAlteracao = $vo->dhUltAlteracao;
-$cdUsuarioInclusao = $vo->cdUsuarioInclusao;
-$cdUsuarioUltAlteracao = $vo->cdUsuarioUltAlteracao;
-
-
 $nmFuncao = "DETALHAR ";
 $titulo = "PESSOA";
 $complementoTit = "";
@@ -53,7 +47,6 @@ setCabecalho($titulo);
 
 ?>
 <!DOCTYPE html>
-<HTML lang="pt-BR">
 <HEAD>
 <?=setTituloPagina(null)?>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>

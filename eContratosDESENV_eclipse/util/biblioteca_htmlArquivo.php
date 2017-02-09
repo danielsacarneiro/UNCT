@@ -28,7 +28,7 @@ Class pasta{
 	var $colecaoItens = "";
 	var $isPasta = true;
 	var $filtro; 
-	var $filtrarFilhos = true;
+	var $trazerTodosFilhos = false;
 	var $pathinfo;
 	var $dir = "";
 	static $barra = "\\\\";
@@ -81,26 +81,41 @@ function criaMenu($item, $isMenuRaiz){
 
 function montarColecaoItens($pastaMenuPai){
 	$indice = $pastaMenuPai->indice;
-	$dir = new FilesystemIterator($pastaMenuPai->dir);	
+	
+	//$pasta = dirname(__FILE__).'/files/a*.*';
+	
+	$pasta = $pastaMenuPai->dir."\\\*";
+	$dir = new GlobIterator($pasta);
+	//echo "alert('".$pasta."');";
+	
+	//$dir = new FilesystemIterator($pastaMenuPai->dir);	
 	$filtro = $pastaMenuPai->filtro;
 	//$filter = new RegexIterator($dir, '/.(php|dat)$/');
 	//$filter = new RegexIterator($dir, '/2d/');	
-	//echo "pasta que executou o montarColecaoItens:". $enderecoPasta. "\n";	
+	
 	$strFiltro = $filtro->contratada;
 
 	$i = 0;
 	$retorno = "";
 	// atribui o valor de $dir para $file em loop
 	foreach($dir as $file){
+		
+		//echo "alert('".$i."');";
 		// verifica se o valor de $file é diferente de '.' ou '..'
 		// e é um diretório (isDir)
 		if ($file->isDir() || $file->isFile()){
 			
+			//foreach(glob("$pasta*.txt") as $arquivo)
+			
 			$dname = $file->getFilename();
+			//$dname = $file->getPathname();
+			//echo "alert('".$dname."');";
 
 			//verifica se deve filtrar o nome dos filhos
+			//se trazerTodosFilhos = true, ele nao filtra, traz todos
 			//pega apenas os arquivos que satisfazem o filtro
-			if(!$pastaMenuPai->filtrarFilhos || existeStr1NaStr2ComSeparador($dname, $strFiltro)){			
+			if($pastaMenuPai->trazerTodosFilhos || existeStr1NaStr2ComSeparador($dname, $strFiltro)){
+				//echo "alert('entrou no for');";
 				//$item->isPasta = $file->isDir();
 				//echo "alert('".$dname."');\n";
 				
@@ -108,9 +123,9 @@ function montarColecaoItens($pastaMenuPai){
 				if ($file->isDir()){
 					$item = new pasta($dname,$filtro, ++$indice);
 					//se o item foi encontrado, eh pq seus filhos devem ser considerados
-					//mesmo que eles nao tenham satisfacam o filtro
+					//mesmo que eles nao satisfacam o filtro
 					//isto permite trazer os arquivos que nao satisfacam o filtro, mas pertencam ao pai que satisfacam
-					$item->filtrarFilhos = false;
+					$item->trazerTodosFilhos = true;
 					$item->setDir($enderecoPasta.pasta::$barra.$item->nome);
 					
 					//echo "alert('".$item->getPasta()."');\n";
@@ -127,13 +142,12 @@ function montarColecaoItens($pastaMenuPai){
 				$i++;
 			}
 		}
-		//echo $i;
+		
 	}
 	$pastaMenuPai->filtro->numTotalRegistros = $i;
 
 	return $retorno;
 }
-
 
 function geraArvoreMenu($pastaMenuPai){	
 	

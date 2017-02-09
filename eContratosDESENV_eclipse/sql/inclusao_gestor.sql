@@ -1,3 +1,22 @@
+SELECT count(*) as nmCampoCount 
+FROM penalidade 
+INNER JOIN contrato 
+ON contrato.ct_numero=penalidade.ct_numero 
+AND contrato.ct_exercicio=penalidade.ct_exercicio 
+AND contrato.ct_tipo=penalidade.ct_tipo 
+WHERE contrato.ct_especie = 01 ORDER BY ct_numero;
+
+SELECT penalidade.pn_cd,penalidade.pa_cd,penalidade.pa_ex,penalidade.ct_numero,penalidade.ct_exercicio,penalidade.ct_tipo 
+FROM penalidade 
+INNER JOIN contrato 
+ON contrato.ct_numero=penalidade.ct_numero 
+AND contrato.ct_exercicio=penalidade.ct_exercicio 
+AND contrato.ct_tipo=penalidade.ct_tipo 
+
+WHERE contrato.ct_especie = 01   ORDER BY ct_numero LIMIT 0,40
+
+select * from penalidade
+
 select ct_exercicio, ct_numero,ct_contratada from contrato 
 where ct_contratada like '% – %'
 group by ct_exercicio, ct_numero,ct_contratada ;

@@ -3,6 +3,7 @@ include_once "config.obj.php";
 include_once "db.obj.php";
 include_once(caminho_util."paginacao.php");
 include_once(caminho_util."bibliotecaHTML.php");
+include_once(caminho_util."bibliotecaSQL.php");
 include_once(caminho_util."bibliotecaFuncoesPrincipal.php");
 
 class dbprocesso{
@@ -118,7 +119,8 @@ class dbprocesso{
 				//ECHO "TEM PAGINACAO";
 	            $pagina = $filtro->paginacao->getPaginaAtual();                                    
 				//guarda o numero total de registros para nao ter que executar a consulta TODOS novamente
-	            $numTotalRegistros = $filtro->numTotalRegistros = $this->getNumTotalRegistrosQuery("SELECT count(*) as " . dbprocesso::$nmCampoCount . $queryFrom . $filtroSQL);		
+	            $queryCount = "SELECT count(*) as " . dbprocesso::$nmCampoCount . $queryFrom . $filtroSQL;
+	            $numTotalRegistros = $filtro->numTotalRegistros = $this->getNumTotalRegistrosQuery($queryCount);		
 	
 	            $qtdRegistrosPorPag = $filtro->qtdRegistrosPorPag;
 				//calcula o número de páginas arredondando o resultado para cima
@@ -133,7 +135,7 @@ class dbprocesso{
             $query = $querySelect . $queryFrom. " $filtroSQL ";			
             $query = $query. " $limite";
 			
-			//echo $filtroSQL;
+			//echo $filtroSQL;			
 			//echo "$queryCount<br>";
 			//echo "$query<br>";
 			
@@ -300,6 +302,24 @@ class dbprocesso{
         
         $retorno = $registro[0][$nmColuna];
         return $retorno;        
+	}
+	
+	function getProximoSequencialChaveComposta($nmColunaSq, $voEntidade){
+		
+		$arrayAtribRemover = array($nmColunaSq);		
+		$arrayColunasChaveSemSq = removeColecaoAtributos($voEntidade->getAtributosChavePrimaria(), $arrayAtribRemover);
+						
+		$query = " SELECT MAX(" . $nmColunaSq . ")+1 AS ". $nmColunaSq ." FROM " . $voEntidade->getNmTabela() . " ";
+		$query .= "\n GROUP BY ". getSQLStringFormatadaColecaoIN($arrayColunasChaveSemSq, false);
+		
+		$registro = $this->consultarEntidade($query, false);
+		
+		if($registro != "")
+			$retorno = $registro[0][$nmColunaSq];
+		else 
+			$retorno = 1;
+		
+		return $retorno;
 	}
 	
 	//---------------------------------	

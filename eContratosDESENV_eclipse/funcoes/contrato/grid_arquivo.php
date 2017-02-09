@@ -14,6 +14,7 @@ ini_set('max_execution_time', 120);
 
 $MenuPai = new pasta("menu_pai", $filtro, 1);
 $MenuPai->setDir("H:\\\UNCT\\\CONTRATOS JÁ ASSINADOS");
+//$MenuPai->setDir("H:\\\UNCT");
 
 criaMenu($MenuPai, true);
 geraArvoreMenu($MenuPai);

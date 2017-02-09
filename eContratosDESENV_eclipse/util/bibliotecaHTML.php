@@ -1,12 +1,12 @@
 <?php
+include_once(caminho_wordpress. "wp-config.php");
 include_once("mensagens.class.php");
 include_once("constantes.class.php");
 include_once("bibliotecaDataHora.php");
 include_once("dominioPermissaoUsuario.php");
 include_once("dominioQtdObjetosPagina.php");
 include_once("radiobutton.php");
-
-include_once(caminho_wordpress. "wp-config.php");
+include_once(caminho_vos."vousuario.php");
 
 // .................................................................................................................
     
@@ -166,7 +166,8 @@ include_once(caminho_wordpress. "wp-config.php");
 	function incluirUsuarioDataHoraDetalhamento($voEntidade){
         $USUARIO_BATCH = "IMPORT.PLANILHA";
         $nmusuinclusao = $voEntidade->nmUsuarioInclusao;
-        $nmusualteracao = $voEntidade->nmUsuarioUltAlteracao;        
+        $nmusualteracao = $voEntidade->nmUsuarioUltAlteracao;
+                
         if($voEntidade->cdUsuarioInclusao == null)
             $nmusuinclusao = $USUARIO_BATCH;
         if($voEntidade->cdUsuarioUltAlteracao == null)
@@ -294,7 +295,7 @@ include_once(caminho_wordpress. "wp-config.php");
     }
     
     function getBotaoCancelar(){
-    	return getBotaoValidacaoAcesso("bttcancelar", "Cancelar", "botaofuncaop", false, true, true, false, "onClick='javascript:cancelar();' accesskey='r'");
+    	return getBotaoValidacaoAcesso("bttcancelar", "Cancelar", "botaofuncaop", false, true, true, true, "onClick='javascript:cancelar();' accesskey='r'");
     }
     
     function getBotaoAlterar(){
@@ -345,8 +346,9 @@ include_once(caminho_wordpress. "wp-config.php");
     			|| $funcao == constantes::$CD_FUNCAO_ALTERAR){
     		    			    			
     			$isManutencao = true;
-    	}
-    	        	 
+    			echo "x";
+    	}    	
+    	
     	$html = "";
 
     	if(!$isManutencao && !$isDetalhamento && getBotaoDetalhar() != "")
@@ -355,13 +357,15 @@ include_once(caminho_wordpress. "wp-config.php");
     	if(!$isDetalhamento && getBotaoSelecionar() != "")
     		$html.=     "<TD class='botaofuncao'>". getBotaoSelecionar() ."</TD>\n";
     	
-    	if(!$isManutencao){    		 
-    		if(getBotaoIncluir() != "")
-	    		$html.=     "<TD class='botaofuncao'>".getBotaoIncluir()."</TD>\n";
-	    	if(getBotaoAlterar() != "")
-	    		$html.=     "<TD class='botaofuncao'>".getBotaoAlterar()."</TD>\n";
-	    	if(getBotaoExcluir() != "")
-	    		$html.=     "<TD class='botaofuncao'>".getBotaoExcluir()."</TD>\n";
+    	if(!$isManutencao){
+    		if(!$isDetalhamento){
+	    		if(getBotaoIncluir() != "")
+		    		$html.=     "<TD class='botaofuncao'>".getBotaoIncluir()."</TD>\n";
+		    	if(getBotaoAlterar() != "")
+		    		$html.=     "<TD class='botaofuncao'>".getBotaoAlterar()."</TD>\n";
+		    	if(getBotaoExcluir() != "")
+		    		$html.=     "<TD class='botaofuncao'>".getBotaoExcluir()."</TD>\n";
+    		}
     	}
     	else{
     		if(getBotaoConfirmar() != "")
@@ -515,4 +519,18 @@ include_once(caminho_wordpress. "wp-config.php");
     	unset($_SESSION[$ID]);
     }
     
-?>
+    function formatarCodigoAnoComplemento($cd, $ano, $complemento){
+    	$retorno = complementarCharAEsquerda($cd, "0", TAMANHO_CODIGOS_SAFI)
+    	. "/" . $ano;
+    	
+    	if($complemento != null&& $complemento != "")
+    		$retorno .= "-" . $complemento;
+    	
+    	return $retorno;
+    	 
+    }
+    
+    function formatarCodigoAno($cd, $ano){
+    	return formatarCodigoAnoComplemento($cd, $ano, null);    
+    }
+    ?>
