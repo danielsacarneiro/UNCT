@@ -147,7 +147,8 @@ include_once (caminho_util."biblioteca_htmlArquivo.php");
 		$retorno.= $this-> getVarComoString($voContrato->obs) . ",";		
 		$retorno.= $this-> getDecimalSQL($voContrato->vlGlobal) . ",";
 		$retorno.= $this-> getDecimalSQL($voContrato->vlMensal) . ",";
-        $retorno.= $this-> getDataSQL($voContrato->dtProposta);
+        $retorno.= $this-> getDataSQL($voContrato->dtProposta) . ",";
+        $retorno.= $this-> getVarComoNumero($voContrato->cdPessoaContratada);
         
         $retorno.= $voContrato->getSQLValuesInsertEntidade();
 		        
@@ -183,6 +184,11 @@ include_once (caminho_util."biblioteca_htmlArquivo.php");
             $sqlConector = ",";
         }
                
+        if($voContrato->cdPessoaContratada != null){
+        	$retorno.= $sqlConector . vocontrato::$nmAtrCdPessoaContratada . " = " . $this->getVarComoNumero($voContrato->cdPessoaContratada);
+        	$sqlConector = ",";
+        }
+        
         if($voContrato->contratada != null){
             $retorno.= $sqlConector . vocontrato::$nmAtrContratadaContrato . " = " . $this->getVarComoString($voContrato->contratada);
             $sqlConector = ",";
@@ -571,7 +577,82 @@ include_once (caminho_util."biblioteca_htmlArquivo.php");
             //echo "NÃO É NÚMERO! <BR>";
             
         return $retorno;
-    }     
+    }
+            
+    function atualizarPessoasContrato(){
+    	include_once(caminho_util."DocumentoPessoa.php");
+    	  	
+    	$query = "SELECT ";
+    	$query.= vopessoa::getNmTabela(). "." .vopessoa::$nmAtrDoc;
+    	$query.= "," . vopessoa::getNmTabela(). "." .vopessoa::$nmAtrCd;
+    	$query.= "\n FROM ". vopessoa::getNmTabela();
+    	$query.= "\n WHERE ". vopessoa::$nmAtrDoc . " IS NOT NULL";
+    	$query.= "\n GROUP BY ". vopessoa::$nmAtrDoc;
+   		$colecaoDocs = $this->consultarEntidade($query, false);
+   		$tam = count($colecaoDocs);
+   		   		
+   		$arrayDocs = array();
+   		for($i=0;$i<$tam;$i++){
+   			
+   			$doc = $colecaoDocs[$i][vopessoa::$nmAtrDoc];
+   			$cdPessoa = $colecaoDocs[$i][vopessoa::$nmAtrCd];
+   			
+   			$doc = new documentoPessoa($doc);   			
+   			$arrayDocs[$doc->getNumDoc()] = $cdPessoa;
+   		}
+   		
+   		//var_dump($arrayDocs);   		
+   	
+   		$query = "SELECT ";
+   		$query.= vocontrato::getNmTabela(). "." .vocontrato::$nmAtrSqContrato;
+   		$query.= "," . vocontrato::getNmTabela(). "." .vocontrato::$nmAtrAnoContrato;
+   		$query.= "," . vocontrato::getNmTabela(). "." .vocontrato::$nmAtrCdContrato;
+   		$query.= "," . vocontrato::getNmTabela(). "." .vocontrato::$nmAtrTipoContrato;
+   		$query.= "," . vocontrato::getNmTabela(). "." .vocontrato::$nmAtrCdEspecieContrato;
+   		$query.= "," . vocontrato::getNmTabela(). "." .vocontrato::$nmAtrDocContratadaContrato;
+   		$query.= "," . vocontrato::getNmTabela(). "." .vocontrato::$nmAtrCdPessoaContratada;
+   		$query.= "," . vocontrato::getNmTabela(). "." .vocontrato::$nmAtrDhUltAlteracao;
+   		$query.= "\n FROM ". vocontrato::getNmTabela();
+   		$query.= "\n WHERE ". vocontrato::$nmAtrDocContratadaContrato . " IS NOT NULL";
+   		$query.= "\n ORDER BY ". vocontrato::$nmAtrSqContrato;
+   		//$query.= " AND " .vocontrato::$nmAtrSqContrato . " = " . "1";
+   		
+   		$colecaoContratos = $this->consultarEntidade($query, false);
+   		
+   		$tam = count($colecaoContratos);
+   		
+   		$qtdRegistros = 0;
+   		
+   		for($i=0;$i<$tam;$i++){
+   			$voContrato = new voContrato();
+   			$voContrato->getDadosBanco($colecaoContratos[$i]);   			   			
+   			$docContrato = new documentoPessoa($voContrato->docContratada);
+   			$doc = $docContrato->getNumDoc();
+   			
+   			echo $doc;
+   			echo "<br>" . $arrayDocs[$doc]; 
+   			
+   			/*$key = array_search($doc, $arrayDocs);
+   			$key = in_array($doc, $arrayDocs);
+   			
+   			
+   			echo $key;*/
+   			
+   			if($voContrato->cdPessoaContratada == 0){   			   				
+   				$voContrato->cdPessoaContratada = $arrayDocs[$doc];
+   				$voContrato->cdUsuarioUltAlteracao = 1;
+   				$this->alterarPorCima($voContrato);
+   				
+   				$qtdRegistros++;
+   			}
+   			   			
+   			ECHO "<br>". $voContrato->toString();
+   			   			
+   		}
+   		
+   		echo "<br>quantidade registros alterados:" . $qtdRegistros;
+   		 
+    }
 
 }
 ?>

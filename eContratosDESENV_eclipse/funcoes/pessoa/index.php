@@ -161,6 +161,7 @@ function alterar() {
                   <TH class="headertabeladados" width="1%">&nbsp;&nbsp;X</TH>
                     <TH class="headertabeladados" width="1%">Código</TH>
                     <TH class="headertabeladados">Nome</TH>
+                    <TH class="headertabeladados">Doc.</TH>
                     <TH class="headertabeladados">vínculo</TH>
                     <TH class="headertabeladados" width="1%">Email</TH>
                     <TH class="headertabeladados" width="1%">Telefone</TH>
@@ -184,6 +185,7 @@ function alterar() {
                     </TD>
                     <TD class="tabeladados"><?php echo complementarCharAEsquerda($colecao[$i][vopessoa::$nmAtrCd], "0", TAMANHO_CODIGOS);?></TD>
                     <TD class="tabeladados"><?php echo $colecao[$i][vopessoa::$nmAtrNome];?></TD>
+                    <TD class="tabeladados"><?php echo $voAtual->doc;?></TD>
                     <TD class="tabeladados"><?php echo $vinculo;?></TD>
                     <TD class="tabeladados"><?php echo $colecao[$i][vopessoa::$nmAtrEmail];?></TD>
                     <TD class="tabeladados" nowrap><?php echo $colecao[$i][vopessoa::$nmAtrTel]?></TD>

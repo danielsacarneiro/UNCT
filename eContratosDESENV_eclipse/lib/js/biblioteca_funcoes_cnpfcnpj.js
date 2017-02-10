@@ -1,9 +1,9 @@
 
 /*
- Descrição:
- - Contém funções de validação e formatação de campos CNPF e CNPJ
+ Descriï¿½ï¿½o:
+ - Contï¿½m funï¿½ï¿½es de validaï¿½ï¿½o e formataï¿½ï¿½o de campos CNPF e CNPJ
 
- Dependências:
+ Dependï¿½ncias:
  - biblioteca_funcoes_principal.js
 */
 
@@ -57,7 +57,7 @@ function isCampoCNPFouCNPJValido(pCampo, pInObrigatorio, pSemMensagem) {
 	}
 }
 
-// Formata o campo CNPF "pCampo" passado como parâmetro
+// Formata o campo CNPF "pCampo" passado como parï¿½metro
 function formatarCampoCNPF(pCampo, pEvento) {
 	var vlCampo = pCampo.value;
 	var tam = vlCampo.length;
@@ -66,7 +66,7 @@ function formatarCampoCNPF(pCampo, pEvento) {
 		return;
 	}
 
-	// Ignorando a tentativa de colocar máscara durante a digitação em dispositivos móveis
+	// Ignorando a tentativa de colocar mï¿½scara durante a digitaï¿½ï¿½o em dispositivos mï¿½veis
 	if (pEvento && isAcessoMovel() && pEvento.type == "keyup") {
 		return;
 	}
@@ -89,7 +89,7 @@ function formatarCampoCNPF(pCampo, pEvento) {
 	var filtro = /^([0-9])*$/;
 	if (!filtro.test(vlCampo)) {
 		pCampo.select();
-		exibirMensagem("CPF Inválido.");
+		exibirMensagem("CPF InvÃ¡lido.");
 		pCampo.value = pCampo.value.substr(0, tam - 1);
 		focarCampo(pCampo);
 		return;
@@ -110,7 +110,7 @@ function formatarCampoCNPF(pCampo, pEvento) {
 	}*/
 }
 
-// Valida o campo CNPF "pCampo" passado como parâmetro
+// Valida o campo CNPF "pCampo" passado como parï¿½metro
 function isCampoCNPFValido(pCampo, pInObrigatorio, pSemMensagem) {
 	var msg = "";
 	var vlCampo = pCampo.value;
@@ -118,13 +118,13 @@ function isCampoCNPFValido(pCampo, pInObrigatorio, pSemMensagem) {
 	if (pInObrigatorio != null) {
 		if (pInObrigatorio) {
 			if (pCampo.className == "campoobrigatorio") {
-				msg = "\n" + "Campo obrigatório.";
+				msg = "\n" + "Campo obrigatï¿½rio.";
 			} else {
-				msg = "\n" + "Campo NÃO obrigatório.";
+				msg = "\n" + "Campo Nï¿½O obrigatï¿½rio.";
 			}
 
 		} else {
-			msg = "\n" + "Campo NÃO obrigatório.";
+			msg = "\n" + "Campo Nï¿½O obrigatï¿½rio.";
 
 			if (vlCampo == "")
 				return true;
@@ -135,7 +135,7 @@ function isCampoCNPFValido(pCampo, pInObrigatorio, pSemMensagem) {
 	if (!filtro.test(vlCampo)) {
 		if (!pSemMensagem) {
 			selecionarCampo(pCampo);
-			exibirMensagem("CPF Inválido." + msg);
+			exibirMensagem("CPF Invï¿½lido." + msg);
 			focarCampo(pCampo);
 		}
 
@@ -145,7 +145,7 @@ function isCampoCNPFValido(pCampo, pInObrigatorio, pSemMensagem) {
 	if (vlCampo.length != 11) {
 		if (!pSemMensagem) {
 			selecionarCampo(pCampo);
-			exibirMensagem("CPF Inválido." + msg);
+			exibirMensagem("CPF Invï¿½lido." + msg);
 			focarCampo(pCampo);
 		}
 
@@ -173,7 +173,7 @@ function isCampoCNPFValido(pCampo, pInObrigatorio, pSemMensagem) {
     	
 		if (!pSemMensagem) {
 			selecionarCampo(pCampo);
-			exibirMensagem("CPF Inválido." + msg);
+			exibirMensagem("CPF Invï¿½lido." + msg);
 			focarCampo(pCampo);
 		}
 		
@@ -190,7 +190,7 @@ function isCampoCNPFValido(pCampo, pInObrigatorio, pSemMensagem) {
 		texto = texto + y;
 	}
 
-	// retorna o resto da divisão por 11
+	// retorna o resto da divisï¿½o por 11
 	dig1 = 11 - (soma % 11);
 
 	if (dig1 == 10)
@@ -219,7 +219,7 @@ function isCampoCNPFValido(pCampo, pInObrigatorio, pSemMensagem) {
 	}else{
 		if (!pSemMensagem) {
 			selecionarCampo(pCampo);
-			exibirMensagem("CPF Inválido." + msg);
+			exibirMensagem("CPF Invï¿½lido." + msg);
 			focarCampo(pCampo);
 		}
 	
@@ -229,7 +229,7 @@ function isCampoCNPFValido(pCampo, pInObrigatorio, pSemMensagem) {
 	return true;
 }
 
-// Formata o campo CNPJ "pCampo" passado como parâmetro
+// Formata o campo CNPJ "pCampo" passado como parï¿½metro
 function formatarCampoCNPJ(pCampo, pEvento) {
 
 	var vlCampo = pCampo.value;
@@ -262,7 +262,7 @@ function formatarCampoCNPJ(pCampo, pEvento) {
 	var filtro = /^([0-9])*$/;
 	if (!filtro.test(vlCampo)) {
 		pCampo.select();
-		exibirMensagem("CNPJ inválido.");
+		exibirMensagem("CNPJ invï¿½lido.");
 		pCampo.value = vlCampo.substr(0, tam - 1);
 		focarCampo(pCampo);
 		return;
@@ -294,17 +294,17 @@ function formatarCampoCNPJ(pCampo, pEvento) {
 	}
 }
 
-// Valida o campo CNPJ "pCampo" passado como parâmetro
+// Valida o campo CNPJ "pCampo" passado como parï¿½metro
 function isCampoCNPJValido(pCampo, pInObrigatorio, pSemMensagem) {
 	var msg = "";
 	var vlCampo = pCampo.value;
 
 	if (pInObrigatorio != null) {
 		if (pInObrigatorio) {
-			msg = "\n" + "Campo obrigatório.";
+			msg = "\n" + "Campo obrigatï¿½rio.";
 
 		} else {
-			msg = "\n" + "Campo NÃO obrigatório.";
+			msg = "\n" + "Campo Nï¿½O obrigatï¿½rio.";
 
 			if (vlCampo == "")
 				return true;
@@ -315,7 +315,7 @@ function isCampoCNPJValido(pCampo, pInObrigatorio, pSemMensagem) {
 	if (!filtro.test(vlCampo)) {
 		if (!pSemMensagem) {
 			pCampo.select();
-			exibirMensagem("CNPJ inválido." + msg);
+			exibirMensagem("CNPJ invï¿½lido." + msg);
 			focarCampo(pCampo);
 		}
 
@@ -325,7 +325,7 @@ function isCampoCNPJValido(pCampo, pInObrigatorio, pSemMensagem) {
 	if (vlCampo.length != 18) {
 		if (!pSemMensagem) {
 			pCampo.select();
-			exibirMensagem("CNPJ inválido." + msg);
+			exibirMensagem("CNPJ invï¿½lido." + msg);
 			focarCampo(pCampo);
 		}
 
@@ -349,7 +349,7 @@ function isCampoCNPJValido(pCampo, pInObrigatorio, pSemMensagem) {
 		if (!(c >= "0") && (c <= "9")) {
 			if (!pSemMensagem) {
 				pCampo.select();
-				exibirMensagem("CNPJ inválido." + msg);
+				exibirMensagem("CNPJ invï¿½lido." + msg);
 				focarCampo(pCampo);
 			}
 
@@ -363,7 +363,7 @@ function isCampoCNPJValido(pCampo, pInObrigatorio, pSemMensagem) {
 	if (!vaCharCGC) {
 		if (!pSemMensagem) {
 			pCampo.select();
-			exibirMensagem("CNPJ inválido." + msg);
+			exibirMensagem("CNPJ invï¿½lido." + msg);
 			focarCampo(pCampo);
 		}
 
@@ -395,7 +395,7 @@ function isCampoCNPJValido(pCampo, pInObrigatorio, pSemMensagem) {
 	if (vlControle != s2) {
 		if (!pSemMensagem) {
 			pCampo.select();
-			exibirMensagem("CNPJ inválido." + msg);
+			exibirMensagem("CNPJ invï¿½lido." + msg);
 			focarCampo(pCampo);
 		}
 
@@ -412,10 +412,10 @@ function isCampoRadicalCNPJValido(pCampo, pInObrigatorio) {
 
 	if (pInObrigatorio != null) {
 		if (pInObrigatorio) {
-			msg = "\n" + "Campo obrigatório.";
+			msg = "\n" + "Campo obrigatï¿½rio.";
 
 		} else {
-			msg = "\n" + "Campo NÃO obrigatório.";
+			msg = "\n" + "Campo Nï¿½O obrigatï¿½rio.";
 			if (vlCampo == "")
 				return true;
 		}
@@ -424,7 +424,7 @@ function isCampoRadicalCNPJValido(pCampo, pInObrigatorio) {
 	var filtro = /^([0-9.])*$/;
 	if (!filtro.test(vlCampo)) {
 		pCampo.select();
-		exibirMensagem("CNPJ inválido." + msg);
+		exibirMensagem("CNPJ invï¿½lido." + msg);
 		focarCampo(pCampo);
 
 		return false;
@@ -432,7 +432,7 @@ function isCampoRadicalCNPJValido(pCampo, pInObrigatorio) {
 		
 	if (vlCampo.length > 10) {
 		pCampo.select();
-		exibirMensagem("CNPJ inválido." + msg);
+		exibirMensagem("CNPJ invï¿½lido." + msg);
 		focarCampo(pCampo);
 
 		return false;

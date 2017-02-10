@@ -23,6 +23,24 @@
 		return $retorno;
 	}
 	
+	function existeItemNoArray($item, $array){
+		$retorno = false;
+		$tam = count($array);
+	
+		for($i=0;$i<$tam;$i++){
+			$findme = $array[$i];			
+			$pos = strpos($str1, $findme);
+	
+			if ($pos !== false){
+				$retorno = true;
+				break;
+			}
+		  
+		}
+		 
+		return $retorno;
+	}
+	
 	function existeStr1NaStr2ComSeparador($str2, $str1comseparador){
         $array = explode("*",$str1comseparador);
         $tamanho = count($array);
@@ -219,5 +237,5 @@
     function getLinkChamadaPHP(){        
         return $_SERVER['PHP_SELF'];
     }    
-
+    
 ?>

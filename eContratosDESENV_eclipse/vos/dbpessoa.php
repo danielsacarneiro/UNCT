@@ -55,6 +55,7 @@ include_once (caminho_vos. "dbpessoagestor.php");
     function consultarPessoa($voentidade, $filtro){
     	$atributosConsulta = vopessoa::getNmTabela() . "." .   vopessoa::$nmAtrCd;
     	$atributosConsulta .= "," . vopessoa::getNmTabela() . "." . vopessoa::$nmAtrNome;
+    	$atributosConsulta .= "," . vopessoa::getNmTabela() . "." . vopessoa::$nmAtrDoc;
     	$atributosConsulta .= "," . vopessoa::getNmTabela() . "." . vopessoa::$nmAtrEmail;
     	$atributosConsulta .= "," . vopessoa::getNmTabela() . "." . vopessoa::$nmAtrTel;
     	$atributosConsulta .= "," . vopessoavinculo::getNmTabela() . "." . vopessoavinculo::$nmAtrCd;

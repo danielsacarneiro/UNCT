@@ -35,12 +35,15 @@ include_once(caminho_vos."vopessoavinculo.php");
 include_once(caminho_vos."dbpessoa.php");
 include_once(caminho_vos."vopessoa.php");
 
+include_once(caminho_util."DocumentoPessoa.php");
+
 $vo = new vopessoa();
 //var_dump($vo->getTodosAtributos());
 //echo "<br>";
 
-$db = new dbpessoa();
-echo $db->incluirSQL($vo);
+$db = new dbcontrato();
+echo $db->atualizarPessoasContrato();
+
 
 
 /*$a=array("a"=>"5","b"=>5,"c"=>"5");
