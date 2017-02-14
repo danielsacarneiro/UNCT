@@ -13,25 +13,6 @@ function getComboPessoaVinculo($idCampo, $nmCampo, $cdOpcaoSelecionada, $classCa
 	return $retorno;
 }
 
-/*function getComboGestorResponsavel($db, $idCampo, $nmCampo, $cdGestor, $cdOpcaoSelecionada, $classCampo, $tagHtml){
-    if($db == null)
-        $db = new dbpessoa();
-
-    if ($cdGestor == null)
-        $cdGestor = @$_GET[vocontrato::$nmAtrGestorContrato];
-                
-    $recordSet = $db->consultarSelect($cdGestor);    
-    $gestorSelect = new select(array());
-    
-    $retorno = "<select $tagHtml></select>";
-    if($cdGestor != null){ 
-        $gestorSelect->getRecordSetComoColecaoSelect(vopessoa::$nmAtrCd, vopessoa::$nmAtrNome, $recordSet);    
-        $retorno = $gestorSelect->getHtmlCombo($idCampo, $nmCampo, $cdOpcaoSelecionada, true, $classCampo, true, $tagHtml);    
-    }	
-        
-    return $retorno;
-}*/
-
 function getComboGestorResponsavel($cdGestor){
 	$pCdOpcaoSelecionada = null;
 	$db = new dbpessoa();

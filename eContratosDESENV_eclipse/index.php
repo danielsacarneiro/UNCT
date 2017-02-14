@@ -36,8 +36,8 @@ cabecalho;
 	f3.adicionarItem(new Link("Manter Contratos", "<?=caminho_funcoesHTML?>contrato", ""));
 	f.adicionarItem(f3);
 
-	f4 = new Tree('Penalidades');	
-    f4.adicionarItem(new Link('Manter Penalidades', '<?=caminho_funcoesHTML?>penalidade', ''));    
+	f4 = new Tree('PAD');	
+    f4.adicionarItem(new Link('Manter Processo', '<?=caminho_funcoesHTML?>pad', ''));    
 	f.adicionarItem(f4);
 	
 

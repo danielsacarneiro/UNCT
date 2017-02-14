@@ -1,10 +1,10 @@
 <?php
 include_once("../../config_lib.php");
 include_once(caminho_util."bibliotecaHTML.php");
-include_once(caminho_vos."vopenalidade.php");
+include_once(caminho_vos."voPAD.php");
 inicio();
 
-$vo = new vopenalidade();
+$vo = new voPAD();
 $vo->getDadosFormulario();
 
 session_start();

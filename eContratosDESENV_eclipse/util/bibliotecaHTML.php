@@ -346,7 +346,6 @@ include_once(caminho_vos."vousuario.php");
     			|| $funcao == constantes::$CD_FUNCAO_ALTERAR){
     		    			    			
     			$isManutencao = true;
-    			echo "x";
     	}    	
     	
     	$html = "";
@@ -397,17 +396,26 @@ include_once(caminho_vos."vousuario.php");
     }
     
     function temPermissao(){
-        $current_user = wp_get_current_user();
-        $permissao_user = $current_user->roles;
-                
-        $dominioPermissaoUsuario = new dominioPermissaoUsuario();
-        return $dominioPermissaoUsuario->temPermissao($permissao_user);
+        return temPermissaoParamHistorico(false);
+    }
+    
+    function temPermissaoParamHistorico($isHistorico){
+    	$current_user = wp_get_current_user();
+    	$permissao_user = $current_user->roles;
+    
+    	$dominioPermissaoUsuario = new dominioPermissaoUsuario();    	
+    	$retorno = true;
+    	if($isHistorico)
+    		$retorno= $dominioPermissaoUsuario->temPermissaoExcluirHistorico($permissao_user);
+    	else 
+    		$retorno= $dominioPermissaoUsuario->temPermissao($permissao_user);
+    	
+    	return $retorno;
     }
     
     function getComponenteConsulta($comboOrdenacao, $cdAtrOrdenacao, $cdOrdenacao, $qtdRegistrosPorPag, $temHistorico, $cdHistorico){
     	return getComponenteConsultaPaginacao($comboOrdenacao, $cdAtrOrdenacao, $cdOrdenacao, true, $qtdRegistrosPorPag, $temHistorico, $cdHistorico);
-    }
-    
+    }    
     
     function getComponenteConsultaPaginacao($comboOrdenacao, $cdAtrOrdenacao, $cdOrdenacao, $temPaginacao, $qtdRegistrosPorPag, $temHistorico, $cdHistorico){
         $html = "";

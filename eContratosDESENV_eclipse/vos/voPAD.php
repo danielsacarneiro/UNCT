@@ -1,22 +1,22 @@
 <?php
-include_once("dbpenalidade.php");
+include_once("dbPAD.php");
 
-  Class vopenalidade extends voentidade{
+  Class voPAD extends voentidade{
   	
-        static $nmAtrCd  = "pn_cd";
-		static $nmAtrCdPA = "pa_cd"; //processo administrativo cd
-		static $nmAtrAnoPA = "pa_ex"; //processo administrativo ano
+		static $nmAtrCdPA = "pad_cd"; //processo administrativo cd
+		static $nmAtrAnoPA = "pad_ex"; //processo administrativo ano
 		
 		static $nmAtrCdContrato  = "ct_numero";
 		static $nmAtrAnoContrato  = "ct_exercicio";
 		static $nmAtrTipoContrato =  "ct_tipo";		
 		
-		static $nmAtrProcessoLicitatorio =  "pn_proc_licitatorio";
-		static $nmAtrObservacao =  "pn_observacao";	
+		static $nmAtrProcessoLicitatorio =  "pad_proc_licitatorio";
+		static $nmAtrObservacao =  "pad_observacao";	
+		static $nmAtrDtAbertura =  "pad_dt_abertura";
+		static $nmAtrSituacao=  "pad_si";
 		
 		var $dbprocesso;
-        
-		var $cd  = "";        
+                
 		var $cdPA= "";		
 		var $anoPA =  "";
 		var $cdContrato =  "";
@@ -24,28 +24,29 @@ include_once("dbpenalidade.php");
 		var $tpContrato =  "";
         var $processoLic =  "";
         var $obs =  "";
+        var $dtAbertura = "";
+        var $situacao = "";
 
 // ...............................................................
 // Funcoes ( Propriedades e metodos da classe )
 
    function __construct() {
        parent::__construct();
-       $this->dbprocesso = new dbpenalidade();
+       $this->dbprocesso = new dbPAD();
        $this->temTabHistorico = true;
    }
    
     public static function getNmTabela(){
-        return  "penalidade";
+        return  "pad";
     }
     
     public function getNmClassProcesso(){
-        return  "dbpenalidade";
+        return  "dbPAD";
     }      
     
     function getValoresWhereSQLChave($isHistorico){
         $nmTabela = $this->getNmTabelaEntidade($isHistorico);        
-		$query = $nmTabela . "." . self::$nmAtrCd . "=" . $this->cd;		
-		$query.= " AND ". $nmTabela . "." . self::$nmAtrAnoPA . "=" . $this->anoPA;
+		$query = $nmTabela . "." . self::$nmAtrAnoPA . "=" . $this->anoPA;
 		$query.= " AND ". $nmTabela . "." . self::$nmAtrCdPA . "=" . $this->cdPA;
 		
         if($isHistorico)
@@ -55,15 +56,16 @@ include_once("dbpenalidade.php");
     }    
     
     function getAtributosFilho(){
-        $retorno = array(
-            self::$nmAtrCd,            
+        $retorno = array(            
         	self::$nmAtrCdPA,            
             self::$nmAtrAnoPA,
             self::$nmAtrCdContrato,
             self::$nmAtrAnoContrato,
             self::$nmAtrTipoContrato,
             self::$nmAtrProcessoLicitatorio,            
-            self::$nmAtrObservacao
+            self::$nmAtrObservacao,
+        	self::$nmAtrDtAbertura,
+        	self::$nmAtrSituacao
         );
         
         return $retorno;    
@@ -71,7 +73,6 @@ include_once("dbpenalidade.php");
     
     function getAtributosChavePrimaria(){
     	$retorno = array(
-    			self::$nmAtrCd,
     			self::$nmAtrCdPA,
     			self::$nmAtrAnoPA
     	);
@@ -80,19 +81,19 @@ include_once("dbpenalidade.php");
     }
     
     function getDadosRegistroBanco($registrobanco){
-        //as colunas default de voentidade sao incluidas pelo metodo getDadosBanco do voentidade
-		$this->cd = $registrobanco[self::$nmAtrCd];        
+        //as colunas default de voentidade sao incluidas pelo metodo getDadosBanco do voentidade        
 		$this->cdContrato = $registrobanco[self::$nmAtrCdContrato];
         $this->anoContrato = $registrobanco[self::$nmAtrAnoContrato];
         $this->cdPA= $registrobanco[self::$nmAtrCdPA];
         $this->anoPA = $registrobanco[self::$nmAtrAnoPA];        		
         $this->processoLic = $registrobanco[self::$nmAtrProcessoLicitatorio];
         $this->obs = $registrobanco[self::$nmAtrObservacao];
+        $this->dtAbertura = getData($registrobanco[self::$nmAtrDtAbertura]);
+        $this->situacao = $registrobanco[self::$nmAtrSituacao];
 	}   
 	
 	function getDadosFormulario(){
-				
-		$this->cd = @$_POST[self::$nmAtrCd];
+		
 		$this->cdPA = @$_POST[self::$nmAtrCdPA];        
 		$this->anoPA = @$_POST[self::$nmAtrAnoPA];
 		
@@ -102,6 +103,8 @@ include_once("dbpenalidade.php");
         
         $this->processoLic = @$_POST[self::$nmAtrProcessoLicitatorio];
         $this->obs = @$_POST[self::$nmAtrObservacao];
+        $this->dtAbertura = @$_POST[self::$nmAtrDtAbertura];
+        $this->situacao= @$_POST[self::$nmAtrSituacao];
         
         $this->dhUltAlteracao = @$_POST[self::$nmAtrDhUltAlteracao];
         $this->sqHist = @$_POST[self::$nmAtrSqHist];
@@ -111,16 +114,15 @@ include_once("dbpenalidade.php");
 	}
                 
 	function toString(){						
-		$retorno.= $this->cd . ",";
         $retorno.= $this->anoPA . ",";		
         $retorno.= $this->cdPA . ",";
 		return $retorno;		
 	}   
 	
 	function getValorChavePrimaria(){
-		$chave = $this->cd;
-		$chave .= CAMPO_SEPARADOR.$this->anoPA;
+		$chave = $this->anoPA;
 		$chave .= CAMPO_SEPARADOR.$this->cdPA;
+		$chave .= CAMPO_SEPARADOR.$this->sqHist;
 		
 		return $chave;
 	}
@@ -128,15 +130,15 @@ include_once("dbpenalidade.php");
 	function getVOExplodeChave(){
 		$chave = @$_GET["chave"];	
 		$array = explode(CAMPO_SEPARADOR,$chave);
-		$this->cd = $array[0];
-		$this->anoPA = $array[1];
-		$this->cdPA = $array[2];
+		$this->anoPA = $array[0];
+		$this->cdPA = $array[1];
+		$this->sqHist = $array[2];
 	}
 	
 	static function getAtributosOrdenacao(){
 		$varAtributos = array(
-				self::getNmTabela().".".self::$nmAtrCdContrato => "Contrato",
-				self::getNmTabela().".".self::$nmAtrCdPA=> "PA"
+				self::$nmAtrCdContrato => "Contrato",
+				self::$nmAtrCdPA=> "PA"
 		);
 		return $varAtributos;
 	}	

@@ -3,7 +3,7 @@ include_once(caminho_util."bibliotecaSQL.php");
 include_once(caminho_lib ."filtroManter.php");
 include_once(caminho_funcoes ."contrato/dominioEspeciesContrato.php");
 
-class filtroManterPenalidade extends filtroManter{
+class filtroManterPAD extends filtroManter{
     
     var $nmFiltro = "filtroManterPenalidade";
     
@@ -13,23 +13,23 @@ class filtroManterPenalidade extends filtroManter{
 	function __construct() {
         parent::__construct(true);
         
-        $this->cd = @$_POST[vopessoa::$nmAtrCd];
-        //$this->cdGestor = @$_POST[vopenalidade::$nmAtrCdGestor];
+        $this->cdPessoa = @$_POST[vopessoa::$nmAtrCd];
+        //$this->cdGestor = @$_POST[voPAD::$nmAtrCdGestor];
         $this->doc = @$_POST[vopessoa::$nmAtrDoc];
         $this->nome = @$_POST[vopessoa::$nmAtrNome];
         
 	}
     	
 	function getFiltroConsultaSQL($isHistorico){
-        $vopenalidade= new vopenalidade();
+        $voPAD= new voPAD();
         $vopessoa= new vopessoa();
         $vocontrato= new vocontrato();
 		$filtro = "";
 		$conector  = "";
 
-        $nmTabela = $vopenalidade->getNmTabela($isHistorico);
-        $nmTabelaPessoa= $vopessoa->getNmTabela($isHistorico);
-        $nmTabelaContrato= $vocontrato->getNmTabela($isHistorico);
+        $nmTabela = $voPAD->getNmTabelaEntidade($isHistorico);
+        $nmTabelaPessoa= $vopessoa->getNmTabelaEntidade(false);
+        $nmTabelaContrato= $vocontrato->getNmTabelaEntidade(false);
         
 		//seta os filtros obrigatorios        
 		if($this->isSetaValorDefault()){
@@ -45,11 +45,11 @@ class filtroManterPenalidade extends filtroManter{
 					
 				$conector  = "\n AND ";
 		
-		if($this->cd != null){
+		if($this->cdPessoa != null){
 			$filtro = $filtro . $conector
 						. $nmTabelaPessoa. "." .vopessoa::$nmAtrCd
 						. " = "
-						. $this->cd;
+						. $this->cdPessoa;
 			
 			$conector  = "\n AND ";
 		}
@@ -76,7 +76,7 @@ class filtroManterPenalidade extends filtroManter{
 
 		if($this->cdGestor != null){
 			$filtro = $filtro . $conector
-						//. $nmTabela. "." .vopenalidade::$nmAtrCdGestor
+						//. $nmTabela. "." .voPAD::$nmAtrCdGestor
 						. "='"
 						. $this->cdGestor
 						. "'";
@@ -87,9 +87,8 @@ class filtroManterPenalidade extends filtroManter{
 		if($filtro != "")
 			$filtro = " WHERE $filtro";
 
-		if($this->cdAtrOrdenacao  != null){
-			
-			$filtro = $filtro . " ORDER BY $this->cdAtrOrdenacao $this->cdOrdenacao";
+		if($this->cdAtrOrdenacao  != null){			
+			$filtro = $filtro . " ORDER BY " . $nmTabela .".$this->cdAtrOrdenacao $this->cdOrdenacao";
 		}
 		
 		//echo "Filtro:$filtro<br>";

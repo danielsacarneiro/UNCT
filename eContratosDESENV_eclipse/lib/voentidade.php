@@ -160,7 +160,7 @@
     function getNmTabelaEntidade($isHistorico){
         $nmTabela = static::getNmTabela();
        if($isHistorico)
-            $nmTabela = $this->getNmTabelaHistorico();
+            $nmTabela = self::getNmTabelaHistorico();
         return $nmTabela;
     }
     

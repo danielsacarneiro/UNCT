@@ -10,6 +10,16 @@ class filtroManterPessoa extends filtroManter{
     
     // ...............................................................
 	// construtor
+    var $cd;    
+    var $doc="";
+    var $nome="";
+    var $cdvinculo="";
+    
+    var $cdContrato="";
+    var $anoContrato="";
+    var $tpContrato="";
+    var $sqEspecieContrato="";
+    
     
 	function __construct() {
         parent::__construct(true);
@@ -18,7 +28,8 @@ class filtroManterPessoa extends filtroManter{
         //$this->cdGestor = @$_POST[vopessoa::$nmAtrCdGestor];
         $this->doc = @$_POST[vopessoa::$nmAtrDoc];
         $this->nome = @$_POST[vopessoa::$nmAtrNome];
-        $this->cdvinculo = @$_POST[vopessoavinculo::$nmAtrCd];
+        $this->cdvinculo = @$_POST[vopessoavinculo::$nmAtrCd];        
+
 	}
     	
 	function getFiltroConsultaSQL($isHistorico){
@@ -27,8 +38,8 @@ class filtroManterPessoa extends filtroManter{
 		$filtro = "";
 		$conector  = "";
 
-        $nmTabela = $voPessoa->getNmTabela($isHistorico);
-        $nmTabelaPessoaVinculo = $voPessoaVinculo->getNmTabela($isHistorico);
+        $nmTabela = $voPessoa->getNmTabelaEntidade($isHistorico);
+        $nmTabelaPessoaVinculo = $voPessoaVinculo->getNmTabela();
         
 		//seta os filtros obrigatorios        
 		if($this->isSetaValorDefault()){
@@ -74,7 +85,44 @@ class filtroManterPessoa extends filtroManter{
 			
 			$conector  = "\n AND ";
 		}	
-
+		
+		if($this->cdContrato != null){
+			$filtro = $filtro . $conector
+					. vocontrato::getNmTabela(). "." .vocontrato::$nmAtrCdContrato
+					. "="
+					. $this->cdContrato;
+						
+					$conector  = "\n AND ";
+		}
+		
+		if($this->anoContrato != null){
+			$filtro = $filtro . $conector
+					. vocontrato::getNmTabela(). "." .vocontrato::$nmAtrAnoContrato
+					. "="
+					. $this->anoContrato;
+		
+					$conector  = "\n AND ";
+		}
+		
+		if($this->tpContrato != null){
+			$filtro = $filtro . $conector
+					. vocontrato::getNmTabela(). "." .vocontrato::$nmAtrTipoContrato
+					. "='"
+					. $this->tpContrato
+					. "'";
+		
+					$conector  = "\n AND ";
+		}
+		
+		if($this->sqEspecieContrato != null){
+			$filtro = $filtro . $conector
+					. vocontrato::getNmTabela(). "." .vocontrato::$nmAtrSqEspecieContrato
+					. "="
+					. $this->sqEspecieContrato;
+		
+					$conector  = "\n AND ";
+		}
+		
 		if($this->cdGestor != null){
 			$filtro = $filtro . $conector
 						//. $nmTabela. "." .vopessoa::$nmAtrCdGestor
@@ -86,11 +134,11 @@ class filtroManterPessoa extends filtroManter{
 		}	
 
 		if($filtro != "")
-			$filtro = " WHERE $filtro";
+			$filtro = "\n WHERE $filtro";
 
 		if($this->cdAtrOrdenacao  != null){
 			
-			$filtro = $filtro . " ORDER BY $this->cdAtrOrdenacao $this->cdOrdenacao";
+			$filtro = $filtro . "\n ORDER BY $this->cdAtrOrdenacao $this->cdOrdenacao";
 		}
 		
 		//echo "Filtro:$filtro<br>";

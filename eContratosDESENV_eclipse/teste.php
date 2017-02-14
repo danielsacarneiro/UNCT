@@ -42,7 +42,7 @@ $vo = new vopessoa();
 //echo "<br>";
 
 $db = new dbcontrato();
-echo $db->atualizarPessoasContrato();
+//echo $db->atualizarPessoasContrato();
 
 
 

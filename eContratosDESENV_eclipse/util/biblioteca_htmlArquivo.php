@@ -31,6 +31,7 @@ Class pasta{
 	var $trazerTodosFilhos = false;
 	var $pathinfo;
 	var $dir = "";
+	var $indice = "";
 	static $barra = "\\\\";
 	// ...............................................................
 	// Funcoes ( Propriedades e metodos da classe )
@@ -74,8 +75,12 @@ function criaMenu($item, $isMenuRaiz){
 	$menuRaiz = "";
 	if($isMenuRaiz)
 		$menuRaiz = ",true";
+	
+	$nomeAexibir = $item->dir;
+	if($item->indice == 1)
+		$nomeAexibir = $item->nome;
 
-	echo $item->nomeObj . " = new Tree( '" .$item->nome. "'" . $menuRaiz . ");\n";
+	echo $item->nomeObj . " = new Tree( '" .$nomeAexibir. "'" . $menuRaiz . ");\n";
 	
 }
 
@@ -143,6 +148,50 @@ function montarColecaoItens($pastaMenuPai){
 			}
 		}
 		
+	}
+	$pastaMenuPai->filtro->numTotalRegistros = $i;
+
+	return $retorno;
+}
+
+function montarColecaoItens2($pastaMenuPai){
+	$indice = $pastaMenuPai->indice;
+	$pasta = $pastaMenuPai->dir."\\\*";
+	$dir = new GlobIterator($pasta);
+	$filtro = $pastaMenuPai->filtro;
+	$strFiltro = $filtro->contratada;
+
+	$i = 0;
+	$retorno = "";
+
+	foreach($dir as $file){
+		if ($file->isDir() || $file->isFile()){
+
+			$dname = $file->getFilename();
+			
+				$enderecoPasta = $pastaMenuPai->dir;
+				if ($file->isDir()){
+					$item = new pasta($dname,$filtro, ++$indice);
+
+					$item->trazerTodosFilhos = true;
+					$item->setDir($enderecoPasta.pasta::$barra.$item->nome);
+					
+					$retorno[$i] = $item;
+					$i++;						
+						
+				}else{
+					if(existeStr1NaStr2ComSeparador($dname, $strFiltro)){
+						$item = new arquivo($dname, ++$indice);
+						$item->dir=$enderecoPasta;
+						
+						$retorno[$i] = $item;
+						$i++;
+						
+					}
+				}
+			
+		}
+
 	}
 	$pastaMenuPai->filtro->numTotalRegistros = $i;
 

@@ -17,9 +17,12 @@ include_once("dominio.class.php");
         return in_array(constantes::$cd_usuario_admin, $colecaoAtributos);                
     }
     
-    function temPermissao($colecaoAtributos){        
+    function temPermissao($colecaoAtributos){
         return in_array(constantes::$cd_usuario_admin, $colecaoAtributos) || in_array(constantes::$cd_usuario_colaborador, $colecaoAtributos);
     }
     
-}
+    function temPermissaoExcluirHistorico($colecaoAtributos){
+    	return in_array(constantes::$cd_usuario_admin, $colecaoAtributos);
+    }
+ }
 ?>
