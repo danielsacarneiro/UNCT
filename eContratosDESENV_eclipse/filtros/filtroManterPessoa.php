@@ -133,13 +133,8 @@ class filtroManterPessoa extends filtroManter{
 			$conector  = "\n AND ";
 		}	
 
-		if($filtro != "")
-			$filtro = "\n WHERE $filtro";
-
-		if($this->cdAtrOrdenacao  != null){
-			
-			$filtro = $filtro . "\n ORDER BY $this->cdAtrOrdenacao $this->cdOrdenacao";
-		}
+		//finaliza o filtro
+		$filtro = parent::getFiltroConsultaSQL($filtro);
 		
 		//echo "Filtro:$filtro<br>";
 

@@ -12,6 +12,7 @@ class filtroManterPAD extends filtroManter{
     var $nome;
     var $cdPA;
     var $anoPA;
+    var $situacao;
     var $cdEspecieContrato;
     
     var $nmEntidadePrincipal;
@@ -29,6 +30,7 @@ class filtroManterPAD extends filtroManter{
         
         $this->cdPA = @$_POST[voPAD::$nmAtrCdPA];
         $this->anoPA = @$_POST[voPAD::$nmAtrAnoPA];
+        $this->situacao = @$_POST[voPAD::$nmAtrSituacao];
         $this->cdEspecieContrato = @$_POST[vocontrato::$nmAtrCdEspecieContrato];
     }
     	
@@ -67,13 +69,23 @@ class filtroManterPAD extends filtroManter{
 			$conector  = "\n AND ";
 		}
 		
+		if($this->situacao != null){
+			$filtro = $filtro . $conector
+					. $nmTabela. "." .voPAD::$nmAtrSituacao
+					. " = "
+					. $this->situacao
+					;
+						
+			$conector  = "\n AND ";
+		}
+		
 		if($this->cdPA != null){
 			$filtro = $filtro . $conector
 			. $nmTabela. "." .voPAD::$nmAtrCdPA
 			. " = "
 					. $this->cdPA;
-						
-			$conector  = "\n AND ";
+		
+					$conector  = "\n AND ";
 		}
 		
 		if($this->anoPA != null){
@@ -124,12 +136,8 @@ class filtroManterPAD extends filtroManter{
 			$conector  = "\n AND ";
 		}	
 
-		if($filtro != "")
-			$filtro = " WHERE $filtro";
-
-		if($this->cdAtrOrdenacao  != null){			
-			$filtro = $filtro . " ORDER BY " . $nmTabela .".$this->cdAtrOrdenacao $this->cdOrdenacao";
-		}
+		//finaliza o filtro
+		$filtro = parent::getFiltroConsultaSQL($filtro);
 		
 		//echo "Filtro:$filtro<br>";
 

@@ -12,10 +12,13 @@ class filtroManter{
 		
 	var $numTotalRegistros;
 	var $TemPaginacao;
+	var $qtdRegistrosPorPag;
+	var $paginacao;
 
 	function __construct($temPaginacao) {        
 		$this->cdAtrOrdenacao = @$_POST["cdAtrOrdenacao"];
 		$this->cdOrdenacao = @$_POST["cdOrdenacao"];
+				
 		$this->dtVigencia = @$_POST["dtVigencia"];
         $this->cdHistorico  = @$_POST["cdHistorico"];        
         $this->qtdRegistrosPorPag = @$_POST["qtdRegistrosPorPag"];
@@ -63,6 +66,25 @@ class filtroManter{
         }
         
         return $filtro;
+    }
+    
+    function getFiltroConsultaSQL($filtro){
+    	
+    	if($filtro != ""){
+    		$filtro = "\n WHERE $filtro";
+    	}
+    	
+    	if($this->cdAtrOrdenacao  != null){
+    				
+    		$ordem = $this->cdOrdenacao;
+    		if($ordem == constantes::$CD_ORDEM_CRESCENTE){
+    			$ordem = "";
+    		}
+    					
+    		$filtro = $filtro . "\n ORDER BY $this->cdAtrOrdenacao $ordem";
+    	}
+    	
+    	return $filtro; 
     }
     
 	function toString(){		

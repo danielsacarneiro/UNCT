@@ -137,7 +137,7 @@ function excluirTramitacao(){
             <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
             <TBODY>
 	        <?php 	        	        
-	        include_once("../contrato/dominioTipoContrato.php");
+	        require_once ("../contrato/dominioTipoContrato.php");
 	        $dominioTipoContrato = new dominioTipoContrato();
 	        
 	        $contrato = formatarCodigoAnoComplemento($colecao[voPAD::$nmAtrCdContrato],
@@ -195,8 +195,7 @@ function excluirTramitacao(){
 	       }	                    
 	       ?>	           				
 	        <?php 
-	        include_once ("dominioSituacaoPAD.php");
-	        
+	        //require_once ("dominioSituacaoPAD.php");	        
 	        $domSiPAD = new dominioSituacaoPAD();
 	        $situacao = $colecao[voPAD::$nmAtrSituacao];
 	        $situacao = $domSiPAD->getDescricao($situacao);
@@ -230,17 +229,17 @@ function excluirTramitacao(){
         	</TR>
     
 <TR>
-	<TD class="campoformulario" halign="left" colspan="4">
+	<TH class="textoseparadorgrupocampos" halign="left" colspan="4">
 	<DIV class="campoformulario" id="div_tramitacao">
 	<?php 
 	$isDetalhamento = false;
 	include_once 'gridTramitacaoAjax.php';
 	?>
 	</DIV>
-	</TD>
+	</TH>
 </TR>
 <TR>
-	<TD class="campoformulario" halign="left" colspan="4">
+	<TH class="textoseparadorgrupocampos" halign="left" colspan="4">
 	<DIV class="campoformulario">Incluir Tramitação:
          <TABLE id="table_tabeladados" class="tabeladados" cellpadding="0" cellspacing="0">						
              <TBODY>
@@ -257,7 +256,7 @@ function excluirTramitacao(){
         </TABLE>
 	
 	</DIV>
-	</TD>
+	</TH>
 </TR>
 <TR>
 	<TD halign="left" colspan="4">

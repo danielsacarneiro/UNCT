@@ -142,9 +142,9 @@ include_once(caminho_vos."vousuario.php");
 	}
 	
 	function getOrdemAtributos(){
-	 $varAtributos = array(
-				"DESC" => "Decrescente",
-				"" => "Crescente"
+	 $varAtributos = array(	 			
+	 			constantes::$CD_ORDEM_CRESCENTE=> "Crescente",
+	 			constantes::$CD_ORDEM_DECRESCENTE => "Decrescente"
 				);
 	 return $varAtributos;	
 	}
@@ -173,50 +173,56 @@ include_once(caminho_vos."vousuario.php");
         if($voEntidade->cdUsuarioUltAlteracao == null)
             $nmusualteracao = $USUARIO_BATCH;
                     
-        $retorno =
-            "<TH class='campoformulario' nowrap>Data Inclusão:</TH>
-            <TD class='campoformulario'>
-            	<INPUT type='text' 
-            	       id='" . voentidade::$nmAtrDhInclusao . "' 
-            	       name='".voentidade::$nmAtrDhInclusao."' 
-            			value='". getDataHoraSQLComoString($voEntidade->dhInclusao)."'
-            			class='camporeadonly' 
-            			size='20' 
-            			maxlength='10' readonly>
-			</TD>
-            <TH class='campoformulario' nowrap>Data Ult.Alteração:</TH>
-            <TD class='campoformulario'>
-            	<INPUT type='text' 
-            	       id='".voentidade::$nmAtrDhUltAlteracao."' 
-            	       name='".voentidade::$nmAtrDhUltAlteracao."' 
-            			value='".getDataHoraSQLComoString($voEntidade->dhUltAlteracao)."'
-            			class='camporeadonly' 
-            			size='20' 
-            			maxlength='10' readonly>
-			</TD>
-        </TR>        
-		<TR>
-            <TH class='campoformulario' nowrap>Usuário Inclusão:</TH>
-            <TD class='campoformulario'>
-            	<INPUT type='text' 
-            	       id='".voentidade::$nmAtrCdUsuarioInclusao."' 
-            	       name='".voentidade::$nmAtrCdUsuarioInclusao."' 
-            			value='".$nmusuinclusao."'            			
-            			class='camporeadonly' 
-            			size='20' 
-            			readonly>
-			</TD>
-            <TH class='campoformulario' nowrap>Usuário Ult.Alteração:</TH>
-            <TD class='campoformulario'>
-            	<INPUT type='text' 
-            	       id='".voentidade::$nmAtrCdUsuarioUltAlteracao."' 
-            	       name='".voentidade::$nmAtrCdUsuarioUltAlteracao."' 
-            			value='".$nmusualteracao."'            			
-            			class='camporeadonly' 
-            			size='20' 
-            			readonly>
-			</TD>";        
+        $retorno = "";
+        if($voEntidade->dhInclusao != null){
+	        $retorno .=
+	            "<TR>
+		            <TH class='campoformulario' nowrap>Data Inclusão:</TH>
+		            <TD class='campoformulario'>
+		            	<INPUT type='text' 
+		            	       id='" . voentidade::$nmAtrDhInclusao . "' 
+		            	       name='".voentidade::$nmAtrDhInclusao."' 
+		            			value='". getDataHoraSQLComoString($voEntidade->dhInclusao)."'
+		            			class='camporeadonly' 
+		            			size='20' 
+		            			maxlength='10' readonly>
+					</TD>
+		            <TH class='campoformulario' nowrap>Usuário Inclusão:</TH>
+		            <TD class='campoformulario'>
+		            	<INPUT type='text' 
+		            	       id='".voentidade::$nmAtrCdUsuarioInclusao."' 
+		            	       name='".voentidade::$nmAtrCdUsuarioInclusao."' 
+		            			value='".$nmusuinclusao."'            			
+		            			class='camporeadonly' 
+		            			size='20' 
+		            			readonly>
+					</TD>            					
+		        </TR>";
+        }
         
+        $retorno .=
+			"<TR>
+	            <TH class='campoformulario' nowrap>Data Ult.Alteração:</TH>
+	            <TD class='campoformulario'>
+	            	<INPUT type='text' 
+	            	       id='".voentidade::$nmAtrDhUltAlteracao."' 
+	            	       name='".voentidade::$nmAtrDhUltAlteracao."' 
+	            			value='".getDataHoraSQLComoString($voEntidade->dhUltAlteracao)."'
+	            			class='camporeadonly' 
+	            			size='20' 
+	            			maxlength='10' readonly>
+				</TD>
+	            <TH class='campoformulario' nowrap>Usuário Ult.Alteração:</TH>
+	            <TD class='campoformulario'>
+	            	<INPUT type='text' 
+	            	       id='".voentidade::$nmAtrCdUsuarioUltAlteracao."' 
+	            	       name='".voentidade::$nmAtrCdUsuarioUltAlteracao."' 
+	            			value='".$nmusualteracao."'            			
+	            			class='camporeadonly' 
+	            			size='20' 
+	            			readonly>
+				</TD>
+			</TR>";        
         
     //    return utf8_decode($retorno);
         return $retorno;
@@ -413,6 +419,11 @@ include_once(caminho_vos."vousuario.php");
     	return $retorno;
     }
     
+    function getComponenteConsultaFiltro($comboOrdenacao, $temHistorico, $filtro){    	
+    	return getComponenteConsultaPaginacao($comboOrdenacao, $filtro->cdAtrOrdenacao, $filtro->cdOrdenacao, $filtro->TemPaginacao, 
+    			$filtro->qtdRegistrosPorPag, $temHistorico, $filtro->cdHistorico);
+    }
+    
     function getComponenteConsulta($comboOrdenacao, $cdAtrOrdenacao, $cdOrdenacao, $qtdRegistrosPorPag, $temHistorico, $cdHistorico){
     	return getComponenteConsultaPaginacao($comboOrdenacao, $cdAtrOrdenacao, $cdOrdenacao, true, $qtdRegistrosPorPag, $temHistorico, $cdHistorico);
     }    
@@ -433,6 +444,7 @@ include_once(caminho_vos."vousuario.php");
                     <TD class='campoformulario' colspan='3'>";
                     
         if($comboOrdenacao != null){ 
+        	//echo $cdOrdenacao;
             $html .= "Coluna:"
                     . $comboOrdenacao->getHtmlOpcao("cdAtrOrdenacao","cdAtrOrdenacao", $cdAtrOrdenacao, false)
                     . " Ordem: "

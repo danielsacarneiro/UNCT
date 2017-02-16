@@ -101,7 +101,7 @@ function confirmar() {
             </TR>               
             <?php }
                      
-            include_once (caminho_funcoes."contrato/dominioTipoContrato.php");
+            require_once (caminho_funcoes."contrato/dominioTipoContrato.php");
             $dominioTipoContrato = new dominioTipoContrato();
             
             $contrato = formatarCodigoAnoComplemento($colecao[voPAD::$nmAtrCdContrato],
@@ -130,8 +130,7 @@ function confirmar() {
 	            <TD class="campoformulario" ><INPUT type="text" id="docContratada" name="docContratada"  value="<?php echo($docContratada);?>"  onkeyup="formatarCampoCNPFouCNPJ(this, event);" class="camporeadonly" size="20" maxlength="20" <?=$readonly?>></TD>
 	        </TR>
 	        <?php 
-	        include_once ("dominioSituacaoPAD.php");
-	        
+	        //require_once ("dominioSituacaoPAD.php");	        
 	        $domSiPAD = new dominioSituacaoPAD();
 	        $situacao = $colecao[voPAD::$nmAtrSituacao];
 	        $situacao = $domSiPAD->getDescricao($situacao);

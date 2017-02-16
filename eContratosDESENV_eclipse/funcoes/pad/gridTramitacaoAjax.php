@@ -88,7 +88,7 @@ function getDadosTramitacao($db, $isDetalhamento){
 		
 	if($tamanho > 0){
 			$html = "";
-			$html .= "Tramitação \n";
+			$html .= "Tramitação: \n";
 			$html .= "<TABLE id='table_tabeladados' class='tabeladados' cellpadding='0' cellspacing='0'> \n";						
 			$html .= " <TBODY>  \n";
 			$html .= "        <TR>    \n"; 

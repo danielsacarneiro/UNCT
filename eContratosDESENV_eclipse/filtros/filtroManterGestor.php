@@ -41,13 +41,8 @@ class filtroManterGestor extends filtroManter{
         
 		}		
 
-		if($filtro != "")
-			$filtro = " WHERE $filtro";
-
-		if($this->cdAtrOrdenacao  != null){
-			
-			$filtro = $filtro . " ORDER BY $this->cdAtrOrdenacao $this->cdOrdenacao";
-		}
+		//finaliza o filtro
+		$filtro = parent::getFiltroConsultaSQL($filtro);
 		
 		//echo "Filtro:$filtro<br>";
 

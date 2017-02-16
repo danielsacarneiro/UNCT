@@ -131,6 +131,13 @@ function tratarUnload() {
 	ocultarMensagemAguarde();
 }
 
+function limparFormulario() {	
+
+	for(i=0;i<frm_principal.length;i++){
+		frm_principal.elements[i].value='';
+	}	
+}
+
 // Confirma a execução de uma operação. Se pTexto for nulo, será exibida uma mensagem padrão de confirmação.
 function solicitarConfirmacao(pTexto, pFuncaoCallBack) {
 	var mensagem;

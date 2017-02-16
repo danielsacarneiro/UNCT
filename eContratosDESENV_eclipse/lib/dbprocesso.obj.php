@@ -55,6 +55,45 @@ class dbprocesso{
         return $registro[0];
 	}
     
+	function consultarPorChave($vo, $isHistorico){
+		$nmTabela = $vo->getNmTabelaEntidade($isHistorico);
+		$temUsuInclusao = false;
+		
+		$query = "SELECT ".$nmTabela;
+		$query.= ".*";
+		
+		if($temUsuInclusao){
+			$query.= "TAB1." .vousuario::$nmAtrName. " AS " . voentidade::$nmAtrNmUsuarioInclusao;
+		}
+		$query.= ", TAB2." .vousuario::$nmAtrName. " AS " . voentidade::$nmAtrNmUsuarioUltAlteracao;
+		$query.= " FROM ". $nmTabela;
+
+		if($temUsuInclusao){
+			$query.= "\n LEFT JOIN ". vousuario::$nmEntidade;
+			$query.= "\n TAB1 ON ";
+			$query.= "TAB1.".vousuario::$nmAtrID. "=".voentidade::$nmAtrCdUsuarioInclusao;
+		}
+		
+		$query.= "\n LEFT JOIN ". vousuario::$nmEntidade;
+		$query.= "\n TAB2 ON ";
+		$query.= "TAB2.".vousuario::$nmAtrID. "=".voentidade::$nmAtrCdUsuarioUltAlteracao;
+		
+		$query.= " WHERE ";
+		$query.= $vo->getValoresWhereSQLChave($isHistorico);
+		
+	
+		/*$query = "SELECT * FROM ".$nmTabela;
+		$query.= " WHERE ";
+		$query.= $vo->getValoresWhereSQLChave($isHistorico);*/
+	
+		//echo $query;
+		$retorno = $this->consultarEntidade($query, true);
+		if($retorno != "")
+			$retorno = $retorno[0];
+		
+		return $retorno;
+	}
+	
 	function consultarEntidade($query, $isPorChavePrimaria){
 		//echo $query;		
 		$retorno = $this->cDb->consultar($query);		
@@ -217,7 +256,13 @@ class dbprocesso{
 	    return $retorno;		
 	}
     
+	function incluirQueryVO($voEntidade){		
+		$arrayAtribRemover =  $voEntidade->varAtributosARemover;		
+		return $this->incluirQuery($voEntidade, $arrayAtribRemover);		
+	}
+	
     function incluirQuery($voEntidade, $arrayAtribRemover){
+    		
         $atributosInsert = $voEntidade->getTodosAtributos();
         //var_dump ($atributosInsert);        
         //echo "<br>";

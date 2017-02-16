@@ -6,6 +6,7 @@
   Class voentidade {		
 		var $varChaves;
 		var $varAtributos;
+		var $varAtributosARemover;
         var $temTabHistorico = true;
         
         static $nmTabelaSufixoHistorico   =  	"_hist";
@@ -80,7 +81,9 @@
     	if($temUsuarioInc){
     		$retorno.= $conector . $this-> cdUsuarioInclusao ;
     		$conector = ",";
-    	}
+    		
+    		//ECHO "TEM USU INCLUSAO";
+    	}//ELSE ECHO "NAO TEM USU INCLUSAO";
     	
     	if($temUsuarioAlt){
     		$retorno.= $conector . $this-> cdUsuarioUltAlteracao;
