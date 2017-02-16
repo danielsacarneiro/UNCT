@@ -7,6 +7,15 @@ class filtroManterPAD extends filtroManter{
     
     var $nmFiltro = "filtroManterPenalidade";
     
+    var $cdPessoa ;    
+    var $doc;
+    var $nome;
+    var $cdPA;
+    var $anoPA;
+    var $cdEspecieContrato;
+    
+    var $nmEntidadePrincipal;
+    
     // ...............................................................
 	// construtor
     
@@ -18,7 +27,10 @@ class filtroManterPAD extends filtroManter{
         $this->doc = @$_POST[vopessoa::$nmAtrDoc];
         $this->nome = @$_POST[vopessoa::$nmAtrNome];
         
-	}
+        $this->cdPA = @$_POST[voPAD::$nmAtrCdPA];
+        $this->anoPA = @$_POST[voPAD::$nmAtrAnoPA];
+        $this->cdEspecieContrato = @$_POST[vocontrato::$nmAtrCdEspecieContrato];
+    }
     	
 	function getFiltroConsultaSQL($isHistorico){
         $voPAD= new voPAD();
@@ -26,32 +38,60 @@ class filtroManterPAD extends filtroManter{
         $vocontrato= new vocontrato();
 		$filtro = "";
 		$conector  = "";
-
-        $nmTabela = $voPAD->getNmTabelaEntidade($isHistorico);
-        $nmTabelaPessoa= $vopessoa->getNmTabelaEntidade(false);
-        $nmTabelaContrato= $vocontrato->getNmTabelaEntidade(false);
-        
+		
+		$nmTabelaPessoa= $vopessoa->getNmTabelaEntidade(false);
+		$nmTabelaContrato= $vocontrato->getNmTabelaEntidade(false);
+		
+		$nmTabela = $voPAD->getNmTabelaEntidade($isHistorico);
+		if($this->nmEntidadePrincipal != null){
+			$voentidade = new voentidade();
+			$class = $this->nmEntidadePrincipal;
+			$voentidade = new $class(); 
+			$nmTabela = $voentidade->getNmTabelaEntidade($isHistorico);
+		}
+		
 		//seta os filtros obrigatorios        
 		if($this->isSetaValorDefault()){
 			//anoDefault foi definido como constante na index.php
             //echo "setou o ano defaul";
             ;                        
 		}
-            		
-		$filtro = $filtro . $conector
-				. $nmTabelaContrato. "." .vocontrato::$nmAtrCdEspecieContrato
-				. " = "
-				. dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
-					
-				$conector  = "\n AND ";
+            				
+		if($this->cdEspecieContrato != null){
+			$filtro = $filtro . $conector
+					. $nmTabelaContrato. "." .vocontrato::$nmAtrCdEspecieContrato
+					. " = "
+					. $this->cdEspecieContrato;
+					//. dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
+						
+			$conector  = "\n AND ";
+		}
+		
+		if($this->cdPA != null){
+			$filtro = $filtro . $conector
+			. $nmTabela. "." .voPAD::$nmAtrCdPA
+			. " = "
+					. $this->cdPA;
+						
+			$conector  = "\n AND ";
+		}
+		
+		if($this->anoPA != null){
+			$filtro = $filtro . $conector
+					. $nmTabela. "." .voPAD::$nmAtrAnoPA
+					. " = "
+					. $this->anoPA;
+						
+			$conector  = "\n AND ";
+		}
 		
 		if($this->cdPessoa != null){
 			$filtro = $filtro . $conector
-						. $nmTabelaPessoa. "." .vopessoa::$nmAtrCd
-						. " = "
-						. $this->cdPessoa;
-			
-			$conector  = "\n AND ";
+			. $nmTabelaPessoa. "." .vopessoa::$nmAtrCd
+			. " = "
+					. $this->cdPessoa;
+						
+					$conector  = "\n AND ";
 		}
 		
 		if($this->nome != null){

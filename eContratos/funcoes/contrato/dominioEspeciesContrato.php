@@ -2,12 +2,26 @@
 include_once(caminho_util. "dominio.class.php");
 
   Class dominioEspeciesContrato extends dominio{
+  	
+  	static $CD_ESPECIE_CONTRATO_MATER = "01";
+  	
+  	/*"01" => "Mater",
+  	"02" => "Apostilamento",
+  	"03" => "Termo Aditivo",
+  	"04" => "Termo de Ajuste",
+  	"05" => "Termo de Cessão de Uso",
+  	"06" => "Termo de Rerratificação",
+  	"07" => "Termo de Cooperação",
+  	"08" => "Termo de Convalidação",
+  	"09" => "Termo de Rescisão Amigável",
+  	"10" => "Termo de Rescisão Unilateral",
+  	"11" => "Termo de Rescisão Encerramento",*/
     
 // ...............................................................
 // Construtor
 	function __construct () {
         		$this->colecao = array(
-				"01" => "Mater",
+        		self::$CD_ESPECIE_CONTRATO_MATER => "Mater",
                 "02" => "Apostilamento",
 				"03" => "Termo Aditivo",
                 "04" => "Termo de Ajuste",
@@ -24,7 +38,7 @@ include_once(caminho_util. "dominio.class.php");
 	function getDominioImportacaoPlanilha() {
         //cooperacao e convalidacao seram considerados como MATER                
         	$array = array(
-				"01" => "Mater*Convênio*Cooperação*Convalidação",
+        		self::$CD_ESPECIE_CONTRATO_MATER => "Mater*Convênio*Cooperação*Convalidação",
                 "02" => "Apostilamento*Apostuilamento",
 				"03" => "T.A",
                 "04" => "Ajuste",

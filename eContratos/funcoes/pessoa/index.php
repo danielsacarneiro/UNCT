@@ -119,18 +119,20 @@ function alterar() {
     <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
         <TBODY>
 			<TR>
-                <TH class="campoformulario" nowrap>Nome:</TH>
-                <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>"  value="<?php echo($nome);?>"  class="camponaoobrigatorio" size="50" ></TD>
-                <TH class="campoformulario" width="1%" nowrap>CNPJ/CPF:</TH>
-                <TD class="campoformulario" ><INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($doc);?>" class="camponaoobrigatorio" size="20" maxlength="18"></TD>
+                <TH class="campoformulario" nowrap>Código:</TH>
+                <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vopessoa::$nmAtrCd?>" name="<?=vopessoa::$nmAtrCd?>"  value="<?php if($filtro->cd != null) echo complementarCharAEsquerda($filtro->cd, "0", TAMANHO_CODIGOS);?>"  class="camponaoobrigatorio" size="7" ></TD>
+                <TH class="campoformulario" nowrap width="1%">Nome:</TH>
+                <TD class="campoformulario" ><INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>"  value="<?php echo($nome);?>"  class="camponaoobrigatorio" size="50" ></TD>
             </TR>            
             <TR>
+                <TH class="campoformulario" width="1%" nowrap>CNPJ/CPF:</TH>
+                <TD class="campoformulario" ><INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($doc);?>" class="camponaoobrigatorio" size="20" maxlength="18"></TD>
                 <TH class="campoformulario" nowrap>Vínculo:</TH>
-                <TD class="campoformulario" colspan="3">
+                <TD class="campoformulario" colspan="1">
                      <?php
                     include_once("biblioteca_htmlPessoa.php");
                     include_once(caminho_vos . "vopessoavinculo.php");
-                    echo getComboPessoaVinculo(vopessoavinculo::$nmAtrCd, vopessoavinculo::$nmAtrCd, "", "camponaoobrigatorio", "");                                        
+                    echo getComboPessoaVinculo(vopessoavinculo::$nmAtrCd, vopessoavinculo::$nmAtrCd, $filtro->cdvinculo, "camponaoobrigatorio", "");                                        
                     ?>
             </TR>
             <TR>
@@ -159,6 +161,7 @@ function alterar() {
                   <TH class="headertabeladados" width="1%">&nbsp;&nbsp;X</TH>
                     <TH class="headertabeladados" width="1%">Código</TH>
                     <TH class="headertabeladados">Nome</TH>
+                    <TH class="headertabeladados">Doc.</TH>
                     <TH class="headertabeladados">vínculo</TH>
                     <TH class="headertabeladados" width="1%">Email</TH>
                     <TH class="headertabeladados" width="1%">Telefone</TH>
@@ -167,14 +170,14 @@ function alterar() {
                 if (is_array($colecao))
                         $tamanho = sizeof($colecao);
                 else 
-                        $tamanho = 0;								 
-                            
+                        $tamanho = 0;
+                $domVinculo = new dominioVinculoPessoa();
                 for ($i=0;$i<$tamanho;$i++) {
                         $voAtual = new vopessoa();
                         $voAtual->getDadosBanco($colecao[$i]);
                                                                 
-                        $dsGestor = "";
-                                        
+                        $vinculo = $colecao[$i][vopessoavinculo::$nmAtrCd];
+                        $vinculo = $domVinculo->getDescricao($vinculo);
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados">
@@ -182,7 +185,8 @@ function alterar() {
                     </TD>
                     <TD class="tabeladados"><?php echo complementarCharAEsquerda($colecao[$i][vopessoa::$nmAtrCd], "0", TAMANHO_CODIGOS);?></TD>
                     <TD class="tabeladados"><?php echo $colecao[$i][vopessoa::$nmAtrNome];?></TD>
-                    <TD class="tabeladados"><?php echo $dsGestor;?></TD>
+                    <TD class="tabeladados"><?php echo $voAtual->doc;?></TD>
+                    <TD class="tabeladados"><?php echo $vinculo;?></TD>
                     <TD class="tabeladados"><?php echo $colecao[$i][vopessoa::$nmAtrEmail];?></TD>
                     <TD class="tabeladados" nowrap><?php echo $colecao[$i][vopessoa::$nmAtrTel]?></TD>
                 </TR>					

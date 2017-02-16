@@ -3,6 +3,7 @@ include_once("dbPAD.php");
 
   Class voPAD extends voentidade{
   	
+  		static $nmAtrColecaoTramitacao =  "ColecaoTramitacao";
 		static $nmAtrCdPA = "pad_cd"; //processo administrativo cd
 		static $nmAtrAnoPA = "pad_ex"; //processo administrativo ano
 		
@@ -26,6 +27,8 @@ include_once("dbPAD.php");
         var $obs =  "";
         var $dtAbertura = "";
         var $situacao = "";
+        
+        var $colecaoTramitacao;
 
 // ...............................................................
 // Funcoes ( Propriedades e metodos da classe )
@@ -40,7 +43,7 @@ include_once("dbPAD.php");
         return  "pad";
     }
     
-    public function getNmClassProcesso(){
+    public static function getNmClassProcesso(){
         return  "dbPAD";
     }      
     
@@ -80,6 +83,26 @@ include_once("dbPAD.php");
     	return $retorno;
     }
     
+    function setColecaoTramitacao($colecaoRegistroBanco){
+    	    	
+    	if($colecaoRegistroBanco != ""){
+    		
+    		$tam = count($colecaoRegistroBanco);
+    		
+    		$retorno = "";
+    		for($i=0;$i<$tam;$i++){
+    			$voTram = new voPADTramitacao();
+    			$voAtual = $colecaoRegistroBanco[$i];
+    			
+    			$voTram->getDadosBanco($voAtual);    			
+    			$retorno[$i] = $voTram;
+    			
+    		}
+    		
+    		$this->colecaoTramitacao = $retorno;
+    	}
+    }
+    
     function getDadosRegistroBanco($registrobanco){
         //as colunas default de voentidade sao incluidas pelo metodo getDadosBanco do voentidade        
 		$this->cdContrato = $registrobanco[self::$nmAtrCdContrato];
@@ -112,6 +135,21 @@ include_once("dbPAD.php");
         $this->cdUsuarioUltAlteracao = id_user;
                     
 	}
+	
+	function montarColecaoTramitacao($colecao){		
+		if($colecao != ""){
+			$tamanho = sizeof($colecao);
+			
+			$retorno = array();
+			for ($i=0;$i<$tamanho;$i++) {
+				$vo = new voPADTramitacao();
+				$vo->getDadosBanco($colecao[$i]);				
+				$retorno[$i] = $vo;
+			}
+			
+			$this->colecaoTramitacao = $retorno;
+		}
+	}	
                 
 	function toString(){						
         $retorno.= $this->anoPA . ",";		
@@ -136,9 +174,9 @@ include_once("dbPAD.php");
 	}
 	
 	static function getAtributosOrdenacao(){
-		$varAtributos = array(
-				self::$nmAtrCdContrato => "Contrato",
-				self::$nmAtrCdPA=> "PA"
+		$varAtributos = array(				
+				self::$nmAtrCdPA=> "PA",
+				self::$nmAtrCdContrato => "Contrato"
 		);
 		return $varAtributos;
 	}	

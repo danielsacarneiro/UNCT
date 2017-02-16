@@ -42,7 +42,7 @@ class filtroManterContrato extends filtroManter{
         $retorno = false;
 		//verifica os filtros obrigatorios
 		if($this->contratada == null && $this->docContratada == null && $this->anoContrato == null
-           && $this->dtVigenciaInicial == null && $this->dtVigenciaFinal == null){
+           && $this->dtVigenciaInicial == null && $this->dtVigenciaFinal == null && $this->objeto == null){
 			$retorno = true;
 		}        
         return $retorno;

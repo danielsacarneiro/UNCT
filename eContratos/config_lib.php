@@ -64,6 +64,7 @@ echo $varGlobalJS;
 
 //variaveis HTML
 define('TAMANHO_CODIGOS', 5);
+define('TAMANHO_CODIGOS_SAFI', 3);
 define('CAMPO_SEPARADOR', "*");
 
 ?>

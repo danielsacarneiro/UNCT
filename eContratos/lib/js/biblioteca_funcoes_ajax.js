@@ -38,6 +38,14 @@
      
  }
  
+ function getDadosContratadaPorContrato(chaveContrato, idDivResultado) {
+     
+     var result = document.getElementById(idDivResultado);
+          
+     imprimeResultado(result, "../pessoa/campoDadosContratadaAjax.php?chave=" + chaveContrato);     
+     
+ }
+ 
  
 /**
   * Função para criar um objeto XMLHTTPRequest

@@ -6,7 +6,7 @@ include_once(caminho_vos . "vopessoavinculo.php");
 include_once("dominioVinculoPessoa.php");
 
 //inicia os parametros
-inicio();
+inicioComValidacaoUsuario(true);
 
 $vo = new vopessoa();
 //var_dump($vo->varAtributos);
@@ -26,7 +26,7 @@ if($isInclusao){
     
 	$dbprocesso = new dbpessoa(null);					
 	$colecao = $dbprocesso->consultarPorChave($vo, $isHistorico);	
-	$vo->getDadosBanco($colecao);    
+	$vo->getDadosBanco($colecao);
 	putObjetoSessao($vo->getNmTabela(), $vo);
 
     $nmFuncao = "ALTERAR ";
@@ -50,12 +50,25 @@ $cdUsuarioUltAlteracao = $vo->cdUsuarioUltAlteracao;
 
 <HEAD>
 <?=setTituloPagina(null)?>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>mensagens_globais.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_text.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_cnpfcnpj.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_ajax.js"></script>
 
 <SCRIPT language="JavaScript" type="text/javascript">
+
+function transferirDadosOrgaoGestor(cdGestor, dsGestor) {		   
+	document.getElementsByName("<?=vogestor::$nmAtrCd?>").item(0).value = completarNumeroComZerosEsquerda(cdGestor, <?=TAMANHO_CODIGOS?>);
+	document.getElementsByName("<?=vogestor::$nmAtrDescricao?>").item(0).value = dsGestor;
+}
+
+function limpaCampoGestor() {		   
+	document.getElementsByName("<?=vogestor::$nmAtrCd?>").item(0).value = "";
+	document.getElementsByName("<?=vogestor::$nmAtrDescricao?>").item(0).value = "";
+}
+
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
 function isFormularioValido() {
 	if (!validaVinculo())
@@ -76,8 +89,7 @@ function confirmar() {
 	return confirm("Confirmar Alteracoes?");    
 }
 
-function carregaGestorPessoa(){    
-    
+/*function carregaGestorPessoa(){    
 	<?php
 		    $idDiv = "DIV";
 		    $idCampoGestor = vogestor::$nmAtrDescricao;
@@ -108,29 +120,43 @@ function validaVinculo(){
 			document.frm_principal.<?=vogestor::$nmAtrDescricao?>.focus();
 			return false;	
 		}
-		/*else
-			alert(document.frm_principal.<?=vogestor::$nmAtrCd?>.value);*/
+	}
+	
+	return true;
+}*/
+
+function validaVinculo(){
+	vinculo = document.frm_principal.<?=vopessoavinculo::$nmAtrCd?>.value;
+	if(vinculo == <?=dominioVinculoPessoa::$CD_VINCULO_RESPONSAVEL?>){
+		
+		if (!isCampoTextoValido(document.frm_principal.<?=vogestor::$nmAtrCd?>, true, 1, <?=TAMANHO_CODIGOS?>, true)){
+			exibirMensagem("Selecione o Órgão Gestor!");
+		    return false;
+		}
+
 	}
 	
 	return true;
 }
 
-
 function verificaVinculo(){
 	vinculo = document.frm_principal.<?=vopessoavinculo::$nmAtrCd?>.value;
+	campo = document.getElementById("<?=vogestor::getNmTabela()?>");
 	if(vinculo == <?=dominioVinculoPessoa::$CD_VINCULO_RESPONSAVEL?>){
-		//document.frm_principal.<?=$idCampoGestor?>.required = true;
-		document.frm_principal.<?=$idCampoGestor?>.style.display = "";
-		
-		carregaGestorPessoa();
+		campo.style.display = "";		
 	}
-	else 
-		limparDiv();
-	
+	else{ 
+		campo.style.display = "none";
+		limpaCampoGestor();
+	}	
 }
 
 function iniciar(){
-	document.frm_principal.<?=$idCampoGestor?>.style.display = "none";	
+	verificaVinculo();	
+}
+
+function abrirJanelaAuxiliarGestor(){
+	//abrirJanelaAuxiliar('".$link."',true, false, false);\" "		
 }
 
 </SCRIPT>
@@ -193,14 +219,22 @@ function iniciar(){
                      <?php
                     include_once("biblioteca_htmlPessoa.php");
                     echo getComboPessoaVinculo(vopessoavinculo::$nmAtrCd, vopessoavinculo::$nmAtrCd, $colecao[vopessoavinculo::$nmAtrCd], "camponaoobrigatorio", " required onChange='verificaVinculo();' ");                    
-                    ?>
-                    <INPUT type="text" id="<?=vogestor::$nmAtrDescricao?>" name="<?=vogestor::$nmAtrDescricao?>"  onKeyUp="verificaVinculo();" value=""  class="campoobrigatorio" size="15">
+                    ?>                     
+                    <div id="<?=vogestor::getNmTabela()?>">
+	                    Órgão Gestor/Código:<INPUT type="text" id="<?=vogestor::$nmAtrCd?>" name="<?=vogestor::$nmAtrCd?>" value="<?=complementarCharAEsquerda($colecao[vogestor::$nmAtrCd], "0", TAMANHO_CODIGOS)?>"  class="camporeadonly" size="5" readonly>
+	                    Descrição: <INPUT type="text" id="<?=vogestor::$nmAtrDescricao?>" name="<?=vogestor::$nmAtrDescricao?>" value="<?=$colecao[vogestor::$nmAtrDescricao]?>"   class="camporeadonly" size="30" readonly>
+	                    <?php echo getLinkPesquisa("../gestor");?>
+                    </div>
+                    <!-- <div id="<?=vogestor::getNmTabela()?>">
+                    Órgão Gestor/Código:<INPUT type="text" id="<?=vogestor::$nmAtrCd?>" name="<?=vogestor::$nmAtrCd?>"  onKeyUp="verificaVinculo();" value=""  class="campoobrigatorio" size="5">
+                    Descrição: <INPUT type="text" id="<?=vogestor::$nmAtrDescricao?>" name="<?=vogestor::$nmAtrDescricao?>"  onKeyUp="verificaVinculo();" value=""  class="campoobrigatorio" size="15">
+                    </div>
 	                <div id="<?=$idDiv?>">
 	                <?php	                 
 	                 //echo getComboGestorResponsavel(new dbgestorpessoa(), vocontrato::$nmAtrCdGestorPessoaContrato, vocontrato::$nmAtrCdGestorPessoaContrato, $voContrato->cdGestor, $voContrato->cdGestorPessoa);                    
 	                //echo getComboGestorResponsavel("", "");
 	                 ?>
-	                </div>                    
+	                </div> -->                    
             </TR>               
 
         <?php if(!$isInclusao){

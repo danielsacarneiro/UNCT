@@ -42,7 +42,7 @@
 	}
 	
 	function existeStr1NaStr2ComSeparador($str2, $str1comseparador){
-        $array = explode("*",$str1comseparador);
+        $array = explode(CAMPO_SEPARADOR,$str1comseparador);
         $tamanho = count($array);
         $retorno = false;
 

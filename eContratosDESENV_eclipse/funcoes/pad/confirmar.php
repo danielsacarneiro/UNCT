@@ -7,8 +7,16 @@ inicio();
 $vo = new voPAD();
 $vo->getDadosFormulario();
 
-session_start();
-$_SESSION["vo"] = $vo;
+if(existeObjetoSessao(voPAD::$nmAtrColecaoTramitacao)){
+	$vo->colecaoTramitacao = getObjetoSessao(voPAD::$nmAtrColecaoTramitacao);
+	//echo "tem objeto sessao";
+	
+	//var_dump($vo->colecaoTramitacao);
+}
+
+
+putObjetoSessao("vo", $vo);
+removeObjetoSessao(voPAD::$nmAtrColecaoTramitacao);
 
 //redirecionar mantendo o post
 //o codigo 307 especificado no RFC do protocolo HTTP 1.0 como temporary redirect, mantendo o post

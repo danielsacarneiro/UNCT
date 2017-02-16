@@ -26,6 +26,8 @@ $isHistorico = "S" == $cdHistorico;
 $vo = new voPAD();
 $dbprocesso = $vo->dbprocesso;
 $colecao = $dbprocesso->consultarPenalidade($vo, $filtro);
+//remove a colecao de tramitacao da sessao pra iniciar do zero
+removeObjetoSessao(voPAD::$nmAtrColecaoTramitacao);
 
 $paginacao = $filtro->paginacao;
 if($filtro->temValorDefaultSetado){
@@ -34,6 +36,7 @@ if($filtro->temValorDefaultSetado){
 
 $qtdRegistrosPorPag = $filtro->qtdRegistrosPorPag;
 $numTotalRegistros = $filtro->numTotalRegistros;
+
 ?>
 
 <!DOCTYPE html>
@@ -167,7 +170,7 @@ function alterar() {
                         $tamanho = 0;
                 
                 include_once (caminho_funcoes."contrato/dominioTipoContrato.php");
-                include_once ("dominioSituacaoPAD.php");
+                //require_once ("dominioSituacaoPAD.php");
                 $dominioTipoContrato = new dominioTipoContrato();
                 $domSiPAD = new dominioSituacaoPAD();
                 

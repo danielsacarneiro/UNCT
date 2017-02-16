@@ -25,20 +25,28 @@ include caminho_wordpress.'excel/Classes/PHPExcel/Writer/Excel2007.php';
 include caminho_wordpress.'excel/Classes/PHPExcel/IOFactory.php';
 include_once(caminho_vos."dbcontrato.php");
 
-$inputFileName = caminho.'planilha/UNCT.xlsx';
-//$inputFileName = 'planilha/dataPublicacao.xlsx';
-echo 'Lendo planilha ',pathinfo($inputFileName,PATHINFO_BASENAME),'<br />';
+$tipoContrato = @$_GET["tipo"];
+if($tipoContrato == null || $tipoContrato == "")
+	throw new Exception("selecione o tipo do contrato!");
+
+if($tipoContrato == "V"){
+	$inputFileName = caminho.'planilha/UNCT_convenio.xlsx';
+}else{
+	$tipoContrato = "P";
+	$inputFileName = caminho.'planilha/UNCT_profisco.xls';
+}
+
 $objPHPExcel = PHPExcel_IOFactory::load($inputFileName);
-
-echo '<hr />';
-
 $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
+
+echo 'Lendo planilha ',pathinfo($inputFileName,PATHINFO_BASENAME),'<br />';
+echo '<hr />';
 
 $totalResultado = count($sheetData);
 //$totalResultado = 15;
 
 echo "A planilha tem " . $totalResultado . " linhas <br>";		
-echo "iMPORTANDO... <br><br>";
+echo "iMPORTANDO tipo $tipoContrato ... <br><br>";
 
 $dbprocesso = new dbcontrato(null);
 
@@ -51,7 +59,7 @@ for ($k=3; $k<=$totalResultado; $k++) {
             break;
         
         try{
-            $result = $dbprocesso->incluirContratoImport("V", $linha);
+            $result = $dbprocesso->incluirContratoImport($tipoContrato, $linha);
         }catch(Exception $e){
             $msgErro = $e->getMessage();
             echo $msgErro;

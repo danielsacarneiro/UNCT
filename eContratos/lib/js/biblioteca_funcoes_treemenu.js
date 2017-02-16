@@ -21,6 +21,7 @@ var _folderIcons = new Array(pastaImagens + "arrowhead1.gif", pastaImagens + "ar
 var _linkIcon = pastaImagens + "arrowhead2.gif";
 var _allSeqItems = new Array();
 var _allHRefItems = new Array();
+var _allLinkArquivo = new Array();
 
 function getNmCookieTree() {
 	nmCookie = "sfi.treemenu";
@@ -101,7 +102,17 @@ function retrairItemTree(id) {
     }
 }
 
-function Link(label, href, seq, background, pInJanelaAuxiliar, pValue, pInSelecionado, pNmClasseCSS, pInComParametrosFramework) {
+function LinkArquivo(label, href, pInJanelaAuxiliar, pNmClasseCSS) {
+	var seq = "";
+	var background = "";
+	var pValue = "";
+	var pInSelecionado = "";
+	var pInComParametrosFramework = "";
+	
+	Link(label, href, seq, background, pInJanelaAuxiliar, pValue, pInSelecionado, pNmClasseCSS, pInComParametrosFramework, true);
+}
+
+function Link(label, href, seq, background, pInJanelaAuxiliar, pValue, pInSelecionado, pNmClasseCSS, pInComParametrosFramework, isLinkArquivo) {
 
     // properties
     this.label = label;
@@ -146,6 +157,11 @@ function Link(label, href, seq, background, pInJanelaAuxiliar, pValue, pInSeleci
     
     _allSeqItems[_allSeqItems.length] = seq;
     _allHRefItems[_allHRefItems.length] = href;
+    
+    if(isLinkArquivo == null)
+    	isLinkArquivo = false;
+    
+    _allLinkArquivo[_allLinkArquivo.length] = isLinkArquivo;
 }
 // End Class - Link
 
@@ -387,7 +403,19 @@ function escreverInterno(printLabel, level, pInColocarRadioLink, pInColocarCheck
 			}
 			
 			if (this.items[i].href != null) {
-				html = html + '<a class="' + this.items[i].nmClasseCSS +'" href="javascript:ativarItemMenu(\'' + this.items[i].href + '\', \'' + this.items[i].seq + '\', ' + this.items[i].inJanelaAuxiliar + ', ' + this.items[i].inComParametrosFramework + ')" style="text-decoration : none;">';
+				
+				//se nao for link arquivo
+				if(!_allLinkArquivo[i]){
+					//original
+					html = html + '<a class="' + this.items[i].nmClasseCSS +'" href="javascript:ativarItemMenu(\'' + this.items[i].href + '\', \'' + this.items[i].seq + '\', ' + this.items[i].inJanelaAuxiliar + ', ' + this.items[i].inComParametrosFramework + ')" style="text-decoration : none;">';
+				}else{
+					
+					//html = html + '<a class="' + this.items[i].nmClasseCSS +'" href="c:\\Semtitulo.jpg" target="_blank" style="text-decoration : none;">';					
+					html = html + '<a class="' + this.items[i].nmClasseCSS +'" href="'+ this.items[i].href +'" target="_blank" style="text-decoration : none;">';
+					
+					
+				}
+				
 			} else {
 				html = html + '<a class="' + this.items[i].nmClasseCSS +'" href="#0" style="text-decoration: none;">';
 			}

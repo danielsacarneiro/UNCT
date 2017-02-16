@@ -162,6 +162,7 @@ class dbprocesso{
 		$consultar = @$_GET["consultar"];
 	
 		if($consultar == "S" || !$validaConsulta){
+			
 			$filtroSQL = $filtro->getFiltroConsultaSQL($isHistorico);
 				
 			//verifica se tem paginacao
@@ -423,6 +424,10 @@ class dbprocesso{
         return $retorno;	
     }
     
+    function getVarComoData($param){
+    	return $this->getDataSQL($param);
+    }
+        
     function getDataSQL($param){
         $retorno = "null";
         //echo $param;
@@ -430,7 +435,7 @@ class dbprocesso{
             $retorno = "'" . (substr($param,6,4)) . "-" . substr($param,3,2) . "-" . substr($param,0,2) . "'";	
         return $retorno;
     }
-    
+        
     function getDecimalSQL($param){
         $retorno = "null";
         $valor = str_replace(" ", "", "$param");

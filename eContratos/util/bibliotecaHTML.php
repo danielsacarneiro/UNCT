@@ -1,12 +1,12 @@
 <?php
+include_once(caminho_wordpress. "wp-config.php");
 include_once("mensagens.class.php");
 include_once("constantes.class.php");
 include_once("bibliotecaDataHora.php");
 include_once("dominioPermissaoUsuario.php");
 include_once("dominioQtdObjetosPagina.php");
 include_once("radiobutton.php");
-
-include_once(caminho_wordpress. "wp-config.php");
+include_once(caminho_vos."vousuario.php");
 
 // .................................................................................................................
     
@@ -29,8 +29,9 @@ include_once(caminho_wordpress. "wp-config.php");
             $idUsuario = get_current_user_id();
             
         }else{
-            if($validarPermissaoAcesso)
-                auth_redirect();        
+            if($validarPermissaoAcesso){
+                auth_redirect();                
+            }
         }
         
         define('id_user', $idUsuario);
@@ -68,6 +69,8 @@ include_once(caminho_wordpress. "wp-config.php");
         
         $pastaImagens = subirNivelPasta(caminho_imagens, $qtdNiveisAcimaEmSeEncontraPagina);
         $pastaMenu = subirNivelPasta(caminho_menu, $qtdNiveisAcimaEmSeEncontraPagina);
+        
+        define('pasta_imagens', $pastaImagens);
 
         if($titulo != null)
             $titulo = " - " . $titulo;
@@ -163,7 +166,8 @@ include_once(caminho_wordpress. "wp-config.php");
 	function incluirUsuarioDataHoraDetalhamento($voEntidade){
         $USUARIO_BATCH = "IMPORT.PLANILHA";
         $nmusuinclusao = $voEntidade->nmUsuarioInclusao;
-        $nmusualteracao = $voEntidade->nmUsuarioUltAlteracao;        
+        $nmusualteracao = $voEntidade->nmUsuarioUltAlteracao;
+                
         if($voEntidade->cdUsuarioInclusao == null)
             $nmusuinclusao = $USUARIO_BATCH;
         if($voEntidade->cdUsuarioUltAlteracao == null)
@@ -251,43 +255,167 @@ include_once(caminho_wordpress. "wp-config.php");
                 
         return  $retorno;        
     }
-    
-    function getBotaoValidacaoAcesso($idBotao, $descricao, $classe, $isSubmit, $complementoHTML) {
-        $retorno = getBotao($idBotao, $descricao, $classe, $isSubmit, $complementoHTML);        
         
-        if(!temPermissao())
-            $retorno = "";
-        return  $retorno;        
+    function isLupa(){
+    	//vem do linkPesquisa ou do campo formulario
+    	$lupa= @$_GET["lupa"];
+    	if($lupa == null || $lupa == ""){
+    		$lupa= @$_POST["lupa"];
+    	}
+    	
+       	if($lupa == null)
+    		$lupa = "N";    		
+    	
+    	return $lupa == "S";
+    }
+        
+    function getBotaoValidacaoAcesso($idBotao, $descricao, $classe, $isSubmit, $imprimirNaLupa, $imprimirNaManutencao, $todosTemAcesso, $complementoHTML) {
+        $retorno = getBotao($idBotao, $descricao, $classe, $isSubmit, $complementoHTML);
+                        
+        $isLupa = isLupa();
+                
+        if($isLupa){
+        	//echo "EH LUPA";
+        	if(!$imprimirNaLupa)
+        		$retorno = "";
+        }else{
+        	//echo "NAO EH LUPA";
+        	if($imprimirNaManutencao){
+        		if(!temPermissao() && !$todosTemAcesso)
+        			$retorno = "";
+	        }else
+        		$retorno = "";
+        }
+            
+       	return  $retorno;        
     }
     
     function getBotaoConfirmar(){
-        return getBotaoValidacaoAcesso("bttconfirmar", "Confirmar", "botaofuncaop", true, " accesskey='c'");
+        return getBotaoValidacaoAcesso("bttconfirmar", "Confirmar", "botaofuncaop", true, false, true, false, " accesskey='c'");
     }
-
+    
+    function getBotaoCancelar(){
+    	return getBotaoValidacaoAcesso("bttcancelar", "Cancelar", "botaofuncaop", false, true, true, true, "onClick='javascript:cancelar();' accesskey='r'");
+    }
+    
     function getBotaoAlterar(){
-        return getBotaoValidacaoAcesso("bttalterar", "Alterar", "botaofuncaop", false, "onClick='javascript:alterar();' accesskey='l'");
+        return getBotaoValidacaoAcesso("bttalterar", "Alterar", "botaofuncaop", false, false,true,false,"onClick='javascript:alterar();' accesskey='l'");
     }
 
     function getBotaoExcluir(){
-        return getBotaoValidacaoAcesso("bttexcluir", "Excluir", "botaofuncaop", false, "onClick='javascript:excluir();' accesskey='x'");
+        return getBotaoValidacaoAcesso("bttexcluir", "Excluir", "botaofuncaop", false,false,true,false, "onClick='javascript:excluir();' accesskey='x'");
     }
 
     function getBotaoIncluir(){
-        return getBotaoValidacaoAcesso("bttincluir", "Incluir", "botaofuncaop", false, "onClick='javascript:incluir();' accesskey='n'");
+        return getBotaoValidacaoAcesso("bttincluir", "Incluir", "botaofuncaop", false,false,true, false,"onClick='javascript:incluir();' accesskey='n'");
+    }
+    
+    function getBotaoDetalhar(){
+    	return getBotaoValidacaoAcesso("bttdetalhar", "Detalhar", "botaofuncaop", false,true,true,true, "onClick='javascript:detalhar(false);' accesskey='d'");
+    }
+    
+    function getBotaoSelecionar(){    
+    	return getBotaoValidacaoAcesso("bttselecionar", "Selecionar", "botaofuncaop", false,true,false,true, "onClick='javascript:selecionar();' accesskey='s'");    	
+    }
+    
+    function getBotaoFechar(){
+    	return getBotaoValidacaoAcesso("bttfechar", "Fechar", "botaofuncaop", false,true,false,true, "onClick='javascript:window.close();' accesskey='f'");
+    }
+        
+    function getRodape(){
+    	$isLupa = isLupa();
+    	//aqui guarda a informacao de ser o contexto de LUPA, quando ocultara alguns botoes
+    	$lupa = "N";
+    	if($isLupa)
+    		$lupa = "S";
+    		 
+    	$retorno = "<INPUT type='hidden' name='lupa' id='lupa' value='".$lupa."'>\n";
+    	return $retorno;
+    }
+    
+    function getBotoesRodape(){
+    	
+    	$isManutencao = false;
+    	$isDetalhamento = false;
+    	$funcao = @$_GET["funcao"];
+    	
+    	if($funcao == constantes::$CD_FUNCAO_DETALHAR){
+    		$isDetalhamento = true;
+    	}else if($funcao == constantes::$CD_FUNCAO_EXCLUIR
+    			|| $funcao == constantes::$CD_FUNCAO_INCLUIR
+    			|| $funcao == constantes::$CD_FUNCAO_ALTERAR){
+    		    			    			
+    			$isManutencao = true;
+    	}    	
+    	
+    	$html = "";
+
+    	if(!$isManutencao && !$isDetalhamento && getBotaoDetalhar() != "")
+    			$html.=     "<TD class='botaofuncao'>".getBotaoDetalhar()."</TD>\n";    			 
+    	
+    	if(!$isDetalhamento && getBotaoSelecionar() != "")
+    		$html.=     "<TD class='botaofuncao'>". getBotaoSelecionar() ."</TD>\n";
+    	
+    	if(!$isManutencao){
+    		if(!$isDetalhamento){
+	    		if(getBotaoIncluir() != "")
+		    		$html.=     "<TD class='botaofuncao'>".getBotaoIncluir()."</TD>\n";
+		    	if(getBotaoAlterar() != "")
+		    		$html.=     "<TD class='botaofuncao'>".getBotaoAlterar()."</TD>\n";
+		    	if(getBotaoExcluir() != "")
+		    		$html.=     "<TD class='botaofuncao'>".getBotaoExcluir()."</TD>\n";
+    		}
+    	}
+    	else{
+    		if(getBotaoConfirmar() != "")
+    			$html.=     "<TD class='botaofuncao'>".getBotaoConfirmar()."</TD>\n";    		
+    	}        	    	
+    	
+    	if(getBotaoCancelar() != "" && ($isDetalhamento || $isManutencao) )
+    		$html.=     "<TD class='botaofuncao'>".getBotaoCancelar()."</TD>\n";
+    	
+    	if(getBotaoFechar() != "")
+    		$html.=     "<TD class='botaofuncao'>".getBotaoFechar()."</TD>\n";
+    	
+    	$html.=getRodape();
+    	    
+    	return $html;
     }
 
+    function getLinkPesquisa($link){
+    	//$parametros = "?lupa=S&".$parametros;    	 
+    	$pasta = pasta_imagens;
+    	 
+    	$html = "<A id='lnkFramework' name='lnkFramework' "
+    			. "href=\"javascript:abrirJanelaAuxiliar('".$link."',true, false, false);\" "
+    					. " class='linkNormal' >"
+    							. "<img src='".$pasta."lupa.png'  width='22' height='22' border='0'></A>";
+    							 
+    							 
+		return $html;
+    }
+    
     function temPermissao(){
-        $current_user = wp_get_current_user();
-        $permissao_user = $current_user->roles;
-                
-        $dominioPermissaoUsuario = new dominioPermissaoUsuario();
-        return $dominioPermissaoUsuario->temPermissao($permissao_user);
+        return temPermissaoParamHistorico(false);
+    }
+    
+    function temPermissaoParamHistorico($isHistorico){
+    	$current_user = wp_get_current_user();
+    	$permissao_user = $current_user->roles;
+    
+    	$dominioPermissaoUsuario = new dominioPermissaoUsuario();    	
+    	$retorno = true;
+    	if($isHistorico)
+    		$retorno= $dominioPermissaoUsuario->temPermissaoExcluirHistorico($permissao_user);
+    	else 
+    		$retorno= $dominioPermissaoUsuario->temPermissao($permissao_user);
+    	
+    	return $retorno;
     }
     
     function getComponenteConsulta($comboOrdenacao, $cdAtrOrdenacao, $cdOrdenacao, $qtdRegistrosPorPag, $temHistorico, $cdHistorico){
     	return getComponenteConsultaPaginacao($comboOrdenacao, $cdAtrOrdenacao, $cdOrdenacao, true, $qtdRegistrosPorPag, $temHistorico, $cdHistorico);
-    }
-    
+    }    
     
     function getComponenteConsultaPaginacao($comboOrdenacao, $cdAtrOrdenacao, $cdOrdenacao, $temPaginacao, $qtdRegistrosPorPag, $temHistorico, $cdHistorico){
         $html = "";
@@ -322,7 +450,7 @@ include_once(caminho_wordpress. "wp-config.php");
 
         $html .= "&nbsp;<button id='localizar' class='botaoconsulta' type='submit'>Consultar</button></TD>
                     </TR>";
-    
+                    
         return $html;        
     }
     
@@ -399,4 +527,18 @@ include_once(caminho_wordpress. "wp-config.php");
     	unset($_SESSION[$ID]);
     }
     
-?>
+    function formatarCodigoAnoComplemento($cd, $ano, $complemento){
+    	$retorno = complementarCharAEsquerda($cd, "0", TAMANHO_CODIGOS_SAFI)
+    	. "/" . $ano;
+    	
+    	if($complemento != null&& $complemento != "")
+    		$retorno .= "-" . $complemento;
+    	
+    	return $retorno;
+    	 
+    }
+    
+    function formatarCodigoAno($cd, $ano){
+    	return formatarCodigoAnoComplemento($cd, $ano, null);    
+    }
+    ?>

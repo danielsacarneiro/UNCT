@@ -4,6 +4,15 @@ include_once(caminho_util."paginacao.php");
 class filtroManter{
     // ...............................................................
 	// construtor
+	
+	var $cdAtrOrdenacao;
+	var $cdOrdenacao;
+	var $dtVigencia;
+	var $cdHistorico;
+		
+	var $numTotalRegistros;
+	var $TemPaginacao;
+
 	function __construct($temPaginacao) {        
 		$this->cdAtrOrdenacao = @$_POST["cdAtrOrdenacao"];
 		$this->cdOrdenacao = @$_POST["cdOrdenacao"];

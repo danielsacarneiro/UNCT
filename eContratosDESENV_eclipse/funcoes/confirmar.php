@@ -5,7 +5,9 @@ include_once(caminho_util."bibliotecaHTML.php");
 $class = @$_GET["class"];
 include_once(caminho_vos.$class.".php");
 
-inicio();
+//inicio();
+inicioComValidacaoUsuario(true);
+
 setCabecalhoPorNivel(null,1);
 $funcao = @$_POST["funcao"];
 //echo $funcao;

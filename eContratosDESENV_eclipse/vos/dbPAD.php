@@ -1,11 +1,13 @@
 <?php
 include_once(caminho_lib. "dbprocesso.obj.php");
 include_once("voPAD.php");
+include_once("voPADTramitacao.php");
 include_once("vocontrato.php");
 include_once("vopessoa.php");
 include_once (caminho_util."bibliotecaFuncoesPrincipal.php");
 include_once (caminho_funcoes."contrato/dominioEspeciesContrato.php");
 include_once (caminho_funcoes."pad/dominioSituacaoPAD.php");
+include_once (caminho_filtros."filtroManterPAD.php");
 
 // .................................................................................................................
 // Classe select
@@ -94,25 +96,144 @@ include_once (caminho_funcoes."pad/dominioSituacaoPAD.php");
         $queryFrom .= "\n LEFT JOIN ". vopessoa::getNmTabela();
         $queryFrom .= "\n ON ". vopessoa::getNmTabela() . "." . vopessoa::$nmAtrCd . "=" . vocontrato::getNmTabela() . "." . vocontrato::$nmAtrCdPessoa;*/
         
+        $filtro->cdEspecieContrato = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
         return $this->consultarComPaginacaoQuery($voentidade, $filtro, $querySelect, $queryFrom);
     }
+        
+    function consultarTramitacao($voentidade){
+    	$filtro = new filtroManterPAD(false);
+    	$filtro->TemPaginacao = false;
+    	
+    	$voPrincipal = new voPADTramitacao();
+    	$filtro->nmEntidadePrincipal = $voPrincipal->getNmClassVO();
+    	
+    	    	
+    	$filtro->cdPA = $voentidade->cdPA;
+    	$filtro->anoPA = $voentidade->anoPA;
+    	$querySelect = "SELECT * ";
+    	$queryFrom = "\n FROM ". voPADTramitacao::getNmTabela();
+    
+    	$retorno = $this->consultarFiltro($filtro, $querySelect, $queryFrom, false);
+    	    	
+    	return $retorno;
+    }
+    
+    //o incluir eh implementado para nao usar da voentidade
+    //por ser mais complexo
+    function incluir($vo){
+    	//Start transaction
+    	$this->cDb->retiraAutoCommit();
+    	try{
+    		$vo = $this->incluirPAD($vo);
+    		$this->incluirPADTramitacao($vo);
+    		//End transaction
+    		$this->cDb->commit();
+    	}catch(Exception $e){
+    		$this->cDb->rollback();
+    		throw new Exception($e->getMessage());
+    	}
+    
+    	return $vo;
+    }
+    
+    function incluirPAD($vo){
+    	$arrayAtribRemover = array(
+    			voPAD::$nmAtrDhInclusao,
+    			voPAD::$nmAtrDhUltAlteracao
+    	);
+    		
+    	if($vo->cdPA == null || $vo->cdPA == ""){
+    		$vo->cdPA = $this->getProximoSequencialChaveComposta(voPAD::$nmAtrCdPA, $vo);
+    		//echo "EH NULO";
+    	}
+    	$vo->situacao = dominioSituacaoPAD::$CD_SITUACAO_PAD_INSTAURADO;
+    	 
+    	$query = $this->incluirQuery($vo, $arrayAtribRemover);
+    	$retorno = $this->cDb->atualizar($query);
+    
+    	return $vo;
+    }
+    
+    function incluirPADTramitacao($vo){
+
+    	if($vo->colecaoTramitacao != null){
+    		//echo "tem tramitacao";
+    		 
+    		if (is_array($vo->colecaoTramitacao)){
+    			$tamanho = sizeof($vo->colecaoTramitacao);
+    			$vo->situacao = $vo->situacao = dominioSituacaoPAD::$CD_SITUACAO_PAD_EM_ANDAMENTO;    			
+    		}
+    		else{
+    			$tamanho = 0;
+    		}    		
+   		
+			for ($i=0;$i<$tamanho;$i++) {
+				$voTramitacao = new voPADTramitacao();
+				$voTramitacao = $vo->colecaoTramitacao[$i];
+				$voTramitacao->cdPA = $vo->cdPA;
+				$voTramitacao->anoPA = $vo->anoPA;
+				$voTramitacao->sq = $this->getProximoSequencialChaveComposta(voPADTramitacao::$nmAtrSq, $voTramitacao); 
+				
+				$voTramitacao->dbPADTramitacao->cDb = $this->cDb;
+				
+				//var_dump($voTramitacao);
+				$voTramitacao->dbPADTramitacao->incluir($voTramitacao);
+				
+				$vo->colecaoTramitacao[$i] = $voTramitacao;
+    		}	    	
+    	}
+    	//else echo "NAO tem tramitacao";
+    	
+    	return $vo;
+    }
 	
-	function incluirSQL($vo){
-		$arrayAtribRemover = array(				
-				voPAD::$nmAtrDhInclusao,
-				voPAD::$nmAtrDhUltAlteracao
-		);
-			
-		if($vo->cdPA == null || $vo->cdPA == ""){
-			$vo->cdPA = $this->getProximoSequencialChaveComposta(voPAD::$nmAtrCdPA, $vo);
-			//echo "EH NULO";
-		}
-		$vo->situacao = dominioSituacaoPAD::$CD_SITUACAO_PAD_INSTAURADO;
-	
-		return $this->incluirQuery($vo, $arrayAtribRemover);
-	}
-	
-	function getSQLValuesInsert($vo){
+    function excluirPADTramitacao($voPAD){
+    	$vo = new voPADTramitacao();
+    	$nmTabela = $vo->getNmTabelaEntidade(false);
+    	$query = "DELETE FROM ".$nmTabela;
+    	$query.= "\n WHERE ". voPADTramitacao::$nmAtrCdPA. " = ". $voPAD->cdPA;
+    	$query.= "\n AND ". voPADTramitacao::$nmAtrAnoPA. " = ". $voPAD->anoPA;
+    	//echo $query;
+    	return $this->atualizarEntidade($query);
+    }
+    
+    //o incluir eh implementado para nao usar da voentidade
+    //por ser mais complexo
+    function excluir($vo){
+    	//Start transaction
+    	$this->cDb->retiraAutoCommit();
+    	try{    		
+    		$this->excluirPADTramitacao($vo);
+    		$vo = parent::excluir($vo);
+    		//End transaction
+    		$this->cDb->commit();
+    	}catch(Exception $e){
+    		$this->cDb->rollback();
+    		throw new Exception($e->getMessage());
+    	}
+    
+    	return $vo;
+    }
+    
+    function alterar($vo){
+    	//Start transaction
+    	$this->cDb->retiraAutoCommit();
+    	try{    		
+    		$this->excluirPADTramitacao($vo);
+    		$this->incluirPADTramitacao($vo);
+    		
+    		$vo = parent::alterar($vo);
+    		//End transaction
+    		$this->cDb->commit();
+    	}catch(Exception $e){
+    		$this->cDb->rollback();
+    		throw new Exception($e->getMessage());
+    	}
+    
+    	return $vo;
+    }
+    
+    function getSQLValuesInsert($vo){
 		$retorno = "";		
 		$retorno.= $this-> getVarComoNumero($vo->cdPA) . ",";
 		$retorno.= $this-> getVarComoNumero($vo->anoPA) . ",";

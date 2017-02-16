@@ -24,7 +24,7 @@
         var $cdUsuarioInclusao;
         //id_user eh o usuario logado no sistema
         //constante definida em bibliotecaHTML
-        var $cdUsuarioUltAlteracao = id_user;
+        var $cdUsuarioUltAlteracao;
         var $nmUsuarioInclusao;
         var $nmUsuarioUltAlteracao;
         
@@ -38,6 +38,8 @@
             voentidade::$nmAtrDhUltAlteracao,
             voentidade::$nmAtrCdUsuarioInclusao,
             voentidade::$nmAtrCdUsuarioUltAlteracao);
+		
+		$this->cdUsuarioUltAlteracao = id_user;
     }
     
     
@@ -88,8 +90,6 @@
    		return $retorno;
     }
     
-    
-    
     function getSQLValuesUpdate(){
 		$retorno = "";        
         $retorno.= self::$nmAtrDhUltAlteracao . " = now() ";
@@ -135,7 +135,6 @@
 	function getDadosBanco($registrobanco){		
 		$this->getDadosRegistroBanco($registrobanco);        
         $this->getDadosBancoEntidade($registrobanco);
-        		
 	}
     
     function removeAtributos($arrayAtribRemover){    	
@@ -179,7 +178,6 @@
     	
     		/*echo "chave sessao:" . $chaveEntidade . "<br>";
     		echo "chave atual:" . $this->getValorChavePrimaria() . "<br>";*/
-    		
     	    	
     	return $this->getValorChavePrimaria() == $chaveEntidade; 
     	
@@ -188,7 +186,12 @@
     function getValorChaveHTML(){
     	//pega do filho
     	return $this->getValorChavePrimaria();
-    }    
+    }
+    
+    function getNmClassVO(){
+    	$classProcesso = $this->getNmClassProcesso();    	 
+    	return  str_replace("db", "vo", $classProcesso);
+    }
                 
 }
 ?>

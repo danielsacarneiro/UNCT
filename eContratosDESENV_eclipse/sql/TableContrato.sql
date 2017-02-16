@@ -88,6 +88,10 @@ ALTER TABLE contrato ADD CONSTRAINT fk_ct_gestor FOREIGN KEY ( gt_cd ) REFERENCE
 ALTER TABLE contrato ADD CONSTRAINT fk_ct_pessoa_gestor FOREIGN KEY ( gp_cd ) REFERENCES pessoa_gestor (gp_cd) 
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;
+
+
+show create table contrato;
+
         
 -- ALTER TABLE contrato DROP FOREIGN KEY fk_ct_gestor_pessoa;
 -- ALTER TABLE contrato DROP FOREIGN KEY fk_ct_gestor;

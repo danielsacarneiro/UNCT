@@ -19,6 +19,12 @@ $colecao = $dbprocesso->consultarPorChave($vo, $isHistorico);
 $vo->getDadosBanco($colecao);
 putObjetoSessao($vo->getNmTabela(), $vo);
 
+$colecaoRegistroBanco = $dbprocesso->consultarTramitacao($vo);
+if($colecaoRegistroBanco != ""){
+	$vo->setColecaoTramitacao($colecaoRegistroBanco);
+	putObjetoSessao(voPAD::$nmAtrColecaoTramitacao, $vo->colecaoTramitacao);
+}
+
 $nmFuncao = "DETALHAR ";
 $titulo = "P.A.D.";
 $complementoTit = "";
@@ -156,7 +162,17 @@ function confirmar() {
 	            			size="10" 
 	            			maxlength="10" readonly>
 				</TD>
-        	</TR>	        
+        	</TR>
+			<TR>
+				<TD class="campoformulario" halign="left" colspan="4">
+				<DIV class="campoformulario" id="div_tramitacao">
+				<?php 
+				$isDetalhamento = true;
+				include_once 'gridTramitacaoAjax.php';
+				?>
+				</DIV>
+				</TD>
+			</TR>
 	        <?php 
 	            echo "<TR>" . incluirUsuarioDataHoraDetalhamento($vo) .  "</TR>";	        	
 	        ?>

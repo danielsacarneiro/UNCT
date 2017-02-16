@@ -28,12 +28,6 @@ $nome  = $vo->nome;
 $doc  = $vo->doc;
 $email  = $vo->email;
     
-$dhInclusao = $vo->dhInclusao;
-$dhUltAlteracao = $vo->dhUltAlteracao;
-$cdUsuarioInclusao = $vo->cdUsuarioInclusao;
-$cdUsuarioUltAlteracao = $vo->cdUsuarioUltAlteracao;
-
-
 $nmFuncao = "DETALHAR ";
 $titulo = "PESSOA";
 $complementoTit = "";
@@ -53,7 +47,6 @@ setCabecalho($titulo);
 
 ?>
 <!DOCTYPE html>
-<HTML lang="pt-BR">
 <HEAD>
 <?=setTituloPagina(null)?>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
@@ -103,7 +96,7 @@ function confirmar() {
 			<TR>
                 <TH class="campoformulario" nowrap width=1%>Nome:</TH>
                 <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>"  value="<?php echo($nome);?>"  class="camporeadonly" size="50" readonly></TD>
-                <TH class="campoformulario" width="1%" nowrap>CPF:</TH>
+                <TH class="campoformulario" width="1%" nowrap>CNPJ/CPF:</TH>
                 <TD class="campoformulario" ><INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($doc);?>" class="camporeadonly" size="20" maxlength="18" readonly></TD>
             </TR>
 			<TR>
@@ -131,6 +124,7 @@ function confirmar() {
 		                $colecaoVinculo = explode(CAMPO_SEPARADOR,$vinculos);
 		                
 		                $gestores = $colecao[vogestor::$nmAtrDescricao];
+		                $cdGestor = $colecao[vogestor::$nmAtrCd];
 		                $gestor = "";
 		                if($gestores != null && $gestores !=""){
 		                	$colecaoGestores = explode(CAMPO_SEPARADOR,$gestores);
@@ -153,7 +147,7 @@ function confirmar() {
 			                <?php
 			                if($cdVinculo == dominioVinculoPessoa::$CD_VINCULO_RESPONSAVEL){
 			                ?>		                    
-		                    <TD class="tabeladados">Órgão Gestor: <?php echo $gestor;?></TD>
+		                    <TD class="tabeladados">Órgão Gestor: <?php echo complementarCharAEsquerda($cdGestor, "0", TAMANHO_CODIGOS) . " - " . $gestor;?></TD>
 			                <?php
 							}				
 			                ?>

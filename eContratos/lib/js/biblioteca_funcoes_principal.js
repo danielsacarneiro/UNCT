@@ -609,7 +609,7 @@ function abrirJanelaAuxiliar(pUrlJanela, pInSubmeterCamposTextFormulario, pInCom
 		caracterSeparador = "&";
 	}
 	
-	var urlJanela = pUrlJanela + caracterSeparador + "_nmJanelaAuxiliar=" + _nmJanelaAuxiliar; 
+	var urlJanela = pUrlJanela + caracterSeparador + "_nmJanelaAuxiliar=" + _nmJanelaAuxiliar + "&lupa=S"; 
 
 	if (!pInSemParametrosFramework) {
 		urlJanela += "&" + ID_REQ_IN_JANELA_AUXILIAR + "=S" + "&" +

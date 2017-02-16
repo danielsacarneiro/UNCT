@@ -18,7 +18,6 @@ INSERT INTO gestor
 
 
 -- ALTER TABLE pessoa DROP FOREIGN KEY fk_pessoa_usuario;
-drop table pessoa_vinculo;
 drop table pessoa;
 CREATE TABLE pessoa (
 	pe_cd INT NOT NULL AUTO_INCREMENT,
@@ -38,6 +37,53 @@ CREATE TABLE pessoa (
 ALTER TABLE pessoa ADD CONSTRAINT fk_pessoa_usuario FOREIGN KEY (ID) REFERENCES wp_users (ID)
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;
+    
+/** INCLUSAO DAS CONTRATADAS */
+DELIMITER $$
+DROP PROCEDURE IF EXISTS importarContratada $$
+CREATE PROCEDURE importarContratada()
+BEGIN
+
+  DECLARE done INTEGER DEFAULT 0;
+  DECLARE nome VARCHAR(150);
+  DECLARE doc VARCHAR(30);
+  DECLARE cdPessoa INT;  
+
+  DECLARE cTabela CURSOR FOR 
+	  select ct_contratada, ct_doc_contratada from contrato
+		where ct_doc_contratada is not null		
+        group by replace(replace(replace(ct_doc_contratada, ".", ""), "/", ""), "-","");
+        -- retira os pontos, barras e tracos para evitar duplicacoes
+	
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;  
+  SELECT MAX(pe_cd) INTO cdPessoa FROM pessoa; 
+  
+  OPEN cTabela;
+  
+  REPEAT
+  -- read_loop: LOOP
+    #aqui você pega os valores do "select", para mais campos vocÇe pode fazer assim:
+    #cTabela INTO c1, c2, c3, ..., cn
+    FETCH cTabela INTO nome,doc;
+		IF NOT done THEN
+		
+        set cdPessoa = cdPessoa +1;
+		INSERT INTO pessoa  (pe_cd, pe_nome, pe_doc)  values (cdPessoa, nome, doc); 
+        INSERT INTO pessoa_vinculo (vi_cd, pe_cd)  values (2, cdPessoa); 
+
+		END IF;
+  UNTIL done END REPEAT;
+  CLOSE cTabela;
+  
+END $$
+DELIMITER ;
+call importarContratada();
+/** INCLUSAO DAS CONTRATADAS */
+
+UPDATE pessoa SET 
+pe_nome = replace(replace(replace(pe_nome,'“','"'),'”','"'),'–','-')
+WHERE pe_cd = 305;
+
 
 	
 drop table pessoa_vinculo;

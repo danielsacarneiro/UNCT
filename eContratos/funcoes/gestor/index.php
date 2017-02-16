@@ -43,6 +43,22 @@ $numTotalRegistros = $filtro->numTotalRegistros;
 
 <SCRIPT language="JavaScript" type="text/javascript">
 
+//Transfere dados selecionados para a janela principal
+function selecionar() {
+	if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta"))
+		return;
+		
+	if (window.opener != null) {
+		array = retornarValorRadioButtonSelecionadoComoArray("document.frm_principal.rdb_consulta", "*");
+		
+		cdGestor = array[0];
+		dsGestor = array[1];
+
+		window.opener.transferirDadosOrgaoGestor(cdGestor, dsGestor);
+		window.close();
+	}
+}
+
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
 function isFormularioValido() {
 	if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta"))
@@ -66,7 +82,8 @@ function detalhar(isExcluir) {
             return;
     	
 	chave = document.frm_principal.rdb_consulta.value;	
-	location.href="detalhar.php?funcao=" + funcao + "&chave=" + chave;
+	lupa = document.frm_principal.lupa.value;
+	location.href="detalhar.php?funcao=" + funcao + "&chave=" + chave + "&lupa="+ lupa;
 }
 
 function excluir() {
@@ -154,6 +171,8 @@ function alterar() {
                                            
                         $chave = $colecao[$i][vogestor::$nmAtrCd]
                                 . "*"
+								. $colecao[$i][vogestor::$nmAtrDescricao]
+								. "*"
                                 . $cdHistorico
                                 . "*"
                                 . $sqHist
@@ -198,11 +217,8 @@ function alterar() {
                     <TR>
                        <TD>
                         <TABLE class="barraacoesaux" cellpadding="0" cellspacing="0">
-	                   	<TR> 
-                            <TD class="botaofuncao"><button id="bttdetalhar" class="botaofuncaop" type="button" onClick="javascript:detalhar(false);" accesskey="d">Detalhar</button></TD>
-                            <TD class="botaofuncao"><?=getBotaoIncluir()?></TD>
-                            <TD class="botaofuncao"><?=getBotaoAlterar()?></TD>
-                            <TD class="botaofuncao"><?=getBotaoExcluir()?></TD>                            
+	                   	<TR>
+	                   		<?=getBotoesRodape();?>
                          </TR>
                          </TABLE>
 	                   </TD>

@@ -26,12 +26,11 @@ include caminho_wordpress.'excel/Classes/PHPExcel/IOFactory.php';
 include_once(caminho_vos."dbcontrato.php");
 
 $inputFileName = caminho.'planilha/UNCT_contrato.xlsx';
-echo 'Lendo planilha ',pathinfo($inputFileName,PATHINFO_BASENAME),'<br />';
 $objPHPExcel = PHPExcel_IOFactory::load($inputFileName);
-
-echo '<hr />';
-
 $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
+
+echo 'Lendo planilha ',pathinfo($inputFileName,PATHINFO_BASENAME),'<br />';
+echo '<hr />';
 
 $totalResultado = count($sheetData);
 //$totalResultado = 15;
@@ -40,6 +39,8 @@ echo "A planilha tem " . $totalResultado . " linhas <br>";
 echo "iMPORTANDO... <br><br>";
 
 $dbprocesso = new dbcontrato(null);
+	
+$tipoContrato = "C";
 
 for ($k=6; $k<=$totalResultado; $k++) {
 		
@@ -49,7 +50,7 @@ for ($k=6; $k<=$totalResultado; $k++) {
             break;        
         
         try{
-            $result = $dbprocesso->incluirContratoImport("C", $linha);
+            $result = $dbprocesso->incluirContratoImport($tipoContrato, $linha);
         }catch(Exception $e){
             $msgErro = $e->getMessage();
             echo $msgErro;

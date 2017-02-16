@@ -3,6 +3,7 @@ include_once("../../config_lib.php");
 include_once(caminho_util."bibliotecaHTML.php");
 include_once(caminho_util."selectExercicio.php");
 include_once(caminho_vos."voPAD.php");
+include_once(caminho_vos."voPADTramitacao.php");
 
 //inicia os parametros
 inicioComValidacaoUsuario(true);
@@ -17,6 +18,8 @@ $isInclusao = $funcao == constantes::$CD_FUNCAO_INCLUIR;
 
 $classChaves = "campoobrigatorio";
 $readonlyChaves = "";
+
+session_start();
 
 $nmFuncao = "";
 if($isInclusao){    
@@ -33,6 +36,12 @@ if($isInclusao){
 	$colecao = $dbprocesso->consultarPorChave($vo, $isHistorico);	
 	$vo->getDadosBanco($colecao);
 	putObjetoSessao($vo->getNmTabela(), $vo);
+	
+	$colecaoRegistroBanco = $dbprocesso->consultarTramitacao($vo);
+	if($colecaoRegistroBanco != ""){
+		$vo->setColecaoTramitacao($colecaoRegistroBanco);
+		putObjetoSessao(voPAD::$nmAtrColecaoTramitacao, $vo->colecaoTramitacao);
+	}
 
     $nmFuncao = "ALTERAR ";
 }
@@ -52,6 +61,7 @@ setCabecalho($titulo);
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_text.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_datahora.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_ajax.js"></script>
 
 <SCRIPT language="JavaScript" type="text/javascript">
@@ -68,6 +78,9 @@ function cancelar() {
 }
 
 function confirmar() {
+	/*if(!isFormularioValido())
+		return false;*/
+	
 	return confirm("Confirmar Alteracoes?");    
 }
 
@@ -79,20 +92,30 @@ function carregaDadosContratada(){
 	tpContrato = document.frm_principal.<?=voPAD::$nmAtrTipoContrato?>.value;
 
 	if(cdContrato != "" && anoContrato != "" && tpContrato != ""){
-		str = cdContrato + '<?=CAMPO_SEPARADOR?>' + anoContrato + '<?=CAMPO_SEPARADOR?>' + tpContrato;			
-
+		str = cdContrato + '<?=CAMPO_SEPARADOR?>' + anoContrato + '<?=CAMPO_SEPARADOR?>' + tpContrato;
 		//vai no ajax
 		getDadosContratadaPorContrato(str, '<?=vopessoa::$nmAtrNome?>');
-
-		/*campo = document.getElementById('<?=vopessoa::$nmAtrNome?>');
-		alert(campo.innerHTML);
-		if(campo.innerHTML=="" || campo.innerHTML=='<img src="../../imagens/loading/loading26.gif"/>')
-			alert(0);*/
-
 	}
-	
 }
 
+function incluirTramitacao(){
+	textoFase = document.frm_principal.<?=voPADTramitacao::$nmAtrObservacao?>.value;
+	if(textoFase != "")
+		manterDadosTramitacaoPAD(textoFase, 'div_tramitacao', '<?=constantes::$CD_FUNCAO_INCLUIR?>');
+	else
+		exibirMensagem("Tramitação não pode ser vazia!");	
+}
+
+function excluirTramitacao(){	 
+    if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_tramitacao"))
+        return;
+
+	if(confirm("Confirmar Alteracoes?")){
+		
+		indice = document.frm_principal.rdb_tramitacao.value;		
+		manterDadosTramitacaoPAD("", 'div_tramitacao', '<?=constantes::$CD_FUNCAO_EXCLUIR?>', indice);
+	}
+}
 
 </SCRIPT>
 
@@ -171,7 +194,18 @@ function carregaDadosContratada(){
 	        <?php 
 	       }	                    
 	       ?>	           				
-
+	        <?php 
+	        include_once ("dominioSituacaoPAD.php");
+	        
+	        $domSiPAD = new dominioSituacaoPAD();
+	        $situacao = $colecao[voPAD::$nmAtrSituacao];
+	        $situacao = $domSiPAD->getDescricao($situacao);
+	        ?>
+			<TR>
+	            <TH class="campoformulario" nowrap>Situação:</TH>
+	            <TD class="campoformulario" colspan=3><INPUT type="text" value="<?php echo(strtoupper($situacao));?>"  class="camporeadonly" size="20" readonly></TD>
+				</TD>
+	        </TR>
 			<TR>
 	            <TH class="campoformulario" nowrap>Proc.Licitatorio:</TH>
 	            <TD class="campoformulario" colspan="3"><INPUT type="text" id="<?=voPAD::$nmAtrProcessoLicitatorio?>" name="<?=voPAD::$nmAtrProcessoLicitatorio?>"  value="<?php echo($vo->processoLic);?>"  class="camponaoobrigatorio" size="50" ></TD>
@@ -194,9 +228,47 @@ function carregaDadosContratada(){
 	            			maxlength="10" required>
 				</TD>
         	</TR>
-	        <?php if(!$isInclusao){
+    
+<TR>
+	<TD class="campoformulario" halign="left" colspan="4">
+	<DIV class="campoformulario" id="div_tramitacao">
+	<?php 
+	$isDetalhamento = false;
+	include_once 'gridTramitacaoAjax.php';
+	?>
+	</DIV>
+	</TD>
+</TR>
+<TR>
+	<TD class="campoformulario" halign="left" colspan="4">
+	<DIV class="campoformulario">Incluir Tramitação:
+         <TABLE id="table_tabeladados" class="tabeladados" cellpadding="0" cellspacing="0">						
+             <TBODY>
+                <TR class="dados">
+                    <TD class="campoformulario">
+                    <textarea rows="2" cols="60" id="<?=voPADTramitacao::$nmAtrObservacao?>" name="<?=voPADTramitacao::$nmAtrObservacao?>" class="camponaoobrigatorio" ></textarea>
+                    <?php 
+                    echo getBotaoValidacaoAcesso("bttincluir_tram", "Incluir", "botaofuncaop", false,false,true, false, "onClick='incluirTramitacao();' accesskey='i'");
+                    echo getBotaoValidacaoAcesso("bttexcluir_tram", "Excluir", "botaofuncaop", false,false,true, false, "onClick='excluirTramitacao();' accesskey='e'");
+                    ?>
+                    </TD>                    
+                </TR>					
+            </TBODY>
+        </TABLE>
+	
+	</DIV>
+	</TD>
+</TR>
+<TR>
+	<TD halign="left" colspan="4">
+	<DIV class="textoseparadorgrupocampos">&nbsp;</DIV>
+	</TD>
+</TR>        	        	
+	        <?php
+	        if(!$isInclusao){
 	            echo "<TR>" . incluirUsuarioDataHoraDetalhamento($vo) .  "</TR>";
-	        }?>
+	        }
+	        ?>
             </TBODY>
             </TABLE>
             </DIV>

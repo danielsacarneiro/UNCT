@@ -9,7 +9,7 @@ include_once(caminho_vos."vousuario.php");
 include_once(caminho_vos."dbcontrato.php");
 
 //inicia os parametros
-inicio();
+inicioComValidacaoUsuario(true);
 
 $voContrato = new voContrato();
 //var_dump($voContrato->varAtributos);

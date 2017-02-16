@@ -56,4 +56,6 @@ CREATE TABLE pad_tramitacao (
 ALTER TABLE pad_tramitacao ADD CONSTRAINT fk_pad_tramitacao FOREIGN KEY (pad_cd, pad_ex) REFERENCES pad (pad_cd, pad_ex)
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;
+    
+show create table pad_tramitacao;
 

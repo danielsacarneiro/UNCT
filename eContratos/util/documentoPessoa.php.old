@@ -1,0 +1,100 @@
+<?php
+
+  Class documentoPessoa {
+    	
+  		static $tpDocCPF = "03";
+  		static $tpDocCNPJ = "02";
+  		static $tpDocRG = "01";
+  		static $caracteresMascara = "./- ";
+  	
+		var $numDoc  = "";		
+        var $numDocComMascara= "";
+        var $tpDoc = "";
+        var $isComMascara = "";
+
+// ...............................................................
+// Funcoes ( Propriedades e métodos da classe )
+
+	function __construct($numDoc) {                    
+		$this->isComMascara = self::isDocComMascara($numDoc);
+		$this->tpDoc = self::getTpDoc($numDoc);	       
+		
+		$this->numDoc = self::getDocSemMascara($numDoc);
+		$this->numDocComMascara = self::getDocComMascara($numDoc);
+	}
+   
+
+	static function formatarNumCPF($numDoc){
+		$retorno = self::getDocSemMascara($numDoc);		
+		$retorno = substr($retorno,0,3).".".substr($retorno,3,3).".".substr($retorno,6,3)."-".substr($retorno,9,2);
+		return $retorno; 
+	}
+	
+	static function formatarNumCNPJ($numDoc){
+		$retorno = self::getDocSemMascara($numDoc);
+		$retorno = substr($retorno,0,2).".".substr($retorno,2,3).".".substr($retorno,5,3)."/".substr($retorno,8,4)."-".substr($retorno,12,2);
+		return $retorno;
+	}
+	
+	static function getDocComMascara($numDoc){
+		$retorno = "";
+		$tpdoc = self::getTpDoc($retorno);
+		
+		if($tpdoc == self::$tpDocCPF)
+			$retorno = self::formatarNumCPF($numDoc);
+		else if($tpdoc == self::$tpDocCNPJ)
+			$retorno = self::formatarNumCPF($numDoc);
+		
+		return $retorno;
+	}
+    
+	static function getDocSemMascara($numDoc){
+		$retorno = $numDoc;
+		$tam = strlen(self::$caracteresMascara);
+	
+		for($i=0;$i<$tam;$i++){
+			$findme = self::$caracteresMascara[$i];
+			$retorno = str_replace($findme, "", $retorno);
+		}
+			
+		return $retorno;
+	}
+	
+	static function getTpDoc($numDoc){
+		$retorno = null;
+		$doc = self::getDocSemMascara($numDoc);
+		$tam = strlen($doc);
+		
+		if($tam == 11)
+			$retorno = self::$tpDocCPF;
+		else if($tam == 14)
+			$retorno = self::$tpDocCNPJ;
+		
+		return $retorno;
+	}
+	
+	static function isDocComMascara($numDoc){
+   		return self::existsQualquerDigitoDeStr2EmStr1($numDoc, self::$caracteresMascara);   	
+   }
+   
+   static function existsQualquerDigitoDeStr2EmStr1($str1, $str2){
+	   $retorno = false;
+	   $tam = strlen($str2);
+	   	 
+	   for($i=0;$i<$tam;$i++){
+		   $findme = $str2[$i];
+		   //echo $findme;
+		   $pos = strpos($str1, $findme);
+		   	
+		   if ($pos !== false){
+			   $retorno = true;
+			   break;
+		   }
+	   	
+	   }
+	   	
+	   return $retorno;   
+   }
+
+}
+?>

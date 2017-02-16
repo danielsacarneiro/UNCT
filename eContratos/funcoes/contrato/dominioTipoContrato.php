@@ -7,9 +7,10 @@ include_once(caminho_util."dominio.class.php");
 // Construtor
 	function __construct () {        
 		$this->colecao = array(				   
-				   constantes::$CD_TIPO_CONTRATO => constantes::$DS_TIPO_CONTRATO,
-                   constantes::$CD_TIPO_CONVENIO => constantes::$DS_TIPO_CONVENIO                   
-				   );        
+				constantes::$CD_TIPO_CONTRATO => constantes::$DS_TIPO_CONTRATO,
+                constantes::$CD_TIPO_CONVENIO => constantes::$DS_TIPO_CONVENIO,                   
+				constantes::$CD_TIPO_PROFISCO => constantes::$DS_TIPO_PROFISCO
+				);        
 	}
 
 // ...............................................................

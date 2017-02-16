@@ -78,7 +78,7 @@ CREATE TABLE contrato (
     
     CONSTRAINT pk PRIMARY KEY (sq, ct_exercicio, ct_numero, ct_tipo)
 );
--- ALTER TABLE contrato ADD COLUMN gt_cd INT NULL AFTER ct_gestor;
+ALTER TABLE contrato ADD COLUMN pe_cd INT NOT NULL AFTER ct_contratada;
 -- ALTER TABLE contrato ADD COLUMN gp_cd INT NULL AFTER ct_gestor_pessoa;
 
 ALTER TABLE contrato ADD CONSTRAINT fk_ct_gestor FOREIGN KEY ( gt_cd ) REFERENCES gestor (gt_cd) 
@@ -95,7 +95,7 @@ ALTER TABLE contrato ADD CONSTRAINT fk_ct_pessoa_gestor FOREIGN KEY ( gp_cd ) RE
 UPDATE contrato SET 
 ct_contratada = replace(replace(replace(ct_contratada,'“','"'),'”','"'),'–','-'),
 ct_objeto = replace(replace(replace(ct_objeto,'“','"'),'”','"'),'–','-')
--- WHERE ct_exercicio = 2016 and ct_numero = 13;
+-- WHERE sq = 1751;-- ct_exercicio = 2016 and ct_numero = 13;
 
 
 drop table contrato_hist;
@@ -139,4 +139,5 @@ CREATE TABLE contrato_hist (
     
     CONSTRAINT pk PRIMARY KEY (hist)
 );
+ALTER TABLE contrato_hist ADD COLUMN pe_cd INT NOT NULL AFTER ct_contratada;
 

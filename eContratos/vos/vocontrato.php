@@ -33,7 +33,7 @@ include_once(caminho_lib."voentidade.php");
         static $nmAtrDtPublicacaoContrato =  "ct_dt_public";
 		static $nmAtrDtAssinaturaContrato  =  "ct_dt_assinatura";
 		static $nmAtrDtVigenciaInicialContrato =  "ct_dt_vigencia_inicio";
-		static $nmAtrDtVigenciaFinalContrato =  "ct_dt_vigencia_fim";
+		static $nmAtrDtVigenciaFinalContrato =  "ct_dt_vigencia_fim";		
 		static $nmAtrContratadaContrato =  	"ct_contratada";
 		static $nmAtrDocContratadaContrato =  	"ct_doc_contratada";
 		static $nmAtrNumEmpenhoContrato =  	"ct_num_empenho";
@@ -44,7 +44,8 @@ include_once(caminho_lib."voentidade.php");
 		static $nmAtrObservacaoContrato =  	"ct_observacao";
 		static $nmAtrVlGlobalContrato =  	"ct_valor_global";
 		static $nmAtrVlMensalContrato =  	"ct_valor_mensal";
-        static $nmAtrDtProposta =  	"ct_dt_proposta";			
+        static $nmAtrDtProposta =  	"ct_dt_proposta";
+        static $nmAtrCdPessoaContratada =  	"pe_cd";
 		
 		var $sq;
 		var $cdContrato;
@@ -52,6 +53,7 @@ include_once(caminho_lib."voentidade.php");
         var $tipo;
         var $situacao;
 		var $contratada;
+		var $cdPessoaContratada;
 		var $docContratada;
 		var $gestor;
 		var $nmGestorPessoa;
@@ -127,7 +129,8 @@ include_once(caminho_lib."voentidade.php");
             vocontrato::$nmAtrObservacaoContrato,
             vocontrato::$nmAtrVlGlobalContrato,
             vocontrato::$nmAtrVlMensalContrato,
-            vocontrato::$nmAtrDtProposta
+            vocontrato::$nmAtrDtProposta,
+        	self::$nmAtrCdPessoaContratada
         );
         
         return $retorno;    
@@ -169,6 +172,7 @@ include_once(caminho_lib."voentidade.php");
         $this->cdEspecie	 = $registrobanco[vocontrato::$nmAtrCdEspecieContrato];
         $this->situacao	 = $registrobanco[vocontrato::$nmAtrCdSituacaoContrato];
         $this->modalidade	 = $registrobanco[vocontrato::$nmAtrModalidadeContrato];
+		$this->cdPessoaContratada= $registrobanco[vocontrato::$nmAtrCdPessoaContratada];
 		$this->contratada = $registrobanco[vocontrato::$nmAtrContratadaContrato];
 		$this->docContratada = $registrobanco[vocontrato::$nmAtrDocContratadaContrato];
 		$this->gestor = $registrobanco[vocontrato::$nmAtrGestorContrato];
@@ -216,6 +220,7 @@ include_once(caminho_lib."voentidade.php");
         $this->cdEspecie = @$_POST[vocontrato::$nmAtrCdEspecieContrato]; 
         $this->modalidade = @$_POST[vocontrato::$nmAtrModalidadeContrato];
         
+        $this->cdPessoaContratada= @$_POST[vocontrato::$nmAtrCdPessoaContratada];
         $this->contratada = @$_POST[vocontrato::$nmAtrContratadaContrato];
 		$this->docContratada = @$_POST[vocontrato::$nmAtrDocContratadaContrato];
 		$this->gestor = @$_POST[vocontrato::$nmAtrGestorContrato];
@@ -277,7 +282,7 @@ include_once(caminho_lib."voentidade.php");
     
 	function toString(){
 		
-		$retorno = $this->sq . "";				
+		$retorno = $this->sq . ",";				
 		$retorno.= $this->anoContrato . ",";
 		$retorno.= $this->cdContrato. ",";
         $retorno.= $this->tipo;		

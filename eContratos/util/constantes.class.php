@@ -12,9 +12,11 @@ header ('Content-type: text/html; charset=ISO-8859-1');
     
     static $CD_TIPO_CONTRATO  = "C";
     static $CD_TIPO_CONVENIO  = "V";
+    static $CD_TIPO_PROFISCO  = "P";
 
     static $DS_TIPO_CONTRATO  = "C-SAFI";
     static $DS_TIPO_CONVENIO  = "CV-SAFI";
+    static $DS_TIPO_PROFISCO  = "C-PROFISCO";
     
     static $CD_FUNCAO_EXCLUIR = "E";
     static $CD_FUNCAO_INCLUIR = "I";

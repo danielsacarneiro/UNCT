@@ -18,6 +18,7 @@ include_once (caminho_vos. "dbpessoagestor.php");
         
 		$query = "SELECT ".$nmTabela;
 		$query.= ".*, " . vopessoavinculo::getNmTabela() . "." .vopessoavinculo::$nmAtrCd;
+		$query.= ", " . vogestor::getNmTabela() . "." .vogestor::$nmAtrCd;
 		$query.= ", " . vogestor::getNmTabela() . "." .vogestor::$nmAtrDescricao;
         $query.= ", TAB1." .vousuario::$nmAtrName. " AS " . voentidade::$nmAtrNmUsuarioInclusao;
         $query.= ", TAB2." .vousuario::$nmAtrName. " AS " . voentidade::$nmAtrNmUsuarioUltAlteracao;
@@ -54,19 +55,49 @@ include_once (caminho_vos. "dbpessoagestor.php");
     function consultarPessoa($voentidade, $filtro){
     	$atributosConsulta = vopessoa::getNmTabela() . "." .   vopessoa::$nmAtrCd;
     	$atributosConsulta .= "," . vopessoa::getNmTabela() . "." . vopessoa::$nmAtrNome;
+    	$atributosConsulta .= "," . vopessoa::getNmTabela() . "." . vopessoa::$nmAtrDoc;
     	$atributosConsulta .= "," . vopessoa::getNmTabela() . "." . vopessoa::$nmAtrEmail;
-    	$atributosConsulta .= "," . vopessoa::getNmTabela() . "." . vopessoa::$nmAtrTel;    	
+    	$atributosConsulta .= "," . vopessoa::getNmTabela() . "." . vopessoa::$nmAtrTel;
+    	$atributosConsulta .= "," . vopessoavinculo::getNmTabela() . "." . vopessoavinculo::$nmAtrCd;
     	
     	//$atributoVinculo = "(SELECT )"    	
     	
         $querySelect = "SELECT ". $atributosConsulta;
         
         $queryFrom = "\n FROM ". vopessoa::getNmTabela();
+        $queryFrom .= "\n INNER JOIN ". vopessoavinculo::getNmTabela();
+        $queryFrom .= "\n ON ". vopessoa::getNmTabela() . "." . vopessoa::$nmAtrCd . "=" . vopessoavinculo::getNmTabela() . "." . vopessoavinculo::$nmAtrCdPessoa;
         
-        return $this->consultarComPaginacaoQuery($voentidade, $filtro, $querySelect, $queryFrom);
+        //echo $querySelect."<br>";
+        //echo $queryFrom;
+        
+        return $this->consultarFiltro($filtro, $querySelect, $queryFrom, true);
+        //return $this->consultarComPaginacaoQuery($voentidade, $filtro, $querySelect, $queryFrom);
     }
     
-	public function consultarPessoaPorGestor($cdGestor){
+    function consultarPessoaPorContrato($filtro){
+    	$atributosConsulta = vopessoa::getNmTabela() . "." .   vopessoa::$nmAtrCd;
+    	$atributosConsulta .= "," . vopessoa::getNmTabela() . "." . vopessoa::$nmAtrNome;
+    	$atributosConsulta .= "," . vopessoa::getNmTabela() . "." . vopessoa::$nmAtrDoc;
+    	$atributosConsulta .= "," . vopessoa::getNmTabela() . "." . vopessoa::$nmAtrEmail;
+    	$atributosConsulta .= "," . vopessoa::getNmTabela() . "." . vopessoa::$nmAtrTel;
+    	$atributosConsulta .= "," . vopessoavinculo::getNmTabela() . "." . vopessoavinculo::$nmAtrCd;
+    	 
+    	//$atributoVinculo = "(SELECT )"
+    	 
+    	$querySelect = "SELECT ". $atributosConsulta;
+    
+    	$queryFrom = "\n FROM ". vopessoa::getNmTabela();
+    	$queryFrom .= "\n INNER JOIN ". vopessoavinculo::getNmTabela();
+    	$queryFrom .= "\n ON ". vopessoa::getNmTabela() . "." . vopessoa::$nmAtrCd . "=" . vopessoavinculo::getNmTabela() . "." . vopessoavinculo::$nmAtrCdPessoa;
+    	$queryFrom .= "\n INNER JOIN ". vocontrato::getNmTabela();
+    	$queryFrom .= "\n ON ";
+    	$queryFrom .= vopessoa::getNmTabela(). ".".vopessoa::$nmAtrCd. "=".vocontrato::getNmTabela() . "." . vocontrato::$nmAtrCdPessoaContratada;   	
+    
+    	return $this->consultarFiltro($filtro, $querySelect, $queryFrom, false);
+    }
+    
+    public function consultarPessoaPorGestor($cdGestor){
         $vo = new vopessoa();            
         $nmTabela = $vo->getNmTabelaEntidade(false);        
 		$query = "SELECT * FROM ".$nmTabela;

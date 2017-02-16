@@ -159,7 +159,10 @@ function montarColecaoItens2($pastaMenuPai){
 	$pasta = $pastaMenuPai->dir."\\\*";
 	$dir = new GlobIterator($pasta);
 	$filtro = $pastaMenuPai->filtro;
-	$strFiltro = $filtro->contratada;
+	
+	$strFiltro = $filtro->contratada;	
+	/*if($filtro->cdContrato != null)
+		$strFiltro .= CAMPO_SEPARADOR.$filtro->cdContrato;*/
 
 	$i = 0;
 	$retorno = "";
