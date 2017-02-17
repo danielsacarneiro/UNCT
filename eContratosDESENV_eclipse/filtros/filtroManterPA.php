@@ -3,18 +3,24 @@ include_once(caminho_util."bibliotecaSQL.php");
 include_once(caminho_lib ."filtroManter.php");
 include_once(caminho_funcoes ."contrato/dominioEspeciesContrato.php");
 
-class filtroManterPAD extends filtroManter{
+class filtroManterPA extends filtroManter{
     
     var $nmFiltro = "filtroManterPenalidade";
     
     var $cdPessoa ;    
+    var $cdResponsavel ;
     var $doc;
     var $nome;
     var $cdPA;
     var $anoPA;
+    var $situacao;
     var $cdEspecieContrato;
     
-    var $nmEntidadePrincipal;
+    var $nmTabelaPessoaContrato = "TAB_PESSOA_CONTRATO";
+    var $nmTabelaPessoaResponsavel = "TAB_PESSOA_RESP";
+    
+    var $nmColNomePessoaContrato = "NmColPessoaContrato";
+    var $nmColNomePessoaResponsavel = "NmColPessoaResponsavel";
     
     // ...............................................................
 	// construtor
@@ -23,31 +29,37 @@ class filtroManterPAD extends filtroManter{
         parent::__construct(true);
         
         $this->cdPessoa = @$_POST[vopessoa::$nmAtrCd];
-        //$this->cdGestor = @$_POST[voPAD::$nmAtrCdGestor];
+        $this->cdResponsavel = @$_POST[voPA::$nmAtrCdResponsavel];
+        //$this->cdGestor = @$_POST[voPA::$nmAtrCdGestor];
         $this->doc = @$_POST[vopessoa::$nmAtrDoc];
         $this->nome = @$_POST[vopessoa::$nmAtrNome];
         
-        $this->cdPA = @$_POST[voPAD::$nmAtrCdPA];
-        $this->anoPA = @$_POST[voPAD::$nmAtrAnoPA];
+        $this->cdPA = @$_POST[voPA::$nmAtrCdPA];
+        $this->anoPA = @$_POST[voPA::$nmAtrAnoPA];
+        $this->situacao = @$_POST[voPA::$nmAtrSituacao];
         $this->cdEspecieContrato = @$_POST[vocontrato::$nmAtrCdEspecieContrato];
+        
+        //isso tudo pq o filtro pode ser usado por mais de um metodo
+        //e precisa saber qual voprincipal considera,
+        //pra pegar por ex os atributos de ordenacao da tabela correta
+        $this->nmEntidadePrincipal = "voPA";
     }
     	
 	function getFiltroConsultaSQL($isHistorico){
-        $voPAD= new voPAD();
+        $voPA= new voPA();
         $vopessoa= new vopessoa();
         $vocontrato= new vocontrato();
 		$filtro = "";
 		$conector  = "";
 		
-		$nmTabelaPessoa= $vopessoa->getNmTabelaEntidade(false);
+		$nmTabelaPessoaContrato = $this->nmTabelaPessoaContrato;
+		$nmTabelaPessoaResponsavel = $this->nmTabelaPessoaResponsavel;
+		
 		$nmTabelaContrato= $vocontrato->getNmTabelaEntidade(false);
 		
-		$nmTabela = $voPAD->getNmTabelaEntidade($isHistorico);
+		$nmTabela = $voPA->getNmTabelaEntidade($isHistorico);
 		if($this->nmEntidadePrincipal != null){
-			$voentidade = new voentidade();
-			$class = $this->nmEntidadePrincipal;
-			$voentidade = new $class(); 
-			$nmTabela = $voentidade->getNmTabelaEntidade($isHistorico);
+			$nmTabela = $this->getVOEntidadePrincipal()->getNmTabelaEntidade($isHistorico);
 		}
 		
 		//seta os filtros obrigatorios        
@@ -67,36 +79,55 @@ class filtroManterPAD extends filtroManter{
 			$conector  = "\n AND ";
 		}
 		
-		if($this->cdPA != null){
+		if($this->situacao != null){
 			$filtro = $filtro . $conector
-			. $nmTabela. "." .voPAD::$nmAtrCdPA
-			. " = "
-					. $this->cdPA;
+					. $nmTabela. "." .voPA::$nmAtrSituacao
+					. " = "
+					. $this->situacao
+					;
 						
 			$conector  = "\n AND ";
 		}
 		
+		if($this->cdPA != null){
+			$filtro = $filtro . $conector
+			. $nmTabela. "." .voPA::$nmAtrCdPA
+			. " = "
+					. $this->cdPA;
+		
+					$conector  = "\n AND ";
+		}
+		
 		if($this->anoPA != null){
 			$filtro = $filtro . $conector
-					. $nmTabela. "." .voPAD::$nmAtrAnoPA
+					. $nmTabela. "." .voPA::$nmAtrAnoPA
 					. " = "
 					. $this->anoPA;
 						
 			$conector  = "\n AND ";
 		}
 		
+		if($this->cdResponsavel!= null){
+			$filtro = $filtro . $conector
+					. $nmTabelaPessoaResponsavel. "." .vopessoa::$nmAtrCd
+					. " = "
+					. $this->cdResponsavel;
+						
+			$conector  = "\n AND ";
+		}
+		
 		if($this->cdPessoa != null){
 			$filtro = $filtro . $conector
-			. $nmTabelaPessoa. "." .vopessoa::$nmAtrCd
+			. $nmTabelaPessoaContrato. "." .vopessoa::$nmAtrCd
 			. " = "
 					. $this->cdPessoa;
-						
+		
 					$conector  = "\n AND ";
 		}
 		
 		if($this->nome != null){
 			$filtro = $filtro . $conector
-			. $nmTabelaPessoa. "." .vopessoa::$nmAtrNome
+			. $nmTabelaPessoaContrato. "." .vopessoa::$nmAtrNome
 			. " LIKE '%"
 					. utf8_encode($this->nome)
 					. "%'";
@@ -106,7 +137,7 @@ class filtroManterPAD extends filtroManter{
 		
 		if($this->doc != null){
 			$filtro = $filtro . $conector
-						. $nmTabelaPessoa. "." .vopessoa::$nmAtrDoc
+						. $nmTabelaPessoaContrato. "." .vopessoa::$nmAtrDoc
 						. "='"
 						. $this->doc
 						. "'";
@@ -116,7 +147,7 @@ class filtroManterPAD extends filtroManter{
 
 		if($this->cdGestor != null){
 			$filtro = $filtro . $conector
-						//. $nmTabela. "." .voPAD::$nmAtrCdGestor
+						//. $nmTabela. "." .voPA::$nmAtrCdGestor
 						. "='"
 						. $this->cdGestor
 						. "'";
@@ -124,12 +155,8 @@ class filtroManterPAD extends filtroManter{
 			$conector  = "\n AND ";
 		}	
 
-		if($filtro != "")
-			$filtro = " WHERE $filtro";
-
-		if($this->cdAtrOrdenacao  != null){			
-			$filtro = $filtro . " ORDER BY " . $nmTabela .".$this->cdAtrOrdenacao $this->cdOrdenacao";
-		}
+		//finaliza o filtro
+		$filtro = parent::getFiltroConsultaSQL($filtro);
 		
 		//echo "Filtro:$filtro<br>";
 

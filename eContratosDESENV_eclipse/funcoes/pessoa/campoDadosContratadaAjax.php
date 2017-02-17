@@ -10,7 +10,7 @@ function getDadosContrata($db){
 	if($db == null)
 		$db = new dbpessoa();
 
-		$filtro = new filtroManterPessoa();
+		$filtro = new filtroManterPessoa(false);
 		$filtro->TemPaginacao = false;
 		$chave = @$_GET["chave"];
 		$array = explode(CAMPO_SEPARADOR,$chave);

@@ -1,14 +1,14 @@
 <?php
 include_once("../../config_lib.php");
 include_once(caminho_util."bibliotecaHTML.php");
-include_once(caminho_vos."voPAD.php");
+include_once(caminho_vos."voPA.php");
 inicio();
 
-$vo = new voPAD();
+$vo = new voPA();
 $vo->getDadosFormulario();
 
-if(existeObjetoSessao(voPAD::$nmAtrColecaoTramitacao)){
-	$vo->colecaoTramitacao = getObjetoSessao(voPAD::$nmAtrColecaoTramitacao);
+if(existeObjetoSessao(voPA::$nmAtrColecaoTramitacao)){
+	$vo->colecaoTramitacao = getObjetoSessao(voPA::$nmAtrColecaoTramitacao);
 	//echo "tem objeto sessao";
 	
 	//var_dump($vo->colecaoTramitacao);
@@ -16,7 +16,7 @@ if(existeObjetoSessao(voPAD::$nmAtrColecaoTramitacao)){
 
 
 putObjetoSessao("vo", $vo);
-removeObjetoSessao(voPAD::$nmAtrColecaoTramitacao);
+removeObjetoSessao(voPA::$nmAtrColecaoTramitacao);
 
 //redirecionar mantendo o post
 //o codigo 307 especificado no RFC do protocolo HTTP 1.0 como temporary redirect, mantendo o post

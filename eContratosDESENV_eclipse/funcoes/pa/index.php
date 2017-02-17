@@ -3,18 +3,18 @@ include_once("../../config_lib.php");
 include_once(caminho_util."bibliotecaHTML.php");
 include_once(caminho_util."constantes.class.php");
 include_once(caminho_util. "select.php");
-include_once(caminho_vos . "dbPAD.php");
+include_once(caminho_vos . "dbPA.php");
 include_once(caminho_vos . "vopessoa.php");
-include_once(caminho_vos . "voPAD.php");
-include_once(caminho_filtros . "filtroManterPAD.php");
+include_once(caminho_vos . "voPA.php");
+include_once(caminho_filtros . "filtroManterPA.php");
 
 //inicia os parametros
 inicio();
 
-$titulo = "CONSULTAR P.A.D.´S";
+$titulo = "CONSULTAR P.A.´S";
 setCabecalho($titulo);
 
-$filtro  = new filtroManterPAD();
+$filtro  = new filtroManterPA();
 $filtro = filtroManter::verificaFiltroSessao($filtro);
 	
 $nome = $filtro->nome;
@@ -23,11 +23,11 @@ $cdHistorico = $filtro->cdHistorico;
 $cdOrdenacao = $filtro->cdOrdenacao;
 $isHistorico = "S" == $cdHistorico; 
 
-$vo = new voPAD();
+$vo = new voPA();
 $dbprocesso = $vo->dbprocesso;
 $colecao = $dbprocesso->consultarPenalidade($vo, $filtro);
 //remove a colecao de tramitacao da sessao pra iniciar do zero
-removeObjetoSessao(voPAD::$nmAtrColecaoTramitacao);
+removeObjetoSessao(voPA::$nmAtrColecaoTramitacao);
 
 $paginacao = $filtro->paginacao;
 if($filtro->temValorDefaultSetado){
@@ -132,12 +132,28 @@ function alterar() {
             </TR>            
             <TR>
                 <TH class="campoformulario" width="1%" nowrap>CNPJ/CPF:</TH>
-                <TD class="campoformulario" colspan=3><INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($doc);?>" class="camponaoobrigatorio" size="20" maxlength="18"></TD>
+                <TD class="campoformulario"><INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($doc);?>" class="camponaoobrigatorio" size="20" maxlength="18"></TD>
+				<TH class="campoformulario" nowrap>Situação:</TH>
+                <TD class="campoformulario" colspan="1">
+                     <?php
+                    include_once("biblioteca_htmlPA.php");                    
+                    echo getComboSituacaoPA(voPA::$nmAtrSituacao, voPA::$nmAtrSituacao, $filtro->situacao, "camponaoobrigatorio", "");                                        
+                    ?>
             </TR>
-        <?php
-        $comboOrdenacao = new select(voPAD::getAtributosOrdenacao($cdHistorico));
+            <TR>
+				<TH class="campoformulario" nowrap>Servidor Responsável:</TH>
+                <TD class="campoformulario" colspan="3">
+                     <?php
+                    include_once(caminho_funcoes."pessoa/biblioteca_htmlPessoa.php");                    
+                    echo getComboPessoaRespPA(voPA::$nmAtrCdResponsavel, voPA::$nmAtrCdResponsavel, $filtro->cdResponsavel, "camponaoobrigatorio", "");                                        
+                    ?>
+            </TR>
+       <?php
+        /*$comboOrdenacao = new select(voPA::getAtributosOrdenacao($cdHistorico));
         $cdAtrOrdenacao = $filtro->cdAtrOrdenacao;
-        echo getComponenteConsulta($comboOrdenacao, $cdAtrOrdenacao, $cdOrdenacao, $qtdRegistrosPorPag, true, $cdHistorico)?>
+        echo getComponenteConsulta($comboOrdenacao, $cdAtrOrdenacao, $cdOrdenacao, $qtdRegistrosPorPag, true, $cdHistorico)*/
+       echo getComponenteConsultaFiltro($vo->temTabHistorico, $filtro);
+        ?>
        </TBODY>
   </TABLE>
 		</DIV>
@@ -161,6 +177,7 @@ function alterar() {
                     <TH class="headertabeladados"width="1%" nowrap >Contrato</TH>
                     <TH class="headertabeladados" width="1%" nowrap >Doc.Contratada</TH>
                     <TH class="headertabeladados" width="90%">Contratada</TH>
+                    <TH class="headertabeladados" width="1%" nowrap>Servidor.Resp.</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Situação</TH>
                 </TR>
                 <?php								
@@ -170,28 +187,28 @@ function alterar() {
                         $tamanho = 0;
                 
                 include_once (caminho_funcoes."contrato/dominioTipoContrato.php");
-                //require_once ("dominioSituacaoPAD.php");
+                //require_once ("dominioSituacaoPA.php");
                 $dominioTipoContrato = new dominioTipoContrato();
-                $domSiPAD = new dominioSituacaoPAD();
+                $domSiPA = new dominioSituacaoPA();
                 
-                $colspan=6;
+                $colspan=7;
                 if($isHistorico){
-                	$colspan=7;
+                	$colspan=8;
                 }
                 
                 for ($i=0;$i<$tamanho;$i++) {
-                        $voAtual = new voPAD();
+                        $voAtual = new voPA();
                         $voAtual->getDadosBanco($colecao[$i]);     
                         
-                        $contrato = formatarCodigoAnoComplemento($colecao[$i][voPAD::$nmAtrCdContrato],
-                        						$colecao[$i][voPAD::$nmAtrAnoContrato], 
-                        						$dominioTipoContrato->getDescricao($colecao[$i][voPAD::$nmAtrTipoContrato]));
+                        $contrato = formatarCodigoAnoComplemento($colecao[$i][voPA::$nmAtrCdContrato],
+                        						$colecao[$i][voPA::$nmAtrAnoContrato], 
+                        						$dominioTipoContrato->getDescricao($colecao[$i][voPA::$nmAtrTipoContrato]));
                                                 
-                        $procAdm = formatarCodigoAno($colecao[$i][voPAD::$nmAtrCdPA],
-                        		$colecao[$i][voPAD::$nmAtrAnoPA]);
+                        $procAdm = formatarCodigoAno($colecao[$i][voPA::$nmAtrCdPA],
+                        		$colecao[$i][voPA::$nmAtrAnoPA]);
                         
-                        $situacao = $colecao[$i][voPAD::$nmAtrSituacao];
-                        $situacao = $domSiPAD->getDescricao($situacao);                        			 
+                        $situacao = $colecao[$i][voPA::$nmAtrSituacao];
+                        $situacao = $domSiPA->getDescricao($situacao);                        			 
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados">
@@ -200,14 +217,15 @@ function alterar() {
                   <?php                  
                   if($isHistorico){                  	
                   	?>
-                  	<TD class="tabeladados"><?php echo complementarCharAEsquerda($colecao[$i][voPAD::$nmAtrSqHist], "0", TAMANHO_CODIGOS);?></TD>
+                  	<TD class="tabeladados"><?php echo complementarCharAEsquerda($colecao[$i][voPA::$nmAtrSqHist], "0", TAMANHO_CODIGOS);?></TD>
                   <?php 
                   }
                   ?>                    
                     <TD class="tabeladados" nowrap><?php echo $procAdm;?></TD>
                     <TD class="tabeladados" nowrap><?php echo $contrato;?></TD>
                     <TD class="tabeladados" nowrap><?php echo $colecao[$i][vopessoa::$nmAtrDoc];?></TD>
-                    <TD class="tabeladados"><?php echo $colecao[$i][vopessoa::$nmAtrNome];?></TD>
+                    <TD class="tabeladados"><?php echo $colecao[$i][$filtro->nmColNomePessoaContrato];?></TD>
+                    <TD class="tabeladados" nowrap><?php echo $colecao[$i][$filtro->nmColNomePessoaResponsavel];?></TD>
                     <TD class="tabeladados" nowrap><?php echo $situacao;?></TD>
                 </TR>					
                 <?php

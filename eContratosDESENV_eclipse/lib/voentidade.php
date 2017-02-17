@@ -192,7 +192,7 @@
     }
     
     function getNmClassVO(){
-    	$classProcesso = $this->getNmClassProcesso();    	 
+    	$classProcesso = static::getNmClassProcesso();    	 
     	return  str_replace("db", "vo", $classProcesso);
     }
                 

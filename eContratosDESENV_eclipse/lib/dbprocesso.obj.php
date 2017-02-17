@@ -140,53 +140,6 @@ class dbprocesso{
         
         return $this->consultarComPaginacaoQuery($voentidade, $filtro, $querySelect, $queryFrom);
 	}
-    
-	/*function consultarComPaginacaoQuery($voentidade, $filtro, $querySelect, $queryFrom){
-                
-        $retorno = "";
-        $isHistorico = ("S" == $filtro->cdHistorico);       
-
-		//flag que diz se pode consultar ou nao
-		$consultar = @$_GET["consultar"];
-		
-        if($consultar == "S"){
-			$filtroSQL = $filtro->getFiltroConsultaSQL($isHistorico);
-			
-			//verifica se tem paginacao
-			$limite = "";
-			if($filtro->TemPaginacao){	
-				//ECHO "TEM PAGINACAO";
-	            $pagina = $filtro->paginacao->getPaginaAtual();                                    
-				//guarda o numero total de registros para nao ter que executar a consulta TODOS novamente
-	            $queryCount = "SELECT count(*) as " . dbprocesso::$nmCampoCount . $queryFrom . $filtroSQL;
-	            $numTotalRegistros = $filtro->numTotalRegistros = $this->getNumTotalRegistrosQuery($queryCount);		
-	
-	            $qtdRegistrosPorPag = $filtro->qtdRegistrosPorPag;
-				//calcula o número de páginas arredondando o resultado para cima
-				$numPaginas = ceil($numTotalRegistros/$qtdRegistrosPorPag);
-				$filtro->paginacao->setNumTotalPaginas($numPaginas);            
-				
-				$inicio = ($qtdRegistrosPorPag*$pagina)-$qtdRegistrosPorPag;
-				$limite = " LIMIT $inicio,$qtdRegistrosPorPag";
-			}
-			
-            //aqui eh onde faz realmente a consulta a retornar
-            $query = $querySelect . $queryFrom. " $filtroSQL ";			
-            $query = $query. " $limite";
-			
-			//echo $filtroSQL;			
-			//echo "$queryCount<br>";
-			//echo "$query<br>";
-			
-            //removeObjetoSessao($voentidade->getNmTabela());
-			
-			$retorno = $this->cDb->consultar($query);
-		}
-        
-        //echo $filtro->toString();
-		
-	    return $retorno;        
-	}*/
 	
 	function consultarComPaginacaoQuery($voentidade, $filtro, $querySelect, $queryFrom){
 		return $this->consultarFiltro($filtro, $querySelect, $queryFrom, true);

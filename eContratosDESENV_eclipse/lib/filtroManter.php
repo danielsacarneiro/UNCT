@@ -1,7 +1,8 @@
 <?php
 include_once(caminho_util."paginacao.php");
+include_once(caminho_util."multiplosConstrutores.php");
 
-class filtroManter{
+class filtroManter extends multiplosConstrutores{
     // ...............................................................
 	// construtor
 	
@@ -14,33 +15,48 @@ class filtroManter{
 	var $TemPaginacao;
 	var $qtdRegistrosPorPag;
 	var $paginacao;
-
-	function __construct($temPaginacao) {        
-		$this->cdAtrOrdenacao = @$_POST["cdAtrOrdenacao"];
-		$this->cdOrdenacao = @$_POST["cdOrdenacao"];
+	var $nmEntidadePrincipal;
+	var $isHistorico;
 				
-		$this->dtVigencia = @$_POST["dtVigencia"];
-        $this->cdHistorico  = @$_POST["cdHistorico"];        
-        $this->qtdRegistrosPorPag = @$_POST["qtdRegistrosPorPag"];
-        if($this->qtdRegistrosPorPag == null)
-        	$this->qtdRegistrosPorPag = paginacao::$qtdRegistrosPorPag;
-
-        $this->numTotalRegistros = @$_POST["numTotalRegistros"];
-        if($this->numTotalRegistros == null)
-            $this->numTotalRegistros = 0;
-
-        $this->paginacao = null;        
-        $this->TemPaginacao= $temPaginacao;
-        
+	function __construct1($pegarFiltrosDaTela) {
+		//echo "teste" . $pegarFiltrosDaTela;
+		$this->__construct2(true, $pegarFiltrosDaTela);
+	}
+	
+	function __construct2($temPaginacao, $pegarFiltrosDaTela) {
+		//echo "ricardo eh gay";
+		
+		if($pegarFiltrosDaTela){
+			$this->pegarFiltroDaTela();
+		}
+		
+		if($this->numTotalRegistros == null){
+			$this->numTotalRegistros = 0;
+		}
+		if($this->qtdRegistrosPorPag == null){
+			$this->qtdRegistrosPorPag = paginacao::$qtdRegistrosPorPag;
+		}		
+		$this->paginacao = null;        
+        $this->TemPaginacao= $temPaginacao;                
         if($temPaginacao){
             $this->paginacao = new paginacao($this->qtdRegistrosPorPag);
-        }
-            
+        }            
+
+        $this->isHistorico = "S" == $this->cdHistorico;
         //para o caso de ser necessario setar um filtro default para nao trazer todos os registros
-        $this->temValorDefaultSetado = false;
-	}
+        $this->temValorDefaultSetado = false;        
+	}	
     
-    function isSetaValorDefault(){
+	function pegarFiltroDaTela(){
+		$this->cdAtrOrdenacao = @$_POST["cdAtrOrdenacao"];
+		$this->cdOrdenacao = @$_POST["cdOrdenacao"];		 
+		$this->dtVigencia = @$_POST["dtVigencia"];
+		$this->cdHistorico  = @$_POST["cdHistorico"];
+		$this->qtdRegistrosPorPag = @$_POST["qtdRegistrosPorPag"];
+		$this->numTotalRegistros = @$_POST["numTotalRegistros"];		 
+	}
+	
+	function isSetaValorDefault(){
         $retorno = false;
     }
     
@@ -80,11 +96,35 @@ class filtroManter{
     		if($ordem == constantes::$CD_ORDEM_CRESCENTE){
     			$ordem = "";
     		}
-    					
-    		$filtro = $filtro . "\n ORDER BY $this->cdAtrOrdenacao $ordem";
+    		
+    		//para setar o atributo de ordenacao de forma mais complexa: quando ha joins na tabela
+    		//para tanto o atributo nmEntidadePrincipal precisa ser not null
+    		$voentidade = $this->getVOEntidadePrincipal();    		
+    		if($voentidade != ""){
+    			$filtro = $filtro . "\n ORDER BY " . $voentidade->getNmTabelaEntidade($this->isHistorico) . ".$this->cdAtrOrdenacao $ordem";
+    		}else{
+    			$filtro = $filtro . "\n ORDER BY $this->cdAtrOrdenacao $ordem";
+    		}
     	}
     	
     	return $filtro; 
+    }
+    
+    function getVOEntidadePrincipal(){
+    	$class = $this->nmEntidadePrincipal;
+    	$retorno = "";
+    	if($class != null)
+    		$retorno = new $class();
+    	return $retorno ; 
+    }
+    
+    function getAtributosOrdenacao(){
+    	$comboOrdenacao = null;
+    	if($this->nmEntidadePrincipal != null){
+    		$voentidade = $this->getVOEntidadePrincipal();    		
+    		$comboOrdenacao = new select($voentidade::getAtributosOrdenacao());
+    	}
+    	return $comboOrdenacao;
     }
     
 	function toString(){		
@@ -96,4 +136,11 @@ class filtroManter{
 	} 
 }
 
+/*class filtroManterGUI extends filtroManter{
+	// ...............................................................
+	// construtor
+	function __construct($temPaginacao) {
+		parent::__construct1($temPaginacao, true);
+	}
+}*/
 ?>

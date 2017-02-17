@@ -25,7 +25,7 @@ cabecalho;
 	f = new Tree('Menu de Funcionalidades finalizadas e entregue a SEFAZ-PE (Homologação)', true);
 	
 	f1 = new Tree('Manutenção de Tabelas');	
-    f1.adicionarItem(new Link('Manter Oficios', '<?=caminho_funcoesHTML?>oficio', ''));
+    f1.adicionarItem(new Link('Manter Documentos', '<?=caminho_funcoesHTML?>documento', ''));
     f1.adicionarItem(new Link('Manter Gestores', '<?=caminho_funcoesHTML?>gestor', ''));
 	f.adicionarItem(f1);
 	
@@ -38,7 +38,7 @@ cabecalho;
 	f.adicionarItem(f3);
 
 	f4 = new Tree('Processos Administrativos');	
-    f4.adicionarItem(new Link('Manter P.A. de Aplicação de Penalidade (PAAP)', '<?=caminho_funcoesHTML?>pad', ''));    
+    f4.adicionarItem(new Link('Manter P.A. de Aplicação de Penalidade (PAAP)', '<?=caminho_funcoesHTML?>pa', ''));    
 	f.adicionarItem(f4);
 
 	/*

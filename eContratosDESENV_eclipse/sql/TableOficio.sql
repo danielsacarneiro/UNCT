@@ -1,10 +1,12 @@
 ALTER DATABASE unct CHARACTER SET utf8 COLLATE utf8_general_ci;
 
-drop table oficio;
-CREATE TABLE oficio (
+drop table documento;
+CREATE TABLE documento (
 	sq INT NOT NULL,
     ofic_cd_setor INT NOT NULL, 
-    ofic_ex INT NOT NULL, 
+    ofic_ex INT NOT NULL,
+    ofic_tp_doc INT NOT NULL,
+    ofic_link_doc TEXT NULL,
         
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_ultalt INT,    

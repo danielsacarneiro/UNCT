@@ -12,7 +12,7 @@ inicio();
 $titulo = "CONSULTAR PESSOAS";
 setCabecalho($titulo);
 
-$filtro  = new filtroManterPessoa();
+$filtro  = new filtroManterPessoa(true);
 $filtro = filtroManter::verificaFiltroSessao($filtro);
 	
 $nome = $filtro->nome;

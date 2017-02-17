@@ -43,7 +43,7 @@
      imprimeResultado(result, "../pessoa/campoDadosContratadaAjax.php?chave=" + chaveContrato);     
  }
  
- function manterDadosTramitacaoPAD(textofase, idDivResultado, funcao, indice) {     
+ function manterDadosTramitacaoPA(textofase, idDivResultado, funcao, indice) {     
      var result = document.getElementById(idDivResultado);          
      imprimeResultado(result, "../pad/gridTramitacaoAjax.php?funcao=" + funcao + "&textoTramitacao=" + textofase+ "&indice=" + indice);     
  }

@@ -2,13 +2,13 @@
 include_once("../../config_lib.php");
 include_once(caminho_util."bibliotecaHTML.php");
 include_once(caminho_util."selectExercicio.php");
-include_once(caminho_vos."voPAD.php");
-include_once(caminho_vos."voPADTramitacao.php");
+include_once(caminho_vos."voPA.php");
+include_once(caminho_vos."voPATramitacao.php");
 
 //inicia os parametros
 inicioComValidacaoUsuario(true);
 
-$vo = new voPAD();
+$vo = new voPA();
 //var_dump($vo->varAtributos);
 
 $funcao = @$_GET["funcao"];
@@ -40,7 +40,7 @@ if($isInclusao){
 	$colecaoRegistroBanco = $dbprocesso->consultarTramitacao($vo);
 	if($colecaoRegistroBanco != ""){
 		$vo->setColecaoTramitacao($colecaoRegistroBanco);
-		putObjetoSessao(voPAD::$nmAtrColecaoTramitacao, $vo->colecaoTramitacao);
+		putObjetoSessao(voPA::$nmAtrColecaoTramitacao, $vo->colecaoTramitacao);
 	}
 
     $nmFuncao = "ALTERAR ";
@@ -87,9 +87,9 @@ function confirmar() {
 function carregaDadosContratada(){    
 	str = "";
 		
-	cdContrato = document.frm_principal.<?=voPAD::$nmAtrCdContrato?>.value;
-	anoContrato = document.frm_principal.<?=voPAD::$nmAtrAnoContrato?>.value;
-	tpContrato = document.frm_principal.<?=voPAD::$nmAtrTipoContrato?>.value;
+	cdContrato = document.frm_principal.<?=voPA::$nmAtrCdContrato?>.value;
+	anoContrato = document.frm_principal.<?=voPA::$nmAtrAnoContrato?>.value;
+	tpContrato = document.frm_principal.<?=voPA::$nmAtrTipoContrato?>.value;
 
 	if(cdContrato != "" && anoContrato != "" && tpContrato != ""){
 		str = cdContrato + '<?=CAMPO_SEPARADOR?>' + anoContrato + '<?=CAMPO_SEPARADOR?>' + tpContrato;
@@ -99,9 +99,9 @@ function carregaDadosContratada(){
 }
 
 function incluirTramitacao(){
-	textoFase = document.frm_principal.<?=voPADTramitacao::$nmAtrObservacao?>.value;
+	textoFase = document.frm_principal.<?=voPATramitacao::$nmAtrObservacao?>.value;
 	if(textoFase != "")
-		manterDadosTramitacaoPAD(textoFase, 'div_tramitacao', '<?=constantes::$CD_FUNCAO_INCLUIR?>');
+		manterDadosTramitacaoPA(textoFase, 'div_tramitacao', '<?=constantes::$CD_FUNCAO_INCLUIR?>');
 	else
 		exibirMensagem("Tramitação não pode ser vazia!");	
 }
@@ -113,7 +113,7 @@ function excluirTramitacao(){
 	if(confirm("Confirmar Alteracoes?")){
 		
 		indice = document.frm_principal.rdb_tramitacao.value;		
-		manterDadosTramitacaoPAD("", 'div_tramitacao', '<?=constantes::$CD_FUNCAO_EXCLUIR?>', indice);
+		manterDadosTramitacaoPA("", 'div_tramitacao', '<?=constantes::$CD_FUNCAO_EXCLUIR?>', indice);
 	}
 }
 
@@ -140,12 +140,12 @@ function excluirTramitacao(){
 	        require_once ("../contrato/dominioTipoContrato.php");
 	        $dominioTipoContrato = new dominioTipoContrato();
 	        
-	        $contrato = formatarCodigoAnoComplemento($colecao[voPAD::$nmAtrCdContrato],
-	        		$colecao[voPAD::$nmAtrAnoContrato],
-	        		$dominioTipoContrato->getDescricao($colecao[voPAD::$nmAtrTipoContrato]));
+	        $contrato = formatarCodigoAnoComplemento($colecao[voPA::$nmAtrCdContrato],
+	        		$colecao[voPA::$nmAtrAnoContrato],
+	        		$dominioTipoContrato->getDescricao($colecao[voPA::$nmAtrTipoContrato]));
 	         
-	        $procAdm = formatarCodigoAno($colecao[voPAD::$nmAtrCdPA],
-	        		$colecao[voPAD::$nmAtrAnoPA]);
+	        $procAdm = formatarCodigoAno($colecao[voPA::$nmAtrCdPA],
+	        		$colecao[voPA::$nmAtrAnoPA]);
 	         
 	        if(!$isInclusao){
 	        ?>	        	        
@@ -157,10 +157,10 @@ function excluirTramitacao(){
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
 	            <TD class="campoformulario" colspan=3>
-				<INPUT type="hidden" id="<?=voPAD::$nmAtrCdContrato?>" name="<?=voPAD::$nmAtrCdContrato?>" value="<?=$vo->cdContrato?>">
-				<INPUT type="hidden" id="<?=voPAD::$nmAtrAnoContrato?>" name="<?=voPAD::$nmAtrAnoContrato?>" value="<?=$vo->anoContrato?>">
-				<INPUT type="hidden" id="<?=voPAD::$nmAtrAnoPA?>" name="<?=voPAD::$nmAtrAnoPA?>" value="<?=$vo->anoPA?>">
-				<INPUT type="hidden" id="<?=voPAD::$nmAtrCdPA?>" name="<?=voPAD::$nmAtrCdPA?>" value="<?=$vo->cdPA?>">	                    
+				<INPUT type="hidden" id="<?=voPA::$nmAtrCdContrato?>" name="<?=voPA::$nmAtrCdContrato?>" value="<?=$vo->cdContrato?>">
+				<INPUT type="hidden" id="<?=voPA::$nmAtrAnoContrato?>" name="<?=voPA::$nmAtrAnoContrato?>" value="<?=$vo->anoContrato?>">
+				<INPUT type="hidden" id="<?=voPA::$nmAtrAnoPA?>" name="<?=voPA::$nmAtrAnoPA?>" value="<?=$vo->anoPA?>">
+				<INPUT type="hidden" id="<?=voPA::$nmAtrCdPA?>" name="<?=voPA::$nmAtrCdPA?>" value="<?=$vo->cdPA?>">	                    
 	            <INPUT type="text" value="<?php echo($contrato);?>"  class="camporeadonly" size="17" readonly>	            	                        	                        
 	        </TR>			            
 			<TR>
@@ -178,15 +178,15 @@ function excluirTramitacao(){
 			<TR>
 		        <TH class="campoformulario" nowrap width="1%">P.A.D.:</TH>
 		        <TD class="campoformulario" colspan=3>
-		            	<?php echo "Ano: " . $selectExercicio->getHtmlCombo(voPAD::$nmAtrAnoPA,voPAD::$nmAtrAnoPA, $vo->anoPA, true, "campoobrigatorio", false, " required ");?>			            
-			            Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voPAD::$nmAtrCdPA?>" name="<?=voPAD::$nmAtrCdPA?>"  value="<?php echo(complementarCharAEsquerda($voContrato->cdContrato, "0", 3));?>"  class="camponaoobrigatorioalinhadodireita" size="6" maxlength="5" <?=$readonlyChaves?>>                               
+		            	<?php echo "Ano: " . $selectExercicio->getHtmlCombo(voPA::$nmAtrAnoPA,voPA::$nmAtrAnoPA, $vo->anoPA, true, "campoobrigatorio", false, " required ");?>			            
+			            Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voPA::$nmAtrCdPA?>" name="<?=voPA::$nmAtrCdPA?>"  value="<?php echo(complementarCharAEsquerda($voContrato->cdContrato, "0", 3));?>"  class="camponaoobrigatorioalinhadodireita" size="6" maxlength="5" <?=$readonlyChaves?>>                               
 	        </TR>			            
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
 	            <TD class="campoformulario" colspan=3>
-	            <?php echo "Ano: " . $selectExercicio->getHtmlCombo(voPAD::$nmAtrAnoContrato,voPAD::$nmAtrAnoContrato, $vo->anoContrato, true, "campoobrigatorio", false, " required onChange='carregaDadosContratada();'");?>
-			  Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voPAD::$nmAtrCdContrato?>" name="<?=voPAD::$nmAtrCdContrato?>"  value="<?php echo(complementarCharAEsquerda($vo->cdContrato, "0", 3));?>"  class="<?=$classChaves?>" size="4" maxlength="3" <?=$readonlyChaves?> required onBlur='carregaDadosContratada();'>
-			  <?php echo $combo->getHtmlCombo(voPAD::$nmAtrTipoContrato,voPAD::$nmAtrTipoContrato, "", true, "camponaoobrigatorio", false, " onChange='carregaDadosContratada();' ");	
+	            <?php echo "Ano: " . $selectExercicio->getHtmlCombo(voPA::$nmAtrAnoContrato,voPA::$nmAtrAnoContrato, $vo->anoContrato, true, "campoobrigatorio", false, " required onChange='carregaDadosContratada();'");?>
+			  Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voPA::$nmAtrCdContrato?>" name="<?=voPA::$nmAtrCdContrato?>"  value="<?php echo(complementarCharAEsquerda($vo->cdContrato, "0", 3));?>"  class="<?=$classChaves?>" size="4" maxlength="3" <?=$readonlyChaves?> required onBlur='carregaDadosContratada();'>
+			  <?php echo $combo->getHtmlCombo(voPA::$nmAtrTipoContrato,voPA::$nmAtrTipoContrato, "", true, "camponaoobrigatorio", false, " onChange='carregaDadosContratada();' ");	
 			  ?>
 			  <div id="<?=vopessoa::$nmAtrNome?>">
 	          </div>
@@ -195,32 +195,39 @@ function excluirTramitacao(){
 	       }	                    
 	       ?>	           				
 	        <?php 
-	        require_once ("dominioSituacaoPAD.php");
-	        
-	        $domSiPAD = new dominioSituacaoPAD();
-	        $situacao = $colecao[voPAD::$nmAtrSituacao];
-	        $situacao = $domSiPAD->getDescricao($situacao);
+	        //require_once ("dominioSituacaoPA.php");	        
+	        $domSiPA = new dominioSituacaoPA();
+	        $situacao = $colecao[voPA::$nmAtrSituacao];
+	        $situacao = $domSiPA->getDescricao($situacao);
 	        ?>
 			<TR>
 	            <TH class="campoformulario" nowrap>Situação:</TH>
 	            <TD class="campoformulario" colspan=3><INPUT type="text" value="<?php echo(strtoupper($situacao));?>"  class="camporeadonly" size="20" readonly></TD>
 				</TD>
 	        </TR>
+            <TR>
+				<TH class="campoformulario" nowrap>Servidor Responsável:</TH>
+                <TD class="campoformulario" colspan="3">
+                     <?php
+                    include_once(caminho_funcoes."pessoa/biblioteca_htmlPessoa.php");                    
+                    echo getComboPessoaRespPA(voPA::$nmAtrCdResponsavel, voPA::$nmAtrCdResponsavel, $vo->cdResponsavel, "camponaoobrigatorio", "required");                                        
+                    ?>
+            </TR>	        
 			<TR>
 	            <TH class="campoformulario" nowrap>Proc.Licitatorio:</TH>
-	            <TD class="campoformulario" colspan="3"><INPUT type="text" id="<?=voPAD::$nmAtrProcessoLicitatorio?>" name="<?=voPAD::$nmAtrProcessoLicitatorio?>"  value="<?php echo($vo->processoLic);?>"  class="camponaoobrigatorio" size="50" ></TD>
+	            <TD class="campoformulario" colspan="3"><INPUT type="text" id="<?=voPA::$nmAtrProcessoLicitatorio?>" name="<?=voPA::$nmAtrProcessoLicitatorio?>"  value="<?php echo($vo->processoLic);?>"  class="camponaoobrigatorio" size="50" ></TD>
 	        </TR>
 			<TR>
 	            <TH class="campoformulario" nowrap>Observação:</TH>
-	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=voPAD::$nmAtrObservacao?>" name="<?=voPAD::$nmAtrObservacao?>" class="camponaoobrigatorio" ><?php echo($vo->obs);?></textarea>
+	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=voPA::$nmAtrObservacao?>" name="<?=voPA::$nmAtrObservacao?>" class="camponaoobrigatorio" ><?php echo($vo->obs);?></textarea>
 				</TD>
 	        </TR>
 			<TR>
 	            <TH class="campoformulario" nowrap>Data Abertura:</TH>
 	            <TD class="campoformulario" colspan="3">
 	            	<INPUT type="text" 
-	            	       id="<?=voPAD::$nmAtrDtAbertura?>" 
-	            	       name="<?=voPAD::$nmAtrDtAbertura?>" 
+	            	       id="<?=voPA::$nmAtrDtAbertura?>" 
+	            	       name="<?=voPA::$nmAtrDtAbertura?>" 
 	            			value="<?php echo($vo->dtAbertura);?>"
 	            			onkeyup="formatarCampoData(this, event, false);" 
 	            			class="camponaoobrigatorio" 
@@ -230,23 +237,23 @@ function excluirTramitacao(){
         	</TR>
     
 <TR>
-	<TD class="campoformulario" halign="left" colspan="4">
+	<TH class="textoseparadorgrupocampos" halign="left" colspan="4">
 	<DIV class="campoformulario" id="div_tramitacao">
 	<?php 
 	$isDetalhamento = false;
 	include_once 'gridTramitacaoAjax.php';
 	?>
 	</DIV>
-	</TD>
+	</TH>
 </TR>
 <TR>
-	<TD class="campoformulario" halign="left" colspan="4">
+	<TH class="textoseparadorgrupocampos" halign="left" colspan="4">
 	<DIV class="campoformulario">Incluir Tramitação:
          <TABLE id="table_tabeladados" class="tabeladados" cellpadding="0" cellspacing="0">						
              <TBODY>
                 <TR class="dados">
                     <TD class="campoformulario">
-                    <textarea rows="2" cols="60" id="<?=voPADTramitacao::$nmAtrObservacao?>" name="<?=voPADTramitacao::$nmAtrObservacao?>" class="camponaoobrigatorio" ></textarea>
+                    <textarea rows="2" cols="60" id="<?=voPATramitacao::$nmAtrObservacao?>" name="<?=voPATramitacao::$nmAtrObservacao?>" class="camponaoobrigatorio" ></textarea>
                     <?php 
                     echo getBotaoValidacaoAcesso("bttincluir_tram", "Incluir", "botaofuncaop", false,false,true, false, "onClick='incluirTramitacao();' accesskey='i'");
                     echo getBotaoValidacaoAcesso("bttexcluir_tram", "Excluir", "botaofuncaop", false,false,true, false, "onClick='excluirTramitacao();' accesskey='e'");
@@ -257,7 +264,7 @@ function excluirTramitacao(){
         </TABLE>
 	
 	</DIV>
-	</TD>
+	</TH>
 </TR>
 <TR>
 	<TD halign="left" colspan="4">

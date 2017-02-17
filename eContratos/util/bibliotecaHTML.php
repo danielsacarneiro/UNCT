@@ -501,19 +501,37 @@ include_once(caminho_vos."vousuario.php");
     }
     
     function putObjetoSessao($ID, $voEntidade){
+    	/*if(!isSet($_SESSION))
+    		session_start();
+    	echo session_id();
+    	if(session_id() == "" || !isSet($_SESSION)){
+    		echo "NAO TEM SESSAO";
+    		session_start();
+    	}
+    	ELSE{
+    		echo "TEM SESSAO";
+    	}*/
+    	
     	session_start();
     	$_SESSION[$ID] = $voEntidade;   
+    }
+    
+    function existeObjetoSessao($ID){
+    	session_start();
+    	return isset($_SESSION[$ID]) && $_SESSION[$ID] != null;
     }
     
     function getObjetoSessao($ID){
     	session_start();
     	
     	/*$objeto = null;
-    	if(isset($_SESSION[$ID]))*/    	
-    	$objeto = $_SESSION[$ID];
+    	if(isset($_SESSION[$ID]))*/
+    	$objeto = null;
+    	if($_SESSION[$ID] != null){
+    		$objeto = $_SESSION[$ID];
+    	}
     	
     	$isUsarSessao = @$_POST["utilizarSessao"] != "N";
-    	
     	if(!$isUsarSessao){
     		$objeto = null;
     		removeObjetoSessao($ID);
@@ -541,4 +559,13 @@ include_once(caminho_vos."vousuario.php");
     function formatarCodigoAno($cd, $ano){
     	return formatarCodigoAnoComplemento($cd, $ano, null);    
     }
+    
+    function getDataHoraAtual(){
+    	return date('d/m/Y H:i:s');
+    }
+    
+    function getDataHoje(){
+    	return dtHoje;
+    }
+    
     ?>

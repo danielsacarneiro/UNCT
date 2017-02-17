@@ -419,7 +419,16 @@ include_once(caminho_vos."vousuario.php");
     	return $retorno;
     }
     
-    function getComponenteConsultaFiltro($comboOrdenacao, $temHistorico, $filtro){    	
+    function getComboColecaoGenerico($colecao, $idCampo, $nmCampo, $cdOpcaoSelecionada, $classCampo, $tagHtml){    	
+    	$select = new select($colecao);    
+    	$retorno = $select->getHtmlCombo($idCampo, $nmCampo, $cdOpcaoSelecionada, true, $classCampo, true, $tagHtml);
+    
+    	return $retorno;
+    }
+    
+    function getComponenteConsultaFiltro($temHistorico, $filtro){
+    	$comboOrdenacao = $filtro->getAtributosOrdenacao();
+    	
     	return getComponenteConsultaPaginacao($comboOrdenacao, $filtro->cdAtrOrdenacao, $filtro->cdOrdenacao, $filtro->TemPaginacao, 
     			$filtro->qtdRegistrosPorPag, $temHistorico, $filtro->cdHistorico);
     }
