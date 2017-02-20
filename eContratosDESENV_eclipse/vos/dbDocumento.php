@@ -41,19 +41,19 @@ include_once 'voDocumento.php';
 		return $retorno;                
     }
         
-    /*function getSQLValuesUpdate($vo){        
+    function getSQLValuesUpdate($vo){        
         $retorno = "";
         $sqlConector = "";
                 
-        if($vo->obs != null){
-            $retorno.= $sqlConector . voDocumento::$nmAtrObservacao. " = " . $this->getVarComoString($vo->obs);
+        if($vo->linkDoc != null){
+            $retorno.= $sqlConector . voDocumento::$nmAtrLinkDoc. " = " . $this->getVarComoString($vo->linkDoc);
             $sqlConector = ",";
         }
                 
         $retorno = $retorno . $sqlConector . $vo->getSQLValuesUpdate();
 		        
 		return $retorno;                
-    }*/
+    }
    
 }
 ?>

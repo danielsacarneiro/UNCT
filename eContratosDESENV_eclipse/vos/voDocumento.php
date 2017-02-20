@@ -5,13 +5,13 @@ include_once(caminho_funcoes."documento/dominioTpDocumento.php");
 
 
   Class voDocumento extends voentidade{
-  	  	 
+  		 
   	static $nmAtrCdSetor = "ofic_cd_setor";
   	static $nmAtrAno = "ofic_ex";  	
   	static $nmAtrSq = "sq";
   	static $nmAtrTpDoc = "ofic_tp_doc";
   	static $nmAtrLinkDoc = "ofic_link_doc";
-        
+  	    
 		var $sq  = "";		
 		var $cdSetor = "";
 		var $ano =  "";		

@@ -13,22 +13,24 @@ $vo = new voDocumento();
 
 $funcao = @$_GET["funcao"];
 
-$readonly = "";
 $isInclusao = $funcao == constantes::$CD_FUNCAO_INCLUIR;
 
 $classChaves = "campoobrigatorio";
 $readonlyChaves = "";
+$disabledChaves = "";
+$required = "";
 
 session_start();
 
 $nmFuncao = "";
 if($isInclusao){    
 	$nmFuncao = "INCLUIR ";	
+	$required = "required";
 }else{
 	$classChaves = "camporeadonly";
 	$readonlyChaves = "readonly";
+	$disabledChaves = "disabled";	
 	
-    $readonly = "readonly";
     $vo->getVOExplodeChave();
     $isHistorico = ($voContrato->sqHist != null && $voContrato->sqHist != "");
 	
@@ -93,26 +95,53 @@ function confirmar() {
             <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
             <TBODY>
 	        <?php
-	            $selectExercicio = new selectExercicio();
-	            $domSetor = new dominioSetor();
-	            $comboSetor = new select($domSetor->colecao);
-	            $domTpDoc = new dominioTpDocumento();
+	        $domSetor = new dominioSetor();
+	        $domTpDoc = new dominioTpDocumento();
+	        if($isInclusao){
+	            $selectExercicio = new selectExercicio();	            
+	            $comboSetor = new select($domSetor->colecao);	            
 	            $comboTpDoc= new select($domTpDoc->colecao);
-	             
 			  ?>			            
 			<TR>
                 <TH class="campoformulario" nowrap width="1%">Exercício:</TH>
-                <TD class="campoformulario" nowrap width="1%"><?php echo $selectExercicio->getHtmlCombo(voDocumento::$nmAtrAno,voDocumento::$nmAtrAno, $vo->ano, true, "camponaoobrigatorio", false, "required");?></TD>
+                <TD class="campoformulario" nowrap width="1%"><?php echo $selectExercicio->getHtmlCombo(voDocumento::$nmAtrAno,voDocumento::$nmAtrAno, $vo->ano, true, $classChaves, false, "$disabledChaves $required");?></TD>
                 <TH class="campoformulario" nowrap width="1%">Setor:</TH>
-                <TD class="campoformulario"><?php echo $comboSetor->getHtmlCombo(voDocumento::$nmAtrCdSetor,voDocumento::$nmAtrCdSetor, $vo->cdSetor, true, "camponaoobrigatorio", true, "required");?></TD>
+                <TD class="campoformulario"><?php echo $comboSetor->getHtmlCombo(voDocumento::$nmAtrCdSetor,voDocumento::$nmAtrCdSetor, $vo->cdSetor, true, $classChaves, true, "$disabledChaves $required");?></TD>
             </TR>            
 			<TR>
                 <TH class="campoformulario" nowrap width="1%">Tp.Documento:</TH>
-                <TD class="campoformulario"><?php echo $comboTpDoc->getHtmlCombo(voDocumento::$nmAtrTpDoc,voDocumento::$nmAtrTpDoc, $vo->tpDoc, true, "camponaoobrigatorio", true, "required");?></TD>			
+                <TD class="campoformulario"><?php echo $comboTpDoc->getHtmlCombo(voDocumento::$nmAtrTpDoc,voDocumento::$nmAtrTpDoc, $vo->tpDoc, true, $classChaves, true, "$disabledChaves $required");?></TD>			
                 <TH class="campoformulario" nowrap>Número:</TH>
-                <TD class="campoformulario"><INPUT type="text" id="<?=voDocumento::$nmAtrSq?>" name="<?=voDocumento::$nmAtrSq?>"  value="<?php echo complementarCharAEsquerda($vo->sq, "0", TAMANHO_CODIGOS);?>"  class="camponaoobrigatorio" size="7" ></TD>
+                <TD class="campoformulario"><INPUT type="text" id="<?=voDocumento::$nmAtrSq?>" name="<?=voDocumento::$nmAtrSq?>"  value="<?php echo complementarCharAEsquerda($vo->sq, "0", TAMANHO_CODIGOS);?>"  class="<?=$classChaves?>" size="7" <?=$readonlyChaves?>></TD>
             </TR>
-
+            <?php 
+	        }else{	        	
+	        ?>
+			<TR>
+                <TH class="campoformulario" nowrap width="1%">Exercício:</TH>
+                <TD class="campoformulario" nowrap width="1%"><INPUT type="text" id="<?=voDocumento::$nmAtrAno?>" name="<?=voDocumento::$nmAtrAno?>"  value="<?php echo $vo->ano;?>"  class="camporeadonly" size="5" readonly></TD>
+                <TH class="campoformulario" nowrap width="1%">Setor:</TH>
+                <TD class="campoformulario" nowrap >
+                		<INPUT type="text" value="<?php echo $domSetor->getDescricao($vo->cdSetor);?>"  class="camporeadonly" size="7" readonly>
+                		<INPUT type="hidden" id="<?=voDocumento::$nmAtrCdSetor?>" name="<?=voDocumento::$nmAtrCdSetor?>"  value="<?php echo $vo->cdSetor;?>">
+                </TD>
+            </TR>            
+			<TR>
+                <TH class="campoformulario" nowrap width="1%">Tp.Documento:</TH>
+                <TD class="campoformulario" nowrap width="1%">
+                		<INPUT type="text" value="<?php echo $domTpDoc->getDescricao($vo->tpDoc);?>"  class="camporeadonly" size="20" readonly>
+                		<INPUT type="hidden" id="<?=voDocumento::$nmAtrTpDoc?>" name="<?=voDocumento::$nmAtrTpDoc?>"  value="<?php echo $vo->tpDoc;?>">			
+                </TD>
+                <TH class="campoformulario" nowrap width="1%">Número:</TH>
+                <TD class="campoformulario"><INPUT type="text" id="<?=voDocumento::$nmAtrSq?>" name="<?=voDocumento::$nmAtrSq?>"  value="<?php echo complementarCharAEsquerda($vo->sq, "0", TAMANHO_CODIGOS);?>"  class="<?=$classChaves?>" size="7" <?=$readonlyChaves?>></TD>
+            </TR>
+	        <?php 
+	        }?>
+			<TR>
+                <TH class="campoformulario" nowrap width="1%">Endereço:</TH>
+                <TD class="campoformulario" colspan=3><INPUT type="text" id="<?=voDocumento::$nmAtrLinkDoc?>" name="<?=voDocumento::$nmAtrLinkDoc?>"  value="<?php echo $vo->linkDoc;?>"  class="camponaoobrigatorio" size="80" ></TD>
+            </TR>
+	        
 <TR>
 	<TD halign="left" colspan="4">
 	<DIV class="textoseparadorgrupocampos">&nbsp;</DIV>

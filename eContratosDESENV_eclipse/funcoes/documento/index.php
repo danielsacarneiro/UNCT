@@ -77,8 +77,16 @@ function incluir() {
 }
 
 function alterar() {
-	exibirMensagem("Operação não permitida!");
-	return;
+    if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta"))
+            return;
+        
+    <?php
+    if($isHistorico){
+    	echo "exibirMensagem('Registro de historico nao permite alteracao.');return";
+    }?>
+    
+	chave = document.frm_principal.rdb_consulta.value;	
+	location.href="manter.php?funcao=<?=constantes::$CD_FUNCAO_ALTERAR?>&chave=" + chave;
 }
 
 </SCRIPT>
@@ -151,6 +159,7 @@ function alterar() {
                     <TH class="headertabeladados"width="1%" nowrap >Setor</TH>
                     <TH class="headertabeladados"width="1%" nowrap >Tp.Documento</TH>
                     <TH class="headertabeladados"  nowrap >Número</TH>
+                    <TH class="headertabeladados"  nowrap >Nome</TH>
                 </TR>
                 <?php								
                 if (is_array($colecao))
@@ -158,9 +167,9 @@ function alterar() {
                 else 
                         $tamanho = 0;
                                 
-                $colspan=6;
+                $colspan=7;
                 if($isHistorico){
-                	$colspan=7;
+                	$colspan=8;
                 }
                 
                 for ($i=0;$i<$tamanho;$i++) {
@@ -189,6 +198,7 @@ function alterar() {
                     <TD class="tabeladados" nowrap><?php echo $setor;?></TD>
                     <TD class="tabeladados" nowrap><?php echo $tpDoc;?></TD>
                     <TD class="tabeladados" nowrap><?php echo complementarCharAEsquerda($voAtual->sq, "0", TAMANHO_CODIGOS);?></TD>
+                    <TD class="tabeladados" nowrap><?php echo $voAtual->linkDoc;?></TD>
                 </TR>					
                 <?php
 				}				

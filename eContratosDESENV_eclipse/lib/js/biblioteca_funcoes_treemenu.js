@@ -225,7 +225,8 @@ function Tree(label, open, id, background, pValorTree, pInTemSubNiveis, pInColoc
     this.cdMenu = pCdMenu;
 
     if (pNmClasseCSS == null || pNmClasseCSS == '') {
-        this.nmClasseCSS = "treelink";
+        //this.nmClasseCSS = "treelink";
+        this.nmClasseCSS = "treelinkbranco";        
     } else {
         this.nmClasseCSS = pNmClasseCSS;
    	}

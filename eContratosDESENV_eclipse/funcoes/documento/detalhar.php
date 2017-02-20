@@ -64,6 +64,14 @@ function confirmar() {
 	return confirm("Confirmar Alteracoes?");    
 }
 
+function mostrarpasta(){
+	pasta= document.frm_principal.<?=voDocumento::$nmAtrLinkDoc?>.value;	
+	//pasta = "c:"; 
+    url = "abrir_windowsexplorer.php?comando=" + pasta;
+	
+    abrirJanelaAuxiliar(url, true, false, false);
+}
+
 </SCRIPT>
 
 </HEAD>
@@ -72,11 +80,6 @@ function confirmar() {
 <FORM name="frm_principal" method="post" action="confirmar.php" onSubmit="return confirmar();">
 
 <INPUT type="hidden" id="funcao" name="funcao" value="<?=$funcao?>">
-
-<INPUT type="hidden" id="<?=voDocumento::$nmAtrSq?>" name="<?=voDocumento::$nmAtrSq?>" value="<?=$vo->sq?>">
-<INPUT type="hidden" id="<?=voDocumento::$nmAtrCdSetor?>" name="<?=voDocumento::$nmAtrCdSetor?>" value="<?=$vo->cdSetor?>">
-<INPUT type="hidden" id="<?=voDocumento::$nmAtrAno?>" name="<?=voDocumento::$nmAtrAno?>" value="<?=$vo->ano?>">
-<INPUT type="hidden" id="<?=voDocumento::$nmAtrTpDoc?>" name="<?=voDocumento::$nmAtrTpDoc?>" value="<?=$vo->tpDoc?>">
  
 <TABLE id="table_conteiner" class="conteiner" cellpadding="0" cellspacing="0">
     <TBODY>
@@ -103,17 +106,36 @@ function confirmar() {
 			  ?>			            
 			<TR>
                 <TH class="campoformulario" nowrap width="1%">Exercício:</TH>
-                <TD class="campoformulario" nowrap width="1%"><?php echo $selectExercicio->getHtmlCombo("","", $vo->ano, true, "camporeadonly", false, "disabled");?></TD>
+                <TD class="campoformulario" nowrap width="1%"><INPUT type="text" id="<?=voDocumento::$nmAtrAno?>" name="<?=voDocumento::$nmAtrAno?>"  value="<?php echo $vo->ano;?>"  class="camporeadonly" size="5" readonly></TD>
                 <TH class="campoformulario" nowrap width="1%">Setor:</TH>
-                <TD class="campoformulario"><?php echo $comboSetor->getHtmlCombo("","", $vo->cdSetor, true, "camporeadonly", true, "disabled");?></TD>
+                <TD class="campoformulario" nowrap >
+                		<INPUT type="text" value="<?php echo $domSetor->getDescricao($vo->cdSetor);?>"  class="camporeadonly" size="7" readonly>
+                		<INPUT type="hidden" id="<?=voDocumento::$nmAtrCdSetor?>" name="<?=voDocumento::$nmAtrCdSetor?>"  value="<?php echo $vo->cdSetor;?>">
+                </TD>
             </TR>            
 			<TR>
                 <TH class="campoformulario" nowrap width="1%">Tp.Documento:</TH>
-                <TD class="campoformulario"><?php echo $comboTpDoc->getHtmlCombo(voDocumento::$nmAtrTpDoc,voDocumento::$nmAtrTpDoc, $vo->tpDoc, true, "camporeadonly", true, "disabled");?></TD>						
-                <TH class="campoformulario" nowrap>Número:</TH>
-                <TD class="campoformulario"><INPUT type="text" id="" name=""  value="<?php echo complementarCharAEsquerda($vo->sq, "0", TAMANHO_CODIGOS);?>"  class="camporeadonly" size="7" readonly></TD>
+                <TD class="campoformulario" nowrap width="1%">
+                		<INPUT type="text" value="<?php echo $domTpDoc->getDescricao($vo->tpDoc);?>"  class="camporeadonly" size="20" readonly>
+                		<INPUT type="hidden" id="<?=voDocumento::$nmAtrTpDoc?>" name="<?=voDocumento::$nmAtrTpDoc?>"  value="<?php echo $vo->tpDoc;?>">			
+                </TD>
+                <TH class="campoformulario" nowrap width="1%">Número:</TH>
+                <TD class="campoformulario"><INPUT type="text" id="<?=voDocumento::$nmAtrSq?>" name="<?=voDocumento::$nmAtrSq?>"  value="<?php echo complementarCharAEsquerda($vo->sq, "0", TAMANHO_CODIGOS);?>"  class="camporeadonly" size="7" <?=$readonlyChaves?>></TD>
             </TR>
-	        <?php 
+			<TR>
+                <TH class="campoformulario" nowrap width="1%">Endereço:</TH>
+                <?php
+                	$endereco = dominioTpDocumento::$ENDERECO_PASTABASE
+                			. dominioTpDocumento::$ENDERECO_PASTA_NOTA_TECNICA
+                			. dominioTpDocumento::$ENDERECO_PASTA_NOTA_TECNICA . " $vo->ano\\";
+                	
+                ?>                
+                <TD class="campoformulario" colspan=3><textarea id="<?=voDocumento::$nmAtrLinkDoc?>" name="<?=voDocumento::$nmAtrLinkDoc?>" rows="2" cols="80" class="camporeadonly" readonly><?php echo  $endereco . $vo->linkDoc;?></textarea>
+                <?php echo getBotaoValidacaoAcesso("bttabrirpasta", "Abrir", "botaofuncaop", false,true,true,true, "onClick='javascript:mostrarpasta();' accesskey='m'");?>
+                </TD>
+                
+            </TR>	        
+            <?php 
 	            echo incluirUsuarioDataHoraDetalhamento($vo);	        	
 	        ?>
             </TBODY>
