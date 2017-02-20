@@ -26,7 +26,8 @@ class filtroManterPA extends filtroManter{
 	// construtor
     
 	function __construct() {
-        parent::__construct(true);
+        //parent::__construct(true);
+		parent::__construct();
         
         $this->cdPessoa = @$_POST[vopessoa::$nmAtrCd];
         $this->cdResponsavel = @$_POST[voPA::$nmAtrCdResponsavel];

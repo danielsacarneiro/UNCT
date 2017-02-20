@@ -18,14 +18,17 @@ class filtroManter extends multiplosConstrutores{
 	var $nmEntidadePrincipal;
 	var $isHistorico;
 				
+	function __construct0() {
+		//echo "teste0";
+		$this->__construct1(true);
+	}
+	
 	function __construct1($pegarFiltrosDaTela) {
 		//echo "teste" . $pegarFiltrosDaTela;
 		$this->__construct2(true, $pegarFiltrosDaTela);
 	}
 	
-	function __construct2($temPaginacao, $pegarFiltrosDaTela) {
-		//echo "ricardo eh gay";
-		
+	function __construct2($temPaginacao, $pegarFiltrosDaTela) {				
 		if($pegarFiltrosDaTela){
 			$this->pegarFiltroDaTela();
 		}
@@ -97,14 +100,16 @@ class filtroManter extends multiplosConstrutores{
     			$ordem = "";
     		}
     		
+    		$filtro = $filtro . "\n ORDER BY $this->cdAtrOrdenacao $ordem";
+    		
     		//para setar o atributo de ordenacao de forma mais complexa: quando ha joins na tabela
     		//para tanto o atributo nmEntidadePrincipal precisa ser not null
-    		$voentidade = $this->getVOEntidadePrincipal();    		
+    		/*$voentidade = $this->getVOEntidadePrincipal();    		
     		if($voentidade != ""){
     			$filtro = $filtro . "\n ORDER BY " . $voentidade->getNmTabelaEntidade($this->isHistorico) . ".$this->cdAtrOrdenacao $ordem";
     		}else{
     			$filtro = $filtro . "\n ORDER BY $this->cdAtrOrdenacao $ordem";
-    		}
+    		}*/
     	}
     	
     	return $filtro; 

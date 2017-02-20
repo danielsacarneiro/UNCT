@@ -45,7 +45,7 @@
  
  function manterDadosTramitacaoPA(textofase, idDivResultado, funcao, indice) {     
      var result = document.getElementById(idDivResultado);          
-     imprimeResultado(result, "../pad/gridTramitacaoAjax.php?funcao=" + funcao + "&textoTramitacao=" + textofase+ "&indice=" + indice);     
+     imprimeResultado(result, "../pa/gridTramitacaoAjax.php?funcao=" + funcao + "&textoTramitacao=" + textofase+ "&indice=" + indice);     
  }
  
 /**

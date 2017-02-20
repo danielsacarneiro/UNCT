@@ -2,6 +2,7 @@
 include_once(caminho_lib."voentidade.php");
 include_once("dbDocumento.php");
 include_once(caminho_funcoes."documento/dominioTpDocumento.php");
+include_once(caminho_util."dominioSetor.php");
 
 
   Class voDocumento extends voentidade{
@@ -109,6 +110,32 @@ include_once(caminho_funcoes."documento/dominioTpDocumento.php");
         $this->sqHist = @$_POST[self::$nmAtrSqHist];
         //usuario de ultima manutencao sempre sera o id_user
         $this->cdUsuarioUltAlteracao = id_user;
+	}
+	
+	function getEnderecoTpDocumento(){
+		$retorno = "";
+		
+		//$domDoc = new dominioTpDocumento();
+		$domSetor = new dominioSetor();
+		$retorno = dominioTpDocumento::$ENDERECO_PASTABASE;
+		
+		if($this->tpDoc != null){
+			
+			if($this->tpDoc == dominioTpDocumento::$CD_TP_DOC_NOTA_TECNICA){
+				$retorno.= dominioTpDocumento::$ENDERECO_PASTA_NOTA_TECNICA;
+				$retorno.= dominioTpDocumento::$ENDERECO_PASTA_NOTA_TECNICA . " $this->ano\\";
+				
+				$retorno.=$this->linkDoc;
+				
+			}else if($this->tpDoc == dominioTpDocumento::$CD_TP_DOC_OFICIO){
+				$retorno.= dominioTpDocumento::$ENDERECO_PASTA_OFICIO;
+				$retorno.= dominioTpDocumento::$ENDERECO_PASTA_OFICIO . " " . $domSetor->getDescricao($this->cdSetor). " $this->ano\\";				
+				
+				$retorno.=$this->linkDoc;
+			}
+		}
+		
+		return $retorno;
 	}
                 
 	function toString(){						

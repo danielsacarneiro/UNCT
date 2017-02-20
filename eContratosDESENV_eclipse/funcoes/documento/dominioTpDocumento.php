@@ -5,6 +5,7 @@ include_once(caminho_util."dominio.class.php");
   	
   	static $ENDERECO_PASTABASE = "H:\ASSESSORIA JURÍDICA\ATJA";
   	static $ENDERECO_PASTA_NOTA_TECNICA = "\Notas Técnicas";  	
+  	static $ENDERECO_PASTA_OFICIO = "\Ofícios";
   	
   	static $CD_TP_DOC_OFICIO = 1;  	
   	static $CD_TP_DOC_NOTA_TECNICA = 2;

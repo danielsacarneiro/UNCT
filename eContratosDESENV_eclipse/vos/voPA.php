@@ -1,5 +1,6 @@
 <?php
 include_once("dbPA.php");
+include_once("vocontrato.php");
 
   Class voPA extends voentidade{
   	
@@ -94,7 +95,7 @@ include_once("dbPA.php");
     		
     		$retorno = "";
     		for($i=0;$i<$tam;$i++){
-    			$voTram = new voPADTramitacao();
+    			$voTram = new voPATramitacao();
     			$voAtual = $colecaoRegistroBanco[$i];
     			
     			$voTram->getDadosBanco($voAtual);    			
@@ -147,7 +148,7 @@ include_once("dbPA.php");
 			
 			$retorno = array();
 			for ($i=0;$i<$tamanho;$i++) {
-				$vo = new voPADTramitacao();
+				$vo = new voPATramitacao();
 				$vo->getDadosBanco($colecao[$i]);				
 				$retorno[$i] = $vo;
 			}
@@ -181,7 +182,7 @@ include_once("dbPA.php");
 	static function getAtributosOrdenacao(){		
 		$varAtributos = array(				
 				self::$nmAtrCdPA=> "PA",
-				self::$nmAtrCdContrato => "Contrato"
+				vocontrato::getNmTabela().".".self::$nmAtrCdContrato => "Contrato"
 		);
 		return $varAtributos;
 	}	

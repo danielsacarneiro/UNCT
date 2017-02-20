@@ -3,7 +3,7 @@ include_once("../../config_lib.php");
 include_once(caminho_vos."dbPA.php");
 include_once(caminho_util."bibliotecaHTML.php");
 
-inicioComValidacaoUsuario(true);
+//inicioComValidacaoUsuario(true);
 
 function incluirTramitacao($textoTramitacao, $colecaoTramitacao){
 	

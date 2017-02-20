@@ -125,12 +125,9 @@ function mostrarpasta(){
 			<TR>
                 <TH class="campoformulario" nowrap width="1%">Endereço:</TH>
                 <?php
-                	$endereco = dominioTpDocumento::$ENDERECO_PASTABASE
-                			. dominioTpDocumento::$ENDERECO_PASTA_NOTA_TECNICA
-                			. dominioTpDocumento::$ENDERECO_PASTA_NOTA_TECNICA . " $vo->ano\\";
-                	
+                	$endereco = $vo->getEnderecoTpDocumento();
                 ?>                
-                <TD class="campoformulario" colspan=3><textarea id="<?=voDocumento::$nmAtrLinkDoc?>" name="<?=voDocumento::$nmAtrLinkDoc?>" rows="2" cols="80" class="camporeadonly" readonly><?php echo  $endereco . $vo->linkDoc;?></textarea>
+                <TD class="campoformulario" colspan=3><textarea id="<?=voDocumento::$nmAtrLinkDoc?>" name="<?=voDocumento::$nmAtrLinkDoc?>" rows="2" cols="80" class="camporeadonly" readonly><?php echo  $endereco;?></textarea>
                 <?php echo getBotaoValidacaoAcesso("bttabrirpasta", "Abrir", "botaofuncaop", false,true,true,true, "onClick='javascript:mostrarpasta();' accesskey='m'");?>
                 </TD>
                 

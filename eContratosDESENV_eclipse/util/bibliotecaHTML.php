@@ -587,6 +587,5 @@ include_once(caminho_vos."vousuario.php");
     
     function getDataHoje(){
     	return dtHoje;
-    }
-    
+    }        
     ?>

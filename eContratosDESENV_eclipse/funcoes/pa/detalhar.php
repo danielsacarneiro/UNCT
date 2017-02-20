@@ -171,7 +171,7 @@ function confirmar() {
 				</TD>
         	</TR>
 			<TR>
-				<TD class="campoformulario" halign="left" colspan="4">
+				<TD class="textoseparadorgrupocampos" halign="left" colspan="4">
 				<DIV class="campoformulario" id="div_tramitacao">
 				<?php 
 				$isDetalhamento = true;

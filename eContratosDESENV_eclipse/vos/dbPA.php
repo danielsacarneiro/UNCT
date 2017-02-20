@@ -133,7 +133,8 @@ include_once (caminho_filtros."filtroManterPA.php");
     	$this->cDb->retiraAutoCommit();
     	try{
     		$vo = $this->incluirPA($vo);
-    		$this->incluirPATramitacao($vo);
+    		$vo = $this->incluirPATramitacao($vo);
+    		
     		//End transaction
     		$this->cDb->commit();
     	}catch(Exception $e){
@@ -155,6 +156,9 @@ include_once (caminho_filtros."filtroManterPA.php");
     		//echo "EH NULO";
     	}
     	$vo->situacao = dominioSituacaoPA::$CD_SITUACAO_PA_INSTAURADO;
+    	if (is_array($vo->colecaoTramitacao)){    		
+    		$vo->situacao = dominioSituacaoPA::$CD_SITUACAO_PA_EM_ANDAMENTO;
+    	}
     	 
     	$query = $this->incluirQuery($vo, $arrayAtribRemover);
     	$retorno = $this->cDb->atualizar($query);
@@ -169,7 +173,7 @@ include_once (caminho_filtros."filtroManterPA.php");
     		 
     		if (is_array($vo->colecaoTramitacao)){
     			$tamanho = sizeof($vo->colecaoTramitacao);
-    			$vo->situacao = $vo->situacao = dominioSituacaoPA::$CD_SITUACAO_PA_EM_ANDAMENTO;    			
+    			$vo->situacao = dominioSituacaoPA::$CD_SITUACAO_PA_EM_ANDAMENTO;
     		}
     		else{
     			$tamanho = 0;
@@ -181,11 +185,12 @@ include_once (caminho_filtros."filtroManterPA.php");
 				$voTramitacao->cdPA = $vo->cdPA;
 				$voTramitacao->anoPA = $vo->anoPA;
 				$voTramitacao->sq = $this->getProximoSequencialChaveComposta(voPATramitacao::$nmAtrSq, $voTramitacao); 
+				$voTramitacao->cdUsuarioUltAlteracao = $vo->cdUsuarioUltAlteracao;
 				
-				$voTramitacao->dbPATramitacao->cDb = $this->cDb;
+				$voTramitacao->dbprocesso->cDb = $this->cDb;
 				
 				//var_dump($voTramitacao);
-				$voTramitacao->dbPATramitacao->incluir($voTramitacao);
+				$voTramitacao->dbprocesso->incluir($voTramitacao);
 				
 				$vo->colecaoTramitacao[$i] = $voTramitacao;
     		}	    	
@@ -226,9 +231,9 @@ include_once (caminho_filtros."filtroManterPA.php");
     function alterar($vo){
     	//Start transaction
     	$this->cDb->retiraAutoCommit();
-    	try{    		
+    	try{
     		$this->excluirPATramitacao($vo);
-    		$this->incluirPATramitacao($vo);
+    		$vo = $this->incluirPATramitacao($vo);
     		
     		$vo = parent::alterar($vo);
     		//End transaction
@@ -281,6 +286,11 @@ include_once (caminho_filtros."filtroManterPA.php");
         
         if($vo->cdResponsavel != null){
         	$retorno.= $sqlConector . voPA::$nmAtrCdResponsavel. " = " . $this->getVarComoNumero($vo->cdResponsavel);
+        	$sqlConector = ",";
+        }
+        
+        if($vo->situacao != null){
+        	$retorno.= $sqlConector . voPA::$nmAtrSituacao. " = " . $this->getVarComoNumero($vo->situacao);
         	$sqlConector = ",";
         }
         
