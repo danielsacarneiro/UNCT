@@ -579,12 +579,12 @@ A.treelinkarquivo:link {
 	font-weight: bolder;
 }
 
-A.treelinkarquivo:visited {
+/*A.treelinkarquivo:visited {
 	color: grey;
 	text-decoration: none;
 	font-family: Helvetica, Arial, sans-serif;
 	font-weight: bolder;	
-}
+}*/
 
 A.treelinkarquivo:hover {
 	color: white;

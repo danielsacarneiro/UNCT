@@ -59,7 +59,7 @@ Class pasta{
 
 function incluirArquivo($nmMenuPai, $item){
 
-	$nmclass = "'treelinkarquivo'";
+	$nmclass = "'treelink'";
 	$linkParametrosComplementares = "'','',false,'','',".$nmclass.",'', true";
 
 	$javaScript = "'". $item->dir. pasta::$barra . $item->nome . "'";

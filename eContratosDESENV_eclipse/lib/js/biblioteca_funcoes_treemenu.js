@@ -410,10 +410,12 @@ function escreverInterno(printLabel, level, pInColocarRadioLink, pInColocarCheck
 					//original
 					html = html + '<a class="' + this.items[i].nmClasseCSS +'" href="javascript:ativarItemMenu(\'' + this.items[i].href + '\', \'' + this.items[i].seq + '\', ' + this.items[i].inJanelaAuxiliar + ', ' + this.items[i].inComParametrosFramework + ')" style="text-decoration : none;">';
 				}else{
+										
+					//html = html + '<a class="' + this.items[i].nmClasseCSS +'" href="'+ this.items[i].href +'" target="_blank" style="text-decoration : none;">';
+					html = html + '<a class="' + this.items[i].nmClasseCSS +'" href="../abrir_windowsexplorer.php?comando='+ this.items[i].href +'" target="_blank" style="text-decoration : none;">';
 					
-					//html = html + '<a class="' + this.items[i].nmClasseCSS +'" href="c:\\Semtitulo.jpg" target="_blank" style="text-decoration : none;">';					
-					html = html + '<a class="' + this.items[i].nmClasseCSS +'" href="'+ this.items[i].href +'" target="_blank" style="text-decoration : none;">';
-					
+				    //url = "abrir_windowsexplorer.php?comando=" + this.items[i].href;
+				    //abrirJanelaAuxiliar(url, true, false, false);					
 					
 				}
 				
