@@ -68,8 +68,10 @@ function mostrarpasta(){
 	pasta= document.frm_principal.<?=voDocumento::$nmAtrLinkDoc?>.value;	
 	//pasta = "c:"; 
     url = "../abrir_windowsexplorer.php?comando=" + pasta;
-	
-    abrirJanelaAuxiliar(url, true, false, false);
+    //abrirJanelaAuxiliar(url, true, false, false);    
+
+    window.open(url,'_blank');
+    
 }
 
 </SCRIPT>
