@@ -8,10 +8,12 @@ Class arquivo{
 	var $nomeSemExtensao = "";
 	var $isPasta = false;
 	var $dir = "";
+	var $pastaPai = null;
 
 	// ...............................................................
 	// Funcoes ( Propriedades e metodos da classe )
-	function __construct($nome, $indice) {
+	function __construct($nome, $indice, $pastaPai) {
+		$this->pastaPai = $pastaPai;
 		$this->nome = $nome;
 		$this->indice = $indice;
 		$this->nomeObj = "obj".$indice;
@@ -37,14 +39,16 @@ Class pasta{
 	var $pathinfo;
 	var $dir = "";
 	var $indice = "";
-	var $numTotalRegistros = "";
-	var $strValidacao = "";
+	var $numTotalRegistros = 0;
+	var $isExibir = false;
+	
+	var $pastaPai = null;
 	
 	static $barra = "\\\\";
 	// ...............................................................
 	// Funcoes ( Propriedades e metodos da classe )
 
-	function __construct($nmPasta, $filtro, $indice) {
+	function __construct($nmPasta, $filtro, $indice, $pastaPai) {
 		$this->nomeAExibir = str_replace(".", "_", $nmPasta);
 		$this->nome = $nmPasta;
 		//$this->nomeObj = $this->nomeAExibir.$indice;
@@ -53,6 +57,7 @@ Class pasta{
 		
 		$this->filtro = $filtro;
 		$this->cdControleConsulta = self::$IN_FILTRAR_TODOS;
+		$this->pastaPai = $pastaPai;
 	}
 	
 	function setDir($caminho){
@@ -64,10 +69,10 @@ Class pasta{
 		return $this->pathinfo["dirname"];
 	}
 	
-	function isPastaValida(){
+	/*function isPastaValida(){
 		$existe = mb_stripos($this->strValidacao, CAMPO_SEPARADOR);
 		return $existe !== false;
-	}	
+	}*/	
 }
 
 function incluirArquivo($nmMenuPai, $item){
@@ -157,7 +162,7 @@ function montarColecaoItens($pastaMenuPai){
 				
 				$enderecoPasta = $pastaMenuPai->dir; 
 				if ($file->isDir()){
-					$item = new pasta($dname,$strFiltro, ++$indice);
+					$item = new pasta($dname,$strFiltro, ++$indice, $pastaMenuPai);					
 					//se o item foi encontrado, eh pq seus filhos devem ser considerados
 					//mesmo que eles nao satisfacam o filtro
 					//isto permite trazer os arquivos que nao satisfacam o filtro, mas pertencam ao pai que satisfacam
@@ -166,28 +171,49 @@ function montarColecaoItens($pastaMenuPai){
 					
 					//seta o valor para dizer que tem uma pasta (dai o indicador ser vazio)
 					//mas mantem os indicadores anteriores
-					$pastaMenuPai->strValidacao = $pastaMenuPai->strValidacao + "";
+					//$pastaMenuPai->strValidacao = $pastaMenuPai->strValidacao + "";
 					
 					//echo "alert('".$item->getPasta()."');\n";
 					
-					//montarColecaoItens($item);
+					montarColecaoItens($item);
 					
 				}else{
-					$item = new arquivo($dname, ++$indice);
+					$item = new arquivo($dname, ++$indice, $pastaMenuPai);
 					$item->dir=$enderecoPasta;
 					//o asterisco serve para dizer que a pasta pai deve ser exibida, pois tem conteudo valido 
-					$pastaMenuPai->strValidacao = $pastaMenuPai->strValidacao + CAMPO_SEPARADOR;
+					//$pastaMenuPai->strValidacao = $pastaMenuPai->strValidacao + CAMPO_SEPARADOR;
+					//marcarPastaParaExibir($pastaMenuPai);
+					contaQtdArquivosEExibe($pastaMenuPai);
 				}
 				
-				$retorno[$i] = $item;
+				$pastaMenuPai->colecaoItens[$i] = $item;
 				$i++;
 			}
 		}
 		
 	}
-	$pastaMenuPai->numTotalRegistros = $i;
 
-	return $retorno;
+}
+
+function marcarPastaParaExibir($pasta){
+	$pasta->isExibir = true;
+	
+	$pastaPai = $pasta->pastaPai;
+	//vai marcar o pai se ele for diferente de nulo e se ainda nao tiver sido marcado
+	if($pastaPai != null && !$pastaPai->isExibir){
+		marcarPastaParaExibir($pastaPai);
+	}
+}
+
+function contaQtdArquivosEExibe($pasta){
+	$pasta->isExibir = true;
+	$pasta->numTotalRegistros++;
+	
+	$pastaPai = $pasta->pastaPai;
+	//vai marcar o pai se ele for diferente de nulo e se ainda nao tiver sido marcado
+	if($pastaPai != null){
+		contaQtdArquivosEExibe($pastaPai);
+	}
 }
 
 /*function montarColecaoItens2($pastaMenuPai){
@@ -238,30 +264,35 @@ function montarColecaoItens($pastaMenuPai){
 }*/
 
 function geraArvoreMenu($pastaMenuPai){	
+	montarColecaoItens($pastaMenuPai);
+	geraArvoreEmDefinitivo($pastaMenuPai);
+}
+
+function geraArvoreEmDefinitivo($pastaMenuPai){
 	
-	$colecao = montarColecaoItens($pastaMenuPai);
+	$colecao = $pastaMenuPai->colecaoItens;
 	if (is_array($colecao)){
 		$tamanho = sizeof($colecao);
 	}
 	else {
 		$tamanho = 0;
 	}
-	
+
 	for ($i=0;$i<$tamanho;$i++) {
 		$item = $colecao[$i];
-	
-		if($item->isPasta){			
-			
+
+		if($item->isPasta){
+			if($item->isExibir){
 				criaMenu($item, false);
 				echo $pastaMenuPai->nomeObj . ".adicionarItem(" . $item->nomeObj . ");\n";
-				geraArvoreMenu($item);
-			
+			}
+			geraArvoreEmDefinitivo($item);				
 		}
 		else{
 			incluirArquivo($pastaMenuPai, $item);
 		}
 	}
-	
+
 }
 
 //Essa função gera um valor de String aleatório do tamanho recebendo por parametros

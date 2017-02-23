@@ -10,7 +10,7 @@ include_once(caminho_util."biblioteca_htmlArquivo.php");
 ini_set('max_execution_time', 120);
 
 $strFiltro = $filtro->nome;
-$MenuPai = new pasta("menu_pai", $strFiltro, 1);
+$MenuPai = new pasta("menu_pai", $strFiltro, 1, null);
 $MenuPai->setDir("H:\\\ASSESSORIA JURÍDICA\\\ATJA\\\PROCESSO ADMINISTRATIVO\\\Publicacao Penalidades");
 $MenuPai->cdControleConsulta = pasta::$IN_FILTRAR_APENAS_FILHO;
 
@@ -53,9 +53,6 @@ $numTotalRegistros = $MenuPai->numTotalRegistros;
                  <TR>
                     <TD class="tabeladadosalinhadocentro" colspan=3><?=$filtro->paginacao->criarLinkPaginacaoGET()?></TD>
                 </TR>				
-                <TR>
-                    <TD class="totalizadortabeladadosalinhadodireita" colspan=3>Total de registro(s) na página: <?=$i?></TD>
-                </TR>
                 <TR>
                     <TD class="totalizadortabeladadosalinhadodireita" colspan=3>Total de registro(s): <?=$numTotalRegistros?></TD>
                 </TR>				
