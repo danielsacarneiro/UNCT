@@ -5,6 +5,15 @@ include_once(caminho_util."multiplosConstrutores.php");
 class filtroManter extends multiplosConstrutores{
     // ...............................................................
 	// construtor
+	static $nmAtrCdConsultarArquivo = "cdConsultarArquivo";
+	static $nmAtrCdAtrOrdenacao = "cdAtrOrdenacao";
+	static $nmAtrCdOrdenacao = "cdOrdenacao";
+	static $nmAtrDtVigencia = "dtVigencia";
+	static $nmAtrCdHistorico = "cdHistorico";
+	static $nmAtrQtdRegistrosPorPag = "qtdRegistrosPorPag";
+	static $nmAtrNumTotalRegistros = "numTotalRegistros";	
+	static $nmAtrCdUtilizarSessao = "utilizarSessao";	
+	static $nmAtrCdConsultar = "consultar";	
 	
 	var $cdAtrOrdenacao;
 	var $cdOrdenacao;
@@ -17,6 +26,7 @@ class filtroManter extends multiplosConstrutores{
 	var $paginacao;
 	var $nmEntidadePrincipal;
 	var $isHistorico;
+	var $cdConsultarArquivo;
 				
 	function __construct0() {
 		//echo "teste0";
@@ -28,7 +38,9 @@ class filtroManter extends multiplosConstrutores{
 		$this->__construct2(true, $pegarFiltrosDaTela);
 	}
 	
-	function __construct2($temPaginacao, $pegarFiltrosDaTela) {				
+	function __construct2($temPaginacao, $pegarFiltrosDaTela) {
+		
+		$this->cdConsultarArquivo = constantes::$CD_NAO;
 		if($pegarFiltrosDaTela){
 			$this->pegarFiltroDaTela();
 		}
@@ -57,6 +69,7 @@ class filtroManter extends multiplosConstrutores{
 		$this->cdHistorico  = @$_POST["cdHistorico"];
 		$this->qtdRegistrosPorPag = @$_POST["qtdRegistrosPorPag"];
 		$this->numTotalRegistros = @$_POST["numTotalRegistros"];		 
+		$this->cdConsultarArquivo = @$_POST[self::$nmAtrCdConsultarArquivo];
 	}
 	
 	function isSetaValorDefault(){

@@ -23,15 +23,23 @@ Class arquivo{
 }
 
 Class pasta{
+	
+	static $IN_NAO_FILTRAR = 1;
+	static $IN_FILTRAR_TODOS= 2;
+	static $IN_FILTRAR_APENAS_PAI = 2;
+	static $IN_FILTRAR_APENAS_FILHO = 3;
 
 	var $nome = "";
 	var $colecaoItens = "";
 	var $isPasta = true;
 	var $filtro; 
-	var $trazerTodosFilhos = false;
+	var $cdControleConsulta = false;
 	var $pathinfo;
 	var $dir = "";
 	var $indice = "";
+	var $numTotalRegistros = "";
+	var $strValidacao = "";
+	
 	static $barra = "\\\\";
 	// ...............................................................
 	// Funcoes ( Propriedades e metodos da classe )
@@ -44,6 +52,7 @@ Class pasta{
 		$this->indice = $indice;
 		
 		$this->filtro = $filtro;
+		$this->cdControleConsulta = self::$IN_FILTRAR_TODOS;
 	}
 	
 	function setDir($caminho){
@@ -55,6 +64,10 @@ Class pasta{
 		return $this->pathinfo["dirname"];
 	}
 	
+	function isPastaValida(){
+		$existe = mb_stripos($this->strValidacao, CAMPO_SEPARADOR);
+		return $existe !== false;
+	}	
 }
 
 function incluirArquivo($nmMenuPai, $item){
@@ -94,11 +107,13 @@ function montarColecaoItens($pastaMenuPai){
 	//echo "alert('".$pasta."');";
 	
 	//$dir = new FilesystemIterator($pastaMenuPai->dir);	
-	$filtro = $pastaMenuPai->filtro;
+	//$filtro = $pastaMenuPai->filtro;
 	//$filter = new RegexIterator($dir, '/.(php|dat)$/');
 	//$filter = new RegexIterator($dir, '/2d/');	
 	
-	$strFiltro = $filtro->contratada;
+	$strFiltro = $pastaMenuPai->filtro;
+	
+	//echo "alert('$strFiltro');";
 
 	$i = 0;
 	$retorno = "";
@@ -117,31 +132,52 @@ function montarColecaoItens($pastaMenuPai){
 			//echo "alert('".$dname."');";
 
 			//verifica se deve filtrar o nome dos filhos
-			//se trazerTodosFilhos = true, ele nao filtra, traz todos
+			//se cdControleConsulta = true, ele nao filtra, traz todos
 			//pega apenas os arquivos que satisfazem o filtro
-			if($pastaMenuPai->trazerTodosFilhos || existeStr1NaStr2ComSeparador($dname, $strFiltro)){
+			$isTrazer = true;
+			$inFilhos = pasta::$IN_NAO_FILTRAR;
+			
+			if($pastaMenuPai->cdControleConsulta != pasta::$IN_NAO_FILTRAR){
+				$isTrazer = ($strFiltro == null) || existeStr1NaStr2ComSeparador($dname, $strFiltro);
+				
+				if($pastaMenuPai->cdControleConsulta == pasta::$IN_FILTRAR_APENAS_FILHO){
+					$isTrazer = $file->isDir() || ($file->isFile() && $isTrazer);
+					$inFilhos = pasta::$IN_FILTRAR_APENAS_FILHO;
+				} else if($pastaMenuPai->cdControleConsulta == pasta::$IN_FILTRAR_APENAS_PAI){
+					//$isTrazer = $file->isFile() || ($file->isDir() && $isTrazer);
+					$isTrazer = ($file->isDir() && $isTrazer);
+					$inFilhos = pasta::$IN_NAO_FILTRAR;
+				}
+			}			
+			
+			if($isTrazer){
 				//echo "alert('entrou no for');";
 				//$item->isPasta = $file->isDir();
 				//echo "alert('".$dname."');\n";
 				
 				$enderecoPasta = $pastaMenuPai->dir; 
 				if ($file->isDir()){
-					$item = new pasta($dname,$filtro, ++$indice);
+					$item = new pasta($dname,$strFiltro, ++$indice);
 					//se o item foi encontrado, eh pq seus filhos devem ser considerados
 					//mesmo que eles nao satisfacam o filtro
 					//isto permite trazer os arquivos que nao satisfacam o filtro, mas pertencam ao pai que satisfacam
-					$item->trazerTodosFilhos = true;
+					$item->cdControleConsulta = $inFilhos;
 					$item->setDir($enderecoPasta.pasta::$barra.$item->nome);
 					
+					//seta o valor para dizer que tem uma pasta (dai o indicador ser vazio)
+					//mas mantem os indicadores anteriores
+					$pastaMenuPai->strValidacao = $pastaMenuPai->strValidacao + "";
+					
 					//echo "alert('".$item->getPasta()."');\n";
+					
+					//montarColecaoItens($item);
 					
 				}else{
 					$item = new arquivo($dname, ++$indice);
 					$item->dir=$enderecoPasta;
-					//$item->setDir($enderecoPasta);
-					//echo "alert('".$enderecoPasta."');\n";
+					//o asterisco serve para dizer que a pasta pai deve ser exibida, pois tem conteudo valido 
+					$pastaMenuPai->strValidacao = $pastaMenuPai->strValidacao + CAMPO_SEPARADOR;
 				}
-				
 				
 				$retorno[$i] = $item;
 				$i++;
@@ -149,20 +185,20 @@ function montarColecaoItens($pastaMenuPai){
 		}
 		
 	}
-	$pastaMenuPai->filtro->numTotalRegistros = $i;
+	$pastaMenuPai->numTotalRegistros = $i;
 
 	return $retorno;
 }
 
-function montarColecaoItens2($pastaMenuPai){
+/*function montarColecaoItens2($pastaMenuPai){
 	$indice = $pastaMenuPai->indice;
 	$pasta = $pastaMenuPai->dir."\\\*";
 	$dir = new GlobIterator($pasta);
 	$filtro = $pastaMenuPai->filtro;
 	
 	$strFiltro = $filtro->contratada;	
-	/*if($filtro->cdContrato != null)
-		$strFiltro .= CAMPO_SEPARADOR.$filtro->cdContrato;*/
+	//if($filtro->cdContrato != null)
+	//	$strFiltro .= CAMPO_SEPARADOR.$filtro->cdContrato;
 
 	$i = 0;
 	$retorno = "";
@@ -176,7 +212,7 @@ function montarColecaoItens2($pastaMenuPai){
 				if ($file->isDir()){
 					$item = new pasta($dname,$filtro, ++$indice);
 
-					$item->trazerTodosFilhos = true;
+					$item->cdControleConsulta = true;
 					$item->setDir($enderecoPasta.pasta::$barra.$item->nome);
 					
 					$retorno[$i] = $item;
@@ -199,7 +235,7 @@ function montarColecaoItens2($pastaMenuPai){
 	$pastaMenuPai->filtro->numTotalRegistros = $i;
 
 	return $retorno;
-}
+}*/
 
 function geraArvoreMenu($pastaMenuPai){	
 	
@@ -214,10 +250,12 @@ function geraArvoreMenu($pastaMenuPai){
 	for ($i=0;$i<$tamanho;$i++) {
 		$item = $colecao[$i];
 	
-		if($item->isPasta){
-			criaMenu($item, false);
-			echo $pastaMenuPai->nomeObj . ".adicionarItem(" . $item->nomeObj . ");\n";			
-			geraArvoreMenu($item);
+		if($item->isPasta){			
+			
+				criaMenu($item, false);
+				echo $pastaMenuPai->nomeObj . ".adicionarItem(" . $item->nomeObj . ");\n";
+				geraArvoreMenu($item);
+			
 		}
 		else{
 			incluirArquivo($pastaMenuPai, $item);

@@ -215,16 +215,16 @@ function alterar() {
             <TR>
                 <TH class="campoformulario" nowrap>Ano Contrato Mater:</TH>
                 <TD class="campoformulario" ><?php echo $comboExercicio->getHtml(vocontrato::$nmAtrAnoContrato,voContrato::$nmAtrAnoContrato, $anoContrato);?>
-                <!-- <INPUT type="text" id="<?=vocontrato::$nmAtrAnoContrato?>" name="<?=vocontrato::$nmAtrAnoContrato?>"  value="<?php echo($anoContrato);?>"  class="camponaoobrigatorio" size="6" maxlength="4" >--></TD>
-                
+                <!-- <INPUT type="text" id="<?=vocontrato::$nmAtrAnoContrato?>" name="<?=vocontrato::$nmAtrAnoContrato?>"  value="<?php echo($anoContrato);?>"  class="camponaoobrigatorio" size="6" maxlength="4" >--></TD>                
 				<?php 
 				include_once(caminho_util."radiobutton.php");
 				$arraySimNao = array("S" => "Sim",
 						"N" => "Não");		
 				$radioArquivo = new radiobutton($arraySimNao);				
-		?>									
+				?>									
                <TH class="campoformulario" nowrap>Procurar em arquivos: 
-               						<?php echo $radioArquivo->getHtmlRadioButton("cdConsultarArquivo","cdConsultarArquivo", $filtro->cdConsultarArquivo, false, "onClick='validaFormulario();'");?>&nbsp;&nbsp;</TH>
+               	<?php echo $radioArquivo->getHtmlRadioButton("cdConsultarArquivo","cdConsultarArquivo", $filtro->cdConsultarArquivo, false, "onClick='validaFormulario();'");?>&nbsp;&nbsp;
+				</TH>
                 <TD class="campoformularioalinhadodireita" colspan="1">
                     <a href="javascript:limparFormulario();" ><img  title="Limpar" src="<?=caminho_imagens?>borracha.jpg" width="20" height="20"></a>
                 </TD>

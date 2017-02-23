@@ -1,8 +1,5 @@
 <?php 
 include_once(caminho_util."biblioteca_htmlArquivo.php");
-
-
-//$colecao = montarColecaoItens("../");
 ?>
 
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_treemenu.js"></SCRIPT>
@@ -12,10 +9,11 @@ include_once(caminho_util."biblioteca_htmlArquivo.php");
 <?php
 ini_set('max_execution_time', 120);
 
-$strFiltro = $filtro->contratada;
+$strFiltro = $filtro->nome;
 $MenuPai = new pasta("menu_pai", $strFiltro, 1);
-$MenuPai->setDir("H:\\\UNCT\\\CONTRATOS JÁ ASSINADOS");
-$MenuPai->cdControleConsulta = pasta::$IN_FILTRAR_APENAS_PAI;
+$MenuPai->setDir("H:\\\ASSESSORIA JURÍDICA\\\ATJA\\\PROCESSO ADMINISTRATIVO\\\Publicacao Penalidades");
+$MenuPai->cdControleConsulta = pasta::$IN_FILTRAR_APENAS_FILHO;
+
 //$MenuPai->setDir("H:\\\UNCT");
 //$MenuPai->setDir("H:\\\ASSESSORIA JURÍDICA\\\ATJA");
 
@@ -56,7 +54,7 @@ $numTotalRegistros = $MenuPai->numTotalRegistros;
                     <TD class="tabeladadosalinhadocentro" colspan=3><?=$filtro->paginacao->criarLinkPaginacaoGET()?></TD>
                 </TR>				
                 <TR>
-                    <TD class="totalizadortabeladadosalinhadodireita" colspan=3>Total de registro(s) consultados: <?=$i?></TD>
+                    <TD class="totalizadortabeladadosalinhadodireita" colspan=3>Total de registro(s) na página: <?=$i?></TD>
                 </TR>
                 <TR>
                     <TD class="totalizadortabeladadosalinhadodireita" colspan=3>Total de registro(s): <?=$numTotalRegistros?></TD>

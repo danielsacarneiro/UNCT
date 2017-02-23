@@ -129,7 +129,7 @@ include_once (caminho_util."biblioteca_htmlArquivo.php");
 		$retorno.= $this-> getVarComoString($voContrato->situacao) . ",";
         $retorno.= $this-> getVarComoString($voContrato->objeto) . ",";
 		$retorno.= $this-> getVarComoString($voContrato->nmGestorPessoa) . ",";
-        $retorno.= $this-> getVarComoNumero($voContrato->cdGestorPessoa) . ",";
+        $retorno.= $this-> getVarComoNumero($voContrato->cdPessoaGestor) . ",";
 		$retorno.= $this-> getVarComoString($voContrato->gestor) . ",";
         $retorno.= $this-> getVarComoNumero($voContrato->cdGestor) . ",";
 		$retorno.= $this-> getVarComoString($voContrato->procLic) . ",";
@@ -214,8 +214,8 @@ include_once (caminho_util."biblioteca_htmlArquivo.php");
             $sqlConector = ",";
         }
         
-        if($voContrato->cdGestorPessoa != null){
-            $retorno.= $sqlConector . vocontrato::$nmAtrCdGestorPessoaContrato . " = " . $this->getVarComoNumero($voContrato->cdGestorPessoa);
+        if($voContrato->cdPessoaGestor != null){
+            $retorno.= $sqlConector . vocontrato::$nmAtrCdPessoaGestorContrato. " = " . $this->getVarComoNumero($voContrato->cdPessoaGestor);
             $sqlConector = ",";
         }
 
@@ -387,9 +387,10 @@ include_once (caminho_util."biblioteca_htmlArquivo.php");
         $situacao = "null";
         $dtProposta = "null";
         $cdGestor = "null";
-        $cdGestorPessoa = "null";
+        $cdPessoaGestor = "null";
+        $cdPessoaContratada= "null";
         
-        $importação = "'S'";
+        $importacao = "'S'";
         $dtPublic = $this->getDataPublicacaoImportacao($dataPublic);
         //trata o valor do inlicom
         if($inLicom == "OK")
@@ -409,7 +410,7 @@ include_once (caminho_util."biblioteca_htmlArquivo.php");
         $retorno.= $situacao . ",";
 		$retorno.= $this-> getVarComoString($objeto) . ",";
 		$retorno.= $this-> getVarComoString($gestorPessoa) . ",";
-        $retorno.= $this-> getVarComoNumero($cdGestorPessoa) . ",";
+        $retorno.= $this-> getVarComoNumero($cdPessoaGestor) . ",";
 		$retorno.= $this-> getVarComoString($gestor) . ",";
         $retorno.= $this-> getVarComoNumero($cdGestor) . ",";
 		$retorno.= $this-> getVarComoString($processoLic) . ",";
@@ -425,11 +426,12 @@ include_once (caminho_util."biblioteca_htmlArquivo.php");
 		$retorno.= $this-> getVarComoString($tpAutorizacao) . ",";
 		$retorno.= $this-> getVarComoNumero($this->getCdAutorizacao($tpAutorizacao)) . ",";		
         $retorno.= $this-> getVarComoString($inLicom) . ",";
-        $retorno.= $importação . ",";
+        $retorno.= $importacao . ",";
 		$retorno.= $this-> getVarComoString($obs) . ",";		
 		$retorno.= $this-> getDecimalLinhaImportacao($valorGlobal) . ",";
 		$retorno.= $this-> getDecimalLinhaImportacao($valorMensal) . ",";
-        $retorno.= $dtProposta; 
+        $retorno.= $dtProposta . ",";
+        $retorno.= $cdPessoaContratada;        
 		
 		return $retorno;				
 	}
