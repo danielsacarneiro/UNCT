@@ -3,14 +3,25 @@ include_once("../../config_lib.php");
 include_once("dominioVinculoPessoa.php");
 include_once(caminho_vos . "dbpessoa.php");
 include_once(caminho_vos . "vogestor.php");
+include_once(caminho_filtros. "filtroManterPessoa.php");
 
-function getComboPessoaVinculo($idCampo, $nmCampo, $cdOpcaoSelecionada, $classCampo, $tagHtml){	
-	$dominioVinculo = new dominioVinculoPessoa();
-	$select = new select($dominioVinculo->colecao);
+function getComboPessoaRespPA($idCampo, $nmCampo, $cdOpcaoSelecionada, $classCampo, $tagHtml){	
+	$dbprocesso = new dbpessoa();
+	$filtro = new filtroManterPessoa(false);
+	$filtro->cdvinculo = dominioVinculoPessoa::$CD_VINCULO_SERVIDOR;
+	$filtro->cdAtrOrdenacao = null;
+	$recordset = $dbprocesso->consultarPessoaManter($filtro, false);
 		
-	$retorno = $select->getHtmlCombo($idCampo, $nmCampo, $cdOpcaoSelecionada, true, $classCampo, true, $tagHtml);	
+	$select = new select(array());
+	$select->getRecordSetComoColecaoSelect(vopessoa::$nmAtrCd, vopessoa::$nmAtrNome, $recordset);
+	
+	return getComboColecaoGenerico($select->colecao, $idCampo, $nmCampo, $cdOpcaoSelecionada, $classCampo, $tagHtml);
+	
+}
 
-	return $retorno;
+function getComboPessoaVinculo($idCampo, $nmCampo, $cdOpcaoSelecionada, $classCampo, $tagHtml){
+	$dominioVinculo = new dominioVinculoPessoa();
+	return getComboColecaoGenerico($dominioVinculo->colecao, $idCampo, $nmCampo, $cdOpcaoSelecionada, $classCampo, $tagHtml);
 }
 
 function getComboGestorResponsavel($cdGestor){

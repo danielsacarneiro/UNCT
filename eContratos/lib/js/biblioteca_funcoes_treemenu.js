@@ -1,10 +1,4 @@
 /*
- * Este arquivo eh propriedade da Secretaria da Fazenda do Estado 
- * de Pernambuco (Sefaz-PE). Nenhuma informacao nele contida pode ser 
- * reproduzida, mostrada ou revelada sem permissao escrita da Sefaz-PE.
- */
-
-/*
  Descri��o:
  - Cont�m fun��es de montagem de menu
 
@@ -225,7 +219,8 @@ function Tree(label, open, id, background, pValorTree, pInTemSubNiveis, pInColoc
     this.cdMenu = pCdMenu;
 
     if (pNmClasseCSS == null || pNmClasseCSS == '') {
-        this.nmClasseCSS = "treelink";
+        //this.nmClasseCSS = "treelink";
+        this.nmClasseCSS = "treelinkbranco";        
     } else {
         this.nmClasseCSS = pNmClasseCSS;
    	}
@@ -409,10 +404,12 @@ function escreverInterno(printLabel, level, pInColocarRadioLink, pInColocarCheck
 					//original
 					html = html + '<a class="' + this.items[i].nmClasseCSS +'" href="javascript:ativarItemMenu(\'' + this.items[i].href + '\', \'' + this.items[i].seq + '\', ' + this.items[i].inJanelaAuxiliar + ', ' + this.items[i].inComParametrosFramework + ')" style="text-decoration : none;">';
 				}else{
+										
+					//html = html + '<a class="' + this.items[i].nmClasseCSS +'" href="'+ this.items[i].href +'" target="_blank" style="text-decoration : none;">';
+					html = html + '<a class="' + this.items[i].nmClasseCSS +'" href="../abrir_windowsexplorer.php?comando='+ this.items[i].href +'" target="_blank" style="text-decoration : none;">';
 					
-					//html = html + '<a class="' + this.items[i].nmClasseCSS +'" href="c:\\Semtitulo.jpg" target="_blank" style="text-decoration : none;">';					
-					html = html + '<a class="' + this.items[i].nmClasseCSS +'" href="'+ this.items[i].href +'" target="_blank" style="text-decoration : none;">';
-					
+				    //url = "abrir_windowsexplorer.php?comando=" + this.items[i].href;
+				    //abrirJanelaAuxiliar(url, true, false, false);					
 					
 				}
 				

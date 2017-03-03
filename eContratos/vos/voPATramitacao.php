@@ -1,21 +1,34 @@
 <?php
 include_once(caminho_lib."voentidade.php");
-include_once("dbPADTramitacao.php");
+include_once("dbPATramitacao.php");
+include_once("vodocumento.php");
 
 
-  Class voPADTramitacao extends voentidade{
+  Class voPATramitacao extends voentidade{
   	  	 
-  	static $nmAtrCdPA = "pad_cd"; //processo administrativo cd
-  	static $nmAtrAnoPA = "pad_ex"; //processo administrativo ano  	
+  	static $nmAtrCdPA = "pa_cd"; //processo administrativo cd
+  	static $nmAtrAnoPA = "pa_ex"; //processo administrativo ano  	
   	static $nmAtrSq = "sq";
-  	static $nmAtrObservacao  = "padtr_observacao";		
+  	static $nmAtrObservacao  = "patr_observacao";
+  	
+  	static $nmAtrCdSetorDoc = "ofic_cd_setor";
+  	static $nmAtrAnoDoc = "ofic_ex";
+  	static $nmAtrSqDoc = "ofic_sq";
+  	static $nmAtrTpDoc = "ofic_tp_doc";
         
 		var $sq  = "";		
 		var $cdPA= "";
 		var $anoPA =  "";		
         var $obs = "";
         
-        var $dbPADTramitacao = "";
+        var $voDoc;
+        
+        /*var $sqDoc  = "";
+        var $cdSetorDoc = "";
+        var $anoDoc =  "";
+        var $tpDoc =  "";*/
+        
+        var $dbprocesso= "";
 
 // ...............................................................
 // Funcoes ( Propriedades e métodos da classe )
@@ -23,7 +36,8 @@ include_once("dbPADTramitacao.php");
    function __construct() {
        parent::__construct();
        $this->temTabHistorico = false;
-       $this->dbPADTramitacao = new dbPADTramitacao();
+       $this->voDoc = null;
+       $this->dbprocesso = new dbPATramitacao();
               
        //retira os atributos padrao que nao possui
        //remove tambem os que o banco deve incluir default
@@ -37,11 +51,11 @@ include_once("dbPADTramitacao.php");
    }
    
     public static function getNmTabela(){
-        return  "pad_tramitacao";
+        return  "pa_tramitacao";
     }
     
     public function getNmClassProcesso(){
-        return  "dbPADTramitacao";
+        return  "dbPATramitacao";
     }      
     
     function getValoresWhereSQLChave($isHistorico){
@@ -63,6 +77,10 @@ include_once("dbPADTramitacao.php");
         	self::$nmAtrCdPA,            
         	self::$nmAtrAnoPA,
         	self::$nmAtrObservacao,
+    		self::$nmAtrCdSetorDoc,
+    		self::$nmAtrAnoDoc,
+    		self::$nmAtrTpDoc,
+    		self::$nmAtrSqDoc    		
         );
         
         return $retorno;    
@@ -84,6 +102,19 @@ include_once("dbPADTramitacao.php");
 		$this->cdPA = $registrobanco[self::$nmAtrCdPA];
 		$this->anoPA = $registrobanco[self::$nmAtrAnoPA];
 		$this->obs = $registrobanco[self::$nmAtrObservacao];
+		
+		//echo "valor sqdoc" . $registrobanco[self::$nmAtrSqDoc];
+		
+		if($registrobanco[self::$nmAtrSqDoc] != null){
+			$vodocumento = new voDocumento();
+			$vodocumento->sq = $registrobanco[self::$nmAtrSqDoc];
+			$vodocumento->cdSetor = $registrobanco[self::$nmAtrCdSetorDoc];
+			$vodocumento->ano = $registrobanco[self::$nmAtrAnoDoc];
+			$vodocumento->tpDoc = $registrobanco[self::$nmAtrTpDoc];
+			
+			$this->voDoc = $vodocumento; 
+		}
+		
 	}   
 	
 	/*function getDadosFormulario(){
@@ -113,9 +144,7 @@ include_once("dbPADTramitacao.php");
 		return $this->sq . CAMPO_SEPARADOR . $this->cdPA. CAMPO_SEPARADOR . $this->anoPA;
 	}
 	
-	function getVOExplodeChave(){
-		$chave = @$_GET["chave"];	
-		$array = explode(CAMPO_SEPARADOR,$chave);
+	function getVOExplodeChavePrimaria($array){
 		$this->sq = $array[0];
 		$this->cdPA= $array[1];
 		$this->anoPA = $array[2];

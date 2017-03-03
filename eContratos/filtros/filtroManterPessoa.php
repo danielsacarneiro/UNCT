@@ -19,19 +19,26 @@ class filtroManterPessoa extends filtroManter{
     var $anoContrato="";
     var $tpContrato="";
     var $sqEspecieContrato="";
-    
-    
-	function __construct() {
-        parent::__construct(true);
-        
-        $this->cd = @$_POST[vopessoa::$nmAtrCd];
-        //$this->cdGestor = @$_POST[vopessoa::$nmAtrCdGestor];
-        $this->doc = @$_POST[vopessoa::$nmAtrDoc];
-        $this->nome = @$_POST[vopessoa::$nmAtrNome];
-        $this->cdvinculo = @$_POST[vopessoavinculo::$nmAtrCd];        
-
+        	
+	function __construct1($pegarFiltrosDaTela) {
+		parent::__construct2(true, $pegarFiltrosDaTela);
+		
+		if($pegarFiltrosDaTela){
+			$this->getFiltroFormulario();
+			//echo "teste";
+		}
+		
+		//echo "construtor2";
 	}
-    	
+	
+	function getFiltroFormulario(){		
+		$this->cd = @$_POST[vopessoa::$nmAtrCd];
+		//$this->cdGestor = @$_POST[vopessoa::$nmAtrCdGestor];
+		$this->doc = @$_POST[vopessoa::$nmAtrDoc];
+		$this->nome = @$_POST[vopessoa::$nmAtrNome];
+		$this->cdvinculo = @$_POST[vopessoavinculo::$nmAtrCd];		
+	}
+	
 	function getFiltroConsultaSQL($isHistorico){
         $voPessoa= new vopessoa();
         $voPessoaVinculo= new vopessoavinculo();
@@ -133,13 +140,8 @@ class filtroManterPessoa extends filtroManter{
 			$conector  = "\n AND ";
 		}	
 
-		if($filtro != "")
-			$filtro = "\n WHERE $filtro";
-
-		if($this->cdAtrOrdenacao  != null){
-			
-			$filtro = $filtro . "\n ORDER BY $this->cdAtrOrdenacao $this->cdOrdenacao";
-		}
+		//finaliza o filtro
+		$filtro = parent::getFiltroConsultaSQL($filtro);
 		
 		//echo "Filtro:$filtro<br>";
 

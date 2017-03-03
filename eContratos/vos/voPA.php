@@ -1,20 +1,22 @@
 <?php
-include_once("dbPAD.php");
+include_once("dbPA.php");
+include_once("vocontrato.php");
 
-  Class voPAD extends voentidade{
+  Class voPA extends voentidade{
   	
   		static $nmAtrColecaoTramitacao =  "ColecaoTramitacao";
-		static $nmAtrCdPA = "pad_cd"; //processo administrativo cd
-		static $nmAtrAnoPA = "pad_ex"; //processo administrativo ano
+		static $nmAtrCdPA = "pa_cd"; //processo administrativo cd
+		static $nmAtrAnoPA = "pa_ex"; //processo administrativo ano
 		
 		static $nmAtrCdContrato  = "ct_numero";
 		static $nmAtrAnoContrato  = "ct_exercicio";
 		static $nmAtrTipoContrato =  "ct_tipo";		
 		
-		static $nmAtrProcessoLicitatorio =  "pad_proc_licitatorio";
-		static $nmAtrObservacao =  "pad_observacao";	
-		static $nmAtrDtAbertura =  "pad_dt_abertura";
-		static $nmAtrSituacao=  "pad_si";
+		static $nmAtrCdResponsavel=  "pa_cd_responsavel";
+		static $nmAtrProcessoLicitatorio =  "pa_proc_licitatorio";
+		static $nmAtrObservacao =  "pa_observacao";	
+		static $nmAtrDtAbertura =  "pa_dt_abertura";
+		static $nmAtrSituacao=  "pa_si";
 		
 		var $dbprocesso;
                 
@@ -27,6 +29,7 @@ include_once("dbPAD.php");
         var $obs =  "";
         var $dtAbertura = "";
         var $situacao = "";
+        var $cdResponsavel = "";
         
         var $colecaoTramitacao;
 
@@ -35,16 +38,16 @@ include_once("dbPAD.php");
 
    function __construct() {
        parent::__construct();
-       $this->dbprocesso = new dbPAD();
+       $this->dbprocesso = new dbPA();
        $this->temTabHistorico = true;
    }
    
     public static function getNmTabela(){
-        return  "pad";
+        return  "pa";
     }
     
     public static function getNmClassProcesso(){
-        return  "dbPAD";
+        return  "dbPA";
     }      
     
     function getValoresWhereSQLChave($isHistorico){
@@ -68,7 +71,8 @@ include_once("dbPAD.php");
             self::$nmAtrProcessoLicitatorio,            
             self::$nmAtrObservacao,
         	self::$nmAtrDtAbertura,
-        	self::$nmAtrSituacao
+        	self::$nmAtrSituacao,
+        	self::$nmAtrCdResponsavel
         );
         
         return $retorno;    
@@ -91,7 +95,7 @@ include_once("dbPAD.php");
     		
     		$retorno = "";
     		for($i=0;$i<$tam;$i++){
-    			$voTram = new voPADTramitacao();
+    			$voTram = new voPATramitacao();
     			$voAtual = $colecaoRegistroBanco[$i];
     			
     			$voTram->getDadosBanco($voAtual);    			
@@ -113,6 +117,7 @@ include_once("dbPAD.php");
         $this->obs = $registrobanco[self::$nmAtrObservacao];
         $this->dtAbertura = getData($registrobanco[self::$nmAtrDtAbertura]);
         $this->situacao = $registrobanco[self::$nmAtrSituacao];
+        $this->cdResponsavel = $registrobanco[self::$nmAtrCdResponsavel];
 	}   
 	
 	function getDadosFormulario(){
@@ -128,6 +133,7 @@ include_once("dbPAD.php");
         $this->obs = @$_POST[self::$nmAtrObservacao];
         $this->dtAbertura = @$_POST[self::$nmAtrDtAbertura];
         $this->situacao= @$_POST[self::$nmAtrSituacao];
+        $this->cdResponsavel = @$_POST[self::$nmAtrCdResponsavel];
         
         $this->dhUltAlteracao = @$_POST[self::$nmAtrDhUltAlteracao];
         $this->sqHist = @$_POST[self::$nmAtrSqHist];
@@ -142,7 +148,7 @@ include_once("dbPAD.php");
 			
 			$retorno = array();
 			for ($i=0;$i<$tamanho;$i++) {
-				$vo = new voPADTramitacao();
+				$vo = new voPATramitacao();
 				$vo->getDadosBanco($colecao[$i]);				
 				$retorno[$i] = $vo;
 			}
@@ -173,10 +179,10 @@ include_once("dbPAD.php");
 		$this->sqHist = $array[2];
 	}
 	
-	static function getAtributosOrdenacao(){
+	static function getAtributosOrdenacao(){		
 		$varAtributos = array(				
 				self::$nmAtrCdPA=> "PA",
-				self::$nmAtrCdContrato => "Contrato"
+				vocontrato::getNmTabela().".".self::$nmAtrCdContrato => "Contrato"
 		);
 		return $varAtributos;
 	}	

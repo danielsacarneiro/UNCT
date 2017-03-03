@@ -1,19 +1,19 @@
 <?php
 include_once(caminho_lib. "dbprocesso.obj.php");
-include_once("voPAD.php");
-include_once("voPADTramitacao.php");
+include_once("voPA.php");
+include_once("voPATramitacao.php");
 include_once("vocontrato.php");
 include_once("vopessoa.php");
 include_once (caminho_util."bibliotecaFuncoesPrincipal.php");
 include_once (caminho_funcoes."contrato/dominioEspeciesContrato.php");
-include_once (caminho_funcoes."pad/dominioSituacaoPAD.php");
-include_once (caminho_filtros."filtroManterPAD.php");
+include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
+include_once (caminho_filtros."filtroManterPA.php");
 
 // .................................................................................................................
 // Classe select
 // cria um combo select html
 
-  Class dbPAD extends dbprocesso{
+  Class dbPA extends dbprocesso{
     
 	function consultarPorChave($vo, $isHistorico){
         $nmTabela = $vo->getNmTabelaEntidade($isHistorico);
@@ -27,17 +27,17 @@ include_once (caminho_filtros."filtroManterPAD.php");
         $query.= " FROM ". $nmTabela;
         $query.= "\n LEFT JOIN ". vousuario::$nmEntidade;
         $query.= "\n TAB1 ON ";
-        $query.= "TAB1.".vousuario::$nmAtrID. "=".$nmTabela . "." . voPAD::$nmAtrCdUsuarioInclusao;
+        $query.= "TAB1.".vousuario::$nmAtrID. "=".$nmTabela . "." . voPA::$nmAtrCdUsuarioInclusao;
         $query.= "\n LEFT JOIN ". vousuario::$nmEntidade;
         $query.= "\n TAB2 ON ";
-        $query.= "TAB2.".vousuario::$nmAtrID. "=".$nmTabela . "." . voPAD::$nmAtrCdUsuarioUltAlteracao;
+        $query.= "TAB2.".vousuario::$nmAtrID. "=".$nmTabela . "." . voPA::$nmAtrCdUsuarioUltAlteracao;
         $query.= "\n INNER JOIN ". vocontrato::getNmTabela();
         $query.= "\n ON ";
-        $query.= $nmTabela. ".".voPAD::$nmAtrCdContrato. "=".vocontrato::getNmTabela() . "." . vocontrato::$nmAtrCdContrato;
+        $query.= $nmTabela. ".".voPA::$nmAtrCdContrato. "=".vocontrato::getNmTabela() . "." . vocontrato::$nmAtrCdContrato;
         $query.= "\n AND ";
-        $query.= $nmTabela. ".".voPAD::$nmAtrAnoContrato. "=".vocontrato::getNmTabela() . "." . vocontrato::$nmAtrAnoContrato;
+        $query.= $nmTabela. ".".voPA::$nmAtrAnoContrato. "=".vocontrato::getNmTabela() . "." . vocontrato::$nmAtrAnoContrato;
         $query.= "\n AND ";
-        $query.= $nmTabela. ".".voPAD::$nmAtrTipoContrato. "=".vocontrato::getNmTabela() . "." . vocontrato::$nmAtrTipoContrato;
+        $query.= $nmTabela. ".".voPA::$nmAtrTipoContrato. "=".vocontrato::getNmTabela() . "." . vocontrato::$nmAtrTipoContrato;
         $query.= "\n LEFT JOIN ". vopessoa::getNmTabela();
         $query.= "\n ON ". vocontrato::getNmTabela() . "." . vocontrato::$nmAtrCdPessoaContratada. "=" . vopessoa::getNmTabela() . "." . vopessoa::$nmAtrCd;
         
@@ -65,19 +65,25 @@ include_once (caminho_filtros."filtroManterPAD.php");
     	$isHistorico = ("S" == $filtro->cdHistorico);
     	$nmTabela = $voentidade->getNmTabelaEntidade($isHistorico);
     	
+    	$nmTabelaPessoaContrato = $filtro->nmTabelaPessoaContrato;
+    	$nmTabelaPessoaResponsavel = $filtro->nmTabelaPessoaResponsavel;
+    	
     	$atributosConsulta = "";
     	
-    	$atributosConsulta .= $nmTabela . "." .   voPAD::$nmAtrCdPA;    	
-    	$atributosConsulta .= "," . $nmTabela . "." . voPAD::$nmAtrAnoPA;
-    	$atributosConsulta .= "," . $nmTabela . "." . voPAD::$nmAtrCdContrato;
-    	$atributosConsulta .= "," . $nmTabela . "." . voPAD::$nmAtrAnoContrato;
-    	$atributosConsulta .= "," . $nmTabela . "." . voPAD::$nmAtrTipoContrato;
-    	$atributosConsulta .= "," . $nmTabela . "." . voPAD::$nmAtrSituacao;
-    	$atributosConsulta .= "," . vopessoa::getNmTabela() . "." . vopessoa::$nmAtrDoc;
-    	$atributosConsulta .= "," . vopessoa::getNmTabela() . "." . vopessoa::$nmAtrNome;
+    	$atributosConsulta .= $nmTabela . "." .   voPA::$nmAtrCdPA;    	
+    	$atributosConsulta .= "," . $nmTabela . "." . voPA::$nmAtrAnoPA;
+    	$atributosConsulta .= "," . $nmTabela . "." . voPA::$nmAtrCdContrato;
+    	$atributosConsulta .= "," . $nmTabela . "." . voPA::$nmAtrAnoContrato;
+    	$atributosConsulta .= "," . $nmTabela . "." . voPA::$nmAtrTipoContrato;
+    	$atributosConsulta .= "," . $nmTabela . "." . voPA::$nmAtrSituacao;
+    	$atributosConsulta .= "," . $nmTabelaPessoaResponsavel . "." . vopessoa::$nmAtrCd;
+    	$atributosConsulta .= "," . $nmTabelaPessoaResponsavel . "." . vopessoa::$nmAtrNome . " AS " . $filtro->nmColNomePessoaResponsavel;
+    	$atributosConsulta .= "," . $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd;
+    	$atributosConsulta .= "," . $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc;
+    	$atributosConsulta .= "," . $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome . " AS " . $filtro->nmColNomePessoaContrato;
     	//traz o sqhistorico tambem
     	if($isHistorico)
-    		$atributosConsulta .= "," . $nmTabela . "." .   voPAD::$nmAtrSqHist;
+    		$atributosConsulta .= "," . $nmTabela . "." .   voPA::$nmAtrSqHist;
     		 
     	/*$atributosConsulta .= "," . vopessoa::getNmTabela() . "." . vopessoa::$nmAtrDoc;
     	$atributosConsulta .= "," . vopessoa::getNmTabela() . "." . vopessoa::$nmAtrNome;*/
@@ -86,11 +92,13 @@ include_once (caminho_filtros."filtroManterPAD.php");
                 
         $queryFrom = "\n FROM ". $nmTabela;
         $queryFrom .= "\n INNER JOIN ". vocontrato::getNmTabela();
-        $queryFrom .= "\n ON ". vocontrato::getNmTabela() . "." . vocontrato::$nmAtrCdContrato . "=" . $nmTabela . "." . voPAD::$nmAtrCdContrato;
-        $queryFrom .= "\n AND ". vocontrato::getNmTabela() . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabela . "." . voPAD::$nmAtrAnoContrato;
-        $queryFrom .= "\n AND ". vocontrato::getNmTabela() . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabela . "." . voPAD::$nmAtrTipoContrato;
+        $queryFrom .= "\n ON ". vocontrato::getNmTabela() . "." . vocontrato::$nmAtrCdContrato . "=" . $nmTabela . "." . voPA::$nmAtrCdContrato;
+        $queryFrom .= "\n AND ". vocontrato::getNmTabela() . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabela . "." . voPA::$nmAtrAnoContrato;
+        $queryFrom .= "\n AND ". vocontrato::getNmTabela() . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabela . "." . voPA::$nmAtrTipoContrato;
         $queryFrom .= "\n LEFT JOIN ". vopessoa::getNmTabela();
-        $queryFrom .= "\n ON ". vocontrato::getNmTabela() . "." . vocontrato::$nmAtrCdPessoaContratada. "=" . vopessoa::getNmTabela() . "." . vopessoa::$nmAtrCd;
+        $queryFrom .= " ". $nmTabelaPessoaContrato . " \n ON ". vocontrato::getNmTabela() . "." . vocontrato::$nmAtrCdPessoaContratada. "=" . $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd;
+        $queryFrom .= "\n LEFT JOIN ". vopessoa::getNmTabela();
+        $queryFrom .= " ". $nmTabelaPessoaResponsavel . " \n ON ". $nmTabela . "." . voPA::$nmAtrCdResponsavel . "=" . $nmTabelaPessoaResponsavel . "." . vopessoa::$nmAtrCd;
         
         /*$queryFrom = "\n FROM ". vocontrato::getNmTabela();
         $queryFrom .= "\n LEFT JOIN ". vopessoa::getNmTabela();
@@ -101,17 +109,16 @@ include_once (caminho_filtros."filtroManterPAD.php");
     }
         
     function consultarTramitacao($voentidade){
-    	$filtro = new filtroManterPAD(false);
+    	$filtro = new filtroManterPA(false);
     	$filtro->TemPaginacao = false;
     	
-    	$voPrincipal = new voPADTramitacao();
-    	$filtro->nmEntidadePrincipal = $voPrincipal->getNmClassVO();
-    	
+    	$voPrincipal = new voPATramitacao();
+    	$filtro->nmEntidadePrincipal = $voPrincipal->getNmClassVO();    	
     	    	
     	$filtro->cdPA = $voentidade->cdPA;
     	$filtro->anoPA = $voentidade->anoPA;
     	$querySelect = "SELECT * ";
-    	$queryFrom = "\n FROM ". voPADTramitacao::getNmTabela();
+    	$queryFrom = "\n FROM ". voPATramitacao::getNmTabela();
     
     	$retorno = $this->consultarFiltro($filtro, $querySelect, $queryFrom, false);
     	    	
@@ -124,8 +131,9 @@ include_once (caminho_filtros."filtroManterPAD.php");
     	//Start transaction
     	$this->cDb->retiraAutoCommit();
     	try{
-    		$vo = $this->incluirPAD($vo);
-    		$this->incluirPADTramitacao($vo);
+    		$vo = $this->incluirPA($vo);
+    		$vo = $this->incluirPATramitacao($vo);
+    		
     		//End transaction
     		$this->cDb->commit();
     	}catch(Exception $e){
@@ -136,17 +144,20 @@ include_once (caminho_filtros."filtroManterPAD.php");
     	return $vo;
     }
     
-    function incluirPAD($vo){
+    function incluirPA($vo){
     	$arrayAtribRemover = array(
-    			voPAD::$nmAtrDhInclusao,
-    			voPAD::$nmAtrDhUltAlteracao
+    			voPA::$nmAtrDhInclusao,
+    			voPA::$nmAtrDhUltAlteracao
     	);
     		
     	if($vo->cdPA == null || $vo->cdPA == ""){
-    		$vo->cdPA = $this->getProximoSequencialChaveComposta(voPAD::$nmAtrCdPA, $vo);
+    		$vo->cdPA = $this->getProximoSequencialChaveComposta(voPA::$nmAtrCdPA, $vo);
     		//echo "EH NULO";
     	}
-    	$vo->situacao = dominioSituacaoPAD::$CD_SITUACAO_PAD_INSTAURADO;
+    	$vo->situacao = dominioSituacaoPA::$CD_SITUACAO_PA_INSTAURADO;
+    	if (is_array($vo->colecaoTramitacao)){    		
+    		$vo->situacao = dominioSituacaoPA::$CD_SITUACAO_PA_EM_ANDAMENTO;
+    	}
     	 
     	$query = $this->incluirQuery($vo, $arrayAtribRemover);
     	$retorno = $this->cDb->atualizar($query);
@@ -154,30 +165,31 @@ include_once (caminho_filtros."filtroManterPAD.php");
     	return $vo;
     }
     
-    function incluirPADTramitacao($vo){
+    function incluirPATramitacao($vo){
 
     	if($vo->colecaoTramitacao != null){
     		//echo "tem tramitacao";
     		 
     		if (is_array($vo->colecaoTramitacao)){
     			$tamanho = sizeof($vo->colecaoTramitacao);
-    			$vo->situacao = $vo->situacao = dominioSituacaoPAD::$CD_SITUACAO_PAD_EM_ANDAMENTO;    			
+    			$vo->situacao = dominioSituacaoPA::$CD_SITUACAO_PA_EM_ANDAMENTO;
     		}
     		else{
     			$tamanho = 0;
     		}    		
    		
 			for ($i=0;$i<$tamanho;$i++) {
-				$voTramitacao = new voPADTramitacao();
+				$voTramitacao = new voPATramitacao();
 				$voTramitacao = $vo->colecaoTramitacao[$i];
 				$voTramitacao->cdPA = $vo->cdPA;
 				$voTramitacao->anoPA = $vo->anoPA;
-				$voTramitacao->sq = $this->getProximoSequencialChaveComposta(voPADTramitacao::$nmAtrSq, $voTramitacao); 
+				$voTramitacao->sq = $this->getProximoSequencialChaveComposta(voPATramitacao::$nmAtrSq, $voTramitacao); 
+				$voTramitacao->cdUsuarioUltAlteracao = $vo->cdUsuarioUltAlteracao;
 				
-				$voTramitacao->dbPADTramitacao->cDb = $this->cDb;
+				$voTramitacao->dbprocesso->cDb = $this->cDb;
 				
 				//var_dump($voTramitacao);
-				$voTramitacao->dbPADTramitacao->incluir($voTramitacao);
+				$voTramitacao->dbprocesso->incluir($voTramitacao);
 				
 				$vo->colecaoTramitacao[$i] = $voTramitacao;
     		}	    	
@@ -187,12 +199,12 @@ include_once (caminho_filtros."filtroManterPAD.php");
     	return $vo;
     }
 	
-    function excluirPADTramitacao($voPAD){
-    	$vo = new voPADTramitacao();
+    function excluirPATramitacao($voPA){
+    	$vo = new voPATramitacao();
     	$nmTabela = $vo->getNmTabelaEntidade(false);
     	$query = "DELETE FROM ".$nmTabela;
-    	$query.= "\n WHERE ". voPADTramitacao::$nmAtrCdPA. " = ". $voPAD->cdPA;
-    	$query.= "\n AND ". voPADTramitacao::$nmAtrAnoPA. " = ". $voPAD->anoPA;
+    	$query.= "\n WHERE ". voPATramitacao::$nmAtrCdPA. " = ". $voPA->cdPA;
+    	$query.= "\n AND ". voPATramitacao::$nmAtrAnoPA. " = ". $voPA->anoPA;
     	//echo $query;
     	return $this->atualizarEntidade($query);
     }
@@ -203,7 +215,7 @@ include_once (caminho_filtros."filtroManterPAD.php");
     	//Start transaction
     	$this->cDb->retiraAutoCommit();
     	try{    		
-    		$this->excluirPADTramitacao($vo);
+    		$this->excluirPATramitacao($vo);
     		$vo = parent::excluir($vo);
     		//End transaction
     		$this->cDb->commit();
@@ -218,9 +230,9 @@ include_once (caminho_filtros."filtroManterPAD.php");
     function alterar($vo){
     	//Start transaction
     	$this->cDb->retiraAutoCommit();
-    	try{    		
-    		$this->excluirPADTramitacao($vo);
-    		$this->incluirPADTramitacao($vo);
+    	try{
+    		$this->excluirPATramitacao($vo);
+    		$vo = $this->incluirPATramitacao($vo);
     		
     		$vo = parent::alterar($vo);
     		//End transaction
@@ -244,7 +256,8 @@ include_once (caminho_filtros."filtroManterPAD.php");
 		$retorno.= $this-> getVarComoString($vo->processoLic) . ",";
 		$retorno.= $this-> getVarComoString($vo->obs). ",";
 		$retorno.= $this-> getDataSQL($vo->dtAbertura). ",";
-		$retorno.= $this-> getVarComoNumero($vo->situacao);
+		$retorno.= $this-> getVarComoNumero($vo->situacao). ",";
+		$retorno.= $this-> getVarComoNumero($vo->cdResponsavel);
 	
 		$retorno.= $vo->getSQLValuesInsertEntidade();
 	
@@ -256,17 +269,27 @@ include_once (caminho_filtros."filtroManterPAD.php");
         $sqlConector = "";
                 
         if($vo->processoLic != null){
-            $retorno.= $sqlConector . voPAD::$nmAtrProcessoLicitatorio . " = " . $this->getVarComoString($vo->processoLic);
+            $retorno.= $sqlConector . voPA::$nmAtrProcessoLicitatorio . " = " . $this->getVarComoString($vo->processoLic);
             $sqlConector = ",";
         }
 
         if($vo->obs != null){
-            $retorno.= $sqlConector . voPAD::$nmAtrObservacao . " = " . $this->getVarComoString($vo->obs);
+            $retorno.= $sqlConector . voPA::$nmAtrObservacao . " = " . $this->getVarComoString($vo->obs);
             $sqlConector = ",";
         }
         
         if($vo->dtAbertura != null){
-        	$retorno.= $sqlConector . voPAD::$nmAtrDtAbertura . " = " . $this->getDataSQL($vo->dtAbertura);
+        	$retorno.= $sqlConector . voPA::$nmAtrDtAbertura . " = " . $this->getDataSQL($vo->dtAbertura);
+        	$sqlConector = ",";
+        }
+        
+        if($vo->cdResponsavel != null){
+        	$retorno.= $sqlConector . voPA::$nmAtrCdResponsavel. " = " . $this->getVarComoNumero($vo->cdResponsavel);
+        	$sqlConector = ",";
+        }
+        
+        if($vo->situacao != null){
+        	$retorno.= $sqlConector . voPA::$nmAtrSituacao. " = " . $this->getVarComoNumero($vo->situacao);
         	$sqlConector = ",";
         }
         

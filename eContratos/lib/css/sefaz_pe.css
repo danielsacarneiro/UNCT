@@ -176,7 +176,7 @@ div.bgCabecalho {
 .textoseparadorgrupocampos {
 	background-color: #ffffff;
 	font-family: Helvetica, Arial, sans-serif;
-	font-size: 11px;
+	font-size: 13px;
 	font-weight: bold;
 	color: black;
 	text-align: left;
@@ -497,11 +497,20 @@ A.titulotreemenu:hover {
 	font-weight: bolder;
 }
 
-A.treelink:link {
+A.treelink, A.treelinkbranco:link {
 	color: Navy;
 	text-decoration: none;
 	font-family: Helvetica, Arial, sans-serif;
-	font-weight: bolder;
+	font-weight: bolder;	
+}
+
+A.treelinkbranco {
+	color: maroon;
+}
+
+A.treelinkbranco:hover {
+	color: white;
+    font-size: 15px;
 }
 
 A.treelink:visited {
@@ -570,12 +579,12 @@ A.treelinkarquivo:link {
 	font-weight: bolder;
 }
 
-A.treelinkarquivo:visited {
+/*A.treelinkarquivo:visited {
 	color: grey;
 	text-decoration: none;
 	font-family: Helvetica, Arial, sans-serif;
 	font-weight: bolder;	
-}
+}*/
 
 A.treelinkarquivo:hover {
 	color: white;

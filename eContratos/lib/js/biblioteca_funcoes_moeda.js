@@ -1,19 +1,13 @@
 /*
- * Este arquivo eh propriedade da Secretaria da Fazenda do Estado 
- * de Pernambuco (Sefaz-PE). Nenhuma informacao nele contida pode ser 
- * reproduzida, mostrada ou revelada sem permissao escrita da Sefaz-PE.
- */
+ Descriï¿½ï¿½o:
+ - Contï¿½m funï¿½ï¿½es para tratamento de campos monetï¿½rios
 
-/*
- Descrição:
- - Contém funções para tratamento de campos monetários
-
- Dependências:
+ Dependï¿½ncias:
  - biblioteca_funcoes_principal.js
 */
 
 
-// Valida o preenchimento do campo moeda "pCampo" passado como parâmetro
+// Valida o preenchimento do campo moeda "pCampo" passado como parï¿½metro
 function formatarCampoMoeda(pCampo, pQtCasasDecimais, pEvento) {
 	var str = pCampo.value;
 	var inTemCaracterInvalido = false;
@@ -46,7 +40,7 @@ function formatarCampoMoeda(pCampo, pQtCasasDecimais, pEvento) {
 	return true;
 }
 
-// Valida o preenchimento do campo moeda "pCampo" passado como parâmetro
+// Valida o preenchimento do campo moeda "pCampo" passado como parï¿½metro
 function formatarCampoMoedaPositivo(pCampo, pQtCasasDecimais, pEvento) {
 	var str = pCampo.value;
 	var inTemCaracterInvalido = false;
@@ -75,7 +69,7 @@ function formatarCampoMoedaPositivo(pCampo, pQtCasasDecimais, pEvento) {
 	return true;
 }
 
-// Valida o preenchimento do campo moeda "pCampo" passado como parâmetro
+// Valida o preenchimento do campo moeda "pCampo" passado como parï¿½metro
 function formatarCampoMoedaComSeparadorMilhar(pCampo, pQtCasasDecimais, pEvento) {
 	var vlCampo = pCampo.value;
 	var tam = vlCampo.length;
@@ -117,7 +111,7 @@ function formatarCampoMoedaComSeparadorMilhar(pCampo, pQtCasasDecimais, pEvento)
 		isNegativo = true;
 	}
 
-	// Quando o campo está em branco é preciso completar com zeros a esquerda
+	// Quando o campo estï¿½ em branco ï¿½ preciso completar com zeros a esquerda
 	if (vlCampo.length <= pQtCasasDecimais) {
 		var tamAux = vlCampo.length;
 		for (i = tamAux; i < (pQtCasasDecimais); i++) {
@@ -137,7 +131,7 @@ function formatarCampoMoedaComSeparadorMilhar(pCampo, pQtCasasDecimais, pEvento)
 	pCampo.value = vlCampoFinal + auxStrDecimal;
 }
 
-// Valida o preenchimento do campo moeda "pCampo" passado como parâmetro
+// Valida o preenchimento do campo moeda "pCampo" passado como parï¿½metro
 function formatarCampoMoedaPositivoComSeparadorMilhar(pCampo, pQtCasasDecimais, pEvento) {
 	var str = pCampo.value;
 	var inTemCaracterInvalido = false;
@@ -158,12 +152,12 @@ function formatarCampoMoedaPositivoComSeparadorMilhar(pCampo, pQtCasasDecimais, 
 	formatarCampoMoedaComSeparadorMilhar(pCampo, pQtCasasDecimais, pEvento);
 }
 
-// Verifica se existe um valor moeda válido no campo "pCampo" passado como parametro
+// Verifica se existe um valor moeda vï¿½lido no campo "pCampo" passado como parametro
 function isCampoMoedaValido(pCampo, pQtCasasDecimais, pInObrigatorio, pVlMinimo, pVlMaximo, pSemMensagem, pSemFocarCampo) {
     return _isCampoMoedaValido(pCampo, pQtCasasDecimais, pInObrigatorio, pVlMinimo, pVlMaximo, pSemMensagem, pSemFocarCampo, false);
 }
 
-// Verifica se existe um valor moeda válido no campo "pCampo" passado como parametro
+// Verifica se existe um valor moeda vï¿½lido no campo "pCampo" passado como parametro
 function isCampoMoedaComSeparadorMilharValido(pCampo, pQtCasasDecimais, pInObrigatorio, pVlMinimo, pVlMaximo, pSemMensagem, pSemFocarCampo) {
     return _isCampoMoedaValido(pCampo, pQtCasasDecimais, pInObrigatorio, pVlMinimo, pVlMaximo, pSemMensagem, pSemFocarCampo, true);
 }
@@ -252,7 +246,7 @@ function _isCampoMoedaValido(pCampo, pQtCasasDecimais, pInObrigatorio, pVlMinimo
 	return true;
 }
 
-// Completa o preenchimento do campo moeda "pCampo" passado como parâmetro
+// Completa o preenchimento do campo moeda "pCampo" passado como parï¿½metro
 function completarCampoMoeda(pCampo, pQtCasasDecimais) {
 	var str = pCampo.value;
 	var menos = "";
@@ -348,7 +342,7 @@ function setValorCampoMoedaComSeparadorMilhar(pCampo, pValor, pQtCasasDecimais) 
 	formatarCampoMoedaComSeparadorMilhar(pCampo, pQtCasasDecimais);
 }
 
-// Arredonda um valor moeda para o número mais próximo
+// Arredonda um valor moeda para o nï¿½mero mais prï¿½ximo
 function arredondarValorMoeda(pVlMoeda, pQtCasasDecimais) {
 	var base = Math.pow(10, pQtCasasDecimais);
 	var resultado = Math.round(pVlMoeda*base)/base;

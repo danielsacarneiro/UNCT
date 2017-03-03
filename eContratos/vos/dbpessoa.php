@@ -52,7 +52,11 @@ include_once (caminho_vos. "dbpessoagestor.php");
         return $retorno;
 	}
     
-    function consultarPessoa($voentidade, $filtro){
+	function consultarPessoa($voentidade, $filtro){
+		return $this->consultarPessoaManter($filtro, true);
+	}
+	
+    function consultarPessoaManter($filtro, $validarConsulta){
     	$atributosConsulta = vopessoa::getNmTabela() . "." .   vopessoa::$nmAtrCd;
     	$atributosConsulta .= "," . vopessoa::getNmTabela() . "." . vopessoa::$nmAtrNome;
     	$atributosConsulta .= "," . vopessoa::getNmTabela() . "." . vopessoa::$nmAtrDoc;
@@ -71,7 +75,7 @@ include_once (caminho_vos. "dbpessoagestor.php");
         //echo $querySelect."<br>";
         //echo $queryFrom;
         
-        return $this->consultarFiltro($filtro, $querySelect, $queryFrom, true);
+        return $this->consultarFiltro($filtro, $querySelect, $queryFrom, $validarConsulta);
         //return $this->consultarComPaginacaoQuery($voentidade, $filtro, $querySelect, $queryFrom);
     }
     

@@ -3,31 +3,28 @@ include_once("../../config_lib.php");
 include_once(caminho_util."bibliotecaHTML.php");
 include_once(caminho_util."constantes.class.php");
 include_once(caminho_util. "select.php");
-include_once(caminho_vos . "dbPAD.php");
-include_once(caminho_vos . "vopessoa.php");
-include_once(caminho_vos . "voPAD.php");
-include_once(caminho_filtros . "filtroManterPAD.php");
+include_once(caminho_vos . "voDocumento.php");
+include_once(caminho_util."selectExercicio.php");
+include_once(caminho_util."dominioSetor.php");
+include_once(caminho_filtros . "filtroManterDocumento.php");
 
 //inicia os parametros
 inicio();
+$vo = new voDocumento();
 
-$titulo = "CONSULTAR P.A.D.´S";
+$titulo = "CONSULTAR " . $vo::getTituloJSP();
 setCabecalho($titulo);
 
-$filtro  = new filtroManterPAD();
+$filtro  = new filtroManterDocumento();
 $filtro = filtroManter::verificaFiltroSessao($filtro);
 	
-$nome = $filtro->nome;
-$doc = $filtro->doc;
 $cdHistorico = $filtro->cdHistorico;
 $cdOrdenacao = $filtro->cdOrdenacao;
 $isHistorico = "S" == $cdHistorico; 
 
-$vo = new voPAD();
 $dbprocesso = $vo->dbprocesso;
-$colecao = $dbprocesso->consultarPenalidade($vo, $filtro);
-//remove a colecao de tramitacao da sessao pra iniciar do zero
-removeObjetoSessao(voPAD::$nmAtrColecaoTramitacao);
+$colecao = $dbprocesso->consultarDocumento($vo, $filtro);
+
 
 $paginacao = $filtro->paginacao;
 if($filtro->temValorDefaultSetado){
@@ -43,11 +40,12 @@ $numTotalRegistros = $filtro->numTotalRegistros;
 <HTML>
 <HEAD>
 <?=setTituloPagina(null)?>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>mensagens_globais.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_datahora.js"></SCRIPT>
-<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_cnpfcnpj.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_text.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_oficio.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
-<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>tooltip.js"></SCRIPT>
 
 <SCRIPT language="JavaScript" type="text/javascript">
 
@@ -58,14 +56,7 @@ function isFormularioValido() {
 	return true;
 }
 
-function limparFormulario() {	
-
-	for(i=0;i<frm_principal.length;i++){
-		frm_principal.elements[i].value='';
-	}	
-}
-
-function detalhar(isExcluir) {    
+function detalhar(isExcluir) {
     if(isExcluir == null || !isExcluir)
         funcao = "<?=constantes::$CD_FUNCAO_DETALHAR?>";
     else
@@ -98,7 +89,26 @@ function alterar() {
     
 	chave = document.frm_principal.rdb_consulta.value;	
 	location.href="manter.php?funcao=<?=constantes::$CD_FUNCAO_ALTERAR?>&chave=" + chave;
+}
 
+//Transfere dados selecionados para a janela principal
+function selecionar() {
+	if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta"))
+		return;
+		
+	if (window.opener != null) {
+		array = retornarValorRadioButtonSelecionadoComoArray("document.frm_principal.rdb_consulta", "<?=CAMPO_SEPARADOR?>");
+
+		sq = array[0];
+		sq = completarNumeroComZerosEsquerda(sq, TAMANHO_CODIGOS_DOCUMENTOS);
+		
+		cdSetor= array[1];
+		ano = array[2];
+		tpDoc = array[3];
+		
+		window.opener.transferirDadosDocumento(sq, cdSetor, ano, tpDoc);
+		window.close();
+	}
 }
 
 </SCRIPT>
@@ -124,20 +134,30 @@ function alterar() {
     <DIV id="div_filtro" class="div_filtro">
     <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
         <TBODY>
+	        <?php
+	            $selectExercicio = new selectExercicio();
+	            $domSetor = new dominioSetor();
+	            $comboSetor = new select($domSetor->colecao);
+	            $domTpDoc = new dominioTpDocumento();
+	            $comboTpDoc= new select($domTpDoc->colecao);
+			  ?>			            
 			<TR>
-                <TH class="campoformulario" nowrap>Cód.Contratada:</TH>
-                <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vopessoa::$nmAtrCd?>" name="<?=vopessoa::$nmAtrCd?>"  value="<?php if($filtro->cd != null) echo complementarCharAEsquerda($filtro->cd, "0", TAMANHO_CODIGOS);?>"  class="camponaoobrigatorio" size="7" ></TD>
-                <TH class="campoformulario" nowrap width="1%">Nome:</TH>
-                <TD class="campoformulario" ><INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>"  value="<?php echo($nome);?>"  class="camponaoobrigatorio" size="50" ></TD>
+                <TH class="campoformulario" nowrap width="1%">Exercício:</TH>
+                <TD class="campoformulario" nowrap width="1%"><?php echo $selectExercicio->getHtmlCombo(voDocumento::$nmAtrAno,voDocumento::$nmAtrAno, $filtro->ano, true, "camponaoobrigatorio", false, "");?></TD>
+                <TH class="campoformulario" nowrap width="1%">Setor:</TH>
+                <TD class="campoformulario"><?php echo $comboSetor->getHtmlCombo(voDocumento::$nmAtrCdSetor,voDocumento::$nmAtrCdSetor, $filtro->cdSetor, true, "camponaoobrigatorio", true, "");?></TD>
             </TR>            
-            <TR>
-                <TH class="campoformulario" width="1%" nowrap>CNPJ/CPF:</TH>
-                <TD class="campoformulario" colspan=3><INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($doc);?>" class="camponaoobrigatorio" size="20" maxlength="18"></TD>
-            </TR>
-        <?php
-        $comboOrdenacao = new select(voPAD::getAtributosOrdenacao($cdHistorico));
-        $cdAtrOrdenacao = $filtro->cdAtrOrdenacao;
-        echo getComponenteConsulta($comboOrdenacao, $cdAtrOrdenacao, $cdOrdenacao, $qtdRegistrosPorPag, true, $cdHistorico)?>
+			<TR>
+                <TH class="campoformulario" nowrap width="1%">Tp.Documento:</TH>
+                <TD class="campoformulario"><?php echo $comboTpDoc->getHtmlCombo(voDocumento::$nmAtrTpDoc,voDocumento::$nmAtrTpDoc, $filtro->tpDoc, true, "camponaoobrigatorio", true, "");?></TD>			
+                <TH class="campoformulario" nowrap>Número:</TH>
+                <TD class="campoformulario"><INPUT type="text" id="<?=voDocumento::$nmAtrSq?>" name="<?=voDocumento::$nmAtrSq?>"  value="<?php if($filtro->sq != null) echo complementarCharAEsquerda($filtro->sq, "0", TAMANHO_CODIGOS);?>"  class="camponaoobrigatorio" size="7" ></TD>
+            </TR>            
+       <?php
+        //$comboOrdenacao = new select(voDocumento::getAtributosOrdenacao($cdHistorico));        
+        //echo getComponenteConsultaFiltro($comboOrdenacao, false, $filtro);
+        echo getComponenteConsultaFiltro($vo->temTabHistorico, $filtro);
+        ?>
        </TBODY>
   </TABLE>
 		</DIV>
@@ -157,41 +177,33 @@ function alterar() {
                   <?php 
                   }
                   ?>
-                    <TH class="headertabeladados" width="1%">P.A.</TH>
-                    <TH class="headertabeladados"width="1%" nowrap >Contrato</TH>
-                    <TH class="headertabeladados" width="1%" nowrap >Doc.Contratada</TH>
-                    <TH class="headertabeladados" width="90%">Contratada</TH>
-                    <TH class="headertabeladados" width="1%" nowrap>Situação</TH>
+                    <TH class="headertabeladados" width="1%">Exercício</TH>
+                    <TH class="headertabeladados"width="1%" nowrap >Setor</TH>
+                    <TH class="headertabeladados"width="1%" nowrap >Tp.Documento</TH>
+                    <TH class="headertabeladados"  nowrap >Número</TH>
+                    <TH class="headertabeladados"  nowrap >Nome</TH>
                 </TR>
                 <?php								
                 if (is_array($colecao))
                         $tamanho = sizeof($colecao);
                 else 
                         $tamanho = 0;
-                
-                include_once (caminho_funcoes."contrato/dominioTipoContrato.php");
-                //require_once ("dominioSituacaoPAD.php");
-                $dominioTipoContrato = new dominioTipoContrato();
-                $domSiPAD = new dominioSituacaoPAD();
-                
-                $colspan=6;
+                                
+                $colspan=7;
                 if($isHistorico){
-                	$colspan=7;
+                	$colspan=8;
                 }
                 
                 for ($i=0;$i<$tamanho;$i++) {
-                        $voAtual = new voPAD();
+                        $voAtual = new voDocumento();
                         $voAtual->getDadosBanco($colecao[$i]);     
-                        
-                        $contrato = formatarCodigoAnoComplemento($colecao[$i][voPAD::$nmAtrCdContrato],
-                        						$colecao[$i][voPAD::$nmAtrAnoContrato], 
-                        						$dominioTipoContrato->getDescricao($colecao[$i][voPAD::$nmAtrTipoContrato]));
                                                 
-                        $procAdm = formatarCodigoAno($colecao[$i][voPAD::$nmAtrCdPA],
-                        		$colecao[$i][voPAD::$nmAtrAnoPA]);
+                        $setor = $colecao[$i][voDocumento::$nmAtrCdSetor];
+                        $setor = $domSetor->getDescricao($setor);
                         
-                        $situacao = $colecao[$i][voPAD::$nmAtrSituacao];
-                        $situacao = $domSiPAD->getDescricao($situacao);                        			 
+                        $tpDoc= $colecao[$i][voDocumento::$nmAtrTpDoc];
+                        $tpDoc = $domTpDoc->getDescricao($tpDoc);
+                        
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados">
@@ -200,15 +212,15 @@ function alterar() {
                   <?php                  
                   if($isHistorico){                  	
                   	?>
-                  	<TD class="tabeladados"><?php echo complementarCharAEsquerda($colecao[$i][voPAD::$nmAtrSqHist], "0", TAMANHO_CODIGOS);?></TD>
+                  	<TD class="tabeladados"><?php echo complementarCharAEsquerda($colecao[$i][voDocumento::$nmAtrSqHist], "0", TAMANHO_CODIGOS);?></TD>
                   <?php 
                   }
                   ?>                    
-                    <TD class="tabeladados" nowrap><?php echo $procAdm;?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $contrato;?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $colecao[$i][vopessoa::$nmAtrDoc];?></TD>
-                    <TD class="tabeladados"><?php echo $colecao[$i][vopessoa::$nmAtrNome];?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $situacao;?></TD>
+                    <TD class="tabeladados" nowrap><?php echo $voAtual->ano;?></TD>
+                    <TD class="tabeladados" nowrap><?php echo $setor;?></TD>
+                    <TD class="tabeladados" nowrap><?php echo $tpDoc;?></TD>
+                    <TD class="tabeladados" nowrap><?php echo complementarCharAEsquerda($voAtual->sq, "0", TAMANHO_CODIGOS);?></TD>
+                    <TD class="tabeladados" nowrap><?php echo $voAtual->linkDoc;?></TD>
                 </TR>					
                 <?php
 				}				

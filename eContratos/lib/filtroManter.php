@@ -1,9 +1,19 @@
 <?php
 include_once(caminho_util."paginacao.php");
+include_once(caminho_util."multiplosConstrutores.php");
 
-class filtroManter{
+class filtroManter extends multiplosConstrutores{
     // ...............................................................
 	// construtor
+	static $nmAtrCdConsultarArquivo = "cdConsultarArquivo";
+	static $nmAtrCdAtrOrdenacao = "cdAtrOrdenacao";
+	static $nmAtrCdOrdenacao = "cdOrdenacao";
+	static $nmAtrDtVigencia = "dtVigencia";
+	static $nmAtrCdHistorico = "cdHistorico";
+	static $nmAtrQtdRegistrosPorPag = "qtdRegistrosPorPag";
+	static $nmAtrNumTotalRegistros = "numTotalRegistros";	
+	static $nmAtrCdUtilizarSessao = "utilizarSessao";	
+	static $nmAtrCdConsultar = "consultar";	
 	
 	var $cdAtrOrdenacao;
 	var $cdOrdenacao;
@@ -12,32 +22,57 @@ class filtroManter{
 		
 	var $numTotalRegistros;
 	var $TemPaginacao;
-
-	function __construct($temPaginacao) {        
-		$this->cdAtrOrdenacao = @$_POST["cdAtrOrdenacao"];
-		$this->cdOrdenacao = @$_POST["cdOrdenacao"];
-		$this->dtVigencia = @$_POST["dtVigencia"];
-        $this->cdHistorico  = @$_POST["cdHistorico"];        
-        $this->qtdRegistrosPorPag = @$_POST["qtdRegistrosPorPag"];
-        if($this->qtdRegistrosPorPag == null)
-        	$this->qtdRegistrosPorPag = paginacao::$qtdRegistrosPorPag;
-
-        $this->numTotalRegistros = @$_POST["numTotalRegistros"];
-        if($this->numTotalRegistros == null)
-            $this->numTotalRegistros = 0;
-
-        $this->paginacao = null;        
-        $this->TemPaginacao= $temPaginacao;
-        
+	var $qtdRegistrosPorPag;
+	var $paginacao;
+	var $nmEntidadePrincipal;
+	var $isHistorico;
+	var $cdConsultarArquivo;
+				
+	function __construct0() {
+		//echo "teste0";
+		$this->__construct1(true);
+	}
+	
+	function __construct1($pegarFiltrosDaTela) {
+		//echo "teste" . $pegarFiltrosDaTela;
+		$this->__construct2(true, $pegarFiltrosDaTela);
+	}
+	
+	function __construct2($temPaginacao, $pegarFiltrosDaTela) {
+		
+		$this->cdConsultarArquivo = constantes::$CD_NAO;
+		if($pegarFiltrosDaTela){
+			$this->pegarFiltroDaTela();
+		}
+		
+		if($this->numTotalRegistros == null){
+			$this->numTotalRegistros = 0;
+		}
+		if($this->qtdRegistrosPorPag == null){
+			$this->qtdRegistrosPorPag = paginacao::$qtdRegistrosPorPag;
+		}		
+		$this->paginacao = null;        
+        $this->TemPaginacao= $temPaginacao;                
         if($temPaginacao){
             $this->paginacao = new paginacao($this->qtdRegistrosPorPag);
-        }
-            
+        }            
+
+        $this->isHistorico = "S" == $this->cdHistorico;
         //para o caso de ser necessario setar um filtro default para nao trazer todos os registros
-        $this->temValorDefaultSetado = false;
-	}
+        $this->temValorDefaultSetado = false;        
+	}	
     
-    function isSetaValorDefault(){
+	function pegarFiltroDaTela(){
+		$this->cdAtrOrdenacao = @$_POST["cdAtrOrdenacao"];
+		$this->cdOrdenacao = @$_POST["cdOrdenacao"];		 
+		$this->dtVigencia = @$_POST["dtVigencia"];
+		$this->cdHistorico  = @$_POST["cdHistorico"];
+		$this->qtdRegistrosPorPag = @$_POST["qtdRegistrosPorPag"];
+		$this->numTotalRegistros = @$_POST["numTotalRegistros"];		 
+		$this->cdConsultarArquivo = @$_POST[self::$nmAtrCdConsultarArquivo];
+	}
+	
+	function isSetaValorDefault(){
         $retorno = false;
     }
     
@@ -65,6 +100,51 @@ class filtroManter{
         return $filtro;
     }
     
+    function getFiltroConsultaSQL($filtro){
+    	
+    	if($filtro != ""){
+    		$filtro = "\n WHERE $filtro";
+    	}
+    	
+    	if($this->cdAtrOrdenacao  != null){
+    				
+    		$ordem = $this->cdOrdenacao;
+    		if($ordem == constantes::$CD_ORDEM_CRESCENTE){
+    			$ordem = "";
+    		}
+    		
+    		$filtro = $filtro . "\n ORDER BY $this->cdAtrOrdenacao $ordem";
+    		
+    		//para setar o atributo de ordenacao de forma mais complexa: quando ha joins na tabela
+    		//para tanto o atributo nmEntidadePrincipal precisa ser not null
+    		/*$voentidade = $this->getVOEntidadePrincipal();    		
+    		if($voentidade != ""){
+    			$filtro = $filtro . "\n ORDER BY " . $voentidade->getNmTabelaEntidade($this->isHistorico) . ".$this->cdAtrOrdenacao $ordem";
+    		}else{
+    			$filtro = $filtro . "\n ORDER BY $this->cdAtrOrdenacao $ordem";
+    		}*/
+    	}
+    	
+    	return $filtro; 
+    }
+    
+    function getVOEntidadePrincipal(){
+    	$class = $this->nmEntidadePrincipal;
+    	$retorno = "";
+    	if($class != null)
+    		$retorno = new $class();
+    	return $retorno ; 
+    }
+    
+    function getAtributosOrdenacao(){
+    	$comboOrdenacao = null;
+    	if($this->nmEntidadePrincipal != null){
+    		$voentidade = $this->getVOEntidadePrincipal();    		
+    		$comboOrdenacao = new select($voentidade::getAtributosOrdenacao());
+    	}
+    	return $comboOrdenacao;
+    }
+    
 	function toString(){		
 		$retorno.= "qtdRegistrosPorPag=" . $this->qtdRegistrosPorPag . "|";
         $retorno.= "paginaAtual=" . $this->paginacao->paginaAtual . "|";
@@ -74,4 +154,11 @@ class filtroManter{
 	} 
 }
 
+/*class filtroManterGUI extends filtroManter{
+	// ...............................................................
+	// construtor
+	function __construct($temPaginacao) {
+		parent::__construct1($temPaginacao, true);
+	}
+}*/
 ?>

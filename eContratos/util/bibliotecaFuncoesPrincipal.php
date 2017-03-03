@@ -49,7 +49,7 @@
         //echo "<br> IMPRIMINDO OPCOES-----";
         //var_dump($array) . "<br>";
         
-        for($i=0; $i<$tamanho;$i++){                        
+        for($i=0; $i<$tamanho;$i++){
             $especie = $array[$i];            
             //verifica se eh o tipo da especie em questao
             $existe = mb_stripos($str2, $especie);

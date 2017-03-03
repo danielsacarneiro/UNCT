@@ -1,7 +1,16 @@
 <?php
 include_once("../../config_lib.php");
-include_once(caminho_vos . "dbgestorpessoa.php");
 include_once(caminho_vos . "vocontrato.php");
+//include_once("dominioSituacaoPA.php");
+
+function getComboSituacaoPA($idCampo, $nmCampo, $cdOpcaoSelecionada, $classCampo, $tagHtml){
+	$dominio = new dominioSituacaoPA();
+	$select = new select($dominio->colecao);
+
+	$retorno = $select->getHtmlCombo($idCampo, $nmCampo, $cdOpcaoSelecionada, true, $classCampo, true, $tagHtml);
+
+	return $retorno;
+}
 
 function getComboGestorPessoa($db, $idCampo, $nmCampo, $cdGestor, $cdOpcaoSelecionada){
     return getComboGestorPessoaMais($db, $idCampo, $nmCampo, $cdGestor, $cdOpcaoSelecionada, "camponaoobrigatorio", "");

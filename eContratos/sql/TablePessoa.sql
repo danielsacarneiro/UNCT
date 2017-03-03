@@ -58,8 +58,9 @@ BEGIN
   DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;  
   SELECT MAX(pe_cd) INTO cdPessoa FROM pessoa; 
   
-  OPEN cTabela;
+  -- DELETE FROM pessoa_vinculo WHERE vi_cd = 2;
   
+  OPEN cTabela;  
   REPEAT
   -- read_loop: LOOP
     #aqui você pega os valores do "select", para mais campos vocÇe pode fazer assim:
@@ -83,8 +84,6 @@ call importarContratada();
 UPDATE pessoa SET 
 pe_nome = replace(replace(replace(pe_nome,'“','"'),'”','"'),'–','-')
 WHERE pe_cd = 305;
-
-
 	
 drop table pessoa_vinculo;
 CREATE TABLE pessoa_vinculo (

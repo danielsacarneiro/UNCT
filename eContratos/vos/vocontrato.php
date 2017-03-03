@@ -24,7 +24,7 @@ include_once(caminho_lib."voentidade.php");
         static $nmAtrCdSituacaoContrato =  "ct_cd_situacao";
 		static $nmAtrObjetoContrato =  "ct_objeto";
 		static $nmAtrGestorPessoaContrato =  "ct_gestor_pessoa";
-        static $nmAtrCdGestorPessoaContrato =  "gp_cd";//vogestorpessoa::$nmAtrCd;
+        static $nmAtrCdPessoaGestorContrato =  "pe_cd_resp";
 		static $nmAtrGestorContrato =  "ct_gestor";
         static $nmAtrCdGestorContrato =  "gt_cd";//vogestor::$nmAtrCd;
 		static $nmAtrProcessoLicContrato =  "ct_processo_lic";
@@ -45,7 +45,7 @@ include_once(caminho_lib."voentidade.php");
 		static $nmAtrVlGlobalContrato =  	"ct_valor_global";
 		static $nmAtrVlMensalContrato =  	"ct_valor_mensal";
         static $nmAtrDtProposta =  	"ct_dt_proposta";
-        static $nmAtrCdPessoaContratada =  	"pe_cd";
+        static $nmAtrCdPessoaContratada =  	"pe_cd_contratada";
 		
 		var $sq;
 		var $cdContrato;
@@ -57,6 +57,7 @@ include_once(caminho_lib."voentidade.php");
 		var $docContratada;
 		var $gestor;
 		var $nmGestorPessoa;
+		var $cdPessoaGestor;
 		var $objeto;
 		var $dtVigenciaInicial;
 		var $dtVigenciaFinal;	
@@ -99,37 +100,37 @@ include_once(caminho_lib."voentidade.php");
         	
     function getAtributosFilho(){
         $retorno = array(
-            vocontrato::$nmAtrSqContrato,
-            vocontrato::$nmAtrAnoContrato,            
-            vocontrato::$nmAtrCdContrato,
-            vocontrato::$nmAtrTipoContrato,
-            vocontrato::$nmAtrEspecieContrato,
-            vocontrato::$nmAtrSqEspecieContrato,
-            vocontrato::$nmAtrCdEspecieContrato,
-            vocontrato::$nmAtrCdSituacaoContrato,
-            vocontrato::$nmAtrObjetoContrato,
-            vocontrato::$nmAtrGestorPessoaContrato,
-            vocontrato::$nmAtrCdGestorPessoaContrato,            
-            vocontrato::$nmAtrGestorContrato,
-            vocontrato::$nmAtrCdGestorContrato,
-            vocontrato::$nmAtrProcessoLicContrato,
-            vocontrato::$nmAtrModalidadeContrato,
-            vocontrato::$nmAtrDataPublicacaoContrato,
-            vocontrato::$nmAtrDtPublicacaoContrato,
-            vocontrato::$nmAtrDtAssinaturaContrato ,
-            vocontrato::$nmAtrDtVigenciaInicialContrato,
-            vocontrato::$nmAtrDtVigenciaFinalContrato,
-            vocontrato::$nmAtrContratadaContrato,
-            vocontrato::$nmAtrDocContratadaContrato,
-            vocontrato::$nmAtrNumEmpenhoContrato,
-            vocontrato::$nmAtrTipoAutorizacaoContrato,
-        	vocontrato::$nmAtrCdAutorizacaoContrato,
-            vocontrato::$nmAtrInLicomContrato,
-            vocontrato::$nmAtrInImportacaoContrato,
-            vocontrato::$nmAtrObservacaoContrato,
-            vocontrato::$nmAtrVlGlobalContrato,
-            vocontrato::$nmAtrVlMensalContrato,
-            vocontrato::$nmAtrDtProposta,
+            self::$nmAtrSqContrato,
+            self::$nmAtrAnoContrato,            
+            self::$nmAtrCdContrato,
+            self::$nmAtrTipoContrato,
+            self::$nmAtrEspecieContrato,
+            self::$nmAtrSqEspecieContrato,
+            self::$nmAtrCdEspecieContrato,
+            self::$nmAtrCdSituacaoContrato,
+            self::$nmAtrObjetoContrato,
+            self::$nmAtrGestorPessoaContrato,
+            self::$nmAtrCdPessoaGestorContrato,            
+            self::$nmAtrGestorContrato,
+            self::$nmAtrCdGestorContrato,
+            self::$nmAtrProcessoLicContrato,
+            self::$nmAtrModalidadeContrato,
+            self::$nmAtrDataPublicacaoContrato,
+            self::$nmAtrDtPublicacaoContrato,
+            self::$nmAtrDtAssinaturaContrato ,
+            self::$nmAtrDtVigenciaInicialContrato,
+            self::$nmAtrDtVigenciaFinalContrato,
+            self::$nmAtrContratadaContrato,
+            self::$nmAtrDocContratadaContrato,
+            self::$nmAtrNumEmpenhoContrato,
+            self::$nmAtrTipoAutorizacaoContrato,
+        	self::$nmAtrCdAutorizacaoContrato,
+            self::$nmAtrInLicomContrato,
+            self::$nmAtrInImportacaoContrato,
+            self::$nmAtrObservacaoContrato,
+            self::$nmAtrVlGlobalContrato,
+            self::$nmAtrVlMensalContrato,
+            self::$nmAtrDtProposta,
         	self::$nmAtrCdPessoaContratada
         );
         
@@ -138,19 +139,19 @@ include_once(caminho_lib."voentidade.php");
     
     function getAtributosMovimentacoes(){
         $retorno = array(
-            vocontrato::$nmAtrSqContrato,
-            vocontrato::$nmAtrAnoContrato,            
-            vocontrato::$nmAtrCdContrato,
-            vocontrato::$nmAtrTipoContrato,
-            vocontrato::$nmAtrEspecieContrato,
-            vocontrato::$nmAtrCdEspecieContrato,            
-            vocontrato::$nmAtrSqEspecieContrato,
-            vocontrato::$nmAtrObjetoContrato,
-            vocontrato::$nmAtrDtAssinaturaContrato,
-        	vocontrato::$nmAtrDtVigenciaInicialContrato,
-        	vocontrato::$nmAtrDtVigenciaFinalContrato,            
-            vocontrato::$nmAtrVlGlobalContrato,
-            vocontrato::$nmAtrVlMensalContrato
+            self::$nmAtrSqContrato,
+            self::$nmAtrAnoContrato,            
+            self::$nmAtrCdContrato,
+            self::$nmAtrTipoContrato,
+            self::$nmAtrEspecieContrato,
+            self::$nmAtrCdEspecieContrato,            
+            self::$nmAtrSqEspecieContrato,
+            self::$nmAtrObjetoContrato,
+            self::$nmAtrDtAssinaturaContrato,
+        	self::$nmAtrDtVigenciaInicialContrato,
+        	self::$nmAtrDtVigenciaFinalContrato,            
+            self::$nmAtrVlGlobalContrato,
+            self::$nmAtrVlMensalContrato
         );
         
         return $retorno;    
@@ -163,87 +164,87 @@ include_once(caminho_lib."voentidade.php");
     }
 
 	function getDadosRegistroBanco($registrobanco){		
-		$this->sq = $registrobanco[vocontrato::$nmAtrSqContrato];
-		$this->cdContrato = $registrobanco[vocontrato::$nmAtrCdContrato];
-		$this->anoContrato = $registrobanco[vocontrato::$nmAtrAnoContrato];
-        $this->tipo = $registrobanco[vocontrato::$nmAtrTipoContrato];
-        $this->especie	 = $registrobanco[vocontrato::$nmAtrEspecieContrato];
-        $this->sqEspecie	 = $registrobanco[vocontrato::$nmAtrSqEspecieContrato];
-        $this->cdEspecie	 = $registrobanco[vocontrato::$nmAtrCdEspecieContrato];
-        $this->situacao	 = $registrobanco[vocontrato::$nmAtrCdSituacaoContrato];
-        $this->modalidade	 = $registrobanco[vocontrato::$nmAtrModalidadeContrato];
-		$this->cdPessoaContratada= $registrobanco[vocontrato::$nmAtrCdPessoaContratada];
-		$this->contratada = $registrobanco[vocontrato::$nmAtrContratadaContrato];
-		$this->docContratada = $registrobanco[vocontrato::$nmAtrDocContratadaContrato];
-		$this->gestor = $registrobanco[vocontrato::$nmAtrGestorContrato];
-        $this->cdGestor = $registrobanco[vocontrato::$nmAtrCdGestorContrato];
-		$this->nmGestorPessoa = $registrobanco[vocontrato::$nmAtrGestorPessoaContrato];
-        $this->cdGestorPessoa = $registrobanco[vocontrato::$nmAtrCdGestorPessoaContrato];
-		$this->objeto = $registrobanco[vocontrato::$nmAtrObjetoContrato];
-		$this->dtVigenciaInicial = getData($registrobanco[vocontrato::$nmAtrDtVigenciaInicialContrato]);
-		$this->dtVigenciaFinal = getData($registrobanco[vocontrato::$nmAtrDtVigenciaFinalContrato]);
-		$this->vlMensal = getMoeda($registrobanco[vocontrato::$nmAtrVlMensalContrato]);
-		$this->vlGlobal = getMoeda($registrobanco[vocontrato::$nmAtrVlGlobalContrato]);
-		$this->procLic = $registrobanco[vocontrato::$nmAtrProcessoLicContrato];				
-		$this->dtAssinatura = getData($registrobanco[vocontrato::$nmAtrDtAssinaturaContrato]);
+		$this->sq = $registrobanco[self::$nmAtrSqContrato];
+		$this->cdContrato = $registrobanco[self::$nmAtrCdContrato];
+		$this->anoContrato = $registrobanco[self::$nmAtrAnoContrato];
+        $this->tipo = $registrobanco[self::$nmAtrTipoContrato];
+        $this->especie	 = $registrobanco[self::$nmAtrEspecieContrato];
+        $this->sqEspecie	 = $registrobanco[self::$nmAtrSqEspecieContrato];
+        $this->cdEspecie	 = $registrobanco[self::$nmAtrCdEspecieContrato];
+        $this->situacao	 = $registrobanco[self::$nmAtrCdSituacaoContrato];
+        $this->modalidade	 = $registrobanco[self::$nmAtrModalidadeContrato];
+		$this->cdPessoaContratada= $registrobanco[self::$nmAtrCdPessoaContratada];
+		$this->contratada = $registrobanco[self::$nmAtrContratadaContrato];
+		$this->docContratada = $registrobanco[self::$nmAtrDocContratadaContrato];
+		$this->gestor = $registrobanco[self::$nmAtrGestorContrato];
+        $this->cdGestor = $registrobanco[self::$nmAtrCdGestorContrato];
+		$this->nmGestorPessoa = $registrobanco[self::$nmAtrGestorPessoaContrato];
+        $this->cdPessoaGestor = $registrobanco[self::$nmAtrCdPessoaGestorContrato];
+		$this->objeto = $registrobanco[self::$nmAtrObjetoContrato];
+		$this->dtVigenciaInicial = getData($registrobanco[self::$nmAtrDtVigenciaInicialContrato]);
+		$this->dtVigenciaFinal = getData($registrobanco[self::$nmAtrDtVigenciaFinalContrato]);
+		$this->vlMensal = getMoeda($registrobanco[self::$nmAtrVlMensalContrato]);
+		$this->vlGlobal = getMoeda($registrobanco[self::$nmAtrVlGlobalContrato]);
+		$this->procLic = $registrobanco[self::$nmAtrProcessoLicContrato];				
+		$this->dtAssinatura = getData($registrobanco[self::$nmAtrDtAssinaturaContrato]);
 		
-        $this->dtPublicacao = getData($registrobanco[vocontrato::$nmAtrDtPublicacaoContrato]);
-        $this->dtProposta = getData($registrobanco[vocontrato::$nmAtrDtProposta]);
-        $this->dataPublicacao = $registrobanco[vocontrato::$nmAtrDataPublicacaoContrato];
-		$this->empenho = $registrobanco[vocontrato::$nmAtrNumEmpenhoContrato];		
-		$this->tpAutorizacao = $registrobanco[vocontrato::$nmAtrTipoAutorizacaoContrato];
-		$this->cdAutorizacao = $registrobanco[vocontrato::$nmAtrCdAutorizacaoContrato];
-		$this->licom = $registrobanco[vocontrato::$nmAtrInLicomContrato];
-        $this->importacao = $registrobanco[vocontrato::$nmAtrInImportacaoContrato];
-		$this->obs = $registrobanco[vocontrato::$nmAtrObservacaoContrato];
-        $this->dhInclusao = $registrobanco[vocontrato::$nmAtrDhInclusao];
-        $this->dhUltAlteracao = $registrobanco[vocontrato::$nmAtrDhUltAlteracao];
-        $this->cdUsuarioInclusao = $registrobanco[vocontrato::$nmAtrCdUsuarioInclusao];
-        $this->cdUsuarioUltAlteracao = $registrobanco[vocontrato::$nmAtrCdUsuarioUltAlteracao];
+        $this->dtPublicacao = getData($registrobanco[self::$nmAtrDtPublicacaoContrato]);
+        $this->dtProposta = getData($registrobanco[self::$nmAtrDtProposta]);
+        $this->dataPublicacao = $registrobanco[self::$nmAtrDataPublicacaoContrato];
+		$this->empenho = $registrobanco[self::$nmAtrNumEmpenhoContrato];		
+		$this->tpAutorizacao = $registrobanco[self::$nmAtrTipoAutorizacaoContrato];
+		$this->cdAutorizacao = $registrobanco[self::$nmAtrCdAutorizacaoContrato];
+		$this->licom = $registrobanco[self::$nmAtrInLicomContrato];
+        $this->importacao = $registrobanco[self::$nmAtrInImportacaoContrato];
+		$this->obs = $registrobanco[self::$nmAtrObservacaoContrato];
+        $this->dhInclusao = $registrobanco[self::$nmAtrDhInclusao];
+        $this->dhUltAlteracao = $registrobanco[self::$nmAtrDhUltAlteracao];
+        $this->cdUsuarioInclusao = $registrobanco[self::$nmAtrCdUsuarioInclusao];
+        $this->cdUsuarioUltAlteracao = $registrobanco[self::$nmAtrCdUsuarioUltAlteracao];
         
-        $this->nmUsuarioInclusao = $registrobanco[vocontrato::$nmAtrNmUsuarioInclusao];
-        $this->nmUsuarioUltAlteracao = $registrobanco[vocontrato::$nmAtrNmUsuarioUltAlteracao];        
+        $this->nmUsuarioInclusao = $registrobanco[self::$nmAtrNmUsuarioInclusao];
+        $this->nmUsuarioUltAlteracao = $registrobanco[self::$nmAtrNmUsuarioUltAlteracao];        
 		
 	}   
 	
 	function getDadosFormulario(){
-        $this->sq = @$_POST[vocontrato::$nmAtrSqContrato];
-		$this->cdContrato = @$_POST[vocontrato::$nmAtrCdContrato];
-		$this->anoContrato = @$_POST[vocontrato::$nmAtrAnoContrato];
-        $this->tipo = @$_POST[vocontrato::$nmAtrTipoContrato];
+        $this->sq = @$_POST[self::$nmAtrSqContrato];
+		$this->cdContrato = @$_POST[self::$nmAtrCdContrato];
+		$this->anoContrato = @$_POST[self::$nmAtrAnoContrato];
+        $this->tipo = @$_POST[self::$nmAtrTipoContrato];
         
-        //if(isset($_POST[vocontrato::$nmAtrSqEspecieContrato]))
-            $this->sqEspecie = @$_POST[vocontrato::$nmAtrSqEspecieContrato];
+        //if(isset($_POST[self::$nmAtrSqEspecieContrato]))
+            $this->sqEspecie = @$_POST[self::$nmAtrSqEspecieContrato];
             
-		$this->especie = @$_POST[vocontrato::$nmAtrEspecieContrato];
-        $this->sqEspecie = @$_POST[vocontrato::$nmAtrSqEspecieContrato];
-        $this->cdEspecie = @$_POST[vocontrato::$nmAtrCdEspecieContrato]; 
-        $this->modalidade = @$_POST[vocontrato::$nmAtrModalidadeContrato];
+		$this->especie = @$_POST[self::$nmAtrEspecieContrato];
+        $this->sqEspecie = @$_POST[self::$nmAtrSqEspecieContrato];
+        $this->cdEspecie = @$_POST[self::$nmAtrCdEspecieContrato]; 
+        $this->modalidade = @$_POST[self::$nmAtrModalidadeContrato];
         
-        $this->cdPessoaContratada= @$_POST[vocontrato::$nmAtrCdPessoaContratada];
-        $this->contratada = @$_POST[vocontrato::$nmAtrContratadaContrato];
-		$this->docContratada = @$_POST[vocontrato::$nmAtrDocContratadaContrato];
-		$this->gestor = @$_POST[vocontrato::$nmAtrGestorContrato];
-        $this->cdGestor = @$_POST[vocontrato::$nmAtrCdGestorContrato];        
-        $this->nmGestorPessoa = @$_POST[vocontrato::$nmAtrGestorPessoaContrato];
-        $this->cdGestorPessoa = @$_POST[vocontrato::$nmAtrCdGestorPessoaContrato];		
-		$this->objeto = @$_POST[vocontrato::$nmAtrObjetoContrato];
-		$this->dtVigenciaInicial = @$_POST[vocontrato::$nmAtrDtVigenciaInicialContrato];
-		$this->dtVigenciaFinal = @$_POST[vocontrato::$nmAtrDtVigenciaFinalContrato];        		
-		$this->vlMensal = @$_POST[vocontrato::$nmAtrVlMensalContrato];
-		$this->vlGlobal = @$_POST[vocontrato::$nmAtrVlGlobalContrato];
-		$this->procLic = @$_POST[vocontrato::$nmAtrProcessoLicContrato];				
-		$this->dtAssinatura = @$_POST[vocontrato::$nmAtrDtAssinaturaContrato];
-		$this->dtPublicacao = @$_POST[vocontrato::$nmAtrDtPublicacaoContrato];
-        $this->dtProposta = @$_POST[vocontrato::$nmAtrDtProposta];
-		$this->empenho = @$_POST[vocontrato::$nmAtrNumEmpenhoContrato];		
-		$this->tpAutorizacao = @$_POST[vocontrato::$nmAtrTipoAutorizacaoContrato];
-		$this->cdAutorizacao = @$_POST[vocontrato::$nmAtrCdAutorizacaoContrato];
-		$this->licom = @$_POST[vocontrato::$nmAtrInLicomContrato];
-		$this->obs = @$_POST[vocontrato::$nmAtrObservacaoContrato];
+        $this->cdPessoaContratada= @$_POST[self::$nmAtrCdPessoaContratada];
+        $this->contratada = @$_POST[self::$nmAtrContratadaContrato];
+		$this->docContratada = @$_POST[self::$nmAtrDocContratadaContrato];
+		$this->gestor = @$_POST[self::$nmAtrGestorContrato];
+        $this->cdGestor = @$_POST[self::$nmAtrCdGestorContrato];        
+        $this->nmGestorPessoa = @$_POST[self::$nmAtrGestorPessoaContrato];
+        $this->cdPessoaGestor = @$_POST[self::$nmAtrCdPessoaGestorContrato];		
+		$this->objeto = @$_POST[self::$nmAtrObjetoContrato];
+		$this->dtVigenciaInicial = @$_POST[self::$nmAtrDtVigenciaInicialContrato];
+		$this->dtVigenciaFinal = @$_POST[self::$nmAtrDtVigenciaFinalContrato];        		
+		$this->vlMensal = @$_POST[self::$nmAtrVlMensalContrato];
+		$this->vlGlobal = @$_POST[self::$nmAtrVlGlobalContrato];
+		$this->procLic = @$_POST[self::$nmAtrProcessoLicContrato];				
+		$this->dtAssinatura = @$_POST[self::$nmAtrDtAssinaturaContrato];
+		$this->dtPublicacao = @$_POST[self::$nmAtrDtPublicacaoContrato];
+        $this->dtProposta = @$_POST[self::$nmAtrDtProposta];
+		$this->empenho = @$_POST[self::$nmAtrNumEmpenhoContrato];		
+		$this->tpAutorizacao = @$_POST[self::$nmAtrTipoAutorizacaoContrato];
+		$this->cdAutorizacao = @$_POST[self::$nmAtrCdAutorizacaoContrato];
+		$this->licom = @$_POST[self::$nmAtrInLicomContrato];
+		$this->obs = @$_POST[self::$nmAtrObservacaoContrato];
         
-        $this->dhUltAlteracao = @$_POST[vocontrato::$nmAtrDhUltAlteracao];
-        $this->sqHist = @$_POST[vocontrato::$nmAtrSqHist];
+        $this->dhUltAlteracao = @$_POST[self::$nmAtrDhUltAlteracao];
+        $this->sqHist = @$_POST[self::$nmAtrSqHist];
         //usuario de ultima manutencao sempre sera o id_user
         $this->cdUsuarioUltAlteracao = id_user;
 	}
@@ -251,11 +252,11 @@ include_once(caminho_lib."voentidade.php");
     function getValoresWhereSQLChave($isHistorico){
         $nmTabela = $this->getNmTabelaEntidade($isHistorico);
         
-		$query = $nmTabela . "." . vocontrato::$nmAtrCdContrato . "=" . $this->cdContrato;
-		$query.= " AND " . $nmTabela . "." . vocontrato::$nmAtrAnoContrato . "=" . $this->anoContrato;
-		$query.= " AND ". $nmTabela . "." . vocontrato::$nmAtrSqContrato . "=" . $this->sq;
+		$query = $nmTabela . "." . self::$nmAtrCdContrato . "=" . $this->cdContrato;
+		$query.= " AND " . $nmTabela . "." . self::$nmAtrAnoContrato . "=" . $this->anoContrato;
+		$query.= " AND ". $nmTabela . "." . self::$nmAtrSqContrato . "=" . $this->sq;
         if($isHistorico)
-            $query.= " AND ". $nmTabela . "." . vocontrato::$nmAtrSqHist . "=" . $this->sqHist;
+            $query.= " AND ". $nmTabela . "." . self::$nmAtrSqHist . "=" . $this->sqHist;
         
         return $query;        
     }

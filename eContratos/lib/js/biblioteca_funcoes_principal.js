@@ -1,10 +1,4 @@
 /*
- * Este arquivo eh propriedade da Secretaria da Fazenda do Estado 
- * de Pernambuco (Sefaz-PE). Nenhuma informacao nele contida pode ser 
- * reproduzida, mostrada ou revelada sem permissao escrita da Sefaz-PE.
- */
-
-/*
  Descrição:
  - Contém todas as mensagens e funções de apoio utilizadas pelas 
    demais bibliotecas
@@ -15,10 +9,13 @@
 */
 
 // Constantes
+TAMANHO_CODIGOS = 5;
+TAMANHO_CODIGOS_DOCUMENTOS = 3;
 CD_CAMPO_SUBSTITUICAO = "[[*]]"; // Deve ser igual à constante br.gov.pe.sefaz.sfi.util.Constantes.CD_CAMPO_SUBSTITUICAO
 CD_CAMPO_SUBSTITUICAO_MSGUSR = "#?#"; // Deve ser igual à constante br.gov.pe.sefaz.sfi.util.Constantes.CD_CAMPO_SUBSTITUICAO_MSGUSR
 
-CD_CAMPO_SEPARADOR = "[[*]]";
+//CD_CAMPO_SEPARADOR = "[[*]]";
+CD_CAMPO_SEPARADOR = "*";
 CD_CAMPO_SEPARADOR_AUX = "[[**]]";
 
 CD_CARACTERE_CORINGA_BD = '%';
@@ -129,6 +126,13 @@ function tratarErroFatal(pMsg, pURL, pLinha) {
 
 function tratarUnload() {
 	ocultarMensagemAguarde();
+}
+
+function limparFormulario() {	
+
+	for(i=0;i<frm_principal.length;i++){
+		frm_principal.elements[i].value='';
+	}	
 }
 
 // Confirma a execução de uma operação. Se pTexto for nulo, será exibida uma mensagem padrão de confirmação.
