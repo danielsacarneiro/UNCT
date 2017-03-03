@@ -1,7 +1,7 @@
 <?php
 include_once("../../config_lib.php");
 include_once(caminho_vos . "vocontrato.php");
-include_once("dominioSituacaoPA.php");
+//include_once("dominioSituacaoPA.php");
 
 function getComboSituacaoPA($idCampo, $nmCampo, $cdOpcaoSelecionada, $classCampo, $tagHtml){
 	$dominio = new dominioSituacaoPA();
