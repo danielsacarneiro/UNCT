@@ -138,7 +138,7 @@ function confirmar() {
 	        <?php 
 	        }?>
 			<TR>
-                <TH class="campoformulario" nowrap width="1%">Endereço:</TH>
+                <TH class="campoformulario" nowrap width="1%">Arquivo:</TH>
                 <TD class="campoformulario" colspan=3><INPUT type="text" id="<?=voDocumento::$nmAtrLinkDoc?>" name="<?=voDocumento::$nmAtrLinkDoc?>"  value="<?php echo $vo->linkDoc;?>"  class="camponaoobrigatorio" size="80" ></TD>
             </TR>
 	        

@@ -450,7 +450,7 @@ include_once(caminho_vos."vousuario.php");
         
   		 $html = "<TR>
                     <TH class='campoformulario' width='1%'>Consulta:</TH>
-                    <TD class='campoformulario' colspan='3'>";
+                    <TD class='campoformulario' valign='bottom' colspan='3' width='90%' nowrap>\n";
                     
         if($comboOrdenacao != null){ 
         	//echo $cdOrdenacao;
@@ -469,9 +469,13 @@ include_once(caminho_vos."vousuario.php");
                 $html .=    " &nbsp;Histórico: "
                     . $radioHistorico->getHtmlRadio("cdHistorico","cdHistorico", $cdHistorico, false, false);
 
-        $html .= "&nbsp;<button id='localizar' class='botaoconsulta' type='submit'>Consultar</button></TD>
+        /*$html .= "&nbsp;<button id='localizar' class='botaoconsulta' type='submit'>Consultar</button></TD>\n";
+        $html .= "<TD class='campoformularioalinhadodireita'> <a href='javascript:limparFormulario();' ><img  title='Limpar' src='".caminho_imagens."borracha.jpg' width='20' height='20'></a></TD>
+                    </TR>";*/
+        $html .= "&nbsp;<button id='localizar' class='botaoconsulta' type='submit'>Consultar</button>\n";
+        $html .= "&nbsp;&nbsp;&nbsp;<a href='javascript:limparFormulario();' ><img  title='Limpar' src='".caminho_imagens."borracha.jpg' width='20' height='20'></a></TD>\n
                     </TR>";
-                    
+        
         return $html;        
     }
     

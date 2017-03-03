@@ -24,14 +24,24 @@ include_once(caminho_lib. "dbprocesso.obj.php");
         $retorno.= $this-> getVarComoNumero($voPADTramitacao->sq) . ",";
         $retorno.= $this-> getVarComoNumero($voPADTramitacao->cdPA) . ",";
         $retorno.= $this-> getVarComoNumero($voPADTramitacao->anoPA) . ",";
-        $retorno.= $this-> getVarComoString($voPADTramitacao->obs);
+        $retorno.= $this-> getVarComoString($voPADTramitacao->obs) . ",";
+        
+        /*$retorno.= $this-> getVarComoNumero($voPADTramitacao->cdSetorDoc) . ",";
+        $retorno.= $this-> getVarComoNumero($voPADTramitacao->anoDoc) . ",";
+        $retorno.= $this-> getVarComoString($voPADTramitacao->tpDoc) . ",";
+        $retorno.= $this-> getVarComoNumero($voPADTramitacao->sqDoc);*/
+        
+        $retorno.= $this-> getVarComoNumero($voPADTramitacao->voDoc->cdSetor) . ",";
+        $retorno.= $this-> getVarComoNumero($voPADTramitacao->voDoc->ano) . ",";
+        $retorno.= $this-> getVarComoString($voPADTramitacao->voDoc->tpDoc) . ",";
+        $retorno.= $this-> getVarComoNumero($voPADTramitacao->voDoc->sq);
         
         $retorno.= $voPADTramitacao->getSQLValuesInsertEntidade();
 		        
 		return $retorno;                
     }
         
-    function getSQLValuesUpdate($vo){        
+    /*function getSQLValuesUpdate($vo){        
         $retorno = "";
         $sqlConector = "";
                 
@@ -39,11 +49,11 @@ include_once(caminho_lib. "dbprocesso.obj.php");
             $retorno.= $sqlConector . voPATramitacao::$nmAtrObservacao. " = " . $this->getVarComoString($vo->obs);
             $sqlConector = ",";
         }
-                
+                        
         $retorno = $retorno . $sqlConector . $vo->getSQLValuesUpdate();
 		        
 		return $retorno;                
-    }
+    }*/
    
 }
 ?>

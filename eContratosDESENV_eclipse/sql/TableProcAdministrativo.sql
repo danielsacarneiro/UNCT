@@ -51,16 +51,25 @@ CREATE TABLE pa_tramitacao (
     pa_cd INT NOT NULL, -- processo administrativo cd 
     pa_ex INT NOT NULL, -- processo administrativo ano
     patr_observacao MEDIUMTEXT,
-    patr_link_arquivo TEXT,
+
+	ofic_sq INT,
+    ofic_cd_setor INT, 
+    ofic_ex INT,
+    ofic_tp_doc CHAR(2),
+    
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_ultalt INT,
     
     CONSTRAINT pk PRIMARY KEY (	sq, pa_cd, pa_ex)
 );
 
-ALTER TABLE pa_tramitacao ADD CONSTRAINT fk_pa_tramitacao FOREIGN KEY (pa_cd, pa_ex) REFERENCES pa (pa_cd, pa_ex)
+ALTER TABLE pa_tramitacao ADD CONSTRAINT fk_pa_tramitacao FOREIGN KEY (pa_ex, pa_cd) REFERENCES pa (pa_ex, pa_cd)
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;
         
+ALTER TABLE pa_tramitacao ADD CONSTRAINT fk_pa_tram_doc FOREIGN KEY (ofic_ex, ofic_cd_setor, ofic_sq, ofic_tp_doc) REFERENCES documento (ofic_ex, ofic_cd_setor, sq, ofic_tp_doc)
+	ON DELETE RESTRICT
+	ON UPDATE RESTRICT;
+
 show create table pa_tramitacao;
 

@@ -1,10 +1,4 @@
 /*
- * Este arquivo eh propriedade da Secretaria da Fazenda do Estado 
- * de Pernambuco (Sefaz-PE). Nenhuma informacao nele contida pode ser 
- * reproduzida, mostrada ou revelada sem permissao escrita da Sefaz-PE.
- */
-
-/*
  Descri��o:
  - Cont�m fun��es de montagem de menu
 

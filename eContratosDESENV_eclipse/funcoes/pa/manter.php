@@ -4,6 +4,7 @@ include_once(caminho_util."bibliotecaHTML.php");
 include_once(caminho_util."selectExercicio.php");
 include_once(caminho_vos."voPA.php");
 include_once(caminho_vos."voPATramitacao.php");
+include_once(caminho_vos."voDocumento.php");
 
 //inicia os parametros
 inicioComValidacaoUsuario(true);
@@ -60,6 +61,7 @@ setCabecalho($titulo);
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>mensagens_globais.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_text.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_oficio.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_datahora.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_ajax.js"></script>
@@ -100,8 +102,12 @@ function carregaDadosContratada(){
 
 function incluirTramitacao(){
 	textoFase = document.frm_principal.<?=voPATramitacao::$nmAtrObservacao?>.value;
-	if(textoFase != "")
-		manterDadosTramitacaoPA(textoFase, 'div_tramitacao', '<?=constantes::$CD_FUNCAO_INCLUIR?>');
+	docFase = document.frm_principal.<?=voDocumento::getNmTabela()?>.value;
+	if(textoFase != ""){
+		manterDadosTramitacaoPA(textoFase, docFase, 'div_tramitacao', '<?=constantes::$CD_FUNCAO_INCLUIR?>');
+		document.frm_principal.<?=voDocumento::getNmTabela()?>.value = "";
+		document.frm_principal.<?=voDocumento::$nmAtrSq?>.value = "";
+	}
 	else
 		exibirMensagem("Tramitação não pode ser vazia!");	
 }
@@ -113,8 +119,21 @@ function excluirTramitacao(){
 	if(confirm("Confirmar Alteracoes?")){
 		
 		indice = document.frm_principal.rdb_tramitacao.value;		
-		manterDadosTramitacaoPA("", 'div_tramitacao', '<?=constantes::$CD_FUNCAO_EXCLUIR?>', indice);
+		manterDadosTramitacaoPA("", "", 'div_tramitacao', '<?=constantes::$CD_FUNCAO_EXCLUIR?>', indice);
 	}
+}
+
+
+function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
+	chave = sq
+		+ CD_CAMPO_SEPARADOR +  cdSetor
+		+ CD_CAMPO_SEPARADOR +  ano
+		+ CD_CAMPO_SEPARADOR +  tpDoc;
+
+	document.getElementsByName("<?=voDocumento::getNmTabela()?>").item(0).value = chave;
+	document.getElementsByName("<?=voDocumento::$nmAtrSq?>").item(0).value = formatarCodigoDocumento(sq, cdSetor, ano, tpDoc);
+
+	//alert(chave);
 }
 
 </SCRIPT>
@@ -198,7 +217,7 @@ function excluirTramitacao(){
 	        //require_once ("dominioSituacaoPA.php");	        
 	        $domSiPA = new dominioSituacaoPA();
 	        $situacao = $colecao[voPA::$nmAtrSituacao];
-	        $situacao = $domSiPA->getDescricao($situacao);
+	        $situacao = $domSiPA->getDescricao($situacao);	        
 	        ?>
 			<TR>
 	            <TH class="campoformulario" nowrap>Situação:</TH>
@@ -250,13 +269,22 @@ function excluirTramitacao(){
 	<TH class="textoseparadorgrupocampos" halign="left" colspan="4">
 	<DIV class="campoformulario">Incluir Tramitação:
          <TABLE id="table_tabeladados" class="tabeladados" cellpadding="0" cellspacing="0">						
-             <TBODY>
+             <TBODY>             
                 <TR class="dados">
+		            <TH class="campoformulario" width="1%" nowrap>Texto:</TH>
+		            <TD class="campoformulario" width="1%" nowrap>
+		            	<textarea rows="2" cols="60" id="<?=voPATramitacao::$nmAtrObservacao?>" name="<?=voPATramitacao::$nmAtrObservacao?>" class="camponaoobrigatorio" ></textarea>
+					</TD>
+		            <TH class="campoformulario" width="1%" nowrap>Documento:</TH>
+		            <TD class="campoformulario" width="1%" nowrap>
+		                    <INPUT type="text" id="<?=voDocumento::$nmAtrSq?>" name="<?=voDocumento::$nmAtrSq?>" class="camporeadonly" size="15" readonly>
+		                    <INPUT type="hidden" id="<?=voDocumento::getNmTabela()?>" name="<?=voDocumento::getNmTabela()?>" value="">
+		                    <?php echo getLinkPesquisa("../documento");?>
+					</TD>
                     <TD class="campoformulario">
-                    <textarea rows="2" cols="60" id="<?=voPATramitacao::$nmAtrObservacao?>" name="<?=voPATramitacao::$nmAtrObservacao?>" class="camponaoobrigatorio" ></textarea>
                     <?php 
                     echo getBotaoValidacaoAcesso("bttincluir_tram", "Incluir", "botaofuncaop", false,false,true, false, "onClick='incluirTramitacao();' accesskey='i'");
-                    echo getBotaoValidacaoAcesso("bttexcluir_tram", "Excluir", "botaofuncaop", false,false,true, false, "onClick='excluirTramitacao();' accesskey='e'");
+                    echo getBotaoValidacaoAcesso("bttexcluir_tram", "Excluir", "botaofuncaop", false,false,true, false, "onClick='excluirTramitacao();' accesskey='e'");                    
                     ?>
                     </TD>                    
                 </TR>					

@@ -195,6 +195,16 @@
     	$classProcesso = static::getNmClassProcesso();    	 
     	return  str_replace("db", "vo", $classProcesso);
     }
-                
+    
+    function getVOExplodeChave(){
+    	$chave = @$_GET["chave"];
+    	$this->getVOExplodeChaveParam($chave);
+    }
+    
+    function getVOExplodeChaveParam($chave){    	
+    	$array = explode(CAMPO_SEPARADOR,$chave);
+    	$this->getVOExplodeChavePrimaria($array);
+    }
+    
 }
 ?>

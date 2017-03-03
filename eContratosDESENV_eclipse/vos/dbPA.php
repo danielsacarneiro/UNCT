@@ -113,8 +113,7 @@ include_once (caminho_filtros."filtroManterPA.php");
     	$filtro->TemPaginacao = false;
     	
     	$voPrincipal = new voPATramitacao();
-    	$filtro->nmEntidadePrincipal = $voPrincipal->getNmClassVO();
-    	
+    	$filtro->nmEntidadePrincipal = $voPrincipal->getNmClassVO();    	
     	    	
     	$filtro->cdPA = $voentidade->cdPA;
     	$filtro->anoPA = $voentidade->anoPA;

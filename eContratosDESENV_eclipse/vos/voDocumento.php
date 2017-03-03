@@ -58,7 +58,7 @@ include_once(caminho_util."dominioSetor.php");
 		$query = $nmTabela . "." . self::$nmAtrSq . "=" . $this->sq;
 		$query .= "\n AND " . $nmTabela . "." . self::$nmAtrCdSetor . "=" . $this->cdSetor;
 		$query .= "\n AND " . $nmTabela . "." . self::$nmAtrAno . "=" . $this->ano;
-		$query .= "\n AND " . $nmTabela . "." . self::$nmAtrTpDoc. "=" . $this->tpDoc;
+		$query .= "\n AND " . $nmTabela . "." . self::$nmAtrTpDoc. "='" . $this->tpDoc . "'";
 		
         if($isHistorico)
             $query.= " AND ". $nmTabela . "." . self::$nmAtrSqHist . "=" . $this->sqHist;
@@ -132,9 +132,35 @@ include_once(caminho_util."dominioSetor.php");
 				$retorno.= dominioTpDocumento::$ENDERECO_PASTA_OFICIO . " " . $domSetor->getDescricao($this->cdSetor). " $this->ano\\";				
 				
 				$retorno.=$this->linkDoc;
+			}else if($this->tpDoc == dominioTpDocumento::$CD_TP_DOC_NOTIFICACAO){				
+					$retorno.= dominioTpDocumento::$ENDERECO_PASTA_PA;					
+					$retorno.= dominioTpDocumento::$ENDERECO_PASTA_NOTIFICACAO;
+					$retorno.= dominioTpDocumento::$ENDERECO_PASTA_NOTIFICACAO . " $this->ano\\";
+				
+					$retorno.=$this->linkDoc;
 			}
+				
 		}
 		
+		return $retorno;
+	}
+	
+	function formatarCodigo(){	
+		return self::formatarCodigoDocumento($this->sq, $this->cdSetor, $this->ano, $this->tpDoc);
+	}
+	
+	static function formatarCodigoDocumento($sq, $cdSetor, $ano, $tpDoc){	
+		
+		$dominioSetor = new dominioSetor();
+		
+		$retorno = "";
+		if($sq != null){
+			$retorno = $tpDoc
+				. " " . complementarCharAEsquerda($sq, "0", TAMANHO_CODIGOS_SAFI)
+				. "-" . substr($ano, 2, 2)
+				. "/" . $dominioSetor->getDescricao($cdSetor);
+		}
+	
 		return $retorno;
 	}
                 
@@ -153,15 +179,13 @@ include_once(caminho_util."dominioSetor.php");
 				. CAMPO_SEPARADOR. $this->ano
 				. CAMPO_SEPARADOR. $this->tpDoc;
 	}
-	
-	function getVOExplodeChave(){
-		$chave = @$_GET["chave"];	
-		$array = explode(CAMPO_SEPARADOR,$chave);
+		
+	function getVOExplodeChavePrimaria($array){
 		$this->sq = $array[0];
 		$this->cdSetor= $array[1];
 		$this->ano = $array[2];
 		$this->tpDoc = $array[3];
-	}	
+	}
 	
 	static function getAtributosOrdenacao(){
 		$varAtributos = array(

@@ -1,22 +1,16 @@
 /*
- * Este arquivo eh propriedade da Secretaria da Fazenda do Estado 
- * de Pernambuco (Sefaz-PE). Nenhuma informacao nele contida pode ser 
- * reproduzida, mostrada ou revelada sem permissao escrita da Sefaz-PE.
- */
+ Descriï¿½ï¿½o:
+ - Contï¿½m funï¿½ï¿½es de validaï¿½ï¿½o de campos numï¿½rico, alfanumï¿½rico e texto
 
-/*
- Descrição:
- - Contém funções de validação de campos numérico, alfanumérico e texto
-
- Dependências:
+ Dependï¿½ncias:
  - biblioteca_funcoes_principal.js
 */
 
 
 // ********************************************************************
-// Funções para campos numéricos
+// Funï¿½ï¿½es para campos numï¿½ricos
 
-// coloca zeros a esquerda até o tamnanho máximo passado como parâmetro
+// coloca zeros a esquerda atï¿½ o tamnanho mï¿½ximo passado como parï¿½metro
 // Exemplo completarNumeroComZerosEsquerda(12, 4) = 0012
 function completarNumeroComZerosEsquerda(pValor, pTamanhoMaximo){
 
@@ -36,7 +30,7 @@ function completarNumeroComZerosEsquerda(pValor, pTamanhoMaximo){
 	return result;
 }
 
-// coloca zeros a direita até o tamnanho máximo passado como parâmetro
+// coloca zeros a direita atï¿½ o tamnanho mï¿½ximo passado como parï¿½metro
 // Exemplo completarNumeroComZerosDireita(12, 4) = 1200
 function completarNumeroComZerosDireita(pValor, pTamanhoMaximo){
 
@@ -126,7 +120,7 @@ function validarCampoNumericoPositivo(pCampo, pEvento) {
 }
 
 // Valida o preenchimento do campo numerico "pCampo" passado como parametro
-// Permite apenas números positivos e caracteres coringa (* e ?)
+// Permite apenas nï¿½meros positivos e caracteres coringa (* e ?)
 // Deve ser chamada no evento onkeyup do componente input text
 function validarCampoNumericoCoringa(pCampo, pEvento) {
 	var str = pCampo.value;
@@ -145,7 +139,7 @@ function validarCampoNumericoCoringa(pCampo, pEvento) {
 	}
 }
 
-// Verifica se existe um valor numérico válido no campo "pCampo" passado como parametro
+// Verifica se existe um valor numï¿½rico vï¿½lido no campo "pCampo" passado como parametro
 function isCampoNumericoValido(pCampo, pInObrigatorio, pVlMinimo, pVlMaximo, pTamanho, pSemMensagem) {
 	pCampo.value = trim(pCampo.value);
 	var str = pCampo.value;
@@ -215,7 +209,7 @@ function isCampoNumericoValido(pCampo, pInObrigatorio, pVlMinimo, pVlMaximo, pTa
 	return true;
 }
 
-// Verifica se existe um valor numérico negativo válido no campo "pCampo" passado como parametro
+// Verifica se existe um valor numï¿½rico negativo vï¿½lido no campo "pCampo" passado como parametro
 function isCampoNumericoNegativoValido(pCampo, pInObrigatorio, pVlMinimo, pVlMaximo, pTamanho, pSemMensagem) {
 	pCampo.value = trim(pCampo.value);
 	var str = pCampo.value;
@@ -282,7 +276,7 @@ function isCampoNumericoNegativoValido(pCampo, pInObrigatorio, pVlMinimo, pVlMax
 	return true;
 }
 
-// Verifica se existe um valor numérico positivo válido no campo "pCampo" passado como parametro
+// Verifica se existe um valor numï¿½rico positivo vï¿½lido no campo "pCampo" passado como parametro
 function isCampoNumericoPositivoValido(pCampo, pInObrigatorio, pVlMinimo, pVlMaximo, pTamanho, pSemMensagem) {
 	pCampo.value = trim(pCampo.value);
 	var str = pCampo.value;
@@ -351,7 +345,7 @@ function isCampoNumericoPositivoValido(pCampo, pInObrigatorio, pVlMinimo, pVlMax
 	return true;
 }
 
-// Verifica se existe um valor numérico válido no campo "pCampo" passado como parâmetro
+// Verifica se existe um valor numï¿½rico vï¿½lido no campo "pCampo" passado como parï¿½metro
 // Permite caracteres coringa e campo vazio
 function isCampoNumericoCoringaValido(pCampo, pSemMensagem) {
 	pCampo.value = trim(pCampo.value);
@@ -375,9 +369,9 @@ function isCampoNumericoCoringaValido(pCampo, pSemMensagem) {
 
 
 // ********************************************************************
-// Funções para campos alfabéticos
+// Funï¿½ï¿½es para campos alfabï¿½ticos
 
-// Valida o preenchimento do campo alfabético "pCampo" passado como parametro
+// Valida o preenchimento do campo alfabï¿½tico "pCampo" passado como parametro
 function validarCampoAlfabetico(pCampo, pEvento) {
 	var str = pCampo.value;
 	var tam = str.length;
@@ -404,7 +398,7 @@ function validarCampoAlfabeticoMaiusculo(pCampo, pEvento) {
 }
 
 
-// Valida o preenchimento do campo alfabético "pCampo" passado como parametro
+// Valida o preenchimento do campo alfabï¿½tico "pCampo" passado como parametro
 // Permite caracteres coringa
 function validarCampoAlfabeticoCoringa(pCampo, pEvento) {
 	var str = pCampo.value;
@@ -422,13 +416,13 @@ function validarCampoAlfabeticoCoringa(pCampo, pEvento) {
 	}
 }
 
-// Verifica se existe um valor alfabético maiúsculo válido no campo "pCampo" passado como parametro
+// Verifica se existe um valor alfabï¿½tico maiï¿½sculo vï¿½lido no campo "pCampo" passado como parametro
 function isCampoAlfabeticoMaiusculoValido(pCampo, pInObrigatorio, pTmMinimo, pTmMaximo, pSemMensagem) {
 	pCampo.value = pCampo.value.toUpperCase();
 	return isCampoAlfabeticoValido(pCampo, pInObrigatorio, pTmMinimo, pTmMaximo, pSemMensagem); 
 }
 
-// Verifica se existe um valor alfabético válido no campo "pCampo" passado como parametro
+// Verifica se existe um valor alfabï¿½tico vï¿½lido no campo "pCampo" passado como parametro
 function isCampoAlfabeticoValido(pCampo, pInObrigatorio, pTmMinimo, pTmMaximo, pSemMensagem) {
 	var str = pCampo.value;
 	var msg;
@@ -475,7 +469,7 @@ function isCampoAlfabeticoValido(pCampo, pInObrigatorio, pTmMinimo, pTmMaximo, p
 	return true;
 }
 
-// Verifica se existe um valor alfabético válido no campo "pCampo" passado como parametro
+// Verifica se existe um valor alfabï¿½tico vï¿½lido no campo "pCampo" passado como parametro
 // Permite caracteres coringa e campo vazio
 function isCampoAlfabeticoCoringaValido(pCampo, pSemMensagem) {
 	var str = pCampo.value;
@@ -498,7 +492,7 @@ function isCampoAlfabeticoCoringaValido(pCampo, pSemMensagem) {
 
 
 // ********************************************************************
-// Funções para campos alfanuméricos
+// Funï¿½ï¿½es para campos alfanumï¿½ricos
 
 // Valida o preenchimento do campo alfanumerico "pCampo" passado como parametro
 function validarCampoAlfaNumerico(pCampo, pEvento) {
@@ -535,7 +529,7 @@ function validarCampoAlfaNumericoCoringa(pCampo, pEvento) {
 }
 
 // Valida o preenchimento do campo alfanumerico extendido maiusculo "pCampo" passado como parametro.
-// Utilizado nos campos razão social.
+// Utilizado nos campos razï¿½o social.
 function validarCampoAlfaNumericoExtendidoMaiusculo(pCampo, pEvento) {
 	if (isTeclaFuncional(pEvento)) {
 		return;
@@ -553,8 +547,8 @@ function validarCampoAlfaNumericoExtendidoMaiusculo(pCampo, pEvento) {
 		expReg = campoExpRegCampoAlfaNumericoExtendido.value;
 		txMsgExpReg = campoTxMsgExpRegCampoAlfaNumericoExtendido.value;
 	} else {
-		expReg = ",\\.:;!?\"'´@#\\$%&*\\(\\)\\-_\\+<>/";
-		txMsgExpReg = ", \n, (vírgula), . (ponto), : (dois pontos), ; (ponto e vírgula), ! (exclamação), \n? (interrogação), \" (aspa), ' (apóstrofo), ´ (acento agudo), @ (arroba), \n# (cerquilha), $ (cifrão), % (percentagem), & (e comercial), * (asterisco), \n( (abre parênteses), ) (fecha parênteses), - (hífen), _ (sublinhado), \n+ (adição), / (barra), < (menor) e > (maior)";
+		expReg = ",\\.:;!?\"'ï¿½@#\\$%&*\\(\\)\\-_\\+<>/";
+		txMsgExpReg = ", \n, (vï¿½rgula), . (ponto), : (dois pontos), ; (ponto e vï¿½rgula), ! (exclamaï¿½ï¿½o), \n? (interrogaï¿½ï¿½o), \" (aspa), ' (apï¿½strofo), ï¿½ (acento agudo), @ (arroba), \n# (cerquilha), $ (cifrï¿½o), % (percentagem), & (e comercial), * (asterisco), \n( (abre parï¿½nteses), ) (fecha parï¿½nteses), - (hï¿½fen), _ (sublinhado), \n+ (adiï¿½ï¿½o), / (barra), < (menor) e > (maior)";
 	}
 
 	var filtro = eval("/^[A-Z0-9" + expReg + "\\s]*$/");
@@ -628,7 +622,7 @@ function isCampoAlfaNumericoValido(pCampo, pInObrigatorio, pTmMinimo, pTmMaximo,
 	return true;
 }
 
-// Verifica se existe um valor alfanumérico válido no campo "pCampo" passado como parametro
+// Verifica se existe um valor alfanumï¿½rico vï¿½lido no campo "pCampo" passado como parametro
 // Permite caracteres coringa e campo vazio
 function isCampoAlfaNumericoCoringaValido(pCampo, pSemMensagem) {
 	var str = pCampo.value;
@@ -661,8 +655,8 @@ function isCampoAlfaNumericoExtendidoMaiusculoValido(pCampo, pInObrigatorio, pTm
 		expReg = campoExpRegCampoAlfaNumericoExtendido.value;
 		txMsgExpReg = campoTxMsgExpRegCampoAlfaNumericoExtendido.value;
 	} else {
-		expReg = ",\\.:;!?\"'´@#\\$%&*\\(\\)\\-_\\+<>/";
-		txMsgExpReg = ", \n, (vírgula), . (ponto), : (dois pontos), ; (ponto e vírgula), ! (exclamação), \n? (interrogação), \" (aspa), ' (apóstrofo), ´ (acento agudo), @ (arroba), \n# (cerquilha), $ (cifrão), % (percentagem), & (e comercial), * (asterisco), \n( (abre parênteses), ) (fecha parênteses), - (hífen), _ (sublinhado), \n+ (adição), / (barra), < (menor) e > (maior)";
+		expReg = ",\\.:;!?\"'ï¿½@#\\$%&*\\(\\)\\-_\\+<>/";
+		txMsgExpReg = ", \n, (vï¿½rgula), . (ponto), : (dois pontos), ; (ponto e vï¿½rgula), ! (exclamaï¿½ï¿½o), \n? (interrogaï¿½ï¿½o), \" (aspa), ' (apï¿½strofo), ï¿½ (acento agudo), @ (arroba), \n# (cerquilha), $ (cifrï¿½o), % (percentagem), & (e comercial), * (asterisco), \n( (abre parï¿½nteses), ) (fecha parï¿½nteses), - (hï¿½fen), _ (sublinhado), \n+ (adiï¿½ï¿½o), / (barra), < (menor) e > (maior)";
 	}
 
 	if (pInObrigatorio) {
@@ -709,7 +703,7 @@ function isCampoAlfaNumericoExtendidoMaiusculoValido(pCampo, pInObrigatorio, pTm
 
 
 // ********************************************************************
-// Funções para campos texto
+// Funï¿½ï¿½es para campos texto
 
 // Valida o preenchimento do campo texto "pCampo" passado como parametro
 function validarCampoTexto(pCampo, pTmMaximo, pEvento, pCaracteresInvalidos) {
@@ -755,7 +749,7 @@ function validarCampoTextoAlfabetico(pCampo, pTmMaximo, pEvento) {
 		return;
 	}
 
-	var filtro = /^([a-zA-ZáéíóúâêôãõÁÉÍÓÚÂÊÔÃÕ\n\r\t ])*$/;
+	var filtro = /^([a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\n\r\t ])*$/;
 	if (!filtro.test(str)) {
 		if (tam > pTmMaximo) {
 			pCampo.value = str.substr(0, pTmMaximo);
@@ -782,7 +776,7 @@ function validarCampoTextoAlfabeticoCoringa(pCampo, pTmMaximo, pEvento) {
 		return;
 	}
 
-	var filtro = /^([a-zA-ZáéíóúâêôãõÁÉÍÓÚÂÊÔÃÕ*\n\r\t ])*$/;
+	var filtro = /^([a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*\n\r\t ])*$/;
 	if (!filtro.test(str)) {
 		if (tam > pTmMaximo) {
 			pCampo.value = str.substr(0, pTmMaximo);
@@ -800,7 +794,7 @@ function validarCampoTextoAlfabeticoCoringa(pCampo, pTmMaximo, pEvento) {
 	}
 }
 
-// Valida o preenchimento do campo texto "pCampo" passado como parametro, aplicando a expressão regular pFiltro
+// Valida o preenchimento do campo texto "pCampo" passado como parametro, aplicando a expressï¿½o regular pFiltro
 function validarCampoTextoExpressaoRegular(pCampo, pFiltro, pTxMensagem, pTmMaximo, pEvento) {
 	var str = pCampo.value;
 	var tam = str.length;
@@ -913,16 +907,16 @@ function isCampoTextoValido(pCampo, pInObrigatorio, pTmMinimo, pTmMaximo, pSemMe
 	return true;
 }
 
-// Verifica se existe um texto alfabético valido no campo "pCampo" passado como parametro
+// Verifica se existe um texto alfabï¿½tico valido no campo "pCampo" passado como parametro
 function isCampoTextoAlfabeticoValido(pCampo, pInObrigatorio, pTmMinimo, pTmMaximo, pSemMensagem) {
 	pCampo.value = trim(pCampo.value);
 	var str = pCampo.value;
 
 	if (pInObrigatorio) {
-		var filtro = /^([a-zA-ZáéíóúâêôãõÁÉÍÓÚÂÊÔÃÕ\n\r\t ])+$/;
+		var filtro = /^([a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\n\r\t ])+$/;
 		msg = "\n" + mensagemGlobal(0);
 	} else {
-		var filtro = /^([a-zA-ZáéíóúâêôãõÁÉÍÓÚÂÊÔÃÕ\n\r\t ])*$/;
+		var filtro = /^([a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\n\r\t ])*$/;
 		msg = "\n" + mensagemGlobal(1);
 	}
 
@@ -956,16 +950,16 @@ function isCampoTextoAlfabeticoValido(pCampo, pInObrigatorio, pTmMinimo, pTmMaxi
 	return true;
 }
 
-// Verifica se existe um texto alfabético valido no campo "pCampo" passado como parametro
+// Verifica se existe um texto alfabï¿½tico valido no campo "pCampo" passado como parametro
 function isCampoTextoAlfabeticoCoringaValido(pCampo, pInObrigatorio, pTmMinimo, pTmMaximo, pSemMensagem) {
 	pCampo.value = trim(pCampo.value);
 	var str = pCampo.value;
 
 	if (pInObrigatorio) {
-		var filtro = /^([a-zA-ZáéíóúâêôãõÁÉÍÓÚÂÊÔÃÕ*\n\r\t ])+$/;
+		var filtro = /^([a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*\n\r\t ])+$/;
 		msg = "\n" + mensagemGlobal(0);
 	} else {
-		var filtro = /^([a-zA-ZáéíóúâêôãõÁÉÍÓÚÂÊÔÃÕ*\n\r\t ])*$/;
+		var filtro = /^([a-zA-Zï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*\n\r\t ])*$/;
 		msg = "\n" + mensagemGlobal(1);
 	}
 
@@ -999,7 +993,7 @@ function isCampoTextoAlfabeticoCoringaValido(pCampo, pInObrigatorio, pTmMinimo, 
 	return true;
 }
 
-// Verifica se existe um texto em "pCampo" válido de acordo com a expressão regular "pFiltro" passada como parâmetro
+// Verifica se existe um texto em "pCampo" vï¿½lido de acordo com a expressï¿½o regular "pFiltro" passada como parï¿½metro
 function isCampoTextoExpressaoRegularValido(pCampo, pFiltro, pTxMensagem, pInObrigatorio, pTmMinimo, pTmMaximo, pSemMensagem) {
 	var str = pCampo.value;
 	var filtro = pFiltro;

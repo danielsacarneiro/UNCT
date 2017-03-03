@@ -6,18 +6,22 @@ include_once(caminho_util."dominio.class.php");
   	static $ENDERECO_PASTABASE = "H:\ASSESSORIA JURÍDICA\ATJA";
   	static $ENDERECO_PASTA_NOTA_TECNICA = "\Notas Técnicas";  	
   	static $ENDERECO_PASTA_OFICIO = "\Ofícios";
+  	static $ENDERECO_PASTA_PA = "\PROCESSO ADMINISTRATIVO";
+  	static $ENDERECO_PASTA_NOTIFICACAO = "\Notificacao";
+  	  	
+  	static $CD_TP_DOC_OFICIO = "OF";
+  	static $CD_TP_DOC_NOTA_TECNICA = "NT";
+  	static $CD_TP_DOC_NOTA_IMPUTACAO = "NI";
+  	static $CD_TP_DOC_NOTIFICACAO = "NO";
   	
-  	static $CD_TP_DOC_OFICIO = 1;  	
-  	static $CD_TP_DOC_NOTA_TECNICA = 2;
-  	static $CD_TP_DOC_NOTA_IMPUTACAO = 3;
-
 // ...............................................................
 // Construtor
     function __construct () {        
 		$this->colecao = array(
 				self::$CD_TP_DOC_OFICIO => "Ofício",
 				self::$CD_TP_DOC_NOTA_TECNICA => "Nota Técnica",
-				self::$CD_TP_DOC_NOTA_IMPUTACAO => "Nota Imputação"
+				self::$CD_TP_DOC_NOTA_IMPUTACAO => "Nota Imputação",
+				self::$CD_TP_DOC_NOTIFICACAO => "Notificação"
 				);
 	}
 	

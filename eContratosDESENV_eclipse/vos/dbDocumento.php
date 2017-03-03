@@ -10,7 +10,7 @@ include_once 'voDocumento.php';
   		 
   		$atributosConsulta = "*";  		   			 
   		$querySelect = "SELECT ". $atributosConsulta;  	
-		$queryFrom = "\n FROM ". $nmTabela;  	
+		$queryFrom = "\n FROM ". $nmTabela;
   		
   		return $this->consultarComPaginacaoQuery($voentidade, $filtro, $querySelect, $queryFrom);
   	}
@@ -33,7 +33,7 @@ include_once 'voDocumento.php';
         $retorno.= $this-> getVarComoNumero($voDocumento->sq) . ",";
         $retorno.= $this-> getVarComoNumero($voDocumento->cdSetor) . ",";
         $retorno.= $this-> getVarComoNumero($voDocumento->ano). ",";
-        $retorno.= $this-> getVarComoNumero($voDocumento->tpDoc). ",";
+        $retorno.= $this-> getVarComoString($voDocumento->tpDoc). ",";
         $retorno.= $this-> getVarComoString($voDocumento->linkDoc);
         
         $retorno.= $voDocumento->getSQLValuesInsertEntidade();
