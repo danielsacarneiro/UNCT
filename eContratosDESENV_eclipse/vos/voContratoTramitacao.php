@@ -54,8 +54,8 @@ include_once("dbContratoTramitacao.php");
         $nmTabela = $this->getNmTabelaEntidade($isHistorico);        
 		$query = $nmTabela . "." . self::$nmAtrCdContrato . "=" . $this->cdContrato;
 		$query.= " AND ". $nmTabela . "." . self::$nmAtrAnoContrato . "=" . $this->anoContrato;
-		$query.= " AND ". $nmTabela . "." . self::$nmAtrTipoContrato . "=" . $this->tipoContrato;
-		$query.= " AND ". $nmTabela . "." . self::$nmAtrSq . "=" . $this->sq;
+		$query.= " AND ". $nmTabela . "." . self::$nmAtrTipoContrato . "='" . $this->tipoContrato;
+		$query.= "' AND ". $nmTabela . "." . self::$nmAtrSq . "=" . $this->sq;
 		
         if($isHistorico)
             $query.= " AND ". $nmTabela . "." . self::$nmAtrSqHist . "=" . $this->sqHist;
@@ -93,7 +93,7 @@ include_once("dbContratoTramitacao.php");
 		$this->cdContrato = $registrobanco[self::$nmAtrCdContrato];
 		$this->anoContrato = $registrobanco[self::$nmAtrAnoContrato];
 		$this->tipoContrato= $registrobanco[self::$nmAtrTipoContrato];
-		//$this->sq = $registrobanco[self::$nmAtrSq];
+		$this->sq = $registrobanco[self::$nmAtrSq];
 	}   
 	
 	function getDadosFormulario(){		
@@ -104,7 +104,8 @@ include_once("dbContratoTramitacao.php");
 		$this->anoContrato = @$_POST[self::$nmAtrAnoContrato];
 		$this->tipoContrato= @$_POST[self::$nmAtrTipoContrato];		
 	}
-	                
+	  
+	//para o caso da classe herdar de alguem
 	function getVOPai(){		
 		$voTramitacao = new voTramitacao();
 		$voTramitacao->sq = $this->sq;
@@ -126,19 +127,16 @@ include_once("dbContratoTramitacao.php");
 	}   
 	
 	function getValorChavePrimaria(){
-		$retorno = "";
-		$retorno.= $this->anoContrato . ",";
-		$retorno.= $this->tipoContrato . ",";
-		$retorno.= $this->cdContrato . ",";
-		$retorno.= $this->sq;
-		
-		return $retorno;
+		return $this->anoContrato
+		. CAMPO_SEPARADOR. $this->tipoContrato
+		. CAMPO_SEPARADOR. $this->cdContrato
+		. CAMPO_SEPARADOR. $this->sq;
 	}
 		
 	function getChavePrimariaVOExplode($array){
-		$this->cdContrato = $array[0];
-		$this->anoContrato = $array[1];
-		$this->tipoContrato= $array[2];
+		$this->anoContrato = $array[0];
+		$this->tipoContrato= $array[1];
+		$this->cdContrato = $array[2];		
 		$this->sq = $array[3];
 	}
 	

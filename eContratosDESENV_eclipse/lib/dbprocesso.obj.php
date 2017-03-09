@@ -54,20 +54,20 @@ class dbprocesso{
                
         return $registro[0];
 	}
-    
-	function consultarPorChave($vo, $isHistorico){
+	
+	//acrescenta os dados dos usuarios guardados na tabela
+	function getQueryNmUsuario($vo, $queryJoin, $isHistorico){
 		$nmTabela = $vo->getNmTabelaEntidade($isHistorico);
-		$temUsuInclusao = false;
-		
-		$query = "SELECT ".$nmTabela;
-		$query.= ".*";
-		
+		$temUsuInclusao = false;		
+				
 		if($temUsuInclusao){
 			$query.= "TAB1." .vousuario::$nmAtrName. " AS " . voentidade::$nmAtrNmUsuarioInclusao;
 		}
 		$query.= ", TAB2." .vousuario::$nmAtrName. " AS " . voentidade::$nmAtrNmUsuarioUltAlteracao;
 		$query.= " FROM ". $nmTabela;
-
+		
+		$query.= $queryJoin;
+		
 		if($temUsuInclusao){
 			$query.= "\n LEFT JOIN ". vousuario::$nmEntidade;
 			$query.= "\n TAB1 ON ";
@@ -78,20 +78,31 @@ class dbprocesso{
 		$query.= "\n TAB2 ON ";
 		$query.= "TAB2.".vousuario::$nmAtrID. "=".voentidade::$nmAtrCdUsuarioUltAlteracao;
 		
+		return $query;		
+	}
+	    
+	function consultarPorChave($vo, $isHistorico){
+		$nmTabela = $vo->getNmTabelaEntidade($isHistorico);		
+		$arrayColunasRetornadas = array($nmTabela . ".*");
+		
+		return $this->consultarPorChaveMontandoQuery($vo, $arrayColunasRetornadas, "", $isHistorico);		
+	}
+	
+	function consultarPorChaveMontandoQuery($vo, $arrayColunasRetornadas, $queryJoin, $isHistorico){
+		
+		$atributos = getSQLStringFormatadaColecaoIN($arrayColunasRetornadas, false);	
+		$query = "SELECT ". $atributos;
+		$query.= $this->getQueryNmUsuario($vo, $queryJoin, $isHistorico);				
+	
 		$query.= " WHERE ";
 		$query.= $vo->getValoresWhereSQLChave($isHistorico);
 		
-	
-		/*$query = "SELECT * FROM ".$nmTabela;
-		$query.= " WHERE ";
-		$query.= $vo->getValoresWhereSQLChave($isHistorico);*/
-	
 		//echo $query;
 		$retorno = $this->consultarEntidade($query, true);
 		if($retorno != "")
 			$retorno = $retorno[0];
 		
-		return $retorno;
+		return $retorno;		
 	}
 	
 	function consultarEntidade($query, $isPorChavePrimaria){

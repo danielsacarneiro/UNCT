@@ -13,22 +13,21 @@ Class dbContratoTramitacao extends dbTramitacao{
 		$query.= "\n ON ";
 		$query.= $nmTabela. ".".voContratoTramitacao::$nmAtrSq. "=".$nmTabelaTramitacao . "." . voTramitacao::$nmAtrSq;
 		
-		//$query.= " WHERE ";
-		//$query.= $vo->getValoresWhereSQLChave($isHistorico);
-
 		//echo $query;
 		return $this->consultarEntidade($query, false);
 	}
 
 	function consultarPorChave($vo, $isHistorico){
 		$nmTabela = $vo->getNmTabelaEntidade($isHistorico);
-	
-		$query = "SELECT * FROM ".$nmTabela;
-		$query.= " WHERE ";
-		$query.= $vo->getValoresWhereSQLChave($isHistorico);
-	
-		//echo $query;
-		return $this->consultarEntidade($query, true);
+		$nmTabelaTramitacao = voTramitacao::getNmTabela();
+		
+		$arrayColunasRetornadas = array($nmTabela . ".*", $nmTabelaTramitacao . ".*");
+			
+		$queryJoin.= "\n INNER JOIN ". $nmTabelaTramitacao;
+		$queryJoin.= "\n ON ";
+		$queryJoin.= $nmTabela. ".".voContratoTramitacao::$nmAtrSq. "=".$nmTabelaTramitacao . "." . voTramitacao::$nmAtrSq;
+					
+		return $this->consultarPorChaveMontandoQuery($vo, $arrayColunasRetornadas, $queryJoin, $isHistorico);
 	}
 	
 	/*function incluirSQL($voTramitacao){
