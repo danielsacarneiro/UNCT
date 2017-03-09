@@ -30,10 +30,9 @@ Class dbContratoTramitacao extends dbTramitacao{
 		return $this->consultarPorChaveMontandoQuery($vo, $arrayColunasRetornadas, $queryJoin, $isHistorico);
 	}
 	
-	/*function incluirSQL($voTramitacao){
-		$arrayAtribRemover = null;
-		return $this->incluirQuery($voTramitacao, $arrayAtribRemover);
-	}*/
+	function incluirSQL($vo){		
+		return $this->incluirQueryVO($vo);
+	}
 	
 	//o incluir eh implementado para nao usar da voentidade
 	//por ser mais complexo
@@ -41,11 +40,14 @@ Class dbContratoTramitacao extends dbTramitacao{
 		//Start transaction
 		$this->cDb->retiraAutoCommit();
 		try{
-			$votramitacao = $vo->getVOPai();			
-			$this->incluirTramitacao($votramitacao);
+		
+			$voTramitacao = $vo->getVOPai();
+			$voTramitacao->dbprocesso->cDb = $this->cDb;
+			$voTramitacao->dbprocesso->incluir($voTramitacao);				
 			
-			$vo->sq = $votramitacao->sq;
-			$vo = $this->incluirContratoTramitacao($vo);	
+			$vo->sq = $voTramitacao->sq;
+			$vo = parent::incluir($vo);
+		
 			//End transaction
 			$this->cDb->commit();
 		}catch(Exception $e){
@@ -55,39 +57,17 @@ Class dbContratoTramitacao extends dbTramitacao{
 	
 		return $vo;
 	}
-	
-	function incluirContratoTramitacao($voCTTRam){
-		//o voContratoTramitacao nao tem nenhum atributo de controle
-		//por isso todos sao removidos
-		//os atributos a remover ja foram removidos no construtor
-		$query = $this->incluirQueryVO($voCTTRam);
-		$retorno = $this->cDb->atualizar($query);	
-		return $voCTTRam;
-	}
-	
-	function incluirTramitacao($voTramitacao){
-		//var_dump($voTramitacao);
-		$voTramitacao->dbprocesso->cDb = $this->cDb;
-		$voTramitacao->dbprocesso->incluir($voTramitacao);
-	}
-		
-	function excluirPATramitacao($voPA){
-		$vo = new voPATramitacao();
-		$nmTabela = $vo->getNmTabelaEntidade(false);
-		$query = "DELETE FROM ".$nmTabela;
-		$query.= "\n WHERE ". voPATramitacao::$nmAtrCdPA. " = ". $voPA->cdPA;
-		$query.= "\n AND ". voPATramitacao::$nmAtrAnoPA. " = ". $voPA->anoPA;
-		//echo $query;
-		return $this->atualizarEntidade($query);
-	}
-	
+			
 	//o incluir eh implementado para nao usar da voentidade
 	//por ser mais complexo
 	function excluir($vo){
 		//Start transaction
 		$this->cDb->retiraAutoCommit();
 		try{
-			$this->excluirPATramitacao($vo);
+			$voTramitacao = $vo->getVOPai();						
+			$voTramitacao->dbprocesso->cDb = $this->cDb;
+			$voTramitacao->dbprocesso->excluir($voTramitacao);
+				
 			$vo = parent::excluir($vo);
 			//End transaction
 			$this->cDb->commit();

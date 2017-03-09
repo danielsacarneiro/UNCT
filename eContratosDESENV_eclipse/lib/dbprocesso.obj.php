@@ -58,7 +58,14 @@ class dbprocesso{
 	//acrescenta os dados dos usuarios guardados na tabela
 	function getQueryNmUsuario($vo, $queryJoin, $isHistorico){
 		$nmTabela = $vo->getNmTabelaEntidade($isHistorico);
-		$temUsuInclusao = false;		
+		//$temUsuInclusao = false;		
+		$temUsuInclusao = existeItemNoArray(voentidade::$nmAtrCdUsuarioInclusao, $vo->getTodosAtributos());
+		
+		/*if($temUsuInclusao){
+			echo "tem usu";
+		}else{
+			echo "NAO tem usu";
+		}*/
 				
 		if($temUsuInclusao){
 			$query.= "TAB1." .vousuario::$nmAtrName. " AS " . voentidade::$nmAtrNmUsuarioInclusao;

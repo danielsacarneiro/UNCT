@@ -98,11 +98,11 @@ include_once("dbContratoTramitacao.php");
 	
 	function getDadosFormulario(){		
 		parent::getDadosFormulario();		
-		//acrescenta apenas os atributos a mais		
-		// o restante esta em voTramitacao
+
 		$this->cdContrato = @$_POST[self::$nmAtrCdContrato];
 		$this->anoContrato = @$_POST[self::$nmAtrAnoContrato];
-		$this->tipoContrato= @$_POST[self::$nmAtrTipoContrato];		
+		$this->tipoContrato= @$_POST[self::$nmAtrTipoContrato];
+		$this->sq= @$_POST[self::$nmAtrSq];
 	}
 	  
 	//para o caso da classe herdar de alguem
