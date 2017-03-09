@@ -1,0 +1,155 @@
+<?php
+include_once("voTramitacao.php");
+include_once("voContrato.php");
+include_once("dbContratoTramitacao.php");
+
+  Class voContratoTramitacao extends voTramitacao{
+  	 
+  	static $nmAtrCdContrato  = "ct_numero";
+  	static $nmAtrAnoContrato  = "ct_exercicio";
+  	static $nmAtrTipoContrato =  "ct_tipo";  	
+  	    
+	var $cdContrato;
+	var $anoContrato;
+	var $tipoContrato;
+
+// ...............................................................
+// Funcoes ( Propriedades e mÃ©todos da classe )
+
+   function __construct() {
+       parent::__construct();
+       $class = self::getNmClassProcesso();       
+       $this->dbprocesso= new $class();              
+       //retira os atributos padrao que nao possui
+       //remove tambem os que o banco deve incluir default
+        $arrayAtribRemover = array(
+       		self::$nmAtrDhInclusao,        		
+        	self::$nmAtrDhUltAlteracao,
+       		self::$nmAtrCdUsuarioInclusao,        	
+        	self::$nmAtrCdUsuarioUltAlteracao
+       );
+       $this->removeAtributos($arrayAtribRemover);
+       $this->varAtributosARemover = $arrayAtribRemover;  
+       
+       //spl_autoload_register(array($this, 'loader'));
+   }
+   
+   private static function loader($class){
+   		include_once $class . '.php';
+   }
+   
+   public static function getTituloJSP(){
+		return  "TRAMITAÇÃO CONTRATO";
+   }
+    
+    public static function getNmTabela(){
+        return  "contrato_tram";
+    }
+    
+    public static function getNmClassProcesso(){
+        return  "dbContratoTramitacao";
+    }      
+    
+    function getValoresWhereSQLChave($isHistorico){
+        $nmTabela = $this->getNmTabelaEntidade($isHistorico);        
+		$query = $nmTabela . "." . self::$nmAtrCdContrato . "=" . $this->cdContrato;
+		$query.= " AND ". $nmTabela . "." . self::$nmAtrAnoContrato . "=" . $this->anoContrato;
+		$query.= " AND ". $nmTabela . "." . self::$nmAtrTipoContrato . "=" . $this->tipoContrato;
+		$query.= " AND ". $nmTabela . "." . self::$nmAtrSq . "=" . $this->sq;
+		
+        if($isHistorico)
+            $query.= " AND ". $nmTabela . "." . self::$nmAtrSqHist . "=" . $this->sqHist;
+        
+        return $query;        
+    }    
+    
+    function getAtributosFilho(){
+    	//metodo da classe filha
+    	$retorno = array(
+    			self::$nmAtrCdContrato,
+    			self::$nmAtrAnoContrato,
+    			self::$nmAtrTipoContrato,
+    			self::$nmAtrSq
+    	);
+        
+        return $retorno;    
+    }
+    
+    function getAtributosChavePrimaria(){
+    	$retorno = array(
+    			self::$nmAtrCdContrato,
+    			self::$nmAtrAnoContrato,
+    			self::$nmAtrTipoContrato,
+    			self::$nmAtrSq
+    	);
+    
+    	return $retorno;
+    }
+        
+    function getDadosRegistroBanco($registrobanco){
+        //as colunas default de voentidade sao incluidas pelo metodo getDadosBanco do voentidade
+    	parent::getDadosRegistroBanco($registrobanco);
+    	
+		$this->cdContrato = $registrobanco[self::$nmAtrCdContrato];
+		$this->anoContrato = $registrobanco[self::$nmAtrAnoContrato];
+		$this->tipoContrato= $registrobanco[self::$nmAtrTipoContrato];
+		//$this->sq = $registrobanco[self::$nmAtrSq];
+	}   
+	
+	function getDadosFormulario(){		
+		parent::getDadosFormulario();		
+		//acrescenta apenas os atributos a mais		
+		// o restante esta em voTramitacao
+		$this->cdContrato = @$_POST[self::$nmAtrCdContrato];
+		$this->anoContrato = @$_POST[self::$nmAtrAnoContrato];
+		$this->tipoContrato= @$_POST[self::$nmAtrTipoContrato];		
+	}
+	                
+	function getVOPai(){		
+		$voTramitacao = new voTramitacao();
+		$voTramitacao->sq = $this->sq;
+		$voTramitacao->obs = $this->obs;
+		$voTramitacao->voDoc = $this->voDoc;
+				
+		return $voTramitacao;
+	}
+	
+	function toString(){
+		$retorno = "";
+		$retorno.= $this->anoContrato . ",";
+		$retorno.= $this->tipoContrato . ",";
+		$retorno.= $this->cdContrato . ",";
+        $retorno.= $this->sq . ",";
+        $retorno.= $this->obs;
+
+        return $retorno;		
+	}   
+	
+	function getValorChavePrimaria(){
+		$retorno = "";
+		$retorno.= $this->anoContrato . ",";
+		$retorno.= $this->tipoContrato . ",";
+		$retorno.= $this->cdContrato . ",";
+		$retorno.= $this->sq;
+		
+		return $retorno;
+	}
+		
+	function getChavePrimariaVOExplode($array){
+		$this->cdContrato = $array[0];
+		$this->anoContrato = $array[1];
+		$this->tipoContrato= $array[2];
+		$this->sq = $array[3];
+	}
+	
+	static function getAtributosOrdenacao(){
+		$varAtributos = array(
+				self::$nmAtrCdContrato => "Número",
+				self::$nmAtrAnoContrato => "Ano",
+				self::$nmAtrTipoContrato => "Tipo Contrato",
+				self::$nmAtrSq => "Tramitação"
+		);
+		return $varAtributos;
+	}
+}
+?>

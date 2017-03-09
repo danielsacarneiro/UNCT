@@ -122,6 +122,13 @@
         return $atributo . " = " . $valor;
     }    
     
+    function getDadosFormularioEntidade(){
+    	$this->dhUltAlteracao = @$_POST[self::$nmAtrDhUltAlteracao];
+    	$this->sqHist = @$_POST[self::$nmAtrSqHist];
+    	//usuario de ultima manutencao sempre sera o id_user
+    	$this->cdUsuarioUltAlteracao = id_user;
+    }
+    
 	function getDadosBancoEntidade($registrobanco){		
 
         $this->dhInclusao = $registrobanco[voentidade::$nmAtrDhInclusao];
@@ -198,12 +205,12 @@
     
     function getVOExplodeChave(){
     	$chave = @$_GET["chave"];
-    	$this->getVOExplodeChaveParam($chave);
+    	$this->getChavePrimariaVOExplodeParam($chave);
     }
     
-    function getVOExplodeChaveParam($chave){    	
+    function getChavePrimariaVOExplodeParam($chave){    	
     	$array = explode(CAMPO_SEPARADOR,$chave);
-    	$this->getVOExplodeChavePrimaria($array);
+    	$this->getChavePrimariaVOExplode($array);
     }
     
 }

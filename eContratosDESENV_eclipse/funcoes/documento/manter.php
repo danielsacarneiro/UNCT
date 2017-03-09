@@ -96,11 +96,11 @@ function confirmar() {
             <TBODY>
 	        <?php
 	        $domSetor = new dominioSetor();
-	        $domTpDoc = new dominioTpDocumento();
+	        $domTp = new dominioTpDocumento();
 	        if($isInclusao){
 	            $selectExercicio = new selectExercicio();	            
 	            $comboSetor = new select($domSetor->colecao);	            
-	            $comboTpDoc= new select($domTpDoc->colecao);
+	            $comboTp= new select($domTp->colecao);
 			  ?>			            
 			<TR>
                 <TH class="campoformulario" nowrap width="1%">Exercício:</TH>
@@ -110,7 +110,7 @@ function confirmar() {
             </TR>            
 			<TR>
                 <TH class="campoformulario" nowrap width="1%">Tp.Documento:</TH>
-                <TD class="campoformulario"><?php echo $comboTpDoc->getHtmlCombo(voDocumento::$nmAtrTpDoc,voDocumento::$nmAtrTpDoc, $vo->tpDoc, true, $classChaves, true, "$disabledChaves $required");?></TD>			
+                <TD class="campoformulario"><?php echo $comboTp->getHtmlCombo(voDocumento::$nmAtrTp,voDocumento::$nmAtrTp, $vo->tp, true, $classChaves, true, "$disabledChaves $required");?></TD>			
                 <TH class="campoformulario" nowrap>Número:</TH>
                 <TD class="campoformulario"><INPUT type="text" id="<?=voDocumento::$nmAtrSq?>" name="<?=voDocumento::$nmAtrSq?>"  value="<?php echo complementarCharAEsquerda($vo->sq, "0", TAMANHO_CODIGOS);?>"  class="<?=$classChaves?>" size="7" <?=$readonlyChaves?>></TD>
             </TR>
@@ -129,8 +129,8 @@ function confirmar() {
 			<TR>
                 <TH class="campoformulario" nowrap width="1%">Tp.Documento:</TH>
                 <TD class="campoformulario" nowrap width="1%">
-                		<INPUT type="text" value="<?php echo $domTpDoc->getDescricao($vo->tpDoc);?>"  class="camporeadonly" size="20" readonly>
-                		<INPUT type="hidden" id="<?=voDocumento::$nmAtrTpDoc?>" name="<?=voDocumento::$nmAtrTpDoc?>"  value="<?php echo $vo->tpDoc;?>">			
+                		<INPUT type="text" value="<?php echo $domTp->getDescricao($vo->tp);?>"  class="camporeadonly" size="20" readonly>
+                		<INPUT type="hidden" id="<?=voDocumento::$nmAtrTp?>" name="<?=voDocumento::$nmAtrTp?>"  value="<?php echo $vo->tp;?>">			
                 </TD>
                 <TH class="campoformulario" nowrap width="1%">Número:</TH>
                 <TD class="campoformulario"><INPUT type="text" id="<?=voDocumento::$nmAtrSq?>" name="<?=voDocumento::$nmAtrSq?>"  value="<?php echo complementarCharAEsquerda($vo->sq, "0", TAMANHO_CODIGOS);?>"  class="<?=$classChaves?>" size="7" <?=$readonlyChaves?>></TD>
@@ -139,7 +139,7 @@ function confirmar() {
 	        }?>
 			<TR>
                 <TH class="campoformulario" nowrap width="1%">Arquivo:</TH>
-                <TD class="campoformulario" colspan=3><INPUT type="text" id="<?=voDocumento::$nmAtrLinkDoc?>" name="<?=voDocumento::$nmAtrLinkDoc?>"  value="<?php echo $vo->linkDoc;?>"  class="camponaoobrigatorio" size="80" ></TD>
+                <TD class="campoformulario" colspan=3><INPUT type="text" id="<?=voDocumento::$nmAtrLink?>" name="<?=voDocumento::$nmAtrLink?>"  value="<?php echo $vo->link;?>"  class="camponaoobrigatorio" size="80" ></TD>
             </TR>
 	        
 <TR>

@@ -33,8 +33,8 @@ include_once 'voDocumento.php';
         $retorno.= $this-> getVarComoNumero($voDocumento->sq) . ",";
         $retorno.= $this-> getVarComoNumero($voDocumento->cdSetor) . ",";
         $retorno.= $this-> getVarComoNumero($voDocumento->ano). ",";
-        $retorno.= $this-> getVarComoString($voDocumento->tpDoc). ",";
-        $retorno.= $this-> getVarComoString($voDocumento->linkDoc);
+        $retorno.= $this-> getVarComoString($voDocumento->tp). ",";
+        $retorno.= $this-> getVarComoString($voDocumento->link);
         
         $retorno.= $voDocumento->getSQLValuesInsertEntidade();
 		        
@@ -45,8 +45,8 @@ include_once 'voDocumento.php';
         $retorno = "";
         $sqlConector = "";
                 
-        if($vo->linkDoc != null){
-            $retorno.= $sqlConector . voDocumento::$nmAtrLinkDoc. " = " . $this->getVarComoString($vo->linkDoc);
+        if($vo->link != null){
+            $retorno.= $sqlConector . voDocumento::$nmAtrLink. " = " . $this->getVarComoString($vo->link);
             $sqlConector = ",";
         }
                 

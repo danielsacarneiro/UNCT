@@ -19,12 +19,12 @@ function getDadosContrata($db){
 		$vo->cdContrato = $array[0];
 		$vo->anoContrato= $array[1];
 		$vo->tipo = $array[2];
-		$vo->sqEspecie= dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
+		$vo->cdEspecie= dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
 		
 		$filtro->cdContrato = $vo->cdContrato;
 		$filtro->anoContrato= $vo->anoContrato;
 		$filtro->tpContrato = $vo->tipo;
-		$filtro->sqEspecieContrato= $vo->sqEspecie;
+		$filtro->cdEspecieContrato= $vo->cdEspecie;
 
 		$recordSet = $db->consultarPessoaPorContrato($filtro);
 		$retorno = "";
@@ -33,7 +33,7 @@ function getDadosContrata($db){
 		}//else throw new Exception("Contrato inexistente.");
 		
 		$javaScript = "onLoad='alert(0);'";
-		$retorno = "Contratada: <INPUT type='text' id='testasdasdade' name='testasdasdade' class='camporeadonly' size=50 readonly value='".$retorno."' required ".$javaScript.">\n";
+		$retorno = "Contratada: <INPUT type='text' id='testasdasdade' name='testasdasdade' class='camporeadonly' size=50 readonly value='".$retorno."' ".$javaScript.">\n";
 		//$retorno = "<SCRIPT language='JavaScript' type='text/javascript'> documenti.frm_principal.".vopessoa::$nmAtrNome.".value='".$retorno."'; </SCRIPT>";
 		return $retorno ;
 		

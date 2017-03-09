@@ -3,7 +3,9 @@ include_once(caminho_util."dominio.class.php");
 
   Class dominioTpDocumento extends dominio{
   	
-  	static $ENDERECO_PASTABASE = "H:\ASSESSORIA JURÍDICA\ATJA";
+  	
+  	static $ENDERECO_PASTABASE = "\\\\sf044836\_dag$\ASSESSORIA JURÍDICA\ATJA";
+  	//static $ENDERECO_PASTABASE = "H:\ASSESSORIA JURÍDICA\ATJA";
   	static $ENDERECO_PASTA_NOTA_TECNICA = "\Notas Técnicas";  	
   	static $ENDERECO_PASTA_OFICIO = "\Ofícios";
   	static $ENDERECO_PASTA_PA = "\PROCESSO ADMINISTRATIVO";

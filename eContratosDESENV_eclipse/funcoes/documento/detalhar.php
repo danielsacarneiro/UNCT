@@ -65,7 +65,7 @@ function confirmar() {
 }
 
 function mostrarpasta(){
-	pasta= document.frm_principal.<?=voDocumento::$nmAtrLinkDoc?>.value;	
+	pasta= document.frm_principal.<?=voDocumento::$nmAtrLink?>.value;	
 	//pasta = "c:"; 
     url = "../abrir_windowsexplorer.php?comando=" + pasta;
     //abrirJanelaAuxiliar(url, true, false, false);    
@@ -102,8 +102,8 @@ function mostrarpasta(){
 	            $selectExercicio = new selectExercicio();
 	            $domSetor = new dominioSetor();
 	            $comboSetor = new select($domSetor->colecao);
-	            $domTpDoc = new dominioTpDocumento();
-	            $comboTpDoc= new select($domTpDoc->colecao);
+	            $domTp = new dominioTpDocumento();
+	            $comboTp= new select($domTp->colecao);
 	             
 			  ?>			            
 			<TR>
@@ -118,8 +118,8 @@ function mostrarpasta(){
 			<TR>
                 <TH class="campoformulario" nowrap width="1%">Tp.Documento:</TH>
                 <TD class="campoformulario" nowrap width="1%">
-                		<INPUT type="text" value="<?php echo $domTpDoc->getDescricao($vo->tpDoc);?>"  class="camporeadonly" size="20" readonly>
-                		<INPUT type="hidden" id="<?=voDocumento::$nmAtrTpDoc?>" name="<?=voDocumento::$nmAtrTpDoc?>"  value="<?php echo $vo->tpDoc;?>">			
+                		<INPUT type="text" value="<?php echo $domTp->getDescricao($vo->tp);?>"  class="camporeadonly" size="20" readonly>
+                		<INPUT type="hidden" id="<?=voDocumento::$nmAtrTp?>" name="<?=voDocumento::$nmAtrTp?>"  value="<?php echo $vo->tp;?>">			
                 </TD>
                 <TH class="campoformulario" nowrap width="1%">Número:</TH>
                 <TD class="campoformulario"><INPUT type="text" id="<?=voDocumento::$nmAtrSq?>" name="<?=voDocumento::$nmAtrSq?>"  value="<?php echo complementarCharAEsquerda($vo->sq, "0", TAMANHO_CODIGOS);?>"  class="camporeadonly" size="7" <?=$readonlyChaves?>></TD>
@@ -127,9 +127,9 @@ function mostrarpasta(){
 			<TR>
                 <TH class="campoformulario" nowrap width="1%">Endereço:</TH>
                 <?php
-                	$endereco = $vo->getEnderecoTpDocumento();
+                	$endereco = $vo->getEnderecoTpumento();
                 ?>                
-                <TD class="campoformulario" colspan=3><textarea id="<?=voDocumento::$nmAtrLinkDoc?>" name="<?=voDocumento::$nmAtrLinkDoc?>" rows="2" cols="80" class="camporeadonly" readonly><?php echo  $endereco;?></textarea>
+                <TD class="campoformulario" colspan=3><textarea id="<?=voDocumento::$nmAtrLink?>" name="<?=voDocumento::$nmAtrLink?>" rows="2" cols="80" class="camporeadonly" readonly><?php echo  $endereco;?></textarea>
                 <?php echo getBotaoValidacaoAcesso("bttabrirpasta", "Abrir", "botaofuncaop", false,true,true,true, "onClick='javascript:mostrarpasta();' accesskey='m'");?>
                 </TD>
                 

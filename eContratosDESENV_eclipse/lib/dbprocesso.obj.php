@@ -213,7 +213,7 @@ class dbprocesso{
 		$arrayAtribRemover =  $voEntidade->varAtributosARemover;		
 		return $this->incluirQuery($voEntidade, $arrayAtribRemover);		
 	}
-	
+	    
     function incluirQuery($voEntidade, $arrayAtribRemover){
     		
         $atributosInsert = $voEntidade->getTodosAtributos();
@@ -352,9 +352,14 @@ class dbprocesso{
 
 	function getProximoSequencial($nmColuna, $voEntidade){
 		$query = " SELECT MAX(" . $nmColuna . ")+1 AS ". $nmColuna ." FROM " . $voEntidade->getNmTabela() . " ";
+		//echo $query; 
         $registro = $this->consultarEntidade($query, false);
         
         $retorno = $registro[0][$nmColuna];
+        
+        if($retorno == null)
+        	$retorno = 1;
+        
         return $retorno;        
 	}
 	

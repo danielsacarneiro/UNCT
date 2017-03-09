@@ -18,9 +18,9 @@ include_once(caminho_lib."voentidade.php");
 		static $nmAtrCdContrato  = "ct_numero";
 		static $nmAtrAnoContrato  = "ct_exercicio";		
 		static $nmAtrTipoContrato =  "ct_tipo";
-		static $nmAtrEspecieContrato =  "ct_especie";
-        static $nmAtrSqEspecieContrato =  "ct_sq_especie";
-        static $nmAtrCdEspecieContrato =  "ct_cd_especie";
+		static $nmAtrEspecieContrato =  "ct_especie"; 
+        static $nmAtrSqEspecieContrato =  "ct_sq_especie"; //sequencial da especie (primeiro, segundo TA, por ex)
+        static $nmAtrCdEspecieContrato =  "ct_cd_especie"; //especie propriamente dita(TA, apostilamento)
         static $nmAtrCdSituacaoContrato =  "ct_cd_situacao";
 		static $nmAtrObjetoContrato =  "ct_objeto";
 		static $nmAtrGestorPessoaContrato =  "ct_gestor_pessoa";

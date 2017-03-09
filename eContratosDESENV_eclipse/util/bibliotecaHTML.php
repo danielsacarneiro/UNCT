@@ -120,20 +120,7 @@ include_once(caminho_vos."vousuario.php");
 		
 		return $retorno;
 	}
-	
-	function getData($dataSQL) {
-		$retorno = null;
-
-		if ($dataSQL != null){            
-            if($dataSQL == "0000-00-00")
-                $retorno = mensagens::$msgDataErro;
-            else if ($dataSQL != null && $dataSQL != "0000-00-00")
-                $retorno = date("d/m/Y", strtotime($dataSQL));            
-        }
-        
-		return $retorno;
-	}	
-
+		
 	function getMoeda($valorSQL) {
 		$retorno = "";
 		if ($valorSQL != null)
@@ -401,6 +388,23 @@ include_once(caminho_vos."vousuario.php");
 		return $html;
     }
     
+    function getBorracha($nmCampos){
+   	
+		$tam = count($nmCampos);		
+		
+		$js = "";
+    	for($i=0;$i<$tam;$i++){
+    		$nmCampoAtual = $nmCampos[$i];    		
+    		$js.= "document.frm_principal." .$nmCampoAtual.".value='';";
+    	}
+    	    	
+    	$html = "&nbsp;&nbsp;<a onClick=\"javascript:".$js."\" ><img  title='Limpar' src='"
+    			.caminho_imagens
+    			."borracha.jpg' width='15' height='15' A style='CURSOR: POINTER'></a>\n";
+    
+    	return $html;
+    }
+    
     function temPermissao(){
         return temPermissaoParamHistorico(false);
     }
@@ -549,9 +553,8 @@ include_once(caminho_vos."vousuario.php");
     function getObjetoSessao($ID){
     	session_start();
     	
-    	/*$objeto = null;
-    	if(isset($_SESSION[$ID]))*/
-    	$objeto = null;
+    	$objeto = null;   	 	   	
+    	 
     	if($_SESSION[$ID] != null){
     		$objeto = $_SESSION[$ID];
     	}
@@ -570,6 +573,14 @@ include_once(caminho_vos."vousuario.php");
     	unset($_SESSION[$ID]);
     }
     
+    function formatarCodigoContrato($cd, $ano, $tipo){   
+    	require_once ("../contrato/dominioTipoContrato.php");
+    	
+    	$dominioTipoContrato = new dominioTipoContrato();
+    	$complemento = $dominioTipoContrato->getDescricao($tipo);    	     		 
+    	return formatarCodigoAnoComplemento($cd, $ano, $complemento);
+    }
+    
     function formatarCodigoAnoComplemento($cd, $ano, $complemento){
     	$retorno = complementarCharAEsquerda($cd, "0", TAMANHO_CODIGOS_SAFI)
     	. "/" . $ano;
@@ -577,8 +588,7 @@ include_once(caminho_vos."vousuario.php");
     	if($complemento != null&& $complemento != "")
     		$retorno .= "-" . $complemento;
     	
-    	return $retorno;
-    	 
+    	return $retorno;    	 
     }
     
     function formatarCodigoAno($cd, $ano){

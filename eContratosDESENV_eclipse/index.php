@@ -35,6 +35,7 @@ cabecalho;
 
 	f3 = new Tree('Contratos');
 	f3.adicionarItem(new Link("Manter Contratos", "<?=caminho_funcoesHTML?>contrato", ""));
+	f3.adicionarItem(new Link("Manter Contrato Tramitação", "<?=caminho_funcoesHTML?>contrato_tram", ""));	
 	f.adicionarItem(f3);
 
 	f4 = new Tree('Processos Administrativos');	

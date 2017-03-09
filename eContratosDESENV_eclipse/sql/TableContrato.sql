@@ -45,8 +45,8 @@ CREATE TABLE contrato (
     ct_numero INT,
     ct_tipo char(1),
 	ct_especie VARCHAR(50),
-    ct_sq_especie INT,
-	ct_cd_especie INT,
+    ct_sq_especie INT, -- indice do documento em questao (primeiro ou segundo apostilamento, por ex)
+    ct_cd_especie INT, -- especie do registro (mater, apostilamento, aditivo)
 	ct_cd_situacao CHAR(2),
     ct_objeto LONGTEXT,
     ct_gestor_pessoa VARCHAR(300) ,
@@ -114,8 +114,8 @@ CREATE TABLE contrato_hist (
     ct_numero INT,
     ct_tipo char(1),
 	ct_especie VARCHAR(50),
-    ct_sq_especie INT,
-    ct_cd_especie INT,
+    ct_sq_especie INT, -- indice do documento em questao (primeiro ou segundo apostilamento, por ex)
+    ct_cd_especie INT, -- especie do registro (mater, apostilamento, aditivo)
 	ct_cd_situacao CHAR(2),
     ct_objeto LONGTEXT,
     ct_gestor_pessoa VARCHAR(300) ,
@@ -148,4 +148,23 @@ CREATE TABLE contrato_hist (
     
     CONSTRAINT pk PRIMARY KEY (hist)
 );
+
+
+drop table contrato_tram;
+CREATE TABLE contrato_tram (
+    ct_exercicio INT NOT NULL, -- CHAVE CONTRATO
+    ct_numero INT NOT NULL,
+    ct_tipo char(1) NOT NULL,    
+    sq_tram BIGINT NOT NULL, -- chave tramitacao
+        
+    CONSTRAINT pk PRIMARY KEY (	ct_exercicio, ct_numero, ct_tipo, sq_tram)
+);
+
+ALTER TABLE contrato_tram ADD CONSTRAINT fk_ct_tram_contrato FOREIGN KEY (ct_exercicio, ct_numero, ct_tipo) REFERENCES contrato (ct_exercicio, ct_numero, ct_tipo) 
+	ON DELETE RESTRICT
+	ON UPDATE RESTRICT;
+
+ALTER TABLE contrato_tram ADD CONSTRAINT fk_ct_tram_tram FOREIGN KEY (sq_tram) REFERENCES tramitacao (sq_tram) 
+	ON DELETE RESTRICT
+	ON UPDATE RESTRICT;
 
