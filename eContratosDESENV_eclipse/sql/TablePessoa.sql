@@ -52,6 +52,7 @@ BEGIN
   DECLARE cTabela CURSOR FOR 
 	  select ct_contratada, ct_doc_contratada from contrato
 		where ct_doc_contratada is not null		
+        and pe_cd_contratada is null -- pega apenas as contratadas dos contratos que ainda nao tem relacao
         group by replace(replace(replace(ct_doc_contratada, ".", ""), "/", ""), "-","");
         -- retira os pontos, barras e tracos para evitar duplicacoes
 	

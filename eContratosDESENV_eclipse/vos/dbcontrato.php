@@ -330,51 +330,53 @@ include_once (caminho_util."biblioteca_htmlArquivo.php");
 		$ano = $linha["B"];
 		
 		$especie = $linha["C"];
-		$objeto = $linha["D"];
-		$gestorPessoa = $linha["E"];
+		$dtAlteracao = $linha["D"];
+		
+		$objeto = $linha["E"];
+		$gestorPessoa = $linha["F"];
         
         if($tipo == "C"){
             //contrato
-            $gestor  = $linha["F"];
+            $gestor  = $linha["G"];
             
-            $valorGlobal = $linha["H"];
-            $valorMensal = $linha["G"];
-            $processoLic = $linha["I"];
-            $modalidadeLic = $linha["J"];
-            $dtAssinatura  = $linha["K"];
-            $dataPublic  = $linha["L"];
-            $nomeContratada  = $linha["M"];
-            $docContratada   = $linha["N"];
+            $valorGlobal = $linha["I"];
+            $valorMensal = $linha["H"];
+            $processoLic = $linha["J"];
+            $modalidadeLic = $linha["K"];
+            $dtAssinatura  = $linha["L"];
+            $dataPublic  = $linha["M"];
+            $nomeContratada  = $linha["N"];
+            $docContratada   = $linha["O"];
             
-            $dtVigenciaInicio   = $linha["O"];
-            $dtVigenciaFim   = $linha["P"];
-            $sqEmpenho   = $linha["R"];
-            $tpAutorizacao   = $linha["S"];
-            $inLicom   = $linha["T"];	
-            $obs = $linha["U"];            
+            $dtVigenciaInicio   = $linha["P"];
+            $dtVigenciaFim   = $linha["Q"];
+            $sqEmpenho   = $linha["S"];
+            $tpAutorizacao   = $linha["T"];
+            $inLicom   = $linha["U"];	
+            $obs = $linha["V"];            
         }else {
             //convenio
             $gestor  = null;            
-            $valorGlobal = $linha["F"];
+            $valorGlobal = $linha["G"];
             $valorMensal = null;
-            $processoLic = $linha["G"];
-            $modalidadeLic = $linha["H"];
-            $dtAssinatura  = $linha["I"];
-            $dataPublic  = $linha["J"];
-            $nomeContratada  = $linha["K"];
-            $docContratada   = $linha["L"];
+            $processoLic = $linha["H"];
+            $modalidadeLic = $linha["I"];
+            $dtAssinatura  = $linha["J"];
+            $dataPublic  = $linha["K"];
+            $nomeContratada  = $linha["L"];
+            $docContratada   = $linha["M"];
             
-            $dtVigenciaInicio   = $linha["M"];
-            $dtVigenciaFim   = $linha["N"];
+            $dtVigenciaInicio   = $linha["N"];
+            $dtVigenciaFim   = $linha["O"];
             
             if($tipo == "V")
-            	$sqEmpenho   = $linha["P"];
+            	$sqEmpenho   = $linha["Q"];
             else
-            	$sqEmpenho   = $linha["O"];
+            	$sqEmpenho   = $linha["P"];
             
             $tpAutorizacao   = null;
-            $inLicom   = $linha["Q"];	
-            $obs = $linha["R"];            
+            $inLicom   = $linha["R"];	
+            $obs = $linha["S"];            
         }        
 
         //recupera o sequencial da especie (aditivo, apostilamento) quando existir        
@@ -648,7 +650,7 @@ include_once (caminho_util."biblioteca_htmlArquivo.php");
    				$qtdRegistros++;
    			}
    			   			
-   			ECHO "<br>". $voContrato->toString();
+   			ECHO "<br>". $voContrato->toString();   			
    			   			
    		}
    		
