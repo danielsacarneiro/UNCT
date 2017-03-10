@@ -179,13 +179,13 @@ include_once("vocontrato.php");
 		$this->sqHist = $array[2];
 	}
 	
-	static function getAtributosOrdenacao(){		
+	/*static function getAtributosOrdenacao(){
 		$varAtributos = array(				
 				self::$nmAtrCdPA=> "PA",
 				vocontrato::getNmTabela().".".self::$nmAtrCdContrato => "Contrato"
 		);
 		return $varAtributos;
-	}	
+	}*/	
 
 }
 ?>

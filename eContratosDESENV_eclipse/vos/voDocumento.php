@@ -194,15 +194,5 @@ include_once(caminho_util."dominioSetor.php");
 		$this->ano = $array[2];
 		$this->tp = $array[3];
 	}
-	
-	static function getAtributosOrdenacao(){
-		$varAtributos = array(
-				self::$nmAtrSq => "Número",
-				self::$nmAtrCdSetor=> "Setor",
-				self::$nmAtrAno => "Ano",
-				self::$nmAtrTp => "Tp.Doc"
-		);
-		return $varAtributos;
-	}
 }
 ?>

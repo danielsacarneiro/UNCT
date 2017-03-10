@@ -40,8 +40,8 @@ if($isInclusao){
     $nmFuncao = "ALTERAR ";
 }
 
-if($vo->dtAbertura == null|| $vo->dtAbertura == "")
-	$vo->dtAbertura = dtHoje;
+if($vo->dtReferencia == null|| $vo->dtReferencia == "")
+	$vo->dtReferencia = dtHoje;
 	
 $titulo = voContratoTramitacao::getTituloJSP();
 $titulo = $nmFuncao . $titulo;
@@ -184,6 +184,20 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 		        	?>
 				</TD>
 	        </TR>
+			<TR>
+	            <TH class="campoformulario" nowrap>Dt.Referência:</TH>
+	            <TD class="campoformulario" colspan="3">
+	            	<INPUT type="text" 
+	            	       id="<?=voContratoTramitacao::$nmAtrDtReferencia?>" 
+	            	       name="<?=voContratoTramitacao::$nmAtrDtReferencia?>" 
+	            			value="<?php echo($vo->dtReferencia);?>"
+	            			onkeyup="formatarCampoData(this, event, false);" 
+	            			class="camponaoobrigatorio" 
+	            			size="10" 
+	            			maxlength="10" required>
+				</TD>
+        	</TR>
+	        
 <TR>
 	<TD halign="left" colspan="4">
 	<DIV class="textoseparadorgrupocampos">&nbsp;</DIV>

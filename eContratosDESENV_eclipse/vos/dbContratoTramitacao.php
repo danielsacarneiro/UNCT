@@ -8,14 +8,16 @@ Class dbContratoTramitacao extends dbTramitacao{
 		$nmTabela = $vo->getNmTabelaEntidade($isHistorico);
 		$nmTabelaTramitacao = voTramitacao::getNmTabela();
 
-		$query = "SELECT * FROM ".$nmTabela;
-		$query.= "\n INNER JOIN ". $nmTabelaTramitacao;
-		$query.= "\n ON ";
-		$query.= $nmTabela. ".".voContratoTramitacao::$nmAtrSq. "=".$nmTabelaTramitacao . "." . voTramitacao::$nmAtrSq;
+		$querySelect = "SELECT *";
+		$queryFrom = " FROM ".$nmTabela;
+		
+		$queryFrom.= "\n INNER JOIN ". $nmTabelaTramitacao;
+		$queryFrom.= "\n ON ";
+		$queryFrom.= $nmTabela. ".".voContratoTramitacao::$nmAtrSq. "=".$nmTabelaTramitacao . "." . voTramitacao::$nmAtrSq;				
 		
 		//echo $query;
-		return $this->consultarEntidade($query, false);
-	}
+		return $this->consultarComPaginacaoQuery($vo, $filtro, $querySelect, $queryFrom);
+	}	
 
 	function consultarPorChave($vo, $isHistorico){
 		$nmTabela = $vo->getNmTabelaEntidade($isHistorico);

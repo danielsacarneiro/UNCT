@@ -2,11 +2,13 @@
 include_once(caminho_lib."voentidade.php");
 include_once("dbTramitacao.php");
 include_once("voDocumento.php");
+include_once (caminho_util."bibliotecaFuncoesPrincipal.php");
 
   Class voTramitacao extends voentidade{
   	   		 
   	static $nmAtrSq = "sq_tram";
   	static $nmAtrObservacao = "tr_observacao";
+  	static $nmAtrDtReferencia = "tr_dtreferencia";
   	 
   	static $nmAtrCdSetorDoc = "doc_cd_setor";
   	static $nmAtrAnoDoc = "doc_ex";
@@ -15,6 +17,7 @@ include_once("voDocumento.php");
   	    
 	var $sq  = "";
 	var $obs = "";
+	var $dtReferencia = "";
 	
 	var $voDoc;
 	
@@ -67,10 +70,11 @@ include_once("voDocumento.php");
     	$retorno = array(
         	self::$nmAtrSq,
     		self::$nmAtrObservacao,
+    		self::$nmAtrDtReferencia,
         	self::$nmAtrCdSetorDoc,            
         	self::$nmAtrAnoDoc,
     		self::$nmAtrTpDoc,
-    		self::$nmAtrSqDoc
+    		self::$nmAtrSqDoc    		
         );
         
         return $retorno;    
@@ -86,8 +90,9 @@ include_once("voDocumento.php");
         
     function getDadosRegistroBanco($registrobanco){
         //as colunas default de voentidade sao incluidas pelo metodo getDadosBanco do voentidade   	 
-		//$this->sq = $registrobanco[self::$nmAtrSq];
+		$this->sq = $registrobanco[self::$nmAtrSq];
 		$this->obs = $registrobanco[self::$nmAtrObservacao];
+		$this->dtReferencia = $registrobanco[self::$nmAtrDtReferencia];		
 
 		if($registrobanco[self::$nmAtrSqDoc] != null){
 			$vodocumento = new voDocumento();
@@ -99,15 +104,12 @@ include_once("voDocumento.php");
 			$this->voDoc = $vodocumento;
 		}
 		
-		/*$this->cdSetorDoc = $registrobanco[self::$nmAtrCdSetorDoc];
-		$this->anoDoc = $registrobanco[self::$nmAtrAnoDoc];
-		$this->tpDoc= $registrobanco[self::$nmAtrTpDoc];
-		$this->sqDoc = $registrobanco[self::$nmAtrSqDoc];*/
 	}   
 	
 	function getDadosFormulario(){
 		//$this->sq = @$_POST[self::$nmAtrSq];
 		$this->obs = @$_POST[self::$nmAtrObservacao];
+		$this->dtReferencia = @$_POST[self::$nmAtrDtReferencia];
 		
 		if(@$_POST[voDocumento::getNmTabela()] != null){			
 			$chaveDoc = @$_POST[voDocumento::getNmTabela()];			
@@ -136,14 +138,15 @@ include_once("voDocumento.php");
 		$this->sq = $array[0];
 	}
 	
-	static function getAtributosOrdenacao(){
+	/*static function getAtributosOrdenacao(){
 		$varAtributos = array(
 				self::$nmAtrSq => "Número",
 				self::$nmAtrCdSetor=> "Setor",
 				self::$nmAtrAno => "Ano",
-				self::$nmAtrTpDoc => "Tp.Doc"
+				self::$nmAtrTpDoc => "Tp.Doc",
+				self::$nmAtrDtReferencia => "Dt.Referencia"
 		);
 		return $varAtributos;
-	}
+	}*/
 }
 ?>

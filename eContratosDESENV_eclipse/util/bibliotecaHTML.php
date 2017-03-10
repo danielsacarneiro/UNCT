@@ -431,7 +431,8 @@ include_once(caminho_vos."vousuario.php");
     }
     
     function getComponenteConsultaFiltro($temHistorico, $filtro){
-    	$comboOrdenacao = $filtro->getAtributosOrdenacao();
+    	//$comboOrdenacao = $filtro->getAtributosOrdenacao();
+    	$comboOrdenacao = $filtro->getComboOrdenacao();    	
     	
     	return getComponenteConsultaPaginacao($comboOrdenacao, $filtro->cdAtrOrdenacao, $filtro->cdOrdenacao, $filtro->TemPaginacao, 
     			$filtro->qtdRegistrosPorPag, $temHistorico, $filtro->cdHistorico);

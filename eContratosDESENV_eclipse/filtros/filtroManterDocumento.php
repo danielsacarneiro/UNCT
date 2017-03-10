@@ -94,6 +94,16 @@ class filtroManterDocumento extends filtroManter{
 
 		return $filtro;
 	}
+	
+	function getAtributosOrdenacao(){
+		$varAtributos = array(
+				voDocumento::$nmAtrSq => "Número",
+				voDocumento::$nmAtrCdSetor=> "Setor",
+				voDocumento::$nmAtrAno => "Ano",
+				voDocumento::$nmAtrTp => "Tp.Doc"
+		);
+		return $varAtributos;
+	}	
 
 }
 

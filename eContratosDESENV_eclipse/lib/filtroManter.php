@@ -136,6 +136,7 @@ class filtroManter extends multiplosConstrutores{
     	return $retorno ; 
     }
     
+    //NAO USAR MAIS
     function getAtributosOrdenacao(){
     	$comboOrdenacao = null;
     	if($this->nmEntidadePrincipal != null){
@@ -145,7 +146,18 @@ class filtroManter extends multiplosConstrutores{
     	return $comboOrdenacao;
     }
     
-	function toString(){		
+    function getComboOrdenacao(){
+    	$comboOrdenacao = null;
+    	try{
+    		$comboOrdenacao = new select($this->getAtributosOrdenacao());
+    	}catch (Exception $ex){
+    		;
+    	}
+
+    	return $comboOrdenacao;
+    }
+    
+    function toString(){		
 		$retorno.= "qtdRegistrosPorPag=" . $this->qtdRegistrosPorPag . "|";
         $retorno.= "paginaAtual=" . $this->paginacao->paginaAtual . "|";
         $retorno.= "numTotalRegistros=" . $this->numTotalRegistros;

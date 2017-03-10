@@ -120,6 +120,19 @@ function confirmar() {
 	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" class="camporeadonly" readonly><?php echo($vo->obs);?></textarea>
 				</TD>
 	        </TR>
+			<TR>
+	            <TH class="campoformulario" nowrap>Dt.Referência:</TH>
+	            <TD class="campoformulario" colspan="3">
+	            	<INPUT type="text" 
+	            	       id="<?=voContratoTramitacao::$nmAtrDtReferencia?>" 
+	            	       name="<?=voContratoTramitacao::$nmAtrDtReferencia?>" 
+	            			value="<?php echo(getData($vo->dtReferencia));?>"
+	            			onkeyup="formatarCampoData(this, event, false);" 
+	            			class="camporeadonly" 
+	            			size="10" 
+	            			maxlength="10" readonly>
+				</TD>
+        	</TR>	        
 	        <?php 
 	            echo "<TR>" . incluirUsuarioDataHoraDetalhamento($vo) .  "</TR>";	        	
 	        ?>

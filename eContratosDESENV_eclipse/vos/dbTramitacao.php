@@ -25,11 +25,12 @@ Class dbTramitacao extends dbprocesso{
 		$retorno = "";
 		$retorno.= $this-> getVarComoNumero($voTramitacao->sq) . ",";
 		$retorno.= $this-> getVarComoString($voTramitacao->obs) . ",";
+		$retorno.= $this-> getVarComoData($voTramitacao->dtReferencia) . ",";
 
 		$retorno.= $this-> getVarComoNumero($voTramitacao->voDoc->cdSetor) . ",";
 		$retorno.= $this-> getVarComoNumero($voTramitacao->voDoc->ano) . ",";
 		$retorno.= $this-> getVarComoString($voTramitacao->voDoc->tp) . ",";
-		$retorno.= $this-> getVarComoNumero($voTramitacao->voDoc->sq);
+		$retorno.= $this-> getVarComoNumero($voTramitacao->voDoc->sq);		
 
 		$retorno.= $voTramitacao->getSQLValuesInsertEntidade();
 

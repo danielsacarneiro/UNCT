@@ -95,6 +95,17 @@ class filtroManterContratoTramitacao extends filtroManter{
 
 		return $filtro;
 	}
+	
+	function getAtributosOrdenacao(){
+		$varAtributos = array(
+				voContratoTramitacao::$nmAtrCdContrato => "Número",
+				voContratoTramitacao::$nmAtrAnoContrato => "Ano",
+				voContratoTramitacao::$nmAtrTipoContrato => "Tipo Contrato",
+				voContratoTramitacao::$nmAtrSq => "Tramitação"
+		);
+		return $varAtributos;
+	}
+	
 
 }
 

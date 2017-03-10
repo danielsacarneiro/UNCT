@@ -110,6 +110,7 @@ include_once("dbContratoTramitacao.php");
 		$voTramitacao = new voTramitacao();
 		$voTramitacao->sq = $this->sq;
 		$voTramitacao->obs = $this->obs;
+		$voTramitacao->dtReferencia = $this->dtReferencia;
 		$voTramitacao->voDoc = $this->voDoc;
 				
 		return $voTramitacao;
@@ -138,16 +139,6 @@ include_once("dbContratoTramitacao.php");
 		$this->tipoContrato= $array[1];
 		$this->cdContrato = $array[2];		
 		$this->sq = $array[3];
-	}
-	
-	static function getAtributosOrdenacao(){
-		$varAtributos = array(
-				self::$nmAtrCdContrato => "Número",
-				self::$nmAtrAnoContrato => "Ano",
-				self::$nmAtrTipoContrato => "Tipo Contrato",
-				self::$nmAtrSq => "Tramitação"
-		);
-		return $varAtributos;
 	}
 }
 ?>
