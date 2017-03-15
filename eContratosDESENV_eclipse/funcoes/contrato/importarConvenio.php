@@ -53,12 +53,17 @@ $dbprocesso = new dbcontrato(null);
 for ($k=3; $k<=$totalResultado; $k++) {
 //for ($k=1; $k<=$totalResultado; $k++) {
 		
-		$linha = $sheetData[$k];
-        
+		$linha = $sheetData[$k];		
+		        
         if($linha["A"] == "FIM")
             break;
         
         try{
+        	$linkDoc = $objPHPExcel->getActiveSheet()->getCell('B'.$k)->getHyperlink()->getUrl();
+        	$linha[vocontrato::$nmAtrDocLink] = $linkDoc;
+        	
+        	//echo $linha[vocontrato::$nmAtrDocLink];
+        	
             $result = $dbprocesso->incluirContratoImport($tipoContrato, $linha);
         }catch(Exception $e){
             $msgErro = $e->getMessage();

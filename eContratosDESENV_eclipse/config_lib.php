@@ -1,5 +1,13 @@
 <?php
 
+set_exception_handler("pegaExcecaoSemTratamento");
+
+//função definida pelo usuário para pegar exceções não tratadas
+function pegaExcecaoSemTratamento($e){
+	//echo 'Exceção pega sem tratamento:</br>', $e->getMessage(), '</br></br></br>';
+	throw new Exception($e->getMessage());
+}
+
 /*set_error_handler(function($errno, $errstr, $errfile, $errline, array $errcontext) {
 	// error was suppressed with the @-operator
 	if (0 === error_reporting()) {

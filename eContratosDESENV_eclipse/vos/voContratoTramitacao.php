@@ -8,10 +8,12 @@ include_once("dbContratoTramitacao.php");
   	static $nmAtrCdContrato  = "ct_numero";
   	static $nmAtrAnoContrato  = "ct_exercicio";
   	static $nmAtrTipoContrato =  "ct_tipo";  	
+  	static $nmAtrSqIndice =  "sq_indice";
   	    
 	var $cdContrato;
 	var $anoContrato;
 	var $tipoContrato;
+	var $sqIndice;
 
 // ...............................................................
 // Funcoes ( Propriedades e métodos da classe )
@@ -54,8 +56,8 @@ include_once("dbContratoTramitacao.php");
         $nmTabela = $this->getNmTabelaEntidade($isHistorico);        
 		$query = $nmTabela . "." . self::$nmAtrCdContrato . "=" . $this->cdContrato;
 		$query.= " AND ". $nmTabela . "." . self::$nmAtrAnoContrato . "=" . $this->anoContrato;
-		$query.= " AND ". $nmTabela . "." . self::$nmAtrTipoContrato . "='" . $this->tipoContrato;
-		$query.= "' AND ". $nmTabela . "." . self::$nmAtrSq . "=" . $this->sq;
+		$query.= " AND ". $nmTabela . "." . self::$nmAtrTipoContrato . "='" . $this->tipoContrato . "'";
+		$query.= " AND ". $nmTabela . "." . self::$nmAtrSq . "=" . $this->sq;
 		
         if($isHistorico)
             $query.= " AND ". $nmTabela . "." . self::$nmAtrSqHist . "=" . $this->sqHist;
@@ -63,13 +65,26 @@ include_once("dbContratoTramitacao.php");
         return $query;        
     }    
     
+    function getValoresWhereSQLChaveLogica($isHistorico){
+    	$nmTabela = $this->getNmTabelaEntidade($isHistorico);
+    	$query = $nmTabela . "." . self::$nmAtrCdContrato . "=" . $this->cdContrato;
+    	$query.= " AND ". $nmTabela . "." . self::$nmAtrAnoContrato . "=" . $this->anoContrato;
+    	$query.= " AND ". $nmTabela . "." . self::$nmAtrTipoContrato . "='" . $this->tipoContrato . "'";
+    
+    	if($isHistorico)
+    		$query.= " AND ". $nmTabela . "." . self::$nmAtrSqHist . "=" . $this->sqHist;
+    
+    		return $query;
+    }
+    
     function getAtributosFilho(){
     	//metodo da classe filha
     	$retorno = array(
     			self::$nmAtrCdContrato,
     			self::$nmAtrAnoContrato,
     			self::$nmAtrTipoContrato,
-    			self::$nmAtrSq
+    			self::$nmAtrSq,
+    			self::$nmAtrSqIndice
     	);
         
         return $retorno;    
@@ -94,6 +109,7 @@ include_once("dbContratoTramitacao.php");
 		$this->anoContrato = $registrobanco[self::$nmAtrAnoContrato];
 		$this->tipoContrato= $registrobanco[self::$nmAtrTipoContrato];
 		$this->sq = $registrobanco[self::$nmAtrSq];
+		$this->sqIndice = $registrobanco[self::$nmAtrSqIndice];
 	}   
 	
 	function getDadosFormulario(){		
@@ -103,6 +119,7 @@ include_once("dbContratoTramitacao.php");
 		$this->anoContrato = @$_POST[self::$nmAtrAnoContrato];
 		$this->tipoContrato= @$_POST[self::$nmAtrTipoContrato];
 		$this->sq= @$_POST[self::$nmAtrSq];
+		$this->sqIndice= @$_POST[self::$nmAtrSqIndice];
 	}
 	  
 	//para o caso da classe herdar de alguem
@@ -122,6 +139,7 @@ include_once("dbContratoTramitacao.php");
 		$retorno.= $this->tipoContrato . ",";
 		$retorno.= $this->cdContrato . ",";
         $retorno.= $this->sq . ",";
+        $retorno.= $this->sqIndice . ",";
         $retorno.= $this->obs;
 
         return $retorno;		

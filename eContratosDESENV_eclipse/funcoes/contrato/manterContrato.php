@@ -99,9 +99,9 @@ function confirmar() {
 }
 
 function carregaGestorPessoa(){    
-    <?php
-    $idDiv = vocontrato::$nmAtrCdGestorPessoaContrato."DIV";
-    $idCampoGestor = vocontrato::$nmAtrCdGestorContrato . "";
+    <?php    
+    $idDiv = vocontrato::$nmAtrCdPessoaGestorContrato."DIV";
+    $idCampoGestor = vocontrato::$nmAtrCdGestorContrato. "";
     ?>
     getDadosGestorPessoa('<?=$idCampoGestor?>', '<?=$idDiv?>');     
 }
@@ -194,8 +194,9 @@ function carregaGestorPessoa(){
             <TD class="campoformulario" colspan="3">
                 <div id="<?=$idDiv?>">
                 <?php
-                 include_once(caminho_funcoes. "gestor_pessoa/biblioteca_htmlGestorPessoa.php");
-                 echo getComboGestorPessoa(new dbgestorpessoa(), vocontrato::$nmAtrCdGestorPessoaContrato, vocontrato::$nmAtrCdGestorPessoaContrato, $voContrato->cdGestor, $voContrato->cdGestorPessoa);                    
+                 include_once(caminho_funcoes. "pessoa/biblioteca_htmlPessoa.php");
+                 //echo getComboGestorPessoa(new dbgestorpessoa(), vocontrato::$nmAtrCdGestorPessoaContrato, vocontrato::$nmAtrCdGestorPessoaContrato, $voContrato->cdGestor, $voContrato->cdGestorPessoa);
+                 getComboGestorResponsavel(null);
                  ?>
                 </div>
                 <!--<INPUT type="text" id="<?=vocontrato::$nmAtrGestorPessoaContrato?>" name="<?=vocontrato::$nmAtrGestorPessoaContrato?>"  value="<?php echo($nmGestorPessoa);?>"  class="camponaoobrigatorio" size="50" ></TD>-->

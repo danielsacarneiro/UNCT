@@ -5,7 +5,7 @@ include_once(caminho_vos ."voContratoTramitacao.php");
 
 class filtroManterContratoTramitacao extends filtroManter{
 
-	public static $nmFiltro = "filtroManterContratoTramitacao";
+	public $nmFiltro = "filtroManterContratoTramitacao";
 
 	var $sq = "";
 	var $cdContrato;
@@ -96,12 +96,13 @@ class filtroManterContratoTramitacao extends filtroManter{
 		return $filtro;
 	}
 	
-	function getAtributosOrdenacao(){
+	static function getAtributosOrdenacao(){
 		$varAtributos = array(
-				voContratoTramitacao::$nmAtrCdContrato => "Número",
+				voContratoTramitacao::$nmAtrDtReferencia=> "Data",
+				voContratoTramitacao::$nmAtrCdContrato => "Contrato",
 				voContratoTramitacao::$nmAtrAnoContrato => "Ano",
 				voContratoTramitacao::$nmAtrTipoContrato => "Tipo Contrato",
-				voContratoTramitacao::$nmAtrSq => "Tramitação"
+				voContratoTramitacao::$nmAtrSqIndice => "Tramitação"
 		);
 		return $varAtributos;
 	}

@@ -152,7 +152,11 @@ function selecionar() {
                 <TD class="campoformulario"><?php echo $comboTp->getHtmlCombo(voDocumento::$nmAtrTp,voDocumento::$nmAtrTp, $filtro->tp, true, "camponaoobrigatorio", true, "");?></TD>			
                 <TH class="campoformulario" nowrap>Número:</TH>
                 <TD class="campoformulario"><INPUT type="text" id="<?=voDocumento::$nmAtrSq?>" name="<?=voDocumento::$nmAtrSq?>"  value="<?php if($filtro->sq != null) echo complementarCharAEsquerda($filtro->sq, "0", TAMANHO_CODIGOS);?>"  class="camponaoobrigatorio" size="7" ></TD>
-            </TR>            
+            </TR>
+			<TR>
+                <TH class="campoformulario" nowrap width="1%">Assunto:</TH>
+                <TD class="campoformulario" colspan=3><INPUT type="text" id="<?=voDocumento::$nmAtrLink?>" name="<?=voDocumento::$nmAtrLink?>"  value="<?php echo($filtro->link);?>"  class="camponaoobrigatorio" size="50" ></TD>			
+            </TR>                                    
        <?php
         //$comboOrdenacao = new select(voDocumento::getAtributosOrdenacao($cdHistorico));        
         //echo getComponenteConsultaFiltro($comboOrdenacao, false, $filtro);

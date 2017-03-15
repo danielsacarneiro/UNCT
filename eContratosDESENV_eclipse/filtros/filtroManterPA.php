@@ -73,8 +73,8 @@ class filtroManterPA extends filtroManter{
 		if($this->cdEspecieContrato != null){
 			$filtro = $filtro . $conector
 					. $nmTabelaContrato. "." .vocontrato::$nmAtrCdEspecieContrato
-					. " = "
-					. $this->cdEspecieContrato;
+					. " = '"
+					. $this->cdEspecieContrato . "'";
 					//. dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
 						
 			$conector  = "\n AND ";

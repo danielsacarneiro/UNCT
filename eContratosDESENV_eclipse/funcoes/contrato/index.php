@@ -243,7 +243,7 @@ function alterar() {
 			<?php
 			//include_once("dominioEspeciesContrato.php");
 			$especiesContrato = new dominioEspeciesContrato();
-			$combo = new select($especiesContrato->colecao);						
+			$combo = new select($especiesContrato->colecao);
 			?>
     			<TH class="campoformulario" nowrap>Espécies:</TH>
                 <TD class="campoformulario"><?php echo $combo->getHtmlSelect(vocontrato::$nmAtrCdEspecieContrato,vocontrato::$nmAtrCdEspecieContrato, $cdEspecie, true, "camponaoobrigatorio", true);?>
@@ -315,8 +315,20 @@ function alterar() {
 				</TD>						
          </TR>
 		<TR>
+               <TH class="campoformulario" nowrap>Vigente na Data:</TH>
+               <TD class="campoformulario">
+                        	<INPUT type="text" 
+                        	       id="dtVigencia" 
+                        	       name="dtVigencia" 
+                        			value="<?php echo($dtVigencia);?>" 
+                        			onkeyup="formatarCampoData(this, event, false);" 
+                        			class="camponaoobrigatorio" 
+                        			size="10" 
+                        			maxlength="10" >
+                </TD>
+		
                <TH class="campoformulario" nowrap>Vigente no Intervalo:</TH>
-               <TD class="campoformulario" colspan="3">
+               <TD class="campoformulario">
                         	<INPUT type="text" 
                         	       id="<?=vocontrato::$nmAtrDtVigenciaInicialContrato?>" 
                         	       name="<?=vocontrato::$nmAtrDtVigenciaInicialContrato?>" 
@@ -336,19 +348,6 @@ function alterar() {
 				</TD>
          </TR>
 		 <TR>
-               <TH class="campoformulario" nowrap>Vigente na Data:</TH>
-               <TD class="campoformulario" colspan="3">
-                        	<INPUT type="text" 
-                        	       id="dtVigencia" 
-                        	       name="dtVigencia" 
-                        			value="<?php echo($dtVigencia);?>" 
-                        			onkeyup="formatarCampoData(this, event, false);" 
-                        			class="camponaoobrigatorio" 
-                        			size="10" 
-                        			maxlength="10" >
-                </TD>
-		</TR>										
-		 <TR>
                <TH class="campoformulario" nowrap>Data Inclusão:</TH>
                <TD class="campoformulario" colspan="3">
                         	<INPUT type="text" 
@@ -360,7 +359,15 @@ function alterar() {
                         			size="10" 
                         			maxlength="10" >
                 </TD>
-		</TR>	
+		</TR>
+		<TR>
+			<TH class="campoformulario" nowrap>Tp.Vigência:</TH>
+			<?php
+			include_once(caminho_util."dominioTpVigencia.php");
+			$comboVigencia = new select(dominioTpVigencia::getColecao());						
+			?>
+            <TD class="campoformulario" nowrap colspan=3><?php echo $comboVigencia->getHtmlOpcao($filtro::$nmAtrTpVigencia,$filtro::$nmAtrTpVigencia, $filtro->tpVigencia, false);?></TD>
+	    </TR>					
 				<?php
 				include_once(caminho_util."dominioQtdObjetosPagina.php");
 				$objetosPorPagina = new dominioQtdObjetosPagina();

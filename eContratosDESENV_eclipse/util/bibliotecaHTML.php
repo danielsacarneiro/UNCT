@@ -457,7 +457,8 @@ include_once(caminho_vos."vousuario.php");
                     <TH class='campoformulario' width='1%'>Consulta:</TH>
                     <TD class='campoformulario' valign='bottom' colspan='3' width='90%' nowrap>\n";
                     
-        if($comboOrdenacao != null){ 
+        //var_dump($comboOrdenacao);
+        if($comboOrdenacao != null && $comboOrdenacao != ""){ 
         	//echo $cdOrdenacao;
             $html .= "Coluna:"
                     . $comboOrdenacao->getHtmlOpcao("cdAtrOrdenacao","cdAtrOrdenacao", $cdAtrOrdenacao, false)

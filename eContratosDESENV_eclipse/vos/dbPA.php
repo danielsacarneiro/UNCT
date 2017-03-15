@@ -49,7 +49,7 @@ include_once (caminho_filtros."filtroManterPA.php");
         $query.= "\n ON ";
         $query.= vogestor::getNmTabela().".".vogestor::$nmAtrCd. "=".vopessoagestor::getNmTabela().".".vopessoagestor::$nmAtrCdGestor;*/
         $query.= "\n WHERE ";
-        $query.= "\n" . vocontrato::getNmTabela() . "." . vocontrato::$nmAtrCdEspecieContrato . " = " . dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
+        $query.= "\n" . vocontrato::getNmTabela() . "." . vocontrato::$nmAtrCdEspecieContrato . " = '" . dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER . "'";
         $query.= "\n AND " . $vo->getValoresWhereSQLChave($isHistorico);
         
 		//echo $query;

@@ -158,7 +158,6 @@ function alterar() {
                     <TH class="headertabeladados"width="1%" nowrap >Documento</TH>
                     <TH class="headertabeladados"width="90%" nowrap >Texto</TH>
                     <TH class="headertabeladados"width="1%" nowrap >Dt.Referência</TH>
-                    <TH class="headertabeladados"width="1%" nowrap >Data</TH>
                 </TR>
                 <?php								
                 if (is_array($colecao))
@@ -172,7 +171,7 @@ function alterar() {
                 //require_once ("dominioSituacaoPA.php");
                 $dominioTipoContrato = new dominioTipoContrato();
                                 
-                $colspan=7;
+                $colspan=6;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -200,12 +199,10 @@ function alterar() {
                   }
                   ?>                    
                     <TD class="tabeladados" nowrap><?php echo $contrato;?></TD>
-					<TD class="tabeladados"><?php echo complementarCharAEsquerda($colecao[$i][$voAtual::$nmAtrSq], "0", TAMANHO_CODIGOS);?></TD>
+					<TD class="tabeladados"><?php echo complementarCharAEsquerda($colecao[$i][$voAtual::$nmAtrSqIndice], "0", TAMANHO_CODIGOS);?></TD>
                     <TD class="tabeladados" nowrap><?php echo $doc;?></TD>                    
                     <TD class="tabeladados" nowrap><?php echo $voAtual->obs;?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($voAtual->dtReferencia);?></TD>
-                    <TD class="tabeladados" nowrap><?php echo getDataHora($voAtual->dhUltAlteracao);?></TD>
-                    
                 </TR>					
                 <?php
 				}				

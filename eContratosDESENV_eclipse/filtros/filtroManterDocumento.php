@@ -11,6 +11,7 @@ class filtroManterDocumento extends filtroManter{
     	var $cdSetor = "";
     	var $ano = "";
     	var $tp = "";
+    	var $link = "";
     // ...............................................................
 	// construtor	
 	function __construct() {
@@ -20,6 +21,7 @@ class filtroManterDocumento extends filtroManter{
         $this->cdSetor = @$_POST[voDocumento::$nmAtrCdSetor];
         $this->ano = @$_POST[voDocumento::$nmAtrAno];
         $this->tp= @$_POST[voDocumento::$nmAtrTp];
+        $this->link= @$_POST[voDocumento::$nmAtrLink];
         
         $this->nmEntidadePrincipal = (new voDocumento())->getNmClassVO();        
               
@@ -83,8 +85,17 @@ class filtroManterDocumento extends filtroManter{
 			. "'"
 			;
 		
-			$conector  = "\n AND ";
+			$conector  = "\n AND ";		
+		}
 		
+		if($this->link != null){
+			$filtro = $filtro . $conector
+			. $nmTabela. "." .voDocumento::$nmAtrLink
+			. " LIKE '"
+			. substituirCaracterSQLLike($this->link)
+			. "'"
+			;		
+			$conector  = "\n AND ";		
 		}
 		
 		//finaliza o filtro

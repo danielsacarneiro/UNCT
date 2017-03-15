@@ -119,7 +119,7 @@ class filtroManterContrato extends filtroManter{
 		if($this->cdEspecie != null){
 			$filtro = $filtro . $conector
 						. $nmTabela. "." .vocontrato::$nmAtrCdEspecieContrato
-						. " = ". $this->cdEspecie
+						. " = '". $this->cdEspecie . "'"
 						;
 			
 			$conector  = "\n AND ";
@@ -256,6 +256,25 @@ class filtroManterContrato extends filtroManter{
 			$conector  = "\n AND ";
 		}		
 
+		if($this->tpVigencia != null && $this->tpVigencia != constantes::$CD_OPCAO_TODOS){						
+			if($this->tpVigencia == dominioTpVigencia::$CD_OPCAO_VIGENTES){
+				$filtro = $filtro . $conector
+				. getSQLDataVigenteSqSimples(
+						$nmTabela,
+						vocontrato::$nmAtrDtVigenciaInicialContrato,
+						vocontrato::$nmAtrDtVigenciaFinalContrato);				
+			}else{
+				$filtro = $filtro . $conector
+						. getSQLDataNaoVigenteSqSimples(
+							$nmTabela,
+							vocontrato::$nmAtrDtVigenciaInicialContrato,
+							vocontrato::$nmAtrDtVigenciaFinalContrato);
+			}
+			
+						
+			$conector  = "\n AND ";
+		}
+		
 		//finaliza o filtro
 		$filtro = parent::getFiltroConsultaSQL($filtro);
 		

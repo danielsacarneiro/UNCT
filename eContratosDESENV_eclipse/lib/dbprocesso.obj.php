@@ -55,8 +55,14 @@ class dbprocesso{
         return $registro[0];
 	}
 	
+	//depreciado
+	/*function getQueryNmUsuario($vo, $queryJoin, $isHistorico){
+		$nmTabelaACompararCdUsuario = $vo->getNmTabelaEntidade($isHistorico);
+		return $this->getQueryNmUsuarioTabelaAComparar($vo, $nmTabelaACompararCdUsuario, $queryJoin, $isHistorico);		
+	}*/
+	
 	//acrescenta os dados dos usuarios guardados na tabela
-	function getQueryNmUsuario($vo, $queryJoin, $isHistorico){
+	function getQueryNmUsuarioTabelaAComparar($vo, $nmTabelaACompararCdUsuario, $queryJoin, $isHistorico){
 		$nmTabela = $vo->getNmTabelaEntidade($isHistorico);
 		//$temUsuInclusao = false;		
 		$temUsuInclusao = existeItemNoArray(voentidade::$nmAtrCdUsuarioInclusao, $vo->getTodosAtributos());
@@ -78,12 +84,12 @@ class dbprocesso{
 		if($temUsuInclusao){
 			$query.= "\n LEFT JOIN ". vousuario::$nmEntidade;
 			$query.= "\n TAB1 ON ";
-			$query.= "TAB1.".vousuario::$nmAtrID. "=".voentidade::$nmAtrCdUsuarioInclusao;
+			$query.= "TAB1.".vousuario::$nmAtrID. "=".$nmTabelaACompararCdUsuario.".".voentidade::$nmAtrCdUsuarioInclusao;
 		}
 		
 		$query.= "\n LEFT JOIN ". vousuario::$nmEntidade;
 		$query.= "\n TAB2 ON ";
-		$query.= "TAB2.".vousuario::$nmAtrID. "=".voentidade::$nmAtrCdUsuarioUltAlteracao;
+		$query.= "TAB2.".vousuario::$nmAtrID. "=".$nmTabelaACompararCdUsuario.".".voentidade::$nmAtrCdUsuarioUltAlteracao;
 		
 		return $query;		
 	}
@@ -97,19 +103,30 @@ class dbprocesso{
 	
 	function consultarPorChaveMontandoQuery($vo, $arrayColunasRetornadas, $queryJoin, $isHistorico){
 		
-		$atributos = getSQLStringFormatadaColecaoIN($arrayColunasRetornadas, false);	
-		$query = "SELECT ". $atributos;
-		$query.= $this->getQueryNmUsuario($vo, $queryJoin, $isHistorico);				
+		$queryWhere = " WHERE ";
+		$queryWhere.= $vo->getValoresWhereSQLChave($isHistorico);						
+		return $this->consultarMontandoQuery($vo, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico);
+	}
 	
-		$query.= " WHERE ";
-		$query.= $vo->getValoresWhereSQLChave($isHistorico);
-		
+	function consultarMontandoQuery($vo, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico){
+		$nmTabelaACompararCdUsuario = $vo->getNmTabelaEntidade($isHistorico);
+		return $this->consultarMontandoQueryUsuario($vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico);		
+	}
+	
+	function consultarMontandoQueryUsuario($vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico){
+			
+		$atributos = getSQLStringFormatadaColecaoIN($arrayColunasRetornadas, false);
+		$query = "SELECT ". $atributos;
+		$query.= $this->getQueryNmUsuarioTabelaAComparar($vo, $nmTabelaACompararCdUsuario, $queryJoin, $isHistorico);
+	
+		$query.= $queryWhere;
+	
 		//echo $query;
 		$retorno = $this->consultarEntidade($query, true);
 		if($retorno != "")
 			$retorno = $retorno[0];
-		
-		return $retorno;		
+	
+			return $retorno;
 	}
 	
 	function consultarEntidade($query, $isPorChavePrimaria){
@@ -382,11 +399,18 @@ class dbprocesso{
 	}
 	
 	function getProximoSequencialChaveComposta($nmColunaSq, $voEntidade){
-		
-		$arrayAtribRemover = array($nmColunaSq);		
-		$arrayColunasChaveSemSq = removeColecaoAtributos($voEntidade->getAtributosChavePrimaria(), $arrayAtribRemover);
-						
+		$arrayAtribRemover = array($nmColunaSq);
+		return $this->getProximoSequencialChaveCompostaLogica($nmColunaSq, $voEntidade, $arrayAtribRemover);		
+	}
+	
+	function getProximoSequencialChaveCompostaLogica($nmColunaSq, $voEntidade, $arrayAtribRemover){
+		$isHistorico = $voEntidade->sqHist != null;		
+
+		$arrayColunasChaveSemSq = removeColecaoAtributos($voEntidade->getAtributosChavePrimaria(), $arrayAtribRemover);						
 		$query = " SELECT MAX(" . $nmColunaSq . ")+1 AS ". $nmColunaSq ." FROM " . $voEntidade->getNmTabela() . " ";
+		$query.= " WHERE ";
+		$query.= $voEntidade->getValoresWhereSQLChaveLogica($isHistorico);
+		
 		$query .= "\n GROUP BY ". getSQLStringFormatadaColecaoIN($arrayColunasChaveSemSq, false);
 		
 		//echo $query;
@@ -410,23 +434,11 @@ class dbprocesso{
 	Function finalizar() {
 		$this->cDb->fecharConexao();
 	}
-
-    /* 	Function finalize() {
-		$this->cDb->fecharConexao();
-	}
-
-	Function fechar() {
-		$this->cDb->close();
-	}*/
-	
-	/*Function getTexto($textoBanco) {
-		return utf8_decode($textoBanco);
-	}*/
     
     /**
      *FUNCOES MANIPULACAO
      */
-    function getVarComoString($param){
+    /*function getVarComoString($param){
         //return "'" . utf8_encode($param) . "'";
         $retorno = "null";
         if($param != null)
@@ -451,7 +463,7 @@ class dbprocesso{
         
     function getDataSQL($param){
         $retorno = "null";
-        //echo $param;
+        //echo "<br> parametro conversao data sql:".$param;
         if($param != null)
             $retorno = "'" . (substr($param,6,4)) . "-" . substr($param,3,2) . "-" . substr($param,0,2) . "'";	
         return $retorno;
@@ -472,5 +484,42 @@ class dbprocesso{
             //echo "NÃO É NÚMERO! <BR>";
             
         return $retorno;
-    }	
+    }*/
+        
+        /**
+         *FUNCOES MANIPULACAO
+         *pega na bibliotecaSQL
+         /*
+         *@ deprecated
+         */
+        function getVarComoString($param){
+        	return getVarComoString($param);
+        }
+        
+        /*
+         *@ deprecated
+         */
+        function getVarComoNumero($param){
+        	return getVarComoNumero($param);
+        }
+        
+        /*
+         *@ deprecated
+         */
+        function getVarComoData($param){
+        	return getVarComoData($param);
+        }
+        /*
+         *@ deprecated
+         */        
+        function getDataSQL($param){
+       		return getVarComoDataSQL($param);
+        }
+        
+        /*
+         *@ deprecated
+         */        
+        function getDecimalSQL($param){        
+        	return getDecimalSQL($param);
+        }
 }	

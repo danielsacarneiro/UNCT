@@ -29,9 +29,11 @@ header ('Content-type: text/html; charset=ISO-8859-1');
 
     static $DS_SIM  = "SIM";
     static $DS_NAO  = "NAO";
+    static $DS_OPCAO_TODOS = "Todos";
      
     static $CD_SIM  = "S";
     static $CD_NAO  = "N"; 
+    static $CD_OPCAO_TODOS  = "op_todos";
     
     static $CD_ESPECIE_CONTRATO_MATER = 1;
     

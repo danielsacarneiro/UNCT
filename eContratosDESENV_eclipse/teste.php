@@ -12,6 +12,7 @@ function teste(){
     echo $indiceEspecie;*/
     
     $param = " CONVÊNIO DE INTERCÂMBIO DE EXPERIÊNCIAS E DE INFORMAÇÕES ECONÔMICO-FISCAIS";
+    $param = " T.A ";
     $cdEspecie = $dbteste->getCdEspecieContrato($param);
     
     echo "<br>especie considerada: " . $cdEspecie;    
@@ -37,14 +38,7 @@ include_once(caminho_vos."vopessoa.php");
 
 include_once(caminho_util."DocumentoPessoa.php");
 
-$vo = new vopessoa();
-//var_dump($vo->getTodosAtributos());
-//echo "<br>";
-
-$db = new dbcontrato();
-echo $db->atualizarPessoasContrato();
-
-
+teste();
 /*$a=array("a"=>"5","b"=>5,"c"=>"5");
 $a=array("a", "b", "c");
 echo array_search("c",$a);*/
@@ -54,6 +48,12 @@ echo array_search("c",$a);*/
 $vo->varAtributos = removeColecaoAtributos($vo->varAtributos, $array);
 
 var_dump($vo->varAtributos);*/
-
-
 ?>
+
+<html>
+<head>
+<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+<title>IMPORTAR PLANILHA #01</title>
+</head>
+<?php teste();?>
+<body>

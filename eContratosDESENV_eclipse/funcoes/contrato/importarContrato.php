@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
 <?php
 include_once("../../config_lib.php");
 
@@ -50,6 +49,10 @@ for ($k=6; $k<=$totalResultado; $k++) {
             break;        
         
         try{
+        	$linkDoc = $objPHPExcel->getActiveSheet()->getCell('B'.$k)->getHyperlink()->getUrl();
+        	$linha[vocontrato::$nmAtrDocLink] = $linkDoc;
+        	 
+        	//echo $linha[vocontrato::$nmAtrDocLink];        	     
             $result = $dbprocesso->incluirContratoImport($tipoContrato, $linha);
         }catch(Exception $e){
             $msgErro = $e->getMessage();

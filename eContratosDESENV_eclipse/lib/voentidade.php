@@ -213,5 +213,12 @@
     	$this->getChavePrimariaVOExplode($array);
     }
     
+    function getValoresWhereSQLChaveLogica($isHistorico){
+    	//via de regra a chave logica eh igual a chave primaria
+    	//quando for distinta, o metodo getValoresWhereSQLChaveLogica 
+    	//devera ser implementado no vo especifico
+    	return $this->getValoresWhereSQLChave($isHistorico);    	
+    }
+    
 }
 ?>

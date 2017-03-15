@@ -10,8 +10,8 @@ CREATE TABLE contrato (
     ct_numero INT,
     ct_tipo char(1),
 	ct_especie VARCHAR(50),
-    ct_sq_especie INT, -- indice do documento em questao (primeiro ou segundo apostilamento, por ex)
-    ct_cd_especie INT, -- especie do registro (mater, apostilamento, aditivo)
+    ct_sq_especie INT DEFAULT 1 NOT NULL, -- indice do documento em questao (primeiro ou segundo apostilamento, por ex)
+    ct_cd_especie CHAR(2), -- especie do registro (mater, apostilamento, aditivo)
 	ct_cd_situacao CHAR(2),
     ct_objeto LONGTEXT,
     ct_gestor_pessoa VARCHAR(300) ,
@@ -36,6 +36,7 @@ CREATE TABLE contrato (
     ct_observacao LONGTEXT,    
     ct_valor_global DECIMAL (14,4),
     ct_valor_mensal DECIMAL (14,4),
+    ct_doc_link TEXT NULL,
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_incl INT,
@@ -58,6 +59,9 @@ ALTER TABLE contrato ADD CONSTRAINT fk_ct_pessoa_resp FOREIGN KEY ( pe_cd_resp )
 ALTER TABLE contrato ADD CONSTRAINT fk_ct_pessoa_contratada FOREIGN KEY ( pe_cd_contratada ) REFERENCES pessoa (pe_cd) 
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;
+    
+ALTER TABLE contrato ADD UNIQUE KEY chave_logica_contrato (ct_exercicio, ct_numero, ct_tipo, ct_cd_especie, ct_sq_especie); 
+    
 
 -- show create table contrato;
 
@@ -80,7 +84,7 @@ CREATE TABLE contrato_hist (
     ct_tipo char(1),
 	ct_especie VARCHAR(50),
     ct_sq_especie INT, -- indice do documento em questao (primeiro ou segundo apostilamento, por ex)
-    ct_cd_especie INT, -- especie do registro (mater, apostilamento, aditivo)
+    ct_cd_especie CHAR(2), -- especie do registro (mater, apostilamento, aditivo)
 	ct_cd_situacao CHAR(2),
     ct_objeto LONGTEXT,
     ct_gestor_pessoa VARCHAR(300) ,
@@ -105,6 +109,7 @@ CREATE TABLE contrato_hist (
     ct_observacao LONGTEXT,    
     ct_valor_global DECIMAL (14,4),
     ct_valor_mensal DECIMAL (14,4),
+    ct_doc_link TEXT NULL,
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_incl INT,
@@ -121,6 +126,7 @@ CREATE TABLE contrato_tram (
     ct_numero INT NOT NULL,
     ct_tipo char(1) NOT NULL,    
     sq_tram BIGINT NOT NULL, -- chave tramitacao
+    sq_indice INT NOT NULL, 
         
     CONSTRAINT pk PRIMARY KEY (	ct_exercicio, ct_numero, ct_tipo, sq_tram)
 );
