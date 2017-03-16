@@ -49,17 +49,18 @@ include_once(caminho_util. "dominio.class.php");
 	}
     
 	function getDominioImportacaoPlanilha() {
-        //cooperacao e convalidacao seram considerados como MATER                
+        //cooperacao e convalidacao seram considerados como MATER
+        //deixa na ultima posicao as especies que podem se repetir
         	$array = array(
-        		self::$CD_ESPECIE_CONTRATO_MATER => "Mater*Convênio*Cooperação*Convalidação",
-        		self::$CD_ESPECIE_CONTRATO_APOSTILAMENTO => "Apostilamento*Apostuilamento",
+        		self::$CD_ESPECIE_CONTRATO_RERRATIFICACAO => "Rerratificação",
         		self::$CD_ESPECIE_CONTRATO_TERMOADITIVO => "T.A",
         		self::$CD_ESPECIE_CONTRATO_TERMOAJUSTE => "Ajuste",
-        		self::$CD_ESPECIE_CONTRATO_CESSAO_USO => "Cessão",                
-        		self::$CD_ESPECIE_CONTRATO_RERRATIFICACAO => "Rerratificação",
+        		self::$CD_ESPECIE_CONTRATO_CESSAO_USO => "Cessão",
         		self::$CD_ESPECIE_CONTRATO_RESCISAO_AMIGAVEL => "Amigável",
         		self::$CD_ESPECIE_CONTRATO_RESCISAO_UNILATERAL => "Unilateral",
-        		self::$CD_ESPECIE_CONTRATO_RESCISAO_ENCERRAMENTO => "Encerramento"
+        		self::$CD_ESPECIE_CONTRATO_RESCISAO_ENCERRAMENTO => "Encerramento",      
+        		self::$CD_ESPECIE_CONTRATO_MATER => "Mater*Convênio*Cooperação*Convalidação",
+        		self::$CD_ESPECIE_CONTRATO_APOSTILAMENTO => "Apostilamento*Apostuilamento"
 				);
             
             return $array;

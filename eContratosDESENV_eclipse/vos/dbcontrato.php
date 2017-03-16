@@ -149,7 +149,7 @@ include_once (caminho_util."biblioteca_htmlArquivo.php");
 		$retorno.= $this-> getDecimalSQL($voContrato->vlGlobal) . ",";
 		$retorno.= $this-> getDecimalSQL($voContrato->vlMensal) . ",";
         $retorno.= $this-> getDataSQL($voContrato->dtProposta) . ",";
-        $retorno.= $this-> getVarComoNumero($voContrato->cdPessoaContratada);
+        $retorno.= $this-> getVarComoNumero($voContrato->cdPessoaContratada) . ",";
         $retorno.= $this-> getVarComoString($voContrato->linkDoc);
         
         $retorno.= $voContrato->getSQLValuesInsertEntidade();
@@ -345,11 +345,7 @@ include_once (caminho_util."biblioteca_htmlArquivo.php");
 			//se der pau, vai alterar
 			//$retorno = $this->cDb->atualizarImportacao($query);				
 		}
-		
-		//atualiza as contratadas
-		echo "<br><br>Atualizando CNPJ das contratadas.<br><br>"; 
-		$this->atualizarPessoasContrato();
-		
+			
 	    return $retorno;		
 	}	
     
@@ -624,14 +620,9 @@ include_once (caminho_util."biblioteca_htmlArquivo.php");
         $valor = str_replace(" ", "", "$valor");
                 
         //echo "<br>decimal apos conversao:" . $valor;
-        if(isNumero($valor)){
-        	$valor = str_replace(",", "A", "$param");
-        	$valor = str_replace(".", ",", "$valor");
-        	$valor = str_replace("A", ".", "$valor");
-        	$valor = str_replace(" ", "", "$valor");
-        	 
-            $retorno = $valor;
-           // echo "� NښMERO! <BR>";
+        if(isNumero($valor)){        	        	
+        	$retorno = getMoedaMascaraImportacao($param);        	 
+            // echo "� NښMERO! <BR>";
         }
         //else
             //echo "NÃO ɉ NښMERO! <BR>";
@@ -715,6 +706,13 @@ include_once (caminho_util."biblioteca_htmlArquivo.php");
    		 
     }
     
+    function atualizarNomesCaracteresEspeciais(){    	
+    	  //a ideia aqui eh colocar a atualizacao do objeto e nome contratada
+    	  //pra retirar os caracterees especiais
+    	;//$retorno = $this->cDb->atualizar($query);
+    
+    }
+        
     function getVOImportacaoPlanilha($tipo, $linha){
     		
     	$numero = $linha["B"];
@@ -797,7 +795,7 @@ include_once (caminho_util."biblioteca_htmlArquivo.php");
     	$retorno->anoContrato = $ano;
     	$retorno->tipo = $tipo;
     	$retorno->especie = $especie;
-    	$retorno->linkDoc = $linkDoc;
+    	$retorno->linkDoc = getDocLinkMascaraImportacao($linkDoc);
     
     	if($sqEspecie != null){
 	    	$retorno->sqEspecie = $sqEspecie;

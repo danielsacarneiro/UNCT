@@ -119,5 +119,6 @@ echo $varGlobalJS;
 define('TAMANHO_CODIGOS', 5);
 define('TAMANHO_CODIGOS_SAFI', 3);
 define('CAMPO_SEPARADOR', "*");
+define('CAMPO_SUBSTITUICAO', "[[*]]");
 
 ?>

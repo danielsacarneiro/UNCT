@@ -99,6 +99,41 @@
         return $retorno;
     }
     
+    function getDocLinkMascaraImportacao($param){
+    	$linkDoc = str_replace("\\", "\\\\", $param);
+    	return $linkDoc;
+    }
+    
+    function getMoedaMascaraImportacao($param){    	
+    	$tamanho = strlen("$param");
+    	//echo "tamanho da string: " . $tamanho. "<br>";
+    
+    	$referencia = "0123456789";
+    	
+    	$qtCasaDecimais = 0;
+    	for($i=$tamanho-1; $i>=0;$i--){
+    		$char = substr("$param",$i,1);
+    		//echo ".$i.";
+        		
+    		if(strpos($referencia, "$char") === false){
+    			//echo "char $char, tem casa decimal:".$i;
+    			$qtCasaDecimais = $tamanho - $i -1;
+    			break;
+    		}
+    	}
+    	   	   	
+    	//echo "<br>". "casas decimais: " . $qtCasaDecimais. "<br>";
+    	
+    	$valor = str_replace(".", "", "$param");
+    	$valor = str_replace(",", "", "$valor");
+    	$valor = str_replace(" ", "", "$valor");
+    	 
+    	$tamanho = strlen($valor);
+    	$valor = substr($valor,0,$tamanho-$qtCasaDecimais) . "." . substr($valor, $tamanho-$qtCasaDecimais, $qtCasaDecimais); 
+    
+    	return number_format($valor, $qtCasaDecimais, ',', '.');
+    }
+    
     function isNumero($param){
         return isNumeroComDecimal($param, true);
     }
@@ -118,11 +153,13 @@
             $digito = substr($param, $i, 1);
             $val = "$digito";
             
+            //if(strpos($referencia, "$val") === true){
+            //eh o mesmo que, pois a posicao zero eh zero, e isso eh falso qd transformado pra boolean
             if(strpos($referencia, "$val") || $val == "0"){
-                //echo $val. " Ã© numero <br>";
+                //echo $val. " é numero <br>";
                 $retorno = true;
             }else{
-                //echo $val. " nao Ã© numero <br>";
+                //echo $val. " nao é numero <br>";
                 $retorno = false;
                 break;
             }

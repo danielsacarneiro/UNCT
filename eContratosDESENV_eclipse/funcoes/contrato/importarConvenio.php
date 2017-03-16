@@ -59,10 +59,10 @@ for ($k=3; $k<=$totalResultado; $k++) {
             break;
         
         try{
-        	$linkDoc = $objPHPExcel->getActiveSheet()->getCell('B'.$k)->getHyperlink()->getUrl();
-        	$linha[vocontrato::$nmAtrDocLink] = $linkDoc;
+        	$linkDoc = $objPHPExcel->getActiveSheet()->getCell('B'.$k)->getHyperlink()->getUrl();        	
+        	$linha[vocontrato::$nmAtrLinkDoc] = $linkDoc;
         	
-        	//echo $linha[vocontrato::$nmAtrDocLink];
+        	//echo $linha[vocontrato::$nmAtrLinkDoc];
         	
             $result = $dbprocesso->incluirContratoImport($tipoContrato, $linha);
         }catch(Exception $e){
@@ -77,6 +77,10 @@ for ($k=3; $k<=$totalResultado; $k++) {
 				
 		echo "linha registro" . $k . " <BR>";
 }
+
+//atualiza as contratadas
+echo "<br><br>Atualizando CNPJ das contratadas.<br><br>";
+$dbprocesso->atualizarPessoasContrato();
     
 echo "FIM... <br><br>";
 

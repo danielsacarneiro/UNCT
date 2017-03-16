@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <?php
 include_once("../../config_lib.php");
-//include_once(caminho_util."bibliotecaHTML.php");
+include_once(caminho_util."bibliotecaFuncoesPrincipal.php");
 //inicio();
 
 error_reporting(E_ALL);
@@ -27,7 +27,7 @@ include caminho_wordpress.'excel/Classes/PHPExcel/Writer/Excel2007.php';
 include caminho_wordpress.'excel/Classes/PHPExcel/IOFactory.php';
 include_once(caminho_vos."dbcontrato.php");
 
-$inputFileName = caminho.'planilha/UNCT_teste.xls';
+$inputFileName = caminho.'planilha/UNCT_teste.xlsx';
 
 $objPHPExcel = PHPExcel_IOFactory::load($inputFileName);
 $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
@@ -45,7 +45,22 @@ $dbprocesso = new dbcontrato(null);
 
 //var_dump($objPHPExcel->getActiveSheet()->getCell('B3')->getHyperlink());
 //var_dump($objPHPExcel->getActiveSheet()->getCell('B3')->getHyperlink()->getUrl());
-echo $objPHPExcel->getActiveSheet()->getCell('B3')->getHyperlink()->getUrl();
+//echo $objPHPExcel->getActiveSheet()->getCell('B3')->getHyperlink()->getUrl();
+
+for ($k=6; $k<=$totalResultado; $k++) {
+
+	$linha = $sheetData[$k];
+	$VALOR = $linha["H"];
+	
+	ECHO "VALOR ENCONTRADO:" . $VALOR . "<BR>";
+	ECHO "VALOR PROCESSADO:" . getMoedaMascaraImportacao($VALOR) . "<BR>";
+
+	if($linha["A"] == "FIM")
+		break;
+
+	echo "linha registro" . $k . " <BR>";
+}
+
 
     
 echo "FIM... <br><br>";
