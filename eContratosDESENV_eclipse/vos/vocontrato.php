@@ -1,5 +1,6 @@
 <?php
 include_once(caminho_lib."voentidade.php");
+include_once(caminho_funcoes."documento/dominioTpDocumento.php");
 //include_once(caminho_vos."vogestor.php");
 //include_once(caminho_vos."vogestorpessoa.php");
 
@@ -332,6 +333,11 @@ include_once(caminho_lib."voentidade.php");
 		$this->cdContrato = $array[3];
 		$this->cdEspecie = $array[4];
 		$this->sqHist = $array[5];
+	}
+	
+	function getLinkDocumento(){		
+		$link = str_replace("G:", dominioTpDocumento::$ENDERECO_DRIVE, $this->linkDoc);
+		return $link; 
 	}
 }
 ?>

@@ -118,7 +118,7 @@ include_once(caminho_util."dominioSetor.php");
 		
 		//$domDoc = new dominioTpDocumento();
 		$domSetor = new dominioSetor();
-		$retorno = dominioTpDocumento::$ENDERECO_PASTABASE;
+		$retorno = dominioTpDocumento::getEnderecoPastaBase();
 		
 		if($this->tp != null){
 			

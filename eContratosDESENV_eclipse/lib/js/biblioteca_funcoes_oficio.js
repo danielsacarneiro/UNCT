@@ -6,8 +6,7 @@
  - biblioteca_funcoes_text.js
 */
 
-function abrirArquivo(pNmCampoLinkDoc){
-	
+function abrirArquivo(pNmCampoLinkDoc){		
 	linkDoc = document.getElementById(pNmCampoLinkDoc).value;	
     url = "../abrir_windowsexplorer.php?comando=" + linkDoc;
     window.open(url,'_blank');

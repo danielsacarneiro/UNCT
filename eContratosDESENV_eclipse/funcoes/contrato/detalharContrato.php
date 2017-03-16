@@ -66,6 +66,7 @@ setCabecalho($titulo);
 <?=setTituloPagina(null)?>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_cnpfcnpj.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_oficio.js"></SCRIPT>
 
 <SCRIPT language="JavaScript" type="text/javascript">
 
@@ -285,6 +286,16 @@ function confirmar() {
 			<textarea rows=5 cols="80" id="<?=vocontrato::$nmAtrObservacaoContrato?>" name="<?=vocontrato::$nmAtrObservacaoContrato?>" class="camporeadonly" <?=$readonly?>><?php echo($obs);?></textarea>  
 		</TD>
     </TR>
+	<TR>
+        <TH class="campoformulario" nowrap width="1%">Documento:</TH>
+        <?php
+        $endereco = $voContrato->getLinkDocumento();
+        ?>                
+        <TD class="campoformulario" colspan=3><textarea id="<?=vocontrato::$nmAtrLinkDoc?>" name="<?=vocontrato::$nmAtrLinkDoc?>" rows="2" cols="80" class="camporeadonly" readonly><?php echo  $endereco;?></textarea>
+    	<?php echo getBotaoValidacaoAcesso("bttabrirpasta", "Abrir", "botaofuncaop", false,true,true,true, "onClick=javascript:abrirArquivo('" . vocontrato::$nmAtrLinkDoc. "'); accesskey='m'");?>
+	</TD>                
+	</TR>	        
+    
 	<TR><?=incluirUsuarioDataHoraDetalhamento($voContrato);?></TR>
         </TBODY>
     </TABLE>
