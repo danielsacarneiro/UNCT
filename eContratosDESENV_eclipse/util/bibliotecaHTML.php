@@ -218,11 +218,14 @@ include_once(caminho_vos."vousuario.php");
     function getDsEspecie($voContrato){
         $retorno = null;
         $especiesContrato = new dominioEspeciesContrato();
-        
+        $cdEspecie = $voContrato->cdEspecie;
         $especie = $voContrato->especie;
-        $sqEspecie = $voContrato->sqEspecie;
-        $cdEspecie = $voContrato->cdEspecie;        
-        if($especie != null || $cdEspecie != null){                               
+        if($cdEspecie != dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER){
+        	$sqEspecie = $voContrato->sqEspecie;
+        }
+                
+        if($especie != null || $cdEspecie != null){ 
+        	
             if($sqEspecie != null)
                 $sqEspecie = $sqEspecie . "º";
                 

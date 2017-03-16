@@ -153,7 +153,7 @@ function confirmar() {
             <TH class="campoformulario" nowrap>Responsavel:</TH>
             <TD class="campoformulario" colspan="3">
                 <?php
-                 include_once(caminho_funcoes. "gestor_pessoa/biblioteca_htmlGestorPessoa.php");
+                 include_once(caminho_funcoes. "pessoa/biblioteca_htmlPessoa.php");
                  if($voContrato->cdGestorPessoa != null)
                     echo getComboGestorPessoaMais(new dbgestorpessoa(), vocontrato::$nmAtrCdGestorPessoaContrato, vocontrato::$nmAtrCdGestorPessoaContrato, $voContrato->cdGestor, $voContrato->cdGestorPessoa, "camporeadonly", " disabled ");
                  
@@ -292,7 +292,8 @@ function confirmar() {
         $endereco = $voContrato->getLinkDocumento();
         ?>                
         <TD class="campoformulario" colspan=3><textarea id="<?=vocontrato::$nmAtrLinkDoc?>" name="<?=vocontrato::$nmAtrLinkDoc?>" rows="2" cols="80" class="camporeadonly" readonly><?php echo  $endereco;?></textarea>
-    	<?php echo getBotaoValidacaoAcesso("bttabrirpasta", "Abrir", "botaofuncaop", false,true,true,true, "onClick=javascript:abrirArquivo('" . vocontrato::$nmAtrLinkDoc. "'); accesskey='m'");?>
+    	<?php echo getBotaoValidacaoAcesso("bttabrirpasta", "Abrir", "botaofuncaop", false,true,true,true, "onClick=javascript:abrirArquivoCliente('" . vocontrato::$nmAtrLinkDoc. "'); accesskey='m'");?>
+    	<!-- <a href="<?=$endereco?>" download><?=$endereco?></a>-->
 	</TD>                
 	</TR>	        
     

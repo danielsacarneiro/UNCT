@@ -337,6 +337,7 @@ include_once(caminho_funcoes."documento/dominioTpDocumento.php");
 	
 	function getLinkDocumento(){		
 		$link = str_replace("G:", dominioTpDocumento::$ENDERECO_DRIVE, $this->linkDoc);
+		//$link = str_replace("G:", "H:", $this->linkDoc);
 		return $link; 
 	}
 }

@@ -45,6 +45,7 @@ setCabecalho($titulo);
 <?=setTituloPagina(null)?>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_cnpfcnpj.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_oficio.js"></SCRIPT>
 
 <SCRIPT language="JavaScript" type="text/javascript">
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
@@ -64,7 +65,7 @@ function confirmar() {
 	return confirm("Confirmar Alteracoes?");    
 }
 
-function mostrarpasta(){
+/*function mostrarpasta(){
 	pasta= document.frm_principal.<?=voDocumento::$nmAtrLink?>.value;	
 	//pasta = "c:"; 
     url = "../abrir_windowsexplorer.php?comando=" + pasta;
@@ -72,7 +73,7 @@ function mostrarpasta(){
 
     window.open(url,'_blank');
     
-}
+}*/
 
 </SCRIPT>
 
@@ -130,7 +131,8 @@ function mostrarpasta(){
                 	$endereco = $vo->getEnderecoTpumento();
                 ?>                
                 <TD class="campoformulario" colspan=3><textarea id="<?=voDocumento::$nmAtrLink?>" name="<?=voDocumento::$nmAtrLink?>" rows="2" cols="80" class="camporeadonly" readonly><?php echo  $endereco;?></textarea>
-                <?php echo getBotaoValidacaoAcesso("bttabrirpasta", "Abrir", "botaofuncaop", false,true,true,true, "onClick='javascript:mostrarpasta();' accesskey='m'");?>
+                <?php echo getBotaoValidacaoAcesso("bttabrirpasta", "Abrir", "botaofuncaop", false,true,true,true, "onClick=javascript:abrirArquivoCliente('" . voDocumento::$nmAtrLink. "'); accesskey='m'");?>
+                <?php //echo getBotaoValidacaoAcesso("bttabrirpasta", "Abrir", "botaofuncaop", false,true,true,true, "onClick='javascript:mostrarpasta();' accesskey='m'");?>
                 </TD>
                 
             </TR>	        

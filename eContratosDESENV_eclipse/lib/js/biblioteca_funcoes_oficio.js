@@ -12,6 +12,12 @@ function abrirArquivo(pNmCampoLinkDoc){
     window.open(url,'_blank');
 }
 
+function abrirArquivoCliente(pNmCampoLinkDoc){		
+	linkDoc = document.getElementById(pNmCampoLinkDoc).value;	
+    url = "../download_arquivo.php?arquivo=" + linkDoc;
+    window.open(url,'_blank');
+}
+
 function getDescricaoSetor(cdSetor){
 	retorno = "";
 	
