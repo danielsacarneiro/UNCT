@@ -142,7 +142,7 @@ function selecionar() {
 	            $comboTp= new select($domTp->colecao);
 			  ?>			            
 			<TR>
-                <TH class="campoformulario" nowrap width="1%">Exercício:</TH>
+                <TH class="campoformulario" nowrap width="1%">Ano:</TH>
                 <TD class="campoformulario" nowrap width="1%"><?php echo $selectExercicio->getHtmlCombo(voDocumento::$nmAtrAno,voDocumento::$nmAtrAno, $filtro->ano, true, "camponaoobrigatorio", false, "");?></TD>
                 <TH class="campoformulario" nowrap width="1%">Setor:</TH>
                 <TD class="campoformulario"><?php echo $comboSetor->getHtmlCombo(voDocumento::$nmAtrCdSetor,voDocumento::$nmAtrCdSetor, $filtro->cdSetor, true, "camponaoobrigatorio", true, "");?></TD>
@@ -181,7 +181,7 @@ function selecionar() {
                   <?php 
                   }
                   ?>
-                    <TH class="headertabeladados" width="1%">Exercício</TH>
+                    <TH class="headertabeladados" width="1%">Ano</TH>
                     <TH class="headertabeladados" width="1%" nowrap >Setor</TH>
                     <TH class="headertabeladados" width="1%" nowrap >Tp.Documento</TH>
                     <TH class="headertabeladados" width="1%" nowrap >Número</TH>

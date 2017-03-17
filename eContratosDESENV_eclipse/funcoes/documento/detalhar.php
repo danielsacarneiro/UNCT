@@ -108,7 +108,7 @@ function confirmar() {
 	             
 			  ?>			            
 			<TR>
-                <TH class="campoformulario" nowrap width="1%">Exercício:</TH>
+                <TH class="campoformulario" nowrap width="1%">Ano:</TH>
                 <TD class="campoformulario" nowrap width="1%"><INPUT type="text" id="<?=voDocumento::$nmAtrAno?>" name="<?=voDocumento::$nmAtrAno?>"  value="<?php echo $vo->ano;?>"  class="camporeadonly" size="5" readonly></TD>
                 <TH class="campoformulario" nowrap width="1%">Setor:</TH>
                 <TD class="campoformulario" nowrap >

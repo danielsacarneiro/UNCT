@@ -103,7 +103,7 @@ function confirmar() {
 	            $comboTp= new select($domTp->colecao);
 			  ?>			            
 			<TR>
-                <TH class="campoformulario" nowrap width="1%">Exercício:</TH>
+                <TH class="campoformulario" nowrap width="1%">Ano:</TH>
                 <TD class="campoformulario" nowrap width="1%"><?php echo $selectExercicio->getHtmlCombo(voDocumento::$nmAtrAno,voDocumento::$nmAtrAno, $vo->ano, true, $classChaves, false, "$disabledChaves $required");?></TD>
                 <TH class="campoformulario" nowrap width="1%">Setor:</TH>
                 <TD class="campoformulario"><?php echo $comboSetor->getHtmlCombo(voDocumento::$nmAtrCdSetor,voDocumento::$nmAtrCdSetor, $vo->cdSetor, true, $classChaves, true, "$disabledChaves $required");?></TD>
