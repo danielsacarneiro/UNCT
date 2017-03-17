@@ -3,22 +3,29 @@
         <DIV id="div_tabeladados" class="tabeladados">
          <TABLE id="table_tabeladados" class="tabeladados" cellpadding="0" cellspacing="0">						
              <TBODY>
-                <TR>
-                  <TH class="headertabeladados" width="1%">&nbsp;&nbsp;X</TH>
-                  <?php 
-                  if($isHistorico){					                  	
-                  	?>
-                  	<TH class="headertabeladados" width="1%">Sq.Hist</TH>
-                  <?php 
-                  }
-                  ?>
-                    <TH class="headertabeladados" width="1%">P.A.</TH>
-                    <TH class="headertabeladados"width="1%" nowrap >Contrato</TH>
-                    <TH class="headertabeladados" width="1%" nowrap >Doc.Contratada</TH>
-                    <TH class="headertabeladados" width="90%">Contratada</TH>
-                    <TH class="headertabeladados" width="1%" nowrap>Servidor.Resp.</TH>
-                    <TH class="headertabeladados" width="1%" nowrap>Situação</TH>
-                </TR>
+                    <TR>
+		                <TH class="headertabeladados" rowspan="2" width="1%">&nbsp;&nbsp;X</TH>
+		                  <?php if($isHistorico){?>
+		                  	<TH class="headertabeladados" width="1%">Sq.Hist</TH>
+		                  <?php }?>
+						<TH class="headertabeladados" colspan="2">
+						<center>P.A.</center>
+						</TH>
+						<TH class="headertabeladados" colspan="3">
+						<center>Contrato</center>
+						</TH>
+	                    <TH class="headertabeladados" rowspan="2" width="1%" nowrap >Doc.Contratada</TH>
+	                    <TH class="headertabeladados" rowspan="2" width="90%">Contratada</TH>
+	                    <TH class="headertabeladados" rowspan="2" width="1%" nowrap>Servidor.Resp.</TH>
+	                    <TH class="headertabeladados" rowspan="2"  width="1%" nowrap>Situação</TH>
+                    </TR>
+                    <TR>
+	                    <TH class="headertabeladados" width="1%" nowrap>Ano</TH>
+	                    <TH class="headertabeladados" width="1%">Num.</TH>
+	                    <TH class="headertabeladados" width="1%" nowrap>Ano</TH>
+	                    <TH class="headertabeladados" width="1%">Num.</TH>
+	                    <TH class="headertabeladados" width="1%">Tipo</TH>	                    
+                    </TR>                 
                 <?php								
                 if (is_array($colecao))
                         $tamanho = sizeof($colecao);
@@ -30,24 +37,25 @@
                 $dominioTipoContrato = new dominioTipoContrato();
                 $domSiPA = new dominioSituacaoPA();
                 
-                $colspan=7;
+                $colspan=10;
                 if($isHistorico){
-                	$colspan=8;
+                	$colspan++;
                 }
                 
                 for ($i=0;$i<$tamanho;$i++) {
                         $voAtual = new voPA();
                         $voAtual->getDadosBanco($colecao[$i]);     
                         
-                        $contrato = formatarCodigoAnoComplemento($colecao[$i][voPA::$nmAtrCdContrato],
+                        /*$contrato = formatarCodigoAnoComplemento($colecao[$i][voPA::$nmAtrCdContrato],
                         						$colecao[$i][voPA::$nmAtrAnoContrato], 
                         						$dominioTipoContrato->getDescricao($colecao[$i][voPA::$nmAtrTipoContrato]));
                                                 
                         $procAdm = formatarCodigoAno($colecao[$i][voPA::$nmAtrCdPA],
-                        		$colecao[$i][voPA::$nmAtrAnoPA]);
+                        		$colecao[$i][voPA::$nmAtrAnoPA]);*/
                         
                         $situacao = $colecao[$i][voPA::$nmAtrSituacao];
-                        $situacao = $domSiPA->getDescricao($situacao);                        			 
+                        $situacao = $domSiPA->getDescricao($situacao);  
+                        $tipo = $dominioTipoContrato->getDescricao($voAtual->tpContrato);
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados">
@@ -60,8 +68,11 @@
                   <?php 
                   }
                   ?>                    
-                    <TD class="tabeladados" nowrap><?php echo $procAdm;?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $contrato;?></TD>
+                    <TD class="tabeladados" nowrap><?php echo $voAtual->anoPA;?></TD>
+                    <TD class="tabeladados" nowrap><?php echo complementarCharAEsquerda($voAtual->cdPA, "0", TAMANHO_CODIGOS_SAFI);?></TD>
+                    <TD class="tabeladados" nowrap><?php echo $voAtual->anoContrato;?></TD>
+                    <TD class="tabeladados" nowrap><?php echo complementarCharAEsquerda($voAtual->cdContrato, "0", TAMANHO_CODIGOS_SAFI);?></TD>
+                    <TD class="tabeladados" nowrap><?php echo $tipo;?></TD>
                     <TD class="tabeladados" nowrap><?php echo $colecao[$i][vopessoa::$nmAtrDoc];?></TD>
                     <TD class="tabeladados"><?php echo $colecao[$i][$filtro->nmColNomePessoaContrato];?></TD>
                     <TD class="tabeladados" nowrap><?php echo $colecao[$i][$filtro->nmColNomePessoaResponsavel];?></TD>

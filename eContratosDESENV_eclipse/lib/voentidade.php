@@ -167,19 +167,29 @@
     }
     
     function getNmTabelaEntidade($isHistorico){
-        $nmTabela = static::getNmTabela();
+       /*$nmTabela = static::getNmTabela();
        if($isHistorico)
             $nmTabela = self::getNmTabelaHistorico();
-        return $nmTabela;
+        return $nmTabela;*/
+       
+       return self::getNmTabelaStatic($isHistorico);
+    }
+    
+    static function getNmTabelaStatic($isHistorico){
+    	$nmTabela = static::getNmTabela();
+    	if($isHistorico){
+    		$nmTabela = self::getNmTabelaHistorico();
+    	}
+    	return $nmTabela;
     }
     
     static function getNmTabelaHistorico(){        
         return static::getNmTabela() . voentidade::$nmTabelaSufixoHistorico;        
     }
     
-    static function getNmTabelaSequencial(){
+    /*static function getNmTabelaSequencial(){
         return static::getNmTabela() . voentidade::$nmTabelaSufixoSequencial;        
-    }
+    }*/
     
     function isIgualChavePrimaria($voentidade){
     	$chaveEntidade = "";

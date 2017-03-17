@@ -1,5 +1,5 @@
 <?php
-
+date_default_timezone_set('America/Recife');
 set_exception_handler("pegaExcecaoSemTratamento");
 
 //função definida pelo usuário para pegar exceções não tratadas

@@ -6,12 +6,17 @@ include_once(caminho_vos ."voContratoTramitacao.php");
 class filtroManterContratoTramitacao extends filtroManter{
 
 	public $nmFiltro = "filtroManterContratoTramitacao";
-
+	static $nmAtrNmContratada = "nmContratada"; 
+	static $nmAtrDocContratada = "docContratada";
+	
 	var $sq = "";
 	var $cdContrato;
 	var $anoContrato;
 	var $tipoContrato;
+	var $cdEspecieContrato;
 	
+	var $nmContratada;
+	var $docContratada;
 	// ...............................................................
 	// construtor
 	function __construct() {
@@ -21,9 +26,11 @@ class filtroManterContratoTramitacao extends filtroManter{
 		$this->cdContrato = @$_POST[voContratoTramitacao::$nmAtrCdContrato];
 		$this->anoContrato = @$_POST[voContratoTramitacao::$nmAtrAnoContrato];
 		$this->tipoContrato= @$_POST[voContratoTramitacao::$nmAtrTipoContrato];
+		$this->cdEspecieContrato = @$_POST[vocontrato::$nmAtrCdEspecieContrato];
 
-		$this->nmEntidadePrincipal = (new voContratoTramitacao())->getNmClassVO();
-
+		$this->nmContratada = @$_POST[self::$nmAtrNmContratada];
+		$this->docContratada = @$_POST[self::$nmAtrDocContratada];
+				
 		if($this->cdOrdenacao == null){
 			$this->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
 		}
@@ -35,6 +42,8 @@ class filtroManterContratoTramitacao extends filtroManter{
 		$conector  = "";
 
 		$nmTabela = $voContratoTramitacao->getNmTabelaEntidade($isHistorico);
+		$nmTabelaContrato = vocontrato::getNmTabela();
+		$nmTabelaPessoa = vopessoa::getNmTabela();
 
 		//seta os filtros obrigatorios
 		if($this->isSetaValorDefault()){
@@ -88,6 +97,40 @@ class filtroManterContratoTramitacao extends filtroManter{
 
 		}
 
+		if($this->cdEspecieContrato != null){
+			$filtro = $filtro . $conector
+			. $nmTabelaContrato. "." .vocontrato::$nmAtrCdEspecieContrato
+			. " = '"
+					. $this->cdEspecieContrato
+					. "'"
+					;
+		
+			$conector  = "\n AND ";
+		
+		}
+		
+		if($this->nmContratada != null){
+			$filtro = $filtro . $conector
+			. $nmTabelaPessoa. "." .vopessoa::$nmAtrNome
+			. " LIKE '"
+			. substituirCaracterSQLLike($this->nmContratada)
+			. "'"
+			;		
+			$conector  = "\n AND ";
+		
+		}
+		
+		if($this->docContratada != null){
+			$filtro = $filtro . $conector
+			. $nmTabelaPessoa. "." .vopessoa::$nmAtrDoc
+			. " = '"
+					. substituirCaracterSQLLike($this->docContratada)
+					. "'"
+							;
+							$conector  = "\n AND ";
+		
+		}
+		
 		//finaliza o filtro
 		$filtro = parent::getFiltroConsultaSQL($filtro);
 
@@ -96,12 +139,12 @@ class filtroManterContratoTramitacao extends filtroManter{
 		return $filtro;
 	}
 	
-	static function getAtributosOrdenacao(){
+	function getAtributosOrdenacao(){
 		$varAtributos = array(
 				voContratoTramitacao::$nmAtrDtReferencia=> "Data",
-				voContratoTramitacao::$nmAtrCdContrato => "Contrato",
-				voContratoTramitacao::$nmAtrAnoContrato => "Ano",
-				voContratoTramitacao::$nmAtrTipoContrato => "Tipo Contrato",
+				voContratoTramitacao::getNmTabelaStatic($this->isHistorico) . "." . voContratoTramitacao::$nmAtrCdContrato => "Contrato",
+				voContratoTramitacao::getNmTabelaStatic($this->isHistorico) . ".". voContratoTramitacao::$nmAtrAnoContrato => "Ano",
+				voContratoTramitacao::getNmTabelaStatic($this->isHistorico) . ".". voContratoTramitacao::$nmAtrTipoContrato => "Tipo Contrato",
 				voContratoTramitacao::$nmAtrSqIndice => "Tramitação"
 		);
 		return $varAtributos;

@@ -113,6 +113,7 @@ include_once("vocontrato.php");
         $this->anoContrato = $registrobanco[self::$nmAtrAnoContrato];
         $this->cdPA= $registrobanco[self::$nmAtrCdPA];
         $this->anoPA = $registrobanco[self::$nmAtrAnoPA];        		
+        $this->tpContrato = $registrobanco[self::$nmAtrTipoContrato];
         $this->processoLic = $registrobanco[self::$nmAtrProcessoLicitatorio];
         $this->obs = $registrobanco[self::$nmAtrObservacao];
         $this->dtAbertura = getData($registrobanco[self::$nmAtrDtAbertura]);

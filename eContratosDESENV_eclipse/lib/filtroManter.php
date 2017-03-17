@@ -193,7 +193,8 @@ class filtroManter extends multiplosConstrutores{
     function getComboOrdenacao(){
     	$comboOrdenacao = null;
     	try{
-    		$comboOrdenacao = new select(static::getAtributosOrdenacao());
+    		//$comboOrdenacao = new select(static::getAtributosOrdenacao());
+    		$comboOrdenacao = new select($this->getAtributosOrdenacao());
     	
     	//}catch (Throwable $ex){
     	}catch (Error $ex){

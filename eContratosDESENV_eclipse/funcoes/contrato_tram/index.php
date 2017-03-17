@@ -2,7 +2,7 @@
 include_once("../../config_lib.php");
 include_once(caminho_util."bibliotecaHTML.php");
 include_once(caminho_util."constantes.class.php");
-include_once(caminho_util. "select.php");
+include_once(caminho_util."selectExercicio.php");
 include_once(caminho_vos . "voContratoTramitacao.php");
 include_once(caminho_filtros . "filtroManterContratoTramitacao.php");
 
@@ -41,6 +41,7 @@ $numTotalRegistros = $filtro->numTotalRegistros;
 <?=setTituloPagina(null)?>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_datahora.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_text.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_cnpfcnpj.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>tooltip.js"></SCRIPT>
@@ -120,12 +121,25 @@ function alterar() {
     <DIV id="div_filtro" class="div_filtro">
     <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
         <TBODY>
-			<TR>
-                <TH class="campoformulario" nowrap>Cód.Contratada:</TH>
-                <TD class="campoformulario" width="1%"></TD>
-                <TH class="campoformulario" nowrap width="1%">Nome:</TH>
-                <TD class="campoformulario" ></TD>
-            </TR>            
+	        <?php
+	        	require_once ("../contrato/dominioTipoContrato.php");
+	        	$combo = new select(dominioTipoContrato::getColecao());
+	            $selectExercicio = new selectExercicio();
+			  ?>			            
+	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
+	            <TD class="campoformulario" colspan=3>
+	            <?php echo "Ano: " . $selectExercicio->getHtmlCombo(voContratoTramitacao::$nmAtrAnoContrato,voContratoTramitacao::$nmAtrAnoContrato, $filtro->anoContrato, true, "camponaoobrigatorio", false, "");?>
+			  Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voContratoTramitacao::$nmAtrCdContrato?>" name="<?=voContratoTramitacao::$nmAtrCdContrato?>"  value="<?php echo(complementarCharAEsquerda($filtro->cdContrato, "0", 3));?>"  class="camponaoobrigatorio" size="4" maxlength="3">
+			  <?php echo $combo->getHtmlCombo(voContratoTramitacao::$nmAtrTipoContrato,voContratoTramitacao::$nmAtrTipoContrato, $filtro->tipoContrato, true, "camponaoobrigatorio", false, "");	
+			  ?>
+	        </TR>			            
+            <TR>
+                <TH class="campoformulario" nowrap>Nome Contratada:</TH>
+                <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=$filtro::$nmAtrNmContratada?>" name="<?=$filtro::$nmAtrNmContratada?>"  value="<?php echo($filtro->nmContratada);?>"  class="camponaoobrigatorio" size="50" <?=$requiredArquivo?>></TD>
+                <TH class="campoformulario" width="1%" nowrap>CNPJ/CPF Contratada:</TH>
+                <TD class="campoformulario" ><INPUT type="text" id="<?=$filtro::$nmAtrDocContratada?>" name="<?=$filtro::$nmAtrDocContratada?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($filtro->docContratada);?>" class="camponaoobrigatorio" size="20" maxlength="18"></TD>
+            </TR>
             
        <?php
         /*$comboOrdenacao = new select(voPA::getAtributosOrdenacao($cdHistorico));
@@ -153,8 +167,10 @@ function alterar() {
                   <?php 
                   }
                   ?>
-                    <TH class="headertabeladados"width="1%" nowrap >Contrato</TH>
-                    <TH class="headertabeladados"width="1%" nowrap >Núm.</TH>                    
+                    <TH class="headertabeladados" width="1%" nowrap>Ano</TH>
+                    <TH class="headertabeladados" width="1%">Num.</TH>
+                    <TH class="headertabeladados" width="1%">Tipo</TH>                    
+                    <TH class="headertabeladados"width="1%" nowrap >Tramitação</TH>                    
                     <TH class="headertabeladados"width="1%" nowrap >Documento</TH>
                     <TH class="headertabeladados"width="90%" nowrap >Texto</TH>
                     <TH class="headertabeladados"width="1%" nowrap >Dt.Referência</TH>
@@ -171,7 +187,7 @@ function alterar() {
                 //require_once ("dominioSituacaoPA.php");
                 $dominioTipoContrato = new dominioTipoContrato();
                                 
-                $colspan=6;
+                $colspan=8;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -180,12 +196,13 @@ function alterar() {
                         $voAtual = new voContratoTramitacao();
                         $voAtual->getDadosBanco($colecao[$i]);     
                         
-                        $contrato = formatarCodigoAnoComplemento($colecao[$i][$voAtual::$nmAtrCdContrato],
+                        /*$contrato = formatarCodigoAnoComplemento($colecao[$i][$voAtual::$nmAtrCdContrato],
                         						$colecao[$i][$voAtual::$nmAtrAnoContrato], 
-                        						$dominioTipoContrato->getDescricao($colecao[$i][$voAtual::$nmAtrTipoContrato]));
+                        						$dominioTipoContrato->getDescricao($colecao[$i][$voAtual::$nmAtrTipoContrato]));*/
                         
                         $doc = formatarCodigoDocumento($voAtual->voDoc->sq, $voAtual->voDoc->cdSetor, $voAtual->voDoc->ano, $voAtual->voDoc->tp);
-                        
+                        //$especie = getDsEspecie($voAtual);
+                        $tipo = $dominioTipoContrato->getDescricao($voAtual->tipoContrato);
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados">
@@ -198,7 +215,9 @@ function alterar() {
                   <?php 
                   }
                   ?>                    
-                    <TD class="tabeladados" nowrap><?php echo $contrato;?></TD>
+                    <TD class="tabeladadosalinhadodireita"><?php echo $voAtual->anoContrato;?></TD>
+                    <TD class="tabeladadosalinhadodireita" ><?php echo complementarCharAEsquerda($voAtual->cdContrato, "0", TAMANHO_CODIGOS_SAFI)?></TD>
+                    <TD class="tabeladados" nowrap><?php echo $tipo?></TD>
 					<TD class="tabeladados"><?php echo complementarCharAEsquerda($colecao[$i][$voAtual::$nmAtrSqIndice], "0", TAMANHO_CODIGOS);?></TD>
                     <TD class="tabeladados" nowrap><?php echo $doc;?></TD>                    
                     <TD class="tabeladados" nowrap><?php echo $voAtual->obs;?></TD>

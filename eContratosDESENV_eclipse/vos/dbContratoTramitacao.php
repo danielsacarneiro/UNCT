@@ -8,6 +8,8 @@ Class dbContratoTramitacao extends dbTramitacao{
 		$isHistorico = ("S" == $filtro->cdHistorico);	
 		$nmTabela = $vo->getNmTabelaEntidade($isHistorico);
 		$nmTabelaTramitacao = voTramitacao::getNmTabela();
+		$nmTabelaContrato = vocontrato::getNmTabela();
+		$nmTabelaPessoa = vopessoa::getNmTabela();
 
 		$querySelect = "SELECT *";
 		$queryFrom = " FROM ".$nmTabela;
@@ -15,7 +17,18 @@ Class dbContratoTramitacao extends dbTramitacao{
 		$queryFrom.= "\n INNER JOIN ". $nmTabelaTramitacao;
 		$queryFrom.= "\n ON ";
 		$queryFrom.= $nmTabela. ".".voContratoTramitacao::$nmAtrSq. "=".$nmTabelaTramitacao . "." . voTramitacao::$nmAtrSq;				
+		$queryFrom.= "\n INNER JOIN ". $nmTabelaContrato;
+		$queryFrom.= "\n ON ";
+		$queryFrom.= $nmTabela. ".".voContratoTramitacao::$nmAtrAnoContrato. "=".$nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato;
+		$queryFrom.= "\n AND ";
+		$queryFrom.= $nmTabela. ".".voContratoTramitacao::$nmAtrTipoContrato. "=".$nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato;
+		$queryFrom.= "\n AND ";
+		$queryFrom.= $nmTabela. ".".voContratoTramitacao::$nmAtrCdContrato. "=".$nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato;
+		$queryFrom.= "\n INNER JOIN ". $nmTabelaPessoa;
+		$queryFrom.= "\n ON ";
+		$queryFrom.= $nmTabelaPessoa. ".".vopessoa::$nmAtrCd. "=".$nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;		
 		
+		$filtro->cdEspecieContrato = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
 		//echo $query;
 		return $this->consultarComPaginacaoQuery($vo, $filtro, $querySelect, $queryFrom);
 	}	

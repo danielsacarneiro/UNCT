@@ -132,7 +132,21 @@ function confirmar() {
 	            			size="10" 
 	            			maxlength="10" readonly>
 				</TD>
-        	</TR>	        
+        	</TR>
+        	<?php $doc = formatarCodigoDocumento($vo->voDoc->sq, $vo->voDoc->cdSetor, $vo->voDoc->ano, $vo->voDoc->tp);?>
+			<TR>
+	            <TH class="campoformulario" nowrap>Documento:</TH>	            	            
+	            <TD class="campoformulario" colspan="3"><INPUT type="text" value="<?php echo($doc);?>"  class="camporeadonly" size="20" readonly>
+	            <?php
+	            if($vo->voDoc != null){
+	            	$chave = $vo->voDoc->getValorChaveHTML();
+	            	$lupa = "S";
+	            	$link = "../documento/detalhar.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $chave . "&lupa=". $lupa;	            
+	            	echo getLinkPesquisa($link);
+				}
+				?>	            		        	
+				</TD>
+	        </TR>        	    
 	        <?php 
 	            echo "<TR>" . incluirUsuarioDataHoraDetalhamento($vo) .  "</TR>";	        	
 	        ?>

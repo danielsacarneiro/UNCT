@@ -177,8 +177,7 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 		        	<INPUT type="text" id="<?=voDocumento::$nmAtrSq?>" name="<?=voDocumento::$nmAtrSq?>" class="camporeadonly" size="15" readonly>
 		        	<INPUT type="hidden" id="<?=voDocumento::getNmTabela()?>" name="<?=voDocumento::getNmTabela()?>" value="">
 		        	<?php 
-		        	echo getLinkPesquisa("../documento");
-		        	
+		        	echo getLinkPesquisa("../documento");		        	
 		        	$nmCampo = array(voDocumento::getNmTabela(), voDocumento::$nmAtrSq);
 		        	echo getBorracha($nmCampo);
 		        	?>

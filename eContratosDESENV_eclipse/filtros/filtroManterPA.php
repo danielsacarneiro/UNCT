@@ -167,7 +167,7 @@ class filtroManterPA extends filtroManter{
 	function getAtributosOrdenacao(){
 		$varAtributos = array(
 				voPA::$nmAtrCdPA=> "PA",
-				vocontrato::getNmTabela().".".voPA::$nmAtrCdContrato => "Contrato"
+				vocontrato::getNmTabelaStatic($this->isHistorico).".".voPA::$nmAtrCdContrato => "Contrato"
 		);
 		return $varAtributos;
 	}
