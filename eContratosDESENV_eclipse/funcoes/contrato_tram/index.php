@@ -169,10 +169,10 @@ function alterar() {
                   ?>
                     <TH class="headertabeladados" width="1%" nowrap>Ano</TH>
                     <TH class="headertabeladados" width="1%">Num.</TH>
-                    <TH class="headertabeladados" width="1%">Tipo</TH>                    
-                    <TH class="headertabeladados"width="1%" nowrap >Tramitação</TH>                    
+                    <TH class="headertabeladados" width="1%">Tipo</TH>                                        
                     <TH class="headertabeladados"width="1%" nowrap >Documento</TH>
                     <TH class="headertabeladados"width="90%" nowrap >Texto</TH>
+                    <TH class="headertabeladados"width="1%" nowrap >Usuário</TH>
                     <TH class="headertabeladados"width="1%" nowrap >Dt.Referência</TH>
                 </TR>
                 <?php								
@@ -217,10 +217,10 @@ function alterar() {
                   ?>                    
                     <TD class="tabeladadosalinhadodireita"><?php echo $voAtual->anoContrato;?></TD>
                     <TD class="tabeladadosalinhadodireita" ><?php echo complementarCharAEsquerda($voAtual->cdContrato, "0", TAMANHO_CODIGOS_SAFI)?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $tipo?></TD>
-					<TD class="tabeladados"><?php echo complementarCharAEsquerda($colecao[$i][$voAtual::$nmAtrSqIndice], "0", TAMANHO_CODIGOS);?></TD>
+                    <TD class="tabeladados" nowrap><?php echo $tipo?></TD>					
                     <TD class="tabeladados" nowrap><?php echo $doc;?></TD>                    
                     <TD class="tabeladados" nowrap><?php echo $voAtual->obs;?></TD>
+                    <TD class="tabeladados" nowrap><?php echo $voAtual->nmUsuarioUltAlteracao;?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($voAtual->dtReferencia);?></TD>
                 </TR>					
                 <?php

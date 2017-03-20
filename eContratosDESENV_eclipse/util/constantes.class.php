@@ -37,7 +37,7 @@ header ('Content-type: text/html; charset=ISO-8859-1');
     
     static $CD_ESPECIE_CONTRATO_MATER = 1;
     
-    static $CD_ORDEM_CRESCENTE = "CRES";
+    static $CD_ORDEM_CRESCENTE = "ASC";
     static $CD_ORDEM_DECRESCENTE = "DESC";
     
     /*"01" => "Mater",

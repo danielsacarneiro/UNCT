@@ -10,8 +10,13 @@ Class dbContratoTramitacao extends dbTramitacao{
 		$nmTabelaTramitacao = voTramitacao::getNmTabela();
 		$nmTabelaContrato = vocontrato::getNmTabela();
 		$nmTabelaPessoa = vopessoa::getNmTabela();
+		$nmTabelaUsuario = vousuario::getNmTabela();
 
-		$querySelect = "SELECT *";
+		$querySelect = "SELECT ";
+		$querySelect .= $nmTabela.".*";
+		$querySelect .= "," . $nmTabelaTramitacao.".*";
+		$querySelect .= "," . $nmTabelaUsuario . "." . vousuario::$nmAtrName;
+		$querySelect .= "  AS " . voContratoTramitacao::$nmAtrNmUsuarioUltAlteracao;
 		$queryFrom = " FROM ".$nmTabela;
 		
 		$queryFrom.= "\n INNER JOIN ". $nmTabelaTramitacao;
@@ -27,6 +32,9 @@ Class dbContratoTramitacao extends dbTramitacao{
 		$queryFrom.= "\n INNER JOIN ". $nmTabelaPessoa;
 		$queryFrom.= "\n ON ";
 		$queryFrom.= $nmTabelaPessoa. ".".vopessoa::$nmAtrCd. "=".$nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;		
+		$queryFrom.= "\n INNER JOIN ". $nmTabelaUsuario;
+		$queryFrom.= "\n ON ";
+		$queryFrom.= $nmTabelaUsuario. ".".vousuario::$nmAtrID. "=".$nmTabelaTramitacao . "." . voTramitacao::$nmAtrCdUsuarioUltAlteracao;
 		
 		$filtro->cdEspecieContrato = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
 		//echo $query;

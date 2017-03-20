@@ -153,17 +153,17 @@ class filtroManter extends multiplosConstrutores{
     	if($this->cdAtrOrdenacao  != null){
     				
     		$ordem = $this->cdOrdenacao;
-    		if($ordem == constantes::$CD_ORDEM_CRESCENTE){
+    		/*if($ordem == constantes::$CD_ORDEM_CRESCENTE){
     			$ordem = "";
-    		}
+    		}*/
     		
     		//pega do filho, se existir
     		$strOrdemDefault = "";
     		if($this->getAtributoOrdenacaoDefault()){
-    			$strOrdemDefault = "," . $this->getAtributoOrdenacaoDefault();
+    			$strOrdemDefault = "," . $this->getAtributoOrdenacaoDefault() . " " . $ordem;
     		}
     		
-    		$filtro = $filtro . "\n ORDER BY $this->cdAtrOrdenacao $strOrdemDefault $ordem";
+    		$filtro = $filtro . "\n ORDER BY $this->cdAtrOrdenacao $ordem $strOrdemDefault ";
     		
     		//para setar o atributo de ordenacao de forma mais complexa: quando ha joins na tabela
     		//para tanto o atributo nmEntidadePrincipal precisa ser not null

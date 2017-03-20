@@ -106,8 +106,13 @@ class filtroManterDocumento extends filtroManter{
 		return $filtro;
 	}
 	
+	function getAtributoOrdenacaoDefault(){
+		return voDocumento::getNmTabelaStatic($this->isHistorico) . "." . voDocumento::$nmAtrDhUltAlteracao;
+	}
+	
 	function getAtributosOrdenacao(){
 		$varAtributos = array(
+				voDocumento::$nmAtrDhUltAlteracao => "Data",
 				voDocumento::$nmAtrSq => "Número",
 				voDocumento::$nmAtrCdSetor=> "Setor",
 				voDocumento::$nmAtrAno => "Ano",

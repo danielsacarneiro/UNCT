@@ -110,6 +110,7 @@ include_once("dbContratoTramitacao.php");
 		$this->tipoContrato= $registrobanco[self::$nmAtrTipoContrato];
 		$this->sq = $registrobanco[self::$nmAtrSq];
 		$this->sqIndice = $registrobanco[self::$nmAtrSqIndice];
+		$this->nmUsuarioUltAlteracao = $registrobanco[self::$nmAtrNmUsuarioUltAlteracao];
 	}   
 	
 	function getDadosFormulario(){		
