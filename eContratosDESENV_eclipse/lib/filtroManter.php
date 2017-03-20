@@ -157,7 +157,13 @@ class filtroManter extends multiplosConstrutores{
     			$ordem = "";
     		}
     		
-    		$filtro = $filtro . "\n ORDER BY $this->cdAtrOrdenacao $ordem";
+    		//pega do filho, se existir
+    		$strOrdemDefault = "";
+    		if($this->getAtributoOrdenacaoDefault()){
+    			$strOrdemDefault = "," . $this->getAtributoOrdenacaoDefault();
+    		}
+    		
+    		$filtro = $filtro . "\n ORDER BY $this->cdAtrOrdenacao $strOrdemDefault $ordem";
     		
     		//para setar o atributo de ordenacao de forma mais complexa: quando ha joins na tabela
     		//para tanto o atributo nmEntidadePrincipal precisa ser not null
@@ -214,7 +220,12 @@ class filtroManter extends multiplosConstrutores{
         $retorno.= "numTotalRegistros=" . $this->numTotalRegistros;
         
 		return $retorno;		
-	} 
+	}
+	
+	function getAtributoOrdenacaoDefault(){
+		return "";
+	}
+	
 }
 
 /*class filtroManterGUI extends filtroManter{
