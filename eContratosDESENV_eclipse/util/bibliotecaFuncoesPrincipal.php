@@ -26,10 +26,14 @@
 	function existeItemNoArray($item, $array){
 		$retorno = false;
 		$tam = count($array);
+		
+		/*echo "ITEM: " . $item . "<br>";
+		echo "ARRAY: " ;
+		var_dump($array);*/
 	
 		for($i=0;$i<$tam;$i++){
 			$findme = $array[$i];			
-			$pos = strpos($str1, $findme);
+			$pos = strpos($item, $findme);
 	
 			if ($pos !== false){
 				$retorno = true;

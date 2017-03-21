@@ -145,6 +145,7 @@ class filtroManter extends multiplosConstrutores{
     }*/
     
     function getFiltroConsultaSQL($filtro){
+    	//ECHO "TESTE";
     	
     	if($filtro != ""){
     		$filtro = "\n WHERE $filtro";

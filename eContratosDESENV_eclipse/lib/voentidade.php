@@ -14,15 +14,20 @@
         static $nmAtrSqHist   =  	"hist";
 		static $nmAtrDhInclusao  =  	"dh_inclusao";
         static $nmAtrDhUltAlteracao  =  	"dh_ultima_alt";
+        static $nmAtrDhOperacao =  	"dh_operacao";
         static $nmAtrCdUsuarioInclusao  =  	"cd_usuario_incl";
         static $nmAtrCdUsuarioUltAlteracao   =  	"cd_usuario_ultalt";
+        static $nmAtrCdUsuarioOperacao =  	"cd_usuario_operacao";
 
         static $nmAtrNmUsuarioInclusao  =  	"nm_usuario_incl";
         static $nmAtrNmUsuarioUltAlteracao   =  	"nm_usuario_ultalt";
+        static $nmAtrNmUsuarioOperacao =  	"nm_usuario_operacao";
 
 		var $dhInclusao;
         var $dhUltAlteracao;
+        var $dhOperacao;
         var $cdUsuarioInclusao;
+        var $cdUsuarioOperacao;
         //id_user eh o usuario logado no sistema
         //constante definida em bibliotecaHTML
         var $cdUsuarioUltAlteracao;
@@ -46,17 +51,6 @@
     
     // ...............................................................
     // Funcoes ( Propriedades e metodos da classe )     
-    /*function getSQLValuesInsertEntidade(){
-		$retorno = "";        
-        $userManutencao = $this-> cdUsuarioUltAlteracao;
-        if($this-> cdUsuarioInclusao == null)
-            $this-> cdUsuarioInclusao = $userManutencao;
-        
-		$retorno.= $this-> cdUsuarioInclusao . ",";
-		$retorno.= $this-> cdUsuarioUltAlteracao;
-                
-		return $retorno;                
-    }*/
     
     function getSQLValuesInsertEntidade(){
     	$userManutencao = $this->cdUsuarioUltAlteracao;
@@ -223,7 +217,7 @@
     	$this->getChavePrimariaVOExplode($array);
     }
     
-    function getValoresWhereSQLChaveLogica($isHistorico){
+    function getValoresWhereSQLChaveLogicaSemSQ($isHistorico){
     	//via de regra a chave logica eh igual a chave primaria
     	//quando for distinta, o metodo getValoresWhereSQLChaveLogica 
     	//devera ser implementado no vo especifico

@@ -65,7 +65,7 @@ include_once("dbContratoTramitacao.php");
         return $query;        
     }    
     
-    function getValoresWhereSQLChaveLogica($isHistorico){
+    function getValoresWhereSQLChaveLogicaSemSQ($isHistorico){
     	$nmTabela = $this->getNmTabelaEntidade($isHistorico);
     	$query = $nmTabela . "." . self::$nmAtrCdContrato . "=" . $this->cdContrato;
     	$query.= " AND ". $nmTabela . "." . self::$nmAtrAnoContrato . "=" . $this->anoContrato;

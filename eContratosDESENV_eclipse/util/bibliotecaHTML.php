@@ -482,7 +482,7 @@ include_once(caminho_vos."vousuario.php");
         $html .= "<TD class='campoformularioalinhadodireita'> <a href='javascript:limparFormulario();' ><img  title='Limpar' src='".caminho_imagens."borracha.jpg' width='20' height='20'></a></TD>
                     </TR>";*/
         $html .= "&nbsp;<button id='localizar' class='botaoconsulta' type='submit'>Consultar</button>\n";
-        $html .= "&nbsp;&nbsp;&nbsp;<a href='javascript:limparFormulario();' ><img  title='Limpar' src='".caminho_imagens."borracha.jpg' width='20' height='20'></a></TD>\n
+        $html .= "&nbsp;&nbsp;&nbsp;<a href='javascript:limparFormularioGeral();' ><img  title='Limpar' src='".caminho_imagens."borracha.jpg' width='20' height='20'></a></TD>\n
                     </TR>";
         
         return $html;        

@@ -68,13 +68,13 @@ class dbprocesso{
 		$temUsuInclusao = existeItemNoArray(voentidade::$nmAtrCdUsuarioInclusao, $vo->getTodosAtributos());
 		
 		/*if($temUsuInclusao){
-			echo "tem usu";
+			echo "tem usu inclusao";
 		}else{
-			echo "NAO tem usu";
+			echo "NAO tem usu inclusao";
 		}*/
 				
 		if($temUsuInclusao){
-			$query.= "TAB1." .vousuario::$nmAtrName. " AS " . voentidade::$nmAtrNmUsuarioInclusao;
+			$query.= ", TAB1." .vousuario::$nmAtrName. " AS " . voentidade::$nmAtrNmUsuarioInclusao;
 		}
 		$query.= ", TAB2." .vousuario::$nmAtrName. " AS " . voentidade::$nmAtrNmUsuarioUltAlteracao;
 		$query.= " FROM ". $nmTabela;
@@ -123,10 +123,11 @@ class dbprocesso{
 	
 		//echo $query;
 		$retorno = $this->consultarEntidade($query, true);
-		if($retorno != "")
+		if($retorno != ""){
 			$retorno = $retorno[0];
+		}
 	
-			return $retorno;
+		return $retorno;
 	}
 	
 	function consultarEntidade($query, $isPorChavePrimaria){
@@ -180,6 +181,10 @@ class dbprocesso{
 		return $this->consultarFiltro($filtro, $querySelect, $queryFrom, true);
 	}
     
+	function consultarTelaConsulta($filtro, $querySelect, $queryFrom){
+		return $this->consultarFiltro($filtro, $querySelect, $queryFrom, true);
+	}
+	
 	function consultarFiltro($filtro, $querySelect, $queryFrom, $validaConsulta){
 	
 		$retorno = "";
@@ -189,6 +194,8 @@ class dbprocesso{
 		$consultar = @$_GET["consultar"];
 	
 		if($consultar == "S" || !$validaConsulta){
+			
+			//removeObjetoSessao($filtro->nmFiltro);
 			
 			$filtroSQL = $filtro->getFiltroConsultaSQL($isHistorico);
 				
@@ -221,6 +228,8 @@ class dbprocesso{
 			//removeObjetoSessao($voentidade->getNmTabela());
 				
 			$retorno = $this->cDb->consultar($query);
+			
+			//putObjetoSessao($filtro->nmFiltro, $filtro);
 		}
 	
 		//echo $filtro->toString();
@@ -409,7 +418,7 @@ class dbprocesso{
 		$arrayColunasChaveSemSq = removeColecaoAtributos($voEntidade->getAtributosChavePrimaria(), $arrayAtribRemover);						
 		$query = " SELECT MAX(" . $nmColunaSq . ")+1 AS ". $nmColunaSq ." FROM " . $voEntidade->getNmTabela() . " ";
 		$query.= " WHERE ";
-		$query.= $voEntidade->getValoresWhereSQLChaveLogica($isHistorico);
+		$query.= $voEntidade->getValoresWhereSQLChaveLogicaSemSQ($isHistorico);
 		
 		$query .= "\n GROUP BY ". getSQLStringFormatadaColecaoIN($arrayColunasChaveSemSq, false);
 		
