@@ -176,7 +176,8 @@ function encaminhar() {
                   ?>
                     <TH class="headertabeladados" width="1%" nowrap>Ano</TH>
                     <TH class="headertabeladados" width="1%">Núm.</TH>
-                    <TH class="headertabeladados" width="1%">Setor</TH>
+                    <TH class="headertabeladados" width="1%">Setor.Resp</TH>
+                    <TH class="headertabeladados" width="1%">Setor.Atual</TH>
                     <TH class="headertabeladados" width="1%">Tipo</TH>
                     <TH class="headertabeladados"width="90%" nowrap >Texto</TH>
                     <TH class="headertabeladados" width="1%">Situação</TH>                    
@@ -196,7 +197,7 @@ function encaminhar() {
                 $dominioTipo = new dominioTipoDemanda();
                 $dominioPrioridade = new dominioPrioridadeDemanda();
                                 
-                $colspan=10;
+                $colspan=11;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -208,6 +209,10 @@ function encaminhar() {
                         //$especie = getDsEspecie($voAtual);
                         $situacao = $dominioSituacao->getDescricao($voAtual->situacao);
                         $setor = $dominioSetor->getDescricao($voAtual->cdSetor);
+                        
+                        $setorDestinoAtual = $colecao[$i][voDemandaTramitacao::$nmAtrCdSetorDestino];
+                        $setorDestinoAtual = $dominioSetor->getDescricao($setorDestinoAtual);
+                        
                         $tipo = $dominioTipo->getDescricao($voAtual->tipo);
                         $prioridade = $dominioPrioridade->getDescricao($voAtual->prioridade);
                         
@@ -230,6 +235,7 @@ function encaminhar() {
                     <TD class="tabeladadosalinhadodireita"><?php echo $voAtual->ano;?></TD>
                     <TD class="tabeladadosalinhadodireita" ><?php echo complementarCharAEsquerda($voAtual->cd, "0", TAMANHO_CODIGOS)?></TD>
 					<TD class="tabeladados" nowrap><?php echo $setor?></TD>
+					<TD class="tabeladados" nowrap><?php echo $setorDestinoAtual?></TD>
 					<TD class="tabeladados" nowrap><?php echo $tipo?></TD>
                     <TD class="tabeladados" nowrap><?php echo $voAtual->texto;?></TD>
                     <TD class="tabeladados" nowrap><?php echo $situacao?></TD>                    

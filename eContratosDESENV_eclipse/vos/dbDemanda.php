@@ -29,29 +29,10 @@ Class dbDemanda extends dbprocesso{
 		return $this->consultarPorChaveMontandoQuery($vo, $arrayColunasRetornadas, $queryJoin, $isHistorico);	
 	}
 	
-	/*function consultarTelaConsulta($vo, $filtro){
-		$isHistorico = $filtro->isHistorico;
-		$nmTabela = $vo->getNmTabelaEntidade($isHistorico);
-		$nmTabelaUsuario = vousuario::getNmTabela();
-	
-		$querySelect = "SELECT ";
-		$querySelect .= $nmTabela.".*";
-	
-		$querySelect .= "," . $nmTabelaUsuario . "." . vousuario::$nmAtrName;
-		$querySelect .= "  AS " . voDemanda::$nmAtrNmUsuarioInclusao;
-		$queryFrom = " FROM ".$nmTabela;
-	
-		$queryFrom.= "\n INNER JOIN ". $nmTabelaUsuario;
-		$queryFrom.= "\n ON ";
-		$queryFrom.= $nmTabelaUsuario. ".".vousuario::$nmAtrID. "=".$nmTabela . "." . voDemanda::$nmAtrCdUsuarioInclusao;
-	
-		//echo $query;
-		return parent::consultarTelaConsulta($filtro, $querySelect, $queryFrom);
-	}*/
-	
 	function consultarTelaConsulta($vo, $filtro){
 		$isHistorico = $filtro->isHistorico;
 		$nmTabela = $vo->getNmTabelaEntidade($isHistorico);
+		$nmTabelaTramitacao = voDemandaTramitacao::getNmTabela();
 		
 		$colunaUsuHistorico = "";
 		
@@ -60,10 +41,31 @@ Class dbDemanda extends dbprocesso{
 		}
 		$arrayColunasRetornadas = array($nmTabela . ".*",
 				static::$nmTabelaUsuarioInclusao . "." . vousuario::$nmAtrName . "  AS " . voDemanda::$nmAtrNmUsuarioInclusao,
+				$nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . "  AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,
 				$colunaUsuHistorico
 		);		
 			
-		$queryJoin = "";		
+		$atributosGroup = voDemandaTramitacao::$nmAtrCd 
+					. ",". voDemandaTramitacao::$nmAtrAno;
+		
+		$queryJoin = "";
+		$queryJoin .= "\n LEFT JOIN (";
+		$queryJoin .= " SELECT MAX("
+					. voDemandaTramitacao::$nmAtrSq. ") AS " . voDemandaTramitacao::$nmAtrSq 
+					. ",". $atributosGroup 
+					. " FROM ". $nmTabelaTramitacao									
+					." GROUP BY "
+					. $atributosGroup;		
+		$queryJoin .= ") TABELA_MAX";
+		$queryJoin .= "\n ON ".$nmTabela.".".voDemandaTramitacao::$nmAtrAno." = TABELA_MAX.".voDemandaTramitacao::$nmAtrAno;
+		$queryJoin .= "\n AND ".$nmTabela.".".voDemandaTramitacao::$nmAtrCd." = TABELA_MAX.".voDemandaTramitacao::$nmAtrCd;
+		
+		$queryJoin .= "\n LEFT JOIN ";
+		$queryJoin .= $nmTabelaTramitacao;
+		$queryJoin .= "\n ON ".$nmTabelaTramitacao.".".voDemandaTramitacao::$nmAtrAno." = TABELA_MAX.".voDemandaTramitacao::$nmAtrAno;
+		$queryJoin .= "\n AND ".$nmTabelaTramitacao.".".voDemandaTramitacao::$nmAtrCd." = TABELA_MAX.".voDemandaTramitacao::$nmAtrCd;
+		$queryJoin .= "\n AND ".$nmTabelaTramitacao.".".voDemandaTramitacao::$nmAtrSq." = TABELA_MAX.".voDemandaTramitacao::$nmAtrSq;
+		
 		//echo $query;
 		return parent::consultarMontandoQueryTelaConsulta($vo, $filtro, $arrayColunasRetornadas, $queryJoin);		
 	}
