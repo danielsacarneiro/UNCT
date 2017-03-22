@@ -211,6 +211,9 @@ function encaminhar() {
                         $setor = $dominioSetor->getDescricao($voAtual->cdSetor);
                         
                         $setorDestinoAtual = $colecao[$i][voDemandaTramitacao::$nmAtrCdSetorDestino];
+                        if($setorDestinoAtual == null){
+                        	$setorDestinoAtual = $setor;
+                        }
                         $setorDestinoAtual = $dominioSetor->getDescricao($setorDestinoAtual);
                         
                         $tipo = $dominioTipo->getDescricao($voAtual->tipo);

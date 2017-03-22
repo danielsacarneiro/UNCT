@@ -48,6 +48,7 @@ Class dbDemanda extends dbprocesso{
 		$atributosGroup = voDemandaTramitacao::$nmAtrCd 
 					. ",". voDemandaTramitacao::$nmAtrAno;
 		
+		//o proximo join eh p pegar a ultima tramitacao apenas, se houver
 		$queryJoin = "";
 		$queryJoin .= "\n LEFT JOIN (";
 		$queryJoin .= " SELECT MAX("
@@ -60,6 +61,7 @@ Class dbDemanda extends dbprocesso{
 		$queryJoin .= "\n ON ".$nmTabela.".".voDemandaTramitacao::$nmAtrAno." = TABELA_MAX.".voDemandaTramitacao::$nmAtrAno;
 		$queryJoin .= "\n AND ".$nmTabela.".".voDemandaTramitacao::$nmAtrCd." = TABELA_MAX.".voDemandaTramitacao::$nmAtrCd;
 		
+		//agora pega dos dados da ultima tramitacao, se houver
 		$queryJoin .= "\n LEFT JOIN ";
 		$queryJoin .= $nmTabelaTramitacao;
 		$queryJoin .= "\n ON ".$nmTabelaTramitacao.".".voDemandaTramitacao::$nmAtrAno." = TABELA_MAX.".voDemandaTramitacao::$nmAtrAno;
