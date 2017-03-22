@@ -139,6 +139,7 @@ function limparFormularioGeral(){
 						|| element.name == "qtdRegistrosPorPag" 
 						|| element.name == "utilizarSessao"
 						|| element.name == "consultar"
+						|| element.name == "cdHistorico"							
 						|| element.name == "cdOrdenacao"; 
 		if(!naoValidar){
 			//alert(element.type);		
