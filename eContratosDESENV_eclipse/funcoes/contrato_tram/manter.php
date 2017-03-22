@@ -82,7 +82,7 @@ function confirmar() {
 	return confirm("Confirmar Alteracoes?");    
 }
 
-function carregaDadosContratada(){    
+function carregaDadosContratada(){
 	str = "";
 		
 	cdContrato = document.frm_principal.<?=voContratoTramitacao::$nmAtrCdContrato?>.value;

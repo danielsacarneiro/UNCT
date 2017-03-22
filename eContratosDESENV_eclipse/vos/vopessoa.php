@@ -13,6 +13,7 @@ include_once(caminho_vos."vogestor.php");
 		static $nmAtrEmail =  "pe_email";
 		static $nmAtrEndereco =  "pe_endereco";
 		
+		static $SQ_CONTRATO_DADOS_CONTRATADA = "ID_CAMPO_SQ_CONTRATO_PESSOA";		
         
 		var $cd  = "";        
 		var $nome= "";		

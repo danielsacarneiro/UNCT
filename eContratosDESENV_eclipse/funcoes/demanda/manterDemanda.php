@@ -5,7 +5,7 @@ include_once(caminho_util."selectExercicio.php");
 include_once(caminho_vos."voDemandaTramitacao.php");
 
 //inicia os parametros
-inicio();
+inicioComValidacaoUsuario(true);
 
 $vo = new voDemanda();
 $vo->getVOExplodeChave();
@@ -20,7 +20,7 @@ $colecao = $dbprocesso->consultarPorChave($vo, $isHistorico);
 $vo->getDadosBanco($colecao);
 putObjetoSessao($vo->getNmTabela(), $vo);
 
-$nmFuncao = "DETALHAR ";
+$nmFuncao = "ALTERAR ";
 $titulo = $vo->getTituloJSP();
 $complementoTit = "";
 $isExclusao = false;
@@ -127,7 +127,7 @@ function confirmar() {
 	            <TD class="campoformulario" >
 	            <?php 
 	            //o setor destino da ultima tramitacao sera o origem da nova
-	            echo $comboPrioridade->getHtmlCombo(voDemanda::$nmAtrPrioridade,voDemanda::$nmAtrPrioridade, $vo->prioridade, true, "camporeadonly", false, " disabled ");?>
+	            echo $comboPrioridade->getHtmlCombo(voDemanda::$nmAtrPrioridade,voDemanda::$nmAtrPrioridade, $vo->prioridade, true, "campoobrigatorio", false, " required ");?>
 				</TD>				
 	        </TR>
 	        <TR>
@@ -157,14 +157,12 @@ function confirmar() {
 	            <TH class="campoformulario" nowrap width="1%">Situação:</TH>
 	            <TD class="campoformulario" colspan=3>
 	            <?php 
-	            echo $comboSituacao->getHtmlCombo(voDemanda::$nmAtrSituacao,voDemanda::$nmAtrSituacao, $vo->situacao, true, "camporeadonly", false, " disabled ");?>
+	            echo $comboSituacao->getHtmlCombo(voDemanda::$nmAtrSituacao,voDemanda::$nmAtrSituacao, $vo->situacao, true, "campoobrigatorio", false, " required ");?>
 				</TD>
 	        </TR>
 				<?php 
 				$isDetalhamento = true;
-				if(!$isHistorico){
-					include_once 'gridTramitacaoAjax.php';
-				}
+				include_once 'gridTramitacaoAjax.php';
 				?>
        	    
 	        <?php 

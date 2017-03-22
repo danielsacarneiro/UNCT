@@ -86,8 +86,21 @@ function alterar() {
     }?>
     
 	chave = document.frm_principal.rdb_consulta.value;	
-	location.href="manter.php?funcao=<?=constantes::$CD_FUNCAO_ALTERAR?>&chave=" + chave;
+	location.href="manterDemanda.php?funcao=<?=constantes::$CD_FUNCAO_ALTERAR?>&chave=" + chave;
 
+}
+
+function encaminhar() {
+    if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta"))
+            return;
+        
+    <?php
+    if($isHistorico){
+    	echo "exibirMensagem('Registro de historico nao permite encaminhamento.');return";
+    }?>
+    
+	chave = document.frm_principal.rdb_consulta.value;	
+	location.href="manter.php?funcao=<?=constantes::$CD_FUNCAO_ALTERAR?>&chave=" + chave;
 }
 
 </SCRIPT>
@@ -186,6 +199,11 @@ function alterar() {
                         $situacao = $dominioSituacao->getDescricao($voAtual->situacao);
                         $setor = $dominioSetor->getDescricao($voAtual->cdSetor);
                         $tipo = $dominioTipo->getDescricao($voAtual->tipo);
+                        
+                        $nmUsuario = $voAtual->nmUsuarioInclusao;
+                        if($isHistorico){
+                        	$nmUsuario = $voAtual->nmUsuarioOperacao;
+                        }
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados">
@@ -204,7 +222,7 @@ function alterar() {
 					<TD class="tabeladados" nowrap><?php echo $tipo?></TD>
                     <TD class="tabeladados" nowrap><?php echo $voAtual->texto;?></TD>
                     <TD class="tabeladados" nowrap><?php echo $situacao?></TD>                    
-                    <TD class="tabeladados" nowrap><?php echo $voAtual->nmUsuarioInclusao;?></TD>
+                    <TD class="tabeladados" nowrap><?php echo $nmUsuario;?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($voAtual->dhInclusao);?></TD>
                 </TR>					
                 <?php
@@ -232,7 +250,14 @@ function alterar() {
                        <TD>
                         <TABLE class="barraacoesaux" cellpadding="0" cellspacing="0">
 	                   	<TR> 
-                            <?=getBotoesRodape();?>                            
+                            <?php
+                            /*$arrayBotoesARemover = array(constantes::$CD_FUNCAO_ALTERAR);
+                            echo getBotoesRodapeComRestricao($arrayBotoesARemover);*/
+                            echo getBotoesRodape();
+                            ?>
+                            <TD class='botaofuncao'>
+                            <?php echo getBotaoValidacaoAcesso("bttEncaminhar", "Encaminhar", "botaofuncaop", false, false,true,false,"onClick='javascript:encaminhar();' accesskey='e'");?>
+                            </TD>
                          </TR>
                          </TABLE>
 	                   </TD>

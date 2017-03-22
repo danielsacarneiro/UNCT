@@ -34,6 +34,8 @@
         var $nmUsuarioInclusao;
         var $nmUsuarioUltAlteracao;
         
+        var $nmUsuarioOperacao;
+        
         var $sqHist;
     
 	function __construct() {
@@ -126,14 +128,20 @@
 	function getDadosBancoEntidade($registrobanco){		
 
         $this->dhInclusao = $registrobanco[voentidade::$nmAtrDhInclusao];
-        $this->dhUltAlteracao = $registrobanco[voentidade::$nmAtrDhUltAlteracao];
+        $this->dhUltAlteracao = $registrobanco[voentidade::$nmAtrDhUltAlteracao];        
+        
         $this->cdUsuarioInclusao = $registrobanco[voentidade::$nmAtrCdUsuarioInclusao];
         $this->cdUsuarioUltAlteracao = $registrobanco[voentidade::$nmAtrCdUsuarioUltAlteracao];
         $this->sqHist= $registrobanco[voentidade::$nmAtrSqHist];
         //$this->cdHistorico = $registrobanco[voentidade::$nmAtrcdSqHist];
         
         $this->nmUsuarioInclusao = $registrobanco[voentidade::$nmAtrNmUsuarioInclusao];
-        $this->nmUsuarioUltAlteracao = $registrobanco[voentidade::$nmAtrNmUsuarioUltAlteracao]; 		
+        $this->nmUsuarioUltAlteracao = $registrobanco[voentidade::$nmAtrNmUsuarioUltAlteracao];        
+        
+        if($this->sqHist != null){
+	        $this->dhOperacao = $registrobanco[voentidade::$nmAtrDhOperacao];
+	        $this->nmUsuarioOperacao = $registrobanco[voentidade::$nmAtrNmUsuarioOperacao];
+        }
 	}
     
 	function getDadosBanco($registrobanco){		

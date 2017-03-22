@@ -64,6 +64,7 @@ Class dbDemandaTramitacao extends dbprocesso{
 		$this->cDb->retiraAutoCommit();
 		try{
 	
+			$voDemanda = new voDemanda();
 			$voDemanda = $vo->getVOPai();
 			$voDemanda->dbprocesso->cDb = $this->cDb;
 			$voDemanda->dbprocesso->incluir($voDemanda);
@@ -73,11 +74,17 @@ Class dbDemandaTramitacao extends dbprocesso{
 				$vo->sq= $this->getProximoSequencialChaveComposta(voDemandaTramitacao::$nmAtrSq, $vo);
 			}			
 			
+			if($voDemanda->temContratoParaIncluir()){
+				$voDemContrato = $voDemanda->getVODemandaContrato();
+				$voDemContrato->dbprocesso->cDb = $this->cDb;				
+				$voDemContrato->dbprocesso->incluir($voDemContrato);
+			}
+	
 			//echo "codigo demandatramitacao: " . $vo->cd;
 			if($vo->temTramitacaoParaIncluir()){
 				$vo = parent::incluir($vo);
 			}
-	
+			
 			//End transaction
 			$this->cDb->commit();
 		}catch(Exception $e){
@@ -99,30 +106,7 @@ Class dbDemandaTramitacao extends dbprocesso{
 		}
 			
 		//echo "codigo demandatramitacao: " . $vo->cd;
-		$vo = parent::incluir($vo);
-		
-		//Start transaction
-		/*$this->cDb->retiraAutoCommit();
-		try{
-	
-			$voDemanda = $vo->getVOPai();
-			$voDemanda->dbprocesso->cDb = $this->cDb;
-			$voDemanda->dbprocesso->incluir($voDemanda);
-	
-			$vo->cd = $voDemanda->cd;
-			if($vo->sq == null || $vo->sq == ""){
-				$vo->sq= $this->getProximoSequencialChaveComposta(voDemandaTramitacao::$nmAtrSq, $vo);
-			}
-				
-			//echo "codigo demandatramitacao: " . $vo->cd;
-			$vo = parent::incluir($vo);
-	
-			//End transaction
-			$this->cDb->commit();
-		}catch(Exception $e){
-			$this->cDb->rollback();
-			throw new Exception($e->getMessage());
-		}*/
+		$vo = parent::incluir($vo);		
 	
 		return $vo;
 	}

@@ -209,7 +209,42 @@ include_once(caminho_vos."vousuario.php");
 	            			size='20' 
 	            			readonly>
 				</TD>
-			</TR>";        
+			</TR>";
+        
+        if($voEntidade->sqHist != null){
+        	$nmusuHistorico = $voEntidade->nmUsuarioOperacao;
+        	
+        	$retorno .= "\n<TR>\n"
+        			. "<TH class='textoseparadorgrupocampos' halign='left' colspan='4'>"
+        			. "<DIV class='campoformulario' id='div_tramitacao'>&nbsp;&nbsp;Dados do Histórico"
+        			. "</DIV>"
+        			. "</TH>"
+        			. "</TR>";
+        	 
+	        $retorno .=
+	       		 "<TR>
+		            <TH class='campoformulario' nowrap>Data:</TH>
+		            <TD class='campoformulario'>
+		            	<INPUT type='text'
+		            	       id='".voentidade::$nmAtrDhOperacao."'
+		            	       name='".voentidade::$nmAtrDhOperacao."'
+		            			value='".getDataHoraSQLComoString($voEntidade->dhOperacao)."'
+		            			class='camporeadonly'
+		            			size='20'
+		            			maxlength='10' readonly>
+					</TD>
+		            <TH class='campoformulario' nowrap>Usuário:</TH>
+		            <TD class='campoformulario'>
+		            	<INPUT type='text'
+		            	       id='".voentidade::$nmAtrCdUsuarioOperacao."'
+		            	       name='".voentidade::$nmAtrCdUsuarioOperacao."'
+		            			value='".$nmusuHistorico."'
+		            			class='camporeadonly'
+		            			size='20'
+		            			readonly>
+					</TD>
+				</TR>";
+        }
         
     //    return utf8_decode($retorno);
         return $retorno;
@@ -330,6 +365,12 @@ include_once(caminho_vos."vousuario.php");
     }
     
     function getBotoesRodape(){
+    	return getBotoesRodapeComRestricao(null);
+    }
+    
+    function getBotoesRodapeComRestricao($arrayBotoesARemover){
+    	
+    	$temAlterar = !existeItemNoArray(constantes::$CD_FUNCAO_ALTERAR, $arrayBotoesARemover);
     	
     	$isManutencao = false;
     	$isDetalhamento = false;
@@ -356,7 +397,7 @@ include_once(caminho_vos."vousuario.php");
     		if(!$isDetalhamento){
 	    		if(getBotaoIncluir() != "")
 		    		$html.=     "<TD class='botaofuncao'>".getBotaoIncluir()."</TD>\n";
-		    	if(getBotaoAlterar() != "")
+		    	if(getBotaoAlterar() != "" && $temAlterar)
 		    		$html.=     "<TD class='botaofuncao'>".getBotaoAlterar()."</TD>\n";
 		    	if(getBotaoExcluir() != "")
 		    		$html.=     "<TD class='botaofuncao'>".getBotaoExcluir()."</TD>\n";

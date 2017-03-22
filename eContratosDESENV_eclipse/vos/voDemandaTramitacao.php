@@ -1,5 +1,6 @@
 <?php
 include_once("voDemanda.php");
+include_once("voDemandaContrato.php");
 
   Class voDemandaTramitacao extends voDemanda{
     	   		  	
@@ -49,6 +50,7 @@ include_once("voDemanda.php");
     }      
     
     function getValoresWhereSQLChave($isHistorico){    	
+    	$nmTabela = self::getNmTabelaStatic($isHistorico);
     	$query = $this->getValoresWhereSQLChaveLogicaSemSQ($isHistorico);
     	$query .= " AND " . $nmTabela . "." . self::$nmAtrSq . "=" . $this->sq;		
         
@@ -94,7 +96,7 @@ include_once("voDemanda.php");
     	$retorno = $this->cdSetorDestino != null && $this->textoTram != null;   	
     	return $retorno;     	
     }
-    
+        
     function getDadosRegistroBanco($registrobanco){
         //as colunas default de voentidade sao incluidas pelo metodo getDadosBanco do voentidade
     	$this->sq = $registrobanco[self::$nmAtrSq];
@@ -131,6 +133,9 @@ include_once("voDemanda.php");
 		$voDemanda->tipo  = $this->tipo;
 		$voDemanda->situacao  = $this->situacao;		
 		$voDemanda->texto  = $this->texto;
+		$voDemanda->prioridade  = $this->prioridade;
+		
+		$voDemanda->sqContrato = $this->sqContrato;
 	
 		return $voDemanda;
 	}

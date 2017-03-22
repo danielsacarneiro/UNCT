@@ -37,7 +37,7 @@ if($isInclusao){
 	$vo->getDadosBanco($colecao);
 	putObjetoSessao($vo->getNmTabela(), $vo);
 		
-    $nmFuncao = "ALTERAR ";
+    $nmFuncao = "ENCAMINHAR ";
 }
 
 if($vo->dtReferencia == null|| $vo->dtReferencia == "")
@@ -55,6 +55,7 @@ setCabecalho($titulo);
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_text.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_oficio.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_pessoa.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_datahora.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_ajax.js"></script>
@@ -81,6 +82,20 @@ function confirmar() {
 	return confirm("Confirmar Alteracoes?");    
 }
 
+function carregaContratada() {
+	<?php 
+	$nmCampoDiv = vopessoa::$nmAtrNome;
+	?>
+	//ta na biblioteca_funcoes_pessoa.js
+	NmCampoCdContrato = '<?=vocontrato::$nmAtrCdContrato;?>';
+	NmCampoAnoContrato = '<?=vocontrato::$nmAtrAnoContrato;?>';
+	NmCampoTipoContrato = '<?=vocontrato::$nmAtrTipoContrato;?>';
+	NmCampoDiv = '<?=$nmCampoDiv;?>';
+	carregaDadosContratada(NmCampoAnoContrato, NmCampoTipoContrato, NmCampoCdContrato, NmCampoDiv);    
+}
+
+
+
 </SCRIPT>
 
 </HEAD>
@@ -105,6 +120,7 @@ function confirmar() {
 	        $comboTipo = new select(dominioTipoDemanda::getColecao());
 	        $comboSetor = new select(dominioSetor::getColecao());
 	        $comboSituacao = new select(dominioSituacaoDemanda::getColecao());
+	        $comboPrioridade = new select(dominioPrioridadeDemanda::getColecao());
 	        $selectExercicio = new selectExercicio();	         
 	        
 	        $votram->dhInclusao = dtHoje;
@@ -114,6 +130,7 @@ function confirmar() {
 	        if(!$isInclusao){
 	        	//ALTERACAO
 	        	$complementoHTML = " required ";
+	        	$readonlyChaves = " readonly ";
 	        ?>	        	        
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Demanda:</TH>
@@ -129,8 +146,13 @@ function confirmar() {
 	        </TR>
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Setor Responsável:</TH>
-	            <TD class="campoformulario" colspan=3>
+	            <TD class="campoformulario" width="1%">
 	            <?php echo $comboSetor->getHtmlCombo("","", $vo->cdSetor, true, "camporeadonly", false, " disabled ");?>
+	            <TH class="campoformulario" nowrap width="1%">Prioridade:</TH>
+	            <TD class="campoformulario" >
+	            <?php 
+	            //o setor destino da ultima tramitacao sera o origem da nova
+	            echo $comboPrioridade->getHtmlCombo(voDemanda::$nmAtrPrioridade,voDemanda::$nmAtrPrioridade, $vo->prioridade, true, "camporeadonly", false, " disabled ");?>	            
 				</TD>
 	        </TR>
 	        <TR>
@@ -138,13 +160,33 @@ function confirmar() {
 	            <TD class="campoformulario" colspan=3>				
 	            <INPUT type="text" value="<?=$vo->texto?>"  class="camporeadonly" size="80" readonly>	            	                        	                        
 	        </TR>	        
+	        <?php	        	        	        
+	        //so exibe contrato se tiver
+	        $voDemandaContrato = new voDemandaContrato();
+	        $voDemandaContrato->getDadosBanco($colecao);
+	         
+	        if($voDemandaContrato->sqContrato != null){
+	        	$voContrato = new vocontrato();
+	        	$voContrato->getDadosBanco($colecao);
+	        	
+	        	require_once (caminho_funcoes."contrato/dominioTipoContrato.php");
+	        	$dominioTipoContrato = new dominioTipoContrato();
+	        	$contrato = formatarCodigoAnoComplemento($voContrato->cdContrato,
+	        			$voContrato->anoContrato,
+	        			$dominioTipoContrato->getDescricao($voContrato->tipo));
+	        ?>
+			<TR>
+                <TH class="campoformulario" nowrap width=1%>Contrato:</TH>
+				<TD class="campoformulario" colspan=3><INPUT type="text" value="<?php echo($contrato);?>"  class="camporeadonlyalinhadodireita" size="17" readonly></TD>
+            </TR>
+            <?php }?>	        
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Situação:</TH>
 	            <TD class="campoformulario" colspan=3>
 	            <?php 
 	            echo $comboSituacao->getHtmlCombo(voDemanda::$nmAtrSituacao,voDemanda::$nmAtrSituacao, $vo->situacao, true, "camporeadonly", false, " disabled ");?>
-				</TD>
-	        </TR>	        
+				</TD>				
+	        </TR>
 				<?php 
 				$isDetalhamento = true;
 				include_once 'gridTramitacaoAjax.php';
@@ -159,6 +201,20 @@ function confirmar() {
 	            <?php echo "Ano: " . $selectExercicio->getHtmlCombo(voDemanda::$nmAtrAno,voDemanda::$nmAtrAno, anoDefault, true, "campoobrigatorio", false, " required ");?>
 	            <?php echo "Tipo: " . $comboTipo->getHtmlCombo(voDemanda::$nmAtrTipo,voDemanda::$nmAtrTipo, $vo->tipo, true, "campoobrigatorio", false, " required ");?>			  
 	        </TR>
+	        <?php 
+	        	require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioTipoContrato.php");	        	
+	        	$combo = new select(dominioTipoContrato::getColecao());
+			  ?>			            
+	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
+	            <TD class="campoformulario" colspan=3>
+	            <?php echo "Ano: " . $selectExercicio->getHtmlCombo(vocontrato::$nmAtrAnoContrato,vocontrato::$nmAtrAnoContrato, $vo->anoContrato, true, "campoobrigatorio", false, " required onChange='carregaContratada();'");?>
+			  Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=vocontrato::$nmAtrCdContrato?>" name="<?=vocontrato::$nmAtrCdContrato?>"  value="<?php echo(complementarCharAEsquerda($vo->cdContrato, "0", TAMANHO_CODIGOS_SAFI));?>"  class="<?=$classChaves?>" size="4" maxlength="3" <?=$readonlyChaves?> required onBlur='carregaContratada();'>
+			  <?php echo $combo->getHtmlCombo(vocontrato::$nmAtrTipoContrato,vocontrato::$nmAtrTipoContrato, "", true, "camponaoobrigatorio", false, " required onChange='carregaContratada();' ");	
+			  ?>
+			  <div id="<?=$nmCampoDiv?>">
+	          </div>
+	        </TR>	        
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Setor Origem:</TH>
 	            <TD class="campoformulario" colspan=3>
@@ -171,10 +227,18 @@ function confirmar() {
 	            <TH class="campoformulario" nowrap width="1%">Título:</TH>
 	            <TD class="campoformulario" colspan=3>				
 	            <INPUT type="text" id="<?=voDemanda::$nmAtrTexto?>" name="<?=voDemanda::$nmAtrTexto?>" value=""  class="campoobrigatorio" size="80" required>	            	                        	                        
-	        </TR>	               
+	        </TR>
+			<TR>
+	            <TH class="campoformulario" nowrap width="1%">Prioridade:</TH>
+	            <TD class="campoformulario" colspan=3>
+	            <?php 
+	            //o setor destino da ultima tramitacao sera o origem da nova
+	            echo $comboPrioridade->getHtmlCombo(voDemanda::$nmAtrPrioridade,voDemanda::$nmAtrPrioridade, $vo->prioridade, true, "campoobrigatorio", false, " required ");?>
+				</TD>
+	        </TR>	       	        
 	        <?php 
 	       }	       
-	       ?>	       
+	       ?>
 			<TR>
 				<TH class="textoseparadorgrupocampos" halign="left" colspan="4">
 				<DIV class="campoformulario" id="div_tramitacao">&nbsp;&nbsp;Novo Encaminhamento

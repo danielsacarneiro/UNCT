@@ -5,6 +5,7 @@ include_once (caminho_util."bibliotecaFuncoesPrincipal.php");
 include_once (caminho_util."dominioSetor.php");
 include_once(caminho_funcoes. "demanda/dominioSituacaoDemanda.php");
 include_once(caminho_funcoes. "demanda/dominioTipoDemanda.php");
+include_once(caminho_funcoes. "demanda/dominioPrioridadeDemanda.php");
 
   Class voDemanda extends voentidade{
     	   		 
@@ -14,6 +15,7 @@ include_once(caminho_funcoes. "demanda/dominioTipoDemanda.php");
   	static $nmAtrTipo = "dem_tipo";  	
   	static $nmAtrSituacao = "dem_situacao";
   	static $nmAtrTexto = "dem_texto";
+  	static $nmAtrPrioridade = "dem_prioridade";
   	   	    
   	var $cd = "";
   	var $ano  = "";  	
@@ -21,7 +23,9 @@ include_once(caminho_funcoes. "demanda/dominioTipoDemanda.php");
   	var $tipo = ""; 	
   	var $situacao  = "";
   	var $texto = "";
-  	 
+  	var $prioridade = "";
+  	
+  	var $sqContrato = "";  	 
 // ...............................................................
 // Funcoes ( Propriedades e métodos da classe )
 
@@ -78,7 +82,8 @@ include_once(caminho_funcoes. "demanda/dominioTipoDemanda.php");
     			self::$nmAtrTipo,
     			self::$nmAtrCdSetor,    			
     			self::$nmAtrSituacao,
-    			self::$nmAtrTexto
+    			self::$nmAtrTexto,
+    			self::$nmAtrPrioridade
     			);
         
         return $retorno;    
@@ -92,6 +97,20 @@ include_once(caminho_funcoes. "demanda/dominioTipoDemanda.php");
     
     	return $retorno;
     }
+    
+    function temContratoParaIncluir(){
+    	$retorno = $this->sqContrato != null;
+    	return $retorno;
+    }    
+    
+    function getVODemandaContrato(){
+    	$voDemanda = new voDemandaContrato();
+    	$voDemanda->anoDemanda = $this->ano;
+    	$voDemanda->cdDemanda = $this->cd;   
+    	$voDemanda->sqContrato = $this->sqContrato;
+    
+    	return $voDemanda;
+    }
         
     function getDadosRegistroBanco($registrobanco){
         //as colunas default de voentidade sao incluidas pelo metodo getDadosBanco do voentidade
@@ -101,6 +120,9 @@ include_once(caminho_funcoes. "demanda/dominioTipoDemanda.php");
     	$this->tipo  = $registrobanco[self::$nmAtrTipo];
     	$this->situacao  = $registrobanco[self::$nmAtrSituacao];
     	$this->texto = $registrobanco[self::$nmAtrTexto];
+    	$this->prioridade = $registrobanco[self::$nmAtrPrioridade];
+    	
+    	$this->sqContrato = $registrobanco[voDemandaContrato::$nmAtrSqContrato];
 	}   
 	
 	function getDadosFormulario(){
@@ -111,6 +133,11 @@ include_once(caminho_funcoes. "demanda/dominioTipoDemanda.php");
 		$this->tipo = @$_POST[self::$nmAtrTipo];
 		$this->situacao  = @$_POST[self::$nmAtrSituacao];
 		$this->texto = @$_POST[self::$nmAtrTexto];
+		$this->prioridade = @$_POST[self::$nmAtrPrioridade];
+		
+		//quando existir
+		//recupera quando da consulta da contratada, ao inserir o contrato na tela
+		$this->sqContrato = @$_POST[vopessoa::$SQ_CONTRATO_DADOS_CONTRATADA];
 		
 		//completa com os dados da entidade
 		$this->getDadosFormularioEntidade();	
@@ -125,12 +152,15 @@ include_once(caminho_funcoes. "demanda/dominioTipoDemanda.php");
 	function getValorChavePrimaria(){
 		return $this->ano
 				. CAMPO_SEPARADOR
-				. $this->cd;
+				. $this->cd
+				. CAMPO_SEPARADOR
+				. $this->sqHist;			
 	}
 		
 	function getChavePrimariaVOExplode($array){
 		$this->ano = $array[0];
 		$this->cd = $array[1];
+		$this->sqHist = $array[2];
 	}
 	
 }

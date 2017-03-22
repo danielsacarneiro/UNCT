@@ -11,6 +11,10 @@ class dbprocesso{
 	var $cDb;
     var $cConfig;
 	static $nmCampoCount  = "nmCampoCount";
+	
+	static $nmTabelaUsuarioInclusao = "TAB_USU_INCLUSAO";
+	static $nmTabelaUsuarioUltAlteracao = "TAB_USU_ULT_ALTERACAO";
+	static $nmTabelaUsuarioOperacao = "TAB_USU_OPERACAO";
 
 	// ...............................................................
 	// construtor	
@@ -21,12 +25,23 @@ class dbprocesso{
 	}
     
     function incluirHistorico($voEntidade) {
+    	//par ao historico funcionar, a tabela de historico deve estar adequada a estrutura da query abaixo
+    	/*
+    	 * deve possuir sempre:
+    	 * 1 - o hist como seguencial
+    	 * 2 - o dhoperacao (CURRENT TIMESTAMP) que diz a hora em q o registro foi historiado
+    	 * 3 - o usuario da operacao id_user logado que fez a operacao
+    	 */
         $tabelaHistorico = $voEntidade->getNmTabelaEntidade(true);
         
         $novoSeq = " SELECT MAX(" . voentidade::$nmAtrSqHist . ")+1 FROM " . $tabelaHistorico;
         
         $query = "INSERT INTO " . $tabelaHistorico;
-        $query.= " SELECT ($novoSeq)," . $voEntidade->getNmTabela() . ".* FROM " . $voEntidade->getNmTabela();
+        $query.= " SELECT ($novoSeq),";
+        $query.= $voEntidade->getNmTabela() . ".*,";
+        $query.= " CURRENT_TIMESTAMP, ";
+        $query.= id_user;
+        $query.= " FROM " . $voEntidade->getNmTabela();
         $query.= " WHERE ";
         $query.= $voEntidade->getValoresWhereSQLChave(false);
         
@@ -66,31 +81,47 @@ class dbprocesso{
 		$nmTabela = $vo->getNmTabelaEntidade($isHistorico);
 		//$temUsuInclusao = false;		
 		$temUsuInclusao = existeItemNoArray(voentidade::$nmAtrCdUsuarioInclusao, $vo->getTodosAtributos());
+		$temUsuUltAlteracao = existeItemNoArray(voentidade::$nmAtrCdUsuarioUltAlteracao, $vo->getTodosAtributos());
+		$temUsuHistorico = $vo->temTabHistorico && $isHistorico;
 		
-		/*if($temUsuInclusao){
-			echo "tem usu inclusao";
+		/*if($temUsuHistorico){
+			echo "tem usu ";
 		}else{
-			echo "NAO tem usu inclusao";
+			echo "NAO tem usu ";
 		}*/
-				
+		
 		if($temUsuInclusao){
-			$query.= ", TAB1." .vousuario::$nmAtrName. " AS " . voentidade::$nmAtrNmUsuarioInclusao;
+			$query.= ", ".self::$nmTabelaUsuarioInclusao."." .vousuario::$nmAtrName. " AS " . voentidade::$nmAtrNmUsuarioInclusao;
 		}
-		$query.= ", TAB2." .vousuario::$nmAtrName. " AS " . voentidade::$nmAtrNmUsuarioUltAlteracao;
+		if($temUsuUltAlteracao){
+			$query.= ", ".self::$nmTabelaUsuarioUltAlteracao."." .vousuario::$nmAtrName. " AS " . voentidade::$nmAtrNmUsuarioUltAlteracao;
+		}
+		if($temUsuHistorico){
+			$query.= ", ".self::$nmTabelaUsuarioOperacao."." .vousuario::$nmAtrName. " AS " . voentidade::$nmAtrNmUsuarioOperacao;
+		}
+		
 		$query.= " FROM ". $nmTabela;
 		
 		$query.= $queryJoin;
 		
 		if($temUsuInclusao){
 			$query.= "\n LEFT JOIN ". vousuario::$nmEntidade;
-			$query.= "\n TAB1 ON ";
-			$query.= "TAB1.".vousuario::$nmAtrID. "=".$nmTabelaACompararCdUsuario.".".voentidade::$nmAtrCdUsuarioInclusao;
+			$query.= "\n ".self::$nmTabelaUsuarioInclusao." ON ";
+			$query.= self::$nmTabelaUsuarioInclusao.".".vousuario::$nmAtrID. "=".$nmTabelaACompararCdUsuario.".".voentidade::$nmAtrCdUsuarioInclusao;
 		}
 		
-		$query.= "\n LEFT JOIN ". vousuario::$nmEntidade;
-		$query.= "\n TAB2 ON ";
-		$query.= "TAB2.".vousuario::$nmAtrID. "=".$nmTabelaACompararCdUsuario.".".voentidade::$nmAtrCdUsuarioUltAlteracao;
+		if($temUsuUltAlteracao){
+			$query.= "\n LEFT JOIN ". vousuario::$nmEntidade;
+			$query.= "\n ".self::$nmTabelaUsuarioUltAlteracao." ON ";
+			$query.= self::$nmTabelaUsuarioUltAlteracao.".".vousuario::$nmAtrID. "=".$nmTabelaACompararCdUsuario.".".voentidade::$nmAtrCdUsuarioUltAlteracao;
+		}
 		
+		if($temUsuHistorico){
+			$query.= "\n LEFT JOIN ". vousuario::$nmEntidade;
+			$query.= "\n ".self::$nmTabelaUsuarioOperacao." ON ";
+			$query.= self::$nmTabelaUsuarioOperacao.".".vousuario::$nmAtrID. "=".$nmTabelaACompararCdUsuario.".".voentidade::$nmAtrCdUsuarioOperacao;
+		}
+				
 		return $query;		
 	}
 	    
@@ -110,11 +141,15 @@ class dbprocesso{
 	
 	function consultarMontandoQuery($vo, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico){
 		$nmTabelaACompararCdUsuario = $vo->getNmTabelaEntidade($isHistorico);
-		return $this->consultarMontandoQueryUsuario($vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico);		
+		return $this->consultarMontandoQueryUsuario($vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico, true);		
 	}
 	
-	function consultarMontandoQueryUsuario($vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico){
-			
+	function consultarMontandoQueryTelaConsulta($vo, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico){
+		$nmTabelaACompararCdUsuario = $vo->getNmTabelaEntidade($isHistorico);
+		return $this->consultarMontandoQueryUsuario($vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico, false);		
+	}
+	
+	function consultarMontandoQueryUsuario($vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico, $isConsultaPorChave){			
 		$atributos = getSQLStringFormatadaColecaoIN($arrayColunasRetornadas, false);
 		$query = "SELECT ". $atributos;
 		$query.= $this->getQueryNmUsuarioTabelaAComparar($vo, $nmTabelaACompararCdUsuario, $queryJoin, $isHistorico);
@@ -122,8 +157,8 @@ class dbprocesso{
 		$query.= $queryWhere;
 	
 		//echo $query;
-		$retorno = $this->consultarEntidade($query, true);
-		if($retorno != ""){
+		$retorno = $this->consultarEntidade($query, $isConsultaPorChave);
+		if($retorno != "" && $isConsultaPorChave){
 			$retorno = $retorno[0];
 		}
 	

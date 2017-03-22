@@ -209,7 +209,7 @@ include_once (caminho_filtros."filtroManterPA.php");
     	return $this->atualizarEntidade($query);
     }
     
-    //o incluir eh implementado para nao usar da voentidade
+    //o excluir eh implementado para nao usar da voentidade
     //por ser mais complexo
     function excluir($vo){
     	//Start transaction

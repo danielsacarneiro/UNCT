@@ -86,6 +86,7 @@ include_once (caminho_vos. "dbpessoagestor.php");
     	$atributosConsulta .= "," . vopessoa::getNmTabela() . "." . vopessoa::$nmAtrEmail;
     	$atributosConsulta .= "," . vopessoa::getNmTabela() . "." . vopessoa::$nmAtrTel;
     	$atributosConsulta .= "," . vopessoavinculo::getNmTabela() . "." . vopessoavinculo::$nmAtrCd;
+    	$atributosConsulta .= "," . vocontrato::getNmTabela() . "." . vocontrato::$nmAtrSqContrato;
     	 
     	//$atributoVinculo = "(SELECT )"
     	 

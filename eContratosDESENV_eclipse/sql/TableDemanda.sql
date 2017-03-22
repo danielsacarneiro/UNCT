@@ -8,6 +8,7 @@ CREATE TABLE demanda (
     dem_situacao INT NOT NULL,        
     dem_cd_setor INT NOT NULL,
     dem_texto MEDIUMTEXT NOT NULL,
+    dem_prioridade INT DEFAULT 3 NOT NULL,
         
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
@@ -24,7 +25,9 @@ CREATE TABLE demanda_hist (
     dem_cd INT NOT NULL,    
     dem_tipo INT NOT NULL,
     dem_situacao INT NOT NULL,        
-    dem_cd_setor INT NOT NULL,    
+    dem_cd_setor INT NOT NULL,
+    dem_texto MEDIUMTEXT NOT NULL,
+    dem_prioridade INT DEFAULT 3 NOT NULL,
         
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
@@ -59,3 +62,19 @@ ALTER TABLE demanda_tram ADD CONSTRAINT fk_demanda_tram FOREIGN KEY (dem_ex, dem
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;
 
+drop table demanda_contrato;
+CREATE TABLE demanda_contrato (	
+    dem_ex INT NOT NULL,
+    dem_cd INT NOT NULL,
+    
+    ct_sq INT NOT NULL,
+        
+    dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    cd_usuario_incl INT,
+    
+    CONSTRAINT pk PRIMARY KEY (dem_ex, dem_cd, ct_sq)
+);
+
+ALTER TABLE demanda_contrato ADD CONSTRAINT fk_demanda_contrato FOREIGN KEY (dem_ex, dem_cd) REFERENCES demanda (dem_ex, dem_cd) 
+	ON DELETE RESTRICT
+	ON UPDATE RESTRICT;
