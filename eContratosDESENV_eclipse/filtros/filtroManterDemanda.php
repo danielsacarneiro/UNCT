@@ -19,11 +19,12 @@ class filtroManterDemanda extends filtroManter{
 		$vodemanda->cdSetor = @$_POST[voDemanda::$nmAtrCdSetor];
 		$vodemanda->tipo = @$_POST[voDemanda::$nmAtrTipo];
 		$vodemanda->situacao  = @$_POST[voDemanda::$nmAtrSituacao];
+		$vodemanda->prioridade  = @$_POST[voDemanda::$nmAtrPrioridade];
 		
 		$this->vodemanda = $vodemanda;
 		
 		if($this->cdOrdenacao == null){
-			$this->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
+			$this->cdOrdenacao = constantes::$CD_ORDEM_CRESCENTE;
 		}
 	}
 	 
@@ -60,6 +61,26 @@ class filtroManterDemanda extends filtroManter{
 					;
 		
 					$conector  = "\n AND ";		
+		}
+		
+		if($this->vodemanda->cdSetor != null){
+			$filtro = $filtro . $conector
+			. $nmTabela. "." .voDemanda::$nmAtrCdSetor
+			. " = "
+					. $this->vodemanda->cdSetor
+					;
+		
+					$conector  = "\n AND ";
+		}
+		
+		if($this->vodemanda->prioridade != null){
+			$filtro = $filtro . $conector
+			. $nmTabela. "." .voDemanda::$nmAtrPrioridade
+			. " = "
+					. $this->vodemanda->prioridade
+					;
+		
+					$conector  = "\n AND ";
 		}
 		
 		if($this->vodemanda->situacao != null){
@@ -102,9 +123,18 @@ class filtroManterDemanda extends filtroManter{
 		return $filtro;
 	}
 	
+	
+	function getAtributoOrdenacaoDefault(){
+		$nmTabelaDemanda = voDemanda::getNmTabelaStatic($this->isHistorico);
+		$retorno = $nmTabelaDemanda . "." . voDemanda::$nmAtrPrioridade . " " . constantes::$CD_ORDEM_CRESCENTE
+				. "," . $nmTabelaDemanda . "." . voDemanda::$nmAtrDhInclusao . " " . constantes::$CD_ORDEM_DECRESCENTE; 
+		return $retorno; 		
+	}
+	
 	function getAtributosOrdenacao(){
 		$nmTabelaDemanda = voDemanda::getNmTabelaStatic($this->isHistorico);
 		$varAtributos = array(
+				voDemanda::$nmAtrPrioridade => "Prioridade",
 				voDemanda::$nmAtrDhInclusao => "Data",
 				$nmTabelaDemanda . "." . voDemanda::$nmAtrCd => "Número"
 		);

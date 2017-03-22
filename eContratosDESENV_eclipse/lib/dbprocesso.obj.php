@@ -89,7 +89,7 @@ class dbprocesso{
 		}else{
 			echo "NAO tem usu ";
 		}*/
-		
+		$query = "";
 		if($temUsuInclusao){
 			$query.= ", ".self::$nmTabelaUsuarioInclusao."." .vousuario::$nmAtrName. " AS " . voentidade::$nmAtrNmUsuarioInclusao;
 		}
@@ -98,9 +98,11 @@ class dbprocesso{
 		}
 		if($temUsuHistorico){
 			$query.= ", ".self::$nmTabelaUsuarioOperacao."." .vousuario::$nmAtrName. " AS " . voentidade::$nmAtrNmUsuarioOperacao;
-		}
+		}		
 		
-		$query.= " FROM ". $nmTabela;
+		$query.= $this->getQueryFrom_NmUsuarioTabelaAComparar($vo, $nmTabelaACompararCdUsuario, $queryJoin, $isHistorico);
+		
+		/*$query.= " FROM ". $nmTabela;
 		
 		$query.= $queryJoin;
 		
@@ -120,9 +122,41 @@ class dbprocesso{
 			$query.= "\n LEFT JOIN ". vousuario::$nmEntidade;
 			$query.= "\n ".self::$nmTabelaUsuarioOperacao." ON ";
 			$query.= self::$nmTabelaUsuarioOperacao.".".vousuario::$nmAtrID. "=".$nmTabelaACompararCdUsuario.".".voentidade::$nmAtrCdUsuarioOperacao;
-		}
+		}*/
 				
 		return $query;		
+	}
+	
+	function getQueryFrom_NmUsuarioTabelaAComparar($vo, $nmTabelaACompararCdUsuario, $queryJoin, $isHistorico){
+		$nmTabela = $vo->getNmTabelaEntidade($isHistorico);
+		//$temUsuInclusao = false;
+		$temUsuInclusao = existeItemNoArray(voentidade::$nmAtrCdUsuarioInclusao, $vo->getTodosAtributos());
+		$temUsuUltAlteracao = existeItemNoArray(voentidade::$nmAtrCdUsuarioUltAlteracao, $vo->getTodosAtributos());
+		$temUsuHistorico = $vo->temTabHistorico && $isHistorico;
+		
+		$queryFrom = "";
+		$queryFrom.= "\n FROM ". $nmTabela;	
+		$queryFrom.= $queryJoin;
+	
+		if($temUsuInclusao){
+			$queryFrom.= "\n LEFT JOIN ". vousuario::$nmEntidade;
+			$queryFrom.= "\n ".self::$nmTabelaUsuarioInclusao." ON ";
+			$queryFrom.= self::$nmTabelaUsuarioInclusao.".".vousuario::$nmAtrID. "=".$nmTabelaACompararCdUsuario.".".voentidade::$nmAtrCdUsuarioInclusao;
+		}
+	
+		if($temUsuUltAlteracao){
+			$queryFrom.= "\n LEFT JOIN ". vousuario::$nmEntidade;
+			$queryFrom.= "\n ".self::$nmTabelaUsuarioUltAlteracao." ON ";
+			$queryFrom.= self::$nmTabelaUsuarioUltAlteracao.".".vousuario::$nmAtrID. "=".$nmTabelaACompararCdUsuario.".".voentidade::$nmAtrCdUsuarioUltAlteracao;
+		}
+	
+		if($temUsuHistorico){
+			$queryFrom.= "\n LEFT JOIN ". vousuario::$nmEntidade;
+			$queryFrom.= "\n ".self::$nmTabelaUsuarioOperacao." ON ";
+			$queryFrom.= self::$nmTabelaUsuarioOperacao.".".vousuario::$nmAtrID. "=".$nmTabelaACompararCdUsuario.".".voentidade::$nmAtrCdUsuarioOperacao;
+		}
+	
+		return $queryFrom;
 	}
 	    
 	function consultarPorChave($vo, $isHistorico){
@@ -144,9 +178,13 @@ class dbprocesso{
 		return $this->consultarMontandoQueryUsuario($vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico, true);		
 	}
 	
-	function consultarMontandoQueryTelaConsulta($vo, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico){
-		$nmTabelaACompararCdUsuario = $vo->getNmTabelaEntidade($isHistorico);
-		return $this->consultarMontandoQueryUsuario($vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico, false);		
+	function consultarMontandoQueryTelaConsulta($vo, $filtro, $arrayColunasRetornadas, $queryJoin){
+		$nmTabelaACompararCdUsuario = $vo->getNmTabelaEntidade($filtro->isHistorico);		
+		$retorno = $this->consultarMontandoQueryUsuarioFiltro($vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $filtro, false, true);
+		
+		/*removeObjetoSessao($filtro->nmFiltro);
+		putObjetoSessao($filtro->nmFiltro, $filtro);*/
+		return $retorno;
 	}
 	
 	function consultarMontandoQueryUsuario($vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico, $isConsultaPorChave){			
@@ -158,6 +196,23 @@ class dbprocesso{
 	
 		//echo $query;
 		$retorno = $this->consultarEntidade($query, $isConsultaPorChave);
+		if($retorno != "" && $isConsultaPorChave){
+			$retorno = $retorno[0];
+		}
+	
+		return $retorno;
+	}
+	
+	function consultarMontandoQueryUsuarioFiltro($vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $filtro, $isConsultaPorChave, $validaConsulta){
+		
+		$isHistorico = $filtro->isHistorico;		
+		$atributos = getSQLStringFormatadaColecaoIN($arrayColunasRetornadas, false);
+		$querySelect = "SELECT ". $atributos;
+		
+		$queryFrom = $this->getQueryFrom_NmUsuarioTabelaAComparar($vo, $nmTabelaACompararCdUsuario, $queryJoin, $isHistorico);
+							
+		//echo $query;		
+		$retorno = $this->consultarFiltro($filtro, $querySelect, $queryFrom, $validaConsulta);
 		if($retorno != "" && $isConsultaPorChave){
 			$retorno = $retorno[0];
 		}
@@ -260,11 +315,9 @@ class dbprocesso{
 			//echo "$queryCount<br>";
 			//echo "$query<br>";
 				
-			//removeObjetoSessao($voentidade->getNmTabela());
-				
-			$retorno = $this->cDb->consultar($query);
+			//removeObjetoSessao($voentidade->getNmTabela());				
+			$retorno = $this->cDb->consultar($query);			
 			
-			//putObjetoSessao($filtro->nmFiltro, $filtro);
 		}
 	
 		//echo $filtro->toString();
@@ -325,9 +378,9 @@ class dbprocesso{
 	function excluir($voEntidade){
         //echo $voEntidade->sqHist;
         $isHistorico = $voEntidade->sqHist != null;
-        if($isHistorico)
-            $retorno = $this->excluirEmDefinitivo($voEntidade, true);
-        else{
+        if($isHistorico){
+            $retorno = $this->excluirEmDefinitivo($voEntidade, true);         
+        }else{
             
             if($voEntidade->temTabHistorico)        
                 $retorno = $this->excluirHistoriando($voEntidade);

@@ -100,11 +100,16 @@ class filtroManter extends multiplosConstrutores{
     	$isUtilizarSessao = $utilizarSessao != "N";
     
     	$consultar = @$_GET["consultar"];
+    	if($consultar == null || $consultar == ""){
+    		$consultar = @$_POST["consultar"];
+    	}
+    	
     	$isConsultar = $consultar == "S";
     
     	$pegarFiltroSessao = $isUtilizarSessao && $isConsultar;
     	//echo "nome filtro". $filtro->nmFiltro;
     	if(existeObjetoSessao($filtro->nmFiltro) && $pegarFiltroSessao){
+    		//echo "pegou filtro sessao";
     		$filtro = getObjetoSessao($filtro->nmFiltro);
     		$paginaAtual = @$_GET['paginaAtual'];
     
@@ -112,6 +117,7 @@ class filtroManter extends multiplosConstrutores{
     			$filtro->paginacao->paginaAtual = $paginaAtual;
     	}
     	else{
+    		//echo "incluiu filtro sessao";
     		putObjetoSessao($filtro->nmFiltro, $filtro);
     	}
     
@@ -161,7 +167,8 @@ class filtroManter extends multiplosConstrutores{
     		//pega do filho, se existir
     		$strOrdemDefault = "";
     		if($this->getAtributoOrdenacaoDefault()){
-    			$strOrdemDefault = "," . $this->getAtributoOrdenacaoDefault() . " " . $ordem;
+    			//$strOrdemDefault = "," . $this->getAtributoOrdenacaoDefault() . " " . $ordem;
+    			$strOrdemDefault = "," . $this->getAtributoOrdenacaoDefault();
     		}
     		
     		$filtro = $filtro . "\n ORDER BY $this->cdAtrOrdenacao $ordem $strOrdemDefault ";

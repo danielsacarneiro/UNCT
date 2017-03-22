@@ -63,10 +63,9 @@ Class dbDemanda extends dbprocesso{
 				$colunaUsuHistorico
 		);		
 			
-		$queryJoin = "";
-		$queryWhere = $filtro->getFiltroConsultaSQL();
+		$queryJoin = "";		
 		//echo $query;
-		return parent::consultarMontandoQueryTelaConsulta($vo, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico);
+		return parent::consultarMontandoQueryTelaConsulta($vo, $filtro, $arrayColunasRetornadas, $queryJoin);		
 	}
 	
 	function consultarDemandaTramitacao($vo){

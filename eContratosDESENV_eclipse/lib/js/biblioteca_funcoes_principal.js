@@ -135,7 +135,11 @@ function limparFormularioGeral(){
 					
 		element = frm_principal.elements[i];		
 		//retira os campos que nao serao resetados 
-		naoValidar = element.name == "cdAtrOrdenacao" || element.name == "qtdRegistrosPorPag" || element.name == "cdOrdenacao"; 
+		naoValidar = element.name == "cdAtrOrdenacao" 
+						|| element.name == "qtdRegistrosPorPag" 
+						|| element.name == "utilizarSessao"
+						|| element.name == "consultar"
+						|| element.name == "cdOrdenacao"; 
 		if(!naoValidar){
 			//alert(element.type);		
 			if(element.type == 'select-one'){

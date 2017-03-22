@@ -60,6 +60,7 @@ function cancelar() {
 	//history.back();
 	lupa = document.frm_principal.lupa.value;	
 	location.href="index.php?consultar=S&lupa="+ lupa;	
+	//location.href="index.php?lupa="+ lupa;
 }
 
 function confirmar() {

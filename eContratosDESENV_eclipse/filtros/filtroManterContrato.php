@@ -284,7 +284,7 @@ class filtroManterContrato extends filtroManter{
 	}
 	
 	function getAtributoOrdenacaoDefault(){
-		return vocontrato::getNmTabelaStatic($this->isHistorico) . "." . vocontrato::$nmAtrSqContrato;		
+		return vocontrato::getNmTabelaStatic($this->isHistorico) . "." . vocontrato::$nmAtrSqContrato . " " . constantes::$CD_ORDEM_DECRESCENTE;		
 	}
 
 }

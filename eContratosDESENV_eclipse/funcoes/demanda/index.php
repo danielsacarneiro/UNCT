@@ -128,6 +128,8 @@ function encaminhar() {
         <TBODY>
 	        <?php	        	
 	        	$comboSituacao = new select(dominioSituacaoDemanda::getColecao());
+	        	$comboSetor = new select(dominioSetor::getColecao());
+	        	$comboPrioridade = new select(dominioPrioridadeDemanda::getColecao());
 	            $selectExercicio = new selectExercicio();
 			  ?>			            
 	        <TR>
@@ -136,6 +138,12 @@ function encaminhar() {
 	            <?php echo "Ano: " . $selectExercicio->getHtmlCombo(voDemanda::$nmAtrAno,voDemanda::$nmAtrAno, $filtro->vodemanda->ano, true, "camponaoobrigatorio", false, "");?>
 			  Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voDemanda::$nmAtrCd?>" name="<?=voDemanda::$nmAtrCd?>"  value="<?php echo(complementarCharAEsquerda($filtro->vodemanda->cd, "0", TAMANHO_CODIGOS));?>"  class="camponaoobrigatorio" size="6" maxlength="5">
 			</TR>			            
+            <TR>
+                <TH class="campoformulario" nowrap width="1%">Setor:</TH>
+                <TD class="campoformulario" width="1%" ><?php echo $comboSetor->getHtmlCombo(voDemanda::$nmAtrCdSetor,voDemanda::$nmAtrCdSetor, $filtro->vodemanda->cdSetor, true, "camponaoobrigatorio", false, "");?></TD>
+                <TH class="campoformulario" nowrap width="1%">Prioridade:</TH>
+                <TD class="campoformulario" ><?php echo $comboPrioridade->getHtmlCombo(voDemanda::$nmAtrPrioridade,voDemanda::$nmAtrPrioridade, $filtro->vodemanda->prioridade, true, "camponaoobrigatorio", false, "");?></TD>                
+            </TR>            
             <TR>
                 <TH class="campoformulario" nowrap>Situação:</TH>
                 <TD class="campoformulario" width="1%" colspan=3><?php echo $comboSituacao->getHtmlCombo(voDemanda::$nmAtrSituacao,voDemanda::$nmAtrSituacao, $filtro->vodemanda->situacao, true, "camponaoobrigatorio", false, "");?></TD>
@@ -167,11 +175,12 @@ function encaminhar() {
                   }
                   ?>
                     <TH class="headertabeladados" width="1%" nowrap>Ano</TH>
-                    <TH class="headertabeladados" width="1%">Número</TH>
+                    <TH class="headertabeladados" width="1%">Núm.</TH>
                     <TH class="headertabeladados" width="1%">Setor</TH>
                     <TH class="headertabeladados" width="1%">Tipo</TH>
                     <TH class="headertabeladados"width="90%" nowrap >Texto</TH>
                     <TH class="headertabeladados" width="1%">Situação</TH>                    
+                    <TH class="headertabeladados" width="1%">Prior.</TH>
                     <TH class="headertabeladados"width="1%" nowrap >Usuário</TH>
                     <TH class="headertabeladados"width="1%" nowrap >Dt.Abertura</TH>
                 </TR>
@@ -185,8 +194,9 @@ function encaminhar() {
                 $dominioSituacao = new dominioSituacaoDemanda();
                 $dominioSetor = new dominioSetor();
                 $dominioTipo = new dominioTipoDemanda();
+                $dominioPrioridade = new dominioPrioridadeDemanda();
                                 
-                $colspan=9;
+                $colspan=10;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -199,6 +209,7 @@ function encaminhar() {
                         $situacao = $dominioSituacao->getDescricao($voAtual->situacao);
                         $setor = $dominioSetor->getDescricao($voAtual->cdSetor);
                         $tipo = $dominioTipo->getDescricao($voAtual->tipo);
+                        $prioridade = $dominioPrioridade->getDescricao($voAtual->prioridade);
                         
                         $nmUsuario = $voAtual->nmUsuarioInclusao;
                         if($isHistorico){
@@ -222,6 +233,7 @@ function encaminhar() {
 					<TD class="tabeladados" nowrap><?php echo $tipo?></TD>
                     <TD class="tabeladados" nowrap><?php echo $voAtual->texto;?></TD>
                     <TD class="tabeladados" nowrap><?php echo $situacao?></TD>                    
+                    <TD class="tabeladados" nowrap><?php echo $prioridade?></TD>
                     <TD class="tabeladados" nowrap><?php echo $nmUsuario;?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($voAtual->dhInclusao);?></TD>
                 </TR>					
