@@ -139,14 +139,16 @@ function encaminhar() {
 			  Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voDemanda::$nmAtrCd?>" name="<?=voDemanda::$nmAtrCd?>"  value="<?php echo(complementarCharAEsquerda($filtro->vodemanda->cd, "0", TAMANHO_CODIGOS));?>"  class="camponaoobrigatorio" size="6" maxlength="5">
 			</TR>			            
             <TR>
-                <TH class="campoformulario" nowrap width="1%">Setor:</TH>
+                <TH class="campoformulario" nowrap width="1%">Setor.Resp.:</TH>
                 <TD class="campoformulario" width="1%" ><?php echo $comboSetor->getHtmlCombo(voDemanda::$nmAtrCdSetor,voDemanda::$nmAtrCdSetor, $filtro->vodemanda->cdSetor, true, "camponaoobrigatorio", false, "");?></TD>
-                <TH class="campoformulario" nowrap width="1%">Prioridade:</TH>
-                <TD class="campoformulario" ><?php echo $comboPrioridade->getHtmlCombo(voDemanda::$nmAtrPrioridade,voDemanda::$nmAtrPrioridade, $filtro->vodemanda->prioridade, true, "camponaoobrigatorio", false, "");?></TD>                
+                <TH class="campoformulario" nowrap width="1%">Setor.Atual.:</TH>
+                <TD class="campoformulario" ><?php echo $comboSetor->getHtmlCombo(voDemandaTramitacao::$nmAtrCdSetorDestino,voDemandaTramitacao::$nmAtrCdSetorDestino, $filtro->vodemanda->cdSetorDestino, true, "camponaoobrigatorio", false, "");?></TD>
             </TR>            
             <TR>
-                <TH class="campoformulario" nowrap>Situação:</TH>
-                <TD class="campoformulario" width="1%" colspan=3><?php echo $comboSituacao->getHtmlCombo(voDemanda::$nmAtrSituacao,voDemanda::$nmAtrSituacao, $filtro->vodemanda->situacao, true, "camponaoobrigatorio", false, "");?></TD>
+                <TH class="campoformulario" nowrap width="1%">Situação:</TH>
+                <TD class="campoformulario" width="1%"><?php echo $comboSituacao->getHtmlCombo(voDemanda::$nmAtrSituacao,voDemanda::$nmAtrSituacao, $filtro->vodemanda->situacao, true, "camponaoobrigatorio", false, "");?></TD>
+                <TH class="campoformulario" nowrap width="1%">Prioridade:</TH>
+                <TD class="campoformulario" ><?php echo $comboPrioridade->getHtmlCombo(voDemanda::$nmAtrPrioridade,voDemanda::$nmAtrPrioridade, $filtro->vodemanda->prioridade, true, "camponaoobrigatorio", false, "");?></TD>                                
             </TR>            
        <?php
         /*$comboOrdenacao = new select(voPA::getAtributosOrdenacao($cdHistorico));

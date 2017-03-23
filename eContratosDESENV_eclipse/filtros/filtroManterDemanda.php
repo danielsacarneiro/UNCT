@@ -1,7 +1,7 @@
 <?php
 include_once(caminho_util."bibliotecaSQL.php");
 include_once(caminho_lib ."filtroManter.php");
-include_once(caminho_vos ."voDemanda.php");
+include_once(caminho_vos ."voDemandaTramitacao.php");
 
 class filtroManterDemanda extends filtroManter{
 
@@ -13,10 +13,11 @@ class filtroManterDemanda extends filtroManter{
 	function __construct() {
 		parent::__construct(true);
 		
-		$vodemanda = new voDemanda();
+		$vodemanda = new voDemandaTramitacao();
 		$vodemanda->cd  = @$_POST[voDemanda::$nmAtrCd];
 		$vodemanda->ano  = @$_POST[voDemanda::$nmAtrAno];
 		$vodemanda->cdSetor = @$_POST[voDemanda::$nmAtrCdSetor];
+		$vodemanda->cdSetorDestino = @$_POST[voDemandaTramitacao::$nmAtrCdSetorDestino];
 		$vodemanda->tipo = @$_POST[voDemanda::$nmAtrTipo];
 		$vodemanda->situacao  = @$_POST[voDemanda::$nmAtrSituacao];
 		$vodemanda->prioridade  = @$_POST[voDemanda::$nmAtrPrioridade];
@@ -33,6 +34,7 @@ class filtroManterDemanda extends filtroManter{
 		$conector  = "";
 
 		$nmTabela = voDemanda::getNmTabelaStatic($this->isHistorico);
+		$nmTabelaTramitacao = voDemandaTramitacao::getNmTabelaStatic(false);
 					
 		//seta os filtros obrigatorios
 		if($this->isSetaValorDefault()){
@@ -68,6 +70,16 @@ class filtroManterDemanda extends filtroManter{
 			. $nmTabela. "." .voDemanda::$nmAtrCdSetor
 			. " = "
 					. $this->vodemanda->cdSetor
+					;
+		
+					$conector  = "\n AND ";
+		}
+		
+		if($this->vodemanda->cdSetorDestino != null){
+			$filtro = $filtro . $conector
+			. $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrCdSetorDestino
+			. " = "
+					. $this->vodemanda->cdSetorDestino
 					;
 		
 					$conector  = "\n AND ";
