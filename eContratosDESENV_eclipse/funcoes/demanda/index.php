@@ -73,7 +73,7 @@ function excluir() {
 }
 
 function incluir() {
-	location.href="manter.php?funcao=<?=constantes::$CD_FUNCAO_INCLUIR?>";
+	location.href="encaminhar.php?funcao=<?=constantes::$CD_FUNCAO_INCLUIR?>";
 }
 
 function alterar() {
@@ -100,7 +100,7 @@ function encaminhar() {
     }?>
     
 	chave = document.frm_principal.rdb_consulta.value;	
-	location.href="manter.php?funcao=<?=constantes::$CD_FUNCAO_ALTERAR?>&chave=" + chave;
+	location.href="encaminhar.php?funcao=<?=constantes::$CD_FUNCAO_ALTERAR?>&chave=" + chave;
 }
 
 </SCRIPT>

@@ -6,15 +6,19 @@ Class dbDemanda extends dbprocesso{
 	function consultarPorChave($vo, $isHistorico){		
 		$nmTabela = $vo->getNmTabelaEntidade($isHistorico);		
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic(false);
+		$nmTabelaContratada = vopessoa::getNmTabelaStatic(false);
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic(false);
 		
 		$arrayColunasRetornadas = array($nmTabela . ".*", 
 				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqContrato,
+				$nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato,
 				$nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato,
 				$nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato,
 				$nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato,
 				$nmTabelaContrato . "." . vocontrato::$nmAtrCdEspecieContrato,
-				$nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato
+				$nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato,
+				$nmTabelaContratada . "." . vopessoa::$nmAtrNome,
+				$nmTabelaContratada . "." . vopessoa::$nmAtrDoc
 		);
 				
 		$queryJoin.= "\n LEFT JOIN ". $nmTabelaDemandaContrato;
@@ -26,6 +30,10 @@ Class dbDemanda extends dbprocesso{
 		$queryJoin.= "\n ON ";
 		$queryJoin.= $nmTabelaDemandaContrato. ".".voDemandaContrato::$nmAtrSqContrato. "=".$nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato;
 				
+		$queryJoin.= "\n LEFT JOIN ". $nmTabelaContratada;
+		$queryJoin.= "\n ON ";
+		$queryJoin.= $nmTabelaContratada. ".".vopessoa::$nmAtrCd . "=".$nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
+		
 		return $this->consultarPorChaveMontandoQuery($vo, $arrayColunasRetornadas, $queryJoin, $isHistorico);	
 	}
 	

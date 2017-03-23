@@ -13,9 +13,10 @@ function carregaDadosContratada(pNmCampoAnoContrato, pNmCampoTipoContrato, pNmCa
 	cdContrato = document.getElementById(pNmCampoCdContrato).value;
 	anoContrato = document.getElementById(pNmCampoAnoContrato).value;
 	tpContrato = document.getElementById(pNmCampoTipoContrato).value;
-
+	//alert(cdContrato + CD_CAMPO_SEPARADOR + anoContrato + CD_CAMPO_SEPARADOR + tpContrato);
 	if(cdContrato != "" && anoContrato != "" && tpContrato != ""){
 		str = cdContrato + CD_CAMPO_SEPARADOR + anoContrato + CD_CAMPO_SEPARADOR + tpContrato;
+		//alert(str);
 		//vai no ajax
 		getDadosContratadaPorContrato(str, pNmCampoDiv);
 	}

@@ -47,6 +47,8 @@ $voDemandaContrato->getDadosBanco($colecao);
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_cnpfcnpj.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_text.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_oficio.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_pessoa.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_ajax.js"></SCRIPT>
 
 <SCRIPT language="JavaScript" type="text/javascript">
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
@@ -69,16 +71,11 @@ function confirmar() {
 </SCRIPT>
 
 </HEAD>
-<BODY class="paginadados" onload="">
+<BODY class="paginadados" onload="carregaContratada();">
 	  
 <FORM name="frm_principal" method="post" action="confirmarAlteracaoDemanda.php" onSubmit="return confirmar();">
 
 <INPUT type="hidden" id="funcao" name="funcao" value="<?=$funcao?>">
-
-<INPUT type="hidden" id="<?=voContratoTramitacao::$nmAtrCdContrato?>" name="<?=voContratoTramitacao::$nmAtrCdContrato?>" value="<?=$vo->cdContrato?>">
-<INPUT type="hidden" id="<?=voContratoTramitacao::$nmAtrAnoContrato?>" name="<?=voContratoTramitacao::$nmAtrAnoContrato?>" value="<?=$vo->anoContrato?>">
-<INPUT type="hidden" id="<?=voContratoTramitacao::$nmAtrTipoContrato?>" name="<?=voContratoTramitacao::$nmAtrTipoContrato?>" value="<?=$vo->tipoContrato?>">
-<INPUT type="hidden" id="<?=voContratoTramitacao::$nmAtrSq?>" name="<?=voContratoTramitacao::$nmAtrSq?>" value="<?=$vo->sq?>">
  
 <TABLE id="table_conteiner" class="conteiner" cellpadding="0" cellspacing="0">
     <TBODY>
@@ -146,11 +143,17 @@ function confirmar() {
 	        	$contrato = formatarCodigoAnoComplemento($voContrato->cdContrato,
 	        			$voContrato->anoContrato,
 	        			$dominioTipoContrato->getDescricao($voContrato->tipo));
-	        
+	        	
+	        	include_once(caminho_funcoes."pessoa/biblioteca_htmlPessoa.php");
+	        	$nmpessoa = $colecao[vopessoa::$nmAtrNome];
+	        	$docpessoa = $colecao[vopessoa::$nmAtrDoc];
+	        	$campoContratado = getCampoContratada($nmpessoa, $docpessoa, $voContrato->sq);	        	
 	        ?>	        
 			<TR>
                 <TH class="campoformulario" nowrap width=1%>Contrato:</TH>
-				<TD class="campoformulario" colspan=3><INPUT type="text" value="<?php echo($contrato);?>"  class="camporeadonlyalinhadodireita" size="17" readonly></TD>
+				<TD class="campoformulario" colspan=3>Número:&nbsp;&nbsp;&nbsp;&nbsp;
+				<INPUT type="text" value="<?php echo($contrato);?>"  class="camporeadonlyalinhadodireita" size="<?=strlen($contrato)?>" readonly>
+				<div id=""><?=$campoContratado?></div></TD>
             </TR>
             <?php }?>	        
 			<TR>

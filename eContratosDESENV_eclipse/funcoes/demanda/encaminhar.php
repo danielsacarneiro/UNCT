@@ -55,10 +55,10 @@ setCabecalho($titulo);
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_text.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_oficio.js"></SCRIPT>
-<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_pessoa.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_datahora.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
-<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_ajax.js"></script>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_ajax.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_pessoa.js"></SCRIPT>
 
 <SCRIPT language="JavaScript" type="text/javascript">
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
@@ -91,10 +91,9 @@ function carregaContratada() {
 	NmCampoAnoContrato = '<?=vocontrato::$nmAtrAnoContrato;?>';
 	NmCampoTipoContrato = '<?=vocontrato::$nmAtrTipoContrato;?>';
 	NmCampoDiv = '<?=$nmCampoDiv;?>';
+	
 	carregaDadosContratada(NmCampoAnoContrato, NmCampoTipoContrato, NmCampoCdContrato, NmCampoDiv);    
 }
-
-
 
 </SCRIPT>
 
@@ -174,10 +173,20 @@ function carregaContratada() {
 	        	$contrato = formatarCodigoAnoComplemento($voContrato->cdContrato,
 	        			$voContrato->anoContrato,
 	        			$dominioTipoContrato->getDescricao($voContrato->tipo));
+	        	
+	        	include_once(caminho_funcoes."pessoa/biblioteca_htmlPessoa.php");
+	        	$nmpessoa = $colecao[vopessoa::$nmAtrNome];
+	        	$docpessoa = $colecao[vopessoa::$nmAtrDoc];
+	        	$campoContratado = getCampoContratada($nmpessoa, $docpessoa, $voContrato->sq);
 	        ?>
 			<TR>
+	            <INPUT type="hidden" id="<?=vocontrato::$nmAtrAnoContrato?>" name="<?=vocontrato::$nmAtrAnoContrato?>" value="<?=$voContrato->anoContrato?>">
+				<INPUT type="hidden" id="<?=vocontrato::$nmAtrCdContrato?>" name="<?=vocontrato::$nmAtrCdContrato?>" value="<?=$voContrato->cdContrato?>">	            			  
+				<INPUT type="hidden" id="<?=vocontrato::$nmAtrTipoContrato?>" name="<?=vocontrato::$nmAtrTipoContrato?>" value="<?=$voContrato->tipo?>">
                 <TH class="campoformulario" nowrap width=1%>Contrato:</TH>
-				<TD class="campoformulario" colspan=3><INPUT type="text" value="<?php echo($contrato);?>"  class="camporeadonlyalinhadodireita" size="17" readonly></TD>
+				<TD class="campoformulario" colspan=3>Número:&nbsp;&nbsp;&nbsp;&nbsp;
+				<INPUT type="text" value="<?php echo($contrato);?>"  class="camporeadonlyalinhadodireita" size="<?=strlen($contrato)?>" readonly>				
+				<div id=""><?=$campoContratado?></div></TD>
             </TR>
             <?php }?>	        
 			<TR>

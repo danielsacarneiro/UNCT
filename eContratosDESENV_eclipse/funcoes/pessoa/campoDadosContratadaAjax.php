@@ -4,6 +4,7 @@ include_once(caminho_vos."dbpessoa.php");
 include_once(caminho_vos."vocontrato.php");
 include_once(caminho_filtros."filtroManterPessoa.php");
 include_once(caminho_funcoes."contrato/dominioEspeciesContrato.php");
+include_once(caminho_funcoes."pessoa/biblioteca_htmlPessoa.php");
 
 function getDadosContrata($db){
 	if($db == null)
@@ -26,17 +27,19 @@ function getDadosContrata($db){
 		$filtro->cdEspecieContrato= $vo->cdEspecie;
 
 		$recordSet = $db->consultarPessoaPorContrato($filtro);
-		$retorno = "";
+		$retorno = getCampoContratada("","","");
 		if($recordSet != ""){
+			$retorno = getCampoContratada($recordSet[0][vopessoa::$nmAtrNome], $recordSet[0][vopessoa::$nmAtrDoc], $recordSet[0][vocontrato::$nmAtrSqContrato]); 
+		}
+		
+		/*if($recordSet != ""){
 			$retorno = $recordSet[0][vopessoa::$nmAtrDoc] . " - ". $recordSet[0][vopessoa::$nmAtrNome];
 			$sqContrato = $recordSet[0][vocontrato::$nmAtrSqContrato];
-			//echo "contrato " . $sqContrato;
-		}//else throw new Exception("Contrato inexistente.");
+		}		
+		$javaScript = "onLoad=''";
+		$retorno = "Contratada: <INPUT type='text' class='camporeadonly' size=50 readonly value='".$retorno."' ".$javaScript.">\n";
+		$retorno .= "<INPUT type='hidden' id='" . vopessoa::$SQ_CONTRATO_DADOS_CONTRATADA . "' name='".vopessoa::$SQ_CONTRATO_DADOS_CONTRATADA."' value='".$sqContrato."' >\n";*/
 		
-		$javaScript = "onLoad='alert(0);'";
-		$retorno = "Contratada: <INPUT type='text' id='testasdasdade' name='testasdasdade' class='camporeadonly' size=50 readonly value='".$retorno."' ".$javaScript.">\n";
-		$retorno .= "<INPUT type='hidden' id='" . vopessoa::$SQ_CONTRATO_DADOS_CONTRATADA . "' name='".vopessoa::$SQ_CONTRATO_DADOS_CONTRATADA."' value='".$sqContrato."' >\n";
-		//$retorno = "<SCRIPT language='JavaScript' type='text/javascript'> documenti.frm_principal.".vopessoa::$nmAtrNome.".value='".$retorno."'; </SCRIPT>";
 		return $retorno ;		
 }
 

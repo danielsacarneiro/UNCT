@@ -67,4 +67,18 @@ function getComboGestorResponsavel($cdGestor){
 	return $retorno;
 }
 
+function getCampoContratada($pNmContratada, $pDocContratada, $pChaveContrato){
+
+	$retorno = "Contratado: <INPUT type='text' class='camporeadonly' size=50 readonly value='NÃO ENCONTRADO - VERIFIQUE O CONTRATO'>\n";
+	if($pDocContratada != ""){
+		$javaScript = "onLoad=''";
+		$retorno = $pDocContratada . " - ". $pNmContratada;
+		$retorno = "Contratado: <INPUT type='text' class='camporeadonly' size=50 readonly value='".$retorno."' ".$javaScript.">\n";
+		$retorno .= "<INPUT type='hidden' id='" . vopessoa::$SQ_CONTRATO_DADOS_CONTRATADA . "' name='".vopessoa::$SQ_CONTRATO_DADOS_CONTRATADA."' value='".$pChaveContrato."' >\n";
+	}
+
+	return $retorno;
+}
+
+
 ?>
