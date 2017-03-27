@@ -113,7 +113,7 @@ include_once(caminho_util."dominioSetor.php");
         $this->cdUsuarioUltAlteracao = id_user;
 	}
 	
-	function getEnderecoTpumento(){
+	function getEnderecoTpDocumento(){
 		$retorno = "";
 		
 		//$domDoc = new dominioTpDocumento();
@@ -155,44 +155,32 @@ include_once(caminho_util."dominioSetor.php");
 		return self::formatarCodigoDocumento($this->sq, $this->cdSetor, $this->ano, $this->tp);
 	}
 	
-	static function formatarCodigoDocumento($sq, $cdSetor, $ano, $tp){	
-		
-		/*$dominioSetor = new dominioSetor();
-		
-		$retorno = "";
-		if($sq != null){
-			$retorno = $tp
-				. " " . complementarCharAEsquerda($sq, "0", TAMANHO_CODIGOS_SAFI)
-				. "-" . substr($ano, 2, 2)
-				. "/" . $dominioSetor->getDescricao($cdSetor);
-		}
-	
-		return $retorno;*/
-		return formatarCodigoDocumento($sq, $cdSetor, $ano, $tpDoc);
-		
+	static function formatarCodigoDocumento($sq, $cdSetor, $ano, $tpDoc){
+		// biblioteca_htmlDocumento
+		return formatarCodigoDocumento($sq, $cdSetor, $ano, $tpDoc);		
 	}
                 
 	function toString(){						
-		$retorno.= $this->sq . ",";
-        $retorno.= $this->cdSetor . ",";		
-        $retorno.= $this->ano. ",";
-        $retorno.= $this->tp. ",";
-        $retorno.= $this->link. ",";
+		$retorno.= "Ano:". $this->ano. ",";
+        $retorno.= "Setor:". $this->cdSetor . ",";        
+        $retorno.= "TpDoc:". $this->tp. ",";
+        $retorno.= "Sq:". $this->sq . ",";
+        $retorno.= "Link:". $this->link. ",";
 		return $retorno;		
 	}   
 	
 	function getValorChavePrimaria(){
-		return $this->sq 
+		return $this->ano 
 				. CAMPO_SEPARADOR. $this->cdSetor
-				. CAMPO_SEPARADOR. $this->ano
-				. CAMPO_SEPARADOR. $this->tp;
+				. CAMPO_SEPARADOR. $this->tp
+				. CAMPO_SEPARADOR. $this->sq;
 	}
 		
 	function getChavePrimariaVOExplode($array){
-		$this->sq = $array[0];
-		$this->cdSetor= $array[1];
-		$this->ano = $array[2];
-		$this->tp = $array[3];
+		$this->ano = $array[0];
+		$this->cdSetor= $array[1];		
+		$this->tp = $array[2];
+		$this->sq = $array[3];
 	}
 }
 ?>

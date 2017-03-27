@@ -72,9 +72,11 @@ function getCampoContratada($pNmContratada, $pDocContratada, $pChaveContrato){
 	$retorno = "Contratado: <INPUT type='text' class='camporeadonly' size=50 readonly value='NÃO ENCONTRADO - VERIFIQUE O CONTRATO'>\n";
 	if($pDocContratada != ""){
 		$javaScript = "onLoad=''";
-		$retorno = $pDocContratada . " - ". $pNmContratada;
-		$retorno = "Contratado: <INPUT type='text' class='camporeadonly' size=50 readonly value='".$retorno."' ".$javaScript.">\n";
-		$retorno .= "<INPUT type='hidden' id='" . vopessoa::$SQ_CONTRATO_DADOS_CONTRATADA . "' name='".vopessoa::$SQ_CONTRATO_DADOS_CONTRATADA."' value='".$pChaveContrato."' >\n";
+		$retorno = "Contratado: <INPUT type='text' class='camporeadonly' size=40 readonly value='".$pNmContratada."' ".$javaScript.">\n";
+		$retorno .= "&nbsp;CNPJ/CNPF: <INPUT type='text' class='camporeadonly' size=18 readonly value='".$pDocContratada."' ".$javaScript.">\n";
+		$retorno .= "<INPUT type='hidden' id='" . vopessoa::$ID_CONTRATO. "' name='".vopessoa::$ID_CONTRATO."' value='".$pChaveContrato."' >\n";
+		$retorno .= "<INPUT type='hidden' id='" . vopessoa::$ID_NOME_DADOS_CONTRATADA . "' name='".vopessoa::$ID_NOME_DADOS_CONTRATADA."' value='".$pNmContratada."' >\n";
+		$retorno .= "<INPUT type='hidden' id='" . vopessoa::$ID_DOC_DADOS_CONTRATADA. "' name='".vopessoa::$ID_DOC_DADOS_CONTRATADA."' value='".$pDocContratada."' >\n";
 	}
 
 	return $retorno;

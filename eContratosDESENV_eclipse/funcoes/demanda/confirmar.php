@@ -7,6 +7,8 @@ inicioComValidacaoUsuario(true);
 $vo = new voDemandaTramitacao();
 $vo->getDadosFormulario();
 
+//echo $vo->voContrato->toString(); 
+
 putObjetoSessao("vo", $vo);
 
 //redirecionar mantendo o post

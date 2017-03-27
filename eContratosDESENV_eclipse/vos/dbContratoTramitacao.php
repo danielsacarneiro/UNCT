@@ -82,7 +82,7 @@ Class dbContratoTramitacao extends dbTramitacao{
 		
 		$nmTabelaUsuario = voTramitacao::getNmTabela();
 		
-		return $this->consultarMontandoQueryUsuario($vo, $nmTabelaUsuario, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico);
+		return $this->consultarMontandoQueryUsuario($vo, $nmTabelaUsuario, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico, true);
 	}
 	
 	function incluirSQL($vo){		

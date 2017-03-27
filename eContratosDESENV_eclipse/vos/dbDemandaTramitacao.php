@@ -67,23 +67,17 @@ Class dbDemandaTramitacao extends dbprocesso{
 			$voDemanda = new voDemanda();
 			$voDemanda = $vo->getVOPai();
 			$voDemanda->dbprocesso->cDb = $this->cDb;
-			$voDemanda->dbprocesso->incluir($voDemanda);
-	
+			$voDemanda->dbprocesso->incluir($voDemanda);	
 			$vo->cd = $voDemanda->cd;
-			if($vo->sq == null || $vo->sq == ""){				
-				$vo->sq= $this->getProximoSequencialChaveComposta(voDemandaTramitacao::$nmAtrSq, $vo);
-			}			
 			
 			if($voDemanda->temContratoParaIncluir()){
 				$voDemContrato = $voDemanda->getVODemandaContrato();
-				$voDemContrato->dbprocesso->cDb = $this->cDb;				
+				$voDemContrato->dbprocesso->cDb = $this->cDb;
 				$voDemContrato->dbprocesso->incluir($voDemContrato);
 			}
-	
-			//echo "codigo demandatramitacao: " . $vo->cd;
-			if($vo->temTramitacaoParaIncluir()){
-				$vo = parent::incluir($vo);
-			}
+			
+			//a transacao ja eh controlada acima
+			$this->incluirDemandaTramitacaoSEMControleTransacao($vo);						
 			
 			//End transaction
 			$this->cDb->commit();
@@ -92,22 +86,48 @@ Class dbDemandaTramitacao extends dbprocesso{
 			throw new Exception($e->getMessage());
 		}
 	
-		return $vo;
+		return $voDemanda;
+	}
+	
+	function incluirDemandaTramitacaoCOMControleTransacao($vo){
+		//Start transaction
+		$this->cDb->retiraAutoCommit();
+		try{			
+			$this->incluirDemandaTramitacaoSEMControleTransacao($vo);				
+			//End transaction
+			$this->cDb->commit();
+		}catch(Exception $e){
+			$this->cDb->rollback();
+			throw new Exception($e->getMessage());
+		}		
+	}
+	
+	function incluirDemandaTramitacaoSEMControleTransacao($vo){
+			//echo "codigo demandatramitacao: " . $vo->cd;
+			if($vo->temTramitacaoParaIncluir()){
+				if($vo->sq == null || $vo->sq == ""){
+					$vo->sq= $this->getProximoSequencialChaveComposta(voDemandaTramitacao::$nmAtrSq, $vo);
+				}
+				
+				parent::incluir($vo);
+				//verifica se tem voDoc pra incluir
+				if($vo->temDocParaIncluir()){
+					$voDemandaTramDoc = new voDemandaTramDoc();
+					$voDemandaTramDoc = $vo->getVODemandaTramDoc();
+					$voDemandaTramDoc->dbprocesso->cDb = $this->cDb;
+					$voDemandaTramDoc->dbprocesso->incluir($voDemandaTramDoc);
+				}
+	
+			}		
 	}
 	
 	function alterar($vo){
 		//o alterar eh chamado na pagina generica confirmar.php
 		//para chamar o alterarVO, basta chamar o parent::alterar
 		//este metodo, por ser chamado da pagina manter.php, apenas incluira uma nova tramitacao
-		//ele NAO altera o estado da demanda, apenas inclui uma nova tramitacao
+		//ele NAO altera o estado da demanda, apenas inclui uma nova tramitacao		
+		$this->incluirDemandaTramitacaoCOMControleTransacao($vo);
 		
-		if($vo->sq == null || $vo->sq == ""){
-			$vo->sq= $this->getProximoSequencialChaveComposta(voDemandaTramitacao::$nmAtrSq, $vo);
-		}
-			
-		//echo "codigo demandatramitacao: " . $vo->cd;
-		$vo = parent::incluir($vo);		
-	
 		return $vo;
 	}
 	
@@ -123,7 +143,8 @@ Class dbDemandaTramitacao extends dbprocesso{
 		$retorno.= $this-> getVarComoNumero($vo->cdSetorOrigem) . ",";
 		$retorno.= $this-> getVarComoNumero($vo->cdSetorDestino) . ",";
 		$retorno.= $this-> getVarComoString($vo->textoTram) . ",";
-		$retorno.= $this-> getVarComoString($vo->prt);
+		$retorno.= $this-> getVarComoString($vo->prt) . ",";
+		$retorno.= $this-> getVarComoData($vo->dtReferencia);
 
 		$retorno.= $vo->getSQLValuesInsertEntidade();
 

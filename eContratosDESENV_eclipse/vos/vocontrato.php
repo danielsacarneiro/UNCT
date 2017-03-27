@@ -296,7 +296,9 @@ include_once(caminho_funcoes."documento/dominioTpDocumento.php");
 		$retorno = $this->sq . ",";				
 		$retorno.= $this->anoContrato . ",";
 		$retorno.= $this->cdContrato. ",";
-        $retorno.= $this->tipo;
+        $retorno.= $this->tipo. ",";
+        $retorno.= $this->cdEspecie. ",";
+        $retorno.= $this->sqEspecie. ",";
         
         $retorno.= " formato contrato ";
         $retorno.= formatarCodigoContrato($this->cdContrato, $this->anoContrato, $this->tipo);
@@ -314,8 +316,10 @@ include_once(caminho_funcoes."documento/dominioTpDocumento.php");
 					. $this->tipo
 					. "*"
 					. $this->cdContrato
-					. "*"					
+					. "*"
 					. $this->cdEspecie
+					. "*"
+					. $this->sqEspecie
 					. "*"
 					. $this->sqHist
 					;
@@ -323,17 +327,31 @@ include_once(caminho_funcoes."documento/dominioTpDocumento.php");
 		return $chave;
 	}
 	
+	/*	  
+	 * @ deprecated	  
+	 */	
 	function getVOExplodeChave(){
 		$chave = @$_GET["chave"];
 		
-		$array = explode("*",$chave);		
+		$array = explode("*",$chave);
 		$this->sq = $array[0];
 		$this->anoContrato = $array[1];
 		$this->tipo = $array[2];
 		$this->cdContrato = $array[3];
 		$this->cdEspecie = $array[4];
-		$this->sqHist = $array[5];
+		$this->sqEspecie = $array[5];
+		$this->sqHist = $array[6];
 	}
+	
+	function getChavePrimariaVOExplode($array){
+		$this->sq = $array[0];
+		$this->anoContrato = $array[1];
+		$this->tipo = $array[2];
+		$this->cdContrato = $array[3];
+		$this->cdEspecie = $array[4];
+		$this->sqEspecie = $array[5];
+		$this->sqHist = $array[6];
+	}	
 	
 	function getLinkDocumento(){		
 		$link = str_replace("G:", dominioTpDocumento::$ENDERECO_DRIVE, $this->linkDoc);

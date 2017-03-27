@@ -4,18 +4,21 @@ include_once("voDemandaContrato.php");
 
   Class voDemandaTramitacao extends voDemanda{
     	   		  	
-  	static $nmAtrSq = "sq";
+  	static $nmAtrSq = "dtm_sq";
   	static $nmAtrTexto = "dtm_texto";
   	static $nmAtrProtocolo = "dtm_prt";
   	
   	static $nmAtrCdSetorOrigem = "dtm_cd_setor_origem";
   	static $nmAtrCdSetorDestino = "dtm_cd_setor_destino";
+  	static $nmAtrDtReferencia = "dtm_dtreferencia";
   	   	    
   	var $sq = "";
   	var $cdSetorOrigem = "";
   	var $cdSetorDestino = "";
   	var $textoTram  = "";
   	var $prt = "";
+  	
+  	var $voDoc = null;  	
   	 
 // ...............................................................
 // Funcoes ( Propriedades e métodos da classe )
@@ -25,6 +28,7 @@ include_once("voDemandaContrato.php");
        $this->temTabHistorico = true;
        $class = self::getNmClassProcesso();
        $this->dbprocesso= new $class();
+       $this->voDoc = new voDocumento();      
               
        //retira os atributos padrao que nao possui
        //remove tambem os que o banco deve incluir default
@@ -76,7 +80,8 @@ include_once("voDemandaContrato.php");
     			self::$nmAtrCdSetorOrigem,
     			self::$nmAtrCdSetorDestino,
     			self::$nmAtrTexto,
-    			self::$nmAtrProtocolo
+    			self::$nmAtrProtocolo,
+    			self::$nmAtrDtReferencia
     			);
         
         return $retorno;    
@@ -91,12 +96,17 @@ include_once("voDemandaContrato.php");
     
     	return $retorno;
     }
-        
+                
     function temTramitacaoParaIncluir(){
-    	$retorno = $this->cdSetorDestino != null && $this->textoTram != null;   	
-    	return $retorno;     	
+    	$retorno = $this->cdSetorDestino != null && $this->textoTram != null;
+    	return $retorno;
     }
-        
+    
+    function temDocParaIncluir(){
+    	$retorno = $this->voDoc != null && $this->voDoc->sq != null;
+    	return $retorno;
+    }
+    
     function getDadosRegistroBanco($registrobanco){
         //as colunas default de voentidade sao incluidas pelo metodo getDadosBanco do voentidade
     	$this->sq = $registrobanco[self::$nmAtrSq];
@@ -106,6 +116,19 @@ include_once("voDemandaContrato.php");
     	$this->cdSetorDestino = $registrobanco[self::$nmAtrCdSetorDestino];
     	$this->textoTram  = $registrobanco[self::$nmAtrTexto];
     	$this->prt = $registrobanco[self::$nmAtrProtocolo];
+    	$this->dtReferencia = $registrobanco[self::$nmAtrDtReferencia];
+    	
+    	if($registrobanco[voDocumento::$nmAtrSq] != null){
+    		$vodocumento = new voDocumento();
+    		$vodocumento->sq = $registrobanco[voDocumento::$nmAtrSq];
+    		$vodocumento->cdSetor = $registrobanco[voDocumento::$nmAtrCdSetor];
+    		$vodocumento->ano = $registrobanco[voDocumento::$nmAtrAno];
+    		$vodocumento->tp = $registrobanco[voDocumento::$nmAtrTp];
+    		$vodocumento->link = $registrobanco[voDocumento::$nmAtrLink];
+    	
+    		$this->voDoc = $vodocumento;
+    	}
+    	 
 	}   
 	
 	function getDadosFormulario(){
@@ -118,10 +141,19 @@ include_once("voDemandaContrato.php");
 			$this->cdSetorOrigem = $this->cdSetor;
 		}
 		
+		//verifica se tem documento
+		if(@$_POST[voDocumento::getNmTabela()] != null){
+			$chaveDoc = @$_POST[voDocumento::getNmTabela()];
+			$vodocumento = new voDocumento();
+			$vodocumento->getChavePrimariaVOExplodeParam($chaveDoc);
+			$this->voDoc = $vodocumento;
+		}		
+		
 		$this->cdSetorDestino = @$_POST[self::$nmAtrCdSetorDestino];		
 		$this->textoTram  = @$_POST[self::$nmAtrTexto];
 		$this->texto = @$_POST[parent::$nmAtrTexto];
-		$this->prt = @$_POST[self::$nmAtrProtocolo];		
+		$this->prt = @$_POST[self::$nmAtrProtocolo];
+		$this->dtReferencia = @$_POST[self::$nmAtrDtReferencia];
 	}
 	
 	//para o caso da classe herdar de alguem
@@ -134,12 +166,27 @@ include_once("voDemandaContrato.php");
 		$voDemanda->situacao  = $this->situacao;		
 		$voDemanda->texto  = $this->texto;
 		$voDemanda->prioridade  = $this->prioridade;
+		$voDemanda->dtReferencia  = $this->dtReferencia;
 		
-		$voDemanda->sqContrato = $this->sqContrato;
+		$voDemanda->voContrato = $this->voContrato;
 	
 		return $voDemanda;
 	}
 	                
+	function getVODemandaTramDoc(){
+		$voDemandaTramDoc = new voDemandaTramDoc();
+		$voDemandaTramDoc->anoDemanda = $this->ano;
+		$voDemandaTramDoc->cdDemanda = $this->cd;
+		$voDemandaTramDoc->sqDemandaTram = $this->sq;
+		
+		$voDemandaTramDoc->anoDoc  = $this->voDoc->ano;
+		$voDemandaTramDoc->cdSetorDoc  = $this->voDoc->cdSetor;
+		$voDemandaTramDoc->tpDoc = $this->voDoc->tp;
+		$voDemandaTramDoc->sqDoc = $this->voDoc->sq;	
+			
+		return $voDemandaTramDoc;
+	}
+	
 	function toString(){						
 		$retorno.= $this->ano;
 		$retorno.= "," . $this->cd;        

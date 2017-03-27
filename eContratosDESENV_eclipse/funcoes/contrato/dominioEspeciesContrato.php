@@ -33,7 +33,11 @@ include_once(caminho_util. "dominio.class.php");
 // ...............................................................
 // Construtor
 	function __construct () {
-        		$this->colecao = array(
+        		$this->colecao = self::getColecao();
+	}
+	
+	static function getColecao(){
+		return array(
         				self::$CD_ESPECIE_CONTRATO_MATER => "Mater",
         				self::$CD_ESPECIE_CONTRATO_APOSTILAMENTO => "Apostilamento",
         				self::$CD_ESPECIE_CONTRATO_TERMOADITIVO => "Termo Aditivo",
@@ -46,12 +50,16 @@ include_once(caminho_util. "dominio.class.php");
         				self::$CD_ESPECIE_CONTRATO_RESCISAO_UNILATERAL => "Termo de Rescisão Unilateral",
         				self::$CD_ESPECIE_CONTRATO_RESCISAO_ENCERRAMENTO => "Termo de Rescisão Encerramento",
 				);
-	}
+	}	
     
-	function getDominioImportacaoPlanilha() {
-        //cooperacao e convalidacao seram considerados como MATER
-        //deixa na ultima posicao as especies que podem se repetir
-        	$array = array(
+	function getDominioImportacaoPlanilha() {            
+            return self::getColecaoImportacaoPlanilha();
+	}
+
+	static function getColecaoImportacaoPlanilha(){
+		//cooperacao e convalidacao seram considerados como MATER
+		//deixa na ultima posicao as especies que podem se repetir		
+		return array(
         		self::$CD_ESPECIE_CONTRATO_RERRATIFICACAO => "Rerratificação",
         		self::$CD_ESPECIE_CONTRATO_TERMOADITIVO => "T.A",
         		self::$CD_ESPECIE_CONTRATO_TERMOAJUSTE => "Ajuste",
@@ -62,9 +70,8 @@ include_once(caminho_util. "dominio.class.php");
         		self::$CD_ESPECIE_CONTRATO_MATER => "Mater*Convênio*Cooperação*Convalidação",
         		self::$CD_ESPECIE_CONTRATO_APOSTILAMENTO => "Apostilamento*Apostuilamento"
 				);
-            
-            return $array;
-	}	
+	}
+	
 }
 
 ?>

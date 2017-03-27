@@ -90,7 +90,7 @@ include_once (caminho_vos. "dbpessoagestor.php");
     	 
     	//$atributoVinculo = "(SELECT )"
     	 
-    	$querySelect = "SELECT ". $atributosConsulta;
+    	$querySelect = "SELECT DISTINCT ". $atributosConsulta;
     
     	$queryFrom = "\n FROM ". vopessoa::getNmTabela();
     	$queryFrom .= "\n INNER JOIN ". vopessoavinculo::getNmTabela();

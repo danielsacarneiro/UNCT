@@ -54,7 +54,7 @@ try{
         /*$metodo = 'incluir';
         $parametros = array($vo, false); 
         $resultado = call_user_func_array(array( $classe, $metodo), $parametros);*/                
-        $resultado = $dbprocesso->incluir($vo);
+        $vo = $dbprocesso->incluir($vo);
                 
     }else if($isExclusao){
         $nmFuncao = "EXCLUIR";

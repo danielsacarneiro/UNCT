@@ -91,9 +91,10 @@ class filtroManterDocumento extends filtroManter{
 		if($this->link != null){
 			$filtro = $filtro . $conector
 			. $nmTabela. "." .voDocumento::$nmAtrLink
-			. " LIKE '"
-			. substituirCaracterSQLLike($this->link)
-			. "'"
+			. " LIKE '%"
+			//. substituirCaracterSQLLike($this->link)
+			. $this->link
+			. "%'"
 			;		
 			$conector  = "\n AND ";		
 		}
@@ -112,8 +113,8 @@ class filtroManterDocumento extends filtroManter{
 	
 	function getAtributosOrdenacao(){
 		$varAtributos = array(
-				voDocumento::$nmAtrDhUltAlteracao => "Data",
 				voDocumento::$nmAtrSq => "Número",
+				voDocumento::$nmAtrDhUltAlteracao => "Data",
 				voDocumento::$nmAtrCdSetor=> "Setor",
 				voDocumento::$nmAtrAno => "Ano",
 				voDocumento::$nmAtrTp => "Tp.Doc"

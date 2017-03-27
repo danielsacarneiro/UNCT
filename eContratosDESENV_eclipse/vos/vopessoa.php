@@ -13,7 +13,9 @@ include_once(caminho_vos."vogestor.php");
 		static $nmAtrEmail =  "pe_email";
 		static $nmAtrEndereco =  "pe_endereco";
 		
-		static $SQ_CONTRATO_DADOS_CONTRATADA = "ID_CAMPO_SQ_CONTRATO_PESSOA";		
+		static $ID_CONTRATO = "ID_CONTRATO_PESSOA";
+		static $ID_NOME_DADOS_CONTRATADA = "ID_NOME_DADOS_CONTRATADA";
+		static $ID_DOC_DADOS_CONTRATADA = "ID_DOC_DADOS_CONTRATADA";
         
 		var $cd  = "";        
 		var $nome= "";		

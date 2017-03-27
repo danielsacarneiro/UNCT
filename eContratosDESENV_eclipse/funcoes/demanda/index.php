@@ -246,7 +246,7 @@ function encaminhar() {
                     <TD class="tabeladados" nowrap><?php echo $situacao?></TD>                    
                     <TD class="tabeladados" nowrap><?php echo $prioridade?></TD>
                     <TD class="tabeladados" nowrap><?php echo $nmUsuario;?></TD>
-                    <TD class="tabeladados" nowrap><?php echo getData($voAtual->dhInclusao);?></TD>
+                    <TD class="tabeladados" nowrap><?php echo getData($voAtual->dtReferencia);?></TD>
                 </TR>					
                 <?php
 				}				

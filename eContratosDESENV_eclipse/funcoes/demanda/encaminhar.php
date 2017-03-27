@@ -78,7 +78,8 @@ function confirmar() {
 	/*if(!isFormularioValido())
 		return false;	
 	*/
-		
+
+
 	return confirm("Confirmar Alteracoes?");    
 }
 
@@ -87,12 +88,26 @@ function carregaContratada() {
 	$nmCampoDiv = vopessoa::$nmAtrNome;
 	?>
 	//ta na biblioteca_funcoes_pessoa.js
-	NmCampoCdContrato = '<?=vocontrato::$nmAtrCdContrato;?>';
-	NmCampoAnoContrato = '<?=vocontrato::$nmAtrAnoContrato;?>';
-	NmCampoTipoContrato = '<?=vocontrato::$nmAtrTipoContrato;?>';
-	NmCampoDiv = '<?=$nmCampoDiv;?>';
+	pNmCampoCdContrato = '<?=vocontrato::$nmAtrCdContrato;?>';
+	pNmCampoAnoContrato = '<?=vocontrato::$nmAtrAnoContrato;?>';
+	pNmCampoTipoContrato = '<?=vocontrato::$nmAtrTipoContrato;?>';
+	pNmCampoCdEspecieContrato = '<?=vocontrato::$nmAtrCdEspecieContrato;?>';
+	pNmCampoSqEspecieContrato = '<?=vocontrato::$nmAtrSqEspecieContrato;?>';
+	pNmCampoDiv = '<?=$nmCampoDiv;?>';
 	
-	carregaDadosContratada(NmCampoAnoContrato, NmCampoTipoContrato, NmCampoCdContrato, NmCampoDiv);    
+	carregaDadosContratada(pNmCampoAnoContrato, pNmCampoTipoContrato, pNmCampoCdContrato, pNmCampoCdEspecieContrato, pNmCampoSqEspecieContrato,pNmCampoDiv);    
+}
+
+function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
+	chave = ano
+	+ CD_CAMPO_SEPARADOR +  cdSetor
+	+ CD_CAMPO_SEPARADOR +  tpDoc
+	+ CD_CAMPO_SEPARADOR +  sq;
+
+	document.getElementsByName("<?=voDocumento::getNmTabela()?>").item(0).value = chave;
+	document.getElementsByName("<?=voDocumento::$nmAtrSq?>").item(0).value = formatarCodigoDocumento(sq, cdSetor, ano, tpDoc);
+
+	//alert(document.frm_principal.<?=voDocumento::getNmTabela()?>.value);
 }
 
 </SCRIPT>
@@ -122,7 +137,7 @@ function carregaContratada() {
 	        $comboPrioridade = new select(dominioPrioridadeDemanda::getColecao());
 	        $selectExercicio = new selectExercicio();	         
 	        
-	        $votram->dhInclusao = dtHoje;
+	        $votram->dtReferencia = dtHoje;
 	        
 	        $complementoHTML = "";
 	        
@@ -164,31 +179,19 @@ function carregaContratada() {
 	        $voDemandaContrato = new voDemandaContrato();
 	        $voDemandaContrato->getDadosBanco($colecao);
 	         
-	        if($voDemandaContrato->sqContrato != null){
-	        	$voContrato = new vocontrato();
-	        	$voContrato->getDadosBanco($colecao);
-	        	
-	        	require_once (caminho_funcoes."contrato/dominioTipoContrato.php");
-	        	$dominioTipoContrato = new dominioTipoContrato();
-	        	$contrato = formatarCodigoAnoComplemento($voContrato->cdContrato,
-	        			$voContrato->anoContrato,
-	        			$dominioTipoContrato->getDescricao($voContrato->tipo));
-	        	
-	        	include_once(caminho_funcoes."pessoa/biblioteca_htmlPessoa.php");
-	        	$nmpessoa = $colecao[vopessoa::$nmAtrNome];
-	        	$docpessoa = $colecao[vopessoa::$nmAtrDoc];
-	        	$campoContratado = getCampoContratada($nmpessoa, $docpessoa, $voContrato->sq);
-	        ?>
+	        if($voDemandaContrato->voContrato != null){
+	        	$voContrato = $voDemandaContrato->voContrato;
+	        }
+	          
+ 	        require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
+ 	        getContratoDetalhamento($voContrato, $colecao);
+			?>	        
 			<TR>
-	            <INPUT type="hidden" id="<?=vocontrato::$nmAtrAnoContrato?>" name="<?=vocontrato::$nmAtrAnoContrato?>" value="<?=$voContrato->anoContrato?>">
-				<INPUT type="hidden" id="<?=vocontrato::$nmAtrCdContrato?>" name="<?=vocontrato::$nmAtrCdContrato?>" value="<?=$voContrato->cdContrato?>">	            			  
-				<INPUT type="hidden" id="<?=vocontrato::$nmAtrTipoContrato?>" name="<?=vocontrato::$nmAtrTipoContrato?>" value="<?=$voContrato->tipo?>">
-                <TH class="campoformulario" nowrap width=1%>Contrato:</TH>
-				<TD class="campoformulario" colspan=3>Número:&nbsp;&nbsp;&nbsp;&nbsp;
-				<INPUT type="text" value="<?php echo($contrato);?>"  class="camporeadonlyalinhadodireita" size="<?=strlen($contrato)?>" readonly>				
-				<div id=""><?=$campoContratado?></div></TD>
+	            <TH class="campoformulario" nowrap width="1%">Data.Demanda:</TH>
+	            <TD class="campoformulario" colspan=3>	            	            	            
+	            <INPUT type="text" value="<?=getData($vo->dtReferencia);?>"  class="camporeadonly" size="12" readonly>
+            	</TD>	        
             </TR>
-            <?php }?>	        
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Situação:</TH>
 	            <TD class="campoformulario" colspan=3>
@@ -211,16 +214,19 @@ function carregaContratada() {
 	            <?php echo "Tipo: " . $comboTipo->getHtmlCombo(voDemanda::$nmAtrTipo,voDemanda::$nmAtrTipo, $vo->tipo, true, "campoobrigatorio", false, " required ");?>			  
 	        </TR>
 	        <?php 
-	        	require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioTipoContrato.php");	        	
+	        	require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioTipoContrato.php");
 	        	$combo = new select(dominioTipoContrato::getColecao());
+	        	require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioEspeciesContrato.php");
+	        	$comboEspecie = new select(dominioEspeciesContrato::getColecao());	        	
 			  ?>			            
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
 	            <TD class="campoformulario" colspan=3>
+	            <?php echo $combo->getHtmlCombo(vocontrato::$nmAtrTipoContrato,vocontrato::$nmAtrTipoContrato, "", true, "camponaoobrigatorio", false, " required onChange='carregaContratada();' ");?>
+	            Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=vocontrato::$nmAtrCdContrato?>" name="<?=vocontrato::$nmAtrCdContrato?>"  value="<?php echo(complementarCharAEsquerda($vo->cdContrato, "0", TAMANHO_CODIGOS_SAFI));?>"  class="<?=$classChaves?>" size="4" maxlength="3" <?=$readonlyChaves?> required onBlur='carregaContratada();'>
 	            <?php echo "Ano: " . $selectExercicio->getHtmlCombo(vocontrato::$nmAtrAnoContrato,vocontrato::$nmAtrAnoContrato, $vo->anoContrato, true, "campoobrigatorio", false, " required onChange='carregaContratada();'");?>
-			  Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=vocontrato::$nmAtrCdContrato?>" name="<?=vocontrato::$nmAtrCdContrato?>"  value="<?php echo(complementarCharAEsquerda($vo->cdContrato, "0", TAMANHO_CODIGOS_SAFI));?>"  class="<?=$classChaves?>" size="4" maxlength="3" <?=$readonlyChaves?> required onBlur='carregaContratada();'>
-			  <?php echo $combo->getHtmlCombo(vocontrato::$nmAtrTipoContrato,vocontrato::$nmAtrTipoContrato, "", true, "camponaoobrigatorio", false, " required onChange='carregaContratada();' ");	
-			  ?>
+				<?php echo "<br>Espécie: " . $comboEspecie->getHtmlCombo(vocontrato::$nmAtrCdEspecieContrato,vocontrato::$nmAtrCdEspecieContrato, $vo->cdespecie, true, "campoobrigatorio", false, " required onChange='carregaContratada();'");?>	            
+         		Seq: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=vocontrato::$nmAtrSqEspecieContrato?>" name="<?=vocontrato::$nmAtrSqEspecieContrato?>"  value="<?php echo(complementarCharAEsquerda($vo->sqEspecie, "0", TAMANHO_CODIGOS_SAFI));?>"  class="camponaoobrigatorio" size="3" maxlength="3" <?=$readonlyChaves?> onBlur='carregaContratada();'> º
 			  <div id="<?=$nmCampoDiv?>">
 	          </div>
 	        </TR>	        
@@ -270,18 +276,30 @@ function carregaContratada() {
 	            <TH class="campoformulario" nowrap width="1%">PRT:</TH>
 	            <TD class="campoformulario" colspan=3>				
 	            <INPUT type="text" id="<?=voDemandaTramitacao::$nmAtrProtocolo?>" name="<?=voDemandaTramitacao::$nmAtrProtocolo?>" value=""  class="camponaoobrigatorio" size="30">	            	                        	                        
-	        </TR>			            	        
+	        </TR>
+	        <TR>
+		        <TH class="campoformulario" width="1%" nowrap>Documento:</TH>
+		        <TD class="campoformulario" nowrap>
+		        	<INPUT type="text" id="<?=voDocumento::$nmAtrSq?>" name="<?=voDocumento::$nmAtrSq?>" class="camporeadonly" size="15" readonly>
+		        	<INPUT type="hidden" id="<?=voDocumento::getNmTabela()?>" name="<?=voDocumento::getNmTabela()?>" value="">
+		        	<?php 
+		        	echo getLinkPesquisa("../documento");		        	
+		        	$nmCampo = array(voDocumento::getNmTabela(), voDocumento::$nmAtrSq);
+		        	echo getBorracha($nmCampo);
+		        	?>
+				</TD>
+	        </TR>	        
 			<TR>
 	            <TH class="campoformulario" nowrap>Data:</TH>
 	            <TD class="campoformulario" colspan="3">
 	            	<INPUT type="text" 
-	            	       id="<?=voDemandaTramitacao::$nmAtrDhOperacao?>" 
-	            	       name="<?=voDemandaTramitacao::$nmAtrDhOperacao?>" 
-	            			value="<?php echo($votram->dhInclusao);?>"
+	            	       id="<?=voDemandaTramitacao::$nmAtrDtReferencia?>" 
+	            	       name="<?=voDemandaTramitacao::$nmAtrDtReferencia?>" 
+	            			value="<?php echo($votram->dtReferencia);?>"
 	            			onkeyup="formatarCampoData(this, event, false);" 
-	            			class="camporeadonly" 
+	            			class="campoobrigatorio" 
 	            			size="10" 
-	            			maxlength="10" readonly>
+	            			maxlength="10" required>
 				</TD>
         	</TR>
 	        

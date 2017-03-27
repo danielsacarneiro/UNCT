@@ -99,12 +99,11 @@ function selecionar() {
 	if (window.opener != null) {
 		array = retornarValorRadioButtonSelecionadoComoArray("document.frm_principal.rdb_consulta", "<?=CAMPO_SEPARADOR?>");
 
-		sq = array[0];
-		sq = completarNumeroComZerosEsquerda(sq, TAMANHO_CODIGOS_DOCUMENTOS);
-		
+		ano = array[0];
 		cdSetor= array[1];
-		ano = array[2];
-		tp = array[3];
+		tp = array[2];
+		sq = array[3];
+		sq = completarNumeroComZerosEsquerda(sq, TAMANHO_CODIGOS_DOCUMENTOS);
 		
 		window.opener.transferirDadosDocumento(sq, cdSetor, ano, tp);
 		window.close();

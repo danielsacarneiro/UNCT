@@ -31,6 +31,7 @@
 			$html .= "<TH class='headertabeladados' width='1%'>Setor.Origem</TH> \n";
 			$html .= "<TH class='headertabeladados' width='1%'>Setor.Destino</TH> \n";
 			$html .= "<TH class='headertabeladados' width='90%'>Texto</TH> \n";
+			$html .= "<TH class='headertabeladados' width='1%' nowrap>Anexo</TH> \n";
 			$html .= "<TH class='headertabeladados' width='1%' nowrap>PRT</TH> \n";
 			$html .= "<TH class='headertabeladados' width='1%' nowrap>Usuário</TH> \n";
 			$html .= "<TH class='headertabeladados' width='1%' nowrap>Data</TH> \n";			
@@ -58,28 +59,28 @@
 		            $html .= "<TD class='tabeladados' nowrap>" . $dominioSetor->getDescricao($voAtual->cdSetorOrigem) . "</TD> \n";
 		            $html .= "<TD class='tabeladados' nowrap>" . $dominioSetor->getDescricao($voAtual->cdSetorDestino) . "</TD> \n";
 		            $html .= "<TD class='tabeladados' nowrap>" . $voAtual->textoTram . "</TD> \n";
-		            $html .= "<TD class='tabeladados' nowrap>" . $voAtual->prt . "</TD> \n";
-		            $html .= "<TD class='tabeladados' nowrap>" . $voAtual->nmUsuarioInclusao . "</TD> \n";
-		            $html .= "<TD class='tabeladados' nowrap>" . getDataHora($voAtual->dhInclusao) . "</TD> \n";
 		            
-		            /*$html .= "<TD class='tabeladados' nowrap> \n";
-		            
-		            if($tram->voDoc->sq != null){
-						$voDoc = $tram->voDoc;
-						$voDoc->dbprocesso = new dbDocumento(); 
+		            $html .= "<TD class='tabeladados' nowrap> \n";		            
+		            if($voAtual->voDoc->sq != null){
+		            	$voDoc = $voAtual->voDoc;
 		            	
-						$registro = $voDoc->dbprocesso->consultarPorChave($voDoc, false);
-						$voDoc->linkDoc =  $registro[voDocumento::$nmAtrLinkDoc];						
+		            	/*$voDoc->dbprocesso = new dbDocumento();		            	 
+		            	$registro = $voDoc->dbprocesso->consultarPorChave($voDoc, false);*/
 		            	
-		            	$endereco = $voDoc->getEnderecoTpDocumento();		            	
+		            	$endereco = $voDoc->getEnderecoTpDocumento();
 		            	$chave = $voDoc->getValorChavePrimaria();
-		            	
+		            	 
 		            	$html .= $voDoc->formatarCodigo() . " \n";
 		            	$html .= "<input type='hidden' name='".$chave."' id='".$chave."' value='".$endereco."'>" . " \n";
-		            	$html .= getBotaoValidacaoAcesso("bttabrir_arq", "Abrir Anexo", "botaofuncaop", false,true,true,true, "onClick=\"javascript:abrirArquivo('".$chave."');\"");
-		            }
-		            		            
-		            $html .= "</TD> \n";*/		           
+		            	//$html .= getBotaoValidacaoAcesso("bttabrir_arq", "Abrir Anexo", "botaofuncaop", false,true,true,true, "onClick=\"javascript:abrirArquivo('".$chave."');\"");		            	
+		            	$html .= getBotaoAbrirDocumento($chave);
+		            }		            
+		            $html .= "</TD> \n";
+		            
+		            $html .= "<TD class='tabeladados' nowrap>" . $voAtual->prt . "</TD> \n";
+		            $html .= "<TD class='tabeladados' nowrap>" . $voAtual->nmUsuarioInclusao . "</TD> \n";
+		            $html .= "<TD class='tabeladados' nowrap>" . getData($voAtual->dtReferencia) . "</TD> \n";
+		            
 		            $html .= "</TR> \n";
 		            $sq++;
 	        	}

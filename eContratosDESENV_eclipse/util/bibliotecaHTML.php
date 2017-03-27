@@ -38,7 +38,7 @@ include_once(caminho_vos."vousuario.php");
         define('name_user', $nomeUsuario);
         
         define('anoDefault', date('Y'));
-        define('dtHoje', date('d/m/Y'));
+        define('dtHoje', getDataHoje());
         define('dtHojeSQL', date('Y/m/d'));        
     }
            
@@ -453,6 +453,10 @@ include_once(caminho_vos."vousuario.php");
         return temPermissaoParamHistorico(false);
     }
     
+    function isUsuarioAdmin(){
+    	return temPermissaoParamHistorico(true);
+    }
+    
     function temPermissaoParamHistorico($isHistorico){
     	$current_user = wp_get_current_user();
     	$permissao_user = $current_user->roles;
@@ -628,12 +632,16 @@ include_once(caminho_vos."vousuario.php");
     }
     
     function formatarCodigoAnoComplemento($cd, $ano, $complemento){
-    	$retorno = complementarCharAEsquerda($cd, "0", TAMANHO_CODIGOS_SAFI)
-    	. "/" . $ano;
+    	$retorno = ""; 
+    	if($complemento != null && $complemento != ""){
+    		$retorno .= $complemento . " ";
+    	}
     	
-    	if($complemento != null&& $complemento != "")
-    		$retorno .= "-" . $complemento;
-    	
+    	//echo "tipo:" . $complemento;
+    		 
+    	$retorno .= complementarCharAEsquerda($cd, "0", TAMANHO_CODIGOS_SAFI)
+    		. "-" . $ano;
+    	    	
     	return $retorno;    	 
     }
     
@@ -646,6 +654,6 @@ include_once(caminho_vos."vousuario.php");
     }
     
     function getDataHoje(){
-    	return dtHoje;
+    	return date('d/m/Y');
     }        
     ?>

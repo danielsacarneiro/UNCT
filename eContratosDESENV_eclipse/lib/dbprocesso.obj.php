@@ -336,7 +336,7 @@ class dbprocesso{
 	function incluir($voEntidade){
         //ta na classe filha
         $query = $this->incluirSQL($voEntidade);
-		//echo $query;		
+		//echo "<br>".$query."<br>";		
 		$retorno = $this->cDb->atualizar($query);
 	    return $retorno;		
 	}

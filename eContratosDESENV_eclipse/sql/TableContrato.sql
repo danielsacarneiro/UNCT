@@ -6,13 +6,13 @@ ALTER DATABASE unct CHARACTER SET utf8 COLLATE utf8_general_ci;
 drop table contrato;
 CREATE TABLE contrato (
     sq INT NOT NULL AUTO_INCREMENT,
-    ct_exercicio INT,
-    ct_numero INT,
-    ct_tipo char(1),
+    ct_exercicio INT NOT NULL,
+    ct_numero INT NOT NULL,
+    ct_tipo char(1) NOT NULL,
 	ct_especie VARCHAR(50),
     ct_sq_especie INT DEFAULT 1 NOT NULL, -- indice do documento em questao (primeiro ou segundo apostilamento, por ex)
-    ct_cd_especie CHAR(2), -- especie do registro (mater, apostilamento, aditivo)
-	ct_cd_situacao CHAR(2),
+    ct_cd_especie CHAR(2) NOT NULL, -- especie do registro (mater, apostilamento, aditivo)
+	ct_cd_situacao CHAR(2) NOT NULL,
     ct_objeto LONGTEXT,
     ct_gestor_pessoa VARCHAR(300) ,
     pe_cd_resp INT ,

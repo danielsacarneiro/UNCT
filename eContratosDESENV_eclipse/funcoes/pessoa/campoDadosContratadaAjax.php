@@ -12,24 +12,37 @@ function getDadosContrata($db){
 
 		$filtro = new filtroManterPessoa(false);
 		$filtro->TemPaginacao = false;
-		$chave = @$_GET["chave"];
-		$array = explode(CAMPO_SEPARADOR,$chave);
+		$chave = @$_GET["chave"];		
 						
 		$vo = new vocontrato();
+		$vo->getChavePrimariaVOExplodeParam($chave);
+		
+		/*$array = explode(CAMPO_SEPARADOR,$chave);
 		$vo->cdContrato = $array[0];
 		$vo->anoContrato= $array[1];
 		$vo->tipo = $array[2];
-		$vo->cdEspecie= dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
+		$vo->cdEspecie= dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;*/
 		
 		$filtro->cdContrato = $vo->cdContrato;
 		$filtro->anoContrato= $vo->anoContrato;
 		$filtro->tpContrato = $vo->tipo;
 		$filtro->cdEspecieContrato= $vo->cdEspecie;
+		$filtro->sqEspecieContrato= $vo->sqEspecie;
+		$filtro->cdAtrOrdenacao = vocontrato::getNmTabela().".".vocontrato::$nmAtrSqContrato;	
+		
+		//$filtro->$dtReferenciaContrato= getDataHoje();
+		//$filtro->$dtReferenciaContrato= "01/01/2016";
 
 		$recordSet = $db->consultarPessoaPorContrato($filtro);
 		$retorno = getCampoContratada("","","");
 		if($recordSet != ""){
-			$retorno = getCampoContratada($recordSet[0][vopessoa::$nmAtrNome], $recordSet[0][vopessoa::$nmAtrDoc], $recordSet[0][vocontrato::$nmAtrSqContrato]); 
+			$tam = count($recordSet);
+			
+			$retorno = "";
+			for($i=0;$i<$tam;$i++){
+				$registro = $recordSet[$i];
+				$retorno .= getCampoContratada($registro[vopessoa::$nmAtrNome], $registro[vopessoa::$nmAtrDoc], $chave). "<br>";
+			}
 		}
 		
 		/*if($recordSet != ""){

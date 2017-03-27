@@ -133,11 +133,17 @@ function confirmar() {
 	            <TD class="campoformulario" colspan=3>				
 	            <INPUT type="text" value="<?=$vo->texto?>"  class="camporeadonly" size="80" readonly>	            	                        	                        
 	        </TR>	        	        
-	        <?php	        	        	        
+	        <?php
+	        if($voDemandaContrato->voContrato != null){
+	        	$voContrato = $voDemandaContrato->voContrato;
+	        }
+	          
+ 	        require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
+ 	        getContratoDetalhamento($voContrato, $colecao);
+	        
 	        //so exibe contrato se tiver
-	        if($voDemandaContrato->sqContrato != null){
-	        	$voContrato = new vocontrato();
-	        	$voContrato->getDadosBanco($colecao);
+	        /*if($voDemandaContrato->voContrato != null){
+	        	$voContrato = $voDemandaContrato->voContrato;	        	
 	        	
 	        	require_once (caminho_funcoes."contrato/dominioTipoContrato.php");
 	        	$dominioTipoContrato = new dominioTipoContrato();
@@ -149,14 +155,24 @@ function confirmar() {
 	        	$nmpessoa = $colecao[vopessoa::$nmAtrNome];
 	        	$docpessoa = $colecao[vopessoa::$nmAtrDoc];
 	        	$campoContratado = getCampoContratada($nmpessoa, $docpessoa, $voContrato->sq);	        	
-	        ?>	        
+	        ?>	
 			<TR>
+	            <INPUT type="hidden" id="<?=vocontrato::$nmAtrAnoContrato?>" name="<?=vocontrato::$nmAtrAnoContrato?>" value="<?=$voContrato->anoContrato?>">
+				<INPUT type="hidden" id="<?=vocontrato::$nmAtrCdContrato?>" name="<?=vocontrato::$nmAtrCdContrato?>" value="<?=$voContrato->cdContrato?>">	            			  
+				<INPUT type="hidden" id="<?=vocontrato::$nmAtrTipoContrato?>" name="<?=vocontrato::$nmAtrTipoContrato?>" value="<?=$voContrato->tipo?>">
                 <TH class="campoformulario" nowrap width=1%>Contrato:</TH>
 				<TD class="campoformulario" colspan=3>Número:&nbsp;&nbsp;&nbsp;&nbsp;
-				<INPUT type="text" value="<?php echo($contrato);?>"  class="camporeadonlyalinhadodireita" size="<?=strlen($contrato)?>" readonly>
+				<INPUT type="text" value="<?php echo($contrato);?>"  class="camporeadonlyalinhadodireita" size="<?=strlen($contrato)?>" readonly>				
 				<div id=""><?=$campoContratado?></div></TD>
+            </TR>	                
+            <?php }*/?>
+            
+			<TR>
+	            <TH class="campoformulario" nowrap width="1%">Data.Referência:</TH>
+	            <TD class="campoformulario" colspan=3>	            	            	            
+	            <INPUT type="text" value="<?=getData($vo->dtReferencia);?>"  class="camporeadonly" size="12" readonly>
+            	</TD>	        
             </TR>
-            <?php }?>	        
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Situação:</TH>
 	            <TD class="campoformulario" colspan=3>

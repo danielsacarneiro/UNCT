@@ -69,6 +69,23 @@ include_once ("bibliotecaFuncoesPrincipal.php");
 		return $sqlFinal;
 	}
 	
+	function getSQLDataVigenteSimplesPorData(
+			$pNmTableEntidade,
+			$pDataComparacao,
+			$pNmColDtInicioVigencia,
+			$pNmColDtFimVigencia) {
+		
+				return getSQLDataVigente(
+						$pNmTableEntidade,
+						null,
+						null,
+						null,
+						$pDataComparacao,
+						$pNmColDtInicioVigencia,
+						$pNmColDtFimVigencia);		
+	}
+	
+	
 	function getSQLDataVigente(
 		$pNmTableEntidade,
 		$pNmColSequencial,
