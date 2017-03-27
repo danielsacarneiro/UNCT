@@ -151,8 +151,9 @@ Class voDemanda extends voentidade{
 		$this->prioridade = @$_POST[self::$nmAtrPrioridade];
 		$this->dtReferencia = @$_POST[self::$nmAtrDtReferencia];
 		//quando existir
-		//recupera quando da consulta da contratada, ao inserir o contrato na tela
+		//recupera quando da consulta da contratada, ao inserir o contrato na tela		
 		$chaveContrato = @$_POST[vopessoa::$ID_CONTRATO];
+		echo "chave contrato:" . $chaveContrato;
 		if($chaveContrato != null){			
 			$voContrato = new vocontrato();
 			$voContrato->getChavePrimariaVOExplodeParam($chaveContrato);

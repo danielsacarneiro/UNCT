@@ -48,6 +48,7 @@ Class dbDemanda extends dbprocesso{
 		$isHistorico = $filtro->isHistorico;
 		$nmTabela = $vo->getNmTabelaEntidade($isHistorico);
 		$nmTabelaTramitacao = voDemandaTramitacao::getNmTabela();
+		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabela();
 		
 		$colunaUsuHistorico = "";
 		
@@ -83,7 +84,11 @@ Class dbDemanda extends dbprocesso{
 		$queryJoin .= "\n AND ".$nmTabelaTramitacao.".".voDemandaTramitacao::$nmAtrCd." = TABELA_MAX.".voDemandaTramitacao::$nmAtrCd;
 		$queryJoin .= "\n AND ".$nmTabelaTramitacao.".".voDemandaTramitacao::$nmAtrSq." = TABELA_MAX.".voDemandaTramitacao::$nmAtrSq;
 		
-		//echo $query;
+		$queryJoin .= "\n LEFT JOIN ";
+		$queryJoin .= $nmTabelaDemandaContrato;
+		$queryJoin .= "\n ON ".$nmTabela.".".voDemanda::$nmAtrAno." = " . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoDemanda;
+		$queryJoin .= "\n AND ".$nmTabela.".".voDemanda::$nmAtrCd." = " . $nmTabelaDemandaContrato. ".". voDemandaContrato::$nmAtrCdDemanda;
+				
 		return parent::consultarMontandoQueryTelaConsulta($vo, $filtro, $arrayColunasRetornadas, $queryJoin);		
 	}
 	

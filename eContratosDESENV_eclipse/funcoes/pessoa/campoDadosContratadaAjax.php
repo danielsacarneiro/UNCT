@@ -34,7 +34,7 @@ function getDadosContrata($db){
 		//$filtro->$dtReferenciaContrato= "01/01/2016";
 
 		$recordSet = $db->consultarPessoaPorContrato($filtro);
-		$retorno = getCampoContratada("","","");
+		$retorno = getCampoContratada("","",$chave);
 		if($recordSet != ""){
 			$tam = count($recordSet);
 			

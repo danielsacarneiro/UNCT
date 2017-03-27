@@ -74,10 +74,10 @@ function getCampoContratada($pNmContratada, $pDocContratada, $pChaveContrato){
 		$javaScript = "onLoad=''";
 		$retorno = "Contratado: <INPUT type='text' class='camporeadonly' size=40 readonly value='".$pNmContratada."' ".$javaScript.">\n";
 		$retorno .= "&nbsp;CNPJ/CNPF: <INPUT type='text' class='camporeadonly' size=18 readonly value='".$pDocContratada."' ".$javaScript.">\n";
-		$retorno .= "<INPUT type='hidden' id='" . vopessoa::$ID_CONTRATO. "' name='".vopessoa::$ID_CONTRATO."' value='".$pChaveContrato."' >\n";
 		$retorno .= "<INPUT type='hidden' id='" . vopessoa::$ID_NOME_DADOS_CONTRATADA . "' name='".vopessoa::$ID_NOME_DADOS_CONTRATADA."' value='".$pNmContratada."' >\n";
 		$retorno .= "<INPUT type='hidden' id='" . vopessoa::$ID_DOC_DADOS_CONTRATADA. "' name='".vopessoa::$ID_DOC_DADOS_CONTRATADA."' value='".$pDocContratada."' >\n";
 	}
+	$retorno .= "<INPUT type='hidden' id='" . vopessoa::$ID_CONTRATO. "' name='".vopessoa::$ID_CONTRATO."' value='".$pChaveContrato."' >\n";
 
 	return $retorno;
 }

@@ -7,6 +7,7 @@ class filtroManterDemanda extends filtroManter{
 
 	public $nmFiltro = "filtroManterDemanda";
 	var $vodemanda;
+	var $vocontrato;
 	
 	// ...............................................................
 	// construtor
@@ -14,6 +15,8 @@ class filtroManterDemanda extends filtroManter{
 		parent::__construct(true);
 		
 		$vodemanda = new voDemandaTramitacao();
+		$vocontrato = new vocontrato();
+		
 		$vodemanda->cd  = @$_POST[voDemanda::$nmAtrCd];
 		$vodemanda->ano  = @$_POST[voDemanda::$nmAtrAno];
 		$vodemanda->cdSetor = @$_POST[voDemanda::$nmAtrCdSetor];
@@ -22,7 +25,12 @@ class filtroManterDemanda extends filtroManter{
 		$vodemanda->situacao  = @$_POST[voDemanda::$nmAtrSituacao];
 		$vodemanda->prioridade  = @$_POST[voDemanda::$nmAtrPrioridade];
 		
+		$vocontrato->anoContrato = @$_POST[vocontrato::$nmAtrAnoContrato];
+		$vocontrato->cdContrato = @$_POST[vocontrato::$nmAtrCdContrato];
+		$vocontrato->tipo = @$_POST[vocontrato::$nmAtrTipoContrato];
+		
 		$this->vodemanda = $vodemanda;
+		$this->vocontrato = $vocontrato;
 		
 		if($this->cdOrdenacao == null){
 			$this->cdOrdenacao = constantes::$CD_ORDEM_CRESCENTE;
@@ -35,6 +43,7 @@ class filtroManterDemanda extends filtroManter{
 
 		$nmTabela = voDemanda::getNmTabelaStatic($this->isHistorico);
 		$nmTabelaTramitacao = voDemandaTramitacao::getNmTabelaStatic(false);
+		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic(false);
 					
 		//seta os filtros obrigatorios
 		if($this->isSetaValorDefault()){
@@ -100,6 +109,36 @@ class filtroManterDemanda extends filtroManter{
 			. $nmTabela. "." .voDemanda::$nmAtrSituacao
 			. " = "
 					. $this->vodemanda->situacao
+					;
+		
+					$conector  = "\n AND ";
+		}
+		
+		if($this->vocontrato->anoContrato != null){
+			$filtro = $filtro . $conector
+			. $nmTabelaDemandaContrato. "." .voDemandaContrato::$nmAtrAnoContrato
+			. " = "
+					. $this->vocontrato->anoContrato 
+					;
+		
+					$conector  = "\n AND ";
+		}
+		
+		if($this->vocontrato->cdContrato != null){
+			$filtro = $filtro . $conector
+			. $nmTabelaDemandaContrato. "." .voDemandaContrato::$nmAtrCdContrato
+			. " = "
+					. $this->vocontrato->cdContrato
+					;
+		
+					$conector  = "\n AND ";
+		}
+		
+		if($this->vocontrato->tipo != null){
+			$filtro = $filtro . $conector
+			. $nmTabelaDemandaContrato. "." .voDemandaContrato::$nmAtrTipoContrato
+			. " = "
+					. getVarComoString($this->vocontrato->tipo)
 					;
 		
 					$conector  = "\n AND ";

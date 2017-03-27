@@ -35,7 +35,7 @@ cabecalho;
 
 	f3 = new Tree('Contratos');
 	f3.adicionarItem(new Link("Manter Contratos", "<?=caminho_funcoesHTML?>contrato", ""));
-	//f3.adicionarItem(new Link("Manter Contrato Tramitação (NAO USAR)", "<?=caminho_funcoesHTML?>contrato_tram", ""));	
+	f3.adicionarItem(new Link("Manter Contrato Tramitação (NAO USAR)", "<?=caminho_funcoesHTML?>contrato_tram", ""));	
 	f.adicionarItem(f3);
 
 	f4 = new Tree('Demandas');

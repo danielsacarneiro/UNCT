@@ -210,8 +210,7 @@ class dbprocesso{
 		$querySelect = "SELECT ". $atributos;
 		
 		$queryFrom = $this->getQueryFrom_NmUsuarioTabelaAComparar($vo, $nmTabelaACompararCdUsuario, $queryJoin, $isHistorico);
-							
-		//echo $query;		
+				
 		$retorno = $this->consultarFiltro($filtro, $querySelect, $queryFrom, $validaConsulta);
 		if($retorno != "" && $isConsultaPorChave){
 			$retorno = $retorno[0];
