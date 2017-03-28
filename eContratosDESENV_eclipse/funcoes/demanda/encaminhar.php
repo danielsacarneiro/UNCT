@@ -83,7 +83,7 @@ function confirmar() {
 	return confirm("Confirmar Alteracoes?");    
 }
 
-function carregaContratada() {
+/*function carregaContratada() {
 	<?php 
 	$nmCampoDiv = vopessoa::$nmAtrNome;
 	?>
@@ -96,7 +96,7 @@ function carregaContratada() {
 	pNmCampoDiv = '<?=$nmCampoDiv;?>';
 	
 	carregaDadosContratada(pNmCampoAnoContrato, pNmCampoTipoContrato, pNmCampoCdContrato, pNmCampoCdEspecieContrato, pNmCampoSqEspecieContrato,pNmCampoDiv);    
-}
+}*/
 
 function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	chave = ano
@@ -135,7 +135,7 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	        $comboSetor = new select(dominioSetor::getColecao());
 	        $comboSituacao = new select(dominioSituacaoDemanda::getColecao());
 	        $comboPrioridade = new select(dominioPrioridadeDemanda::getColecao());
-	        $selectExercicio = new selectExercicio();	         
+	        $selectExercicio = new selectExercicio();
 	        
 	        $votram->dtReferencia = dtHoje;
 	        
@@ -213,22 +213,17 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	            <?php echo "Ano: " . $selectExercicio->getHtmlCombo(voDemanda::$nmAtrAno,voDemanda::$nmAtrAno, anoDefault, true, "campoobrigatorio", false, " required ");?>
 	            <?php echo "Tipo: " . $comboTipo->getHtmlCombo(voDemanda::$nmAtrTipo,voDemanda::$nmAtrTipo, $vo->tipo, true, "campoobrigatorio", false, " required ");?>			  
 	        </TR>
-	        <?php 
-	        	require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioTipoContrato.php");
-	        	$combo = new select(dominioTipoContrato::getColecao());
-	        	require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioEspeciesContrato.php");
-	        	$comboEspecie = new select(dominioEspeciesContrato::getColecao());	        	
-			  ?>			            
+	        <?php	        
+	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
+	        $arrayCssClass = array("campoobrigatorio","campoobrigatorio", "campoobrigatorio");
+	        $arrayComplementoHTML = array(" required onChange='carregaContratada();' ",
+	        		" required onBlur='carregaContratada();' ",
+	        		" onChange='carregaContratada();' "	        		
+	        );	        
+	        ?>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" colspan=3>
-	            <?php echo $combo->getHtmlCombo(vocontrato::$nmAtrTipoContrato,vocontrato::$nmAtrTipoContrato, "", true, "camponaoobrigatorio", false, " required onChange='carregaContratada();' ");?>
-	            Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=vocontrato::$nmAtrCdContrato?>" name="<?=vocontrato::$nmAtrCdContrato?>"  value="<?php echo(complementarCharAEsquerda($vo->cdContrato, "0", TAMANHO_CODIGOS_SAFI));?>"  class="<?=$classChaves?>" size="4" maxlength="3" <?=$readonlyChaves?> required onBlur='carregaContratada();'>
-	            <?php echo "Ano: " . $selectExercicio->getHtmlCombo(vocontrato::$nmAtrAnoContrato,vocontrato::$nmAtrAnoContrato, $vo->anoContrato, true, "campoobrigatorio", false, " required onChange='carregaContratada();'");?>
-				<?php echo "<br>Espécie: " . $comboEspecie->getHtmlCombo(vocontrato::$nmAtrCdEspecieContrato,vocontrato::$nmAtrCdEspecieContrato, $vo->cdespecie, true, "campoobrigatorio", false, " required onChange='carregaContratada();'");?>	            
-         		Seq: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=vocontrato::$nmAtrSqEspecieContrato?>" name="<?=vocontrato::$nmAtrSqEspecieContrato?>"  value="<?php echo(complementarCharAEsquerda($vo->sqEspecie, "0", TAMANHO_CODIGOS_SAFI));?>"  class="camponaoobrigatorio" size="3" maxlength="3" <?=$readonlyChaves?> onBlur='carregaContratada();'> º
-			  <div id="<?=$nmCampoDiv?>">
-	          </div>
+	            <TD class="campoformulario" colspan=3><?php getContratoEntradaDeDados($tipoContrato, $anoContrato, $cdContrato, $arrayCssClass, $arrayComplementoHTML, $nmCampoDiv);?></TD>
 	        </TR>	        
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Setor Origem:</TH>

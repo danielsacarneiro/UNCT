@@ -3,9 +3,9 @@ include_once(caminho_util."dominio.class.php");
 include_once(caminho_util."constantes.class.php");
 
 Class dominioPrioridadeDemanda extends dominio{
-	static $CD_PRIORI_ALTA = 1;
+	static $CD_PRIORI_ALTA = 3;
 	static $CD_PRIORI_MEDIA = 2;
-	static $CD_PRIORI_BAIXA = 3;	
+	static $CD_PRIORI_BAIXA = 1;	
 
 	static $DS_PRIORI_ALTA = "Alta";
 	static $DS_PRIORI_MEDIA = "Média";

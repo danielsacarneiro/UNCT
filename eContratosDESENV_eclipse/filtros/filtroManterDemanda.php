@@ -186,7 +186,7 @@ class filtroManterDemanda extends filtroManter{
 		$nmTabelaDemanda = voDemanda::getNmTabelaStatic($this->isHistorico);
 		$varAtributos = array(
 				voDemanda::$nmAtrPrioridade => "Prioridade",
-				voDemanda::$nmAtrDhInclusao => "Data",
+				voDemanda::$nmAtrDtReferencia => "Data",
 				$nmTabelaDemanda . "." . voDemanda::$nmAtrCd => "Número"
 		);
 		return $varAtributos;
