@@ -3,50 +3,15 @@ ALTER DATABASE unct CHARACTER SET utf8 COLLATE utf8_general_ci;
 -- ALTER DATABASE unct CHARACTER SET Latin1 COLLATE latin1_general_ci;
 -- ALTER DATABASE `sua_base` CHARSET = Latin1 COLLATE = latin1_swedish_ci;
 
-drop table contrato_import;
-
-CREATE TABLE contrato_import (
-    sq INT NOT NULL AUTO_INCREMENT,
-    ct_exercicio INT,
-    ct_numero INT,
-    ct_tipo char(1),
-	ct_especie VARCHAR(50) , -- CHAR(2),
-    ct_objeto LONGTEXT,
-    ct_gestor_pessoa VARCHAR(300) ,
-    ct_gestor VARCHAR(200) ,
-	ct_processo_lic VARCHAR(300),
-    ct_modalidade_lic VARCHAR(300),
-    
-	ct_data_public VARCHAR(300),
-    ct_dt_assinatura DATE,
-    ct_dt_vigencia_inicio DATE,
-    ct_dt_vigencia_fim DATE,
-    
-    ct_contratada VARCHAR(300),
-    ct_doc_contratada VARCHAR(30),
-    ct_num_empenho VARCHAR(20),
-    
-    ct_tp_autorizacao VARCHAR(15), -- CHAR(2),
-    ct_in_licom CHAR(1),
-    ct_observacao LONGTEXT,
-    
-    ct_valor_global DECIMAL (14,4),
-    ct_valor_mensal DECIMAL (14,4),
-    dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
-    
-    CONSTRAINT pk_contrato PRIMARY KEY (sq, ct_exercicio, ct_numero, ct_tipo)
-);
-
 drop table contrato;
 CREATE TABLE contrato (
     sq INT NOT NULL AUTO_INCREMENT,
-    ct_exercicio INT,
-    ct_numero INT,
-    ct_tipo char(1),
+    ct_exercicio INT NOT NULL,
+    ct_numero INT NOT NULL,
+    ct_tipo char(1) NOT NULL,
 	ct_especie VARCHAR(50),
-    ct_sq_especie INT,
-	ct_cd_especie INT,
+    ct_sq_especie INT DEFAULT 1 NOT NULL, -- indice do documento em questao (primeiro ou segundo apostilamento, por ex)
+    ct_cd_especie CHAR(2) NOT NULL, -- especie do registro (mater, apostilamento, aditivo)
 	ct_cd_situacao CHAR(2),
     ct_objeto LONGTEXT,
     ct_gestor_pessoa VARCHAR(300) ,
@@ -71,6 +36,7 @@ CREATE TABLE contrato (
     ct_observacao LONGTEXT,    
     ct_valor_global DECIMAL (14,4),
     ct_valor_mensal DECIMAL (14,4),
+    ct_doc_link TEXT NULL,
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_incl INT,
@@ -93,6 +59,9 @@ ALTER TABLE contrato ADD CONSTRAINT fk_ct_pessoa_resp FOREIGN KEY ( pe_cd_resp )
 ALTER TABLE contrato ADD CONSTRAINT fk_ct_pessoa_contratada FOREIGN KEY ( pe_cd_contratada ) REFERENCES pessoa (pe_cd) 
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;
+    
+ALTER TABLE contrato ADD UNIQUE KEY chave_logica_contrato (ct_exercicio, ct_numero, ct_tipo, ct_cd_especie, ct_sq_especie); 
+    
 
 -- show create table contrato;
 
@@ -114,8 +83,8 @@ CREATE TABLE contrato_hist (
     ct_numero INT,
     ct_tipo char(1),
 	ct_especie VARCHAR(50),
-    ct_sq_especie INT,
-    ct_cd_especie INT,
+    ct_sq_especie INT, -- indice do documento em questao (primeiro ou segundo apostilamento, por ex)
+    ct_cd_especie CHAR(2), -- especie do registro (mater, apostilamento, aditivo)
 	ct_cd_situacao CHAR(2),
     ct_objeto LONGTEXT,
     ct_gestor_pessoa VARCHAR(300) ,
@@ -140,6 +109,7 @@ CREATE TABLE contrato_hist (
     ct_observacao LONGTEXT,    
     ct_valor_global DECIMAL (14,4),
     ct_valor_mensal DECIMAL (14,4),
+    ct_doc_link TEXT NULL,
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_incl INT,
@@ -148,4 +118,24 @@ CREATE TABLE contrato_hist (
     
     CONSTRAINT pk PRIMARY KEY (hist)
 );
+
+
+drop table contrato_tram;
+CREATE TABLE contrato_tram (
+    ct_exercicio INT NOT NULL, -- CHAVE CONTRATO
+    ct_numero INT NOT NULL,
+    ct_tipo char(1) NOT NULL,    
+    sq_tram BIGINT NOT NULL, -- chave tramitacao
+    sq_indice INT NOT NULL, 
+        
+    CONSTRAINT pk PRIMARY KEY (	ct_exercicio, ct_numero, ct_tipo, sq_tram)
+);
+
+ALTER TABLE contrato_tram ADD CONSTRAINT fk_ct_tram_contrato FOREIGN KEY (ct_exercicio, ct_numero, ct_tipo) REFERENCES contrato (ct_exercicio, ct_numero, ct_tipo) 
+	ON DELETE RESTRICT
+	ON UPDATE RESTRICT;
+
+ALTER TABLE contrato_tram ADD CONSTRAINT fk_ct_tram_tram FOREIGN KEY (sq_tram) REFERENCES tramitacao (sq_tram) 
+	ON DELETE RESTRICT
+	ON UPDATE RESTRICT;
 

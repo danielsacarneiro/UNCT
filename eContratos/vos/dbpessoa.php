@@ -86,10 +86,11 @@ include_once (caminho_vos. "dbpessoagestor.php");
     	$atributosConsulta .= "," . vopessoa::getNmTabela() . "." . vopessoa::$nmAtrEmail;
     	$atributosConsulta .= "," . vopessoa::getNmTabela() . "." . vopessoa::$nmAtrTel;
     	$atributosConsulta .= "," . vopessoavinculo::getNmTabela() . "." . vopessoavinculo::$nmAtrCd;
+    	$atributosConsulta .= "," . vocontrato::getNmTabela() . "." . vocontrato::$nmAtrSqContrato;
     	 
     	//$atributoVinculo = "(SELECT )"
     	 
-    	$querySelect = "SELECT ". $atributosConsulta;
+    	$querySelect = "SELECT DISTINCT ". $atributosConsulta;
     
     	$queryFrom = "\n FROM ". vopessoa::getNmTabela();
     	$queryFrom .= "\n INNER JOIN ". vopessoavinculo::getNmTabela();

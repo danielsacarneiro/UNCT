@@ -38,7 +38,7 @@ include_once(caminho_vos."vousuario.php");
         define('name_user', $nomeUsuario);
         
         define('anoDefault', date('Y'));
-        define('dtHoje', date('d/m/Y'));
+        define('dtHoje', getDataHoje());
         define('dtHojeSQL', date('Y/m/d'));        
     }
            
@@ -120,20 +120,7 @@ include_once(caminho_vos."vousuario.php");
 		
 		return $retorno;
 	}
-	
-	function getData($dataSQL) {
-		$retorno = null;
-
-		if ($dataSQL != null){            
-            if($dataSQL == "0000-00-00")
-                $retorno = mensagens::$msgDataErro;
-            else if ($dataSQL != null && $dataSQL != "0000-00-00")
-                $retorno = date("d/m/Y", strtotime($dataSQL));            
-        }
-        
-		return $retorno;
-	}	
-
+		
 	function getMoeda($valorSQL) {
 		$retorno = "";
 		if ($valorSQL != null)
@@ -148,21 +135,7 @@ include_once(caminho_vos."vousuario.php");
 				);
 	 return $varAtributos;	
 	}
-	
-	function getAtributosOrdenacaoContrato(){
-	 $varAtributos = array(
-				"ct_exercicio" => "Ano",
-				"ct_numero" => "Numero",
-				"ct_tipo" => "Tipo",
-				"ct_especie" => "Especie",
-                "ct_contratada" => "Contratada",
-				"ct_dt_vigencia_inicio" => "Dt.Inicio",
-				"ct_dt_vigencia_fim"  => "Dt.Fim",
-				"ct_valor_global" => "Vl.Global" 
-				);
-	 return $varAtributos;	
-	}    
-    	
+	    	
 	function incluirUsuarioDataHoraDetalhamento($voEntidade){
         $USUARIO_BATCH = "IMPORT.PLANILHA";
         $nmusuinclusao = $voEntidade->nmUsuarioInclusao;
@@ -222,7 +195,42 @@ include_once(caminho_vos."vousuario.php");
 	            			size='20' 
 	            			readonly>
 				</TD>
-			</TR>";        
+			</TR>";
+        
+        if($voEntidade->sqHist != null){
+        	$nmusuHistorico = $voEntidade->nmUsuarioOperacao;
+        	
+        	$retorno .= "\n<TR>\n"
+        			. "<TH class='textoseparadorgrupocampos' halign='left' colspan='4'>"
+        			. "<DIV class='campoformulario' id='div_tramitacao'>&nbsp;&nbsp;Dados do Histórico"
+        			. "</DIV>"
+        			. "</TH>"
+        			. "</TR>";
+        	 
+	        $retorno .=
+	       		 "<TR>
+		            <TH class='campoformulario' nowrap>Data:</TH>
+		            <TD class='campoformulario'>
+		            	<INPUT type='text'
+		            	       id='".voentidade::$nmAtrDhOperacao."'
+		            	       name='".voentidade::$nmAtrDhOperacao."'
+		            			value='".getDataHoraSQLComoString($voEntidade->dhOperacao)."'
+		            			class='camporeadonly'
+		            			size='20'
+		            			maxlength='10' readonly>
+					</TD>
+		            <TH class='campoformulario' nowrap>Usuário:</TH>
+		            <TD class='campoformulario'>
+		            	<INPUT type='text'
+		            	       id='".voentidade::$nmAtrCdUsuarioOperacao."'
+		            	       name='".voentidade::$nmAtrCdUsuarioOperacao."'
+		            			value='".$nmusuHistorico."'
+		            			class='camporeadonly'
+		            			size='20'
+		            			readonly>
+					</TD>
+				</TR>";
+        }
         
     //    return utf8_decode($retorno);
         return $retorno;
@@ -231,11 +239,14 @@ include_once(caminho_vos."vousuario.php");
     function getDsEspecie($voContrato){
         $retorno = null;
         $especiesContrato = new dominioEspeciesContrato();
-        
+        $cdEspecie = $voContrato->cdEspecie;
         $especie = $voContrato->especie;
-        $sqEspecie = $voContrato->sqEspecie;
-        $cdEspecie = $voContrato->cdEspecie;        
-        if($especie != null || $cdEspecie != null){                               
+        if($cdEspecie != dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER){
+        	$sqEspecie = $voContrato->sqEspecie;
+        }
+                
+        if($especie != null || $cdEspecie != null){ 
+        	
             if($sqEspecie != null)
                 $sqEspecie = $sqEspecie . "º";
                 
@@ -340,6 +351,12 @@ include_once(caminho_vos."vousuario.php");
     }
     
     function getBotoesRodape(){
+    	return getBotoesRodapeComRestricao(null);
+    }
+    
+    function getBotoesRodapeComRestricao($arrayBotoesARemover){
+    	
+    	$temAlterar = !existeItemNoArray(constantes::$CD_FUNCAO_ALTERAR, $arrayBotoesARemover);
     	
     	$isManutencao = false;
     	$isDetalhamento = false;
@@ -366,7 +383,7 @@ include_once(caminho_vos."vousuario.php");
     		if(!$isDetalhamento){
 	    		if(getBotaoIncluir() != "")
 		    		$html.=     "<TD class='botaofuncao'>".getBotaoIncluir()."</TD>\n";
-		    	if(getBotaoAlterar() != "")
+		    	if(getBotaoAlterar() != "" && $temAlterar)
 		    		$html.=     "<TD class='botaofuncao'>".getBotaoAlterar()."</TD>\n";
 		    	if(getBotaoExcluir() != "")
 		    		$html.=     "<TD class='botaofuncao'>".getBotaoExcluir()."</TD>\n";
@@ -401,8 +418,29 @@ include_once(caminho_vos."vousuario.php");
 		return $html;
     }
     
+    function getBorracha($nmCampos){
+   	
+		$tam = count($nmCampos);		
+		
+		$js = "";
+    	for($i=0;$i<$tam;$i++){
+    		$nmCampoAtual = $nmCampos[$i];    		
+    		$js.= "document.frm_principal." .$nmCampoAtual.".value='';";
+    	}
+    	    	
+    	$html = "&nbsp;&nbsp;<a onClick=\"javascript:".$js."\" ><img  title='Limpar' src='"
+    			.caminho_imagens
+    			."borracha.jpg' width='15' height='15' A style='CURSOR: POINTER'></a>\n";
+    
+    	return $html;
+    }
+    
     function temPermissao(){
         return temPermissaoParamHistorico(false);
+    }
+    
+    function isUsuarioAdmin(){
+    	return temPermissaoParamHistorico(true);
     }
     
     function temPermissaoParamHistorico($isHistorico){
@@ -427,7 +465,8 @@ include_once(caminho_vos."vousuario.php");
     }
     
     function getComponenteConsultaFiltro($temHistorico, $filtro){
-    	$comboOrdenacao = $filtro->getAtributosOrdenacao();
+    	//$comboOrdenacao = $filtro->getAtributosOrdenacao();
+    	$comboOrdenacao = $filtro->getComboOrdenacao();    	
     	
     	return getComponenteConsultaPaginacao($comboOrdenacao, $filtro->cdAtrOrdenacao, $filtro->cdOrdenacao, $filtro->TemPaginacao, 
     			$filtro->qtdRegistrosPorPag, $temHistorico, $filtro->cdHistorico);
@@ -452,7 +491,8 @@ include_once(caminho_vos."vousuario.php");
                     <TH class='campoformulario' width='1%'>Consulta:</TH>
                     <TD class='campoformulario' valign='bottom' colspan='3' width='90%' nowrap>\n";
                     
-        if($comboOrdenacao != null){ 
+        //var_dump($comboOrdenacao);
+        if($comboOrdenacao != null && $comboOrdenacao != ""){ 
         	//echo $cdOrdenacao;
             $html .= "Coluna:"
                     . $comboOrdenacao->getHtmlOpcao("cdAtrOrdenacao","cdAtrOrdenacao", $cdAtrOrdenacao, false)
@@ -473,7 +513,7 @@ include_once(caminho_vos."vousuario.php");
         $html .= "<TD class='campoformularioalinhadodireita'> <a href='javascript:limparFormulario();' ><img  title='Limpar' src='".caminho_imagens."borracha.jpg' width='20' height='20'></a></TD>
                     </TR>";*/
         $html .= "&nbsp;<button id='localizar' class='botaoconsulta' type='submit'>Consultar</button>\n";
-        $html .= "&nbsp;&nbsp;&nbsp;<a href='javascript:limparFormulario();' ><img  title='Limpar' src='".caminho_imagens."borracha.jpg' width='20' height='20'></a></TD>\n
+        $html .= "&nbsp;&nbsp;&nbsp;<a href='javascript:limparFormularioGeral();' ><img  title='Limpar' src='".caminho_imagens."borracha.jpg' width='20' height='20'></a></TD>\n
                     </TR>";
         
         return $html;        
@@ -549,9 +589,8 @@ include_once(caminho_vos."vousuario.php");
     function getObjetoSessao($ID){
     	session_start();
     	
-    	/*$objeto = null;
-    	if(isset($_SESSION[$ID]))*/
-    	$objeto = null;
+    	$objeto = null;   	 	   	
+    	 
     	if($_SESSION[$ID] != null){
     		$objeto = $_SESSION[$ID];
     	}
@@ -570,15 +609,26 @@ include_once(caminho_vos."vousuario.php");
     	unset($_SESSION[$ID]);
     }
     
+    function formatarCodigoContrato($cd, $ano, $tipo){   
+    	require_once ("../contrato/dominioTipoContrato.php");
+    	
+    	$dominioTipoContrato = new dominioTipoContrato();
+    	$complemento = $dominioTipoContrato->getDescricao($tipo);    	     		 
+    	return formatarCodigoAnoComplemento($cd, $ano, $complemento);
+    }
+    
     function formatarCodigoAnoComplemento($cd, $ano, $complemento){
-    	$retorno = complementarCharAEsquerda($cd, "0", TAMANHO_CODIGOS_SAFI)
-    	. "/" . $ano;
+    	$retorno = ""; 
+    	if($complemento != null && $complemento != ""){
+    		$retorno .= $complemento . " ";
+    	}
     	
-    	if($complemento != null&& $complemento != "")
-    		$retorno .= "-" . $complemento;
-    	
-    	return $retorno;
-    	 
+    	//echo "tipo:" . $complemento;
+    		 
+    	$retorno .= complementarCharAEsquerda($cd, "0", TAMANHO_CODIGOS_SAFI)
+    		. "-" . $ano;
+    	    	
+    	return $retorno;    	 
     }
     
     function formatarCodigoAno($cd, $ano){
@@ -590,6 +640,6 @@ include_once(caminho_vos."vousuario.php");
     }
     
     function getDataHoje(){
-    	return dtHoje;
+    	return date('d/m/Y');
     }        
     ?>

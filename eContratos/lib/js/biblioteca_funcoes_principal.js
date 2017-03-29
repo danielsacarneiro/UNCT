@@ -128,11 +128,28 @@ function tratarUnload() {
 	ocultarMensagemAguarde();
 }
 
-function limparFormulario() {	
+function limparFormularioGeral(){	
 
-	for(i=0;i<frm_principal.length;i++){
-		frm_principal.elements[i].value='';
-	}	
+	frm_principal.reset();
+	for(i=0;i<frm_principal.length;i++){		
+					
+		element = frm_principal.elements[i];		
+		//retira os campos que nao serao resetados 
+		naoValidar = element.name == "cdAtrOrdenacao" 
+						|| element.name == "qtdRegistrosPorPag" 
+						|| element.name == "utilizarSessao"
+						|| element.name == "consultar"
+						|| element.name == "cdHistorico"							
+						|| element.name == "cdOrdenacao"; 
+		if(!naoValidar){
+			//alert(element.type);		
+			if(element.type == 'select-one'){
+				element[0].selected = true;			
+			}else {		
+				element.value='';
+			}
+		}
+	}
 }
 
 // Confirma a execução de uma operação. Se pTexto for nulo, será exibida uma mensagem padrão de confirmação.

@@ -66,6 +66,7 @@ setCabecalho($titulo);
 <?=setTituloPagina(null)?>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_cnpfcnpj.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_oficio.js"></SCRIPT>
 
 <SCRIPT language="JavaScript" type="text/javascript">
 
@@ -152,7 +153,7 @@ function confirmar() {
             <TH class="campoformulario" nowrap>Responsavel:</TH>
             <TD class="campoformulario" colspan="3">
                 <?php
-                 include_once(caminho_funcoes. "gestor_pessoa/biblioteca_htmlGestorPessoa.php");
+                 include_once(caminho_funcoes. "pessoa/biblioteca_htmlPessoa.php");
                  if($voContrato->cdGestorPessoa != null)
                     echo getComboGestorPessoaMais(new dbgestorpessoa(), vocontrato::$nmAtrCdGestorPessoaContrato, vocontrato::$nmAtrCdGestorPessoaContrato, $voContrato->cdGestor, $voContrato->cdGestorPessoa, "camporeadonly", " disabled ");
                  
@@ -273,7 +274,7 @@ function confirmar() {
 	
         <TH class="campoformulario" nowrap>Autorizacao Previa:</TH>
         <TD class="campoformulario" colspan="3"><?php echo $combo->getHtmlCombo(vocontrato::$nmAtrCdAutorizacaoContrato,vocontrato::$nmAtrCdAutorizacaoContrato, $voContrato->cdAutorizacao, true, "camporeadonly", true, " disabled");?>
-        <INPUT type="text" id="<?=vocontrato::$nmAtrTipoAutorizacaoContrato?>" name="<?=vocontrato::$nmAtrTipoAutorizacaoContrato?>"  value="<?php echo($tpAutorizacao);?>"  class="camporeadonly" size="10" <?=$readonly?>></TD>
+        <!-- <INPUT type="text" id="<?=vocontrato::$nmAtrTipoAutorizacaoContrato?>" name="<?=vocontrato::$nmAtrTipoAutorizacaoContrato?>"  value="<?php echo($tpAutorizacao);?>"  class="camporeadonly" size="10" <?=$readonly?>>--></TD> 
     </TR>
 	<TR>
         <TH class="campoformulario" nowrap>LICON:</TH>
@@ -285,6 +286,17 @@ function confirmar() {
 			<textarea rows=5 cols="80" id="<?=vocontrato::$nmAtrObservacaoContrato?>" name="<?=vocontrato::$nmAtrObservacaoContrato?>" class="camporeadonly" <?=$readonly?>><?php echo($obs);?></textarea>  
 		</TD>
     </TR>
+	<TR>
+        <TH class="campoformulario" nowrap width="1%">Documento:</TH>
+        <?php
+        $endereco = $voContrato->getLinkDocumento();
+        ?>                
+        <TD class="campoformulario" colspan=3><textarea id="<?=vocontrato::$nmAtrLinkDoc?>" name="<?=vocontrato::$nmAtrLinkDoc?>" rows="2" cols="80" class="camporeadonly" readonly><?php echo  $endereco;?></textarea>
+    	<?php echo getBotaoValidacaoAcesso("bttabrirpasta", "Abrir", "botaofuncaop", false,true,true,true, "onClick=javascript:abrirArquivoCliente('" . vocontrato::$nmAtrLinkDoc. "'); accesskey='m'");?>
+    	<!-- <a href="<?=$endereco?>" download><?=$endereco?></a>-->
+	</TD>                
+	</TR>	        
+    
 	<TR><?=incluirUsuarioDataHoraDetalhamento($voContrato);?></TR>
         </TBODY>
     </TABLE>

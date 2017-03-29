@@ -10,6 +10,29 @@
 // ********************************************************************
 // Fun��es para campos num�ricos
 
+//Funcao js para truncar/cortar string e jogar "..." no final de acordo com o tamanho/size desejado
+//@param str: string do texto pra truncar/cortar. Deve ter o tamanho minimo para comportar os 3 caracteres "..."
+//@param size: tamanho da string antes dos "..."
+function truncarTexto(str, size, pStringAcrescentarAoFim){
+    if (str==undefined || str=='undefined' || str =='' || size==undefined || size=='undefined' || size ==''){
+        return str;
+    }
+    
+    strFim = "";    
+    if(pStringAcrescentarAoFim != null)
+    	strFim = pStringAcrescentarAoFim;
+    
+    tamanho = strFim.length;
+    //alert(tamanho);
+     
+    var shortText = str;
+    if(str.length >= size+tamanho){
+        shortText = str.substring(0, size).concat(strFim);
+    }
+    return shortText;
+}
+
+
 // coloca zeros a esquerda at� o tamnanho m�ximo passado como par�metro
 // Exemplo completarNumeroComZerosEsquerda(12, 4) = 0012
 function completarNumeroComZerosEsquerda(pValor, pTamanhoMaximo){

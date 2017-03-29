@@ -41,10 +41,13 @@ include_once (caminho_util."bibliotecaFuncoesPrincipal.php");
 
     function incluirSQL($voGestor){
         $arrayAtribRemover = array(
-            vogestor::$nmAtrCd,
             vogestor::$nmAtrDhInclusao,
             vogestor::$nmAtrDhUltAlteracao
             );
+        
+        if($voGestor->cd == null || $voGestor->cd == ""){
+        	$voGestor->cd = $this->getProximoSequencial(vogestor::$nmAtrCd, $voGestor);        
+        }
         
         //$voGestor->cd = $this->getProximoSequencial(vogestor::$nmAtrCd, $voGestor);        
         
@@ -53,7 +56,7 @@ include_once (caminho_util."bibliotecaFuncoesPrincipal.php");
 
     function getSQLValuesInsert($voGestor){
 		$retorno = "";
-        //$retorno.= $this-> getVarComoNumero($voGestor->cd) . ",";
+        $retorno.= $this-> getVarComoNumero($voGestor->cd) . ",";
         $retorno.= $this-> getVarComoString($voGestor->descricao);
         
         $retorno.= $voGestor->getSQLValuesInsertEntidade();

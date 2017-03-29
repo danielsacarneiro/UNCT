@@ -99,14 +99,13 @@ function selecionar() {
 	if (window.opener != null) {
 		array = retornarValorRadioButtonSelecionadoComoArray("document.frm_principal.rdb_consulta", "<?=CAMPO_SEPARADOR?>");
 
-		sq = array[0];
+		ano = array[0];
+		cdSetor= array[1];
+		tp = array[2];
+		sq = array[3];
 		sq = completarNumeroComZerosEsquerda(sq, TAMANHO_CODIGOS_DOCUMENTOS);
 		
-		cdSetor= array[1];
-		ano = array[2];
-		tpDoc = array[3];
-		
-		window.opener.transferirDadosDocumento(sq, cdSetor, ano, tpDoc);
+		window.opener.transferirDadosDocumento(sq, cdSetor, ano, tp);
 		window.close();
 	}
 }
@@ -138,21 +137,25 @@ function selecionar() {
 	            $selectExercicio = new selectExercicio();
 	            $domSetor = new dominioSetor();
 	            $comboSetor = new select($domSetor->colecao);
-	            $domTpDoc = new dominioTpDocumento();
-	            $comboTpDoc= new select($domTpDoc->colecao);
+	            $domTp = new dominioTpDocumento();
+	            $comboTp= new select($domTp->colecao);
 			  ?>			            
 			<TR>
-                <TH class="campoformulario" nowrap width="1%">Exercício:</TH>
+                <TH class="campoformulario" nowrap width="1%">Ano:</TH>
                 <TD class="campoformulario" nowrap width="1%"><?php echo $selectExercicio->getHtmlCombo(voDocumento::$nmAtrAno,voDocumento::$nmAtrAno, $filtro->ano, true, "camponaoobrigatorio", false, "");?></TD>
                 <TH class="campoformulario" nowrap width="1%">Setor:</TH>
                 <TD class="campoformulario"><?php echo $comboSetor->getHtmlCombo(voDocumento::$nmAtrCdSetor,voDocumento::$nmAtrCdSetor, $filtro->cdSetor, true, "camponaoobrigatorio", true, "");?></TD>
             </TR>            
 			<TR>
                 <TH class="campoformulario" nowrap width="1%">Tp.Documento:</TH>
-                <TD class="campoformulario"><?php echo $comboTpDoc->getHtmlCombo(voDocumento::$nmAtrTpDoc,voDocumento::$nmAtrTpDoc, $filtro->tpDoc, true, "camponaoobrigatorio", true, "");?></TD>			
+                <TD class="campoformulario"><?php echo $comboTp->getHtmlCombo(voDocumento::$nmAtrTp,voDocumento::$nmAtrTp, $filtro->tp, true, "camponaoobrigatorio", true, "");?></TD>			
                 <TH class="campoformulario" nowrap>Número:</TH>
                 <TD class="campoformulario"><INPUT type="text" id="<?=voDocumento::$nmAtrSq?>" name="<?=voDocumento::$nmAtrSq?>"  value="<?php if($filtro->sq != null) echo complementarCharAEsquerda($filtro->sq, "0", TAMANHO_CODIGOS);?>"  class="camponaoobrigatorio" size="7" ></TD>
-            </TR>            
+            </TR>
+			<TR>
+                <TH class="campoformulario" nowrap width="1%">Assunto:</TH>
+                <TD class="campoformulario" colspan=3><INPUT type="text" id="<?=voDocumento::$nmAtrLink?>" name="<?=voDocumento::$nmAtrLink?>"  value="<?php echo($filtro->link);?>"  class="camponaoobrigatorio" size="50" ></TD>			
+            </TR>                                    
        <?php
         //$comboOrdenacao = new select(voDocumento::getAtributosOrdenacao($cdHistorico));        
         //echo getComponenteConsultaFiltro($comboOrdenacao, false, $filtro);
@@ -177,11 +180,12 @@ function selecionar() {
                   <?php 
                   }
                   ?>
-                    <TH class="headertabeladados" width="1%">Exercício</TH>
-                    <TH class="headertabeladados"width="1%" nowrap >Setor</TH>
-                    <TH class="headertabeladados"width="1%" nowrap >Tp.Documento</TH>
-                    <TH class="headertabeladados"  nowrap >Número</TH>
-                    <TH class="headertabeladados"  nowrap >Nome</TH>
+                    <TH class="headertabeladados" width="1%">Ano</TH>
+                    <TH class="headertabeladados" width="1%" nowrap >Setor</TH>
+                    <TH class="headertabeladados" width="1%" nowrap >Tp.Documento</TH>
+                    <TH class="headertabeladados" width="1%" nowrap >Número</TH>
+                    <TH class="headertabeladados" width="90%" nowrap >Link</TH>
+                    <TH class="headertabeladados"  nowrap >Data</TH>
                 </TR>
                 <?php								
                 if (is_array($colecao))
@@ -191,7 +195,7 @@ function selecionar() {
                                 
                 $colspan=7;
                 if($isHistorico){
-                	$colspan=8;
+                	$colspan++;
                 }
                 
                 for ($i=0;$i<$tamanho;$i++) {
@@ -201,8 +205,8 @@ function selecionar() {
                         $setor = $colecao[$i][voDocumento::$nmAtrCdSetor];
                         $setor = $domSetor->getDescricao($setor);
                         
-                        $tpDoc= $colecao[$i][voDocumento::$nmAtrTpDoc];
-                        $tpDoc = $domTpDoc->getDescricao($tpDoc);
+                        $tp= $colecao[$i][voDocumento::$nmAtrTp];
+                        $tp = $domTp->getDescricao($tp);
                         
                 ?>
                 <TR class="dados">
@@ -218,9 +222,10 @@ function selecionar() {
                   ?>                    
                     <TD class="tabeladados" nowrap><?php echo $voAtual->ano;?></TD>
                     <TD class="tabeladados" nowrap><?php echo $setor;?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $tpDoc;?></TD>
+                    <TD class="tabeladados" nowrap><?php echo $tp;?></TD>
                     <TD class="tabeladados" nowrap><?php echo complementarCharAEsquerda($voAtual->sq, "0", TAMANHO_CODIGOS);?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $voAtual->linkDoc;?></TD>
+                    <TD class="tabeladados"><?php echo $voAtual->link;?></TD>
+                    <TD class="tabeladados" nowrap><?php echo getDataHora($voAtual->dhUltAlteracao);?></TD>
                 </TR>					
                 <?php
 				}				

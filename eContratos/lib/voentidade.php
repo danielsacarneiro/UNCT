@@ -14,20 +14,27 @@
         static $nmAtrSqHist   =  	"hist";
 		static $nmAtrDhInclusao  =  	"dh_inclusao";
         static $nmAtrDhUltAlteracao  =  	"dh_ultima_alt";
+        static $nmAtrDhOperacao =  	"dh_operacao";
         static $nmAtrCdUsuarioInclusao  =  	"cd_usuario_incl";
         static $nmAtrCdUsuarioUltAlteracao   =  	"cd_usuario_ultalt";
+        static $nmAtrCdUsuarioOperacao =  	"cd_usuario_operacao";
 
         static $nmAtrNmUsuarioInclusao  =  	"nm_usuario_incl";
         static $nmAtrNmUsuarioUltAlteracao   =  	"nm_usuario_ultalt";
+        static $nmAtrNmUsuarioOperacao =  	"nm_usuario_operacao";
 
 		var $dhInclusao;
         var $dhUltAlteracao;
+        var $dhOperacao;
         var $cdUsuarioInclusao;
+        var $cdUsuarioOperacao;
         //id_user eh o usuario logado no sistema
         //constante definida em bibliotecaHTML
         var $cdUsuarioUltAlteracao;
         var $nmUsuarioInclusao;
         var $nmUsuarioUltAlteracao;
+        
+        var $nmUsuarioOperacao;
         
         var $sqHist;
     
@@ -46,17 +53,6 @@
     
     // ...............................................................
     // Funcoes ( Propriedades e metodos da classe )     
-    /*function getSQLValuesInsertEntidade(){
-		$retorno = "";        
-        $userManutencao = $this-> cdUsuarioUltAlteracao;
-        if($this-> cdUsuarioInclusao == null)
-            $this-> cdUsuarioInclusao = $userManutencao;
-        
-		$retorno.= $this-> cdUsuarioInclusao . ",";
-		$retorno.= $this-> cdUsuarioUltAlteracao;
-                
-		return $retorno;                
-    }*/
     
     function getSQLValuesInsertEntidade(){
     	$userManutencao = $this->cdUsuarioUltAlteracao;
@@ -122,17 +118,30 @@
         return $atributo . " = " . $valor;
     }    
     
+    function getDadosFormularioEntidade(){
+    	$this->dhUltAlteracao = @$_POST[self::$nmAtrDhUltAlteracao];
+    	$this->sqHist = @$_POST[self::$nmAtrSqHist];
+    	//usuario de ultima manutencao sempre sera o id_user
+    	$this->cdUsuarioUltAlteracao = id_user;
+    }
+    
 	function getDadosBancoEntidade($registrobanco){		
 
         $this->dhInclusao = $registrobanco[voentidade::$nmAtrDhInclusao];
-        $this->dhUltAlteracao = $registrobanco[voentidade::$nmAtrDhUltAlteracao];
+        $this->dhUltAlteracao = $registrobanco[voentidade::$nmAtrDhUltAlteracao];        
+        
         $this->cdUsuarioInclusao = $registrobanco[voentidade::$nmAtrCdUsuarioInclusao];
         $this->cdUsuarioUltAlteracao = $registrobanco[voentidade::$nmAtrCdUsuarioUltAlteracao];
         $this->sqHist= $registrobanco[voentidade::$nmAtrSqHist];
         //$this->cdHistorico = $registrobanco[voentidade::$nmAtrcdSqHist];
         
         $this->nmUsuarioInclusao = $registrobanco[voentidade::$nmAtrNmUsuarioInclusao];
-        $this->nmUsuarioUltAlteracao = $registrobanco[voentidade::$nmAtrNmUsuarioUltAlteracao]; 		
+        $this->nmUsuarioUltAlteracao = $registrobanco[voentidade::$nmAtrNmUsuarioUltAlteracao];        
+        
+        if($this->sqHist != null){
+	        $this->dhOperacao = $registrobanco[voentidade::$nmAtrDhOperacao];
+	        $this->nmUsuarioOperacao = $registrobanco[voentidade::$nmAtrNmUsuarioOperacao];
+        }
 	}
     
 	function getDadosBanco($registrobanco){		
@@ -160,19 +169,29 @@
     }
     
     function getNmTabelaEntidade($isHistorico){
-        $nmTabela = static::getNmTabela();
+       /*$nmTabela = static::getNmTabela();
        if($isHistorico)
             $nmTabela = self::getNmTabelaHistorico();
-        return $nmTabela;
+        return $nmTabela;*/
+       
+       return self::getNmTabelaStatic($isHistorico);
+    }
+    
+    static function getNmTabelaStatic($isHistorico){
+    	$nmTabela = static::getNmTabela();
+    	if($isHistorico){
+    		$nmTabela = self::getNmTabelaHistorico();
+    	}
+    	return $nmTabela;
     }
     
     static function getNmTabelaHistorico(){        
         return static::getNmTabela() . voentidade::$nmTabelaSufixoHistorico;        
     }
     
-    static function getNmTabelaSequencial(){
+    /*static function getNmTabelaSequencial(){
         return static::getNmTabela() . voentidade::$nmTabelaSufixoSequencial;        
-    }
+    }*/
     
     function isIgualChavePrimaria($voentidade){
     	$chaveEntidade = "";
@@ -198,12 +217,19 @@
     
     function getVOExplodeChave(){
     	$chave = @$_GET["chave"];
-    	$this->getVOExplodeChaveParam($chave);
+    	$this->getChavePrimariaVOExplodeParam($chave);
     }
     
-    function getVOExplodeChaveParam($chave){    	
+    function getChavePrimariaVOExplodeParam($chave){    	
     	$array = explode(CAMPO_SEPARADOR,$chave);
-    	$this->getVOExplodeChavePrimaria($array);
+    	$this->getChavePrimariaVOExplode($array);
+    }
+    
+    function getValoresWhereSQLChaveLogicaSemSQ($isHistorico){
+    	//via de regra a chave logica eh igual a chave primaria
+    	//quando for distinta, o metodo getValoresWhereSQLChaveLogica 
+    	//devera ser implementado no vo especifico
+    	return $this->getValoresWhereSQLChave($isHistorico);    	
     }
     
 }

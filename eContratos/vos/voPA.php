@@ -113,6 +113,7 @@ include_once("vocontrato.php");
         $this->anoContrato = $registrobanco[self::$nmAtrAnoContrato];
         $this->cdPA= $registrobanco[self::$nmAtrCdPA];
         $this->anoPA = $registrobanco[self::$nmAtrAnoPA];        		
+        $this->tpContrato = $registrobanco[self::$nmAtrTipoContrato];
         $this->processoLic = $registrobanco[self::$nmAtrProcessoLicitatorio];
         $this->obs = $registrobanco[self::$nmAtrObservacao];
         $this->dtAbertura = getData($registrobanco[self::$nmAtrDtAbertura]);
@@ -179,13 +180,13 @@ include_once("vocontrato.php");
 		$this->sqHist = $array[2];
 	}
 	
-	static function getAtributosOrdenacao(){		
+	/*static function getAtributosOrdenacao(){
 		$varAtributos = array(				
 				self::$nmAtrCdPA=> "PA",
 				vocontrato::getNmTabela().".".self::$nmAtrCdContrato => "Contrato"
 		);
 		return $varAtributos;
-	}	
+	}*/	
 
 }
 ?>

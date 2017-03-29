@@ -2,22 +2,23 @@
 include_once(caminho_lib."voentidade.php");
 include_once("dbDocumento.php");
 include_once(caminho_funcoes."documento/dominioTpDocumento.php");
+include_once(caminho_funcoes."documento/biblioteca_htmlDocumento.php");
 include_once(caminho_util."dominioSetor.php");
 
 
   Class voDocumento extends voentidade{
   		 
-  	static $nmAtrCdSetor = "ofic_cd_setor";
-  	static $nmAtrAno = "ofic_ex";  	
+  	static $nmAtrCdSetor = "doc_cd_setor";
+  	static $nmAtrAno = "doc_ex";  	
   	static $nmAtrSq = "sq";
-  	static $nmAtrTpDoc = "ofic_tp_doc";
-  	static $nmAtrLinkDoc = "ofic_link_doc";
+  	static $nmAtrTp = "doc_tp";
+  	static $nmAtrLink = "doc_link";
   	    
 		var $sq  = "";		
 		var $cdSetor = "";
 		var $ano =  "";		
-		var $tpDoc =  "";
-		var $linkDoc =  "";
+		var $tp =  "";
+		var $link =  "";
         
         var $dbprocesso = "";
 
@@ -58,7 +59,7 @@ include_once(caminho_util."dominioSetor.php");
 		$query = $nmTabela . "." . self::$nmAtrSq . "=" . $this->sq;
 		$query .= "\n AND " . $nmTabela . "." . self::$nmAtrCdSetor . "=" . $this->cdSetor;
 		$query .= "\n AND " . $nmTabela . "." . self::$nmAtrAno . "=" . $this->ano;
-		$query .= "\n AND " . $nmTabela . "." . self::$nmAtrTpDoc. "='" . $this->tpDoc . "'";
+		$query .= "\n AND " . $nmTabela . "." . self::$nmAtrTp. "='" . $this->tp . "'";
 		
         if($isHistorico)
             $query.= " AND ". $nmTabela . "." . self::$nmAtrSqHist . "=" . $this->sqHist;
@@ -72,8 +73,8 @@ include_once(caminho_util."dominioSetor.php");
         	self::$nmAtrSq,
         	self::$nmAtrCdSetor,            
         	self::$nmAtrAno,
-    		self::$nmAtrTpDoc,
-    		self::$nmAtrLinkDoc
+    		self::$nmAtrTp,
+    		self::$nmAtrLink
         );
         
         return $retorno;    
@@ -84,7 +85,7 @@ include_once(caminho_util."dominioSetor.php");
     			self::$nmAtrSq,
     			self::$nmAtrCdSetor,
     			self::$nmAtrAno,
-    			self::$nmAtrTpDoc
+    			self::$nmAtrTp
     	);
     
     	return $retorno;
@@ -95,16 +96,16 @@ include_once(caminho_util."dominioSetor.php");
 		$this->sq = $registrobanco[self::$nmAtrSq];
 		$this->cdSetor = $registrobanco[self::$nmAtrCdSetor];
 		$this->ano = $registrobanco[self::$nmAtrAno];
-		$this->tpDoc= $registrobanco[self::$nmAtrTpDoc];
-		$this->linkDoc= $registrobanco[self::$nmAtrLinkDoc];
+		$this->tp= $registrobanco[self::$nmAtrTp];
+		$this->link= $registrobanco[self::$nmAtrLink];
 	}   
 	
 	function getDadosFormulario(){
 		$this->sq = @$_POST[self::$nmAtrSq];
 		$this->cdSetor = @$_POST[self::$nmAtrCdSetor];
 		$this->ano = @$_POST[self::$nmAtrAno];
-		$this->tpDoc= @$_POST[self::$nmAtrTpDoc];
-		$this->linkDoc= $_POST[self::$nmAtrLinkDoc];
+		$this->tp= @$_POST[self::$nmAtrTp];
+		$this->link= $_POST[self::$nmAtrLink];
 		        
         $this->dhUltAlteracao = @$_POST[self::$nmAtrDhUltAlteracao];
         $this->sqHist = @$_POST[self::$nmAtrSqHist];
@@ -117,84 +118,69 @@ include_once(caminho_util."dominioSetor.php");
 		
 		//$domDoc = new dominioTpDocumento();
 		$domSetor = new dominioSetor();
-		$retorno = dominioTpDocumento::$ENDERECO_PASTABASE;
+		$retorno = dominioTpDocumento::getEnderecoPastaBase();
 		
-		if($this->tpDoc != null){
+		if($this->tp != null){
 			
-			if($this->tpDoc == dominioTpDocumento::$CD_TP_DOC_NOTA_TECNICA){
+			if($this->tp == dominioTpDocumento::$CD_TP_DOC_NOTA_TECNICA){
 				$retorno.= dominioTpDocumento::$ENDERECO_PASTA_NOTA_TECNICA;
 				$retorno.= dominioTpDocumento::$ENDERECO_PASTA_NOTA_TECNICA . " $this->ano\\";
 				
-				$retorno.=$this->linkDoc;
+				$retorno.=$this->link;
 				
-			}else if($this->tpDoc == dominioTpDocumento::$CD_TP_DOC_OFICIO){
+			}else if($this->tp == dominioTpDocumento::$CD_TP_DOC_OFICIO){
 				$retorno.= dominioTpDocumento::$ENDERECO_PASTA_OFICIO;
 				$retorno.= dominioTpDocumento::$ENDERECO_PASTA_OFICIO . " " . $domSetor->getDescricao($this->cdSetor). " $this->ano\\";				
 				
-				$retorno.=$this->linkDoc;
-			}else if($this->tpDoc == dominioTpDocumento::$CD_TP_DOC_NOTIFICACAO){				
+				$retorno.=$this->link;
+			}else if($this->tp == dominioTpDocumento::$CD_TP_DOC_NOTIFICACAO){				
 					$retorno.= dominioTpDocumento::$ENDERECO_PASTA_PA;					
 					$retorno.= dominioTpDocumento::$ENDERECO_PASTA_NOTIFICACAO;
 					$retorno.= dominioTpDocumento::$ENDERECO_PASTA_NOTIFICACAO . " $this->ano\\";
 				
-					$retorno.=$this->linkDoc;
-			}
-				
+					$retorno.=$this->link;
+			}else if($this->tp == dominioTpDocumento::$CD_TP_DOC_NOTA_IMPUTACAO){
+						$retorno.= dominioTpDocumento::$ENDERECO_PASTA_PA;
+						$retorno.= dominioTpDocumento::$ENDERECO_PASTA_NOTAS_IMPUTACAO;
+						$retorno.= dominioTpDocumento::$ENDERECO_PASTA_NOTAS_IMPUTACAO . " $this->ano\\";
+					
+						$retorno.=$this->link;
+			}				
 		}
 		
 		return $retorno;
 	}
 	
 	function formatarCodigo(){	
-		return self::formatarCodigoDocumento($this->sq, $this->cdSetor, $this->ano, $this->tpDoc);
+		return self::formatarCodigoDocumento($this->sq, $this->cdSetor, $this->ano, $this->tp);
 	}
 	
-	static function formatarCodigoDocumento($sq, $cdSetor, $ano, $tpDoc){	
-		
-		$dominioSetor = new dominioSetor();
-		
-		$retorno = "";
-		if($sq != null){
-			$retorno = $tpDoc
-				. " " . complementarCharAEsquerda($sq, "0", TAMANHO_CODIGOS_SAFI)
-				. "-" . substr($ano, 2, 2)
-				. "/" . $dominioSetor->getDescricao($cdSetor);
-		}
-	
-		return $retorno;
+	static function formatarCodigoDocumento($sq, $cdSetor, $ano, $tpDoc){
+		// biblioteca_htmlDocumento
+		return formatarCodigoDocumento($sq, $cdSetor, $ano, $tpDoc);		
 	}
                 
 	function toString(){						
-		$retorno.= $this->sq . ",";
-        $retorno.= $this->cdSetor . ",";		
-        $retorno.= $this->ano. ",";
-        $retorno.= $this->tpDoc. ",";
-        $retorno.= $this->linkDoc. ",";
+		$retorno.= "Ano:". $this->ano. ",";
+        $retorno.= "Setor:". $this->cdSetor . ",";        
+        $retorno.= "TpDoc:". $this->tp. ",";
+        $retorno.= "Sq:". $this->sq . ",";
+        $retorno.= "Link:". $this->link. ",";
 		return $retorno;		
 	}   
 	
 	function getValorChavePrimaria(){
-		return $this->sq 
+		return $this->ano 
 				. CAMPO_SEPARADOR. $this->cdSetor
-				. CAMPO_SEPARADOR. $this->ano
-				. CAMPO_SEPARADOR. $this->tpDoc;
+				. CAMPO_SEPARADOR. $this->tp
+				. CAMPO_SEPARADOR. $this->sq;
 	}
 		
-	function getVOExplodeChavePrimaria($array){
-		$this->sq = $array[0];
-		$this->cdSetor= $array[1];
-		$this->ano = $array[2];
-		$this->tpDoc = $array[3];
-	}
-	
-	static function getAtributosOrdenacao(){
-		$varAtributos = array(
-				self::$nmAtrSq => "Número",
-				self::$nmAtrCdSetor=> "Setor",
-				self::$nmAtrAno => "Ano",
-				self::$nmAtrTpDoc => "Tp.Doc"
-		);
-		return $varAtributos;
+	function getChavePrimariaVOExplode($array){
+		$this->ano = $array[0];
+		$this->cdSetor= $array[1];		
+		$this->tp = $array[2];
+		$this->sq = $array[3];
 	}
 }
 ?>

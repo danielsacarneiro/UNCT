@@ -1,5 +1,6 @@
 <?php
 include_once(caminho_lib."voentidade.php");
+include_once(caminho_funcoes."documento/dominioTpDocumento.php");
 //include_once(caminho_vos."vogestor.php");
 //include_once(caminho_vos."vogestorpessoa.php");
 
@@ -18,9 +19,9 @@ include_once(caminho_lib."voentidade.php");
 		static $nmAtrCdContrato  = "ct_numero";
 		static $nmAtrAnoContrato  = "ct_exercicio";		
 		static $nmAtrTipoContrato =  "ct_tipo";
-		static $nmAtrEspecieContrato =  "ct_especie";
-        static $nmAtrSqEspecieContrato =  "ct_sq_especie";
-        static $nmAtrCdEspecieContrato =  "ct_cd_especie";
+		static $nmAtrEspecieContrato =  "ct_especie"; 
+        static $nmAtrSqEspecieContrato =  "ct_sq_especie"; //sequencial da especie (primeiro, segundo TA, por ex)
+        static $nmAtrCdEspecieContrato =  "ct_cd_especie"; //especie propriamente dita(TA, apostilamento)
         static $nmAtrCdSituacaoContrato =  "ct_cd_situacao";
 		static $nmAtrObjetoContrato =  "ct_objeto";
 		static $nmAtrGestorPessoaContrato =  "ct_gestor_pessoa";
@@ -46,6 +47,7 @@ include_once(caminho_lib."voentidade.php");
 		static $nmAtrVlMensalContrato =  	"ct_valor_mensal";
         static $nmAtrDtProposta =  	"ct_dt_proposta";
         static $nmAtrCdPessoaContratada =  	"pe_cd_contratada";
+        static $nmAtrLinkDoc =  	"ct_doc_link";        
 		
 		var $sq;
 		var $cdContrato;
@@ -78,6 +80,7 @@ include_once(caminho_lib."voentidade.php");
 		var $licom ;
         var $importacao ;
 		var $obs ;
+		var $linkDoc ;
 		
 
 // ...............................................................
@@ -85,6 +88,8 @@ include_once(caminho_lib."voentidade.php");
    function __construct() {
        parent::__construct();
        $this->temTabHistorico = true;
+       $this->sqEspecie = 1;
+       $this->importacao = "N";
    }
 
 // ...............................................................
@@ -131,7 +136,8 @@ include_once(caminho_lib."voentidade.php");
             self::$nmAtrVlGlobalContrato,
             self::$nmAtrVlMensalContrato,
             self::$nmAtrDtProposta,
-        	self::$nmAtrCdPessoaContratada
+        	self::$nmAtrCdPessoaContratada,
+        	self::$nmAtrLinkDoc
         );
         
         return $retorno;    
@@ -151,7 +157,8 @@ include_once(caminho_lib."voentidade.php");
         	self::$nmAtrDtVigenciaInicialContrato,
         	self::$nmAtrDtVigenciaFinalContrato,            
             self::$nmAtrVlGlobalContrato,
-            self::$nmAtrVlMensalContrato
+            self::$nmAtrVlMensalContrato,
+        	self::$nmAtrLinkDoc
         );
         
         return $retorno;    
@@ -197,6 +204,8 @@ include_once(caminho_lib."voentidade.php");
 		$this->licom = $registrobanco[self::$nmAtrInLicomContrato];
         $this->importacao = $registrobanco[self::$nmAtrInImportacaoContrato];
 		$this->obs = $registrobanco[self::$nmAtrObservacaoContrato];
+		$this->linkDoc = $registrobanco[self::$nmAtrLinkDoc];
+		
         $this->dhInclusao = $registrobanco[self::$nmAtrDhInclusao];
         $this->dhUltAlteracao = $registrobanco[self::$nmAtrDhUltAlteracao];
         $this->cdUsuarioInclusao = $registrobanco[self::$nmAtrCdUsuarioInclusao];
@@ -242,6 +251,7 @@ include_once(caminho_lib."voentidade.php");
 		$this->cdAutorizacao = @$_POST[self::$nmAtrCdAutorizacaoContrato];
 		$this->licom = @$_POST[self::$nmAtrInLicomContrato];
 		$this->obs = @$_POST[self::$nmAtrObservacaoContrato];
+		$this->linkDoc = @$_POST[self::$nmAtrLinkDoc];
         
         $this->dhUltAlteracao = @$_POST[self::$nmAtrDhUltAlteracao];
         $this->sqHist = @$_POST[self::$nmAtrSqHist];
@@ -286,7 +296,12 @@ include_once(caminho_lib."voentidade.php");
 		$retorno = $this->sq . ",";				
 		$retorno.= $this->anoContrato . ",";
 		$retorno.= $this->cdContrato. ",";
-        $retorno.= $this->tipo;		
+        $retorno.= $this->tipo. ",";
+        $retorno.= $this->cdEspecie. ",";
+        $retorno.= $this->sqEspecie. ",";
+        
+        $retorno.= " formato contrato ";
+        $retorno.= formatarCodigoContrato($this->cdContrato, $this->anoContrato, $this->tipo);
 		
 		return $retorno;		
 	}   
@@ -301,8 +316,10 @@ include_once(caminho_lib."voentidade.php");
 					. $this->tipo
 					. "*"
 					. $this->cdContrato
-					. "*"					
+					. "*"
 					. $this->cdEspecie
+					. "*"
+					. $this->sqEspecie
 					. "*"
 					. $this->sqHist
 					;
@@ -310,17 +327,36 @@ include_once(caminho_lib."voentidade.php");
 		return $chave;
 	}
 	
+	/*	  
+	 * @ deprecated	  
+	 */	
 	function getVOExplodeChave(){
 		$chave = @$_GET["chave"];
 		
-		$array = explode("*",$chave);		
+		$array = explode("*",$chave);
 		$this->sq = $array[0];
 		$this->anoContrato = $array[1];
 		$this->tipo = $array[2];
 		$this->cdContrato = $array[3];
 		$this->cdEspecie = $array[4];
-		$this->sqHist = $array[5];
+		$this->sqEspecie = $array[5];
+		$this->sqHist = $array[6];
+	}
+	
+	function getChavePrimariaVOExplode($array){
+		$this->sq = $array[0];
+		$this->anoContrato = $array[1];
+		$this->tipo = $array[2];
+		$this->cdContrato = $array[3];
+		$this->cdEspecie = $array[4];
+		$this->sqEspecie = $array[5];
+		$this->sqHist = $array[6];
 	}	
-
+	
+	function getLinkDocumento(){		
+		$link = str_replace("G:", dominioTpDocumento::$ENDERECO_DRIVE, $this->linkDoc);
+		//$link = str_replace("G:", "H:", $this->linkDoc);
+		return $link; 
+	}
 }
 ?>

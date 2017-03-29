@@ -162,7 +162,7 @@ function getDadosTramitacao($db, $isDetalhamento){
 		            		            
 		            $html .= "</TD> \n";
 		            
-		            $html .= "<TD class='tabeladados' nowrap>" . getDataHoraSQLComoString($tram->dhUltAlteracao) . "</TD> \n";
+		            $html .= "<TD class='tabeladados' nowrap>" . $tram->dhUltAlteracao . "</TD> \n";
 		            $html .= "</TR> \n";
 		            $sq++;
 	        	}

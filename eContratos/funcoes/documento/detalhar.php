@@ -45,6 +45,7 @@ setCabecalho($titulo);
 <?=setTituloPagina(null)?>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_cnpfcnpj.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_oficio.js"></SCRIPT>
 
 <SCRIPT language="JavaScript" type="text/javascript">
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
@@ -64,15 +65,15 @@ function confirmar() {
 	return confirm("Confirmar Alteracoes?");    
 }
 
-function mostrarpasta(){
-	pasta= document.frm_principal.<?=voDocumento::$nmAtrLinkDoc?>.value;	
+/*function mostrarpasta(){
+	pasta= document.frm_principal.<?=voDocumento::$nmAtrLink?>.value;	
 	//pasta = "c:"; 
     url = "../abrir_windowsexplorer.php?comando=" + pasta;
     //abrirJanelaAuxiliar(url, true, false, false);    
 
     window.open(url,'_blank');
     
-}
+}*/
 
 </SCRIPT>
 
@@ -102,12 +103,12 @@ function mostrarpasta(){
 	            $selectExercicio = new selectExercicio();
 	            $domSetor = new dominioSetor();
 	            $comboSetor = new select($domSetor->colecao);
-	            $domTpDoc = new dominioTpDocumento();
-	            $comboTpDoc= new select($domTpDoc->colecao);
+	            $domTp = new dominioTpDocumento();
+	            $comboTp= new select($domTp->colecao);
 	             
 			  ?>			            
 			<TR>
-                <TH class="campoformulario" nowrap width="1%">Exercício:</TH>
+                <TH class="campoformulario" nowrap width="1%">Ano:</TH>
                 <TD class="campoformulario" nowrap width="1%"><INPUT type="text" id="<?=voDocumento::$nmAtrAno?>" name="<?=voDocumento::$nmAtrAno?>"  value="<?php echo $vo->ano;?>"  class="camporeadonly" size="5" readonly></TD>
                 <TH class="campoformulario" nowrap width="1%">Setor:</TH>
                 <TD class="campoformulario" nowrap >
@@ -118,8 +119,8 @@ function mostrarpasta(){
 			<TR>
                 <TH class="campoformulario" nowrap width="1%">Tp.Documento:</TH>
                 <TD class="campoformulario" nowrap width="1%">
-                		<INPUT type="text" value="<?php echo $domTpDoc->getDescricao($vo->tpDoc);?>"  class="camporeadonly" size="20" readonly>
-                		<INPUT type="hidden" id="<?=voDocumento::$nmAtrTpDoc?>" name="<?=voDocumento::$nmAtrTpDoc?>"  value="<?php echo $vo->tpDoc;?>">			
+                		<INPUT type="text" value="<?php echo $domTp->getDescricao($vo->tp);?>"  class="camporeadonly" size="20" readonly>
+                		<INPUT type="hidden" id="<?=voDocumento::$nmAtrTp?>" name="<?=voDocumento::$nmAtrTp?>"  value="<?php echo $vo->tp;?>">			
                 </TD>
                 <TH class="campoformulario" nowrap width="1%">Número:</TH>
                 <TD class="campoformulario"><INPUT type="text" id="<?=voDocumento::$nmAtrSq?>" name="<?=voDocumento::$nmAtrSq?>"  value="<?php echo complementarCharAEsquerda($vo->sq, "0", TAMANHO_CODIGOS);?>"  class="camporeadonly" size="7" <?=$readonlyChaves?>></TD>
@@ -129,8 +130,16 @@ function mostrarpasta(){
                 <?php
                 	$endereco = $vo->getEnderecoTpDocumento();
                 ?>                
-                <TD class="campoformulario" colspan=3><textarea id="<?=voDocumento::$nmAtrLinkDoc?>" name="<?=voDocumento::$nmAtrLinkDoc?>" rows="2" cols="80" class="camporeadonly" readonly><?php echo  $endereco;?></textarea>
-                <?php echo getBotaoValidacaoAcesso("bttabrirpasta", "Abrir", "botaofuncaop", false,true,true,true, "onClick='javascript:mostrarpasta();' accesskey='m'");?>
+                <TD class="campoformulario" colspan=3><textarea id="<?=voDocumento::$nmAtrLink?>" name="<?=voDocumento::$nmAtrLink?>" rows="2" cols="80" class="camporeadonly" readonly><?php echo  $endereco;?></textarea>
+                <?php 
+                echo getBotaoAbrirDocumento(voDocumento::$nmAtrLink);
+                /*echo getBotaoValidacaoAcesso("bttabrirpasta", "Abrir", "botaofuncaop", false,true,true,true, "onClick=javascript:abrirArquivoCliente('" . voDocumento::$nmAtrLink. "'); accesskey='m'");
+                if(isUsuarioAdmin()){
+                	echo "&nbsp;" . getBotaoValidacaoAcesso("bttabrirservidor", "Abrir no Servidor", "botaofuncaop", false,true,true,true, "onClick=javascript:abrirArquivo('" . voDocumento::$nmAtrLink. "'); accesskey='m'");
+				}*/
+				?>
+                
+                <?php //echo getBotaoValidacaoAcesso("bttabrirpasta", "Abrir", "botaofuncaop", false,true,true,true, "onClick='javascript:mostrarpasta();' accesskey='m'");?>
                 </TD>
                 
             </TR>	        

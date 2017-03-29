@@ -3,9 +3,22 @@ include_once(caminho_util. "dominio.class.php");
 
   Class dominioEspeciesContrato extends dominio{
   	
-  	static $CD_ESPECIE_CONTRATO_MATER = "01";
+  	static $CD_ESPECIE_CONTRATO_MATER = "CM";
+  	static $CD_ESPECIE_CONTRATO_TERMOADITIVO = "TA";
+  	static $CD_ESPECIE_CONTRATO_APOSTILAMENTO = "AP";
+  	static $CD_ESPECIE_CONTRATO_TERMOAJUSTE = "AJ";
+  	static $CD_ESPECIE_CONTRATO_CESSAO_USO = "CS";
   	
-  	/*"01" => "Mater",
+  	static $CD_ESPECIE_CONTRATO_RERRATIFICACAO = "RR";
+  	static $CD_ESPECIE_CONTRATO_COOPERACAO = "CO";
+  	static $CD_ESPECIE_CONTRATO_CONVALIDACAO = "CV";
+  	static $CD_ESPECIE_CONTRATO_RESCISAO_AMIGAVEL = "RA";
+  	static $CD_ESPECIE_CONTRATO_RESCISAO_UNILATERAL = "RU";
+  	static $CD_ESPECIE_CONTRATO_RESCISAO_ENCERRAMENTO = "RE";
+  	
+  	 /*
+  	 * ANTES ERA ASSIM:
+  	"01" => "Mater",
   	"02" => "Apostilamento",
   	"03" => "Termo Aditivo",
   	"04" => "Termo de Ajuste",
@@ -20,37 +33,45 @@ include_once(caminho_util. "dominio.class.php");
 // ...............................................................
 // Construtor
 	function __construct () {
-        		$this->colecao = array(
-        		self::$CD_ESPECIE_CONTRATO_MATER => "Mater",
-                "02" => "Apostilamento",
-				"03" => "Termo Aditivo",
-                "04" => "Termo de Ajuste",
-                "05" => "Termo de Cessão de Uso",
-                "06" => "Termo de Rerratificação",
-                "07" => "Termo de Cooperação",
-                "08" => "Termo de Convalidação",
-                "09" => "Termo de Rescisão Amigável",
-                "10" => "Termo de Rescisão Unilateral",
-                "11" => "Termo de Rescisão Encerramento",
+        		$this->colecao = self::getColecao();
+	}
+	
+	static function getColecao(){
+		return array(
+        				self::$CD_ESPECIE_CONTRATO_MATER => "Mater",
+        				self::$CD_ESPECIE_CONTRATO_APOSTILAMENTO => "Apostilamento",
+        				self::$CD_ESPECIE_CONTRATO_TERMOADITIVO => "Termo Aditivo",
+        				self::$CD_ESPECIE_CONTRATO_TERMOAJUSTE => "Termo de Ajuste",
+        				self::$CD_ESPECIE_CONTRATO_CESSAO_USO => "Termo de Cessão de Uso",
+        				self::$CD_ESPECIE_CONTRATO_RERRATIFICACAO => "Termo de Rerratificação",
+        				self::$CD_ESPECIE_CONTRATO_COOPERACAO => "Termo de Cooperação",
+        				self::$CD_ESPECIE_CONTRATO_CONVALIDACAO => "Termo de Convalidação",
+        				self::$CD_ESPECIE_CONTRATO_RESCISAO_AMIGAVEL => "Termo de Rescisão Amigável",
+        				self::$CD_ESPECIE_CONTRATO_RESCISAO_UNILATERAL => "Termo de Rescisão Unilateral",
+        				self::$CD_ESPECIE_CONTRATO_RESCISAO_ENCERRAMENTO => "Termo de Rescisão Encerramento",
+				);
+	}	
+    
+	function getDominioImportacaoPlanilha() {            
+            return self::getColecaoImportacaoPlanilha();
+	}
+
+	static function getColecaoImportacaoPlanilha(){
+		//cooperacao e convalidacao seram considerados como MATER
+		//deixa na ultima posicao as especies que podem se repetir		
+		return array(
+        		self::$CD_ESPECIE_CONTRATO_RERRATIFICACAO => "Rerratificação*Rerratificacao",
+        		self::$CD_ESPECIE_CONTRATO_TERMOADITIVO => "T.A",
+        		self::$CD_ESPECIE_CONTRATO_TERMOAJUSTE => "Ajuste",
+        		self::$CD_ESPECIE_CONTRATO_CESSAO_USO => "Cessão",
+        		self::$CD_ESPECIE_CONTRATO_RESCISAO_AMIGAVEL => "Amigável*Amigavel",
+        		self::$CD_ESPECIE_CONTRATO_RESCISAO_UNILATERAL => "Unilateral",
+        		self::$CD_ESPECIE_CONTRATO_RESCISAO_ENCERRAMENTO => "Encerramento",      
+        		self::$CD_ESPECIE_CONTRATO_MATER => "Mater*Convênio*Cooperação*Convalidação",
+        		self::$CD_ESPECIE_CONTRATO_APOSTILAMENTO => "Apostilamento*Apostuilamento"
 				);
 	}
-    
-	function getDominioImportacaoPlanilha() {
-        //cooperacao e convalidacao seram considerados como MATER                
-        	$array = array(
-        		self::$CD_ESPECIE_CONTRATO_MATER => "Mater*Convênio*Cooperação*Convalidação",
-                "02" => "Apostilamento*Apostuilamento",
-				"03" => "T.A",
-                "04" => "Ajuste",
-                "05" => "Cessão",                
-                "06" => "Rerratificação",
-                "09" => "Amigável",
-                "10" => "Unilateral",
-                "11" => "Encerramento"
-				);
-            
-            return $array;
-	}	
+	
 }
 
 ?>

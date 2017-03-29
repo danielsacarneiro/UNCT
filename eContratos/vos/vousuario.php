@@ -23,6 +23,18 @@ Class vousuario extends voentidade{
         );
 		
 	}
+	
+	public static function getTituloJSP(){
+		return  "USU�RIO";
+	}
+	
+	public static function getNmTabela(){
+		return  "wp_users";
+	}
+	
+	public static function getNmClassProcesso(){
+		return  "dbusuario";
+	}
 
 // ...............................................................
 // Funções ( Propriedades e métodos da classe )

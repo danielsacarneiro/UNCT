@@ -35,11 +35,16 @@ cabecalho;
 
 	f3 = new Tree('Contratos');
 	f3.adicionarItem(new Link("Manter Contratos", "<?=caminho_funcoesHTML?>contrato", ""));
+	//f3.adicionarItem(new Link("Manter Contrato Tramitação (NAO USAR)", "<?=caminho_funcoesHTML?>contrato_tram", ""));	
 	f.adicionarItem(f3);
 
-	f4 = new Tree('Processos Administrativos');	
-    f4.adicionarItem(new Link('Manter P.A. de Aplicação de Penalidade (PAAP)', '<?=caminho_funcoesHTML?>pa', ''));    
+	f4 = new Tree('Demandas');
+	f4.adicionarItem(new Link("Manter Demanda", "<?=caminho_funcoesHTML?>demanda", ""));	
 	f.adicionarItem(f4);
+
+	f5 = new Tree('Processos Administrativos');	
+    f5.adicionarItem(new Link('Manter P.A. de Aplicação de Penalidade (PAAP)', '<?=caminho_funcoesHTML?>pa', ''));    
+	f.adicionarItem(f5);
 
 	/*
 	exemplo

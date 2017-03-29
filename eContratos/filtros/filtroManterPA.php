@@ -73,8 +73,8 @@ class filtroManterPA extends filtroManter{
 		if($this->cdEspecieContrato != null){
 			$filtro = $filtro . $conector
 					. $nmTabelaContrato. "." .vocontrato::$nmAtrCdEspecieContrato
-					. " = "
-					. $this->cdEspecieContrato;
+					. " = '"
+					. $this->cdEspecieContrato . "'";
 					//. dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
 						
 			$conector  = "\n AND ";
@@ -163,6 +163,15 @@ class filtroManterPA extends filtroManter{
 
 		return $filtro;
 	}
+	
+	function getAtributosOrdenacao(){
+		$varAtributos = array(
+				voPA::$nmAtrCdPA=> "PA",
+				vocontrato::getNmTabelaStatic($this->isHistorico).".".voPA::$nmAtrCdContrato => "Contrato"
+		);
+		return $varAtributos;
+	}
+	
 
 }
 

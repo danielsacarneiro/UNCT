@@ -7,6 +7,7 @@ include_once(caminho_lib ."filtroManter.php");
 class filtroManterPessoa extends filtroManter{
     
     var $nmFiltro = "filtroManterPessoa";
+    static $ID_REQ_DT_REFERENCIA = "filtroManterPessoa_ID_REQ_DT_REFERENCIA";
     
     // ...............................................................
 	// construtor
@@ -18,7 +19,9 @@ class filtroManterPessoa extends filtroManter{
     var $cdContrato="";
     var $anoContrato="";
     var $tpContrato="";
+    var $cdEspecieContrato="";
     var $sqEspecieContrato="";
+    var $dtReferenciaContrato ="";
         	
 	function __construct1($pegarFiltrosDaTela) {
 		parent::__construct2(true, $pegarFiltrosDaTela);
@@ -36,7 +39,7 @@ class filtroManterPessoa extends filtroManter{
 		//$this->cdGestor = @$_POST[vopessoa::$nmAtrCdGestor];
 		$this->doc = @$_POST[vopessoa::$nmAtrDoc];
 		$this->nome = @$_POST[vopessoa::$nmAtrNome];
-		$this->cdvinculo = @$_POST[vopessoavinculo::$nmAtrCd];		
+		$this->cdvinculo = @$_POST[vopessoavinculo::$nmAtrCd];
 	}
 	
 	function getFiltroConsultaSQL($isHistorico){
@@ -121,10 +124,20 @@ class filtroManterPessoa extends filtroManter{
 					$conector  = "\n AND ";
 		}
 		
+		if($this->cdEspecieContrato != null){
+			$filtro = $filtro . $conector
+					. vocontrato::getNmTabela(). "." .vocontrato::$nmAtrCdEspecieContrato
+					. "="
+					. getVarComoString($this->cdEspecieContrato)
+					;
+		
+					$conector  = "\n AND ";
+		}
+		
 		if($this->sqEspecieContrato != null){
 			$filtro = $filtro . $conector
-					. vocontrato::getNmTabela(). "." .vocontrato::$nmAtrSqEspecieContrato
-					. "="
+			. vocontrato::getNmTabela(). "." .vocontrato::$nmAtrSqEspecieContrato
+			. "="
 					. $this->sqEspecieContrato;
 		
 					$conector  = "\n AND ";
@@ -138,7 +151,19 @@ class filtroManterPessoa extends filtroManter{
 						. "'";
 			
 			$conector  = "\n AND ";
-		}	
+		}
+		
+		if($this->dtReferenciaContrato != null){
+			$filtro = $filtro . $conector
+					.  getSQLDataVigenteSimplesPorData(
+							vocontrato::getNmTabela(),
+							$this->dtReferenciaContrato,
+							vocontrato::$nmAtrDtVigenciaInicialContrato,
+							vocontrato::$nmAtrDtVigenciaFinalContrato)
+			;
+		
+					$conector  = "\n AND ";
+		}		
 
 		//finaliza o filtro
 		$filtro = parent::getFiltroConsultaSQL($filtro);

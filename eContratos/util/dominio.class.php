@@ -55,7 +55,6 @@ Class dominio {
 	
 		return $retorno;
 	}
-	
-	
+		
 }
 ?>

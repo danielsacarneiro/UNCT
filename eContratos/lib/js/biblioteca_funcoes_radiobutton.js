@@ -16,7 +16,7 @@ function isRadioButtonConsultaSelecionado(pNmRadioButton, pSemMensagem) {
 	
 	if (radioButton == null) {
 		if (!pSemMensagem) {
-			exibirMensagem("Nenhum registro est√° dispon√≠vel!");
+			exibirMensagem("Nenhum registro est· disponÌvel!");
 		}
 		return false;
 	}

@@ -1,4 +1,57 @@
 <?php
+date_default_timezone_set('America/Recife');
+set_exception_handler("pegaExcecaoSemTratamento");
+
+//função definida pelo usuário para pegar exceções não tratadas
+function pegaExcecaoSemTratamento($e){
+	//echo 'Exceção pega sem tratamento:</br>', $e->getMessage(), '</br></br></br>';
+	throw new Exception($e->getMessage());
+}
+
+/*set_error_handler(function($errno, $errstr, $errfile, $errline, array $errcontext) {
+	// error was suppressed with the @-operator
+	if (0 === error_reporting()) {
+		return false;
+	}
+	
+	if (2 === error_reporting()) {
+		throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+	}	
+
+
+	//throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+});*/
+
+function isClasseFrameWork($class_name, $tipoClasse){	
+	$isClasseFramework = false;
+	$pos = strpos($class_name, $tipoClasse);
+	if($pos !== false && $pos == 0){
+		$isClasseFramework = true;
+	}
+	
+	return $isClasseFramework;	
+}
+
+/*a funcao abaixo serve para incluir a classe usada na confirmacao
+ * o session precisa identificar qual classe ele serializa
+ * dai o include
+ */
+spl_autoload_register(function ($class_name) {
+	$caminhoClasse = caminho_vos;
+	$pos = strpos($class_name, "filtro");
+	if($pos !== false && $pos == 0){
+		//eh classe filtro
+		$caminhoClasse = caminho_filtros;
+	}	
+		
+	$isClasseFramework = isClasseFrameWork($class_name, "vo") || isClasseFrameWork($class_name, "filtro") || isClasseFrameWork($class_name, "db");
+		
+	if($isClasseFramework){
+		include_once $caminhoClasse.$class_name . '.php';
+	}
+	
+});
+
 function getPastaRoot(){
     $aplicacao = "UNCT/eContratos";
     $ambiente = "";
@@ -66,5 +119,6 @@ echo $varGlobalJS;
 define('TAMANHO_CODIGOS', 5);
 define('TAMANHO_CODIGOS_SAFI', 3);
 define('CAMPO_SEPARADOR', "*");
+define('CAMPO_SUBSTITUICAO', "[[*]]");
 
 ?>

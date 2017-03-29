@@ -99,9 +99,9 @@ function confirmar() {
 }
 
 function carregaGestorPessoa(){    
-    <?php
-    $idDiv = vocontrato::$nmAtrCdGestorPessoaContrato."DIV";
-    $idCampoGestor = vocontrato::$nmAtrCdGestorContrato . "";
+    <?php    
+    $idDiv = vocontrato::$nmAtrCdPessoaGestorContrato."DIV";
+    $idCampoGestor = vocontrato::$nmAtrCdGestorContrato. "";
     ?>
     getDadosGestorPessoa('<?=$idCampoGestor?>', '<?=$idDiv?>');     
 }
@@ -194,8 +194,9 @@ function carregaGestorPessoa(){
             <TD class="campoformulario" colspan="3">
                 <div id="<?=$idDiv?>">
                 <?php
-                 include_once(caminho_funcoes. "gestor_pessoa/biblioteca_htmlGestorPessoa.php");
-                 echo getComboGestorPessoa(new dbgestorpessoa(), vocontrato::$nmAtrCdGestorPessoaContrato, vocontrato::$nmAtrCdGestorPessoaContrato, $voContrato->cdGestor, $voContrato->cdGestorPessoa);                    
+                 include_once(caminho_funcoes. "pessoa/biblioteca_htmlPessoa.php");
+                 //echo getComboGestorPessoa(new dbgestorpessoa(), vocontrato::$nmAtrCdGestorPessoaContrato, vocontrato::$nmAtrCdGestorPessoaContrato, $voContrato->cdGestor, $voContrato->cdGestorPessoa);
+                 getComboGestorResponsavel(null);
                  ?>
                 </div>
                 <!--<INPUT type="text" id="<?=vocontrato::$nmAtrGestorPessoaContrato?>" name="<?=vocontrato::$nmAtrGestorPessoaContrato?>"  value="<?php echo($nmGestorPessoa);?>"  class="camponaoobrigatorio" size="50" ></TD>-->
@@ -305,8 +306,7 @@ function carregaGestorPessoa(){
 		<TR>
 			<?php
 			include_once("dominioAutorizacao.php");
-			$autorizacao = new dominioAutorizacao();
-			$combo = new select($autorizacao->colecao);						
+			$combo = new select(dominioAutorizacao::getColecao());						
 			?>
             <TH class="campoformulario" nowrap>Autorização Prévia:</TH>
             <TD class="campoformulario" colspan="3"><?php echo $combo->getHtmlSelect(vocontrato::$nmAtrCdAutorizacaoContrato,vocontrato::$nmAtrCdAutorizacaoContrato, $voContrato->cdAutorizacao, true, "camponaoobrigatorio", true);?>

@@ -49,7 +49,7 @@ include_once (caminho_filtros."filtroManterPA.php");
         $query.= "\n ON ";
         $query.= vogestor::getNmTabela().".".vogestor::$nmAtrCd. "=".vopessoagestor::getNmTabela().".".vopessoagestor::$nmAtrCdGestor;*/
         $query.= "\n WHERE ";
-        $query.= "\n" . vocontrato::getNmTabela() . "." . vocontrato::$nmAtrCdEspecieContrato . " = " . dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
+        $query.= "\n" . vocontrato::getNmTabela() . "." . vocontrato::$nmAtrCdEspecieContrato . " = '" . dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER . "'";
         $query.= "\n AND " . $vo->getValoresWhereSQLChave($isHistorico);
         
 		//echo $query;
@@ -209,7 +209,7 @@ include_once (caminho_filtros."filtroManterPA.php");
     	return $this->atualizarEntidade($query);
     }
     
-    //o incluir eh implementado para nao usar da voentidade
+    //o excluir eh implementado para nao usar da voentidade
     //por ser mais complexo
     function excluir($vo){
     	//Start transaction

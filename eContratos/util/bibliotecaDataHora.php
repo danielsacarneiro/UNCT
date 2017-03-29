@@ -1,12 +1,36 @@
 <?php
 include_once("mensagens.class.php");
+
+function getDataHora($dataSQL) {
+	return getDataHoraParam($dataSQL, true);
+}
+
+function getData($dataSQL) {
+	return getDataHoraParam($dataSQL, false);
+}
+
+function getDataHoraParam($dataSQL, $temHora) {
+	$retorno = null;
+	if ($dataSQL != null){
+		if($dataSQL == "0000-00-00")
+			$retorno = mensagens::$msgDataErro;
+		else if ($dataSQL != null && $dataSQL != "0000-00-00"){
+			$retorno = date("d/m/Y", strtotime($dataSQL));				
+			if($temHora){
+				$retorno .= " " . date("H:i:s", strtotime($dataSQL));
+			}
+		}
+	}
+	return $retorno;
+}
     
 function getDataHoraSQLComoString($data) {
 	//pega qualquer data e transforma no formato SQL	
 	$retorno = "";
 	if ($data != null){
-		$retorno = date("d/m/Y", strtotime($data)) . " ";
-        $retorno .= date("H:i:s", strtotime($data));
+		$retorno = getDataHora($data);
+		/*$retorno = date("d/m/Y", strtotime($data)) . " ";
+        $retorno .= date("H:i:s", strtotime($data));*/
     }
 						
 	return $retorno;

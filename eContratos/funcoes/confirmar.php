@@ -3,7 +3,24 @@ include_once("../config_lib.php");
 include_once(caminho_util."bibliotecaHTML.php");
 //define a classe do vo que chamou
 $class = @$_GET["class"];
+//echo $class;
 include_once(caminho_vos.$class.".php");
+
+/*a funcao abaixo serve para incluir a classe usada na confirmacao
+ * o session precisa identificar qual classe ele serializa
+ * dai o include
+ */
+/*spl_autoload_register(function ($class_name) {
+
+	$caminhoClasse = caminho_vos;
+	$existe = mb_stripos($class_name, "filtro");
+	if($existe !== false){
+		//eh classe filtro
+		$caminhoClasse = caminho_filtros;
+	}
+
+	include_once $caminhoClasse.$class_name . '.php';
+});*/
 
 //inicio();
 inicioComValidacaoUsuario(true);
@@ -22,19 +39,22 @@ try{
     
     session_start();
     if(!isset($_SESSION["vo"])){
-        throw new Exception("Sessão expirada. Realize nova consulta.");        
+        throw new Exception("Sessão expirada. Realize nova consulta.");
     }
     
-    $vo = $_SESSION["vo"];
+    //$vo = $_SESSION["vo"];
+    $vo = getObjetoSessao("vo");
     $dbprocesso = new $class(null);
     //session_destroy();
+    
+    //var_dump($vo);
     
     if($isInclusao){
         $nmFuncao = "INCLUIR";        
         /*$metodo = 'incluir';
         $parametros = array($vo, false); 
         $resultado = call_user_func_array(array( $classe, $metodo), $parametros);*/                
-        $resultado = $dbprocesso->incluir($vo);
+        $vo = $dbprocesso->incluir($vo);
                 
     }else if($isExclusao){
         $nmFuncao = "EXCLUIR";
@@ -49,6 +69,8 @@ try{
     $classMensagem = "campomensagemverde";
     $msg = "OPERACÃO $nmFuncao REALIZADA COM SUCESSO";
     
+    //echo $vo->getNmTabela();
+    //var_dump($vo);
     putObjetoSessao($vo->getNmTabela(), $vo);
     
 }catch(Exception $e) {

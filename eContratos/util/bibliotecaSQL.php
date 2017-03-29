@@ -5,13 +5,86 @@ include_once ("bibliotecaFuncoesPrincipal.php");
   //Class bibliotecaSQL {
   
 	function getDataSQL($dataSQL) {
-		$retorno = "";
-		if ($dataSQL != null)
+		$retorno = "";		
+		if ($dataSQL != null){						
 			//$retorno = date("Y-m-d", strtotime($dataSQL));
-			$retorno = implode("-",array_reverse(explode("/",$dataSQL)));
-			
+			$retorno = implode("-",array_reverse(explode("/",$dataSQL)));		
+		}			
 		return $retorno;
 	}  
+	
+	function getSQLDataVigenteSqSimples(
+			$pNmTableEntidade,
+			$pNmColDtInicioVigencia,
+			$pNmColDtFimVigencia) {
+		
+			$pDataComparacao = dtHoje;
+		
+			return getSQLDataVigente(
+					$pNmTableEntidade,
+					null,
+					null,
+					null,
+					$pDataComparacao,
+					$pNmColDtInicioVigencia,
+					$pNmColDtFimVigencia);	
+	}
+	
+	function getSQLDataNaoVigenteSqSimples(
+			$pNmTableEntidade,
+			$pNmColDtInicioVigencia,
+			$pNmColDtFimVigencia) {
+	
+				$pDataComparacao = dtHoje;
+	
+				return getSQLDataNaoVigente(
+						$pNmTableEntidade,
+						null,
+						null,
+						null,
+						$pDataComparacao,
+						$pNmColDtInicioVigencia,
+						$pNmColDtFimVigencia);
+	}
+	
+	function getSQLDataNaoVigente(
+			$pNmTableEntidade,
+			$pNmColSequencial,
+			$pChaveTuplaComparacaoSemSequencial,
+			$pChaveGroupBy,
+			$pDataComparacao,
+			$pNmColDtInicioVigencia,
+			$pNmColDtFimVigencia) {
+	
+			$nmColDtInicioVigencia = "$pNmTableEntidade.$pNmColDtInicioVigencia";
+			$nmColDtFimVigencia = "$pNmTableEntidade.$pNmColDtFimVigencia";
+					
+			$sqlFinal = $sqlClausulaVigenciaAtual =
+					"( "					
+					. $pNmColDtFimVigencia
+					. " < "
+					. getVarComoDataSQL($pDataComparacao)
+					. ")";
+	
+		return $sqlFinal;
+	}
+	
+	function getSQLDataVigenteSimplesPorData(
+			$pNmTableEntidade,
+			$pDataComparacao,
+			$pNmColDtInicioVigencia,
+			$pNmColDtFimVigencia) {
+		
+				return getSQLDataVigente(
+						$pNmTableEntidade,
+						null,
+						null,
+						null,
+						$pDataComparacao,
+						$pNmColDtInicioVigencia,
+						$pNmColDtFimVigencia);		
+	}
+	
 	
 	function getSQLDataVigente(
 		$pNmTableEntidade,
@@ -25,11 +98,11 @@ include_once ("bibliotecaFuncoesPrincipal.php");
 		$nmColDtInicioVigencia = "$pNmTableEntidade.$pNmColDtInicioVigencia";
 		$nmColDtFimVigencia = "$pNmTableEntidade.$pNmColDtFimVigencia";
 		
-		$pDataComparacao = "'" . $pDataComparacao . "'";
+		//$pDataComparacao = "'" . $pDataComparacao . "'";
 		
 		$sqlFinal = $sqlClausulaVigenciaAtual =
 			"( ( "
-				. $pDataComparacao
+				. getVarComoDataSQL($pDataComparacao)
 				. " BETWEEN "
 				. $nmColDtInicioVigencia
 				. "\n AND "
@@ -37,7 +110,7 @@ include_once ("bibliotecaFuncoesPrincipal.php");
 				. "\n ) OR ( "
 				. $nmColDtInicioVigencia
 				. " <= "
-				. $pDataComparacao
+				. getVarComoDataSQL($pDataComparacao)
 				. " "
 				. "\n AND "
 				. $nmColDtFimVigencia
@@ -150,6 +223,73 @@ include_once ("bibliotecaFuncoesPrincipal.php");
 			$retorno = substr($retorno, 0, $qtdCharFim);
 		}
 		//echo $retorno;
+		return $retorno;
+	}
+	
+	/**
+	 *FUNCOES MANIPULACAO
+	 */
+	function substituirCaracterSQLLike($param){
+		return substituirCaracterEspecial("*", "%", $param);
+	}
+	
+	function substituirCaracterEspecial($strOrigem, $strDestino, $param){
+		$retorno = null;
+		if($param != null){			
+			$retorno = str_replace($strOrigem, $strDestino, $param);			
+		}	
+		return $retorno;
+	}
+	
+	function getVarComoString($param){
+		//return "'" . utf8_encode($param) . "'";
+		$retorno = "null";
+		if($param != null){
+			//corrige a existencia de aspas simples pq dah pau no banco
+			$valor = str_replace("'", '"', $param);
+			$retorno =  "'" . trim($valor) . "'";
+		}		
+	
+		return $retorno;
+	}
+	
+	function getVarComoNumero($param){
+		$retorno = "null";
+		$isNum = isNumero($param);
+		if($isNum){
+			$retorno =  trim($param);
+			// echo "EH NUMERO";
+		}
+		return $retorno;
+	}
+	
+	function getVarComoData($param){
+		return getVarComoDataSQL($param);
+	}
+	
+	function getVarComoDataSQL($param){
+		$retorno = "null";
+		//echo "<br> parametro conversao data sql:".$param;
+		if($param != null)
+			$retorno = "'" . (substr($param,6,4)) . "-" . substr($param,3,2) . "-" . substr($param,0,2) . "'";
+		
+		return $retorno;
+	}
+	
+	function getDecimalSQL($param){
+		$retorno = "null";
+		$valor = str_replace(" ", "", "$param");
+		$valor = str_replace(".", "", "$valor");
+		$valor = str_replace(",", ".", "$valor");
+	
+		//echo $valor;
+		if(isNumero($valor)){
+			$retorno = $valor;
+			//echo "É NÚMERO! <BR>";
+		}
+		//else
+		//echo "NÃO É NÚMERO! <BR>";
+	
 		return $retorno;
 	}
 	

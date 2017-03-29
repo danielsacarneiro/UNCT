@@ -144,7 +144,7 @@ include_once("vodocumento.php");
 		return $this->sq . CAMPO_SEPARADOR . $this->cdPA. CAMPO_SEPARADOR . $this->anoPA;
 	}
 	
-	function getVOExplodeChavePrimaria($array){
+	function getChavePrimariaVOExplode($array){
 		$this->sq = $array[0];
 		$this->cdPA= $array[1];
 		$this->anoPA = $array[2];

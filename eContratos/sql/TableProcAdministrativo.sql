@@ -6,7 +6,7 @@ CREATE TABLE pa (
     pa_ex INT NOT NULL, -- processo administrativo ano    
     
     ct_exercicio INT, -- dados contrato
-    ct_numero INT,
+    ct_numero INT, -- simulacao da utilizacao da chave primaria
     ct_tipo char(1),
     
     pa_cd_responsavel INT NULL,
@@ -67,9 +67,5 @@ ALTER TABLE pa_tramitacao ADD CONSTRAINT fk_pa_tramitacao FOREIGN KEY (pa_ex, pa
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;
         
-ALTER TABLE pa_tramitacao ADD CONSTRAINT fk_pa_tram_doc FOREIGN KEY (ofic_ex, ofic_cd_setor, ofic_sq, ofic_tp_doc) REFERENCES documento (ofic_ex, ofic_cd_setor, sq, ofic_tp_doc)
-	ON DELETE RESTRICT
-	ON UPDATE RESTRICT;
-
 show create table pa_tramitacao;
 
