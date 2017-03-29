@@ -124,32 +124,6 @@ class filtroManter extends multiplosConstrutores{
     	return $filtro;
     }
     
-    /*static function verificaFiltroSessao($filtro){
-    	//echo $filtro->nmFiltro;
-    	
-        session_start();
-        $utilizarSessao = @$_POST["utilizarSessao"];
-        $isUtilizarSessao = $utilizarSessao != "N";
-        
-        $consultar = @$_GET["consultar"];
-        $isConsultar = $consultar == "S";
-        
-        $pegarFiltroSessao = $isUtilizarSessao && $isConsultar;
-        //echo "nome filtro". $filtro->nmFiltro;
-        if(isset($_SESSION[$filtro->nmFiltro]) && $pegarFiltroSessao){
-            $filtro = $_SESSION[$filtro->nmFiltro];
-            $paginaAtual = @$_GET['paginaAtual'];
-            
-            if($paginaAtual != null)
-                $filtro->paginacao->paginaAtual = $paginaAtual;
-        }
-        else{
-            $_SESSION[$filtro->nmFiltro] = $filtro;            
-        }
-        
-        return $filtro;
-    }*/
-    
     function getFiltroConsultaSQL($filtro){
     	//ECHO "TESTE";
     	

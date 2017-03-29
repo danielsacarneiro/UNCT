@@ -226,7 +226,13 @@ function encaminhar() {
                         $voAtual->getDadosBanco($colecao[$i]);     
                         
                         //$especie = getDsEspecie($voAtual);
-                        $situacao = $dominioSituacao->getDescricao($voAtual->situacao);
+                        $cdSituacao = $voAtual->situacao;
+                        $situacao = $dominioSituacao->getDescricao($cdSituacao);
+                        $classColunaSituacao = "tabeladadosdestacadoazulclaro";                        
+                        if($cdSituacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_ABERTA){
+                        	$classColunaSituacao = "tabeladadosdestacado";
+                        }
+                        
                         $setor = $dominioSetor->getDescricao($voAtual->cdSetor);
                         
                         $setorDestinoAtual = $colecao[$i][voDemandaTramitacao::$nmAtrCdSetorDestino];
@@ -260,7 +266,7 @@ function encaminhar() {
 					<TD class="tabeladados" nowrap><?php echo $setorDestinoAtual?></TD>
 					<TD class="tabeladados" nowrap><?php echo $tipo?></TD>
                     <TD class="tabeladados" nowrap><?php echo $voAtual->texto;?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $situacao?></TD>                    
+                    <TD class="<?=$classColunaSituacao;?>" nowrap><?php echo $situacao?></TD>                    
                     <TD class="tabeladados" nowrap><?php echo $prioridade?></TD>
                     <TD class="tabeladados" nowrap><?php echo $nmUsuario;?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($voAtual->dtReferencia);?></TD>

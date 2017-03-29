@@ -34,6 +34,7 @@ header ('Content-type: text/html; charset=ISO-8859-1');
     static $CD_SIM  = "S";
     static $CD_NAO  = "N"; 
     static $CD_OPCAO_TODOS  = "op_todos";
+    static $CD_OPCAO_VAZIO = "op_vazio";
     
     static $CD_ESPECIE_CONTRATO_MATER = 1;
     

@@ -47,8 +47,10 @@
 		$html = "<select id='$idSelect' name='$nmSelect' class='$class' $TagEJavaScript>\n";
 			
 		//inclui opcao vazio
-		if($comOpcaoSelecione)
+		if($comOpcaoSelecione){
 			$html .= $this->getOpcao("", "-- Selecione --", null);
+			//$html .= $this->getOpcao(constantes::$CD_OPCAO_VAZIO, "-- Selecione --", null);
+		}
 			
 		//var_dump( $this->colecao);
 		
