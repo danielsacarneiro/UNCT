@@ -54,13 +54,17 @@ include_once(caminho_vos."vousuario.php");
         $pastaCSS = caminho_css;        
         $pastaCSS = subirNivelPasta($pastaCSS, $qtdNiveisAcimaEmSeEncontraPagina);
         
+        $pastaJS = caminho_js;
+        $pastaJS = subirNivelPasta($pastaJS, $qtdNiveisAcimaEmSeEncontraPagina);
+        
         if($titulo == null)
             $titulo = constantes::$nomeSistema." :: U N C T";
         
         $codificacaoHTML = "\n<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'>";
         $html = $codificacaoHTML;
         $html.= "\n<TITLE>$titulo</TITLE>";
-        $html.= "\n<LINK href='" . $pastaCSS . "sefaz_pe.css' rel='stylesheet' type='text/css'>\n";        
+        $html.= "\n<LINK href='" . $pastaCSS . "sefaz_pe.css' rel='stylesheet' type='text/css'>\n";
+        $html.= "\n<SCRIPT language='JavaScript' type='text/javascript' src='" . $pastaJS . "mensagens_globais.js'></SCRIPT>\n";        
         
         return $html;
     }

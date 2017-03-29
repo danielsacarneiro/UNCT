@@ -272,6 +272,6 @@ _mensagensGlobais[1410] = "Número OAB inválido!";
 _mensagensGlobais[1420] = "Número TATE inválido!";
 
 // Retorna a mensagem com o código informado
-function mensagemGlobal(pCdMensagem) {
+function mensagemGlobal(pCdMensagem) {	
 	return _mensagensGlobais[pCdMensagem];
 }
