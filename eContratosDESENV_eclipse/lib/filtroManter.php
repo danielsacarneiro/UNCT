@@ -30,6 +30,7 @@ class filtroManter extends multiplosConstrutores{
 	var $nmEntidadePrincipal;
 	var $isHistorico;
 	var $cdConsultarArquivo;
+	var $isValidarConsulta;
 				
 	function __construct0() {
 		//echo "teste0";
@@ -48,6 +49,10 @@ class filtroManter extends multiplosConstrutores{
 		
 		if($pegarFiltrosDaTela){
 			$this->pegarFiltroDaTela();
+			$this->isValidarConsulta = true;
+		}
+		else{
+			$this->isValidarConsulta = false;
 		}
 		
 		if($this->numTotalRegistros == null){
@@ -64,7 +69,12 @@ class filtroManter extends multiplosConstrutores{
 
         $this->isHistorico = "S" == $this->cdHistorico;        
         //para o caso de ser necessario setar um filtro default para nao trazer todos os registros
-        $this->temValorDefaultSetado = false;        
+        $this->temValorDefaultSetado = false;
+        
+		//chama o metodo do filho que pega os dados do filtro do formulario
+        if (method_exists($this,"getFiltroFormulario")){
+        	$this->getFiltroFormulario();
+        }        
 	}	
     
 	function pegarFiltroDaTela(){
@@ -75,17 +85,7 @@ class filtroManter extends multiplosConstrutores{
 		$this->cdHistorico  = @$_POST[self::$nmAtrCdHistorico];
 		$this->qtdRegistrosPorPag = @$_POST[self::$nmAtrQtdRegistrosPorPag];
 		$this->numTotalRegistros = @$_POST[self::$nmAtrNumTotalRegistros];		 
-		$this->cdConsultarArquivo = @$_POST[self::$nmAtrCdConsultarArquivo];
-		
-		/*$this->cdAtrOrdenacao = @$_POST["cdAtrOrdenacao"];
-		$this->cdOrdenacao = @$_POST["cdOrdenacao"];
-		$this->tpVigencia = @$_POST["dtVigencia"];
-		$this->dtVigencia = @$_POST["dtVigencia"];
-		$this->cdHistorico  = @$_POST["cdHistorico"];
-		$this->qtdRegistrosPorPag = @$_POST["qtdRegistrosPorPag"];
-		$this->numTotalRegistros = @$_POST["numTotalRegistros"];
-		$this->cdConsultarArquivo = @$_POST[self::$nmAtrCdConsultarArquivo];*/
-		
+		$this->cdConsultarArquivo = @$_POST[self::$nmAtrCdConsultarArquivo];		
 	}
 	
 	function isSetaValorDefault(){
@@ -158,7 +158,8 @@ class filtroManter extends multiplosConstrutores{
     	}
     	
     	if($this->cdAtrOrdenacao  != null){
-    				
+    		
+    		$atributoOrdenacao = $this->cdAtrOrdenacao; 
     		$ordem = $this->cdOrdenacao;
     		/*if($ordem == constantes::$CD_ORDEM_CRESCENTE){
     			$ordem = "";
@@ -171,7 +172,14 @@ class filtroManter extends multiplosConstrutores{
     			$strOrdemDefault = "," . $this->getAtributoOrdenacaoDefault();
     		}
     		
-    		$filtro = $filtro . "\n ORDER BY $this->cdAtrOrdenacao $ordem $strOrdemDefault ";
+    		if($this->cdAtrOrdenacaoConsulta != null){
+    			//atributo que serve para formatar o atributo de ordenacao de acordo com a tabela que deve ser consultada
+    			//os campos dos combos de ordenacao geralmente nao vem identificados com a tabela que devem ordenar
+    			//o filtro filho pode formatar isso, e atribui a variavel cdAtrOrdenacaoConsulta
+    			$atributoOrdenacao = $this->cdAtrOrdenacaoConsulta; 
+    		}
+    		
+    		$filtro = $filtro . "\n ORDER BY $atributoOrdenacao $ordem $strOrdemDefault ";
     		
     		//para setar o atributo de ordenacao de forma mais complexa: quando ha joins na tabela
     		//para tanto o atributo nmEntidadePrincipal precisa ser not null

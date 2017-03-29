@@ -71,6 +71,7 @@ $numTotalRegistros = $filtro->numTotalRegistros;
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_datahora.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_cnpfcnpj.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_text.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>tooltip.js"></SCRIPT>
 
 <SCRIPT language="JavaScript" type="text/javascript">
@@ -205,17 +206,13 @@ function alterar() {
     <DIV id="div_filtro" class="div_filtro">
     <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
         <TBODY>
-			<?php
-			$colecaoExer = array();
-            for ($i=anoDefault;$i>2000;$i--){            	
-            	$colecaoExer[$i]=$i;
-            }			            
-			$comboExercicio = new select($colecaoExer);
-			?>        
+	        <?php	        
+	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
+	        $arrayCssClass = array("camponaoobrigatorio","camponaoobrigatorio", "camponaoobrigatorio");
+	        ?>        
             <TR>
-                <TH class="campoformulario" nowrap>Ano Contrato Mater:</TH>
-                <TD class="campoformulario" ><?php echo $comboExercicio->getHtml(vocontrato::$nmAtrAnoContrato,voContrato::$nmAtrAnoContrato, $anoContrato);?>
-                <!-- <INPUT type="text" id="<?=vocontrato::$nmAtrAnoContrato?>" name="<?=vocontrato::$nmAtrAnoContrato?>"  value="<?php echo($anoContrato);?>"  class="camponaoobrigatorio" size="6" maxlength="4" >--></TD>                
+	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
+	            <TD class="campoformulario" width="1%"><?php getContratoEntradaDeDados($tipo, $cdContrato, $anoContrato, $arrayCssClass, null, null);?></TD>
 				<?php 
 				include_once(caminho_util."radiobutton.php");
 				$arraySimNao = array("S" => "Sim",
@@ -232,15 +229,7 @@ function alterar() {
 			<?php
             $dominioTipoContrato = new dominioTipoContrato();            
 			$tiposContrato = new select($dominioTipoContrato->colecao);
-			?>            
-            <TR>
-                <TH class="campoformulario" nowrap>Número/Tipo:</TH>
-                <TD class="campoformulario" colspan="3"><INPUT type="text" id="<?=vocontrato::$nmAtrCdContrato?>" name="<?=vocontrato::$nmAtrCdContrato?>"  value="<?php echo(complementarCharAEsquerda($cdContrato, "0", 3));?>"  class="camponaoobrigatorio" size="6" maxlength="5" >
-                                                        <?php echo $tiposContrato->getHtml(vocontrato::$nmAtrTipoContrato,voContrato::$nmAtrTipoContrato, $tipo);?>
-                </TD>
-            </TR>					
-            <TR>
-			<?php
+            
 			//include_once("dominioEspeciesContrato.php");
 			$especiesContrato = new dominioEspeciesContrato();
 			$combo = new select($especiesContrato->colecao);
@@ -369,27 +358,8 @@ function alterar() {
             <TD class="campoformulario" nowrap colspan=3><?php echo $comboVigencia->getHtmlOpcao($filtro::$nmAtrTpVigencia,$filtro::$nmAtrTpVigencia, $filtro->tpVigencia, false);?></TD>
 	    </TR>					
 				<?php
-				include_once(caminho_util."dominioQtdObjetosPagina.php");
-				$objetosPorPagina = new dominioQtdObjetosPagina();
-				$comboQtdRegistros  = new select($objetosPorPagina->colecao);
-				$comboOrdem = new select(getOrdemAtributos());
-				$comboOrdenacao = new select(getAtributosOrdenacaoContrato());
-				//$cdOrdenacao = @$_POST["cdOrdenacao"];
-				//$cdAtrOrdenacao = @$_POST["cdAtrOrdenacao"];                      
-                $cdOrdenacao = $filtro->cdOrdenacao;
-                $cdAtrOrdenacao = $filtro->cdAtrOrdenacao;
-                
-                $radioHistorico  = new radiobutton($arraySimNao);
+				echo getComponenteConsultaFiltro($voContrato->temTabHistorico, $filtro);
 				?>
-  		    <TR>
-               <TH class="campoformulario" width="1%">Ordenação:</TH>
-			   <TD class="campoformulario" colspan="3"> <?php echo $comboOrdenacao->getHtmlOpcao("cdAtrOrdenacao","cdAtrOrdenacao", $cdAtrOrdenacao, false);?>
-																Ordem:
-														<?php echo $comboOrdem->getHtmlOpcao("cdOrdenacao","cdOrdenacao", $cdOrdenacao, false);?>
-														Num.Registros por página:<?php echo $comboQtdRegistros->getHtmlOpcao("qtdRegistrosPorPag","qtdRegistrosPorPag", $qtdRegistrosPorPag, false);?>&nbsp;
-                                                        Histórico: <?php echo $radioHistorico->getHtmlRadio("cdHistorico","cdHistorico", $cdHistorico, false, false);?>
-                                                        &nbsp;<button id="localizar" class="botaoconsulta" type="submit">Consultar</button></TD>
-			</TR>
        </TBODY>
   </TABLE>
 		</DIV>

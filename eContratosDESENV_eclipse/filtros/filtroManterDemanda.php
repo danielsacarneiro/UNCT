@@ -11,9 +11,19 @@ class filtroManterDemanda extends filtroManter{
 	
 	// ...............................................................
 	// construtor
-	function __construct() {
-		parent::__construct(true);
-		
+	
+	/*function __construct1($pegarFiltrosDaTela) {
+		parent::__construct1($pegarFiltrosDaTela);
+	
+		if($pegarFiltrosDaTela){
+			$this->getFiltroFormulario();
+			//echo "teste";
+		}
+	
+		//echo "construtor2";
+	}*/
+	
+	function getFiltroFormulario(){
 		$vodemanda = new voDemandaTramitacao();
 		$vocontrato = new vocontrato();
 		
@@ -28,13 +38,14 @@ class filtroManterDemanda extends filtroManter{
 		$vocontrato->anoContrato = @$_POST[vocontrato::$nmAtrAnoContrato];
 		$vocontrato->cdContrato = @$_POST[vocontrato::$nmAtrCdContrato];
 		$vocontrato->tipo = @$_POST[vocontrato::$nmAtrTipoContrato];
+		$vocontrato->cdAutorizacao = @$_POST[vocontrato::$nmAtrCdAutorizacaoContrato];
 		
 		$this->vodemanda = $vodemanda;
 		$this->vocontrato = $vocontrato;
 		
 		if($this->cdOrdenacao == null){
-			$this->cdOrdenacao = constantes::$CD_ORDEM_CRESCENTE;
-		}
+			$this->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
+		}		
 	}
 	 
 	function getFiltroConsultaSQL(){
@@ -44,6 +55,7 @@ class filtroManterDemanda extends filtroManter{
 		$nmTabela = voDemanda::getNmTabelaStatic($this->isHistorico);
 		$nmTabelaTramitacao = voDemandaTramitacao::getNmTabelaStatic(false);
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic(false);
+		$nmTabelaContrato = vocontrato::getNmTabelaStatic(false);
 					
 		//seta os filtros obrigatorios
 		if($this->isSetaValorDefault()){
@@ -144,6 +156,16 @@ class filtroManterDemanda extends filtroManter{
 					$conector  = "\n AND ";
 		}
 		
+		if($this->vocontrato->cdAutorizacao != null){
+			$filtro = $filtro . $conector
+			. $nmTabelaContrato. "." .vocontrato::$nmAtrCdAutorizacaoContrato
+			. " = "
+					. $this->vocontrato->cdAutorizacao
+					;
+		
+					$conector  = "\n AND ";
+		}
+		
 		if($this->nmContratada != null){
 			$filtro = $filtro . $conector
 			. $nmTabelaPessoa. "." .vopessoa::$nmAtrNome
@@ -166,12 +188,25 @@ class filtroManterDemanda extends filtroManter{
 		
 		}
 		
+		$this->formataCampoOrdenacao($nmTabela);
 		//finaliza o filtro
 		$filtro = parent::getFiltroConsultaSQL($filtro);
 
 		//echo "Filtro:$filtro<br>";
 
 		return $filtro;
+	}
+	
+	function formataCampoOrdenacao($nmTabela){
+		if($nmTabela != null && $this->cdAtrOrdenacao != null){
+			
+			$jaEhFormatado = strpos ($this->cdAtrOrdenacao, ".");									
+			
+			if($jaEhFormatado === false){			
+				$this->cdAtrOrdenacaoConsulta = $nmTabela. "." .$this->cdAtrOrdenacao;
+			}
+			
+		}		
 	}
 	
 	
@@ -183,11 +218,10 @@ class filtroManterDemanda extends filtroManter{
 	}
 	
 	function getAtributosOrdenacao(){
-		$nmTabelaDemanda = voDemanda::getNmTabelaStatic($this->isHistorico);
 		$varAtributos = array(
-				voDemanda::$nmAtrPrioridade => "Prioridade",
 				voDemanda::$nmAtrDtReferencia => "Data",
-				$nmTabelaDemanda . "." . voDemanda::$nmAtrCd => "Número"
+				voDemanda::$nmAtrPrioridade => "Prioridade",				
+				voDemanda::$nmAtrCd => "Número"
 		);
 		return $varAtributos;
 	}

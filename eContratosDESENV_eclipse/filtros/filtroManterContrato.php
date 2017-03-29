@@ -286,6 +286,20 @@ class filtroManterContrato extends filtroManter{
 	function getAtributoOrdenacaoDefault(){
 		return vocontrato::getNmTabelaStatic($this->isHistorico) . "." . vocontrato::$nmAtrSqContrato . " " . constantes::$CD_ORDEM_DECRESCENTE;		
 	}
+	
+	function getAtributosOrdenacao(){
+		$varAtributos = array(
+				"ct_exercicio" => "Ano",
+				"ct_numero" => "Numero",
+				"ct_tipo" => "Tipo",
+				vocontrato::$nmAtrCdEspecieContrato => "Especie",
+				"ct_contratada" => "Contratada",
+				"ct_dt_vigencia_inicio" => "Dt.Inicio",
+				"ct_dt_vigencia_fim"  => "Dt.Fim",
+				"ct_valor_global" => "Vl.Global"
+		);
+		return $varAtributos;
+	}	
 
 }
 

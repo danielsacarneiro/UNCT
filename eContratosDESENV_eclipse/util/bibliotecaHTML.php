@@ -135,21 +135,7 @@ include_once(caminho_vos."vousuario.php");
 				);
 	 return $varAtributos;	
 	}
-	
-	function getAtributosOrdenacaoContrato(){
-	 $varAtributos = array(
-				"ct_exercicio" => "Ano",
-				"ct_numero" => "Numero",
-				"ct_tipo" => "Tipo",
-				vocontrato::$nmAtrCdEspecieContrato => "Especie",
-                "ct_contratada" => "Contratada",
-				"ct_dt_vigencia_inicio" => "Dt.Inicio",
-				"ct_dt_vigencia_fim"  => "Dt.Fim",
-				"ct_valor_global" => "Vl.Global" 
-				);
-	 return $varAtributos;	
-	}    
-    	
+	    	
 	function incluirUsuarioDataHoraDetalhamento($voEntidade){
         $USUARIO_BATCH = "IMPORT.PLANILHA";
         $nmusuinclusao = $voEntidade->nmUsuarioInclusao;

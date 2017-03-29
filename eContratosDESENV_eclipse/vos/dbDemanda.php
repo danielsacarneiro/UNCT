@@ -49,6 +49,7 @@ Class dbDemanda extends dbprocesso{
 		$nmTabela = $vo->getNmTabelaEntidade($isHistorico);
 		$nmTabelaTramitacao = voDemandaTramitacao::getNmTabela();
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabela();
+		$nmTabelaContrato = vocontrato::getNmTabelaStatic(false);
 		
 		$colunaUsuHistorico = "";
 		
@@ -88,6 +89,19 @@ Class dbDemanda extends dbprocesso{
 		$queryJoin .= $nmTabelaDemandaContrato;
 		$queryJoin .= "\n ON ".$nmTabela.".".voDemanda::$nmAtrAno." = " . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoDemanda;
 		$queryJoin .= "\n AND ".$nmTabela.".".voDemanda::$nmAtrCd." = " . $nmTabelaDemandaContrato. ".". voDemandaContrato::$nmAtrCdDemanda;
+		
+		$queryJoin.= "\n LEFT JOIN ". $nmTabelaContrato;
+		$queryJoin.= "\n ON ";
+		$queryJoin.= $nmTabelaDemandaContrato. ".".voDemandaContrato::$nmAtrAnoContrato . "=".$nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato;
+		$queryJoin.= "\n AND ";
+		$queryJoin.= $nmTabelaDemandaContrato. ".".voDemandaContrato::$nmAtrTipoContrato . "=".$nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato;
+		$queryJoin.= "\n AND ";
+		$queryJoin.= $nmTabelaDemandaContrato. ".".voDemandaContrato::$nmAtrCdContrato. "=".$nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato;
+		$queryJoin.= "\n AND ";
+		$queryJoin.= $nmTabelaDemandaContrato. ".".voDemandaContrato::$nmAtrCdEspecieContrato. "=".$nmTabelaContrato . "." . vocontrato::$nmAtrCdEspecieContrato;
+		$queryJoin.= "\n AND ";
+		$queryJoin.= $nmTabelaDemandaContrato. ".".voDemandaContrato::$nmAtrSqEspecieContrato. "=".$nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato;
+		
 				
 		return parent::consultarMontandoQueryTelaConsulta($vo, $filtro, $arrayColunasRetornadas, $queryJoin);		
 	}
@@ -135,6 +149,40 @@ Class dbDemanda extends dbprocesso{
 		$filtro->TemPaginacao = false;	
 
 		return parent::consultarFiltro($filtro, $querySelect, $queryFrom, false);
+	}
+	
+	function validarAlteracao($vo){
+		
+		if($vo->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA){
+			//verifica se o setor atual eh igual ao setor de origem
+			$filtro = new filtroManterDemanda(false);
+			//$filtro->vodemanda = new voDemanda();
+			$filtro->vodemanda = new voDemanda();
+			$filtro->vodemanda->cd = $vo->cd;
+			$filtro->vodemanda->ano = $vo->ano;			
+						
+			//echo "SITUACAO FECHADA";
+			$colecao = $this->consultarTelaConsulta($vo, $filtro);			
+			if($colecao != ""){
+				$setorAtual = $colecao[0][voDemandaTramitacao::$nmAtrCdSetorDestino];
+				//echo "setor atual:" . $setorAtual;
+				if($vo->cdSetor != $setorAtual){
+					$msg = "A demanda deve estar encaminhada ao setor responsável para fechamento.";
+					throw new Exception($msg);					
+				}
+			}//else echo "COLECAO VAZIA";
+		}
+				
+		//throw new Exception("REMOVER!!:" . $msg);
+		
+		return true;
+	}
+	
+	function alterar($vo){		
+		$isAlteracaoPermitida = $this->validarAlteracao($vo);
+		if($isAlteracaoPermitida){
+			parent::alterar($vo);
+		}		
 	}
 	
 	//o excluir eh implementado para nao usar da voentidade

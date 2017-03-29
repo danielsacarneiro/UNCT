@@ -180,7 +180,7 @@ class dbprocesso{
 	
 	function consultarMontandoQueryTelaConsulta($vo, $filtro, $arrayColunasRetornadas, $queryJoin){
 		$nmTabelaACompararCdUsuario = $vo->getNmTabelaEntidade($filtro->isHistorico);		
-		$retorno = $this->consultarMontandoQueryUsuarioFiltro($vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $filtro, false, true);
+		$retorno = $this->consultarMontandoQueryUsuarioFiltro($vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $filtro, false, $filtro->isValidarConsulta);
 		
 		/*removeObjetoSessao($filtro->nmFiltro);
 		putObjetoSessao($filtro->nmFiltro, $filtro);*/
@@ -278,7 +278,7 @@ class dbprocesso{
 	
 		$retorno = "";
 		$isHistorico = ("S" == $filtro->cdHistorico);
-	
+			
 		//flag que diz se pode consultar ou nao
 		$consultar = @$_GET["consultar"];
 	

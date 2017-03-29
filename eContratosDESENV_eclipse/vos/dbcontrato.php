@@ -358,122 +358,6 @@ include_once (caminho_util."biblioteca_htmlArquivo.php");
 		
 		return $retorno;				
 	}
-           
-	/*
-	 * IMPORTACAO ANTIGA
-	 * function getAtributosInsertImportacaoPlanilha($tipo, $linha){
-		//$tipo = $linha["A"];
-		$numero = $linha["B"];
-		$ano = $linha["B"];
-	
-		$especie = $linha["C"];
-		$dtAlteracao = $linha["D"];
-	
-		$objeto = $linha["E"];
-		$gestorPessoa = $linha["F"];
-	
-		if($tipo == "C"){
-			//contrato
-			$gestor  = $linha["G"];
-	
-			$valorGlobal = $linha["I"];
-			$valorMensal = $linha["H"];
-			$processoLic = $linha["J"];
-			$modalidadeLic = $linha["K"];
-			$dtAssinatura  = $linha["L"];
-			$dataPublic  = $linha["M"];
-			$nomeContratada  = $linha["N"];
-			$docContratada   = $linha["O"];
-	
-			$dtVigenciaInicio   = $linha["P"];
-			$dtVigenciaFim   = $linha["Q"];
-			$sqEmpenho   = $linha["S"];
-			$tpAutorizacao   = $linha["T"];
-			$inLicom   = $linha["U"];
-			$obs = $linha["V"];
-		}else {
-			//convenio
-			$gestor  = null;
-			$valorGlobal = $linha["G"];
-			$valorMensal = null;
-			$processoLic = $linha["H"];
-			$modalidadeLic = $linha["I"];
-			$dtAssinatura  = $linha["J"];
-			$dataPublic  = $linha["K"];
-			$nomeContratada  = $linha["L"];
-			$docContratada   = $linha["M"];
-	
-			$dtVigenciaInicio   = $linha["N"];
-			$dtVigenciaFim   = $linha["O"];
-	
-			if($tipo == "V")
-				$sqEmpenho   = $linha["Q"];
-				else
-					$sqEmpenho   = $linha["P"];
-	
-					$tpAutorizacao   = null;
-					$inLicom   = $linha["R"];
-					$obs = $linha["S"];
-		}
-	
-		//recupera o sequencial da especie (aditivo, apostilamento) quando existir
-		$sqEspecie = substr($especie, 0, 3);
-		$indiceEspecie = getIndicePosteriorAoUltimoNumeroAPartirDoComeco($sqEspecie);
-		$sqEspecie = substr($sqEspecie, 0, $indiceEspecie);
-		//recuperar a especie propriamente dita
-		$cdEspecie = $this->getCdEspecieContrato($especie);
-	
-		$situacao = "null";
-		$dtProposta = "null";
-		$cdGestor = "null";
-		$cdPessoaGestor = "null";
-		$cdPessoaContratada= "null";
-	
-		$importacao = "'S'";
-		$dtPublic = $this->getDataPublicacaoImportacao($dataPublic);
-		//trata o valor do inlicom
-		if($inLicom == "OK")
-			$inLicom = "S";
-			else
-				$inLicom = "N";
-	
-				//CUIDADO COM A ORDEM
-				//DEVE ESTAR IGUAL A vocontrato->getAtributosFilho()
-				$retorno = "";
-				$retorno.= $this->getAnoLinhaImportacao($ano) . ",";
-				$retorno.= $this-> getNumeroLinhaImportacao($numero) . ",";
-				$retorno.= $this-> getVarComoString($tipo) . ",";
-				$retorno.= $this-> getVarComoString($especie) . ",";
-				$retorno.= $this-> getVarComoNumero($sqEspecie) . ",";
-				$retorno.= $this-> getVarComoString($cdEspecie) . ",";
-				$retorno.= $situacao . ",";
-				$retorno.= $this-> getVarComoString($objeto) . ",";
-				$retorno.= $this-> getVarComoString($gestorPessoa) . ",";
-				$retorno.= $this-> getVarComoNumero($cdPessoaGestor) . ",";
-				$retorno.= $this-> getVarComoString($gestor) . ",";
-				$retorno.= $this-> getVarComoNumero($cdGestor) . ",";
-				$retorno.= $this-> getVarComoString($processoLic) . ",";
-				$retorno.= $this-> getVarComoString($modalidadeLic) . ",";
-				$retorno.= $this-> getVarComoString($dataPublic) . ",";
-				$retorno.= $this-> getVarComoString($dtPublic) . ",";
-				$retorno.= $this-> getDataLinhaImportacao($dtAssinatura) . ",";
-				$retorno.= $this-> getDataLinhaImportacao($dtVigenciaInicio) . ",";
-				$retorno.= $this-> getDataLinhaImportacao($dtVigenciaFim) . ",";
-				$retorno.= $this-> getVarComoString($nomeContratada) . ",";
-				$retorno.= $this-> getVarComoString($docContratada) . ",";
-				$retorno.= $this-> getVarComoString($sqEmpenho) . ",";
-				$retorno.= $this-> getVarComoString($tpAutorizacao) . ",";
-				$retorno.= $this-> getVarComoNumero($this->getCdAutorizacao($tpAutorizacao)) . ",";
-				$retorno.= $this-> getVarComoString($inLicom) . ",";
-				$retorno.= $importacao . ",";
-				$retorno.= $this-> getVarComoString($obs) . ",";
-				$retorno.= $this-> getDecimalLinhaImportacao($valorGlobal) . ",";
-				$retorno.= $this-> getDecimalLinhaImportacao($valorMensal) . ",";
-				$retorno.= $dtProposta . ",";
-				$retorno.= $cdPessoaContratada;
-	
-				return $retorno;
-	}*/
 	
 	function getCdAutorizacao($tipoAutorizacao){
 		include_once(caminho_funcoes."contrato/dominioAutorizacao.php");
@@ -499,7 +383,9 @@ include_once (caminho_util."biblioteca_htmlArquivo.php");
 		
 	}
     
-    function getCdEspecieContrato($param){
+    //recebe tambem o objeto porque as vezes a informacao esta nele
+    //quando a informacao nao estiver na especie, ele tenta no objeto 
+    function getCdEspecieContrato($paramEspecie, $objeto){
                         
         $retorno = null;
         $dominioEspecies = new dominioEspeciesContrato();
@@ -510,7 +396,7 @@ include_once (caminho_util."biblioteca_htmlArquivo.php");
         //var_dump($colecao) . "<br>";
         $chaves = array_keys($colecao);
         
-        //echo "<br>especie:$param";
+        //echo "<br>especie:$paramEspecie";
         
         for($i=0; $i<$tamanho;$i++){                        
             $chave = $chaves[$i];
@@ -518,10 +404,10 @@ include_once (caminho_util."biblioteca_htmlArquivo.php");
             
             $mystring = utf8_encode($especie);
             //$mystring = $especie;
-            //echo "<br>$mystring X $param";
+            //echo "<br>$mystring X $paramEspecie";
             
             //verifica se eh o tipo da especie em questao            
-            if(existeStr1NaStr2ComSeparador($param, $mystring)){
+            if(existeStr1NaStr2ComSeparador($paramEspecie, $mystring)){
                 $retorno = $chave;
                 break;
             }
@@ -531,7 +417,12 @@ include_once (caminho_util."biblioteca_htmlArquivo.php");
             echo "<br>EXISTE<br>";
         }
         else{
-            echo "<br>NAO EXISTE<br>";
+        	//se nao conseguiu na especie, tenta no objeto
+        	if($objeto != null){
+        		$retorno = $this->getCdEspecieContrato($objeto, null);
+        	}else{
+            	echo "<br>NAO EXISTE<br>";
+        	}
         }
         
         //$mystring = utf8_decode($param);
@@ -774,7 +665,7 @@ include_once (caminho_util."biblioteca_htmlArquivo.php");
     	$indiceEspecie = getIndicePosteriorAoUltimoNumeroAPartirDoComeco($sqEspecie);
     	$sqEspecie = substr($sqEspecie, 0, $indiceEspecie);
     	//recuperar a especie propriamente dita
-    	$cdEspecie = $this->getCdEspecieContrato($especie);
+    	$cdEspecie = $this->getCdEspecieContrato($especie, $objeto);
     
     	$situacao = "null";
     	$dtProposta = "null";
@@ -825,7 +716,7 @@ include_once (caminho_util."biblioteca_htmlArquivo.php");
      	//corrige os tipos de dados
     	$retorno->anoContrato = $this->getAnoLinhaImportacao($retorno->anoContrato);
     	$retorno->cdContrato = $this-> getNumeroLinhaImportacao($retorno->cdContrato);
-    	$retorno->tpAutorizacao = $this->getCdAutorizacao($retorno->tpAutorizacao);
+    	$retorno->cdAutorizacao = $this->getCdAutorizacao($retorno->tpAutorizacao);
     	//echo "<br> VALOR GLOBAL: " . $retorno->vlGlobal;
     	//echo "<br> VALOR vlMensal: " . $retorno->vlMensal;
      	$retorno->vlGlobal = $this->getDecimalLinhaImportacao($retorno->vlGlobal);

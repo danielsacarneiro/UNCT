@@ -306,8 +306,7 @@ function carregaGestorPessoa(){
 		<TR>
 			<?php
 			include_once("dominioAutorizacao.php");
-			$autorizacao = new dominioAutorizacao();
-			$combo = new select($autorizacao->colecao);						
+			$combo = new select(dominioAutorizacao::getColecao());						
 			?>
             <TH class="campoformulario" nowrap>Autorização Prévia:</TH>
             <TD class="campoformulario" colspan="3"><?php echo $combo->getHtmlSelect(vocontrato::$nmAtrCdAutorizacaoContrato,vocontrato::$nmAtrCdAutorizacaoContrato, $voContrato->cdAutorizacao, true, "camponaoobrigatorio", true);?>
