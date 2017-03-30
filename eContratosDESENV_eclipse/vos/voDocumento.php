@@ -129,8 +129,12 @@ include_once(caminho_util."dominioSetor.php");
 				$retorno.=$this->link;
 				
 			}else if($this->tp == dominioTpDocumento::$CD_TP_DOC_OFICIO){
+				if($this->cdSetor == dominioSetor::$CD_SETOR_UNCT){
+					$retorno = dominioTpDocumento::getEnderecoPastaBaseUNCT();
+				}
+				
 				$retorno.= dominioTpDocumento::$ENDERECO_PASTA_OFICIO;
-				$retorno.= dominioTpDocumento::$ENDERECO_PASTA_OFICIO . " " . $domSetor->getDescricao($this->cdSetor). " $this->ano\\";				
+				$retorno.= dominioTpDocumento::$ENDERECO_PASTA_OFICIO . " $this->ano\\";				
 				
 				$retorno.=$this->link;
 			}else if($this->tp == dominioTpDocumento::$CD_TP_DOC_NOTIFICACAO){				
