@@ -36,6 +36,7 @@ class filtroManterDemanda extends filtroManter{
 		$vodemanda->tipo = @$_POST[voDemanda::$nmAtrTipo];
 		$vodemanda->situacao  = @$_POST[voDemanda::$nmAtrSituacao];
 		$vodemanda->prioridade  = @$_POST[voDemanda::$nmAtrPrioridade];
+		$vodemanda->prt = @$_POST[voDemandaTramitacao::$nmAtrProtocolo];
 		
 		$vocontrato->anoContrato = @$_POST[vocontrato::$nmAtrAnoContrato];
 		$vocontrato->cdContrato = @$_POST[vocontrato::$nmAtrCdContrato];
@@ -130,6 +131,21 @@ class filtroManterDemanda extends filtroManter{
 					;
 		
 					$conector  = "\n AND ";
+		}
+		
+		if($this->vodemanda->prt != null){
+						
+			
+			$filtro = $filtro . $conector
+			. " EXISTS (SELECT 'X' FROM " . $nmTabelaTramitacao
+			. " WHERE " 
+			. $nmTabela . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrAno
+			. " AND " . $nmTabela . "." . voDemanda::$nmAtrCd . "=" . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrCd
+			. " AND " . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrProtocolo . "="			
+			. getVarComoString($this->vodemanda->prt)
+			. ")\n";
+		
+			$conector  = "\n AND ";
 		}
 		
 		if($this->vocontrato->anoContrato != null){

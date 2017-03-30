@@ -50,8 +50,7 @@ setCabecalho($titulo);
 ?>
 <!DOCTYPE html>
 <HEAD>
-<?=setTituloPagina(null)?>
-<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>mensagens_globais.js"></SCRIPT>
+
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_text.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_oficio.js"></SCRIPT>
@@ -83,21 +82,6 @@ function confirmar() {
 	return confirm("Confirmar Alteracoes?");    
 }
 
-/*function carregaContratada() {
-	<?php 
-	$nmCampoDiv = vopessoa::$nmAtrNome;
-	?>
-	//ta na biblioteca_funcoes_pessoa.js
-	pNmCampoCdContrato = '<?=vocontrato::$nmAtrCdContrato;?>';
-	pNmCampoAnoContrato = '<?=vocontrato::$nmAtrAnoContrato;?>';
-	pNmCampoTipoContrato = '<?=vocontrato::$nmAtrTipoContrato;?>';
-	pNmCampoCdEspecieContrato = '<?=vocontrato::$nmAtrCdEspecieContrato;?>';
-	pNmCampoSqEspecieContrato = '<?=vocontrato::$nmAtrSqEspecieContrato;?>';
-	pNmCampoDiv = '<?=$nmCampoDiv;?>';
-	
-	carregaDadosContratada(pNmCampoAnoContrato, pNmCampoTipoContrato, pNmCampoCdContrato, pNmCampoCdEspecieContrato, pNmCampoSqEspecieContrato,pNmCampoDiv);    
-}*/
-
 function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	chave = ano
 	+ CD_CAMPO_SEPARADOR +  cdSetor
@@ -111,7 +95,7 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 }
 
 </SCRIPT>
-
+<?=setTituloPagina(null)?>
 </HEAD>
 <BODY class="paginadados" onload="">
 	  
@@ -236,7 +220,7 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Título:</TH>
 	            <TD class="campoformulario" colspan=3>				
-	            <INPUT type="text" onKeyUp="javascript:this.value = this.value.toUpperCase();" id="<?=voDemanda::$nmAtrTexto?>" name="<?=voDemanda::$nmAtrTexto?>" value=""  class="campoobrigatorio" size="80" required>	            	                        	                        
+	            <INPUT type="text" id="<?=voDemanda::$nmAtrTexto?>" name="<?=voDemanda::$nmAtrTexto?>" value=""  class="campoobrigatorio" size="80" required>	            	                        	                        
 	        </TR>
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Prioridade:</TH>
@@ -270,7 +254,7 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">PRT:</TH>
 	            <TD class="campoformulario" colspan=3>				
-	            <INPUT type="text" id="<?=voDemandaTramitacao::$nmAtrProtocolo?>" name="<?=voDemandaTramitacao::$nmAtrProtocolo?>" value=""  class="camponaoobrigatorio" size="30">	            	                        	                        
+	            <INPUT type="text" onkeyup="formatarCampoPRT(this, event);" id="<?=voDemandaTramitacao::$nmAtrProtocolo?>" name="<?=voDemandaTramitacao::$nmAtrProtocolo?>" value=""  class="camponaoobrigatorio" size="30">	            	                        	                        
 	        </TR>
 	        <TR>
 		        <TH class="campoformulario" width="1%" nowrap>Documento:</TH>

@@ -107,6 +107,12 @@ Class dbDemanda extends dbprocesso{
 		$queryJoin.= "\n ON ";
 		$queryJoin.= $nmTabelaPessoaContrato. ".".vopessoa::$nmAtrCd . "=".$nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
 		
+		/*$arrayGroupby = array($nmTabela . "." . voDemanda::$nmAtrAno,
+					$nmTabela . "." . voDemanda::$nmAtrCd
+		);		
+		
+		$filtro->groupby = $arrayGroupby;*/
+		
 		return parent::consultarMontandoQueryTelaConsulta($vo, $filtro, $arrayColunasRetornadas, $queryJoin);		
 	}
 	
@@ -256,7 +262,7 @@ Class dbDemanda extends dbprocesso{
 		$retorno.= $this-> getVarComoNumero($vo->cdSetor) . ",";
 		//$retorno.= $this-> getVarComoNumero($vo->situacao);				
 		$retorno.= $this-> getVarComoNumero(dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_ABERTA). ",";
-		$retorno.= $this-> getVarComoString($vo->texto). ",";
+		$retorno.= $this-> getVarComoString(strtoupper($vo->texto)). ",";
 		$retorno.= $this-> getVarComoNumero($vo->prioridade). ",";
 		$retorno.= $this-> getVarComoData($vo->dtReferencia);
 

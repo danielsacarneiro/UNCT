@@ -71,7 +71,7 @@ function confirmar() {
 </SCRIPT>
 
 </HEAD>
-<BODY class="paginadados" onload="carregaContratada();">
+<BODY class="paginadados" onload="">
 	  
 <FORM name="frm_principal" method="post" action="confirmarAlteracaoDemanda.php" onSubmit="return confirmar();">
 

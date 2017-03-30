@@ -103,30 +103,6 @@ class dbprocesso {
 		
 		$query .= $this->getQueryFrom_NmUsuarioTabelaAComparar ( $vo, $nmTabelaACompararCdUsuario, $queryJoin, $isHistorico );
 		
-		/*
-		 * $query.= " FROM ". $nmTabela;
-		 *
-		 * $query.= $queryJoin;
-		 *
-		 * if($temUsuInclusao){
-		 * $query.= "\n LEFT JOIN ". vousuario::$nmEntidade;
-		 * $query.= "\n ".self::$nmTabelaUsuarioInclusao." ON ";
-		 * $query.= self::$nmTabelaUsuarioInclusao.".".vousuario::$nmAtrID. "=".$nmTabelaACompararCdUsuario.".".voentidade::$nmAtrCdUsuarioInclusao;
-		 * }
-		 *
-		 * if($temUsuUltAlteracao){
-		 * $query.= "\n LEFT JOIN ". vousuario::$nmEntidade;
-		 * $query.= "\n ".self::$nmTabelaUsuarioUltAlteracao." ON ";
-		 * $query.= self::$nmTabelaUsuarioUltAlteracao.".".vousuario::$nmAtrID. "=".$nmTabelaACompararCdUsuario.".".voentidade::$nmAtrCdUsuarioUltAlteracao;
-		 * }
-		 *
-		 * if($temUsuHistorico){
-		 * $query.= "\n LEFT JOIN ". vousuario::$nmEntidade;
-		 * $query.= "\n ".self::$nmTabelaUsuarioOperacao." ON ";
-		 * $query.= self::$nmTabelaUsuarioOperacao.".".vousuario::$nmAtrID. "=".$nmTabelaACompararCdUsuario.".".voentidade::$nmAtrCdUsuarioOperacao;
-		 * }
-		 */
-		
 		return $query;
 	}
 	function getQueryFrom_NmUsuarioTabelaAComparar($vo, $nmTabelaACompararCdUsuario, $queryJoin, $isHistorico) {
