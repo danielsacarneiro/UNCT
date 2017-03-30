@@ -32,10 +32,6 @@ if($voContrato != null && $voContrato->cdContrato){
 }
 
 function getContratoEntradaDeDados($tipoContrato, $cdContrato, $anoContrato, $arrayCssClass, $arrayComplementoHTML){
-	return getContratoForm($tipoContrato, $cdContrato, $anoContrato, $arrayCssClass, $arrayComplementoHTML, null);	
-}
-
-function getContratoForm($tipoContrato, $cdContrato, $anoContrato, $arrayCssClass, $arrayComplementoHTML, $javaScriptAposCarregamentoContratada){
 	require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioTipoContrato.php");
 	$combo = new select(dominioTipoContrato::getColecao());
 	require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioEspeciesContrato.php");
@@ -54,6 +50,7 @@ function getContratoForm($tipoContrato, $cdContrato, $anoContrato, $arrayCssClas
 	?>
 	
 <SCRIPT language="JavaScript" type="text/javascript">
+
 function carregaContratada() {
 	//ta na biblioteca_funcoes_pessoa.js
 	pNmCampoCdContrato = '<?=vocontrato::$nmAtrCdContrato;?>';
@@ -65,8 +62,7 @@ function carregaContratada() {
 
 	//alert(pNmCampoCdContrato + " " + pNmCampoAnoContrato + " " + pNmCampoTipoContrato + " " + pNmCampoCdEspecieContrato + " " + pNmCampoSqEspecieContrato + " " + pNmCampoDiv);
 	carregaDadosContratada(pNmCampoAnoContrato, pNmCampoTipoContrato, pNmCampoCdContrato, pNmCampoCdEspecieContrato, pNmCampoSqEspecieContrato,pNmCampoDiv);
-
-	<?=$javaScriptAposCarregamentoContratada?>;    
+		    
 }
 </SCRIPT>	
 	            <?php echo $combo->getHtmlCombo(vocontrato::$nmAtrTipoContrato,vocontrato::$nmAtrTipoContrato, $tipoContrato, true, $cssTipoContrato, false, $htmlTipoContrato);?>

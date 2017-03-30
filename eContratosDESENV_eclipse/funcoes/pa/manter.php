@@ -57,8 +57,7 @@ setCabecalho($titulo);
 ?>
 <!DOCTYPE html>
 <HEAD>
-<?=setTituloPagina(null)?>
-<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>mensagens_globais.js"></SCRIPT>
+
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_text.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_oficio.js"></SCRIPT>
@@ -137,7 +136,7 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 }
 
 </SCRIPT>
-
+<?=setTituloPagina(null)?>
 </HEAD>
 <BODY class="paginadados" onload="">
 	  

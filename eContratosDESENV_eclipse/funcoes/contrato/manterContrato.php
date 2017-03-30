@@ -73,7 +73,7 @@ setCabecalho($titulo);
 <!DOCTYPE html>
 
 <HEAD>
-<?=setTituloPagina(null)?>
+
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_cnpfcnpj.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_moeda.js"></SCRIPT>
@@ -107,14 +107,11 @@ function carregaGestorPessoa(){
 }
 
 </SCRIPT>
-
+<?=setTituloPagina(null)?>
 </HEAD>
 <BODY class="paginadados" onload="">
 	  
 <FORM name="frm_principal" method="post" action="confirmarManterContrato.php" onSubmit="return confirmar();">
-
-<INPUT type="hidden" id="id_contexto_sessao" name="<%=PRManterReferenciaLegal.ID_REQ_CONTEXTO_SESSAO%>" value="<%=idContextoSessao%>"> 
-<INPUT type="hidden" id="nao_utilizar_id_contexto_sessao" name="<%=PRManterReferenciaLegal.ID_REQ_NAO_UTILIZAR_ID_CONTEXTO_SESSAO%>" value=""> 
 
 <INPUT type="hidden" id="funcao" name="funcao" value="<?=$funcao?>">
 <INPUT type="hidden" id="<?=vousuario::$nmAtrID?>" name="<?=vousuario::$nmAtrID?>" value="<?=id_user?>">

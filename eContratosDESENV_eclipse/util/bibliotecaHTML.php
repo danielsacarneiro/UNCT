@@ -513,12 +513,10 @@ include_once(caminho_vos."vousuario.php");
                 $html .=    " &nbsp;Histórico: "
                     . $radioHistorico->getHtmlRadio("cdHistorico","cdHistorico", $cdHistorico, false, false);
 
-        /*$html .= "&nbsp;<button id='localizar' class='botaoconsulta' type='submit'>Consultar</button></TD>\n";
-        $html .= "<TD class='campoformularioalinhadodireita'> <a href='javascript:limparFormulario();' ><img  title='Limpar' src='".caminho_imagens."borracha.jpg' width='20' height='20'></a></TD>
-                    </TR>";*/
         $html .= "&nbsp;<button id='localizar' class='botaoconsulta' type='submit'>Consultar</button>\n";
         $html .= "&nbsp;&nbsp;&nbsp;<a href='javascript:limparFormularioGeral();' ><img  title='Limpar' src='".caminho_imagens."borracha.jpg' width='20' height='20'></a></TD>\n
                     </TR>";
+        //$html .= "<imput type='hidden' id='javascript:ID_REQ_DT_HOJE' name='javascript:ID_REQ_DT_HOJE'>\n";                
         
         return $html;        
     }

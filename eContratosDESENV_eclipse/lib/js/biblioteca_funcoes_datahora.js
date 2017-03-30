@@ -1,4 +1,11 @@
-//traz o ano atual
+/*
+ Descriï¿½ï¿½o:
+ - Contï¿½m funï¿½ï¿½es de validaï¿½ï¿½o e formataï¿½ï¿½o de campos data e hora
+
+ Dependï¿½ncias:
+ - biblioteca_funcoes_principal.js
+*/
+
 function getAnoAtual() {
 	
 	var mydate=new Date();
@@ -7,20 +14,8 @@ function getAnoAtual() {
 		year+=1900;
 
 	return year;
-
-
-	/*var campoDtHoje = eval("document.frm_principal." + ID_REQ_DT_HOJE);
-	
-	if (campoDtHoje != null) {
-		ano = (campoDtHoje.value.substring(6, 10));
-		return parseInt(ano);
-	} else {
-		exibirMensagem(mensagemGlobal(134));
-		return null;
-	}*/
 }
 
-//formata o campo data
 function formatarCampoData(pCampo, pEvento, pInMesAno) {
 	var vlCampo = pCampo.value;
 	var tam = vlCampo.length;
@@ -42,7 +37,7 @@ function formatarCampoData(pCampo, pEvento, pInMesAno) {
 	if (!filtro.test(vlCampo)) {
 		pCampo.value = vlCampo.substr(0, tam - 1);
 		selecionarCampo(pCampo);
-		exibirMensagem("Data inválida!");
+		exibirMensagem(mensagemGlobal(120));
 		focarCampo(pCampo);
 		return;
 	}
@@ -75,7 +70,7 @@ function formatarCampoData(pCampo, pEvento, pInMesAno) {
 	if ((vlCampo.length > 6 && vlCampo.charAt(6) == '0')
 		|| (vlCampo.length > 7 && parseInt(vlCampo.substring(6, 8)) < 19)) {
 		selecionarCampo(pCampo);
-		exibirMensagem("Data inválida!" + '\n' + "O ano deve ser maior ou igual a 1900!");
+		exibirMensagem(mensagemGlobal(120) + '\n' + mensagemGlobal(133));
 		focarCampo(pCampo);
 		return;
 	} 
@@ -91,7 +86,7 @@ function formatarCampoData(pCampo, pEvento, pInMesAno) {
 	}
 }
 
-// Verifica se existe uma data válida no campo "pCampo" passado como parametro
+// Verifica se existe uma data vï¿½lida no campo "pCampo" passado como parametro
 function isCampoDataValido(pCampo, pInObrigatorio, pInMesAno, pSemMensagem, pSemFocarCampo) {
 	var msg = "";
 	var vlCampo = pCampo.value;
@@ -100,10 +95,10 @@ function isCampoDataValido(pCampo, pInObrigatorio, pInMesAno, pSemMensagem, pSem
 	
 	if (pInObrigatorio != null || (typeof pInObrigatorio) == "undefined") {
 		if (pInObrigatorio) {
-			msg = "\n" + "Obs: campo obrigatório (*).";
+			msg = "\n" + mensagemGlobal(0);
 
 		} else {
-			msg = "\n" + "Obs: campo NÃO obrigatório (*).";
+			msg = "\n" + mensagemGlobal(1);
 
 			if (vlCampo == "")
 				return true;
@@ -117,7 +112,7 @@ function isCampoDataValido(pCampo, pInObrigatorio, pInMesAno, pSemMensagem, pSem
 				selecionarCampo(pCampo);
 			}
 			if (!pSemMensagem) {
-				exibirMensagem("Data Inválida." + msg);
+				exibirMensagem(mensagemGlobal(120) + msg);
 			}
 			if (!pSemFocarCampo) {
 				focarCampo(pCampo);
@@ -137,7 +132,7 @@ function isCampoDataValido(pCampo, pInObrigatorio, pInMesAno, pSemMensagem, pSem
 				selecionarCampo(pCampo);
 			}
 			if (!pSemMensagem) {
-				exibirMensagem("Data Inválida." + msg);
+				exibirMensagem(mensagemGlobal(120) + msg);
 			}
 			if (!pSemFocarCampo) {				
 				focarCampo(pCampo);
@@ -190,7 +185,7 @@ function isCampoDataValido(pCampo, pInObrigatorio, pInMesAno, pSemMensagem, pSem
 			selecionarCampo(pCampo);
 		}
 		if (!pSemMensagem) {
-			exibirMensagem("Data Inválida." + msg);
+			exibirMensagem(mensagemGlobal(120) + msg);
 		}
 		if (!pSemFocarCampo) {
 			focarCampo(pCampo);

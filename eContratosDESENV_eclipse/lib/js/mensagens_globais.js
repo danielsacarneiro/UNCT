@@ -275,3 +275,4 @@ _mensagensGlobais[1420] = "Número TATE inválido!";
 function mensagemGlobal(pCdMensagem) {	
 	return _mensagensGlobais[pCdMensagem];
 }
+

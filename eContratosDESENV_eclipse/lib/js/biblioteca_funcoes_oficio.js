@@ -34,6 +34,12 @@ function getDescricaoTipoContrato(tipo){
 
 function getDescricaoSetor(cdSetor){
 	retorno = "";
+  	/*static $CD_SETOR_SAFI= 1;
+  	static $CD_SETOR_UNCT= 2;
+  	static $CD_SETOR_ATJA= 3;
+  	static $CD_SETOR_DIUC= 4;
+  	static $CD_SETOR_PGE= 5;
+  	static $CD_SETOR_SAD= 6;*/	
 	
 	if(cdSetor == 1){
 		retorno = "SAFI";		
@@ -41,6 +47,12 @@ function getDescricaoSetor(cdSetor){
 		retorno = "UNCT";
 	}else if(cdSetor == 3){
 		retorno = "ATJA";
+	}else if(cdSetor == 4){
+		retorno = "DIUC";
+	}else if(cdSetor == 5){
+		retorno = "PGE";
+	}else if(cdSetor == 6){
+		retorno = "SAD";
 	}
 	
 	return retorno;

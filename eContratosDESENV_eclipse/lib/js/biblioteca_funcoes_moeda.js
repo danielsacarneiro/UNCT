@@ -1,4 +1,5 @@
 /*
+
  Descri��o:
  - Cont�m fun��es para tratamento de campos monet�rios
 

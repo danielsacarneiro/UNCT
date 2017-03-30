@@ -132,8 +132,20 @@ function criarNomeDocumento(){
 	            $comboSetor = new select($domSetor->colecao);	            
 	            $comboTp= new select($domTp->colecao);
 			  ?>			            
+	        <?php	        
+	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
+	        $arrayCssClass = array("camponaoobrigatorio","camponaoobrigatorio", "camponaoobrigatorio");
+	        $arrayComplementoHTML = array(" onChange='carregaContratada();' ",
+	        		" onBlur='carregaContratada();' ",
+	        		" onChange='carregaContratada();' "	        		
+	        );
+	        ?>
+	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
+	            <TD class="campoformulario" colspan=3><?php getContratoEntradaDeDados($tipoContrato, $anoContrato, $cdContrato, $arrayCssClass, $arrayComplementoHTML, $nmCampoDiv);?></TD>
+	        </TR>            
 			<TR>
-                <TH class="campoformulario" nowrap width="1%">Ano:</TH>
+                <TH class="campoformulario" nowrap width="1%">Ano.Doc.:</TH>
                 <TD class="campoformulario" nowrap width="1%"><?php echo $selectExercicio->getHtmlCombo(voDocumento::$nmAtrAno,voDocumento::$nmAtrAno, $vo->ano, true, $classChaves, false, " onChange='criarNomeDocumento();' $disabledChaves $required");?></TD>
                 <TH class="campoformulario" nowrap width="1%">Setor:</TH>
                 <TD class="campoformulario"><?php echo $comboSetor->getHtmlCombo(voDocumento::$nmAtrCdSetor,voDocumento::$nmAtrCdSetor, $vo->cdSetor, true, $classChaves, true, "onChange='criarNomeDocumento();' $disabledChaves $required");?></TD>
@@ -144,18 +156,6 @@ function criarNomeDocumento(){
                 <TH class="campoformulario" nowrap>Número:</TH>
                 <TD class="campoformulario"><INPUT type="text" id="<?=voDocumento::$nmAtrSq?>" onkeyup="validarCampoNumericoPositivo(this);" name="<?=voDocumento::$nmAtrSq?>" onBlur='criarNomeDocumento();' value="<?php echo complementarCharAEsquerda($vo->sq, "0", TAMANHO_CODIGOS);?>"  class="<?=$classChaves?>" size="7" <?=$readonlyChaves?>></TD>
             </TR>
-	        <?php	        
-	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
-	        $arrayCssClass = array("camponaoobrigatorio","camponaoobrigatorio", "camponaoobrigatorio");
-	        $arrayComplementoHTML = array(" onChange='carregaContratada();' ",
-	        		" onBlur='carregaContratada();' ",
-	        		" onChange='carregaContratada();' "	        		
-	        );	        
-	        ?>
-	        <TR>
-	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" colspan=3><?php getContratoForm($tipoContrato, $anoContrato, $cdContrato, $arrayCssClass, $arrayComplementoHTML, $nmCampoDiv, "criarNomeDocumento();");?></TD>
-	        </TR>            
             <?php 
 	        }else{	        	
 	        ?>
