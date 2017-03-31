@@ -47,10 +47,13 @@ $dbprocesso = new dbcontrato(null);
 //var_dump($objPHPExcel->getActiveSheet()->getCell('B3')->getHyperlink()->getUrl());
 //echo $objPHPExcel->getActiveSheet()->getCell('B3')->getHyperlink()->getUrl();
 
+$documento = new documentoPessoa();
+$retorno->docContratada = $documento->getNumDoc();
+
 for ($k=6; $k<=$totalResultado; $k++) {
 
 	$linha = $sheetData[$k];
-	$VALOR = $linha["H"];
+	$VALOR = $linha["O"];
 	
 	ECHO "VALOR ENCONTRADO:" . $VALOR . "<BR>";
 	ECHO "VALOR PROCESSADO:" . getMoedaMascaraImportacao($VALOR) . "<BR>";

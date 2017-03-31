@@ -50,6 +50,7 @@ function getContratoEntradaDeDados($tipoContrato, $cdContrato, $anoContrato, $ar
 	?>
 	
 <SCRIPT language="JavaScript" type="text/javascript">
+
 function carregaContratada() {
 	//ta na biblioteca_funcoes_pessoa.js
 	pNmCampoCdContrato = '<?=vocontrato::$nmAtrCdContrato;?>';
@@ -60,7 +61,8 @@ function carregaContratada() {
 	pNmCampoDiv = '<?=$nmCampoDivPessoaContratada;?>';
 
 	//alert(pNmCampoCdContrato + " " + pNmCampoAnoContrato + " " + pNmCampoTipoContrato + " " + pNmCampoCdEspecieContrato + " " + pNmCampoSqEspecieContrato + " " + pNmCampoDiv);
-	carregaDadosContratada(pNmCampoAnoContrato, pNmCampoTipoContrato, pNmCampoCdContrato, pNmCampoCdEspecieContrato, pNmCampoSqEspecieContrato,pNmCampoDiv);    
+	carregaDadosContratada(pNmCampoAnoContrato, pNmCampoTipoContrato, pNmCampoCdContrato, pNmCampoCdEspecieContrato, pNmCampoSqEspecieContrato,pNmCampoDiv);
+		    
 }
 </SCRIPT>	
 	            <?php echo $combo->getHtmlCombo(vocontrato::$nmAtrTipoContrato,vocontrato::$nmAtrTipoContrato, $tipoContrato, true, $cssTipoContrato, false, $htmlTipoContrato);?>

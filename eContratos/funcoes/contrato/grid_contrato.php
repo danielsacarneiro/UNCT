@@ -48,9 +48,10 @@
                                 ;*/                        
                 
                         $datainiSQL = $colecao[$i]["ct_dt_vigencia_inicio"];
-                        $datafimSQL = $colecao[$i]["ct_dt_vigencia_fim"];																																									
+                        $datafimSQL = $colecao[$i]["ct_dt_vigencia_fim"];
+                        $dataFinal = getData($datafimSQL);
                                                 
-                        $validaAlerta = true;
+                        $validaAlerta = $dataFinal != "";
                         try{                                                   
                             $qtDiasFimVigencia = getQtdDiasEntreDatas(dtHojeSQL, $datafimSQL);
                         }catch (Exception $e){
@@ -84,7 +85,7 @@
                     <TD class="tabeladados" nowrap><?php echo $colecao[$i]["ct_doc_contratada"]?></TD>
                     <TD class="tabeladados"><?php echo $colecao[$i]["ct_objeto"]?></TD>
                     <TD class="tabeladados"><?php echo getData($datainiSQL)?></TD>
-                    <TD <?=$tagCelula?>>                    <?php echo getData($datafimSQL)?></TD>
+                    <TD <?=$tagCelula?>>                    <?php echo $dataFinal?></TD>
                     <TD class="tabeladadosalinhadodireita" ><?php echo getMoeda($colecao[$i]["ct_valor_mensal"])?></TD>                    
                     <TD class="tabeladadosalinhadodireita" ><?php echo getMoeda($colecao[$i]["ct_valor_global"])?></TD>
                 </TR>					

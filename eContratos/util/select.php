@@ -87,7 +87,7 @@
 	
 	function selected($cd, $opcaoSelecionada) {
 		
-		//echo " $cd == $opcaoSelecionada ";
+		//echo " $cd == $opcaoSelecionada ";		
 		if($cd == $opcaoSelecionada)
 			return true;
 		else

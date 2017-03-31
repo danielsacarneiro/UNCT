@@ -54,13 +54,17 @@ include_once(caminho_vos."vousuario.php");
         $pastaCSS = caminho_css;        
         $pastaCSS = subirNivelPasta($pastaCSS, $qtdNiveisAcimaEmSeEncontraPagina);
         
+        $pastaJS = caminho_js;
+        $pastaJS = subirNivelPasta($pastaJS, $qtdNiveisAcimaEmSeEncontraPagina);
+        
         if($titulo == null)
             $titulo = constantes::$nomeSistema." :: U N C T";
         
         $codificacaoHTML = "\n<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'>";
         $html = $codificacaoHTML;
         $html.= "\n<TITLE>$titulo</TITLE>";
-        $html.= "\n<LINK href='" . $pastaCSS . "sefaz_pe.css' rel='stylesheet' type='text/css'>\n";        
+        $html.= "\n<LINK href='" . $pastaCSS . "sefaz_pe.css' rel='stylesheet' type='text/css'>\n";
+        $html.= "\n<SCRIPT language='JavaScript' type='text/javascript' src='" . $pastaJS . "mensagens_globais.js'></SCRIPT>\n";        
         
         return $html;
     }
@@ -509,12 +513,10 @@ include_once(caminho_vos."vousuario.php");
                 $html .=    " &nbsp;Histórico: "
                     . $radioHistorico->getHtmlRadio("cdHistorico","cdHistorico", $cdHistorico, false, false);
 
-        /*$html .= "&nbsp;<button id='localizar' class='botaoconsulta' type='submit'>Consultar</button></TD>\n";
-        $html .= "<TD class='campoformularioalinhadodireita'> <a href='javascript:limparFormulario();' ><img  title='Limpar' src='".caminho_imagens."borracha.jpg' width='20' height='20'></a></TD>
-                    </TR>";*/
         $html .= "&nbsp;<button id='localizar' class='botaoconsulta' type='submit'>Consultar</button>\n";
         $html .= "&nbsp;&nbsp;&nbsp;<a href='javascript:limparFormularioGeral();' ><img  title='Limpar' src='".caminho_imagens."borracha.jpg' width='20' height='20'></a></TD>\n
                     </TR>";
+        //$html .= "<imput type='hidden' id='javascript:ID_REQ_DT_HOJE' name='javascript:ID_REQ_DT_HOJE'>\n";                
         
         return $html;        
     }

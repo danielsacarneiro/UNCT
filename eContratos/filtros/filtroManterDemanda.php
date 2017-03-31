@@ -8,6 +8,8 @@ class filtroManterDemanda extends filtroManter{
 	public $nmFiltro = "filtroManterDemanda";
 	var $vodemanda;
 	var $vocontrato;
+	var $nmContratada;
+	var $docContratada;
 	
 	// ...............................................................
 	// construtor
@@ -34,6 +36,7 @@ class filtroManterDemanda extends filtroManter{
 		$vodemanda->tipo = @$_POST[voDemanda::$nmAtrTipo];
 		$vodemanda->situacao  = @$_POST[voDemanda::$nmAtrSituacao];
 		$vodemanda->prioridade  = @$_POST[voDemanda::$nmAtrPrioridade];
+		$vodemanda->prt = @$_POST[voDemandaTramitacao::$nmAtrProtocolo];
 		
 		$vocontrato->anoContrato = @$_POST[vocontrato::$nmAtrAnoContrato];
 		$vocontrato->cdContrato = @$_POST[vocontrato::$nmAtrCdContrato];
@@ -42,6 +45,9 @@ class filtroManterDemanda extends filtroManter{
 		
 		$this->vodemanda = $vodemanda;
 		$this->vocontrato = $vocontrato;
+
+		$this->nmContratada = @$_POST[vopessoa::$nmAtrNome];
+		$this->docContratada = @$_POST[vopessoa::$nmAtrDoc];
 		
 		if($this->cdOrdenacao == null){
 			$this->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
@@ -56,6 +62,7 @@ class filtroManterDemanda extends filtroManter{
 		$nmTabelaTramitacao = voDemandaTramitacao::getNmTabelaStatic(false);
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic(false);
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic(false);
+		$nmTabelaPessaContrato = vopessoa::getNmTabelaStatic(false);
 					
 		//seta os filtros obrigatorios
 		if($this->isSetaValorDefault()){
@@ -126,6 +133,21 @@ class filtroManterDemanda extends filtroManter{
 					$conector  = "\n AND ";
 		}
 		
+		if($this->vodemanda->prt != null){
+						
+			
+			$filtro = $filtro . $conector
+			. " EXISTS (SELECT 'X' FROM " . $nmTabelaTramitacao
+			. " WHERE " 
+			. $nmTabela . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrAno
+			. " AND " . $nmTabela . "." . voDemanda::$nmAtrCd . "=" . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrCd
+			. " AND " . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrProtocolo . "="			
+			. getVarComoString($this->vodemanda->prt)
+			. ")\n";
+		
+			$conector  = "\n AND ";
+		}
+		
 		if($this->vocontrato->anoContrato != null){
 			$filtro = $filtro . $conector
 			. $nmTabelaDemandaContrato. "." .voDemandaContrato::$nmAtrAnoContrato
@@ -168,7 +190,7 @@ class filtroManterDemanda extends filtroManter{
 		
 		if($this->nmContratada != null){
 			$filtro = $filtro . $conector
-			. $nmTabelaPessoa. "." .vopessoa::$nmAtrNome
+			. $nmTabelaPessaContrato. "." .vopessoa::$nmAtrNome
 			. " LIKE '"
 			. substituirCaracterSQLLike($this->nmContratada)
 			. "'"
@@ -179,9 +201,9 @@ class filtroManterDemanda extends filtroManter{
 		
 		if($this->docContratada != null){
 			$filtro = $filtro . $conector
-			. $nmTabelaPessoa. "." .vopessoa::$nmAtrDoc
+			. $nmTabelaPessaContrato. "." .vopessoa::$nmAtrDoc
 			. " = '"
-					. substituirCaracterSQLLike($this->docContratada)
+					. documentoPessoa::getNumeroDocSemMascara($this->docContratada)
 					. "'"
 							;
 							$conector  = "\n AND ";

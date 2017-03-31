@@ -1,13 +1,19 @@
 /*
- Descricao:
- - Contem funcoes para tratamento de radiobuttons
+ * Este arquivo eh propriedade da Secretaria da Fazenda do Estado 
+ * de Pernambuco (Sefaz-PE). Nenhuma informacao nele contida pode ser 
+ * reproduzida, mostrada ou revelada sem permissao escrita da Sefaz-PE.
+ */
 
- Dependencias:
+/*
+ Descrição:
+ - Contém funções para tratamento de radiobuttons
+
+ Dependências:
  - biblioteca_funcoes_principal.js
 */
 
 // Verifica se algum "radiobutton" esta selecionado na colecao com nome "pNmRadioButton" passado como parametro.
-// Se  pSemMensagem igual a true, nao exibe mensagem
+// Se  pSemMensagem igual a true, não exibe mensagem
 // Utilizado em telas de consulta.
 function isRadioButtonConsultaSelecionado(pNmRadioButton, pSemMensagem) {
 	var i = 0;
@@ -16,7 +22,7 @@ function isRadioButtonConsultaSelecionado(pNmRadioButton, pSemMensagem) {
 	
 	if (radioButton == null) {
 		if (!pSemMensagem) {
-			exibirMensagem("Nenhum registro está disponível!");
+			exibirMensagem(mensagemGlobal(60));
 		}
 		return false;
 	}
@@ -33,13 +39,13 @@ function isRadioButtonConsultaSelecionado(pNmRadioButton, pSemMensagem) {
 	}
 	
 	if (!pSemMensagem) {
-		exibirMensagem("Selecione um registro!");
+		exibirMensagem(mensagemGlobal(61));
 	}
 	return false;
 }
 
 // Verifica se algum "radiobutton" esta selecionado na colecao com nome "pNmRadioButton" passado como parametro.
-// Se  pSemMensagem igual a true, nao exibe mensagem
+// Se  pSemMensagem igual a true, não exibe mensagem
 // Utilizado em telas de consulta.
 function isRadioButtonSelecionado(pNmRadioButton, pSemMensagem) {
 	var i = 0;
@@ -62,28 +68,24 @@ function isRadioButtonSelecionado(pNmRadioButton, pSemMensagem) {
 	}
 	
 	if (!pSemMensagem) {
-		exibirMensagem("Selecione um registro!");
+		exibirMensagem(mensagemGlobal(62));
 	}
 	return false;
 }
 
-// Retorna um Array com os campos que compoem o valor do radiobutton "pRadioButton" passado como parametro
+// Retorna um Array com os campos que compõem o valor do radiobutton "pRadioButton" passado como parâmetro
 // Os campos devem estar separados pela constante CD_CAMPO_SEPARADOR
-
-function retornarValorRadioButtonSelecionadoComoArray(pNmRadioButton, pSeparador, pSemMensagem) {
-	
+function retornarValorRadioButtonSelecionadoComoArray(pNmRadioButton, pSemMensagem) {
 	var i;
-	
-	CD_CAMPO_SEPARADOR = pSeparador;	
-	
-	radioButton = eval(pNmRadioButton);	
+
+	radioButton = eval(pNmRadioButton);
 	
 	if (radioButton == null) {
 		if (!pSemMensagem) {
-			exibirMensagem("Selecione um registro.");
+			exibirMensagem(mensagemGlobal(60));
 		}	
 		return false;
-	}	
+	}
 	
 	if (radioButton.checked) {
 		// Quando existe apenas um radio button no formulario
@@ -111,7 +113,7 @@ function retornarValoresTodosRadioButtonComoString(pNmRadioButton, pSemMensagem)
 	
 	if (radioButton == null) {
 		if (!pSemMensagem) {
-			exibirMensagem("Selecione um registro!");
+			exibirMensagem(mensagemGlobal(60));
 		}
 		return false;
 	} 
@@ -134,7 +136,7 @@ function retornarValorRadioButtonSelecionado(pNmRadioButton) {
 	radioButton = eval(pNmRadioButton);
 	
 	if (radioButton == null) {
-		exibirMensagem("Selecione um registro!");
+		exibirMensagem(mensagemGlobal(60));
 		return false;
 	}
 	
@@ -152,7 +154,7 @@ function retornarValorRadioButtonSelecionado(pNmRadioButton) {
 	return "";
 }
 
-// Retorna um Array de Arrays com os campos que compoem o valor do radiobutton "pRadioButton" passado como parametro
+// Retorna um Array de Arrays com os campos que compõem o valor do radiobutton "pRadioButton" passado como parâmetro
 // Os campos devem estar separados pela constante CD_CAMPO_SEPARADOR
 function retornarValoresTodosRadioButtonComoArrayDeArray(pNmRadioButton, pSemMensagem) {
     var i;
@@ -162,11 +164,11 @@ function retornarValoresTodosRadioButtonComoArrayDeArray(pNmRadioButton, pSemMen
 
     if (radioButton == null) {
         if (!pSemMensagem) {
-           exibirMensagem("Selecione um registro!");
+           exibirMensagem(mensagemGlobal(60));
         }
         retorno = ""; 
     } else {
-        // Caso exista so um registro no formulario
+        // Caso exista só um registro no formulário
 		if (!radioButton.length) {
             valorRadioButton = radioButton.value;
             retorno = new Array(1); 

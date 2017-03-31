@@ -5,6 +5,7 @@ include_once(caminho_util."dominio.class.php");
   	
   	static $ENDERECO_DRIVE = "\\\\sf044836\_dag$";
   	static $ENDERECO_PASTABASE = "ASSESSORIA JURÍDICA\ATJA";
+  	static $ENDERECO_PASTABASE_UNCT = "UNCT\Documentos";
   	//static $ENDERECO_PASTABASE = "H:\ASSESSORIA JURÍDICA\ATJA";
   	static $ENDERECO_PASTA_NOTA_TECNICA = "\Notas Técnicas";  	
   	static $ENDERECO_PASTA_OFICIO = "\Ofícios";
@@ -30,6 +31,9 @@ include_once(caminho_util."dominio.class.php");
 	
 	static function getEnderecoPastaBase() {
 		return self::$ENDERECO_DRIVE . "\\" . self::$ENDERECO_PASTABASE;
+	}
+	static function getEnderecoPastaBaseUNCT() {
+		return self::$ENDERECO_DRIVE . "\\" . self::$ENDERECO_PASTABASE_UNCT;
 	}
 	
 }

@@ -12,9 +12,10 @@ function getData($dataSQL) {
 function getDataHoraParam($dataSQL, $temHora) {
 	$retorno = null;
 	if ($dataSQL != null){
-		if($dataSQL == "0000-00-00")
-			$retorno = mensagens::$msgDataErro;
-		else if ($dataSQL != null && $dataSQL != "0000-00-00"){
+		if($dataSQL == "0000-00-00"){
+			//$retorno = mensagens::$msgDataErro;
+			$retorno = "";
+		}else if ($dataSQL != null && $dataSQL != "0000-00-00"){
 			$retorno = date("d/m/Y", strtotime($dataSQL));				
 			if($temHora){
 				$retorno .= " " . date("H:i:s", strtotime($dataSQL));

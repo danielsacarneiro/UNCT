@@ -31,6 +31,8 @@ class filtroManter extends multiplosConstrutores{
 	var $isHistorico;
 	var $cdConsultarArquivo;
 	var $isValidarConsulta;
+	
+	var $groupby;
 				
 	function __construct0() {
 		//echo "teste0";
@@ -135,9 +137,6 @@ class filtroManter extends multiplosConstrutores{
     		
     		$atributoOrdenacao = $this->cdAtrOrdenacao; 
     		$ordem = $this->cdOrdenacao;
-    		/*if($ordem == constantes::$CD_ORDEM_CRESCENTE){
-    			$ordem = "";
-    		}*/
     		
     		//pega do filho, se existir
     		$strOrdemDefault = "";
@@ -153,16 +152,13 @@ class filtroManter extends multiplosConstrutores{
     			$atributoOrdenacao = $this->cdAtrOrdenacaoConsulta; 
     		}
     		
+    		if($this->groupby != null && $this->groupby != ""){
+    			$filtro = $filtro . "\n GROUP BY " . getSQLStringFormatadaColecaoIN($this->groupby, false );
+    		}
+    		
     		$filtro = $filtro . "\n ORDER BY $atributoOrdenacao $ordem $strOrdemDefault ";
     		
-    		//para setar o atributo de ordenacao de forma mais complexa: quando ha joins na tabela
-    		//para tanto o atributo nmEntidadePrincipal precisa ser not null
-    		/*$voentidade = $this->getVOEntidadePrincipal();    		
-    		if($voentidade != ""){
-    			$filtro = $filtro . "\n ORDER BY " . $voentidade->getNmTabelaEntidade($this->isHistorico) . ".$this->cdAtrOrdenacao $ordem";
-    		}else{
-    			$filtro = $filtro . "\n ORDER BY $this->cdAtrOrdenacao $ordem";
-    		}*/
+    		
     	}
     	
     	return $filtro; 
