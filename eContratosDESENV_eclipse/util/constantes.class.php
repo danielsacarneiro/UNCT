@@ -23,10 +23,6 @@ header ('Content-type: text/html; charset=ISO-8859-1');
     static $CD_FUNCAO_ALTERAR = "A";
     static $CD_FUNCAO_DETALHAR = "D";
     
-    static $cd_usuario_admin = "administrator";
-    static $cd_usuario_colaborador = "contributor";
-    static $cd_usuario_visitante = "subscriber";    
-
     static $DS_SIM  = "SIM";
     static $DS_NAO  = "NAO";
     static $DS_OPCAO_TODOS = "Todos";
