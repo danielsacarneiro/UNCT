@@ -6,6 +6,7 @@ include_once (caminho_vos. "vousuario.php");
 include_once (caminho_filtros."filtroManterContrato.php");
 include_once (caminho_util."bibliotecaFuncoesPrincipal.php");
 include_once (caminho_util."biblioteca_htmlArquivo.php");
+include_once(caminho_util."DocumentoPessoa.php");
 
 // .................................................................................................................
 // Classe select
@@ -35,7 +36,19 @@ include_once (caminho_util."biblioteca_htmlArquivo.php");
     	if($isArquivo){
     		return "";
     	}else{
-    		return $this->consultarComPaginacao($voentidade, $filtro);
+    		$retorno = $this->consultarComPaginacao($voentidade, $filtro); 
+    		
+    		/*if(getAtributoComoBooleano($filtro->inTrazerConsolidadoVigencia)){
+    			
+	    		$colecaoColunasAgrupar = array(
+	    				vocontrato::$nmAtrTipoContrato, 
+	    				vocontrato::$nmAtrAnoContrato,
+	    				vocontrato::$nmAtrCdContrato
+	    		);    			
+	    		$retorno = getRecordSetGroupBy($retorno, $colecaoColunasAgrupar);
+    		}*/
+    		
+    		return $retorno;
     	}    	
     }
         
@@ -497,7 +510,7 @@ include_once (caminho_util."biblioteca_htmlArquivo.php");
     
     function getDataLinhaImportacao($param){
     	$retorno = "null";    
-    	if($param != null){
+    	if($param != null && $param != ""){
     		//$retorno = "'" . substr($param,3,2) . "/" . substr($param,0,2) . "/" . (substr($param,6,4) + 2000). "'";
     		$retorno = substr($param,3,2) . "/" . substr($param,0,2) . "/" . (substr($param,6,4) + 2000);
     	}
@@ -521,9 +534,7 @@ include_once (caminho_util."biblioteca_htmlArquivo.php");
         return $retorno;
     }
             
-    function atualizarPessoasContrato(){
-    	include_once(caminho_util."DocumentoPessoa.php");
-    	  	
+    function atualizarPessoasContrato(){    	  	
     	$query = "SELECT ";
     	$query.= vopessoa::getNmTabela(). "." .vopessoa::$nmAtrDoc;
     	$query.= "," . vopessoa::getNmTabela(). "." .vopessoa::$nmAtrCd;
@@ -551,11 +562,13 @@ include_once (caminho_util."biblioteca_htmlArquivo.php");
    		$query.= "," . vocontrato::getNmTabela(). "." .vocontrato::$nmAtrCdContrato;
    		$query.= "," . vocontrato::getNmTabela(). "." .vocontrato::$nmAtrTipoContrato;
    		$query.= "," . vocontrato::getNmTabela(). "." .vocontrato::$nmAtrCdEspecieContrato;
+   		$query.= "," . vocontrato::getNmTabela(). "." .vocontrato::$nmAtrSqEspecieContrato;
    		$query.= "," . vocontrato::getNmTabela(). "." .vocontrato::$nmAtrDocContratadaContrato;
    		$query.= "," . vocontrato::getNmTabela(). "." .vocontrato::$nmAtrCdPessoaContratada;
    		$query.= "," . vocontrato::getNmTabela(). "." .vocontrato::$nmAtrDhUltAlteracao;
    		$query.= "\n FROM ". vocontrato::getNmTabela();
    		$query.= "\n WHERE ". vocontrato::$nmAtrDocContratadaContrato . " IS NOT NULL";
+   		$query.= "\n AND ". vocontrato::$nmAtrCdPessoaContratada . " IS NULL";
    		$query.= "\n ORDER BY ". vocontrato::$nmAtrSqContrato;
    		//$query.= " AND " .vocontrato::$nmAtrSqContrato . " = " . "1";
    		
@@ -704,7 +717,10 @@ include_once (caminho_util."biblioteca_htmlArquivo.php");
     	$retorno->dtPublicacao = $dtPublic;
     	$retorno->dataPublicacao = $dataPublic;
     	$retorno->contratada = $nomeContratada;
-    	$retorno->docContratada = $docContratada;
+    	
+    	$documento = new documentoPessoa($docContratada);
+    	$retorno->docContratada = $documento->getNumDoc();
+    	
     	$retorno->dtVigenciaInicial = $dtVigenciaInicio;
     	$retorno->dtVigenciaFinal = $dtVigenciaFim;
     	$retorno->empenho = $sqEmpenho;

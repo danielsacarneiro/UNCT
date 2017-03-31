@@ -203,7 +203,7 @@ class filtroManterDemanda extends filtroManter{
 			$filtro = $filtro . $conector
 			. $nmTabelaPessaContrato. "." .vopessoa::$nmAtrDoc
 			. " = '"
-					. substituirCaracterSQLLike($this->docContratada)
+					. documentoPessoa::getNumeroDocSemMascara($this->docContratada)
 					. "'"
 							;
 							$conector  = "\n AND ";

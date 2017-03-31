@@ -6,6 +6,9 @@ include_once(caminho_lib ."filtroManter.php");
 class filtroManterContrato extends filtroManter{
     
     public static $nmFiltro = "filtroManterContrato";
+    public static $nmAtrInTrazerConsolidadoPorVigencia = "nmAtrInTrazerConsolidadoPorVigencia";
+    
+    var $inTrazerConsolidadoVigencia;
     // ...............................................................
 	// construtor
 	function __construct() {
@@ -33,7 +36,8 @@ class filtroManterContrato extends filtroManter{
         $this->dtInclusao  = @$_POST[voentidade::$nmAtrDhInclusao];
         
         $this->cdConsultarArquivo = @$_POST["cdConsultarArquivo"];
-        
+        $this->inTrazerConsolidadoVigencia = @$_POST[self::$nmAtrInTrazerConsolidadoPorVigencia];
+               
         //para o caso de ser necessario setar um filtro default para nao trazer todos os registros
         //$this->temValorDefaultSetado = false;
 	}
@@ -42,7 +46,7 @@ class filtroManterContrato extends filtroManter{
         $retorno = false;
 		//verifica os filtros obrigatorios
 		if($this->contratada == null && $this->docContratada == null && $this->anoContrato == null
-           && $this->dtVigenciaInicial == null && $this->dtVigenciaFinal == null && $this->objeto == null){
+           && $this->dtVigenciaInicial == null && $this->dtVigenciaFinal == null && $this->objeto == null && $this->dtVigencia == null){
 			$retorno = true;
 		}        
         return $retorno;
@@ -217,7 +221,7 @@ class filtroManterContrato extends filtroManter{
 								vocontrato::$nmAtrSqContrato,
 								$pChaveTuplaComparacaoSemSequencial,
 								$pChaveTuplaComparacaoSemSequencial,
-								getDataSQL($this->dtVigencia),
+								$this->dtVigencia,
 								vocontrato::$nmAtrDtVigenciaInicialContrato,
 								vocontrato::$nmAtrDtVigenciaFinalContrato);
 			

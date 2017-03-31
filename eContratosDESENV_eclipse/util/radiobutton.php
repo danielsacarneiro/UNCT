@@ -20,7 +20,7 @@ include_once ("select.php");
             $opcaoSelecionada = "N";
         
 		$totalResultado = count($this->colecao);				 		
-		$chaves = array_keys($this->colecao);
+		$chaves = array_keys($this->colecao);		
 
 		for ($i=0; $i<$totalResultado; $i++) {
 			$cd = $chaves[$i];

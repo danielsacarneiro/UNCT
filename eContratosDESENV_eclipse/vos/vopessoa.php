@@ -1,6 +1,7 @@
 <?php
 include_once(caminho_vos."vopessoavinculo.php");
 include_once(caminho_vos."vogestor.php");
+include_once(caminho_util."DocumentoPessoa.php");
 
   Class vopessoa extends voentidade{
         //var $nmTable = "contrato_import";
@@ -82,6 +83,9 @@ include_once(caminho_vos."vogestor.php");
 		$this->nome = @$_POST[vopessoa::$nmAtrNome];
         $this->email = @$_POST[vopessoa::$nmAtrEmail];
         $this->doc = @$_POST[vopessoa::$nmAtrDoc];
+        if($this->doc != null){
+        	$this->doc = documentoPessoa::getNumeroDocSemMascara($this->doc);
+        }
         $this->tel = @$_POST[vopessoa::$nmAtrTel]; 
         $this->endereco = @$_POST[vopessoa::$nmAtrEndereco];
         

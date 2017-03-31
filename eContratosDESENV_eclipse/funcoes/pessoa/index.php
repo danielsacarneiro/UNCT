@@ -178,6 +178,9 @@ function alterar() {
                                                                 
                         $vinculo = $colecao[$i][vopessoavinculo::$nmAtrCd];
                         $vinculo = $domVinculo->getDescricao($vinculo);
+                                               
+                        $docFormatado = documentoPessoa::getNumeroDocFormatado($voAtual->doc);
+                        
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados">
@@ -185,7 +188,7 @@ function alterar() {
                     </TD>
                     <TD class="tabeladados"><?php echo complementarCharAEsquerda($colecao[$i][vopessoa::$nmAtrCd], "0", TAMANHO_CODIGOS);?></TD>
                     <TD class="tabeladados"><?php echo $colecao[$i][vopessoa::$nmAtrNome];?></TD>
-                    <TD class="tabeladados"><?php echo $voAtual->doc;?></TD>
+                    <TD class="tabeladados"><?php echo $docFormatado;?></TD>
                     <TD class="tabeladados"><?php echo $vinculo;?></TD>
                     <TD class="tabeladados"><?php echo $colecao[$i][vopessoa::$nmAtrEmail];?></TD>
                     <TD class="tabeladados" nowrap><?php echo $colecao[$i][vopessoa::$nmAtrTel]?></TD>

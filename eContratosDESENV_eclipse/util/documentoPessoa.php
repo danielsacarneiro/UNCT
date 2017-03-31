@@ -261,6 +261,9 @@ class documentoPessoa
 				$formatado .= substr( $this->valor, 6, 3 ) . '-';
 				$formatado .= substr( $this->valor, 9, 2 ) . '';
 			}
+			else {
+				$formatado = $this->valor;
+			}
 		} 
 		// Valida CNPJ
 		elseif ( $this->verifica_cpf_cnpj() === self::$tpDocCNPJ) {
@@ -272,10 +275,26 @@ class documentoPessoa
 				$formatado .= substr( $this->valor,  5,  3 ) . '/';
 				$formatado .= substr( $this->valor,  8,  4 ) . '-';
 				$formatado .= substr( $this->valor, 12, 14 ) . '';
+			}else {
+				$formatado = $this->valor;
 			}
-		} 
+		}
+		else {
+			$formatado = $this->valor;
+		}
  
 		// Retorna o valor 
 		return $formatado;
 	}
+	
+	static function getNumeroDocFormatado($num){
+		$documento = new documentoPessoa($num);
+		return $documento->formata(); 		
+	}
+	
+	static function getNumeroDocSemMascara($num){
+		$documento = new documentoPessoa($num);
+		return $documento->getNumDoc();
+	}
+	
 }

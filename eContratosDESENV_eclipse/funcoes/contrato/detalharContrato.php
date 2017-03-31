@@ -219,7 +219,7 @@ function confirmar() {
             	<INPUT type="text" 
             	       id="<?=vocontrato::$nmAtrDtAssinaturaContrato?>" 
             	       name="<?=vocontrato::$nmAtrDtAssinaturaContrato?>" 
-            			value="<?php echo($voContrato->dtProposta);?>"
+            			value="<?php echo($voContrato->dtAssinatura);?>"
             			onkeyup="formatarCampoData(this, event, false);" 
             			class="camporeadonly" 
             			size="10" 

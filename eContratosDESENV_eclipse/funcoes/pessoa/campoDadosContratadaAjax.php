@@ -35,7 +35,7 @@ function getDadosContrata($db){
 
 		$recordSet = $db->consultarPessoaPorContrato($filtro);
 		$retorno = getCampoContratada("","",$chave);
-		if($recordSet != ""){			
+		if($recordSet != ""){
 			
 			$colecaoColunasAgrupar = array(vopessoa::$nmAtrDoc, vopessoa::$nmAtrNome);
 			

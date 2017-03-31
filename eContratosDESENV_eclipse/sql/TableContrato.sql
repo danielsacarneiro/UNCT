@@ -47,11 +47,13 @@ CREATE TABLE contrato (
 );
 -- ALTER TABLE contrato ADD COLUMN pe_cd INT NOT NULL AFTER ct_contratada;
 -- ALTER TABLE contrato ADD COLUMN gp_cd INT NULL AFTER ct_gestor_pessoa;
+        
+ALTER TABLE contrato ADD UNIQUE KEY chave_logica_contrato (ct_exercicio, ct_numero, ct_tipo, ct_cd_especie, ct_sq_especie); 
 
 ALTER TABLE contrato ADD CONSTRAINT fk_ct_gestor FOREIGN KEY ( gt_cd ) REFERENCES gestor (gt_cd) 
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;
-    
+
 ALTER TABLE contrato ADD CONSTRAINT fk_ct_pessoa_resp FOREIGN KEY ( pe_cd_resp ) REFERENCES pessoa (pe_cd) 
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;
@@ -60,8 +62,6 @@ ALTER TABLE contrato ADD CONSTRAINT fk_ct_pessoa_contratada FOREIGN KEY ( pe_cd_
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;
     
-ALTER TABLE contrato ADD UNIQUE KEY chave_logica_contrato (ct_exercicio, ct_numero, ct_tipo, ct_cd_especie, ct_sq_especie); 
-    
 
 -- show create table contrato;
 
@@ -69,7 +69,7 @@ ALTER TABLE contrato ADD UNIQUE KEY chave_logica_contrato (ct_exercicio, ct_nume
 -- ALTER TABLE contrato DROP FOREIGN KEY fk_ct_gestor_pessoa;
 -- ALTER TABLE contrato DROP FOREIGN KEY fk_ct_gestor;
     
-UPDATE contrato SET 
+UPDATE contrato SET
 ct_contratada = replace(replace(replace(ct_contratada,'“','"'),'”','"'),'–','-'),
 ct_objeto = replace(replace(replace(ct_objeto,'“','"'),'”','"'),'–','-')
 ;-- WHERE sq = 1751;-- ct_exercicio = 2016 and ct_numero = 13;

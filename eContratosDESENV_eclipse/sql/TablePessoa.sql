@@ -18,6 +18,8 @@ INSERT INTO gestor
 
 
 -- ALTER TABLE pessoa DROP FOREIGN KEY fk_pessoa_usuario;
+drop table pessoa_vinculo;
+drop table pessoa_gestor;
 drop table pessoa;
 CREATE TABLE pessoa (
 	pe_cd INT NOT NULL AUTO_INCREMENT,
@@ -38,6 +40,10 @@ ALTER TABLE pessoa ADD CONSTRAINT fk_pessoa_usuario FOREIGN KEY (ID) REFERENCES 
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;
     
+-- ALTER TABLE pessoa DROP FOREIGN KEY fk_pessoa_usuario;
+    
+ show create table pessoa; 
+    
 /** INCLUSAO DAS CONTRATADAS */
 DELIMITER $$
 DROP PROCEDURE IF EXISTS importarContratada $$
@@ -47,7 +53,7 @@ BEGIN
   DECLARE done INTEGER DEFAULT 0;
   DECLARE nome VARCHAR(150);
   DECLARE doc VARCHAR(30);
-  DECLARE cdPessoa INT;  
+  DECLARE cdPessoa INT DEFAULT 0;  
 
   DECLARE cTabela CURSOR FOR 
 	  select ct_contratada, ct_doc_contratada from contrato
@@ -57,7 +63,7 @@ BEGIN
         -- retira os pontos, barras e tracos para evitar duplicacoes
 	
   DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;  
-  SELECT MAX(pe_cd) INTO cdPessoa FROM pessoa; 
+  -- SELECT MAX(pe_cd)+1 INTO cdPessoa FROM pessoa; 
   
   -- DELETE FROM pessoa_vinculo WHERE vi_cd = 2;
   
@@ -72,6 +78,7 @@ BEGIN
         set cdPessoa = cdPessoa +1;
 		INSERT INTO pessoa  (pe_cd, pe_nome, pe_doc)  values (cdPessoa, nome, doc); 
         INSERT INTO pessoa_vinculo (vi_cd, pe_cd)  values (2, cdPessoa); 
+        
 
 		END IF;
   UNTIL done END REPEAT;

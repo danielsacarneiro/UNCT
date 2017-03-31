@@ -258,18 +258,28 @@ include_once(caminho_funcoes."documento/dominioTpDocumento.php");
         //usuario de ultima manutencao sempre sera o id_user
         $this->cdUsuarioUltAlteracao = id_user;
 	}
-    
-    function getValoresWhereSQLChave($isHistorico){
-        $nmTabela = $this->getNmTabelaEntidade($isHistorico);
-        
-		$query = $nmTabela . "." . self::$nmAtrCdContrato . "=" . $this->cdContrato;
-		$query.= " AND " . $nmTabela . "." . self::$nmAtrAnoContrato . "=" . $this->anoContrato;
+	
+	function getValoresWhereSQLChave($isHistorico){
+		$nmTabela = self::getNmTabelaStatic($isHistorico);
+		$query = $this->getValoresWhereSQLChaveLogicaSemSQ($isHistorico);
 		$query.= " AND ". $nmTabela . "." . self::$nmAtrSqContrato . "=" . $this->sq;
-        if($isHistorico)
-            $query.= " AND ". $nmTabela . "." . self::$nmAtrSqHist . "=" . $this->sqHist;
-        
-        return $query;        
-    }
+		
+		if($isHistorico)
+			$query.= " AND ". $nmTabela . "." . self::$nmAtrSqHist . "=" . $this->sqHist;
+	
+		return $query;
+	}
+	
+	function getValoresWhereSQLChaveLogicaSemSQ($isHistorico){
+		$nmTabela = self::getNmTabelaStatic($isHistorico);
+		$query = $nmTabela . "." . self::$nmAtrTipoContrato . "=" . getVarComoString($this->tipo);
+		$query.= " AND " . $nmTabela . "." . self::$nmAtrAnoContrato . "=" . $this->anoContrato;
+		$query.= " AND " . $nmTabela . "." . self::$nmAtrCdContrato . "=" . $this->cdContrato;
+		$query.= " AND " . $nmTabela . "." . self::$nmAtrCdEspecieContrato . "=" . getVarComoString($this->cdEspecie);
+		$query.= " AND " . $nmTabela . "." . self::$nmAtrSqEspecieContrato . "=" . $this->sqEspecie;
+			
+		return $query;
+	}
     
     function getValoresWhereSQL($voEntidade, $colecaoAtributos){
         $sqlConector = "";

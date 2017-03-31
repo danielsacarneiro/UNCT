@@ -219,12 +219,10 @@ function alterar() {
 						"N" => "Não");		
 				$radioArquivo = new radiobutton($arraySimNao);				
 				?>									
-               <TH class="campoformulario" nowrap>Procurar em arquivos: 
+    			<TH class="campoformulario" nowrap>Procurar em arquivos:</TH>
+               	<TD class="campoformulario" nowrap> 
                	<?php echo $radioArquivo->getHtmlRadioButton("cdConsultarArquivo","cdConsultarArquivo", $filtro->cdConsultarArquivo, false, "onClick='validaFormulario();'");?>&nbsp;&nbsp;
-				</TH>
-                <TD class="campoformularioalinhadodireita" colspan="1">
-                    <a href="javascript:limparFormulario();" ><img  title="Limpar" src="<?=caminho_imagens?>borracha.jpg" width="20" height="20"></a>
-                </TD>
+				</TD>
             </TR>
 			<?php
             $dominioTipoContrato = new dominioTipoContrato();            
@@ -235,8 +233,8 @@ function alterar() {
 			$combo = new select($especiesContrato->colecao);
 			?>
     			<TH class="campoformulario" nowrap>Espécies:</TH>
-                <TD class="campoformulario"><?php echo $combo->getHtmlSelect(vocontrato::$nmAtrCdEspecieContrato,vocontrato::$nmAtrCdEspecieContrato, $cdEspecie, true, "camponaoobrigatorio", true);?>
-                <INPUT type="text" id="<?=vocontrato::$nmAtrEspecieContrato?>" name="<?=vocontrato::$nmAtrEspecieContrato?>"  value="<?php echo($especie);?>"  class="camponaoobrigatorio" size="30" >
+                <TD class="campoformulario"><?php echo $combo->getHtmlCombo(vocontrato::$nmAtrCdEspecieContrato,vocontrato::$nmAtrCdEspecieContrato, $cdEspecie, true, "camponaoobrigatorio", true, ""/*," multiple size=6 "*/);?>
+                <!-- <INPUT type="text" id="<?=vocontrato::$nmAtrEspecieContrato?>" name="<?=vocontrato::$nmAtrEspecieContrato?>"  value="<?php echo($especie);?>"  class="camponaoobrigatorio" size="30" > -->
                 </TD>												                
                 <TH class="campoformulario" nowrap>Modalidade:</TH>
 			<?php
@@ -313,7 +311,11 @@ function alterar() {
                         			onkeyup="formatarCampoData(this, event, false);" 
                         			class="camponaoobrigatorio" 
                         			size="10" 
-                        			maxlength="10" >
+                        			maxlength="10" >                        			                	 
+               						<?php /*echo "Consolidado: " . $radioArquivo->getHtmlRadioButton(filtroManterContrato::$nmAtrInTrazerConsolidadoPorVigencia,
+               												filtroManterContrato::$nmAtrInTrazerConsolidadoPorVigencia, 
+               												$filtro->inTrazerConsolidadoVigencia, 
+               												false, "");*/?>
                 </TD>
 		
                <TH class="campoformulario" nowrap>Vigente no Intervalo:</TH>
