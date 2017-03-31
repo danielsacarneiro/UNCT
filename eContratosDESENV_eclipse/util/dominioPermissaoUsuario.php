@@ -13,7 +13,7 @@ include_once("dominio.class.php");
 				);
 	}
     
-    function isAdministrador($colecaoAtributos){        
+    static function isAdministrador($colecaoAtributos){        
         return in_array(constantes::$cd_usuario_admin, $colecaoAtributos);                
     }
     

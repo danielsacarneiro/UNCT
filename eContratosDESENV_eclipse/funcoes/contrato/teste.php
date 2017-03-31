@@ -20,7 +20,7 @@ set_time_limit(0);
 
 <?php
 
-header('Content-Type: text/html; charset=utf-8',true);
+/*header('Content-Type: text/html; charset=utf-8',true);
 
 include caminho_wordpress.'excel/Classes/PHPExcel.php';
 include caminho_wordpress.'excel/Classes/PHPExcel/Writer/Excel2007.php';
@@ -68,7 +68,7 @@ for ($k=6; $k<=$totalResultado; $k++) {
     
 echo "FIM... <br><br>";
 
-$dbprocesso->finalizar();
+$dbprocesso->finalizar();*/
 
 ?>
 <body>

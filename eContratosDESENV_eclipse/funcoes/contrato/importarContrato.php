@@ -19,9 +19,9 @@ set_time_limit(0);
 
 header('Content-Type: text/html; charset=utf-8',true);
 
-include caminho_wordpress.'excel/Classes/PHPExcel.php';
-include caminho_wordpress.'excel/Classes/PHPExcel/Writer/Excel2007.php';
-include caminho_wordpress.'excel/Classes/PHPExcel/IOFactory.php';
+include_once caminho_wordpress.'excel/Classes/PHPExcel.php';
+include_once caminho_wordpress.'excel/Classes/PHPExcel/Writer/Excel2007.php';
+include_once caminho_wordpress.'excel/Classes/PHPExcel/IOFactory.php';
 include_once(caminho_vos."dbcontrato.php");
 
 $inputFileName = caminho.'planilha/UNCT_contrato.xlsx';
@@ -87,6 +87,11 @@ function imprimeLinha($linha){
 		echo $ds . ",";		
 	}	
 }
+
+
+include "include_importarConvenio.php";
+importarConvenio("V");
+importarConvenio("P");
 
 ?>
 <body>

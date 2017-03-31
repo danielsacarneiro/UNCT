@@ -360,7 +360,13 @@ include_once(caminho_vos."vousuario.php");
     
     function getBotoesRodapeComRestricao($arrayBotoesARemover){
     	
-    	$temAlterar = !existeItemNoArray(constantes::$CD_FUNCAO_ALTERAR, $arrayBotoesARemover);
+    	//o administrador pode ver todos os botoes
+    	$usuarioLogadoTemPermissao = dominioPermissaoUsuario::isAdministrador(getColecaoPermissaoUsuarioLogado());
+    	
+    	//$usuarioLogadoTemPermissao = true;
+    	
+    	$temAlterar = !existeItemNoArray(constantes::$CD_FUNCAO_ALTERAR, $arrayBotoesARemover) || $usuarioLogadoTemPermissao;
+    	$temExcluir = !existeItemNoArray(constantes::$CD_FUNCAO_EXCLUIR, $arrayBotoesARemover) || $usuarioLogadoTemPermissao;
     	
     	$isManutencao = false;
     	$isDetalhamento = false;
@@ -389,7 +395,7 @@ include_once(caminho_vos."vousuario.php");
 		    		$html.=     "<TD class='botaofuncao'>".getBotaoIncluir()."</TD>\n";
 		    	if(getBotaoAlterar() != "" && $temAlterar)
 		    		$html.=     "<TD class='botaofuncao'>".getBotaoAlterar()."</TD>\n";
-		    	if(getBotaoExcluir() != "")
+		    	if(getBotaoExcluir() != "" && $temExcluir)
 		    		$html.=     "<TD class='botaofuncao'>".getBotaoExcluir()."</TD>\n";
     		}
     	}
@@ -439,8 +445,15 @@ include_once(caminho_vos."vousuario.php");
     	return $html;
     }
     
+    function getColecaoPermissaoUsuarioLogado(){
+    	$current_user = wp_get_current_user();
+    	$permissao_user = $current_user->roles;
+    	 
+        return $permissao_user;
+    }
+    
     function temPermissao(){
-        return temPermissaoParamHistorico(false);
+    	return temPermissaoParamHistorico(false);
     }
     
     function isUsuarioAdmin(){

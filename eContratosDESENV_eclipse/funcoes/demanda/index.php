@@ -309,9 +309,9 @@ function encaminhar() {
                         <TABLE class="barraacoesaux" cellpadding="0" cellspacing="0">
 	                   	<TR> 
                             <?php
-                            /*$arrayBotoesARemover = array(constantes::$CD_FUNCAO_ALTERAR);
-                            echo getBotoesRodapeComRestricao($arrayBotoesARemover);*/
-                            echo getBotoesRodape();
+                            $arrayBotoesARemover = array(constantes::$CD_FUNCAO_EXCLUIR);
+                            echo getBotoesRodapeComRestricao($arrayBotoesARemover);
+                            //echo getBotoesRodape();
                             ?>
                             <TD class='botaofuncao'>
                             <?php echo getBotaoValidacaoAcesso("bttEncaminhar", "Encaminhar", "botaofuncaop", false, false,true,false,"onClick='javascript:encaminhar();' accesskey='e'");?>
