@@ -76,7 +76,7 @@ try{
 }catch(Exception $e) {
     $msgErro = $e->getMessage();
     $classMensagem = "campomensagemvermelho";
-    $msg = "OPERACAO $nmFuncao FALHOU.$msgErro";
+    $msg = "OPERACAO $nmFuncao FALHOU.<br>$msgErro";
 }
 
 

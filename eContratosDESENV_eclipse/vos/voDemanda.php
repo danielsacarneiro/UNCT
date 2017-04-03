@@ -27,6 +27,7 @@ Class voDemanda extends voentidade{
 	var $prioridade = "";
 	var $dtReferencia = "";
 	 
+	var $dbprocesso = null;
 	var $voContrato = null;
 	// ...............................................................
 	// Funcoes ( Propriedades e métodos da classe )
@@ -103,7 +104,7 @@ Class voDemanda extends voentidade{
 	}
 
 	function temContratoParaIncluir(){
-		$retorno = $this->voContrato != null;
+		$retorno = $this->voContrato->tipo != null && $this->voContrato->anoContrato != null && $this->voContrato->cdContrato != null;
 		return $retorno;
 	}
 

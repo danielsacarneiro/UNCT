@@ -59,7 +59,9 @@ Class dbDemanda extends dbprocesso{
 		}
 		$arrayColunasRetornadas = array($nmTabela . ".*",
 				static::$nmTabelaUsuarioInclusao . "." . vousuario::$nmAtrName . "  AS " . voDemanda::$nmAtrNmUsuarioInclusao,
-				$nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . "  AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,
+				//$nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . "  AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,
+				"COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . ",". $nmTabela . "." . voDemanda::$nmAtrCdSetor . ") AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,
+				"COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrDhInclusao. ",". $nmTabela . "." . voDemanda::$nmAtrDhUltAlteracao . ") AS " . filtroManterDemanda::$NmColDhUltimaMovimentacao,
 				$colunaUsuHistorico
 		);		
 			
@@ -176,7 +178,7 @@ Class dbDemanda extends dbprocesso{
 			if($colecao != ""){
 				$setorAtual = $colecao[0][voDemandaTramitacao::$nmAtrCdSetorDestino];
 				//echo "setor atual:" . $setorAtual;
-				if($vo->cdSetor != $setorAtual){
+				if($setorAtual != null && $vo->cdSetor != $setorAtual){
 					$msg = "A demanda deve estar encaminhada ao setor responsável para fechamento.";
 					throw new Exception($msg);					
 				}

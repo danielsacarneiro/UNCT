@@ -215,6 +215,7 @@ function encaminhar() {
                     <TH class="headertabeladados" width="1%">Prior.</TH>
                     <TH class="headertabeladados"width="1%" nowrap >Usuário</TH>
                     <TH class="headertabeladados"width="1%" nowrap >Dt.Abertura</TH>
+                    <TH class="headertabeladados"width="1%" nowrap >Dt.Últ.Movimentação</TH>
                 </TR>
                 <?php								
                 if (is_array($colecao))
@@ -228,7 +229,7 @@ function encaminhar() {
                 $dominioTipo = new dominioTipoDemanda();
                 $dominioPrioridade = new dominioPrioridadeDemanda();
                                 
-                $colspan=11;
+                $colspan=12;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -248,9 +249,6 @@ function encaminhar() {
                         $setor = $dominioSetor->getDescricao($voAtual->cdSetor);
                         
                         $setorDestinoAtual = $colecao[$i][voDemandaTramitacao::$nmAtrCdSetorDestino];
-                        if($setorDestinoAtual == null){
-                        	$setorDestinoAtual = $setor;
-                        }
                         $setorDestinoAtual = $dominioSetor->getDescricao($setorDestinoAtual);
                         
                         $tipo = $dominioTipo->getDescricao($voAtual->tipo);
@@ -260,6 +258,8 @@ function encaminhar() {
                         if($isHistorico){
                         	$nmUsuario = $voAtual->nmUsuarioOperacao;
                         }
+                        
+                        $dataUltimaMovimentacao = $colecao[$i][filtroManterDemanda::$NmColDhUltimaMovimentacao];
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados">
@@ -282,6 +282,7 @@ function encaminhar() {
                     <TD class="tabeladados" nowrap><?php echo $prioridade?></TD>
                     <TD class="tabeladados" nowrap><?php echo $nmUsuario;?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($voAtual->dtReferencia);?></TD>
+                    <TD class="tabeladados" nowrap><?php echo getData($dataUltimaMovimentacao);?></TD>
                 </TR>					
                 <?php
 				}				

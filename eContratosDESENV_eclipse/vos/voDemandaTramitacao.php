@@ -108,6 +108,8 @@ include_once("voDemandaContrato.php");
     }
     
     function getDadosRegistroBanco($registrobanco){
+    	parent::getDadosRegistroBanco($registrobanco);
+    	
         //as colunas default de voentidade sao incluidas pelo metodo getDadosBanco do voentidade
     	$this->sq = $registrobanco[self::$nmAtrSq];
     	$this->cd = $registrobanco[self::$nmAtrCd];
@@ -157,10 +159,16 @@ include_once("voDemandaContrato.php");
 	}
 	
 	//para o caso da classe herdar de alguem
-	function getVOPai(){
+	function getVOPaiChave(){
 		$voDemanda = new voDemanda();
 		$voDemanda->ano = $this->ano;
 		$voDemanda->cd = $this->cd;
+		
+		return $voDemanda;
+	}
+	
+	function getVOPai(){
+		$voDemanda = $this->getVOPaiChave();
 		$voDemanda->cdSetor = $this->cdSetor;
 		$voDemanda->tipo  = $this->tipo;
 		$voDemanda->situacao  = $this->situacao;		

@@ -115,6 +115,7 @@ function confirmar() {
 				<INPUT type="hidden" id="<?=voDemanda::$nmAtrCd?>" name="<?=voDemanda::$nmAtrCd?>" value="<?=$vo->cd?>">	            			  
 				<INPUT type="hidden" id="<?=voDemanda::$nmAtrTipo?>" name="<?=voDemanda::$nmAtrTipo?>" value="<?=$vo->tipo?>">
 				<INPUT type="hidden" id="<?=voDemanda::$nmAtrCdSetor?>" name="<?=voDemanda::$nmAtrCdSetor?>" value="<?=$vo->cdSetor?>">
+				<INPUT type="hidden" id="<?=voDemanda::$nmAtrSituacao?>" name="<?=voDemanda::$nmAtrSituacao?>" value="<?=$vo->situacao?>">
 	        </TR>
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Setor Responsável:</TH>
@@ -140,32 +141,7 @@ function confirmar() {
 	          
  	        require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
  	        getContratoDetalhamento($voContrato, $colecao);
-	        
-	        //so exibe contrato se tiver
-	        /*if($voDemandaContrato->voContrato != null){
-	        	$voContrato = $voDemandaContrato->voContrato;	        	
-	        	
-	        	require_once (caminho_funcoes."contrato/dominioTipoContrato.php");
-	        	$dominioTipoContrato = new dominioTipoContrato();
-	        	$contrato = formatarCodigoAnoComplemento($voContrato->cdContrato,
-	        			$voContrato->anoContrato,
-	        			$dominioTipoContrato->getDescricao($voContrato->tipo));
-	        	
-	        	include_once(caminho_funcoes."pessoa/biblioteca_htmlPessoa.php");
-	        	$nmpessoa = $colecao[vopessoa::$nmAtrNome];
-	        	$docpessoa = $colecao[vopessoa::$nmAtrDoc];
-	        	$campoContratado = getCampoContratada($nmpessoa, $docpessoa, $voContrato->sq);	        	
-	        ?>	
-			<TR>
-	            <INPUT type="hidden" id="<?=vocontrato::$nmAtrAnoContrato?>" name="<?=vocontrato::$nmAtrAnoContrato?>" value="<?=$voContrato->anoContrato?>">
-				<INPUT type="hidden" id="<?=vocontrato::$nmAtrCdContrato?>" name="<?=vocontrato::$nmAtrCdContrato?>" value="<?=$voContrato->cdContrato?>">	            			  
-				<INPUT type="hidden" id="<?=vocontrato::$nmAtrTipoContrato?>" name="<?=vocontrato::$nmAtrTipoContrato?>" value="<?=$voContrato->tipo?>">
-                <TH class="campoformulario" nowrap width=1%>Contrato:</TH>
-				<TD class="campoformulario" colspan=3>Número:&nbsp;&nbsp;&nbsp;&nbsp;
-				<INPUT type="text" value="<?php echo($contrato);?>"  class="camporeadonlyalinhadodireita" size="<?=strlen($contrato)?>" readonly>				
-				<div id=""><?=$campoContratado?></div></TD>
-            </TR>	                
-            <?php }*/?>
+	        ?>
             
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Data.Referência:</TH>
@@ -177,7 +153,7 @@ function confirmar() {
 	            <TH class="campoformulario" nowrap width="1%">Situação:</TH>
 	            <TD class="campoformulario" colspan=3>
 	            <?php 
-	            echo $comboSituacao->getHtmlCombo(voDemanda::$nmAtrSituacao,voDemanda::$nmAtrSituacao, $vo->situacao, true, "camporeadonly", false, " disabled ");?>
+	            echo $comboSituacao->getHtmlCombo("","", $vo->situacao, true, "camporeadonly", false, " disabled ");?>
 				</TD>
 	        </TR>
 				<?php 
@@ -187,6 +163,12 @@ function confirmar() {
 				}
 				?>
        	    
+			<TR>
+				<TH class='textoseparadorgrupocampos' halign='left' colspan='4'>
+				<DIV class='campoformulario' id='div_tramitacao'>&nbsp;&nbsp;Detalhamento Demanda
+				</DIV>
+				</TH>
+			</TR>       	    
 	        <?php 
 	            echo "<TR>" . incluirUsuarioDataHoraDetalhamento($vo) .  "</TR>";	        	
 	        ?>

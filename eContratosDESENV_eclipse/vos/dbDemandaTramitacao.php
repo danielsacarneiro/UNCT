@@ -60,6 +60,9 @@ Class dbDemandaTramitacao extends dbprocesso{
 	//o incluir eh implementado para nao usar da voentidade
 	//por ser mais complexo
 	function incluir($vo){
+		
+		$this->validarInclusao($vo);
+		
 		//Start transaction
 		$this->cDb->retiraAutoCommit();
 		try{
@@ -89,11 +92,40 @@ Class dbDemandaTramitacao extends dbprocesso{
 		return $voDemanda;
 	}
 	
-	function incluirDemandaTramitacaoCOMControleTransacao($vo){
+	function validarInclusao($vo){
+		$voDemanda = new voDemanda();		
+		
+		if($vo->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO && !$voDemanda->temContratoParaIncluir()){
+			$msg = "Selecione o contrato.";
+			throw new Exception($msg);
+		}
+	
+	}
+	
+	function validarEncaminhamento($vo){
+			
+		if($vo->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA){
+			$msg = "Encaminhamento não permitido para demanda FECHADA.";
+			throw new Exception($msg);
+		}
+			
+		return true;
+	}
+		
+	function encaminharDemanda($vo){
 		//Start transaction
 		$this->cDb->retiraAutoCommit();
-		try{			
-			$this->incluirDemandaTramitacaoSEMControleTransacao($vo);				
+		try{
+			$this->incluirDemandaTramitacaoSEMControleTransacao($vo);
+			
+			/*$voDemanda = new voDemanda();
+			$voDemanda = $vo->getVOPaiChave();
+			$registro = $voDemanda->dbprocesso->consultarPorChave($voDemanda, false);
+			$voDemanda->getDadosBanco($registro);
+			$voDemanda->dbprocesso->cDb = $this->cDb;
+			$voDemanda->situacao = dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_ABERTA;
+			$voDemanda->dbprocesso->alterar($voDemanda);*/
+				
 			//End transaction
 			$this->cDb->commit();
 		}catch(Exception $e){
@@ -125,8 +157,11 @@ Class dbDemandaTramitacao extends dbprocesso{
 		//o alterar eh chamado na pagina generica confirmar.php
 		//para chamar o alterarVO, basta chamar o parent::alterar
 		//este metodo, por ser chamado da pagina manter.php, apenas incluira uma nova tramitacao
-		//ele NAO altera o estado da demanda, apenas inclui uma nova tramitacao		
-		$this->incluirDemandaTramitacaoCOMControleTransacao($vo);
+		//ele NAO altera o estado da demanda, apenas inclui uma nova tramitacao
+		$isAlteracaoPermitida = $this->validarEncaminhamento($vo);
+		if($isAlteracaoPermitida){		
+			$this->encaminharDemanda($vo);
+		}
 		
 		return $vo;
 	}

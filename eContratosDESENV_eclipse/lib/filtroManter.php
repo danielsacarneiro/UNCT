@@ -127,6 +127,9 @@ class filtroManter extends multiplosConstrutores{
     }
     
     function getFiltroConsultaSQL($filtro){
+    	return $this->getFiltroConsulta($filtro, true);
+    }
+    function getFiltroConsulta($filtro, $comAtributoOrdenacao){
     	//ECHO "TESTE";
     	
     	if($filtro != ""){
@@ -156,7 +159,9 @@ class filtroManter extends multiplosConstrutores{
     			$filtro = $filtro . "\n GROUP BY " . getSQLStringFormatadaColecaoIN($this->groupby, false );
     		}
     		
-    		$filtro = $filtro . "\n ORDER BY $atributoOrdenacao $ordem $strOrdemDefault ";
+    		if($comAtributoOrdenacao){
+    			$filtro = $filtro . "\n ORDER BY $atributoOrdenacao $ordem $strOrdemDefault ";
+    		}
     		
     		
     	}

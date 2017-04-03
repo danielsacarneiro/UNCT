@@ -181,13 +181,16 @@ include_once(caminho_vos."vousuario.php");
 			"<TR>
 	            <TH class='campoformulario' nowrap>Data Ult.Alteração:</TH>
 	            <TD class='campoformulario'>
-	            	<INPUT type='text' 
-	            	       id='".voentidade::$nmAtrDhUltAlteracao."' 
-	            	       name='".voentidade::$nmAtrDhUltAlteracao."' 
+	            	<INPUT type='text'	            	        
 	            			value='".getDataHoraSQLComoString($voEntidade->dhUltAlteracao)."'
 	            			class='camporeadonly' 
 	            			size='20' 
 	            			maxlength='10' readonly>
+	            	<INPUT type='hidden'
+	            	       id='".voentidade::$nmAtrDhUltAlteracao."' 
+	            	       name='".voentidade::$nmAtrDhUltAlteracao."' 
+	            			value='".$voEntidade->dhUltAlteracao."'>
+	            					
 				</TD>
 	            <TH class='campoformulario' nowrap>Usuário Ult.Alteração:</TH>
 	            <TD class='campoformulario'>
@@ -656,5 +659,9 @@ include_once(caminho_vos."vousuario.php");
     
     function getDataHoje(){
     	return date('d/m/Y');
-    }        
+    }
+    
+    function tratarExcecaoHTML($ex){
+    	header("Location: ../mensagemErro.php?texto=".$ex->getMessage(),TRUE,307);
+    }
     ?>

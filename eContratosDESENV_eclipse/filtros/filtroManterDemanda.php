@@ -6,6 +6,8 @@ include_once(caminho_vos ."voDemandaTramitacao.php");
 class filtroManterDemanda extends filtroManter{
 
 	public $nmFiltro = "filtroManterDemanda";
+	static $NmColDhUltimaMovimentacao = "NmColDhUltimaMovimentacao";
+	
 	var $vodemanda;
 	var $vocontrato;
 	var $nmContratada;
@@ -210,7 +212,7 @@ class filtroManterDemanda extends filtroManter{
 		
 		}
 		
-		$this->formataCampoOrdenacao($nmTabela);
+		$this->formataCampoOrdenacao(new voDemanda());
 		//finaliza o filtro
 		$filtro = parent::getFiltroConsultaSQL($filtro);
 
@@ -219,12 +221,15 @@ class filtroManterDemanda extends filtroManter{
 		return $filtro;
 	}
 	
-	function formataCampoOrdenacao($nmTabela){
+	function formataCampoOrdenacao($voEntidade){		
+		$nmTabela = $voEntidade->getNmTabelaStatic($this->isHistorico);
+		
 		if($nmTabela != null && $this->cdAtrOrdenacao != null){
 			
 			$jaEhFormatado = strpos ($this->cdAtrOrdenacao, ".");									
 			
-			if($jaEhFormatado === false){			
+			//so formata se o atrordenacao escolhido pertencer a nmtabela em questao
+			if($jaEhFormatado === false && existeItemNoArray($this->cdAtrOrdenacao, $voEntidade->getTodosAtributos())){			
 				$this->cdAtrOrdenacaoConsulta = $nmTabela. "." .$this->cdAtrOrdenacao;
 			}
 			
@@ -241,7 +246,8 @@ class filtroManterDemanda extends filtroManter{
 	
 	function getAtributosOrdenacao(){
 		$varAtributos = array(
-				voDemanda::$nmAtrDtReferencia => "Data",
+				voDemanda::$nmAtrDtReferencia => "Data.Referência",
+				filtroManterDemanda::$NmColDhUltimaMovimentacao => "Data.Movimentação",
 				voDemanda::$nmAtrPrioridade => "Prioridade",				
 				voDemanda::$nmAtrCd => "Número"
 		);
