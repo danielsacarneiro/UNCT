@@ -103,7 +103,7 @@ Class voDemanda extends voentidade{
 		return $retorno;
 	}
 
-	function temContratoParaIncluir(){
+	function temContratoParaIncluir(){		
 		$retorno = $this->voContrato->tipo != null && $this->voContrato->anoContrato != null && $this->voContrato->cdContrato != null;
 		return $retorno;
 	}
@@ -154,7 +154,7 @@ Class voDemanda extends voentidade{
 		//quando existir
 		//recupera quando da consulta da contratada, ao inserir o contrato na tela		
 		$chaveContrato = @$_POST[vopessoa::$ID_CONTRATO];
-		echo "chave contrato:" . $chaveContrato;
+		//echo "chave contrato:" . $chaveContrato;
 		if($chaveContrato != null){			
 			$voContrato = new vocontrato();
 			$voContrato->getChavePrimariaVOExplodeParam($chaveContrato);

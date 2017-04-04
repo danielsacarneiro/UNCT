@@ -93,9 +93,10 @@ Class dbDemandaTramitacao extends dbprocesso{
 	}
 	
 	function validarInclusao($vo){
-		$voDemanda = new voDemanda();		
+		/*echo "tipo da demanda:" . $vo->tipo . "<br>"; 
+		echo "tem contrato:" . $vo->temContratoParaIncluir() . "<br>";*/
 		
-		if($vo->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO && !$voDemanda->temContratoParaIncluir()){
+		if($vo->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO && !$vo->temContratoParaIncluir()){
 			$msg = "Selecione o contrato.";
 			throw new Exception($msg);
 		}
