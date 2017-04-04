@@ -30,11 +30,12 @@ class filtroManterDocumento extends filtroManter{
         }
 	}
     	
-	function getFiltroConsultaSQL($isHistorico){
+	function getFiltroConsultaSQL(){
         $voDocumento= new voDocumento();
 		$filtro = "";
 		$conector  = "";
 
+		$isHistorico = $this->isHistorico;
         $nmTabela = $voDocumento->getNmTabelaEntidade($isHistorico);
         
 		//seta os filtros obrigatorios        
@@ -100,7 +101,7 @@ class filtroManterDocumento extends filtroManter{
 		}
 		
 		//finaliza o filtro
-		$filtro = parent::getFiltroConsultaSQL($filtro);
+		$filtro = parent::getFiltroConsulta($filtro);
 		
 		//echo "Filtro:$filtro<br>";
 

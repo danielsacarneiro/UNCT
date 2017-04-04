@@ -36,11 +36,12 @@ class filtroManterContratoTramitacao extends filtroManter{
 		}
 	}
 	 
-	function getFiltroConsultaSQL($isHistorico){
+	function getFiltroConsultaSQL(){
 		$voContratoTramitacao= new voContratoTramitacao();
 		$filtro = "";
 		$conector  = "";
 
+		$isHistorico = $this->isHistorico;
 		$nmTabela = $voContratoTramitacao->getNmTabelaEntidade($isHistorico);
 		$nmTabelaContrato = vocontrato::getNmTabela();
 		$nmTabelaPessoa = vopessoa::getNmTabela();
@@ -132,7 +133,7 @@ class filtroManterContratoTramitacao extends filtroManter{
 		}
 		
 		//finaliza o filtro
-		$filtro = parent::getFiltroConsultaSQL($filtro);
+		$filtro = parent::getFiltroConsulta($filtro);
 
 		//echo "Filtro:$filtro<br>";
 

@@ -46,7 +46,7 @@ class filtroConsultarContratoPGE extends filtroManter{
         return $retorno;
     }
 	
-	function getFiltroConsultaSQL($isHistorico){
+	function getFiltroConsultaSQL(){
 		$filtro = "";
 		$conector  = "";
         $voContrato = new vocontrato();
@@ -55,6 +55,7 @@ class filtroConsultarContratoPGE extends filtroManter{
         if($isHistorico)
             $nmTabela = vocontrato::getNmTabelaHistorico();*/
             
+        $isHistorico = $this->isHistorico;
         $nmTabela = $voContrato->getNmTabelaEntidade($isHistorico);
         
 		//seta os filtros obrigatorios        
@@ -257,7 +258,7 @@ class filtroConsultarContratoPGE extends filtroManter{
 		}		
 
 		//finaliza o filtro
-		$filtro = parent::getFiltroConsultaSQL($filtro);
+		$filtro = parent::getFiltroConsulta($filtro);
 		
 		//echo "Filtro:$filtro<br>";
 

@@ -126,10 +126,14 @@ class filtroManter extends multiplosConstrutores{
     	return $filtro;
     }
     
-    function getFiltroConsultaSQL($filtro){
-    	return $this->getFiltroConsulta($filtro, true);
+    function getSQLWhere($comAtributoOrdenacao){
+    	return $this->getFiltroConsultaSQL($comAtributoOrdenacao);
     }
-    function getFiltroConsulta($filtro, $comAtributoOrdenacao){
+    
+    function getFiltroConsulta($filtro){
+    	return $this->getFiltroSQL($filtro, true);
+    }
+    function getFiltroSQL($filtro, $comAtributoOrdenacao){
     	//ECHO "TESTE";
     	
     	if($filtro != ""){

@@ -251,7 +251,8 @@ class dbprocesso {
 			
 			// removeObjetoSessao($filtro->nmFiltro);
 			
-			$filtroSQL = $filtro->getFiltroConsultaSQL ( $isHistorico );
+			$filtroSQL = $filtro->getSQLWhere (true);
+			//echo $filtroSQL. "<br>";
 			
 			// verifica se tem paginacao
 			$limite = "";
@@ -259,9 +260,11 @@ class dbprocesso {
 				// ECHO "TEM PAGINACAO";
 				$pagina = $filtro->paginacao->getPaginaAtual ();
 				
-				$filtroSQLPaginacao = $filtro->getFiltroConsulta ($isHistorico, false);				
-				// guarda o numero total de registros para nao ter que executar a consulta TODOS novamente
+				$filtroSQLPaginacao = $filtro->getSQLWhere (false);
+				//echo $filtroSQLPaginacao. "<br>";
 				$queryCount = "SELECT count(*) as " . dbprocesso::$nmCampoCount . $queryFrom . $filtroSQLPaginacao;
+				
+				// guarda o numero total de registros para nao ter que executar a consulta TODOS novamente
 				$numTotalRegistros = $filtro->numTotalRegistros = $this->getNumTotalRegistrosQuery ( $queryCount );
 				
 				$qtdRegistrosPorPag = $filtro->qtdRegistrosPorPag;

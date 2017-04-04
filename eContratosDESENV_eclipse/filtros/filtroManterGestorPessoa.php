@@ -19,11 +19,12 @@ class filtroManterGestorPessoa extends filtroManter{
         $this->nome = @$_POST[vogestorpessoa::$nmAtrNome];        
 	}
     	
-	function getFiltroConsultaSQL($isHistorico){
+	function getFiltroConsultaSQL(){
         $voGestorPessoa= new vogestorpessoa();
 		$filtro = "";
 		$conector  = "";
 
+		$isHistorico = $this->isHistorico;
         $nmTabela = $voGestorPessoa->getNmTabela($isHistorico);
         
 		//seta os filtros obrigatorios        
@@ -64,7 +65,7 @@ class filtroManterGestorPessoa extends filtroManter{
 		}	
 
 		//finaliza o filtro
-		$filtro = parent::getFiltroConsultaSQL($filtro);
+		$filtro = parent::getFiltroConsulta($filtro);
 		
 		//echo "Filtro:$filtro<br>";
 

@@ -56,7 +56,7 @@ class filtroManterDemanda extends filtroManter{
 		}		
 	}
 	 
-	function getFiltroConsultaSQL(){
+	function getFiltroConsultaSQL($comAtributoOrdenacao = null){
 		$filtro = "";
 		$conector  = "";
 
@@ -214,7 +214,7 @@ class filtroManterDemanda extends filtroManter{
 		
 		$this->formataCampoOrdenacao(new voDemanda());
 		//finaliza o filtro
-		$filtro = parent::getFiltroConsultaSQL($filtro);
+		$filtro = parent::getFiltroSQL($filtro, $comAtributoOrdenacao);
 
 		//echo "Filtro:$filtro<br>";
 
