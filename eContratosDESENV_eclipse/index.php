@@ -24,26 +24,23 @@ cabecalho;
 <SCRIPT language="javascript">
 	f = new Tree('Menu de Funcionalidades finalizadas e entregue a SEFAZ-PE (Homologação)', true);
 	
-	f1 = new Tree('Manutenção de Tabelas');	
-    f1.adicionarItem(new Link('Manutenção Documentos', '<?=caminho_funcoesHTML?>documento', ''));
-    f1.adicionarItem(new Link('Manutenção Gestores', '<?=caminho_funcoesHTML?>gestor', ''));
+	f1 = new Tree('Serviço 01 (Tabelas)');	
+    f1.adicionarItem(new Link('Documentos', '<?=caminho_funcoesHTML?>documento', ''));
+    f1.adicionarItem(new Link('Gestores', '<?=caminho_funcoesHTML?>gestor', ''));
+    f1.adicionarItem(new Link('Pessoas', '<?=caminho_funcoesHTML?>pessoa', ''));
 	f.adicionarItem(f1);
 	
-	f2 = new Tree('Pessoas');	
-    f2.adicionarItem(new Link('Manutenção Pessoas', '<?=caminho_funcoesHTML?>pessoa', ''));    
-	f.adicionarItem(f2);
-
-	f3 = new Tree('Contratos');
-	f3.adicionarItem(new Link("Manutenção Contratos", "<?=caminho_funcoesHTML?>contrato", ""));
+	f3 = new Tree('Serviço 02 (Contratos)');
+	f3.adicionarItem(new Link("Contratos", "<?=caminho_funcoesHTML?>contrato", ""));
 	//f3.adicionarItem(new Link("Manutenção Contrato Tramitação (NAO USAR)", "<?=caminho_funcoesHTML?>contrato_tram", ""));	
 	f.adicionarItem(f3);
 
-	f4 = new Tree('Demandas');
-	f4.adicionarItem(new Link("Manutenção Demanda", "<?=caminho_funcoesHTML?>demanda", ""));	
+	f4 = new Tree('Serviço 03 (Demanda)');
+	f4.adicionarItem(new Link("Demandas", "<?=caminho_funcoesHTML?>demanda", ""));	
 	f.adicionarItem(f4);
 
-	f5 = new Tree('Processos Administrativos');	
-    f5.adicionarItem(new Link('Manutenção P.A. de Aplicação de Penalidade (PAAP)', '<?=caminho_funcoesHTML?>pa', ''));    
+	f5 = new Tree('Serviço 04 (Proc.Admin.)');	
+    f5.adicionarItem(new Link('P.A.s de Aplicação de Penalidade (PAAP)', '<?=caminho_funcoesHTML?>pa', ''));    
 	f.adicionarItem(f5);
 
 	/*

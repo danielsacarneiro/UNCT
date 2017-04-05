@@ -134,8 +134,13 @@ function formatarCampoPRT(pCampo, pEvento) {
 		vlCampo = vlCampo.substr(0, 4) + '.' + vlCampo.substr(4, 5) + '.' + vlCampo.substr(9);
 	} else if (tamanho > 13 && tamanho <= 16) {
 		vlCampo = vlCampo.substr(0, 4) + '.' + vlCampo.substr(4, 5) + '.' + vlCampo.substr(9,4) + '.' + vlCampo.substr(13);
-	} else if (tamanho > 16) {
+	} else if (tamanho > 16 && tamanho <= 18) {
 		vlCampo = vlCampo.substr(0, 4) + '.' + vlCampo.substr(4, 5) + '.' + vlCampo.substr(9,4) + '.' + vlCampo.substr(13,3) + '-' + vlCampo.substr(16);
+	} else if (tamanho > 18) {
+		pCampo.value = vlCampo.substr(0, 18);
+		formatarCampoPRT(pCampo,pEvento);
+		
+		return;
 	}
 
 	pCampo.value = vlCampo;
