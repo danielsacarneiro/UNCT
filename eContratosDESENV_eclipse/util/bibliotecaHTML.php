@@ -98,7 +98,13 @@ include_once(caminho_vos."vousuario.php");
                                 .",
                                 <a class='linkbranco' href='" . $pastaMenu. "index.php' >Menu</a>
                                 <a href='" .$pastaMenu . "login.php?funcao=I' ><img  title='Entrar' src='" . $pastaImagens . "botao_home_laranja.gif' width='20' height='20'></a>
-                                <a href='" . $pastaMenu. "login.php?funcao=O' ><img  title='Sair' src='" . $pastaImagens . "logout.gif' width='25' height='20'></a>
+                                <a href='" . $pastaMenu. "login.php?funcao=O' ><img  title='Sair' src='" . $pastaImagens . "logout.gif' width='25' height='20'></a>";
+		
+		if(isUsuarioAdmin()){
+			$cabecalho .= "<a href='http://sf300451/wordpress/wp-admin/' ><img  title='WORDPRESS' src='" . $pastaImagens . "w-logo-white.png' width='25' height='20'></a>";
+		}
+		
+		$cabecalho .= "\n
                                 </TH>                                                                                                
                                 </TR>
                         </TBODY>
