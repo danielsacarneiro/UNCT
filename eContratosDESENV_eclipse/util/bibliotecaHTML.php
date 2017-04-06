@@ -294,6 +294,14 @@ include_once(caminho_vos."vousuario.php");
     }
         
     function getBotaoValidacaoAcesso($idBotao, $descricao, $classe, $isSubmit, $imprimirNaLupa, $imprimirNaManutencao, $todosTemAcesso, $complementoHTML) {
+    	return 	getBotaoGeral($idBotao, $descricao, $classe, $isSubmit, $imprimirNaLupa, $imprimirNaManutencao, $todosTemAcesso, $complementoHTML, "");
+    }
+    
+    function getBotaoPorFuncao($idBotao, $descricao, $classe, $isSubmit, $imprimirNaLupa, $imprimirNaManutencao, $complementoHTML, $cdFuncaoBotao) {
+    	return 	getBotaoGeral($idBotao, $descricao, $classe, $isSubmit, $imprimirNaLupa, $imprimirNaManutencao, false, $complementoHTML, $cdFuncaoBotao);
+    }
+    
+    function getBotaoGeral($idBotao, $descricao, $classe, $isSubmit, $imprimirNaLupa, $imprimirNaManutencao, $todosTemAcesso, $complementoHTML, $cdFuncaoBotao) {
         $retorno = getBotao($idBotao, $descricao, $classe, $isSubmit, $complementoHTML);
                         
         $isLupa = isLupa();
@@ -305,7 +313,7 @@ include_once(caminho_vos."vousuario.php");
         }else{
         	//echo "NAO EH LUPA";
         	if($imprimirNaManutencao){
-        		if(!temPermissao() && !$todosTemAcesso)
+        		if(!temPermissao($cdFuncaoBotao) && !$todosTemAcesso)
         			$retorno = "";
 	        }else
         		$retorno = "";
@@ -323,11 +331,11 @@ include_once(caminho_vos."vousuario.php");
     }
     
     function getBotaoAlterar(){
-        return getBotaoValidacaoAcesso("bttalterar", "Alterar", "botaofuncaop", false, false,true,false,"onClick='javascript:alterar();' accesskey='l'");
+        return getBotaoPorFuncao("bttalterar", "Alterar", "botaofuncaop", false, false,true,"onClick='javascript:alterar();' accesskey='l'", constantes::$CD_FUNCAO_ALTERAR);
     }
 
     function getBotaoExcluir(){
-        return getBotaoValidacaoAcesso("bttexcluir", "Excluir", "botaofuncaop", false,false,true,false, "onClick='javascript:excluir();' accesskey='x'");
+        return getBotaoPorFuncao("bttexcluir", "Excluir", "botaofuncaop", false,false,true,"onClick='javascript:excluir();' accesskey='x'", constantes::$CD_FUNCAO_EXCLUIR);
     }
 
     function getBotaoIncluir(){
@@ -366,8 +374,7 @@ include_once(caminho_vos."vousuario.php");
     	//o administrador pode ver todos os botoes
     	$usuarioLogadoTemPermissao = dominioPermissaoUsuario::isAdministrador(getColecaoPermissaoUsuarioLogado());
     	
-    	//$usuarioLogadoTemPermissao = true;
-    	
+    	//falta fazer para os outros botoes
     	$temAlterar = !existeItemNoArray(constantes::$CD_FUNCAO_ALTERAR, $arrayBotoesARemover) || $usuarioLogadoTemPermissao;
     	$temExcluir = !existeItemNoArray(constantes::$CD_FUNCAO_EXCLUIR, $arrayBotoesARemover) || $usuarioLogadoTemPermissao;
     	
@@ -455,25 +462,29 @@ include_once(caminho_vos."vousuario.php");
         return $permissao_user;
     }
     
-    function temPermissao(){
-    	return temPermissaoParamHistorico(false);
+    function temPermissao($cdFuncaoBotao){
+    	return temPermissaoPorFuncao($cdFuncaoBotao, false);
     }
     
     function isUsuarioAdmin(){
-    	return temPermissaoParamHistorico(true);
+    	return dominioPermissaoUsuario::isAdministrador(getColecaoPermissaoUsuarioLogado());    	
     }
     
     function temPermissaoParamHistorico($isHistorico){
+    	return temPermissaoPorFuncao(constantes::$CD_FUNCAO_HISTORICO, $isHistorico);
+    }
+    
+    function temPermissaoPorFuncao($cdFuncaoBotao, $isHistorico){    
     	$current_user = wp_get_current_user();
     	$permissao_user = $current_user->roles;
-    
-    	$dominioPermissaoUsuario = new dominioPermissaoUsuario();    	
+        	
     	$retorno = true;
-    	if($isHistorico)
-    		$retorno= $dominioPermissaoUsuario->temPermissaoExcluirHistorico($permissao_user);
-    	else 
-    		$retorno= $dominioPermissaoUsuario->temPermissao($permissao_user);
-    	
+    	if($isHistorico){
+    		$retorno= dominioPermissaoUsuario::temPermissaoPorFuncao(constantes::$CD_FUNCAO_HISTORICO, $permissao_user);    	
+    	}else {
+    		//$retorno= dominioPermissaoUsuario::temPermissao($permissao_user);
+    		$retorno= dominioPermissaoUsuario::temPermissaoPorFuncao($cdFuncaoBotao, $permissao_user);
+    	}
     	return $retorno;
     }
     

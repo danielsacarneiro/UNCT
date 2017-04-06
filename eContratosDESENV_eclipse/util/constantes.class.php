@@ -19,9 +19,11 @@ header ('Content-type: text/html; charset=ISO-8859-1');
     static $DS_TIPO_PROFISCO  = "C-PROFISCO";
     
     static $CD_FUNCAO_EXCLUIR = "E";
+    static $CD_FUNCAO_HISTORICO = "H";
     static $CD_FUNCAO_INCLUIR = "I";
     static $CD_FUNCAO_ALTERAR = "A";
     static $CD_FUNCAO_DETALHAR = "D";
+    static $CD_FUNCAO_TODAS = "T";
     
     static $DS_SIM  = "SIM";
     static $DS_NAO  = "NAO";
