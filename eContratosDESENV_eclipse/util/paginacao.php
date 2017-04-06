@@ -7,7 +7,7 @@
   Class paginacao {
 		var $paginaAtual;
 		var $numPaginas;
-		static $qtdRegistrosPorPag = 40;
+		static $qtdRegistrosPorPag = 10;
 		
 // ...............................................................
 // Construtor

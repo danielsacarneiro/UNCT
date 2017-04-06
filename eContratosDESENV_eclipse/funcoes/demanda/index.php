@@ -277,7 +277,7 @@ function encaminhar() {
 					<TD class="tabeladados" nowrap><?php echo $setor?></TD>
 					<TD class="tabeladados" nowrap><?php echo $setorDestinoAtual?></TD>
 					<TD class="tabeladados" nowrap><?php echo $tipo?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $voAtual->texto;?></TD>
+                    <TD class="tabeladados" ><?php echo $voAtual->texto;?></TD>
                     <TD class="<?=$classColunaSituacao;?>" nowrap><?php echo $situacao?></TD>                    
                     <TD class="tabeladados" nowrap><?php echo $prioridade?></TD>
                     <TD class="tabeladados" nowrap><?php echo $nmUsuario;?></TD>

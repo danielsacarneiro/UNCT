@@ -36,7 +36,10 @@ cabecalho;
 	f.adicionarItem(f3);
 
 	f4 = new Tree('Serviço 03 (Demanda)');
-	f4.adicionarItem(new Link("Demandas", "<?=caminho_funcoesHTML?>demanda", ""));	
+	f4.adicionarItem(new Link("Demandas", "<?=caminho_funcoesHTML?>demanda", ""));
+	<?php if(isUsuarioAdmin()){?>
+		f4.adicionarItem(new Link("Tramitação Demanda", "<?=caminho_funcoesHTML?>demanda_tram", ""));
+	<?php }?>
 	f.adicionarItem(f4);
 
 	f5 = new Tree('Serviço 04 (Proc.Admin.)');	

@@ -62,7 +62,7 @@
 		            $html .= "<TD class='tabeladados' nowrap>" . complementarCharAEsquerda($sq, "0", TAMANHO_CODIGOS) . "</TD> \n";
 		            $html .= "<TD class='tabeladados' nowrap>" . $dominioSetor->getDescricao($voAtual->cdSetorOrigem) . "</TD> \n";
 		            $html .= "<TD class='tabeladados' nowrap>" . $dominioSetor->getDescricao($voAtual->cdSetorDestino) . "</TD> \n";
-		            $html .= "<TD class='tabeladados' nowrap>" . $voAtual->textoTram . "</TD> \n";
+		            $html .= "<TD class='tabeladados' >" . $voAtual->textoTram . "</TD> \n";
 		            
 		            $html .= "<TD class='tabeladados' nowrap> \n";		            
 		            if($voAtual->voDoc->sq != null){

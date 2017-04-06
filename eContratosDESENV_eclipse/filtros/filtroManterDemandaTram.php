@@ -1,87 +1,64 @@
 <?php
-include_once(caminho_util."bibliotecaSQL.php");
-include_once(caminho_lib ."filtroManter.php");
-include_once(caminho_vos ."voDemandaTramitacao.php");
+include_once("filtroManterDemanda.php");
 
-class filtroManterDemanda extends filtroManter{
+class filtroManterDemandaTram extends filtroManterDemanda{
 
-	public $nmFiltro = "filtroManterDemanda";
-	static $NmColDhUltimaMovimentacao = "NmColDhUltimaMovimentacao";
-	
-	var $vodemanda;
-	var $vocontrato;
-	var $nmContratada;
-	var $docContratada;
-	
-	// ...............................................................
-	// construtor
+	public $nmFiltro = "filtroManterDemandaTram";
 		
 	function getFiltroFormulario(){
-		$vodemanda = new voDemandaTramitacao();
-		$vocontrato = new vocontrato();
-		
-		$vodemanda->cd  = @$_POST[voDemanda::$nmAtrCd];
-		$vodemanda->ano  = @$_POST[voDemanda::$nmAtrAno];
-		$vodemanda->cdSetor = @$_POST[voDemanda::$nmAtrCdSetor];
-		$vodemanda->cdSetorDestino = @$_POST[voDemandaTramitacao::$nmAtrCdSetorDestino];
-		$vodemanda->tipo = @$_POST[voDemanda::$nmAtrTipo];
-		$vodemanda->situacao  = @$_POST[voDemanda::$nmAtrSituacao];
-		$vodemanda->prioridade  = @$_POST[voDemanda::$nmAtrPrioridade];
-		$vodemanda->prt = @$_POST[voDemandaTramitacao::$nmAtrProtocolo];
-		
-		$vocontrato->anoContrato = @$_POST[vocontrato::$nmAtrAnoContrato];
-		$vocontrato->cdContrato = @$_POST[vocontrato::$nmAtrCdContrato];
-		$vocontrato->tipo = @$_POST[vocontrato::$nmAtrTipoContrato];
-		$vocontrato->cdAutorizacao = @$_POST[vocontrato::$nmAtrCdAutorizacaoContrato];
-		
-		$this->vodemanda = $vodemanda;
-		$this->vocontrato = $vocontrato;
-
-		$this->nmContratada = @$_POST[vopessoa::$nmAtrNome];
-		$this->docContratada = @$_POST[vopessoa::$nmAtrDoc];
-		
-		if($this->cdOrdenacao == null){
-			$this->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
-		}		
+		parent::getFiltroFormulario();
+	
+		$sqDemandaTram = @$_POST[voDemandaTramitacao::$nmAtrSq];
+		$this->vodemanda->sq = $sqDemandaTram; 
 	}
-	 
+	
 	function getFiltroConsultaSQL($comAtributoOrdenacao = null){
 		$filtro = "";
 		$conector  = "";
-
+	
 		$nmTabela = voDemanda::getNmTabelaStatic($this->isHistorico);
 		$nmTabelaTramitacao = voDemandaTramitacao::getNmTabelaStatic(false);
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic(false);
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic(false);
 		$nmTabelaPessaContrato = vopessoa::getNmTabelaStatic(false);
-					
+			
 		//seta os filtros obrigatorios
 		if($this->isSetaValorDefault()){
 			//anoDefault foi definido como constante na index.php
 			//echo "setou o ano defaul";
 			;
 		}
-		
+	
 		if($this->vodemanda->ano != null){
-			
+				
 			$filtro = $filtro . $conector
-				. $nmTabela. "." .voDemanda::$nmAtrAno
-				. " = "
-				. $this->vodemanda->ano
-				;
-						
-			$conector  = "\n AND ";
-
+			. $nmTabela. "." .voDemanda::$nmAtrAno
+			. " = "
+					. $this->vodemanda->ano
+					;
+	
+					$conector  = "\n AND ";
+	
 		}
-
+	
 		if($this->vodemanda->cd != null){
 			$filtro = $filtro . $conector
 			. $nmTabela. "." .voDemanda::$nmAtrCd
 			. " = "
 					. $this->vodemanda->cd
 					;
+	
+					$conector  = "\n AND ";
+		}
+	
+		if($this->vodemanda->sq != null){
+			$filtro = $filtro . $conector
+			. $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrSq
+			. " = "
+					. $this->vodemanda->sq
+					;
 		
-					$conector  = "\n AND ";		
+					$conector  = "\n AND ";
 		}
 		
 		if($this->vodemanda->cdSetor != null){
@@ -90,106 +67,106 @@ class filtroManterDemanda extends filtroManter{
 			. " = "
 					. $this->vodemanda->cdSetor
 					;
-		
+	
 					$conector  = "\n AND ";
 		}
-		
+	
 		if($this->vodemanda->cdSetorDestino != null){
 			$filtro = $filtro . $conector
 			. $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrCdSetorDestino
 			. " = "
 					. $this->vodemanda->cdSetorDestino
 					;
-		
+	
 					$conector  = "\n AND ";
 		}
-		
+	
 		if($this->vodemanda->prioridade != null){
 			$filtro = $filtro . $conector
 			. $nmTabela. "." .voDemanda::$nmAtrPrioridade
 			. " = "
 					. $this->vodemanda->prioridade
 					;
-		
+	
 					$conector  = "\n AND ";
 		}
-		
+	
 		if($this->vodemanda->situacao != null){
 			$filtro = $filtro . $conector
 			. $nmTabela. "." .voDemanda::$nmAtrSituacao
 			. " = "
 					. $this->vodemanda->situacao
 					;
-		
+	
 					$conector  = "\n AND ";
 		}
-		
+	
 		if($this->vodemanda->prt != null){
-						
-			
+	
+				
 			$filtro = $filtro . $conector
 			. " EXISTS (SELECT 'X' FROM " . $nmTabelaTramitacao
-			. " WHERE " 
-			. $nmTabela . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrAno
-			. " AND " . $nmTabela . "." . voDemanda::$nmAtrCd . "=" . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrCd
-			. " AND " . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrProtocolo . "="			
-			. getVarComoString($this->vodemanda->prt)
-			. ")\n";
-		
-			$conector  = "\n AND ";
+			. " WHERE "
+					. $nmTabela . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrAno
+					. " AND " . $nmTabela . "." . voDemanda::$nmAtrCd . "=" . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrCd
+					. " AND " . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrProtocolo . "="
+							. getVarComoString($this->vodemanda->prt)
+							. ")\n";
+	
+							$conector  = "\n AND ";
 		}
-		
+	
 		if($this->vocontrato->anoContrato != null){
 			$filtro = $filtro . $conector
 			. $nmTabelaDemandaContrato. "." .voDemandaContrato::$nmAtrAnoContrato
 			. " = "
-					. $this->vocontrato->anoContrato 
+					. $this->vocontrato->anoContrato
 					;
-		
+	
 					$conector  = "\n AND ";
 		}
-		
+	
 		if($this->vocontrato->cdContrato != null){
 			$filtro = $filtro . $conector
 			. $nmTabelaDemandaContrato. "." .voDemandaContrato::$nmAtrCdContrato
 			. " = "
 					. $this->vocontrato->cdContrato
 					;
-		
+	
 					$conector  = "\n AND ";
 		}
-		
+	
 		if($this->vocontrato->tipo != null){
 			$filtro = $filtro . $conector
 			. $nmTabelaDemandaContrato. "." .voDemandaContrato::$nmAtrTipoContrato
 			. " = "
 					. getVarComoString($this->vocontrato->tipo)
 					;
-		
+	
 					$conector  = "\n AND ";
 		}
-		
+	
 		if($this->vocontrato->cdAutorizacao != null){
 			$filtro = $filtro . $conector
 			. $nmTabelaContrato. "." .vocontrato::$nmAtrCdAutorizacaoContrato
 			. " = "
 					. $this->vocontrato->cdAutorizacao
 					;
-		
+	
 					$conector  = "\n AND ";
 		}
-		
+	
 		if($this->nmContratada != null){
 			$filtro = $filtro . $conector
 			. $nmTabelaPessaContrato. "." .vopessoa::$nmAtrNome
 			. " LIKE '"
-			. substituirCaracterSQLLike($this->nmContratada)
-			. "'"
-			;		
-			$conector  = "\n AND ";
-		
+					. substituirCaracterSQLLike($this->nmContratada)
+					. "'"
+							;
+							$conector  = "\n AND ";
+	
 		}
-		
+	
 		if($this->docContratada != null){
 			$filtro = $filtro . $conector
 			. $nmTabelaPessaContrato. "." .vopessoa::$nmAtrDoc
@@ -198,17 +175,17 @@ class filtroManterDemanda extends filtroManter{
 					. "'"
 							;
 							$conector  = "\n AND ";
-		
+	
 		}
-		
+	
 		$this->formataCampoOrdenacao(new voDemanda());
 		//finaliza o filtro
 		$filtro = parent::getFiltroSQL($filtro, $comAtributoOrdenacao);
-
+	
 		//echo "Filtro:$filtro<br>";
-
+	
 		return $filtro;
-	}	
+	}
 	
 	function getAtributoOrdenacaoDefault(){
 		$nmTabelaDemanda = voDemanda::getNmTabelaStatic($this->isHistorico);
@@ -219,10 +196,11 @@ class filtroManterDemanda extends filtroManter{
 	
 	function getAtributosOrdenacao(){
 		$varAtributos = array(
-				voDemanda::$nmAtrDtReferencia => "Data.Referência",
+				voDemandaTramitacao::$nmAtrDtReferencia => "Data.Referência",
 				filtroManterDemanda::$NmColDhUltimaMovimentacao => "Data.Movimentação",
-				voDemanda::$nmAtrPrioridade => "Prioridade",				
-				voDemanda::$nmAtrCd => "Número"
+				voDemandaTramitacao::$nmAtrAno => "Ano",
+				voDemandaTramitacao::$nmAtrCd => "Número",
+				voDemandaTramitacao::$nmAtrSq => "Tramitação"
 		);
 		return $varAtributos;
 	}

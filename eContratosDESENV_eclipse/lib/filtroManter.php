@@ -209,6 +209,21 @@ class filtroManter extends multiplosConstrutores{
     	return $comboOrdenacao;
     }
     
+    function formataCampoOrdenacao($voEntidade){
+    	$nmTabela = $voEntidade->getNmTabelaStatic($this->isHistorico);
+    
+    	if($nmTabela != null && $this->cdAtrOrdenacao != null){
+    			
+    		$jaEhFormatado = strpos ($this->cdAtrOrdenacao, ".");
+    			
+    		//so formata se o atrordenacao escolhido pertencer a nmtabela em questao
+    		if($jaEhFormatado === false && existeItemNoArray($this->cdAtrOrdenacao, $voEntidade->getTodosAtributos())){
+    			$this->cdAtrOrdenacaoConsulta = $nmTabela. "." .$this->cdAtrOrdenacao;
+    		}
+    			
+    	}
+    }
+    
     function toString(){		
 		$retorno.= "qtdRegistrosPorPag=" . $this->qtdRegistrosPorPag . "|";
         $retorno.= "paginaAtual=" . $this->paginacao->paginaAtual . "|";

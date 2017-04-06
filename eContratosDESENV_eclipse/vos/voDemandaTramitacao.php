@@ -25,7 +25,7 @@ include_once("voDemandaContrato.php");
 
    function __construct() {
        parent::__construct();
-       $this->temTabHistorico = true;
+       $this->temTabHistorico = false;
        $class = self::getNmClassProcesso();
        $this->dbprocesso= new $class();
        $this->voDoc = new voDocumento();      
