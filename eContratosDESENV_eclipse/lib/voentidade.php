@@ -93,7 +93,7 @@
    		return $retorno;
     }
     
-    /*
+    /**
      * @deprecated
      */
     function getSQLValuesUpdate(){
