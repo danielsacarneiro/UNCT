@@ -184,6 +184,11 @@ Class voDemanda extends voentidade{
 		$this->cd = $array[1];
 		$this->sqHist = $array[2];
 	}
+	
+	function getMensagemComplementarTelaSucesso(){
+		$retorno = "Demanda (Número - Ano): " . formatarCodigoAnoComplementoArgs($this->cd, $this->ano, TAMANHO_CODIGOS, null);
+		return $retorno; 
+	}	
 
 }
 ?>

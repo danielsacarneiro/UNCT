@@ -227,7 +227,7 @@ include_once("voDemandaContrato.php");
 		$this->ano = $array[0];
 		$this->cd = $array[1];
 		$this->sq = $array[2];
-	}
+	}		
 	
 }
 ?>

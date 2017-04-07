@@ -72,9 +72,14 @@ try{
     		call_user_func_array(array($dbprocesso,$funcao),$argumentos);
     	}    	 
     }
-    
+        
     $classMensagem = "campomensagemverde";
     $msg = "OPERACÃO $nmFuncao REALIZADA COM SUCESSO";
+    
+    if($vo->getMensagemComplementarTelaSucesso() != ""){
+    	$msgComplementar = $vo->getMensagemComplementarTelaSucesso();
+    	$msg .= "<br>" . $msgComplementar; 
+    }    
     
     //echo $vo->getNmTabela();
     //var_dump($vo);

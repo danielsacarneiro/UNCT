@@ -242,6 +242,9 @@
     	return $this->getNmTabela();
     }
     
+    function getMensagemComplementarTelaSucesso(){
+    	return "";    	
+    }    
     
 }
 ?>

@@ -584,15 +584,23 @@ function formatarCodigoContrato($cd, $ano, $tipo) {
 	$complemento = $dominioTipoContrato->getDescricao ( $tipo );
 	return formatarCodigoAnoComplemento ( $cd, $ano, $complemento );
 }
+
 function formatarCodigoAnoComplemento($cd, $ano, $complemento) {
+	return formatarCodigoAnoComplementoArgs($cd, $ano, null, $complemento);
+}
+
+function formatarCodigoAnoComplementoArgs($cd, $ano, $pTamanhoCodigo, $complemento) {
 	$retorno = "";
 	if ($complemento != null && $complemento != "") {
 		$retorno .= $complemento . " ";
 	}
 	
-	// echo "tipo:" . $complemento;
+	$tamanhoCodigo = TAMANHO_CODIGOS_SAFI;
+	if($pTamanhoCodigo != null){
+		$tamanhoCodigo = $pTamanhoCodigo;
+	}
 	
-	$retorno .= complementarCharAEsquerda ( $cd, "0", TAMANHO_CODIGOS_SAFI ) . "-" . $ano;
+	$retorno .= complementarCharAEsquerda ( $cd, "0", $tamanhoCodigo ) . "-" . $ano;
 	
 	return $retorno;
 }
