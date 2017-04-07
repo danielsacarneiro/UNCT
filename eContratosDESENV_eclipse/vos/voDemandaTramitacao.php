@@ -53,6 +53,18 @@ include_once("voDemandaContrato.php");
         return  "dbDemandaTramitacao";
     }      
     
+    //GAMBIARRA NAO REPETIR
+    function getTelaRetornoConfirmar(){
+    	//REGRA: retorna para a tela da demanda
+    	$telaConsultaRetorno = voDemanda::getNmTabela();
+    	
+    	if ($this->NM_METODO_RETORNO_CONFIRMAR != null && $this->NM_METODO_RETORNO_CONFIRMAR != ""){
+    		$telaConsultaRetorno = $this->NM_METODO_RETORNO_CONFIRMAR; 
+    	}
+    		
+    	return  $telaConsultaRetorno;
+    }
+    
     function getValoresWhereSQLChave($isHistorico){    	
     	$nmTabela = self::getNmTabelaStatic($isHistorico);
     	$query = $this->getValoresWhereSQLChaveLogicaSemSQ($isHistorico);
@@ -136,6 +148,7 @@ include_once("voDemandaContrato.php");
 	function getDadosFormulario(){
 		parent::getDadosFormulario();
 				
+		$this->sq = @$_POST[self::$nmAtrSq];
 		$this->cdSetorOrigem = @$_POST[self::$nmAtrCdSetorOrigem];
 		
 		if($this->cdSetorOrigem == null){

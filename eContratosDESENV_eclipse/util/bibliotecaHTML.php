@@ -310,7 +310,8 @@ function getBotaoExcluir() {
 	return getBotaoPorFuncao ( "bttexcluir", "Excluir", "botaofuncaop", false, false, true, "onClick='javascript:excluir();' accesskey='x'", constantes::$CD_FUNCAO_EXCLUIR );
 }
 function getBotaoIncluir() {
-	return getBotaoValidacaoAcesso ( "bttincluir", "Incluir", "botaofuncaop", false, false, true, false, "onClick='javascript:incluir();' accesskey='n'" );
+	//return getBotaoValidacaoAcesso ( "bttincluir", "Incluir", "botaofuncaop", false, false, true, false, "onClick='javascript:incluir();' accesskey='n'" );
+	return getBotaoPorFuncao ( "bttincluir", "Incluir", "botaofuncaop", false, false, true, "onClick='javascript:incluir();' accesskey='n'", constantes::$CD_FUNCAO_INCLUIR);
 }
 function getBotaoDetalhar() {
 	return getBotaoValidacaoAcesso ( "bttdetalhar", "Detalhar", "botaofuncaop", false, true, true, true, "onClick='javascript:detalhar(false);' accesskey='d'" );
@@ -340,6 +341,7 @@ function getBotoesRodapeComRestricao($arrayBotoesARemover) {
 	$usuarioLogadoTemPermissao = dominioPermissaoUsuario::isAdministrador ( getColecaoPermissaoUsuarioLogado () );
 	
 	// falta fazer para os outros botoes
+	$temIncluir = ! existeItemNoArray ( constantes::$CD_FUNCAO_INCLUIR, $arrayBotoesARemover ) || $usuarioLogadoTemPermissao;
 	$temAlterar = ! existeItemNoArray ( constantes::$CD_FUNCAO_ALTERAR, $arrayBotoesARemover ) || $usuarioLogadoTemPermissao;
 	$temExcluir = ! existeItemNoArray ( constantes::$CD_FUNCAO_EXCLUIR, $arrayBotoesARemover ) || $usuarioLogadoTemPermissao;
 	
@@ -347,9 +349,14 @@ function getBotoesRodapeComRestricao($arrayBotoesARemover) {
 	$isDetalhamento = false;
 	$funcao = @$_GET ["funcao"];
 	
+	//considera que qq funcao chamado que nao sejam as funcoes baiscas (alterar, excluir, incluir...) caira nessa opcao
+	//marreta: verifica pelo tamanho do nome da funcao
+	//um exemplo eh o metodo encaminhar chamado no encaminhamento de demanda (voDemandaTramitacao)
+	$isMetodoChamadoEspecifico = strlen($funcao) > 2; 
+	
 	if ($funcao == constantes::$CD_FUNCAO_DETALHAR) {
 		$isDetalhamento = true;
-	} else if ($funcao == constantes::$CD_FUNCAO_EXCLUIR || $funcao == constantes::$CD_FUNCAO_INCLUIR || $funcao == constantes::$CD_FUNCAO_ALTERAR) {
+	} else if ($funcao == constantes::$CD_FUNCAO_EXCLUIR || $funcao == constantes::$CD_FUNCAO_INCLUIR || $funcao == constantes::$CD_FUNCAO_ALTERAR || $isMetodoChamadoEspecifico) {
 		
 		$isManutencao = true;
 	}
@@ -364,7 +371,7 @@ function getBotoesRodapeComRestricao($arrayBotoesARemover) {
 	
 	if (! $isManutencao) {
 		if (! $isDetalhamento) {
-			if (getBotaoIncluir () != "")
+			if (getBotaoIncluir () != "" && $temIncluir)
 				$html .= "<TD class='botaofuncao'>" . getBotaoIncluir () . "</TD>\n";
 			if (getBotaoAlterar () != "" && $temAlterar)
 				$html .= "<TD class='botaofuncao'>" . getBotaoAlterar () . "</TD>\n";

@@ -101,7 +101,7 @@ function encaminhar() {
     }?>
     
 	chave = document.frm_principal.rdb_consulta.value;	
-	location.href="encaminhar.php?funcao=<?=constantes::$CD_FUNCAO_ALTERAR?>&chave=" + chave;
+	location.href="encaminhar.php?funcao=<?=dbDemandaTramitacao::$NM_FUNCAO_ENCAMINHAR?>&chave=" + chave;
 }
 
 </SCRIPT>

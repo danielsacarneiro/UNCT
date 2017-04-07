@@ -1,6 +1,7 @@
 <?php
 include_once (caminho_lib . "dbprocesso.obj.php");
 class dbDemanda extends dbprocesso {
+		
 	function consultarPorChave($vo, $isHistorico) {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );

@@ -3,11 +3,13 @@
 // Classe select
 // cria um combo select html
 
-  Class voentidade {		
+  Class voentidade {
+  		var $NM_METODO_RETORNO_CONFIRMAR;
+  	
 		var $varChaves;
 		var $varAtributos;
 		var $varAtributosARemover;
-        var $temTabHistorico = true;
+        var $temTabHistorico;
         
         static $nmTabelaSufixoHistorico   =  	"_hist";
         static $nmTabelaSufixoSequencial   =  	"_seq";
@@ -48,6 +50,8 @@
             voentidade::$nmAtrCdUsuarioUltAlteracao);
 		
 		$this->cdUsuarioUltAlteracao = id_user;
+		$this->NM_METODO_RETORNO_CONFIRMAR = null;
+		$this->temTabHistorico = true;
     }
     
     
@@ -231,6 +235,13 @@
     	//devera ser implementado no vo especifico
     	return $this->getValoresWhereSQLChave($isHistorico);    	
     }
+    
+    function getTelaRetornoConfirmar(){
+    	//se a filha nao tiver sobrescrito esse metodo
+    	//pega o metodo da classe filha via de REGRA 
+    	return $this->getNmTabela();
+    }
+    
     
 }
 ?>

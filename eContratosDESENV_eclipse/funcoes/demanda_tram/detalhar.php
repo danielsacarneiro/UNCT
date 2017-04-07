@@ -7,7 +7,7 @@ include_once(caminho_vos."voDemandaTramitacao.php");
 //inicia os parametros
 inicio();
 
-$vo = new voDemanda();
+$vo = new voDemandaTramitacao();
 $vo->getVOExplodeChave();
 //var_dump($vo->varAtributos);
 $isHistorico = ($vo->sqHist != null && $vo->sqHist != "");
@@ -16,7 +16,7 @@ $readonly = "";
 $nmFuncao = "";
 $readonly = "readonly";
 $dbprocesso = $vo->dbprocesso;
-$colecao = $dbprocesso->consultarPorChave($vo, $isHistorico);
+$colecao = $dbprocesso->consultarPorChaveTela($vo, $isHistorico);
 $vo->getDadosBanco($colecao);
 putObjetoSessao($vo->getNmTabela(), $vo);
 
@@ -38,6 +38,10 @@ setCabecalho($titulo);
 
 $voDemandaContrato = new voDemandaContrato();
 $voDemandaContrato->getDadosBanco($colecao);
+
+$voDemanda = new voDemanda();
+$voDemanda->getDadosBanco($colecao);
+
 ?>
 
 <!DOCTYPE html>
@@ -74,7 +78,7 @@ function confirmar() {
 </HEAD>
 <BODY class="paginadados" onload="">
 	  
-<FORM name="frm_principal" method="post" action="confirmarAlteracaoDemanda.php" onSubmit="return confirmar();">
+<FORM name="frm_principal" method="post" action="confirmar.php" onSubmit="return confirmar();">
 
 <INPUT type="hidden" id="funcao" name="funcao" value="<?=$funcao?>">
  
@@ -87,15 +91,8 @@ function confirmar() {
             <TD class="conteinerfiltro">
             <DIV id="div_filtro" class="div_filtro">
             <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
-            <TBODY>
-            <?php if($isHistorico){?>
-			<TR>
-                <TH class="campoformulario" nowrap width=1%>Sq.Hist:</TH>
-                <TD class="campoformulario" colspan=3><INPUT type="text" value="<?php echo(complementarCharAEsquerda($vo->sqHist, "0", TAMANHO_CODIGOS));?>"  class="camporeadonlyalinhadodireita" size="5" readonly></TD>
-                <INPUT type="hidden" id="<?=voContratoTramitacao::$nmAtrSqHist?>" name="<?=voContratoTramitacao::$nmAtrSqHist?>" value="<?=$vo->sqHist?>">
-            </TR>               
-            <?php }                     
-            
+                        <TBODY>
+            <?php            
 	        $comboTipo = new select(dominioTipoDemanda::getColecao());
 	        $comboSetor = new select(dominioSetor::getColecao());
 	        $comboSituacao = new select(dominioSituacaoDemanda::getColecao());
@@ -109,66 +106,77 @@ function confirmar() {
 	            <TD class="campoformulario" colspan=3>	            
 	            <?php echo "Ano: " . $selectExercicio->getHtmlCombo("","", $vo->ano, true, "camporeadonly", false, " disabled ");?>	            	            
 	            Número: <INPUT type="text" value="<?=complementarCharAEsquerda($vo->cd, "0", TAMANHO_CODIGOS);?>"  class="camporeadonly" size="6" readonly>
-	            <?php echo "Tipo: " . $comboTipo->getHtmlCombo("","", $vo->tipo, true, "camporeadonly", false, " disabled ");?>
+	            <?php echo "Tipo: " . $comboTipo->getHtmlCombo("","", $voDemanda->tipo, true, "camporeadonly", false, " disabled ");?>
+	            Tramitação: <INPUT type="text" value="<?=complementarCharAEsquerda($vo->sq, "0", TAMANHO_CODIGOS);?>"  class="camporeadonly" size="6" readonly>
 	            
-	            <INPUT type="hidden" id="<?=voDemanda::$nmAtrAno?>" name="<?=voDemanda::$nmAtrAno?>" value="<?=$vo->ano?>">
-				<INPUT type="hidden" id="<?=voDemanda::$nmAtrCd?>" name="<?=voDemanda::$nmAtrCd?>" value="<?=$vo->cd?>">	            			  
-				<INPUT type="hidden" id="<?=voDemanda::$nmAtrTipo?>" name="<?=voDemanda::$nmAtrTipo?>" value="<?=$vo->tipo?>">
+	            <INPUT type="hidden" id="<?=voDemandaTramitacao::$nmAtrAno?>" name="<?=voDemandaTramitacao::$nmAtrAno?>" value="<?=$vo->ano?>">
+				<INPUT type="hidden" id="<?=voDemandaTramitacao::$nmAtrCd?>" name="<?=voDemandaTramitacao::$nmAtrCd?>" value="<?=$vo->cd?>">	            			  
+				<INPUT type="hidden" id="<?=voDemanda::$nmAtrTipo?>" name="<?=voDemanda::$nmAtrTipo?>" value="<?=$voDemanda->tipo?>">
 				<INPUT type="hidden" id="<?=voDemanda::$nmAtrCdSetor?>" name="<?=voDemanda::$nmAtrCdSetor?>" value="<?=$vo->cdSetor?>">
-				<INPUT type="hidden" id="<?=voDemanda::$nmAtrSituacao?>" name="<?=voDemanda::$nmAtrSituacao?>" value="<?=$vo->situacao?>">
+				<INPUT type="hidden" id="<?=voDemandaTramitacao::$nmAtrSq?>" name="<?=voDemandaTramitacao::$nmAtrSq?>" value="<?=$vo->sq?>">
 	        </TR>
 			<TR>
-	            <TH class="campoformulario" nowrap width="1%">Setor Responsável:</TH>
+	            <TH class="campoformulario" nowrap width="1%">Setor Origem:</TH>
 	            <TD class="campoformulario" width="1%">
-	            <?php echo $comboSetor->getHtmlCombo("","", $vo->cdSetor, true, "camporeadonly", false, " disabled ");?>
+	            <?php echo $comboSetor->getHtmlCombo("","", $vo->cdSetorOrigem, true, "camporeadonly", false, " disabled ");?>
 				</TD>
-	            <TH class="campoformulario" nowrap width="1%">Prioridade:</TH>
-	            <TD class="campoformulario" >
-	            <?php 
-	            //o setor destino da ultima tramitacao sera o origem da nova
-	            echo $comboPrioridade->getHtmlCombo(voDemanda::$nmAtrPrioridade,voDemanda::$nmAtrPrioridade, $vo->prioridade, true, "camporeadonly", false, " disabled ");?>
-				</TD>				
+	            <TH class="campoformulario" nowrap width="1%">Setor Destino:</TH>
+	            <TD class="campoformulario">
+	            <?php echo $comboSetor->getHtmlCombo("","", $vo->cdSetorDestino, true, "camporeadonly", false, " disabled ");?>
+				</TD>
 	        </TR>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Título:</TH>
 	            <TD class="campoformulario" colspan=3>				
 	            <INPUT type="text" value="<?=$vo->texto?>"  class="camporeadonly" size="80" readonly>	            	                        	                        
 	        </TR>	        	        
-	        <?php
+	        <?php	        	        	        
+	        //so exibe contrato se tiver
+	        $voDemandaContrato = new voDemandaContrato();
+	        $voDemandaContrato->getDadosBanco($colecao);
+	         
 	        if($voDemandaContrato->voContrato != null){
 	        	$voContrato = $voDemandaContrato->voContrato;
 	        }
 	          
  	        require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
  	        getContratoDetalhamento($voContrato, $colecao);
-	        ?>
-            
+			?>      
 			<TR>
-	            <TH class="campoformulario" nowrap width="1%">Data.Referência:</TH>
-	            <TD class="campoformulario" colspan=3>	            	            	            
-	            <INPUT type="text" value="<?=getData($vo->dtReferencia);?>"  class="camporeadonly" size="12" readonly>
-            	</TD>	        
-            </TR>
-			<TR>
-	            <TH class="campoformulario" nowrap width="1%">Situação:</TH>
-	            <TD class="campoformulario" colspan=3>
-	            <?php 
-	            echo $comboSituacao->getHtmlCombo("","", $vo->situacao, true, "camporeadonly", false, " disabled ");?>
+	            <TH class="campoformulario" nowrap width="1%">Texto:</TH>
+	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=voDemandaTramitacao::$nmAtrTexto?>" name="<?=voDemandaTramitacao::$nmAtrTexto?>" class="camporeadonly" readonly><?php echo($vo->textoTram);?></textarea>
 				</TD>
 	        </TR>
-				<?php 
-				$isDetalhamento = true;
-				if(!$isHistorico){
-					include_once 'gridTramitacaoAjax.php';
-				}
-				?>
-       	    
+	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">PRT:</TH>
+	            <TD class="campoformulario" colspan=3>				
+	            <INPUT type="text" onkeyup="formatarCampoPRT(this, event);" id="<?=voDemandaTramitacao::$nmAtrProtocolo?>" name="<?=voDemandaTramitacao::$nmAtrProtocolo?>" value="<?php echo($vo->prt);?>"  class="camporeadonly" size="30" readonly>	            	                        	                        
+	        </TR>
+	        <!-- <TR>
+		        <TH class="campoformulario" width="1%" nowrap>Documento:</TH>
+		        <TD class="campoformulario" nowrap colspan=3>
+		        	<INPUT type="text" id="<?=voDocumento::$nmAtrSq?>" name="<?=voDocumento::$nmAtrSq?>" class="camporeadonly" size="15" readonly>
+		        	<INPUT type="hidden" id="<?=voDocumento::getNmTabela()?>" name="<?=voDocumento::getNmTabela()?>" value="">
+		        	<?php 
+		        	echo getLinkPesquisa("../documento");		        	
+		        	$nmCampo = array(voDocumento::getNmTabela(), voDocumento::$nmAtrSq);
+		        	echo getBorracha($nmCampo);
+		        	?>
+				</TD>
+	        </TR>-->	        
 			<TR>
-				<TH class='textoseparadorgrupocampos' halign='left' colspan='4'>
-				<DIV class='campoformulario' id='div_tramitacao'>&nbsp;&nbsp;Detalhamento Demanda
-				</DIV>
-				</TH>
-			</TR>       	    
+	            <TH class="campoformulario" nowrap>Data:</TH>
+	            <TD class="campoformulario" colspan="3">
+	            	<INPUT type="text" 
+	            	       id="<?=voDemandaTramitacao::$nmAtrDtReferencia?>" 
+	            	       name="<?=voDemandaTramitacao::$nmAtrDtReferencia?>" 
+	            			value="<?php echo(getData($vo->dtReferencia));?>"
+	            			onkeyup="formatarCampoData(this, event, false);" 
+	            			class="camporeadonly" 
+	            			size="10" 
+	            			maxlength="10" readonly>
+				</TD>
+        	</TR>
 	        <?php 
 	            echo "<TR>" . incluirUsuarioDataHoraDetalhamento($vo) .  "</TR>";	        	
 	        ?>

@@ -1,6 +1,9 @@
 <?php
 include_once (caminho_lib . "dbprocesso.obj.php");
 class dbDemandaTramitacao extends dbprocesso {
+	
+	static $NM_FUNCAO_ENCAMINHAR = "encaminhar";
+	
 	function consultarPorChaveTela($vo, $isHistorico) {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
@@ -217,7 +220,17 @@ class dbDemandaTramitacao extends dbprocesso {
 			}
 		}
 	}
+	//usa a opcao EXCEPCIONAL do voentidade: $NM_METODO_RETORNO_CONFIRMAR
 	function alterar($vo) {
+		$vo->NM_METODO_RETORNO_CONFIRMAR = voDemandaTramitacao::getNmTabela();
+		parent::alterar($vo);		
+	}
+	//usa a opcao EXCEPCIONAL do voentidade: $NM_METODO_RETORNO_CONFIRMAR
+	function excluir($vo) {
+		$vo->NM_METODO_RETORNO_CONFIRMAR = voDemandaTramitacao::getNmTabela();
+		parent::excluir($vo);		
+	}
+	function encaminhar($vo) {
 		// o alterar eh chamado na pagina generica confirmar.php
 		// para chamar o alterarVO, basta chamar o parent::alterar
 		// este metodo, por ser chamado da pagina manter.php, apenas incluira uma nova tramitacao
@@ -226,12 +239,10 @@ class dbDemandaTramitacao extends dbprocesso {
 		if ($isAlteracaoPermitida) {
 			$this->encaminharDemanda ( $vo );
 		}
-		
+	
 		return $vo;
 	}
-	function excluir($vo) {
-		throw new Exception ( "Operacao nao permitida." );
-	}
+
 	function getSQLValuesInsert($vo) {
 		$retorno = "";
 		$retorno .= $this->getVarComoNumero ( $vo->ano ) . ",";

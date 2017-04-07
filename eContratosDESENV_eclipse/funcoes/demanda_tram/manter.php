@@ -75,7 +75,7 @@ function confirmar() {
 </HEAD>
 <BODY class="paginadados" onload="">
 	  
-<FORM name="frm_principal" method="post" action="confirmarAlteracaoDemanda.php" onSubmit="return confirmar();">
+<FORM name="frm_principal" method="post" action="confirmar.php" onSubmit="return confirmar();">
 
 <INPUT type="hidden" id="funcao" name="funcao" value="<?=$funcao?>">
  
@@ -106,23 +106,21 @@ function confirmar() {
 	            <?php echo "Tipo: " . $comboTipo->getHtmlCombo("","", $voDemanda->tipo, true, "camporeadonly", false, " disabled ");?>
 	            Tramitação: <INPUT type="text" value="<?=complementarCharAEsquerda($vo->sq, "0", TAMANHO_CODIGOS);?>"  class="camporeadonly" size="6" readonly>
 	            
-	            <INPUT type="hidden" id="<?=voDemanda::$nmAtrAno?>" name="<?=voDemanda::$nmAtrAno?>" value="<?=$vo->ano?>">
-				<INPUT type="hidden" id="<?=voDemanda::$nmAtrCd?>" name="<?=voDemanda::$nmAtrCd?>" value="<?=$vo->cd?>">	            			  
+	            <INPUT type="hidden" id="<?=voDemandaTramitacao::$nmAtrAno?>" name="<?=voDemandaTramitacao::$nmAtrAno?>" value="<?=$vo->ano?>">
+				<INPUT type="hidden" id="<?=voDemandaTramitacao::$nmAtrCd?>" name="<?=voDemandaTramitacao::$nmAtrCd?>" value="<?=$vo->cd?>">	            			  
 				<INPUT type="hidden" id="<?=voDemanda::$nmAtrTipo?>" name="<?=voDemanda::$nmAtrTipo?>" value="<?=$voDemanda->tipo?>">
 				<INPUT type="hidden" id="<?=voDemanda::$nmAtrCdSetor?>" name="<?=voDemanda::$nmAtrCdSetor?>" value="<?=$vo->cdSetor?>">
 				<INPUT type="hidden" id="<?=voDemandaTramitacao::$nmAtrSq?>" name="<?=voDemandaTramitacao::$nmAtrSq?>" value="<?=$vo->sq?>">
 	        </TR>
 			<TR>
-	            <TH class="campoformulario" nowrap width="1%">Setor Responsável:</TH>
+	            <TH class="campoformulario" nowrap width="1%">Setor Origem:</TH>
 	            <TD class="campoformulario" width="1%">
-	            <?php echo $comboSetor->getHtmlCombo("","", $vo->cdSetor, true, "camporeadonly", false, " disabled ");?>
+	            <?php echo $comboSetor->getHtmlCombo("","", $vo->cdSetorOrigem, true, "camporeadonly", false, " disabled ");?>
 				</TD>
-	            <TH class="campoformulario" nowrap width="1%">Prioridade:</TH>
-	            <TD class="campoformulario" >
-	            <?php 
-	            //o setor destino da ultima tramitacao sera o origem da nova
-	            echo $comboPrioridade->getHtmlCombo(voDemanda::$nmAtrPrioridade,voDemanda::$nmAtrPrioridade, $vo->prioridade, true, "camporeadonly", false, " disabled ");?>
-				</TD>				
+	            <TH class="campoformulario" nowrap width="1%">Setor Destino:</TH>
+	            <TD class="campoformulario">
+	            <?php echo $comboSetor->getHtmlCombo("","", $vo->cdSetorDestino, true, "camporeadonly", false, " disabled ");?>
+				</TD>
 	        </TR>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Título:</TH>
