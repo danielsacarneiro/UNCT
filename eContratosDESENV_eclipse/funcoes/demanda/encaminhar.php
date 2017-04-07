@@ -34,7 +34,7 @@ if($isInclusao){
     $isHistorico = ($voContrato->sqHist != null && $voContrato->sqHist != "");
 	
 	$dbprocesso = $vo->dbprocesso;					
-	$colecao = $dbprocesso->consultarPorChave($vo, $isHistorico);	
+	$colecao = $dbprocesso->consultarPorChaveTela($vo, $isHistorico);	
 	$vo->getDadosBanco($colecao);
 	
 	$votram->getDadosBanco($colecao);	
@@ -172,7 +172,8 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Título:</TH>
 	            <TD class="campoformulario" colspan=3>				
-	            <INPUT type="text" value="<?=$vo->texto?>"  class="camporeadonly" size="80" readonly>	            	                        	                        
+	            <INPUT type="text" value="<?=$vo->texto?>"  class="camporeadonly" size="80" readonly>
+				</TD>
 	        </TR>	        
 	        <?php	        	        	        
 	        //so exibe contrato se tiver

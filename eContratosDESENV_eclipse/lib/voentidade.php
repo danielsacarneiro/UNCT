@@ -93,13 +93,33 @@
    		return $retorno;
     }
     
+    /*
+     * @deprecated
+     */
     function getSQLValuesUpdate(){
-		$retorno = "";        
-        $retorno.= self::$nmAtrDhUltAlteracao . " = now() ";
-        $retorno.= ",";
-        $retorno.= self::$nmAtrCdUsuarioUltAlteracao . " = " . $this->cdUsuarioUltAlteracao;
-
-		return $retorno;                
+    	$retorno = "";
+    	$retorno.= self::$nmAtrDhUltAlteracao . " = now() ";
+    	$retorno.= ",";
+    	$retorno.= self::$nmAtrCdUsuarioUltAlteracao . " = " . $this->cdUsuarioUltAlteracao;
+    
+    	return $retorno;
+    }
+    
+    function getSQLValuesEntidadeUpdate(){
+    	$temUsuarioAlt = array_search(self::$nmAtrCdUsuarioUltAlteracao, $this->varAtributos);
+    	$temDtAlt = array_search(self::$nmAtrDhUltAlteracao, $this->varAtributos);
+    
+    	$retorno = "";
+    	$conector = ",";
+    	if($temUsuarioAlt){
+    		$retorno.= $conector. self::$nmAtrCdUsuarioUltAlteracao . " = " . $this->cdUsuarioUltAlteracao;
+    		$conector = ",";
+    	}
+    	if($temDtAlt){
+    		$retorno.= $conector . self::$nmAtrDhUltAlteracao . " = now() ";
+    	}
+    
+    	return $retorno;
     }
     
     function getValoresWhereSQL($voEntidade, $colecaoAtributos){

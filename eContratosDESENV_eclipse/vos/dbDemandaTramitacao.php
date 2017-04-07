@@ -258,5 +258,25 @@ class dbDemandaTramitacao extends dbprocesso {
 		
 		return $retorno;
 	}
+	
+	function getSQLValuesUpdate($vo) {		
+		$retorno = "";
+		$sqlConector = "";
+	
+		if ($vo->textoTram != null) {
+			$retorno .= $sqlConector . voDemandaTramitacao::$nmAtrTexto . " = " . $this->getVarComoString($vo->textoTram);
+			$sqlConector = ",";
+		}
+	
+		if ($vo->prt != null) {
+			$retorno .= $sqlConector . voDemandaTramitacao::$nmAtrProtocolo . " = " . $this->getVarComoString($vo->prt);
+			$sqlConector = ",";
+		}
+		
+		$retorno = $retorno . $vo->getSQLValuesEntidadeUpdate();
+	
+		return $retorno;
+	}
+	
 }
 ?>

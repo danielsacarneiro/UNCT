@@ -51,6 +51,11 @@ class filtroManter extends multiplosConstrutores{
 		
 		if($pegarFiltrosDaTela){
 			$this->pegarFiltroDaTela();
+			//chama o metodo do filho que pega os dados do filtro do formulario
+			if (method_exists($this,"getFiltroFormulario")){
+				$this->getFiltroFormulario();
+			}
+				
 			$this->isValidarConsulta = true;
 		}
 		else{
@@ -73,10 +78,6 @@ class filtroManter extends multiplosConstrutores{
         //para o caso de ser necessario setar um filtro default para nao trazer todos os registros
         $this->temValorDefaultSetado = false;
         
-		//chama o metodo do filho que pega os dados do filtro do formulario
-        if (method_exists($this,"getFiltroFormulario")){
-        	$this->getFiltroFormulario();
-        }        
 	}	
     
 	function pegarFiltroDaTela(){

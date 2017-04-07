@@ -114,9 +114,6 @@ function alterar() {
     <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
         <TBODY>
 	        <?php	        	
-	        	$comboSituacao = new select(dominioSituacaoDemanda::getColecao());
-	        	$comboSetor = new select(dominioSetor::getColecao());
-	        	$comboPrioridade = new select(dominioPrioridadeDemanda::getColecao());
 	            $selectExercicio = new selectExercicio();
 			  ?>			            
 	        <TR>
@@ -126,23 +123,6 @@ function alterar() {
 			  Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voDemanda::$nmAtrCd?>" name="<?=voDemanda::$nmAtrCd?>"  value="<?php echo(complementarCharAEsquerda($filtro->vodemanda->cd, "0", TAMANHO_CODIGOS));?>"  class="camponaoobrigatorio" size="6" maxlength="5">
 			  Tramitação: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voDemandaTramitacao::$nmAtrSq?>" name="<?=voDemandaTramitacao::$nmAtrSq?>"  value="<?php echo(complementarCharAEsquerda($filtro->vodemanda->sq, "0", TAMANHO_CODIGOS));?>"  class="camponaoobrigatorio" size="6" maxlength="5">
 			</TR>			            
-            <TR>
-                <TH class="campoformulario" nowrap width="1%">Setor.Resp.:</TH>
-                <TD class="campoformulario" width="1%" ><?php echo $comboSetor->getHtmlCombo(voDemanda::$nmAtrCdSetor,voDemanda::$nmAtrCdSetor, $filtro->vodemanda->cdSetor, true, "camponaoobrigatorio", false, "");?></TD>
-                <TH class="campoformulario" nowrap width="1%">Setor.Atual.:</TH>
-                <TD class="campoformulario" ><?php echo $comboSetor->getHtmlCombo(voDemandaTramitacao::$nmAtrCdSetorDestino,voDemandaTramitacao::$nmAtrCdSetorDestino, $filtro->vodemanda->cdSetorDestino, true, "camponaoobrigatorio", false, "");?></TD>
-            </TR>            
-            <TR>
-                <TH class="campoformulario" nowrap width="1%">Situação:</TH>
-                <TD class="campoformulario" width="1%"><?php echo $comboSituacao->getHtmlCombo(voDemanda::$nmAtrSituacao,voDemanda::$nmAtrSituacao, $filtro->vodemanda->situacao, true, "camponaoobrigatorio", false, "");?></TD>
-                <TH class="campoformulario" nowrap width="1%">Prioridade:</TH>
-                <TD class="campoformulario" ><?php echo $comboPrioridade->getHtmlCombo(voDemanda::$nmAtrPrioridade,voDemanda::$nmAtrPrioridade, $filtro->vodemanda->prioridade, true, "camponaoobrigatorio", false, "");?></TD>                                
-            </TR>
-	        <TR>
-	            <TH class="campoformulario" nowrap width="1%">PRT:</TH>
-	            <TD class="campoformulario" colspan=3>				
-	            <INPUT type="text" onkeyup="formatarCampoPRT(this, event);" id="<?=voDemandaTramitacao::$nmAtrProtocolo?>" name="<?=voDemandaTramitacao::$nmAtrProtocolo?>" value="<?php echo($filtro->vodemanda->prt);?>" class="camponaoobrigatorio" size="30">	            	                        	                        
-	        </TR>            
 	        <?php	        
 	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
 	        $arrayCssClass = array("camponaoobrigatorio","camponaoobrigatorio", "camponaoobrigatorio");
@@ -151,20 +131,6 @@ function alterar() {
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
 	            <TD class="campoformulario" colspan="3"><?php getContratoEntradaDeDados($filtro->vocontrato->tipo, $filtro->vocontrato->cdContrato, $filtro->vocontrato->anoContrato, $arrayCssClass, null, null);?></TD>
 			</TR>
-			<TR>
-				<?php
-				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioAutorizacao.php");				
-				$combo = new select(dominioAutorizacao::getColecao());						
-				?>
-	            <TH class="campoformulario" nowrap>Autorização:</TH>
-	            <TD class="campoformulario" colspan="3"><?php echo $combo->getHtmlSelect(vocontrato::$nmAtrCdAutorizacaoContrato,vocontrato::$nmAtrCdAutorizacaoContrato, $filtro->vocontrato->cdAutorizacao, true, "camponaoobrigatorio", true);?>	            
-	        </TR>
-			<TR>
-                <TH class="campoformulario" nowrap>Nome Contratada:</TH>
-                <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>"  value="<?php echo($filtro->nmContratada);?>"  class="camponaoobrigatorio" size="50"></TD>
-                <TH class="campoformulario" width="1%" nowrap>CNPJ/CPF Contratada:</TH>
-                <TD class="campoformulario" ><INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($filtro->docContratada);?>" class="camponaoobrigatorio" size="20" maxlength="18"></TD>
-            </TR>
 	                    
        <?php
         /*$comboOrdenacao = new select(voPA::getAtributosOrdenacao($cdHistorico));

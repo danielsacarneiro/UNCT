@@ -5,15 +5,20 @@
 	
 	$colecaoTramitacao = "";
 	
+	//$vo vem da tela que chamou
 	if($vo->cd != null)
 		$colecaoTramitacao = $db->consultarDemandaTramitacao($vo);
+	
+	//var_dump($colecaoTramitacao);
 					
-	if (is_array($colecaoTramitacao))
-		$tamanho = sizeof($colecaoTramitacao);
-	else
+	if (is_array($colecaoTramitacao)){
+		$tamanho = sizeof($colecaoTramitacao);		
+	}
+	else{
 		$tamanho = 0;
-		
-	if($tamanho > 0){
+	}
+	
+	if($tamanho > 0){	
 		
 		$numColunas = 9;
 			

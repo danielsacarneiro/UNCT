@@ -2,7 +2,7 @@
 include_once (caminho_lib . "dbprocesso.obj.php");
 class dbDemanda extends dbprocesso {
 		
-	function consultarPorChave($vo, $isHistorico) {
+	function consultarPorChaveTela($vo, $isHistorico) {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );
@@ -150,9 +150,12 @@ class dbDemanda extends dbprocesso {
 		$queryFrom .= "\n AND " . $nmTabelaDemandaTramDoc . "." . voDemandaTramDoc::$nmAtrTpDoc . "=" . $nmTabelaDocumento . "." . voDocumento::$nmAtrTp;
 		$queryFrom .= "\n AND " . $nmTabelaDemandaTramDoc . "." . voDemandaTramDoc::$nmAtrSqDoc . "=" . $nmTabelaDocumento . "." . voDocumento::$nmAtrSq;
 		
-		$filtro = new filtroManterDemanda ();
+		$filtro = new filtroManterDemanda (false);		
+		
 		$filtro->vodemanda = $vo;
 		$filtro->TemPaginacao = false;
+		
+		//echo $vo->texto;
 		
 		return parent::consultarFiltro ( $filtro, $querySelect, $queryFrom, false );
 	}

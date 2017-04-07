@@ -236,7 +236,8 @@ include_once ("bibliotecaFuncoesPrincipal.php");
 	function substituirCaracterEspecial($strOrigem, $strDestino, $param){
 		$retorno = null;
 		if($param != null){			
-			$retorno = str_replace($strOrigem, $strDestino, $param);			
+			$retorno = str_replace($strOrigem, $strDestino, utf8_encode($param));			
+			//$retorno = str_replace($strOrigem, $strDestino, $param);
 		}	
 		return $retorno;
 	}

@@ -152,18 +152,15 @@ function encaminhar() {
                 <TD class="campoformulario" ><?php echo $comboPrioridade->getHtmlCombo(voDemanda::$nmAtrPrioridade,voDemanda::$nmAtrPrioridade, $filtro->vodemanda->prioridade, true, "camponaoobrigatorio", false, "");?></TD>                                
             </TR>
 	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">Título:</TH>
+	            <TD class="campoformulario" nowrap width="1%">				
+	            <INPUT type="text" id="<?=voDemanda::$nmAtrTexto?>" name="<?=voDemanda::$nmAtrTexto?>" value="<?=$filtro->vodemanda->texto?>"  class="camponaoobrigatorio" size="50">
+	            </TD>
 	            <TH class="campoformulario" nowrap width="1%">PRT:</TH>
-	            <TD class="campoformulario" colspan=3>				
+	            <TD class="campoformulario">				
 	            <INPUT type="text" onkeyup="formatarCampoPRT(this, event);" id="<?=voDemandaTramitacao::$nmAtrProtocolo?>" name="<?=voDemandaTramitacao::$nmAtrProtocolo?>" value="<?php echo($filtro->vodemanda->prt);?>" class="camponaoobrigatorio" size="30">	            	                        	                        
+	            </TD>	            	                        	                        
 	        </TR>            
-	        <?php	        
-	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
-	        $arrayCssClass = array("camponaoobrigatorio","camponaoobrigatorio", "camponaoobrigatorio");
-	        ?>        
-            <TR>
-	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" colspan="3"><?php getContratoEntradaDeDados($filtro->vocontrato->tipo, $filtro->vocontrato->cdContrato, $filtro->vocontrato->anoContrato, $arrayCssClass, null, null);?></TD>
-			</TR>
 			<TR>
 				<?php
 				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioAutorizacao.php");				
@@ -172,6 +169,14 @@ function encaminhar() {
 	            <TH class="campoformulario" nowrap>Autorização:</TH>
 	            <TD class="campoformulario" colspan="3"><?php echo $combo->getHtmlSelect(vocontrato::$nmAtrCdAutorizacaoContrato,vocontrato::$nmAtrCdAutorizacaoContrato, $filtro->vocontrato->cdAutorizacao, true, "camponaoobrigatorio", true);?>	            
 	        </TR>
+	        <?php	        
+	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
+	        $arrayCssClass = array("camponaoobrigatorio","camponaoobrigatorio", "camponaoobrigatorio");
+	        ?>        
+            <TR>
+	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
+	            <TD class="campoformulario" colspan="3"><?php getContratoEntradaDeDados($filtro->vocontrato->tipo, $filtro->vocontrato->cdContrato, $filtro->vocontrato->anoContrato, $arrayCssClass, null, null);?></TD>
+			</TR>
 			<TR>
                 <TH class="campoformulario" nowrap>Nome Contratada:</TH>
                 <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>"  value="<?php echo($filtro->nmContratada);?>"  class="camponaoobrigatorio" size="50"></TD>
@@ -273,7 +278,7 @@ function encaminhar() {
                   }
                   ?>                    
                     <TD class="tabeladadosalinhadodireita"><?php echo $voAtual->ano;?></TD>
-                    <TD class="tabeladadosalinhadodireita" ><?php echo complementarCharAEsquerda($voAtual->cd, "0", TAMANHO_CODIGOS)?></TD>
+                    <TD class="tabeladadosdestacadonegrito"><?php echo complementarCharAEsquerda($voAtual->cd, "0", TAMANHO_CODIGOS)?></TD>
 					<TD class="tabeladados" nowrap><?php echo $setor?></TD>
 					<TD class="tabeladados" nowrap><?php echo $setorDestinoAtual?></TD>
 					<TD class="tabeladados" nowrap><?php echo $tipo?></TD>

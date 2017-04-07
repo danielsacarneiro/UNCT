@@ -16,7 +16,7 @@ $readonly = "";
 $nmFuncao = "";
 $readonly = "readonly";
 $dbprocesso = $vo->dbprocesso;
-$colecao = $dbprocesso->consultarPorChave($vo, $isHistorico);
+$colecao = $dbprocesso->consultarPorChaveTela($vo, $isHistorico);
 $vo->getDadosBanco($colecao);
 putObjetoSessao($vo->getNmTabela(), $vo);
 
