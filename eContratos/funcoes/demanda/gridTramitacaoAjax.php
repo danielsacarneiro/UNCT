@@ -5,18 +5,24 @@
 	
 	$colecaoTramitacao = "";
 	
+	//$vo vem da tela que chamou
 	if($vo->cd != null)
 		$colecaoTramitacao = $db->consultarDemandaTramitacao($vo);
+	
+	//var_dump($colecaoTramitacao);
 					
-	if (is_array($colecaoTramitacao))
-		$tamanho = sizeof($colecaoTramitacao);
-	else
+	if (is_array($colecaoTramitacao)){
+		$tamanho = sizeof($colecaoTramitacao);		
+	}
+	else{
 		$tamanho = 0;
+	}
+	
+	if($tamanho > 0){	
 		
-	if($tamanho > 0){
-		
-			$html = "";
-							
+		$numColunas = 9;
+			
+			$html = "";							
 			$html .= "<TR>\n";
 			$html .= "<TH class='textoseparadorgrupocampos' halign='left' colspan='4'>\n";
 			$html .= "<DIV class='campoformulario' id='div_tramitacao'>&nbsp;&nbsp;Histórico\n";
@@ -25,6 +31,7 @@
 			$html .= " <TBODY>  \n";
 			$html .= "        <TR>    \n"; 
 			if(!$isDetalhamento){
+				$numColunas++;
 				$html .= "<TH class='headertabeladados' width='1%'>&nbsp;&nbsp;X</TH>  \n";
 			}
 			$html .= "<TH class='headertabeladados' width='1%' nowrap>Número</TH>   \n";
@@ -34,10 +41,12 @@
 			$html .= "<TH class='headertabeladados' width='1%' nowrap>Anexo</TH> \n";
 			$html .= "<TH class='headertabeladados' width='1%' nowrap>PRT</TH> \n";
 			$html .= "<TH class='headertabeladados' width='1%' nowrap>Usuário</TH> \n";
-			$html .= "<TH class='headertabeladados' width='1%' nowrap>Data</TH> \n";			
+			$html .= "<TH class='headertabeladados' width='1%' nowrap>Data.Referência</TH> \n";			
+			$html .= "<TH class='headertabeladados' width='1%' nowrap>Movimentação</TH> \n";
 			$html .= "</TR> \n";
 			       
 			$sq = 1;
+			
 			$dominioSetor = new dominioSetor();
 	        for ($i=0;$i<$tamanho;$i++) {
         	
@@ -58,7 +67,7 @@
 		            $html .= "<TD class='tabeladados' nowrap>" . complementarCharAEsquerda($sq, "0", TAMANHO_CODIGOS) . "</TD> \n";
 		            $html .= "<TD class='tabeladados' nowrap>" . $dominioSetor->getDescricao($voAtual->cdSetorOrigem) . "</TD> \n";
 		            $html .= "<TD class='tabeladados' nowrap>" . $dominioSetor->getDescricao($voAtual->cdSetorDestino) . "</TD> \n";
-		            $html .= "<TD class='tabeladados' nowrap>" . $voAtual->textoTram . "</TD> \n";
+		            $html .= "<TD class='tabeladados' >" . $voAtual->textoTram . "</TD> \n";
 		            
 		            $html .= "<TD class='tabeladados' nowrap> \n";		            
 		            if($voAtual->voDoc->sq != null){
@@ -80,12 +89,19 @@
 		            $html .= "<TD class='tabeladados' nowrap>" . $voAtual->prt . "</TD> \n";
 		            $html .= "<TD class='tabeladados' nowrap>" . $voAtual->nmUsuarioInclusao . "</TD> \n";
 		            $html .= "<TD class='tabeladados' nowrap>" . getData($voAtual->dtReferencia) . "</TD> \n";
+		            $html .= "<TD class='tabeladados' nowrap>" . getData($voAtual->dhInclusao) . "</TD> \n";
 		            
-		            $html .= "</TR> \n";
+		            $html .= "</TR> \n";		            		            
+		            
 		            $sq++;
 	        	}
 	              
 	        }				
+	        
+	        /*$html .= "<TR>\n";
+	        $html .= "<TD class='tabeladadosalinhadodireita' colspan='". ($numColunas) . "'><bold>&nbsp;&nbsp;Última movimentação:".getData($voAtual->dhInclusao)."</bold></TD>";	        
+	        $html .= "</TR>\n";*/
+	         
 	                
 	        $html .= "</TBODY> \n";
 	        $html .= "</TABLE> \n";

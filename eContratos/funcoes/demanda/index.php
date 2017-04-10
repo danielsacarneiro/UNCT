@@ -101,7 +101,7 @@ function encaminhar() {
     }?>
     
 	chave = document.frm_principal.rdb_consulta.value;	
-	location.href="encaminhar.php?funcao=<?=constantes::$CD_FUNCAO_ALTERAR?>&chave=" + chave;
+	location.href="encaminhar.php?funcao=<?=dbDemandaTramitacao::$NM_FUNCAO_ENCAMINHAR?>&chave=" + chave;
 }
 
 </SCRIPT>
@@ -152,18 +152,15 @@ function encaminhar() {
                 <TD class="campoformulario" ><?php echo $comboPrioridade->getHtmlCombo(voDemanda::$nmAtrPrioridade,voDemanda::$nmAtrPrioridade, $filtro->vodemanda->prioridade, true, "camponaoobrigatorio", false, "");?></TD>                                
             </TR>
 	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">Título:</TH>
+	            <TD class="campoformulario" nowrap width="1%">				
+	            <INPUT type="text" id="<?=voDemanda::$nmAtrTexto?>" name="<?=voDemanda::$nmAtrTexto?>" value="<?=$filtro->vodemanda->texto?>"  class="camponaoobrigatorio" size="50">
+	            </TD>
 	            <TH class="campoformulario" nowrap width="1%">PRT:</TH>
-	            <TD class="campoformulario" colspan=3>				
+	            <TD class="campoformulario">				
 	            <INPUT type="text" onkeyup="formatarCampoPRT(this, event);" id="<?=voDemandaTramitacao::$nmAtrProtocolo?>" name="<?=voDemandaTramitacao::$nmAtrProtocolo?>" value="<?php echo($filtro->vodemanda->prt);?>" class="camponaoobrigatorio" size="30">	            	                        	                        
+	            </TD>	            	                        	                        
 	        </TR>            
-	        <?php	        
-	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
-	        $arrayCssClass = array("camponaoobrigatorio","camponaoobrigatorio", "camponaoobrigatorio");
-	        ?>        
-            <TR>
-	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" colspan="3"><?php getContratoEntradaDeDados($filtro->vocontrato->tipo, $filtro->vocontrato->cdContrato, $filtro->vocontrato->anoContrato, $arrayCssClass, null, null);?></TD>
-			</TR>
 			<TR>
 				<?php
 				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioAutorizacao.php");				
@@ -172,6 +169,14 @@ function encaminhar() {
 	            <TH class="campoformulario" nowrap>Autorização:</TH>
 	            <TD class="campoformulario" colspan="3"><?php echo $combo->getHtmlSelect(vocontrato::$nmAtrCdAutorizacaoContrato,vocontrato::$nmAtrCdAutorizacaoContrato, $filtro->vocontrato->cdAutorizacao, true, "camponaoobrigatorio", true);?>	            
 	        </TR>
+	        <?php	        
+	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
+	        $arrayCssClass = array("camponaoobrigatorio","camponaoobrigatorio", "camponaoobrigatorio");
+	        ?>        
+            <TR>
+	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
+	            <TD class="campoformulario" colspan="3"><?php getContratoEntradaDeDados($filtro->vocontrato->tipo, $filtro->vocontrato->cdContrato, $filtro->vocontrato->anoContrato, $arrayCssClass, null, null);?></TD>
+			</TR>
 			<TR>
                 <TH class="campoformulario" nowrap>Nome Contratada:</TH>
                 <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>"  value="<?php echo($filtro->nmContratada);?>"  class="camponaoobrigatorio" size="50"></TD>
@@ -215,6 +220,7 @@ function encaminhar() {
                     <TH class="headertabeladados" width="1%">Prior.</TH>
                     <TH class="headertabeladados"width="1%" nowrap >Usuário</TH>
                     <TH class="headertabeladados"width="1%" nowrap >Dt.Abertura</TH>
+                    <TH class="headertabeladados"width="1%" nowrap >Dt.Últ.Movimentação</TH>
                 </TR>
                 <?php								
                 if (is_array($colecao))
@@ -228,7 +234,7 @@ function encaminhar() {
                 $dominioTipo = new dominioTipoDemanda();
                 $dominioPrioridade = new dominioPrioridadeDemanda();
                                 
-                $colspan=11;
+                $colspan=12;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -248,9 +254,6 @@ function encaminhar() {
                         $setor = $dominioSetor->getDescricao($voAtual->cdSetor);
                         
                         $setorDestinoAtual = $colecao[$i][voDemandaTramitacao::$nmAtrCdSetorDestino];
-                        if($setorDestinoAtual == null){
-                        	$setorDestinoAtual = $setor;
-                        }
                         $setorDestinoAtual = $dominioSetor->getDescricao($setorDestinoAtual);
                         
                         $tipo = $dominioTipo->getDescricao($voAtual->tipo);
@@ -260,6 +263,8 @@ function encaminhar() {
                         if($isHistorico){
                         	$nmUsuario = $voAtual->nmUsuarioOperacao;
                         }
+                        
+                        $dataUltimaMovimentacao = $colecao[$i][filtroManterDemanda::$NmColDhUltimaMovimentacao];
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados">
@@ -273,15 +278,16 @@ function encaminhar() {
                   }
                   ?>                    
                     <TD class="tabeladadosalinhadodireita"><?php echo $voAtual->ano;?></TD>
-                    <TD class="tabeladadosalinhadodireita" ><?php echo complementarCharAEsquerda($voAtual->cd, "0", TAMANHO_CODIGOS)?></TD>
+                    <TD class="tabeladadosdestacadonegrito"><?php echo complementarCharAEsquerda($voAtual->cd, "0", TAMANHO_CODIGOS)?></TD>
 					<TD class="tabeladados" nowrap><?php echo $setor?></TD>
 					<TD class="tabeladados" nowrap><?php echo $setorDestinoAtual?></TD>
 					<TD class="tabeladados" nowrap><?php echo $tipo?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $voAtual->texto;?></TD>
+                    <TD class="tabeladados" ><?php echo $voAtual->texto;?></TD>
                     <TD class="<?=$classColunaSituacao;?>" nowrap><?php echo $situacao?></TD>                    
                     <TD class="tabeladados" nowrap><?php echo $prioridade?></TD>
                     <TD class="tabeladados" nowrap><?php echo $nmUsuario;?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($voAtual->dtReferencia);?></TD>
+                    <TD class="tabeladados" nowrap><?php echo getData($dataUltimaMovimentacao);?></TD>
                 </TR>					
                 <?php
 				}				
@@ -309,9 +315,9 @@ function encaminhar() {
                         <TABLE class="barraacoesaux" cellpadding="0" cellspacing="0">
 	                   	<TR> 
                             <?php
-                            /*$arrayBotoesARemover = array(constantes::$CD_FUNCAO_ALTERAR);
-                            echo getBotoesRodapeComRestricao($arrayBotoesARemover);*/
-                            echo getBotoesRodape();
+                            $arrayBotoesARemover = array(constantes::$CD_FUNCAO_EXCLUIR);
+                            echo getBotoesRodapeComRestricao($arrayBotoesARemover);
+                            //echo getBotoesRodape();
                             ?>
                             <TD class='botaofuncao'>
                             <?php echo getBotaoValidacaoAcesso("bttEncaminhar", "Encaminhar", "botaofuncaop", false, false,true,false,"onClick='javascript:encaminhar();' accesskey='e'");?>

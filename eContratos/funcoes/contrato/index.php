@@ -149,7 +149,8 @@ function movimentacoes(){
   	
 	var array = retornarValorRadioButtonSelecionadoComoArray("document.frm_principal.rdb_consulta", "*", false);
 	especie = array[4];
-	if(especie != <?=constantes::$CD_ESPECIE_CONTRATO_MATER;?>){
+	
+	if(especie != '<?=dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;?>'){
 		alert("Operação permitida apenas para contrato Mater.");
 		return;
 	}

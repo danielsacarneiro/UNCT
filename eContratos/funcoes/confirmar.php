@@ -64,10 +64,22 @@ try{
         $nmFuncao = "ALTERAR";
         //$resultado = $dbprocesso->alterarContratoPorCima($vo);
         $resultado = $dbprocesso->alterar($vo);
+    }else {    	
+    	//chama um metodo especifico passado
+    	//caso nao seja nenhuma das funcoes basicas acima
+    	if (method_exists($dbprocesso,$funcao)) {
+    		$argumentos = array($vo);
+    		call_user_func_array(array($dbprocesso,$funcao),$argumentos);
+    	}    	 
     }
-    
+        
     $classMensagem = "campomensagemverde";
     $msg = "OPERACÃO $nmFuncao REALIZADA COM SUCESSO";
+    
+    if($vo->getMensagemComplementarTelaSucesso() != ""){
+    	$msgComplementar = $vo->getMensagemComplementarTelaSucesso();
+    	$msg .= "<br>" . $msgComplementar; 
+    }    
     
     //echo $vo->getNmTabela();
     //var_dump($vo);
@@ -76,7 +88,7 @@ try{
 }catch(Exception $e) {
     $msgErro = $e->getMessage();
     $classMensagem = "campomensagemvermelho";
-    $msg = "OPERACAO $nmFuncao FALHOU.$msgErro";
+    $msg = "OPERACAO $nmFuncao FALHOU.<br>$msgErro";
 }
 
 
@@ -99,7 +111,7 @@ function cancela() {
 </HEAD>
 <BODY class="paginadados" onload="">
 	  
-<FORM name="frm_principal" method="post" action="<?=$vo->getNmTabela()?>/index.php?consultar=S"> 
+<FORM name="frm_principal" method="post" action="<?=$vo->getTelaRetornoConfirmar()?>/index.php?consultar=S"> 
 <TABLE id="table_conteiner" class="conteiner" cellpadding="0" cellspacing="0">
     <TBODY>
 	<TR>

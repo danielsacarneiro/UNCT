@@ -16,11 +16,12 @@ class filtroManterGestor extends filtroManter{
         
 	}
     	
-	function getFiltroConsultaSQL($isHistorico){
+	function getFiltroConsultaSQL(){
         $voGestor= new vogestor();
 		$filtro = "";
 		$conector  = "";
 
+		$isHistorico = $this->isHistorico;
         $nmTabela = $voGestor->getNmTabelaEntidade($isHistorico);
         
 		//seta os filtros obrigatorios        
@@ -42,7 +43,7 @@ class filtroManterGestor extends filtroManter{
 		}		
 
 		//finaliza o filtro
-		$filtro = parent::getFiltroConsultaSQL($filtro);
+		$filtro = parent::getFiltroConsulta($filtro);
 		
 		//echo "Filtro:$filtro<br>";
 

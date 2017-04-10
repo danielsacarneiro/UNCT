@@ -4,6 +4,7 @@ include_once(caminho_util."bibliotecaHTML.php");
 include_once(caminho_util."selectExercicio.php");
 include_once(caminho_vos."voDemandaTramitacao.php");
 
+try{
 //inicia os parametros
 inicioComValidacaoUsuario(true);
 
@@ -33,8 +34,12 @@ if($isInclusao){
     $isHistorico = ($voContrato->sqHist != null && $voContrato->sqHist != "");
 	
 	$dbprocesso = $vo->dbprocesso;					
-	$colecao = $dbprocesso->consultarPorChave($vo, $isHistorico);	
+	$colecao = $dbprocesso->consultarPorChaveTela($vo, $isHistorico);	
 	$vo->getDadosBanco($colecao);
+	
+	$votram->getDadosBanco($colecao);	
+	$votram->dbprocesso->validarEncaminhamento($votram);
+	
 	putObjetoSessao($vo->getNmTabela(), $vo);
 		
     $nmFuncao = "ENCAMINHAR ";
@@ -62,7 +67,10 @@ setCabecalho($titulo);
 <SCRIPT language="JavaScript" type="text/javascript">
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
 function isFormularioValido() {
-	if(!isCampoTextoValido(document.frm_principal.<?=voDemandaTramitacao::$nmAtrTexto?>, true))	
+
+	campoSetorDestino = document.frm_principal.<?=voDemandaTramitacao::$nmAtrCdSetorDestino?>;
+
+	if(campoSetorDestino.value != "" && !isCampoTextoValido(document.frm_principal.<?=voDemandaTramitacao::$nmAtrTexto?>, true))	
 		return false;		
 	
 	return true;
@@ -74,12 +82,19 @@ function cancelar() {
 }
 
 function confirmar() {
-	/*if(!isFormularioValido())
-		return false;	
-	*/
-
+	if(!isFormularioValido())
+		return false;
 
 	return confirm("Confirmar Alteracoes?");    
+}
+
+function validaFormulario() {
+	tipoDemanda = document.frm_principal.<?=voDemanda::$nmAtrTipo?>.value;
+
+	//if(tipoDemanda == <?=dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO?>)
+	habilitaContrato();
+	//else
+		//alert("NAO eh contrato");
 }
 
 function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
@@ -134,13 +149,14 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	            <TH class="campoformulario" nowrap width="1%">Demanda:</TH>
 	            <TD class="campoformulario" colspan=3>	            
 	            <?php echo "Ano: " . $selectExercicio->getHtmlCombo("","", $vo->ano, true, "camporeadonly", false, " disabled ");?>
-	            <?php echo "Tipo: " . $comboTipo->getHtmlCombo("","", $vo->tipo, true, "camporeadonly", false, " disabled ");?>
+	            <?php echo "Tipo: " . $comboTipo->getHtmlCombo("","", $vo->tipo, false, "camporeadonly", false, " disabled ");?>
 				Número: <INPUT type="text" value="<?=complementarCharAEsquerda($vo->cd, "0", TAMANHO_CODIGOS);?>"  class="camporeadonly" size="6" readonly>	            
 	            
 	            <INPUT type="hidden" id="<?=voDemanda::$nmAtrAno?>" name="<?=voDemanda::$nmAtrAno?>" value="<?=$vo->ano?>">
 				<INPUT type="hidden" id="<?=voDemanda::$nmAtrCd?>" name="<?=voDemanda::$nmAtrCd?>" value="<?=$vo->cd?>">	            			  
 				<INPUT type="hidden" id="<?=voDemanda::$nmAtrTipo?>" name="<?=voDemanda::$nmAtrTipo?>" value="<?=$vo->tipo?>">
 				<INPUT type="hidden" id="<?=voDemanda::$nmAtrCdSetor?>" name="<?=voDemanda::$nmAtrCdSetor?>" value="<?=$vo->cdSetor?>">
+				<INPUT type="hidden" id="<?=voDemanda::$nmAtrSituacao?>" name="<?=voDemanda::$nmAtrSituacao?>" value="<?=$vo->situacao?>">
 	        </TR>
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Setor Responsável:</TH>
@@ -156,7 +172,8 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Título:</TH>
 	            <TD class="campoformulario" colspan=3>				
-	            <INPUT type="text" value="<?=$vo->texto?>"  class="camporeadonly" size="80" readonly>	            	                        	                        
+	            <INPUT type="text" value="<?=$vo->texto?>"  class="camporeadonly" size="80" readonly>
+				</TD>
 	        </TR>	        
 	        <?php	        	        	        
 	        //so exibe contrato se tiver
@@ -180,7 +197,7 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	            <TH class="campoformulario" nowrap width="1%">Situação:</TH>
 	            <TD class="campoformulario" colspan=3>
 	            <?php 
-	            echo $comboSituacao->getHtmlCombo(voDemanda::$nmAtrSituacao,voDemanda::$nmAtrSituacao, $vo->situacao, true, "camporeadonly", false, " disabled ");?>
+	            echo $comboSituacao->getHtmlCombo("","", $vo->situacao, true, "camporeadonly", false, " disabled ");?>
 				</TD>				
 	        </TR>
 				<?php 
@@ -195,14 +212,14 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	            <TH class="campoformulario" nowrap width="1%">Demanda:</TH>
 	            <TD class="campoformulario" colspan=3>	            
 	            <?php echo "Ano: " . $selectExercicio->getHtmlCombo(voDemanda::$nmAtrAno,voDemanda::$nmAtrAno, anoDefault, true, "campoobrigatorio", false, " required ");?>
-	            <?php echo "Tipo: " . $comboTipo->getHtmlCombo(voDemanda::$nmAtrTipo,voDemanda::$nmAtrTipo, $vo->tipo, true, "campoobrigatorio", false, " required ");?>			  
+	            <?php echo "Tipo: " . $comboTipo->getHtmlCombo(voDemanda::$nmAtrTipo,voDemanda::$nmAtrTipo, $vo->tipo, false, "campoobrigatorio", false, " required onChange='validaFormulario();'");?>			  
 	        </TR>
 	        <?php	        
 	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
-	        $arrayCssClass = array("campoobrigatorio","campoobrigatorio", "campoobrigatorio");
+	        $arrayCssClass = array("camponaoobrigatorio","camponaoobrigatorio", "camponaoobrigatorio");
 	        $arrayComplementoHTML = array(" required onChange='carregaContratada();' ",
 	        		" required onBlur='carregaContratada();' ",
-	        		" onChange='carregaContratada();' "	        		
+	        		" required onChange='carregaContratada();' "	        		
 	        );	        
 	        ?>
 	        <TR>
@@ -214,7 +231,7 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	            <TD class="campoformulario" colspan=3>
 	            <?php 
 	            //o setor destino da ultima tramitacao sera o origem da nova
-	            echo $comboSetor->getHtmlCombo(voDemanda::$nmAtrCdSetor,voDemanda::$nmAtrCdSetor, $votram->cdSetorDestino, true, "campoobrigatorio", false, " required ");?>
+	            echo $comboSetor->getHtmlCombo(voDemanda::$nmAtrCdSetor,voDemanda::$nmAtrCdSetor, "", true, "campoobrigatorio", false, " required ");?>
 				</TD>
 	        </TR>	 
 	        <TR>
@@ -258,7 +275,7 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	        </TR>
 	        <TR>
 		        <TH class="campoformulario" width="1%" nowrap>Documento:</TH>
-		        <TD class="campoformulario" nowrap>
+		        <TD class="campoformulario" nowrap colspan=3>
 		        	<INPUT type="text" id="<?=voDocumento::$nmAtrSq?>" name="<?=voDocumento::$nmAtrSq?>" class="camporeadonly" size="15" readonly>
 		        	<INPUT type="hidden" id="<?=voDocumento::getNmTabela()?>" name="<?=voDocumento::getNmTabela()?>" value="">
 		        	<?php 
@@ -320,3 +337,9 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 
 </BODY>
 </HTML>
+<?php 
+}catch(Exception $ex){
+	putObjetoSessao($vo->getNmTabela(), $vo);
+	tratarExcecaoHTML($ex);	
+}
+?>

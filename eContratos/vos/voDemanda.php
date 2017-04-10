@@ -27,6 +27,7 @@ Class voDemanda extends voentidade{
 	var $prioridade = "";
 	var $dtReferencia = "";
 	 
+	var $dbprocesso = null;
 	var $voContrato = null;
 	// ...............................................................
 	// Funcoes ( Propriedades e mÃ©todos da classe )
@@ -102,8 +103,8 @@ Class voDemanda extends voentidade{
 		return $retorno;
 	}
 
-	function temContratoParaIncluir(){
-		$retorno = $this->voContrato != null;
+	function temContratoParaIncluir(){		
+		$retorno = $this->voContrato->tipo != null && $this->voContrato->anoContrato != null && $this->voContrato->cdContrato != null;
 		return $retorno;
 	}
 
@@ -153,7 +154,7 @@ Class voDemanda extends voentidade{
 		//quando existir
 		//recupera quando da consulta da contratada, ao inserir o contrato na tela		
 		$chaveContrato = @$_POST[vopessoa::$ID_CONTRATO];
-		echo "chave contrato:" . $chaveContrato;
+		//echo "chave contrato:" . $chaveContrato;
 		if($chaveContrato != null){			
 			$voContrato = new vocontrato();
 			$voContrato->getChavePrimariaVOExplodeParam($chaveContrato);
@@ -183,6 +184,11 @@ Class voDemanda extends voentidade{
 		$this->cd = $array[1];
 		$this->sqHist = $array[2];
 	}
+	
+	function getMensagemComplementarTelaSucesso(){
+		$retorno = "Demanda (Número - Ano): " . formatarCodigoAnoComplementoArgs($this->cd, $this->ano, TAMANHO_CODIGOS, null);
+		return $retorno; 
+	}	
 
 }
 ?>

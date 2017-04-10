@@ -64,6 +64,24 @@ function carregaContratada() {
 	carregaDadosContratada(pNmCampoAnoContrato, pNmCampoTipoContrato, pNmCampoCdContrato, pNmCampoCdEspecieContrato, pNmCampoSqEspecieContrato,pNmCampoDiv);
 		    
 }
+
+function habilitaContrato() {
+	
+	pCampoCdContrato = document.frm_principal.<?=vocontrato::$nmAtrCdContrato;?>;
+	pCampoAnoContrato = document.frm_principal.<?=vocontrato::$nmAtrAnoContrato;?>;
+	pCampoTipoContrato = document.frm_principal.<?=vocontrato::$nmAtrTipoContrato;?>;
+
+	/*pNmCampoCdEspecieContrato = '<?=vocontrato::$nmAtrCdEspecieContrato;?>';
+	pNmCampoSqEspecieContrato = '<?=vocontrato::$nmAtrSqEspecieContrato;?>';
+	pNmCampoDiv = '<?=$nmCampoDivPessoaContratada;?>';*/
+
+	flag = pCampoCdContrato.required == true;
+
+	pCampoCdContrato.required = !flag;
+	pCampoAnoContrato.required = !flag;
+	pCampoTipoContrato.required = !flag;
+}
+
 </SCRIPT>	
 	            <?php echo $combo->getHtmlCombo(vocontrato::$nmAtrTipoContrato,vocontrato::$nmAtrTipoContrato, $tipoContrato, true, $cssTipoContrato, false, $htmlTipoContrato);?>
 	            Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=vocontrato::$nmAtrCdContrato?>" name="<?=vocontrato::$nmAtrCdContrato?>"  value="<?php echo(complementarCharAEsquerda($cdContrato, "0", TAMANHO_CODIGOS_SAFI));?>"  class="<?=$cssCdContrato?>" size="4" maxlength="3" <?=$readonlyChaves?> <?=$htmlCdContrato?>>

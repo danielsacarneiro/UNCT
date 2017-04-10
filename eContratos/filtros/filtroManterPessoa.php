@@ -42,12 +42,13 @@ class filtroManterPessoa extends filtroManter{
 		$this->cdvinculo = @$_POST[vopessoavinculo::$nmAtrCd];
 	}
 	
-	function getFiltroConsultaSQL($isHistorico){
+	function getFiltroConsultaSQL(){
         $voPessoa= new vopessoa();
         $voPessoaVinculo= new vopessoavinculo();
 		$filtro = "";
 		$conector  = "";
 
+		$isHistorico = $this->isHistorico;
         $nmTabela = $voPessoa->getNmTabelaEntidade($isHistorico);
         $nmTabelaPessoaVinculo = $voPessoaVinculo->getNmTabela();
         
@@ -166,7 +167,7 @@ class filtroManterPessoa extends filtroManter{
 		}		
 
 		//finaliza o filtro
-		$filtro = parent::getFiltroConsultaSQL($filtro);
+		$filtro = parent::getFiltroConsulta($filtro);
 		
 		//echo "Filtro:$filtro<br>";
 

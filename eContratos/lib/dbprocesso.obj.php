@@ -53,15 +53,14 @@ class dbprocesso {
 		
 		// echo $query;
 		$registro = $this->consultarEntidade ( $query, true );
-		$dhValidacao = getDataHoraSQLComoString ( $registro [0] [voentidade::$nmAtrDhUltAlteracao] );
-		
-		/*
-		 * echo "<br>data banco: " . $dhValidacao;
-		 * echo "<br>data registro: " . $voEntidade->dhUltAlteracao;
-		 */
-		
+		$dhValidacao = $registro [0] [voentidade::$nmAtrDhUltAlteracao];		
+						
 		if ($dhValidacao != $voEntidade->dhUltAlteracao) {
-			throw new Exception ( "Registro desatualizado." );
+			$msg = "Registro desatualizado.";
+			$msg.= "<br>data banco: " . $dhValidacao;
+			$msg.= "<br>data registro: " . $voEntidade->dhUltAlteracao;
+				
+			throw new Exception ( $msg );
 		}
 		
 		return $registro [0];
@@ -252,15 +251,20 @@ class dbprocesso {
 			
 			// removeObjetoSessao($filtro->nmFiltro);
 			
-			$filtroSQL = $filtro->getFiltroConsultaSQL ( $isHistorico );
+			$filtroSQL = $filtro->getSQLWhere (true);
+			//echo $filtroSQL. "<br>";
 			
 			// verifica se tem paginacao
 			$limite = "";
 			if ($filtro->TemPaginacao) {
 				// ECHO "TEM PAGINACAO";
 				$pagina = $filtro->paginacao->getPaginaAtual ();
+				
+				$filtroSQLPaginacao = $filtro->getSQLWhere (false);
+				//echo $filtroSQLPaginacao. "<br>";
+				$queryCount = "SELECT count(*) as " . dbprocesso::$nmCampoCount . $queryFrom . $filtroSQLPaginacao;
+				
 				// guarda o numero total de registros para nao ter que executar a consulta TODOS novamente
-				$queryCount = "SELECT count(*) as " . dbprocesso::$nmCampoCount . $queryFrom . $filtroSQL;
 				$numTotalRegistros = $filtro->numTotalRegistros = $this->getNumTotalRegistrosQuery ( $queryCount );
 				
 				$qtdRegistrosPorPag = $filtro->qtdRegistrosPorPag;

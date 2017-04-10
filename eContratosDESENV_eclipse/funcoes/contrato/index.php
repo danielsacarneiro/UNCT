@@ -54,9 +54,9 @@ $colecao = $dbprocesso->consultarFiltroManterContrato($voContrato, $filtro);
 //aqui verifica se pelo menos um filtro valido foi inserido
 //se nao, seta os filtros defalts para diminuir o retorno da consulta
 //o trecho deve ficar depois da consulta que eh quando sao setados no filtro os valores default
-if($filtro->temValorDefaultSetado){
+//if($filtro->temValorDefaultSetado){
 	$anoContrato  = $filtro->anoContrato;
-}
+//}
 
 $qtdRegistrosPorPag = $filtro->qtdRegistrosPorPag;
 $numTotalRegistros = $filtro->numTotalRegistros;

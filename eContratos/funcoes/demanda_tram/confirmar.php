@@ -1,11 +1,13 @@
 <?php
 include_once("../../config_lib.php");
 include_once(caminho_util."bibliotecaHTML.php");
-include_once(caminho_vos."voDemanda.php");
-inicio();
+include_once(caminho_vos."voDemandaTramitacao.php");
+inicioComValidacaoUsuario(true);
 
-$vo = new voDemanda();
+$vo = new voDemandaTramitacao();
 $vo->getDadosFormulario();
+
+//echo "RESOLVER PROBLEMA DA CHAMADA AO INCLUIR"; 
 
 putObjetoSessao("vo", $vo);
 

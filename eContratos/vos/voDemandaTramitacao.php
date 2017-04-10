@@ -25,7 +25,7 @@ include_once("voDemandaContrato.php");
 
    function __construct() {
        parent::__construct();
-       $this->temTabHistorico = true;
+       $this->temTabHistorico = false;
        $class = self::getNmClassProcesso();
        $this->dbprocesso= new $class();
        $this->voDoc = new voDocumento();      
@@ -52,6 +52,18 @@ include_once("voDemandaContrato.php");
     public static function getNmClassProcesso(){
         return  "dbDemandaTramitacao";
     }      
+    
+    //GAMBIARRA NAO REPETIR
+    function getTelaRetornoConfirmar(){
+    	//REGRA: retorna para a tela da demanda
+    	$telaConsultaRetorno = voDemanda::getNmTabela();
+    	
+    	if ($this->NM_METODO_RETORNO_CONFIRMAR != null && $this->NM_METODO_RETORNO_CONFIRMAR != ""){
+    		$telaConsultaRetorno = $this->NM_METODO_RETORNO_CONFIRMAR; 
+    	}
+    		
+    	return  $telaConsultaRetorno;
+    }
     
     function getValoresWhereSQLChave($isHistorico){    	
     	$nmTabela = self::getNmTabelaStatic($isHistorico);
@@ -108,6 +120,8 @@ include_once("voDemandaContrato.php");
     }
     
     function getDadosRegistroBanco($registrobanco){
+    	parent::getDadosRegistroBanco($registrobanco);
+    	
         //as colunas default de voentidade sao incluidas pelo metodo getDadosBanco do voentidade
     	$this->sq = $registrobanco[self::$nmAtrSq];
     	$this->cd = $registrobanco[self::$nmAtrCd];
@@ -134,6 +148,7 @@ include_once("voDemandaContrato.php");
 	function getDadosFormulario(){
 		parent::getDadosFormulario();
 				
+		$this->sq = @$_POST[self::$nmAtrSq];
 		$this->cdSetorOrigem = @$_POST[self::$nmAtrCdSetorOrigem];
 		
 		if($this->cdSetorOrigem == null){
@@ -157,10 +172,16 @@ include_once("voDemandaContrato.php");
 	}
 	
 	//para o caso da classe herdar de alguem
-	function getVOPai(){
+	function getVOPaiChave(){
 		$voDemanda = new voDemanda();
 		$voDemanda->ano = $this->ano;
 		$voDemanda->cd = $this->cd;
+		
+		return $voDemanda;
+	}
+	
+	function getVOPai(){
+		$voDemanda = $this->getVOPaiChave();
 		$voDemanda->cdSetor = $this->cdSetor;
 		$voDemanda->tipo  = $this->tipo;
 		$voDemanda->situacao  = $this->situacao;		
@@ -206,7 +227,7 @@ include_once("voDemandaContrato.php");
 		$this->ano = $array[0];
 		$this->cd = $array[1];
 		$this->sq = $array[2];
-	}
+	}		
 	
 }
 ?>

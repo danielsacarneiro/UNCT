@@ -19,14 +19,12 @@ header ('Content-type: text/html; charset=ISO-8859-1');
     static $DS_TIPO_PROFISCO  = "C-PROFISCO";
     
     static $CD_FUNCAO_EXCLUIR = "E";
+    static $CD_FUNCAO_HISTORICO = "H";
     static $CD_FUNCAO_INCLUIR = "I";
     static $CD_FUNCAO_ALTERAR = "A";
     static $CD_FUNCAO_DETALHAR = "D";
+    static $CD_FUNCAO_TODAS = "T";
     
-    static $cd_usuario_admin = "administrator";
-    static $cd_usuario_colaborador = "contributor";
-    static $cd_usuario_visitante = "subscriber";    
-
     static $DS_SIM  = "SIM";
     static $DS_NAO  = "NAO";
     static $DS_OPCAO_TODOS = "Todos";
@@ -35,8 +33,6 @@ header ('Content-type: text/html; charset=ISO-8859-1');
     static $CD_NAO  = "N"; 
     static $CD_OPCAO_TODOS  = "op_todos";
     static $CD_OPCAO_VAZIO = "op_vazio";
-    
-    static $CD_ESPECIE_CONTRATO_MATER = 1;
     
     static $CD_ORDEM_CRESCENTE = "ASC";
     static $CD_ORDEM_DECRESCENTE = "DESC";

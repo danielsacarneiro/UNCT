@@ -82,7 +82,7 @@
                     <TD class="tabeladados" nowrap><?php echo $tipo?></TD>
                     <TD class="tabeladados"><?php echo $especie?></TD>
                     <TD class="tabeladados"><?php echo $colecao[$i]["ct_contratada"]?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $colecao[$i]["ct_doc_contratada"]?></TD>
+                    <TD class="tabeladados" nowrap><?php echo documentoPessoa::getNumeroDocFormatado($colecao[$i]["ct_doc_contratada"])?></TD>
                     <TD class="tabeladados"><?php echo $colecao[$i]["ct_objeto"]?></TD>
                     <TD class="tabeladados"><?php echo getData($datainiSQL)?></TD>
                     <TD <?=$tagCelula?>>                    <?php echo $dataFinal?></TD>

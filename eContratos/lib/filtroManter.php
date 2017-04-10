@@ -51,6 +51,11 @@ class filtroManter extends multiplosConstrutores{
 		
 		if($pegarFiltrosDaTela){
 			$this->pegarFiltroDaTela();
+			//chama o metodo do filho que pega os dados do filtro do formulario
+			if (method_exists($this,"getFiltroFormulario")){
+				$this->getFiltroFormulario();
+			}
+				
 			$this->isValidarConsulta = true;
 		}
 		else{
@@ -73,10 +78,6 @@ class filtroManter extends multiplosConstrutores{
         //para o caso de ser necessario setar um filtro default para nao trazer todos os registros
         $this->temValorDefaultSetado = false;
         
-		//chama o metodo do filho que pega os dados do filtro do formulario
-        if (method_exists($this,"getFiltroFormulario")){
-        	$this->getFiltroFormulario();
-        }        
 	}	
     
 	function pegarFiltroDaTela(){
@@ -126,7 +127,14 @@ class filtroManter extends multiplosConstrutores{
     	return $filtro;
     }
     
-    function getFiltroConsultaSQL($filtro){
+    function getSQLWhere($comAtributoOrdenacao){
+    	return $this->getFiltroConsultaSQL($comAtributoOrdenacao);
+    }
+    
+    function getFiltroConsulta($filtro){
+    	return $this->getFiltroSQL($filtro, true);
+    }
+    function getFiltroSQL($filtro, $comAtributoOrdenacao){
     	//ECHO "TESTE";
     	
     	if($filtro != ""){
@@ -156,7 +164,9 @@ class filtroManter extends multiplosConstrutores{
     			$filtro = $filtro . "\n GROUP BY " . getSQLStringFormatadaColecaoIN($this->groupby, false );
     		}
     		
-    		$filtro = $filtro . "\n ORDER BY $atributoOrdenacao $ordem $strOrdemDefault ";
+    		if($comAtributoOrdenacao){
+    			$filtro = $filtro . "\n ORDER BY $atributoOrdenacao $ordem $strOrdemDefault ";
+    		}
     		
     		
     	}
@@ -198,6 +208,21 @@ class filtroManter extends multiplosConstrutores{
     	}    		
 
     	return $comboOrdenacao;
+    }
+    
+    function formataCampoOrdenacao($voEntidade){
+    	$nmTabela = $voEntidade->getNmTabelaStatic($this->isHistorico);
+    
+    	if($nmTabela != null && $this->cdAtrOrdenacao != null){
+    			
+    		$jaEhFormatado = strpos ($this->cdAtrOrdenacao, ".");
+    			
+    		//so formata se o atrordenacao escolhido pertencer a nmtabela em questao
+    		if($jaEhFormatado === false && existeItemNoArray($this->cdAtrOrdenacao, $voEntidade->getTodosAtributos())){
+    			$this->cdAtrOrdenacaoConsulta = $nmTabela. "." .$this->cdAtrOrdenacao;
+    		}
+    			
+    	}
     }
     
     function toString(){		

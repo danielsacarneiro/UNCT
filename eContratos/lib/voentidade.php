@@ -3,11 +3,13 @@
 // Classe select
 // cria um combo select html
 
-  Class voentidade {		
+  Class voentidade {
+  		var $NM_METODO_RETORNO_CONFIRMAR;
+  	
 		var $varChaves;
 		var $varAtributos;
 		var $varAtributosARemover;
-        var $temTabHistorico = true;
+        var $temTabHistorico;
         
         static $nmTabelaSufixoHistorico   =  	"_hist";
         static $nmTabelaSufixoSequencial   =  	"_seq";
@@ -48,6 +50,8 @@
             voentidade::$nmAtrCdUsuarioUltAlteracao);
 		
 		$this->cdUsuarioUltAlteracao = id_user;
+		$this->NM_METODO_RETORNO_CONFIRMAR = null;
+		$this->temTabHistorico = true;
     }
     
     
@@ -89,13 +93,33 @@
    		return $retorno;
     }
     
+    /**
+     * @deprecated
+     */
     function getSQLValuesUpdate(){
-		$retorno = "";        
-        $retorno.= self::$nmAtrDhUltAlteracao . " = now() ";
-        $retorno.= ",";
-        $retorno.= self::$nmAtrCdUsuarioUltAlteracao . " = " . $this->cdUsuarioUltAlteracao;
-
-		return $retorno;                
+    	$retorno = "";
+    	$retorno.= self::$nmAtrDhUltAlteracao . " = now() ";
+    	$retorno.= ",";
+    	$retorno.= self::$nmAtrCdUsuarioUltAlteracao . " = " . $this->cdUsuarioUltAlteracao;
+    
+    	return $retorno;
+    }
+    
+    function getSQLValuesEntidadeUpdate(){
+    	$temUsuarioAlt = array_search(self::$nmAtrCdUsuarioUltAlteracao, $this->varAtributos);
+    	$temDtAlt = array_search(self::$nmAtrDhUltAlteracao, $this->varAtributos);
+    
+    	$retorno = "";
+    	$conector = ",";
+    	if($temUsuarioAlt){
+    		$retorno.= $conector. self::$nmAtrCdUsuarioUltAlteracao . " = " . $this->cdUsuarioUltAlteracao;
+    		$conector = ",";
+    	}
+    	if($temDtAlt){
+    		$retorno.= $conector . self::$nmAtrDhUltAlteracao . " = now() ";
+    	}
+    
+    	return $retorno;
     }
     
     function getValoresWhereSQL($voEntidade, $colecaoAtributos){
@@ -231,6 +255,16 @@
     	//devera ser implementado no vo especifico
     	return $this->getValoresWhereSQLChave($isHistorico);    	
     }
+    
+    function getTelaRetornoConfirmar(){
+    	//se a filha nao tiver sobrescrito esse metodo
+    	//pega o metodo da classe filha via de REGRA 
+    	return $this->getNmTabela();
+    }
+    
+    function getMensagemComplementarTelaSucesso(){
+    	return "";    	
+    }    
     
 }
 ?>

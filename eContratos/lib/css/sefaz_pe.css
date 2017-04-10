@@ -1077,7 +1077,7 @@ TD.areapassoapasso {
 }
 
 /*  Representa o header de uma tabela de visualização de dados */
-TD.tabeladados,TD.tabeladadosalinhadodireita,TD.tabeladadosalinhadocentro,TD.tabeladadosdestacado,TD.tabeladadosdestacadoamarelo, TD.tabeladadosdestacadoverde,TD.tabeladadosdestacadovermelho,TD.tabeladadosdestacadoazulclaro
+TD.tabeladados,TD.tabeladadosalinhadodireita,TD.tabeladadosalinhadocentro,TD.tabeladadosdestacado,TD.tabeladadosdestacadoamarelo, TD.tabeladadosdestacadoverde,TD.tabeladadosdestacadovermelho,TD.tabeladadosdestacadoazulclaro,TD.tabeladadosdestacadonegrito
 	{
 	color: #222;
 	font-family: Helvetica, Arial, sans-serif;
@@ -1107,6 +1107,11 @@ TD.tabeladadosalinhadocentro {
 TD.tabeladadosdestacado {
 	text-align: left;
 	background-color: #FFFF66;
+}
+
+TD.tabeladadosdestacadonegrito {
+	text-align: center;
+	font-weight: bolder;
 }
 
 TD.tabeladadosdestacadoamarelo {
@@ -2015,7 +2020,7 @@ HR.protocolosmenu {
 		background: #e5e8f0;
 		border: solid 1px #777;
 	}
-	TD.tabeladados,TD.tabeladadosalinhadodireita,TD.tabeladadosalinhadocentro,TD.tabeladadosdestacado,TD.tabeladadosdestacadoverde,TD.tabeladadosdestacadovermelho,TD.tabeladadosdestacadoazulclaro {
+	TD.tabeladados,TD.tabeladadosalinhadodireita,TD.tabeladadosalinhadocentro,TD.tabeladadosdestacado,TD.tabeladadosdestacadoverde,TD.tabeladadosdestacadovermelho,TD.tabeladadosdestacadoazulclaro,TD.tabeladadosdestacadonegrito{
 		color: #000;
 		border: 1px solid #aaa;
 	}

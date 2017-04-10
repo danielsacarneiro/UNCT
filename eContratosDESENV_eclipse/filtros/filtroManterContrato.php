@@ -64,13 +64,11 @@ class filtroManterContrato extends filtroManter{
         $nmTabela = $voContrato->getNmTabelaEntidade($this->isHistorico);
         
 		//seta os filtros obrigatorios        
-		if($this->isSetaValorDefault()){
+		/*if($this->isSetaValorDefault()){
 			//anoDefault foi definido como constante na index.php
 			$this->anoContrato  = anoDefault;
             $this->temValorDefaultSetado = true;
-            //echo "setou o ano defaul";
-            //$this->setaAtributoRequest($this->nmAtrAnoContrato, anoDefault);
-		}
+		}*/
             		
 		if($this->cdContrato != null){
 			$filtro = $filtro . $conector

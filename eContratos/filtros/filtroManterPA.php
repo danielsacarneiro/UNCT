@@ -46,7 +46,7 @@ class filtroManterPA extends filtroManter{
         $this->nmEntidadePrincipal = "voPA";
     }
     	
-	function getFiltroConsultaSQL($isHistorico){
+	function getFiltroConsultaSQL(){
         $voPA= new voPA();
         $vopessoa= new vopessoa();
         $vocontrato= new vocontrato();
@@ -57,7 +57,7 @@ class filtroManterPA extends filtroManter{
 		$nmTabelaPessoaResponsavel = $this->nmTabelaPessoaResponsavel;
 		
 		$nmTabelaContrato= $vocontrato->getNmTabelaEntidade(false);
-		
+		$isHistorico = $this->isHistorico;
 		$nmTabela = $voPA->getNmTabelaEntidade($isHistorico);
 		if($this->nmEntidadePrincipal != null){
 			$nmTabela = $this->getVOEntidadePrincipal()->getNmTabelaEntidade($isHistorico);
@@ -157,7 +157,7 @@ class filtroManterPA extends filtroManter{
 		}	
 
 		//finaliza o filtro
-		$filtro = parent::getFiltroConsultaSQL($filtro);
+		$filtro = parent::getFiltroConsulta($filtro);
 		
 		//echo "Filtro:$filtro<br>";
 
