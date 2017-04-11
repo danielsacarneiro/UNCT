@@ -57,9 +57,17 @@
                         }catch (Exception $e){
                             $validaAlerta = false;
                         }                        
-                                            
+                                     
+                        /*if($validaAlerta)
+                        	echo "verdadeiro";
+                        else
+                        	echo "falso";*/
+                        
+                        //valida alerta somente quandoa consultar for por contratos vigentes
+                        $validaAlerta = $validaAlerta && ($filtro->tpVigencia == dominioTpVigencia::$CD_OPCAO_VIGENTES);
                         $classColuna = "tabeladados";
-                        $mensagemAlerta = "";
+                        $mensagemAlerta = "";                        
+                        
                         if($validaAlerta){
                             if($qtDiasFimVigencia <= constantes::$qts_dias_ALERTA_VERMELHO)
                                 $classColuna = "tabeladadosdestacadovermelho";

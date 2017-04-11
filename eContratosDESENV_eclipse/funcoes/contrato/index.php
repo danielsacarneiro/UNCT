@@ -2,7 +2,6 @@
 include_once("../../config_lib.php");
 include_once(caminho_util."bibliotecaHTML.php");
 include_once(caminho_util."constantes.class.php");
-include_once("dominioTipoContrato.php");
 include_once(caminho_util. "select.php");
 include_once(caminho_vos . "dbcontrato.php");
 
@@ -117,16 +116,6 @@ function selecionar() {
 		window.close();
 	}
 }
-
-/*function limparFormulario() {	
-
-	for(i=0;i<frm_principal.length;i++){
-		frm_principal.elements[i].value='';
-	}	
-	frm_principal.<?=vocontrato::$nmAtrAnoContrato?>.value = <?php echo(anoDefault);?>;
-	frm_principal.<?=vocontrato::$nmAtrDtVigenciaInicialContrato?>.value = "<?php echo dtHoje;?>";
-	frm_principal.<?=vocontrato::$nmAtrDtVigenciaFinalContrato?>.value = "<?php echo dtHoje;?>";	
-}*/
 
 function detalhar(isExcluir) {    
     if(isExcluir == null || !isExcluir)
