@@ -6,8 +6,9 @@
 	$colecaoTramitacao = "";
 	
 	//$vo vem da tela que chamou
-	if($vo->cd != null)
+	if($vo->cd != null && $vo->ano != null){
 		$colecaoTramitacao = $db->consultarDemandaTramitacao($vo);
+	}
 	
 	//var_dump($colecaoTramitacao);
 					

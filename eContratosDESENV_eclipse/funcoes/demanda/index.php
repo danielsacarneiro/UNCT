@@ -167,7 +167,18 @@ function encaminhar() {
 				$combo = new select(dominioAutorizacao::getColecao());						
 				?>
 	            <TH class="campoformulario" nowrap>Autorização:</TH>
-	            <TD class="campoformulario" colspan="3"><?php echo $combo->getHtmlSelect(vocontrato::$nmAtrCdAutorizacaoContrato,vocontrato::$nmAtrCdAutorizacaoContrato, $filtro->vocontrato->cdAutorizacao, true, "camponaoobrigatorio", true);?>	            
+	            <TD class="campoformulario" width="1%"><?php echo $combo->getHtmlSelect(vocontrato::$nmAtrCdAutorizacaoContrato,vocontrato::$nmAtrCdAutorizacaoContrato, $filtro->vocontrato->cdAutorizacao, true, "camponaoobrigatorio", true);?>
+	            <TH class="campoformulario" nowrap width="1%">Data.Últ.Movimentação:</TH>
+	            <TD class="campoformulario">
+	            	<INPUT type="text" 
+	            	       id="<?=voDemanda::$nmAtrDtReferencia?>" 
+	            	       name="<?=voDemanda::$nmAtrDtReferencia?>" 
+	            			value="<?php echo($filtro->dtUltMovimentacao);?>"
+	            			onkeyup="formatarCampoData(this, event, false);" 
+	            			class="camponaoobrigatorio" 
+	            			size="10" 
+	            			maxlength="10">
+				</TD>	            	            
 	        </TR>
 	        <?php	        
 	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");

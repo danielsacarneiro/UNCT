@@ -13,8 +13,19 @@ class filtroManterDemanda extends filtroManter{
 	var $nmContratada;
 	var $docContratada;
 	
+	var $dtUltMovimentacao;
+	
 	// ...............................................................
 	// construtor
+	function __construct0() {
+		$this->__construct1(true);
+	}
+	
+	function __construct1($pegarFiltrosDaTela) {		
+		$this->vodemanda = new voDemandaTramitacao();
+		$this->vocontrato = new vocontrato();
+		parent::__construct1($pegarFiltrosDaTela);		
+	}	
 		
 	function getFiltroFormulario(){
 		$vodemanda = new voDemandaTramitacao();
@@ -40,6 +51,7 @@ class filtroManterDemanda extends filtroManter{
 
 		$this->nmContratada = @$_POST[vopessoa::$nmAtrNome];
 		$this->docContratada = @$_POST[vopessoa::$nmAtrDoc];
+		$this->dtUltMovimentacao = @$_POST[voDemanda::$nmAtrDtReferencia];
 		
 		if($this->cdOrdenacao == null){
 			$this->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
@@ -136,9 +148,27 @@ class filtroManterDemanda extends filtroManter{
 					$conector  = "\n AND ";
 		}
 		
-		if($this->vodemanda->prt != null){
-						
+		if($this->dtUltMovimentacao != null){
+			$colDemandaTram = $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrDhInclusao;
+			$colDemanda = $nmTabela. "." .voDemanda::$nmAtrDhUltAlteracao;
 			
+			$filtro = $filtro . $conector
+			. " ((". $colDemandaTram 
+			. " IS NOT NULL AND DATE(". $colDemandaTram
+			. ") = "
+			. getVarComoDataSQL($this->dtUltMovimentacao)
+			. ") OR "
+			. "(". $colDemanda
+			. " IS NOT NULL AND DATE(". $colDemanda
+			. ") = "
+			. getVarComoDataSQL($this->dtUltMovimentacao)					
+			. ")) "
+			;
+		
+			$conector  = "\n AND ";
+		}
+		
+		if($this->vodemanda->prt != null){			
 			$filtro = $filtro . $conector
 			. " EXISTS (SELECT 'X' FROM " . $nmTabelaTramitacao
 			. " WHERE " 
