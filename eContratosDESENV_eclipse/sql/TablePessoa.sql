@@ -26,9 +26,10 @@ CREATE TABLE pessoa (
 	ID BIGINT(20) UNSIGNED,
     pe_nome VARCHAR(150),
     pe_doc VARCHAR(30),
-    pe_tel VARCHAR(30),
+    pe_tel VARCHAR(100),
     pe_email VARCHAR(100),
 	pe_endereco VARCHAR(300),
+    pe_obs VARCHAR(300),
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_incl INT,
@@ -39,6 +40,8 @@ CREATE TABLE pessoa (
 ALTER TABLE pessoa ADD CONSTRAINT fk_pessoa_usuario FOREIGN KEY (ID) REFERENCES wp_users (ID)
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;
+
+-- ALTER TABLE pessoa CHANGE COLUMN pe_tel pe_tel VARCHAR(100) NULL DEFAULT NULL ;
     
 -- ALTER TABLE pessoa DROP FOREIGN KEY fk_pessoa_usuario;
     

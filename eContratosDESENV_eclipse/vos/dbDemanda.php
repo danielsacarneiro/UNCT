@@ -58,6 +58,10 @@ class dbDemanda extends dbprocesso {
 		$arrayColunasRetornadas = array (
 				$nmTabela . ".*",
 				static::$nmTabelaUsuarioInclusao . "." . vousuario::$nmAtrName . "  AS " . voDemanda::$nmAtrNmUsuarioInclusao,
+				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato,
+				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato,
+				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato,
+				
 				// $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . " AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,
 				"COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . "," . $nmTabela . "." . voDemanda::$nmAtrCdSetor . ") AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,
 				"COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrDhInclusao . "," . $nmTabela . "." . voDemanda::$nmAtrDhUltAlteracao . ") AS " . filtroManterDemanda::$NmColDhUltimaMovimentacao,
@@ -272,6 +276,16 @@ class dbDemanda extends dbprocesso {
 		
 		if ($vo->situacao != null) {
 			$retorno .= $sqlConector . voDemanda::$nmAtrSituacao . " = " . $this->getVarComoNumero ( $vo->situacao );
+			$sqlConector = ",";
+		}
+		
+		if ($vo->texto != null) {
+			$retorno .= $sqlConector . voDemanda::$nmAtrTexto . " = " . $this->getVarComoString($vo->texto);
+			$sqlConector = ",";
+		}
+		
+		if ($vo->tipo != null) {
+			$retorno .= $sqlConector . voDemanda::$nmAtrTipo . " = " . $this->getVarComoString($vo->tipo);
 			$sqlConector = ",";
 		}
 		

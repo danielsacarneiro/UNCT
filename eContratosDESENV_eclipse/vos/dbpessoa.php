@@ -254,7 +254,8 @@ include_once (caminho_vos. "dbpessoagestor.php");
         $retorno.= $this-> getVarComoString($vopessoa->doc) . ",";
         $retorno.= $this-> getVarComoString($vopessoa->tel) . ",";
         $retorno.= $this-> getVarComoString($vopessoa->email) . ",";
-        $retorno.= $this-> getVarComoString($vopessoa->endereco);
+        $retorno.= $this-> getVarComoString($vopessoa->endereco) . ",";
+        $retorno.= $this-> getVarComoString($vopessoa->obs);
         
         $retorno.= $vopessoa->getSQLValuesInsertEntidade();
 		        
@@ -292,6 +293,11 @@ include_once (caminho_vos. "dbpessoagestor.php");
 
         if($vo->endereco != null){
         	$retorno.= $sqlConector . vopessoa::$nmAtrEndereco . " = " . $this->getVarComoString($vo->endereco);
+        	$sqlConector = ",";
+        }
+        
+        if($vo->obs != null){
+        	$retorno.= $sqlConector . vopessoa::$nmAtrObservacao . " = " . $this->getVarComoString($vo->obs);
         	$sqlConector = ",";
         }
         
@@ -352,6 +358,7 @@ include_once (caminho_vos. "dbpessoagestor.php");
         $retorno.= $this-> getVarComoString($tel) . ",";
         $retorno.= $this-> getVarComoString($email) . ",";
         $retorno.= $this-> getVarComoString($endereco);
+
 		return $retorno;				
 	}    
 

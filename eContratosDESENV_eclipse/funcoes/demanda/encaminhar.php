@@ -110,7 +110,7 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 }
 
 </SCRIPT>
-<?=setTituloPagina(null)?>
+<?=setTituloPagina($vo->getTituloJSP())?>
 </HEAD>
 <BODY class="paginadados" onload="">
 	  

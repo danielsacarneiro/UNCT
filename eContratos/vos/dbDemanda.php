@@ -151,8 +151,8 @@ class dbDemanda extends dbprocesso {
 		$queryFrom .= "\n AND " . $nmTabelaDemandaTramDoc . "." . voDemandaTramDoc::$nmAtrSqDoc . "=" . $nmTabelaDocumento . "." . voDocumento::$nmAtrSq;
 		
 		$filtro = new filtroManterDemanda (false);		
-		
-		$filtro->vodemanda = $vo;
+		$filtro->vodemanda->cd = $vo->cd;
+		$filtro->vodemanda->ano = $vo->ano;
 		$filtro->TemPaginacao = false;
 		
 		//echo $vo->texto;

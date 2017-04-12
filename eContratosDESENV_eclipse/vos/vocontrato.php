@@ -94,7 +94,10 @@ include_once(caminho_funcoes."documento/dominioTpDocumento.php");
 
 // ...............................................................
 // Funções ( Propriedades e métodos da classe )
-
+	public static function getTituloJSP(){
+		return  "CONTRATO";
+	}
+    
     public static function getNmTabela(){
         return  "contrato";
     }

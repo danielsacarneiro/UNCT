@@ -39,7 +39,10 @@ function getDescricaoSetor(cdSetor){
   	static $CD_SETOR_ATJA= 3;
   	static $CD_SETOR_DIlC= 4;
   	static $CD_SETOR_PGE= 5;
-  	static $CD_SETOR_SAD= 6;*/	
+  	static $CD_SETOR_SAD= 6;
+  	static $CD_SETOR_UNCP= 7;
+  	static $CD_SETOR_CPL= 8;	
+	static $CD_SETOR_UNSG= 9;*/
 	
 	if(cdSetor == 1){
 		retorno = "SAFI";		
@@ -53,6 +56,12 @@ function getDescricaoSetor(cdSetor){
 		retorno = "PGE";
 	}else if(cdSetor == 6){
 		retorno = "SAD";
+	}else if(cdSetor == 7){
+		retorno = "UNCP";
+	}else if(cdSetor == 8){
+		retorno = "CPL";
+	}else if(cdSetor == 9){
+		retorno = "UNSG";
 	}
 	
 	return retorno;

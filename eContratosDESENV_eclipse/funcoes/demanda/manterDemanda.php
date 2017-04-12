@@ -42,7 +42,7 @@ $voDemandaContrato->getDadosBanco($colecao);
 
 <!DOCTYPE html>
 <HEAD>
-<?=setTituloPagina(null)?>
+<?=setTituloPagina($vo->getTituloJSP())?>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_cnpfcnpj.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_text.js"></SCRIPT>
@@ -108,11 +108,11 @@ function confirmar() {
 	            <TD class="campoformulario" colspan=3>	            
 	            <?php echo "Ano: " . $selectExercicio->getHtmlCombo("","", $vo->ano, true, "camporeadonly", false, " disabled ");?>	            	            
 	            Número: <INPUT type="text" value="<?=complementarCharAEsquerda($vo->cd, "0", TAMANHO_CODIGOS);?>"  class="camporeadonly" size="6" readonly>
-	            <?php echo "Tipo: " . $comboTipo->getHtmlCombo("","", $vo->tipo, true, "camporeadonly", false, " disabled ");?>
+	            <?php echo "Tipo: " . $comboTipo->getHtmlCombo(voDemanda::$nmAtrTipo, voDemanda::$nmAtrTipo, $vo->tipo, true, "campoobrigatorio", false, " required ");?>
 	            
 	            <INPUT type="hidden" id="<?=voDemanda::$nmAtrAno?>" name="<?=voDemanda::$nmAtrAno?>" value="<?=$vo->ano?>">
 				<INPUT type="hidden" id="<?=voDemanda::$nmAtrCd?>" name="<?=voDemanda::$nmAtrCd?>" value="<?=$vo->cd?>">	            			  
-				<INPUT type="hidden" id="<?=voDemanda::$nmAtrTipo?>" name="<?=voDemanda::$nmAtrTipo?>" value="<?=$vo->tipo?>">
+				<!-- <INPUT type="hidden" id="<?=voDemanda::$nmAtrTipo?>" name="<?=voDemanda::$nmAtrTipo?>" value="<?=$vo->tipo?>"> -->
 				<INPUT type="hidden" id="<?=voDemanda::$nmAtrCdSetor?>" name="<?=voDemanda::$nmAtrCdSetor?>" value="<?=$vo->cdSetor?>">
 	        </TR>
 			<TR>
@@ -130,7 +130,7 @@ function confirmar() {
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Título:</TH>
 	            <TD class="campoformulario" colspan=3>				
-	            <INPUT type="text" value="<?=$vo->texto?>"  class="camporeadonly" size="80" readonly>	            	                        	                        
+	            <INPUT type="text" id="<?=voDemanda::$nmAtrTexto?>" name="<?=voDemanda::$nmAtrTexto?>" value="<?=$vo->texto?>"  class="campoobrigatorio" size="80" required>	            	                        	                        
 	        </TR>	        	        
 	        <?php	        	        	        
 	        //so exibe contrato se tiver

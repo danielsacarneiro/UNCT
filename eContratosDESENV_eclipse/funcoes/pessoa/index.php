@@ -164,7 +164,7 @@ function alterar() {
                     <TH class="headertabeladados">Doc.</TH>
                     <TH class="headertabeladados">vínculo</TH>
                     <TH class="headertabeladados" width="1%">Email</TH>
-                    <TH class="headertabeladados" width="1%">Telefone</TH>
+                    <TH class="headertabeladados" width="10%">Telefone</TH>
                 </TR>
                 <?php								
                 if (is_array($colecao))
@@ -191,7 +191,7 @@ function alterar() {
                     <TD class="tabeladados"><?php echo $docFormatado;?></TD>
                     <TD class="tabeladados"><?php echo $vinculo;?></TD>
                     <TD class="tabeladados"><?php echo $colecao[$i][vopessoa::$nmAtrEmail];?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $colecao[$i][vopessoa::$nmAtrTel]?></TD>
+                    <TD class="tabeladados"><?php echo $colecao[$i][vopessoa::$nmAtrTel]?></TD>
                 </TR>					
                 <?php
 				}				

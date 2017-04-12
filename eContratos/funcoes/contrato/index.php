@@ -2,7 +2,6 @@
 include_once("../../config_lib.php");
 include_once(caminho_util."bibliotecaHTML.php");
 include_once(caminho_util."constantes.class.php");
-include_once("dominioTipoContrato.php");
 include_once(caminho_util. "select.php");
 include_once(caminho_vos . "dbcontrato.php");
 
@@ -54,9 +53,9 @@ $colecao = $dbprocesso->consultarFiltroManterContrato($voContrato, $filtro);
 //aqui verifica se pelo menos um filtro valido foi inserido
 //se nao, seta os filtros defalts para diminuir o retorno da consulta
 //o trecho deve ficar depois da consulta que eh quando sao setados no filtro os valores default
-if($filtro->temValorDefaultSetado){
+//if($filtro->temValorDefaultSetado){
 	$anoContrato  = $filtro->anoContrato;
-}
+//}
 
 $qtdRegistrosPorPag = $filtro->qtdRegistrosPorPag;
 $numTotalRegistros = $filtro->numTotalRegistros;
@@ -117,16 +116,6 @@ function selecionar() {
 		window.close();
 	}
 }
-
-/*function limparFormulario() {	
-
-	for(i=0;i<frm_principal.length;i++){
-		frm_principal.elements[i].value='';
-	}	
-	frm_principal.<?=vocontrato::$nmAtrAnoContrato?>.value = <?php echo(anoDefault);?>;
-	frm_principal.<?=vocontrato::$nmAtrDtVigenciaInicialContrato?>.value = "<?php echo dtHoje;?>";
-	frm_principal.<?=vocontrato::$nmAtrDtVigenciaFinalContrato?>.value = "<?php echo dtHoje;?>";	
-}*/
 
 function detalhar(isExcluir) {    
     if(isExcluir == null || !isExcluir)

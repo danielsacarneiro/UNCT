@@ -105,7 +105,7 @@ function encaminhar() {
 }
 
 </SCRIPT>
-<?=setTituloPagina(null)?>
+<?=setTituloPagina($vo->getTituloJSP())?>
 </HEAD>
 <BODY class="paginadados" onload="">
 	  
@@ -128,6 +128,7 @@ function encaminhar() {
     <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
         <TBODY>
 	        <?php	        	
+	        	$comboTipo = new select(dominioTipoDemanda::getColecao());
 	        	$comboSituacao = new select(dominioSituacaoDemanda::getColecao());
 	        	$comboSetor = new select(dominioSetor::getColecao());
 	        	$comboPrioridade = new select(dominioPrioridadeDemanda::getColecao());
@@ -138,6 +139,7 @@ function encaminhar() {
 	            <TD class="campoformulario" colspan=3>
 	            <?php echo "Ano: " . $selectExercicio->getHtmlCombo(voDemanda::$nmAtrAno,voDemanda::$nmAtrAno, $filtro->vodemanda->ano, true, "camponaoobrigatorio", false, "");?>
 			  Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voDemanda::$nmAtrCd?>" name="<?=voDemanda::$nmAtrCd?>"  value="<?php echo(complementarCharAEsquerda($filtro->vodemanda->cd, "0", TAMANHO_CODIGOS));?>"  class="camponaoobrigatorio" size="6" maxlength="5">
+			  <?php echo "Tipo: " . $comboTipo->getHtmlCombo(voDemanda::$nmAtrTipo, voDemanda::$nmAtrTipo, $filtro->vodemanda->tipo, true, "camponaoobrigatorio", false, "");?>
 			</TR>			            
             <TR>
                 <TH class="campoformulario" nowrap width="1%">Setor.Resp.:</TH>
@@ -250,10 +252,12 @@ function encaminhar() {
                 	$colspan++;
                 }
                 
+                $dominioTipoContrato = new dominioTipoContrato();
+                
                 for ($i=0;$i<$tamanho;$i++) {
                         $voAtual = new voDemanda();
                         $voAtual->getDadosBanco($colecao[$i]);     
-                        
+                                                
                         //$especie = getDsEspecie($voAtual);
                         $cdSituacao = $voAtual->situacao;
                         $situacao = $dominioSituacao->getDescricao($cdSituacao);
@@ -268,6 +272,16 @@ function encaminhar() {
                         $setorDestinoAtual = $dominioSetor->getDescricao($setorDestinoAtual);
                         
                         $tipo = $dominioTipo->getDescricao($voAtual->tipo);
+                        if($voAtual->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO){
+                        	$voDemandaContrato = new voDemandaContrato();
+                        	$voDemandaContrato->getDadosBanco($colecao[$i]);
+                        	
+                        	$contrato = formatarCodigoAnoComplemento($voDemandaContrato->voContrato->cdContrato,
+                        			$voDemandaContrato->voContrato->anoContrato,
+                        			$dominioTipoContrato->getDescricao($voDemandaContrato->voContrato->tipo));                        	
+                        	 
+                        	$tipo = $tipo . ":". $contrato;
+                        }
                         $prioridade = $dominioPrioridade->getDescricao($voAtual->prioridade);
                         
                         $nmUsuario = $voAtual->nmUsuarioInclusao;

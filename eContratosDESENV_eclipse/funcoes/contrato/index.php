@@ -64,7 +64,7 @@ $numTotalRegistros = $filtro->numTotalRegistros;
 <!DOCTYPE html>
 <HTML>
 <HEAD>
-<?=setTituloPagina(null)?>
+<?=setTituloPagina(vocontrato::getTituloJSP())?>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>mensagens_globais.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_datahora.js"></SCRIPT>

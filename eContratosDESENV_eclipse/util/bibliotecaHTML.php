@@ -52,8 +52,12 @@ function setTituloPaginaPorNivel($titulo, $qtdNiveisAcimaEmSeEncontraPagina) {
 	$pastaJS = caminho_js;
 	$pastaJS = subirNivelPasta ( $pastaJS, $qtdNiveisAcimaEmSeEncontraPagina );
 	
-	if ($titulo == null)
+	if ($titulo == null){
 		$titulo = constantes::$nomeSistema . " :: U N C T";
+	}
+	else{
+		$titulo = constantes::$nomeSistema . " : $titulo";
+	}
 	
 	$codificacaoHTML = "\n<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'>";
 	$html = $codificacaoHTML;

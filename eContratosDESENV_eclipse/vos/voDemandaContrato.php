@@ -90,6 +90,7 @@ Class voDemandaContrato extends voentidade{
 		$this->cdDemanda = $registrobanco[self::$nmAtrCdDemanda];
 		$this->anoDemanda  = $registrobanco[self::$nmAtrAnoDemanda];
 		
+		$this->voContrato = new vocontrato();
 		$this->voContrato->cdContrato = $registrobanco[self::$nmAtrCdContrato];
 		$this->voContrato->anoContrato = $registrobanco[self::$nmAtrAnoContrato];
 		$this->voContrato->tipo = $registrobanco[self::$nmAtrTipoContrato];		

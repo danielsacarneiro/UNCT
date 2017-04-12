@@ -166,7 +166,7 @@ include_once(caminho_util."dominioSetor.php");
                 
 	function toString(){						
 		$retorno.= "Ano:". $this->ano. ",";
-        $retorno.= "Setor:". $this->cdSetor . ",";        
+        $retorno.= "Setor:". $this->cdSetor . ",";
         $retorno.= "TpDoc:". $this->tp. ",";
         $retorno.= "Sq:". $this->sq . ",";
         $retorno.= "Link:". $this->link. ",";
@@ -186,5 +186,10 @@ include_once(caminho_util."dominioSetor.php");
 		$this->tp = $array[2];
 		$this->sq = $array[3];
 	}
+	
+	function getMensagemComplementarTelaSucesso(){
+		$retorno = "Documento: " . $this->formatarCodigo();
+		return $retorno;
+	}	
 }
 ?>

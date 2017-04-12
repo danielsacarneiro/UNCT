@@ -13,6 +13,7 @@ include_once(caminho_util."DocumentoPessoa.php");
         static $nmAtrTel =  "pe_tel";
 		static $nmAtrEmail =  "pe_email";
 		static $nmAtrEndereco =  "pe_endereco";
+		static $nmAtrObservacao =  "pe_obs";
 		
 		static $ID_CONTRATO = "ID_CONTRATO_PESSOA";
 		static $ID_NOME_DADOS_CONTRATADA = "ID_NOME_DADOS_CONTRATADA";
@@ -23,6 +24,7 @@ include_once(caminho_util."DocumentoPessoa.php");
 		var $doc =  "";
 		var $email =  "";
         var $tel =  "";
+        var $obs =  "";
 
 // ...............................................................
 // FunÃ§Ãµes ( Propriedades e mÃ©todos da classe )
@@ -58,7 +60,8 @@ include_once(caminho_util."DocumentoPessoa.php");
             self::$nmAtrDoc,
             self::$nmAtrTel,            
             self::$nmAtrEmail,
-        	self::$nmAtrEndereco
+        	self::$nmAtrEndereco,
+        	self::$nmAtrObservacao
         );
         
         return $retorno;    
@@ -74,6 +77,7 @@ include_once(caminho_util."DocumentoPessoa.php");
         $this->tel = $registrobanco[vopessoa::$nmAtrTel];
         $this->email = $registrobanco[vopessoa::$nmAtrEmail];        		
         $this->endereco = $registrobanco[vopessoa::$nmAtrEndereco];
+        $this->obs = $registrobanco[vopessoa::$nmAtrObservacao];
 	}   
 	
 	function getDadosFormulario(){
@@ -88,6 +92,7 @@ include_once(caminho_util."DocumentoPessoa.php");
         }
         $this->tel = @$_POST[vopessoa::$nmAtrTel]; 
         $this->endereco = @$_POST[vopessoa::$nmAtrEndereco];
+        $this->obs= @$_POST[vopessoa::$nmAtrObservacao];
         
         $this->dhUltAlteracao = @$_POST[vopessoa::$nmAtrDhUltAlteracao];
         $this->sqHist = @$_POST[vopessoa::$nmAtrSqHist];
@@ -119,7 +124,8 @@ include_once(caminho_util."DocumentoPessoa.php");
 	static function getAtributosOrdenacao(){
 		$varAtributos = array(
 				self::$nmAtrNome => "Nome",
-				vopessoavinculo::$nmAtrCd=> "Vinculo"
+				vopessoavinculo::$nmAtrCd=> "Vinculo",
+				vopessoa::getNmTabela() . "." .vopessoa::$nmAtrDhUltAlteracao=> "Data.Alteração"
 		);
 		return $varAtributos;
 	}	

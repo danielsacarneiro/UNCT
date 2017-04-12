@@ -87,11 +87,11 @@ class filtroManterPessoa extends filtroManter{
 					$conector  = "\n AND ";
 		}
 		
-		if($this->doc != null){
+		if($this->doc != null){			
 			$filtro = $filtro . $conector
 						. $nmTabela. "." .vopessoa::$nmAtrDoc
 						. "='"
-						. $this->doc
+						. documentoPessoa::getNumeroDocSemMascara($this->doc)
 						. "'";
 			
 			$conector  = "\n AND ";

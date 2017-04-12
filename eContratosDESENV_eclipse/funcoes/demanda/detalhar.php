@@ -42,7 +42,7 @@ $voDemandaContrato->getDadosBanco($colecao);
 
 <!DOCTYPE html>
 <HEAD>
-<?=setTituloPagina(null)?>
+<?=setTituloPagina($vo->getTituloJSP())?>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_cnpfcnpj.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_text.js"></SCRIPT>

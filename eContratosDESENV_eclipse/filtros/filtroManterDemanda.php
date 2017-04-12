@@ -97,6 +97,16 @@ class filtroManterDemanda extends filtroManter{
 					$conector  = "\n AND ";		
 		}
 		
+		if($this->vodemanda->tipo != null){
+			$filtro = $filtro . $conector
+			. $nmTabela. "." .voDemanda::$nmAtrTipo
+			. " = "
+					. $this->vodemanda->tipo
+					;
+		
+					$conector  = "\n AND ";
+		}
+		
 		if($this->vodemanda->cdSetor != null){
 			$filtro = $filtro . $conector
 			. $nmTabela. "." .voDemanda::$nmAtrCdSetor
@@ -264,6 +274,7 @@ class filtroManterDemanda extends filtroManter{
 				voDemanda::$nmAtrDtReferencia => "Data.Referência",
 				filtroManterDemanda::$NmColDhUltimaMovimentacao => "Data.Movimentação",
 				voDemanda::$nmAtrPrioridade => "Prioridade",				
+				voDemanda::$nmAtrTipo => "Tipo",
 				voDemanda::$nmAtrCd => "Número"
 		);
 		return $varAtributos;
