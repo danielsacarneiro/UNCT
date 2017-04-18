@@ -73,14 +73,18 @@ function setCabecalhoPorNivel($titulo, $qtdNiveisAcimaEmSeEncontraPagina) {
 	
 	define ( 'pasta_imagens', $pastaImagens );
 	
-	if ($titulo != null)
+	if ($titulo != null){
 		$titulo = " - " . $titulo;
+	}
+		
+	$diaExtenso = strftime('%A, %d de %B de %Y', strtotime('today'));	
+	//$diaExtenso = date ( 'l jS \of F Y' );	
 	
 	$cabecalho = "		<TABLE id='table_conteiner' class='conteiner' cellpadding='0' cellspacing='0'>
                         <TBODY>
                                 <TR>
                                 <TH class=headertabeladados colspan=2>
-                                    <img id=imgLogotipoSefaz src='" . $pastaImagens . "marca_sefaz.png' alt='SEFAZ-PE'> SAFI - UNIDADE DE CONTRATOS, " . date ( 'l jS \of F Y' ) . "
+                                    <img id=imgLogotipoSefaz src='" . $pastaImagens . "marca_sefaz.png' alt='SEFAZ-PE'> SAFI - UNIDADE DE CONTRATOS, " . $diaExtenso . "
                                 </TH>
                                 </TR>                                
                                 <TR>

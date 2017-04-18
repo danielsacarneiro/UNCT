@@ -1,5 +1,7 @@
 <?php
 date_default_timezone_set('America/Recife');
+setlocale(LC_ALL, 'portuguese');
+//setlocale(LC_ALL, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
 set_exception_handler("pegaExcecaoSemTratamento");
 
 //função definida pelo usuário para pegar exceções não tratadas
