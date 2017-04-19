@@ -5,6 +5,7 @@
  Dependencias:
  - biblioteca_funcoes_principal.js
  - biblioteca_funcoes_ajax.js
+ - biblioteca_funcoes_oficio.js
 */
 
 function carregaDadosContratada(pNmCampoAnoContrato, pNmCampoTipoContrato, pNmCampoCdContrato, pNmCampoCdEspecieContrato, pNmCampoSqEspecieContrato, pNmCampoDiv){
@@ -40,4 +41,26 @@ function carregaDadosContratada(pNmCampoAnoContrato, pNmCampoTipoContrato, pNmCa
 		//vai no ajax
 		getDadosContratadaPorContrato(str, pNmCampoDiv);
 	}
+}
+
+function getNomePessoaContratada(pNmCampoPessoa){
+	try{
+		camposContratada = document.getElementsByName(pNmCampoPessoa);
+		numContratadas = camposContratada.length;
+
+		campoNomeContratada = null;
+		if(numContratadas == 1){
+			campoNomeContratada = camposContratada[0];
+		}else{
+			//pega o ultimo
+			campoNomeContratada = camposContratada[numContratadas-1];
+		}		
+		
+		nmContrata = campoNomeContratada.value;		
+		nmContrata = truncarTexto(nmContrata, 20, "");
+	}catch(ex){
+		nmContrata = "";
+	}
+	
+	return nmContrata;
 }

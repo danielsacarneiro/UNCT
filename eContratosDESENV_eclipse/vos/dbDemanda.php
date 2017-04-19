@@ -280,7 +280,7 @@ class dbDemanda extends dbprocesso {
 		}
 		
 		if ($vo->texto != null) {
-			$retorno .= $sqlConector . voDemanda::$nmAtrTexto . " = " . $this->getVarComoString($vo->texto);
+			$retorno .= $sqlConector . voDemanda::$nmAtrTexto . " = " . $this->getVarComoString(strtoupper($vo->texto));
 			$sqlConector = ",";
 		}
 		

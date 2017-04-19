@@ -20,8 +20,6 @@ $readonlyChaves = "";
 $disabledChaves = "";
 $required = "";
 
-session_start();
-
 $nmFuncao = "";
 if($isInclusao){    
 	$nmFuncao = "INCLUIR ";	
@@ -88,13 +86,26 @@ function criarNomeDocumento(){
 	cdContrato = document.frm_principal.<?=vocontrato::$nmAtrCdContrato?>.value;
 	tpContrato = document.frm_principal.<?=vocontrato::$nmAtrTipoContrato?>.value;
 	tpContrato = getDescricaoTipoContrato(tpContrato);
+	
+	/*try{
+		camposContratada = document.getElementsByName('<?=vopessoa::$ID_NOME_DADOS_CONTRATADA?>');
+		numContratadas = camposContratada.length;
 
-	try{
-		nmContrata = document.frm_principal.<?=vopessoa::$ID_NOME_DADOS_CONTRATADA?>.value;		
+		campoNomeContratada = null;
+		if(numContratadas == 1){
+			campoNomeContratada = camposContratada[0];
+		}else{
+			//pega o ultimo
+			campoNomeContratada = camposContratada[numContratadas-1];
+		}		
+		
+		nmContrata = campoNomeContratada.value;		
 		nmContrata = truncarTexto(nmContrata, 20, "");
 	}catch(ex){
 		nmContrata = "";
-	}
+	}*/
+
+	nmContrata = getNomePessoaContratada('<?=vopessoa::$ID_NOME_DADOS_CONTRATADA?>');
 	nmContrata = "_" + nmContrata  + "_";
 	
 	complemento = formatarCodigoDocumento(cdContrato, "", anoContrato, tpContrato);
