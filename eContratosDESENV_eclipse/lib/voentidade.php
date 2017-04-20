@@ -42,7 +42,7 @@
     
 	function __construct() {
 		//exemplo de chamada de construtor da classe pai em caso de override
-		//parent::__construct($altura,$grossura,$largura,$cor); 
+		//parent::__construct($altura,$grossura,$largura,$cor);
 		$this->varAtributos = array(
             voentidade::$nmAtrDhInclusao,
             voentidade::$nmAtrDhUltAlteracao,
@@ -52,6 +52,7 @@
 		$this->cdUsuarioUltAlteracao = id_user;
 		$this->NM_METODO_RETORNO_CONFIRMAR = null;
 		$this->temTabHistorico = true;
+				
     }
     
     

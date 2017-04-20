@@ -189,6 +189,19 @@ function removeElementoArray($input, $elem) {
 	
 	return $input;
 }
+/*
+ * faz o merge de array com as chaves
+ */
+function array_merge_keys(){
+	$args = func_get_args();
+	$result = array();
+	foreach($args as &$array){
+		foreach($array as $key=>&$value){
+			$result[$key] = $value;
+		}
+	}
+	return $result;
+}
 function getColecaoEntreSeparador($colecaoAtributos, $separador) {
 	return getColecaoEntreSeparadorAspas ( $colecaoAtributos, $separador, false );
 }

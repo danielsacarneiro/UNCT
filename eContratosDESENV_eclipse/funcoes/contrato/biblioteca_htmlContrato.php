@@ -24,7 +24,7 @@ if($voContrato != null && $voContrato->cdContrato){
 				<INPUT type="hidden" id="<?=vocontrato::$nmAtrTipoContrato?>" name="<?=vocontrato::$nmAtrTipoContrato?>" value="<?=$voContrato->tipo?>">
                 <TH class="campoformulario" nowrap width=1%>Contrato:</TH>
 				<TD class="campoformulario" colspan=3>Número:&nbsp;&nbsp;&nbsp;&nbsp;
-				<INPUT type="text" value="<?php echo($contrato);?>"  class="camporeadonlyalinhadodireita" size="<?=strlen($contrato)?>" readonly>				
+				<INPUT type="text" value="<?php echo($contrato);?>"  class="camporeadonlyalinhadodireita" size="<?=strlen($contrato)+1?>" readonly>				
 				<div id=""><?=$campoContratado?></div></TD>
             </TR>	                
 <?php }

@@ -165,7 +165,7 @@ function encaminhar() {
 	        </TR>            
 			<TR>
 				<?php
-				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioAutorizacao.php");				
+				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioAutorizacao.php");
 				$combo = new select(dominioAutorizacao::getColecao());						
 				?>
 	            <TH class="campoformulario" nowrap>Autorização:</TH>
@@ -228,6 +228,7 @@ function encaminhar() {
                     <TH class="headertabeladados" width="1%">Setor.Resp</TH>
                     <TH class="headertabeladados" width="1%">Setor.Atual</TH>
                     <TH class="headertabeladados" width="1%">Tipo</TH>
+                    <TH class="headertabeladados" width="1%">Contrato</TH>
                     <TH class="headertabeladados"width="90%" nowrap >Texto</TH>
                     <TH class="headertabeladados" width="1%">Situação</TH>                    
                     <TH class="headertabeladados" width="1%">Prior.</TH>
@@ -247,7 +248,7 @@ function encaminhar() {
                 $dominioTipo = new dominioTipoDemanda();
                 $dominioPrioridade = new dominioPrioridadeDemanda();
                                 
-                $colspan=12;
+                $colspan=13;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -272,7 +273,8 @@ function encaminhar() {
                         $setorDestinoAtual = $dominioSetor->getDescricao($setorDestinoAtual);
                         
                         $tipo = $dominioTipo->getDescricao($voAtual->tipo);
-                        if($voAtual->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO){
+                        if($voAtual->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO
+                        		|| $voAtual->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_PROCADM){
                         	$voDemandaContrato = new voDemandaContrato();
                         	$voDemandaContrato->getDadosBanco($colecao[$i]);
                         	
@@ -280,7 +282,7 @@ function encaminhar() {
                         			$voDemandaContrato->voContrato->anoContrato,
                         			$dominioTipoContrato->getDescricao($voDemandaContrato->voContrato->tipo));                        	
                         	 
-                        	$tipo = $tipo . ":". $contrato;
+                        	//$tipo = $tipo . ":". $contrato;
                         }
                         $prioridade = $dominioPrioridade->getDescricao($voAtual->prioridade);
                         
@@ -307,6 +309,7 @@ function encaminhar() {
 					<TD class="tabeladados" nowrap><?php echo $setor?></TD>
 					<TD class="tabeladados" nowrap><?php echo $setorDestinoAtual?></TD>
 					<TD class="tabeladados" nowrap><?php echo $tipo?></TD>
+					<TD class="tabeladados" nowrap><?php echo $contrato?></TD>
                     <TD class="tabeladados" ><?php echo $voAtual->texto;?></TD>
                     <TD class="<?=$classColunaSituacao;?>" nowrap><?php echo $situacao?></TD>                    
                     <TD class="tabeladados" nowrap><?php echo $prioridade?></TD>

@@ -1,0 +1,150 @@
+<?php
+include_once(caminho_lib."voentidade.php");
+include_once("dbDemanda.php");
+include_once (caminho_util."bibliotecaFuncoesPrincipal.php");
+include_once (caminho_util."dominioSetor.php");
+include_once(caminho_funcoes. "contrato/dominioAutorizacao.php");
+include_once(caminho_funcoes. "contrato/dominioEspeciesContrato.php");
+include_once (caminho_util."documentoPessoa.php");
+
+Class voContratoInfo extends voentidade{
+	
+	static $nmAtrCdContrato  = "ct_numero";
+	static $nmAtrAnoContrato  = "ct_exercicio";
+	static $nmAtrTipoContrato =  "ct_tipo";
+	
+	static $nmAtrCdAutorizacaoContrato =  	"ctinf_cd_autorizacao";
+	static $nmAtrObs = "ctinf_obs";
+	static $nmAtrDtProposta = "ctinf_dt_proposta";
+	 
+	var $cd = "";
+	var $ano  = "";
+	var $tipo = "";	
+	var $cdAutorizacao = "";
+	var $obs = "";
+	var $dtProposta = "";
+	 
+	var $dbprocesso = null;
+	// ...............................................................
+	// Funcoes ( Propriedades e mÃ©todos da classe )
+
+	function __construct() {
+		parent::__construct();
+		$this->temTabHistorico = false;
+		$class = self::getNmClassProcesso();
+		$this->dbprocesso= new $class();
+		//retira os atributos padrao que nao possui
+		//remove tambem os que o banco deve incluir default
+		$arrayAtribRemover = array(
+				self::$nmAtrDhInclusao,
+				self::$nmAtrDhUltAlteracao
+		);
+		$this->removeAtributos($arrayAtribRemover);
+		$this->varAtributosARemover = $arrayAtribRemover;
+	}
+	 
+	public static function getTituloJSP(){
+		return  "CONTRATO-INFORMAÇÕES ADICIONAIS";
+	}
+
+	public static function getNmTabela(){
+		return  "contrato_info";
+	}
+
+	public static function getNmClassProcesso(){
+		return  "dbContratoInfo";
+	}
+
+	function getValoresWhereSQLChave($isHistorico){
+		$nmTabela = $this->getNmTabelaEntidade($isHistorico);
+		$query = $nmTabela . "." . self::$nmAtrAnoContrato . "=" . $this->ano;
+		$query .= " AND " . $nmTabela . "." . self::$nmAtrCdContrato . "=" . $this->cd;
+		$query .= " AND " . $nmTabela . "." . self::$nmAtrTipoContrato . "=" . getVarComoString($this->tipo);
+
+		if($isHistorico)
+			$query.= " AND ". $nmTabela . "." . self::$nmAtrSqHist . "=" . $this->sqHist;
+
+			return $query;
+	}
+
+	function getAtributosFilho(){
+		$retorno = array(
+				self::$nmAtrAnoContrato,
+				self::$nmAtrCdContrato,
+				self::$nmAtrTipoContrato,
+				self::$nmAtrCdAutorizacaoContrato,
+				self::$nmAtrObs,
+				self::$nmAtrDtProposta
+		);
+
+		return $retorno;
+	}
+
+	function getAtributosChavePrimaria(){
+		$retorno = array(
+				self::$nmAtrAnoContrato,
+				self::$nmAtrTipoContrato,
+				self::$nmAtrCdContrato
+		);
+
+		return $retorno;
+	}
+
+	function getVOContrato(){
+		$retorno = new vocontrato();
+		$retorno->cdContrato = $this->cd;
+		$retorno->anoContrato = $this->ano;
+		$retorno->tipo = $this->tipo;
+			
+		return $retorno;
+	}
+	
+	function getDadosRegistroBanco($registrobanco){
+		//as colunas default de voentidade sao incluidas pelo metodo getDadosBanco do voentidade
+		$this->cd = $registrobanco[self::$nmAtrCdContrato];
+		$this->ano  = $registrobanco[self::$nmAtrAnoContrato];
+		$this->tipo  = $registrobanco[self::$nmAtrTipoContrato];
+		$this->cdAutorizacao  = $registrobanco[self::$nmAtrCdAutorizacaoContrato];
+		$this->obs = $registrobanco[self::$nmAtrObs];
+		$this->dtProposta = $registrobanco[self::$nmAtrDtProposta];		 
+	}
+
+	function getDadosFormulario(){
+		$this->cd = @$_POST[self::$nmAtrCdContrato];
+		$this->ano  = @$_POST[self::$nmAtrAnoContrato];
+		$this->tipo  = @$_POST[self::$nmAtrTipoContrato];
+		$this->cdAutorizacao  = @$_POST[self::$nmAtrCdAutorizacaoContrato];
+		$this->obs = @$_POST[self::$nmAtrObs];
+		$this->dtProposta = @$_POST[self::$nmAtrDtProposta];
+		//completa com os dados da entidade
+		$this->getDadosFormularioEntidade();
+	}
+	 
+	function toString(){
+		/*$retorno.= $this->ano;
+		$retorno.= "," . $this->tipo;
+		$retorno.= "," . $this->cd;*/
+		return formatarCodigoContrato($this->cd, $this->ano, $this->tipo);
+	}
+
+	function getValorChavePrimaria(){
+		return $this->ano
+		. CAMPO_SEPARADOR
+		. $this->cd
+		. CAMPO_SEPARADOR
+		. $this->tipo;
+	}
+
+	function getChavePrimariaVOExplode($array){
+		$this->ano = $array[0];
+		$this->cd = $array[1];
+		$this->tipo = $array[2];
+	}
+	
+	function getMensagemComplementarTelaSucesso(){
+		$retorno = "Contrato : " . formatarCodigoContrato($this->cd, $this->ano, $this->tipo);
+		return $retorno; 
+	}	
+
+}
+?>

@@ -3,7 +3,7 @@ header ('Content-type: text/html; charset=ISO-8859-1');
 
   Class constantes {	
 	
-	static $nomeSistema = "e-Contr@tos";
+	static $nomeSistema = "e@CONTi";
 	static $DATA_INICIO = "01/01/1900";
 	static $DATA_FIM = "01/01/2099";
 	

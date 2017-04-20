@@ -7,6 +7,7 @@ include_once ("dominioPermissaoUsuario.php");
 include_once ("dominioQtdObjetosPagina.php");
 include_once ("radiobutton.php");
 include_once (caminho_vos . "vousuario.php");
+require_once (caminho_funcoes . "contrato/dominioTipoContrato.php");
 
 // .................................................................................................................
 
@@ -585,9 +586,7 @@ function removeObjetoSessao($ID) {
 	session_start ();
 	unset ( $_SESSION [$ID] );
 }
-function formatarCodigoContrato($cd, $ano, $tipo) {
-	require_once ("../contrato/dominioTipoContrato.php");
-	
+function formatarCodigoContrato($cd, $ano, $tipo) {	
 	$dominioTipoContrato = new dominioTipoContrato ();
 	$complemento = $dominioTipoContrato->getDescricao ( $tipo );
 	return formatarCodigoAnoComplemento ( $cd, $ano, $complemento );

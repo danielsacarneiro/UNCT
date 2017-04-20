@@ -25,6 +25,7 @@ CREATE TABLE contrato (
     ct_dt_assinatura DATE,
     ct_dt_vigencia_inicio DATE,
     ct_dt_vigencia_fim DATE,    
+	ct_dt_proposta DATE NULL,
     ct_contratada VARCHAR(300),
     pe_cd_contratada INT,
     ct_doc_contratada VARCHAR(30),
@@ -41,7 +42,6 @@ CREATE TABLE contrato (
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_incl INT,
     cd_usuario_ultalt INT,
-	ct_dt_proposta DATE NULL,
     
     CONSTRAINT pk PRIMARY KEY (sq, ct_exercicio, ct_numero, ct_tipo)
 );
@@ -97,7 +97,8 @@ CREATE TABLE contrato_hist (
     ct_dt_public DATE,
     ct_dt_assinatura DATE,
     ct_dt_vigencia_inicio DATE,
-    ct_dt_vigencia_fim DATE,    
+    ct_dt_vigencia_fim DATE,
+	ct_dt_proposta DATE NULL,
     ct_contratada VARCHAR(300),
     pe_cd_contratada INT,
     ct_doc_contratada VARCHAR(30),
@@ -114,8 +115,29 @@ CREATE TABLE contrato_hist (
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_incl INT,
     cd_usuario_ultalt INT,
-    ct_dt_proposta DATE NULL,
     
     CONSTRAINT pk PRIMARY KEY (hist)
 );
+
+
+drop table contrato_info;
+CREATE TABLE contrato_info (	
+    ct_exercicio INT NOT NULL,
+    ct_numero INT NOT NULL,
+    ct_tipo char(1) NOT NULL,
+    ctinf_cd_autorizacao INT, 
+    ctinf_dt_proposta DATE NULL,
+    ctinf_obs MEDIUMTEXT NULL,
+    
+    dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
+    cd_usuario_incl INT,
+    cd_usuario_ultalt INT,
+    
+    CONSTRAINT pk PRIMARY KEY (ct_exercicio, ct_numero, ct_tipo)
+);
+
+ALTER TABLE contrato_info ADD CONSTRAINT fk_contrato_info FOREIGN KEY (ct_exercicio, ct_numero, ct_tipo) REFERENCES contrato (ct_exercicio, ct_numero, ct_tipo)
+	ON DELETE RESTRICT
+	ON UPDATE RESTRICT;
 

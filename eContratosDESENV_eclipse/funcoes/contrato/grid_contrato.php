@@ -124,9 +124,9 @@
 	                   	<TR> 
                             <TD class="botaofuncao"><button id="bttdetalhar" class="botaofuncaop" type="button" onClick="javascript:detalhar(false);" accesskey="d">Detalhar</button></TD>
                             <TD class="botaofuncao"><?=getBotao("bttMovimentacao", "Movimentações", null, false, "onClick='javascript:movimentacoes();' accesskey='m'")?></TD>
-                            <TD class="botaofuncao"><?=getBotaoIncluir()?></TD>
+                            <!-- <TD class="botaofuncao"><?=getBotaoIncluir()?></TD>
                             <TD class="botaofuncao"><?=getBotaoAlterar()?></TD>
-                            <TD class="botaofuncao"><?=getBotaoExcluir()?></TD>                            
+                            <TD class="botaofuncao"><?=getBotaoExcluir()?></TD>-->                            
                          </TR>
                          </TABLE>
 	                   </TD>

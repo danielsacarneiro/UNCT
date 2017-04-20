@@ -262,18 +262,23 @@ class dbprocesso {
 				
 				$filtroSQLPaginacao = $filtro->getSQLWhere ( false );
 				// echo $filtroSQLPaginacao. "<br>";
-				$queryCount = "SELECT count(*) as " . dbprocesso::$nmCampoCount . $queryFrom . $filtroSQLPaginacao;
+				$queryCount = "SELECT count(*) as " . dbprocesso::$nmCampoCount;
+				$queryCount .= "\n FROM (SELECT 'X' " . $queryFrom . $filtroSQLPaginacao . ") ALIAS_COUNT";
 				
 				// guarda o numero total de registros para nao ter que executar a consulta TODOS novamente
 				$numTotalRegistros = $filtro->numTotalRegistros = $this->getNumTotalRegistrosQuery ( $queryCount );
 				
 				$qtdRegistrosPorPag = $filtro->qtdRegistrosPorPag;
-				// calcula o número de páginas arredondando o resultado para cima
-				$numPaginas = ceil ( $numTotalRegistros / $qtdRegistrosPorPag );
-				$filtro->paginacao->setNumTotalPaginas ( $numPaginas );
 				
-				$inicio = ($qtdRegistrosPorPag * $pagina) - $qtdRegistrosPorPag;
-				$limite = " LIMIT $inicio,$qtdRegistrosPorPag";
+				//echo $qtdRegistrosPorPag;
+				if($qtdRegistrosPorPag != constantes::$CD_OPCAO_TODOS){
+					// calcula o número de páginas arredondando o resultado para cima
+					$numPaginas = ceil ( $numTotalRegistros / $qtdRegistrosPorPag );
+					$filtro->paginacao->setNumTotalPaginas ( $numPaginas );
+					
+					$inicio = ($qtdRegistrosPorPag * $pagina) - $qtdRegistrosPorPag;
+					$limite = " LIMIT $inicio,$qtdRegistrosPorPag";
+				}
 			}
 			
 			// aqui eh onde faz realmente a consulta a retornar
@@ -296,7 +301,11 @@ class dbprocesso {
 		$queryCount = $query;
 		// echo $queryCount;
 		$retorno = $this->cDb->consultar ( $queryCount );
-		$numTotalRegistros = $retorno [0] [dbprocesso::$nmCampoCount];
+		$numTotalRegistros = 0;
+		
+		if($retorno != ""){
+			$numTotalRegistros = $retorno [0] [dbprocesso::$nmCampoCount];
+		}
 		return $numTotalRegistros;
 	}
 	function incluir($voEntidade) {
@@ -304,7 +313,7 @@ class dbprocesso {
 		$query = $this->incluirSQL ( $voEntidade );
 		// echo "<br>".$query."<br>";
 		$retorno = $this->cDb->atualizar ( $query );
-		return $retorno;
+		return $voEntidade;
 	}
 	function incluirQueryVO($voEntidade) {
 		$arrayAtribRemover = $voEntidade->varAtributosARemover;
