@@ -90,7 +90,7 @@ function alterar() {
 }
 
 </SCRIPT>
-<?=setTituloPagina(null)?>
+<?=setTituloPagina(voContratoInfo::getTituloJSP())?>
 </HEAD>
 <BODY class="paginadados" onload="">
 	  
