@@ -5,32 +5,53 @@ class dbContratoInfo extends dbprocesso {
 	function consultarPorChaveTela($vo, $isHistorico) {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
-		$nmTabelaPessoa = vopessoa::getNmTabelaStatic ( false );
+		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
 		
 		$arrayColunasRetornadas = array (
 				$nmTabela . ".*",
-				$nmTabelaPessoa . "." . vopessoa::$nmAtrDoc,
-				 $nmTabelaPessoa . "." . vopessoa::$nmAtrNome
+				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
+				 $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome
 		);
 		
-		$queryJoin .= "\n LEFT JOIN " . $nmTabelaContrato;
-		$queryJoin .= "\n ON ";
-		$queryJoin .= $nmTabela . "." . voContratoInfo::$nmAtrAnoContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato;
-		$queryJoin .= "\n AND ";
-		$queryJoin .= $nmTabela . "." . voContratoInfo::$nmAtrTipoContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato;
-		$queryJoin .= "\n AND ";
-		$queryJoin .= $nmTabela . "." . voContratoInfo::$nmAtrCdContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato;
+		$groupbyinterno = $nmTabela.".".vocontrato::$nmAtrAnoContrato
+		.",".$nmTabela.".". vocontrato::$nmAtrCdContrato
+		.",".$nmTabela.".". vocontrato::$nmAtrTipoContrato;
 		
-		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoa;
+		$nmTabContratoInterna = vocontrato::getNmTabelaStatic(false);
+		$nmTabContratoSqMAX = "TAB_MAXCONTRATO";
+		$queryJoin .= "\n INNER JOIN ";
+		$queryJoin .= " (SELECT "
+			. $groupbyinterno
+			.", MAX(".vocontrato::$nmAtrSqContrato.") AS " . vocontrato::$nmAtrSqContrato. " FROM ".$nmTabContratoInterna;
+		$queryJoin .= " INNER JOIN " . $nmTabela;
 		$queryJoin .= "\n ON ";
-		$queryJoin .= $nmTabelaPessoa . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
+		$queryJoin .= $nmTabela . "." . voContratoInfo::$nmAtrAnoContrato . "=" . $nmTabContratoInterna . "." . vocontrato::$nmAtrAnoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabela . "." . voContratoInfo::$nmAtrTipoContrato . "=" . $nmTabContratoInterna . "." . vocontrato::$nmAtrTipoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabela . "." . voContratoInfo::$nmAtrCdContrato . "=" . $nmTabContratoInterna . "." . vocontrato::$nmAtrCdContrato;
+		$queryJoin .= " GROUP BY " . $groupbyinterno;
+		$queryJoin .= "\n) " . $nmTabContratoSqMAX;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabela . "." . voContratoInfo::$nmAtrAnoContrato . "=" . $nmTabContratoSqMAX . "." . vocontrato::$nmAtrAnoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabela . "." . voContratoInfo::$nmAtrCdContrato . "=" . $nmTabContratoSqMAX . "." . vocontrato::$nmAtrCdContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabela . "." . voContratoInfo::$nmAtrTipoContrato . "=" . $nmTabContratoSqMAX . "." . vocontrato::$nmAtrTipoContrato;		
 		
-		$queryWhere = "\n WHERE ";
+		$queryJoin .= "\n INNER JOIN " . $nmTabelaContrato;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato . "=" . $nmTabContratoSqMAX . "." . vocontrato::$nmAtrSqContrato;
+		
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoaContrato;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
+		
+		/*$queryWhere = "\n WHERE ";
 		$queryWhere .= $vo->getValoresWhereSQLChave ( $isHistorico );
-		$queryWhere.= "\n AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrCdEspecieContrato . "=" . getVarComoString(dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER);
-		//$queryWhere.= "\n AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato . "=" . $this->sqEspecie;		
+		$queryWhere.= "\n AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato . "=" . $this->sqEspecie;*/		
 		
-		return $this->consultarMontandoQuery ( $vo, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico );
+		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryJoin, $isHistorico );
 	}
 	function consultarTelaConsulta($vo, $filtro) {
 		$isHistorico = $filtro->isHistorico;
@@ -44,32 +65,53 @@ class dbContratoInfo extends dbprocesso {
 			$colunaUsuHistorico = static::$nmTabelaUsuarioOperacao . "." . vousuario::$nmAtrName . "  AS " . voDemanda::$nmAtrNmUsuarioOperacao;
 		}
 		$arrayColunasRetornadas = array (
-				$nmTabela . ".*",				
-				"MAX(". $nmTabelaContrato . "."  . vocontrato::$nmAtrSqContrato. ")",
+				$nmTabela . ".*",
 				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
 				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
 				$colunaUsuHistorico 
 		);			
-						
-		$queryJoin .= "\n LEFT JOIN " . $nmTabelaContrato;
+		
+		$groupbyinterno = $nmTabela.".".vocontrato::$nmAtrAnoContrato
+							.",".$nmTabela.".". vocontrato::$nmAtrCdContrato
+							.",".$nmTabela.".". vocontrato::$nmAtrTipoContrato;
+								
+		$nmTabContratoInterna = vocontrato::getNmTabelaStatic(false);
+		$nmTabContratoSqMAX = "TAB_MAXCONTRATO";
+		$queryJoin .= "\n INNER JOIN ";
+		$queryJoin .= " (SELECT " 
+							. $groupbyinterno
+							.", MAX(".vocontrato::$nmAtrSqContrato.") AS " . vocontrato::$nmAtrSqContrato. " FROM ".$nmTabContratoInterna;
+		$queryJoin .= " INNER JOIN " . $nmTabela;		
 		$queryJoin .= "\n ON ";
-		$queryJoin .= $nmTabela . "." . voContratoInfo::$nmAtrAnoContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato;
+		$queryJoin .= $nmTabela . "." . voContratoInfo::$nmAtrAnoContrato . "=" . $nmTabContratoInterna . "." . vocontrato::$nmAtrAnoContrato;
 		$queryJoin .= "\n AND ";
-		$queryJoin .= $nmTabela . "." . voContratoInfo::$nmAtrTipoContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato;
+		$queryJoin .= $nmTabela . "." . voContratoInfo::$nmAtrTipoContrato . "=" . $nmTabContratoInterna . "." . vocontrato::$nmAtrTipoContrato;
 		$queryJoin .= "\n AND ";
-		$queryJoin .= $nmTabela . "." . voContratoInfo::$nmAtrCdContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato;
+		$queryJoin .= $nmTabela . "." . voContratoInfo::$nmAtrCdContrato . "=" . $nmTabContratoInterna . "." . vocontrato::$nmAtrCdContrato;
+		$queryJoin .= " GROUP BY " . $groupbyinterno;
+		$queryJoin .= "\n) " . $nmTabContratoSqMAX;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabela . "." . voContratoInfo::$nmAtrAnoContrato . "=" . $nmTabContratoSqMAX . "." . vocontrato::$nmAtrAnoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabela . "." . voContratoInfo::$nmAtrCdContrato . "=" . $nmTabContratoSqMAX . "." . vocontrato::$nmAtrCdContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabela . "." . voContratoInfo::$nmAtrTipoContrato . "=" . $nmTabContratoSqMAX . "." . vocontrato::$nmAtrTipoContrato;		
+		
+		$queryJoin .= "\n INNER JOIN " . $nmTabelaContrato;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato . "=" . $nmTabContratoSqMAX . "." . vocontrato::$nmAtrSqContrato;
 		
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoaContrato;
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
 		
 		
-		 $arrayGroupby = array($nmTabela . "." . voContratoInfo::$nmAtrAnoContrato,
+		 /*$arrayGroupby = array($nmTabela . "." . voContratoInfo::$nmAtrAnoContrato,
 		 		$nmTabela . "." . voContratoInfo::$nmAtrCdContrato,
 		 		$nmTabela . "." . voContratoInfo::$nmAtrTipoContrato
 		 );
 		
-		 $filtro->groupby = $arrayGroupby;		
+		 $filtro->groupby = $arrayGroupby;*/		
 		
 		return parent::consultarMontandoQueryTelaConsulta ( $vo, $filtro, $arrayColunasRetornadas, $queryJoin );
 	}
