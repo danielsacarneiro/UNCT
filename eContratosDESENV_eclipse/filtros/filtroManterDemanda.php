@@ -234,9 +234,9 @@ class filtroManterDemanda extends filtroManter{
 		if($this->nmContratada != null){
 			$filtro = $filtro . $conector
 			. $nmTabelaPessaContrato. "." .vopessoa::$nmAtrNome
-			. " LIKE '"
-			. substituirCaracterSQLLike($this->nmContratada)
-			. "'"
+			. " LIKE '%"
+			. $this->nmContratada
+			. "%'"
 			;		
 			$conector  = "\n AND ";
 		

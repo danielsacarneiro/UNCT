@@ -55,7 +55,7 @@ class filtroManterContratoInfo extends filtroManter {
 		}
 		
 		if ($this->nmContratada != null) {
-			$filtro = $filtro . $conector . $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome . " LIKE '" . substituirCaracterSQLLike ( $this->nmContratada ) . "'";
+			$filtro = $filtro . $conector . $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome . " LIKE '%" .  $this->nmContratada . "%'";
 			$conector = "\n AND ";
 		}
 		
