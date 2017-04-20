@@ -1,4 +1,18 @@
 <?php
+
+function imprimeLinha($linha){
+	$totalResultado = count($linha);
+	$chaves = array_keys($linha);
+
+	echo " --- VALORES PARA CADA LINHA---: <br>";
+	for ($i=0; $i<$totalResultado; $i++) {
+		$cd = $chaves[$i];
+		$ds = $linha[$cd];
+			
+		echo $ds . ",";
+	}
+}
+
 function importarConvenio($tipoContrato) {
 	if ($tipoContrato == null || $tipoContrato == "")
 		throw new Exception ( "selecione o tipo do contrato!" );
@@ -51,6 +65,10 @@ function importarConvenio($tipoContrato) {
 		
 		echo "linha registro" . $k . " <BR>";
 	}
+	
+	//libera memoria
+	unset($objPHPExcel);
+	unset($sheetData);	
 	
 	// atualiza as contratadas
 	echo "<br><br>Atualizando CNPJ das contratadas.<br><br>";

@@ -23,6 +23,7 @@ include_once caminho_wordpress.'excel/Classes/PHPExcel.php';
 include_once caminho_wordpress.'excel/Classes/PHPExcel/Writer/Excel2007.php';
 include_once caminho_wordpress.'excel/Classes/PHPExcel/IOFactory.php';
 include_once(caminho_vos."dbcontrato.php");
+include "include_importarConvenio.php";
 
 $inputFileName = caminho.'planilha/UNCT_contrato.xlsx';
 $objPHPExcel = PHPExcel_IOFactory::load($inputFileName);
@@ -67,6 +68,10 @@ for ($k=6; $k<=$totalResultado; $k++) {
 		echo "linha registro" . $k . " <BR>";
 }
 
+//libera memoria
+unset($objPHPExcel);
+unset($sheetData);
+
 //atualiza as contratadas
 echo "<br><br>Atualizando CNPJ das contratadas.<br><br>";
 $dbprocesso->atualizarPessoasContrato();
@@ -75,21 +80,7 @@ echo "FIM... <br><br>";
 
 $dbprocesso->finalizar();
 
-function imprimeLinha($linha){
-	$totalResultado = count($linha);
-	$chaves = array_keys($linha);
-	
-	echo " --- VALORES PARA CADA LINHA---: <br>";
-	for ($i=0; $i<$totalResultado; $i++) {
-		$cd = $chaves[$i];
-		$ds = $linha[$cd];
-			
-		echo $ds . ",";		
-	}	
-}
 
-
-include "include_importarConvenio.php";
 importarConvenio("V");
 importarConvenio("P");
 

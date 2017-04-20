@@ -271,11 +271,11 @@ class filtroManterDemanda extends filtroManter{
 	
 	function getAtributosOrdenacao(){
 		$varAtributos = array(
+				voDemanda::$nmAtrCd => "Número",
 				voDemanda::$nmAtrDtReferencia => "Data.Referência",
 				filtroManterDemanda::$NmColDhUltimaMovimentacao => "Data.Movimentação",
 				voDemanda::$nmAtrPrioridade => "Prioridade",				
-				voDemanda::$nmAtrTipo => "Tipo",
-				voDemanda::$nmAtrCd => "Número"
+				voDemanda::$nmAtrTipo => "Tipo"				
 		);
 		return $varAtributos;
 	}

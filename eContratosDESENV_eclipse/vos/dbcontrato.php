@@ -586,8 +586,8 @@ include_once(caminho_util."DocumentoPessoa.php");
    			$docContrato = new documentoPessoa($voContrato->docContratada);
    			$doc = $docContrato->getNumDoc();
    			
-   			echo $doc;
-   			echo "<br>" . $arrayDocs[$doc]; 
+   			echo "<br> Documento: ". $doc;
+   			echo "<br> Cd.Pessoa: " . $arrayDocs[$doc]; 
    			
    			/*$key = array_search($doc, $arrayDocs);
    			$key = in_array($doc, $arrayDocs);   			
@@ -602,7 +602,7 @@ include_once(caminho_util."DocumentoPessoa.php");
    				$qtdRegistros++;
    			}
    			   			
-   			ECHO "<br>". $voContrato->toString();   			
+   			ECHO "<br> Contrato: ". $voContrato->toString();   			
    			   			
    		}
    		
