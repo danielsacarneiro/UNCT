@@ -141,6 +141,10 @@ class filtroManter extends multiplosConstrutores{
     		$filtro = "\n WHERE $filtro";
     	}
     	
+    	if($this->groupby != null && $this->groupby != ""){
+    		$filtro = $filtro . "\n GROUP BY " . getSQLStringFormatadaColecaoIN($this->groupby, false );
+    	}    	 
+    	
     	if($this->cdAtrOrdenacao  != null){
     		
     		$atributoOrdenacao = $this->cdAtrOrdenacao; 
@@ -159,11 +163,7 @@ class filtroManter extends multiplosConstrutores{
     			//o filtro filho pode formatar isso, e atribui a variavel cdAtrOrdenacaoConsulta
     			$atributoOrdenacao = $this->cdAtrOrdenacaoConsulta; 
     		}
-    		
-    		if($this->groupby != null && $this->groupby != ""){
-    			$filtro = $filtro . "\n GROUP BY " . getSQLStringFormatadaColecaoIN($this->groupby, false );
-    		}
-    		
+    		    		
     		if($comAtributoOrdenacao){
     			$filtro = $filtro . "\n ORDER BY $atributoOrdenacao $ordem $strOrdemDefault ";
     		}
@@ -236,6 +236,10 @@ class filtroManter extends multiplosConstrutores{
 	function getAtributoOrdenacaoDefault(){
 		return "";
 	}
+	
+	function setaFiltroConsultaSemLimiteRegistro(){
+		$this->qtdRegistrosPorPag = null;
+	}	
 	
 }
 

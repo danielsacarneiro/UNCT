@@ -67,6 +67,24 @@ function getComboGestorResponsavel($cdGestor){
 	return $retorno;
 }
 
+function consultarPessoasContrato($voContrato){
+	//$voContrato = new vocontrato();
+	$filtro = new filtroManterPessoa(false);
+	$filtro->anoContrato = $voContrato->anoContrato;
+	$filtro->cdContrato = $voContrato->cdContrato;
+	$filtro->tipo = $voContrato->tipo;
+	$filtro->setaFiltroConsultaSemLimiteRegistro();
+	//seta clausula group by
+	$filtro->groupby = array(vopessoa::$nmAtrDoc, vopessoa::$nmAtrNome);
+	$filtro->cdAtrOrdenacao = vocontrato::$nmAtrSqContrato;
+	$filtro->cdOrdenacao = constantes::$CD_ORDEM_CRESCENTE;
+	
+	$db = new dbpessoa();
+	$colecao = $db->consultarPessoaFiltro($filtro);
+	
+	return $colecao;
+}
+
 function getCampoContratada($pNmContratada, $pDocContratada, $pChaveContrato){
 
 	$retorno = "Contratado: <INPUT type='text' class='camporeadonly' size=50 readonly value='NÃO ENCONTRADO - VERIFIQUE O CONTRATO'>\n";

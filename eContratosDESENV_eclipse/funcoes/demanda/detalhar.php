@@ -140,7 +140,8 @@ function confirmar() {
 	        }
 	          
  	        require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
- 	        getContratoDetalhamento($voContrato, $colecao);
+ 	        //getContratoDetalhamento($voContrato, $colecao);
+ 	        getContratoDet($voContrato);
 	        ?>
             
 			<TR>

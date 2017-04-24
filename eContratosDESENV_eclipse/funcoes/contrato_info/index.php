@@ -14,8 +14,6 @@ setCabecalho($titulo);
 $filtro  = new filtroManterContratoInfo();
 $filtro = filtroManter::verificaFiltroSessao($filtro);
 	
-$nome = $filtro->nome;
-$doc = $filtro->doc;
 $cdHistorico = $filtro->cdHistorico;
 $cdOrdenacao = $filtro->cdOrdenacao;
 $isHistorico = "S" == $cdHistorico; 
@@ -194,8 +192,8 @@ function alterar() {
                   <?php 
                   }
                   ?>                    
-                    <TD class="tabeladadosalinhadodireita"><?php echo $voAtual->ano;?></TD>
-                    <TD class="tabeladadosalinhadodireita" ><?php echo complementarCharAEsquerda($voAtual->cd, "0", TAMANHO_CODIGOS_SAFI)?></TD>
+                    <TD class="tabeladadosalinhadodireita"><?php echo $voAtual->anoContrato;?></TD>
+                    <TD class="tabeladadosalinhadodireita" ><?php echo complementarCharAEsquerda($voAtual->cdContrato, "0", TAMANHO_CODIGOS_SAFI)?></TD>
                     <TD class="tabeladados" nowrap><?php echo $tipo?></TD>
 					<TD class="tabeladados" nowrap><?php echo $voPessoa->nome?></TD>
 					<TD class="tabeladados" nowrap><?php echo documentoPessoa::getNumeroDocFormatado($voPessoa->doc)?></TD>

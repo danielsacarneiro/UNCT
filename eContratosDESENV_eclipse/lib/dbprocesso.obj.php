@@ -271,7 +271,7 @@ class dbprocesso {
 				$qtdRegistrosPorPag = $filtro->qtdRegistrosPorPag;
 				
 				//echo $qtdRegistrosPorPag;
-				if($qtdRegistrosPorPag != constantes::$CD_OPCAO_TODOS){
+				if($qtdRegistrosPorPag != null && $qtdRegistrosPorPag != constantes::$CD_OPCAO_TODOS){
 					// calcula o número de páginas arredondando o resultado para cima
 					$numPaginas = ceil ( $numTotalRegistros / $qtdRegistrosPorPag );
 					$filtro->paginacao->setNumTotalPaginas ( $numPaginas );

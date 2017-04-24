@@ -21,7 +21,7 @@ $msg = "OPERACAO $nmFuncao FALHOU.<br>$msgErro";
 <SCRIPT language="JavaScript" type="text/javascript">
 
 function cancela() {	
-	//history.back().back();
+	//history.back();
     //window.location.history.go(-2);
     //history.go(-2);
 	//location.href="index.php";	

@@ -20,6 +20,17 @@ function getColunaEmLinha($recordset, $nmColuna, $pSeparador) {
 	
 	return $retorno;
 }
+function isArrayMultiDimensional($colecao){
+	//funcao marreta que verifica se o array eh muldimensional
+	//se retornar zero, eh array simples
+	$isArrayMultidimensional = array_sum(array_map('is_array', $colecao));
+	$retorno = true;
+	
+	if($isArrayMultidimensional == 0)
+		$retorno = false;
+	
+	return $retorno;	
+}
 function existeItemNoArray($item, $array) {
 	$retorno = false;
 	$tam = count ( $array );

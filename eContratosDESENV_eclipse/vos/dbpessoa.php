@@ -52,8 +52,19 @@ include_once (caminho_vos. "dbpessoagestor.php");
         return $retorno;
 	}
     
+	/**
+	 * 
+	 * @param unknown $voentidade
+	 * @param unknown $filtro
+	 * @return string
+	 * @deprecated
+	 */	
 	function consultarPessoa($voentidade, $filtro){
 		return $this->consultarPessoaManter($filtro, true);
+	}
+	
+	function consultarPessoaFiltro($filtro){
+		return $this->consultarPessoaManter($filtro, false);
 	}
 	
     function consultarPessoaManter($filtro, $validarConsulta){
@@ -66,12 +77,17 @@ include_once (caminho_vos. "dbpessoagestor.php");
     	
     	//$atributoVinculo = "(SELECT )"    	
     	
+    	$nmTabelaContrato = vocontrato::getNmTabela();
+    	$nmTabela = vopessoa::getNmTabela();
+    	
         $querySelect = "SELECT ". $atributosConsulta;
         
         $queryFrom = "\n FROM ". vopessoa::getNmTabela();
         $queryFrom .= "\n INNER JOIN ". vopessoavinculo::getNmTabela();
-        $queryFrom .= "\n ON ". vopessoa::getNmTabela() . "." . vopessoa::$nmAtrCd . "=" . vopessoavinculo::getNmTabela() . "." . vopessoavinculo::$nmAtrCdPessoa;
+        $queryFrom .= "\n ON ". vopessoa::getNmTabela() . "." . vopessoa::$nmAtrCd . "=" . vopessoavinculo::getNmTabela() . "." . vopessoavinculo::$nmAtrCdPessoa;        
         
+        $queryFrom .= "\n LEFT JOIN ". $nmTabelaContrato;
+        $queryFrom .= "\n ON ". $nmTabela . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
         //echo $querySelect."<br>";
         //echo $queryFrom;
         

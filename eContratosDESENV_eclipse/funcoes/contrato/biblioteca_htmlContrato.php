@@ -1,5 +1,12 @@
 <?php
 require_once(caminho_util."selectExercicio.php");
+include_once(caminho_funcoes. "pessoa/biblioteca_htmlPessoa.php");
+
+
+function getContratoDet($voContrato){	
+	$colecao = consultarPessoasContrato($voContrato);	
+	return getContratoDetalhamento($voContrato, $colecao);	
+}
 
 function getContratoDetalhamento($voContrato, $colecao){
 $vo = new vocontrato();
@@ -14,9 +21,22 @@ if($voContrato != null && $voContrato->cdContrato){
 			$dominioTipoContrato->getDescricao($voContrato->tipo));
 
 	include_once(caminho_funcoes."pessoa/biblioteca_htmlPessoa.php");
-	$nmpessoa = $colecao[vopessoa::$nmAtrNome];
-	$docpessoa = $colecao[vopessoa::$nmAtrDoc];
-	$campoContratado = getCampoContratada($nmpessoa, $docpessoa, $voContrato->sq);
+		
+	if(!isArrayMultiDimensional($colecao)){
+		$nmpessoa = $colecao[vopessoa::$nmAtrNome];
+		$docpessoa = $colecao[vopessoa::$nmAtrDoc];
+		$campoContratado = getCampoContratada($nmpessoa, $docpessoa, $voContrato->sq);		
+	}else{
+		$campoContratado = "";
+		$tamanhoColecao = count($colecao);
+		for($i=0; $i<$tamanhoColecao;$i++){
+			$nmpessoa = $colecao[$i][vopessoa::$nmAtrNome];
+			$docpessoa = $colecao[$i][vopessoa::$nmAtrDoc];
+			$campoContratado .= getCampoContratada($nmpessoa, $docpessoa, $voContrato->sq)."<br>";				
+		}
+		
+	}	
+	
 	?>
 			<TR>
 	            <INPUT type="hidden" id="<?=vocontrato::$nmAtrAnoContrato?>" name="<?=vocontrato::$nmAtrAnoContrato?>" value="<?=$voContrato->anoContrato?>">

@@ -185,7 +185,8 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	        }
 	          
  	        require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
- 	        getContratoDetalhamento($voContrato, $colecao);
+ 	        //getContratoDetalhamento($voContrato, $colecao);
+ 	        getContratoDet($voContrato);
 			?>	        
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Data.Demanda:</TH>
@@ -339,7 +340,7 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 </HTML>
 <?php 
 }catch(Exception $ex){
-	putObjetoSessao($vo->getNmTabela(), $vo);
+	putObjetoSessao("vo", $vo);
 	tratarExcecaoHTML($ex);	
 }
 ?>

@@ -94,7 +94,8 @@ function confirmar() {
 	        }
 	          
  	        require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
- 	        getContratoDetalhamento($voContrato, $colecao);
+ 	        //getContratoDetalhamento($voContrato, $colecao);
+ 	        getContratoDet($voContrato);
 			?>      
 			<TR>
 				<?php
@@ -102,9 +103,12 @@ function confirmar() {
 				$combo = new select(dominioAutorizacao::getColecao());						
 				?>
 	            <TH class="campoformulario" nowrap>Autorização:</TH>
-	            <TD class="campoformulario" width="1%"><?php echo $combo->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato,voContratoInfo::$nmAtrCdAutorizacaoContrato, $vo->cdAutorizacao, true, "camporeadonly", true, " disabled ");?>
+	            <TD class="campoformulario" colspan=3>
+	            Planinha: <?php echo $combo->getHtmlCombo("","", $colecao[vocontrato::$nmAtrCdAutorizacaoContrato], true, "camporeadonly", true, " disabled ");?>	            
+	            Atual: <?php echo $combo->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato,voContratoInfo::$nmAtrCdAutorizacaoContrato, $vo->cdAutorizacao, true, "camporeadonly", true, " disabled ");?>	        </TR>
+	        <TR>	       
 	            <TH class="campoformulario" nowrap width="1%">Data.Proposta:</TH>
-	            <TD class="campoformulario">
+	            <TD class="campoformulario" colspan=3>
 	            	<INPUT type="text" 
 	            	       id="<?=voContratoInfo::$nmAtrDtProposta?>" 
 	            	       name="<?=voContratoInfo::$nmAtrDtProposta?>" 

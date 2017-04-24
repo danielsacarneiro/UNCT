@@ -17,8 +17,8 @@ Class voContratoInfo extends voentidade{
 	static $nmAtrObs = "ctinf_obs";
 	static $nmAtrDtProposta = "ctinf_dt_proposta";
 	 
-	var $cd = "";
-	var $ano  = "";
+	var $cdContrato = "";
+	var $anoContrato  = "";
 	var $tipo = "";	
 	var $cdAutorizacao = "";
 	var $obs = "";
@@ -57,8 +57,8 @@ Class voContratoInfo extends voentidade{
 
 	function getValoresWhereSQLChave($isHistorico){
 		$nmTabela = $this->getNmTabelaEntidade($isHistorico);
-		$query = $nmTabela . "." . self::$nmAtrAnoContrato . "=" . $this->ano;
-		$query .= " AND " . $nmTabela . "." . self::$nmAtrCdContrato . "=" . $this->cd;
+		$query = $nmTabela . "." . self::$nmAtrAnoContrato . "=" . $this->anoContrato;
+		$query .= " AND " . $nmTabela . "." . self::$nmAtrCdContrato . "=" . $this->cdContrato;
 		$query .= " AND " . $nmTabela . "." . self::$nmAtrTipoContrato . "=" . getVarComoString($this->tipo);
 
 		if($isHistorico)
@@ -92,8 +92,8 @@ Class voContratoInfo extends voentidade{
 
 	function getVOContrato(){
 		$retorno = new vocontrato();
-		$retorno->cdContrato = $this->cd;
-		$retorno->anoContrato = $this->ano;
+		$retorno->cdContrato = $this->cdContrato;
+		$retorno->anoContrato = $this->anoContrato;
 		$retorno->tipo = $this->tipo;
 			
 		return $retorno;
@@ -101,8 +101,8 @@ Class voContratoInfo extends voentidade{
 	
 	function getDadosRegistroBanco($registrobanco){
 		//as colunas default de voentidade sao incluidas pelo metodo getDadosBanco do voentidade
-		$this->cd = $registrobanco[self::$nmAtrCdContrato];
-		$this->ano  = $registrobanco[self::$nmAtrAnoContrato];
+		$this->cdContrato = $registrobanco[self::$nmAtrCdContrato];
+		$this->anoContrato  = $registrobanco[self::$nmAtrAnoContrato];
 		$this->tipo  = $registrobanco[self::$nmAtrTipoContrato];
 		$this->cdAutorizacao  = $registrobanco[self::$nmAtrCdAutorizacaoContrato];
 		$this->obs = $registrobanco[self::$nmAtrObs];
@@ -110,8 +110,8 @@ Class voContratoInfo extends voentidade{
 	}
 
 	function getDadosFormulario(){
-		$this->cd = @$_POST[self::$nmAtrCdContrato];
-		$this->ano  = @$_POST[self::$nmAtrAnoContrato];
+		$this->cdContrato = @$_POST[self::$nmAtrCdContrato];
+		$this->anoContrato  = @$_POST[self::$nmAtrAnoContrato];
 		$this->tipo  = @$_POST[self::$nmAtrTipoContrato];
 		$this->cdAutorizacao  = @$_POST[self::$nmAtrCdAutorizacaoContrato];
 		$this->obs = @$_POST[self::$nmAtrObs];
@@ -124,25 +124,25 @@ Class voContratoInfo extends voentidade{
 		/*$retorno.= $this->ano;
 		$retorno.= "," . $this->tipo;
 		$retorno.= "," . $this->cd;*/
-		return formatarCodigoContrato($this->cd, $this->ano, $this->tipo);
+		return formatarCodigoContrato($this->cdContrato, $this->anoContrato, $this->tipo);
 	}
 
 	function getValorChavePrimaria(){
-		return $this->ano
+		return $this->anoContrato
 		. CAMPO_SEPARADOR
-		. $this->cd
+		. $this->cdContrato
 		. CAMPO_SEPARADOR
 		. $this->tipo;
 	}
 
 	function getChavePrimariaVOExplode($array){
-		$this->ano = $array[0];
-		$this->cd = $array[1];
+		$this->anoContrato = $array[0];
+		$this->cdContrato = $array[1];
 		$this->tipo = $array[2];
 	}
 	
 	function getMensagemComplementarTelaSucesso(){
-		$retorno = "Contrato : " . formatarCodigoContrato($this->cd, $this->ano, $this->tipo);
+		$retorno = "Contrato : " . formatarCodigoContrato($this->cdContrato, $this->anoContrato, $this->tipo);
 		return $retorno; 
 	}	
 

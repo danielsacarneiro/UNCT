@@ -9,8 +9,9 @@ class dbContratoInfo extends dbprocesso {
 		
 		$arrayColunasRetornadas = array (
 				$nmTabela . ".*",
+				$nmTabelaContrato . "." . vocontrato::$nmAtrCdAutorizacaoContrato,
 				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
-				 $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome
+				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome
 		);
 		
 		$groupbyinterno = $nmTabela.".".vocontrato::$nmAtrAnoContrato
@@ -122,8 +123,8 @@ class dbContratoInfo extends dbprocesso {
 	
 	function getSQLValuesInsert($vo) {		
 		$retorno = "";
-		$retorno .= $this->getVarComoNumero ( $vo->ano ) . ",";
-		$retorno .= $this->getVarComoNumero ( $vo->cd ) . ",";
+		$retorno .= $this->getVarComoNumero ( $vo->anoContrato ) . ",";
+		$retorno .= $this->getVarComoNumero ( $vo->cdContrato ) . ",";
 		$retorno .= $this->getVarComoString ( $vo->tipo ) . ",";
 		$retorno .= $this->getVarComoNumero ( $vo->cdAutorizacao) . ",";
 		// $retorno.= $this-> getVarComoNumero($vo->situacao);
