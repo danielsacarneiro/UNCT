@@ -66,7 +66,7 @@ class filtroManterDemanda extends filtroManter{
 		$nmTabelaTramitacao = voDemandaTramitacao::getNmTabelaStatic(false);
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic(false);
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic(false);
-		$nmTabelaPessaContrato = vopessoa::getNmTabelaStatic(false);
+		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic(false);
 					
 		//seta os filtros obrigatorios
 		if($this->isSetaValorDefault()){
@@ -130,12 +130,21 @@ class filtroManterDemanda extends filtroManter{
 		
 		if($this->vodemanda->cdSetorDestino != null){
 			$filtro = $filtro . $conector
+			. " (("
+			. $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrCdSetorDestino
+			. " IS NULL AND "
+			.$nmTabela. "." .voDemanda::$nmAtrCdSetor
+			. " = "
+			. $this->vodemanda->cdSetorDestino			
+			. " ) OR ("
+			. $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrCdSetorDestino
+			. " IS NOT NULL AND "
 			. $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrCdSetorDestino
 			. " = "
-					. $this->vodemanda->cdSetorDestino
-					;
-		
-					$conector  = "\n AND ";
+			. $this->vodemanda->cdSetorDestino
+			. "))";
+										
+			$conector  = "\n AND ";
 		}
 		
 		if($this->vodemanda->prioridade != null){
@@ -233,7 +242,7 @@ class filtroManterDemanda extends filtroManter{
 		
 		if($this->nmContratada != null){
 			$filtro = $filtro . $conector
-			. $nmTabelaPessaContrato. "." .vopessoa::$nmAtrNome
+			. $nmTabelaPessoaContrato. "." .vopessoa::$nmAtrNome
 			. " LIKE '%"
 			. $this->nmContratada
 			. "%'"
@@ -244,7 +253,7 @@ class filtroManterDemanda extends filtroManter{
 		
 		if($this->docContratada != null){
 			$filtro = $filtro . $conector
-			. $nmTabelaPessaContrato. "." .vopessoa::$nmAtrDoc
+			. $nmTabelaPessoaContrato. "." .vopessoa::$nmAtrDoc
 			. " = '"
 					. documentoPessoa::getNumeroDocSemMascara($this->docContratada)
 					. "'"

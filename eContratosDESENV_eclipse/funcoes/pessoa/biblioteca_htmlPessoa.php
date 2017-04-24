@@ -72,7 +72,7 @@ function consultarPessoasContrato($voContrato){
 	$filtro = new filtroManterPessoa(false);
 	$filtro->anoContrato = $voContrato->anoContrato;
 	$filtro->cdContrato = $voContrato->cdContrato;
-	$filtro->tipo = $voContrato->tipo;
+	$filtro->tpContrato = $voContrato->tipo;
 	$filtro->setaFiltroConsultaSemLimiteRegistro();
 	//seta clausula group by
 	$filtro->groupby = array(vopessoa::$nmAtrDoc, vopessoa::$nmAtrNome);

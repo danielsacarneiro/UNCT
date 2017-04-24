@@ -41,7 +41,8 @@ class filtroManter extends multiplosConstrutores{
 	
 	function __construct1($pegarFiltrosDaTela) {
 		//echo "teste" . $pegarFiltrosDaTela;
-		$this->__construct2(true, $pegarFiltrosDaTela);
+		//se nao pega dados da tela, nao tem paginacao por padrao
+		$this->__construct2($pegarFiltrosDaTela, $pegarFiltrosDaTela);
 	}
 	
 	function __construct2($temPaginacao, $pegarFiltrosDaTela) {
