@@ -7,7 +7,9 @@ inicioComValidacaoUsuario(true);
 $vo = new voDemandaTramitacao();
 $vo->getDadosFormulario();
 
-//echo "RESOLVER PROBLEMA DA CHAMADA AO INCLUIR"; 
+//echo "RESOLVER PROBLEMA DA CHAMADA AO INCLUIR";
+
+//echo $vo->getVODemandaTramDoc ()->toString();
 
 putObjetoSessao("vo", $vo);
 

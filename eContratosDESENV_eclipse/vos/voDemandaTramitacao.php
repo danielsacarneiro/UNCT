@@ -212,6 +212,7 @@ include_once("voDemandaContrato.php");
 		$retorno.= $this->ano;
 		$retorno.= "," . $this->cd;        
 		$retorno.= "," . $this->sq;
+		$retorno.= "," . $this->voDoc->toString();
 		return $retorno;		
 	}   
 	

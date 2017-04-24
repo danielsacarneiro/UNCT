@@ -70,6 +70,18 @@ function confirmar() {
 	return confirm("Confirmar Alteracoes?");    
 }
 
+function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
+	chave = ano
+	+ CD_CAMPO_SEPARADOR +  cdSetor
+	+ CD_CAMPO_SEPARADOR +  tpDoc
+	+ CD_CAMPO_SEPARADOR +  sq;
+
+	document.getElementsByName("<?=voDocumento::getNmTabela()?>").item(0).value = chave;
+	document.getElementsByName("<?=voDocumento::$nmAtrSq?>").item(0).value = formatarCodigoDocumento(sq, cdSetor, ano, tpDoc);
+
+	//alert(document.frm_principal.<?=voDocumento::getNmTabela()?>.value);
+}
+
 </SCRIPT>
 
 </HEAD>
@@ -149,10 +161,10 @@ function confirmar() {
 	            <TD class="campoformulario" colspan=3>				
 	            <INPUT type="text" onkeyup="formatarCampoPRT(this, event);" id="<?=voDemandaTramitacao::$nmAtrProtocolo?>" name="<?=voDemandaTramitacao::$nmAtrProtocolo?>" value="<?php echo($vo->prt);?>"  class="camponaoobrigatorio" size="30">	            	                        	                        
 	        </TR>
-	        <!-- <TR>
+	        <TR>
 		        <TH class="campoformulario" width="1%" nowrap>Documento:</TH>
 		        <TD class="campoformulario" nowrap colspan=3>
-		        	<INPUT type="text" id="<?=voDocumento::$nmAtrSq?>" name="<?=voDocumento::$nmAtrSq?>" class="camporeadonly" size="15" readonly>
+		        	<INPUT type="text" id="<?=voDocumento::$nmAtrSq?>" name="<?=voDocumento::$nmAtrSq?>" class="camporeadonly" size="15" readonly value="<?=$vo->voDoc->formatarCodigo()?>">
 		        	<INPUT type="hidden" id="<?=voDocumento::getNmTabela()?>" name="<?=voDocumento::getNmTabela()?>" value="">
 		        	<?php 
 		        	echo getLinkPesquisa("../documento");		        	
@@ -160,7 +172,7 @@ function confirmar() {
 		        	echo getBorracha($nmCampo);
 		        	?>
 				</TD>
-	        </TR>-->	        
+	        </TR>	        
 			<TR>
 	            <TH class="campoformulario" nowrap>Data:</TH>
 	            <TD class="campoformulario" colspan="3">

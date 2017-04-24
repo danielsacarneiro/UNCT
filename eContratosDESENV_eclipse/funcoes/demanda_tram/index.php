@@ -248,9 +248,6 @@ function alterar() {
                             echo getBotoesRodapeComRestricao($arrayBotoesARemover);
                             //echo getBotoesRodape();
                             ?>
-                            <TD class='botaofuncao'>
-                            <?php echo getBotaoValidacaoAcesso("bttEncaminhar", "Encaminhar", "botaofuncaop", false, false,true,false,"onClick='javascript:encaminhar();' accesskey='e'");?>
-                            </TD>
                          </TR>
                          </TABLE>
 	                   </TD>

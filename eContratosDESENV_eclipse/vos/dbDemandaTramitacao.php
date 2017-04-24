@@ -1,15 +1,15 @@
 <?php
 include_once (caminho_lib . "dbprocesso.obj.php");
 class dbDemandaTramitacao extends dbprocesso {
-	
 	static $NM_FUNCAO_ENCAMINHAR = "encaminhar";
-	
 	function consultarPorChaveTela($vo, $isHistorico) {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( false );
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );
 		$nmTabelaPessoa = vopessoa::getNmTabelaStatic ( false );
+		$nmTabelaDoc = voDocumento::getNmTabelaStatic ( false );
+		$nmTabelaDemandaDoc = voDemandaTramDoc::getNmTabelaStatic ( false );
 		
 		$arrayColunasRetornadas = array (
 				$nmTabela . ".*",
@@ -23,13 +23,17 @@ class dbDemandaTramitacao extends dbprocesso {
 				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdEspecieContrato,
 				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato,
 				$nmTabelaPessoa . "." . vopessoa::$nmAtrDoc,
-				$nmTabelaPessoa . "." . vopessoa::$nmAtrNome 
+				$nmTabelaPessoa . "." . vopessoa::$nmAtrNome,
+				$nmTabelaDoc . "." . voDocumento::$nmAtrAno,
+				$nmTabelaDoc . "." . voDocumento::$nmAtrCdSetor,
+				$nmTabelaDoc . "." . voDocumento::$nmAtrTp,
+				$nmTabelaDoc . "." . voDocumento::$nmAtrSq				
 		);
-				
+		
 		$queryJoin .= "\n INNER JOIN " . $nmTabelaDemanda;
 		$queryJoin .= "\n ON ";
-		$queryJoin .= $nmTabelaDemanda . "." . voDemanda::$nmAtrAno. "=" . $nmTabela . "." . voDemandaTramitacao::$nmAtrAno;
-		$queryJoin .= "\n AND " . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd. "=" . $nmTabela . "." . voDemandaTramitacao::$nmAtrCd;
+		$queryJoin .= $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $nmTabela . "." . voDemandaTramitacao::$nmAtrAno;
+		$queryJoin .= "\n AND " . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd . "=" . $nmTabela . "." . voDemandaTramitacao::$nmAtrCd;
 		
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaDemandaContrato;
 		$queryJoin .= "\n ON ";
@@ -51,6 +55,18 @@ class dbDemandaTramitacao extends dbprocesso {
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoa;
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaPessoa . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
+		
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaDemandaDoc;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaDemandaDoc . "." . voDemandaTramDoc::$nmAtrAnoDemanda . "=" . $nmTabela . "." . voDemandaTramitacao::$nmAtrAno;
+		$queryJoin .= "\n AND " . $nmTabelaDemandaDoc . "." . voDemandaTramDoc::$nmAtrCdDemanda . "=" . $nmTabela . "." . voDemandaTramitacao::$nmAtrCd;
+		
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaDoc;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaDemandaDoc . "." . voDemandaTramDoc::$nmAtrAnoDoc . "=" . $nmTabelaDoc . "." . voDocumento::$nmAtrAno;
+		$queryJoin .= "\n AND " . $nmTabelaDemandaDoc . "." . voDemandaTramDoc::$nmAtrCdSetorDoc . "=" . $nmTabelaDoc . "." . voDocumento::$nmAtrCdSetor;
+		$queryJoin .= "\n AND " . $nmTabelaDemandaDoc . "." . voDemandaTramDoc::$nmAtrTpDoc . "=" . $nmTabelaDoc . "." . voDocumento::$nmAtrTp;
+		$queryJoin .= "\n AND " . $nmTabelaDemandaDoc . "." . voDemandaTramDoc::$nmAtrSqDoc . "=" . $nmTabelaDoc . "." . voDocumento::$nmAtrSq;
 		
 		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryJoin, $isHistorico );
 	}
@@ -220,15 +236,36 @@ class dbDemandaTramitacao extends dbprocesso {
 			}
 		}
 	}
-	//usa a opcao EXCEPCIONAL do voentidade: $NM_METODO_RETORNO_CONFIRMAR
+	// usa a opcao EXCEPCIONAL do voentidade: $NM_METODO_RETORNO_CONFIRMAR
 	function alterar($vo) {
-		$vo->NM_METODO_RETORNO_CONFIRMAR = voDemandaTramitacao::getNmTabela();
-		parent::alterar($vo);		
+		// Start transaction
+		$vo->NM_METODO_RETORNO_CONFIRMAR = voDemandaTramitacao::getNmTabela ();
+		
+		$this->cDb->retiraAutoCommit ();
+		try {
+			if ($vo->temDocParaIncluir ()) {
+				//echo "tem doc p incluir";
+				$voDemandaTramDoc = new voDemandaTramDoc ();
+				$voDemandaTramDoc = $vo->getVODemandaTramDoc ();
+				$voDemandaTramDoc->dbprocesso->cDb = $this->cDb;
+				$voDemandaTramDoc->dbprocesso->incluir ( $voDemandaTramDoc );
+			}
+			
+			//echo "passou doc p incluir";			
+			parent::alterar ( $vo );
+			// End transaction
+			$this->cDb->commit ();
+				
+		} catch ( Exception $e ) {
+			//echo "DEU ROLLBACK";
+			$this->cDb->rollback ();
+			throw new Exception ( $e->getMessage () );
+		}
 	}
-	//usa a opcao EXCEPCIONAL do voentidade: $NM_METODO_RETORNO_CONFIRMAR
+	// usa a opcao EXCEPCIONAL do voentidade: $NM_METODO_RETORNO_CONFIRMAR
 	function excluir($vo) {
-		$vo->NM_METODO_RETORNO_CONFIRMAR = voDemandaTramitacao::getNmTabela();
-		parent::excluir($vo);		
+		$vo->NM_METODO_RETORNO_CONFIRMAR = voDemandaTramitacao::getNmTabela ();
+		parent::excluir ( $vo );
 	}
 	function encaminhar($vo) {
 		// o alterar eh chamado na pagina generica confirmar.php
@@ -239,10 +276,9 @@ class dbDemandaTramitacao extends dbprocesso {
 		if ($isAlteracaoPermitida) {
 			$this->encaminharDemanda ( $vo );
 		}
-	
+		
 		return $vo;
 	}
-
 	function getSQLValuesInsert($vo) {
 		$retorno = "";
 		$retorno .= $this->getVarComoNumero ( $vo->ano ) . ",";
@@ -258,25 +294,23 @@ class dbDemandaTramitacao extends dbprocesso {
 		
 		return $retorno;
 	}
-	
-	function getSQLValuesUpdate($vo) {		
+	function getSQLValuesUpdate($vo) {
 		$retorno = "";
 		$sqlConector = "";
-	
+		
 		if ($vo->textoTram != null) {
-			$retorno .= $sqlConector . voDemandaTramitacao::$nmAtrTexto . " = " . $this->getVarComoString($vo->textoTram);
-			$sqlConector = ",";
-		}
-	
-		if ($vo->prt != null) {
-			$retorno .= $sqlConector . voDemandaTramitacao::$nmAtrProtocolo . " = " . $this->getVarComoString($vo->prt);
+			$retorno .= $sqlConector . voDemandaTramitacao::$nmAtrTexto . " = " . $this->getVarComoString ( $vo->textoTram );
 			$sqlConector = ",";
 		}
 		
-		$retorno = $retorno . $vo->getSQLValuesEntidadeUpdate();
-	
+		if ($vo->prt != null) {
+			$retorno .= $sqlConector . voDemandaTramitacao::$nmAtrProtocolo . " = " . $this->getVarComoString ( $vo->prt );
+			$sqlConector = ",";
+		}
+		
+		$retorno = $retorno . $vo->getSQLValuesEntidadeUpdate ();
+		
 		return $retorno;
 	}
-	
 }
 ?>

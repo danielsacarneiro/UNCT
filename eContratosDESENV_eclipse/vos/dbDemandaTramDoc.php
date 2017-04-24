@@ -19,7 +19,7 @@ Class dbDemandaTramDoc extends dbprocesso{
 		$retorno.= $this-> getVarComoNumero($vo->sqDoc);
 
 		$retorno.= $vo->getSQLValuesInsertEntidade();
-
+		 
 		return $retorno;
 	}
 	 

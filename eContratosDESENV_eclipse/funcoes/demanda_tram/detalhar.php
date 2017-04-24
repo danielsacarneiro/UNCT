@@ -152,18 +152,12 @@ function confirmar() {
 	            <TD class="campoformulario" colspan=3>				
 	            <INPUT type="text" onkeyup="formatarCampoPRT(this, event);" id="<?=voDemandaTramitacao::$nmAtrProtocolo?>" name="<?=voDemandaTramitacao::$nmAtrProtocolo?>" value="<?php echo($vo->prt);?>"  class="camporeadonly" size="30" readonly>	            	                        	                        
 	        </TR>
-	        <!-- <TR>
+	        <TR>
 		        <TH class="campoformulario" width="1%" nowrap>Documento:</TH>
 		        <TD class="campoformulario" nowrap colspan=3>
-		        	<INPUT type="text" id="<?=voDocumento::$nmAtrSq?>" name="<?=voDocumento::$nmAtrSq?>" class="camporeadonly" size="15" readonly>
-		        	<INPUT type="hidden" id="<?=voDocumento::getNmTabela()?>" name="<?=voDocumento::getNmTabela()?>" value="">
-		        	<?php 
-		        	echo getLinkPesquisa("../documento");		        	
-		        	$nmCampo = array(voDocumento::getNmTabela(), voDocumento::$nmAtrSq);
-		        	echo getBorracha($nmCampo);
-		        	?>
+	        	<INPUT type="text" id="<?=voDocumento::$nmAtrSq?>" name="<?=voDocumento::$nmAtrSq?>" class="camporeadonly" size="15" readonly value="<?=$vo->voDoc->formatarCodigo()?>">		        	
 				</TD>
-	        </TR>-->	        
+	        </TR>	        
 			<TR>
 	            <TH class="campoformulario" nowrap>Data:</TH>
 	            <TD class="campoformulario" colspan="3">
