@@ -30,7 +30,7 @@ Class voContratoInfo extends voentidade{
 
 	function __construct() {
 		parent::__construct();
-		$this->temTabHistorico = false;
+		$this->temTabHistorico = true;
 		$class = self::getNmClassProcesso();
 		$this->dbprocesso= new $class();
 		//retira os atributos padrao que nao possui
@@ -132,13 +132,16 @@ Class voContratoInfo extends voentidade{
 		. CAMPO_SEPARADOR
 		. $this->cdContrato
 		. CAMPO_SEPARADOR
-		. $this->tipo;
-	}
+		. $this->tipo
+		. CAMPO_SEPARADOR
+		. $this->sqHist;
+		}
 
 	function getChavePrimariaVOExplode($array){
 		$this->anoContrato = $array[0];
 		$this->cdContrato = $array[1];
 		$this->tipo = $array[2];
+		$this->sqHist = $array[3];
 	}
 	
 	function getMensagemComplementarTelaSucesso(){

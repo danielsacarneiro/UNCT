@@ -196,7 +196,13 @@ function encaminhar() {
                 <TH class="campoformulario" width="1%" nowrap>CNPJ/CPF Contratada:</TH>
                 <TD class="campoformulario" ><INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($filtro->docContratada);?>" class="camponaoobrigatorio" size="20" maxlength="18"></TD>
             </TR>
-	                    
+            <?php            
+            $comboTpDoc = new select(dominioTpDocumento::getColecao());            
+            ?>	                    
+            <TR>
+	            <TH class="campoformulario" nowrap width="1%">Tp.Documento:</TH>
+				<TD class="campoformulario" width="1%"><?php echo $comboTpDoc->getHtmlSelect(voDocumento::$nmAtrTp,voDocumento::$nmAtrTp, $filtro->tpDocumento, true, "camponaoobrigatorio", true);?>
+			</TR>
        <?php
         /*$comboOrdenacao = new select(voPA::getAtributosOrdenacao($cdHistorico));
         $cdAtrOrdenacao = $filtro->cdAtrOrdenacao;

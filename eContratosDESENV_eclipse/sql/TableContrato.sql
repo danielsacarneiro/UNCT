@@ -141,3 +141,23 @@ ALTER TABLE contrato_info ADD CONSTRAINT fk_contrato_info FOREIGN KEY (ct_exerci
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;
 
+drop table contrato_info_hist;
+CREATE TABLE contrato_info_hist (
+	hist INT NOT NULL AUTO_INCREMENT,	
+    ct_exercicio INT NOT NULL,
+    ct_numero INT NOT NULL,
+    ct_tipo char(1) NOT NULL,
+    ctinf_cd_autorizacao INT, 
+    ctinf_dt_proposta DATE NULL,
+    ctinf_obs MEDIUMTEXT NULL,
+    
+    dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
+    cd_usuario_incl INT,
+    cd_usuario_ultalt INT,
+    
+	dh_operacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    cd_usuario_operacao INT,    
+    
+	CONSTRAINT pk PRIMARY KEY (hist)
+);

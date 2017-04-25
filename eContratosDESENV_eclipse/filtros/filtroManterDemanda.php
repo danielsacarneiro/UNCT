@@ -12,6 +12,7 @@ class filtroManterDemanda extends filtroManter{
 	var $vocontrato;
 	var $nmContratada;
 	var $docContratada;
+	var $tpDocumento;
 	
 	var $dtUltMovimentacao;
 	
@@ -52,6 +53,7 @@ class filtroManterDemanda extends filtroManter{
 		$this->nmContratada = @$_POST[vopessoa::$nmAtrNome];
 		$this->docContratada = @$_POST[vopessoa::$nmAtrDoc];
 		$this->dtUltMovimentacao = @$_POST[voDemanda::$nmAtrDtReferencia];
+		$this->tpDocumento = @$_POST[voDocumento::$nmAtrTp];
 		
 		if($this->cdOrdenacao == null){
 			$this->cdOrdenacao = constantes::$CD_ORDEM_CRESCENTE;
@@ -64,6 +66,7 @@ class filtroManterDemanda extends filtroManter{
 
 		$nmTabela = voDemanda::getNmTabelaStatic($this->isHistorico);
 		$nmTabelaTramitacao = voDemandaTramitacao::getNmTabelaStatic(false);
+		$nmTabelaTramitacaoDoc = voDemandaTramDoc::getNmTabelaStatic(false);
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic(false);
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic(false);
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic(false);
@@ -73,6 +76,19 @@ class filtroManterDemanda extends filtroManter{
 			//anoDefault foi definido como constante na index.php
 			//echo "setou o ano defaul";
 			;
+		}
+		
+		if($this->tpDocumento != null){
+			$filtro = $filtro . $conector
+			. " EXISTS (SELECT 'X' FROM " . $nmTabelaTramitacaoDoc
+			. " WHERE "
+					. $nmTabela . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaTramitacaoDoc. "." . voDemandaTramDoc::$nmAtrAnoDemanda
+					. " AND " . $nmTabela . "." . voDemanda::$nmAtrCd . "=" . $nmTabelaTramitacaoDoc. "." . voDemandaTramDoc::$nmAtrCdDemanda
+					. " AND " . $nmTabelaTramitacaoDoc. "." . voDemandaTramDoc::$nmAtrTpDoc. "="
+							. getVarComoString($this->tpDocumento)
+							. ")\n";
+		
+							$conector  = "\n AND ";
 		}
 		
 		if($this->vodemanda->ano != null){
@@ -187,7 +203,7 @@ class filtroManterDemanda extends filtroManter{
 			$conector  = "\n AND ";
 		}
 		
-		if($this->vodemanda->prt != null){			
+		if($this->vodemanda->prt != null){
 			$filtro = $filtro . $conector
 			. " EXISTS (SELECT 'X' FROM " . $nmTabelaTramitacao
 			. " WHERE " 

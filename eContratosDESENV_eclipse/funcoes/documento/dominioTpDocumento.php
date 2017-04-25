@@ -21,13 +21,17 @@ include_once(caminho_util."dominio.class.php");
 // ...............................................................
 // Construtor
     function __construct () {        
-		$this->colecao = array(
+		$this->colecao = self::getColecao();
+	}
+	
+	static function getColecao(){
+		return array(
 				self::$CD_TP_DOC_OFICIO => "Ofício",
 				self::$CD_TP_DOC_NOTA_TECNICA => "Nota Técnica",
 				self::$CD_TP_DOC_NOTA_IMPUTACAO => "Nota Imputação",
 				self::$CD_TP_DOC_NOTIFICACAO => "Notificação"
 				);
-	}
+	}	
 	
 	static function getEnderecoPastaBase() {
 		return self::$ENDERECO_DRIVE . "\\" . self::$ENDERECO_PASTABASE;

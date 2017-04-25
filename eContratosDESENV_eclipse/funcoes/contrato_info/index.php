@@ -126,9 +126,6 @@ function alterar() {
                 <TD class="campoformulario" ><INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($filtro->docContratada);?>" class="camponaoobrigatorio" size="20" maxlength="18"></TD>
             </TR>	                    
        <?php
-        /*$comboOrdenacao = new select(voPA::getAtributosOrdenacao($cdHistorico));
-        $cdAtrOrdenacao = $filtro->cdAtrOrdenacao;
-        echo getComponenteConsulta($comboOrdenacao, $cdAtrOrdenacao, $cdOrdenacao, $qtdRegistrosPorPag, true, $cdHistorico)*/
        echo getComponenteConsultaFiltro($vo->temTabHistorico, $filtro);
         ?>
        </TBODY>

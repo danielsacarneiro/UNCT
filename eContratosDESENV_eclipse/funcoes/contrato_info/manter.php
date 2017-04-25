@@ -143,7 +143,7 @@ function confirmar() {
 	        </TR>	       
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Observação:</TH>
-	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=voContratoInfo::$nmAtrObs?>" name="<?=voContratoInfo::$nmAtrObs?>" class="camponaoobrigatorio" <?=$complementoHTML?>><?=$vo->obs?></textarea>
+	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=voContratoInfo::$nmAtrObs?>" name="<?=voContratoInfo::$nmAtrObs?>" class="camponaoobrigatorio"><?=$vo->obs?></textarea>
 				</TD>
 	        </TR>
 	        
