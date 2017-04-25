@@ -28,9 +28,8 @@ function getDadosContrata($db){
 		$retorno = getCampoContratada("","",$chave);
 		if($recordSet != ""){
 			
-			$colecaoColunasAgrupar = array(vopessoa::$nmAtrDoc, vopessoa::$nmAtrNome);
-			
-			$recordSet = getRecordSetGroupBy($recordSet, $colecaoColunasAgrupar);
+			//$colecaoColunasAgrupar = array(vopessoa::$nmAtrDoc, vopessoa::$nmAtrNome);			
+			//$recordSet = getRecordSetGroupBy($recordSet, $colecaoColunasAgrupar);
 			$tam = count($recordSet);
 			
 			$retorno = "";

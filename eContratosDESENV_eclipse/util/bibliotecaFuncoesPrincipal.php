@@ -244,7 +244,7 @@ function getColecaoEntreSeparadorAspas($colecaoAtributos, $separador, $comAspas)
 function getChaveReferenciaGroupBy($registro, $colecaoColunasAgrupar) {
 	$retorno = "";
 	$tamanhoColecao = count ( $colecaoColunasAgrupar );
-	for($i = 0; $i <= $tamanhoColecao; $i ++) {
+	for($i = 0; $i < $tamanhoColecao; $i ++) {
 		$nmColuna = $colecaoColunasAgrupar[$i];
 		$retorno.= CAMPO_SEPARADOR + $registro[$nmColuna];
 	}
