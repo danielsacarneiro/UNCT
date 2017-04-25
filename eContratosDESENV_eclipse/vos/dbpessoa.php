@@ -73,10 +73,8 @@ include_once (caminho_vos. "dbpessoagestor.php");
     	$atributosConsulta .= "," . vopessoa::getNmTabela() . "." . vopessoa::$nmAtrDoc;
     	$atributosConsulta .= "," . vopessoa::getNmTabela() . "." . vopessoa::$nmAtrEmail;
     	$atributosConsulta .= "," . vopessoa::getNmTabela() . "." . vopessoa::$nmAtrTel;
-    	$atributosConsulta .= "," . vopessoavinculo::getNmTabela() . "." . vopessoavinculo::$nmAtrCd;
-    	
-    	//$atributoVinculo = "(SELECT )"    	
-    	
+    	$atributosConsulta .= "," . vopessoavinculo::getNmTabela() . "." . vopessoavinculo::$nmAtrCd;   	
+    	    	
     	$nmTabelaContrato = vocontrato::getNmTabela();
     	$nmTabela = vopessoa::getNmTabela();
     	
@@ -90,9 +88,10 @@ include_once (caminho_vos. "dbpessoagestor.php");
         $queryFrom .= "\n ON ". $nmTabela . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
         //echo $querySelect."<br>";
         //echo $queryFrom;
+        //$filtro = new filtroManterPessoa();
+        $filtro->groupby = $atributosConsulta;
         
-        return $this->consultarFiltro($filtro, $querySelect, $queryFrom, $validarConsulta);
-        //return $this->consultarComPaginacaoQuery($voentidade, $filtro, $querySelect, $queryFrom);
+        return $this->consultarFiltro($filtro, $querySelect, $queryFrom, $validarConsulta);        
     }
     
     function consultarPessoaPorContrato($filtro){

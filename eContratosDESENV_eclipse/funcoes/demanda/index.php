@@ -201,7 +201,7 @@ function encaminhar() {
             ?>	                    
             <TR>
 	            <TH class="campoformulario" nowrap width="1%">Tp.Documento:</TH>
-				<TD class="campoformulario" width="1%"><?php echo $comboTpDoc->getHtmlSelect(voDocumento::$nmAtrTp,voDocumento::$nmAtrTp, $filtro->tpDocumento, true, "camponaoobrigatorio", true);?>
+				<TD class="campoformulario" width="1%" colspan=3><?php echo $comboTpDoc->getHtmlSelect(voDocumento::$nmAtrTp,voDocumento::$nmAtrTp, $filtro->tpDocumento, true, "camponaoobrigatorio", true);?>
 			</TR>
        <?php
         /*$comboOrdenacao = new select(voPA::getAtributosOrdenacao($cdHistorico));

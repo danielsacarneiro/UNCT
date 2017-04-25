@@ -125,7 +125,8 @@ include_once(caminho_util."DocumentoPessoa.php");
 		$varAtributos = array(
 				self::$nmAtrNome => "Nome",
 				vopessoavinculo::$nmAtrCd=> "Vinculo",
-				vopessoa::getNmTabela() . "." .vopessoa::$nmAtrDhUltAlteracao=> "Data.Alteração"
+				vopessoa::getNmTabela() . "." .vopessoa::$nmAtrDhUltAlteracao=> "Data.Alteração",
+				vopessoa::getNmTabela() . "." . self::$nmAtrCd => "Código"
 		);
 		return $varAtributos;
 	}	

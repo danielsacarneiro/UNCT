@@ -143,7 +143,12 @@ class filtroManter extends multiplosConstrutores{
     	}
     	
     	if($this->groupby != null && $this->groupby != ""){
-    		$filtro = $filtro . "\n GROUP BY " . getSQLStringFormatadaColecaoIN($this->groupby, false );
+    		$str = $this->groupby;
+    		if(count($this->groupby) > 1){
+    			$str = getSQLStringFormatadaColecaoIN($this->groupby, false );
+    		}
+    		
+    		$filtro = $filtro . "\n GROUP BY " . $str;
     	}    	 
     	
     	if($this->cdAtrOrdenacao  != null){
