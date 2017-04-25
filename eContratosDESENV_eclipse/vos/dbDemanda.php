@@ -15,6 +15,7 @@ class dbDemanda extends dbprocesso {
 				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato,
 				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdEspecieContrato,
 				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato,
+				$nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato,
 				$nmTabelaPessoa . "." . vopessoa::$nmAtrDoc,
 				$nmTabelaPessoa . "." . vopessoa::$nmAtrNome 
 		);
@@ -61,6 +62,7 @@ class dbDemanda extends dbprocesso {
 				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato,
 				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato,
 				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato,
+				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
 				
 				// $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . " AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,
 				"COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . "," . $nmTabela . "." . voDemanda::$nmAtrCdSetor . ") AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,

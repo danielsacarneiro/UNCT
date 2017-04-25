@@ -120,7 +120,7 @@ function cancela() {
             <TH class="campoformulario" nowrap>Nome Contratada:</TH>
             <TD class="campoformulario" width="1%"><INPUT type="text" id="nmContratada" name="nmContratada"  value="<?php echo($nmContratada);?>"  class="camporeadonly" size="50" <?=$readonly?>></TD>
             <TH class="campoformulario" width="1%" nowrap>CNPJ/CNPF Contratada:</TH>
-            <TD class="campoformulario" ><INPUT type="text" id="docContratada" name="docContratada"  value="<?php echo($docContratada);?>"  onkeyup="formatarCampoCNPFouCNPJ(this, event);" class="camporeadonly" size="20" maxlength="20" <?=$readonly?>></TD>
+            <TD class="campoformulario" ><INPUT type="text" id="docContratada" name="docContratada"  value="<?php echo(documentoPessoa::getNumeroDocFormatado($docContratada));?>"  onkeyup="formatarCampoCNPFouCNPJ(this, event);" class="camporeadonly" size="20" maxlength="20" <?=$readonly?>></TD>
         </TR>		
 		<TR>
             <TH class="campoformulario" nowrap>Data Proposta:</TH>

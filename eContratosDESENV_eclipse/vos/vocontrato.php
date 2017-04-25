@@ -1,5 +1,6 @@
 <?php
 include_once(caminho_lib."voentidade.php");
+include_once(caminho_util."documentoPessoa.php");
 include_once(caminho_funcoes."documento/dominioTpDocumento.php");
 //include_once(caminho_vos."vogestor.php");
 //include_once(caminho_vos."vogestorpessoa.php");
@@ -262,10 +263,24 @@ include_once(caminho_funcoes."documento/dominioTpDocumento.php");
         $this->cdUsuarioUltAlteracao = id_user;
 	}
 	
+	function isChaveLogicaValida(){
+		$retorno = $this->tipo == null
+		|| $this->anoContrato == null
+		|| $this->cdContrato == null
+		|| $this->cdEspecie == null
+		|| $this->sqEspecie == null;
+		
+		return !$retorno;
+	}
+	
 	function getValoresWhereSQLChave($isHistorico){
 		$nmTabela = self::getNmTabelaStatic($isHistorico);
 		$query = $this->getValoresWhereSQLChaveLogicaSemSQ($isHistorico);
-		$query.= " AND ". $nmTabela . "." . self::$nmAtrSqContrato . "=" . $this->sq;
+		
+		//aqui so usa o sq se a chave logica nao estiver completa
+		if(!$this->isChaveLogicaValida()){
+			$query.= " AND ". $nmTabela . "." . self::$nmAtrSqContrato . "=" . $this->sq;
+		}
 		
 		if($isHistorico)
 			$query.= " AND ". $nmTabela . "." . self::$nmAtrSqHist . "=" . $this->sqHist;
@@ -277,29 +292,13 @@ include_once(caminho_funcoes."documento/dominioTpDocumento.php");
 		$nmTabela = self::getNmTabelaStatic($isHistorico);
 		$query = $nmTabela . "." . self::$nmAtrTipoContrato . "=" . getVarComoString($this->tipo);
 		$query.= " AND " . $nmTabela . "." . self::$nmAtrAnoContrato . "=" . $this->anoContrato;
-		$query.= " AND " . $nmTabela . "." . self::$nmAtrCdContrato . "=" . $this->cdContrato;
+		$query.= " AND " . $nmTabela . "." . self::$nmAtrCdContrato . "=" . $this->cdContrato;		
 		$query.= " AND " . $nmTabela . "." . self::$nmAtrCdEspecieContrato . "=" . getVarComoString($this->cdEspecie);
 		$query.= " AND " . $nmTabela . "." . self::$nmAtrSqEspecieContrato . "=" . $this->sqEspecie;
-			
+		
 		return $query;
 	}
-    
-    function getValoresWhereSQL($voEntidade, $colecaoAtributos){
-        $sqlConector = "";
-        $retorno = "";
-        $nmTabela = $voEntidade->getNmTabelaEntidade(false);        
-        
-        $tamanho = sizeof($colecaoAtributos);                   
-        $chaves = array_keys($colecaoAtributos);        
             
-        for ($i=0;$i<$tamanho;$i++) {
-            $nmAtributo = $chaves[$i];
-            $retorno .= $sqlConector . $this->getAtributoValorSQL($nmAtributo, $colecaoAtributos[$nmAtributo]);
-            $sqlConector = " AND ";
-        }
-        return $retorno;        
-    }
-        
     function getValorChavePrimaria(){    	
     	return $this->sq;
     }

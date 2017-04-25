@@ -2,17 +2,21 @@
 require_once(caminho_util."selectExercicio.php");
 include_once(caminho_funcoes. "pessoa/biblioteca_htmlPessoa.php");
 
+function isContratoValido($voContrato){
+	//so exibe contrato se tiver
+	return $voContrato != null && $voContrato->cdContrato;	
+}
 
-function getContratoDet($voContrato){	
+function getContratoDet($voContrato){
 	$colecao = consultarPessoasContrato($voContrato);	
 	return getContratoDetalhamento($voContrato, $colecao);	
 }
 
 function getContratoDetalhamento($voContrato, $colecao){
-$vo = new vocontrato();
+	$vo = new vocontrato();
 
-//so exibe contrato se tiver
-if($voContrato != null && $voContrato->cdContrato){
+	//so exibe contrato se tiver
+	if(isContratoValido($voContrato)){
 
 	require_once (caminho_funcoes."contrato/dominioTipoContrato.php");
 	$dominioTipoContrato = new dominioTipoContrato();
@@ -44,7 +48,20 @@ if($voContrato != null && $voContrato->cdContrato){
 				<INPUT type="hidden" id="<?=vocontrato::$nmAtrTipoContrato?>" name="<?=vocontrato::$nmAtrTipoContrato?>" value="<?=$voContrato->tipo?>">
                 <TH class="campoformulario" nowrap width=1%>Contrato:</TH>
 				<TD class="campoformulario" colspan=3>Número:&nbsp;&nbsp;&nbsp;&nbsp;
-				<INPUT type="text" value="<?php echo($contrato);?>"  class="camporeadonlyalinhadodireita" size="<?=strlen($contrato)+1?>" readonly>				
+				<INPUT type="text" value="<?php echo($contrato);?>"  class="camporeadonlyalinhadodireita" size="<?=strlen($contrato)+1?>" readonly>	
+				<?php				
+				//$voContrato = new vocontrato();
+				if($voContrato->cdEspecie == null){
+					$voContrato->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
+				}
+				if($voContrato->sqEspecie == null){
+					$voContrato->sqEspecie = 1;
+				}
+				
+				$chaveContrato = $voContrato->getValorChaveHTML();
+		        echo getLinkPesquisa("../contrato/detalharContrato.php?funcao=".constantes::$CD_FUNCAO_DETALHAR."&chave=".$chaveContrato);
+		        $nmCampo = array(voDocumento::getNmTabela(), voDocumento::$nmAtrSq);		        
+		        ?>							
 				<div id=""><?=$campoContratado?></div></TD>
             </TR>	                
 <?php }
@@ -115,5 +132,53 @@ function habilitaContrato() {
 	          </div>	        
 <?php 
 }
+
+function getCdAutorizacaoMaisRecenteContrato($voContrato){
+	$colecao = consultarPessoasContrato($voContrato);
+	return getContratoDetalhamento($voContrato, $colecao);
+}
+
+function consultarDadosContratoCompilado($voContrato){
+	$retorno = "";
+	
+	if(isContratoValido($voContrato)){	
+		$nmTabela = $voContrato->getNmTabelaEntidade(false);
+		
+		$nmAtributosWhere = array(
+				vocontrato::$nmAtrAnoContrato => $voContrato->anoContrato,
+				vocontrato::$nmAtrCdContrato => $voContrato->cdContrato,
+				vocontrato::$nmAtrTipoContrato => "'$voContrato->tipo'"
+		);
+	
+		$query = "SELECT * ";
+		$query.= "\n FROM ".$nmTabela;
+		$query.= "\n WHERE ";
+		$query.= $voContrato->getValoresWhereSQL($voContrato, $nmAtributosWhere);
+		$query.= "\n ORDER BY " . vocontrato::$nmAtrSqContrato;
+		
+		$db = new dbcontrato();
+		$retorno = $db->consultarEntidade($query, false);
+		$retorno = $retorno[0];
+	}
+
+	//echo $query;
+	return $retorno;
+}
+
+/*function consultarDadosContratoCompilado($voContrato){
+	//$voContrato = new vocontrato();
+	$filtro = new filtroManterContrato(false);
+	$filtro->anoContrato = $voContrato->anoContrato;
+	$filtro->cdContrato = $voContrato->cdContrato;
+	$filtro->tipo = $voContrato->tipo;
+
+	//seta clausula group by
+	$filtro->groupby = array(vocontrato::$nmAtrAnoContrato, vocontrato::$nmAtrCdContrato, vocontrato::$nmAtrTipoContrato);
+
+	$db = new dbcontrato();
+	$colecao = $db->consultarPessoaFiltro($filtro);
+
+	return $colecao;
+}*/
 
 ?>

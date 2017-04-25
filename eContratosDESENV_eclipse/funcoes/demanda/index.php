@@ -225,16 +225,16 @@ function encaminhar() {
                   ?>
                     <TH class="headertabeladados" width="1%" nowrap>Ano</TH>
                     <TH class="headertabeladados" width="1%">Núm.</TH>
-                    <TH class="headertabeladados" width="1%">Setor.Resp</TH>
-                    <TH class="headertabeladados" width="1%">Setor.Atual</TH>
+                    <TH class="headertabeladados" width="1%">Origem</TH>
+                    <TH class="headertabeladados" width="1%">Atual</TH>
                     <TH class="headertabeladados" width="1%">Tipo</TH>
-                    <TH class="headertabeladados" width="1%">Contrato</TH>
-                    <TH class="headertabeladados"width="90%" nowrap >Texto</TH>
+                    <TH class="headertabeladados" width="30%">Contrato</TH>
+                    <TH class="headertabeladados"width="60%" nowrap >Texto</TH>
                     <TH class="headertabeladados" width="1%">Situação</TH>                    
                     <TH class="headertabeladados" width="1%">Prior.</TH>
                     <TH class="headertabeladados"width="1%" nowrap >Usuário</TH>
                     <TH class="headertabeladados"width="1%" nowrap >Dt.Abertura</TH>
-                    <TH class="headertabeladados"width="1%" nowrap >Dt.Últ.Movimentação</TH>
+                    <TH class="headertabeladados"width="1%" nowrap >Últ.Movim.</TH>
                 </TR>
                 <?php								
                 if (is_array($colecao))
@@ -256,6 +256,7 @@ function encaminhar() {
                 $dominioTipoContrato = new dominioTipoContrato();
                 
                 for ($i=0;$i<$tamanho;$i++) {
+                		$contrato = "";
                         $voAtual = new voDemanda();
                         $voAtual->getDadosBanco($colecao[$i]);     
                                                 
@@ -273,6 +274,8 @@ function encaminhar() {
                         $setorDestinoAtual = $dominioSetor->getDescricao($setorDestinoAtual);
                         
                         $tipo = $dominioTipo->getDescricao($voAtual->tipo);
+                        $empresa = $colecao[$i][vopessoa::$nmAtrNome];
+                        
                         if($voAtual->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO
                         		|| $voAtual->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_PROCADM){
                         	$voDemandaContrato = new voDemandaContrato();
@@ -280,7 +283,11 @@ function encaminhar() {
                         	
                         	$contrato = formatarCodigoAnoComplemento($voDemandaContrato->voContrato->cdContrato,
                         			$voDemandaContrato->voContrato->anoContrato,
-                        			$dominioTipoContrato->getDescricao($voDemandaContrato->voContrato->tipo));                        	
+                        			$dominioTipoContrato->getDescricao($voDemandaContrato->voContrato->tipo));
+                        	
+                        	if($empresa != null){
+                        		$contrato .= "-".$empresa;
+                        	}
                         	 
                         	//$tipo = $tipo . ":". $contrato;
                         }
@@ -309,7 +316,7 @@ function encaminhar() {
 					<TD class="tabeladados" nowrap><?php echo $setor?></TD>
 					<TD class="tabeladados" nowrap><?php echo $setorDestinoAtual?></TD>
 					<TD class="tabeladados" nowrap><?php echo $tipo?></TD>
-					<TD class="tabeladados" nowrap><?php echo $contrato?></TD>
+					<TD class="tabeladados" ><?php echo $contrato?></TD>
                     <TD class="tabeladados" ><?php echo $voAtual->texto;?></TD>
                     <TD class="<?=$classColunaSituacao;?>" nowrap><?php echo $situacao?></TD>                    
                     <TD class="tabeladados" nowrap><?php echo $prioridade?></TD>

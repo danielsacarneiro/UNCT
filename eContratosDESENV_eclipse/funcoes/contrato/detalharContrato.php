@@ -76,9 +76,10 @@ function isFormularioValido() {
 	return true;
 }
 
-function cancela() {	
+function cancelar() {
 	//history.back();
-	location.href="index.php?consultar=S";	
+	lupa = document.frm_principal.lupa.value;	
+	location.href="index.php?consultar=S&lupa="+ lupa;	
 }
 
 function confirmar() {
@@ -310,14 +311,8 @@ function confirmar() {
 						<TD>
                     		<TABLE class="barraacoesaux" cellpadding="0" cellspacing="0">
 	                    	<TR>
-                                <?php
-                                if($isExclusao){
-                                ?>
-                                    <TD class="botaofuncao"><?=getBotaoConfirmar()?></TD>
-                                <?php
-                                }?>
-								<TD class="botaofuncao"><button id="cancelar" onClick="javascript:cancela();" class="botaofuncaop" type="button" accesskey="c">Cancelar</button></TD>
-						    </TR>
+							<?=getBotoesRodape();?>						    
+							</TR>
 		                    </TABLE>
 	                    </TD>
                     </TR>  

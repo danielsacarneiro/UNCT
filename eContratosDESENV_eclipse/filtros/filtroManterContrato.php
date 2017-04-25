@@ -6,12 +6,43 @@ include_once (caminho_util . "bibliotecaHTML.php");
 class filtroManterContrato extends filtroManter {
 	public static $nmFiltro = "filtroManterContrato";
 	public static $nmAtrInTrazerConsolidadoPorVigencia = "nmAtrInTrazerConsolidadoPorVigencia";
+		
+	var $cdContrato;
+	var $anoContrato;
+	var $tipo;
+	var $especie;
+	var $cdEspecie;
+	var $modalidade;
+	
+	var $contratada;
+	var $docContratada;
+	var $gestor;
+	
+	var $objeto;
+	var $dtVigenciaInicial;
+	var $dtVigenciaFinal;
+	
+	var $dtInicio1;
+	var $dtInicio2;
+	var $dtFim1;
+	var $dtFim2;
+	var $dtInclusao;
+	
+	var $cdConsultarArquivo;
 	var $inTrazerConsolidadoVigencia;
+	
 	// ...............................................................
 	// construtor
-	function __construct() {
-		parent::__construct ( true );
-		
+	
+	function __construct1($pegarFiltrosDaTela) {
+		parent::__construct1($pegarFiltrosDaTela);
+	
+		if($pegarFiltrosDaTela){
+			$this->getFiltroFormulario();		
+		}	
+	}
+	
+	function getFiltroFormulario(){
 		$this->cdContrato = @$_POST [vocontrato::$nmAtrCdContrato];
 		$this->anoContrato = @$_POST [vocontrato::$nmAtrAnoContrato];
 		$this->tipo = @$_POST [vocontrato::$nmAtrTipoContrato];
@@ -34,11 +65,9 @@ class filtroManterContrato extends filtroManter {
 		$this->dtInclusao = @$_POST [voentidade::$nmAtrDhInclusao];
 		
 		$this->cdConsultarArquivo = @$_POST ["cdConsultarArquivo"];
-		$this->inTrazerConsolidadoVigencia = @$_POST [self::$nmAtrInTrazerConsolidadoPorVigencia];
-		
-		// para o caso de ser necessario setar um filtro default para nao trazer todos os registros
-		// $this->temValorDefaultSetado = false;
+		$this->inTrazerConsolidadoVigencia = @$_POST [self::$nmAtrInTrazerConsolidadoPorVigencia];		
 	}
+		
 	function isSetaValorDefault() {
 		$retorno = false;
 		// verifica os filtros obrigatorios

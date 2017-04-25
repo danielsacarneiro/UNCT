@@ -54,7 +54,7 @@ class filtroManterDemanda extends filtroManter{
 		$this->dtUltMovimentacao = @$_POST[voDemanda::$nmAtrDtReferencia];
 		
 		if($this->cdOrdenacao == null){
-			$this->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
+			$this->cdOrdenacao = constantes::$CD_ORDEM_CRESCENTE;
 		}		
 	}
 	 

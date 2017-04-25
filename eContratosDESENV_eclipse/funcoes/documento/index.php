@@ -250,7 +250,7 @@ function selecionar() {
                        <TD>
                         <TABLE class="barraacoesaux" cellpadding="0" cellspacing="0">
 	                   	<TR> 
-                            <?=getBotoesRodape();?>                            
+                            <?=getBotoesRodape();?>
                          </TR>
                          </TABLE>
 	                   </TD>

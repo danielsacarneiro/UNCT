@@ -95,7 +95,8 @@ Class voDemandaContrato extends voentidade{
 		$this->voContrato->anoContrato = $registrobanco[self::$nmAtrAnoContrato];
 		$this->voContrato->tipo = $registrobanco[self::$nmAtrTipoContrato];		
 		$this->voContrato->sqEspecie	 = $registrobanco[self::$nmAtrSqEspecieContrato];
-		$this->voContrato->cdEspecie	 = $registrobanco[self::$nmAtrCdEspecieContrato];				
+		$this->voContrato->cdEspecie	 = $registrobanco[self::$nmAtrCdEspecieContrato];
+		$this->voContrato->sq = $registrobanco[vocontrato::$nmAtrSqContrato];
 	}
 
 	function getDadosFormulario(){		

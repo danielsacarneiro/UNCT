@@ -24,7 +24,7 @@ class filtroManterPessoa extends filtroManter{
     var $dtReferenciaContrato ="";
         	
 	function __construct1($pegarFiltrosDaTela) {
-		parent::__construct2(true, $pegarFiltrosDaTela);
+		parent::__construct1($pegarFiltrosDaTela);
 		
 		if($pegarFiltrosDaTela){
 			$this->getFiltroFormulario();
