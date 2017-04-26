@@ -26,8 +26,12 @@ function getContratoDetalhamento($voContrato, $colecao){
 
 	include_once(caminho_funcoes."pessoa/biblioteca_htmlPessoa.php");
 	
-	$campoContratado = getCampoContratada("", "", $voContrato->sq);	
+	//$voContrato = new vocontrato();
+	$chaveContrato = $voContrato->getValorChaveHTML();
+	$campoContratado = getCampoContratada("", "", $chaveContrato);
+	$temLupa = false;
 	if($colecao != ""){
+		$temLupa = true;
 		if(!isArrayMultiDimensional($colecao)){
 			$nmpessoa = $colecao[vopessoa::$nmAtrNome];
 			$docpessoa = $colecao[vopessoa::$nmAtrDoc];		
@@ -60,10 +64,10 @@ function getContratoDetalhamento($voContrato, $colecao){
 				if($voContrato->sqEspecie == null){
 					$voContrato->sqEspecie = 1;
 				}
-				
-				$chaveContrato = $voContrato->getValorChaveHTML();
-		        echo getLinkPesquisa("../contrato/detalharContrato.php?funcao=".constantes::$CD_FUNCAO_DETALHAR."&chave=".$chaveContrato);
-		        $nmCampo = array(voDocumento::getNmTabela(), voDocumento::$nmAtrSq);		        
+								
+				if($temLupa){
+		        	echo getLinkPesquisa("../contrato/detalharContrato.php?funcao=".constantes::$CD_FUNCAO_DETALHAR."&chave=".$chaveContrato);
+				}		        		        
 		        ?>							
 				<div id=""><?=$campoContratado?></div></TD>
             </TR>	                

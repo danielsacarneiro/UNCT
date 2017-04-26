@@ -14,11 +14,9 @@ ini_set('max_execution_time', 120);
 
 $strFiltro = $filtro->contratada;
 $MenuPai = new pasta("menu_pai", $strFiltro, 1, null);
-$MenuPai->setDir("H:\\\UNCT\\\CONTRATOS JÁ ASSINADOS");
+$MenuPai->setDir(dominioTpDocumento::$ENDERECO_DRIVE . "\\\UNCT\\\CONTRATOS JÁ ASSINADOS");
+//$MenuPai->setDir(dominioTpDocumento::$ENDERECO_DRIVE . "\\\UNCT");
 $MenuPai->cdControleConsulta = pasta::$IN_FILTRAR_APENAS_PAI;
-//$MenuPai->setDir("H:\\\UNCT");
-//$MenuPai->setDir("H:\\\ASSESSORIA JURÍDICA\\\ATJA");
-
 
 criaMenu($MenuPai, true);
 geraArvoreMenu($MenuPai);

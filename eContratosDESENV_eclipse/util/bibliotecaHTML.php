@@ -607,7 +607,7 @@ function formatarCodigoAnoComplementoArgs($cd, $ano, $pTamanhoCodigo, $complemen
 		$tamanhoCodigo = $pTamanhoCodigo;
 	}
 	
-	$retorno .= complementarCharAEsquerda ( $cd, "0", $tamanhoCodigo ) . "-" . $ano;
+	$retorno .= complementarCharAEsquerda ( $cd, "0", $tamanhoCodigo ) . "/" . substr($ano, 2, 2);
 	
 	return $retorno;
 }

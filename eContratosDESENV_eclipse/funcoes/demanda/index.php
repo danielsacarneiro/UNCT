@@ -292,7 +292,7 @@ function encaminhar() {
                         			$dominioTipoContrato->getDescricao($voDemandaContrato->voContrato->tipo));
                         	
                         	if($empresa != null){
-                        		$contrato .= "-".$empresa;
+                        		$contrato .= ": ".$empresa;
                         	}
                         	 
                         	//$tipo = $tipo . ":". $contrato;

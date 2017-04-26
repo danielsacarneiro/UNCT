@@ -216,53 +216,6 @@ function contaQtdArquivosEExibe($pasta){
 	}
 }
 
-/*function montarColecaoItens2($pastaMenuPai){
-	$indice = $pastaMenuPai->indice;
-	$pasta = $pastaMenuPai->dir."\\\*";
-	$dir = new GlobIterator($pasta);
-	$filtro = $pastaMenuPai->filtro;
-	
-	$strFiltro = $filtro->contratada;	
-	//if($filtro->cdContrato != null)
-	//	$strFiltro .= CAMPO_SEPARADOR.$filtro->cdContrato;
-
-	$i = 0;
-	$retorno = "";
-
-	foreach($dir as $file){
-		if ($file->isDir() || $file->isFile()){
-
-			$dname = $file->getFilename();
-			
-				$enderecoPasta = $pastaMenuPai->dir;
-				if ($file->isDir()){
-					$item = new pasta($dname,$filtro, ++$indice);
-
-					$item->cdControleConsulta = true;
-					$item->setDir($enderecoPasta.pasta::$barra.$item->nome);
-					
-					$retorno[$i] = $item;
-					$i++;						
-						
-				}else{
-					if(existeStr1NaStr2ComSeparador($dname, $strFiltro)){
-						$item = new arquivo($dname, ++$indice);
-						$item->dir=$enderecoPasta;
-						
-						$retorno[$i] = $item;
-						$i++;
-						
-					}
-				}
-			
-		}
-
-	}
-	$pastaMenuPai->filtro->numTotalRegistros = $i;
-
-	return $retorno;
-}*/
-
 function geraArvoreMenu($pastaMenuPai){	
 	montarColecaoItens($pastaMenuPai);
 	geraArvoreEmDefinitivo($pastaMenuPai);
