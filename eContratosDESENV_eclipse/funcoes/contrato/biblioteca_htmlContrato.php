@@ -25,21 +25,24 @@ function getContratoDetalhamento($voContrato, $colecao){
 			$dominioTipoContrato->getDescricao($voContrato->tipo));
 
 	include_once(caminho_funcoes."pessoa/biblioteca_htmlPessoa.php");
-		
-	if(!isArrayMultiDimensional($colecao)){
-		$nmpessoa = $colecao[vopessoa::$nmAtrNome];
-		$docpessoa = $colecao[vopessoa::$nmAtrDoc];
-		$campoContratado = getCampoContratada($nmpessoa, $docpessoa, $voContrato->sq);		
-	}else{
-		$campoContratado = "";
-		$tamanhoColecao = count($colecao);
-		for($i=0; $i<$tamanhoColecao;$i++){
-			$nmpessoa = $colecao[$i][vopessoa::$nmAtrNome];
-			$docpessoa = $colecao[$i][vopessoa::$nmAtrDoc];
-			$campoContratado .= getCampoContratada($nmpessoa, $docpessoa, $voContrato->sq)."<br>";				
-		}
-		
-	}	
+	
+	$campoContratado = getCampoContratada("", "", $voContrato->sq);	
+	if($colecao != ""){
+		if(!isArrayMultiDimensional($colecao)){
+			$nmpessoa = $colecao[vopessoa::$nmAtrNome];
+			$docpessoa = $colecao[vopessoa::$nmAtrDoc];		
+			$campoContratado = getCampoContratada($nmpessoa, $docpessoa, $voContrato->sq);		
+		}else{
+			$campoContratado = "";
+			$tamanhoColecao = count($colecao);
+			for($i=0; $i<$tamanhoColecao;$i++){
+				$nmpessoa = $colecao[$i][vopessoa::$nmAtrNome];
+				$docpessoa = $colecao[$i][vopessoa::$nmAtrDoc];
+				$campoContratado .= getCampoContratada($nmpessoa, $docpessoa, $voContrato->sq)."<br>";				
+			}
+			
+		}	
+	}
 	
 	?>
 			<TR>

@@ -109,7 +109,7 @@ function selecionar() {
 }
 
 </SCRIPT>
-<?=setTituloPagina(null)?>
+<?=setTituloPagina($vo->getTituloJSP())?>
 </HEAD>
 <BODY class="paginadados" onload="">
 	  
