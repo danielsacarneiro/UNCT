@@ -1,195 +1,185 @@
 <?php
-include_once(caminho_lib."voentidade.php");
-include_once("dbDocumento.php");
-include_once(caminho_funcoes."documento/dominioTpDocumento.php");
-include_once(caminho_funcoes."documento/biblioteca_htmlDocumento.php");
-include_once(caminho_util."dominioSetor.php");
-
-
-  Class voDocumento extends voentidade{
-  		 
-  	static $nmAtrCdSetor = "doc_cd_setor";
-  	static $nmAtrAno = "doc_ex";  	
-  	static $nmAtrSq = "sq";
-  	static $nmAtrTp = "doc_tp";
-  	static $nmAtrLink = "doc_link";
-  	    
-		var $sq  = "";		
-		var $cdSetor = "";
-		var $ano =  "";		
-		var $tp =  "";
-		var $link =  "";
-        
-        var $dbprocesso = "";
-
-// ...............................................................
-// Funcoes ( Propriedades e métodos da classe )
-
-   function __construct() {
-       parent::__construct();
-       $this->temTabHistorico = false;
-       $this->dbprocesso= new dbDocumento();
-              
-       //retira os atributos padrao que nao possui
-       //remove tambem os que o banco deve incluir default
-        $arrayAtribRemover = array(
-       		self::$nmAtrDhInclusao,        		
-        	self::$nmAtrDhUltAlteracao,
-       		self::$nmAtrCdUsuarioInclusao        	
-       );
-       $this->removeAtributos($arrayAtribRemover);
-       $this->varAtributosARemover = $arrayAtribRemover;
-              
-   }
-   
-   public static function getTituloJSP(){
-		return  "DOCUMENTOS";
-   }
-    
-    public static function getNmTabela(){
-        return  "documento";
-    }
-    
-    public static function getNmClassProcesso(){
-        return  "dbDocumento";
-    }      
-    
-    function getValoresWhereSQLChave($isHistorico){
-        $nmTabela = $this->getNmTabelaEntidade($isHistorico);        
-		$query = $nmTabela . "." . self::$nmAtrSq . "=" . $this->sq;
-		$query .= "\n AND " . $nmTabela . "." . self::$nmAtrCdSetor . "=" . $this->cdSetor;
-		$query .= "\n AND " . $nmTabela . "." . self::$nmAtrAno . "=" . $this->ano;
-		$query .= "\n AND " . $nmTabela . "." . self::$nmAtrTp. "='" . $this->tp . "'";
-		
-        if($isHistorico)
-            $query.= " AND ". $nmTabela . "." . self::$nmAtrSqHist . "=" . $this->sqHist;
-        
-        return $query;        
-    }    
-    
-    function getAtributosFilho(){    
-
-    	$retorno = array(
-        	self::$nmAtrSq,
-        	self::$nmAtrCdSetor,            
-        	self::$nmAtrAno,
-    		self::$nmAtrTp,
-    		self::$nmAtrLink
-        );
-        
-        return $retorno;    
-    }
-    
-    function getAtributosChavePrimaria(){
-    	$retorno = array(
-    			self::$nmAtrSq,
-    			self::$nmAtrCdSetor,
-    			self::$nmAtrAno,
-    			self::$nmAtrTp
-    	);
-    
-    	return $retorno;
-    }
-        
-    function getDadosRegistroBanco($registrobanco){
-        //as colunas default de voentidade sao incluidas pelo metodo getDadosBanco do voentidade
-		$this->sq = $registrobanco[self::$nmAtrSq];
-		$this->cdSetor = $registrobanco[self::$nmAtrCdSetor];
-		$this->ano = $registrobanco[self::$nmAtrAno];
-		$this->tp= $registrobanco[self::$nmAtrTp];
-		$this->link= $registrobanco[self::$nmAtrLink];
-	}   
+include_once (caminho_lib . "voentidade.php");
+include_once ("dbDocumento.php");
+include_once (caminho_funcoes . "documento/dominioTpDocumento.php");
+include_once (caminho_funcoes . "documento/biblioteca_htmlDocumento.php");
+include_once (caminho_util . "dominioSetor.php");
+class voDocumento extends voentidade {
+	static $nmAtrCdSetor = "doc_cd_setor";
+	static $nmAtrAno = "doc_ex";
+	static $nmAtrSq = "sq";
+	static $nmAtrTp = "doc_tp";
+	static $nmAtrLink = "doc_link";
+	var $sq = "";
+	var $cdSetor = "";
+	var $ano = "";
+	var $tp = "";
+	var $link = "";
+	var $dbprocesso = "";
 	
-	function getDadosFormulario(){
-		$this->sq = @$_POST[self::$nmAtrSq];
-		$this->cdSetor = @$_POST[self::$nmAtrCdSetor];
-		$this->ano = @$_POST[self::$nmAtrAno];
-		$this->tp= @$_POST[self::$nmAtrTp];
-		$this->link= $_POST[self::$nmAtrLink];
-		        
-        $this->dhUltAlteracao = @$_POST[self::$nmAtrDhUltAlteracao];
-        $this->sqHist = @$_POST[self::$nmAtrSqHist];
-        //usuario de ultima manutencao sempre sera o id_user
-        $this->cdUsuarioUltAlteracao = id_user;
+	// ...............................................................
+	// Funcoes ( Propriedades e métodos da classe )
+	function __construct() {
+		parent::__construct ();
+		$this->temTabHistorico = false;
+		$this->dbprocesso = new dbDocumento ();
+		
+		// retira os atributos padrao que nao possui
+		// remove tambem os que o banco deve incluir default
+		$arrayAtribRemover = array (
+				self::$nmAtrDhInclusao,
+				self::$nmAtrDhUltAlteracao,
+				self::$nmAtrCdUsuarioInclusao 
+		);
+		$this->removeAtributos ( $arrayAtribRemover );
+		$this->varAtributosARemover = $arrayAtribRemover;
+	}
+	public static function getTituloJSP() {
+		return "DOCUMENTOS";
+	}
+	public static function getNmTabela() {
+		return "documento";
+	}
+	public static function getNmClassProcesso() {
+		return "dbDocumento";
 	}
 	
-	function getEnderecoTpDocumento(){
+	function getValoresWhereSQLChave($isHistorico){
+		$nmTabela = $this->getNmTabelaEntidade($isHistorico);
+		$query =  $this->getValoresWhereSQLChaveLogicaSemSQ($isHistorico);
+		$query .= " AND " . $nmTabela . "." . self::$nmAtrSq . "=" . $this->sq;
+	
+		if($isHistorico)
+			$query.= " AND ". $nmTabela . "." . self::$nmAtrSqHist . "=" . $this->sqHist;
+	
+		return $query;
+	}
+	
+	function getValoresWhereSQLChaveLogicaSemSQ($isHistorico){
+		$nmTabela = $this->getNmTabelaEntidade($isHistorico);
+		$query = $nmTabela . "." . self::$nmAtrCdSetor . "=" . $this->cdSetor;
+		$query .= "\n AND " . $nmTabela . "." . self::$nmAtrAno . "=" . $this->ano;
+		$query .= "\n AND " . $nmTabela . "." . self::$nmAtrTp . "='" . $this->tp . "'";		
+	
+		return $query;
+	}
+	
+	function getAtributosFilho() {
+		$retorno = array (
+				self::$nmAtrSq,
+				self::$nmAtrCdSetor,
+				self::$nmAtrAno,
+				self::$nmAtrTp,
+				self::$nmAtrLink 
+		);
+		
+		return $retorno;
+	}
+	function getAtributosChavePrimaria() {
+		$retorno = array (
+				self::$nmAtrSq,
+				self::$nmAtrCdSetor,
+				self::$nmAtrAno,
+				self::$nmAtrTp 
+		);
+		
+		return $retorno;
+	}
+	function getDadosRegistroBanco($registrobanco) {
+		// as colunas default de voentidade sao incluidas pelo metodo getDadosBanco do voentidade
+		$this->sq = $registrobanco [self::$nmAtrSq];
+		$this->cdSetor = $registrobanco [self::$nmAtrCdSetor];
+		$this->ano = $registrobanco [self::$nmAtrAno];
+		$this->tp = $registrobanco [self::$nmAtrTp];
+		$this->link = $registrobanco [self::$nmAtrLink];
+	}
+	function getDadosFormulario() {
+		$this->sq = @$_POST [self::$nmAtrSq];
+		$this->cdSetor = @$_POST [self::$nmAtrCdSetor];
+		$this->ano = @$_POST [self::$nmAtrAno];
+		$this->tp = @$_POST [self::$nmAtrTp];
+		$this->link = $_POST [self::$nmAtrLink];
+		
+		$this->dhUltAlteracao = @$_POST [self::$nmAtrDhUltAlteracao];
+		$this->sqHist = @$_POST [self::$nmAtrSqHist];
+		// usuario de ultima manutencao sempre sera o id_user
+		$this->cdUsuarioUltAlteracao = id_user;
+	}
+	function getEnderecoTpDocumento() {
 		$retorno = "";
 		
-		//$domDoc = new dominioTpDocumento();
-		$domSetor = new dominioSetor();
-		$retorno = dominioTpDocumento::getEnderecoPastaBase();
+		// $domDoc = new dominioTpDocumento();
+		$domSetor = new dominioSetor ();
+		$retorno = dominioTpDocumento::getEnderecoPastaBase ();
+		if ($this->cdSetor == dominioSetor::$CD_SETOR_UNCT) {
+			$retorno = dominioTpDocumento::getEnderecoPastaBaseUNCT ();
+		}
 		
-		if($this->tp != null){
+		if ($this->tp != null) {
 			
-			if($this->tp == dominioTpDocumento::$CD_TP_DOC_NOTA_TECNICA){
-				$retorno.= dominioTpDocumento::$ENDERECO_PASTA_NOTA_TECNICA;
-				$retorno.= dominioTpDocumento::$ENDERECO_PASTA_NOTA_TECNICA . " $this->ano\\";
+			if ($this->tp == dominioTpDocumento::$CD_TP_DOC_NOTA_TECNICA) {
+				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_DOCUMENTOS;
+				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_NOTA_TECNICA;
+				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_NOTA_TECNICA . " $this->ano\\";
 				
-				$retorno.=$this->link;
+				$retorno .= $this->link;
+			} else if ($this->tp == dominioTpDocumento::$CD_TP_DOC_OFICIO) {
+				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_DOCUMENTOS;
+				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_OFICIO;
+				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_OFICIO . " $this->ano\\";
 				
-			}else if($this->tp == dominioTpDocumento::$CD_TP_DOC_OFICIO){
-				if($this->cdSetor == dominioSetor::$CD_SETOR_UNCT){
-					$retorno = dominioTpDocumento::getEnderecoPastaBaseUNCT();
-				}
+				$retorno .= $this->link;
+			} else if ($this->tp == dominioTpDocumento::$CD_TP_DOC_NOTIFICACAO) {
+				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_PA;
+				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_NOTIFICACAO;
+				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_NOTIFICACAO . " $this->ano\\";
 				
-				$retorno.= dominioTpDocumento::$ENDERECO_PASTA_OFICIO;
-				$retorno.= dominioTpDocumento::$ENDERECO_PASTA_OFICIO . " $this->ano\\";				
+				$retorno .= $this->link;
+			} else if ($this->tp == dominioTpDocumento::$CD_TP_DOC_NOTA_IMPUTACAO) {
+				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_PA;
+				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_NOTAS_IMPUTACAO;
+				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_NOTAS_IMPUTACAO . " $this->ano\\";
 				
-				$retorno.=$this->link;
-			}else if($this->tp == dominioTpDocumento::$CD_TP_DOC_NOTIFICACAO){				
-					$retorno.= dominioTpDocumento::$ENDERECO_PASTA_PA;					
-					$retorno.= dominioTpDocumento::$ENDERECO_PASTA_NOTIFICACAO;
-					$retorno.= dominioTpDocumento::$ENDERECO_PASTA_NOTIFICACAO . " $this->ano\\";
+				$retorno .= $this->link;
+			} else if ($this->tp == dominioTpDocumento::$CD_TP_DOC_OUTROS) {
 				
-					$retorno.=$this->link;
-			}else if($this->tp == dominioTpDocumento::$CD_TP_DOC_NOTA_IMPUTACAO){
-						$retorno.= dominioTpDocumento::$ENDERECO_PASTA_PA;
-						$retorno.= dominioTpDocumento::$ENDERECO_PASTA_NOTAS_IMPUTACAO;
-						$retorno.= dominioTpDocumento::$ENDERECO_PASTA_NOTAS_IMPUTACAO . " $this->ano\\";
-					
-						$retorno.=$this->link;
-			}				
+				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_DOCUMENTOS;
+				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_OUTROS;
+				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_OUTROS . " $this->ano\\";
+				
+				$retorno .= $this->link;
+			}
 		}
 		
 		return $retorno;
 	}
-	
-	function formatarCodigo(){	
-		return self::formatarCodigoDocumento($this->sq, $this->cdSetor, $this->ano, $this->tp);
+	function formatarCodigo() {
+		return self::formatarCodigoDocumento ( $this->sq, $this->cdSetor, $this->ano, $this->tp );
 	}
-	
-	static function formatarCodigoDocumento($sq, $cdSetor, $ano, $tpDoc){
+	static function formatarCodigoDocumento($sq, $cdSetor, $ano, $tpDoc) {
 		// biblioteca_htmlDocumento
-		return formatarCodigoDocumento($sq, $cdSetor, $ano, $tpDoc);		
+		return formatarCodigoDocumento ( $sq, $cdSetor, $ano, $tpDoc );
 	}
-                
-	function toString(){						
-		$retorno.= "Ano:". $this->ano. ",";
-        $retorno.= "Setor:". $this->cdSetor . ",";
-        $retorno.= "TpDoc:". $this->tp. ",";
-        $retorno.= "Sq:". $this->sq . ",";
-        $retorno.= "Link:". $this->link. ",";
-		return $retorno;		
-	}   
-	
-	function getValorChavePrimaria(){
-		return $this->ano 
-				. CAMPO_SEPARADOR. $this->cdSetor
-				. CAMPO_SEPARADOR. $this->tp
-				. CAMPO_SEPARADOR. $this->sq;
-	}
-		
-	function getChavePrimariaVOExplode($array){
-		$this->ano = $array[0];
-		$this->cdSetor= $array[1];		
-		$this->tp = $array[2];
-		$this->sq = $array[3];
-	}
-	
-	function getMensagemComplementarTelaSucesso(){
-		$retorno = "Documento: " . $this->formatarCodigo();
+	function toString() {
+		$retorno .= "Ano:" . $this->ano . ",";
+		$retorno .= "Setor:" . $this->cdSetor . ",";
+		$retorno .= "TpDoc:" . $this->tp . ",";
+		$retorno .= "Sq:" . $this->sq . ",";
+		$retorno .= "Link:" . $this->link . ",";
 		return $retorno;
-	}	
+	}
+	function getValorChavePrimaria() {
+		return $this->ano . CAMPO_SEPARADOR . $this->cdSetor . CAMPO_SEPARADOR . $this->tp . CAMPO_SEPARADOR . $this->sq;
+	}
+	function getChavePrimariaVOExplode($array) {
+		$this->ano = $array [0];
+		$this->cdSetor = $array [1];
+		$this->tp = $array [2];
+		$this->sq = $array [3];
+	}
+	function getMensagemComplementarTelaSucesso() {
+		$retorno = "Documento: " . $this->formatarCodigo ();
+		return $retorno;
+	}
 }
 ?>

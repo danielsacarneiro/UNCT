@@ -25,11 +25,12 @@ include_once(caminho_util."dominio.class.php");
 // ...............................................................
 // Construtor
     function __construct () {        
-		$this->colecao = self::getColecao();
+		$this->colecao = self::getColecao();		
+		//ksort($this->colecao);
 	}
 	
 	static function getColecao(){
-		return array(
+		$retorno = array(
 				self::$CD_SETOR_ATJA => "ATJA",
 				self::$CD_SETOR_CPL => self::$DS_SETOR_CPL,
 				self::$CD_SETOR_DILC => self::$DS_SETOR_DILC,
@@ -40,6 +41,10 @@ include_once(caminho_util."dominio.class.php");
 				self::$CD_SETOR_SAD => self::$DS_SETOR_SAD,
 				self::$CD_SETOR_PGE => self::$DS_SETOR_PGE
 		);
+		
+		uksort($retorno, 'strnatcmp');
+		
+		return $retorno;
 	}
 	
 }

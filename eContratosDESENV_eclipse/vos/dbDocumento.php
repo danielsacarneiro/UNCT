@@ -18,11 +18,11 @@ include_once 'voDocumento.php';
   	function incluir($vo){
   		  	
   		if($vo->sq == null || $vo->sq == ""){
-  			$vo->sq = $this->getProximoSequencialChaveComposta(voDocumento::$nmAtrSq, $vo);
-  			//echo "EH NULO";
+  			$vo->sq = $this->getProximoSequencialChaveComposta(voDocumento::$nmAtrSq, $vo);  			
   		}
   	
   		$query = $this->incluirQueryVO($vo);
+  		//echo $query;
   		$retorno = $this->cDb->atualizar($query);
   	
   		return $vo;

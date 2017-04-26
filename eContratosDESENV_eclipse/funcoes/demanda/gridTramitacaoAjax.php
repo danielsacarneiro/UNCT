@@ -36,14 +36,14 @@
 				$html .= "<TH class='headertabeladados' width='1%'>&nbsp;&nbsp;X</TH>  \n";
 			}
 			$html .= "<TH class='headertabeladados' width='1%' nowrap>Número</TH>   \n";
-			$html .= "<TH class='headertabeladados' width='1%'>Setor.Origem</TH> \n";
-			$html .= "<TH class='headertabeladados' width='1%'>Setor.Destino</TH> \n";
+			$html .= "<TH class='headertabeladados' width='1%'>Origem</TH> \n";
+			$html .= "<TH class='headertabeladados' width='1%'>Destino</TH> \n";
 			$html .= "<TH class='headertabeladados' width='90%'>Texto</TH> \n";
 			$html .= "<TH class='headertabeladados' width='1%' nowrap>Anexo</TH> \n";
 			$html .= "<TH class='headertabeladados' width='1%' nowrap>PRT</TH> \n";
 			$html .= "<TH class='headertabeladados' width='1%' nowrap>Usuário</TH> \n";
-			$html .= "<TH class='headertabeladados' width='1%' nowrap>Data.Referência</TH> \n";			
-			$html .= "<TH class='headertabeladados' width='1%' nowrap>Movimentação</TH> \n";
+			$html .= "<TH class='headertabeladados' width='1%' nowrap>Dt.Referência</TH> \n";			
+			$html .= "<TH class='headertabeladados' width='1%' nowrap>Ult.Mov.</TH> \n";
 			$html .= "</TR> \n";
 			       
 			$sq = 1;

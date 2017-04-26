@@ -5,9 +5,12 @@ include_once(caminho_util."dominio.class.php");
   	
   	static $ENDERECO_DRIVE = "\\\\sf044836\_dag$";
   	static $ENDERECO_PASTABASE = "ASSESSORIA JURÍDICA\ATJA";
-  	static $ENDERECO_PASTABASE_UNCT = "UNCT\Documentos";
-  	//static $ENDERECO_PASTABASE = "H:\ASSESSORIA JURÍDICA\ATJA";
+  	static $ENDERECO_PASTABASE_UNCT = "UNCT";
+  	
+  	static $ENDERECO_PASTA_DOCUMENTOS = "\Documentos";
+  	//static $ENDERECO_PASTABASE = "H:\ASSESSORIA JURÍDICA\ATJA";  	
   	static $ENDERECO_PASTA_NOTA_TECNICA = "\Notas Técnicas";  	
+  	static $ENDERECO_PASTA_OUTROS = "\Outros";
   	static $ENDERECO_PASTA_OFICIO = "\Ofícios";
   	static $ENDERECO_PASTA_PA = "\PROCESSO ADMINISTRATIVO";
   	static $ENDERECO_PASTA_NOTIFICACAO = "\Notificacao";
@@ -17,6 +20,7 @@ include_once(caminho_util."dominio.class.php");
   	static $CD_TP_DOC_NOTA_TECNICA = "NT";
   	static $CD_TP_DOC_NOTA_IMPUTACAO = "NI";
   	static $CD_TP_DOC_NOTIFICACAO = "NO";
+  	static $CD_TP_DOC_OUTROS = "OT";
   	
 // ...............................................................
 // Construtor
@@ -29,7 +33,8 @@ include_once(caminho_util."dominio.class.php");
 				self::$CD_TP_DOC_OFICIO => "Ofício",
 				self::$CD_TP_DOC_NOTA_TECNICA => "Nota Técnica",
 				self::$CD_TP_DOC_NOTA_IMPUTACAO => "Nota Imputação",
-				self::$CD_TP_DOC_NOTIFICACAO => "Notificação"
+				self::$CD_TP_DOC_NOTIFICACAO => "Notificação",
+				self::$CD_TP_DOC_OUTROS => "Outros"
 				);
 	}	
 	
