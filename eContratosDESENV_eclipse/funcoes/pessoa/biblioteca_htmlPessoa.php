@@ -80,7 +80,7 @@ function consultarPessoasContrato($voContrato){
 	$filtro->cdOrdenacao = constantes::$CD_ORDEM_CRESCENTE;
 	
 	$db = new dbpessoa();
-	$colecao = $db->consultarPessoaFiltro($filtro);
+	$colecao = $db->consultarPessoaContratoFiltro($filtro);
 	
 	return $colecao;
 }

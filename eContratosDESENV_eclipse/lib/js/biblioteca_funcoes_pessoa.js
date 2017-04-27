@@ -17,15 +17,7 @@ function carregaDadosContratada(pNmCampoAnoContrato, pNmCampoTipoContrato, pNmCa
 	cdEspecieContrato = document.getElementById(pNmCampoCdEspecieContrato).value;
 	sqEspecieContrato = document.getElementById(pNmCampoSqEspecieContrato).value;
 	//alert(cdContrato + CD_CAMPO_SEPARADOR + anoContrato + CD_CAMPO_SEPARADOR + tpContrato);
-	
-	/*$this->sq = $array[0];
-	$this->anoContrato = $array[1];
-	$this->tipo = $array[2];
-	$this->cdContrato = $array[3];
-	$this->cdEspecie = $array[4];
-	$this->sqEspecie = $array[5];
-	$this->sqHist = $array[6];*/
-	
+		
 	//fica assim por conta do formato da chave do vocontrato
 	sqContrato = "";
 	if(cdContrato != "" && anoContrato != "" && tpContrato != ""){

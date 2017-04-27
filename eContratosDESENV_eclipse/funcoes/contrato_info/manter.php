@@ -95,6 +95,7 @@ function confirmar() {
 	        $complementoHTML = "";
 	        
 	        if(!$isInclusao){
+	        	$cdAutorizacao = $vo->cdAutorizacao;
 	        	//ALTERACAO
 	        	$complementoHTML = " required ";
 	        	$readonlyChaves = " readonly ";
@@ -125,10 +126,10 @@ function confirmar() {
 			<TR>
 				<?php
 				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioAutorizacao.php");
-				$combo = new select(dominioAutorizacao::getColecao());						
+				$combo = new select(dominioAutorizacao::getColecao());				
 				?>
 	            <TH class="campoformulario" nowrap>Autorização:</TH>
-	            <TD class="campoformulario" width="1%"><?php echo $combo->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato,voContratoInfo::$nmAtrCdAutorizacaoContrato, $vo->cdAutorizacao, true, "campoobrigatorio", true, " required ");?>
+	            <TD class="campoformulario" width="1%"><?php echo $combo->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato,voContratoInfo::$nmAtrCdAutorizacaoContrato, $cdAutorizacao, true, "campoobrigatorio", true, " required ");?>
 	            <TH class="campoformulario" nowrap width="1%">Data.Proposta:</TH>
 	            <TD class="campoformulario">
 	            	<INPUT type="text" 

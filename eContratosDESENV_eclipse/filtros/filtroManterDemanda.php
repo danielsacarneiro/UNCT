@@ -7,6 +7,8 @@ class filtroManterDemanda extends filtroManter{
 
 	public $nmFiltro = "filtroManterDemanda";
 	static $NmColDhUltimaMovimentacao = "NmColDhUltimaMovimentacao";
+	static $NmAtrCdDemandaInicial = "NmAtrCdDemandaInicial";
+	static $NmAtrCdDemandaFinal = "NmAtrCdDemandaFinal";
 	
 	var $vodemanda;
 	var $vocontrato;
@@ -15,6 +17,8 @@ class filtroManterDemanda extends filtroManter{
 	var $tpDocumento;
 	
 	var $dtUltMovimentacao;
+	var $cdDemandaInicial;
+	var $cdDemandaFinal;
 	
 	// ...............................................................
 	// construtor
@@ -54,6 +58,8 @@ class filtroManterDemanda extends filtroManter{
 		$this->docContratada = @$_POST[vopessoa::$nmAtrDoc];
 		$this->dtUltMovimentacao = @$_POST[voDemanda::$nmAtrDtReferencia];
 		$this->tpDocumento = @$_POST[voDocumento::$nmAtrTp];
+		$this->cdDemandaInicial = @$_POST[self::$NmAtrCdDemandaInicial];
+		$this->cdDemandaFinal = @$_POST[self::$NmAtrCdDemandaFinal];
 		
 		if($this->cdOrdenacao == null){
 			$this->cdOrdenacao = constantes::$CD_ORDEM_CRESCENTE;
@@ -275,6 +281,24 @@ class filtroManterDemanda extends filtroManter{
 					. "'"
 							;
 							$conector  = "\n AND ";
+		
+		}
+		
+		if($this->cdDemandaInicial != null){
+			$filtro = $filtro . $conector
+			. $nmTabela . "." .voDemanda::$nmAtrCd
+			. " >= "
+					. $this->cdDemandaInicial;
+					$conector  = "\n AND ";
+		
+		}
+		
+		if($this->cdDemandaFinal != null){
+			$filtro = $filtro . $conector
+			. $nmTabela . "." .voDemanda::$nmAtrCd
+			. " <= "
+					. $this->cdDemandaFinal;
+					$conector  = "\n AND ";
 		
 		}
 		

@@ -115,10 +115,6 @@ function habilitaContrato() {
 	pCampoAnoContrato = document.frm_principal.<?=vocontrato::$nmAtrAnoContrato;?>;
 	pCampoTipoContrato = document.frm_principal.<?=vocontrato::$nmAtrTipoContrato;?>;
 
-	/*pNmCampoCdEspecieContrato = '<?=vocontrato::$nmAtrCdEspecieContrato;?>';
-	pNmCampoSqEspecieContrato = '<?=vocontrato::$nmAtrSqEspecieContrato;?>';
-	pNmCampoDiv = '<?=$nmCampoDivPessoaContratada;?>';*/
-
 	flag = pCampoCdContrato.required == true;
 
 	pCampoCdContrato.required = !flag;
@@ -171,21 +167,5 @@ function consultarDadosContratoCompilado($voContrato){
 	//echo $query;
 	return $retorno;
 }
-
-/*function consultarDadosContratoCompilado($voContrato){
-	//$voContrato = new vocontrato();
-	$filtro = new filtroManterContrato(false);
-	$filtro->anoContrato = $voContrato->anoContrato;
-	$filtro->cdContrato = $voContrato->cdContrato;
-	$filtro->tipo = $voContrato->tipo;
-
-	//seta clausula group by
-	$filtro->groupby = array(vocontrato::$nmAtrAnoContrato, vocontrato::$nmAtrCdContrato, vocontrato::$nmAtrTipoContrato);
-
-	$db = new dbcontrato();
-	$colecao = $db->consultarPessoaFiltro($filtro);
-
-	return $colecao;
-}*/
 
 ?>

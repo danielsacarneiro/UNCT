@@ -136,10 +136,15 @@ function encaminhar() {
 			  ?>			            
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Demanda:</TH>
-	            <TD class="campoformulario" colspan=3>
+	            <TD class="campoformulario" nowrap width="1%">
 	            <?php echo "Ano: " . $selectExercicio->getHtmlCombo(voDemanda::$nmAtrAno,voDemanda::$nmAtrAno, $filtro->vodemanda->ano, true, "camponaoobrigatorio", false, "");?>
 			  Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voDemanda::$nmAtrCd?>" name="<?=voDemanda::$nmAtrCd?>"  value="<?php echo(complementarCharAEsquerda($filtro->vodemanda->cd, "0", TAMANHO_CODIGOS));?>"  class="camponaoobrigatorio" size="6" maxlength="5">
 			  <?php echo "Tipo: " . $comboTipo->getHtmlCombo(voDemanda::$nmAtrTipo, voDemanda::$nmAtrTipo, $filtro->vodemanda->tipo, true, "camponaoobrigatorio", false, "");?>
+	            <TH class="campoformulario" nowrap width="1%">Intervalo.Demanda:</TH>
+	            <TD class="campoformulario" >
+				  Inicial: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=filtroManterDemanda::$NmAtrCdDemandaInicial?>" name="<?=filtroManterDemanda::$NmAtrCdDemandaInicial?>"  value="<?php echo(complementarCharAEsquerda($filtro->cdDemandaInicial, "0", TAMANHO_CODIGOS));?>"  class="camponaoobrigatorio" size="6" maxlength="5">
+				  Final: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=filtroManterDemanda::$NmAtrCdDemandaFinal?>" name="<?=filtroManterDemanda::$NmAtrCdDemandaFinal?>"  value="<?php echo(complementarCharAEsquerda($filtro->cdDemandaFinal, "0", TAMANHO_CODIGOS));?>"  class="camponaoobrigatorio" size="6" maxlength="5">
+			  </TD>			  
 			</TR>			            
             <TR>
                 <TH class="campoformulario" nowrap width="1%">Setor.Resp.:</TH>
