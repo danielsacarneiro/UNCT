@@ -287,10 +287,10 @@ function encaminhar() {
                         $tipo = $dominioTipo->getDescricao($voAtual->tipo);
                         $empresa = $colecao[$i][vopessoa::$nmAtrNome];
                         
-                        if($voAtual->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO
-                        		|| $voAtual->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_PROCADM){
-                        	$voDemandaContrato = new voDemandaContrato();
-                        	$voDemandaContrato->getDadosBanco($colecao[$i]);
+                        $voDemandaContrato = new voDemandaContrato();
+                        $voDemandaContrato->getDadosBanco($colecao[$i]);
+                        
+                        if($voDemandaContrato->voContrato->cdContrato != null){
                         	
                         	$contrato = formatarCodigoAnoComplemento($voDemandaContrato->voContrato->cdContrato,
                         			$voDemandaContrato->voContrato->anoContrato,

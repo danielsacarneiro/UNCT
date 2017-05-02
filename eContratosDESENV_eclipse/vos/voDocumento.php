@@ -43,27 +43,24 @@ class voDocumento extends voentidade {
 	public static function getNmClassProcesso() {
 		return "dbDocumento";
 	}
-	
-	function getValoresWhereSQLChave($isHistorico){
-		$nmTabela = $this->getNmTabelaEntidade($isHistorico);
-		$query =  $this->getValoresWhereSQLChaveLogicaSemSQ($isHistorico);
+	function getValoresWhereSQLChave($isHistorico) {
+		$nmTabela = $this->getNmTabelaEntidade ( $isHistorico );
+		$query = $this->getValoresWhereSQLChaveLogicaSemSQ ( $isHistorico );
 		$query .= " AND " . $nmTabela . "." . self::$nmAtrSq . "=" . $this->sq;
-	
-		if($isHistorico)
-			$query.= " AND ". $nmTabela . "." . self::$nmAtrSqHist . "=" . $this->sqHist;
-	
+		
+		if ($isHistorico)
+			$query .= " AND " . $nmTabela . "." . self::$nmAtrSqHist . "=" . $this->sqHist;
+		
 		return $query;
 	}
-	
-	function getValoresWhereSQLChaveLogicaSemSQ($isHistorico){
-		$nmTabela = $this->getNmTabelaEntidade($isHistorico);
+	function getValoresWhereSQLChaveLogicaSemSQ($isHistorico) {
+		$nmTabela = $this->getNmTabelaEntidade ( $isHistorico );
 		$query = $nmTabela . "." . self::$nmAtrCdSetor . "=" . $this->cdSetor;
 		$query .= "\n AND " . $nmTabela . "." . self::$nmAtrAno . "=" . $this->ano;
-		$query .= "\n AND " . $nmTabela . "." . self::$nmAtrTp . "='" . $this->tp . "'";		
-	
+		$query .= "\n AND " . $nmTabela . "." . self::$nmAtrTp . "='" . $this->tp . "'";
+		
 		return $query;
 	}
-	
 	function getAtributosFilho() {
 		$retorno = array (
 				self::$nmAtrSq,
@@ -116,39 +113,11 @@ class voDocumento extends voentidade {
 		}
 		
 		if ($this->tp != null) {
-			
-			if ($this->tp == dominioTpDocumento::$CD_TP_DOC_NOTA_TECNICA) {
-				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_DOCUMENTOS;
-				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_NOTA_TECNICA;
-				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_NOTA_TECNICA . " $this->ano\\";
-				
-				$retorno .= $this->link;
-			} else if ($this->tp == dominioTpDocumento::$CD_TP_DOC_OFICIO) {
-				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_DOCUMENTOS;
-				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_OFICIO;
-				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_OFICIO . " $this->ano\\";
-				
-				$retorno .= $this->link;
-			} else if ($this->tp == dominioTpDocumento::$CD_TP_DOC_NOTIFICACAO) {
-				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_PA;
-				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_NOTIFICACAO;
-				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_NOTIFICACAO . " $this->ano\\";
-				
-				$retorno .= $this->link;
-			} else if ($this->tp == dominioTpDocumento::$CD_TP_DOC_NOTA_IMPUTACAO) {
-				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_PA;
-				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_NOTAS_IMPUTACAO;
-				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_NOTAS_IMPUTACAO . " $this->ano\\";
-				
-				$retorno .= $this->link;
-			} else if ($this->tp == dominioTpDocumento::$CD_TP_DOC_OUTROS) {
-				
-				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_DOCUMENTOS;
-				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_OUTROS;
-				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_OUTROS . " $this->ano\\";
-				
-				$retorno .= $this->link;
-			}
+			$enderecoTemp = "\\".dominioTpDocumento::getEnderecoPastaBasePorTpDocumento ( $this->tp );
+			$retorno .= dominioTpDocumento::$ENDERECO_PASTA_DOCUMENTOS;
+			$retorno .= $enderecoTemp;
+			$retorno .= $enderecoTemp . " $this->ano\\";
+			$retorno .= $this->link;
 		}
 		
 		return $retorno;

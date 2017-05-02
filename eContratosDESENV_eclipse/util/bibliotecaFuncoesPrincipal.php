@@ -20,19 +20,19 @@ function getColunaEmLinha($recordset, $nmColuna, $pSeparador) {
 	
 	return $retorno;
 }
-function isArrayMultiDimensional($colecao){
-	//funcao marreta que verifica se o array eh muldimensional
-	//se retornar zero, eh array simples
+function isArrayMultiDimensional($colecao) {
+	// funcao marreta que verifica se o array eh muldimensional
+	// se retornar zero, eh array simples
 	$isArrayMultidimensional = 0;
-	if($colecao != null){		
-		$isArrayMultidimensional = array_sum(array_map('is_array', $colecao));
+	if ($colecao != null) {
+		$isArrayMultidimensional = array_sum ( array_map ( 'is_array', $colecao ) );
 	}
 	
-	$retorno = true;	
-	if($isArrayMultidimensional == 0)
+	$retorno = true;
+	if ($isArrayMultidimensional == 0)
 		$retorno = false;
 	
-	return $retorno;	
+	return $retorno;
 }
 function existeItemNoArray($item, $array) {
 	$retorno = false;
@@ -206,15 +206,19 @@ function removeElementoArray($input, $elem) {
 /*
  * faz o merge de array com as chaves
  */
-function array_merge_keys(){
-	$args = func_get_args();
-	$result = array();
-	foreach($args as &$array){
-		foreach($array as $key=>&$value){
-			$result[$key] = $value;
+function array_merge_keys() {
+	$args = func_get_args ();
+	$result = array ();
+	foreach ( $args as &$array ) {
+		foreach ( $array as $key => &$value ) {
+			$result [$key] = $value;
 		}
 	}
 	return $result;
+}
+
+function putElementoArrayComChaves($input, $elem) {
+	return array_merge_keys ( $input, $elem);	
 }
 function getColecaoEntreSeparador($colecaoAtributos, $separador) {
 	return getColecaoEntreSeparadorAspas ( $colecaoAtributos, $separador, false );
@@ -243,19 +247,17 @@ function getColecaoEntreSeparadorAspas($colecaoAtributos, $separador, $comAspas)
 	// echo $retorno;
 	return $retorno;
 }
-
 function getChaveReferenciaGroupBy($registro, $colecaoColunasAgrupar) {
 	$retorno = "";
 	$tamanhoColecao = count ( $colecaoColunasAgrupar );
 	for($i = 0; $i < $tamanhoColecao; $i ++) {
-		$nmColuna = $colecaoColunasAgrupar[$i];
-		$retorno.= CAMPO_SEPARADOR + $registro[$nmColuna];
+		$nmColuna = $colecaoColunasAgrupar [$i];
+		$retorno .= CAMPO_SEPARADOR + $registro [$nmColuna];
 	}
-	return $retorno;	
+	return $retorno;
 }
-
 function getRecordSetGroupBy($recordset, $colecaoColunasAgrupar) {
-	//a colecao deve estar ordenada de acordo com a regra de negocio
+	// a colecao deve estar ordenada de acordo com a regra de negocio
 	$retorno = "";
 	$indice = 0;
 	
@@ -264,27 +266,26 @@ function getRecordSetGroupBy($recordset, $colecaoColunasAgrupar) {
 		$tamanhoColecao = count ( $recordset );
 		// echo "<br> qtd registros: " . $tamanho;
 		
-		$registroAtual = $recordset[0];
-		//inclui sempre o primeiro
-		$retorno[$indice] = $registroAtual;
-		$indice++;
+		$registroAtual = $recordset [0];
+		// inclui sempre o primeiro
+		$retorno [$indice] = $registroAtual;
+		$indice ++;
 		
-		$strReferencia = getChaveReferenciaGroupBy($registroAtual, $colecaoColunasAgrupar);
+		$strReferencia = getChaveReferenciaGroupBy ( $registroAtual, $colecaoColunasAgrupar );
 		
 		for($i = 1; $i < $tamanhoColecao; $i ++) {
-			$registroAtual = $recordset[$i];
-			$strComparacao = getChaveReferenciaGroupBy($registroAtual, $colecaoColunasAgrupar);
+			$registroAtual = $recordset [$i];
+			$strComparacao = getChaveReferenciaGroupBy ( $registroAtual, $colecaoColunasAgrupar );
 			
 			if ($strComparacao != $strReferencia) {
-				$retorno[$indice] = $registroAtual;
-				$indice++;
-				//echo "<br>" . $strComparacao . "<br>";
+				$retorno [$indice] = $registroAtual;
+				$indice ++;
+				// echo "<br>" . $strComparacao . "<br>";
 				
-				$strReferencia = getChaveReferenciaGroupBy($registroAtual, $colecaoColunasAgrupar);
+				$strReferencia = getChaveReferenciaGroupBy ( $registroAtual, $colecaoColunasAgrupar );
 			}
 			// echo "$retorno<br>";
 		}
-		
 	}
 	// echo $retorno;
 	return $retorno;
@@ -337,9 +338,9 @@ function getLinkChamadaPHP() {
 }
 function getAtributoComoBooleano($param) {
 	$retorno = false;
-	if($param != null && $param == constantes::$CD_SIM){
+	if ($param != null && $param == constantes::$CD_SIM) {
 		$retorno = true;
-	}	
+	}
 	return $retorno;
 }
 

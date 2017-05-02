@@ -183,7 +183,8 @@ class dbDemandaTramitacao extends dbprocesso {
 		 * echo "tipo da demanda:" . $vo->tipo . "<br>";
 		 * echo "tem contrato:" . $vo->temContratoParaIncluir() . "<br>";
 		 */
-		if ($vo->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO && ! $vo->temContratoParaIncluir ()) {
+		//if ($vo->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO && ! $vo->temContratoParaIncluir ()) {
+		if (dominioTipoDemanda::isContratoObrigatorio($vo->tipo) && ! $vo->temContratoParaIncluir ()) {			
 			$msg = "Selecione o contrato.";
 			throw new Exception ( $msg );
 		}

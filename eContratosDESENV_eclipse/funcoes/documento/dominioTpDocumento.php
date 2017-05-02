@@ -8,20 +8,21 @@ include_once(caminho_util."dominio.class.php");
   	static $ENDERECO_PASTABASE_UNCT = "UNCT";
   	
   	static $ENDERECO_PASTA_DOCUMENTOS = "\Documentos";
-  	//static $ENDERECO_PASTABASE = "H:\ASSESSORIA JURÍDICA\ATJA";  	
-  	static $ENDERECO_PASTA_NOTA_TECNICA = "\Notas Técnicas";  	
-  	static $ENDERECO_PASTA_OUTROS = "\Outros";
-  	static $ENDERECO_PASTA_OFICIO = "\Ofícios";
-  	static $ENDERECO_PASTA_PA = "\PROCESSO ADMINISTRATIVO";
-  	static $ENDERECO_PASTA_NOTIFICACAO = "\Notificacao";
-  	static $ENDERECO_PASTA_NOTAS_IMPUTACAO = "\Notas de Imputação";
-  	  	
+  	  	  	
   	static $CD_TP_DOC_OFICIO = "OF";
   	static $CD_TP_DOC_NOTA_TECNICA = "NT";
   	static $CD_TP_DOC_NOTA_IMPUTACAO = "NI";
   	static $CD_TP_DOC_NOTIFICACAO = "NO";
   	static $CD_TP_DOC_OUTROS = "OT";
-  	
+  	static $CD_TP_DOC_PLANILHA_CUSTOS = "PC";
+
+  	static $DS_TP_DOC_OFICIO = "Ofício";
+  	static $DS_TP_DOC_NOTA_TECNICA = "Nota Técnica";
+  	static $DS_TP_DOC_NOTA_IMPUTACAO = "Nota Imputação";
+  	static $DS_TP_DOC_NOTIFICACAO = "Notificação";
+  	static $DS_TP_DOC_OUTROS = "Outros";
+  	static $DS_TP_DOC_PLANILHA_CUSTOS = "Planilha de Custos";
+  	 
 // ...............................................................
 // Construtor
     function __construct () {        
@@ -30,11 +31,12 @@ include_once(caminho_util."dominio.class.php");
 	
 	static function getColecao(){
 		return array(
-				self::$CD_TP_DOC_OFICIO => "Ofício",
+				self::$CD_TP_DOC_OFICIO => self::$DS_TP_DOC_OFICIO,
 				self::$CD_TP_DOC_NOTA_TECNICA => "Nota Técnica",
 				self::$CD_TP_DOC_NOTA_IMPUTACAO => "Nota Imputação",
-				self::$CD_TP_DOC_NOTIFICACAO => "Notificação",
-				self::$CD_TP_DOC_OUTROS => "Outros"
+				self::$CD_TP_DOC_NOTIFICACAO => self::$DS_TP_DOC_NOTIFICACAO,
+				self::$CD_TP_DOC_PLANILHA_CUSTOS => self::$DS_TP_DOC_PLANILHA_CUSTOS,
+				self::$CD_TP_DOC_OUTROS => self::$DS_TP_DOC_OUTROS
 				);
 	}	
 	
@@ -43,6 +45,10 @@ include_once(caminho_util."dominio.class.php");
 	}
 	static function getEnderecoPastaBaseUNCT() {
 		return self::$ENDERECO_DRIVE . "\\" . self::$ENDERECO_PASTABASE_UNCT;
+	}
+	
+	static function getEnderecoPastaBasePorTpDocumento($tpDoc) {		
+		return self::getDescricaoStatic($tpDoc, self::getColecao());
 	}
 	
 }

@@ -623,4 +623,13 @@ function getDataHoje() {
 function tratarExcecaoHTML($ex) {
 	header ( "Location: ../mensagemErro.php?texto=" . $ex->getMessage (), TRUE, 307 );
 }
+function getStrComPuloLinhaHTML($str) {
+	return getStrComPuloLinhaGenerico($str,"<br>");
+}
+function getStrComPuloLinha($str) {
+	return getStrComPuloLinhaGenerico($str,"\n");
+}
+function getStrComPuloLinhaGenerico($str,$pulo) {
+	return "$str$pulo";
+}
 ?>

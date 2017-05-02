@@ -88,13 +88,31 @@ function confirmar() {
 	return confirm("Confirmar Alteracoes?");    
 }
 
-function validaFormulario() {
-	tipoDemanda = document.frm_principal.<?=voDemanda::$nmAtrTipo?>.value;
+function habilitaContrato() {	
 
-	//if(tipoDemanda == <?=dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO?>)
+	<?php
+	$dominioTipoDemanda = new dominioTipoDemanda(dominioTipoDemanda::getColecaoTipoDemandaContrato());
+	echo $dominioTipoDemanda->getArrayHTMLChaves("colecaoTpDemandaContrato");	
+	?>
+
+	cdTpDemanda = document.frm_principal.<?=voDemanda::$nmAtrTipo?>.value;
+	
+	pCampoCdContrato = document.frm_principal.<?=vocontrato::$nmAtrCdContrato;?>;
+	pCampoAnoContrato = document.frm_principal.<?=vocontrato::$nmAtrAnoContrato;?>;
+	pCampoTipoContrato = document.frm_principal.<?=vocontrato::$nmAtrTipoContrato;?>;
+
+	flag = false;
+	if(colecaoTpDemandaContrato.indexOf(cdTpDemanda) != -1)
+		flag = true;
+
+	pCampoCdContrato.required = flag;
+	pCampoAnoContrato.required = flag;
+	pCampoTipoContrato.required = flag;
+}
+
+
+function validaFormulario() {
 	habilitaContrato();
-	//else
-		//alert("NAO eh contrato");
 }
 
 function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
@@ -208,12 +226,14 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	        <?php
 	        }else{
 	        	//INCLUSAO
+	        	$comboTipoEditado = new select(dominioTipoDemanda::getColecaoComElementosARemover(dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO));
+	        	//var_dump($comboTipoEditado->colecao);
 			  ?>			            
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Demanda:</TH>
 	            <TD class="campoformulario" colspan=3>	            
 	            <?php echo "Ano: " . $selectExercicio->getHtmlCombo(voDemanda::$nmAtrAno,voDemanda::$nmAtrAno, anoDefault, true, "campoobrigatorio", false, " required ");?>
-	            <?php echo "Tipo: " . $comboTipo->getHtmlCombo(voDemanda::$nmAtrTipo,voDemanda::$nmAtrTipo, $vo->tipo, false, "campoobrigatorio", false, " required onChange='validaFormulario();'");?>			  
+	            <?php echo "Tipo: " . $comboTipoEditado->getHtmlCombo(voDemanda::$nmAtrTipo,voDemanda::$nmAtrTipo, "", true, "campoobrigatorio", false, " required onChange='validaFormulario();'");?>			  
 	        </TR>
 	        <?php	        
 	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");

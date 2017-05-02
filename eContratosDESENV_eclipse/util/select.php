@@ -53,6 +53,7 @@
 		}
 			
 		//var_dump( $this->colecao);
+		//echo $idSelect .":". $opcaoSelecionada;
 		
 		$totalResultado = count($this->colecao);				 		
 		$chaves = array_keys($this->colecao);

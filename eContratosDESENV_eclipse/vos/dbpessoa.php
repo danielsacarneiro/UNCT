@@ -85,8 +85,6 @@ class dbpessoa extends dbprocesso {
 		$queryFrom .= "\n ON " . $nmTabela . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
 		// echo $querySelect."<br>";
 		// echo $queryFrom;
-		// $filtro = new filtroManterPessoa();
-		$filtro->groupby = $atributosConsulta;
 		
 		return $this->consultarFiltro ( $filtro, $querySelect, $queryFrom, false );
 	}
