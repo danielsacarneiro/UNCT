@@ -116,7 +116,7 @@ function confirmar() {
 			<TR>
                 <TH class="campoformulario" nowrap width=1%>Observação:</TH>
                 <TD class="campoformulario" width="1%" colspan=3>
-                				<textarea rows="2" cols="60" id="<?=vopessoa::$nmAtrObservacao?>" name="<?=vopessoa::$nmAtrObservacao?>" class="camponaoobrigatorio" maxlength="300"><?php echo($vo->obs);?></textarea>
+                				<textarea rows="2" cols="60" id="<?=vopessoa::$nmAtrObservacao?>" name="<?=vopessoa::$nmAtrObservacao?>" class="camporeadonly" readonly><?php echo($vo->obs);?></textarea>
 				</TD>
             </TR>            
             <TR>
