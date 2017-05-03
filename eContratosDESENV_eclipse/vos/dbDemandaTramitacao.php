@@ -10,6 +10,75 @@ class dbDemandaTramitacao extends dbprocesso {
 		$nmTabelaPessoa = vopessoa::getNmTabelaStatic ( false );
 		$nmTabelaDoc = voDocumento::getNmTabelaStatic ( false );
 		$nmTabelaDemandaDoc = voDemandaTramDoc::getNmTabelaStatic ( false );
+	
+		$arrayColunasRetornadas = array (
+				$nmTabela . ".*",
+				$nmTabelaDemanda . "." . voDemanda::$nmAtrTipo,
+				$nmTabelaDemanda . "." . voDemanda::$nmAtrCdSetor,
+				$nmTabelaDemanda . "." . voDemanda::$nmAtrTexto,
+				$nmTabelaDemanda . "." . voDemanda::$nmAtrPrioridade,
+				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato,
+				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato,
+				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato,
+				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdEspecieContrato,
+				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato,
+				$nmTabelaPessoa . "." . vopessoa::$nmAtrDoc,
+				$nmTabelaPessoa . "." . vopessoa::$nmAtrNome,
+				$nmTabelaDoc . "." . voDocumento::$nmAtrAno,
+				$nmTabelaDoc . "." . voDocumento::$nmAtrCdSetor,
+				$nmTabelaDoc . "." . voDocumento::$nmAtrTp,
+				$nmTabelaDoc . "." . voDocumento::$nmAtrSq
+		);
+	
+		$queryJoin .= "\n INNER JOIN " . $nmTabelaDemanda;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $nmTabela . "." . voDemandaTramitacao::$nmAtrAno;
+		$queryJoin .= "\n AND " . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd . "=" . $nmTabela . "." . voDemandaTramitacao::$nmAtrCd;
+	
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaDemandaContrato;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoDemanda . "=" . $nmTabelaDemanda . "." . voDemanda::$nmAtrAno;
+		$queryJoin .= "\n AND " . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdDemanda . "=" . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd;
+	
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaContrato;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdEspecieContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato;
+	
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoa;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaPessoa . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
+	
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaDemandaDoc;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaDemandaDoc . "." . voDemandaTramDoc::$nmAtrAnoDemanda . "=" . $nmTabela . "." . voDemandaTramitacao::$nmAtrAno;
+		$queryJoin .= "\n AND " . $nmTabelaDemandaDoc . "." . voDemandaTramDoc::$nmAtrCdDemanda . "=" . $nmTabela . "." . voDemandaTramitacao::$nmAtrCd;
+	
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaDoc;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaDemandaDoc . "." . voDemandaTramDoc::$nmAtrAnoDoc . "=" . $nmTabelaDoc . "." . voDocumento::$nmAtrAno;
+		$queryJoin .= "\n AND " . $nmTabelaDemandaDoc . "." . voDemandaTramDoc::$nmAtrCdSetorDoc . "=" . $nmTabelaDoc . "." . voDocumento::$nmAtrCdSetor;
+		$queryJoin .= "\n AND " . $nmTabelaDemandaDoc . "." . voDemandaTramDoc::$nmAtrTpDoc . "=" . $nmTabelaDoc . "." . voDocumento::$nmAtrTp;
+		$queryJoin .= "\n AND " . $nmTabelaDemandaDoc . "." . voDemandaTramDoc::$nmAtrSqDoc . "=" . $nmTabelaDoc . "." . voDocumento::$nmAtrSq;
+	
+		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryJoin, $isHistorico );
+	}
+	
+	function consultarPorChaveTramitacao($vo, $isHistorico) {
+		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
+		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
+		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( false );
+		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );
+		$nmTabelaPessoa = vopessoa::getNmTabelaStatic ( false );
+		$nmTabelaDoc = voDocumento::getNmTabelaStatic ( false );
+		$nmTabelaDemandaDoc = voDemandaTramDoc::getNmTabelaStatic ( false );
 		
 		$arrayColunasRetornadas = array (
 				$nmTabela . ".*",
@@ -60,6 +129,7 @@ class dbDemandaTramitacao extends dbprocesso {
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaDemandaDoc . "." . voDemandaTramDoc::$nmAtrAnoDemanda . "=" . $nmTabela . "." . voDemandaTramitacao::$nmAtrAno;
 		$queryJoin .= "\n AND " . $nmTabelaDemandaDoc . "." . voDemandaTramDoc::$nmAtrCdDemanda . "=" . $nmTabela . "." . voDemandaTramitacao::$nmAtrCd;
+		$queryJoin .= "\n AND " . $nmTabelaDemandaDoc . "." . voDemandaTramDoc::$nmAtrSqDemandaTram . "=" . $nmTabela . "." . voDemandaTramitacao::$nmAtrSq;
 		
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaDoc;
 		$queryJoin .= "\n ON ";
@@ -71,25 +141,6 @@ class dbDemandaTramitacao extends dbprocesso {
 		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryJoin, $isHistorico );
 	}
 	
-	/*
-	 * function consultarTelaConsulta($vo, $filtro){
-	 * $isHistorico = $filtro->isHistorico;
-	 * $nmTabela = $vo->getNmTabelaEntidade($isHistorico);
-	 * $nmTabelaUsuario = vousuario::getNmTabela();
-	 *
-	 * $querySelect = "SELECT ";
-	 * $querySelect .= $nmTabela.".*";
-	 * $querySelect .= "," . $nmTabelaUsuario . "." . vousuario::$nmAtrName;
-	 * $querySelect .= " AS " . voDemanda::$nmAtrNmUsuarioInclusao;
-	 * $queryFrom = " FROM ".$nmTabela;
-	 * $queryFrom.= "\n INNER JOIN ". $nmTabelaUsuario;
-	 * $queryFrom.= "\n ON ";
-	 * $queryFrom.= $nmTabelaUsuario. ".".vousuario::$nmAtrID. "=".$nmTabela . "." . voDemanda::$nmAtrCdUsuarioInclusao;
-	 *
-	 * //echo $query;
-	 * return parent::consultarTelaConsulta($filtro, $querySelect, $queryFrom);
-	 * }
-	 */
 	function consultarTelaConsulta($vo, $filtro) {
 		$isHistorico = $filtro->isHistorico;
 		$nmTabelaTramitacao = $vo->getNmTabelaEntidade ( $isHistorico );
