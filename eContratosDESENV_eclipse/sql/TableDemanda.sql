@@ -53,7 +53,7 @@ CREATE TABLE demanda_tram (
     dtm_cd_setor_origem INT NOT NULL,    
     dtm_cd_setor_destino INT NOT NULL,
     dtm_texto MEDIUMTEXT NOT NULL,
-    dtm_prt TEXT,
+    dtm_prt VARCHAR(25),
     dtm_dtreferencia DATE,
     
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -66,6 +66,10 @@ CREATE TABLE demanda_tram (
 ALTER TABLE demanda_tram ADD CONSTRAINT fk_demanda_tram FOREIGN KEY (dem_ex, dem_cd) REFERENCES demanda (dem_ex, dem_cd) 
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;
+
+-- select length(dtm_prt) from demanda_tram
+-- group by length(dtm_prt)
+ALTER TABLE demanda_tram ADD UNIQUE KEY chave_logica_prt (dtm_prt);
 
 drop table demanda_contrato;
 CREATE TABLE demanda_contrato (	
