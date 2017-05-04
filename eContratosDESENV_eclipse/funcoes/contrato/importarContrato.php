@@ -29,6 +29,13 @@ $inputFileName = caminho.'planilha/UNCT_contrato.xlsx';
 $objPHPExcel = PHPExcel_IOFactory::load($inputFileName);
 $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
 
+/*$cacheMethod = PHPExcel_CachedObjectStorageFactory:: cache_to_phpTemp;
+$cacheSettings = array( ' memoryCacheSize ' => '8MB');
+PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
+
+$objReader = PHPExcel_IOFactory::createReader('Excel2007');
+$objPHPExcel = $objReader->load("test.xlsx");*/
+
 echo 'Lendo planilha ',pathinfo($inputFileName,PATHINFO_BASENAME),'<br />';
 echo '<hr />';
 
