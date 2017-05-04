@@ -92,7 +92,7 @@ function confirmar() {
 			<TR>
                 <TH class="campoformulario" nowrap width=1%>Sq.Hist:</TH>
                 <TD class="campoformulario" colspan=3><INPUT type="text" value="<?php echo(complementarCharAEsquerda($vo->sqHist, "0", TAMANHO_CODIGOS));?>"  class="camporeadonlyalinhadodireita" size="5" readonly></TD>
-                <INPUT type="hidden" id="<?=voContratoTramitacao::$nmAtrSqHist?>" name="<?=voContratoTramitacao::$nmAtrSqHist?>" value="<?=$vo->sqHist?>">
+                <INPUT type="hidden" id="<?=voDemanda::$nmAtrSqHist?>" name="<?=voDemanda::$nmAtrSqHist?>" value="<?=$vo->sqHist?>">
             </TR>               
             <?php }                     
             
