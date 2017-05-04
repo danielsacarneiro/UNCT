@@ -81,8 +81,8 @@ echo "FIM... <br><br>";
 $dbprocesso->finalizar();
 
 
-importarConvenio("V");
-importarConvenio("P");
+//importarConvenio("V");
+//importarConvenio("P");
 
 ?>
 <body>

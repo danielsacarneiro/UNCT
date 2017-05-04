@@ -87,30 +87,13 @@ function criarNomeDocumento(){
 	tpContrato = document.frm_principal.<?=vocontrato::$nmAtrTipoContrato?>.value;
 	tpContrato = getDescricaoTipoContrato(tpContrato);
 	
-	/*try{
-		camposContratada = document.getElementsByName('<?=vopessoa::$ID_NOME_DADOS_CONTRATADA?>');
-		numContratadas = camposContratada.length;
-
-		campoNomeContratada = null;
-		if(numContratadas == 1){
-			campoNomeContratada = camposContratada[0];
-		}else{
-			//pega o ultimo
-			campoNomeContratada = camposContratada[numContratadas-1];
-		}		
-		
-		nmContrata = campoNomeContratada.value;		
-		nmContrata = truncarTexto(nmContrata, 20, "");
-	}catch(ex){
-		nmContrata = "";
-	}*/
-
 	nmContrata = getNomePessoaContratada('<?=vopessoa::$ID_NOME_DADOS_CONTRATADA?>');
 	nmContrata = "_" + nmContrata  + "_";
 	
 	complemento = formatarCodigoDocumento(cdContrato, "", anoContrato, tpContrato);
 	complemento = nmContrata + complemento;
-	complemento = complemento + ".doc";
+	//complemento = complemento + ".doc";
+	complemento = complemento + getExtensaoDocumento(tpDoc);	
 		
 	document.frm_principal.<?=voDocumento::$nmAtrLink?>.value = formatarNomeDocumento(sq, cdSetor, ano, tpDoc, complemento);
 }

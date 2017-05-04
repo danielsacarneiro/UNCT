@@ -140,6 +140,8 @@ CREATE TABLE contrato_info (
 ALTER TABLE contrato_info ADD CONSTRAINT fk_contrato_info FOREIGN KEY (ct_exercicio, ct_numero, ct_tipo) REFERENCES contrato (ct_exercicio, ct_numero, ct_tipo)
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;
+    
+-- ALTER TABLE contrato_info DROP FOREIGN KEY fk_contrato_info;    
 
 drop table contrato_info_hist;
 CREATE TABLE contrato_info_hist (

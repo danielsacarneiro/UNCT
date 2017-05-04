@@ -99,12 +99,21 @@ function formatarNomeDocumento(sq, cdSetor, ano, tpDoc, complemento){
 	
 	str = formatarCodigoDocumento(sq, cdSetor, ano, tpDoc);	
 	if(complemento != "")
-		str = str  + complemento;	
+		str = str  + complemento;
 	
 	return str;	
 }
 
+function getExtensaoDocumento(tpDoc) {
+	retorno = ".doc";
+	if(tpDoc == 'PC')
+		retorno = ".xls";
+	
+	return retorno;	
+}
+
 function formatarCampoPRT(pCampo, pEvento) {
+
 	var vlCampo = pCampo.value;
 	var tam = vlCampo.length;
 

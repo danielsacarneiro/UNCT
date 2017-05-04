@@ -10,6 +10,7 @@ include_once(caminho_util."dominio.class.php");
   	static $ENDERECO_PASTA_DOCUMENTOS = "\Documentos";
   	  	  	
   	static $CD_TP_DOC_OFICIO = "OF";
+  	static $CD_TP_DOC_CI= "CI";
   	static $CD_TP_DOC_NOTA_TECNICA = "NT";
   	static $CD_TP_DOC_NOTA_IMPUTACAO = "NI";
   	static $CD_TP_DOC_NOTIFICACAO = "NO";
@@ -17,6 +18,7 @@ include_once(caminho_util."dominio.class.php");
   	static $CD_TP_DOC_PLANILHA_CUSTOS = "PC";
 
   	static $DS_TP_DOC_OFICIO = "Ofício";
+  	static $DS_TP_DOC_CI= "Com. Interna";
   	static $DS_TP_DOC_NOTA_TECNICA = "Nota Técnica";
   	static $DS_TP_DOC_NOTA_IMPUTACAO = "Nota Imputação";
   	static $DS_TP_DOC_NOTIFICACAO = "Notificação";
@@ -32,6 +34,7 @@ include_once(caminho_util."dominio.class.php");
 	static function getColecao(){
 		return array(
 				self::$CD_TP_DOC_OFICIO => self::$DS_TP_DOC_OFICIO,
+				self::$CD_TP_DOC_CI => self::$DS_TP_DOC_CI,
 				self::$CD_TP_DOC_NOTA_TECNICA => "Nota Técnica",
 				self::$CD_TP_DOC_NOTA_IMPUTACAO => "Nota Imputação",
 				self::$CD_TP_DOC_NOTIFICACAO => self::$DS_TP_DOC_NOTIFICACAO,
