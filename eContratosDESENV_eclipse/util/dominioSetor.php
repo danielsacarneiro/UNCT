@@ -17,8 +17,8 @@ include_once(caminho_util."dominio.class.php");
   	static $DS_SETOR_UNCP= "UNCP";
   	static $DS_SETOR_ATJA= "ATJA";
   	static $DS_SETOR_DILC= "DILC";
-  	static $DS_SETOR_PGE= "_PGE";
-  	static $DS_SETOR_SAD= "_SAD";
+  	static $DS_SETOR_PGE= "PGE*";
+  	static $DS_SETOR_SAD= "SAD*";
   	static $DS_SETOR_CPL= "CPL";
   	static $DS_SETOR_UNSG= "UNSG";
   	 
