@@ -7,6 +7,7 @@ class filtroManterDemanda extends filtroManter{
 
 	public $nmFiltro = "filtroManterDemanda";
 	static $NmColDhUltimaMovimentacao = "NmColDhUltimaMovimentacao";
+	static $NmColQtdContratos = "NmColQtdContratos";
 	static $NmAtrCdDemandaInicial = "NmAtrCdDemandaInicial";
 	static $NmAtrCdDemandaFinal = "NmAtrCdDemandaFinal";
 	

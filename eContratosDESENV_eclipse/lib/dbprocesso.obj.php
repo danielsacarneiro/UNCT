@@ -5,6 +5,7 @@ include_once (caminho_util . "paginacao.php");
 include_once (caminho_util . "bibliotecaHTML.php");
 include_once (caminho_util . "bibliotecaSQL.php");
 include_once (caminho_util . "bibliotecaFuncoesPrincipal.php");
+//include_once (caminho_excecoes . "ExcecaoMaisDeUmRegistroRetornado.php");
 class dbprocesso {
 	var $cDb;
 	var $cConfig;
@@ -143,14 +144,14 @@ class dbprocesso {
 		
 		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, "", $isHistorico );
 	}
-	function consultarPorChaveMontandoQuery($vo, $arrayColunasRetornadas, $queryJoin, $isHistorico) {
+	function consultarPorChaveMontandoQuery($vo, $arrayColunasRetornadas, $queryJoin, $isHistorico, $isConsultaPorChave = true) {
 		$queryWhere = " WHERE ";
 		$queryWhere .= $vo->getValoresWhereSQLChave ( $isHistorico );
-		return $this->consultarMontandoQuery ( $vo, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico );
+		return $this->consultarMontandoQuery ( $vo, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico, $isConsultaPorChave );
 	}
-	function consultarMontandoQuery($vo, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico) {
+	function consultarMontandoQuery($vo, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico, $isConsultaPorChave) {
 		$nmTabelaACompararCdUsuario = $vo->getNmTabelaEntidade ( $isHistorico );
-		return $this->consultarMontandoQueryUsuario ( $vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico, true );
+		return $this->consultarMontandoQueryUsuario ( $vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico, $isConsultaPorChave);
 	}
 	function consultarMontandoQueryTelaConsulta($vo, $filtro, $arrayColunasRetornadas, $queryJoin) {
 		$nmTabelaACompararCdUsuario = $vo->getNmTabelaEntidade ( $filtro->isHistorico );
@@ -199,7 +200,7 @@ class dbprocesso {
 			$tamanho = sizeof ( $retorno );
 			
 			if ($tamanho > 1)
-				throw new Exception ( "Existe mais de um registro." );
+				throw new excecaoMaisDeUmRegistroRetornado ( "Existe mais de um registro." );
 		}
 		
 		return $retorno;

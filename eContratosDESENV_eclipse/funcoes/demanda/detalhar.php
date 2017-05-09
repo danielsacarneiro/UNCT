@@ -4,6 +4,7 @@ include_once(caminho_util."bibliotecaHTML.php");
 include_once(caminho_util."selectExercicio.php");
 include_once(caminho_vos."voDemandaTramitacao.php");
 
+try{
 //inicia os parametros
 inicio();
 
@@ -16,8 +17,7 @@ $readonly = "";
 $nmFuncao = "";
 $readonly = "readonly";
 $dbprocesso = $vo->dbprocesso;
-$colecao = $dbprocesso->consultarPorChaveTela($vo, $isHistorico);
-$vo->getDadosBanco($colecao);
+$vo = $dbprocesso->consultarPorChaveTelaColecaoContrato($vo, $isHistorico);
 putObjetoSessao($vo->getNmTabela(), $vo);
 
 $nmFuncao = "DETALHAR ";
@@ -35,9 +35,6 @@ if($funcao == constantes::$CD_FUNCAO_EXCLUIR){
 
 $titulo = $nmFuncao. $titulo. $complementoTit;
 setCabecalho($titulo);
-
-$voDemandaContrato = new voDemandaContrato();
-$voDemandaContrato->getDadosBanco($colecao);
 ?>
 
 <!DOCTYPE html>
@@ -135,15 +132,9 @@ function confirmar() {
 	            <INPUT type="text" value="<?=$vo->texto?>"  class="camporeadonly" size="80" readonly>	            	                        	                        
 	        </TR>	        	        
 	        <?php
-	        if($voDemandaContrato->voContrato != null){
-	        	$voContrato = $voDemandaContrato->voContrato;
-	        }
-	          
  	        require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
- 	        //getContratoDetalhamento($voContrato, $colecao);
- 	        getContratoDet($voContrato);
-	        ?>
-            
+ 	        getColecaoContratoDet($vo->colecaoContrato);
+	        ?>            
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Data.Referência:</TH>
 	            <TD class="campoformulario" colspan=3>	            	            	            
@@ -201,3 +192,9 @@ function confirmar() {
 
 </BODY>
 </HTML>
+<?php 
+}catch(Exception $ex){
+	putObjetoSessao("vo", $vo);
+	tratarExcecaoHTML($ex);	
+}
+?>

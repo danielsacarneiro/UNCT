@@ -68,12 +68,21 @@ function setTituloPaginaPorNivel($titulo, $qtdNiveisAcimaEmSeEncontraPagina) {
 	
 	return $html;
 }
+function getPastaImagens() {
+	return getPastaImagensPorNivel(null);
+	
+}
+function getPastaImagensPorNivel($qtdNiveisAcimaEmSeEncontraPagina) {
+	$pastaImagens = subirNivelPasta ( caminho_imagens, $qtdNiveisAcimaEmSeEncontraPagina );	
+	return $pastaImagens;
+}
+
 function setCabecalhoPorNivel($titulo, $qtdNiveisAcimaEmSeEncontraPagina) {
-	$pastaImagens = subirNivelPasta ( caminho_imagens, $qtdNiveisAcimaEmSeEncontraPagina );
+	//se precisar fazer o mesmo para pasta menu
+	$pastaImagens = getPastaImagensPorNivel($qtdNiveisAcimaEmSeEncontraPagina);
 	$pastaMenu = subirNivelPasta ( caminho_menu, $qtdNiveisAcimaEmSeEncontraPagina );
-	
+		
 	define ( 'pasta_imagens', $pastaImagens );
-	
 	if ($titulo != null){
 		$titulo = " - " . $titulo;
 	}
@@ -403,11 +412,17 @@ function getBotoesRodapeComRestricao($arrayBotoesARemover) {
 	return $html;
 }
 function getLinkPesquisa($link) {
-	// $parametros = "?lupa=S&".$parametros;
-	$pasta = pasta_imagens;
+	return getImagemLink("javascript:abrirJanelaAuxiliar('" . $link . "',true, false, false);\" ", "lupa.png");
+}
+function getImagemLink($href, $nmImagem) {
+
+	//$pasta = pasta_imagens . "//";
+	$pasta = getPastaImagens() . "//";
+
+	$html = "<A id='lnkFramework' name='lnkFramework' " . "href=\"". $href . "\"" . " class='linkNormal' >" . "<img src='" . $pasta . $nmImagem . "'  width='22' height='22' border='0'></A>";
 	
-	$html = "<A id='lnkFramework' name='lnkFramework' " . "href=\"javascript:abrirJanelaAuxiliar('" . $link . "',true, false, false);\" " . " class='linkNormal' >" . "<img src='" . $pasta . "lupa.png'  width='22' height='22' border='0'></A>";
-	
+	//echo $pasta;
+
 	return $html;
 }
 function getBorracha($nmCampos) {

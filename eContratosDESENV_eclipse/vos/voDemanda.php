@@ -28,7 +28,7 @@ Class voDemanda extends voentidade{
 	var $dtReferencia = "";
 	 
 	var $dbprocesso = null;
-	var $voContrato = null;
+	var $colecaoContrato = null;
 	// ...............................................................
 	// Funcoes ( Propriedades e mÃ©todos da classe )
 
@@ -37,7 +37,7 @@ Class voDemanda extends voentidade{
 		$this->temTabHistorico = true;
 		$class = self::getNmClassProcesso();
 		$this->dbprocesso= new $class();
-		$this->voContrato = new vocontrato();
+		$this->colecaoContrato = array();
 
 		//retira os atributos padrao que nao possui
 		//remove tambem os que o banco deve incluir default
@@ -103,20 +103,33 @@ Class voDemanda extends voentidade{
 		return $retorno;
 	}
 
-	function temContratoParaIncluir(){		
+	/*function temContratoParaIncluir(){
 		$retorno = $this->voContrato->tipo != null && $this->voContrato->anoContrato != null && $this->voContrato->cdContrato != null;
 		return $retorno;
-	}
+	}*/
 
-	function getVODemandaContrato(){
+	function temContratoParaIncluir(){
+		$retorno = $this->colecaoContrato != null && (count($this->colecaoContrato)>0);
+		return $retorno;
+	}
+	
+	/*function getVODemandaContrato(){
 		$voDemanda = new voDemandaContrato();
 		$voDemanda->anoDemanda = $this->ano;
 		$voDemanda->cdDemanda = $this->cd;
 		$voDemanda->voContrato = $this->voContrato;
 
 		return $voDemanda;
-	}
+	}*/
 
+	function getVODemandaContrato($voContrato){
+		$voDemanda = new voDemandaContrato();
+		$voDemanda->anoDemanda = $this->ano;
+		$voDemanda->cdDemanda = $this->cd;
+		$voDemanda->voContrato = $voContrato;	
+		return $voDemanda;
+	}
+	
 	function getDadosRegistroBanco($registrobanco){
 		//as colunas default de voentidade sao incluidas pelo metodo getDadosBanco do voentidade
 		$this->cd = $registrobanco[self::$nmAtrCd];
@@ -128,7 +141,7 @@ Class voDemanda extends voentidade{
 		$this->prioridade = $registrobanco[self::$nmAtrPrioridade];
 		$this->dtReferencia = $registrobanco[self::$nmAtrDtReferencia];
 		 
-		$chaveContrato = $registrobanco[vocontrato::$nmAtrCdContrato];
+		/*$chaveContrato = $registrobanco[vocontrato::$nmAtrCdContrato];
 		if($chaveContrato != null){
 			$voContrato = new vocontrato();
 			$voContrato->cdContrato = $registrobanco[voDemandaContrato::$nmAtrCdContrato];
@@ -138,7 +151,7 @@ Class voDemanda extends voentidade{
 			$voContrato->cdEspecie	 = $registrobanco[voDemandaContrato::$nmAtrCdEspecieContrato];				
 			
 			$this->voContrato = $voContrato;
-		}		
+		}*/		
 	}
 
 	function getDadosFormulario(){
@@ -156,15 +169,40 @@ Class voDemanda extends voentidade{
 		$chaveContrato = @$_POST[vopessoa::$ID_CONTRATO];
 		//echo "chave contrato:" . $chaveContrato;
 		if($chaveContrato != null){			
-			$voContrato = new vocontrato();
-			$voContrato->getChavePrimariaVOExplodeParam($chaveContrato);
-			$this->voContrato = $voContrato;
+			$this->setColecaoContratoFormulario($chaveContrato);
 		}
 
 		//completa com os dados da entidade
 		$this->getDadosFormularioEntidade();
 	}
+	
+	function setColecaoContratoFormulario($colecao){
+		$retorno = null;
+		if($colecao != null){
+			$retorno = array();				
+			foreach ($colecao as $chaveContrato) {
+				$voContrato = new vocontrato();
+				$voContrato->getChavePrimariaVOExplodeParam($chaveContrato);
+				$retorno[] = $voContrato;				
+			}
+		}		
+		$this->colecaoContrato = $retorno;
+	}
 	 
+	function setColecaoContratoRegistroBanco($colecao){
+		$retorno = null;
+		if($colecao != null){
+			$retorno = array();
+			foreach ($colecao as $registrobanco) {
+				$voContrato = new vocontrato();
+				$voContrato->getDadosBanco($registrobanco);
+				$retorno[] = $voContrato;
+			}
+		}
+	
+		$this->colecaoContrato = $retorno;
+	}
+	
 	function toString(){
 		$retorno.= $this->ano;
 		$retorno.= "," . $this->cd;
@@ -187,6 +225,9 @@ Class voDemanda extends voentidade{
 	
 	function getMensagemComplementarTelaSucesso(){
 		$retorno = "Demanda (Número - Ano): " . formatarCodigoAnoComplementoArgs($this->cd, $this->ano, TAMANHO_CODIGOS, null);
+		if($this->sqHist != null){
+			$retorno .= "<br>Núm. Histórico: " . complementarCharAEsquerda($this->sqHist, "0", TAMANHO_CODIGOS);
+		}
 		return $retorno; 
 	}	
 

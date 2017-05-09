@@ -1,4 +1,15 @@
 <?php
+
+/*
+ * implementa a busca insensitive de uma palavra em outra
+ * diferente de strpos que eh case sensitive
+ */
+function getMultiPos($haystack, $needles, $sensitive=true, $offset=0){
+	foreach($needles as $needle) {
+		$result[$needle] = ($sensitive) ? strpos($haystack, $needle, $offset) : stripos($haystack, $needle, $offset);
+	}
+	return $result;
+}
 function isColecaoVazia($recordset) {
 	return $recordset == null || $recordset == "";
 }

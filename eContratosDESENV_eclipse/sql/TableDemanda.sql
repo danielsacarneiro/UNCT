@@ -10,6 +10,7 @@ CREATE TABLE demanda (
     dem_texto MEDIUMTEXT NOT NULL,
     dem_prioridade INT DEFAULT 3 NOT NULL,
     dem_dtreferencia DATE,
+    dem_prt VARCHAR(25),
         
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
@@ -18,7 +19,7 @@ CREATE TABLE demanda (
     
     CONSTRAINT pk PRIMARY KEY (dem_ex, dem_cd)
 );
-
+    
 -- update demanda set dem_dtreferencia = DATE(dh_inclusao);
 
 drop table demanda_hist;
@@ -32,6 +33,7 @@ CREATE TABLE demanda_hist (
     dem_texto MEDIUMTEXT NOT NULL,
     dem_prioridade INT DEFAULT 3 NOT NULL,
     dem_dtreferencia DATE,
+    dem_prt VARCHAR(25),
         
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,

@@ -189,7 +189,7 @@ include_once("voDemandaContrato.php");
 		$voDemanda->prioridade  = $this->prioridade;
 		$voDemanda->dtReferencia  = $this->dtReferencia;
 		
-		$voDemanda->voContrato = $this->voContrato;
+		$voDemanda->colecaoContrato = $this->colecaoContrato;
 	
 		return $voDemanda;
 	}

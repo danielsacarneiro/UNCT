@@ -33,12 +33,11 @@ if($isInclusao){
     $vo->getVOExplodeChave();
     $isHistorico = ($voContrato->sqHist != null && $voContrato->sqHist != "");
 	
-	$dbprocesso = $vo->dbprocesso;					
-	$colecao = $dbprocesso->consultarPorChaveTela($vo, $isHistorico);	
-	$vo->getDadosBanco($colecao);
+	$dbprocesso = $vo->dbprocesso;	
+	$vo = $dbprocesso->consultarPorChaveTelaColecaoContrato($vo, $isHistorico);	
 	
-	$votram->getDadosBanco($colecao);	
-	$votram->dbprocesso->validarEncaminhamento($votram);
+	$dbDemandaTramitacao = new dbDemandaTramitacao();
+	$dbDemandaTramitacao->validarEncaminhamento($vo);
 	
 	putObjetoSessao($vo->getNmTabela(), $vo);
 		
@@ -63,6 +62,7 @@ setCabecalho($titulo);
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_ajax.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_pessoa.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_contrato.js"></SCRIPT>
 
 <SCRIPT language="JavaScript" type="text/javascript">
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
@@ -193,19 +193,10 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	            <INPUT type="text" value="<?=$vo->texto?>"  class="camporeadonly" size="80" readonly>
 				</TD>
 	        </TR>	        
-	        <?php	        	        	        
-	        //so exibe contrato se tiver
-	        $voDemandaContrato = new voDemandaContrato();
-	        $voDemandaContrato->getDadosBanco($colecao);
-	         
-	        if($voDemandaContrato->voContrato != null){
-	        	$voContrato = $voDemandaContrato->voContrato;
-	        }
-	          
+	        <?php
  	        require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
- 	        //getContratoDetalhamento($voContrato, $colecao);
- 	        getContratoDet($voContrato);
-			?>	        
+ 	        getColecaoContratoDet($vo->colecaoContrato);
+	        ?>            
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Data.Demanda:</TH>
 	            <TD class="campoformulario" colspan=3>	            	            	            
@@ -237,15 +228,17 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	        </TR>
 	        <?php	        
 	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
-	        $arrayCssClass = array("camponaoobrigatorio","camponaoobrigatorio", "camponaoobrigatorio");
+	        /*$arrayCssClass = array("camponaoobrigatorio","camponaoobrigatorio", "camponaoobrigatorio");
 	        $arrayComplementoHTML = array(" required onChange='carregaContratada();' ",
 	        		" required onBlur='carregaContratada();' ",
-	        		" required onChange='carregaContratada();' "	        		
-	        );	        
+	        		" required onChange='carregaContratada();' "
+	        );*/
+	        
 	        ?>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" colspan=3><?php getContratoEntradaDeDados($tipoContrato, $anoContrato, $cdContrato, $arrayCssClass, $arrayComplementoHTML, $nmCampoDiv);?></TD>
+	            <TD class="campoformulario" colspan=3><?php getCampoDadosContratoMultiplos();//getContratoEntradaDeDados($tipoContrato, $anoContrato, $cdContrato, $arrayCssClass, $arrayComplementoHTML, $nmCampoDiv);?>	            
+	            </TD>
 	        </TR>	        
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Setor Origem:</TH>

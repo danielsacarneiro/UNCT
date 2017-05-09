@@ -81,4 +81,8 @@ function getQtdDiasEntreDatas($dataini, $datafim) {
 	return $retorno*$fator;
 }
 
+function getAnoHoje(){
+	return date ( 'Y' );
+}
+
 ?>

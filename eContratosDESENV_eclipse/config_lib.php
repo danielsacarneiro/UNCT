@@ -39,18 +39,31 @@ function isClasseFrameWork($class_name, $tipoClasse){
  * dai o include
  */
 spl_autoload_register(function ($class_name) {
-	$caminhoClasse = caminho_vos;
-	$pos = strpos($class_name, "filtro");
+	$caminhoClasse = caminho_vos;	
+	$pos = stripos($class_name, "filtro");	
 	if($pos !== false && $pos == 0){
 		//eh classe filtro
 		$caminhoClasse = caminho_filtros;
-	}	
-		
-	$isClasseFramework = isClasseFrameWork($class_name, "vo") || isClasseFrameWork($class_name, "filtro") || isClasseFrameWork($class_name, "db");
-		
-	if($isClasseFramework){
-		include_once $caminhoClasse.$class_name . '.php';
+	}else{
+		//poderia tambem usar o stripos (mas quis demonstrar como cria uma nova funcao parametrizavel)
+		$needle = "Excecao";
+		$pos = getMultiPos($class_name, array($needle), false);
+		$pos = $pos[$needle];
+		if($pos !== false && $pos == 0){			
+			//eh classe EXCECAO
+			$caminhoClasse = caminho_excecoes;
+		}		
 	}
+		
+	$isClasseFramework = isClasseFrameWork($class_name, "vo") || isClasseFrameWork($class_name, "filtro") || isClasseFrameWork($class_name, "excecao") || isClasseFrameWork($class_name, "db");
+	
+	//ECHO $class_name;
+	if($isClasseFramework){
+		//echo "ACHOU";
+		include_once $caminhoClasse.$class_name . '.php';
+	}/*else{
+		echo "NAO ACHOU";
+	}*/
 	
 });
 
@@ -80,6 +93,7 @@ define('caminho_lib', "$base/lib/");
 define('caminho_util', "$base/util/");
 define('caminho_vos', "$base/vos/");
 define('caminho_filtros', "$base/filtros/");
+define('caminho_excecoes', "$base/excecoes/");
 define('caminho_funcoesHTML', "funcoes/");
 define('caminho_funcoes', "$base/funcoes/");
 

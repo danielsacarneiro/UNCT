@@ -7,7 +7,7 @@ inicioComValidacaoUsuario(true);
 $vo = new voDemandaTramitacao();
 $vo->getDadosFormulario();
 
-//echo $vo->voContrato->toString(); 
+//var_dump($vo->colecaoContrato); 
 
 putObjetoSessao("vo", $vo);
 //echo $funcao = @$_POST["funcao"];

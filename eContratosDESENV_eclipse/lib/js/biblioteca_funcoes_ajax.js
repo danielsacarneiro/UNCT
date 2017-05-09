@@ -38,11 +38,24 @@
      
  }
  
- function getDadosContratadaPorContrato(chaveContrato, idDivResultado) {     
+ function getDadosContratadaPorContrato(chaveContrato, idDivResultado) {
      var result = document.getElementById(idDivResultado);          
      imprimeResultado(result, "../pessoa/campoDadosContratadaAjax.php?chave=" + chaveContrato);     
  }
  
+ function getNovoCampoDadosContratoAjax(idDivResultado, pIndiceContratoAtual, pIsLimpar) {
+     var result = document.getElementById(idDivResultado);
+     var limpar = (pIsLimpar != null && pIsLimpar);
+     if(limpar)
+    	 retorno = "S";
+     else
+    	 retorno = "N";
+     
+     pIndiceContratoAtual++;
+      
+     imprimeResultado(result, "../contrato/campoDadosContratoAjax.php?limpar="+retorno + "&indice=" +pIndiceContratoAtual);     
+ }
+
  function manterDadosTramitacaoPA(textofase, docfase, idDivResultado, funcao, indice) {     
      var result = document.getElementById(idDivResultado);          
      imprimeResultado(result, "../pa/gridTramitacaoAjax.php?funcao=" + funcao + "&textoTramitacao=" + textofase+ "&indice=" + indice+"&docFase=" + docfase);     

@@ -1,75 +1,123 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
 <?php
 include_once("../../config_lib.php");
-include_once(caminho_util."bibliotecaFuncoesPrincipal.php");
-//inicio();
+include_once(caminho_util."bibliotecaHTML.php");
+include_once(caminho_util."selectExercicio.php");
+include_once(caminho_vos."vocontrato.php");
+require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
 
-error_reporting(E_ALL);
-set_time_limit(0);
+//inicia os parametros
+inicioComValidacaoUsuario(true);
+$vo = new vocontrato();
+setCabecalho($titulo);
 
 ?>
-<html>
-<head>
-<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+<!DOCTYPE html>
+<HEAD>
 
-<title>TESTE PLANILHA EXCEL</title>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_text.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_oficio.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_datahora.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_ajax.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_pessoa.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_contrato.js"></SCRIPT>
 
-</head>
-<body>
+<SCRIPT language="JavaScript" type="text/javascript">
+// Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
+function isFormularioValido() {
 
-<?php
+	campoSetorDestino = document.frm_principal.<?=voDemandaTramitacao::$nmAtrCdSetorDestino?>;
 
-/*header('Content-Type: text/html; charset=utf-8',true);
-
-include caminho_wordpress.'excel/Classes/PHPExcel.php';
-include caminho_wordpress.'excel/Classes/PHPExcel/Writer/Excel2007.php';
-include caminho_wordpress.'excel/Classes/PHPExcel/IOFactory.php';
-include_once(caminho_vos."dbcontrato.php");
-
-$inputFileName = caminho.'planilha/UNCT_teste.xlsx';
-
-$objPHPExcel = PHPExcel_IOFactory::load($inputFileName);
-$sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
-
-echo 'Lendo planilha ',pathinfo($inputFileName,PATHINFO_BASENAME),'<br />';
-echo '<hr />';
-
-$totalResultado = count($sheetData);
-//$totalResultado = 15;
-
-echo "A planilha tem " . $totalResultado . " linhas <br>";		
-echo "iMPORTANDO tipo $tipoContrato ... <br><br>";
-
-$dbprocesso = new dbcontrato(null);
-
-//var_dump($objPHPExcel->getActiveSheet()->getCell('B3')->getHyperlink());
-//var_dump($objPHPExcel->getActiveSheet()->getCell('B3')->getHyperlink()->getUrl());
-//echo $objPHPExcel->getActiveSheet()->getCell('B3')->getHyperlink()->getUrl();
-
-$documento = new documentoPessoa();
-$retorno->docContratada = $documento->getNumDoc();
-
-for ($k=6; $k<=$totalResultado; $k++) {
-
-	$linha = $sheetData[$k];
-	$VALOR = $linha["O"];
+	if(campoSetorDestino.value != "" && !isCampoTextoValido(document.frm_principal.<?=voDemandaTramitacao::$nmAtrTexto?>, true))	
+		return false;		
 	
-	ECHO "VALOR ENCONTRADO:" . $VALOR . "<BR>";
-	ECHO "VALOR PROCESSADO:" . getMoedaMascaraImportacao($VALOR) . "<BR>";
+	return true;
+}
 
-	if($linha["A"] == "FIM")
-		break;
+function cancelar() {
+	//history.back();
+	location.href="index.php?consultar=S";	
+}
 
-	echo "linha registro" . $k . " <BR>";
+function confirmar() {
+	if(!isFormularioValido())
+		return false;
+
+	return confirm("Confirmar Alteracoes?");    
+}
+
+function habilitaContrato() {	
+
+	<?php
+	$dominioTipoDemanda = new dominioTipoDemanda(dominioTipoDemanda::getColecaoTipoDemandaContrato());
+	echo $dominioTipoDemanda->getArrayHTMLChaves("colecaoTpDemandaContrato");	
+	?>
+
+	cdTpDemanda = document.frm_principal.<?=voDemanda::$nmAtrTipo?>.value;
+	
+	pCampoCdContrato = document.frm_principal.<?=vocontrato::$nmAtrCdContrato;?>;
+	pCampoAnoContrato = document.frm_principal.<?=vocontrato::$nmAtrAnoContrato;?>;
+	pCampoTipoContrato = document.frm_principal.<?=vocontrato::$nmAtrTipoContrato;?>;
+
+	flag = false;
+	if(colecaoTpDemandaContrato.indexOf(cdTpDemanda) != -1)
+		flag = true;
+
+	pCampoCdContrato.required = flag;
+	pCampoAnoContrato.required = flag;
+	pCampoTipoContrato.required = flag;
 }
 
 
-    
-echo "FIM... <br><br>";
+function validaFormulario() {
+	habilitaContrato();
+}
 
-$dbprocesso->finalizar();*/
+function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
+	chave = ano
+	+ CD_CAMPO_SEPARADOR +  cdSetor
+	+ CD_CAMPO_SEPARADOR +  tpDoc
+	+ CD_CAMPO_SEPARADOR +  sq;
 
-?>
-<body>
-</html>
+	document.getElementsByName("<?=voDocumento::getNmTabela()?>").item(0).value = chave;
+	document.getElementsByName("<?=voDocumento::$nmAtrSq?>").item(0).value = formatarCodigoDocumento(sq, cdSetor, ano, tpDoc);
+
+	//alert(document.frm_principal.<?=voDocumento::getNmTabela()?>.value);
+}
+
+</SCRIPT>
+<?=setTituloPagina($vo->getTituloJSP())?>
+</HEAD>
+<BODY class="paginadados" onload="">
+	  
+<FORM name="frm_principal" method="post" action="confirmar.php" onSubmit="return confirmar();">
+
+<INPUT type="hidden" id="funcao" name="funcao" value="<?=$funcao?>">
+ 
+<TABLE id="table_conteiner" class="conteiner" cellpadding="0" cellspacing="0">
+    <TBODY>
+		<TR>
+		<TD class="conteinerfiltro"><?=cabecalho?></TD>
+		</TR>
+        <TR>
+            <TD class="conteinerfiltro">
+            <DIV id="div_filtro" class="div_filtro">
+            <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
+            <TBODY>
+	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
+	            <TD class="campoformulario" colspan=3><?php echo getCampoDadosContratoMultiplos();?>	            
+	            </TD>
+	        </TR>	        
+            </TBODY>
+            </TABLE>
+            </DIV>
+            </TD>
+        </TR>
+    </TBODY>
+</TABLE>
+</FORM>
+
+</BODY>
+</HTML>

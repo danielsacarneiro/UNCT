@@ -290,16 +290,20 @@ function encaminhar() {
                         $voDemandaContrato = new voDemandaContrato();
                         $voDemandaContrato->getDadosBanco($colecao[$i]);
                         
+                        $qtContratos = $colecao[$i][filtroManterDemanda::$NmColQtdContratos];                        
                         if($voDemandaContrato->voContrato->cdContrato != null){
                         	
-                        	$contrato = formatarCodigoAnoComplemento($voDemandaContrato->voContrato->cdContrato,
-                        			$voDemandaContrato->voContrato->anoContrato,
-                        			$dominioTipoContrato->getDescricao($voDemandaContrato->voContrato->tipo));
-                        	
-                        	if($empresa != null){
-                        		$contrato .= ": ".$empresa;
-                        	}
-                        	 
+                        	if($qtContratos > 1){
+                        		$contrato = "VÁRIOS";
+                        	}else{                        	
+	                        	$contrato = formatarCodigoAnoComplemento($voDemandaContrato->voContrato->cdContrato,
+	                        			$voDemandaContrato->voContrato->anoContrato,
+	                        			$dominioTipoContrato->getDescricao($voDemandaContrato->voContrato->tipo));
+	                        	
+	                        	if($empresa != null){
+	                        		$contrato .= ": ".$empresa;
+	                        	}
+                        	}                        	 
                         	//$tipo = $tipo . ":". $contrato;
                         }
                         $prioridade = $dominioPrioridade->getDescricao($voAtual->prioridade);

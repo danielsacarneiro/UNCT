@@ -212,9 +212,7 @@ class dbDemandaTramitacao extends dbprocesso {
 			$vo->cd = $voDemanda->cd;
 			
 			if ($voDemanda->temContratoParaIncluir ()) {
-				$voDemContrato = $voDemanda->getVODemandaContrato ();
-				$voDemContrato->dbprocesso->cDb = $this->cDb;
-				$voDemContrato->dbprocesso->incluir ( $voDemContrato );
+				$this->incluirColecaoDemandaContrato($voDemanda);
 			}
 			
 			// a transacao ja eh controlada acima
@@ -229,6 +227,18 @@ class dbDemandaTramitacao extends dbprocesso {
 		
 		return $voDemanda;
 	}
+	function incluirColecaoDemandaContrato($voDemanda) {
+		$colecao = $voDemanda->colecaoContrato;		
+		foreach ($colecao as $voContrato) {	
+			$voDemContrato = new voDemandaContrato();
+			$voDemContrato = $voDemanda->getVODemandaContrato($voContrato);
+			$this->incluirDemandaContrato($voDemContrato);
+		}		
+	}
+	function incluirDemandaContrato($voDemContrato) {		
+		$voDemContrato->dbprocesso->cDb = $this->cDb;
+		$voDemContrato->dbprocesso->incluir ( $voDemContrato );		
+	}
 	function validarInclusao($vo) {
 		/*
 		 * echo "tipo da demanda:" . $vo->tipo . "<br>";
@@ -236,7 +246,7 @@ class dbDemandaTramitacao extends dbprocesso {
 		 */
 		//if ($vo->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO && ! $vo->temContratoParaIncluir ()) {
 		if (dominioTipoDemanda::isContratoObrigatorio($vo->tipo) && ! $vo->temContratoParaIncluir ()) {			
-			$msg = "Selecione o contrato.";
+			$msg = "Selecione o(s) contrato(s).";
 			throw new Exception ( $msg );
 		}
 	}

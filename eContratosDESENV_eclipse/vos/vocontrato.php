@@ -15,8 +15,10 @@ include_once(caminho_funcoes."documento/dominioTpDocumento.php");
         /*var $nmEntidade = "contrato";
         var $nmTabela = "contrato";
 		static $nmEntidadeStatic = "contrato";*/
-        
-		static $nmAtrSqContrato  = "sq";
+  		static $ID_REQ_CAMPO_CONTRATO = "ID_REQ_CAMPO_CONTRATO";
+  		//static $ID_REQ_QTD_CONTRATOS = "ID_REQ_QTD_CONTRATOS";
+		
+  		static $nmAtrSqContrato  = "sq";
 		static $nmAtrCdContrato  = "ct_numero";
 		static $nmAtrAnoContrato  = "ct_exercicio";		
 		static $nmAtrTipoContrato =  "ct_tipo";

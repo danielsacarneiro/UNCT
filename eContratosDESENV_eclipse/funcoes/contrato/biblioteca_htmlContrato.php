@@ -12,6 +12,16 @@ function getContratoDet($voContrato){
 	return getContratoDetalhamento($voContrato, $colecao);	
 }
 
+function getColecaoContratoDet($colecao){
+	$html = "";
+	//var_dump($colecao);
+	
+	foreach ($colecao as $voContrato) {
+		$html .= getContratoDet($voContrato);
+	}
+	return $html;
+}
+
 function getContratoDetalhamento($voContrato, $colecao){
 	$vo = new vocontrato();
 
@@ -74,8 +84,13 @@ function getContratoDetalhamento($voContrato, $colecao){
 <?php }
 
 }
-
 function getContratoEntradaDeDados($tipoContrato, $cdContrato, $anoContrato, $arrayCssClass, $arrayComplementoHTML){
+	return getContratoEntradaDeDadosMais($tipoContrato, $cdContrato, $anoContrato, $arrayCssClass, $arrayComplementoHTML, null);
+}
+
+function getContratoEntradaDeDadosMais($tipoContrato, $cdContrato, $anoContrato, $arrayCssClass, $arrayComplementoHTML, $indiceContrato){
+	$isOpcaoMultiplos = $indiceContrato != null;			
+		
 	require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioTipoContrato.php");
 	$combo = new select(dominioTipoContrato::getColecao());
 	require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioEspeciesContrato.php");
@@ -90,35 +105,45 @@ function getContratoEntradaDeDados($tipoContrato, $cdContrato, $anoContrato, $ar
 	$htmlCdContrato = $arrayComplementoHTML[1];
 	$htmlAnoContrato = $arrayComplementoHTML[2];
 	
-	$nmCampoDivPessoaContratada = vopessoa::$nmAtrNome; 
-	?>
+	//parametros para a recuperacao de dados
+	$nmCampoDivPessoaContratada = vopessoa::$nmAtrNome;
+	if($isOpcaoMultiplos){
+		$nmCampoDivNovoContrato = vocontrato::$ID_REQ_CAMPO_CONTRATO. $indiceContrato;		 
+		$nmCampoDivContratoAnterior = vocontrato::$ID_REQ_CAMPO_CONTRATO. ($indiceContrato-1);
+		$nmCampoDivPessoaContratada = vopessoa::$nmAtrNome. $indiceContrato;
+	}
 	
-<SCRIPT language="JavaScript" type="text/javascript">
-
-function carregaContratada() {
-	//ta na biblioteca_funcoes_pessoa.js
-	pNmCampoCdContrato = '<?=vocontrato::$nmAtrCdContrato;?>';
-	pNmCampoAnoContrato = '<?=vocontrato::$nmAtrAnoContrato;?>';
-	pNmCampoTipoContrato = '<?=vocontrato::$nmAtrTipoContrato;?>';
-	pNmCampoCdEspecieContrato = '<?=vocontrato::$nmAtrCdEspecieContrato;?>';
-	pNmCampoSqEspecieContrato = '<?=vocontrato::$nmAtrSqEspecieContrato;?>';
-	pNmCampoDiv = '<?=$nmCampoDivPessoaContratada;?>';
-
-	//alert(pNmCampoCdContrato + " " + pNmCampoAnoContrato + " " + pNmCampoTipoContrato + " " + pNmCampoCdEspecieContrato + " " + pNmCampoSqEspecieContrato + " " + pNmCampoDiv);
-	carregaDadosContratada(pNmCampoAnoContrato, pNmCampoTipoContrato, pNmCampoCdContrato, pNmCampoCdEspecieContrato, pNmCampoSqEspecieContrato,pNmCampoDiv);
-		    
-}
-
-</SCRIPT>	
-	            <?php echo $combo->getHtmlCombo(vocontrato::$nmAtrTipoContrato,vocontrato::$nmAtrTipoContrato, $tipoContrato, true, $cssTipoContrato, false, $htmlTipoContrato);?>
-	            Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=vocontrato::$nmAtrCdContrato?>" name="<?=vocontrato::$nmAtrCdContrato?>"  value="<?php echo(complementarCharAEsquerda($cdContrato, "0", TAMANHO_CODIGOS_SAFI));?>"  class="<?=$cssCdContrato?>" size="4" maxlength="3" <?=$readonlyChaves?> <?=$htmlCdContrato?>>
-	            <?php echo "Ano: " . $selectExercicio->getHtmlCombo(vocontrato::$nmAtrAnoContrato,vocontrato::$nmAtrAnoContrato, $anoContrato, true, $cssAnoContrato, false, $htmlAnoContrato);?>
-				<!--<?php echo "<br>Espécie: " . $comboEspecie->getHtmlCombo(vocontrato::$nmAtrCdEspecieContrato,vocontrato::$nmAtrCdEspecieContrato, $vo->cdespecie, true, $cssClass, false, " required onChange='carregaContratada();'");?>	            
-         		Seq: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=vocontrato::$nmAtrSqEspecieContrato?>" name="<?=vocontrato::$nmAtrSqEspecieContrato?>"  value="<?php echo(complementarCharAEsquerda($vo->sqEspecie, "0", TAMANHO_CODIGOS_SAFI));?>"  class="<?=$cssClass?>" size="3" maxlength="3" <?=$readonlyChaves?> onBlur='carregaContratada();'> º-->
-				
-				<INPUT type="hidden" id="<?=vocontrato::$nmAtrCdEspecieContrato?>" name="<?=vocontrato::$nmAtrCdEspecieContrato?>"  value="<?=dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;?>">         		
-				<INPUT type="hidden" id="<?=vocontrato::$nmAtrSqEspecieContrato?>" name="<?=vocontrato::$nmAtrSqEspecieContrato?>"  value="1">
+	$pNmCampoCdContrato = vocontrato::$nmAtrCdContrato; 
+	$pNmCampoAnoContrato = vocontrato::$nmAtrAnoContrato;
+	$pNmCampoTipoContrato = vocontrato::$nmAtrTipoContrato;	
+	$pNmCampoCdEspecieContrato = vocontrato::$nmAtrCdEspecieContrato;
+	$pNmCampoSqEspecieContrato = vocontrato::$nmAtrSqEspecieContrato;	
+	
+	/*$nmCampoDivPessoaContratada .= $indiceContrato;
+	$nmCampoDivNovoContrato .= $indiceContrato;
+	$pNmCampoCdContrato .= $indiceContrato;
+	$pNmCampoAnoContrato .= $indiceContrato;
+	$pNmCampoTipoContrato .= $indiceContrato;
+	$pNmCampoCdEspecieContrato .= $indiceContrato;
+	$pNmCampoSqEspecieContrato .= $indiceContrato;*/
+	
+	echo $combo->getHtmlCombo($pNmCampoTipoContrato.$indiceContrato,$pNmCampoTipoContrato, $tipoContrato, true, $cssTipoContrato, false, $htmlTipoContrato);?>
+	Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=$pNmCampoCdContrato.$indiceContrato?>" name="<?=$pNmCampoCdContrato?>"  value="<?php echo(complementarCharAEsquerda($cdContrato, "0", TAMANHO_CODIGOS_SAFI));?>"  class="<?=$cssCdContrato?>" size="4" maxlength="3" <?=$htmlCdContrato?>>
+	<?php 
+	echo "Ano: " . $selectExercicio->getHtmlCombo($pNmCampoAnoContrato.$indiceContrato,$pNmCampoAnoContrato, $anoContrato, true, $cssAnoContrato, false, $htmlAnoContrato);
+	if($isOpcaoMultiplos){
+		echo "&nbsp;" . getImagemLink("javascript:carregaNovoCampoContrato('$nmCampoDivNovoContrato', $indiceContrato);\" ", "sinal_mais.gif");
+		
+		if($indiceContrato > 1){
+			echo "&nbsp;" . getImagemLink("javascript:limparCampoContrato('$nmCampoDivContratoAnterior', $indiceContrato);\" ", "sinal_menos.gif");
+		}
+	}
+	?>	            				
+				<INPUT type="hidden" id="<?=$pNmCampoCdEspecieContrato.$indiceContrato?>" name="<?=$pNmCampoCdEspecieContrato?>"  value="<?=dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;?>">         		
+				<INPUT type="hidden" id="<?=$pNmCampoSqEspecieContrato.$indiceContrato?>" name="<?=$pNmCampoSqEspecieContrato?>"  value="1">				
 			  <div id="<?=$nmCampoDivPessoaContratada?>">
+	          </div>	          
+			  <div id="<?=$nmCampoDivNovoContrato?>">
 	          </div>	        
 <?php 
 }
@@ -153,6 +178,38 @@ function consultarDadosContratoCompilado($voContrato){
 
 	//echo $query;
 	return $retorno;
+}
+
+function getCampoDadosContratoSimples() {
+	return getCampoDadosContratoMultiplosPorIndice(null);	
+}
+function getCampoDadosContratoMultiplos() {
+	$indiceQtdContrato = 1;
+	$html = getCampoDadosContratoMultiplosPorIndice($indiceQtdContrato);
+	//$html .= "<INPUT type='hidden' id='". vocontrato::$ID_REQ_QTD_CONTRATOS . "' name='" . vocontrato::$ID_REQ_QTD_CONTRATOS . "'  value='".$indiceQtdContrato."'>";
+	return 	$html;	
+}
+function getCampoDadosContratoMultiplosPorIndice($indice) {
+	$pNmCampoCdContrato = vocontrato::$nmAtrCdContrato;
+	$pNmCampoAnoContrato = vocontrato::$nmAtrAnoContrato;
+	$pNmCampoTipoContrato = vocontrato::$nmAtrTipoContrato;
+	$pNmCampoCdEspecieContrato = vocontrato::$nmAtrCdEspecieContrato;
+	$pNmCampoSqEspecieContrato = vocontrato::$nmAtrSqEspecieContrato;	
+	$nmCampoDivPessoaContratada = vopessoa::$nmAtrNome;
+	
+	$indiceJS = $indice;
+	if($indice == null)
+		$indiceJS = "''";
+	
+	$chamadaFuncaoJS = "\"carregaContratada($indiceJS, '$pNmCampoCdContrato', '$pNmCampoAnoContrato', '$pNmCampoTipoContrato', '$pNmCampoCdEspecieContrato', '$pNmCampoSqEspecieContrato', '$nmCampoDivPessoaContratada');\"";	
+	
+	$arrayCssClass = array("camponaoobrigatorio","camponaoobrigatorio", "camponaoobrigatorio");
+	$arrayComplementoHTML = array(" required onChange=$chamadaFuncaoJS ",
+			" required onBlur=$chamadaFuncaoJS ",
+			" required onChange=$chamadaFuncaoJS "
+	);	
+	$html = getContratoEntradaDeDadosMais("", "", "", $arrayCssClass, $arrayComplementoHTML, $indice);
+	return 	$html;
 }
 
 ?>

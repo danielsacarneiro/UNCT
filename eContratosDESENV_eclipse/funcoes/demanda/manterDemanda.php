@@ -16,8 +16,7 @@ $readonly = "";
 $nmFuncao = "";
 $readonly = "readonly";
 $dbprocesso = $vo->dbprocesso;
-$colecao = $dbprocesso->consultarPorChaveTela($vo, $isHistorico);
-$vo->getDadosBanco($colecao);
+$vo = $dbprocesso->consultarPorChaveTelaColecaoContrato($vo, $isHistorico);
 putObjetoSessao($vo->getNmTabela(), $vo);
 
 $nmFuncao = "ALTERAR ";
@@ -35,9 +34,6 @@ if($funcao == constantes::$CD_FUNCAO_EXCLUIR){
 
 $titulo = $nmFuncao. $titulo. $complementoTit;
 setCabecalho($titulo);
-
-$voDemandaContrato = new voDemandaContrato();
-$voDemandaContrato->getDadosBanco($colecao);
 ?>
 
 <!DOCTYPE html>
@@ -132,18 +128,10 @@ function confirmar() {
 	            <TD class="campoformulario" colspan=3>				
 	            <INPUT type="text" id="<?=voDemanda::$nmAtrTexto?>" name="<?=voDemanda::$nmAtrTexto?>" value="<?=$vo->texto?>"  class="campoobrigatorio" size="80" required>	            	                        	                        
 	        </TR>	        	        
-	        <?php	        	        	        
-	        //so exibe contrato se tiver
-	        $voDemandaContrato = new voDemandaContrato();
-	        $voDemandaContrato->getDadosBanco($colecao);
-	         
-	        if($voDemandaContrato->voContrato != null){
-	        	$voContrato = $voDemandaContrato->voContrato;
-	        }
-	          
+	        <?php
  	        require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
- 	        getContratoDetalhamento($voContrato, $colecao);
-			?>      
+ 	        getColecaoContratoDet($vo->colecaoContrato);
+	        ?>            
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Situação:</TH>
 	            <TD class="campoformulario" colspan=3>
