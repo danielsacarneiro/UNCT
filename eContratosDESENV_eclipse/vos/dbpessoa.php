@@ -261,7 +261,7 @@ class dbpessoa extends dbprocesso {
 		$this->cDb->retiraAutoCommit ();
 		try {
 			$this->excluirPessoaVinculo ( $vopessoa );
-			$this->excluirPessoaGestor ( $vopessoa );
+			$this->excluirPessoaGestor ( $vopessoa );			
 			$vopessoa = parent::excluir ( $vopessoa );
 			// End transaction
 			$this->cDb->commit ();

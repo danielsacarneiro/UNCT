@@ -280,7 +280,7 @@ class dbDemanda extends dbprocesso {
 			//so exclui os relacionamentos se a exclusao for de registro historico
 			//e nao existir outro registro vigente que possa utilizar os relacionamentos
 			//if($vo->validaExclusaoRelacionamentoHistorico()){			
-			if(!$this->existeOutroRegistroUnionHistorico($vo)){				
+			if(!$this->existeOutroRegistroUnionHistorico($vo)){
 				$this->excluirDemandaTramitacao ( $vo );
 				$this->excluirDemandaContrato ( $vo );
 			}
