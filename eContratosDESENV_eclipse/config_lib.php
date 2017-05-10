@@ -1,4 +1,7 @@
 <?php
+//mysqli_report(MYSQLI_REPORT_ALL);
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
 date_default_timezone_set('America/Recife');
 setlocale(LC_ALL, 'portuguese');
 //setlocale(LC_ALL, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');

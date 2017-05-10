@@ -2,10 +2,10 @@
 /**
  * Define uma classe de exceção
  */
-class excecaoMaisDeUmRegistroRetornado extends excecaoGenerica
+class excecaoChaveRegistroInexistente extends excecaoGenerica
 {
     // Redefine a exceção de forma que a mensagem não seja opcional
-    public function __construct($message = "Existe mais de um registro.", $code = 0, Exception $previous = null) {
+    public function __construct($message = "Chave Registro Inexistente.", $code = 0, Exception $previous = null) {
         // código
     
         // garante que tudo está corretamente inicializado

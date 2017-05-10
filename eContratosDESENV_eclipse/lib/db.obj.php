@@ -11,7 +11,7 @@
           // ...............................................................
          // Construtor
 
-    function db() {
+    function db() {    		
             $this->id_conexao = "";
             $this->resultado = "";			
     }

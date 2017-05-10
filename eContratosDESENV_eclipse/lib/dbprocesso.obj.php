@@ -5,7 +5,7 @@ include_once (caminho_util . "paginacao.php");
 include_once (caminho_util . "bibliotecaHTML.php");
 include_once (caminho_util . "bibliotecaSQL.php");
 include_once (caminho_util . "bibliotecaFuncoesPrincipal.php");
-//include_once (caminho_excecoes . "ExcecaoMaisDeUmRegistroRetornado.php");
+// include_once (caminho_excecoes . "ExcecaoMaisDeUmRegistroRetornado.php");
 class dbprocesso {
 	var $cDb;
 	var $cConfig;
@@ -66,14 +66,6 @@ class dbprocesso {
 		
 		return $registro [0];
 	}
-	
-	// depreciado
-	/*
-	 * function getQueryNmUsuario($vo, $queryJoin, $isHistorico){
-	 * $nmTabelaACompararCdUsuario = $vo->getNmTabelaEntidade($isHistorico);
-	 * return $this->getQueryNmUsuarioTabelaAComparar($vo, $nmTabelaACompararCdUsuario, $queryJoin, $isHistorico);
-	 * }
-	 */
 	
 	// acrescenta os dados dos usuarios guardados na tabela
 	function getQueryNmUsuarioTabelaAComparar($vo, $nmTabelaACompararCdUsuario, $queryJoin, $isHistorico) {
@@ -151,7 +143,7 @@ class dbprocesso {
 	}
 	function consultarMontandoQuery($vo, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico, $isConsultaPorChave) {
 		$nmTabelaACompararCdUsuario = $vo->getNmTabelaEntidade ( $isHistorico );
-		return $this->consultarMontandoQueryUsuario ( $vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico, $isConsultaPorChave);
+		return $this->consultarMontandoQueryUsuario ( $vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico, $isConsultaPorChave );
 	}
 	function consultarMontandoQueryTelaConsulta($vo, $filtro, $arrayColunasRetornadas, $queryJoin) {
 		$nmTabelaACompararCdUsuario = $vo->getNmTabelaEntidade ( $filtro->isHistorico );
@@ -175,7 +167,6 @@ class dbprocesso {
 		if ($retorno != "" && $isConsultaPorChave) {
 			$retorno = $retorno [0];
 		}
-		
 		return $retorno;
 	}
 	function consultarMontandoQueryUsuarioFiltro($vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $filtro, $isConsultaPorChave, $validaConsulta) {
@@ -193,15 +184,29 @@ class dbprocesso {
 		return $retorno;
 	}
 	function consultarEntidade($query, $isPorChavePrimaria) {
+		return $this->consultarEntidadeComValidacao ( $query, $isPorChavePrimaria, false );
+	}
+	function consultarEntidadeComValidacao($query, $isPorChavePrimaria, $levantarExcecaoSeConsultaVazia) {
 		// echo $query;
 		$retorno = $this->cDb->consultar ( $query );
 		
 		if ($isPorChavePrimaria) {
 			$tamanho = sizeof ( $retorno );
 			
+			if ($retorno == "")
+				throw new excecaoChaveRegistroInexistente ();
+			
 			if ($tamanho > 1)
-				throw new excecaoMaisDeUmRegistroRetornado ( "Existe mais de um registro." );
+				throw new excecaoMaisDeUmRegistroRetornado ();
 		}
+		
+		if ($levantarExcecaoSeConsultaVazia && $retorno == "") {
+			throw new excecaoConsultaVazia ();
+		}
+		
+		//var_dump($retorno);
+		
+		//throw new excecaoGenerica("QUALQUER COPISA");
 		
 		return $retorno;
 	}
@@ -271,8 +276,8 @@ class dbprocesso {
 				
 				$qtdRegistrosPorPag = $filtro->qtdRegistrosPorPag;
 				
-				//echo $qtdRegistrosPorPag;
-				if($qtdRegistrosPorPag != null && $qtdRegistrosPorPag != constantes::$CD_OPCAO_TODOS){
+				// echo $qtdRegistrosPorPag;
+				if ($qtdRegistrosPorPag != null && $qtdRegistrosPorPag != constantes::$CD_OPCAO_TODOS) {
 					// calcula o número de páginas arredondando o resultado para cima
 					$numPaginas = ceil ( $numTotalRegistros / $qtdRegistrosPorPag );
 					$filtro->paginacao->setNumTotalPaginas ( $numPaginas );
@@ -304,7 +309,7 @@ class dbprocesso {
 		$retorno = $this->cDb->consultar ( $queryCount );
 		$numTotalRegistros = 0;
 		
-		if($retorno != ""){
+		if ($retorno != "") {
 			$numTotalRegistros = $retorno [0] [dbprocesso::$nmCampoCount];
 		}
 		return $numTotalRegistros;
@@ -485,7 +490,48 @@ class dbprocesso {
 		
 		return $retorno;
 	}
-	
+	function existeRegistroVigente($vo) {
+		$retorno = true;
+		// verifica se existe outro registro vigente (que nao seja historico - obvio) com a mesma chave
+		try {
+			$this->consultarPorChave ( $vo, false );
+		} catch ( excecaoChaveRegistroInexistente $ex ) {
+			$retorno = false;
+		}
+		return $retorno;
+	}
+	function existeOutroRegistroUnionHistorico($vo) {
+		$nmTabela = $vo->getNmTabelaEntidade ( false );
+		$nmTabelaHistorico = $vo->getNmTabelaEntidade ( true );
+		$arrayColunasRetornadas = $vo->getAtributosChavePrimaria ();
+		
+		$querySelect .= "SELECT ";
+		$querySelect .= getSQLStringFormatadaColecaoIN ( $arrayColunasRetornadas, false );
+		$querySelect .= ", null  AS " . voentidade::$nmAtrSqHist;
+		$querySelect .= " FROM " . $nmTabela;
+		$querySelect .= " WHERE ";
+		$querySelect .= $vo->getValoresWhereSQLChave ( false );
+		
+		if($vo->temTabHistorico){
+			// acrescenta o atributo de historico
+			$arrayColunasRetornadas [] = voentidade::$nmAtrSqHist;
+			
+			$querySelect .= "\n\n UNION \n\n SELECT ";
+			$querySelect .= getSQLStringFormatadaColecaoIN ( $arrayColunasRetornadas, false );
+			$querySelect .= " FROM " . $nmTabelaHistorico;
+			$querySelect .= " WHERE ";
+			$querySelect .= $vo->getValoresWhereSQLChaveSemNomeTabela ( false );
+		}
+		
+		//echo $querySelect;
+				
+		$colecao = $this->consultarEntidadeComValidacao ( $querySelect, false, true );
+		//se for vazia, levanta excecaoConsultaVazia
+		//se a qtd de registro for igual a 1, eh o proprio registro consultado
+		$retorno = (count($colecao) != 1);
+		
+		return $retorno;
+	}
 	// ---------------------------------
 	function limpaResultado() {
 		$this->cDb->limpaResultado ();

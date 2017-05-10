@@ -39,6 +39,8 @@
         var $nmUsuarioOperacao;
         
         var $sqHist;
+        
+        //var $dbprocesso;
     
 	function __construct() {
 		//exemplo de chamada de construtor da classe pai em caso de override
@@ -52,9 +54,11 @@
 		$this->cdUsuarioUltAlteracao = id_user;
 		$this->NM_METODO_RETORNO_CONFIRMAR = null;
 		$this->temTabHistorico = true;
-				
-    }
-    
+		
+		//cria a classe processo para todo vo
+		/*$class = static::getNmClassProcesso();
+		$this->dbprocesso= new $class();*/				
+    }    
     
     // ...............................................................
     // Funcoes ( Propriedades e metodos da classe )     
@@ -265,7 +269,24 @@
     
     function getMensagemComplementarTelaSucesso(){
     	return "";    	
-    }    
+    }
     
+    function isHistorico(){
+    	return $this->sqHist != null;
+    }
+    
+    function getValoresWhereSQLChaveSemNomeTabela($isHistorico) {    	
+    	return str_replace ( $this->getNmTabelaEntidade($isHistorico) . ".", "", $this->getValoresWhereSQLChave($isHistorico) );    	
+    }
+    
+    /*function validaExclusaoRelacionamentoHistorico(){
+    	$retorno = false;
+    	//so exclui os relacionamentos se a exclusao for de registro historico
+    	//e nao existir outro registro vigente que possa utilizar os relacionamentos
+    	if($this->isHistorico() && !$this->dbprocesso->existeRegistroVigente($this)){    		
+    		$retorno = true;
+    	}    	
+    	return $retorno;
+    }*/   
 }
 ?>
