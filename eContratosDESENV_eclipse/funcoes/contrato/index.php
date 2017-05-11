@@ -42,9 +42,9 @@ if($filtro->cdConsultarArquivo == null){
 }
 
 $requiredArquivo = "";
-if($filtro->cdConsultarArquivo == "S"){
+/*if($filtro->cdConsultarArquivo == "S"){
 	$requiredArquivo = "required";
-}
+}*/
 
 $dbprocesso = new dbcontrato();
 //$colecao = $dbprocesso->consultarComPaginacao($voContrato, $filtro, $numTotalRegistros, $pagina, $qtdRegistrosPorPag);
@@ -65,8 +65,8 @@ $numTotalRegistros = $filtro->numTotalRegistros;
 <HTML>
 <HEAD>
 <?=setTituloPagina(vocontrato::getTituloJSP())?>
-<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>mensagens_globais.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_datahora.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_cnpfcnpj.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
@@ -79,26 +79,20 @@ $numTotalRegistros = $filtro->numTotalRegistros;
 function validaFormulario() {
 
 	isConsultarArquivo = document.frm_principal.cdConsultarArquivo.value;
-	if(isConsultarArquivo == "S")
+	/*if(isConsultarArquivo == "S")
 		document.frm_principal.<?=vocontrato::$nmAtrContratadaContrato?>.required = true;
 	else
-		document.frm_principal.<?=vocontrato::$nmAtrContratadaContrato?>.required = false;
+		document.frm_principal.<?=vocontrato::$nmAtrContratadaContrato?>.required = false;*/
+
+	if(isConsultarArquivo == "S"){		
+		var colecaoNmCamposForm = ["<?=vocontrato::$nmAtrCdContrato?>", "<?=vocontrato::$nmAtrContratadaContrato?>"];
+		var colecaoDescricaoCamposForm = ["Número do Contrato", " ou Nome Contratada"];
+		if(!isPeloMenosUmCampoFormularioSelecionado(colecaoNmCamposForm, colecaoDescricaoCamposForm, true))
+			return false;
+	}
+
+	return true;
 		
-}
-
-// Submete o filtro de consulta 
-function processarFiltroConsulta(pAcao, pEvento, pNaoUtilizarIdContextoSessao) {
-	
-	if (!isCampoTextoValido(document.frm_principal.dsReferenciaLegal, false, 0, 100))
-	    return false;
-	    	
-	if (!isCampoNumericoValido(document.frm_principal.primeiro_campo, false, 0, 32767, null, false)) {
-		return false
-	}	    
-
-	document.frm_principal.nao_utilizar_id_contexto_sessao.value = pNaoUtilizarIdContextoSessao;
-	document.frm_principal.id_contexto_sessao.value = "";
-	submeterFormulario(pAcao, pEvento);
 }
 
 // Transfere dados selecionados para a janela principal
@@ -173,11 +167,19 @@ function alterar() {
 
 }
 
+function confirmar() {
+	if (!validaFormulario()) {
+		return false;
+	}	
+	    
+	return true;
+}
+
 </SCRIPT>
 
 </HEAD>
 <BODY class="paginadados" onload="">	  
-<FORM name="frm_principal" method="post" action="index.php?consultar=S">
+<FORM name="frm_principal" method="post" action="index.php?consultar=S" onSubmit="return confirmar();">
 
 <INPUT type="hidden" id="evento" name="<%=PRManterReferenciaLegal.ID_REQ_EVENTO%>" value=""> 
 <INPUT type="hidden" name="utilizarSessao" value="N"> 
@@ -211,7 +213,7 @@ function alterar() {
 				?>									
     			<TH class="campoformulario" nowrap>Procurar em arquivos:</TH>
                	<TD class="campoformulario" nowrap> 
-               	<?php echo $radioArquivo->getHtmlRadioButton("cdConsultarArquivo","cdConsultarArquivo", $filtro->cdConsultarArquivo, false, "onClick='validaFormulario();'");?>&nbsp;&nbsp;
+               	<?php echo $radioArquivo->getHtmlRadioButton("cdConsultarArquivo","cdConsultarArquivo", $filtro->cdConsultarArquivo, false, "");?>&nbsp;&nbsp;
 				</TD>
             </TR>
 			<?php

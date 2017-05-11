@@ -2231,3 +2231,35 @@ function dispositivoProntoAcessoMovel() {
 		document.addEventListener("backbutton", window.voltarMovel, false);
 	}
 }
+function getStringColecaoDescricao(colecaoDescricaoCampos) {
+	var retorno = "";
+	var tamanho = colecaoDescricaoCampos.length;
+	if(colecaoDescricaoCampos != null && tamanho > 0){
+		for (var i = 0; i < tamanho; i++) {
+			retorno = retorno + colecaoDescricaoCampos[i];
+		}		
+	}
+	
+	return retorno;
+}
+function isPeloMenosUmCampoFormularioSelecionado(colecaoNmCamposForm, colecaoDescricaoCampos, comMensagem) {
+	var tamanho = colecaoNmCamposForm.length;
+	var temCampo = false;
+	if (colecaoNmCamposForm != null && tamanho > 0){		
+		for (var i = 0; i < tamanho; i++) {
+			campoForm = eval(colecaoNmCamposForm[i]);
+			if(campoForm.value != ""){
+				temCampo = true;
+				break;
+			}			
+		}
+		
+		if(!temCampo && comMensagem){
+			var str = getStringColecaoDescricao(colecaoDescricaoCampos);
+			exibirMensagem("Selecione ao menos um dos campos a seguir: " + str);		
+		}
+		
+	}
+	
+	return temCampo;
+}
