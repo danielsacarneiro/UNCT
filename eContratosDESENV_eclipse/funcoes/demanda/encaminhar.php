@@ -237,7 +237,7 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	        ?>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" colspan=3><?php getCampoDadosContratoMultiplos();//getContratoEntradaDeDados($tipoContrato, $anoContrato, $cdContrato, $arrayCssClass, $arrayComplementoHTML, $nmCampoDiv);?>	            
+	            <TD class="campoformulario" colspan=3><?php getCampoDadosContratoMultiplos();?>	            
 	            </TD>
 	        </TR>	        
 			<TR>

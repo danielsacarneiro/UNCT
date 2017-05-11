@@ -30,6 +30,7 @@ function limparCampoContrato(pNmCampoDiv, pIndice) {
 }
 
 function carregaContratada(pIndice, pNmCampoCdContrato, pNmCampoAnoContrato, pNmCampoTipoContrato, pNmCampoCdEspecieContrato, pNmCampoSqEspecieContrato, pNmCampoDivNomePessoa) {
+	//alert(pNmCampoCdContrato + " " + pNmCampoAnoContrato + " " + pNmCampoTipoContrato + " " + pNmCampoCdEspecieContrato + " " + pNmCampoSqEspecieContrato + " " + pNmCampoDivNomePessoa);
 	//ta na biblioteca_funcoes_pessoa.js
 	pNmCampoCdContrato = pNmCampoCdContrato + pIndice;
 	pNmCampoAnoContrato = pNmCampoAnoContrato  + pIndice; 

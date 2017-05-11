@@ -53,6 +53,7 @@ setCabecalho($titulo);
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_ajax.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_pessoa.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_oficio.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_contrato.js"></SCRIPT>
 
 <SCRIPT language="JavaScript" type="text/javascript">
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
@@ -128,15 +129,16 @@ function criarNomeDocumento(){
 			  ?>			            
 	        <?php	        
 	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
+	        /*$javaScript = "carregaContratada(null, pNmCampoCdContrato, pNmCampoAnoContrato, pNmCampoTipoContrato, pNmCampoCdEspecieContrato, pNmCampoSqEspecieContrato, pNmCampoDivNomePessoa);";
 	        $arrayCssClass = array("camponaoobrigatorio","camponaoobrigatorio", "camponaoobrigatorio");
 	        $arrayComplementoHTML = array(" onChange='carregaContratada();' ",
 	        		" onBlur='carregaContratada();' ",
 	        		" onChange='carregaContratada();' "	        		
-	        );
+	        );*/
 	        ?>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" colspan=3><?php getContratoEntradaDeDados($tipoContrato, $anoContrato, $cdContrato, $arrayCssClass, $arrayComplementoHTML, $nmCampoDiv);?></TD>
+	            <TD class="campoformulario" colspan=3><?php getCampoDadosContratoSimples();//getContratoEntradaDeDados($tipoContrato, $cdContrato, $anoContrato, $arrayCssClass, $arrayComplementoHTML);?></TD>
 	        </TR>            
 			<TR>
                 <TH class="campoformulario" nowrap width="1%">Ano.Doc.:</TH>

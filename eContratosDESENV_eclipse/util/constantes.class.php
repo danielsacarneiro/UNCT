@@ -1,5 +1,5 @@
 <?php
-header ('Content-type: text/html; charset=ISO-8859-1');
+//header ('Content-type: text/html; charset=ISO-8859-1');
 
   Class constantes {	
 	
@@ -49,7 +49,9 @@ header ('Content-type: text/html; charset=ISO-8859-1');
     "10" => "Termo de Rescisão Unilateral",
     "11" => "Termo de Rescisão Encerramento",*/
     
-    
+    static $CD_CLASS_CAMPO_OBRIGATORIO = "campoobrigatorio";
+    static $CD_CLASS_CAMPO_NAO_OBRIGATORIO = "camponaoobrigatorio";
+    static $CD_CLASS_CAMPO_READONLY = "camporeadonly";    
     
     static $TAMANHO_CODIGOS = 5;    	
 }

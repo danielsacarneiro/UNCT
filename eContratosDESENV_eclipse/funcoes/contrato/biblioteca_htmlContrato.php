@@ -1,5 +1,6 @@
 <?php
 require_once(caminho_util."selectExercicio.php");
+//require_once(caminho_util."constantes.class.php");
 include_once(caminho_funcoes. "pessoa/biblioteca_htmlPessoa.php");
 
 function isContratoValido($voContrato){
@@ -180,16 +181,16 @@ function consultarDadosContratoCompilado($voContrato){
 	return $retorno;
 }
 
-function getCampoDadosContratoSimples() {
-	return getCampoDadosContratoMultiplosPorIndice(null);	
+function getCampoDadosContratoSimples($nmClass = "camponaoobrigatorio") {
+	return getCampoDadosContratoMultiplosPorIndice(null,$nmClass);	
 }
-function getCampoDadosContratoMultiplos() {
+function getCampoDadosContratoMultiplos($nmClass = "campoobrigatorio") {
 	$indiceQtdContrato = 1;
-	$html = getCampoDadosContratoMultiplosPorIndice($indiceQtdContrato);
+	$html = getCampoDadosContratoMultiplosPorIndice($indiceQtdContrato, $nmClass);
 	//$html .= "<INPUT type='hidden' id='". vocontrato::$ID_REQ_QTD_CONTRATOS . "' name='" . vocontrato::$ID_REQ_QTD_CONTRATOS . "'  value='".$indiceQtdContrato."'>";
 	return 	$html;	
 }
-function getCampoDadosContratoMultiplosPorIndice($indice) {
+function getCampoDadosContratoMultiplosPorIndice($indice, $nmClass = "camponaoobrigatorio"){
 	$pNmCampoCdContrato = vocontrato::$nmAtrCdContrato;
 	$pNmCampoAnoContrato = vocontrato::$nmAtrAnoContrato;
 	$pNmCampoTipoContrato = vocontrato::$nmAtrTipoContrato;
@@ -201,12 +202,17 @@ function getCampoDadosContratoMultiplosPorIndice($indice) {
 	if($indice == null)
 		$indiceJS = "''";
 	
-	$chamadaFuncaoJS = "\"carregaContratada($indiceJS, '$pNmCampoCdContrato', '$pNmCampoAnoContrato', '$pNmCampoTipoContrato', '$pNmCampoCdEspecieContrato', '$pNmCampoSqEspecieContrato', '$nmCampoDivPessoaContratada');\"";	
+	$chamadaFuncaoJS = "\"carregaContratada($indiceJS, '$pNmCampoCdContrato', '$pNmCampoAnoContrato', '$pNmCampoTipoContrato', '$pNmCampoCdEspecieContrato', '$pNmCampoSqEspecieContrato', '$nmCampoDivPessoaContratada');\"";
 	
-	$arrayCssClass = array("camponaoobrigatorio","camponaoobrigatorio", "camponaoobrigatorio");
-	$arrayComplementoHTML = array(" required onChange=$chamadaFuncaoJS ",
-			" required onBlur=$chamadaFuncaoJS ",
-			" required onChange=$chamadaFuncaoJS "
+	$required = "";
+	if($nmClass == constantes::$CD_CLASS_CAMPO_OBRIGATORIO){
+		$required = "required";
+	}
+	
+	$arrayCssClass = array($nmClass,$nmClass, $nmClass);
+	$arrayComplementoHTML = array(" $required onChange=$chamadaFuncaoJS ",
+			" $required onBlur=$chamadaFuncaoJS ",
+			" $required onChange=$chamadaFuncaoJS "
 	);	
 	$html = getContratoEntradaDeDadosMais("", "", "", $arrayCssClass, $arrayComplementoHTML, $indice);
 	return 	$html;
