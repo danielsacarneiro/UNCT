@@ -85,17 +85,13 @@ function confirmar() {
             <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
             <TBODY>
 	        <?php	        	        	        
-	        //so exibe contrato se tiver
-	        $voDemandaContrato = new voDemandaContrato();
-	        $voDemandaContrato->getDadosBanco($colecao);
-	         
-	        if($voDemandaContrato->voContrato != null){
-	        	$voContrato = $voDemandaContrato->voContrato;
-	        }
+	        
+			$voContrato = $vo->getVOContrato();	        
 	          
  	        require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
  	        //getContratoDetalhamento($voContrato, $colecao);
  	        getContratoDet($voContrato);
+ 	        //getColecaoContratoDet($vo->colecaoContrato); 	         	        
 			?>      
 			<TR>
 				<?php

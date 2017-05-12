@@ -95,7 +95,9 @@ Class voContratoInfo extends voentidade{
 		$retorno->cdContrato = $this->cdContrato;
 		$retorno->anoContrato = $this->anoContrato;
 		$retorno->tipo = $this->tipo;
-			
+		$retorno->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
+		$retorno->sqEspecie = 1;
+		
 		return $retorno;
 	}
 	
