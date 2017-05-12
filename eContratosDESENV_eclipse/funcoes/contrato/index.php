@@ -84,7 +84,7 @@ function validaFormulario() {
 	else
 		document.frm_principal.<?=vocontrato::$nmAtrContratadaContrato?>.required = false;*/
 
-	if(isConsultarArquivo == "S"){		
+	if(isConsultarArquivo != "N"){		
 		var colecaoNmCamposForm = ["<?=vocontrato::$nmAtrCdContrato?>", "<?=vocontrato::$nmAtrContratadaContrato?>"];
 		var colecaoDescricaoCamposForm = ["Número do Contrato", " ou Nome Contratada"];
 		if(!isPeloMenosUmCampoFormularioSelecionado(colecaoNmCamposForm, colecaoDescricaoCamposForm, true))
@@ -206,14 +206,12 @@ function confirmar() {
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
 	            <TD class="campoformulario" width="1%"><?php getContratoEntradaDeDados($tipo, $cdContrato, $anoContrato, $arrayCssClass, null, null);?></TD>
 				<?php 
-				include_once(caminho_util."radiobutton.php");
-				$arraySimNao = array("S" => "Sim",
-						"N" => "Não");		
-				$radioArquivo = new radiobutton($arraySimNao);				
+				include_once("dominioConsultaArquivoContrato.php");
+				$comboConsultaArquivo = new select(dominioConsultaArquivoContrato::getColecao());
 				?>									
     			<TH class="campoformulario" nowrap>Procurar em arquivos:</TH>
                	<TD class="campoformulario" nowrap> 
-               	<?php echo $radioArquivo->getHtmlRadioButton("cdConsultarArquivo","cdConsultarArquivo", $filtro->cdConsultarArquivo, false, "");?>&nbsp;&nbsp;
+               	<?php echo $comboConsultaArquivo->getHtmlCombo("cdConsultarArquivo","cdConsultarArquivo", $filtro->cdConsultarArquivo, false, "camponaoobrigatorio", false, "");?>
 				</TD>
             </TR>
 			<?php
@@ -361,7 +359,7 @@ function confirmar() {
 </TR>
 <?php 
 
-if($filtro->cdConsultarArquivo == "S"){
+if($filtro->cdConsultarArquivo != "N"){
 	include("grid_arquivo.php");
 }else{
 	include("grid_contrato.php");

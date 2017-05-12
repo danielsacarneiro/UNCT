@@ -17,24 +17,23 @@ if($filtro->cdContrato != null){
 
 $barra = "\\\\";
 $MenuPai = new pasta("menu_pai", $strFiltro, 1, null);
-$endereco = dominioTpDocumento::$ENDERECO_DRIVE . $barra. "UNCT".$barra."CONTRATOS JÁ ASSINADOS";
 
-$especieArquivo = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
-
-$MenuPai->cdControleConsulta = pasta::$IN_FILTRAR_APENAS_PAI;
-if($filtro->cdEspecie != null){
-	$anoArquivo = $filtro->anoContrato; 
-	if($anoArquivo == null){
-		$anoArquivo = anoDefault;		
-	}
-	$endereco = dominioTpDocumento::$ENDERECO_DRIVE . $barra. "UNCT".$barra."ANO " . $anoArquivo .$barra."CONTRATOS";
-	
-	if($filtro->cdEspecie == dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_TERMOADITIVO){
-		$endereco = dominioTpDocumento::$ENDERECO_DRIVE . $barra."UNCT".$barra."ANO " . $anoArquivo .$barra."TERMOS ADITIVOS";
-	}	
-	
-	$MenuPai->cdControleConsulta = pasta::$IN_FILTRAR_APENAS_FILHO;	
+$anoArquivo = $filtro->anoContrato;
+if($anoArquivo == null){
+	$anoArquivo = anoDefault;
 }
+$MenuPai->cdControleConsulta = pasta::$IN_FILTRAR_APENAS_FILHO;
+$endereco = dominioTpDocumento::$ENDERECO_DRIVE . $barra. "UNCT".$barra;
+
+if($filtro->cdConsultarArquivo == dominioConsultaArquivoContrato::$CD_CONSULTA_ARQUIVO_CONTRATO_ASSINADO){
+	$MenuPai->cdControleConsulta = pasta::$IN_FILTRAR_APENAS_PAI;
+	$endereco .= "CONTRATOS JÁ ASSINADOS";
+}else if($filtro->cdConsultarArquivo == dominioConsultaArquivoContrato::$CD_CONSULTA_ARQUIVO_CONTRATO_MATER){
+	$endereco .= "ANO " . $anoArquivo .$barra."CONTRATOS";
+}else if($filtro->cdConsultarArquivo == dominioConsultaArquivoContrato::$CD_CONSULTA_ARQUIVO_TERMO_ADITIVO){
+	$endereco .= "ANO " . $anoArquivo .$barra."TERMOS ADITIVOS";
+}	
+	
 	
 $MenuPai->setDir($endereco);
 //$MenuPai->setDir(dominioTpDocumento::$ENDERECO_DRIVE . "\\\UNCT");
