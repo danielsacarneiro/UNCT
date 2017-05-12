@@ -1,8 +1,5 @@
 <?php 
 include_once(caminho_util."biblioteca_htmlArquivo.php");
-
-
-//$colecao = montarColecaoItens("../");
 ?>
 
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_treemenu.js"></SCRIPT>
@@ -18,21 +15,22 @@ if($filtro->cdContrato != null){
 	$strFiltro = complementarCharAEsquerda($filtro->cdContrato, "0", TAMANHO_CODIGOS_SAFI);
 }
 
+$barra = "\\\\";
 $MenuPai = new pasta("menu_pai", $strFiltro, 1, null);
-$endereco = dominioTpDocumento::$ENDERECO_DRIVE . "\\\UNCT\\\CONTRATOS JÁ ASSINADOS";
+$endereco = dominioTpDocumento::$ENDERECO_DRIVE . $barra. "UNCT".$barra."CONTRATOS JÁ ASSINADOS";
 
 $especieArquivo = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
 
 $MenuPai->cdControleConsulta = pasta::$IN_FILTRAR_APENAS_PAI;
 if($filtro->cdEspecie != null){
 	$anoArquivo = $filtro->anoContrato; 
-	if($anoArquivo != null){
+	if($anoArquivo == null){
 		$anoArquivo = anoDefault;		
 	}
-	$endereco = dominioTpDocumento::$ENDERECO_DRIVE . "\\\UNCT\\\ANO " . $anoArquivo . "\\\CONTRATOS";
+	$endereco = dominioTpDocumento::$ENDERECO_DRIVE . $barra. "UNCT".$barra."ANO " . $anoArquivo .$barra."CONTRATOS";
 	
 	if($filtro->cdEspecie == dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_TERMOADITIVO){
-		$endereco = dominioTpDocumento::$ENDERECO_DRIVE . "\\\UNCT\\\ANO " . $anoArquivo . "\\\TERMOS ADITIVOS";
+		$endereco = dominioTpDocumento::$ENDERECO_DRIVE . $barra."UNCT".$barra."ANO " . $anoArquivo .$barra."TERMOS ADITIVOS";
 	}	
 	
 	$MenuPai->cdControleConsulta = pasta::$IN_FILTRAR_APENAS_FILHO;	

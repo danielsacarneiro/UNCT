@@ -65,25 +65,26 @@ Class pasta{
 		$this->pathinfo = pathinfo($this->dir);		
 	}
 	
-	function getPasta(){
+	/*function getPasta(){
 		return $this->pathinfo["dirname"];
-	}
-	
-	/*function isPastaValida(){
-		$existe = mb_stripos($this->strValidacao, CAMPO_SEPARADOR);
-		return $existe !== false;
-	}*/	
+		//return $this->dir;
+	}*/
 }
 
+function getEnderecoArquivoCorreto($endereco){
+	$linkDoc = str_replace ( dominioTpDocumento::$ENDERECO_DRIVE, dominioTpDocumento::$ENDERECO_DRIVE_HTML, $endereco );
+	return $linkDoc;
+	
+}
 function incluirArquivo($nmMenuPai, $item){
 
 	$nmclass = "'treelink'";
 	$linkParametrosComplementares = "'','',false,'','',".$nmclass.",'', true";
 
-	$javaScript = "'". $item->dir. pasta::$barra . $item->nome . "'";
+	$javaScript = "'". getEnderecoArquivoCorreto($item->dir). pasta::$barra . $item->nome . "'";
+	//$javaScript = "'". $item->dir . pasta::$barra . "DANIEL" . "'";
 		
-	$objArquivo = "new Link('" . $item->nome . "', " . $javaScript . " , $linkParametrosComplementares)";
-	
+	$objArquivo = "new Link('" . $item->nome . "', " . $javaScript . " , $linkParametrosComplementares)";	
 	//$objArquivo = "new LinkArquivo('" . $item->nome . "', " . $javaScript . " , false, ".$nmclass.")";
 
 	echo $nmMenuPai->nomeObj . ".adicionarItem(" . $objArquivo . ");\n";

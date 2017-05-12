@@ -491,14 +491,14 @@ A.titulotreemenu:visited {
 }
 
 A.titulotreemenu:hover {
-	color: black;
+	color: maroon;
 	text-decoration: underline;
 	font-family: Helvetica, Arial, sans-serif;	
 	font-weight: bolder;
 }
 
 A.treelink, A.treelinkbranco:link {
-	color: Navy;
+	color: black;
 	text-decoration: none;
 	font-family: Helvetica, Arial, sans-serif;
 	font-weight: bolder;	
