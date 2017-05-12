@@ -76,15 +76,19 @@ function getEnderecoArquivoCorreto($endereco){
 	return $linkDoc;
 	
 }
+function getNomeArquivoCorreto($nome){
+	$linkDoc = str_replace ( dominioTpDocumento::$ENDERECO_DRIVE, "", $nome );
+	return $linkDoc;
+
+}
 function incluirArquivo($nmMenuPai, $item){
 
 	$nmclass = "'treelink'";
 	$linkParametrosComplementares = "'','',false,'','',".$nmclass.",'', true";
 
 	$javaScript = "'". getEnderecoArquivoCorreto($item->dir). pasta::$barra . $item->nome . "'";
-	//$javaScript = "'". $item->dir . pasta::$barra . "DANIEL" . "'";
 		
-	$objArquivo = "new Link('" . $item->nome . "', " . $javaScript . " , $linkParametrosComplementares)";	
+	$objArquivo = "new Link('" . getNomeArquivoCorreto($item->nome) . "', " . $javaScript . " , $linkParametrosComplementares)";	
 	//$objArquivo = "new LinkArquivo('" . $item->nome . "', " . $javaScript . " , false, ".$nmclass.")";
 
 	echo $nmMenuPai->nomeObj . ".adicionarItem(" . $objArquivo . ");\n";
@@ -99,7 +103,7 @@ function criaMenu($item, $isMenuRaiz){
 	if($item->indice == 1)
 		$nomeAexibir = $item->nome;
 
-	echo $item->nomeObj . " = new Tree( '" .$nomeAexibir. "'" . $menuRaiz . ");\n";
+	echo $item->nomeObj . " = new Tree( '" .getNomeArquivoCorreto($nomeAexibir). "'" . $menuRaiz . ");\n";
 	
 }
 

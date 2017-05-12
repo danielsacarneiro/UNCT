@@ -15,7 +15,7 @@ if($filtro->cdContrato != null){
 	$strFiltro = complementarCharAEsquerda($filtro->cdContrato, "0", TAMANHO_CODIGOS_SAFI);
 }
 
-$barra = "\\\\";
+$barra = pasta::$barra;
 $MenuPai = new pasta("menu_pai", $strFiltro, 1, null);
 
 $anoArquivo = $filtro->anoContrato;
