@@ -76,23 +76,27 @@ $numTotalRegistros = $filtro->numTotalRegistros;
 <SCRIPT language="JavaScript" type="text/javascript">
 
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
+function formataForm() {
+	isConsultarArquivo = document.frm_principal.cdConsultarArquivo.value;
+	if(isConsultarArquivo == "<?=dominioConsultaArquivoContrato::$CD_CONSULTA_ARQUIVO_CONTRATO_ASSINADO?>"){
+			//por conta da estrutura de arquivos da _dag$/UNCT, deve-se obrigar o nome da contratada			
+		document.frm_principal.<?=vocontrato::$nmAtrContratadaContrato?>.required = true;
+	}else{
+		document.frm_principal.<?=vocontrato::$nmAtrContratadaContrato?>.required = false;
+	}
+}
+
 function validaFormulario() {
 
 	isConsultarArquivo = document.frm_principal.cdConsultarArquivo.value;
-	/*if(isConsultarArquivo == "S")
-		document.frm_principal.<?=vocontrato::$nmAtrContratadaContrato?>.required = true;
-	else
-		document.frm_principal.<?=vocontrato::$nmAtrContratadaContrato?>.required = false;*/
-
-	if(isConsultarArquivo != "N"){		
+	if(isConsultarArquivo != "N"){							
 		var colecaoNmCamposForm = ["<?=vocontrato::$nmAtrCdContrato?>", "<?=vocontrato::$nmAtrContratadaContrato?>"];
 		var colecaoDescricaoCamposForm = ["Número do Contrato", " ou Nome Contratada"];
 		if(!isPeloMenosUmCampoFormularioSelecionado(colecaoNmCamposForm, colecaoDescricaoCamposForm, true))
-			return false;
+			return false;	
 	}
 
-	return true;
-		
+	return true;			
 }
 
 // Transfere dados selecionados para a janela principal
@@ -178,7 +182,7 @@ function confirmar() {
 </SCRIPT>
 
 </HEAD>
-<BODY class="paginadados" onload="">	  
+<BODY class="paginadados" onload="formataForm();">	  
 <FORM name="frm_principal" method="post" action="index.php?consultar=S" onSubmit="return confirmar();">
 
 <INPUT type="hidden" id="evento" name="<%=PRManterReferenciaLegal.ID_REQ_EVENTO%>" value=""> 
@@ -206,19 +210,17 @@ function confirmar() {
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
 	            <TD class="campoformulario" width="1%"><?php getContratoEntradaDeDados($tipo, $cdContrato, $anoContrato, $arrayCssClass, null, null);?></TD>
 				<?php 
-				include_once("dominioConsultaArquivoContrato.php");
 				$comboConsultaArquivo = new select(dominioConsultaArquivoContrato::getColecao());
 				?>									
     			<TH class="campoformulario" nowrap>Procurar em arquivos:</TH>
                	<TD class="campoformulario" nowrap> 
-               	<?php echo $comboConsultaArquivo->getHtmlCombo("cdConsultarArquivo","cdConsultarArquivo", $filtro->cdConsultarArquivo, false, "camponaoobrigatorio", false, "");?>
+               	<?php echo $comboConsultaArquivo->getHtmlCombo("cdConsultarArquivo","cdConsultarArquivo", $filtro->cdConsultarArquivo, false, "camponaoobrigatorio", false, " onChange='formataForm();' ");?>
 				</TD>
             </TR>
 			<?php
             $dominioTipoContrato = new dominioTipoContrato();            
-			$tiposContrato = new select($dominioTipoContrato->colecao);
-            
-			//include_once("dominioEspeciesContrato.php");
+			$tiposContrato = new select($dominioTipoContrato->colecao);            
+
 			$especiesContrato = new dominioEspeciesContrato();
 			$combo = new select($especiesContrato->colecao);
 			?>

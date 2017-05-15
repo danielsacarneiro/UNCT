@@ -53,6 +53,10 @@
     static $CD_CLASS_CAMPO_NAO_OBRIGATORIO = "camponaoobrigatorio";
     static $CD_CLASS_CAMPO_READONLY = "camporeadonly";    
     
-    static $TAMANHO_CODIGOS = 5;    	
+    static $TAMANHO_CODIGOS = 5;
+    static $TAMANHO_CODIGOS_SAFI = 3;
+    static $CD_CAMPO_SEPARADOR = "*";
+    static $CD_CAMPO_SUBSTITUICAO = "[[*]]";
+       
 }
 ?>

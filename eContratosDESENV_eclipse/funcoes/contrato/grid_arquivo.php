@@ -10,9 +10,11 @@ include_once(caminho_util."biblioteca_htmlArquivo.php");
 ini_set('max_execution_time', 120);
 
 $strFiltro = $filtro->contratada;
+$temContratoSelecionado = false;
 if($filtro->cdContrato != null){
 	//prioriza o filtro pelo numero do contrato
-	$strFiltro = complementarCharAEsquerda($filtro->cdContrato, "0", TAMANHO_CODIGOS_SAFI);
+	$strFiltro .= constantes::$CD_CAMPO_SEPARADOR . complementarCharAEsquerda($filtro->cdContrato, "0", TAMANHO_CODIGOS_SAFI);
+	$temContratoSelecionado = true;
 }
 
 $barra = pasta::$barra;
@@ -26,7 +28,9 @@ $MenuPai->cdControleConsulta = pasta::$IN_FILTRAR_APENAS_FILHO;
 $endereco = dominioTpDocumento::$ENDERECO_DRIVE . $barra. "UNCT".$barra;
 
 if($filtro->cdConsultarArquivo == dominioConsultaArquivoContrato::$CD_CONSULTA_ARQUIVO_CONTRATO_ASSINADO){
-	$MenuPai->cdControleConsulta = pasta::$IN_FILTRAR_APENAS_PAI;
+	//if(!$temContratoSelecionado){
+		$MenuPai->cdControleConsulta = pasta::$IN_FILTRAR_APENAS_PAI;
+	//}
 	$endereco .= "CONTRATOS JÁ ASSINADOS";
 }else if($filtro->cdConsultarArquivo == dominioConsultaArquivoContrato::$CD_CONSULTA_ARQUIVO_CONTRATO_MATER){
 	$endereco .= "ANO " . $anoArquivo .$barra."CONTRATOS";

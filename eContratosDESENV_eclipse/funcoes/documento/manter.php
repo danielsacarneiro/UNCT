@@ -88,11 +88,22 @@ function criarNomeDocumento(){
 	tpContrato = document.frm_principal.<?=vocontrato::$nmAtrTipoContrato?>.value;
 	tpContrato = getDescricaoTipoContrato(tpContrato);
 	
-	nmContrata = getNomePessoaContratada('<?=vopessoa::$ID_NOME_DADOS_CONTRATADA?>');
-	nmContrata = "_" + nmContrata  + "_";
+	complemento = "";
+	isContrato = (cdContrato != "" && anoContrato != "" && tpContrato != "");
+	if(isContrato){
+		nome = getNomePessoaContratada('<?=vopessoa::$ID_NOME_DADOS_CONTRATADA?>');
+		nome = "_" + nome  + "_";
+		//se nao eh parecer, eh contrato
+		//pega o contrato
+		complemento = formatarCodigoDocumento(cdContrato, "", anoContrato, tpContrato);		
+	}else{
+		anoProcLic = document.frm_principal.<?=voProcLicitatorio::$nmAtrAnoProcLicitatorio?>.value;
+		cdProcLic = document.frm_principal.<?=voProcLicitatorio::$nmAtrCdProcLicitatorio?>.value;
+		
+		nome = "_Edital_PL-" + formatarCodigoDocumento(cdProcLic, null, anoProcLic, null);
+	}
 	
-	complemento = formatarCodigoDocumento(cdContrato, "", anoContrato, tpContrato);
-	complemento = nmContrata + complemento;
+	complemento = nome + complemento;
 	//complemento = complemento + ".doc";
 	complemento = complemento + getExtensaoDocumento(tpDoc);	
 		
@@ -126,20 +137,23 @@ function criarNomeDocumento(){
 	        if($isInclusao){	            
 	            $comboSetor = new select($domSetor->colecao);	            
 	            $comboTp= new select($domTp->colecao);
-			  ?>			            
-	        <?php	        
+
 	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
-	        /*$javaScript = "carregaContratada(null, pNmCampoCdContrato, pNmCampoAnoContrato, pNmCampoTipoContrato, pNmCampoCdEspecieContrato, pNmCampoSqEspecieContrato, pNmCampoDivNomePessoa);";
-	        $arrayCssClass = array("camponaoobrigatorio","camponaoobrigatorio", "camponaoobrigatorio");
-	        $arrayComplementoHTML = array(" onChange='carregaContratada();' ",
-	        		" onBlur='carregaContratada();' ",
-	        		" onChange='carregaContratada();' "	        		
-	        );*/
+	        
+	        
+	        $nmClass = constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO;	        
+	        $arrayCssClass = array($nmClass,$nmClass);
+	        $js_procLic = " onChange='criarNomeDocumento();' ";
+	        $arrayComplementoHTML = array($js_procLic, $js_procLic);	        
 	        ?>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
 	            <TD class="campoformulario" colspan=3><?php getCampoDadosContratoSimples();//getContratoEntradaDeDados($tipoContrato, $cdContrato, $anoContrato, $arrayCssClass, $arrayComplementoHTML);?></TD>
-	        </TR>            
+	        </TR>
+	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">Proc.Licitatório:</TH>
+	            <TD class="campoformulario" colspan=3><?php getProcLicitatorioEntradaDados("", "", $arrayCssClass, $arrayComplementoHTML);?></TD>
+	        </TR>
 			<TR>
                 <TH class="campoformulario" nowrap width="1%">Ano.Doc.:</TH>
                 <TD class="campoformulario" nowrap width="1%"><?php echo $selectExercicio->getHtmlCombo(voDocumento::$nmAtrAno,voDocumento::$nmAtrAno, $vo->ano, true, $classChaves, false, " onChange='criarNomeDocumento();' $disabledChaves $required");?></TD>

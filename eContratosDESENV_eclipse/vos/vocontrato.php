@@ -2,6 +2,7 @@
 include_once(caminho_lib."voentidade.php");
 include_once(caminho_util."documentoPessoa.php");
 include_once(caminho_funcoes."documento/dominioTpDocumento.php");
+include_once(caminho_funcoes."contrato/dominioConsultaArquivoContrato.php");
 //include_once(caminho_vos."vogestor.php");
 //include_once(caminho_vos."vogestorpessoa.php");
 

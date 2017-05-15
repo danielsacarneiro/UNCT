@@ -324,10 +324,29 @@ class dbDemandaTramitacao extends dbprocesso {
 			throw new Exception ( $e->getMessage () );
 		}
 	}
+	function excluirDemandaTramDoc($voDemandaTram) {		
+		$nmTabela = voDemandaTramDoc::getNmTabelaStatic ( false );
+		$query = "DELETE FROM " . $nmTabela;
+		$query .= "\n WHERE " . voDemandaTramDoc::$nmAtrAnoDemanda . " = " . $voDemandaTram->ano;
+		$query .= "\n AND " . voDemandaTramDoc::$nmAtrCdDemanda . " = " . $voDemandaTram->cd;
+		$query .= "\n AND " . voDemandaTramDoc::$nmAtrSqDemandaTram . " = " . $voDemandaTram->sqDemandaTram;
+		// echo $query;
+		return $this->atualizarEntidade ( $query );
+	}
 	// usa a opcao EXCEPCIONAL do voentidade: $NM_METODO_RETORNO_CONFIRMAR
 	function excluir($vo) {
 		$vo->NM_METODO_RETORNO_CONFIRMAR = voDemandaTramitacao::getNmTabela ();
-		parent::excluir ( $vo );
+		$this->cDb->retiraAutoCommit ();
+		try {
+			$this->excluirDemandaTramDoc($vo);
+			parent::excluir ( $vo );
+			
+			$this->cDb->commit ();
+		} catch ( Exception $e ) {
+			//echo "DEU ROLLBACK";
+			$this->cDb->rollback ();
+			throw new Exception ( $e->getMessage () );
+		}		
 	}
 	function encaminhar($vo) {
 		// o alterar eh chamado na pagina generica confirmar.php

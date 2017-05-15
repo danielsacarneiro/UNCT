@@ -134,10 +134,11 @@ $varGlobalJS =
 
 echo $varGlobalJS;
 
+include_once (caminho_util."constantes.class.php");
 //variaveis HTML
-define('TAMANHO_CODIGOS', 5);
-define('TAMANHO_CODIGOS_SAFI', 3);
-define('CAMPO_SEPARADOR', "*");
-define('CAMPO_SUBSTITUICAO', "[[*]]");
+define('TAMANHO_CODIGOS', constantes::$TAMANHO_CODIGOS);
+define('TAMANHO_CODIGOS_SAFI', constantes::$TAMANHO_CODIGOS_SAFI);
+define('CAMPO_SEPARADOR', constantes::$CD_CAMPO_SEPARADOR);
+define('CAMPO_SUBSTITUICAO', constantes::$CD_CAMPO_SUBSTITUICAO);
 
 ?>

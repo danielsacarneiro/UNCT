@@ -78,14 +78,16 @@ function existeStr1NaStr2ComSeparador($str2, $str1comseparador) {
 	for($i = 0; $i < $tamanho; $i ++) {
 		$especie = $array [$i];
 		// verifica se eh o tipo da especie em questao
-		$existe = mb_stripos ( $str2, $especie );
-		// echo "<br>$str2 x $especie";
-		
-		if ($existe !== false) {
-			// if($existe){
-			// echo "<br>EXISTE<br>";
-			$retorno = true;
-			break;
+		if($especie != null && $especie != ""){
+			$existe = mb_stripos ( $str2, $especie );
+			// echo "<br>$str2 x $especie";
+			
+			if ($existe !== false) {
+				// if($existe){
+				// echo "<br>EXISTE<br>";
+				$retorno = true;
+				break;
+			}
 		}
 	}
 	return $retorno;

@@ -218,4 +218,21 @@ function getCampoDadosContratoMultiplosPorIndice($indice, $nmClass = "camponaoob
 	return 	$html;
 }
 
+function getProcLicitatorioEntradaDados($cdProcLic, $anoProcLic, $arrayCssClass, $arrayComplementoHTML){
+
+	$selectExercicio = new selectExercicio();
+	$cssCdProcLic = $arrayCssClass[0];
+	$cssAnoProcLic = $arrayCssClass[1];
+
+	$htmlCdProcLic = $arrayComplementoHTML[0];
+	$htmlAnoProcLic = $arrayComplementoHTML[1];
+	
+	$pNmCampoCdProcLicitatorio = voProcLicitatorio::$nmAtrCdProcLicitatorio;
+	$pNmCampoAnoProcLicitatorio = voProcLicitatorio::$nmAtrAnoProcLicitatorio;
+
+	
+	echo "Número: <INPUT type='text' onkeyup='validarCampoNumericoPositivo(this)' id='" . $pNmCampoCdProcLicitatorio . "' name='". $pNmCampoCdProcLicitatorio ."'  value='". complementarCharAEsquerda($cdProcLic, "0", TAMANHO_CODIGOS_SAFI) . "'  class='" . $cssCdProcLic . "' size='4' maxlength='3'  ". $htmlCdProcLic . ">";	 
+	echo "&nbsp;Ano: " . $selectExercicio->getHtmlCombo($pNmCampoAnoProcLicitatorio,$pNmCampoAnoProcLicitatorio, $anoProcLic, true, $cssAnoProcLic, false, $htmlAnoProcLic);
+}
+
 ?>

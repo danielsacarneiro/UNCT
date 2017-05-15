@@ -18,6 +18,7 @@ include_once(caminho_util."dominio.class.php");
   	static $CD_TP_DOC_NOTIFICACAO = "NO";
   	static $CD_TP_DOC_OUTROS = "OT";
   	static $CD_TP_DOC_PLANILHA_CUSTOS = "PC";
+  	static $CD_TP_DOC_PARECER = "PA";
 
   	static $DS_TP_DOC_OFICIO = "Ofício";
   	static $DS_TP_DOC_CI= "Com. Interna";
@@ -26,6 +27,7 @@ include_once(caminho_util."dominio.class.php");
   	static $DS_TP_DOC_NOTIFICACAO = "Notificação";
   	static $DS_TP_DOC_OUTROS = "Outros";
   	static $DS_TP_DOC_PLANILHA_CUSTOS = "Planilha de Custos";
+  	static $DS_TP_DOC_PARECER = "Parecer";
   	 
 // ...............................................................
 // Construtor
@@ -38,6 +40,7 @@ include_once(caminho_util."dominio.class.php");
 				self::$CD_TP_DOC_OFICIO => self::$DS_TP_DOC_OFICIO,
 				self::$CD_TP_DOC_CI => self::$DS_TP_DOC_CI,
 				self::$CD_TP_DOC_NOTA_TECNICA => "Nota Técnica",
+				self::$CD_TP_DOC_PARECER => self::$DS_TP_DOC_PARECER,
 				self::$CD_TP_DOC_NOTA_IMPUTACAO => "Nota Imputação",
 				self::$CD_TP_DOC_NOTIFICACAO => self::$DS_TP_DOC_NOTIFICACAO,
 				self::$CD_TP_DOC_PLANILHA_CUSTOS => self::$DS_TP_DOC_PLANILHA_CUSTOS,
