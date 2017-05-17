@@ -22,14 +22,18 @@ function formatarCodigoDocumento($sq, $cdSetor, $ano, $tpDoc){
 	return $str;
 }
 
-function getBotaoAbrirDocumento($pNmCampolink){
+function getBotaoAbrirDocumentoMais($pLink, $javaScript){
 	$retorno = "";
-	$retorno = getBotaoValidacaoAcesso("bttabrirpasta", "Abrir", "botaofuncaop", false,true,true,true, "onClick=javascript:abrirArquivoCliente('" . $pNmCampolink. "'); accesskey='m'");	
+	$retorno = getBotaoValidacaoAcesso("bttabrirpasta", "Abrir", "botaofuncaop", false,true,true,true, "onClick=javascript:".$javaScript."Cliente('" . $pLink. "'); accesskey='m'");
 	if(isUsuarioAdmin()){
-		$retorno .= "&nbsp;" . getBotaoValidacaoAcesso("bttabrirservidor", "Abrir no Servidor", "botaofuncaop", false,true,true,true, "onClick=javascript:abrirArquivo('" . $pNmCampolink. "'); accesskey='m'");
+		$retorno .= "&nbsp;" . getBotaoValidacaoAcesso("bttabrirservidor", "Abrir no Servidor", "botaofuncaop", false,true,true,true, "onClick=javascript:".$javaScript."('" . $pLink. "'); accesskey='m'");
 	}
-	
+
 	return $retorno;
+}
+
+function getBotaoAbrirDocumento($pNmCampolink){	
+	return getBotaoAbrirDocumentoMais($pNmCampolink, "abrirArquivo");
 }
 
 ?>

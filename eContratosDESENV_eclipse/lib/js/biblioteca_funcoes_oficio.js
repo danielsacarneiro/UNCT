@@ -7,14 +7,30 @@
 */
 
 function abrirArquivo(pNmCampoLinkDoc){		
-	linkDoc = document.getElementById(pNmCampoLinkDoc).value;	
-    url = "../abrir_windowsexplorer.php?comando=" + linkDoc;
+	linkDoc = document.getElementById(pNmCampoLinkDoc).value;
+	abrirArquivoLink(linkDoc);
+	/*url = "../abrir_windowsexplorer.php?comando=" + linkDoc;
+    window.open(url,'_blank');*/
+}
+
+function abrirArquivoLink(pLinkDoc){	
+	url = "../abrir_windowsexplorer.php?comando=" + pLinkDoc;
     window.open(url,'_blank');
 }
 
-function abrirArquivoCliente(pNmCampoLinkDoc){		
+/*function abrirArquivoCliente(pNmCampoLinkDoc){
 	linkDoc = document.getElementById(pNmCampoLinkDoc).value;	
     url = "../download_arquivo.php?arquivo=" + linkDoc;
+    window.open(url,'_blank');
+}*/
+
+function abrirArquivoCliente(pNmCampoLinkDoc){
+	linkDoc = document.getElementById(pNmCampoLinkDoc).value;
+	abrirArquivoLinkCliente(linkDoc);
+}
+
+function abrirArquivoLinkCliente(pLinkDoc){	
+    url = "../download_arquivo.php?arquivo=" + pLinkDoc;
     window.open(url,'_blank');
 }
 

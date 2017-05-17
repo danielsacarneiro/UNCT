@@ -34,6 +34,10 @@ if($filtro->temValorDefaultSetado){
 $qtdRegistrosPorPag = $filtro->qtdRegistrosPorPag;
 $numTotalRegistros = $filtro->numTotalRegistros;
 
+$isUsuarioAdmin = "false";
+if(isUsuarioAdmin())
+	$isUsuarioAdmin = "true";
+
 ?>
 
 <!DOCTYPE html>
@@ -84,9 +88,24 @@ function alterar() {
     if($isHistorico){
     	echo "exibirMensagem('Registro de historico nao permite alteracao.');return";
     }?>
-    
-	chave = document.frm_principal.rdb_consulta.value;	
+
+    chave = document.frm_principal.rdb_consulta.value;	
 	location.href="manter.php?funcao=<?=constantes::$CD_FUNCAO_ALTERAR?>&chave=" + chave;
+}
+
+function abrir() {
+    if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta"))
+            return;
+            
+	chave = document.frm_principal.rdb_consulta.value;
+	nmCampo = "<?=voDocumento::$nmAtrLink?>"+chave;	
+	linkDoc = document.getElementById(nmCampo).value;
+
+	if(<?=$isUsuarioAdmin?>){
+		abrirArquivoLink(linkDoc);
+	}else{
+		abrirArquivoLinkCliente(linkDoc);
+	}
 }
 
 //Transfere dados selecionados para a janela principal
@@ -206,6 +225,10 @@ function selecionar() {
                         $tp= $colecao[$i][voDocumento::$nmAtrTp];
                         $tp = $domTp->getDescricao($tp);
                         
+                        $chave = $voAtual->getValorChaveHTML();
+                        $chave =  voDocumento::$nmAtrLink.$chave;
+                        echo "<INPUT type='hidden' id='".$chave."' name='".$chave."'  value='" . $voAtual->getEnderecoTpDocumento() ."'>";                        
+                        
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados">
@@ -250,6 +273,7 @@ function selecionar() {
                        <TD>
                         <TABLE class="barraacoesaux" cellpadding="0" cellspacing="0">
 	                   	<TR> 
+							<TD class='botaofuncao'><?php echo getBotaoValidacaoAcesso("bttabrirpasta", "Abrir", "botaofuncaop", false,true,true,true, "onClick=javascript:abrir(); accesskey='m'");?></TD>
                             <?=getBotoesRodape();?>
                          </TR>
                          </TABLE>

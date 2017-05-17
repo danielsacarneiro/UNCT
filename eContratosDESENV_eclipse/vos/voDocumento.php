@@ -138,7 +138,9 @@ class voDocumento extends voentidade {
 		return $retorno;
 	}
 	function getValorChavePrimaria() {
-		return $this->ano . CAMPO_SEPARADOR . $this->cdSetor . CAMPO_SEPARADOR . $this->tp . CAMPO_SEPARADOR . $this->sq;
+		$separador = CAMPO_SEPARADOR;
+		//$separador = "b";
+		return $this->ano . $separador . $this->cdSetor . $separador . $this->tp . $separador . $this->sq;
 	}
 	function getChavePrimariaVOExplode($array) {
 		$this->ano = $array [0];
