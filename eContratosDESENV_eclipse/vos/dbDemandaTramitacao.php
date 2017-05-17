@@ -329,7 +329,7 @@ class dbDemandaTramitacao extends dbprocesso {
 		$query = "DELETE FROM " . $nmTabela;
 		$query .= "\n WHERE " . voDemandaTramDoc::$nmAtrAnoDemanda . " = " . $voDemandaTram->ano;
 		$query .= "\n AND " . voDemandaTramDoc::$nmAtrCdDemanda . " = " . $voDemandaTram->cd;
-		$query .= "\n AND " . voDemandaTramDoc::$nmAtrSqDemandaTram . " = " . $voDemandaTram->sqDemandaTram;
+		$query .= "\n AND " . voDemandaTramDoc::$nmAtrSqDemandaTram . " = " . $voDemandaTram->sq;
 		// echo $query;
 		return $this->atualizarEntidade ( $query );
 	}
