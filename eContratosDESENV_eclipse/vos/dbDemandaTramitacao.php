@@ -222,7 +222,7 @@ class dbDemandaTramitacao extends dbprocesso {
 			$this->cDb->commit ();
 		} catch ( Exception $e ) {
 			$this->cDb->rollback ();
-			throw new Exception ( $e->getMessage () );
+			throw new Exception ( get_class($this)." | ". $e->getMessage () );
 		}
 		
 		return $voDemanda;

@@ -29,6 +29,7 @@ class filtroManter extends multiplosConstrutores{
 	var $paginacao;
 	var $nmEntidadePrincipal;
 	var $isHistorico;
+	
 	var $cdConsultarArquivo;
 	var $isValidarConsulta;
 	
@@ -245,6 +246,10 @@ class filtroManter extends multiplosConstrutores{
 	
 	function setaFiltroConsultaSemLimiteRegistro(){
 		$this->qtdRegistrosPorPag = null;
+	}
+	
+	function isHistorico(){
+		return $this->isHistorico;
 	}	
 	
 }

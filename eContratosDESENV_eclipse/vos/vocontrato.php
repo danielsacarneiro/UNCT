@@ -306,7 +306,13 @@ include_once(caminho_funcoes."contrato/dominioConsultaArquivoContrato.php");
     	return $this->sq;
     }
     
-	function toString(){
+    /*usada quando ha chave logica na entidade
+     * */
+    function getValorChaveLogica(){    	
+    	return $this->anoContrato . CAMPO_SEPARADOR . $this->cdContrato . CAMPO_SEPARADOR . $this->tipo . CAMPO_SEPARADOR . $this->cdEspecie . CAMPO_SEPARADOR . $this->sqEspecie;
+    }
+    
+    function toString(){
 		
 		$retorno = $this->sq . ",";				
 		$retorno.= $this->anoContrato . ",";

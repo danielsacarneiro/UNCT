@@ -247,11 +247,12 @@ class dbprocesso {
 		return $this->consultarFiltro ( $filtro, $querySelect, $queryFrom, true );
 	}
 	function consultarFiltro($filtro, $querySelect, $queryFrom, $validaConsulta) {
+		
 		$retorno = "";
 		$isHistorico = ("S" == $filtro->cdHistorico);
 		
 		// flag que diz se pode consultar ou nao
-		$consultar = @$_GET ["consultar"];
+		$consultar = @$_GET ["consultar"];		
 		
 		if ($consultar == "S" || ! $validaConsulta) {
 			
@@ -296,6 +297,7 @@ class dbprocesso {
 			// echo "$query<br>";
 			
 			// removeObjetoSessao($voentidade->getNmTabela());
+
 			$retorno = $this->cDb->consultar ( $query );
 		}
 		

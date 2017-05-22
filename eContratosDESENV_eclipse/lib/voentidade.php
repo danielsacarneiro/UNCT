@@ -224,17 +224,26 @@
     
     function isIgualChavePrimaria($voentidade){
     	$chaveEntidade = "";
-    	if($voentidade != null)
-    		$chaveEntidade = $voentidade->getValorChavePrimaria();
     	
-    		/*echo "chave sessao:" . $chaveEntidade . "<br>";
-    		echo "chave atual:" . $this->getValorChavePrimaria() . "<br>";*/
-    	    	
-    	return $this->getValorChavePrimaria() == $chaveEntidade; 
+    	if($voentidade != null){    		
+    		//$chaveEntidade = call_user_func_array(array($voentidade,$nmMetodo),array(""));
+    		$chaveEntidade = $voentidade->getValorChaveLogica();
+    	}
+    	    	 
+    	$chaveAComparar = $this->getValorChaveLogica();
     	
-    }    
+    	/*echo "chave a comparar:" . $chaveEntidade . "<br>";
+    	echo "chave referencia:" . $chaveAComparar . "<br>";*/    	
+    
+    	return $chaveAComparar == $chaveEntidade;    	 
+    }
     
     function getValorChaveHTML(){
+    	//pega do filho
+    	return $this->getValorChavePrimaria();
+    }
+    
+    function getValorChaveLogica(){
     	//pega do filho
     	return $this->getValorChavePrimaria();
     }
@@ -271,8 +280,8 @@
     	return "";    	
     }
     
-    function isHistorico(){
-    	return $this->sqHist != null;
+    function isHistorico(){    	
+    	return $this->sqHist != null && $this->sqHist != "";
     }
     
     function getValoresWhereSQLChaveSemNomeTabela($isHistorico) {    	

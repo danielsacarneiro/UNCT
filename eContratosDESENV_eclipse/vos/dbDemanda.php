@@ -200,7 +200,10 @@ class dbDemanda extends dbprocesso {
 		return parent::consultarFiltro ( $filtro, $querySelect, $queryFrom, false );
 	}
 	function consultarDemandaContrato($vo) {
-		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( false );
+		$isHistorico = $vo->isHistorico();
+		//$isHistorico = false;
+		
+		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( $isHistorico );
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
@@ -235,7 +238,10 @@ class dbDemanda extends dbprocesso {
 		//var_dump($vo);
 		$filtro->vodemanda->cd = $vo->cd;
 		$filtro->vodemanda->ano = $vo->ano;
-		$filtro->TemPaginacao = false;		
+		$filtro->vodemanda->sqHist= $vo->sqHist;
+		$filtro->TemPaginacao = false;
+		$filtro->isHistorico = $isHistorico;		
+		
 	
 		return parent::consultarFiltro ( $filtro, $querySelect, $queryFrom, false );
 	}

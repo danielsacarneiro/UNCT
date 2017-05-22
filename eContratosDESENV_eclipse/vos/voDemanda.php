@@ -165,14 +165,25 @@ class voDemanda extends voentidade {
 		// completa com os dados da entidade
 		$this->getDadosFormularioEntidade ();
 	}
+	function getContratoColecaoFormulario($itemColecao) {
+		$voContrato = new vocontrato ();
+		$voContrato->getChavePrimariaVOExplodeParam ($itemColecao);
+		return $voContrato;		
+	}
 	function setColecaoContratoFormulario($colecao) {
 		$retorno = null;
 		if ($colecao != null) {
 			$retorno = array ();
-			foreach ( $colecao as $chaveContrato ) {
-				$voContrato = new vocontrato ();
-				$voContrato->getChavePrimariaVOExplodeParam ( $chaveContrato );
-				$retorno [] = $voContrato;
+			//inclui o primeiro contrato
+			$voContrato = $this->getContratoColecaoFormulario($colecao[0]);
+			$retorno [] = $voContrato;
+				
+			foreach ( $colecao as $chaveContrato ) {				
+				$voAtual = $this->getContratoColecaoFormulario($chaveContrato);
+				if(!$voAtual->isIgualChavePrimaria($voContrato)){
+					$retorno [] = $voAtual;
+					$voContrato = $voAtual;
+				}
 			}
 		}
 		$this->colecaoContrato = $retorno;

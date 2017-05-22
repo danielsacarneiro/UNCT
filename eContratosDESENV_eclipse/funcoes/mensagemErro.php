@@ -44,7 +44,7 @@ function cancela() {
             <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
                 <TBODY>
                 <TR>
-                    <TH class="<?=$classMensagem?>" nowrap width="1%"><?=$msg?></TH>			
+                    <TH class="<?=$classMensagem?>" width="100%"><?=$msg?></TH>			
                 </TR>
                 </TBODY>
             </TABLE>

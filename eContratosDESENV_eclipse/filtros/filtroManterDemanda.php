@@ -19,7 +19,7 @@ class filtroManterDemanda extends filtroManter{
 	
 	var $dtUltMovimentacao;
 	var $cdDemandaInicial;
-	var $cdDemandaFinal;
+	var $cdDemandaFinal;	
 	
 	// ...............................................................
 	// construtor
@@ -71,7 +71,7 @@ class filtroManterDemanda extends filtroManter{
 		$filtro = "";
 		$conector  = "";
 
-		$nmTabela = voDemanda::getNmTabelaStatic($this->isHistorico);
+		$nmTabela = voDemanda::getNmTabelaStatic($this->isHistorico());
 		$nmTabelaTramitacao = voDemandaTramitacao::getNmTabelaStatic(false);
 		$nmTabelaTramitacaoDoc = voDemandaTramDoc::getNmTabelaStatic(false);
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic(false);
@@ -98,18 +98,27 @@ class filtroManterDemanda extends filtroManter{
 							$conector  = "\n AND ";
 		}
 		
-		if($this->vodemanda->ano != null){
-			
+		if($this->isHistorico() && $this->vodemanda->sqHist != null){			
 			$filtro = $filtro . $conector
-				. $nmTabela. "." .voDemanda::$nmAtrAno
+				. $nmTabela. "." .voDemanda::$nmAtrSqHist
 				. " = "
-				. $this->vodemanda->ano
-				;
-						
+				. $this->vodemanda->sqHist
+				;						
 			$conector  = "\n AND ";
-
 		}
 
+		if($this->vodemanda->ano != null){
+				
+			$filtro = $filtro . $conector
+			. $nmTabela. "." .voDemanda::$nmAtrAno
+			. " = "
+					. $this->vodemanda->ano
+					;
+		
+					$conector  = "\n AND ";
+		
+		}
+		
 		if($this->vodemanda->cd != null){
 			$filtro = $filtro . $conector
 			. $nmTabela. "." .voDemanda::$nmAtrCd
