@@ -58,8 +58,13 @@ include_once(caminho_util."dominio.class.php");
 		return self::$ENDERECO_DRIVE . "\\" . self::$ENDERECO_PASTABASE_UNCT;
 	}
 	
-	static function getEnderecoPastaBasePorTpDocumento($tpDoc) {		
-		return self::getDescricaoStatic($tpDoc, self::getColecao());
+	static function getEnderecoPastaBasePorTpDocumento($tpDoc) {
+		$retorno = self::getDescricaoStatic($tpDoc, self::getColecao());
+		if($tpDoc == self::$CD_TP_DOC_APOSTILAMENTO){
+			$retorno = "Apostilamentos";
+		}
+		
+		return $retorno;
 	}
 	
 }

@@ -113,10 +113,19 @@ class voDocumento extends voentidade {
 		}
 		
 		if ($this->tp != null) {
-			$enderecoTemp = "\\".dominioTpDocumento::getEnderecoPastaBasePorTpDocumento ( $this->tp );
-			$retorno .= dominioTpDocumento::$ENDERECO_PASTA_DOCUMENTOS;
-			$retorno .= $enderecoTemp;
-			$retorno .= $enderecoTemp . " $this->ano\\";
+			$enderecoTemp = "\\" . dominioTpDocumento::getEnderecoPastaBasePorTpDocumento ( $this->tp );
+			
+			// excecao
+			if ($this->tp == dominioTpDocumento::$CD_TP_DOC_APOSTILAMENTO) {
+				$retorno .= "\\ANO $this->ano" . $enderecoTemp;
+				$retorno .= "\\";
+			} else {
+				// regra geral
+				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_DOCUMENTOS;
+				$retorno .= $enderecoTemp;
+				$retorno .= $enderecoTemp . " $this->ano\\";
+			}
+			
 			$retorno .= $this->link;
 		}
 		
@@ -139,7 +148,7 @@ class voDocumento extends voentidade {
 	}
 	function getValorChavePrimaria() {
 		$separador = CAMPO_SEPARADOR;
-		//$separador = "b";
+		// $separador = "b";
 		return $this->ano . $separador . $this->cdSetor . $separador . $this->tp . $separador . $this->sq;
 	}
 	function getChavePrimariaVOExplode($array) {
