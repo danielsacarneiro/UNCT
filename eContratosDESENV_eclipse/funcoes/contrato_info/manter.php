@@ -51,6 +51,7 @@ try{
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_ajax.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_pessoa.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_contrato.js"></SCRIPT>
 
 <SCRIPT language="JavaScript" type="text/javascript">
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
@@ -74,7 +75,7 @@ function confirmar() {
 </SCRIPT>
 <?=setTituloPagina($vo->getTituloJSP())?>
 </HEAD>
-<BODY class="paginadados" onload="">
+<BODY class="paginadados" onload="formataFormTpGarantia('<?=voContratoInfo::$nmAtrInTemGarantia?>', '<?=voContratoInfo::$nmAtrInPrestacaoGarantia?>', '<?=voContratoInfo::$nmAtrTpGarantia?>');">
 	  
 <FORM name="frm_principal" method="post" action="confirmar.php" onSubmit="return confirmar();">
 
@@ -93,32 +94,29 @@ function confirmar() {
 	        <?php	        
 	        $selectExercicio = new selectExercicio();	        
 	        $complementoHTML = "";
-	        
+
+	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
 	        if(!$isInclusao){
 	        	$cdAutorizacao = $vo->cdAutorizacao;
 	        	//ALTERACAO
 	        	$complementoHTML = " required ";
 	        	$readonlyChaves = " readonly ";
 	          
-	        	$voContrato = $vo->getVOContrato();
-	        	
-	 	        require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
-	 	        getContratoDetalhamento($voContrato, $colecao);	 	        
-
+	        	$voContrato = $vo->getVOContrato();        	
+	 	        
+	 	        getContratoDetalhamento($voContrato, $colecao);
 	        }else{
 	        	//INCLUSAO
-			  ?>			            
-	        <?php	        
-	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
-	        $arrayCssClass = array("camponaoobrigatorio","camponaoobrigatorio", "camponaoobrigatorio");
+
+	        /*$arrayCssClass = array("camponaoobrigatorio","camponaoobrigatorio", "camponaoobrigatorio");
 	        $arrayComplementoHTML = array(" required onChange='carregaContratada();' ",
 	        		" required onBlur='carregaContratada();' ",
 	        		" required onChange='carregaContratada();' "	        		
-	        );	        
+	        );*/	        
 	        ?>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" colspan=3><?php getContratoEntradaDeDados($tipoContrato, $anoContrato, $cdContrato, $arrayCssClass, $arrayComplementoHTML, $nmCampoDiv);?></TD>
+	            <TD class="campoformulario" colspan=3><?php getCampoDadosContratoSimples();//getContratoEntradaDeDados($tipoContrato, $anoContrato, $cdContrato, $arrayCssClass, $arrayComplementoHTML, $nmCampoDiv);?></TD>
 	        </TR>	        
 	        <?php 
 	       }	       
@@ -142,6 +140,24 @@ function confirmar() {
 	            			maxlength="10">
 				</TD>
 	        </TR>	       
+	        <?php 
+	        include_once(caminho_util. "dominioSimNao.php");
+	        $comboSimNao = new select(dominioSimNao::getColecao());
+	        
+	        include_once(caminho_funcoes. "contrato/dominioTpGarantiaContrato.php");
+	        $comboGarantia = new select(dominioTpGarantiaContrato::getColecao());
+	        $jsGarantia = "formataFormTpGarantia('".voContratoInfo::$nmAtrInTemGarantia."', '".voContratoInfo::$nmAtrInPrestacaoGarantia."', '".voContratoInfo::$nmAtrTpGarantia."');"
+	        ?>
+			<TR>
+	            <TH class="campoformulario" nowrap width="1%">Garantia:</TH>
+	            <TD class="campoformulario" colspan="3">
+	            Tem?: <?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInTemGarantia,voContratoInfo::$nmAtrInTemGarantia, $vo->inTemGarantia, true, "campoobrigatorio", false,
+	            		" onChange=\"". $jsGarantia. "\" required ");?>
+	            		
+	            Foi prestada?: <?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInPrestacaoGarantia,voContratoInfo::$nmAtrInPrestacaoGarantia, $vo->inPrestacaoGarantia, true, "camponaoobrigatorio", false, " onChange=\"". $jsGarantia. "\" disabled ");?>
+	            Tipo: <?php echo $comboGarantia->getHtmlCombo(voContratoInfo::$nmAtrTpGarantia,voContratoInfo::$nmAtrTpGarantia, $vo->tpGarantia, true, "camponaoobrigatorio", true, " disabled ");?>
+	            </TD>
+	        </TR>
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Observação:</TH>
 	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=voContratoInfo::$nmAtrObs?>" name="<?=voContratoInfo::$nmAtrObs?>" class="camponaoobrigatorio"><?=$vo->obs?></textarea>

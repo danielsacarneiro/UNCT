@@ -43,3 +43,31 @@ function carregaContratada(pIndice, pNmCampoCdContrato, pNmCampoAnoContrato, pNm
 	carregaDadosContratada(pNmCampoAnoContrato, pNmCampoTipoContrato, pNmCampoCdContrato, pNmCampoCdEspecieContrato, pNmCampoSqEspecieContrato,pNmCampoDivNomePessoa);		    
 }
 
+function formataFormTpGarantia(pNmCampoTemGarantia, pNmCampoPrestacaoGarantia, pNmCampoTpGarantia) {
+	//precisa da bibliotecafuncoesprincipal.js
+	campoTemGarantia = document.getElementById(pNmCampoTemGarantia);
+	campoPrestacaoGarantia = document.getElementById(pNmCampoPrestacaoGarantia);
+	campoTpGarantia = document.getElementById(pNmCampoTpGarantia);
+	
+	if(campoTemGarantia.value == "S"){
+		habilitarElementoMais(pNmCampoPrestacaoGarantia, true, true);
+		/*campoPrestacaoGarantia.disabled = false;
+		campoTpGarantia.disabled = false;
+		campoPrestacaoGarantia.required = true;*/
+		
+		if(campoPrestacaoGarantia.value == "S"){
+			habilitarElementoMais(pNmCampoTpGarantia, true, true);			
+		}else{
+			habilitarElementoMais(pNmCampoTpGarantia, false, false);
+		}
+		
+	}else{		
+		/*campoTpGarantia.disabled = true;		
+		campoPrestacaoGarantia.disabled = true;
+		campoPrestacaoGarantia.required = false;*/
+		habilitarElementoMais(pNmCampoPrestacaoGarantia, false, false);
+		habilitarElementoMais(pNmCampoTpGarantia, false, false);
+	}		
+}
+
+

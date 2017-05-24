@@ -16,6 +16,10 @@ Class voContratoInfo extends voentidade{
 	static $nmAtrCdAutorizacaoContrato =  	"ctinf_cd_autorizacao";
 	static $nmAtrObs = "ctinf_obs";
 	static $nmAtrDtProposta = "ctinf_dt_proposta";
+		
+	static $nmAtrInTemGarantia = "ctinf_in_garantia";
+	static $nmAtrInPrestacaoGarantia = "ctinf_in_prestacao_garantia";
+	static $nmAtrTpGarantia = "ctinf_tp_garantia";
 	 
 	var $cdContrato = "";
 	var $anoContrato  = "";
@@ -23,6 +27,10 @@ Class voContratoInfo extends voentidade{
 	var $cdAutorizacao = "";
 	var $obs = "";
 	var $dtProposta = "";
+	
+	var $inTemGarantia = "";
+	var $inPrestacaoGarantia = "";
+	var $tpGarantia = "";
 	 
 	var $dbprocesso = null;
 	// ...............................................................
@@ -74,7 +82,11 @@ Class voContratoInfo extends voentidade{
 				self::$nmAtrTipoContrato,
 				self::$nmAtrCdAutorizacaoContrato,
 				self::$nmAtrObs,
-				self::$nmAtrDtProposta
+				self::$nmAtrDtProposta,
+				
+				self::$nmAtrInTemGarantia,
+				self::$nmAtrInPrestacaoGarantia,
+				self::$nmAtrTpGarantia
 		);
 
 		return $retorno;
@@ -109,6 +121,10 @@ Class voContratoInfo extends voentidade{
 		$this->cdAutorizacao  = $registrobanco[self::$nmAtrCdAutorizacaoContrato];
 		$this->obs = $registrobanco[self::$nmAtrObs];
 		$this->dtProposta = $registrobanco[self::$nmAtrDtProposta];		 
+		
+		$this->inTemGarantia = $registrobanco[self::$nmAtrInTemGarantia];
+		$this->inPrestacaoGarantia = $registrobanco[self::$nmAtrInPrestacaoGarantia];
+		$this->tpGarantia = $registrobanco[self::$nmAtrTpGarantia];
 	}
 
 	function getDadosFormulario(){
@@ -118,6 +134,11 @@ Class voContratoInfo extends voentidade{
 		$this->cdAutorizacao  = @$_POST[self::$nmAtrCdAutorizacaoContrato];
 		$this->obs = @$_POST[self::$nmAtrObs];
 		$this->dtProposta = @$_POST[self::$nmAtrDtProposta];
+		
+		$this->inTemGarantia = $_POST[self::$nmAtrInTemGarantia];
+		$this->inPrestacaoGarantia = $_POST[self::$nmAtrInPrestacaoGarantia];
+		$this->tpGarantia = $_POST[self::$nmAtrTpGarantia];
+		
 		//completa com os dados da entidade
 		$this->getDadosFormularioEntidade();
 	}

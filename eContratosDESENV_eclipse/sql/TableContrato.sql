@@ -129,6 +129,10 @@ CREATE TABLE contrato_info (
     ctinf_dt_proposta DATE NULL,
     ctinf_obs MEDIUMTEXT NULL,
     
+    ctinf_in_garantia CHAR(1) NULL,
+    ctinf_in_prestacao_garantia CHAR(1) NULL,
+    ctinf_tp_garantia INT NULL,
+    
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_incl INT,
@@ -140,6 +144,10 @@ CREATE TABLE contrato_info (
 ALTER TABLE contrato_info ADD CONSTRAINT fk_contrato_info FOREIGN KEY (ct_exercicio, ct_numero, ct_tipo) REFERENCES contrato (ct_exercicio, ct_numero, ct_tipo)
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;
+    
+ALTER TABLE contrato_info ADD COLUMN ctinf_in_garantia CHAR(1) NULL AFTER ctinf_obs;
+ALTER TABLE contrato_info ADD COLUMN ctinf_in_prestacao_garantia CHAR(1) NULL AFTER ctinf_in_garantia;
+ALTER TABLE contrato_info ADD COLUMN ctinf_tp_garantia INT NULL AFTER ctinf_in_prestacao_garantia;
     
 -- ALTER TABLE contrato_info DROP FOREIGN KEY fk_contrato_info;    
 
@@ -153,6 +161,10 @@ CREATE TABLE contrato_info_hist (
     ctinf_dt_proposta DATE NULL,
     ctinf_obs MEDIUMTEXT NULL,
     
+    ctinf_in_garantia CHAR(1) NULL,
+    ctinf_in_prestacao_garantia CHAR(1) NULL,
+    ctinf_tp_garantia INT NULL,    
+    
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_incl INT,
@@ -163,3 +175,8 @@ CREATE TABLE contrato_info_hist (
     
 	CONSTRAINT pk PRIMARY KEY (hist)
 );
+
+ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_garantia CHAR(1) NULL AFTER ctinf_obs;
+ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_prestacao_garantia CHAR(1) NULL AFTER ctinf_in_garantia;
+ALTER TABLE contrato_info_hist ADD COLUMN ctinf_tp_garantia INT NULL AFTER ctinf_in_prestacao_garantia;
+

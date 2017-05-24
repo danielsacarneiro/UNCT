@@ -356,11 +356,12 @@ class dbprocesso {
 	}
 	function excluir($voEntidade) {
 		// echo $voEntidade->sqHist;
-		$isHistorico = $voEntidade->sqHist != null;
+		$isHistorico = $voEntidade->isHistorico();
 		if ($isHistorico) {
+			//echo "EH HISTORICO";
 			$retorno = $this->excluirEmDefinitivo ( $voEntidade, true );
 		} else {
-			
+			//echo "nao EH HISTORICO";
 			if ($voEntidade->temTabHistorico)
 				$retorno = $this->excluirHistoriando ( $voEntidade );
 			else
@@ -415,6 +416,7 @@ class dbprocesso {
 		// $query.= vogestorpessoa::$nmAtrSqContrato . " = " . $voContrato->sq;
 		
 		$query .= $voEntidade->getValoresWhereSQLChave ( false );
+		//echo $query;
 		
 		return $query;
 	}
@@ -545,35 +547,69 @@ class dbprocesso {
 	/**
 	 * FUNCOES MANIPULACAO
 	 * pega na bibliotecaSQL
-	 * /*
-	 * @ deprecated
 	 */
+	
+	function getValorAtributo($param, $nmMetodo) {	
+		$retorno = "";
+		if($param == constantes::$CD_CAMPO_NULO){
+			$retorno = "null";
+		}else{
+			//pega o metodo na bibliotecaSQL.php
+			$retorno = $nmMetodo( $param );
+		}
+	
+		return $retorno;
+	}
+	
 	function getVarComoString($param) {
+		//return getVarComoString ( $param );
+		return $this->getValorAtributo ( $param , "getVarComoString");
+	}
+	
+	function getVarComoNumero($param) {
+		//return getVarComoNumero ( $param );
+		return $this->getValorAtributo ( $param , "getVarComoNumero");
+	}
+	
+	function getVarComoData($param) {
+		//return getVarComoData ( $param );
+		return $this->getValorAtributo ( $param , "getVarComoData");
+	}
+	
+	function getVarComoDecimal($param) {
+		//return getDecimalSQL ( $param );
+		return $this->getValorAtributo ( $param , "getDecimalSQL");
+	}
+	
+	/*function getVarComoString($param) {
 		return getVarComoString ( $param );
 	}
 	
-	/*
-	 * @ deprecated
-	 */
 	function getVarComoNumero($param) {
 		return getVarComoNumero ( $param );
 	}
 	
-	/*
-	 * @ deprecated
-	 */
 	function getVarComoData($param) {
 		return getVarComoData ( $param );
 	}
-	/*
-	 * @ deprecated
+	
+	function getVarComoDecimal($param) {
+		return getDecimalSQL ( $param );
+	}*/
+	
+	/**
+	 * @deprecated
+	 * @param unknown $param
+	 * @return string
 	 */
 	function getDataSQL($param) {
 		return getVarComoDataSQL ( $param );
 	}
 	
-	/*
-	 * @ deprecated
+	/**
+	 * @deprecated
+	 * @param unknown $param
+	 * @return string|mixed
 	 */
 	function getDecimalSQL($param) {
 		return getDecimalSQL ( $param );

@@ -121,7 +121,8 @@ class dbContratoInfo extends dbprocesso {
 		return $this->incluirQueryVO ( $vo );
 	}
 	
-	function getSQLValuesInsert($vo) {		
+	function getSQLValuesInsert($vo) {
+		//$vo = new voContratoInfo();
 		$retorno = "";
 		$retorno .= $this->getVarComoNumero ( $vo->anoContrato ) . ",";
 		$retorno .= $this->getVarComoNumero ( $vo->cdContrato ) . ",";
@@ -131,13 +132,18 @@ class dbContratoInfo extends dbprocesso {
 		//$retorno .= $this->getVarComoNumero ( dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_ABERTA ) . ",";
 		
 		$retorno .= $this->getVarComoString ( $vo->obs ) . ",";
-		$retorno .= $this->getVarComoData ( $vo->dtProposta);
+		$retorno .= $this->getVarComoData ( $vo->dtProposta) . ",";
+		
+		$retorno .= $this->getVarComoString ( $vo->inTemGarantia ) . ",";
+		$retorno .= $this->getVarComoString ( $vo->inPrestacaoGarantia) . ",";
+		$retorno .= $this->getVarComoNumero( $vo->tpGarantia);
 		
 		$retorno .= $vo->getSQLValuesInsertEntidade ();
 		
 		return $retorno;
 	}
 	function getSQLValuesUpdate($vo) {
+		//$vo = new voContratoInfo();
 		$retorno = "";
 		$sqlConector = "";
 		
@@ -156,7 +162,32 @@ class dbContratoInfo extends dbprocesso {
 			$sqlConector = ",";
 		}
 		
-		$retorno = $retorno . $sqlConector . $vo->getSQLValuesUpdate ();
+		if ($vo->inTemGarantia != null) {
+			$retorno .= $sqlConector . voContratoInfo::$nmAtrInTemGarantia . " = " . $this->getVarComoString($vo->inTemGarantia);
+			$sqlConector = ",";
+			
+			if ($vo->inTemGarantia == constantes::$CD_NAO) {
+				$vo->inPrestacaoGarantia = constantes::$CD_CAMPO_NULO;				
+				$vo->tpGarantia = constantes::$CD_CAMPO_NULO;
+			}
+		}
+		
+		if ($vo->inPrestacaoGarantia != null) {
+			$retorno .= $sqlConector . voContratoInfo::$nmAtrInPrestacaoGarantia . " = " . $this->getVarComoString($vo->inPrestacaoGarantia);
+			$sqlConector = ",";
+			
+			if ($vo->inPrestacaoGarantia == constantes::$CD_NAO) {
+				$vo->tpGarantia = constantes::$CD_CAMPO_NULO;
+			}				
+		}
+		
+		if ($vo->tpGarantia != null) {
+			$retorno .= $sqlConector . voContratoInfo::$nmAtrTpGarantia . " = " . $this->getVarComoNumero($vo->tpGarantia);
+			$sqlConector = ",";
+		}
+		
+		
+		$retorno = $retorno . $vo->getSQLValuesEntidadeUpdate ();
 		
 		return $retorno;
 	}

@@ -153,9 +153,11 @@ class filtroManterDemanda extends filtroManter{
 			//echo "tem texto";
 			$filtro = $filtro . $conector
 			. $nmTabela. "." .voDemanda::$nmAtrTexto
-			. " LIKE '"
-					. substituirCaracterSQLLike($this->vodemanda->texto)
-					. "'";
+			/*. " LIKE '"
+			. substituirCaracterSQLLike($this->vodemanda->texto)*/
+			. " LIKE '%"
+			. $this->vodemanda->texto
+			. "%'";
 		
 			$conector  = "\n AND ";
 		}

@@ -9,7 +9,7 @@ class excecaoGenerica extends Exception
         // código
     
         // garante que tudo está corretamente inicializado
-        parent::__construct($message, $code, $previous);
+        parent::__construct(get_class($this). ":". $message, $code, $previous);
     }
 
     // personaliza a apresentação do objeto como string

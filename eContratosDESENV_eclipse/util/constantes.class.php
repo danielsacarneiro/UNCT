@@ -57,6 +57,7 @@
     static $TAMANHO_CODIGOS_SAFI = 3;
     static $CD_CAMPO_SEPARADOR = "*";
     static $CD_CAMPO_SUBSTITUICAO = "[[*]]";
+    static $CD_CAMPO_NULO = "null";
        
 }
 ?>

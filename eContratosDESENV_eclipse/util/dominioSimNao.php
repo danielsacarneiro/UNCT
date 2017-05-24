@@ -5,12 +5,16 @@ Class dominioSimNao extends dominio{
 // ...............................................................
 // Construtor
 	function __construct () {        
-		$this->colecao = array(				   
-				constantes::$CD_SIM => constantes::$DS_SIM,
-				constantes::$CD_NAO => constantes::$DS_NAO
-				);        
+		$this->colecao = self::getColecao();        
 	}
 
+	static function getColecao(){
+		return array(
+				constantes::$CD_SIM => constantes::$DS_SIM,
+				constantes::$CD_NAO => constantes::$DS_NAO
+		);
+	}
+	
 // ...............................................................
 // Funções( Propriedades e metodos da classe )
 	

@@ -84,7 +84,13 @@ function confirmar() {
             <DIV id="div_filtro" class="div_filtro">
             <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
             <TBODY>
-	        <?php	        	        	        
+			<?php if($isHistorico){?>
+			<TR>
+                <TH class="campoformulario" nowrap width=1%>Sq.Hist:</TH>
+                <TD class="campoformulario" colspan=3><INPUT type="text" value="<?php echo(complementarCharAEsquerda($vo->sqHist, "0", TAMANHO_CODIGOS));?>"  class="camporeadonlyalinhadodireita" size="5" readonly></TD>
+                <INPUT type="hidden" id="<?=voContratoInfo::$nmAtrSqHist?>" name="<?=voContratoInfo::$nmAtrSqHist?>" value="<?=$vo->sqHist?>">
+            </TR>               
+            <?php }	        	        	        
 	        
 			$voContrato = $vo->getVOContrato();	        
 	          
@@ -109,7 +115,7 @@ function confirmar() {
 	            Planinha: <?php echo $combo->getHtmlCombo("","", $cdAutorizacaoPlanilha, true, "camporeadonly", true, " disabled ");?>	            
 	            Atual: <?php echo $combo->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato,voContratoInfo::$nmAtrCdAutorizacaoContrato, $vo->cdAutorizacao, true, "camporeadonly", true, " disabled ");?>	        </TR>
 	        <TR>	       
-	            <TH class="campoformulario" nowrap width="1%">Data.Proposta:</TH>
+	            <TH class="campoformulario" nowrap width="1%">Data.Proposta de preços:</TH>
 	            <TD class="campoformulario" colspan=3>
 	            	<INPUT type="text" 
 	            	       id="<?=voContratoInfo::$nmAtrDtProposta?>" 
@@ -121,7 +127,24 @@ function confirmar() {
 	            			maxlength="10"
 	            			readonly>
 				</TD>
-	        </TR>	       
+	        </TR>
+	        <?php 
+	        include_once(caminho_util. "dominioSimNao.php");
+	        $comboSimNao = new select(dominioSimNao::getColecao());
+	        
+	        include_once(caminho_funcoes. "contrato/dominioTpGarantiaContrato.php");
+	        $comboGarantia = new select(dominioTpGarantiaContrato::getColecao());
+	        $jsGarantia = "formataFormTpGarantia('".voContratoInfo::$nmAtrInTemGarantia."', '".voContratoInfo::$nmAtrInPrestacaoGarantia."', '".voContratoInfo::$nmAtrTpGarantia."');"
+	        ?>	        
+			<TR>
+	            <TH class="campoformulario" nowrap width="1%">Garantia:</TH>
+	            <TD class="campoformulario" colspan="3">
+	            Tem?: <?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInTemGarantia,voContratoInfo::$nmAtrInTemGarantia, $vo->inTemGarantia, true, "camporeadonly", false,
+	            		" disabled ");?>	            		
+	            Foi prestada?: <?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInPrestacaoGarantia,voContratoInfo::$nmAtrInPrestacaoGarantia, $vo->inPrestacaoGarantia, true, "camporeadonly", false, " disabled ");?>
+	            Tipo: <?php echo $comboGarantia->getHtmlCombo(voContratoInfo::$nmAtrTpGarantia,voContratoInfo::$nmAtrTpGarantia, $vo->tpGarantia, true, "camporeadonly", true, " disabled ");?>
+	            </TD>
+	        </TR>	        
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Observação:</TH>
 	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=voContratoInfo::$nmAtrObs?>" name="<?=voContratoInfo::$nmAtrObs?>" class="camporeadonly" readonly><?=$vo->obs?></textarea>

@@ -326,11 +326,30 @@ function limparCampo(pCampo) {
 	}
 }
 
+
+function habilitarElementoMais(pNmElemento, pHabilitar, pIsObrigatorio) {	
+	elemento = eval(pNmElemento);
+	if(pHabilitar){
+		habilitarElemento(pNmElemento);
+	}else{
+		desabilitarElemento(pNmElemento);
+		elemento.value = "";
+	}	
+	
+	if(pIsObrigatorio){		
+		//elemento.className = 'campoobrigatorio';		
+		elemento.required = true;
+	}else{
+		//elemento.className = 'camponaoobrigatorio';
+		elemento.required = false;
+	}
+}
+
 function desabilitarElemento(pNmElemento) {
 	elemento = eval(pNmElemento);
 	if (elemento != null) {
 		try {
-			elemento.disabled = true;
+			elemento.disabled = true;			
 		} catch(er) {
 		}
 	}

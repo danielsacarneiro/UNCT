@@ -245,7 +245,7 @@ include_once ("bibliotecaFuncoesPrincipal.php");
 	function getVarComoString($param){
 		//return "'" . utf8_encode($param) . "'";
 		$retorno = "null";
-		if($param != null){
+		if($param != null){			
 			//corrige a existencia de aspas simples pq dah pau no banco
 			$valor = str_replace("'", '"', $param);
 			$retorno =  "'" . trim($valor) . "'";
