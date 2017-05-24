@@ -184,8 +184,7 @@ class dbContratoInfo extends dbprocesso {
 		if ($vo->tpGarantia != null) {
 			$retorno .= $sqlConector . voContratoInfo::$nmAtrTpGarantia . " = " . $this->getVarComoNumero($vo->tpGarantia);
 			$sqlConector = ",";
-		}
-		
+		}		
 		
 		$retorno = $retorno . $vo->getSQLValuesEntidadeUpdate ();
 		
