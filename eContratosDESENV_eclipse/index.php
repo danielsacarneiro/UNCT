@@ -45,6 +45,7 @@ cabecalho;
 	
 	<?php if(isUsuarioAdmin()){?>
 	f5 = new Tree('Serviço 05 (ADMINISTRADOR)');
+    f5.adicionarItem(new Link('Usuários', '<?=caminho_funcoesHTML?>usuario_info', ''));
     f5.adicionarItem(new Link('P.A.s de Aplicação de Penalidade (PAAP)', '<?=caminho_funcoesHTML?>pa', ''));
 	f5.adicionarItem(new Link("Tramitação Demanda", "<?=caminho_funcoesHTML?>demanda_tram", ""));
 	f5.adicionarItem(new Link('______', '#', ''));

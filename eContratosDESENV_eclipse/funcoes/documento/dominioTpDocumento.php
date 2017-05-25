@@ -22,7 +22,7 @@ include_once(caminho_util."dominio.class.php");
   	static $CD_TP_DOC_APOSTILAMENTO = "AP";  	
 
   	static $DS_TP_DOC_OFICIO = "Ofício";
-  	static $DS_TP_DOC_CI= "Com. Interna";
+  	static $DS_TP_DOC_CI= "CI";
   	static $DS_TP_DOC_NOTA_TECNICA = "Nota Técnica";
   	static $DS_TP_DOC_NOTA_IMPUTACAO = "Nota Imputação";
   	static $DS_TP_DOC_NOTIFICACAO = "Notificação";

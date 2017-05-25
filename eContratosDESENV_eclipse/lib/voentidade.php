@@ -3,7 +3,7 @@
 // Classe select
 // cria um combo select html
 
-  Class voentidade {
+  Class voentidade extends multiplosConstrutores{
   		var $NM_METODO_RETORNO_CONFIRMAR;
   	
 		var $varChaves;
@@ -42,7 +42,7 @@
         
         //var $dbprocesso;
     
-	function __construct() {
+	function __construct0() {
 		//exemplo de chamada de construtor da classe pai em caso de override
 		//parent::__construct($altura,$grossura,$largura,$cor);
 		$this->varAtributos = array(

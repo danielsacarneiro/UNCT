@@ -316,6 +316,13 @@ class dbprocesso {
 		}
 		return $numTotalRegistros;
 	}
+	
+	//metodo mais simples de inclusao
+	//havendo complexidade, cada class implementa o seu
+	function incluirSQL($vo){
+		return $this->incluirQueryVO($vo);
+	}
+	
 	function incluir($voEntidade) {
 		// ta na classe filha
 		$query = $this->incluirSQL ( $voEntidade );

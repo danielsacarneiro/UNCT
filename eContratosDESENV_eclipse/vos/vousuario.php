@@ -5,7 +5,7 @@ Class vousuario extends voentidade{
         static $nmEntidade = "wp_users";	
         static $nmAtrID  = "ID";
         static $nmAtrLogin  = "user_login";
-        static $nmAtrName  = "user_nicename";
+        static $nmAtrName  = "display_name";
 		
 		var $id;
 		var $login;
@@ -36,6 +36,16 @@ Class vousuario extends voentidade{
 		return  "dbusuario";
 	}
 
+	function getAtributosFilho(){
+		$retorno = array(
+				self::$nmAtrID,
+				self::$nmAtrLogin,
+				self::$nmAtrName
+		);
+	
+		return $retorno;
+	}
+	
 // ...............................................................
 // Funções ( Propriedades e métodos da classe )
 		
