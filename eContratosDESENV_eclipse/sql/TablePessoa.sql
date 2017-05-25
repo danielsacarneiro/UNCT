@@ -56,7 +56,7 @@ BEGIN
   DECLARE done INTEGER DEFAULT 0;
   DECLARE nome VARCHAR(150);
   DECLARE doc VARCHAR(30);
-  DECLARE cdPessoa INT DEFAULT 0;  
+  DECLARE cdPessoa INT DEFAULT 444;
 
   DECLARE cTabela CURSOR FOR 
 	  select ct_contratada, ct_doc_contratada from contrato
