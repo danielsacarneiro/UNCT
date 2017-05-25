@@ -30,22 +30,30 @@ cabecalho;
     f1.adicionarItem(new Link('Pessoas', '<?=caminho_funcoesHTML?>pessoa', ''));
 	f.adicionarItem(f1);
 	
-	f3 = new Tree('Serviço 02 (Contratos)');
-	f3.adicionarItem(new Link("Contratos-Planilha", "<?=caminho_funcoesHTML?>contrato", ""));
-	f3.adicionarItem(new Link("Contratos-Informações Adicionais", "<?=caminho_funcoesHTML?>contrato_info", ""));
-	//f3.adicionarItem(new Link("Manutenção Contrato Tramitação (NAO USAR)", "<?=caminho_funcoesHTML?>contrato_tram", ""));	
+	f2 = new Tree('Serviço 02 (Contratos)');
+	f2.adicionarItem(new Link("Contratos-Planilha", "<?=caminho_funcoesHTML?>contrato", ""));
+	f2.adicionarItem(new Link("Contratos-Informações Adicionais", "<?=caminho_funcoesHTML?>contrato_info", ""));	
+	f.adicionarItem(f2);
+
+	f3 = new Tree('Serviço 03 (Demanda)');
+	f3.adicionarItem(new Link("Demandas", "<?=caminho_funcoesHTML?>demanda", ""));
 	f.adicionarItem(f3);
 
-	f4 = new Tree('Serviço 03 (Demanda)');
-	f4.adicionarItem(new Link("Demandas", "<?=caminho_funcoesHTML?>demanda", ""));
-	<?php if(isUsuarioAdmin()){?>
-		f4.adicionarItem(new Link("Tramitação Demanda", "<?=caminho_funcoesHTML?>demanda_tram", ""));
-	<?php }?>
+	f4 = new Tree('Serviço 04 (Proc.Admin.)');	
+    f4.adicionarItem(new Link('P.A.s de Aplicação de Penalidade (PAAP)', '<?=caminho_funcoesHTML?>pa', ''));    
 	f.adicionarItem(f4);
-
-	f5 = new Tree('Serviço 04 (Proc.Admin.)');	
-    f5.adicionarItem(new Link('P.A.s de Aplicação de Penalidade (PAAP)', '<?=caminho_funcoesHTML?>pa', ''));    
-	f.adicionarItem(f5);
+	
+	<?php if(isUsuarioAdmin()){?>
+	f5 = new Tree('Serviço 05 (ADMINISTRADOR)');
+    f5.adicionarItem(new Link('P.A.s de Aplicação de Penalidade (PAAP)', '<?=caminho_funcoesHTML?>pa', ''));
+	f5.adicionarItem(new Link("Tramitação Demanda", "<?=caminho_funcoesHTML?>demanda_tram", ""));
+	f5.adicionarItem(new Link('______', '#', ''));
+	f5.adicionarItem(new Link("IMPORTAR CSAFI", "<?=caminho_funcoesHTML?>contrato/importarContrato.php", ""));
+	f5.adicionarItem(new Link("IMPORTAR CV-SAFI", "<?=caminho_funcoesHTML?>contrato/importarConvenio.php?tipo=V", ""));
+	f5.adicionarItem(new Link("IMPORTAR PROFISCO", "<?=caminho_funcoesHTML?>contrato/importarConvenio.php?tipo=P", ""));		
+	f.adicionarItem(f5);	
+	<?php }?>
+	
 
 	/*
 	exemplo
