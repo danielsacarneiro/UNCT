@@ -6,12 +6,20 @@ inicio();
 setCabecalhoPorNivel(null,1);
 
 $msgErro = @$_GET["texto"];
+$cdTela = @$_GET["cdTela"];
 
 $vo = getObjetoSessao("vo");
 
-$classMensagem = "campomensagemvermelho";
-$msg = "OPERACAO $nmFuncao FALHOU.<br>$msgErro";
-
+//tela sucesso
+if($cdTela != null && $cdTela == 1){
+	$paginaEncaminhamento = "../index.php";
+	$classMensagem = "campomensagemverde";
+	$msg = "OPERACAO REALIZADA COM SUCESSO.<br>";	
+}else{
+	$paginaEncaminhamento = $vo->getNmTabela();
+	$classMensagem = "campomensagemvermelho";
+	$msg = "OPERACAO $nmFuncao FALHOU.<br>$msgErro";
+}
 
 ?>
 <!DOCTYPE html>
@@ -32,7 +40,7 @@ function cancela() {
 </HEAD>
 <BODY class="paginadados" onload="">
 	  
-<FORM name="frm_principal" method="post" action="<?=$vo->getNmTabela()?>/index.php?consultar=S"> 
+<FORM name="frm_principal" method="post" action="<?=$paginaEncaminhamento?>/index.php?consultar=S"> 
 <TABLE id="table_conteiner" class="conteiner" cellpadding="0" cellspacing="0">
     <TBODY>
 	<TR>
