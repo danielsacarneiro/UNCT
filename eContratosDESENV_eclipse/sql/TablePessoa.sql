@@ -56,6 +56,7 @@ BEGIN
   DECLARE done INTEGER DEFAULT 0;
   DECLARE nome VARCHAR(150);
   DECLARE doc VARCHAR(30);
+  -- cdPessoa deve conter o cdPessoa da ultima pessoa incluida
   DECLARE cdPessoa INT DEFAULT 444;
 
   DECLARE cTabela CURSOR FOR 
