@@ -88,31 +88,39 @@ function confirmar() {
 	return confirm("Confirmar Alteracoes?");    
 }
 
-function habilitaContrato() {	
 
+function formataFormContratoPorTpDemanda(pNmCampoTpDemanda, pColecaoNmObjetosFormContrato) {
 	<?php
-	$dominioTipoDemanda = new dominioTipoDemanda(dominioTipoDemanda::getColecaoTipoDemandaContrato());
-	echo $dominioTipoDemanda->getArrayHTMLChaves("colecaoTpDemandaContrato");	
-	?>
-
-	cdTpDemanda = document.frm_principal.<?=voDemanda::$nmAtrTipo?>.value;
+			$dominioTipoDemanda = new dominioTipoDemanda(dominioTipoDemanda::getColecaoTipoDemandaContrato());
+			echo $dominioTipoDemanda->getArrayHTMLChaves("colecaoTpDemandaContrato");	
+			?>
 	
-	pCampoCdContrato = document.frm_principal.<?=vocontrato::$nmAtrCdContrato;?>;
-	pCampoAnoContrato = document.frm_principal.<?=vocontrato::$nmAtrAnoContrato;?>;
-	pCampoTipoContrato = document.frm_principal.<?=vocontrato::$nmAtrTipoContrato;?>;
-
-	flag = false;
-	if(colecaoTpDemandaContrato.indexOf(cdTpDemanda) != -1)
-		flag = true;
-
-	pCampoCdContrato.required = flag;
-	pCampoAnoContrato.required = flag;
-	pCampoTipoContrato.required = flag;
+	campoTpDemanda = document.getElementById(pNmCampoTpDemanda);
+	cdTpDemanda = campoTpDemanda.value;
+	
+	isDemandaContrato = colecaoTpDemandaContrato.indexOf(cdTpDemanda) != -1;	
+	tam = pColecaoNmObjetosFormContrato.length;
+	
+	for(i=0; i<tam;i++){
+		nmCampo = pColecaoNmObjetosFormContrato[i];		
+		camposForm = document.getElementsByName(nmCampo);
+				
+		for(k=0; k<camposForm.length;k++){
+			campo = camposForm[k];
+			//alert(campo);
+			if(isDemandaContrato){
+				habilitarCampoElementoMais(campo, true, true);
+			}else{
+				habilitarCampoElementoMais(campo, true, false);
+			}
+		}
+		
+	}
 }
 
-
 function validaFormulario() {
-	habilitaContrato();
+	pColecaoNmObjetosFormContrato = ['<?=vocontrato::$nmAtrTipoContrato;?>', '<?=vocontrato::$nmAtrCdContrato;?>','<?=vocontrato::$nmAtrAnoContrato;?>'];	
+	formataFormContratoPorTpDemanda('<?=voDemanda::$nmAtrTipo?>', pColecaoNmObjetosFormContrato);
 }
 
 function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
@@ -237,7 +245,7 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	        ?>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" colspan=3><?php getCampoDadosContratoMultiplos();?>	            
+	            <TD class="campoformulario" colspan=3><?php getCampoDadosContratoMultiplos("camponaoobrigatorio");?>	            
 	            </TD>
 	        </TR>	        
 			<TR>

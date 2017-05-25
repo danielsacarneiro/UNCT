@@ -50,24 +50,14 @@ function formataFormTpGarantia(pNmCampoTemGarantia, pNmCampoPrestacaoGarantia, p
 	campoTpGarantia = document.getElementById(pNmCampoTpGarantia);
 	
 	if(campoTemGarantia.value == "S"){
-		habilitarElementoMais(pNmCampoPrestacaoGarantia, true, true);
-		/*campoPrestacaoGarantia.disabled = false;
-		campoTpGarantia.disabled = false;
-		campoPrestacaoGarantia.required = true;*/
-		
+		habilitarElementoMais(pNmCampoPrestacaoGarantia, true, true);		
 		if(campoPrestacaoGarantia.value == "S"){
 			habilitarElementoMais(pNmCampoTpGarantia, true, true);			
 		}else{
 			habilitarElementoMais(pNmCampoTpGarantia, false, false);
-		}
-		
+		}		
 	}else{		
-		/*campoTpGarantia.disabled = true;		
-		campoPrestacaoGarantia.disabled = true;
-		campoPrestacaoGarantia.required = false;*/
 		habilitarElementoMais(pNmCampoPrestacaoGarantia, false, false);
 		habilitarElementoMais(pNmCampoTpGarantia, false, false);
 	}		
 }
-
-

@@ -580,13 +580,15 @@ function existeObjetoSessao($ID) {
 	session_start ();
 	return isset ( $_SESSION [$ID] ) && $_SESSION [$ID] != null;
 }
-function getObjetoSessao($ID) {
+function getObjetoSessao($ID, $levantarExcecaoSeObjetoInexistente = false) {
 	session_start ();
 	
 	$objeto = null;
 	
 	if ($_SESSION [$ID] != null) {
 		$objeto = $_SESSION [$ID];
+	}else if ($levantarExcecaoSeObjetoInexistente){
+		throw new excecaoObjetoSessaoInexistente($ID); 
 	}
 	
 	$isUsarSessao = @$_POST ["utilizarSessao"] != "N";

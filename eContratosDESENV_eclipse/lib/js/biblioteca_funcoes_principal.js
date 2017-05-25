@@ -326,13 +326,18 @@ function limparCampo(pCampo) {
 	}
 }
 
+function habilitarCampoElementoMais(pCampoElemento, pHabilitar, pIsObrigatorio) {
+	//alert(pCampoElemento.value);
+	return habilitarElementoMais(pCampoElemento.id, pHabilitar, pIsObrigatorio);
+}
 
-function habilitarElementoMais(pNmElemento, pHabilitar, pIsObrigatorio) {	
-	elemento = eval(pNmElemento);
+function habilitarElementoMais(pIdElemento, pHabilitar, pIsObrigatorio) {
+	//alert(pIdElemento);
+	elemento = eval(pIdElemento);
 	if(pHabilitar){
-		habilitarElemento(pNmElemento);
+		habilitarElemento(pIdElemento);
 	}else{
-		desabilitarElemento(pNmElemento);
+		desabilitarElemento(pIdElemento);
 		elemento.value = "";
 	}	
 	

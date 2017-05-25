@@ -354,8 +354,26 @@ class dbprocesso {
 		
 		return $query;
 	}
+	
+	function validaExclusaoHistorico($voEntidade) {
+		//se a operacao com historico foi selecionada da tela
+		//quando o vo for incluido na sessao para executar a operacao desejada pelo usuario
+		//teremos a identificacao se trata-se de uma operacao com historico ou nao
+		//e ela precisa ser garantida aqui
+		//$voSessao = new voentidade();
+		$voSessao = getObjetoSessao($voEntidade->getNmTabela(), true);
+		$isOperacaoHistoricoSelecionadaPeloUsuario = $voSessao->isHistorico();
+		$isOperacaoHistoricoARealizar = $voEntidade->isHistorico();
+		
+		if($isOperacaoHistoricoSelecionadaPeloUsuario && !$isOperacaoHistoricoARealizar){
+			throw new excecaoGenerica("Operação com registro de histórico não pode ser realizada por ausência do SQ Histórico.");
+		}
+	}
+	
 	function excluir($voEntidade) {
 		// echo $voEntidade->sqHist;
+		$this->validaExclusaoHistorico($voEntidade);
+		
 		$isHistorico = $voEntidade->isHistorico();
 		if ($isHistorico) {
 			//echo "EH HISTORICO";
