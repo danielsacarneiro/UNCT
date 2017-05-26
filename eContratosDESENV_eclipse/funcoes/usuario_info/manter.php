@@ -27,8 +27,10 @@ try{
 		$isHistorico = ($voContrato->sqHist != null && $voContrato->sqHist != "");
 
 		$dbprocesso = $vo->dbprocesso;
+		//pode vir mais de um registro porque pode ter mais de um setor associado
 		$colecao = $dbprocesso->consultarPorChaveTela($vo, $isHistorico);
-		$vo->getDadosBanco($colecao);
+		$vo->getDadosBanco($colecao[0]);
+		$vo->setColecaoSetorRegistroBanco($colecao);
 
 		putObjetoSessao($vo->getNmTabela(), $vo);
 
@@ -39,16 +41,19 @@ try{
 	$titulo = voUsuarioInfo::getTituloJSP();
 	$titulo = $nmFuncao . $titulo;
 	setCabecalho($titulo);
-
+	
+	$ID_REQ_CDSETOR_ORIGEM = "cdSetorOrigem";
+	//colecao
+	$ID_REQ_CDSETOR_DESTINO = voUsuarioSetor::$nmAtrCdSetor;
 	?>
 <!DOCTYPE html>
 <HEAD>
 
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>jquery.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_text.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_datahora.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
-
 <SCRIPT language="JavaScript" type="text/javascript">
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
 function isFormularioValido() {
@@ -68,7 +73,46 @@ function confirmar() {
 	return confirm("Confirmar Alteracoes?");    
 }
 
+//jquery
+$( document ).ready(function() {
+
+	$("#pAdd").on('click', function() {
+		var p = $("#<?=$ID_REQ_CDSETOR_ORIGEM?> option:selected");
+        p.clone().appendTo("#<?=$ID_REQ_CDSETOR_DESTINO?>");
+        p.remove();
+
+        $("#<?=$ID_REQ_CDSETOR_DESTINO?> option").prop('selected', true);
+        //$("#<?=$ID_REQ_CDSETOR_DESTINO?> option");
+      });
+
+      $("#pAddAll").on('click', function() {
+        var p = $("#<?=$ID_REQ_CDSETOR_ORIGEM?> option");
+        p.clone().appendTo("#<?=$ID_REQ_CDSETOR_DESTINO?>");
+        p.remove();
+
+        $("#<?=$ID_REQ_CDSETOR_DESTINO?> option").prop('selected', true);
+      });
+
+      $("#pRemove").on('click', function() {
+        var p = $("#<?=$ID_REQ_CDSETOR_DESTINO?> option:selected");
+        p.clone().appendTo("#<?=$ID_REQ_CDSETOR_ORIGEM?>");
+        p.remove();
+
+        $("#<?=$ID_REQ_CDSETOR_DESTINO?> option").prop('selected', true);
+      });
+
+      $("#pRemoveAll").on('click', function() {
+        var p = $("#<?=$ID_REQ_CDSETOR_DESTINO?> option");
+        p.clone().appendTo("#<?=$ID_REQ_CDSETOR_ORIGEM?>");
+        p.remove();
+
+        $("#<?=$ID_REQ_CDSETOR_DESTINO?> option").prop('selected', true);
+      });    	 
+    	
+});
+
 </SCRIPT>
+
 <?=setTituloPagina($vo->getTituloJSP())?>
 </HEAD>
 <BODY class="paginadados" onload="">
@@ -93,7 +137,11 @@ function confirmar() {
 	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
 	        if(!$isInclusao){
 	        	$id = $vo->id;
+	        	$colecaoOrigem = dominioSetor::getColecaoComElementosARemover($vo->colecaoSetor);	        	
+	        	$comboSetor = new select($colecaoOrigem);
 	        	
+	        	$colecaoDestino = dominioSetor::getColecaoApenasComElementos($vo->colecaoSetor);
+	        	$comboVazio = new select($colecaoDestino);
 	        ?>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">ID:</TH>
@@ -106,20 +154,37 @@ function confirmar() {
 	        }else{
 	        	//INCLUSAO
 				//por enquanto nao tem
-	        	;
-	       }	       
-
-	       include_once(caminho_util. "dominioSimNao.php");
-	        $comboSimNao = new select(dominioSimNao::getColecao());	        
+	        	$comboSetor = new select(dominioSetor::getColecao());
+	        	$comboVazio = new select();	        	
+	       }	       	       
 	        ?>
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Setor:</TH>
-	            <TD class="campoformulario" colspan="3">
-	            Tem?: <?php echo $comboSimNao->getHtmlCombo(voUsuarioInfo::$nmAtrInTemGarantia,voUsuarioInfo::$nmAtrInTemGarantia, $vo->inTemGarantia, true, "campoobrigatorio", false,
-	            		" onChange=\"". $jsGarantia. "\" required ");?>
-	            </TD>
-	        </TR>
-	        
+	            <TD class="campoformulario" colspan=3>
+	            <TABLE cellpadding="0" cellspacing="0">
+				    <TBODY>
+						<TR>	            
+						<TD class="campoformulario">
+			            <?php echo $comboSetor->getHtmlCombo($ID_REQ_CDSETOR_ORIGEM, $ID_REQ_CDSETOR_ORIGEM, "", false, "camponaoobrigatorio", false,
+			            	" size=10 multiple ");?></TD>	            		            	
+						<TD class="campoformulario">
+							<input id="pAdd" type="button" value=">_" >
+							<br>
+							<input id="pAddAll" type="button" value=">>" >
+							<br>
+							<input id='pRemove' type='button' value="_<" >
+							<br>
+							<input id="pRemoveAll" type="button" value="<<" >
+						</TD>
+			            <TD class="campoformulario">
+			            <?php echo $comboVazio->getHtmlCombo($ID_REQ_CDSETOR_DESTINO,$ID_REQ_CDSETOR_DESTINO."[]", $vo->colecaoSetor, false, "campoobrigatorio", false,
+			            	" size=10 multiple onChange=\"". $jsGarantia. "\" required ");?>	            	
+			            </TD>
+			            </TR>
+			       </TBODY>
+			    </TABLE>
+			    </TD>
+	        </TR>	        
 <TR>
 	<TD halign="left" colspan="4">
 	<DIV class="textoseparadorgrupocampos">&nbsp;</DIV>

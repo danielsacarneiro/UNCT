@@ -324,7 +324,7 @@ class dbDemandaTramitacao extends dbprocesso {
 			throw new Exception ( $e->getMessage () );
 		}
 	}
-	function excluirDemandaTramDoc($voDemandaTram) {		
+	function excluirDemandaTramDoc($voDemandaTram) {
 		$nmTabela = voDemandaTramDoc::getNmTabelaStatic ( false );
 		$query = "DELETE FROM " . $nmTabela;
 		$query .= "\n WHERE " . voDemandaTramDoc::$nmAtrAnoDemanda . " = " . $voDemandaTram->ano;

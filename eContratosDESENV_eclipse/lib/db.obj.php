@@ -81,11 +81,21 @@ class db {
 		} catch ( Exception $e ) {
 			// retira o pulo de linha se nao dah pau na impressao
 			$query = str_replace ( "\n", "", $query );
-			$MSG = "Query: " . $query . " | ERROR: " . $e->getMessage ();
-			throw new Exception ( $MSG );
+			
+			/*$MSG = "Query: " . $query . " | ERROR: " . $e->getMessage ();
+			throw new Exception ( $MSG );*/
+			$this->levantaExcecao($query, $e);
 		}
 		
 		return $this->resultado;
+	}
+	
+	function levantaExcecao($query, $ex = null){	
+		$msg = "<br>----ERROR------:<br>" . mysqli_error ( $this->id_conexao ) . "<br>";
+		$msg .= $ex->getMessage (). "<br>";
+		$msg = "$msg. Query: $query";
+		
+		throw new Exception ($msg);		
 	}
 	
 	/**
@@ -107,7 +117,11 @@ class db {
 		if ($iscodificar)
 			$query = utf8_encode ( $query );
 		
-		$dados = mysqli_query ( $this->id_conexao, $query );
+		try{
+			$dados = mysqli_query ( $this->id_conexao, $query );
+		}catch (Exception $ex){
+			$this->levantaExcecao($query, $ex);
+		}
 		
 		// MARRETA: volta ao padrao normal
 		if ($iscodificar)
@@ -118,8 +132,7 @@ class db {
 			$resultado = 1; // operacao efetuada com sucesso
 		else {
 			$resultado = 0;
-			$msg = "<br>----ERROR------:<br>" . mysqli_error ( $this->id_conexao ) . "<br>";
-			throw new Exception ( "$msg. Query: $query" );
+			$this->levantaExcecao($query);
 		}
 		
 		return $resultado;

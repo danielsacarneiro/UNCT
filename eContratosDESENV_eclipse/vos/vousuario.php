@@ -36,6 +36,16 @@ Class vousuario extends voentidade{
 		return  "dbusuario";
 	}
 
+	function getValoresWhereSQLChave($isHistorico){
+		$nmTabela = $this->getNmTabelaEntidade($isHistorico);
+		$query = $nmTabela . "." . self::$nmAtrID . "=" . $this->id;
+	
+		if($isHistorico)
+			$query.= " AND ". $nmTabela . "." . self::$nmAtrSqHist . "=" . $this->sqHist;
+	
+			return $query;
+	}
+	
 	function getAtributosFilho(){
 		$retorno = array(
 				self::$nmAtrID,

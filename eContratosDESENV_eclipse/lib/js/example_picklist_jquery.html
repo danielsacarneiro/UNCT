@@ -1,0 +1,81 @@
+<html>
+
+<head>
+<script type="text/javascript" src="jquery-2.1.0.js"></script>
+<script type="text/javascript">
+
+$( document ).ready(function() {
+
+	$("#pAdd").on('click', function() {
+		var p = $("#pickData option:selected");
+        p.clone().appendTo("#pickListResult");
+        p.remove();
+      });
+
+      $("#pAddAll").on('click', function() {
+        var p = $("#pickData option");
+        p.clone().appendTo("#pickListResult");
+        p.remove();
+      });
+
+      $("#pRemove").on('click', function() {
+        var p = $("#pickListResult option:selected");
+        p.clone().appendTo("#pickData");
+        p.remove();
+      });
+
+      $("#pRemoveAll").on('click', function() {
+        var p = $("#pickListResult option");
+        p.clone().appendTo("#pickData");
+        p.remove();
+      });
+
+
+});
+
+</script >
+</head>
+
+<body>
+
+<div>
+
+<table>
+
+<tr>
+
+<td>
+
+<select class="form-control pickListSelect" id="pickData" multiple=""><option id="1">Isis</option><option id="2">Sophia</option><option id="3">Alice</option><option id="4">Isabella</option><option id="6">Laura</option><option id="7">Luiza</option><option id="10">Maria Eduarda</option><option id="11">Helena</option><option id="12">Beatriz</option><option id="13">Maria Luiza</option><option id="14">Lara</option><option id="15">Julia</option><option id="8">Valentina</option><option id="5">Manuela</option><option id="9">Giovanna</option></select>
+
+</td>
+
+<td>
+<input id="pAdd" type="button" value=">" />
+</br>
+<input id="pAddAll" type="button" value=">>" />
+</br>
+<input id="pRemove" type="button" value="<" />
+</br>
+<input id="pRemoveAll" type="button" value="<<" />
+</td>
+
+<td>
+
+<select class="form-control pickListSelect" id="pickListResult" multiple=""></select>
+
+</td>
+
+</tr>
+
+</table>
+
+
+
+</div>
+
+
+</body>
+
+
+</html>

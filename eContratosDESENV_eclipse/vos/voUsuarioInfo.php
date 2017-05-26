@@ -83,9 +83,23 @@ Class voUsuarioInfo extends vousuario{
 		$this->login = $_POST[self::$nmAtrLogin];
 		$this->name  = $_POST[self::$nmAtrName];
 		
+		$this->colecaoSetor = $_POST[voUsuarioSetor::$nmAtrCdSetor];
+		
 		//completa com os dados da entidade
 		$this->getDadosFormularioEntidade();
 	}
+	
+	function setColecaoSetorRegistroBanco($colecao) {
+		$retorno = null;
+		if ($colecao != null) {
+			$retorno = array ();
+			foreach ( $colecao as $registrobanco ) {
+				$retorno [] = $registrobanco[voUsuarioSetor::$nmAtrCdSetor];
+			}
+		}
+	
+		$this->colecaoSetor = $retorno;
+	}	
 	 
 	function toString(){
 		$retorno.= $this->id;
@@ -103,7 +117,7 @@ Class voUsuarioInfo extends vousuario{
 	}
 	
 	function getMensagemComplementarTelaSucesso(){
-		$retorno = "Usuário informações adicionais: " . $this->login . "(".complementarCharAEsquerda($this->login, "0", TAMANHO_CODIGOS).")";
+		$retorno = "Usuário informações adicionais: " . $this->name . " (".complementarCharAEsquerda($this->id, "0", TAMANHO_CODIGOS).")";
 		return $retorno; 
 	}	
 

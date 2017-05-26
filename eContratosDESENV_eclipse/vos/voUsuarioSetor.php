@@ -1,5 +1,5 @@
 <?php
-include_once("voentidade.php");
+include_once (caminho_lib . "voentidade.php");
 include_once (caminho_util . "dominioSetor.php");
 
 Class voUsuarioSetor extends voentidade{

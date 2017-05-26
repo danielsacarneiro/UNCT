@@ -9,7 +9,7 @@
 // ...............................................................
 // Construtor
 //recebe uma colecao Cd x Descricao	
-	function __construct ($colecao) {		
+	function __construct ($colecao = array()) {		
 		$this->colecao = $colecao;
 		reset($this->colecao);
 	}
@@ -88,11 +88,11 @@
 	
 	function selected($cd, $opcaoSelecionada) {
 		
-		//echo " $cd == $opcaoSelecionada ";		
-		if($cd == $opcaoSelecionada)
-			return true;
-		else
-			return false;
+		if(!is_array($opcaoSelecionada)){
+			return $cd == $opcaoSelecionada;
+		}else{			
+			return in_array($cd, $opcaoSelecionada);
+		}
 	}
     
     function getRecordSetComoColecaoSelect($nmColunaCd, $nmColunaDs, $recordSet){			

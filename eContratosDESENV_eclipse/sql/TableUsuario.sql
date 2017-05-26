@@ -11,3 +11,12 @@ CREATE TABLE usuario_info (
     CONSTRAINT pk PRIMARY KEY (ID)
 );
 
+drop table usuario_setor;
+CREATE TABLE usuario_setor (
+    ID INT NOT NULL,
+    usu_cd_setor INT NOT NULL,
+    
+    dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    cd_usuario_incl INT,
+    CONSTRAINT pk PRIMARY KEY (ID,usu_cd_setor)
+);

@@ -1,17 +1,17 @@
 <?php
 include_once("../../config_lib.php");
 include_once(caminho_util."bibliotecaHTML.php");
-include_once(caminho_vos."vopessoa.php");
-inicio();
 
-$vo = new vopessoa();
+inicioComValidacaoUsuario(true);
+
+$vo = new voUsuarioInfo();
 $vo->getDadosFormulario();
 
-session_start();
-$_SESSION["vo"] = $vo;
+//echo $vo->id;
+//var_dump($vo->colecaoSetor);
 
-//redirecionar mantendo o post
-//o codigo 307 especificado no RFC do protocolo HTTP 1.0 como temporary redirect, mantendo o post
+
+putObjetoSessao("vo", $vo);
 
 header("Location: ../confirmar.php?class=".$vo->getNmClassProcesso(),TRUE,307);
 ?>

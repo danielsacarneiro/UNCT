@@ -6,7 +6,7 @@ Class dbUsuarioSetor extends dbprocesso{
 	function getSQLValuesInsert($vo){		
 		
 		$retorno = "";
-		$retorno.= $this-> getVarComoNumero($vo->ID) . ",";
+		$retorno.= $this-> getVarComoNumero($vo->id) . ",";
 		$retorno.= $this-> getVarComoNumero($vo->cdSetor);
 				
 		$retorno.= $vo->getSQLValuesInsertEntidade();
