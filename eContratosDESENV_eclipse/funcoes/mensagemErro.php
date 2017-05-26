@@ -8,7 +8,7 @@ setCabecalhoPorNivel(null,1);
 $msgErro = @$_GET["texto"];
 $cdTela = @$_GET["cdTela"];
 
-$vo = getObjetoSessao("vo");
+$vo = getObjetoSessao(constantes::$ID_REQ_SESSAO_VO);
 
 //tela sucesso
 if($cdTela != null && $cdTela == 1){

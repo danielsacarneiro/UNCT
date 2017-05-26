@@ -42,7 +42,7 @@ class dbprocesso {
 		$query .= " WHERE ";
 		$query .= $voEntidade->getValoresWhereSQLChave ( false );
 		
-		// echo $query;
+		//echo $query;
 		
 		$retorno = $this->cDb->atualizar ( $query );
 		return $retorno;
@@ -529,7 +529,7 @@ class dbprocesso {
 		}
 		return $retorno;
 	}
-	function existeOutroRegistroUnionHistorico($vo) {
+	function permiteExclusaoHistorico($vo) {
 		$nmTabela = $vo->getNmTabelaEntidade ( false );
 		$nmTabelaHistorico = $vo->getNmTabelaEntidade ( true );
 		$arrayColunasRetornadas = $vo->getAtributosChavePrimaria ();
@@ -557,7 +557,8 @@ class dbprocesso {
 		$colecao = $this->consultarEntidadeComValidacao ( $querySelect, false, true );
 		//se for vazia, levanta excecaoConsultaVazia
 		//se a qtd de registro for igual a 1, eh o proprio registro consultado
-		$retorno = (count($colecao) != 1);
+		//permitira exclusao se apenas houver 1 registro (que eh o consultado) e este eh de historico 
+		$retorno = (count($colecao) == 1) && $vo->isHistorico();
 		
 		return $retorno;
 	}

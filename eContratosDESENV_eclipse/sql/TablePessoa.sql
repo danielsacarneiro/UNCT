@@ -44,6 +44,28 @@ ALTER TABLE pessoa ADD CONSTRAINT fk_pessoa_usuario FOREIGN KEY (ID) REFERENCES 
 -- ALTER TABLE pessoa CHANGE COLUMN pe_tel pe_tel VARCHAR(100) NULL DEFAULT NULL ;
     
 -- ALTER TABLE pessoa DROP FOREIGN KEY fk_pessoa_usuario;
+
+drop table pessoa_hist;
+CREATE TABLE pessoa_hist (
+	hist INT NOT NULL AUTO_INCREMENT,
+	pe_cd INT NOT NULL,
+	ID BIGINT(20) UNSIGNED,
+    pe_nome VARCHAR(150),
+    pe_doc VARCHAR(30),
+    pe_tel VARCHAR(100),
+    pe_email VARCHAR(100),
+	pe_endereco VARCHAR(300),
+    pe_obs VARCHAR(300),
+    dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
+    cd_usuario_incl INT,
+    cd_usuario_ultalt INT,
+    
+	dh_operacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    cd_usuario_operacao INT,    
+        
+    CONSTRAINT pk PRIMARY KEY (hist)
+);
     
  show create table pessoa; 
     
@@ -107,9 +129,11 @@ CREATE TABLE pessoa_vinculo (
         
     CONSTRAINT pk PRIMARY KEY (vi_cd, pe_cd)
 );
-ALTER TABLE pessoa_vinculo ADD CONSTRAINT fk_pessoa_vinculo FOREIGN KEY ( pe_cd ) REFERENCES pessoa (pe_cd) 
-	ON DELETE RESTRICT
-	ON UPDATE RESTRICT;
+-- ALTER TABLE pessoa_vinculo ADD CONSTRAINT fk_pessoa_vinculo FOREIGN KEY ( pe_cd ) REFERENCES pessoa (pe_cd) 
+-- ON DELETE RESTRICT
+-- ON UPDATE RESTRICT;
+    
+-- ALTER TABLE pessoa_vinculo DROP FOREIGN KEY fk_pessoa_vinculo;        
     
 drop table pessoa_gestor;
 CREATE TABLE pessoa_gestor (
@@ -123,7 +147,9 @@ CREATE TABLE pessoa_gestor (
 ALTER TABLE pessoa_gestor ADD CONSTRAINT fk_pessoa_gestor FOREIGN KEY ( gt_cd ) REFERENCES gestor (gt_cd) 
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;
-ALTER TABLE pessoa_gestor ADD CONSTRAINT fk_pessoa_gestor2 FOREIGN KEY ( pe_cd ) REFERENCES pessoa (pe_cd) 
-	ON DELETE RESTRICT
-	ON UPDATE RESTRICT;
+-- ALTER TABLE pessoa_gestor ADD CONSTRAINT fk_pessoa_gestor2 FOREIGN KEY ( pe_cd ) REFERENCES pessoa (pe_cd) 
+-- ON DELETE RESTRICT
+-- ON UPDATE RESTRICT;
+    
+-- ALTER TABLE pessoa_gestor DROP FOREIGN KEY fk_pessoa_gestor2; 
 

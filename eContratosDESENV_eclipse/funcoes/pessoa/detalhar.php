@@ -89,6 +89,14 @@ function confirmar() {
             <DIV id="div_filtro" class="div_filtro">
             <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
             <TBODY>
+			<?php if($isHistorico){?>
+			<TR>
+                <TH class="campoformulario" nowrap width=1%>Sq.Hist:</TH>
+                <TD class="campoformulario" colspan=3><INPUT type="text" value="<?php echo(complementarCharAEsquerda($vo->sqHist, "0", TAMANHO_CODIGOS));?>"  class="camporeadonlyalinhadodireita" size="5" readonly></TD>
+                <INPUT type="hidden" id="<?=voentidade::$nmAtrSqHist?>" name="<?=voentidade::$nmAtrSqHist?>" value="<?=$vo->sqHist?>">
+            </TR>               
+            <?php }
+            ?>            
 			<TR>
                 <TH class="campoformulario" nowrap width=1%>Código:</TH>
                 <TD class="campoformulario" colspan=3><INPUT type="text" value="<?php echo(complementarCharAEsquerda($vo->cd, "0", TAMANHO_CODIGOS));?>"  class="camporeadonlyalinhadodireita" size="5" readonly></TD>

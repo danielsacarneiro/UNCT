@@ -22,8 +22,8 @@ $cdOrdenacao = $filtro->cdOrdenacao;
 $isHistorico = ("S" == $cdHistorico); 
 
 $dbprocesso = new dbpessoa();
-$voPessoa = new vopessoa();
-$colecao = $dbprocesso->consultarPessoa($voPessoa, $filtro);
+$vo = new vopessoa();
+$colecao = $dbprocesso->consultarPessoa($vo, $filtro);
 
 $paginacao = $filtro->paginacao;
 if($filtro->temValorDefaultSetado){
@@ -143,10 +143,9 @@ function alterar() {
                     echo getComboGestor(null, vogestor::$nmAtrCd, vogestor::$nmAtrCd, $filtro->cdGestor);                    
                     ?>
             </TR>
-        <?php
-        $comboOrdenacao = new select(vopessoa::getAtributosOrdenacao());
-        $cdAtrOrdenacao = $filtro->cdAtrOrdenacao;
-        echo getComponenteConsulta($comboOrdenacao, $cdAtrOrdenacao, $cdOrdenacao, $qtdRegistrosPorPag, false, $cdHistorico)?>
+       <?php
+       echo getComponenteConsultaFiltro($vo->temTabHistorico, $filtro);
+        ?>
        </TBODY>
   </TABLE>
 		</DIV>
@@ -159,6 +158,13 @@ function alterar() {
              <TBODY>
                 <TR>
                   <TH class="headertabeladados" width="1%">&nbsp;&nbsp;X</TH>
+                  <?php 
+                  if($isHistorico){
+                  	?>
+                  	<TH class="headertabeladados" width="1%">Sq.Hist</TH>
+                  <?php 
+                  }
+                  ?>                  
                     <TH class="headertabeladados" width="1%">Código</TH>
                     <TH class="headertabeladados">Nome</TH>
                     <TH class="headertabeladados">Doc.</TH>
@@ -171,6 +177,12 @@ function alterar() {
                         $tamanho = sizeof($colecao);
                 else 
                         $tamanho = 0;
+                
+				$colspan=5;
+				if($isHistorico){
+					$colspan++;
+				}
+                        
                 $domVinculo = new dominioVinculoPessoa();
                 for ($i=0;$i<$tamanho;$i++) {
                         $voAtual = new vopessoa();
@@ -186,6 +198,13 @@ function alterar() {
                     <TD class="tabeladados">
                     <?=getHTMLRadioButtonConsulta("rdb_consulta", "rdb_consulta", $voAtual);?>					
                     </TD>
+                  <?php                  
+                  if($isHistorico){                  	
+                  	?>
+                  	<TD class="tabeladados"><?php echo complementarCharAEsquerda($colecao[$i][$voAtual::$nmAtrSqHist], "0", TAMANHO_CODIGOS);?></TD>
+                  <?php 
+                  }
+                  ?>                    
                     <TD class="tabeladados"><?php echo complementarCharAEsquerda($colecao[$i][vopessoa::$nmAtrCd], "0", TAMANHO_CODIGOS);?></TD>
                     <TD class="tabeladados"><?php echo $colecao[$i][vopessoa::$nmAtrNome];?></TD>
                     <TD class="tabeladados"><?php echo $docFormatado;?></TD>

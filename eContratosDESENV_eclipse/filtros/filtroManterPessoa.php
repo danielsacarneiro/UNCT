@@ -22,17 +22,6 @@ class filtroManterPessoa extends filtroManter{
     var $cdEspecieContrato="";
     var $sqEspecieContrato="";
     var $dtReferenciaContrato ="";
-        	
-	function __construct1($pegarFiltrosDaTela) {
-		parent::__construct1($pegarFiltrosDaTela);
-		
-		if($pegarFiltrosDaTela){
-			$this->getFiltroFormulario();
-			//echo "teste";
-		}
-		
-		//echo "construtor2";
-	}
 	
 	function getFiltroFormulario(){		
 		$this->cd = @$_POST[vopessoa::$nmAtrCd];
@@ -42,13 +31,13 @@ class filtroManterPessoa extends filtroManter{
 		$this->cdvinculo = @$_POST[vopessoavinculo::$nmAtrCd];
 	}
 	
-	function getFiltroConsultaSQL(){
+	function getFiltroConsultaSQL($comAtributoOrdenacao = null){
         $voPessoa= new vopessoa();
         $voPessoaVinculo= new vopessoavinculo();
 		$filtro = "";
 		$conector  = "";
 
-		$isHistorico = $this->isHistorico;
+		$isHistorico = $this->isHistorico();
         $nmTabela = $voPessoa->getNmTabelaEntidade($isHistorico);
         $nmTabelaPessoaVinculo = $voPessoaVinculo->getNmTabela();
         
@@ -166,14 +155,23 @@ class filtroManterPessoa extends filtroManter{
 					$conector  = "\n AND ";
 		}		
 
-		//finaliza o filtro
-		$filtro = parent::getFiltroConsulta($filtro);
-		
+		$this->formataCampoOrdenacao(new vopessoa());
+		//finaliza o filtro		
+		$filtro = parent::getFiltroSQL($filtro, $comAtributoOrdenacao);
 		//echo "Filtro:$filtro<br>";
 
 		return $filtro;
 	}
-
+	
+	function getAtributosOrdenacao(){
+		$varAtributos = array(
+				vopessoa::$nmAtrNome => "Nome",
+				vopessoavinculo::$nmAtrCd=> "Vinculo",				
+				vopessoa::$nmAtrDhUltAlteracao=> "Data.Alteração",
+				vopessoa::$nmAtrCd => "Código"
+		);
+		return $varAtributos;
+	}
 }
 
 ?>

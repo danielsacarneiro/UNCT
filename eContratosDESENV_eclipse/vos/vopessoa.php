@@ -31,8 +31,12 @@ include_once(caminho_util."DocumentoPessoa.php");
 
    function __construct() {
        parent::__construct();
-       $this->temTabHistorico = false;
+       $this->temTabHistorico = true;
    }
+   
+	public static function getTituloJSP(){
+		return  "PESSOA";
+	}    
    
     public static function getNmTabela(){
         return  "pessoa";
@@ -65,6 +69,13 @@ include_once(caminho_util."DocumentoPessoa.php");
         );
         
         return $retorno;    
+    }
+    function getAtributosChavePrimaria() {
+    	$retorno = array (    
+    			self::$nmAtrCd
+    	);
+    
+    	return $retorno;
     }
     
 	function getDadosRegistroBanco($registrobanco){
@@ -112,24 +123,19 @@ include_once(caminho_util."DocumentoPessoa.php");
 	}   
 	
 	function getValorChavePrimaria(){
-		return $this->cd;
+		return $this->cd . constantes::$CD_CAMPO_SEPARADOR . $this->sqHist;
 	}
-	
+		
 	function getVOExplodeChave(){
 		$chave = @$_GET["chave"];	
 		$array = explode(CAMPO_SEPARADOR,$chave);
 		$this->cd = $array[0];
+		$this->sqHist = $array[1];
 	}
-	
-	static function getAtributosOrdenacao(){
-		$varAtributos = array(
-				self::$nmAtrNome => "Nome",
-				vopessoavinculo::$nmAtrCd=> "Vinculo",
-				vopessoa::getNmTabela() . "." .vopessoa::$nmAtrDhUltAlteracao=> "Data.Alteração",
-				vopessoa::getNmTabela() . "." . self::$nmAtrCd => "Código"
-		);
-		return $varAtributos;
-	}	
-
+		
+	function getMensagemComplementarTelaSucesso(){
+		$retorno = "Pessoa: " . $this->cd . " - ". $this->nome;
+		return $retorno;
+	}
 }
 ?>

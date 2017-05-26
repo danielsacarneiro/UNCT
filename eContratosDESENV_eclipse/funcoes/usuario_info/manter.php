@@ -160,7 +160,6 @@ function confirmar() {
 </HTML>
 <?php 
 }catch(Exception $ex){
-	putObjetoSessao($vo->getNmTabela(), $vo);
-	tratarExcecaoHTML($ex);	
+	tratarExcecaoHTML($ex, $vo);	
 }
 ?>

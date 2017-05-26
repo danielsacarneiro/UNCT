@@ -644,7 +644,13 @@ function getDataHoraAtual() {
 function getDataHoje() {
 	return date ( 'd/m/Y' );
 }
-function tratarExcecaoHTML($ex) {
+function tratarExcecaoHTML($ex, $vo = null) {
+	if($vo != null){
+		putObjetoSessao($vo->getNmTabela(), $vo);
+		//a debaixo eh para a tela de msg de erro
+		putObjetoSessao(constantes::$ID_REQ_SESSAO_VO, $vo);		
+	}
+	
 	header ( "Location: ../mensagemErro.php?texto=" . $ex->getMessage (), TRUE, 307 );
 }
 function getStrComPuloLinhaHTML($str) {

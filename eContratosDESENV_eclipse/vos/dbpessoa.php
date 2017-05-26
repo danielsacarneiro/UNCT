@@ -24,17 +24,17 @@ class dbpessoa extends dbprocesso {
 		$query .= " FROM " . $nmTabela;
 		$query .= "\n INNER JOIN " . vopessoavinculo::getNmTabela ();
 		$query .= "\n ON ";
-		$query .= vopessoavinculo::getNmTabela () . "." . vopessoavinculo::$nmAtrCdPessoa . "=" . vopessoa::getNmTabela () . "." . vopessoa::$nmAtrCd;
+		$query .= vopessoavinculo::getNmTabela () . "." . vopessoavinculo::$nmAtrCdPessoa . "=" . $nmTabela . "." . vopessoa::$nmAtrCd;
 		$query .= "\n LEFT JOIN " . vousuario::$nmEntidade;
 		$query .= "\n TAB1 ON ";
-		$query .= "TAB1." . vousuario::$nmAtrID . "=" . vopessoa::getNmTabela () . "." . vopessoa::$nmAtrCdUsuarioInclusao;
+		$query .= "TAB1." . vousuario::$nmAtrID . "=" . $nmTabela . "." . vopessoa::$nmAtrCdUsuarioInclusao;
 		$query .= "\n LEFT JOIN " . vousuario::$nmEntidade;
 		$query .= "\n TAB2 ON ";
-		$query .= "TAB2." . vousuario::$nmAtrID . "=" . vopessoa::getNmTabela () . "." . vopessoa::$nmAtrCdUsuarioUltAlteracao;
+		$query .= "TAB2." . vousuario::$nmAtrID . "=" . $nmTabela . "." . vopessoa::$nmAtrCdUsuarioUltAlteracao;
 		
 		$query .= "\n LEFT JOIN " . vopessoagestor::getNmTabela ();
 		$query .= "\n ON ";
-		$query .= vopessoagestor::getNmTabela () . "." . vopessoagestor::$nmAtrCdPessoa . "=" . vopessoa::getNmTabela () . "." . vopessoa::$nmAtrCd;
+		$query .= vopessoagestor::getNmTabela () . "." . vopessoagestor::$nmAtrCdPessoa . "=" . $nmTabela . "." . vopessoa::$nmAtrCd;
 		$query .= "\n LEFT JOIN " . vogestor::getNmTabela ();
 		$query .= "\n ON ";
 		$query .= vogestor::getNmTabela () . "." . vogestor::$nmAtrCd . "=" . vopessoagestor::getNmTabela () . "." . vopessoagestor::$nmAtrCdGestor;
@@ -88,22 +88,26 @@ class dbpessoa extends dbprocesso {
 		
 		return $this->consultarFiltro ( $filtro, $querySelect, $queryFrom, false );
 	}
-	function consultarPessoaManter($filtro, $validarConsulta) {
-		$atributosConsulta = vopessoa::getNmTabela () . "." . vopessoa::$nmAtrCd;
-		$atributosConsulta .= "," . vopessoa::getNmTabela () . "." . vopessoa::$nmAtrNome;
-		$atributosConsulta .= "," . vopessoa::getNmTabela () . "." . vopessoa::$nmAtrDoc;
-		$atributosConsulta .= "," . vopessoa::getNmTabela () . "." . vopessoa::$nmAtrEmail;
-		$atributosConsulta .= "," . vopessoa::getNmTabela () . "." . vopessoa::$nmAtrTel;
+	function consultarPessoaManter($filtro, $validarConsulta) {		
+		$nmTabela = vopessoa::getNmTabelaStatic($filtro->isHistorico());
+		$atributosConsulta = $nmTabela . "." . vopessoa::$nmAtrCd;
+		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrNome;
+		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrDoc;
+		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrEmail;
+		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrTel;
 		$atributosConsulta .= "," . vopessoavinculo::getNmTabela () . "." . vopessoavinculo::$nmAtrCd;
 		
-		$nmTabelaContrato = vocontrato::getNmTabela ();
-		$nmTabela = vopessoa::getNmTabela ();
+		if($filtro->isHistorico()){
+			$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrSqHist;
+		}		
+		
+		$nmTabelaContrato = vocontrato::getNmTabela ();		
 		
 		$querySelect = "SELECT " . $atributosConsulta;
 		
-		$queryFrom = "\n FROM " . vopessoa::getNmTabela ();
+		$queryFrom = "\n FROM " . $nmTabela;
 		$queryFrom .= "\n INNER JOIN " . vopessoavinculo::getNmTabela ();
-		$queryFrom .= "\n ON " . vopessoa::getNmTabela () . "." . vopessoa::$nmAtrCd . "=" . vopessoavinculo::getNmTabela () . "." . vopessoavinculo::$nmAtrCdPessoa;
+		$queryFrom .= "\n ON " . $nmTabela . "." . vopessoa::$nmAtrCd . "=" . vopessoavinculo::getNmTabela () . "." . vopessoavinculo::$nmAtrCdPessoa;
 		
 		$queryFrom .= "\n LEFT JOIN " . $nmTabelaContrato;
 		$queryFrom .= "\n ON " . $nmTabela . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
@@ -254,14 +258,19 @@ class dbpessoa extends dbprocesso {
 		return $vopessoa;
 	}
 	
-	// o alterar eh implementado para nao usar da voentidade
+	// o excluir eh implementado para nao usar da voentidade
 	// por ser mais complexo
 	function excluir($vopessoa) {
 		// Start transaction
 		$this->cDb->retiraAutoCommit ();
 		try {
-			$this->excluirPessoaVinculo ( $vopessoa );
-			$this->excluirPessoaGestor ( $vopessoa );			
+			if($this->permiteExclusaoHistorico($vopessoa)){
+				//echo "excluiu";
+				$this->excluirPessoaVinculo ( $vopessoa );
+				$this->excluirPessoaGestor ( $vopessoa );			
+			}else{
+				//echo "nao excluiu";
+			}
 			$vopessoa = parent::excluir ( $vopessoa );
 			// End transaction
 			$this->cDb->commit ();
