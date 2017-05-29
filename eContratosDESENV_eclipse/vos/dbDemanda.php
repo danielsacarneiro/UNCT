@@ -30,6 +30,7 @@ class dbDemanda extends dbprocesso {
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );
 		$nmTabelaPessoa = vopessoa::getNmTabelaStatic ( false );
+		$nmTabelaTramitacao = voDemandaTramitacao::getNmTabela ();
 		
 		$arrayColunasRetornadas = array (
 				$nmTabela . ".*",
@@ -40,17 +41,23 @@ class dbDemanda extends dbprocesso {
 				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato,
 				$nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato,
 				$nmTabelaPessoa . "." . vopessoa::$nmAtrDoc,
-				$nmTabelaPessoa . "." . vopessoa::$nmAtrNome 
+				$nmTabelaPessoa . "." . vopessoa::$nmAtrNome,
+				"COALESCE (" . " . $nmTabelaTramitacao." . voDemandaTramitacao::$nmAtrCdSetorDestino . "," . $nmTabela . "." . voDemanda::$nmAtrCdSetor . ") AS " . voDemanda::$nmAtrCdSetorAtual
 		);
 		
-		/*$atributosGroup = voDemandaTramitacao::$nmAtrCd . "," . voDemandaTramitacao::$nmAtrAno;		
+		$atributosGroup = voDemandaTramitacao::$nmAtrCd . "," . voDemandaTramitacao::$nmAtrAno;		
 		// o proximo join eh p pegar a ultima tramitacao apenas, se houver
 		$queryJoin = "";
 		$queryJoin .= "\n LEFT JOIN (";
 		$queryJoin .= " SELECT MAX(" . voDemandaTramitacao::$nmAtrSq . ") AS " . voDemandaTramitacao::$nmAtrSq . "," . $atributosGroup . " FROM " . $nmTabelaTramitacao . " GROUP BY " . $atributosGroup;
 		$queryJoin .= ") TABELA_MAX";
 		$queryJoin .= "\n ON " . $nmTabela . "." . voDemandaTramitacao::$nmAtrAno . " = TABELA_MAX." . voDemandaTramitacao::$nmAtrAno;
-		$queryJoin .= "\n AND " . $nmTabela . "." . voDemandaTramitacao::$nmAtrCd . " = TABELA_MAX." . voDemandaTramitacao::$nmAtrCd;*/		
+		$queryJoin .= "\n AND " . $nmTabela . "." . voDemandaTramitacao::$nmAtrCd . " = TABELA_MAX." . voDemandaTramitacao::$nmAtrCd;		
+		
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaTramitacao;
+		$queryJoin .= "\n ON " . $nmTabela . "." . voDemanda::$nmAtrAno . " = " . $nmTabelaTramitacao .".".voDemandaTramitacao::$nmAtrAno;
+		$queryJoin .= "\n AND " . $nmTabela . "." . voDemanda::$nmAtrCd . " = " . $nmTabelaTramitacao . ".".voDemandaTramitacao::$nmAtrCd;
+		$queryJoin .= "\n AND " . "TABELA_MAX." . voDemandaTramitacao::$nmAtrSq . " = " . $nmTabelaTramitacao . ".".voDemandaTramitacao::$nmAtrSq;
 		
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaDemandaContrato;
 		$queryJoin .= "\n ON ";

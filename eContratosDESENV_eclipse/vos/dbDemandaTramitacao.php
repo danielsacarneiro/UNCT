@@ -208,6 +208,14 @@ class dbDemandaTramitacao extends dbprocesso {
 			$voDemanda = new voDemanda ();
 			$voDemanda = $vo->getVOPai ();
 			$voDemanda->dbprocesso->cDb = $this->cDb;
+			
+			$dbUsuarioInfo = new dbUsuarioInfo();
+			$cdSetor = $vo->cdSetor;
+			if (!$dbUsuarioInfo->isUsuarioPertenceAoSetor($cdSetor)) {
+				$msg = "Usuário não autorizado pelo Setor ". dominioSetor::getDescricaoStaticTeste($cdSetor)." para incluir demanda.";
+				throw new Exception ( $msg );
+			}				
+			
 			$voDemanda->dbprocesso->incluir ( $voDemanda );
 			$vo->cd = $voDemanda->cd;
 			
@@ -257,8 +265,8 @@ class dbDemandaTramitacao extends dbprocesso {
 		}
 		
 		$dbUsuarioInfo = new dbUsuarioInfo();
-		$cdSetor = $vo->cdSetor;
-		//var_dump("Setor origem:" . $cdSetor);
+		$cdSetor = $vo->cdSetorAtual;
+		//var_dump("Setor atual:" . $cdSetor);
 		
 		if (!$dbUsuarioInfo->isUsuarioPertenceAoSetor($cdSetor)) {
 			$msg = "Usuário não autorizado pelo Setor ". dominioSetor::getDescricaoStaticTeste($cdSetor)." para encaminhamento.";
@@ -293,6 +301,9 @@ class dbDemandaTramitacao extends dbprocesso {
 	function incluirDemandaTramitacaoSEMControleTransacao($vo) {
 		// echo "codigo demandatramitacao: " . $vo->cd;
 		if ($vo->temTramitacaoParaIncluir ()) {
+			
+			$this->validarEncaminhamento ( $vo );
+			
 			if ($vo->sq == null || $vo->sq == "") {
 				$vo->sq = $this->getProximoSequencialChaveComposta ( voDemandaTramitacao::$nmAtrSq, $vo );
 			}
@@ -362,10 +373,11 @@ class dbDemandaTramitacao extends dbprocesso {
 		// para chamar o alterarVO, basta chamar o parent::alterar
 		// este metodo, por ser chamado da pagina manter.php, apenas incluira uma nova tramitacao
 		// ele NAO altera o estado da demanda, apenas inclui uma nova tramitacao
-		$isAlteracaoPermitida = $this->validarEncaminhamento ( $vo );
-		if ($isAlteracaoPermitida) {
+		
+		/*$isAlteracaoPermitida = $this->validarEncaminhamento ( $vo );
+		if ($isAlteracaoPermitida) {*/
 			$this->encaminharDemanda ( $vo );
-		}
+		//}
 		
 		return $vo;
 	}

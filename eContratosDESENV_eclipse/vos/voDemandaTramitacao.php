@@ -183,6 +183,7 @@ include_once("voDemandaContrato.php");
 	function getVOPai(){
 		$voDemanda = $this->getVOPaiChave();
 		$voDemanda->cdSetor = $this->cdSetor;
+		$voDemanda->cdSetorAtual = $this->cdSetor;
 		$voDemanda->tipo  = $this->tipo;
 		$voDemanda->situacao  = $this->situacao;		
 		$voDemanda->texto  = $this->texto;

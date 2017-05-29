@@ -126,6 +126,7 @@ class voDemanda extends voentidade {
 		$this->cd = $registrobanco [self::$nmAtrCd];
 		$this->ano = $registrobanco [self::$nmAtrAno];
 		$this->cdSetor = $registrobanco [self::$nmAtrCdSetor];
+		$this->cdSetorAtual = $registrobanco [self::$nmAtrCdSetorAtual];
 		$this->tipo = $registrobanco [self::$nmAtrTipo];
 		$this->situacao = $registrobanco [self::$nmAtrSituacao];
 		$this->texto = $registrobanco [self::$nmAtrTexto];
