@@ -481,6 +481,23 @@ class dbprocesso {
 		
 		return $retorno;
 	}
+	
+	function getSQLSequencialPorTabela($nmColunaSq, $voEntidade, $isHistorico){
+		$nmTabela = $voEntidade->getNmTabelaEntidade($isHistorico);
+	
+		$arrayAtribRemover = array (
+				$nmColunaSq
+		);
+		$arrayColunasChaveSemSq = removeColecaoAtributos ( $voEntidade->getAtributosChavePrimaria (), $arrayAtribRemover );
+	
+		$query = " SELECT MAX($nmColunaSq) AS $nmColunaSq FROM $nmTabela ";
+		$query .= " WHERE ";
+		$query .= $voEntidade->getValoresWhereSQLChaveLogicaSemSQ ( $isHistorico );
+		$query .= "\n GROUP BY " . getSQLStringFormatadaColecaoIN ( $arrayColunasChaveSemSq, false );
+	
+		return $query;
+	}
+	
 	function getProximoSequencial($nmColuna, $voEntidade) {
 		$query = " SELECT MAX(" . $nmColuna . ")+1 AS " . $nmColuna . " FROM " . $voEntidade->getNmTabela () . " ";
 		// echo $query;
@@ -495,20 +512,18 @@ class dbprocesso {
 		return $retorno;
 	}
 	function getProximoSequencialChaveComposta($nmColunaSq, $voEntidade) {
-		$arrayAtribRemover = array (
-				$nmColunaSq 
-		);
-		return $this->getProximoSequencialChaveCompostaLogica ( $nmColunaSq, $voEntidade, $arrayAtribRemover );
+		return $this->getProximoSequencialChaveCompostaLogica ( $nmColunaSq, $voEntidade );
 	}
-	function getProximoSequencialChaveCompostaLogica($nmColunaSq, $voEntidade, $arrayAtribRemover) {
-		$isHistorico = $voEntidade->sqHist != null;
-		
-		$arrayColunasChaveSemSq = removeColecaoAtributos ( $voEntidade->getAtributosChavePrimaria (), $arrayAtribRemover );
-		$query = " SELECT MAX(" . $nmColunaSq . ")+1 AS " . $nmColunaSq . " FROM " . $voEntidade->getNmTabela () . " ";
-		$query .= " WHERE ";
-		$query .= $voEntidade->getValoresWhereSQLChaveLogicaSemSQ ( $isHistorico );
-		
-		$query .= "\n GROUP BY " . getSQLStringFormatadaColecaoIN ( $arrayColunasChaveSemSq, false );
+	function getProximoSequencialChaveCompostaLogica($nmColunaSq, $voEntidade) {
+							
+		$query = " SELECT COALESCE(MAX(" . $nmColunaSq . "),0)+1 AS " . $nmColunaSq . " FROM ";
+		$query .= "(";
+		$query .= $this->getSQLSequencialPorTabela($nmColunaSq, $voEntidade, false);
+		if($voEntidade->temTabHistorico()){
+			$query .= " UNION ";
+			$query .= $this->getSQLSequencialPorTabela($nmColunaSq, $voEntidade, true);
+		}
+		$query .= ") TAB_SQ";
 		
 		// echo $query;
 		$registro = $this->consultarEntidade ( $query, false );

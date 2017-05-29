@@ -19,6 +19,9 @@ CREATE TABLE demanda (
     
     CONSTRAINT pk PRIMARY KEY (dem_ex, dem_cd)
 );
+
+-- ALTER TABLE demanda CHANGE dem_cd dem_cd INT AUTO_INCREMENT;
+-- ALTER TABLE demanda AUTO_INCREMENT=100;
     
 -- update demanda set dem_dtreferencia = DATE(dh_inclusao);
 

@@ -292,6 +292,10 @@
     	return $this->sqHist != null && $this->sqHist != "";
     }
     
+    function temTabHistorico(){
+    	return $this->temTabHistorico;
+    }
+    
     function getValoresWhereSQLChaveSemNomeTabela($isHistorico) {    	
     	return str_replace ( $this->getNmTabelaEntidade($isHistorico) . ".", "", $this->getValoresWhereSQLChave($isHistorico) );    	
     }
