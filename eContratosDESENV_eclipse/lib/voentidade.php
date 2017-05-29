@@ -263,6 +263,14 @@
     	$this->getChavePrimariaVOExplode($array);
     }
     
+    function getAtributosComIdentificacaoTabela($colecaoAtributos, $isHistorico){
+    	$retorno = array();
+    	foreach ($colecaoAtributos as $nmAtributo) {
+    		$retorno[] = $this->getNmTabelaEntidade($isHistorico) . "." . $nmAtributo;
+    	}    	
+    	return $retorno; 
+    }
+    
     function getValoresWhereSQLChaveLogicaSemSQ($isHistorico){
     	//via de regra a chave logica eh igual a chave primaria
     	//quando for distinta, o metodo getValoresWhereSQLChaveLogica 

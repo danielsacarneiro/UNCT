@@ -143,9 +143,10 @@ class filtroManter extends multiplosConstrutores{
     		$filtro = "\n WHERE $filtro";
     	}
     	
+    	//var_dump($this->groupby);
     	if($this->groupby != null && $this->groupby != ""){
     		$str = $this->groupby;
-    		if(count($this->groupby) > 1){
+    		if(is_array($this->groupby)){
     			$str = getSQLStringFormatadaColecaoIN($this->groupby, false );
     		}
     		

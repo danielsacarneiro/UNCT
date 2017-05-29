@@ -80,7 +80,7 @@ class db {
 				$this->resultado = "";
 		} catch ( Exception $e ) {
 			// retira o pulo de linha se nao dah pau na impressao
-			$query = str_replace ( "\n", "", $query );
+			$query = str_replace ( constantes::$CD_NOVA_LINHA, "", $query );
 			
 			/*$MSG = "Query: " . $query . " | ERROR: " . $e->getMessage ();
 			throw new Exception ( $MSG );*/

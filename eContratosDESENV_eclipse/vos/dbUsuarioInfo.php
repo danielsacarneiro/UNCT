@@ -7,7 +7,8 @@ class dbUsuarioInfo extends dbprocesso {
 		$nmTabelaUsuSetor = voUsuarioSetor::getNmTabela ();
 		
 		$arrayColunasRetornadas = array (
-				$nmTabelaWPUsers . ".*",
+				$nmTabelaWPUsers . "." . vousuario::$nmAtrLogin,
+				$nmTabelaWPUsers . "." . vousuario::$nmAtrName,				
 				$nmTabelaUsuSetor . ".*"
 		)
 		;
@@ -20,18 +21,23 @@ class dbUsuarioInfo extends dbprocesso {
 		$queryJoin .= $nmTabelaWPUsers . "." . vousuario::$nmAtrID . "=" . $nmTabelaUsuSetor . "." . voUsuarioSetor::$nmAtrID;
 		
 		$vouserwp = new vousuario();
-		$vouserwp->id = $vo->id;
-		
+		$vouserwp->id = $vo->id;		
 		
 		$queryWhere = " WHERE ";
 		$queryWhere .= $vouserwp->getValoresWhereSQLChave ( $isHistorico );
-		return $this->consultarMontandoQuery ( $vouserwp, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico, false );		 
 		
+		$nmTabelaACompararCdUsuario = $nmTabelaUsuSetor;
+		return $this->consultarMontandoQueryUsuario($vouserwp, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico, false);
+
+		//ATENCAO
+		//QUANDO PASSAR A USAR A TABELA VOUSUARIOINFO, ALTERAR O METODO PARA O ABAIXO
+		//return $this->consultarMontandoQuery ( $vouserwp, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico, false );		
 	}
 	function consultarTelaConsulta($vo, $filtro) {
 		$isHistorico = $filtro->isHistorico ();
 		$nmTabela = $vo::getNmTabelaStatic ( $isHistorico );
 		$nmTabelaWPUsers = vousuario::getNmTabela ();
+		$nmTabelaUsuSetor = voUsuarioSetor::getNmTabela ();
 		
 		$arrayColunasRetornadas = array (
 				$nmTabelaWPUsers . ".*" 
@@ -41,8 +47,54 @@ class dbUsuarioInfo extends dbprocesso {
 		$queryJoin .= "\n LEFT JOIN " . $nmTabela;
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaWPUsers . "." . vousuario::$nmAtrID . "=" . $nmTabela . "." . voUsuarioInfo::$nmAtrID;
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaUsuSetor;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaWPUsers . "." . vousuario::$nmAtrID . "=" . $nmTabelaUsuSetor . "." . voUsuarioSetor::$nmAtrID;				
+		
+		$vouserwp = new vousuario();
+		$nmTabelaACompararCdUsuario = $nmTabelaUsuSetor;
+							
+		//$filtro->groupby = array($vouserwp::getNmTabelaStatic($isHistorico) . "." . $vouserwp::$nmAtrID);
+		$filtro->groupby = $vouserwp->getAtributosComIdentificacaoTabela($vouserwp->getAtributosChavePrimaria(), $isHistorico);
+		
+		return $this->consultarMontandoQueryUsuarioFiltro($vouserwp, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $filtro, false, true);		
+		
+		//ATENCAO
+		//QUANDO PASSAR A USAR A TABELA VOUSUARIOINFO, ALTERAR O METODO PARA O ABAIXO
+		//return parent::consultarMontandoQueryTelaConsulta ( $vouserwp, $filtro, $arrayColunasRetornadas, $queryJoin );
+		
+	}
+	
+	function isUsuarioPertenceAoSetor($cdSetor) {
+		$retorno = true;
+		
+		if($cdSetor != null){
+			$filtro = new filtroManterUsuario(false);
+			$filtro->id = get_current_user_id ();
+			$filtro->cdSetor = $cdSetor;
+			$colecao = $this->consultarSetorUsuario($filtro);
+			$retorno = !isColecaoVazia($colecao);
+		}
+		
+		return $retorno;
+		
+	}
+	
+	function consultarSetorUsuario($filtro) {
+		$isHistorico = $filtro->isHistorico ();
+		$nmTabelaUsuSetor = voUsuarioSetor::getNmTabelaStatic ( false);
+	
+		/*$arrayColunasRetornadas = array (
+				$nmTabelaUsuSetor . ".*"
+		)
+		;*/
+		
+		$querySelect = " SELECT * ";
+		$queryFrom = " FROM " . $nmTabelaUsuSetor;
 				
-		return parent::consultarMontandoQueryTelaConsulta ( new vousuario(), $filtro, $arrayColunasRetornadas, $queryJoin );
+		$filtro->nmEntidadePrincipal = $nmTabelaUsuSetor;
+				
+		return $this->consultarFiltro ( $filtro, $querySelect, $queryFrom, false );
 	}
 	
 	function incluirColecaoUsuarioSetor($vo) {

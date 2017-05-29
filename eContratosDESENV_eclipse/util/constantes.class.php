@@ -51,7 +51,8 @@
     
     static $CD_CLASS_CAMPO_OBRIGATORIO = "campoobrigatorio";
     static $CD_CLASS_CAMPO_NAO_OBRIGATORIO = "camponaoobrigatorio";
-    static $CD_CLASS_CAMPO_READONLY = "camporeadonly";    
+    static $CD_CLASS_CAMPO_READONLY = "camporeadonly";
+    static $CD_NOVA_LINHA = "\n";
     
     static $TAMANHO_CODIGOS = 5;
     static $TAMANHO_CODIGOS_SAFI = 3;

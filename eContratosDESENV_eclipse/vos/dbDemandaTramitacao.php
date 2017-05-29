@@ -256,6 +256,15 @@ class dbDemandaTramitacao extends dbprocesso {
 			throw new Exception ( $msg );
 		}
 		
+		$dbUsuarioInfo = new dbUsuarioInfo();
+		$cdSetor = $vo->cdSetor;
+		//var_dump("Setor origem:" . $cdSetor);
+		
+		if (!$dbUsuarioInfo->isUsuarioPertenceAoSetor($cdSetor)) {
+			$msg = "Usuário não autorizado pelo Setor ". dominioSetor::getDescricaoStaticTeste($cdSetor)." para encaminhamento.";
+			throw new Exception ( $msg );
+		}		
+				
 		return true;
 	}
 	function encaminharDemanda($vo) {

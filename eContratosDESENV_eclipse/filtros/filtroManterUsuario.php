@@ -22,8 +22,11 @@ class filtroManterUsuario extends filtroManter{
 
 		$filtro = "";
 		$conector  = "";
-
+		
         $nmTabela = vousuario::getNmTabelaStatic($this->isHistorico());
+        if($this->nmEntidadePrincipal != null){
+        	$nmTabela = $this->nmEntidadePrincipal; 
+        }
         
 		//seta os filtros obrigatorios        
 		if($this->isSetaValorDefault()){
@@ -49,6 +52,17 @@ class filtroManterUsuario extends filtroManter{
 					. $this->name
 					. "%' ";
 						
+					$conector  = "\n AND ";
+		
+		}
+		
+		if($this->cdSetor != null){
+			$filtro = $filtro . $conector
+			. $nmTabela. "." .voUsuarioSetor::$nmAtrCdSetor
+			. " = "
+			. $this->cdSetor
+			;
+		
 					$conector  = "\n AND ";
 		
 		}

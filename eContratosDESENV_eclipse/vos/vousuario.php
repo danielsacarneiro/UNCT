@@ -13,7 +13,7 @@ Class vousuario extends voentidade{
 
 // ...............................................................
 // Construtor
-	function __construct() {
+	/*function __construct() {
 		//exemplo de chamada de construtor da classe pai em caso de override
 		//parent::__construct($altura,$grossura,$largura,$cor); 
 		$this->varAtributos = array(
@@ -22,7 +22,26 @@ Class vousuario extends voentidade{
             $this->nmAtrName
         );
 		
-	}
+	}*/
+	
+	function __construct() {
+		parent::__construct0();
+		//por enquanto nao vai ter historico
+		//quando guardarmos mais informacoes do usuario, colocamos historico
+		$this->temTabHistorico = false;
+		//$class = self::getNmClassProcesso();
+		//$this->dbprocesso= new $class();		
+	
+		//retira os atributos padrao que nao possui
+		//remove tambem os que o banco deve incluir default
+		$arrayAtribRemover = array(
+				self::$nmAtrDhInclusao,
+				self::$nmAtrDhUltAlteracao,
+				self::$nmAtrCdUsuarioUltAlteracao
+		);
+		$this->removeAtributos($arrayAtribRemover);
+		$this->varAtributosARemover = $arrayAtribRemover;
+	}	
 	
 	public static function getTituloJSP(){
 		return  "USU�RIO";
@@ -55,6 +74,14 @@ Class vousuario extends voentidade{
 	
 		return $retorno;
 	}
+	
+	function getAtributosChavePrimaria(){
+		$retorno = array(
+				self::$nmAtrID
+		);
+	
+		return $retorno;
+	}	
 	
 // ...............................................................
 // Funções ( Propriedades e métodos da classe )

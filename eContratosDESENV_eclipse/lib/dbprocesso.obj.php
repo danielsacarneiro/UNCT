@@ -75,13 +75,15 @@ class dbprocesso {
 		$temUsuUltAlteracao = existeItemNoArray ( voentidade::$nmAtrCdUsuarioUltAlteracao, $vo->getTodosAtributos () );
 		$temUsuHistorico = $vo->temTabHistorico && $isHistorico;
 		
+		//var_dump($vo->getTodosAtributos ());
+		
 		/*
 		 * if($temUsuHistorico){
 		 * echo "tem usu ";
 		 * }else{
 		 * echo "NAO tem usu ";
 		 * }
-		 */
+		 */		
 		$query = "";
 		if ($temUsuInclusao) {
 			$query .= ", " . self::$nmTabelaUsuarioInclusao . "." . vousuario::$nmAtrName . " AS " . voentidade::$nmAtrNmUsuarioInclusao;
@@ -162,7 +164,7 @@ class dbprocesso {
 		
 		$query .= $queryWhere;
 		
-		// echo $query;
+		//echo $query;
 		$retorno = $this->consultarEntidade ( $query, $isConsultaPorChave );
 		if ($retorno != "" && $isConsultaPorChave) {
 			$retorno = $retorno [0];
@@ -188,6 +190,7 @@ class dbprocesso {
 	}
 	function consultarEntidadeComValidacao($query, $isPorChavePrimaria, $levantarExcecaoSeConsultaVazia) {
 		// echo $query;
+		$query = str_replace ( constantes::$CD_NOVA_LINHA, "", $query );
 		$retorno = $this->cDb->consultar ( $query );
 		
 		if ($isPorChavePrimaria) {

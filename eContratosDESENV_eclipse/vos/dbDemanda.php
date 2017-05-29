@@ -43,6 +43,15 @@ class dbDemanda extends dbprocesso {
 				$nmTabelaPessoa . "." . vopessoa::$nmAtrNome 
 		);
 		
+		/*$atributosGroup = voDemandaTramitacao::$nmAtrCd . "," . voDemandaTramitacao::$nmAtrAno;		
+		// o proximo join eh p pegar a ultima tramitacao apenas, se houver
+		$queryJoin = "";
+		$queryJoin .= "\n LEFT JOIN (";
+		$queryJoin .= " SELECT MAX(" . voDemandaTramitacao::$nmAtrSq . ") AS " . voDemandaTramitacao::$nmAtrSq . "," . $atributosGroup . " FROM " . $nmTabelaTramitacao . " GROUP BY " . $atributosGroup;
+		$queryJoin .= ") TABELA_MAX";
+		$queryJoin .= "\n ON " . $nmTabela . "." . voDemandaTramitacao::$nmAtrAno . " = TABELA_MAX." . voDemandaTramitacao::$nmAtrAno;
+		$queryJoin .= "\n AND " . $nmTabela . "." . voDemandaTramitacao::$nmAtrCd . " = TABELA_MAX." . voDemandaTramitacao::$nmAtrCd;*/		
+		
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaDemandaContrato;
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrAno;
@@ -67,14 +76,7 @@ class dbDemanda extends dbprocesso {
 		$colecao = $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryJoin, $isHistorico, $isConsultaPorChave );
 		return $colecao;		
 	}
-	/*function getincluirColecaoDemandaContrato($voDemanda) {
-		$colecao = $voDemanda->colecaoContrato;
-		foreach ($colecao as $voContrato) {
-			$voDemContrato = new voDemandaContrato();
-			$voDemContrato = $voDemanda->getVODemandaContrato($voContrato);
-			$this->incluirDemandaContrato($voDemContrato);
-		}
-	}*/
+
 	function consultarTelaConsulta($vo, $filtro) {
 		$isHistorico = $filtro->isHistorico;
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
