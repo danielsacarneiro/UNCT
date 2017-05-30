@@ -6,13 +6,16 @@ include_once(caminho_util."selectExercicio.php");
 include_once(caminho_vos . "voDemanda.php");
 include_once(caminho_filtros . "filtroManterDemanda.php");
 
+try{
 //inicia os parametros
 inicio();
 
 $titulo = "CONSULTAR " . voDemanda::getTituloJSP();
 setCabecalho($titulo);
 
+$vo = new voDemanda();
 $filtro  = new filtroManterDemanda();
+$filtro->voPrincipal = $vo;
 $filtro = filtroManter::verificaFiltroSessao($filtro);
 	
 $nome = $filtro->nome;
@@ -21,7 +24,6 @@ $cdHistorico = $filtro->cdHistorico;
 $cdOrdenacao = $filtro->cdOrdenacao;
 $isHistorico = "S" == $cdHistorico; 
 
-$vo = new voDemanda();
 $dbprocesso = $vo->dbprocesso;
 $colecao = $dbprocesso->consultarTelaConsulta($vo, $filtro);
 
@@ -387,3 +389,8 @@ function encaminhar() {
 
 </BODY>
 </HTML>
+<?php 
+}catch(Exception $ex){
+	tratarExcecaoHTML($ex, $vo);
+}
+?>

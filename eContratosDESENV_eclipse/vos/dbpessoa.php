@@ -264,13 +264,13 @@ class dbpessoa extends dbprocesso {
 		// Start transaction
 		$this->cDb->retiraAutoCommit ();
 		try {
-			if($this->permiteExclusaoHistorico($vopessoa)){
+			$permiteExcluirPrincipal = $this->permiteExclusaoPrincipal($vopessoa);
+			if($permiteExcluirPrincipal){
 				//echo "excluiu";
 				$this->excluirPessoaVinculo ( $vopessoa );
 				$this->excluirPessoaGestor ( $vopessoa );			
-			}else{
-				//echo "nao excluiu";
 			}
+			
 			$vopessoa = parent::excluir ( $vopessoa );
 			// End transaction
 			$this->cDb->commit ();

@@ -40,6 +40,8 @@ CREATE TABLE pessoa (
 ALTER TABLE pessoa ADD CONSTRAINT fk_pessoa_usuario FOREIGN KEY (ID) REFERENCES wp_users (ID)
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;
+    
+ALTER TABLE pessoa ADD COLUMN in_desativado CHAR(1) NOT NULL DEFAULT 'N' AFTER cd_usuario_ultalt;    
 
 -- ALTER TABLE pessoa CHANGE COLUMN pe_tel pe_tel VARCHAR(100) NULL DEFAULT NULL ;
     
@@ -66,6 +68,8 @@ CREATE TABLE pessoa_hist (
         
     CONSTRAINT pk PRIMARY KEY (hist)
 );
+
+ALTER TABLE pessoa_hist ADD COLUMN in_desativado CHAR(1) NOT NULL AFTER cd_usuario_ultalt;    
     
  show create table pessoa; 
     
@@ -129,9 +133,9 @@ CREATE TABLE pessoa_vinculo (
         
     CONSTRAINT pk PRIMARY KEY (vi_cd, pe_cd)
 );
--- ALTER TABLE pessoa_vinculo ADD CONSTRAINT fk_pessoa_vinculo FOREIGN KEY ( pe_cd ) REFERENCES pessoa (pe_cd) 
--- ON DELETE RESTRICT
--- ON UPDATE RESTRICT;
+ALTER TABLE pessoa_vinculo ADD CONSTRAINT fk_pessoa_vinculo FOREIGN KEY ( pe_cd ) REFERENCES pessoa (pe_cd) 
+ON DELETE RESTRICT
+ON UPDATE RESTRICT;
     
 -- ALTER TABLE pessoa_vinculo DROP FOREIGN KEY fk_pessoa_vinculo;        
     
@@ -147,9 +151,10 @@ CREATE TABLE pessoa_gestor (
 ALTER TABLE pessoa_gestor ADD CONSTRAINT fk_pessoa_gestor FOREIGN KEY ( gt_cd ) REFERENCES gestor (gt_cd) 
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;
--- ALTER TABLE pessoa_gestor ADD CONSTRAINT fk_pessoa_gestor2 FOREIGN KEY ( pe_cd ) REFERENCES pessoa (pe_cd) 
--- ON DELETE RESTRICT
--- ON UPDATE RESTRICT;
+
+ALTER TABLE pessoa_gestor ADD CONSTRAINT fk_pessoa_gestor2 FOREIGN KEY ( pe_cd ) REFERENCES pessoa (pe_cd) 
+ON DELETE RESTRICT
+ON UPDATE RESTRICT;
     
 -- ALTER TABLE pessoa_gestor DROP FOREIGN KEY fk_pessoa_gestor2; 
 

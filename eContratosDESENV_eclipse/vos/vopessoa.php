@@ -133,8 +133,8 @@ include_once(caminho_util."DocumentoPessoa.php");
 		$this->sqHist = $array[1];
 	}
 		
-	function getMensagemComplementarTelaSucesso(){
-		$retorno = "Pessoa: " . $this->cd . " - ". $this->nome;
+	function getMensagemComplementarTelaSucesso(){				
+		$retorno = $this->getMensagemComplementarTelaSucessoPadrao($this->getTituloJSP(), $this->cd, $this->nome);
 		return $retorno;
 	}
 }

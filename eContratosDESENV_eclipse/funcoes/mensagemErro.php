@@ -16,7 +16,12 @@ if($cdTela != null && $cdTela == 1){
 	$classMensagem = "campomensagemverde";
 	$msg = "OPERACAO REALIZADA COM SUCESSO.<br>";	
 }else{
-	$paginaEncaminhamento = $vo->getNmTabela();
+	
+	if($vo != null){
+		$paginaEncaminhamento = $vo->getNmTabela()."/index.php?consultar=S";
+	}else{
+		$paginaEncaminhamento = "../index.php";
+	}	
 	$classMensagem = "campomensagemvermelho";
 	$msg = "OPERACAO $nmFuncao FALHOU.<br>$msgErro";
 }
@@ -40,7 +45,7 @@ function cancela() {
 </HEAD>
 <BODY class="paginadados" onload="">
 	  
-<FORM name="frm_principal" method="post" action="<?=$paginaEncaminhamento?>/index.php?consultar=S"> 
+<FORM name="frm_principal" method="post" action="<?=$paginaEncaminhamento?>"> 
 <TABLE id="table_conteiner" class="conteiner" cellpadding="0" cellspacing="0">
     <TBODY>
 	<TR>

@@ -150,9 +150,9 @@ function confirmar() {
 	        </TR>
 				<?php 
 				$isDetalhamento = true;
-				if(!$isHistorico){
+				//if(!$isHistorico){
 					include_once 'gridTramitacaoAjax.php';
-				}
+				//}
 				?>
        	    
 			<TR>

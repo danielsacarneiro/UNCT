@@ -11,8 +11,10 @@ inicio();
 
 $titulo = "CONSULTAR PESSOAS";
 setCabecalho($titulo);
+$vo = new vopessoa();
 
 $filtro  = new filtroManterPessoa(true);
+$filtro->voPrincipal = $vo;
 $filtro = filtroManter::verificaFiltroSessao($filtro);
 	
 $nome = $filtro->nome;
@@ -22,7 +24,6 @@ $cdOrdenacao = $filtro->cdOrdenacao;
 $isHistorico = ("S" == $cdHistorico); 
 
 $dbprocesso = new dbpessoa();
-$vo = new vopessoa();
 $colecao = $dbprocesso->consultarPessoa($vo, $filtro);
 
 $paginacao = $filtro->paginacao;

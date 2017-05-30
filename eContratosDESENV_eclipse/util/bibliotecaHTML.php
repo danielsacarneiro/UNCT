@@ -651,7 +651,10 @@ function tratarExcecaoHTML($ex, $vo = null) {
 		putObjetoSessao(constantes::$ID_REQ_SESSAO_VO, $vo);		
 	}
 	
-	header ( "Location: ../mensagemErro.php?texto=" . $ex->getMessage (), TRUE, 307 );
+	$msg = $ex->getMessage ();
+	$msg = str_replace("\n", "", $msg);
+	
+	header ( "Location: ../mensagemErro.php?texto=" . $msg, TRUE, 307 );
 }
 function getStrComPuloLinhaHTML($str) {
 	return getStrComPuloLinhaGenerico($str,"<br>");

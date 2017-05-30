@@ -292,10 +292,11 @@ class dbDemanda extends dbprocesso {
 		// Start transaction
 		$this->cDb->retiraAutoCommit ();
 		try {
+			$permiteExcluirPrincipal = $this->permiteExclusaoPrincipal($vo);
 			//so exclui os relacionamentos se a exclusao for de registro historico
 			//e nao existir outro registro vigente que possa utilizar os relacionamentos
 			//if($vo->validaExclusaoRelacionamentoHistorico()){			
-			if($this->permiteExclusaoHistorico($vo)){
+			if($permiteExcluirPrincipal){
 				$this->excluirDemandaTramitacao ( $vo );
 				$this->excluirDemandaContrato ( $vo );
 			}

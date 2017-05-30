@@ -20,6 +20,9 @@ CREATE TABLE demanda (
     CONSTRAINT pk PRIMARY KEY (dem_ex, dem_cd)
 );
 
+ALTER TABLE demanda ADD COLUMN in_desativado CHAR(1) NOT NULL DEFAULT 'N' AFTER cd_usuario_ultalt;
+
+
 -- ALTER TABLE demanda CHANGE dem_cd dem_cd INT AUTO_INCREMENT;
 -- ALTER TABLE demanda AUTO_INCREMENT=100;
     
@@ -48,6 +51,7 @@ CREATE TABLE demanda_hist (
     
     CONSTRAINT pk PRIMARY KEY (hist)
 );
+ALTER TABLE demanda_hist ADD COLUMN in_desativado CHAR(1) NOT NULL AFTER cd_usuario_ultalt;
 
 drop table demanda_tram;
 CREATE TABLE demanda_tram (

@@ -27,12 +27,14 @@ class filtroManterDemanda extends filtroManter{
 		$this->__construct1(true);
 	}
 	
-	function __construct1($pegarFiltrosDaTela) {		
+	function __construct1($pegarFiltrosDaTela) {
 		$this->vodemanda = new voDemandaTramitacao();
 		$this->vocontrato = new vocontrato();
-		parent::__construct1($pegarFiltrosDaTela);		
-	}	
 		
+		parent::__construct1($pegarFiltrosDaTela);				
+		
+	}	
+			
 	function getFiltroFormulario(){
 		$vodemanda = new voDemandaTramitacao();
 		$vocontrato = new vocontrato();
@@ -66,7 +68,7 @@ class filtroManterDemanda extends filtroManter{
 			$this->cdOrdenacao = constantes::$CD_ORDEM_CRESCENTE;
 		}		
 	}
-	 
+	 	
 	function getFiltroConsultaSQL($comAtributoOrdenacao = null){
 		$filtro = "";
 		$conector  = "";

@@ -24,6 +24,8 @@
         static $nmAtrNmUsuarioInclusao  =  	"nm_usuario_incl";
         static $nmAtrNmUsuarioUltAlteracao   =  	"nm_usuario_ultalt";
         static $nmAtrNmUsuarioOperacao =  	"nm_usuario_operacao";
+        
+        static $nmAtrInDesativado = "in_desativado";
 
 		var $dhInclusao;
         var $dhUltAlteracao;
@@ -288,6 +290,11 @@
     	return "";    	
     }
     
+    function getMensagemComplementarTelaSucessoPadrao($titulo, $cd, $descricao){
+    	$retorno = "$titulo: " . $descricao . " (".complementarCharAEsquerda($cd, "0", TAMANHO_CODIGOS).")";
+    	return $retorno;
+    }    
+    
     function isHistorico(){    	
     	return $this->sqHist != null && $this->sqHist != "";
     }
@@ -299,7 +306,6 @@
     function getValoresWhereSQLChaveSemNomeTabela($isHistorico) {    	
     	return str_replace ( $this->getNmTabelaEntidade($isHistorico) . ".", "", $this->getValoresWhereSQLChave($isHistorico) );    	
     }
-    
     /*function validaExclusaoRelacionamentoHistorico(){
     	$retorno = false;
     	//so exclui os relacionamentos se a exclusao for de registro historico

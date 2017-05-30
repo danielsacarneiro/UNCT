@@ -27,6 +27,7 @@ include_once("voDemandaContrato.php");
        parent::__construct();
        $this->temTabHistorico = false;
        $class = self::getNmClassProcesso();
+       $this->setDesativacao(constantes::$CD_NAO);
        $this->dbprocesso= new $class();
        $this->voDoc = new voDocumento();      
               
