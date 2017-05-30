@@ -52,6 +52,7 @@ CREATE TABLE demanda_hist (
     CONSTRAINT pk PRIMARY KEY (hist)
 );
 ALTER TABLE demanda_hist ADD COLUMN in_desativado CHAR(1) NOT NULL AFTER cd_usuario_ultalt;
+ALTER TABLE demanda_hist ADD CONSTRAINT desativacao_demanda CHECK (in_desativado NOT IN ('S'))
 
 drop table demanda_tram;
 CREATE TABLE demanda_tram (
