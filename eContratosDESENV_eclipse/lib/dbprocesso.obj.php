@@ -450,6 +450,7 @@ class dbprocesso {
 		
 		$query = " UPDATE " . $nmTabela . " \n";
 		$query .= " SET " . voentidade::$nmAtrInDesativado . " = 'S' ";
+		$query .= ", " . voentidade::$nmAtrDhUltAlteracao . " = now() ";
 		$query .= "\n WHERE ";
 		// chave primaria
 		$query .= $voEntidade->getValoresWhereSQLChave ( $isHistorico );

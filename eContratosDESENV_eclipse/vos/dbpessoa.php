@@ -14,35 +14,25 @@ class dbpessoa extends dbprocesso {
 	function consultarPorChave($vo, $isHistorico) {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
 		
-		$query = "SELECT " . $nmTabela;
-		$query .= ".*, " . vopessoavinculo::getNmTabela () . "." . vopessoavinculo::$nmAtrCd;
-		$query .= ", " . vogestor::getNmTabela () . "." . vogestor::$nmAtrCd;
-		$query .= ", " . vogestor::getNmTabela () . "." . vogestor::$nmAtrDescricao;
-		$query .= ", TAB1." . vousuario::$nmAtrName . " AS " . voentidade::$nmAtrNmUsuarioInclusao;
-		$query .= ", TAB2." . vousuario::$nmAtrName . " AS " . voentidade::$nmAtrNmUsuarioUltAlteracao;
+		$arrayColunasRetornadas = array($nmTabela . ".*",
+				vopessoavinculo::getNmTabela () . "." . vopessoavinculo::$nmAtrCd,
+				vogestor::getNmTabela () . "." . vogestor::$nmAtrCd,
+				vogestor::getNmTabela () . "." . vogestor::$nmAtrDescricao
+		);		
+
+		$queryJoin .= "\n INNER JOIN " . vopessoavinculo::getNmTabela ();
+		$queryJoin .= "\n ON ";
+		$queryJoin .= vopessoavinculo::getNmTabela () . "." . vopessoavinculo::$nmAtrCdPessoa . "=" . $nmTabela . "." . vopessoa::$nmAtrCd;
 		
-		$query .= " FROM " . $nmTabela;
-		$query .= "\n INNER JOIN " . vopessoavinculo::getNmTabela ();
-		$query .= "\n ON ";
-		$query .= vopessoavinculo::getNmTabela () . "." . vopessoavinculo::$nmAtrCdPessoa . "=" . $nmTabela . "." . vopessoa::$nmAtrCd;
-		$query .= "\n LEFT JOIN " . vousuario::$nmEntidade;
-		$query .= "\n TAB1 ON ";
-		$query .= "TAB1." . vousuario::$nmAtrID . "=" . $nmTabela . "." . vopessoa::$nmAtrCdUsuarioInclusao;
-		$query .= "\n LEFT JOIN " . vousuario::$nmEntidade;
-		$query .= "\n TAB2 ON ";
-		$query .= "TAB2." . vousuario::$nmAtrID . "=" . $nmTabela . "." . vopessoa::$nmAtrCdUsuarioUltAlteracao;
+		$queryJoin .= "\n LEFT JOIN " . vopessoagestor::getNmTabela ();
+		$queryJoin .= "\n ON ";
+		$queryJoin .= vopessoagestor::getNmTabela () . "." . vopessoagestor::$nmAtrCdPessoa . "=" . $nmTabela . "." . vopessoa::$nmAtrCd;
+		$queryJoin .= "\n LEFT JOIN " . vogestor::getNmTabela ();
+		$queryJoin .= "\n ON ";
+		$queryJoin .= vogestor::getNmTabela () . "." . vogestor::$nmAtrCd . "=" . vopessoagestor::getNmTabela () . "." . vopessoagestor::$nmAtrCdGestor;
 		
-		$query .= "\n LEFT JOIN " . vopessoagestor::getNmTabela ();
-		$query .= "\n ON ";
-		$query .= vopessoagestor::getNmTabela () . "." . vopessoagestor::$nmAtrCdPessoa . "=" . $nmTabela . "." . vopessoa::$nmAtrCd;
-		$query .= "\n LEFT JOIN " . vogestor::getNmTabela ();
-		$query .= "\n ON ";
-		$query .= vogestor::getNmTabela () . "." . vogestor::$nmAtrCd . "=" . vopessoagestor::getNmTabela () . "." . vopessoagestor::$nmAtrCdGestor;
-		$query .= " WHERE ";
-		$query .= $vo->getValoresWhereSQLChave ( $isHistorico );
+		$recordset = $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryJoin, $isHistorico, false );		
 		
-		// echo $query;
-		$recordset = $this->consultarEntidade ( $query, false );
 		$colecaoColunasATransformar = array (
 				vopessoavinculo::$nmAtrCd,
 				vogestor::$nmAtrDescricao 
