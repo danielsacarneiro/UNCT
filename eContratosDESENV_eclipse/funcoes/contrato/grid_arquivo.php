@@ -12,15 +12,21 @@ ini_set('max_execution_time', 120);
 $strFiltro = $filtro->contratada;
 $temContratoSelecionado = false;
 if($filtro->cdContrato != null){
+	$strAnoContrato = "";
+	if($filtro->anoContrato != null){
+		$strAnoContrato = " - " . substr($filtro->anoContrato,2,2);
+	}
+	
 	//prioriza o filtro pelo numero do contrato
-	$strFiltro .= constantes::$CD_CAMPO_SEPARADOR . complementarCharAEsquerda($filtro->cdContrato, "0", TAMANHO_CODIGOS_SAFI);
+	$strFiltro .= constantes::$CD_CAMPO_SEPARADOR . complementarCharAEsquerda($filtro->cdContrato, "0", TAMANHO_CODIGOS_SAFI) . $strAnoContrato;	
+	
 	$temContratoSelecionado = true;
 }
 
 $barra = pasta::$barra;
 $MenuPai = new pasta("menu_pai", $strFiltro, 1, null);
 
-$anoArquivo = $filtro->anoContrato;
+$anoArquivo = $filtro->anoArquivo;
 if($anoArquivo == null){
 	$anoArquivo = anoDefault;
 }

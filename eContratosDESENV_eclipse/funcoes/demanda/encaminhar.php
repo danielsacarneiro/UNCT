@@ -88,6 +88,15 @@ function confirmar() {
 	return confirm("Confirmar Alteracoes?");    
 }
 
+function checkResponsabilidade() {
+	campoCheck = document.frm_principal.<?=voDemandaTramitacao::$nmAtrInResponsabilidadePRT?>;
+	campoPRT = document.frm_principal.<?=voDemandaTramitacao::$nmAtrProtocolo?>;
+	if(campoCheck.checked){
+		campoPRT.required = false;
+	}else{
+		campoPRT.required = true;
+	}
+}
 
 function formataFormContratoPorTpDemanda(pNmCampoTpDemanda, pColecaoNmObjetosFormContrato) {
 	<?php
@@ -293,7 +302,8 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">PRT:</TH>
 	            <TD class="campoformulario" colspan=3>				
-	            <INPUT type="text" onkeyup="formatarCampoPRT(this, event);" id="<?=voDemandaTramitacao::$nmAtrProtocolo?>" name="<?=voDemandaTramitacao::$nmAtrProtocolo?>" value=""  class="camponaoobrigatorio" size="30">	            	                        	                        
+	            <INPUT type="text" onkeyup="formatarCampoPRT(this, event);" id="<?=voDemandaTramitacao::$nmAtrProtocolo?>" name="<?=voDemandaTramitacao::$nmAtrProtocolo?>" value=""  class="camponaoobrigatorio" size="30" required>
+	            <INPUT type="checkbox" id="<?=voDemandaTramitacao::$nmAtrInResponsabilidadePRT?>" name="<?=voDemandaTramitacao::$nmAtrInResponsabilidadePRT?>" value="" onClick="checkResponsabilidade();"> *Assumo a responsabilidade de não incluir PRT.	            	                        	                        
 	        </TR>
 	        <TR>
 		        <TH class="campoformulario" width="1%" nowrap>Documento:</TH>

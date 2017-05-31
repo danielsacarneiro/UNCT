@@ -4,6 +4,8 @@ include_once("voDemandaContrato.php");
 
   Class voDemandaTramitacao extends voDemanda{
     	   		  	
+  	static $nmAtrInResponsabilidadePRT = "nmAtrInResponsabilidadePRT";
+  	
   	static $nmAtrSq = "dtm_sq";
   	static $nmAtrTexto = "dtm_texto";
   	static $nmAtrProtocolo = "dtm_prt";

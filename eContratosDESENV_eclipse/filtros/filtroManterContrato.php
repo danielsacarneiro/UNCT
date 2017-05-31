@@ -5,10 +5,12 @@ include_once (caminho_lib . "filtroManter.php");
 include_once (caminho_util . "bibliotecaHTML.php");
 class filtroManterContrato extends filtroManter {
 	public static $nmFiltro = "filtroManterContrato";
-	public static $nmAtrInTrazerConsolidadoPorVigencia = "nmAtrInTrazerConsolidadoPorVigencia";
+	public static $nmAtrInTrazerConsolidadoPorVigencia = "nmAtrInTrazerConsolidadoPorVigencia";	
+	public static $nmAtrAnoArquivo = "nmAtrAnoArquivo";
 		
 	var $cdContrato;
 	var $anoContrato;
+	var $anoArquivo;
 	var $tipo;
 	var $especie;
 	var $cdEspecie;
@@ -45,6 +47,7 @@ class filtroManterContrato extends filtroManter {
 	function getFiltroFormulario(){
 		$this->cdContrato = @$_POST [vocontrato::$nmAtrCdContrato];
 		$this->anoContrato = @$_POST [vocontrato::$nmAtrAnoContrato];
+		$this->anoArquivo = @$_POST [self::$nmAtrAnoArquivo];
 		$this->tipo = @$_POST [vocontrato::$nmAtrTipoContrato];
 		$this->especie = @$_POST [vocontrato::$nmAtrEspecieContrato];
 		$this->cdEspecie = @$_POST [vocontrato::$nmAtrCdEspecieContrato];

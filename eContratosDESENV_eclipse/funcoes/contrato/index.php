@@ -78,6 +78,13 @@ $numTotalRegistros = $filtro->numTotalRegistros;
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
 function formataForm() {
 	isConsultarArquivo = document.frm_principal.cdConsultarArquivo.value;
+
+	if(isConsultarArquivo != "<?=dominioConsultaArquivoContrato::$CD_CONSULTA_COMUM?>"){
+		document.frm_principal.<?=filtroManterContrato::$nmAtrAnoArquivo?>.disabled = false;
+	}else{
+		document.frm_principal.<?=filtroManterContrato::$nmAtrAnoArquivo?>.disabled = true;
+	}
+	
 	if(isConsultarArquivo == "<?=dominioConsultaArquivoContrato::$CD_CONSULTA_ARQUIVO_CONTRATO_ASSINADO?>"){
 			//por conta da estrutura de arquivos da _dag$/UNCT, deve-se obrigar o nome da contratada			
 		document.frm_principal.<?=vocontrato::$nmAtrContratadaContrato?>.required = true;
@@ -211,10 +218,14 @@ function confirmar() {
 	            <TD class="campoformulario" width="1%"><?php getContratoEntradaDeDados($tipo, $cdContrato, $anoContrato, $arrayCssClass, null, null);?></TD>
 				<?php 
 				$comboConsultaArquivo = new select(dominioConsultaArquivoContrato::getColecao());
+				$selectExercicio = new selectExercicio();
 				?>									
     			<TH class="campoformulario" nowrap>Procurar em arquivos:</TH>
                	<TD class="campoformulario" nowrap> 
-               	<?php echo $comboConsultaArquivo->getHtmlCombo("cdConsultarArquivo","cdConsultarArquivo", $filtro->cdConsultarArquivo, false, "camponaoobrigatorio", false, " onChange='formataForm();' ");?>
+               	<?php 
+               	echo $comboConsultaArquivo->getHtmlCombo("cdConsultarArquivo","cdConsultarArquivo", $filtro->cdConsultarArquivo, false, "camponaoobrigatorio", false, " onChange='formataForm();' ");              	               	
+               	echo "Ano Arquivo: " . $selectExercicio->getHtmlCombo(filtroManterContrato::$nmAtrAnoArquivo,filtroManterContrato::$nmAtrAnoArquivo, $filtro->anoArquivo, true, "camponaoobrigatorio", false, "");
+               	?>
 				</TD>
             </TR>
 			<?php
