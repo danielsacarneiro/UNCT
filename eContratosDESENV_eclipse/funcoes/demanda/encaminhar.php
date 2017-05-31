@@ -89,12 +89,25 @@ function confirmar() {
 }
 
 function checkResponsabilidade() {
-	campoCheck = document.frm_principal.<?=voDemandaTramitacao::$nmAtrInResponsabilidadePRT?>;
+	campoResponsabilidade = document.frm_principal.<?=voDemandaTramitacao::$nmAtrInResponsabilidadePRT?>;
 	campoPRT = document.frm_principal.<?=voDemandaTramitacao::$nmAtrProtocolo?>;
-	if(campoCheck.checked){
+	if(campoResponsabilidade.checked){
 		campoPRT.required = false;
 	}else{
 		campoPRT.required = true;
+	}
+}
+
+function formataForm() {
+	campoSetorDestino = document.frm_principal.<?=voDemandaTramitacao::$nmAtrCdSetorDestino?>;
+	campoPRT = document.frm_principal.<?=voDemandaTramitacao::$nmAtrProtocolo?>;
+	campoResponsabilidade = document.frm_principal.<?=voDemandaTramitacao::$nmAtrInResponsabilidadePRT?>;
+	
+	if(campoSetorDestino.value != ""){
+		campoPRT.required = true;
+		campoResponsabilidade.checked = false;
+	}else{
+		campoPRT.required = false;
 	}
 }
 
@@ -174,10 +187,12 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	        $votram->dtReferencia = dtHoje;
 	        
 	        $complementoHTML = "";
+	        $complementoHTMLSetorDestino = " onChange='formataForm();' ";
 	        
 	        if(!$isInclusao){
 	        	//ALTERACAO
-	        	$complementoHTML = " required ";
+	        	$complementoHTML = " required ";	        	
+	        	$complementoHTMLSetorDestino .=  $complementoHTML;
 	        	$readonlyChaves = " readonly ";
 	        ?>	        	        
 	        <TR>
@@ -291,7 +306,7 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Setor Destino:</TH>
 	            <TD class="campoformulario" colspan=3>
-	            <?php echo $comboSetor->getHtmlCombo(voDemandaTramitacao::$nmAtrCdSetorDestino,voDemandaTramitacao::$nmAtrCdSetorDestino, $vo->cdSetorDestino, true, "camponaoobrigatorio", false, $complementoHTML);?>
+	            <?php echo $comboSetor->getHtmlCombo(voDemandaTramitacao::$nmAtrCdSetorDestino,voDemandaTramitacao::$nmAtrCdSetorDestino, $vo->cdSetorDestino, true, "camponaoobrigatorio", false, $complementoHTMLSetorDestino);?>
 				</TD>
 	        </TR>
 			<TR>
@@ -302,7 +317,7 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">PRT:</TH>
 	            <TD class="campoformulario" colspan=3>				
-	            <INPUT type="text" onkeyup="formatarCampoPRT(this, event);" id="<?=voDemandaTramitacao::$nmAtrProtocolo?>" name="<?=voDemandaTramitacao::$nmAtrProtocolo?>" value=""  class="camponaoobrigatorio" size="30" required>
+	            <INPUT type="text" onkeyup="formatarCampoPRT(this, event);" id="<?=voDemandaTramitacao::$nmAtrProtocolo?>" name="<?=voDemandaTramitacao::$nmAtrProtocolo?>" value=""  class="camponaoobrigatorio" size="30" <?=$complementoHTML?>>
 	            <INPUT type="checkbox" id="<?=voDemandaTramitacao::$nmAtrInResponsabilidadePRT?>" name="<?=voDemandaTramitacao::$nmAtrInResponsabilidadePRT?>" value="" onClick="checkResponsabilidade();"> *Assumo a responsabilidade de não incluir PRT.	            	                        	                        
 	        </TR>
 	        <TR>
