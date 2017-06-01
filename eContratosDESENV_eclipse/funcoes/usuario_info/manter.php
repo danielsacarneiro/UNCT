@@ -117,7 +117,7 @@ function confirmar() {
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Setor:</TH>
 	            <TD class="campoformulario" colspan=3>
-	            <?=$comboSetor->getHtmlComboMultiplo($ID_REQ_CDSETOR_ORIGEM, $ID_REQ_CDSETOR_DESTINO, $vo->colecaoSetor, "campoobrigatorio", 10, " required ");?>
+	            <?=$comboSetor->getHtmlComboMultiplo($ID_REQ_CDSETOR_ORIGEM, $ID_REQ_CDSETOR_DESTINO, $vo->colecaoSetor, "camponaoobrigatorio", 10, " ");?>
 			    </TD>
 	        </TR>	        
 <TR>

@@ -11,7 +11,7 @@ function getMultiPos($haystack, $needles, $sensitive=true, $offset=0){
 	return $result;
 }
 function isColecaoVazia($recordset) {
-	return $recordset == null || $recordset == "";
+	return $recordset == null || $recordset == "" || (is_array($recordset) && count($recordset)==0);
 }
 function getColunaEmLinha($recordset, $nmColuna, $pSeparador) {
 	$retorno = null;

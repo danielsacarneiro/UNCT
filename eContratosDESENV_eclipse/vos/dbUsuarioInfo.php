@@ -7,9 +7,12 @@ class dbUsuarioInfo extends dbprocesso {
 		$nmTabelaUsuSetor = voUsuarioSetor::getNmTabela ();
 		
 		$arrayColunasRetornadas = array (
+				$nmTabelaWPUsers . "." . vousuario::$nmAtrID,
 				$nmTabelaWPUsers . "." . vousuario::$nmAtrLogin,
 				$nmTabelaWPUsers . "." . vousuario::$nmAtrName,				
-				$nmTabelaUsuSetor . ".*"
+				$nmTabelaUsuSetor . "." . voUsuarioSetor::$nmAtrCdSetor,
+				$nmTabelaUsuSetor . "." . voUsuarioSetor::$nmAtrCdUsuarioInclusao,
+				$nmTabelaUsuSetor . "." . voUsuarioSetor::$nmAtrDhInclusao,
 		)
 		;
 		
@@ -99,12 +102,14 @@ class dbUsuarioInfo extends dbprocesso {
 	
 	function incluirColecaoUsuarioSetor($vo) {
 		$colecao = $vo->colecaoSetor;
-		foreach ($colecao as $cdSetor) {
-			$voUsuarioSetor = new voUsuarioSetor();
-			$voUsuarioSetor->cdSetor = $cdSetor; 
-			$voUsuarioSetor->id = $vo->id;
-			$voUsuarioSetor->dbprocesso->cDb = $this->cDb;
-			$voUsuarioSetor->dbprocesso->incluir($voUsuarioSetor);
+		if(!isColecaoVazia($colecao)){
+			foreach ($colecao as $cdSetor) {
+				$voUsuarioSetor = new voUsuarioSetor();
+				$voUsuarioSetor->cdSetor = $cdSetor; 
+				$voUsuarioSetor->id = $vo->id;
+				$voUsuarioSetor->dbprocesso->cDb = $this->cDb;
+				$voUsuarioSetor->dbprocesso->incluir($voUsuarioSetor);
+			}
 		}
 	}
 	
