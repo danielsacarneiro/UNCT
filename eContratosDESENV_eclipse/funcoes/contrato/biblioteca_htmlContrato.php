@@ -85,11 +85,11 @@ function getContratoDetalhamento($voContrato, $colecao){
 <?php }
 
 }
-function getContratoEntradaDeDados($tipoContrato, $cdContrato, $anoContrato, $arrayCssClass, $arrayComplementoHTML){
-	return getContratoEntradaDeDadosMais($tipoContrato, $cdContrato, $anoContrato, $arrayCssClass, $arrayComplementoHTML, null);
+function getContratoEntradaDeDados($tipoContrato, $cdContrato, $anoContrato, $arrayCssClass, $arrayComplementoHTML, $comChaveCompletaSeNulo = true){
+	return getContratoEntradaDeDadosMais($tipoContrato, $cdContrato, $anoContrato, $arrayCssClass, $arrayComplementoHTML, null, $comChaveCompletaSeNulo);
 }
 
-function getContratoEntradaDeDadosMais($tipoContrato, $cdContrato, $anoContrato, $arrayCssClass, $arrayComplementoHTML, $indiceContrato){
+function getContratoEntradaDeDadosMais($tipoContrato, $cdContrato, $anoContrato, $arrayCssClass, $arrayComplementoHTML, $indiceContrato, $comChaveCompletaSeNulo = true){
 	$isOpcaoMultiplos = $indiceContrato != null;			
 		
 	require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioTipoContrato.php");
@@ -139,9 +139,11 @@ function getContratoEntradaDeDadosMais($tipoContrato, $cdContrato, $anoContrato,
 			echo "&nbsp;" . getImagemLink("javascript:limparCampoContrato('$nmCampoDivContratoAnterior', $indiceContrato);\" ", "sinal_menos.gif");
 		}
 	}
-	?>	            				
+	
+	if($comChaveCompletaSeNulo){?>	   				
 				<INPUT type="hidden" id="<?=$pNmCampoCdEspecieContrato.$indiceContrato?>" name="<?=$pNmCampoCdEspecieContrato?>"  value="<?=dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;?>">         		
-				<INPUT type="hidden" id="<?=$pNmCampoSqEspecieContrato.$indiceContrato?>" name="<?=$pNmCampoSqEspecieContrato?>"  value="1">				
+				<INPUT type="hidden" id="<?=$pNmCampoSqEspecieContrato.$indiceContrato?>" name="<?=$pNmCampoSqEspecieContrato?>"  value="1">
+	<?php }?>				
 			  <div id="<?=$nmCampoDivPessoaContratada?>">
 	          </div>	          
 			  <div id="<?=$nmCampoDivNovoContrato?>">

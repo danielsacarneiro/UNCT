@@ -49,7 +49,6 @@ try{
 <!DOCTYPE html>
 <HEAD>
 
-<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>jquery.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_text.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_datahora.js"></SCRIPT>
@@ -73,44 +72,6 @@ function confirmar() {
 	return confirm("Confirmar Alteracoes?");    
 }
 
-//jquery
-$( document ).ready(function() {
-
-	$("#pAdd").on('click', function() {
-		var p = $("#<?=$ID_REQ_CDSETOR_ORIGEM?> option:selected");
-        p.clone().appendTo("#<?=$ID_REQ_CDSETOR_DESTINO?>");
-        p.remove();
-
-        $("#<?=$ID_REQ_CDSETOR_DESTINO?> option").prop('selected', true);
-        //$("#<?=$ID_REQ_CDSETOR_DESTINO?> option");
-      });
-
-      $("#pAddAll").on('click', function() {
-        var p = $("#<?=$ID_REQ_CDSETOR_ORIGEM?> option");
-        p.clone().appendTo("#<?=$ID_REQ_CDSETOR_DESTINO?>");
-        p.remove();
-
-        $("#<?=$ID_REQ_CDSETOR_DESTINO?> option").prop('selected', true);
-      });
-
-      $("#pRemove").on('click', function() {
-        var p = $("#<?=$ID_REQ_CDSETOR_DESTINO?> option:selected");
-        p.clone().appendTo("#<?=$ID_REQ_CDSETOR_ORIGEM?>");
-        p.remove();
-
-        $("#<?=$ID_REQ_CDSETOR_DESTINO?> option").prop('selected', true);
-      });
-
-      $("#pRemoveAll").on('click', function() {
-        var p = $("#<?=$ID_REQ_CDSETOR_DESTINO?> option");
-        p.clone().appendTo("#<?=$ID_REQ_CDSETOR_ORIGEM?>");
-        p.remove();
-
-        $("#<?=$ID_REQ_CDSETOR_DESTINO?> option").prop('selected', true);
-      });    	 
-    	
-});
-
 </SCRIPT>
 
 <?=setTituloPagina($vo->getTituloJSP())?>
@@ -133,15 +94,11 @@ $( document ).ready(function() {
             <TBODY>
 	        <?php	        	        
 	        $complementoHTML = "";
-
-	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
+	        
+	        $comboSetor = new select(dominioSetor::getColecao());	        
+	         
 	        if(!$isInclusao){
-	        	$id = $vo->id;
-	        	$colecaoOrigem = dominioSetor::getColecaoComElementosARemover($vo->colecaoSetor);	        	
-	        	$comboSetor = new select($colecaoOrigem);
-	        	
-	        	$colecaoDestino = dominioSetor::getColecaoApenasComElementos($vo->colecaoSetor);
-	        	$comboVazio = new select($colecaoDestino);
+	        	$id = $vo->id;	        	        	
 	        ?>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">ID:</TH>
@@ -154,35 +111,13 @@ $( document ).ready(function() {
 	        }else{
 	        	//INCLUSAO
 				//por enquanto nao tem
-	        	$comboSetor = new select(dominioSetor::getColecao());
-	        	$comboVazio = new select();	        	
+				;
 	       }	       	       
 	        ?>
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Setor:</TH>
 	            <TD class="campoformulario" colspan=3>
-	            <TABLE cellpadding="0" cellspacing="0">
-				    <TBODY>
-						<TR>	            
-						<TD class="campoformulario">
-			            <?php echo $comboSetor->getHtmlCombo($ID_REQ_CDSETOR_ORIGEM, $ID_REQ_CDSETOR_ORIGEM, "", false, "camponaoobrigatorio", false,
-			            	" size=10 multiple ");?></TD>	            		            	
-						<TD class="campoformulario">
-							<input id="pAdd" type="button" value=">_" >
-							<br>
-							<input id="pAddAll" type="button" value=">>" >
-							<br>
-							<input id='pRemove' type='button' value="_<" >
-							<br>
-							<input id="pRemoveAll" type="button" value="<<" >
-						</TD>
-			            <TD class="campoformulario">
-			            <?php echo $comboVazio->getHtmlCombo($ID_REQ_CDSETOR_DESTINO,$ID_REQ_CDSETOR_DESTINO."[]", $vo->colecaoSetor, false, "campoobrigatorio", false,
-			            	" size=10 multiple onChange=\"". $jsGarantia. "\" required ");?>	            	
-			            </TD>
-			            </TR>
-			       </TBODY>
-			    </TABLE>
+	            <?=$comboSetor->getHtmlComboMultiplo($ID_REQ_CDSETOR_ORIGEM, $ID_REQ_CDSETOR_DESTINO, $vo->colecaoSetor, "campoobrigatorio", 10, " required ");?>
 			    </TD>
 	        </TR>	        
 <TR>

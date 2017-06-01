@@ -9,6 +9,8 @@ class filtroManterContratoInfo extends filtroManter {
 	var $nmContratada = "";
 	var $docContratada = "";
 	
+	var $cdAutorizacao = "";
+	
 	// ...............................................................
 	function getFiltroFormulario() {
 		$this->cdContrato = @$_POST [voContratoInfo::$nmAtrCdContrato];
@@ -17,6 +19,7 @@ class filtroManterContratoInfo extends filtroManter {
 		
 		$this->nmContratada = @$_POST [vopessoa::$nmAtrNome];
 		$this->docContratada = @$_POST [vopessoa::$nmAtrDoc];
+		$this->cdAutorizacao = @$_POST [voContratoInfo::$nmAtrCdAutorizacaoContrato];
 		
 		if ($this->cdOrdenacao == null) {
 			$this->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
@@ -51,6 +54,13 @@ class filtroManterContratoInfo extends filtroManter {
 			
 			$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrTipoContrato . " = " . getVarComoString ( $this->tipoContrato );
 			
+			$conector = "\n AND ";
+		}
+		
+		if ($this->cdAutorizacao != null) {
+				
+			$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrCdAutorizacaoContrato . " = " . getVarComoString ( $this->cdAutorizacao );
+				
 			$conector = "\n AND ";
 		}
 		

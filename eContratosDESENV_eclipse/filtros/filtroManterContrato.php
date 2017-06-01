@@ -14,6 +14,7 @@ class filtroManterContrato extends filtroManter {
 	var $tipo;
 	var $especie;
 	var $cdEspecie;
+	var $colecaoCdEspecie;
 	var $modalidade;
 	
 	var $contratada;
@@ -50,7 +51,8 @@ class filtroManterContrato extends filtroManter {
 		$this->anoArquivo = @$_POST [self::$nmAtrAnoArquivo];
 		$this->tipo = @$_POST [vocontrato::$nmAtrTipoContrato];
 		$this->especie = @$_POST [vocontrato::$nmAtrEspecieContrato];
-		$this->cdEspecie = @$_POST [vocontrato::$nmAtrCdEspecieContrato];
+		$this->cdEspecie = @$_POST [vocontrato::$nmAtrCdEspecieContrato];		
+		
 		$this->modalidade = @$_POST [vocontrato::$nmAtrModalidadeContrato];
 		
 		$this->contratada = @$_POST [vocontrato::$nmAtrContratadaContrato];
@@ -130,12 +132,17 @@ class filtroManterContrato extends filtroManter {
 			$conector = "\n AND ";
 		}
 		
-		if ($this->cdEspecie != null) {
-			$filtro = $filtro . $conector . $nmTabela . "." . vocontrato::$nmAtrCdEspecieContrato . " = '" . $this->cdEspecie . "'";
+		if ($this->cdEspecie != null && !$this->isAtributoArrayVazio($this->cdEspecie)) {
+			$comparar = " = '" . $this->cdEspecie . "'";
+			if(is_array($this->cdEspecie)){			
+				$comparar = " IN (" . getSQLStringFormatadaColecaoIN($this->cdEspecie, true) . ")";
+			}
+			
+			$filtro = $filtro . $conector . $nmTabela . "." . vocontrato::$nmAtrCdEspecieContrato . $comparar;
 			
 			$conector = "\n AND ";
 		}
-		
+				
 		if ($this->contratada != null) {
 			$filtro = $filtro . $conector . $nmTabela . "." . vocontrato::$nmAtrContratadaContrato . " LIKE '%" . utf8_encode ( $this->contratada ) . "%'";
 			

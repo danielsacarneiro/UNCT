@@ -79,8 +79,12 @@ class dominio extends multiplosConstrutores {
 		
 		return $retorno;
 	}
-	static function getColecaoComElementosARemover($chaveARemover) {
-		$colecao = static::getColecao ();
+	static function getColecaoComElementosARemover($chaveARemover, $colecao=null) {
+		//usado para o caso de um dominio que tenha a colecao chamar sem o 2 argumento
+		if($colecao == null){
+			$colecao = static::getColecao ();
+		}
+		
 		// var_dump($colecao);
 		$retorno = $colecao;
 		if ($chaveARemover != null) {
@@ -99,8 +103,12 @@ class dominio extends multiplosConstrutores {
 		}
 		return $retorno;
 	}
-	static function getColecaoApenasComElementos($chaves) {
-		$colecao = static::getColecao ();
+	static function getColecaoApenasComElementos($chaves, $colecao=null) {	
+		//usado para o caso de um dominio que tenha a colecao chamar sem o 2 argumento
+		if($colecao == null){
+			$colecao = static::getColecao ();
+		}
+		
 		// var_dump($colecao);
 		$retorno = $colecao;
 		if ($chaves != null) {

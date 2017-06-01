@@ -6,6 +6,7 @@ include_once(caminho_util. "select.php");
 include_once(caminho_vos . "dbcontrato.php");
 
 //inicia os parametros
+try{
 inicio();
 
 $titulo = "CONSULTAR CONTRATOS";
@@ -215,7 +216,7 @@ function confirmar() {
 	        ?>        
             <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" width="1%"><?php getContratoEntradaDeDados($tipo, $cdContrato, $anoContrato, $arrayCssClass, null, null);?></TD>
+	            <TD class="campoformulario" width="1%"><?php getContratoEntradaDeDados($tipo, $cdContrato, $anoContrato, $arrayCssClass, null, null, false);?></TD>
 				<?php 
 				$comboConsultaArquivo = new select(dominioConsultaArquivoContrato::getColecao());
 				$selectExercicio = new selectExercicio();
@@ -231,13 +232,12 @@ function confirmar() {
 			<?php
             $dominioTipoContrato = new dominioTipoContrato();            
 			$tiposContrato = new select($dominioTipoContrato->colecao);            
-
-			$especiesContrato = new dominioEspeciesContrato();
-			$combo = new select($especiesContrato->colecao);
+			
+			$comboEspecies = new select(dominioEspeciesContrato::getColecao());
+				
 			?>
     			<TH class="campoformulario" nowrap>Espécies:</TH>
-                <TD class="campoformulario"><?php echo $combo->getHtmlCombo(vocontrato::$nmAtrCdEspecieContrato,vocontrato::$nmAtrCdEspecieContrato, $cdEspecie, true, "camponaoobrigatorio", true, ""/*," multiple size=6 "*/);?>
-                <!-- <INPUT type="text" id="<?=vocontrato::$nmAtrEspecieContrato?>" name="<?=vocontrato::$nmAtrEspecieContrato?>"  value="<?php echo($especie);?>"  class="camponaoobrigatorio" size="30" > -->
+                <TD class="campoformulario"><?php echo $comboEspecies->getHtmlCombo(vocontrato::$nmAtrCdEspecieContrato, vocontrato::$nmAtrCdEspecieContrato."[]", $filtro->cdEspecie, true, "camponaoobrigatorio", false, " multiple ")?>
                 </TD>												                
                 <TH class="campoformulario" nowrap>Modalidade:</TH>
 			<?php
@@ -385,3 +385,7 @@ if($filtro->cdConsultarArquivo != "N"){
 
 </BODY>
 </HTML>
+<?php 
+}catch(Exception $ex){
+	tratarExcecaoHTML($ex, $vo);	
+}
