@@ -1,7 +1,5 @@
 <?php
-// .................................................................................................................
-// Classe select
-// cria um combo select html
+include_once (caminho_util . "multiplosConstrutores.php");
 
   Class voentidade extends multiplosConstrutores{
   		var $NM_METODO_RETORNO_CONFIRMAR;
