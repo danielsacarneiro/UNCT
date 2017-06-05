@@ -16,6 +16,7 @@ class filtroManterDemanda extends filtroManter{
 	var $nmContratada;
 	var $docContratada;
 	var $tpDocumento;
+	var $sqDocumento;
 	
 	var $dtUltMovimentacao;
 	var $cdDemandaInicial;
@@ -61,6 +62,7 @@ class filtroManterDemanda extends filtroManter{
 		$this->docContratada = @$_POST[vopessoa::$nmAtrDoc];
 		$this->dtUltMovimentacao = @$_POST[voDemanda::$nmAtrDtReferencia];
 		$this->tpDocumento = @$_POST[voDocumento::$nmAtrTp];
+		$this->sqDocumento = @$_POST[voDocumento::$nmAtrSq];
 		$this->cdDemandaInicial = @$_POST[self::$NmAtrCdDemandaInicial];
 		$this->cdDemandaFinal = @$_POST[self::$NmAtrCdDemandaFinal];
 		
@@ -87,17 +89,27 @@ class filtroManterDemanda extends filtroManter{
 			;
 		}
 		
-		if($this->tpDocumento != null){
+		$consultaDocumento = $this->tpDocumento != null || $this->sqDocumento != null; 
+		if($consultaDocumento){
 			$filtro = $filtro . $conector
 			. " EXISTS (SELECT 'X' FROM " . $nmTabelaTramitacaoDoc
 			. " WHERE "
 					. $nmTabela . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaTramitacaoDoc. "." . voDemandaTramDoc::$nmAtrAnoDemanda
-					. " AND " . $nmTabela . "." . voDemanda::$nmAtrCd . "=" . $nmTabelaTramitacaoDoc. "." . voDemandaTramDoc::$nmAtrCdDemanda
-					. " AND " . $nmTabelaTramitacaoDoc. "." . voDemandaTramDoc::$nmAtrTpDoc. "="
-							. getVarComoString($this->tpDocumento)
-							. ")\n";
-		
-							$conector  = "\n AND ";
+					. " AND " . $nmTabela . "." . voDemanda::$nmAtrCd . "=" . $nmTabelaTramitacaoDoc. "." . voDemandaTramDoc::$nmAtrCdDemanda;
+					
+			if($this->tpDocumento != null){
+				$filtro .= " AND " . $nmTabelaTramitacaoDoc. "." . voDemandaTramDoc::$nmAtrTpDoc. "="
+							. getVarComoString($this->tpDocumento);
+			}
+
+			if($this->sqDocumento != null){
+				$filtro .= " AND " . $nmTabelaTramitacaoDoc. "." . voDemandaTramDoc::$nmAtrSqDoc . "="
+						. getVarComoNumero($this->sqDocumento);						
+			}
+			
+			$filtro .= ")\n";
+				
+			$conector  = "\n AND ";
 		}
 		
 		if($this->isHistorico() && $this->vodemanda->sqHist != null){			

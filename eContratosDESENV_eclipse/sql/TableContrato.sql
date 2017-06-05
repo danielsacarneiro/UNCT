@@ -149,7 +149,7 @@ ALTER TABLE contrato_info ADD COLUMN ctinf_in_garantia CHAR(1) NULL AFTER ctinf_
 ALTER TABLE contrato_info ADD COLUMN ctinf_in_prestacao_garantia CHAR(1) NULL AFTER ctinf_in_garantia;
 ALTER TABLE contrato_info ADD COLUMN ctinf_tp_garantia INT NULL AFTER ctinf_in_prestacao_garantia;
     
--- ALTER TABLE contrato_info DROP FOREIGN KEY fk_contrato_info;    
+ALTER TABLE contrato_info DROP FOREIGN KEY fk_contrato_info;
 
 drop table contrato_info_hist;
 CREATE TABLE contrato_info_hist (

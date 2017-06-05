@@ -207,8 +207,9 @@ function encaminhar() {
             $comboTpDoc = new select(dominioTpDocumento::getColecao());            
             ?>	                    
             <TR>
-	            <TH class="campoformulario" nowrap width="1%">Tp.Documento:</TH>
+	            <TH class="campoformulario" nowrap width="1%">Doc.Anexo:</TH>
 				<TD class="campoformulario" width="1%" colspan=3><?php echo $comboTpDoc->getHtmlSelect(voDocumento::$nmAtrTp,voDocumento::$nmAtrTp, $filtro->tpDocumento, true, "camponaoobrigatorio", true);?>
+				Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voDocumento::$nmAtrSq?>" name="<?=voDocumento::$nmAtrSq?>"  value="<?php echo(complementarCharAEsquerda($filtro->sqDocumento, "0", TAMANHO_CODIGOS));?>"  class="camponaoobrigatorio" size="6" maxlength="5">
 			</TR>
        <?php
         /*$comboOrdenacao = new select(voPA::getAtributosOrdenacao($cdHistorico));
