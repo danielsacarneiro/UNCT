@@ -171,14 +171,19 @@ class dbprocesso {
 		}
 		return $retorno;
 	}
-	function consultarMontandoQueryUsuarioFiltro($vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $filtro, $isConsultaPorChave, $validaConsulta) {
+	
+	/**
+	 * removido ultimo parametro
+	 * */
+	// function consultarMontandoQueryUsuarioFiltro($vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $filtro, $isConsultaPorChave, $validaConsulta) {
+	function consultarMontandoQueryUsuarioFiltro($vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $filtro, $isConsultaPorChave) {
 		$isHistorico = $filtro->isHistorico;
 		$atributos = getSQLStringFormatadaColecaoIN ( $arrayColunasRetornadas, false );
 		$querySelect = "SELECT " . $atributos;
 		
 		$queryFrom = $this->getQueryFrom_NmUsuarioTabelaAComparar ( $vo, $nmTabelaACompararCdUsuario, $queryJoin, $isHistorico );
 		
-		$retorno = $this->consultarFiltro ( $filtro, $querySelect, $queryFrom, $validaConsulta );
+		$retorno = $this->consultarFiltro ( $filtro, $querySelect, $queryFrom, $filtro->isValidarConsulta );
 		if ($retorno != "" && $isConsultaPorChave) {
 			$retorno = $retorno [0];
 		}

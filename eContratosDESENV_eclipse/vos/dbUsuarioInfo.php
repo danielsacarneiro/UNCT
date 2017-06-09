@@ -60,7 +60,8 @@ class dbUsuarioInfo extends dbprocesso {
 		//$filtro->groupby = array($vouserwp::getNmTabelaStatic($isHistorico) . "." . $vouserwp::$nmAtrID);
 		$filtro->groupby = $vouserwp->getAtributosComIdentificacaoTabela($vouserwp->getAtributosChavePrimaria(), $isHistorico);
 		
-		return $this->consultarMontandoQueryUsuarioFiltro($vouserwp, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $filtro, false, true);		
+		//echo "teste";
+		return $this->consultarMontandoQueryUsuarioFiltro($vouserwp, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $filtro, false);		
 		
 		//ATENCAO
 		//QUANDO PASSAR A USAR A TABELA VOUSUARIOINFO, ALTERAR O METODO PARA O ABAIXO

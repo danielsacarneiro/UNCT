@@ -10,6 +10,7 @@ class filtroManterDemanda extends filtroManter{
 	static $NmColQtdContratos = "NmColQtdContratos";
 	static $NmAtrCdDemandaInicial = "NmAtrCdDemandaInicial";
 	static $NmAtrCdDemandaFinal = "NmAtrCdDemandaFinal";
+	static $NmAtrCdUsuarioTramitacao = "NmAtrCdUsuarioTramitacao";
 	
 	var $vodemanda;
 	var $vocontrato;
@@ -21,6 +22,7 @@ class filtroManterDemanda extends filtroManter{
 	var $dtUltMovimentacao;
 	var $cdDemandaInicial;
 	var $cdDemandaFinal;	
+	var $cdUsuarioTramitacao;
 	
 	// ...............................................................
 	// construtor
@@ -66,6 +68,8 @@ class filtroManterDemanda extends filtroManter{
 		$this->cdDemandaInicial = @$_POST[self::$NmAtrCdDemandaInicial];
 		$this->cdDemandaFinal = @$_POST[self::$NmAtrCdDemandaFinal];
 		
+		$this->cdUsuarioTramitacao = @$_POST[self::$NmAtrCdUsuarioTramitacao];
+		
 		if($this->cdOrdenacao == null){
 			$this->cdOrdenacao = constantes::$CD_ORDEM_CRESCENTE;
 		}		
@@ -90,6 +94,19 @@ class filtroManterDemanda extends filtroManter{
 		}
 		
 		$consultaDocumento = $this->tpDocumento != null || $this->sqDocumento != null; 
+		if($this->cdUsuarioTramitacao != null){
+			$filtro = $filtro . $conector
+			. " EXISTS (SELECT 'X' FROM " . $nmTabelaTramitacao
+			. " WHERE "
+					. $nmTabela . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrAno
+					. " AND " . $nmTabela . "." . voDemanda::$nmAtrCd . "=" . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrCd
+					. " AND " . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrCdUsuarioInclusao . "="
+					. getVarComoNumero($this->cdUsuarioTramitacao)
+					. ")\n";
+			
+			$conector  = "\n AND ";
+		}
+		
 		if($consultaDocumento){
 			$filtro = $filtro . $conector
 			. " EXISTS (SELECT 'X' FROM " . $nmTabelaTramitacaoDoc

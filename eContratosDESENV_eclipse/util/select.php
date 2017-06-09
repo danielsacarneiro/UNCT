@@ -17,6 +17,17 @@ class select extends multiplosConstrutores {
 		$this->colecao = $colecao;
 		reset ( $this->colecao );
 	}
+	function __construct3($recordSet, $nmColCD, $nmColDS) {
+		$colecao = array();
+		
+		for ($i=0; $i<count($recordSet);$i++){			
+			$cd = $recordSet[$i][$nmColCD];
+			$ds = $recordSet[$i][$nmColDS];			
+			$colecao[$cd]=$ds;
+		}
+
+		self::__construct1($colecao);	
+	}
 	
 	// ...............................................................
 	// Funções ( Propriedades e métodos da classe )
