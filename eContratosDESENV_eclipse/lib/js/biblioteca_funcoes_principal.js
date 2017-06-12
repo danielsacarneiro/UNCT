@@ -144,8 +144,11 @@ function limparFormularioGeral(){
 		if(!naoValidar){
 			//alert(element.type);		
 			if(element.type == 'select-one'){
-				element[0].selected = true;			
-			}else {		
+				element[0].selected = true;
+			}if(element.type == 'checkbox'){
+				element.checked = false;				
+			}else {
+				
 				element.value='';
 			}
 		}
