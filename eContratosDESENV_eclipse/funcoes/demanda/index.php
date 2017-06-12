@@ -45,6 +45,7 @@ $numTotalRegistros = $filtro->numTotalRegistros;
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_text.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_cnpfcnpj.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_oficio.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_moeda.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>tooltip.js"></SCRIPT>
 
@@ -173,10 +174,18 @@ function encaminhar() {
 			<TR>
 				<?php
 				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioAutorizacao.php");
-				$combo = new select(dominioAutorizacao::getColecao());						
+				$combo = new select(dominioAutorizacao::getColecao());
+				
+				$nmCheckAutorizacaoArray = vocontrato::$nmAtrCdAutorizacaoContrato . "[]";
+				$colecaoAutorizacao = $filtro->vocontrato->cdAutorizacao;
+				
 				?>
 	            <TH class="campoformulario" nowrap>Autorização:</TH>
-	            <TD class="campoformulario" width="1%"><?php echo $combo->getHtmlSelect(vocontrato::$nmAtrCdAutorizacaoContrato,vocontrato::$nmAtrCdAutorizacaoContrato, $filtro->vocontrato->cdAutorizacao, true, "camponaoobrigatorio", true);?>
+	            <TD class="campoformulario" width="1%">
+	            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_SAD?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_SAD?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_SAD, $colecaoAutorizacao)?> > SAD
+	            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_PGE?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_PGE?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_PGE, $colecaoAutorizacao)?>> PGE
+	            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_GOV?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_GOV?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_GOV, $colecaoAutorizacao)?>> GOV
+	            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_NENHUM?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_NENHUM?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_NENHUM, $colecaoAutorizacao)?>> Nenhum
 	            <TH class="campoformulario" nowrap width="1%">Data.Últ.Movimentação:</TH>
 	            <TD class="campoformulario">
 	            	<INPUT type="text" 
@@ -195,7 +204,12 @@ function encaminhar() {
 	        ?>        
             <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" colspan="3"><?php getContratoEntradaDeDados($filtro->vocontrato->tipo, $filtro->vocontrato->cdContrato, $filtro->vocontrato->anoContrato, $arrayCssClass, null, null);?></TD>
+	            <TD class="campoformulario" ><?php getContratoEntradaDeDados($filtro->vocontrato->tipo, $filtro->vocontrato->cdContrato, $filtro->vocontrato->anoContrato, $arrayCssClass, null, null);?></TD>
+	            <TH class="campoformulario" >Valor Global:</TH>
+	            <TD class="campoformulario" ><INPUT type="text" id="<?=filtroManterDemanda::$NmAtrVlGlobalInicial?>" name="<?=filtroManterDemanda::$NmAtrVlGlobalInicial?>"  value="<?php echo($filtro->vlGlobalInicial);?>"
+	            							onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="camponaoobrigatorioalinhadodireita" size="15" >
+	            							a <INPUT type="text" id="<?=filtroManterDemanda::$NmAtrVlGlobalFinal?>" name="<?=filtroManterDemanda::$NmAtrVlGlobalFinal?>"  value="<?php echo($filtro->vlGlobalFinal);?>"
+	            							onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="camponaoobrigatorioalinhadodireita" size="15" ></TD>        	            
 			</TR>
 			<TR>
                 <TH class="campoformulario" nowrap>Nome Contratada:</TH>
@@ -253,8 +267,8 @@ function encaminhar() {
                     <TH class="headertabeladados" width="1%">Origem</TH>
                     <TH class="headertabeladados" width="1%">Atual</TH>
                     <TH class="headertabeladados" width="1%">Tipo</TH>
-                    <TH class="headertabeladados" width="30%">Contrato</TH>
-                    <TH class="headertabeladados"width="60%" nowrap >Texto</TH>
+                    <TH class="headertabeladados" width="60%">Contrato</TH>
+                    <TH class="headertabeladados"width="30%" nowrap >Texto</TH>
                     <TH class="headertabeladados" width="1%">Situação</TH>                    
                     <TH class="headertabeladados" width="1%">Prior.</TH>
                     <TH class="headertabeladados"width="1%" nowrap >Usuário</TH>

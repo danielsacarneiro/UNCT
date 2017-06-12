@@ -264,6 +264,10 @@ include_once ("bibliotecaFuncoesPrincipal.php");
 		return $retorno;
 	}
 	
+	function getVarComoDecimal($param){
+		return getDecimalSQL($param);
+	}
+	
 	function getVarComoData($param){
 		return getVarComoDataSQL($param);
 	}

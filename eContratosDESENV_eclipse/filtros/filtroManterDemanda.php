@@ -2,6 +2,7 @@
 include_once(caminho_util."bibliotecaSQL.php");
 include_once(caminho_lib ."filtroManter.php");
 include_once(caminho_vos ."voDemandaTramitacao.php");
+require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioAutorizacao.php");
 
 class filtroManterDemanda extends filtroManter{
 
@@ -11,6 +12,9 @@ class filtroManterDemanda extends filtroManter{
 	static $NmAtrCdDemandaInicial = "NmAtrCdDemandaInicial";
 	static $NmAtrCdDemandaFinal = "NmAtrCdDemandaFinal";
 	static $NmAtrCdUsuarioTramitacao = "NmAtrCdUsuarioTramitacao";
+	
+	static $NmAtrVlGlobalInicial = "NmAtrVlGlobalInicial";
+	static $NmAtrVlGlobalFinal = "NmAtrVlGlobalFinal";
 	
 	var $vodemanda;
 	var $vocontrato;
@@ -23,6 +27,9 @@ class filtroManterDemanda extends filtroManter{
 	var $cdDemandaInicial;
 	var $cdDemandaFinal;	
 	var $cdUsuarioTramitacao;
+
+	var $vlGlobalInicial;
+	var $vlGlobalFinal;
 	
 	// ...............................................................
 	// construtor
@@ -67,6 +74,9 @@ class filtroManterDemanda extends filtroManter{
 		$this->sqDocumento = @$_POST[voDocumento::$nmAtrSq];
 		$this->cdDemandaInicial = @$_POST[self::$NmAtrCdDemandaInicial];
 		$this->cdDemandaFinal = @$_POST[self::$NmAtrCdDemandaFinal];
+		
+		$this->vlGlobalInicial = @$_POST[self::$NmAtrVlGlobalInicial];
+		$this->vlGlobalFinal = @$_POST[self::$NmAtrVlGlobalFinal];
 		
 		$this->cdUsuarioTramitacao = @$_POST[self::$NmAtrCdUsuarioTramitacao];
 		
@@ -162,12 +172,20 @@ class filtroManterDemanda extends filtroManter{
 		
 		if($this->vodemanda->tipo != null){
 			$filtro = $filtro . $conector
-			. $nmTabela. "." .voDemanda::$nmAtrTipo
-			. " = "
+			. $nmTabela. "." .voDemanda::$nmAtrTipo;
+			
+			if($this->vodemanda->tipo != dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO){			
+				$filtro .= 	" = "
 					. $this->vodemanda->tipo
-					;
-		
-					$conector  = "\n AND ";
+					;			
+			}else{
+				$filtro .= 	" IN ("
+						. getSQLStringFormatadaColecaoIN(array_keys(dominioTipoDemanda::getColecaoTipoDemandaContrato()), false)
+						. ") "
+						;				
+			}			
+			
+			$conector  = "\n AND ";
 		}
 		
 		if($this->vodemanda->cdSetor != null){
@@ -295,14 +313,29 @@ class filtroManterDemanda extends filtroManter{
 					$conector  = "\n AND ";
 		}
 		
+		//echo $this->vocontrato->cdAutorizacao; 
 		if($this->vocontrato->cdAutorizacao != null){
-			$filtro = $filtro . $conector
-			. $nmTabelaContrato. "." .vocontrato::$nmAtrCdAutorizacaoContrato
-			. " = "
-					. $this->vocontrato->cdAutorizacao
-					;
-		
-					$conector  = "\n AND ";
+			
+			if(!is_array($this->vocontrato->cdAutorizacao)){
+				$filtro = $filtro . $conector
+				. $nmTabelaContrato. "." .vocontrato::$nmAtrCdAutorizacaoContrato
+				. " = "
+						. $this->vocontrato->cdAutorizacao
+						;				
+			}else{
+				
+				$colecaoAutorizacao = $this->vocontrato->cdAutorizacao;
+				$parametroMetodoEspecifico = dominioAutorizacao::getColecaoCdAutorizacaoIntercace($colecaoAutorizacao);
+				
+				//var_dump($parametroMetodoEspecifico);
+				
+				$filtro = $filtro . $conector
+				. $nmTabelaContrato. "." .vocontrato::$nmAtrCdAutorizacaoContrato
+				. " IN (" . getSQLStringFormatadaColecaoIN($parametroMetodoEspecifico, false) . ")";
+				;				
+			}			
+			
+			$conector  = "\n AND ";
 		}
 		
 		if($this->nmContratada != null){
@@ -345,6 +378,24 @@ class filtroManterDemanda extends filtroManter{
 		
 		}
 		
+		if($this->vlGlobalInicial != null){
+			$filtro = $filtro . $conector
+			. $nmTabelaContrato . "." .vocontrato::$nmAtrVlGlobalContrato
+			. " >= "
+					. getVarComoDecimal($this->vlGlobalInicial);
+					$conector  = "\n AND ";
+		
+		}
+		
+		if($this->vlGlobalFinal != null){
+			$filtro = $filtro . $conector
+			. $nmTabelaContrato . "." .vocontrato::$nmAtrVlGlobalContrato
+			. " >= "
+					. getVarComoDecimal($this->vlGlobalFinal);
+					$conector  = "\n AND ";
+		
+		}
+		
 		$this->formataCampoOrdenacao(new voDemanda());
 		//finaliza o filtro
 		$filtro = parent::getFiltroSQL($filtro, $comAtributoOrdenacao);
@@ -370,8 +421,7 @@ class filtroManterDemanda extends filtroManter{
 				voDemanda::$nmAtrTipo => "Tipo"				
 		);
 		return $varAtributos;
-	}
-	
+	}	
 
 }
 
