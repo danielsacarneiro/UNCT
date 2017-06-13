@@ -148,13 +148,11 @@ function confirmar() {
 	            echo $comboSituacao->getHtmlCombo("","", $vo->situacao, true, "camporeadonly", false, " disabled ");?>
 				</TD>
 	        </TR>
-				<?php 
-				$isDetalhamento = true;
-				//if(!$isHistorico){
-					include_once 'gridTramitacaoAjax.php';
-				//}
-				?>
-       	    
+				<?php
+				include_once 'biblioteca_htmlDemanda.php';
+				$colecaoTramitacao = $vo->dbprocesso->consultarDemandaTramitacao($vo);
+				mostrarGridDemanda($colecaoTramitacao, true);
+				?>       	    
 			<TR>
 				<TH class='textoseparadorgrupocampos' halign='left' colspan='4'>
 				<DIV class='campoformulario' id='div_tramitacao'>&nbsp;&nbsp;Detalhamento Demanda

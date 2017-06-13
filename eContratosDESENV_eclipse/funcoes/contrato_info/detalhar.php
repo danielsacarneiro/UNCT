@@ -150,6 +150,18 @@ function confirmar() {
 	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=voContratoInfo::$nmAtrObs?>" name="<?=voContratoInfo::$nmAtrObs?>" class="camporeadonly" readonly><?=$vo->obs?></textarea>
 				</TD>
 	        </TR>
+				<?php 
+				include_once '../demanda/biblioteca_htmlDemanda.php';
+				$filtroTramitacaoContrato = new filtroConsultarDemandaContrato(false);
+				$filtroTramitacaoContrato->vocontrato->cdContrato = $vo->cdContrato;
+				$filtroTramitacaoContrato->vocontrato->anoContrato = $vo->anoContrato;
+				$filtroTramitacaoContrato->vocontrato->tipo = $vo->tipo;				
+				$filtroTramitacaoContrato->temDocumentoAnexo = constantes::$CD_SIM;
+				$filtroTramitacaoContrato->TemPaginacao = false;			
+				
+				$colecaoTramitacao = $vo->dbprocesso->consultarDemandaTramitacaoContrato($filtroTramitacaoContrato);
+				mostrarGridDemandaContrato($colecaoTramitacao, true);
+				?>	        
 	        
 <TR>
 	<TD halign="left" colspan="4">

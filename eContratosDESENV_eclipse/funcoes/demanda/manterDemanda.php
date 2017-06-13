@@ -140,8 +140,9 @@ function confirmar() {
 				</TD>
 	        </TR>
 				<?php 
-				$isDetalhamento = true;
-				include_once 'gridTramitacaoAjax.php';
+				include_once 'biblioteca_htmlDemanda.php';
+				$colecaoTramitacao = $vo->dbprocesso->consultarDemandaTramitacao($vo);
+				mostrarGridDemanda($colecaoTramitacao, true);
 				?>
        	    
 	        <?php 

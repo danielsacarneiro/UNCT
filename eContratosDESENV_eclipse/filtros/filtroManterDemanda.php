@@ -20,6 +20,7 @@ class filtroManterDemanda extends filtroManter{
 	var $vocontrato;
 	var $nmContratada;
 	var $docContratada;
+	var $temDocumentoAnexo;
 	var $tpDocumento;
 	var $sqDocumento;
 	
@@ -102,8 +103,7 @@ class filtroManterDemanda extends filtroManter{
 			//echo "setou o ano defaul";
 			;
 		}
-		
-		$consultaDocumento = $this->tpDocumento != null || $this->sqDocumento != null; 
+		 
 		if($this->cdUsuarioTramitacao != null){
 			$filtro = $filtro . $conector
 			. " EXISTS (SELECT 'X' FROM " . $nmTabelaTramitacao
@@ -117,6 +117,7 @@ class filtroManterDemanda extends filtroManter{
 			$conector  = "\n AND ";
 		}
 		
+		$consultaDocumento = $this->temDocumentoAnexo == constantes::$CD_SIM || $this->tpDocumento != null || $this->sqDocumento != null;
 		if($consultaDocumento){
 			$filtro = $filtro . $conector
 			. " EXISTS (SELECT 'X' FROM " . $nmTabelaTramitacaoDoc

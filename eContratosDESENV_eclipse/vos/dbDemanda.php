@@ -1,26 +1,26 @@
 <?php
 include_once (caminho_lib . "dbprocesso.obj.php");
 class dbDemanda extends dbprocesso {
-		
 	function consultarPorChaveTelaColecaoContrato($vo, $isHistorico) {
-		try{
-			//para o caso de so haver um contrato, o consultarPorChaveTelaJoinContrato traz apenas um registro
-			//como realmente deve ser
-			$colecao = $this->consultarPorChaveTelaJoinContrato($vo, $isHistorico, true);
-			$voContrato = new vocontrato();
-			$voContrato->getDadosBanco($colecao);
+		try {
+			// para o caso de so haver um contrato, o consultarPorChaveTelaJoinContrato traz apenas um registro
+			// como realmente deve ser
+			$colecao = $this->consultarPorChaveTelaJoinContrato ( $vo, $isHistorico, true );
+			$voContrato = new vocontrato ();
+			$voContrato->getDadosBanco ( $colecao );
 			
-			$vo->getDadosBanco($colecao);
-			$vo->colecaoContrato = array($voContrato);			
-			
-		}catch(excecaoMaisDeUmRegistroRetornado $ex){
-			//faz consulta a parte
-			//nao valida a consulta por chave
-			$colecao = $this->consultarPorChaveTelaJoinContrato($vo, $isHistorico, false);			
-			//pega os dados do vo que vao ser iguais para qualquer registro.
-			$vo->getDadosBanco($colecao[0]);			
-			$colecaoContrato = $this->consultarDemandaContrato($vo);
-			$vo->setColecaoContratoRegistroBanco($colecaoContrato);			
+			$vo->getDadosBanco ( $colecao );
+			$vo->colecaoContrato = array (
+					$voContrato 
+			);
+		} catch ( excecaoMaisDeUmRegistroRetornado $ex ) {
+			// faz consulta a parte
+			// nao valida a consulta por chave
+			$colecao = $this->consultarPorChaveTelaJoinContrato ( $vo, $isHistorico, false );
+			// pega os dados do vo que vao ser iguais para qualquer registro.
+			$vo->getDadosBanco ( $colecao [0] );
+			$colecaoContrato = $this->consultarDemandaContrato ( $vo );
+			$vo->setColecaoContratoRegistroBanco ( $colecaoContrato );
 		}
 		
 		return $vo;
@@ -42,22 +42,22 @@ class dbDemanda extends dbprocesso {
 				$nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato,
 				$nmTabelaPessoa . "." . vopessoa::$nmAtrDoc,
 				$nmTabelaPessoa . "." . vopessoa::$nmAtrNome,
-				"COALESCE (" . " . $nmTabelaTramitacao." . voDemandaTramitacao::$nmAtrCdSetorDestino . "," . $nmTabela . "." . voDemanda::$nmAtrCdSetor . ") AS " . voDemanda::$nmAtrCdSetorAtual
+				"COALESCE (" . " . $nmTabelaTramitacao." . voDemandaTramitacao::$nmAtrCdSetorDestino . "," . $nmTabela . "." . voDemanda::$nmAtrCdSetor . ") AS " . voDemanda::$nmAtrCdSetorAtual 
 		);
 		
-		$atributosGroup = voDemandaTramitacao::$nmAtrCd . "," . voDemandaTramitacao::$nmAtrAno;		
+		$atributosGroup = voDemandaTramitacao::$nmAtrCd . "," . voDemandaTramitacao::$nmAtrAno;
 		// o proximo join eh p pegar a ultima tramitacao apenas, se houver
 		$queryJoin = "";
 		$queryJoin .= "\n LEFT JOIN (";
 		$queryJoin .= " SELECT MAX(" . voDemandaTramitacao::$nmAtrSq . ") AS " . voDemandaTramitacao::$nmAtrSq . "," . $atributosGroup . " FROM " . $nmTabelaTramitacao . " GROUP BY " . $atributosGroup;
 		$queryJoin .= ") TABELA_MAX";
 		$queryJoin .= "\n ON " . $nmTabela . "." . voDemandaTramitacao::$nmAtrAno . " = TABELA_MAX." . voDemandaTramitacao::$nmAtrAno;
-		$queryJoin .= "\n AND " . $nmTabela . "." . voDemandaTramitacao::$nmAtrCd . " = TABELA_MAX." . voDemandaTramitacao::$nmAtrCd;		
+		$queryJoin .= "\n AND " . $nmTabela . "." . voDemandaTramitacao::$nmAtrCd . " = TABELA_MAX." . voDemandaTramitacao::$nmAtrCd;
 		
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaTramitacao;
-		$queryJoin .= "\n ON " . $nmTabela . "." . voDemanda::$nmAtrAno . " = " . $nmTabelaTramitacao .".".voDemandaTramitacao::$nmAtrAno;
-		$queryJoin .= "\n AND " . $nmTabela . "." . voDemanda::$nmAtrCd . " = " . $nmTabelaTramitacao . ".".voDemandaTramitacao::$nmAtrCd;
-		$queryJoin .= "\n AND " . "TABELA_MAX." . voDemandaTramitacao::$nmAtrSq . " = " . $nmTabelaTramitacao . ".".voDemandaTramitacao::$nmAtrSq;
+		$queryJoin .= "\n ON " . $nmTabela . "." . voDemanda::$nmAtrAno . " = " . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrAno;
+		$queryJoin .= "\n AND " . $nmTabela . "." . voDemanda::$nmAtrCd . " = " . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCd;
+		$queryJoin .= "\n AND " . "TABELA_MAX." . voDemandaTramitacao::$nmAtrSq . " = " . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrSq;
 		
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaDemandaContrato;
 		$queryJoin .= "\n ON ";
@@ -81,9 +81,8 @@ class dbDemanda extends dbprocesso {
 		$queryJoin .= $nmTabelaPessoa . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
 		
 		$colecao = $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryJoin, $isHistorico, $isConsultaPorChave );
-		return $colecao;		
+		return $colecao;
 	}
-
 	function consultarTelaConsulta($vo, $filtro) {
 		$isHistorico = $filtro->isHistorico;
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
@@ -148,25 +147,28 @@ class dbDemanda extends dbprocesso {
 		
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoaContrato;
 		$queryJoin .= "\n ON ";
-		$queryJoin .= $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;		
+		$queryJoin .= $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
 		
-		$arrayGroupby = array($nmTabela . "." . voDemanda::$nmAtrAno,
-							$nmTabela . "." . voDemanda::$nmAtrCd
-		 				);
+		$arrayGroupby = array (
+				$nmTabela . "." . voDemanda::$nmAtrAno,
+				$nmTabela . "." . voDemanda::$nmAtrCd 
+		);
 		
-		if($isHistorico){
-			$arrayGroupby[] = voentidade::$nmAtrSqHist;
+		if ($isHistorico) {
+			$arrayGroupby [] = voentidade::$nmAtrSqHist;
 		}
 		
-		$filtro->groupby = $arrayGroupby;		
+		$filtro->groupby = $arrayGroupby;
 		
 		return parent::consultarMontandoQueryTelaConsulta ( $vo, $filtro, $arrayColunasRetornadas, $queryJoin );
 	}
-	function consultarDemandaTramitacao($vo) {		
+	function consultarDemandaTramitacao($vo) {
 		$nmTabela = voDemandaTramitacao::getNmTabelaStatic ( false );
 		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( false );
 		$nmTabelaDemandaTramDoc = voDemandaTramDoc::getNmTabelaStatic ( false );
 		$nmTabelaDocumento = voDocumento::getNmTabelaStatic ( false );
+		
+		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );
 		
 		$nmTabelaUsuario = vousuario::getNmTabela ();
 		
@@ -199,29 +201,32 @@ class dbDemanda extends dbprocesso {
 		$queryFrom .= "\n AND " . $nmTabelaDemandaTramDoc . "." . voDemandaTramDoc::$nmAtrTpDoc . "=" . $nmTabelaDocumento . "." . voDocumento::$nmAtrTp;
 		$queryFrom .= "\n AND " . $nmTabelaDemandaTramDoc . "." . voDemandaTramDoc::$nmAtrSqDoc . "=" . $nmTabelaDocumento . "." . voDocumento::$nmAtrSq;
 		
-		$filtro = new filtroManterDemanda (false);		
+		$filtro = new filtroManterDemanda ( false );
+		// $vo = new voContratoInfo();
+		// vo eh vodemanda
 		$filtro->vodemanda->cd = $vo->cd;
 		$filtro->vodemanda->ano = $vo->ano;
+		
 		$filtro->TemPaginacao = false;
 		
-		//echo $vo->texto;
+		// echo $vo->texto;
 		
 		return parent::consultarFiltro ( $filtro, $querySelect, $queryFrom, false );
 	}
 	function consultarDemandaContrato($vo) {
-		$isHistorico = $vo->isHistorico();
-		//$isHistorico = false;
+		$isHistorico = $vo->isHistorico ();
+		// $isHistorico = false;
 		
 		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( $isHistorico );
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
-	
+		
 		$querySelect = "SELECT ";
 		$querySelect .= $nmTabelaDemanda . ".*,";
 		$querySelect .= $nmTabelaDemandaContrato . ".*";
 		$queryFrom = " FROM " . $nmTabelaDemanda;
-			
+		
 		$queryFrom .= "\n INNER JOIN ";
 		$queryFrom .= $nmTabelaDemandaContrato;
 		$queryFrom .= "\n ON " . $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . " = " . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoDemanda;
@@ -234,24 +239,25 @@ class dbDemanda extends dbprocesso {
 		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato;
 		$queryFrom .= "\n AND ";
 		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato;
-		/*$queryJoin .= "\n AND ";
-		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdEspecieContrato;
-		$queryJoin .= "\n AND ";
-		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato;*/
+		/*
+		 * $queryJoin .= "\n AND ";
+		 * $queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdEspecieContrato;
+		 * $queryJoin .= "\n AND ";
+		 * $queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato;
+		 */
 		
 		$queryFrom .= "\n LEFT JOIN " . $nmTabelaPessoaContrato;
 		$queryFrom .= "\n ON ";
 		$queryFrom .= $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
 		
-		$filtro = new filtroManterDemanda (false);
-		//var_dump($vo);
+		$filtro = new filtroManterDemanda ( false );
+		// var_dump($vo);
 		$filtro->vodemanda->cd = $vo->cd;
 		$filtro->vodemanda->ano = $vo->ano;
-		$filtro->vodemanda->sqHist= $vo->sqHist;
+		$filtro->vodemanda->sqHist = $vo->sqHist;
 		$filtro->TemPaginacao = false;
-		$filtro->isHistorico = $isHistorico;		
+		$filtro->isHistorico = $isHistorico;
 		
-	
 		return parent::consultarFiltro ( $filtro, $querySelect, $queryFrom, false );
 	}
 	function validarAlteracao($vo) {
@@ -292,11 +298,11 @@ class dbDemanda extends dbprocesso {
 		// Start transaction
 		$this->cDb->retiraAutoCommit ();
 		try {
-			$permiteExcluirPrincipal = $this->permiteExclusaoPrincipal($vo);
-			//so exclui os relacionamentos se a exclusao for de registro historico
-			//e nao existir outro registro vigente que possa utilizar os relacionamentos
-			//if($vo->validaExclusaoRelacionamentoHistorico()){			
-			if($permiteExcluirPrincipal){
+			$permiteExcluirPrincipal = $this->permiteExclusaoPrincipal ( $vo );
+			// so exclui os relacionamentos se a exclusao for de registro historico
+			// e nao existir outro registro vigente que possa utilizar os relacionamentos
+			// if($vo->validaExclusaoRelacionamentoHistorico()){
+			if ($permiteExcluirPrincipal) {
 				$this->excluirDemandaTramitacao ( $vo );
 				$this->excluirDemandaContrato ( $vo );
 			}
@@ -377,12 +383,12 @@ class dbDemanda extends dbprocesso {
 		}
 		
 		if ($vo->texto != null) {
-			$retorno .= $sqlConector . voDemanda::$nmAtrTexto . " = " . $this->getVarComoString(strtoupper($vo->texto));
+			$retorno .= $sqlConector . voDemanda::$nmAtrTexto . " = " . $this->getVarComoString ( strtoupper ( $vo->texto ) );
 			$sqlConector = ",";
 		}
 		
 		if ($vo->tipo != null) {
-			$retorno .= $sqlConector . voDemanda::$nmAtrTipo . " = " . $this->getVarComoString($vo->tipo);
+			$retorno .= $sqlConector . voDemanda::$nmAtrTipo . " = " . $this->getVarComoString ( $vo->tipo );
 			$sqlConector = ",";
 		}
 		

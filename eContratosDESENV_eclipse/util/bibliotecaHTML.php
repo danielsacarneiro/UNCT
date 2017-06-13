@@ -160,7 +160,7 @@ function incluirUsuarioDataHoraDetalhamento($voEntidade) {
 	if ($voEntidade->dhInclusao != null) {
 		$retorno .= "<TR>
 		            <TH class='campoformulario' nowrap>Data Inclusão:</TH>
-		            <TD class='campoformulario'>
+		            <TD class='campoformulario' width='1%'>
 		            	<INPUT type='text' 
 		            	       id='" . voentidade::$nmAtrDhInclusao . "' 
 		            	       name='" . voentidade::$nmAtrDhInclusao . "' 
@@ -169,7 +169,7 @@ function incluirUsuarioDataHoraDetalhamento($voEntidade) {
 		            			size='20' 
 		            			maxlength='10' readonly>
 					</TD>
-		            <TH class='campoformulario' nowrap>Usuário Inclusão:</TH>
+		            <TH class='campoformulario' width='1%' nowrap>Usuário Inclusão:</TH>
 		            <TD class='campoformulario'>
 		            	<INPUT type='text' 
 		            	       id='" . voentidade::$nmAtrCdUsuarioInclusao . "' 

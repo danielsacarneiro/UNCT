@@ -163,17 +163,16 @@ class filtroManter extends multiplosConstrutores {
 			$strFiltro = $strFiltro . "\n GROUP BY " . $str;
 		}
 		
+		// pega do filho, se existir
+		$strOrdemDefault = "";
+		if ($this->getAtributoOrdenacaoDefault ()) {
+			$strOrdemDefault = $this->getAtributoOrdenacaoDefault ();
+		}
+		
 		if ($this->cdAtrOrdenacao != null) {
 			
 			$atributoOrdenacao = $this->cdAtrOrdenacao;
-			$ordem = $this->cdOrdenacao;
-			
-			// pega do filho, se existir
-			$strOrdemDefault = "";
-			if ($this->getAtributoOrdenacaoDefault ()) {
-				// $strOrdemDefault = "," . $this->getAtributoOrdenacaoDefault() . " " . $ordem;
-				$strOrdemDefault = "," . $this->getAtributoOrdenacaoDefault ();
-			}
+			$ordem = $this->cdOrdenacao;			
 			
 			if ($this->cdAtrOrdenacaoConsulta != null) {
 				// atributo que serve para formatar o atributo de ordenacao de acordo com a tabela que deve ser consultada
@@ -182,11 +181,25 @@ class filtroManter extends multiplosConstrutores {
 				$atributoOrdenacao = $this->cdAtrOrdenacaoConsulta;
 			}
 			
-			if ($comAtributoOrdenacao) {
-				$strFiltro = $strFiltro . "\n ORDER BY $atributoOrdenacao $ordem $strOrdemDefault ";
-			}
+			$atributoOrdenacao = "$atributoOrdenacao $ordem";
 		}
 		
+		$ordenacaoFinal = "";
+		$conectorOrdem = "";
+		//concatena as ordenacoes que existirem
+		if($atributoOrdenacao != ""){
+			$ordenacaoFinal = $atributoOrdenacao;
+			$conectorOrdem = ",";
+		}
+
+		if($strOrdemDefault != ""){
+			$ordenacaoFinal = $atributoOrdenacao . $conectorOrdem. $strOrdemDefault;
+		}
+		
+		if ($comAtributoOrdenacao && $ordenacaoFinal != "") {
+			$strFiltro = $strFiltro . "\n ORDER BY $ordenacaoFinal ";
+		}
+			
 		//echo $strFiltro;
 		
 		return $strFiltro;
