@@ -208,7 +208,8 @@ class dbDemanda extends dbprocesso {
 		$filtro->vodemanda->ano = $vo->ano;
 		
 		$filtro->TemPaginacao = false;
-		
+		$filtro->cdAtrOrdenacao = voDemandaTramitacao::$nmAtrDhInclusao;
+		$filtro->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;		
 		// echo $vo->texto;
 		
 		return parent::consultarFiltro ( $filtro, $querySelect, $queryFrom, false );
