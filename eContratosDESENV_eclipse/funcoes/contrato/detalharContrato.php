@@ -292,8 +292,9 @@ function confirmar() {
         $endereco = $voContrato->getLinkDocumento();
         ?>                
         <TD class="campoformulario" colspan=3><textarea id="<?=vocontrato::$nmAtrLinkDoc?>" name="<?=vocontrato::$nmAtrLinkDoc?>" rows="2" cols="80" class="camporeadonly" readonly><?php echo  $endereco;?></textarea>
-    	<?php echo getBotaoValidacaoAcesso("bttabrirpasta", "Abrir", "botaofuncaop", false,true,true,true, "onClick=javascript:abrirArquivoCliente('" . vocontrato::$nmAtrLinkDoc. "'); accesskey='m'");?>
-    	<!-- <a href="<?=$endereco?>" download><?=$endereco?></a>-->
+    	<?php    	
+    	echo getBotaoAbrirDocumento(vocontrato::$nmAtrLinkDoc);
+    	?>
 	</TD>                
 	</TR>	        
     

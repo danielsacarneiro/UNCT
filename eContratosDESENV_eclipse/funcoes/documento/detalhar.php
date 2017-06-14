@@ -133,15 +133,8 @@ function confirmar() {
                 <TD class="campoformulario" colspan=3><textarea id="<?=voDocumento::$nmAtrLink?>" name="<?=voDocumento::$nmAtrLink?>" rows="2" cols="80" class="camporeadonly" readonly><?php echo  $endereco;?></textarea>
                 <?php 
                 echo getBotaoAbrirDocumento(voDocumento::$nmAtrLink);
-                /*echo getBotaoValidacaoAcesso("bttabrirpasta", "Abrir", "botaofuncaop", false,true,true,true, "onClick=javascript:abrirArquivoCliente('" . voDocumento::$nmAtrLink. "'); accesskey='m'");
-                if(isUsuarioAdmin()){
-                	echo "&nbsp;" . getBotaoValidacaoAcesso("bttabrirservidor", "Abrir no Servidor", "botaofuncaop", false,true,true,true, "onClick=javascript:abrirArquivo('" . voDocumento::$nmAtrLink. "'); accesskey='m'");
-				}*/
 				?>
-                
-                <?php //echo getBotaoValidacaoAcesso("bttabrirpasta", "Abrir", "botaofuncaop", false,true,true,true, "onClick='javascript:mostrarpasta();' accesskey='m'");?>
                 </TD>
-                
             </TR>	        
             <?php 
 	            echo incluirUsuarioDataHoraDetalhamento($vo);	        	
