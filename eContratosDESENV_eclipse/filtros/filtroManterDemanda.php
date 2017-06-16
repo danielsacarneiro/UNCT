@@ -23,6 +23,7 @@ class filtroManterDemanda extends filtroManter{
 	var $nmContratada;
 	var $docContratada;
 	var $temDocumentoAnexo;
+	var $cdSetorDocumento;
 	var $tpDocumento;
 	var $sqDocumento;
 	
@@ -75,6 +76,7 @@ class filtroManterDemanda extends filtroManter{
 		$this->nmContratada = @$_POST[vopessoa::$nmAtrNome];
 		$this->docContratada = @$_POST[vopessoa::$nmAtrDoc];
 		$this->dtUltMovimentacao = @$_POST[voDemanda::$nmAtrDtReferencia];
+		$this->cdSetorDocumento = @$_POST[voDocumento::$nmAtrCdSetor];
 		$this->tpDocumento = @$_POST[voDocumento::$nmAtrTp];
 		$this->sqDocumento = @$_POST[voDocumento::$nmAtrSq];
 		$this->cdDemandaInicial = @$_POST[self::$NmAtrCdDemandaInicial];
@@ -126,7 +128,7 @@ class filtroManterDemanda extends filtroManter{
 			$conector  = "\n AND ";
 		}
 		
-		$consultaDocumento = $this->temDocumentoAnexo == constantes::$CD_SIM || $this->tpDocumento != null || $this->sqDocumento != null;
+		$consultaDocumento = $this->temDocumentoAnexo == constantes::$CD_SIM || $this->tpDocumento != null || $this->cdSetorDocumento != null || $this->sqDocumento != null;
 		if($consultaDocumento){
 			$filtro = $filtro . $conector
 			. " EXISTS (SELECT 'X' FROM " . $nmTabelaTramitacaoDoc
@@ -139,6 +141,11 @@ class filtroManterDemanda extends filtroManter{
 							. getVarComoString($this->tpDocumento);
 			}
 
+			if($this->cdSetorDocumento != null){
+				$filtro .= " AND " . $nmTabelaTramitacaoDoc. "." . voDemandaTramDoc::$nmAtrCdSetorDoc . "="
+						. getVarComoNumero($this->cdSetorDocumento);
+			}
+				
 			if($this->sqDocumento != null){
 				$filtro .= " AND " . $nmTabelaTramitacaoDoc. "." . voDemandaTramDoc::$nmAtrSqDoc . "="
 						. getVarComoNumero($this->sqDocumento);						

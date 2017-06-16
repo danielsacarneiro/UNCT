@@ -221,13 +221,8 @@ function encaminhar() {
             </TR>
             <?php            
             $comboTpDoc = new select(dominioTpDocumento::getColecao());
-            ?>	                    
-            <TR>
-	            <TH class="campoformulario" nowrap width="1%">Doc.Anexo:</TH>
-				<TD class="campoformulario" width="1%" colspan=3><?php echo $comboTpDoc->getHtmlSelect(voDocumento::$nmAtrTp,voDocumento::$nmAtrTp, $filtro->tpDocumento, true, "camponaoobrigatorio", true);?>
-				Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voDocumento::$nmAtrSq?>" name="<?=voDocumento::$nmAtrSq?>"  value="<?php echo(complementarCharAEsquerda($filtro->sqDocumento, "0", TAMANHO_CODIGOS));?>"  class="camponaoobrigatorio" size="6" maxlength="5">
-			</TR>
-            <?php            
+            $comboSetor = new select(dominioSetor::getColecao());
+
             $voUsuario = new voUsuarioInfo();
             $filtroUsu = new filtroManterUsuario(false);
             $colecaoUsu = $voUsuario->dbprocesso->consultarTelaConsulta($voUsuario, $filtroUsu);
@@ -236,7 +231,13 @@ function encaminhar() {
             ?>	                    
             <TR>
 	            <TH class="campoformulario" nowrap width="1%">Usuário:</TH>
-				<TD class="campoformulario" width="1%" colspan=3><?php echo $comboUsuTramitacao->getHtmlSelect(filtroManterDemanda::$NmAtrCdUsuarioTramitacao,filtroManterDemanda::$NmAtrCdUsuarioTramitacao, $filtro->cdUsuarioTramitacao, true, "camponaoobrigatorio", true);?>				
+				<TD class="campoformulario" width="1%"><?php echo $comboUsuTramitacao->getHtmlSelect(filtroManterDemanda::$NmAtrCdUsuarioTramitacao,filtroManterDemanda::$NmAtrCdUsuarioTramitacao, $filtro->cdUsuarioTramitacao, true, "camponaoobrigatorio", true);?>
+				<TH class="campoformulario" nowrap width="1%">Doc.Anexo:</TH>
+				<TD class="campoformulario" >
+				Tipo: <?php echo $comboTpDoc->getHtmlSelect(voDocumento::$nmAtrTp,voDocumento::$nmAtrTp, $filtro->tpDocumento, true, "camponaoobrigatorio", true);?>
+				Setor: <?php echo $comboSetor->getHtmlCombo(voDocumento::$nmAtrCdSetor,voDocumento::$nmAtrCdSetor, $filtro->cdSetorDocumento, true, "camponaoobrigatorio", true, "");?> 
+				Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voDocumento::$nmAtrSq?>" name="<?=voDocumento::$nmAtrSq?>"  value="<?php echo(complementarCharAEsquerda($filtro->sqDocumento, "0", TAMANHO_CODIGOS));?>"  class="camponaoobrigatorio" size="6" maxlength="5">
+								
 			</TR>
        <?php
         /*$comboOrdenacao = new select(voPA::getAtributosOrdenacao($cdHistorico));
