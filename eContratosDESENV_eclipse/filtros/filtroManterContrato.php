@@ -150,7 +150,7 @@ class filtroManterContrato extends filtroManter {
 		}
 		
 		if ($this->docContratada != null) {
-			$filtro = $filtro . $conector . $nmTabela . "." . vocontrato::$nmAtrDocContratadaContrato . "='" . $this->docContratada . "'";
+			$filtro = $filtro . $conector . $nmTabela . "." . vocontrato::$nmAtrDocContratadaContrato . "='" . documentoPessoa::getNumeroDocSemMascara($this->docContratada) . "'";
 			
 			$conector = "\n AND ";
 		}
