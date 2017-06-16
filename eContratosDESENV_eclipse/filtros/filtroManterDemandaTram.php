@@ -61,6 +61,19 @@ class filtroManterDemandaTram extends filtroManterDemanda{
 					$conector  = "\n AND ";
 		}
 		
+		if($this->vodemanda->texto != null){
+			//echo "tem texto";
+			$filtro = $filtro . $conector
+			. $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrTexto
+			/*. " LIKE '"
+			 . substituirCaracterSQLLike($this->vodemanda->texto)*/
+			. " LIKE '%"
+			 		. $this->vodemanda->texto
+			 		. "%'";
+		
+			 		$conector  = "\n AND ";
+		}		
+		
 		if($this->vodemanda->cdSetor != null){
 			$filtro = $filtro . $conector
 			. $nmTabela. "." .voDemanda::$nmAtrCdSetor

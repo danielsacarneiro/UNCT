@@ -132,11 +132,13 @@ function alterar() {
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
 	            <TD class="campoformulario" colspan="3"><?php getContratoEntradaDeDados($filtro->vocontrato->tipo, $filtro->vocontrato->cdContrato, $filtro->vocontrato->anoContrato, $arrayCssClass, null, null);?></TD>
 			</TR>
-	                    
+	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">Texto:</TH>
+	            <TD class="campoformulario" nowrap width="1%" colspan="3">				
+	            <INPUT type="text" id="<?=voDemanda::$nmAtrTexto?>" name="<?=voDemanda::$nmAtrTexto?>" value="<?=$filtro->vodemanda->texto?>"  class="camponaoobrigatorio" size="50">
+	            </TD>
+	        </TR>	                    
        <?php
-        /*$comboOrdenacao = new select(voPA::getAtributosOrdenacao($cdHistorico));
-        $cdAtrOrdenacao = $filtro->cdAtrOrdenacao;
-        echo getComponenteConsulta($comboOrdenacao, $cdAtrOrdenacao, $cdOrdenacao, $qtdRegistrosPorPag, true, $cdHistorico)*/
        echo getComponenteConsultaFiltro($vo->temTabHistorico, $filtro);
         ?>
        </TBODY>
