@@ -108,7 +108,7 @@ function getCampoContratada($pNmContratada, $pDocContratada, $pChaveContrato){
 	$idContrato = vopessoa::$ID_CONTRATO . $pChaveContrato;
 	
 	//vai em colchete porque podem ser retornados mais de um contrato
-	$retorno .= "<INPUT type='hidden' id='" . $idContrato. "' name='".vopessoa::$ID_CONTRATO."[]' value='".$pChaveContrato."' >\n";
+	$retorno .= "<INPUT type='hidden' id='" . $idContrato. "' name='".vopessoa::getID_REQ_ColecaoContrato()."' value='".$pChaveContrato."' onLoad='alert(this.name);'>\n";
 
 	return $retorno;
 }

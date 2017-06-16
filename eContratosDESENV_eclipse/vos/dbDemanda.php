@@ -10,9 +10,7 @@ class dbDemanda extends dbprocesso {
 			$voContrato->getDadosBanco ( $colecao );
 			
 			$vo->getDadosBanco ( $colecao );
-			$vo->colecaoContrato = array (
-					$voContrato 
-			);
+			$vo->colecaoContrato = array ($voContrato);
 		} catch ( excecaoMaisDeUmRegistroRetornado $ex ) {
 			// faz consulta a parte
 			// nao valida a consulta por chave
@@ -249,6 +247,10 @@ class dbDemanda extends dbprocesso {
 		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato;
 		$queryFrom .= "\n AND ";
 		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato;
+		$queryFrom .= "\n AND ";
+		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdEspecieContrato;
+		$queryFrom .= "\n AND ";
+		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato;
 		/*
 		 * $queryJoin .= "\n AND ";
 		 * $queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdEspecieContrato;

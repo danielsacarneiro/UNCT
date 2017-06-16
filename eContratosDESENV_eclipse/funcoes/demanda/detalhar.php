@@ -133,6 +133,7 @@ function confirmar() {
 	        </TR>	        	        
 	        <?php
  	        require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
+ 	       // var_dump($vo->colecaoContrato);
  	        getColecaoContratoDet($vo->colecaoContrato);
 	        ?>            
 			<TR>

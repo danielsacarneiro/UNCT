@@ -46,6 +46,10 @@ include_once(caminho_util."DocumentoPessoa.php");
         return  "dbpessoa";
     }      
     
+    public static function getID_REQ_ColecaoContrato(){
+    	return  self::$ID_CONTRATO."[]";
+    }
+    
     function getValoresWhereSQLChave($isHistorico){
         $nmTabela = $this->getNmTabelaEntidade($isHistorico);        
 		$query = $nmTabela . "." . vopessoa::$nmAtrCd . "=" . $this->cd;

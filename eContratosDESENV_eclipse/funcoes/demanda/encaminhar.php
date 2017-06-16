@@ -71,7 +71,7 @@ function isFormularioValido() {
 	campoSetorDestino = document.frm_principal.<?=voDemandaTramitacao::$nmAtrCdSetorDestino?>;
 	campoTipoDemanda = document.frm_principal.<?=voDemandaTramitacao::$nmAtrTipo?>;
 	//verifica se tem algum contrato selecionado atraves do campo pessoa contratada preenchido
-	campoPessoaContrato = document.getElementsByName("<?=vopessoa::$ID_CONTRATO?>");
+	campoPessoaContrato = document.getElementsByName("<?=vopessoa::getID_REQ_ColecaoContrato()?>")[0];
 
 	if(campoSetorDestino.value != "" && !isCampoTextoValido(document.frm_principal.<?=voDemandaTramitacao::$nmAtrTexto?>, true))	
 		return false;		
