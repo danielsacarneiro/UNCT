@@ -170,7 +170,25 @@ Class voContratoInfo extends voentidade{
 	function getMensagemComplementarTelaSucesso(){
 		$retorno = "Contrato : " . formatarCodigoContrato($this->cdContrato, $this->anoContrato, $this->tipo);
 		return $retorno; 
-	}	
+	}
+	
+	static function getOperacaoFiltroCdAutorizacaoOR_AND($colecaoAutorizacao, $InOR_AND){
+		
+		$parametroMetodoEspecifico = dominioAutorizacao::getColecaoCdAutorizacaoIntercace($colecaoAutorizacao, $InOR_AND);
+		$operador = " IN ";
+		$parametroComparacao = " (" . getSQLStringFormatadaColecaoIN($parametroMetodoEspecifico, false) . ")";
+		if($InOR_AND == constantes::$CD_OPCAO_AND){
+			$operador = " = ";
+			$parametroComparacao = $parametroMetodoEspecifico;
+		}
+		//var_dump($parametroMetodoEspecifico);
+		
+		$retorno = " $operador $parametroComparacao";
+		;
+		
+		return $retorno;
+		
+	} 
 
 }
 ?>

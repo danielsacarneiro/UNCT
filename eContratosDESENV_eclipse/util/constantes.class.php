@@ -37,6 +37,11 @@
     static $CD_ORDEM_CRESCENTE = "ASC";
     static $CD_ORDEM_DECRESCENTE = "DESC";
     
+    static $CD_OPCAO_OR = "OR";
+    static $CD_OPCAO_AND = "AND";
+    static $DS_OPCAO_OR = "OU";
+    static $DS_OPCAO_AND = "E";
+    
     /*"01" => "Mater",
     "02" => "Apostilamento",
     "03" => "Termo Aditivo",

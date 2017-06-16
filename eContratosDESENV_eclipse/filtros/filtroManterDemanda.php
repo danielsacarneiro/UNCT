@@ -9,12 +9,14 @@ class filtroManterDemanda extends filtroManter{
 	public $nmFiltro = "filtroManterDemanda";
 	static $NmColDhUltimaMovimentacao = "NmColDhUltimaMovimentacao";
 	static $NmColQtdContratos = "NmColQtdContratos";
+
 	static $NmAtrCdDemandaInicial = "NmAtrCdDemandaInicial";
 	static $NmAtrCdDemandaFinal = "NmAtrCdDemandaFinal";
 	static $NmAtrCdUsuarioTramitacao = "NmAtrCdUsuarioTramitacao";
 	
 	static $NmAtrVlGlobalInicial = "NmAtrVlGlobalInicial";
 	static $NmAtrVlGlobalFinal = "NmAtrVlGlobalFinal";
+	static $NmAtrInOR_AND = "NmAtrInOR_AND";
 	
 	var $vodemanda;
 	var $vocontrato;
@@ -31,6 +33,8 @@ class filtroManterDemanda extends filtroManter{
 
 	var $vlGlobalInicial;
 	var $vlGlobalFinal;
+	
+	var $InOR_AND;
 	
 	// ...............................................................
 	// construtor
@@ -80,6 +84,10 @@ class filtroManterDemanda extends filtroManter{
 		$this->vlGlobalFinal = @$_POST[self::$NmAtrVlGlobalFinal];
 		
 		$this->cdUsuarioTramitacao = @$_POST[self::$NmAtrCdUsuarioTramitacao];
+		$this->InOR_AND = @$_POST[self::$NmAtrInOR_AND];
+		if($this->InOR_AND == null){
+			$this->InOR_AND = constantes::$CD_OPCAO_OR;
+		}
 		
 		if($this->cdOrdenacao == null){
 			$this->cdOrdenacao = constantes::$CD_ORDEM_CRESCENTE;
@@ -95,6 +103,7 @@ class filtroManterDemanda extends filtroManter{
 		$nmTabelaTramitacaoDoc = voDemandaTramDoc::getNmTabelaStatic(false);
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic(false);
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic(false);
+		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic(false);
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic(false);
 					
 		//seta os filtros obrigatorios
@@ -316,24 +325,22 @@ class filtroManterDemanda extends filtroManter{
 		
 		//echo $this->vocontrato->cdAutorizacao; 
 		if($this->vocontrato->cdAutorizacao != null){
+			$strComparacao = "COALESCE (" . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrCdAutorizacaoContrato 
+							. "," 
+							. $nmTabelaContrato . "." . voContrato::$nmAtrCdAutorizacaoContrato . ")";
 			
 			if(!is_array($this->vocontrato->cdAutorizacao)){
 				$filtro = $filtro . $conector
-				. $nmTabelaContrato. "." .vocontrato::$nmAtrCdAutorizacaoContrato
+				//. $nmTabelaContrato. "." .vocontrato::$nmAtrCdAutorizacaoContrato
+				. $strComparacao
 				. " = "
 						. $this->vocontrato->cdAutorizacao
 						;				
 			}else{
 				
-				$colecaoAutorizacao = $this->vocontrato->cdAutorizacao;
-				$parametroMetodoEspecifico = dominioAutorizacao::getColecaoCdAutorizacaoIntercace($colecaoAutorizacao);
+				$colecaoAutorizacao = $this->vocontrato->cdAutorizacao;				
+				$filtro = $filtro . $conector . $strComparacao . voContratoInfo::getOperacaoFiltroCdAutorizacaoOR_AND($colecaoAutorizacao, $this->InOR_AND);
 				
-				//var_dump($parametroMetodoEspecifico);
-				
-				$filtro = $filtro . $conector
-				. $nmTabelaContrato. "." .vocontrato::$nmAtrCdAutorizacaoContrato
-				. " IN (" . getSQLStringFormatadaColecaoIN($parametroMetodoEspecifico, false) . ")";
-				;				
 			}			
 			
 			$conector  = "\n AND ";

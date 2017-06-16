@@ -13,13 +13,20 @@ function carregaNovoCampoContrato(pNmCampoDiv, pIndice) {
 	getNovoCampoDadosContratoAjax(pNmCampoDiv,pIndice, false);
 	_globalQtdContrato++;
 	
+	if(_globalQtdContrato > 9){
+		exibirMensagem("ATENÇÃO: Muitos contratos podem provocar erro no sistema.");
+	}
 	//campoQtdContrato = document.getElementById(pNMCampoQtdContratos);
 	//campoQtdContrato.value = _globalQtdContrato;		    
 }
 
-function limparCampoContrato(pNmCampoDiv, pIndice) {
-	
-	if(pIndice == 1){		
+function limparCampoContrato(pNmCampoDiv, pIndice, pNmCampoDivContratada, pColecaoCamposALimpar) {	
+	if(pIndice == 1){
+		//biblioteca_funcoes_principal.js	
+		//alert(pColecaoCamposALimpar);
+		var colecaoElementos = pColecaoCamposALimpar.split(CD_CAMPO_SEPARADOR);
+		limparCamposColecaoFormulario(colecaoElementos);
+		limpaCampoDiv(pNmCampoDivContratada);
 		return;
 	}
 	getNovoCampoDadosContratoAjax(pNmCampoDiv,pIndice, true);

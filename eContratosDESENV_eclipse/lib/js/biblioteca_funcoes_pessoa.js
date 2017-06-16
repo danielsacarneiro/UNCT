@@ -14,12 +14,16 @@ function carregaDadosContratada(pNmCampoAnoContrato, pNmCampoTipoContrato, pNmCa
 	cdContrato = document.getElementById(pNmCampoCdContrato).value;
 	anoContrato = document.getElementById(pNmCampoAnoContrato).value;
 	tpContrato = document.getElementById(pNmCampoTipoContrato).value;
-	cdEspecieContrato = document.getElementById(pNmCampoCdEspecieContrato).value;
-	sqEspecieContrato = document.getElementById(pNmCampoSqEspecieContrato).value;
+	try{
+		cdEspecieContrato = document.getElementById(pNmCampoCdEspecieContrato).value;
+		sqEspecieContrato = document.getElementById(pNmCampoSqEspecieContrato).value;
+	}catch(ex){		
+		cdEspecieContrato = null;
+		sqEspecieContrato = null;		
+	}
 	//alert(cdContrato + CD_CAMPO_SEPARADOR + anoContrato + CD_CAMPO_SEPARADOR + tpContrato);
-		
+
 	//fica assim por conta do formato da chave do vocontrato
-	sqContrato = "";
 	if(cdContrato != "" && anoContrato != "" && tpContrato != ""){
 		str = "" + CD_CAMPO_SEPARADOR + anoContrato + CD_CAMPO_SEPARADOR + tpContrato + CD_CAMPO_SEPARADOR + cdContrato;
 		
@@ -32,6 +36,9 @@ function carregaDadosContratada(pNmCampoAnoContrato, pNmCampoTipoContrato, pNmCa
 		//alert(str);
 		//vai no ajax
 		getDadosContratadaPorContrato(str, pNmCampoDiv);
+	}else{
+		//limpa o campodiv da contratada
+		limpaCampoDiv(pNmCampoDiv);		
 	}
 }
 

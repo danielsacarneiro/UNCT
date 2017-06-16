@@ -128,6 +128,30 @@ function tratarUnload() {
 	ocultarMensagemAguarde();
 }
 
+function limparCampoFormularioEConti(element){
+	if(element.type == 'select-one'){
+		element[0].selected = true;
+	}else if(element.type == 'checkbox'){
+		element.checked = false;				
+	}else {		
+		element.value='';
+	}
+}
+
+function limparCamposColecaoFormulario(colecaoIDCampos){	
+	
+	for(i=0;i<colecaoIDCampos.length;i++){					
+		id = colecaoIDCampos[i];		
+		element = document.getElementById(id);		
+		limparCampoFormularioEConti(element);
+	}
+}
+
+function limpaCampoDiv(pNmCampoDiv){
+	objectResult = document.getElementById(pNmCampoDiv);
+	objectResult.innerHTML = "";
+}
+
 function limparFormularioGeral(){	
 
 	frm_principal.reset();
@@ -142,16 +166,12 @@ function limparFormularioGeral(){
 						|| element.name == "cdHistorico"							
 						|| element.name == "cdOrdenacao"; 
 		if(!naoValidar){
-			//alert(element.type);		
-			if(element.type == 'select-one'){
-				element[0].selected = true;
-			}if(element.type == 'checkbox'){
-				element.checked = false;				
-			}else {
-				
-				element.value='';
-			}
-		}
+			//alert(element.type);
+			limparCampoFormularioEConti(element);
+		}/*else{
+			alert("tipo:" + element.type + " - nome:" + element.id);
+		}*/
+		
 	}
 }
 

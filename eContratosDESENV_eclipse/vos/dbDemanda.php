@@ -89,6 +89,7 @@ class dbDemanda extends dbprocesso {
 		$nmTabelaTramitacao = voDemandaTramitacao::getNmTabela ();
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabela ();
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
+		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
 		
 		$colunaUsuHistorico = "";
@@ -144,6 +145,14 @@ class dbDemanda extends dbprocesso {
 		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdEspecieContrato;
 		$queryJoin .= "\n AND ";
 		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato;
+		
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaContratoInfo;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato . "=" . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrAnoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato . "=" . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrTipoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato . "=" . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrCdContrato;
 		
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoaContrato;
 		$queryJoin .= "\n ON ";

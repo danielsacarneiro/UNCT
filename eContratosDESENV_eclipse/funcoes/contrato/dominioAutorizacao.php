@@ -30,43 +30,71 @@ class dominioAutorizacao extends dominio {
 				self::$CD_AUTORIZ_SAD_PGE_GOV => self::$DS_AUTORIZ_SAD_PGE_GOV 
 		);
 	}
-	static function temAutorizacao($cdAutorizacao, $colecaoAutorizacao) {	
-		return in_array($cdAutorizacao, $colecaoAutorizacao);
+	static function temAutorizacao($cdAutorizacao, $colecaoAutorizacao) {
+		return in_array ( $cdAutorizacao, $colecaoAutorizacao );
 	}
-	
 	static function checkedTemAutorizacao($cdAutorizacao, $colecaoAutorizacao) {
 		$retorno = "";
-		if($colecaoAutorizacao != null && self::temAutorizacao($cdAutorizacao, $colecaoAutorizacao)){
+		if ($colecaoAutorizacao != null && self::temAutorizacao ( $cdAutorizacao, $colecaoAutorizacao )) {
 			$retorno = " checked ";
 		}
 		return $retorno;
 	}
-	
-	static function getColecaoCdAutorizacaoIntercace($colecaoAutorizacao) {
+	static function getColecaoCdAutorizacaoIntercace($colecaoAutorizacao, $InOR_AND) {
+		if($InOR_AND == constantes::$CD_OPCAO_OR)
+			return self::getColecaoCdAutorizacaoIntercaceOR ( $colecaoAutorizacao );
+		else
+			return self::getColecaoCdAutorizacaoIntercaceAND( $colecaoAutorizacao );
+	}
+	static function getColecaoCdAutorizacaoIntercaceOR($colecaoAutorizacao) {
+		$temSAD = in_array ( self::$CD_AUTORIZ_SAD, $colecaoAutorizacao );
+		$temPGE = in_array ( self::$CD_AUTORIZ_PGE, $colecaoAutorizacao );
+		$temGOV = in_array ( self::$CD_AUTORIZ_GOV, $colecaoAutorizacao );
 		
- 		$temSAD = in_array(self::$CD_AUTORIZ_SAD, $colecaoAutorizacao);
- 		$temPGE = in_array(self::$CD_AUTORIZ_PGE, $colecaoAutorizacao);
- 		$temGOV = in_array(self::$CD_AUTORIZ_GOV, $colecaoAutorizacao);
- 			
- 		$retorno = "";
-
+		$retorno = "";
+		
 		if ($temSAD || $temPGE || $temGOV) {
-			$retorno[] = self::$CD_AUTORIZ_SAD_PGE_GOV;
-		} 
-		else{
-			$retorno[] = self::$CD_AUTORIZ_NENHUM;
+			$retorno [] = self::$CD_AUTORIZ_SAD_PGE_GOV;
+		} else {
+			$retorno [] = self::$CD_AUTORIZ_NENHUM;
 		}
-
+		
 		if ($temSAD || $temPGE) {
-			$retorno[] = self::$CD_AUTORIZ_SAD_PGE;
+			$retorno [] = self::$CD_AUTORIZ_SAD_PGE;
 		}
 		
 		if ($temSAD) {
-			$retorno[] = self::$CD_AUTORIZ_SAD;
+			$retorno [] = self::$CD_AUTORIZ_SAD;
 		}
 		
 		if ($temPGE) {
-			$retorno[] = self::$CD_AUTORIZ_PGE;
+			$retorno [] = self::$CD_AUTORIZ_PGE;
+		}
+		
+		return $retorno;
+	}
+	static function getColecaoCdAutorizacaoIntercaceAND($colecaoAutorizacao) {
+		$temSAD = in_array ( self::$CD_AUTORIZ_SAD, $colecaoAutorizacao );
+		$temPGE = in_array ( self::$CD_AUTORIZ_PGE, $colecaoAutorizacao );
+		$temGOV = in_array ( self::$CD_AUTORIZ_GOV, $colecaoAutorizacao );
+		$temNenhum = in_array ( self::$CD_AUTORIZ_NENHUM, $colecaoAutorizacao );
+		
+		$retorno = "";
+		
+		if($temNenhum){
+			$retorno =  self::$CD_AUTORIZ_NENHUM;
+		}else if ($temSAD && $temPGE && $temGOV) {
+			$retorno = self::$CD_AUTORIZ_SAD_PGE_GOV;
+		} else if ($temSAD && $temPGE) {
+			$retorno = self::$CD_AUTORIZ_SAD_PGE;
+		} else if ($temSAD) {
+			$retorno = self::$CD_AUTORIZ_SAD;
+		} else if ($temPGE) {
+			$retorno = self::$CD_AUTORIZ_PGE;
+		} else if ($temGOV) {
+			$retorno = self::$CD_AUTORIZ_GOV;
+		} else {
+			$retorno = self::$CD_AUTORIZ_NENHUM;
 		}
 		
 		return $retorno;

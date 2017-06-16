@@ -69,9 +69,17 @@ setCabecalho($titulo);
 function isFormularioValido() {
 
 	campoSetorDestino = document.frm_principal.<?=voDemandaTramitacao::$nmAtrCdSetorDestino?>;
+	campoTipoDemanda = document.frm_principal.<?=voDemandaTramitacao::$nmAtrTipo?>;
+	//verifica se tem algum contrato selecionado atraves do campo pessoa contratada preenchido
+	campoPessoaContrato = document.getElementsByName("<?=vopessoa::$ID_CONTRATO?>");
 
 	if(campoSetorDestino.value != "" && !isCampoTextoValido(document.frm_principal.<?=voDemandaTramitacao::$nmAtrTexto?>, true))	
 		return false;		
+	
+	if(campoTipoDemanda.value == "<?=dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL?>" && campoPessoaContrato != null){
+		exibirMensagem("Tipo da Demanda não permite inclusão de contrato");	
+		return false;		
+	}
 	
 	return true;
 }

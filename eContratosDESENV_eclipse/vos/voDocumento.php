@@ -131,12 +131,18 @@ class voDocumento extends voentidade {
 		
 		return $retorno;
 	}
-	function formatarCodigo() {
-		return self::formatarCodigoDocumento ( $this->sq, $this->cdSetor, $this->ano, $this->tp );
+	function formatarCodigo($comDescricaoPorExtenso = false) {
+		$retorno = self::formatarCodigoDocumento ( $this->sq, $this->cdSetor, $this->ano, $this->tp );
+		
+		if($comDescricaoPorExtenso)
+			$retorno = $this->link;		
+		
+		return $retorno;
 	}
 	static function formatarCodigoDocumento($sq, $cdSetor, $ano, $tpDoc) {
 		// biblioteca_htmlDocumento
-		return formatarCodigoDocumento ( $sq, $cdSetor, $ano, $tpDoc );
+		$retorno = formatarCodigoDocumento ( $sq, $cdSetor, $ano, $tpDoc );		
+		return $retorno;
 	}
 	function toString() {
 		$retorno .= "Ano:" . $this->ano . ",";
