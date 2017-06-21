@@ -99,8 +99,12 @@ function mostrarGridDemanda($colecaoTramitacao, $isDetalhamento) {
 		$html .= "</TH>\n";
 		$html .= "</TR>\n";
 		
-		// inclui o setor origem que vai ser o setor destino da ultima tramitacao
-		$html .= "<INPUT type='hidden' id='" . voDemandaTramitacao::$nmAtrCdSetorOrigem . "' name='" . voDemandaTramitacao::$nmAtrCdSetorOrigem . "' value='" . $voAtual->cdSetorDestino . "'> \n";
+		$isSetorAtual = $i = 0;
+		// o setor origem vai ser o setor destino da ultima tramitacao
+		//ATENCAo a ordenacao da consulta. O setor atual/origem serah o da ultima tramitacao em caso de ordenacao crescente. Caso contrario, sera o da primeira tramitacao.
+		if($isSetorAtual){
+			$html .= "<INPUT type='hidden' id='" . voDemandaTramitacao::$nmAtrCdSetorOrigem . "' name='" . voDemandaTramitacao::$nmAtrCdSetorOrigem . "' value='" . $voAtual->cdSetorDestino . "'> \n";
+		}
 	}
 	
 	echo $html;
@@ -182,9 +186,6 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento) {
 		$html .= "</DIV> \n";
 		$html .= "</TH>\n";
 		$html .= "</TR>\n";
-
-		// inclui o setor origem que vai ser o setor destino da ultima tramitacao
-		$html .= "<INPUT type='hidden' id='" . voDemandaTramitacao::$nmAtrCdSetorOrigem . "' name='" . voDemandaTramitacao::$nmAtrCdSetorOrigem . "' value='" . $voAtual->cdSetorDestino . "'> \n";
 	}
 
 	echo $html;
