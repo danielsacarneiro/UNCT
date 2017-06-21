@@ -7,6 +7,7 @@ class filtroManterContrato extends filtroManter {
 	public static $nmFiltro = "filtroManterContrato";
 	public static $nmAtrInTrazerConsolidadoPorVigencia = "nmAtrInTrazerConsolidadoPorVigencia";	
 	public static $nmAtrAnoArquivo = "nmAtrAnoArquivo";
+	public static $nmAtrTpDemanda = "nmAtrTpDemanda";
 		
 	var $cdContrato;
 	var $anoContrato;
@@ -34,11 +35,20 @@ class filtroManterContrato extends filtroManter {
 	var $cdConsultarArquivo;
 	var $inTrazerConsolidadoVigencia;
 	
+	var $tpDemanda;
+	
 	// ...............................................................
 	// construtor
 	
 	function __construct1($pegarFiltrosDaTela) {
 		parent::__construct1($pegarFiltrosDaTela);
+		
+		$querySelect = "SELECT * ";
+		$queryJoin = " FROM " . vocontrato::getNmTabelaStatic($this->isHistorico);
+			
+		//ACRESCENTA A CONSULTA
+		$this->setQueryFromJoin($queryJoin);
+		$this->setQuerySelect($querySelect);
 	
 		if($pegarFiltrosDaTela){
 			$this->getFiltroFormulario();		
@@ -71,6 +81,7 @@ class filtroManterContrato extends filtroManter {
 		
 		$this->cdConsultarArquivo = @$_POST ["cdConsultarArquivo"];
 		$this->inTrazerConsolidadoVigencia = @$_POST [self::$nmAtrInTrazerConsolidadoPorVigencia];		
+		$this->tpDemanda = @$_POST [self::$nmAtrTpDemanda];
 	}
 		
 	function isSetaValorDefault() {
@@ -231,7 +242,61 @@ class filtroManterContrato extends filtroManter {
 			
 			$conector = "\n AND ";
 		}
+				
+		if ($this->tpDemanda != null && !$this->isAtributoArrayVazio($this->tpDemanda)) {
+			$nmTabelaDemanda = voDemanda::getNmTabelaStatic(false);
+			$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );
+			$nmTabelaTramitacao = voDemandaTramitacao::getNmTabela ();
+				
+			$queryJoin .= $this->getQueryFromJoin() . "\n INNER JOIN " . $nmTabelaDemandaContrato;
+			$queryJoin .= "\n ON ";
+			$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrAnoContrato;
+			$queryJoin .= "\n AND ";
+			$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
+			$queryJoin .= "\n AND ";
+			$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrCdContrato;
+			$queryJoin .= "\n AND ";
+			$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdEspecieContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrCdEspecieContrato;
+			$queryJoin .= "\n AND ";
+			$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrSqEspecieContrato;
+				
+			$queryJoin .= "\n INNER JOIN " . $nmTabelaDemanda;
+			$queryJoin .= "\n ON ";
+			$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoDemanda . "=" . $nmTabelaDemanda . "." . voDemanda::$nmAtrAno;
+			$queryJoin .= "\n AND " . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdDemanda . "=" . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd;
+			
+			// o proximo join eh p pegar a ultima tramitacao apenas, se houver
+			$atributosGroup = voDemandaTramitacao::$nmAtrCd . "," . voDemandaTramitacao::$nmAtrAno;
+			$queryJoin .= "\n LEFT JOIN (";
+			$queryJoin .= " SELECT MAX(" . voDemandaTramitacao::$nmAtrSq . ") AS " . voDemandaTramitacao::$nmAtrSq . "," . $atributosGroup . " FROM " . $nmTabelaTramitacao . " GROUP BY " . $atributosGroup;
+			$queryJoin .= ") TABELA_MAX";
+			$queryJoin .= "\n ON " . $nmTabelaDemanda . "." . voDemandaTramitacao::$nmAtrAno . " = TABELA_MAX." . voDemandaTramitacao::$nmAtrAno;
+			$queryJoin .= "\n AND " . $nmTabelaDemanda . "." . voDemandaTramitacao::$nmAtrCd . " = TABELA_MAX." . voDemandaTramitacao::$nmAtrCd;
+			
+			$queryJoin .= "\n LEFT JOIN " . $nmTabelaTramitacao;
+			$queryJoin .= "\n ON " . $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . " = " . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrAno;
+			$queryJoin .= "\n AND " . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd . " = " . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCd;
+			$queryJoin .= "\n AND " . "TABELA_MAX." . voDemandaTramitacao::$nmAtrSq . " = " . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrSq;				
+			
+			$this->setQueryFromJoin($queryJoin);
+						
+			if(is_array($this->tpDemanda) && count($this->tpDemanda) > 1){
+				$comparar = " IN (" . getSQLStringFormatadaColecaoIN($this->tpDemanda, false) . ")";
+			}else{
+				$comparar = " = " . $this->tpDemanda[0];
+			}
+				
+			//traz apenas das demandas abertas e que estao na ATJA
+			$filtro = $filtro . $conector . $nmTabelaDemanda . "." . voDemanda::$nmAtrTipo . $comparar;
+			$filtro = $filtro . " AND " . $nmTabelaDemanda . "." . voDemanda::$nmAtrSituacao . " = "  . dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_ABERTA;
+			$filtro = $filtro . " AND " . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . " = "  . dominioSetor::$CD_SETOR_ATJA;
+				
+			$conector = "\n AND ";		
+		}
 		
+		//serve para retirar a ambiguidade, quando existir, do atributo da ordenacao
+		//nem sempre sera usado pelos filtros
+		$this->formataCampoOrdenacao(new vocontrato());
 		// finaliza o filtro
 		$filtro = parent::getFiltroConsulta ( $filtro );
 		

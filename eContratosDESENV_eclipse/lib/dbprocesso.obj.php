@@ -254,10 +254,13 @@ class dbprocesso {
 	function consultarTelaConsulta($filtro, $querySelect, $queryFrom) {
 		return $this->consultarFiltro ( $filtro, $querySelect, $queryFrom, true );
 	}
+	function consultarFiltroManter($filtro, $validaConsulta) {		
+		return $this->consultarFiltro($filtro, $filtro->getQuerySelect(), $filtro->getQueryFromJoin(), $validaConsulta);
+	}
 	function consultarFiltro($filtro, $querySelect, $queryFrom, $validaConsulta) {
 		$retorno = "";
 		$isHistorico = ("S" == $filtro->cdHistorico);
-		
+				
 		// flag que diz se pode consultar ou nao
 		$consultar = @$_GET ["consultar"];
 		
@@ -267,6 +270,11 @@ class dbprocesso {
 			
 			$filtroSQL = $filtro->getSQLWhere ( true );
 			// echo $filtroSQL. "<br>";
+			
+			//para os casos em que o filtro passa conter o sql de consulta internamente
+			if($filtro->temQueryPadrao()){
+				$queryFrom = $filtro->getQueryFromJoin();
+			}				
 			
 			// verifica se tem paginacao
 			$limite = "";

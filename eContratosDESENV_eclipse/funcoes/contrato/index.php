@@ -234,25 +234,28 @@ function confirmar() {
 			$tiposContrato = new select($dominioTipoContrato->colecao);            
 			
 			$comboEspecies = new select(dominioEspeciesContrato::getColecao());
-				
+			$comboTpDemanda = new select(dominioTipoDemanda::getColecaoTipoDemandaContrato());				
 			?>
     			<TH class="campoformulario" nowrap>Espécies:</TH>
                 <TD class="campoformulario"><?php echo $comboEspecies->getHtmlCombo(vocontrato::$nmAtrCdEspecieContrato, vocontrato::$nmAtrCdEspecieContrato."[]", $filtro->cdEspecie, true, "camponaoobrigatorio", false, " multiple ")?>
-                </TD>												                
-                <TH class="campoformulario" nowrap>Modalidade:</TH>
-			<?php
-			include_once("dominioModalidadeLicitacao.php");
-			$modalidades = new dominioModalidadeLicitacao();
-			$combo = new select($modalidades->colecao);						
-			?>
-                 <TD class="campoformulario" nowrap><?php echo $combo->getHtml("cdModalidade","cdModalidade", $modalidade);?>
-                    <INPUT type="text" id="<?=vocontrato::$nmAtrModalidadeContrato?>" name="<?=vocontrato::$nmAtrModalidadeContrato?>"  value="<?php echo($modalidade);?>"  class="camponaoobrigatorio" size="30" >
-                 </TD>
+                </TD>
+                <TH class="campoformulario" nowrap>Demandas:</TH>
+                <TD class="campoformulario"><?php echo $comboTpDemanda->getHtmlCombo(filtroManterContrato::$nmAtrTpDemanda, filtroManterContrato::$nmAtrTpDemanda."[]", $filtro->tpDemanda, true, "camponaoobrigatorio", false, " multiple ")?>
+                </TD>                												                
 	        </TR>                 
 			<TR>
                  <TH class="campoformulario" nowrap>Gestor:</TH>
-                 <TD class="campoformulario" colspan="3">
+                 <TD class="campoformulario">
                                 <INPUT type="text" id="<?=vocontrato::$nmAtrGestorContrato?>" name="<?=vocontrato::$nmAtrGestorContrato?>"  value="<?php echo($nmGestor);?>"  class="camponaoobrigatorio" size="50" ></TD>
+                <TH class="campoformulario" nowrap>Modalidade:</TH>
+				<?php
+				include_once("dominioModalidadeLicitacao.php");
+				$modalidades = new dominioModalidadeLicitacao();
+				$combo = new select($modalidades->colecao);						
+				?>
+                 <TD class="campoformulario" nowrap><?php echo $combo->getHtml("cdModalidade","cdModalidade", $modalidade);?>
+                    <INPUT type="text" id="<?=vocontrato::$nmAtrModalidadeContrato?>" name="<?=vocontrato::$nmAtrModalidadeContrato?>"  value="<?php echo($modalidade);?>"  class="camponaoobrigatorio" size="30" >
+                 </TD>                                
             </TR>
 			<TR>
                 <TH class="campoformulario" nowrap>Nome Contratada:</TH>

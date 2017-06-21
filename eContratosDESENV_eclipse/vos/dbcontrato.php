@@ -36,17 +36,10 @@ include_once(caminho_util."DocumentoPessoa.php");
     	if($isArquivo){
     		return "";
     	}else{
-    		$retorno = $this->consultarComPaginacao($voentidade, $filtro); 
+    		$groupby = array(vocontrato::$nmAtrSqContrato);    		
+    		$filtro->groupby = $groupby;
     		
-    		/*if(getAtributoComoBooleano($filtro->inTrazerConsolidadoVigencia)){
-    			
-	    		$colecaoColunasAgrupar = array(
-	    				vocontrato::$nmAtrTipoContrato, 
-	    				vocontrato::$nmAtrAnoContrato,
-	    				vocontrato::$nmAtrCdContrato
-	    		);    			
-	    		$retorno = getRecordSetGroupBy($retorno, $colecaoColunasAgrupar);
-    		}*/
+    		$retorno = $this->consultarFiltroManter($filtro, true);    		
     		
     		return $retorno;
     	}    	

@@ -31,6 +31,9 @@ class filtroManter extends multiplosConstrutores {
 	var $inDesativado;
 	var $groupby;
 	
+	private $QUERY_SELECT;
+	private $QUERY_FROM;
+	
 	var $voPrincipal;
 	function __construct0() {
 		// echo "teste0";
@@ -83,6 +86,21 @@ class filtroManter extends multiplosConstrutores {
 		$this->qtdRegistrosPorPag = @$_POST [self::$nmAtrQtdRegistrosPorPag];
 		$this->numTotalRegistros = @$_POST [self::$nmAtrNumTotalRegistros];
 		$this->cdConsultarArquivo = @$_POST [self::$nmAtrCdConsultarArquivo];
+	}
+	function setQueryFromJoin($query) {
+		$this->QUERY_FROM = $query;
+	}
+	function getQueryFromJoin(){
+		return $this->QUERY_FROM;
+	}
+	function setQuerySelect($query) {
+		$this->QUERY_SELECT = $query;
+	}
+	function getQuerySelect() {
+		return $this->QUERY_SELECT;
+	}
+	function temQueryPadrao() {
+		return $this->QUERY_SELECT != null && $this->QUERY_SELECT != "";
 	}
 	function isSetaValorDefault() {
 		$retorno = false;
