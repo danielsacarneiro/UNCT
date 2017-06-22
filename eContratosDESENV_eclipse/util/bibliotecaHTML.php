@@ -4,6 +4,7 @@ include_once ("mensagens.class.php");
 include_once ("constantes.class.php");
 include_once ("bibliotecaDataHora.php");
 include_once ("dominioPermissaoUsuario.php");
+include_once ("dominioSimNao.php");
 include_once ("dominioQtdObjetosPagina.php");
 include_once ("radiobutton.php");
 include_once (caminho_vos . "vousuario.php");
@@ -493,13 +494,8 @@ function getComponenteConsultaPaginacao($comboOrdenacao, $cdAtrOrdenacao, $cdOrd
 	
 	$objetosPorPagina = new dominioQtdObjetosPagina ();
 	$comboQtdRegistros = new select ( $objetosPorPagina->colecao );
-	$comboOrdem = new select ( getOrdemAtributos () );
-	
-	$arraySimNao = array (
-			"S" => "Sim",
-			"N" => "Não" 
-	);
-	$radioHistorico = new radiobutton ( $arraySimNao );
+	$comboOrdem = new select ( getOrdemAtributos () );	
+	$radioHistorico = new radiobutton ( dominioSimNao::getColecao());
 	
 	$html = "<TR>
                     <TH class='campoformulario' width='1%'>Consulta:</TH>

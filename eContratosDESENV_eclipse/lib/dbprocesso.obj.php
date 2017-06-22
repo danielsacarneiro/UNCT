@@ -419,11 +419,13 @@ class dbprocesso {
 		return $retorno;
 	}
 	function desativarOuExcluirPrincipal($voEntidade) {
-		if (! $voEntidade->temTabHistorico ()) {
+		//exclui o principal em caso de nao ter historico ou, ainda que tenha, nao implementa a desativacao
+		//a desativacao soh eh necessaria quando ha tabelas de relacionamento que impedem a exclusao direta
+		if (! $voEntidade->temTabHistorico () || !$voEntidade->temTabsRelacionamentoQueImpedemExclusaoDireta()) {
 			// exclusao simples
 			$query = $this->excluirSQL ( $voEntidade, $isHistorico );
 		} else {
-			$query = $this->excluirDesativandoSQL ( $voEntidade );
+				$query = $this->excluirDesativandoSQL ( $voEntidade );
 		}
 		// echo $query;
 		$retorno = $this->cDb->atualizar ( $query );
@@ -443,14 +445,15 @@ class dbprocesso {
 		// echo "entrou temhistorico";
 		// se eh o registro de historico, deve verificar se pode excluir o registro desativado na tabela principal
 		// so pode excluir o registro principal se eh o ultimo historico e nao ha outro registro ativo
-		if ($this->permiteExclusaoPrincipal ( $voEntidade )) {
+		// a validacao so eh feita se o voentidade implementa a desativacao (quando tem tabelas relacionadas que nao permitem exclusao direta)
+		if ($voEntidade->temTabsRelacionamentoQueImpedemExclusaoDireta() && $this->permiteExclusaoPrincipal ( $voEntidade )) {
 			// echo "entrou aqui permiteExclusaoPrincipal";
 			// exclui o registro desativado na tabela principal
 			$query = $this->excluirHistoricoEPrincipalSQL ( $voEntidade );
 		}
-		
-		$retorno = $this->cDb->atualizar ( $query );
+
 		// echo $query;
+		$retorno = $this->cDb->atualizar ( $query );
 		return $retorno;
 	}
 	function excluirHistoriando($voEntidade) {

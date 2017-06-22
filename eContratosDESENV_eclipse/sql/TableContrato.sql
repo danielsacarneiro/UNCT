@@ -133,6 +133,9 @@ CREATE TABLE contrato_info (
     ctinf_in_prestacao_garantia CHAR(1) NULL,
     ctinf_tp_garantia INT NULL,
     
+    ctinf_in_mao_obra CHAR(1) NULL,
+    ctinf_cd_classificacao INT,
+    
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_incl INT,
@@ -148,6 +151,10 @@ ALTER TABLE contrato_info ADD CONSTRAINT fk_contrato_info FOREIGN KEY (ct_exerci
 ALTER TABLE contrato_info ADD COLUMN ctinf_in_garantia CHAR(1) NULL AFTER ctinf_obs;
 ALTER TABLE contrato_info ADD COLUMN ctinf_in_prestacao_garantia CHAR(1) NULL AFTER ctinf_in_garantia;
 ALTER TABLE contrato_info ADD COLUMN ctinf_tp_garantia INT NULL AFTER ctinf_in_prestacao_garantia;
+ALTER TABLE contrato_info ADD COLUMN ctinf_in_mao_obra CHAR(1) NULL AFTER ctinf_tp_garantia;
+ALTER TABLE contrato_info ADD COLUMN ctinf_cd_classificacao INT NULL AFTER ctinf_in_mao_obra;
+
+-- ALTER TABLE contrato_info ADD COLUMN in_desativado CHAR(1) NOT NULL AFTER cd_usuario_ultalt;
     
 ALTER TABLE contrato_info DROP FOREIGN KEY fk_contrato_info;
 
@@ -165,6 +172,9 @@ CREATE TABLE contrato_info_hist (
     ctinf_in_prestacao_garantia CHAR(1) NULL,
     ctinf_tp_garantia INT NULL,    
     
+    ctinf_in_mao_obra CHAR(1) NULL,
+    ctinf_cd_classificacao INT,
+    
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_incl INT,
@@ -179,4 +189,10 @@ CREATE TABLE contrato_info_hist (
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_garantia CHAR(1) NULL AFTER ctinf_obs;
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_prestacao_garantia CHAR(1) NULL AFTER ctinf_in_garantia;
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_tp_garantia INT NULL AFTER ctinf_in_prestacao_garantia;
+ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_mao_obra CHAR(1) NULL AFTER ctinf_tp_garantia;
+ALTER TABLE contrato_info_hist ADD COLUMN ctinf_cd_classificacao INT NULL AFTER ctinf_in_mao_obra;
+
+-- ALTER TABLE contrato_info_hist DROP FOREIGN KEY desativacao_demanda; 
+
+
 

@@ -1,11 +1,7 @@
 <?php
-include_once(caminho_lib."voentidade.php");
+include_once("vocontrato.php");
 include_once("dbDemanda.php");
-include_once (caminho_util."bibliotecaFuncoesPrincipal.php");
 include_once (caminho_util."dominioSetor.php");
-include_once(caminho_funcoes. "contrato/dominioAutorizacao.php");
-include_once(caminho_funcoes. "contrato/dominioEspeciesContrato.php");
-include_once (caminho_util."documentoPessoa.php");
 
 Class voContratoInfo extends voentidade{
 	
@@ -21,6 +17,9 @@ Class voContratoInfo extends voentidade{
 	static $nmAtrInPrestacaoGarantia = "ctinf_in_prestacao_garantia";
 	static $nmAtrTpGarantia = "ctinf_tp_garantia";
 	 
+	static $nmAtrCdClassificacao = "ctinf_cd_classificacao";
+	static $nmAtrInMaoDeObra = "ctinf_in_mao_obra";
+	
 	var $cdContrato = "";
 	var $anoContrato  = "";
 	var $tipo = "";	
@@ -32,6 +31,9 @@ Class voContratoInfo extends voentidade{
 	var $inPrestacaoGarantia = "";
 	var $tpGarantia = "";
 	 
+	var $inMaoDeObra = "";
+	var $cdClassificacao = "";
+	
 	var $dbprocesso = null;
 	// ...............................................................
 	// Funcoes ( Propriedades e métodos da classe )
@@ -39,6 +41,10 @@ Class voContratoInfo extends voentidade{
 	function __construct() {
 		parent::__construct();
 		$this->temTabHistorico = true;
+		//por enquanto nao tem tabela relacionada que impeca a exclusao do registro principal
+		//diferente do voDemanda, por ex
+		$this->temTabsRelacionamentoQueImpedemExclusaoDireta = false;
+		
 		$class = self::getNmClassProcesso();
 		$this->dbprocesso= new $class();
 		//retira os atributos padrao que nao possui
@@ -86,7 +92,9 @@ Class voContratoInfo extends voentidade{
 				
 				self::$nmAtrInTemGarantia,
 				self::$nmAtrInPrestacaoGarantia,
-				self::$nmAtrTpGarantia
+				self::$nmAtrTpGarantia,
+				self::$nmAtrCdClassificacao,
+				self::$nmAtrInMaoDeObra
 		);
 
 		return $retorno;
@@ -125,6 +133,9 @@ Class voContratoInfo extends voentidade{
 		$this->inTemGarantia = $registrobanco[self::$nmAtrInTemGarantia];
 		$this->inPrestacaoGarantia = $registrobanco[self::$nmAtrInPrestacaoGarantia];
 		$this->tpGarantia = $registrobanco[self::$nmAtrTpGarantia];
+		
+		$this->cdClassificacao = $registrobanco[self::$nmAtrCdClassificacao];
+		$this->inMaoDeObra = $registrobanco[self::$nmAtrInMaoDeObra];
 	}
 
 	function getDadosFormulario(){
@@ -139,6 +150,8 @@ Class voContratoInfo extends voentidade{
 		$this->inPrestacaoGarantia = $_POST[self::$nmAtrInPrestacaoGarantia];
 		$this->tpGarantia = $_POST[self::$nmAtrTpGarantia];
 		
+		$this->cdClassificacao = $_POST[self::$nmAtrCdClassificacao];
+		$this->inMaoDeObra = $_POST[self::$nmAtrInMaoDeObra];		
 		//completa com os dados da entidade
 		$this->getDadosFormularioEntidade();
 	}

@@ -99,7 +99,19 @@ function confirmar() {
  	        //getContratoDetalhamento($voContrato, $colecao);
  	        getContratoDet($voContrato);
  	        //getColecaoContratoDet($vo->colecaoContrato); 	         	        
-			?>      
+			?>
+			<TR>
+				<?php
+				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioClassificacaoContrato.php");
+				$comboClassificacao = new select(dominioClassificacaoContrato::getColecao());				
+				?>
+	            <TH class="campoformulario" nowrap>Classificação:</TH>
+	            <TD class="campoformulario" width="1%" colspan=3>
+	            <?php echo $comboClassificacao->getHtmlCombo(voContratoInfo::$nmAtrCdClassificacao,voContratoInfo::$nmAtrCdClassificacao, $vo->cdClassificacao, true, "camporeadonly", true, " disabled ");
+	            $radioMaodeObra = new radiobutton ( dominioSimNao::getColecao());
+	            echo "&nbsp;&nbsp;Mão de obra incluída?: " . $radioMaodeObra->getHtmlRadioButton ( voContratoInfo::$nmAtrInMaoDeObra, voContratoInfo::$nmAtrInMaoDeObra, $vo->inMaoDeObra, false, " disabled " );	             
+	            ?>
+	        </TR>			
 			<TR>
 				<?php
 				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioAutorizacao.php");

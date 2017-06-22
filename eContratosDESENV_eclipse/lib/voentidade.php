@@ -9,6 +9,10 @@ include_once (caminho_util . "multiplosConstrutores.php");
 		var $varAtributosARemover;
         var $temTabHistorico;
         
+        //atributo que indica se a entidade implementa a desativacao
+        //a desativacao soh eh necessaria quando ha tabelas de relacionamento que impedem a exclusao direta        
+        var $temTabsRelacionamentoQueImpedemExclusaoDireta;
+        
         static $nmTabelaSufixoHistorico   =  	"_hist";
         static $nmTabelaSufixoSequencial   =  	"_seq";
         static $nmAtrSqHist   =  	"hist";
@@ -54,6 +58,7 @@ include_once (caminho_util . "multiplosConstrutores.php");
 		$this->cdUsuarioUltAlteracao = id_user;
 		$this->NM_METODO_RETORNO_CONFIRMAR = null;
 		$this->temTabHistorico = true;
+		$this->temTabsRelacionamentoQueImpedemExclusaoDireta = true;
 		
 		//cria a classe processo para todo vo
 		/*$class = static::getNmClassProcesso();
@@ -299,6 +304,10 @@ include_once (caminho_util . "multiplosConstrutores.php");
     
     function temTabHistorico(){
     	return $this->temTabHistorico;
+    }
+    
+    function temTabsRelacionamentoQueImpedemExclusaoDireta(){
+    	return $this->temTabsRelacionamentoQueImpedemExclusaoDireta;
     }
     
     function getValoresWhereSQLChaveSemNomeTabela($isHistorico) {    	

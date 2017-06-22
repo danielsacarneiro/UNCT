@@ -137,7 +137,7 @@ ALTER TABLE pessoa_vinculo ADD CONSTRAINT fk_pessoa_vinculo FOREIGN KEY ( pe_cd 
 ON DELETE RESTRICT
 ON UPDATE RESTRICT;
     
--- ALTER TABLE pessoa_vinculo DROP FOREIGN KEY fk_pessoa_vinculo;        
+-- ALTER TABLE pessoa_vinculo DROP FOREIGN KEY fk_pessoa_vinculo; 
     
 drop table pessoa_gestor;
 CREATE TABLE pessoa_gestor (

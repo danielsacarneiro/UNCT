@@ -25,8 +25,8 @@
     static $CD_FUNCAO_DETALHAR = "D";
     static $CD_FUNCAO_TODAS = "T";
     
-    static $DS_SIM  = "SIM";
-    static $DS_NAO  = "NAO";
+    static $DS_SIM  = "Sim";
+    static $DS_NAO  = "Não";
     static $DS_OPCAO_TODOS = "Todos";
      
     static $CD_SIM  = "S";

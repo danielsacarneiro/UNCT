@@ -72,6 +72,23 @@ function confirmar() {
 	return confirm("Confirmar Alteracoes?");    
 }
 
+function formataFormClassificacao() {
+	campoClassificacao = document.frm_principal.<?=voContratoInfo::$nmAtrCdClassificacao?>;
+	campoMaodeObra = document.frm_principal.<?=voContratoInfo::$nmAtrInMaoDeObra?>;
+
+	classificacao = campoClassificacao.value;
+	maoObra = campoMaodeObra.value;
+	if(classificacao == "<?=dominioClassificacaoContrato::$CD_MAO_OBRA?>"){
+		selecionarRadioButton(campoMaodeObra, "<?=constantes::$CD_SIM?>");
+		campoMaodeObra[1].disabled = true;
+	}else{
+		if(maoObra == null){
+			selecionarRadioButton(campoMaodeObra, "<?=constantes::$CD_NAO?>");
+		}						
+		campoMaodeObra[1].disabled = false;
+	}
+}
+
 </SCRIPT>
 <?=setTituloPagina($vo->getTituloJSP())?>
 </HEAD>
@@ -121,6 +138,19 @@ function confirmar() {
 	        <?php 
 	       }	       
 	       ?>
+			<TR>
+				<?php
+				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioClassificacaoContrato.php");
+				$comboClassificacao = new select(dominioClassificacaoContrato::getColecao());
+				?>
+	            <TH class="campoformulario" nowrap>Classificação:</TH>
+	            <TD class="campoformulario" width="1%" colspan=3>
+	            <?php 
+	            echo $comboClassificacao->getHtmlCombo(voContratoInfo::$nmAtrCdClassificacao,voContratoInfo::$nmAtrCdClassificacao, $vo->cdClassificacao, true, "campoobrigatorio", true, " onChange='formataFormClassificacao();' required ");
+	            $radioMaodeObra = new radiobutton ( dominioSimNao::getColecao());
+	            echo "&nbsp;&nbsp;Mão de obra incluída?: " . $radioMaodeObra->getHtmlRadioButton ( voContratoInfo::$nmAtrInMaoDeObra, voContratoInfo::$nmAtrInMaoDeObra, $vo->inMaoDeObra, false, " onClick='formataFormClassificacao();' required " );	            
+	            ?>
+	        </TR>	       
 			<TR>
 				<?php
 				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioAutorizacao.php");
