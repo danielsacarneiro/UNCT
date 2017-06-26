@@ -92,7 +92,7 @@ function formataFormClassificacao(pCampoChamada) {
 </SCRIPT>
 <?=setTituloPagina($vo->getTituloJSP())?>
 </HEAD>
-<BODY class="paginadados" onload="formataFormTpGarantia('<?=voContratoInfo::$nmAtrInTemGarantia?>', '<?=voContratoInfo::$nmAtrInPrestacaoGarantia?>', '<?=voContratoInfo::$nmAtrTpGarantia?>');">
+<BODY class="paginadados" onload="formataFormTpGarantia('<?=voContratoInfo::$nmAtrInTemGarantia?>', '<?=voContratoInfo::$nmAtrTpGarantia?>');">
 	  
 <FORM name="frm_principal" method="post" action="confirmar.php" onSubmit="return confirmar();">
 
@@ -178,15 +178,13 @@ function formataFormClassificacao(pCampoChamada) {
 	        <?php	        
 	        include_once(caminho_funcoes. "contrato/dominioTpGarantiaContrato.php");
 	        $comboGarantia = new select(dominioTpGarantiaContrato::getColecao());
-	        $jsGarantia = "formataFormTpGarantia('".voContratoInfo::$nmAtrInTemGarantia."', '".voContratoInfo::$nmAtrInPrestacaoGarantia."', '".voContratoInfo::$nmAtrTpGarantia."');"
+	        $jsGarantia = "formataFormTpGarantia('".voContratoInfo::$nmAtrInTemGarantia."', '".voContratoInfo::$nmAtrTpGarantia."');"
 	        ?>
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Garantia:</TH>
 	            <TD class="campoformulario" colspan="3">
 	            Tem?: <?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInTemGarantia,voContratoInfo::$nmAtrInTemGarantia, $vo->inTemGarantia, true, "camponaoobrigatorio", false,
 	            		" onChange=\"". $jsGarantia. "\" required ");?>
-	            		
-	            Foi prestada?: <?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInPrestacaoGarantia,voContratoInfo::$nmAtrInPrestacaoGarantia, $vo->inPrestacaoGarantia, true, "camponaoobrigatorio", false, " onChange=\"". $jsGarantia. "\" disabled ");?>
 	            Tipo: <?php echo $comboGarantia->getHtmlCombo(voContratoInfo::$nmAtrTpGarantia,voContratoInfo::$nmAtrTpGarantia, $vo->tpGarantia, true, "camponaoobrigatorio", true, " disabled ");?>
 	            </TD>
 	        </TR>
@@ -198,8 +196,7 @@ function formataFormClassificacao(pCampoChamada) {
 		            	"<?=voContratoInfo::$nmAtrCdClassificacao?>",
 		            	"<?=voContratoInfo::$nmAtrInMaoDeObra?>",
 	            		"<?=voContratoInfo::$nmAtrInTemGarantia?>",
-	            		"<?=voContratoInfo::$nmAtrTpGarantia?>",
-	            		"<?=voContratoInfo::$nmAtrInPrestacaoGarantia?>"];
+	            		"<?=voContratoInfo::$nmAtrTpGarantia?>"];
 	            </SCRIPT>
 	            <INPUT type="checkbox" id="checkResponsabilidade" name="checkResponsabilidade" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCamposRequired);"> *Assumo a responsabilidade de não incluir os valores obrigatórios.
 				</TD>

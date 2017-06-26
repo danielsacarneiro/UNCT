@@ -50,21 +50,14 @@ function carregaContratada(pIndice, pNmCampoCdContrato, pNmCampoAnoContrato, pNm
 	carregaDadosContratada(pNmCampoAnoContrato, pNmCampoTipoContrato, pNmCampoCdContrato, pNmCampoCdEspecieContrato, pNmCampoSqEspecieContrato,pNmCampoDivNomePessoa);		    
 }
 
-function formataFormTpGarantia(pNmCampoTemGarantia, pNmCampoPrestacaoGarantia, pNmCampoTpGarantia) {
+function formataFormTpGarantia(pNmCampoTemGarantia, pNmCampoTpGarantia) {
 	//precisa da bibliotecafuncoesprincipal.js
 	campoTemGarantia = document.getElementById(pNmCampoTemGarantia);
-	campoPrestacaoGarantia = document.getElementById(pNmCampoPrestacaoGarantia);
 	campoTpGarantia = document.getElementById(pNmCampoTpGarantia);
 	
 	if(campoTemGarantia.value == "S"){
-		habilitarElementoMais(pNmCampoPrestacaoGarantia, true, true);		
-		if(campoPrestacaoGarantia.value == "S"){
-			habilitarElementoMais(pNmCampoTpGarantia, true, true);			
-		}else{
-			habilitarElementoMais(pNmCampoTpGarantia, false, false);
-		}		
+		habilitarElementoMais(pNmCampoTpGarantia, true, true);			
 	}else{		
-		habilitarElementoMais(pNmCampoPrestacaoGarantia, false, false);
 		habilitarElementoMais(pNmCampoTpGarantia, false, false);
 	}		
 }

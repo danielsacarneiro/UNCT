@@ -173,7 +173,6 @@ class dbContratoInfo extends dbprocesso {
 		$retorno .= $this->getVarComoData ( $vo->dtProposta ) . ",";
 		
 		$retorno .= $this->getVarComoString ( $vo->inTemGarantia ) . ",";
-		$retorno .= $this->getVarComoString ( $vo->inPrestacaoGarantia ) . ",";
 		$retorno .= $this->getVarComoNumero ( $vo->tpGarantia ) . ",";
 		
 		$retorno .= $this->getVarComoNumero($vo->cdClassificacao) . ",";
@@ -212,16 +211,7 @@ class dbContratoInfo extends dbprocesso {
 				$vo->tpGarantia = constantes::$CD_CAMPO_NULO;
 			}
 		}
-		
-		if ($vo->inPrestacaoGarantia != null) {
-			$retorno .= $sqlConector . voContratoInfo::$nmAtrInPrestacaoGarantia . " = " . $this->getVarComoString ( $vo->inPrestacaoGarantia );
-			$sqlConector = ",";
-			
-			if ($vo->inPrestacaoGarantia == constantes::$CD_NAO) {
-				$vo->tpGarantia = constantes::$CD_CAMPO_NULO;
-			}
-		}
-		
+				
 		if ($vo->tpGarantia != null) {
 			$retorno .= $sqlConector . voContratoInfo::$nmAtrTpGarantia . " = " . $this->getVarComoNumero ( $vo->tpGarantia );
 			$sqlConector = ",";

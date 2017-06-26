@@ -147,15 +147,14 @@ function confirmar() {
 	        
 	        include_once(caminho_funcoes. "contrato/dominioTpGarantiaContrato.php");
 	        $comboGarantia = new select(dominioTpGarantiaContrato::getColecao());
-	        $jsGarantia = "formataFormTpGarantia('".voContratoInfo::$nmAtrInTemGarantia."', '".voContratoInfo::$nmAtrInPrestacaoGarantia."', '".voContratoInfo::$nmAtrTpGarantia."');"
+	        $jsGarantia = "formataFormTpGarantia('".voContratoInfo::$nmAtrInTemGarantia."', '".voContratoInfo::$nmAtrTpGarantia."');"
 	        ?>	        
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Garantia:</TH>
 	            <TD class="campoformulario" colspan="3">
 	            Tem?: <?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInTemGarantia,voContratoInfo::$nmAtrInTemGarantia, $vo->inTemGarantia, true, "camporeadonly", false,
-	            		" disabled ");?>	            		
-	            Foi prestada?: <?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInPrestacaoGarantia,voContratoInfo::$nmAtrInPrestacaoGarantia, $vo->inPrestacaoGarantia, true, "camporeadonly", false, " disabled ");?>
-	            Tipo: <?php echo $comboGarantia->getHtmlCombo(voContratoInfo::$nmAtrTpGarantia,voContratoInfo::$nmAtrTpGarantia, $vo->tpGarantia, true, "camporeadonly", true, " disabled ");?>
+	            		" disabled ");?>
+	            Tipo: <?php echo $comboGarantia->getHtmlCombo(voContratoInfo::$nmAtrTpGarantia,voContratoInfo::$nmAtrTpGarantia, $vo->tpGarantia, true, "camporeadonly", false, " disabled ");?>
 	            </TD>
 	        </TR>	        
 			<TR>
