@@ -47,8 +47,8 @@ try{
 
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_text.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_select.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_datahora.js"></SCRIPT>
-<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_ajax.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_pessoa.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_contrato.js"></SCRIPT>
@@ -72,20 +72,20 @@ function confirmar() {
 	return confirm("Confirmar Alteracoes?");    
 }
 
-function formataFormClassificacao() {
+function formataFormClassificacao(pCampoChamada) {
 	campoClassificacao = document.frm_principal.<?=voContratoInfo::$nmAtrCdClassificacao?>;
 	campoMaodeObra = document.frm_principal.<?=voContratoInfo::$nmAtrInMaoDeObra?>;
 
 	classificacao = campoClassificacao.value;
-	maoObra = campoMaodeObra.value;
+
 	if(classificacao == "<?=dominioClassificacaoContrato::$CD_MAO_OBRA?>"){
-		selecionarRadioButton(campoMaodeObra, "<?=constantes::$CD_SIM?>");
-		campoMaodeObra[1].disabled = true;
-	}else{
-		if(maoObra == null){
-			selecionarRadioButton(campoMaodeObra, "<?=constantes::$CD_NAO?>");
-		}						
-		campoMaodeObra[1].disabled = false;
+		campoMaodeObra.value = "<?=constantes::$CD_SIM?>";
+	}
+	else if(classificacao == "<?=dominioClassificacaoContrato::$CD_FORNECIMENTO_AQUISICAO?>"){
+		campoMaodeObra.value = "<?=constantes::$CD_NAO?>";
+	}
+	else if(pCampoChamada == null || pCampoChamada.name != "<?=voContratoInfo::$nmAtrInMaoDeObra?>"){		
+		campoMaodeObra.value = "";
 	}
 }
 
@@ -119,9 +119,8 @@ function formataFormClassificacao() {
 	        	$complementoHTML = " required ";
 	        	$readonlyChaves = " readonly ";
 	          
-	        	$voContrato = $vo->getVOContrato();        	
-	 	        
-	 	        getContratoDetalhamento($voContrato, $colecao);
+	        	$voContrato = $vo->getVOContrato();	 	        
+	        	getContratoDet($voContrato);	 	         
 	        }else{
 	        	//INCLUSAO
 
@@ -146,9 +145,15 @@ function formataFormClassificacao() {
 	            <TH class="campoformulario" nowrap>Classificação:</TH>
 	            <TD class="campoformulario" width="1%" colspan=3>
 	            <?php 
-	            echo $comboClassificacao->getHtmlCombo(voContratoInfo::$nmAtrCdClassificacao,voContratoInfo::$nmAtrCdClassificacao, $vo->cdClassificacao, true, "campoobrigatorio", true, " onChange='formataFormClassificacao();' required ");
-	            $radioMaodeObra = new radiobutton ( dominioSimNao::getColecao());
-	            echo "&nbsp;&nbsp;Mão de obra incluída?: " . $radioMaodeObra->getHtmlRadioButton ( voContratoInfo::$nmAtrInMaoDeObra, voContratoInfo::$nmAtrInMaoDeObra, $vo->inMaoDeObra, false, " onClick='formataFormClassificacao();' required " );	            
+	            echo $comboClassificacao->getHtmlCombo(voContratoInfo::$nmAtrCdClassificacao,voContratoInfo::$nmAtrCdClassificacao, $vo->cdClassificacao, true, "camponaoobrigatorio", true, " onChange='formataFormClassificacao();' required ");
+	            //$radioMaodeObra = new radiobutton ( dominioSimNao::getColecao());
+	            //echo "&nbsp;&nbsp;Mão de obra incluída (planilha de custos)?: " . $radioMaodeObra->getHtmlRadioButton ( voContratoInfo::$nmAtrInMaoDeObra, voContratoInfo::$nmAtrInMaoDeObra, $vo->inMaoDeObra, false, " required " );
+	            
+	            include_once(caminho_util. "dominioSimNao.php");
+	            $comboSimNao = new select(dominioSimNao::getColecao());	             
+	            echo "&nbsp;&nbsp;Mão de obra incluída (planilha de custos)?: ";
+	            echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInMaoDeObra,voContratoInfo::$nmAtrInMaoDeObra, $vo->inMaoDeObra, true, "camponaoobrigatorio", false,
+	            		" onChange='formataFormClassificacao(this);' required ");
 	            ?>
 	        </TR>	       
 			<TR>
@@ -157,7 +162,7 @@ function formataFormClassificacao() {
 				$combo = new select(dominioAutorizacao::getColecao());				
 				?>
 	            <TH class="campoformulario" nowrap>Autorização:</TH>
-	            <TD class="campoformulario" width="1%"><?php echo $combo->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato,voContratoInfo::$nmAtrCdAutorizacaoContrato, $cdAutorizacao, true, "campoobrigatorio", true, " required ");?>
+	            <TD class="campoformulario" width="1%"><?php echo $combo->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato,voContratoInfo::$nmAtrCdAutorizacaoContrato, $cdAutorizacao, true, "camponaoobrigatorio", true, " required ");?>
 	            <TH class="campoformulario" nowrap width="1%">Data.Proposta:</TH>
 	            <TD class="campoformulario">
 	            	<INPUT type="text" 
@@ -170,10 +175,7 @@ function formataFormClassificacao() {
 	            			maxlength="10">
 				</TD>
 	        </TR>	       
-	        <?php 
-	        include_once(caminho_util. "dominioSimNao.php");
-	        $comboSimNao = new select(dominioSimNao::getColecao());
-	        
+	        <?php	        
 	        include_once(caminho_funcoes. "contrato/dominioTpGarantiaContrato.php");
 	        $comboGarantia = new select(dominioTpGarantiaContrato::getColecao());
 	        $jsGarantia = "formataFormTpGarantia('".voContratoInfo::$nmAtrInTemGarantia."', '".voContratoInfo::$nmAtrInPrestacaoGarantia."', '".voContratoInfo::$nmAtrTpGarantia."');"
@@ -181,7 +183,7 @@ function formataFormClassificacao() {
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Garantia:</TH>
 	            <TD class="campoformulario" colspan="3">
-	            Tem?: <?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInTemGarantia,voContratoInfo::$nmAtrInTemGarantia, $vo->inTemGarantia, true, "campoobrigatorio", false,
+	            Tem?: <?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInTemGarantia,voContratoInfo::$nmAtrInTemGarantia, $vo->inTemGarantia, true, "camponaoobrigatorio", false,
 	            		" onChange=\"". $jsGarantia. "\" required ");?>
 	            		
 	            Foi prestada?: <?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInPrestacaoGarantia,voContratoInfo::$nmAtrInPrestacaoGarantia, $vo->inPrestacaoGarantia, true, "camponaoobrigatorio", false, " onChange=\"". $jsGarantia. "\" disabled ");?>
@@ -191,6 +193,15 @@ function formataFormClassificacao() {
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Observação:</TH>
 	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=voContratoInfo::$nmAtrObs?>" name="<?=voContratoInfo::$nmAtrObs?>" class="camponaoobrigatorio"><?=$vo->obs?></textarea>
+	            <SCRIPT language="JavaScript" type="text/javascript">
+	            	colecaoIDCamposRequired = ["<?=voContratoInfo::$nmAtrCdAutorizacaoContrato?>",
+		            	"<?=voContratoInfo::$nmAtrCdClassificacao?>",
+		            	"<?=voContratoInfo::$nmAtrInMaoDeObra?>",
+	            		"<?=voContratoInfo::$nmAtrInTemGarantia?>",
+	            		"<?=voContratoInfo::$nmAtrTpGarantia?>",
+	            		"<?=voContratoInfo::$nmAtrInPrestacaoGarantia?>"];
+	            </SCRIPT>
+	            <INPUT type="checkbox" id="checkResponsabilidade" name="checkResponsabilidade" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCamposRequired);"> *Assumo a responsabilidade de não incluir os valores obrigatórios.
 				</TD>
 	        </TR>
 	        

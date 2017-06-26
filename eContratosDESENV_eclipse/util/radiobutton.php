@@ -16,8 +16,8 @@ include_once ("select.php");
   	function getHtmlRadioButton($idRadio, $nmRadio, $opcaoSelecionada, $comOpcaoTodos, $javaScript) {
 		$html = "";
 		
-        if($opcaoSelecionada == null)
-            $opcaoSelecionada = "N";
+        /*if($opcaoSelecionada == null)
+            $opcaoSelecionada = "N";*/
         
 		$totalResultado = count($this->colecao);				 		
 		$chaves = array_keys($this->colecao);		
@@ -26,11 +26,14 @@ include_once ("select.php");
 			$cd = $chaves[$i];
 			$ds = $this->colecao[$cd];
 			
-			$html .= $this->getRadioValue($idRadio, $nmRadio, $cd, $ds, $opcaoSelecionada, $javaScript);		
+			$id = $idRadio.complementarCharAEsquerda("$i", "0", 2);
+			$html .= $this->getRadioValue($id, $nmRadio, $cd, $ds, $opcaoSelecionada, $javaScript);		
 		}	
 		//inclui opcao vazio
-		if($comOpcaoTodos)
-			$html .= $this->getRadioValue($idRadio, $nmRadio,"", "Todos", null, $javaScript);
+		if($comOpcaoTodos){
+			$id = $idRadio.complementarCharAEsquerda("$i", "0", 2);
+			$html .= $this->getRadioValue($id, $nmRadio,"", "Todos", null, $javaScript);
+		}
 
 		return $html;
 	}

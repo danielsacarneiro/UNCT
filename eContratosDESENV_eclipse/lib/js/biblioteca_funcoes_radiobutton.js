@@ -197,3 +197,11 @@ function selecionarRadioButton(pRadioButton, pVlRadioButton) {
 	}
 }
 
+//Seleciona o radiobutton com valor igual a "pVlRadioButton" passado como parametro
+function esvaziarRadioButton(pRadioButton) {
+	var i = 0;
+	
+	for (i = 0; i < pRadioButton.length; i++) {
+		pRadioButton.item(i).checked = false;
+	}
+}

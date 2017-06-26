@@ -497,6 +497,10 @@ function getComponenteConsultaPaginacao($comboOrdenacao, $cdAtrOrdenacao, $cdOrd
 	$comboOrdem = new select ( getOrdemAtributos () );	
 	$radioHistorico = new radiobutton ( dominioSimNao::getColecao());
 	
+	if($cdHistorico == null){
+		$cdHistorico = constantes::$CD_NAO;
+	}
+	
 	$html = "<TR>
                     <TH class='campoformulario' width='1%'>Consulta:</TH>
                     <TD class='campoformulario' valign='bottom' colspan='3' width='90%' nowrap>\n";

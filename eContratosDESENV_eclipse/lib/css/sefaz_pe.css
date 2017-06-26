@@ -6,6 +6,10 @@ input:required, select:required {
   border: 1px solid #FFA500;
 }
 
+input:disabled, select:disabled {    
+  border: 1px solid #CCC;
+}
+
 #header {
  width: 100%;
  background-color: blue;

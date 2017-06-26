@@ -138,7 +138,20 @@ function limparCampoFormularioEConti(element){
 	}
 }
 
-function limparCamposColecaoFormulario(colecaoIDCampos){	
+function validaFormRequiredCheckBox(campoCheckBoxValidacao, colecaoIDCampos){
+	pIsRequired = !campoCheckBoxValidacao.checked;
+	tornarRequiredCamposColecaoFormulario(colecaoIDCampos, pIsRequired);
+}
+
+function tornarRequiredCamposColecaoFormulario(colecaoIDCampos, pIsRequired){	
+	for(i=0;i<colecaoIDCampos.length;i++){					
+		id = colecaoIDCampos[i];		
+		element = document.getElementById(id);
+		element.required = pIsRequired;
+	}
+}
+
+function limparCamposColecaoFormulario(colecaoIDCampos){
 	
 	for(i=0;i<colecaoIDCampos.length;i++){					
 		id = colecaoIDCampos[i];		
