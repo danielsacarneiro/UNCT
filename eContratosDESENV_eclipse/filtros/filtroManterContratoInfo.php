@@ -15,6 +15,8 @@ class filtroManterContratoInfo extends filtroManter {
 
 	var $InOR_AND;	
 	var $cdAutorizacao = "";
+	var $inTemGarantia = "";
+	var $tpGarantia = "";	
 	
 	// ...............................................................
 	function getFiltroFormulario() {
@@ -25,6 +27,10 @@ class filtroManterContratoInfo extends filtroManter {
 		$this->nmContratada = @$_POST [vopessoa::$nmAtrNome];
 		$this->docContratada = @$_POST [vopessoa::$nmAtrDoc];
 		$this->cdAutorizacao = @$_POST [voContratoInfo::$nmAtrCdAutorizacaoContrato];
+		
+		$this->inTemGarantia = @$_POST [voContratoInfo::$nmAtrInTemGarantia];
+		$this->tpGarantia = @$_POST [voContratoInfo::$nmAtrTpGarantia];
+		
 		$this->InOR_AND = @$_POST[self::$NmAtrInOR_AND];
 		if($this->InOR_AND == null){
 			$this->InOR_AND = constantes::$CD_OPCAO_OR;
@@ -82,6 +88,20 @@ class filtroManterContratoInfo extends filtroManter {
 		
 			$conector = "\n AND ";
 		}		
+		
+		if ($this->inTemGarantia != null) {
+		
+			$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrInTemGarantia . " = " . getVarComoString ( $this->inTemGarantia );
+		
+			$conector = "\n AND ";
+		}
+		
+		if ($this->tpGarantia != null) {
+		
+			$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrTpGarantia . " = " . getVarComoNumero($this->tpGarantia);
+		
+			$conector = "\n AND ";
+		}
 		
 		/*if($this->cdAutorizacao != null){
 			$strComparacao = "COALESCE (" . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrCdAutorizacaoContrato

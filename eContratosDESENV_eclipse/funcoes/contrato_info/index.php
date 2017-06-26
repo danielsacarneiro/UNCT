@@ -127,10 +127,22 @@ function alterar() {
             </TR>
             <?php 
             $comboAutorizacao = new select(dominioAutorizacao::getColecao());
+            
+            include_once(caminho_funcoes. "contrato/dominioTpGarantiaContrato.php");            
+            $comboGarantia = new select(dominioTpGarantiaContrato::getColecao());
+            include_once(caminho_util. "dominioSimNao.php");
+            $comboSimNao = new select(dominioSimNao::getColecao());
+            
             ?>                    
             <TR>
 	            <TH class="campoformulario" nowrap width="1%">Autorização:</TH>
-	            <TD class="campoformulario" colspan="3"><?php echo $comboAutorizacao->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato, voContratoInfo::$nmAtrCdAutorizacaoContrato, $filtro->cdAutorizacao, true, "camponaoobrigatorio", false, "");?></TD>
+	            <TD class="campoformulario" width="1%"><?php echo $comboAutorizacao->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato, voContratoInfo::$nmAtrCdAutorizacaoContrato, $filtro->cdAutorizacao, true, "camponaoobrigatorio", false, "");?></TD>	            
+	            <TH class="campoformulario" nowrap width="1%">Garantia:</TH>
+	            <TD class="campoformulario">
+	            Tem?: <?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInTemGarantia,voContratoInfo::$nmAtrInTemGarantia, $filtro->inTemGarantia, true, "camponaoobrigatorio", false,
+	            		"");?>
+	            Tipo: <?php echo $comboGarantia->getHtmlCombo(voContratoInfo::$nmAtrTpGarantia,voContratoInfo::$nmAtrTpGarantia, $filtro->tpGarantia, true, "camponaoobrigatorio", true, "");?>
+	            </TD>
 			</TR>
        <?php
        echo getComponenteConsultaFiltro($vo->temTabHistorico, $filtro);

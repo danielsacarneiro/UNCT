@@ -27,7 +27,6 @@ Class voContratoInfo extends voentidade{
 	var $dtProposta = "";
 	
 	var $inTemGarantia = "";
-	var $inPrestacaoGarantia = "";
 	var $tpGarantia = "";
 	 
 	var $inMaoDeObra = "";
