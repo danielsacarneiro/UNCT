@@ -144,6 +144,24 @@ function alterar() {
 	            Tipo: <?php echo $comboGarantia->getHtmlCombo(voContratoInfo::$nmAtrTpGarantia,voContratoInfo::$nmAtrTpGarantia, $filtro->tpGarantia, true, "camponaoobrigatorio", true, "");?>
 	            </TD>
 			</TR>
+			<TR>
+				<?php
+				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioClassificacaoContrato.php");
+				$comboClassificacao = new select(dominioClassificacaoContrato::getColecao());
+				?>
+	            <TH class="campoformulario" nowrap>Classificação:</TH>
+	            <TD class="campoformulario" width="1%" colspan=3>
+	            <?php 
+	            echo $comboClassificacao->getHtmlCombo(voContratoInfo::$nmAtrCdClassificacao,voContratoInfo::$nmAtrCdClassificacao, $filtro->cdClassificacao, true, "camponaoobrigatorio", true, "");
+	            //$radioMaodeObra = new radiobutton ( dominioSimNao::getColecao());
+	            //echo "&nbsp;&nbsp;Mão de obra incluída (planilha de custos)?: " . $radioMaodeObra->getHtmlRadioButton ( voContratoInfo::$nmAtrInMaoDeObra, voContratoInfo::$nmAtrInMaoDeObra, $vo->inMaoDeObra, false, " required " );
+	            
+	            include_once(caminho_util. "dominioSimNao.php");
+	            $comboSimNao = new select(dominioSimNao::getColecao());	             
+	            echo "&nbsp;&nbsp;Mão de obra incluída (planilha de custos)?: ";
+	            echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInMaoDeObra,voContratoInfo::$nmAtrInMaoDeObra, $filtro->inMaoDeObra, true, "camponaoobrigatorio", false,"");
+	            ?>
+	        </TR>       			
        <?php
        echo getComponenteConsultaFiltro($vo->temTabHistorico, $filtro);
         ?>
