@@ -3,7 +3,8 @@ include_once (caminho_util . "bibliotecaSQL.php");
 include_once (caminho_lib . "filtroManter.php");
 class filtroManterContratoInfo extends filtroManter {
 	public $nmFiltro = "filtroManterContratoInfo";
-	static $NmAtrInOR_AND = "NmAtrInOR_AND";	
+	static $NmAtrInOR_AND = "NmAtrInOR_AND";
+	static $NmColAutorizacao = "NmColAutorizacao";
 	
 	var $cdContrato = "";
 	var $anoContrato = "";
@@ -45,10 +46,16 @@ class filtroManterContratoInfo extends filtroManter {
 			$this->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
 		}
 	}
+	
+	function getSqlAtributoCoalesceAutorizacao(){
+		return 	"COALESCE (" . voContratoInfo::getNmTabelaStatic ( $this->isHistorico ) . "." . voContratoInfo::$nmAtrCdAutorizacaoContrato
+		. "," . vocontrato::getNmTabelaStatic ( false ) . "." . vocontrato::$nmAtrCdAutorizacaoContrato . ")";	
+	}
+	
 	function getFiltroConsultaSQL($comAtributoOrdenacao = null) {
 		$filtro = "";
 		$conector = "";
-		
+				
 		$nmTabela = voContratoInfo::getNmTabelaStatic ( $this->isHistorico );
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
@@ -123,9 +130,7 @@ class filtroManterContratoInfo extends filtroManter {
 		}*/		
 		
 		if($this->cdAutorizacao != null){
-			$strComparacao = "COALESCE (" . $nmTabela . "." . voContratoInfo::$nmAtrCdAutorizacaoContrato
-			. ","
-			. $nmTabelaContrato . "." . voContrato::$nmAtrCdAutorizacaoContrato . ")";
+			$strComparacao = $this->getSqlAtributoCoalesceAutorizacao();
 						
 					if(!is_array($this->cdAutorizacao)){
 						$filtro = $filtro . $conector

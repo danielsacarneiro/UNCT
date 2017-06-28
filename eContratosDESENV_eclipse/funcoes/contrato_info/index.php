@@ -230,6 +230,7 @@ function alterar() {
                         $voPessoa->getDadosBanco($colecao[$i]);                        
                                            
                         $tipo = $dominioTipoContrato->getDescricao($colecao[$i]["ct_tipo"]);
+                        $autorizacaoAtual = $colecao[$i][filtroManterContratoInfo::$NmColAutorizacao];
                    ?>
                 <TR class="dados">
                     <TD class="tabeladados">
@@ -247,7 +248,7 @@ function alterar() {
                     <TD class="tabeladados" nowrap><?php echo $tipo?></TD>
 					<TD class="tabeladados" nowrap><?php echo $voPessoa->nome?></TD>
 					<TD class="tabeladados" nowrap><?php echo documentoPessoa::getNumeroDocFormatado($voPessoa->doc)?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $dominioAutorizacao->getDescricao($voAtual->cdAutorizacao)?></TD>
+                    <TD class="tabeladados" nowrap><?php echo $dominioAutorizacao->getDescricao($autorizacaoAtual)?></TD>
                 </TR>					
                 <?php
 				}				

@@ -64,6 +64,7 @@ class dbContratoInfo extends dbprocesso {
 		}
 		$arrayColunasRetornadas = array (
 				$nmTabela . ".*",
+				$filtro->getSqlAtributoCoalesceAutorizacao() . " AS " . filtroManterContratoInfo::$NmColAutorizacao,
 				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
 				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
 				$colunaUsuHistorico 

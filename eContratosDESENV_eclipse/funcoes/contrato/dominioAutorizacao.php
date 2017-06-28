@@ -51,13 +51,12 @@ class dominioAutorizacao extends dominio {
 		$temSAD = in_array ( self::$CD_AUTORIZ_SAD, $colecaoAutorizacao );
 		$temPGE = in_array ( self::$CD_AUTORIZ_PGE, $colecaoAutorizacao );
 		$temGOV = in_array ( self::$CD_AUTORIZ_GOV, $colecaoAutorizacao );
+		$temNenhum = in_array ( self::$CD_AUTORIZ_NENHUM, $colecaoAutorizacao );
 		
 		$retorno = "";
 		
 		if ($temSAD || $temPGE || $temGOV) {
 			$retorno [] = self::$CD_AUTORIZ_SAD_PGE_GOV;
-		} else {
-			$retorno [] = self::$CD_AUTORIZ_NENHUM;
 		}
 		
 		if ($temSAD || $temPGE) {
@@ -70,6 +69,10 @@ class dominioAutorizacao extends dominio {
 		
 		if ($temPGE) {
 			$retorno [] = self::$CD_AUTORIZ_PGE;
+		}
+		
+		if ($temNenhum) {
+			$retorno [] = self::$CD_AUTORIZ_NENHUM;
 		}
 		
 		return $retorno;
