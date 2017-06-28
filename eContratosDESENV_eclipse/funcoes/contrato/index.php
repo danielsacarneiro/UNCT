@@ -265,7 +265,18 @@ function confirmar() {
             </TR>
 			<TR>
 				<TH class="campoformulario" nowrap>Objeto:</TH>
-				<TD class="campoformulario" colspan="3"><INPUT type="text" id="<?=vocontrato::$nmAtrObjetoContrato?>" name="<?=vocontrato::$nmAtrObjetoContrato?>"  value="<?php echo($dsObjeto);?>"  class="camponaoobrigatorio" size="50" ></TD>
+				<TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vocontrato::$nmAtrObjetoContrato?>" name="<?=vocontrato::$nmAtrObjetoContrato?>"  value="<?php echo($dsObjeto);?>"  class="camponaoobrigatorio" size="50" ></TD>
+               <TH class="campoformulario" nowrap>Data Inclusão:</TH>
+               <TD class="campoformulario" >
+                        	<INPUT type="text" 
+                        	       id="<?=vocontrato::$nmAtrDhInclusao?>" 
+                        	       name="<?=vocontrato::$nmAtrDhInclusao?>"
+                        			value="<?php echo($filtro->dtInclusao);?>" 
+                        			onkeyup="formatarCampoData(this, event, false);" 
+                        			class="camponaoobrigatorio" 
+                        			size="10" 
+                        			maxlength="10" >
+                </TD>				
 			</TR>
 			<TR>
 				<TH class="campoformulario" nowrap>Intervalo Data Inicial:</TH>
@@ -344,19 +355,23 @@ function confirmar() {
                         			maxlength="10" >
 				</TD>
          </TR>
-		 <TR>
-               <TH class="campoformulario" nowrap>Data Inclusão:</TH>
-               <TD class="campoformulario" colspan="3">
-                        	<INPUT type="text" 
-                        	       id="<?=vocontrato::$nmAtrDhInclusao?>" 
-                        	       name="<?=vocontrato::$nmAtrDhInclusao?>"
-                        			value="<?php echo($filtro->dtInclusao);?>" 
-                        			onkeyup="formatarCampoData(this, event, false);" 
-                        			class="camponaoobrigatorio" 
-                        			size="10" 
-                        			maxlength="10" >
-                </TD>
-		</TR>
+		<TR>
+				<?php
+				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioAutorizacao.php");				
+				$nmCheckAutorizacaoArray = vocontrato::$nmAtrCdAutorizacaoContrato . "[]";
+				$colecaoAutorizacao = $filtro->cdAutorizacao;
+								
+				require_once (caminho_util . "/selectOR_AND.php");
+				$comboOuE = new selectOR_AND();
+				?>
+	            <TH class="campoformulario" nowrap>Autorização:</TH>
+	            <TD class="campoformulario" colspan=3>
+	            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_SAD?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_SAD?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_SAD, $colecaoAutorizacao)?> >SAD
+	            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_PGE?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_PGE?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_PGE, $colecaoAutorizacao)?>>PGE
+	            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_GOV?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_GOV?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_GOV, $colecaoAutorizacao)?>>GOV
+	            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_NENHUM?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_NENHUM?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_NENHUM, $colecaoAutorizacao)?>>Nenhum
+	            <?php echo $comboOuE->getHtmlSelect(filtroManterContrato::$NmAtrInOR_AND,filtroManterContrato::$NmAtrInOR_AND, $filtro->InOR_AND, false, "camponaoobrigatorio", false);?>
+	    </TR>		
 		<TR>
 			<TH class="campoformulario" nowrap>Tp.Vigência:</TH>
 			<?php

@@ -105,8 +105,8 @@ function confirmar() {
 				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioClassificacaoContrato.php");
 				$comboClassificacao = new select(dominioClassificacaoContrato::getColecao());				
 				?>
-	            <TH class="campoformulario" nowrap>Classificação:</TH>
-	            <TD class="campoformulario" width="1%" colspan=3>
+	            <TH class="campoformulario" width="1%" nowrap>Classificação:</TH>
+	            <TD class="campoformulario" colspan=3>
 	            <?php echo $comboClassificacao->getHtmlCombo(voContratoInfo::$nmAtrCdClassificacao,voContratoInfo::$nmAtrCdClassificacao, $vo->cdClassificacao, true, "camporeadonly", true, " disabled ");
 	            $radioMaodeObra = new radiobutton ( dominioSimNao::getColecao());
 	            echo "&nbsp;&nbsp;Mão de obra incluída?: " . $radioMaodeObra->getHtmlRadioButton ( voContratoInfo::$nmAtrInMaoDeObra, voContratoInfo::$nmAtrInMaoDeObra, $vo->inMaoDeObra, false, " disabled " );	             
@@ -116,14 +116,12 @@ function confirmar() {
 				<?php
 				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioAutorizacao.php");
 				$combo = new select(dominioAutorizacao::getColecao());
-				
-				
 				$dadosContratoCompilado = consultarDadosContratoCompilado($voContrato);
 				//por enquanto ta pegando do registro mais antigo (na teoria eh o contrato mater)
 				//MELHORAR
 				$cdAutorizacaoPlanilha =  $dadosContratoCompilado[vocontrato::$nmAtrCdAutorizacaoContrato];
 				?>
-	            <TH class="campoformulario" nowrap>Autorização:</TH>
+	            <TH class="campoformulario" width="1%" nowrap>Autorização:</TH>
 	            <TD class="campoformulario" colspan=3>
 	            Planinha: <?php echo $combo->getHtmlCombo("","", $cdAutorizacaoPlanilha, true, "camporeadonly", true, " disabled ");?>	            
 	            Atual: <?php echo $combo->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato,voContratoInfo::$nmAtrCdAutorizacaoContrato, $vo->cdAutorizacao, true, "camporeadonly", true, " disabled ");?>	        </TR>

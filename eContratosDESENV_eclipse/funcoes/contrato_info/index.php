@@ -134,9 +134,25 @@ function alterar() {
             $comboSimNao = new select(dominioSimNao::getColecao());
             
             ?>                    
-            <TR>
-	            <TH class="campoformulario" nowrap width="1%">Autorização:</TH>
-	            <TD class="campoformulario" width="1%"><?php echo $comboAutorizacao->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato, voContratoInfo::$nmAtrCdAutorizacaoContrato, $filtro->cdAutorizacao, true, "camponaoobrigatorio", false, "");?></TD>	            
+			<TR>
+				<?php
+				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioAutorizacao.php");
+				//$combo = new select(dominioAutorizacao::getColecao());				
+				$nmCheckAutorizacaoArray = voContratoInfo::$nmAtrCdAutorizacaoContrato . "[]";
+				$colecaoAutorizacao = $filtro->cdAutorizacao;
+								
+				require_once (caminho_util . "/selectOR_AND.php");
+				$comboOuE = new selectOR_AND();
+				?>
+	            <TH class="campoformulario" nowrap>Autorização:</TH>
+	            <TD class="campoformulario" width="1%">
+	            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_SAD?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_SAD?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_SAD, $colecaoAutorizacao)?> >SAD
+	            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_PGE?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_PGE?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_PGE, $colecaoAutorizacao)?>>PGE
+	            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_GOV?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_GOV?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_GOV, $colecaoAutorizacao)?>>GOV
+	            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_NENHUM?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_NENHUM?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_NENHUM, $colecaoAutorizacao)?>>Nenhum
+	            <?php echo $comboOuE->getHtmlSelect(filtroManterContratoInfo::$NmAtrInOR_AND,filtroManterContratoInfo::$NmAtrInOR_AND, $filtro->InOR_AND, false, "camponaoobrigatorio", false);?>
+	            <!-- <TH class="campoformulario" nowrap width="1%">Autorização:</TH>
+	            <TD class="campoformulario" width="1%"><?php echo $comboAutorizacao->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato, voContratoInfo::$nmAtrCdAutorizacaoContrato, $filtro->cdAutorizacao, true, "camponaoobrigatorio", false, "");?></TD>-->	            
 	            <TH class="campoformulario" nowrap width="1%">Garantia:</TH>
 	            <TD class="campoformulario">
 	            Tem?: <?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInTemGarantia,voContratoInfo::$nmAtrInTemGarantia, $filtro->inTemGarantia, true, "camponaoobrigatorio", false,

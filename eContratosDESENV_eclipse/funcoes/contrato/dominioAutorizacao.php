@@ -7,6 +7,7 @@ class dominioAutorizacao extends dominio {
 	static $CD_AUTORIZ_SAD_PGE = 4;
 	static $CD_AUTORIZ_SAD_PGE_GOV = 5;
 	static $CD_AUTORIZ_GOV = 6;
+	
 	static $DS_AUTORIZ_PGE = "PGE";
 	static $DS_AUTORIZ_SAD = "SAD";
 	static $DS_AUTORIZ_SAD_PGE = "PGE e SAD";
@@ -87,12 +88,12 @@ class dominioAutorizacao extends dominio {
 			$retorno = self::$CD_AUTORIZ_SAD_PGE_GOV;
 		} else if ($temSAD && $temPGE) {
 			$retorno = self::$CD_AUTORIZ_SAD_PGE;
+		} else if ($temGOV) {
+			$retorno = self::$CD_AUTORIZ_GOV;
 		} else if ($temSAD) {
 			$retorno = self::$CD_AUTORIZ_SAD;
 		} else if ($temPGE) {
 			$retorno = self::$CD_AUTORIZ_PGE;
-		} else if ($temGOV) {
-			$retorno = self::$CD_AUTORIZ_GOV;
 		} else {
 			$retorno = self::$CD_AUTORIZ_NENHUM;
 		}

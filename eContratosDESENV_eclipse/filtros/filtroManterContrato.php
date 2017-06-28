@@ -8,6 +8,10 @@ class filtroManterContrato extends filtroManter {
 	public static $nmAtrInTrazerConsolidadoPorVigencia = "nmAtrInTrazerConsolidadoPorVigencia";	
 	public static $nmAtrAnoArquivo = "nmAtrAnoArquivo";
 	public static $nmAtrTpDemanda = "nmAtrTpDemanda";
+	public static $NmAtrInOR_AND = "NmAtrInOR_AND";
+	
+	var $InOR_AND;
+	var $cdAutorizacao = "";	
 		
 	var $cdContrato;
 	var $anoContrato;
@@ -82,6 +86,12 @@ class filtroManterContrato extends filtroManter {
 		$this->cdConsultarArquivo = @$_POST ["cdConsultarArquivo"];
 		$this->inTrazerConsolidadoVigencia = @$_POST [self::$nmAtrInTrazerConsolidadoPorVigencia];		
 		$this->tpDemanda = @$_POST [self::$nmAtrTpDemanda];
+		
+		$this->cdAutorizacao = @$_POST [vocontrato::$nmAtrCdAutorizacaoContrato];
+		$this->InOR_AND = @$_POST[self::$NmAtrInOR_AND];
+		if($this->InOR_AND == null){
+			$this->InOR_AND = constantes::$CD_OPCAO_OR;
+		}		
 	}
 		
 	function isSetaValorDefault() {
@@ -292,6 +302,27 @@ class filtroManterContrato extends filtroManter {
 			$filtro = $filtro . " AND " . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . " = "  . dominioSetor::$CD_SETOR_ATJA;
 				
 			$conector = "\n AND ";		
+		}
+		
+		//echo $this->vocontrato->cdAutorizacao;
+		if($this->cdAutorizacao != null){
+			$strComparacao = $nmTabela . "." . voContrato::$nmAtrCdAutorizacaoContrato;
+						
+					if(!is_array($this->cdAutorizacao)){
+						$filtro = $filtro . $conector
+						//. $nmTabelaContrato. "." .vocontrato::$nmAtrCdAutorizacaoContrato
+						. $strComparacao
+						. " = "
+								. $this->cdAutorizacao
+								;
+					}else{
+		
+						$colecaoAutorizacao = $this->cdAutorizacao;
+						$filtro = $filtro . $conector . $strComparacao . voContratoInfo::getOperacaoFiltroCdAutorizacaoOR_AND($colecaoAutorizacao, $this->InOR_AND);
+		
+					}
+						
+					$conector  = "\n AND ";
 		}
 		
 		//serve para retirar a ambiguidade, quando existir, do atributo da ordenacao

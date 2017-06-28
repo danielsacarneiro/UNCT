@@ -3,8 +3,7 @@ include_once (caminho_util . "bibliotecaSQL.php");
 include_once (caminho_lib . "filtroManter.php");
 class filtroManterContratoInfo extends filtroManter {
 	public $nmFiltro = "filtroManterContratoInfo";
-	static $NmAtrInOR_AND = "NmAtrInOR_AND";
-	
+	static $NmAtrInOR_AND = "NmAtrInOR_AND";	
 	
 	var $cdContrato = "";
 	var $anoContrato = "";
@@ -20,8 +19,7 @@ class filtroManterContratoInfo extends filtroManter {
 	
 	var $cdClassificacao = "";
 	var $inMaoDeObra = "";
-	
-	
+		
 	// ...............................................................
 	function getFiltroFormulario() {
 		$this->cdContrato = @$_POST [voContratoInfo::$nmAtrCdContrato];
@@ -88,14 +86,7 @@ class filtroManterContratoInfo extends filtroManter {
 			$filtro = $filtro . $conector . $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc . " = '" . documentoPessoa::getNumeroDocSemMascara ( $this->docContratada ) . "'";
 			$conector = "\n AND ";
 		}
-		
-		if ($this->cdAutorizacao != null) {
-		
-			$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrCdAutorizacaoContrato . " = " . getVarComoString ( $this->cdAutorizacao );
-		
-			$conector = "\n AND ";
-		}		
-		
+				
 		if ($this->inTemGarantia != null) {
 		
 			$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrInTemGarantia . " = " . getVarComoString ( $this->inTemGarantia );
@@ -122,25 +113,43 @@ class filtroManterContratoInfo extends filtroManter {
 			$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrCdClassificacao . " = " . getVarComoNumero($this->cdClassificacao);
 		
 			$conector = "\n AND ";
-		}		
+		}
 		
-		/*if($this->cdAutorizacao != null){
-			$strComparacao = "COALESCE (" . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrCdAutorizacaoContrato
+		/*if ($this->cdAutorizacao != null) {
+		
+			$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrCdAutorizacaoContrato . " = " . getVarComoString ( $this->cdAutorizacao );
+		
+			$conector = "\n AND ";
+		}*/		
+		
+		if($this->cdAutorizacao != null){
+			$strComparacao = "COALESCE (" . $nmTabela . "." . voContratoInfo::$nmAtrCdAutorizacaoContrato
 			. ","
-			. $nmTabelaContrato . "." . voContrato::$nmAtrCdAutorizacaoContrato . ")";						
-		
-			$colecaoAutorizacao = $this->vocontrato->cdAutorizacao;
-			$filtro = $filtro . $conector . $strComparacao . voContratoInfo::getOperacaoFiltroCdAutorizacaoOR_AND($colecaoAutorizacao, $this->InOR_AND);		
+			. $nmTabelaContrato . "." . voContrato::$nmAtrCdAutorizacaoContrato . ")";
 						
-			$conector  = "\n AND ";
-		}*/
+					if(!is_array($this->cdAutorizacao)){
+						$filtro = $filtro . $conector
+						//. $nmTabelaContrato. "." .vocontrato::$nmAtrCdAutorizacaoContrato
+						. $strComparacao
+						. " = "
+								. $this->cdAutorizacao
+								;
+					}else{
 		
+						$colecaoAutorizacao = $this->cdAutorizacao;
+						$filtro = $filtro . $conector . $strComparacao . voContratoInfo::getOperacaoFiltroCdAutorizacaoOR_AND($colecaoAutorizacao, $this->InOR_AND);
+						//echo $strComparacao . voContratoInfo::getOperacaoFiltroCdAutorizacaoOR_AND($colecaoAutorizacao, $this->InOR_AND);
+		
+					}
+						
+					$conector  = "\n AND ";
+		}		
 		
 		$this->formataCampoOrdenacao ( new voContratoInfo () );
 		// finaliza o filtro
 		$filtro = parent::getFiltroSQL ( $filtro, $comAtributoOrdenacao );
 		
-		// echo "Filtro:$filtro<br>";
+		//echo "Filtro:$filtro<br>";
 		
 		return $filtro;
 	}
