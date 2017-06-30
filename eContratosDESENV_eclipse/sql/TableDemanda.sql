@@ -80,6 +80,7 @@ ALTER TABLE demanda_tram ADD CONSTRAINT fk_demanda_tram FOREIGN KEY (dem_ex, dem
 -- select length(dtm_prt) from demanda_tram
 -- group by length(dtm_prt)
 ALTER TABLE demanda_tram ADD UNIQUE KEY chave_logica_prt (dtm_prt);
+ALTER TABLE demanda_tram DROP INDEX chave_logica_prt;
 
 drop table demanda_contrato;
 CREATE TABLE demanda_contrato (	

@@ -271,7 +271,7 @@ function encaminhar() {
                     <TH class="headertabeladados" width="1%">Atual</TH>
                     <TH class="headertabeladados" width="1%">Tipo</TH>
                     <TH class="headertabeladados" width="40%">Contrato</TH>
-                    <TH class="headertabeladados"width="50%" nowrap >Texto</TH>
+                    <TH class="headertabeladados"width="50%" nowrap >Título</TH>
                     <TH class="headertabeladados" width="1%">Situação</TH>                    
                     <TH class="headertabeladados" width="1%">Prior.</TH>
                     <TH class="headertabeladados"width="1%" nowrap >Usuário</TH>

@@ -38,8 +38,11 @@ $dtFim2  = $filtro->dtFim2;
 $cdHistorico = $filtro->cdHistorico;
 $isHistorico = ("S" == $cdHistorico); 
 
+$complementoTitulo = "";
 if($filtro->cdConsultarArquivo == null){
 	$filtro->cdConsultarArquivo = "N";
+}else if($filtro->cdConsultarArquivo != "N"){
+	$complementoTitulo = "/ARQUIVO";
 }
 
 $requiredArquivo = "";
@@ -65,7 +68,7 @@ $numTotalRegistros = $filtro->numTotalRegistros;
 <!DOCTYPE html>
 <HTML>
 <HEAD>
-<?=setTituloPagina(vocontrato::getTituloJSP())?>
+<?=setTituloPagina(vocontrato::getTituloJSP().$complementoTitulo)?>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>mensagens_globais.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_datahora.js"></SCRIPT>
