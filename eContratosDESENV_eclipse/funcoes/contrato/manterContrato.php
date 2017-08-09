@@ -171,7 +171,7 @@ function carregaGestorPessoa(){
                         echo $combo->getHtmlComObrigatorio(vocontrato::$nmAtrCdEspecieContrato,voContrato::$nmAtrCdEspecieContrato, "", false, true);
                     }
                     ?>                        
-                    Ordem: <INPUT type="text" id="<?=vocontrato::$nmAtrSqEspecieContrato?>" name="<?=vocontrato::$nmAtrSqEspecieContrato?>" value="<?=$voContrato->sqEspecie;?>"  class="camponaoobrigatorio" size="3" maxlength=2 >
+                    Número: <INPUT type="text" id="<?=vocontrato::$nmAtrSqEspecieContrato?>" name="<?=vocontrato::$nmAtrSqEspecieContrato?>" value="<?=$voContrato->sqEspecie;?>"  class="camponaoobrigatorio" size="3" maxlength=2 > º
         </TR>
 		<TR>
             <TH class="campoformulario" nowrap>Gestor:</TH>
