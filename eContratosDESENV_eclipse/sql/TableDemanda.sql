@@ -11,11 +11,12 @@ CREATE TABLE demanda (
     dem_prioridade INT DEFAULT 3 NOT NULL,
     dem_dtreferencia DATE,
     dem_prt VARCHAR(25),
-        
+    	
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_incl INT,
     cd_usuario_ultalt INT,
+    in_desativado CHAR(1) NOT NULL DEFAULT 'N',
     
     CONSTRAINT pk PRIMARY KEY (dem_ex, dem_cd)
 );
@@ -40,12 +41,13 @@ CREATE TABLE demanda_hist (
     dem_prioridade INT DEFAULT 3 NOT NULL,
     dem_dtreferencia DATE,
     dem_prt VARCHAR(25),
-        
+	    
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_incl INT,
     cd_usuario_ultalt INT,
     
+    in_desativado CHAR(1),
 	dh_operacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_operacao INT,
     
