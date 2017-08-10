@@ -37,9 +37,9 @@ include_once (caminho_filtros."filtroManterPA.php");
     function consultarPAAP($vo, $filtro){    	
     	$isHistorico = ("S" == $filtro->cdHistorico);
     	$nmTabela = $vo->getNmTabelaEntidade($isHistorico);    	
-    	$nmTabelaContrato = vocontrato::getNmTabelaStatic($isHistorico);
-    	$nmTabelaDemanda = voDemanda::getNmTabelaStatic($isHistorico);
-    	$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic($isHistorico);
+    	$nmTabelaContrato = vocontrato::getNmTabelaStatic(false);
+    	$nmTabelaDemanda = voDemanda::getNmTabelaStatic(false);
+    	$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic(false);
     	$nmTabelaPessoaContrato = $filtro->nmTabelaPessoaContrato;
     	$nmTabelaPessoaResponsavel = $filtro->nmTabelaPessoaResponsavel;
     	

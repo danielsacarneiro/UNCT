@@ -8,10 +8,12 @@ include_once(caminho_filtros . "filtroManterPA.php");
 //inicia os parametros
 inicio();
 
+$vo = new voPA();
 $titulo = "CONSULTAR " . voPA::getTituloJSP();
 setCabecalho($titulo);
 
 $filtro  = new filtroManterPA();
+$filtro->voPrincipal = $vo;
 $filtro = filtroManter::verificaFiltroSessao($filtro);
 	
 $nome = $filtro->nome;
@@ -20,7 +22,6 @@ $cdHistorico = $filtro->cdHistorico;
 $cdOrdenacao = $filtro->cdOrdenacao;
 $isHistorico = "S" == $cdHistorico; 
 
-$vo = new voPA();
 $dbprocesso = $vo->dbprocesso;
 $colecao = $dbprocesso->consultarPAAP($vo, $filtro);
 
@@ -169,7 +170,7 @@ function validaFormulario() {
                     <TR>
 		                <TH class="headertabeladados" rowspan="2" width="1%">&nbsp;&nbsp;X</TH>
 		                  <?php if($isHistorico){?>
-		                  	<TH class="headertabeladados" width="1%">Sq.Hist</TH>
+		                  	<TH class="headertabeladados" rowspan="2" width="1%">Sq.Hist</TH>
 		                  <?php }?>
 						<TH class="headertabeladados" colspan="2">
 						<center>P.A.</center>

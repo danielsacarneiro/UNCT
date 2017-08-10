@@ -127,6 +127,9 @@ class voPA extends voentidade {
 	}
 	function getMensagemComplementarTelaSucesso() {
 		$retorno = "PAAP: " . formatarCodigoAno($this->cdPA, $this->anoPA);
+		if ($this->sqHist != null) {
+			$retorno .= "<br>Núm. Histórico: " . complementarCharAEsquerda ( $this->sqHist, "0", TAMANHO_CODIGOS );
+		}		
 		return $retorno;
 	}
 }
