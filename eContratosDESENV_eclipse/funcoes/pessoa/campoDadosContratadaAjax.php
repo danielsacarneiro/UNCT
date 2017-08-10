@@ -5,35 +5,58 @@ include_once (caminho_vos . "vocontrato.php");
 include_once (caminho_filtros . "filtroManterPessoa.php");
 include_once (caminho_funcoes . "contrato/dominioEspeciesContrato.php");
 include_once (caminho_funcoes . "pessoa/biblioteca_htmlPessoa.php");
-
+include_once (caminho_funcoes . "contrato/biblioteca_htmlContrato.php");
 function getDadosContrata($db) {
-	if ($db == null)
-		$db = new dbpessoa ();
-	
 	$chave = @$_GET ["chave"];
+	$voentidade = @$_GET ["voentidade"];
 	
-	$vo = new vocontrato ();
-	$vo->getChavePrimariaVOExplodeParam ( $chave );
+	$isConsultaPessoaPorDemanda = $voentidade == "vodemanda";
 	
-	$recordSet = consultarPessoasContrato ( $vo );
-	
-	$retorno = getCampoContratada ( "", "", $chave );
-	if ($recordSet != "") {		
-		// $colecaoColunasAgrupar = array(vopessoa::$nmAtrDoc, vopessoa::$nmAtrNome);
-		// $recordSet = getRecordSetGroupBy($recordSet, $colecaoColunasAgrupar);
-		$tam = count ( $recordSet );
+	if (! $isConsultaPessoaPorDemanda) {
+		$vo = new vocontrato ();
+		$vo->getChavePrimariaVOExplodeParam ( $chave );
+		$recordSet = consultarPessoasContrato ( $vo );
 		
-		$retorno = "";
-		for($i = 0; $i < $tam; $i ++) {
-			$registro = $recordSet [$i];
-			$retorno .= getCampoContratada ( $registro [vopessoa::$nmAtrNome], $registro [vopessoa::$nmAtrDoc], $chave ) . "<br>";
+		$retorno = getCampoContratada ( "", "", $chave );
+		if ($recordSet != "") {
+			// $colecaoColunasAgrupar = array(vopessoa::$nmAtrDoc, vopessoa::$nmAtrNome);
+			// $recordSet = getRecordSetGroupBy($recordSet, $colecaoColunasAgrupar);
+			$tam = count ( $recordSet );
 			
-			//guarda para usar na pagina que chamou o metodo
-			$arrayCdAutorizacao[] = $registro [vocontrato::$nmAtrCdAutorizacaoContrato];
+			$retorno = "";
+			for($i = 0; $i < $tam; $i ++) {
+				$registro = $recordSet [$i];
+				
+				$retorno .= getCampoContratada ( $registro [vopessoa::$nmAtrNome], $registro [vopessoa::$nmAtrDoc], $chave ) . "<br>";
+				
+				// guarda para usar na pagina que chamou o metodo
+				$arrayCdAutorizacao [] = $registro [vocontrato::$nmAtrCdAutorizacaoContrato];
+			}
+			
+			putObjetoSessao ( "teste", $arrayCdAutorizacao );
 		}
+	} else {
+		$vo = new voDemanda ();
+		$vo->getChavePrimariaVOExplodeParam ( $chave );
+		$colecaoContrato = consultarContratosDemanda ( $vo );
 		
-		putObjetoSessao("teste", $arrayCdAutorizacao);
+		$colecaoContrato = converteRecordSetEmColecaoVOsContrato ( $colecaoContrato );
 		
+		// vai na bibliotacontrato
+		$retorno = getColecaoContratoDet ( $colecaoContrato );
+	}
+	
+	return $retorno;
+}
+function converteRecordSetEmColecaoVOsContrato($colecao) {
+	$retorno = "";
+	if (! isColecaoVazia ( $colecao )) {
+		foreach ( $colecao as $registrobanco ) {
+			$vocontrato = new vocontrato ();
+			$vocontrato->getDadosBanco ( $registrobanco );
+			
+			$retorno [] = $vocontrato;
+		}
 	}
 	
 	return $retorno;

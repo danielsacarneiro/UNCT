@@ -245,4 +245,11 @@ function getProcLicitatorioEntradaDados($cdProcLic, $anoProcLic, $arrayCssClass,
 	echo "&nbsp;Ano: " . $selectExercicio->getHtmlCombo($pNmCampoAnoProcLicitatorio,$pNmCampoAnoProcLicitatorio, $anoProcLic, true, $cssAnoProcLic, false, $htmlAnoProcLic);
 }
 
+function consultarContratosDemanda($voDemanda){	
+	$db = new dbDemanda();	
+	$colecao = $db->consultarDemandaContrato($voDemanda);
+	return $colecao;
+}
+
+
 ?>

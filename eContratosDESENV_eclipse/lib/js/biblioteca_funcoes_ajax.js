@@ -43,6 +43,11 @@
      imprimeResultado(result, "../pessoa/campoDadosContratadaAjax.php?chave=" + chaveContrato);     
  }
  
+ function getDadosContratadaPorDemanda(chaveDemanda, idDivResultado) {
+     var result = document.getElementById(idDivResultado);          
+     imprimeResultado(result, "../pessoa/campoDadosContratadaAjax.php?voentidade=vodemanda&chave=" + chaveDemanda);     
+ }
+
  function getNovoCampoDadosContratoAjax(idDivResultado, pIndiceContratoAtual, pIsLimpar) {
      var result = document.getElementById(idDivResultado);
      var limpar = (pIsLimpar != null && pIsLimpar);

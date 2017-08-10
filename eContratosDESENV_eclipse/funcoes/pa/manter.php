@@ -2,9 +2,8 @@
 include_once("../../config_lib.php");
 include_once(caminho_util."bibliotecaHTML.php");
 include_once(caminho_util."selectExercicio.php");
-include_once(caminho_vos."voPA.php");
-include_once(caminho_vos."voPATramitacao.php");
-include_once(caminho_vos."voDocumento.php");
+include_once (caminho_funcoes . "contrato/biblioteca_htmlContrato.php");
+include_once (caminho_funcoes . "demanda/biblioteca_htmlDemanda.php");
 
 //inicia os parametros
 inicioComValidacaoUsuario(true);
@@ -34,23 +33,21 @@ if($isInclusao){
     $isHistorico = ($voContrato->sqHist != null && $voContrato->sqHist != "");
 	
 	$dbprocesso = $vo->dbprocesso;					
-	$colecao = $dbprocesso->consultarPorChave($vo, $isHistorico);	
+	$colecao = $dbprocesso->consultarPorChaveTela($vo, $isHistorico);	
 	$vo->getDadosBanco($colecao);
-	putObjetoSessao($vo->getNmTabela(), $vo);
 	
-	$colecaoRegistroBanco = $dbprocesso->consultarTramitacao($vo);
-	if($colecaoRegistroBanco != ""){
-		$vo->setColecaoTramitacao($colecaoRegistroBanco);
-		putObjetoSessao(voPA::$nmAtrColecaoTramitacao, $vo->colecaoTramitacao);
-	}
+	$voContrato = new vocontrato();
+	$voContrato->getDadosBanco($colecao);
+	
+	$voDemanda = new voDemanda();
+	$voDemanda->getDadosBanco($colecao);
+	
+	putObjetoSessao($vo->getNmTabela(), $vo);
 
     $nmFuncao = "ALTERAR ";
 }
-
-if($vo->dtAbertura == null|| $vo->dtAbertura == "")
-	$vo->dtAbertura = dtHoje;
 	
-$titulo = "P.A.D.";
+$titulo = voPA::getTituloJSP();
 $titulo = $nmFuncao . $titulo;
 setCabecalho($titulo);
 
@@ -87,56 +84,19 @@ function confirmar() {
 
 function carregaDadosContratada(){    
 	str = "";
-		
-	cdContrato = document.frm_principal.<?=voPA::$nmAtrCdContrato?>.value;
-	anoContrato = document.frm_principal.<?=voPA::$nmAtrAnoContrato?>.value;
-	tpContrato = document.frm_principal.<?=voPA::$nmAtrTipoContrato?>.value;
 
-	if(cdContrato != "" && anoContrato != "" && tpContrato != ""){
-		str = cdContrato + '<?=CAMPO_SEPARADOR?>' + anoContrato + '<?=CAMPO_SEPARADOR?>' + tpContrato;
+	cdDemanda = document.frm_principal.<?=voPA::$nmAtrCdDemanda?>.value;
+	anoDemanda = document.frm_principal.<?=voPA::$nmAtrAnoDemanda?>.value;
+	
+	if(cdDemanda != "" && anoDemanda != ""){
+		str = anoDemanda + '<?=CAMPO_SEPARADOR?>' + cdDemanda;
 		//vai no ajax
-		getDadosContratadaPorContrato(str, '<?=vopessoa::$nmAtrNome?>');
+		getDadosContratadaPorDemanda(str, '<?=vopessoa::$nmAtrNome?>');
 	}
-}
-
-function incluirTramitacao(){
-	textoFase = document.frm_principal.<?=voPATramitacao::$nmAtrObservacao?>.value;
-	docFase = document.frm_principal.<?=voDocumento::getNmTabela()?>.value;
-	if(textoFase != ""){
-		manterDadosTramitacaoPA(textoFase, docFase, 'div_tramitacao', '<?=constantes::$CD_FUNCAO_INCLUIR?>');
-		document.frm_principal.<?=voDocumento::getNmTabela()?>.value = "";
-		document.frm_principal.<?=voDocumento::$nmAtrSq?>.value = "";
-	}
-	else
-		exibirMensagem("Tramitação não pode ser vazia!");	
-}
-
-function excluirTramitacao(){	 
-    if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_tramitacao"))
-        return;
-
-	if(confirm("Confirmar Alteracoes?")){
-		
-		indice = document.frm_principal.rdb_tramitacao.value;		
-		manterDadosTramitacaoPA("", "", 'div_tramitacao', '<?=constantes::$CD_FUNCAO_EXCLUIR?>', indice);
-	}
-}
-
-
-function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
-	chave = sq
-		+ CD_CAMPO_SEPARADOR +  cdSetor
-		+ CD_CAMPO_SEPARADOR +  ano
-		+ CD_CAMPO_SEPARADOR +  tpDoc;
-
-	document.getElementsByName("<?=voDocumento::getNmTabela()?>").item(0).value = chave;
-	document.getElementsByName("<?=voDocumento::$nmAtrSq?>").item(0).value = formatarCodigoDocumento(sq, cdSetor, ano, tpDoc);
-
-	//alert(chave);
 }
 
 </SCRIPT>
-<?=setTituloPagina(null)?>
+<?=setTituloPagina($vo->getTituloJSP())?>
 </HEAD>
 <BODY class="paginadados" onload="">
 	  
@@ -154,43 +114,23 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
             <DIV id="div_filtro" class="div_filtro">
             <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
             <TBODY>
-	        <?php 	        	        
-	        require_once ("../contrato/dominioTipoContrato.php");
-	        $dominioTipoContrato = new dominioTipoContrato();
-	        
-	        $contrato = formatarCodigoAnoComplemento($colecao[voPA::$nmAtrCdContrato],
-	        		$colecao[voPA::$nmAtrAnoContrato],
-	        		$dominioTipoContrato->getDescricao($colecao[voPA::$nmAtrTipoContrato]));
-	         
+	        <?php	         
 	        $procAdm = formatarCodigoAno($colecao[voPA::$nmAtrCdPA],
 	        		$colecao[voPA::$nmAtrAnoPA]);
 	         
 	        if(!$isInclusao){
 	        ?>	        	        
 			<TR>
-		         <TH class="campoformulario" nowrap width="1%">P.A.D.:</TH>
+		         <TH class="campoformulario" nowrap width="1%">P.A.A.P.:</TH>
 		         <TD class="campoformulario" colspan=3>
-		         <INPUT type="text" value="<?php echo($procAdm);?>"  class="camporeadonly" size="10" readonly>
+		         <?php echo(getDetalhamentoHTMLCodigoAno($vo->anoPA, $vo->cdPA, TAMANHO_CODIGOS_SAFI));?>
+				 </TD>
 	        </TR>
-	        <TR>
-	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" colspan=3>
-				<INPUT type="hidden" id="<?=voPA::$nmAtrCdContrato?>" name="<?=voPA::$nmAtrCdContrato?>" value="<?=$vo->cdContrato?>">
-				<INPUT type="hidden" id="<?=voPA::$nmAtrAnoContrato?>" name="<?=voPA::$nmAtrAnoContrato?>" value="<?=$vo->anoContrato?>">
-				<INPUT type="hidden" id="<?=voPA::$nmAtrAnoPA?>" name="<?=voPA::$nmAtrAnoPA?>" value="<?=$vo->anoPA?>">
-				<INPUT type="hidden" id="<?=voPA::$nmAtrCdPA?>" name="<?=voPA::$nmAtrCdPA?>" value="<?=$vo->cdPA?>">	                    
-	            <INPUT type="text" value="<?php echo($contrato);?>"  class="camporeadonly" size="17" readonly>	            	                        	                        
-	        </TR>			            
-			<TR>
-	            <TH class="campoformulario" nowrap>Nome Contratada:</TH>
-	            <TD class="campoformulario" width="1%"><INPUT type="text" id="nmContratada" name="nmContratada"  value="<?php echo($colecao[vopessoa::$nmAtrNome]);?>"  class="camporeadonly" size="50" <?=$readonly?>></TD>
-	            <TH class="campoformulario" width="1%" nowrap>CNPJ/CNPF Contratada:</TH>
-	            <TD class="campoformulario" ><INPUT type="text" id="docContratada" name="docContratada"  value="<?php echo($colecao[vopessoa::$nmAtrDoc]);?>"  onkeyup="formatarCampoCNPFouCNPJ(this, event);" class="camporeadonly" size="20" maxlength="20" <?=$readonly?>></TD>
-	        </TR>
-	        
-	        <?php
+			<?php 
+			getDemandaDetalhamento($voDemanda);
+			getContratoDet($voContrato);
+			
 	        }else{
-	        	$combo = new select($dominioTipoContrato->colecao);
 	            $selectExercicio = new selectExercicio();
 			  ?>			            
 			<TR>
@@ -200,12 +140,10 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 			            Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voPA::$nmAtrCdPA?>" name="<?=voPA::$nmAtrCdPA?>"  value="<?php echo(complementarCharAEsquerda($voContrato->cdContrato, "0", 3));?>"  class="camponaoobrigatorioalinhadodireita" size="6" maxlength="5" <?=$readonlyChaves?>>                               
 	        </TR>			            
 	        <TR>
-	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
+	            <TH class="campoformulario" nowrap width="1%">Demanda:</TH>
 	            <TD class="campoformulario" colspan=3>
-	            <?php echo "Ano: " . $selectExercicio->getHtmlCombo(voPA::$nmAtrAnoContrato,voPA::$nmAtrAnoContrato, $vo->anoContrato, true, "campoobrigatorio", false, " required onChange='carregaDadosContratada();'");?>
-			  Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voPA::$nmAtrCdContrato?>" name="<?=voPA::$nmAtrCdContrato?>"  value="<?php echo(complementarCharAEsquerda($vo->cdContrato, "0", 3));?>"  class="<?=$classChaves?>" size="4" maxlength="3" <?=$readonlyChaves?> required onBlur='carregaDadosContratada();'>
-			  <?php echo $combo->getHtmlCombo(voPA::$nmAtrTipoContrato,voPA::$nmAtrTipoContrato, "", true, "camponaoobrigatorio", false, " onChange='carregaDadosContratada();' ");	
-			  ?>
+	            <?php echo "Ano: " . $selectExercicio->getHtmlCombo(voPA::$nmAtrAnoDemanda,voPA::$nmAtrAnoDemanda, $vo->anoDemanda, true, "campoobrigatorio", false, " required onChange='carregaDadosContratada();'");?>
+			  Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voPA::$nmAtrCdDemanda?>" name="<?=voPA::$nmAtrCdDemanda?>"  value="<?php echo(complementarCharAEsquerda($vo->cdDemanda, "0", 5));?>"  class="<?=$classChaves?>" size="6" maxlength="5" <?=$readonlyChaves?> required onBlur='carregaDadosContratada();'>
 			  <div id="<?=vopessoa::$nmAtrNome?>">
 	          </div>
 	        </TR>			            
@@ -215,12 +153,11 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	        <?php 
 	        //require_once ("dominioSituacaoPA.php");	        
 	        $domSiPA = new dominioSituacaoPA();
-	        $situacao = $colecao[voPA::$nmAtrSituacao];
-	        $situacao = $domSiPA->getDescricao($situacao);	        
+	        $comboSituacao = new select($domSiPA::getColecao());	        
 	        ?>
 			<TR>
 	            <TH class="campoformulario" nowrap>Situação:</TH>
-	            <TD class="campoformulario" colspan=3><INPUT type="text" value="<?php echo(strtoupper($situacao));?>"  class="camporeadonly" size="20" readonly></TD>
+	            <TD class="campoformulario" colspan=3><?php echo $comboSituacao->getHtmlCombo(voPA::$nmAtrSituacao,voPA::$nmAtrSituacao, $vo->situacao, true, "campoobrigatorio", false, " required ");?></TD>
 				</TD>
 	        </TR>
             <TR>
@@ -232,10 +169,6 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
                     ?>
             </TR>	        
 			<TR>
-	            <TH class="campoformulario" nowrap>Proc.Licitatorio:</TH>
-	            <TD class="campoformulario" colspan="3"><INPUT type="text" id="<?=voPA::$nmAtrProcessoLicitatorio?>" name="<?=voPA::$nmAtrProcessoLicitatorio?>"  value="<?php echo($vo->processoLic);?>"  class="camponaoobrigatorio" size="50" ></TD>
-	        </TR>
-			<TR>
 	            <TH class="campoformulario" nowrap>Observação:</TH>
 	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=voPA::$nmAtrObservacao?>" name="<?=voPA::$nmAtrObservacao?>" class="camponaoobrigatorio" ><?php echo($vo->obs);?></textarea>
 				</TD>
@@ -246,7 +179,7 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	            	<INPUT type="text" 
 	            	       id="<?=voPA::$nmAtrDtAbertura?>" 
 	            	       name="<?=voPA::$nmAtrDtAbertura?>" 
-	            			value="<?php echo($vo->dtAbertura);?>"
+	            			value="<?php echo(getData($vo->dtAbertura));?>"
 	            			onkeyup="formatarCampoData(this, event, false);" 
 	            			class="camponaoobrigatorio" 
 	            			size="10" 
@@ -254,45 +187,6 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 				</TD>
         	</TR>
     
-<TR>
-	<TH class="textoseparadorgrupocampos" halign="left" colspan="4">
-	<DIV class="campoformulario" id="div_tramitacao">
-	<?php 
-	$isDetalhamento = false;
-	include_once 'gridTramitacaoAjax.php';
-	?>
-	</DIV>
-	</TH>
-</TR>
-<TR>
-	<TH class="textoseparadorgrupocampos" halign="left" colspan="4">
-	<DIV class="campoformulario">Incluir Tramitação:
-         <TABLE id="table_tabeladados" class="tabeladados" cellpadding="0" cellspacing="0">						
-             <TBODY>             
-                <TR class="dados">
-		            <TH class="campoformulario" width="1%" nowrap>Texto:</TH>
-		            <TD class="campoformulario" width="1%" nowrap>
-		            	<textarea rows="2" cols="60" id="<?=voPATramitacao::$nmAtrObservacao?>" name="<?=voPATramitacao::$nmAtrObservacao?>" class="camponaoobrigatorio" ></textarea>
-					</TD>
-		            <TH class="campoformulario" width="1%" nowrap>Documento:</TH>
-		            <TD class="campoformulario" width="1%" nowrap>
-		                    <INPUT type="text" id="<?=voDocumento::$nmAtrSq?>" name="<?=voDocumento::$nmAtrSq?>" class="camporeadonly" size="15" readonly>
-		                    <INPUT type="hidden" id="<?=voDocumento::getNmTabela()?>" name="<?=voDocumento::getNmTabela()?>" value="">
-		                    <?php echo getLinkPesquisa("../documento");?>
-					</TD>
-                    <TD class="campoformulario">
-                    <?php 
-                    echo getBotaoValidacaoAcesso("bttincluir_tram", "Incluir", "botaofuncaop", false,false,true, false, "onClick='incluirTramitacao();' accesskey='i'");
-                    echo getBotaoValidacaoAcesso("bttexcluir_tram", "Excluir", "botaofuncaop", false,false,true, false, "onClick='excluirTramitacao();' accesskey='e'");                    
-                    ?>
-                    </TD>                    
-                </TR>					
-            </TBODY>
-        </TABLE>
-	
-	</DIV>
-	</TH>
-</TR>
 <TR>
 	<TD halign="left" colspan="4">
 	<DIV class="textoseparadorgrupocampos">&nbsp;</DIV>

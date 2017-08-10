@@ -44,7 +44,9 @@
                 
                 for ($i=0;$i<$tamanho;$i++) {
                         $voAtual = new voPA();
+                        $voContratoAtual = new vocontrato();
                         $voAtual->getDadosBanco($colecao[$i]);     
+                        $voContratoAtual->getDadosBanco($colecao[$i]);
                         
                         /*$contrato = formatarCodigoAnoComplemento($colecao[$i][voPA::$nmAtrCdContrato],
                         						$colecao[$i][voPA::$nmAtrAnoContrato], 
@@ -55,7 +57,8 @@
                         
                         $situacao = $colecao[$i][voPA::$nmAtrSituacao];
                         $situacao = $domSiPA->getDescricao($situacao);  
-                        $tipo = $dominioTipoContrato->getDescricao($voAtual->tpContrato);
+                        $tipo = $dominioTipoContrato->getDescricao($voContratoAtual->tipo);
+                        
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados">
@@ -70,10 +73,10 @@
                   ?>                    
                     <TD class="tabeladados" nowrap><?php echo $voAtual->anoPA;?></TD>
                     <TD class="tabeladados" nowrap><?php echo complementarCharAEsquerda($voAtual->cdPA, "0", TAMANHO_CODIGOS_SAFI);?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $voAtual->anoContrato;?></TD>
-                    <TD class="tabeladados" nowrap><?php echo complementarCharAEsquerda($voAtual->cdContrato, "0", TAMANHO_CODIGOS_SAFI);?></TD>
+                    <TD class="tabeladados" nowrap><?php echo $voContratoAtual->anoContrato;?></TD>
+                    <TD class="tabeladados" nowrap><?php echo complementarCharAEsquerda($voContratoAtual->cdContrato, "0", TAMANHO_CODIGOS_SAFI);?></TD>
                     <TD class="tabeladados" nowrap><?php echo $tipo;?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $colecao[$i][vopessoa::$nmAtrDoc];?></TD>
+                    <TD class="tabeladados" nowrap><?php echo documentoPessoa::getNumeroDocFormatado($colecao[$i][vopessoa::$nmAtrDoc]);?></TD>
                     <TD class="tabeladados"><?php echo $colecao[$i][$filtro->nmColNomePessoaContrato];?></TD>
                     <TD class="tabeladados" nowrap><?php echo $colecao[$i][$filtro->nmColNomePessoaResponsavel];?></TD>
                     <TD class="tabeladados" nowrap><?php echo $situacao;?></TD>

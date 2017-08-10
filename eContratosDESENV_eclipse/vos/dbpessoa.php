@@ -53,29 +53,29 @@ class dbpessoa extends dbprocesso {
 	 */
 	function consultarPessoa($voentidade, $filtro) {
 		return $this->consultarPessoaManter ( $filtro, true );
-	}
+	}	
 	function consultarPessoaContratoFiltro($filtro) {
 		$nmTabelaContrato = vocontrato::getNmTabela ();
 		$nmTabela = vopessoa::getNmTabela ();
 		$nmTabelaPessoaVinculo = vopessoavinculo::getNmTabela ();
-		
+	
 		$atributosConsulta = $nmTabela . "." . vopessoa::$nmAtrCd;
 		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrNome;
 		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrDoc;
 		$atributosConsulta .= "," . $nmTabelaPessoaVinculo . "." . vopessoavinculo::$nmAtrCd;
 		//$atributosConsulta .= "," . $nmTabelaContrato . "." . vocontrato::$nmAtrCdAutorizacaoContrato;
-		
+	
 		$querySelect = "SELECT " . $atributosConsulta;
-		
+	
 		$queryFrom = "\n FROM " . $nmTabela;
 		$queryFrom .= "\n INNER JOIN " . $nmTabelaPessoaVinculo;
 		$queryFrom .= "\n ON " . $nmTabela . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaPessoaVinculo . "." . vopessoavinculo::$nmAtrCdPessoa;
-		
+	
 		$queryFrom .= "\n LEFT JOIN " . $nmTabelaContrato;
 		$queryFrom .= "\n ON " . $nmTabela . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
 		// echo $querySelect."<br>";
 		// echo $queryFrom;
-		
+	
 		return $this->consultarFiltro ( $filtro, $querySelect, $queryFrom, false );
 	}
 	function consultarPessoaManter($filtro, $validarConsulta) {		

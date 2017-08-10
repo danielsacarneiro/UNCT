@@ -22,6 +22,9 @@ class filtroManterPessoa extends filtroManter{
     var $cdEspecieContrato="";
     var $sqEspecieContrato="";
     var $dtReferenciaContrato ="";
+    
+    var $cdDemanda ="";
+    var $anoDemanda ="";    
 	
 	function getFiltroFormulario(){		
 		$this->cd = @$_POST[vopessoa::$nmAtrCd];
@@ -40,6 +43,8 @@ class filtroManterPessoa extends filtroManter{
 		$isHistorico = $this->isHistorico();
         $nmTabela = $voPessoa->getNmTabelaEntidade($isHistorico);
         $nmTabelaPessoaVinculo = $voPessoaVinculo->getNmTabela();
+        
+        $nmTabelaDemanda = voDemanda::getNmTabelaStatic($isHistorico);
         
 		//seta os filtros obrigatorios        
 		if($this->isSetaValorDefault()){
@@ -153,7 +158,26 @@ class filtroManterPessoa extends filtroManter{
 			;
 		
 					$conector  = "\n AND ";
-		}		
+		}
+		
+		if($this->cdDemanda != null){
+			$filtro = $filtro . $conector
+			. $nmTabelaDemanda . "." .voDemanda::$nmAtrCd
+			. "="
+					. $this->cdDemanda;
+		
+					$conector  = "\n AND ";
+		}
+		
+		if($this->anoDemanda != null){
+			$filtro = $filtro . $conector
+			. $nmTabelaDemanda . "." .voDemanda::$nmAtrAno
+			. "="
+					. $this->anoDemanda;
+		
+					$conector  = "\n AND ";
+		}
+		
 
 		$this->formataCampoOrdenacao(new vopessoa());
 		//finaliza o filtro		

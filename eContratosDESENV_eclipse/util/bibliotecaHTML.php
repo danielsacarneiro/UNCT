@@ -54,10 +54,9 @@ function setTituloPaginaPorNivel($titulo, $qtdNiveisAcimaEmSeEncontraPagina) {
 	$pastaJS = caminho_js;
 	$pastaJS = subirNivelPasta ( $pastaJS, $qtdNiveisAcimaEmSeEncontraPagina );
 	
-	if ($titulo == null){
+	if ($titulo == null) {
 		$titulo = constantes::$nomeSistema . " :: U N C T";
-	}
-	else{
+	} else {
 		$titulo = constantes::$nomeSistema . " : $titulo";
 	}
 	
@@ -70,26 +69,24 @@ function setTituloPaginaPorNivel($titulo, $qtdNiveisAcimaEmSeEncontraPagina) {
 	return $html;
 }
 function getPastaImagens() {
-	return getPastaImagensPorNivel(null);
-	
+	return getPastaImagensPorNivel ( null );
 }
 function getPastaImagensPorNivel($qtdNiveisAcimaEmSeEncontraPagina) {
-	$pastaImagens = subirNivelPasta ( caminho_imagens, $qtdNiveisAcimaEmSeEncontraPagina );	
+	$pastaImagens = subirNivelPasta ( caminho_imagens, $qtdNiveisAcimaEmSeEncontraPagina );
 	return $pastaImagens;
 }
-
 function setCabecalhoPorNivel($titulo, $qtdNiveisAcimaEmSeEncontraPagina) {
-	//se precisar fazer o mesmo para pasta menu
-	$pastaImagens = getPastaImagensPorNivel($qtdNiveisAcimaEmSeEncontraPagina);
+	// se precisar fazer o mesmo para pasta menu
+	$pastaImagens = getPastaImagensPorNivel ( $qtdNiveisAcimaEmSeEncontraPagina );
 	$pastaMenu = subirNivelPasta ( caminho_menu, $qtdNiveisAcimaEmSeEncontraPagina );
-		
+	
 	define ( 'pasta_imagens', $pastaImagens );
-	if ($titulo != null){
+	if ($titulo != null) {
 		$titulo = " - " . $titulo;
 	}
-		
-	$diaExtenso = strftime('%A, %d de %B de %Y', strtotime('today'));	
-	//$diaExtenso = date ( 'l jS \of F Y' );	
+	
+	$diaExtenso = strftime ( '%A, %d de %B de %Y', strtotime ( 'today' ) );
+	// $diaExtenso = date ( 'l jS \of F Y' );
 	
 	$cabecalho = "		<TABLE id='table_conteiner' class='conteiner' cellpadding='0' cellspacing='0'>
                         <TBODY>
@@ -214,8 +211,7 @@ function incluirUsuarioDataHoraDetalhamento($voEntidade) {
 	if ($voEntidade->sqHist != null) {
 		$nmusuHistorico = $voEntidade->nmUsuarioOperacao;
 		
-		$retorno .= "\n<TR>\n" . "<TH class='textoseparadorgrupocampos' halign='left' colspan='4'>" 
-				. "<DIV class='campoformulario' id='div_tramitacao'>&nbsp;&nbsp;Dados do Histórico" . "</DIV>" . "</TH>" . "</TR>";
+		$retorno .= "\n<TR>\n" . "<TH class='textoseparadorgrupocampos' halign='left' colspan='4'>" . "<DIV class='campoformulario' id='div_tramitacao'>&nbsp;&nbsp;Dados do Histórico" . "</DIV>" . "</TH>" . "</TR>";
 		
 		$retorno .= "<TR>
 		            <TH class='campoformulario' nowrap>Data:</TH>
@@ -329,8 +325,8 @@ function getBotaoExcluir() {
 	return getBotaoPorFuncao ( "bttexcluir", "Excluir", "botaofuncaop", false, false, true, "onClick='javascript:excluir();' accesskey='x'", constantes::$CD_FUNCAO_EXCLUIR );
 }
 function getBotaoIncluir() {
-	//return getBotaoValidacaoAcesso ( "bttincluir", "Incluir", "botaofuncaop", false, false, true, false, "onClick='javascript:incluir();' accesskey='n'" );
-	return getBotaoPorFuncao ( "bttincluir", "Incluir", "botaofuncaop", false, false, true, "onClick='javascript:incluir();' accesskey='n'", constantes::$CD_FUNCAO_INCLUIR);
+	// return getBotaoValidacaoAcesso ( "bttincluir", "Incluir", "botaofuncaop", false, false, true, false, "onClick='javascript:incluir();' accesskey='n'" );
+	return getBotaoPorFuncao ( "bttincluir", "Incluir", "botaofuncaop", false, false, true, "onClick='javascript:incluir();' accesskey='n'", constantes::$CD_FUNCAO_INCLUIR );
 }
 function getBotaoDetalhar() {
 	return getBotaoValidacaoAcesso ( "bttdetalhar", "Detalhar", "botaofuncaop", false, true, true, true, "onClick='javascript:detalhar(false);' accesskey='d'" );
@@ -355,30 +351,32 @@ function getBotoesRodape() {
 	return getBotoesRodapeComRestricao ( null );
 }
 function exibeBotao($arrayBotoesARemover, $nmFuncaoBotao, $usuarioLogadoTemPermissao, $restringeBotaoSemValidarPermissao) {
-	return ! existeItemNoArray ( $nmFuncaoBotao, $arrayBotoesARemover ) || ($usuarioLogadoTemPermissao && !$restringeBotaoSemValidarPermissao);
+	return ! existeItemNoArray ( $nmFuncaoBotao, $arrayBotoesARemover ) || ($usuarioLogadoTemPermissao && ! $restringeBotaoSemValidarPermissao);
 }
 function getBotoesRodapeComRestricao($arrayBotoesARemover, $restringeBotaoSemValidarPermissao = false) {
 	
 	// o administrador pode ver todos os botoes
 	$usuarioLogadoTemPermissao = dominioPermissaoUsuario::isAdministrador ( getColecaoPermissaoUsuarioLogado () );
 	
-	/*$temIncluir = ! existeItemNoArray ( constantes::$CD_FUNCAO_INCLUIR, $arrayBotoesARemover ) || $usuarioLogadoTemPermissao;
-	$temAlterar = ! existeItemNoArray ( constantes::$CD_FUNCAO_ALTERAR, $arrayBotoesARemover ) || $usuarioLogadoTemPermissao;
-	$temExcluir = ! existeItemNoArray ( constantes::$CD_FUNCAO_EXCLUIR, $arrayBotoesARemover ) || $usuarioLogadoTemPermissao;*/
+	/*
+	 * $temIncluir = ! existeItemNoArray ( constantes::$CD_FUNCAO_INCLUIR, $arrayBotoesARemover ) || $usuarioLogadoTemPermissao;
+	 * $temAlterar = ! existeItemNoArray ( constantes::$CD_FUNCAO_ALTERAR, $arrayBotoesARemover ) || $usuarioLogadoTemPermissao;
+	 * $temExcluir = ! existeItemNoArray ( constantes::$CD_FUNCAO_EXCLUIR, $arrayBotoesARemover ) || $usuarioLogadoTemPermissao;
+	 */
 	
 	// falta fazer para os outros botoes
-	$temIncluir = exibeBotao($arrayBotoesARemover, constantes::$CD_FUNCAO_INCLUIR, $usuarioLogadoTemPermissao, $restringeBotaoSemValidarPermissao);	
-	$temAlterar = exibeBotao($arrayBotoesARemover, constantes::$CD_FUNCAO_ALTERAR, $usuarioLogadoTemPermissao, $restringeBotaoSemValidarPermissao);
-	$temExcluir = exibeBotao($arrayBotoesARemover, constantes::$CD_FUNCAO_EXCLUIR, $usuarioLogadoTemPermissao, $restringeBotaoSemValidarPermissao);
-			
+	$temIncluir = exibeBotao ( $arrayBotoesARemover, constantes::$CD_FUNCAO_INCLUIR, $usuarioLogadoTemPermissao, $restringeBotaoSemValidarPermissao );
+	$temAlterar = exibeBotao ( $arrayBotoesARemover, constantes::$CD_FUNCAO_ALTERAR, $usuarioLogadoTemPermissao, $restringeBotaoSemValidarPermissao );
+	$temExcluir = exibeBotao ( $arrayBotoesARemover, constantes::$CD_FUNCAO_EXCLUIR, $usuarioLogadoTemPermissao, $restringeBotaoSemValidarPermissao );
+	
 	$isManutencao = false;
 	$isDetalhamento = false;
 	$funcao = @$_GET ["funcao"];
 	
-	//considera que qq funcao chamado que nao sejam as funcoes baiscas (alterar, excluir, incluir...) caira nessa opcao
-	//marreta: verifica pelo tamanho do nome da funcao
-	//um exemplo eh o metodo encaminhar chamado no encaminhamento de demanda (voDemandaTramitacao)
-	$isMetodoChamadoEspecifico = strlen($funcao) > 2; 
+	// considera que qq funcao chamado que nao sejam as funcoes baiscas (alterar, excluir, incluir...) caira nessa opcao
+	// marreta: verifica pelo tamanho do nome da funcao
+	// um exemplo eh o metodo encaminhar chamado no encaminhamento de demanda (voDemandaTramitacao)
+	$isMetodoChamadoEspecifico = strlen ( $funcao ) > 2;
 	
 	if ($funcao == constantes::$CD_FUNCAO_DETALHAR) {
 		$isDetalhamento = true;
@@ -420,17 +418,17 @@ function getBotoesRodapeComRestricao($arrayBotoesARemover, $restringeBotaoSemVal
 	return $html;
 }
 function getLinkPesquisa($link) {
-	return getImagemLink("javascript:abrirJanelaAuxiliar('" . $link . "',true, false, false);\" ", "lupa.png");
+	return getImagemLink ( "javascript:abrirJanelaAuxiliar('" . $link . "',true, false, false);\" ", "lupa.png" );
 }
 function getImagemLink($href, $nmImagem) {
-
-	//$pasta = pasta_imagens . "//";
-	$pasta = getPastaImagens() . "//";
-
-	$html = "<A id='lnkFramework' name='lnkFramework' " . "href=\"". $href . "\"" . " class='linkNormal' >" . "<img src='" . $pasta . $nmImagem . "'  width='22' height='22' border='0'></A>";
 	
-	//echo $pasta;
-
+	// $pasta = pasta_imagens . "//";
+	$pasta = getPastaImagens () . "//";
+	
+	$html = "<A id='lnkFramework' name='lnkFramework' " . "href=\"" . $href . "\"" . " class='linkNormal' >" . "<img src='" . $pasta . $nmImagem . "'  width='22' height='22' border='0'></A>";
+	
+	// echo $pasta;
+	
 	return $html;
 }
 function getBorracha($nmCampos) {
@@ -494,10 +492,10 @@ function getComponenteConsultaPaginacao($comboOrdenacao, $cdAtrOrdenacao, $cdOrd
 	
 	$objetosPorPagina = new dominioQtdObjetosPagina ();
 	$comboQtdRegistros = new select ( $objetosPorPagina->colecao );
-	$comboOrdem = new select ( getOrdemAtributos () );	
-	$radioHistorico = new radiobutton ( dominioSimNao::getColecao());
+	$comboOrdem = new select ( getOrdemAtributos () );
+	$radioHistorico = new radiobutton ( dominioSimNao::getColecao () );
 	
-	if($cdHistorico == null){
+	if ($cdHistorico == null) {
 		$cdHistorico = constantes::$CD_NAO;
 	}
 	
@@ -594,8 +592,8 @@ function getObjetoSessao($ID, $levantarExcecaoSeObjetoInexistente = false) {
 	
 	if ($_SESSION [$ID] != null) {
 		$objeto = $_SESSION [$ID];
-	}else if ($levantarExcecaoSeObjetoInexistente){
-		throw new excecaoObjetoSessaoInexistente($ID); 
+	} else if ($levantarExcecaoSeObjetoInexistente) {
+		throw new excecaoObjetoSessaoInexistente ( $ID );
 	}
 	
 	$isUsarSessao = @$_POST ["utilizarSessao"] != "N";
@@ -610,16 +608,14 @@ function removeObjetoSessao($ID) {
 	session_start ();
 	unset ( $_SESSION [$ID] );
 }
-function formatarCodigoContrato($cd, $ano, $tipo) {	
+function formatarCodigoContrato($cd, $ano, $tipo) {
 	$dominioTipoContrato = new dominioTipoContrato ();
 	$complemento = $dominioTipoContrato->getDescricao ( $tipo );
 	return formatarCodigoAnoComplemento ( $cd, $ano, $complemento );
 }
-
 function formatarCodigoAnoComplemento($cd, $ano, $complemento) {
-	return formatarCodigoAnoComplementoArgs($cd, $ano, null, $complemento);
+	return formatarCodigoAnoComplementoArgs ( $cd, $ano, null, $complemento );
 }
-
 function formatarCodigoAnoComplementoArgs($cd, $ano, $pTamanhoCodigo, $complemento) {
 	$retorno = "";
 	if ($complemento != null && $complemento != "") {
@@ -627,11 +623,11 @@ function formatarCodigoAnoComplementoArgs($cd, $ano, $pTamanhoCodigo, $complemen
 	}
 	
 	$tamanhoCodigo = TAMANHO_CODIGOS_SAFI;
-	if($pTamanhoCodigo != null){
+	if ($pTamanhoCodigo != null) {
 		$tamanhoCodigo = $pTamanhoCodigo;
 	}
 	
-	$retorno .= complementarCharAEsquerda ( $cd, "0", $tamanhoCodigo ) . "/" . substr($ano, 2, 2);
+	$retorno .= complementarCharAEsquerda ( $cd, "0", $tamanhoCodigo ) . "/" . substr ( $ano, 2, 2 );
 	
 	return $retorno;
 }
@@ -645,24 +641,32 @@ function getDataHoje() {
 	return date ( 'd/m/Y' );
 }
 function tratarExcecaoHTML($ex, $vo = null) {
-	if($vo != null){
-		putObjetoSessao($vo->getNmTabela(), $vo);
-		//a debaixo eh para a tela de msg de erro
-		putObjetoSessao(constantes::$ID_REQ_SESSAO_VO, $vo);		
+	if ($vo != null) {
+		putObjetoSessao ( $vo->getNmTabela (), $vo );
+		// a debaixo eh para a tela de msg de erro
+		putObjetoSessao ( constantes::$ID_REQ_SESSAO_VO, $vo );
 	}
 	
 	$msg = $ex->getMessage ();
-	$msg = str_replace("\n", "", $msg);
+	$msg = str_replace ( "\n", "", $msg );
 	
 	header ( "Location: ../mensagemErro.php?texto=" . $msg, TRUE, 307 );
 }
 function getStrComPuloLinhaHTML($str) {
-	return getStrComPuloLinhaGenerico($str,"<br>");
+	return getStrComPuloLinhaGenerico ( $str, "<br>" );
 }
 function getStrComPuloLinha($str) {
-	return getStrComPuloLinhaGenerico($str,"\n");
+	return getStrComPuloLinhaGenerico ( $str, "\n" );
 }
-function getStrComPuloLinhaGenerico($str,$pulo) {
+function getStrComPuloLinhaGenerico($str, $pulo) {
 	return "$str$pulo";
+}
+function getDetalhamentoHTMLCodigoAno($ano, $cd, $tamanhoCodigo = null) {
+	if($tamanhoCodigo == null){
+		$tamanhoCodigo = TAMANHO_CODIGOS;
+	}
+	$retorno .= "Ano: <INPUT type='text' value='$ano'  class='camporeadonly' size='5' readonly>";
+	$retorno .= "Número: <INPUT type='text' value='" . complementarCharAEsquerda ( $cd, "0", $tamanhoCodigo ) . "'  class='camporeadonlyalinhadodireita' size='6' readonly>";	
+	return $retorno;
 }
 ?>

@@ -1,4 +1,26 @@
 <?php
+
+function getDemandaDetalhamento($voDemanda){	
+?>
+	<TR>
+	<TH class="campoformulario" nowrap width="1%">Demanda:</TH>
+	<TD class="campoformulario" colspan=3>
+	<?php	
+	echo getDetalhamentoHTMLCodigoAno($voDemanda->ano, $voDemanda->cd); 
+	if($voDemanda->tipo != null){
+		$comboTipo = new select(dominioTipoDemanda::getColecao());
+		echo "Tipo: " . $comboTipo->getHtmlCombo("","", $voDemanda->tipo, true, "camporeadonly", false, " disabled ");
+	}					
+	?>		            
+		<INPUT type="hidden" id="<?=voDemanda::$nmAtrAno?>" name="<?=voDemanda::$nmAtrAno?>" value="<?=$voDemanda->ano?>">
+		<INPUT type="hidden" id="<?=voDemanda::$nmAtrCd?>" name="<?=voDemanda::$nmAtrCd?>" value="<?=$voDemanda->cd?>">	            			  
+		<INPUT type="hidden" id="<?=voDemanda::$nmAtrTipo?>" name="<?=voDemanda::$nmAtrTipo?>" value="<?=$voDemanda->tipo?>">
+		<INPUT type="hidden" id="<?=voDemanda::$nmAtrCdSetor?>" name="<?=voDemanda::$nmAtrCdSetor?>" value="<?=$voDemanda->cdSetor?>">
+		<INPUT type="hidden" id="<?=voDemanda::$nmAtrSituacao?>" name="<?=voDemanda::$nmAtrSituacao?>" value="<?=$voDemanda->situacao?>">
+	</TR>
+<?php 
+}
+
 function getHtmlDocumento($voAtual, $comDescricaoPorExtenso = false) {
 	$html .= "<TD class='tabeladadosalinhadodireita' nowrap> \n";
 	if ($voAtual->voDoc->sq != null) {

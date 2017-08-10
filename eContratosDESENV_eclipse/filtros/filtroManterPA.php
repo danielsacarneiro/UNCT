@@ -1,11 +1,10 @@
 <?php
 include_once(caminho_util."bibliotecaSQL.php");
 include_once(caminho_lib ."filtroManter.php");
-include_once(caminho_funcoes ."contrato/dominioEspeciesContrato.php");
 
 class filtroManterPA extends filtroManter{
     
-    var $nmFiltro = "filtroManterPenalidade";
+    var $nmFiltro = "filtroManterPA";
     
     var $cdPessoa ;    
     var $cdResponsavel ;
@@ -14,7 +13,6 @@ class filtroManterPA extends filtroManter{
     var $cdPA;
     var $anoPA;
     var $situacao;
-    var $cdEspecieContrato;
     
     var $nmTabelaPessoaContrato = "TAB_PESSOA_CONTRATO";
     var $nmTabelaPessoaResponsavel = "TAB_PESSOA_RESP";
@@ -38,7 +36,6 @@ class filtroManterPA extends filtroManter{
         $this->cdPA = @$_POST[voPA::$nmAtrCdPA];
         $this->anoPA = @$_POST[voPA::$nmAtrAnoPA];
         $this->situacao = @$_POST[voPA::$nmAtrSituacao];
-        $this->cdEspecieContrato = @$_POST[vocontrato::$nmAtrCdEspecieContrato];
         
         //isso tudo pq o filtro pode ser usado por mais de um metodo
         //e precisa saber qual voprincipal considera,
@@ -167,7 +164,7 @@ class filtroManterPA extends filtroManter{
 	function getAtributosOrdenacao(){
 		$varAtributos = array(
 				voPA::$nmAtrCdPA=> "PA",
-				vocontrato::getNmTabelaStatic($this->isHistorico).".".voPA::$nmAtrCdContrato => "Contrato"
+				vocontrato::getNmTabelaStatic($this->isHistorico).".".vocontrato::$nmAtrCdContrato => "Contrato"
 		);
 		return $varAtributos;
 	}
