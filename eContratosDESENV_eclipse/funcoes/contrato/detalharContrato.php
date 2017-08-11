@@ -18,7 +18,10 @@ $readonly = "readonly";
 	$dbprocesso = new dbcontrato();				
 	$colecao = $dbprocesso->limpaResultado();
 	$colecao = $dbprocesso->consultarContratoPorChave($voContrato, $isHistorico);	
-	$voContrato->getDadosBanco($colecao[0]);	
+	$voContrato->getDadosBanco($colecao[0]);
+	
+	$voContratoInfo = new voContratoInfo();
+	$voContratoInfo->getDadosBanco($colecao[0]);
 	
 	putObjetoSessao($voContrato->getNmTabela(), $voContrato);
 
@@ -62,7 +65,7 @@ setCabecalho($titulo);
 <!DOCTYPE html>
 
 <HEAD>    
-<?=setTituloPagina(null)?>
+<?=setTituloPagina($titulo)?>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_cnpfcnpj.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_oficio.js"></SCRIPT>
@@ -253,7 +256,7 @@ function confirmar() {
             	<INPUT type="text" 
             	       id="<?=vocontrato::$nmAtrDtProposta?>" 
             	       name="<?=vocontrato::$nmAtrDtProposta?>" 
-            			value="<?php echo($voContrato->dtProposta);?>"
+            			value="<?php echo(getData($voContratoInfo->dtProposta));?>"
             			onkeyup="formatarCampoData(this, event, false);" 
             			class="camporeadonly" 
             			size="10" 

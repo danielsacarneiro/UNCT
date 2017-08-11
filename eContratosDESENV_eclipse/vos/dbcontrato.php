@@ -47,17 +47,28 @@ include_once(caminho_util."DocumentoPessoa.php");
         
 	function consultarContratoPorChave($voContrato, $isHistorico){
         $nmTabela = $voContrato->getNmTabelaEntidade($isHistorico);
+        $nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic(false);
         
 		$query = "SELECT ".$nmTabela;
-        $query.= ".*, TAB1." .vousuario::$nmAtrName. " AS " . voentidade::$nmAtrNmUsuarioInclusao;
+        $query.= ".*";
+        $query.= ", $nmTabelaContratoInfo." . voContratoInfo::$nmAtrDtProposta;
         $query.= ", TAB2." .vousuario::$nmAtrName. " AS " . voentidade::$nmAtrNmUsuarioUltAlteracao;
         $query.= " FROM ". $nmTabela;
+        
+        $query .= "\n LEFT JOIN " . $nmTabelaContratoInfo;
+        $query .= "\n ON ";
+        $query .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrCdContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrCdContrato;
+        $query .= "\n AND ";
+        $query .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrAnoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrAnoContrato;
+        $query .= "\n AND ";
+        $query .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrTipoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
+        
         $query.= "\n LEFT JOIN ". vousuario::$nmEntidade;
         $query.= "\n TAB1 ON ";
-        $query.= "TAB1.".vousuario::$nmAtrID. "=".vocontrato::$nmAtrCdUsuarioInclusao;
+        $query.= "TAB1.".vousuario::$nmAtrID. "=$nmTabela.".vocontrato::$nmAtrCdUsuarioInclusao;
         $query.= "\n LEFT JOIN ". vousuario::$nmEntidade;
         $query.= "\n TAB2 ON ";
-        $query.= "TAB2.".vousuario::$nmAtrID. "=".vocontrato::$nmAtrCdUsuarioUltAlteracao;
+        $query.= "TAB2.".vousuario::$nmAtrID. "=$nmTabela.".vocontrato::$nmAtrCdUsuarioUltAlteracao;
         $query.= " WHERE ";
         $query.= $voContrato->getValoresWhereSQLChave($isHistorico);        
         
