@@ -1,10 +1,13 @@
 <?php
 
-function getDemandaDetalhamento($voDemanda){	
+function getDemandaDetalhamento($voDemanda, $colspan=null){
+	if($colspan==null){
+		$colspan=3;
+	}
 ?>
 	<TR>
 	<TH class="campoformulario" nowrap width="1%">Demanda:</TH>
-	<TD class="campoformulario" colspan=3>
+	<TD class="campoformulario" colspan=<?=$colspan?>>
 	<?php	
 	echo getDetalhamentoHTMLCodigoAno($voDemanda->ano, $voDemanda->cd); 
 	if($voDemanda->tipo != null){
@@ -112,6 +115,14 @@ function mostrarGridDemanda($colecaoTramitacao, $isDetalhamento) {
 				$html .= "</TR> \n";
 				
 				$sq ++;
+				
+				$isSetorAtual = $i == 0;
+				// o setor origem vai ser o setor destino da ultima tramitacao
+				//ATENCAo a ordenacao da consulta. O setor atual/origem serah o da ultima tramitacao em caso de ordenacao crescente. Caso contrario, sera o da primeira tramitacao.				
+				if($isSetorAtual){
+					//echo "setor atual é $voAtual->cdSetorDestino";
+					$html .= "<INPUT type='hidden' id='" . voDemandaTramitacao::$nmAtrCdSetorOrigem . "' name='" . voDemandaTramitacao::$nmAtrCdSetorOrigem . "' value='" . $voAtual->cdSetorDestino . "'> \n";
+				}				
 			}
 		}
 				
@@ -121,12 +132,6 @@ function mostrarGridDemanda($colecaoTramitacao, $isDetalhamento) {
 		$html .= "</TH>\n";
 		$html .= "</TR>\n";
 		
-		$isSetorAtual = $i = 0;
-		// o setor origem vai ser o setor destino da ultima tramitacao
-		//ATENCAo a ordenacao da consulta. O setor atual/origem serah o da ultima tramitacao em caso de ordenacao crescente. Caso contrario, sera o da primeira tramitacao.
-		if($isSetorAtual){
-			$html .= "<INPUT type='hidden' id='" . voDemandaTramitacao::$nmAtrCdSetorOrigem . "' name='" . voDemandaTramitacao::$nmAtrCdSetorOrigem . "' value='" . $voAtual->cdSetorDestino . "'> \n";
-		}
 	}
 	
 	echo $html;

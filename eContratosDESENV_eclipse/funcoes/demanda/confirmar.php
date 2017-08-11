@@ -7,7 +7,10 @@ inicioComValidacaoUsuario(true);
 $vo = new voDemandaTramitacao();
 $vo->getDadosFormulario();
 
-//var_dump($vo->colecaoContrato);
+/*echo $vo->cdSetor . " cd setor <BR>";
+echo $vo->cdSetorAtual . " cd setor atual <BR>";
+echo $vo->cdSetorDestino . " cd setor destino <BR>";
+echo $vo->cdSetorOrigem . " cd setor origem <BR>";*/
 
 putObjetoSessao("vo", $vo);
 //echo $funcao = @$_POST["funcao"];

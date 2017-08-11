@@ -3,6 +3,7 @@ include_once("../../config_lib.php");
 include_once(caminho_util."bibliotecaHTML.php");
 include_once(caminho_util."selectExercicio.php");
 include_once(caminho_vos."voDemandaTramitacao.php");
+include_once (caminho_funcoes . "demanda/biblioteca_htmlDemanda.php");
 
 try{
 //inicia os parametros
@@ -202,20 +203,9 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	        	$complementoHTML = " required ";	        	
 	        	$complementoHTMLSetorDestino .=  $complementoHTML;
 	        	$readonlyChaves = " readonly ";
+	        	
+	        	getDemandaDetalhamento($vo);
 	        ?>	        	        
-	        <TR>
-	            <TH class="campoformulario" nowrap width="1%">Demanda:</TH>
-	            <TD class="campoformulario" colspan=3>	            
-	            <?php echo "Ano: " . $selectExercicio->getHtmlCombo("","", $vo->ano, true, "camporeadonly", false, " disabled ");?>
-	            <?php echo "Tipo: " . $comboTipo->getHtmlCombo("","", $vo->tipo, false, "camporeadonly", false, " disabled ");?>
-				Número: <INPUT type="text" value="<?=complementarCharAEsquerda($vo->cd, "0", TAMANHO_CODIGOS);?>"  class="camporeadonly" size="6" readonly>	            
-	            
-	            <INPUT type="hidden" id="<?=voDemanda::$nmAtrAno?>" name="<?=voDemanda::$nmAtrAno?>" value="<?=$vo->ano?>">
-				<INPUT type="hidden" id="<?=voDemanda::$nmAtrCd?>" name="<?=voDemanda::$nmAtrCd?>" value="<?=$vo->cd?>">	            			  
-				<INPUT type="hidden" id="<?=voDemanda::$nmAtrTipo?>" name="<?=voDemanda::$nmAtrTipo?>" value="<?=$vo->tipo?>">
-				<INPUT type="hidden" id="<?=voDemanda::$nmAtrCdSetor?>" name="<?=voDemanda::$nmAtrCdSetor?>" value="<?=$vo->cdSetor?>">
-				<INPUT type="hidden" id="<?=voDemanda::$nmAtrSituacao?>" name="<?=voDemanda::$nmAtrSituacao?>" value="<?=$vo->situacao?>">
-	        </TR>
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Setor Responsável:</TH>
 	            <TD class="campoformulario" width="1%">
