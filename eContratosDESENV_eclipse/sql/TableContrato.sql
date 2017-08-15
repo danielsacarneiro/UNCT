@@ -3,7 +3,7 @@ ALTER DATABASE unct CHARACTER SET utf8 COLLATE utf8_general_ci;
 -- ALTER DATABASE unct CHARACTER SET Latin1 COLLATE latin1_general_ci;
 -- ALTER DATABASE `sua_base` CHARSET = Latin1 COLLATE = latin1_swedish_ci;
 
-drop table contrato;
+drop table IF EXISTS contrato;
 CREATE TABLE contrato (
     sq INT NOT NULL AUTO_INCREMENT,
     ct_exercicio INT NOT NULL,

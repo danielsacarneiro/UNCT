@@ -438,7 +438,7 @@ include_once(caminho_util."DocumentoPessoa.php");
         	if($objeto != null){
         		$retorno = $this->getCdEspecieContrato($objeto, null);
         	}else{
-            	echo "<br>NAO EXISTE<br>";
+            	echo "<br>NAO EXISTE $paramEspecie <br>";
         	}
         }
         

@@ -151,6 +151,8 @@ function confirmar() {
 				$filtroTramitacaoContrato->vocontrato->cdContrato = $voContrato->cdContrato;
 				$filtroTramitacaoContrato->vocontrato->anoContrato = $voContrato->anoContrato;
 				$filtroTramitacaoContrato->vocontrato->tipo = $voContrato->tipo;
+				$filtroTramitacaoContrato->vodemanda->cd = $voDemanda->cd;
+				$filtroTramitacaoContrato->vodemanda->ano = $voDemanda->ano;
 				//$filtroTramitacaoContrato->temDocumentoAnexo = constantes::$CD_SIM;
 				$filtroTramitacaoContrato->TemPaginacao = false;			
 				

@@ -281,6 +281,18 @@ class dbDemandaTramitacao extends dbprocesso {
 		try {
 			$this->incluirDemandaTramitacaoSEMControleTransacao ( $vo );
 			
+			//sempre que uma demanda for encaminhada, ela estara em andamento ate que seja fechada
+			$voDemanda = new voDemanda ();
+			$voDemanda = $vo->getVOPai ();			
+			/*$registrobanco = $voDemanda->dbprocesso->consultarPorChave($voDemanda, false);
+			$voDemanda->getDadosBanco($registrobanco);*/
+			
+			$voDemanda = $voDemanda->dbprocesso->consultarPorChaveVO($voDemanda, false);			
+				
+			$voDemanda->dbprocesso->cDb = $this->cDb;
+			$voDemanda->situacao = dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO;
+			$voDemanda->dbprocesso->alterar($voDemanda);			
+			
 			/*
 			 * $voDemanda = new voDemanda();
 			 * $voDemanda = $vo->getVOPaiChave();

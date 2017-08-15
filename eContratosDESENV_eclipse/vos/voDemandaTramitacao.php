@@ -193,6 +193,7 @@ include_once("voDemandaContrato.php");
 		$voDemanda->dtReferencia  = $this->dtReferencia;
 		
 		$voDemanda->colecaoContrato = $this->colecaoContrato;
+		//$voDemanda->dhUltAlteracao = date('Y-m-d H:i:s');
 	
 		return $voDemanda;
 	}

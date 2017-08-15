@@ -130,6 +130,12 @@ class dbprocesso {
 		
 		return $queryFrom;
 	}
+	function consultarPorChaveVO($vo, $isHistorico) {		
+		$registrobanco = $this->consultarPorChave($vo, $isHistorico);
+		$vo->getDadosBanco($registrobanco);
+		
+		return $vo;
+	}
 	function consultarPorChave($vo, $isHistorico) {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
 		$arrayColunasRetornadas = array (
