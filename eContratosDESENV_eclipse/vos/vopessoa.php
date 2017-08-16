@@ -5,7 +5,9 @@ include_once(caminho_util."DocumentoPessoa.php");
 
   Class vopessoa extends voentidade{
         //var $nmTable = "contrato_import";
-		//para teste                
+		//para teste       
+		static $ID_REQ_DIV_CONTRATADO = "ID_REQ_DIV_CONTRATADO";	
+  	
 		static $nmAtrCd  = "pe_cd";
 		static $nmAtrIdUser  = "ID";
 		static $nmAtrNome= "pe_nome";		
@@ -14,6 +16,8 @@ include_once(caminho_util."DocumentoPessoa.php");
 		static $nmAtrEmail =  "pe_email";
 		static $nmAtrEndereco =  "pe_endereco";
 		static $nmAtrObservacao =  "pe_obs";
+		//indicador de participacao ao programa de acesso ao trabalhador
+		static $nmAtrInPAT = "pe_in_pat";		
 		
 		static $ID_CONTRATO = "ID_CONTRATO_PESSOA";
 		static $ID_NOME_DADOS_CONTRATADA = "ID_NOME_DADOS_CONTRATADA";
@@ -25,6 +29,7 @@ include_once(caminho_util."DocumentoPessoa.php");
 		var $email =  "";
         var $tel =  "";
         var $obs =  "";
+        var $inPAT = "";
 
 // ...............................................................
 // Funções ( Propriedades e métodos da classe )
@@ -69,7 +74,8 @@ include_once(caminho_util."DocumentoPessoa.php");
             self::$nmAtrTel,            
             self::$nmAtrEmail,
         	self::$nmAtrEndereco,
-        	self::$nmAtrObservacao
+        	self::$nmAtrObservacao,
+        	self::$nmAtrInPAT
         );
         
         return $retorno;    
@@ -93,6 +99,7 @@ include_once(caminho_util."DocumentoPessoa.php");
         $this->email = $registrobanco[vopessoa::$nmAtrEmail];        		
         $this->endereco = $registrobanco[vopessoa::$nmAtrEndereco];
         $this->obs = $registrobanco[vopessoa::$nmAtrObservacao];
+        $this->inPAT = $registrobanco[vopessoa::$nmAtrInPAT];
 	}   
 	
 	function getDadosFormulario(){
@@ -108,16 +115,14 @@ include_once(caminho_util."DocumentoPessoa.php");
         $this->tel = @$_POST[vopessoa::$nmAtrTel]; 
         $this->endereco = @$_POST[vopessoa::$nmAtrEndereco];
         $this->obs= @$_POST[vopessoa::$nmAtrObservacao];
-        
-        $this->dhUltAlteracao = @$_POST[vopessoa::$nmAtrDhUltAlteracao];
-        $this->sqHist = @$_POST[vopessoa::$nmAtrSqHist];
-        //usuario de ultima manutencao sempre sera o id_user
-        $this->cdUsuarioUltAlteracao = id_user;
-        
+        $this->inPAT = @$_POST[vopessoa::$nmAtrInPAT];
+                
         //vinculo
         $this->cdVinculo = @$_POST[vopessoavinculo::$nmAtrCd];
         $this->cdGestor = @$_POST[vogestor::$nmAtrCd];
-            
+        
+        //completa com os dados da entidade
+        $this->getDadosFormularioEntidade();            
 	}
                 
 	function toString(){						

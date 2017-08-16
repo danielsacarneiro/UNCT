@@ -104,14 +104,23 @@ function validaVinculo(){
 
 function verificaVinculo(){
 	vinculo = document.frm_principal.<?=vopessoavinculo::$nmAtrCd?>.value;
-	campo = document.getElementById("<?=vogestor::getNmTabela()?>");
+	campoDIVGestor = document.getElementById("<?=vogestor::getNmTabela()?>");
+	campoDIVContratado = document.getElementById("<?=vopessoa::$ID_REQ_DIV_CONTRATADO?>");
 	if(vinculo == <?=dominioVinculoPessoa::$CD_VINCULO_RESPONSAVEL?>){
-		campo.style.display = "";		
+		campoDIVGestor.style.display = "";		
 	}
 	else{ 
-		campo.style.display = "none";
+		campoDIVGestor.style.display = "none";
 		limpaCampoGestor();
+	}
+
+	if(vinculo == <?=dominioVinculoPessoa::$CD_VINCULO_CONTRATADO?>){
+		campoDIVContratado.style.display = "";		
+	}
+	else{ 
+		campoDIVContratado.style.display = "none";
 	}	
+		
 }
 
 function iniciar(){
@@ -194,16 +203,14 @@ function abrirJanelaAuxiliarGestor(){
 	                    Descrição: <INPUT type="text" id="<?=vogestor::$nmAtrDescricao?>" name="<?=vogestor::$nmAtrDescricao?>" value="<?=$colecao[vogestor::$nmAtrDescricao]?>"   class="camporeadonly" size="30" readonly>
 	                    <?php echo getLinkPesquisa("../gestor");?>
                     </div>
-                    <!-- <div id="<?=vogestor::getNmTabela()?>">
-                    Órgão Gestor/Código:<INPUT type="text" id="<?=vogestor::$nmAtrCd?>" name="<?=vogestor::$nmAtrCd?>"  onKeyUp="verificaVinculo();" value=""  class="campoobrigatorio" size="5">
-                    Descrição: <INPUT type="text" id="<?=vogestor::$nmAtrDescricao?>" name="<?=vogestor::$nmAtrDescricao?>"  onKeyUp="verificaVinculo();" value=""  class="campoobrigatorio" size="15">
+                    <div id="<?=vopessoa::$ID_REQ_DIV_CONTRATADO?>">
+		                <?php 
+			            include_once(caminho_util. "dominioSimNao.php");
+			            $comboSimNao = new select(dominioSimNao::getColecao());	             
+			            echo "Participa do PAT (Programa de Alimentação do Trabalhador)?: ";
+			            echo $comboSimNao->getHtmlCombo(vopessoa::$nmAtrInPAT,vopessoa::$nmAtrInPAT, $vo->inPAT, true, "camponaoobrigatorio", false,"");
+			            ?>
                     </div>
-	                <div id="<?=$idDiv?>">
-	                <?php	                 
-	                 //echo getComboGestorResponsavel(new dbgestorpessoa(), vocontrato::$nmAtrCdGestorPessoaContrato, vocontrato::$nmAtrCdGestorPessoaContrato, $voContrato->cdGestor, $voContrato->cdGestorPessoa);                    
-	                //echo getComboGestorResponsavel("", "");
-	                 ?>
-	                </div> -->                    
             </TR>               
 
         <?php if(!$isInclusao){

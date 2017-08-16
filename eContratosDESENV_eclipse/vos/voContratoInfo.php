@@ -18,7 +18,7 @@ Class voContratoInfo extends voentidade{
 	 
 	static $nmAtrCdClassificacao = "ctinf_cd_classificacao";
 	static $nmAtrInMaoDeObra = "ctinf_in_mao_obra";
-	
+		
 	var $cdContrato = "";
 	var $anoContrato  = "";
 	var $tipo = "";	
@@ -30,7 +30,7 @@ Class voContratoInfo extends voentidade{
 	var $tpGarantia = "";
 	 
 	var $inMaoDeObra = "";
-	var $cdClassificacao = "";
+	var $cdClassificacao = "";	
 	
 	var $dbprocesso = null;
 	// ...............................................................

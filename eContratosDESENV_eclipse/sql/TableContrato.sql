@@ -153,7 +153,7 @@ ALTER TABLE contrato_info ADD COLUMN ctinf_in_mao_obra CHAR(1) NULL AFTER ctinf_
 ALTER TABLE contrato_info ADD COLUMN ctinf_cd_classificacao INT NULL AFTER ctinf_in_mao_obra;
 
 -- ALTER TABLE contrato_info ADD COLUMN in_desativado CHAR(1) NOT NULL AFTER cd_usuario_ultalt;
--- ALTER TABLE contrato_info DROP COLUMN ctinf_in_prestacao_garantia;
+ -- ALTER TABLE contrato_info DROP COLUMN ctinf_in_pat;
     
 ALTER TABLE contrato_info DROP FOREIGN KEY fk_contrato_info;
 
@@ -188,7 +188,6 @@ ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_garantia CHAR(1) NULL AFTER c
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_tp_garantia INT NULL AFTER ctinf_in_garantia;
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_mao_obra CHAR(1) NULL AFTER ctinf_tp_garantia;
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_cd_classificacao INT NULL AFTER ctinf_in_mao_obra;
-
 -- ALTER TABLE contrato_info_hist DROP FOREIGN KEY desativacao_demanda; 
 -- ALTER TABLE contrato_info_hist DROP COLUMN ctinf_in_prestacao_garantia;
 

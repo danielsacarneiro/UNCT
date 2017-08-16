@@ -13,7 +13,16 @@ class dominio extends multiplosConstrutores {
 		return self::getDescricaoStatic ( $chave, $this->colecao );
 	}
 	
+	/**
+	 * 
+	 * @param unknown $chave
+	 * @deprecated
+	 */
 	static function getDescricaoStaticTeste($chave) {
+		return static::getDescricaoStatic($chave);
+	}
+	
+	/*static function getDescricaoStaticTeste($chave) {
 		$retorno = $chave;
 		$colecao = static::getColecao();
 		if ($colecao != null) {
@@ -34,10 +43,13 @@ class dominio extends multiplosConstrutores {
 		}
 		
 		return $retorno;		
-	}
+	}*/
 	
-	static function getDescricaoStatic($chave, $colecao) {
+	static function getDescricaoStatic($chave, $colecao = null) {
 		$retorno = $chave;
+		if($colecao == null){
+			$colecao = static::getColecao();
+		}
 		if ($colecao != null) {
 			$totalResultado = count ( $colecao );
 			$chaves = array_keys ( $colecao );

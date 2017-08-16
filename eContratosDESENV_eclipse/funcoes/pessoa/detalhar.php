@@ -164,7 +164,17 @@ function confirmar() {
 		                    <TD class="tabeladados">Órgão Gestor: <?php echo complementarCharAEsquerda($cdGestor, "0", TAMANHO_CODIGOS) . " - " . $gestor;?></TD>
 			                <?php
 							}				
-			                ?>
+							
+							if($cdVinculo == dominioVinculoPessoa::$CD_VINCULO_CONTRATADO){
+								include_once(caminho_util. "dominioSimNao.php");
+								if($vo->inPAT == null){
+									$vo->inPAT = "Não informado";
+								}
+								?>
+							<TD class="tabeladados">PAT: <?php echo dominioSimNao::getDescricaoStatic($vo->inPAT);?></TD>
+							<?php
+							}				
+							?>														
 		                </TR>					
 		                <?php
 						}				

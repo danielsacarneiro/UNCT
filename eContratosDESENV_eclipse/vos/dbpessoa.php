@@ -281,7 +281,8 @@ class dbpessoa extends dbprocesso {
 		$retorno .= $this->getVarComoString ( $vopessoa->tel ) . ",";
 		$retorno .= $this->getVarComoString ( $vopessoa->email ) . ",";
 		$retorno .= $this->getVarComoString ( $vopessoa->endereco ) . ",";
-		$retorno .= $this->getVarComoString ( $vopessoa->obs );
+		$retorno .= $this->getVarComoString ( $vopessoa->obs ) . ",";
+		$retorno .= $this->getVarComoString ( $vopessoa->inPAT );
 		
 		$retorno .= $vopessoa->getSQLValuesInsertEntidade ();
 		
@@ -323,6 +324,11 @@ class dbpessoa extends dbprocesso {
 		
 		if ($vo->obs != null) {
 			$retorno .= $sqlConector . vopessoa::$nmAtrObservacao . " = " . $this->getVarComoString ( $vo->obs );
+			$sqlConector = ",";
+		}
+		
+		if ($vo->inPAT != null) {
+			$retorno .= $sqlConector . vopessoa::$nmAtrInPAT . " = " . $this->getVarComoString ( $vo->inPAT );
 			$sqlConector = ",";
 		}
 		

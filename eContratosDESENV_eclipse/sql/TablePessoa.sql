@@ -30,6 +30,8 @@ CREATE TABLE pessoa (
     pe_email VARCHAR(100),
 	pe_endereco VARCHAR(300),
     pe_obs VARCHAR(300),
+    pe_in_pat CHAR(1),
+    
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_incl INT,
@@ -41,7 +43,8 @@ ALTER TABLE pessoa ADD CONSTRAINT fk_pessoa_usuario FOREIGN KEY (ID) REFERENCES 
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;
     
-ALTER TABLE pessoa ADD COLUMN in_desativado CHAR(1) NOT NULL DEFAULT 'N' AFTER cd_usuario_ultalt;    
+ALTER TABLE pessoa ADD COLUMN pe_in_pat CHAR(1) NULL AFTER pe_obs;
+ALTER TABLE pessoa ADD COLUMN in_desativado CHAR(1) NOT NULL DEFAULT 'N' AFTER cd_usuario_ultalt;
 
 -- ALTER TABLE pessoa CHANGE COLUMN pe_tel pe_tel VARCHAR(100) NULL DEFAULT NULL ;
     
@@ -58,6 +61,8 @@ CREATE TABLE pessoa_hist (
     pe_email VARCHAR(100),
 	pe_endereco VARCHAR(300),
     pe_obs VARCHAR(300),
+    pe_in_pat CHAR(1),
+    
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_incl INT,
@@ -69,6 +74,7 @@ CREATE TABLE pessoa_hist (
     CONSTRAINT pk PRIMARY KEY (hist)
 );
 
+ALTER TABLE pessoa_hist ADD COLUMN pe_in_pat CHAR(1) NULL AFTER pe_obs;
 ALTER TABLE pessoa_hist ADD COLUMN in_desativado CHAR(1) NOT NULL AFTER cd_usuario_ultalt;    
     
  show create table pessoa; 
