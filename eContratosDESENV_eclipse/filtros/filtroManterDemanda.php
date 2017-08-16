@@ -257,7 +257,7 @@ class filtroManterDemanda extends filtroManter{
 					$conector  = "\n AND ";
 		}
 		
-		if($this->vodemanda->situacao != null){
+		/*if($this->vodemanda->situacao != null){
 			$filtro = $filtro . $conector
 			. $nmTabela. "." .voDemanda::$nmAtrSituacao
 			. " = "
@@ -265,7 +265,18 @@ class filtroManterDemanda extends filtroManter{
 					;
 		
 					$conector  = "\n AND ";
-		}
+		}*/
+		
+		if ($this->vodemanda->situacao != null && !$this->isAtributoArrayVazio($this->vodemanda->situacao)) {
+			$comparar = " = '" . $this->vodemanda->situacao . "'";
+			if(is_array($this->vodemanda->situacao)){
+				$comparar = " IN (" . getSQLStringFormatadaColecaoIN($this->vodemanda->situacao, true) . ")";
+			}
+				
+			$filtro = $filtro . $conector . $nmTabela . "." . voDemanda::$nmAtrSituacao . $comparar;
+				
+			$conector = "\n AND ";
+		}		
 		
 		if($this->dtUltMovimentacao != null){
 			$colDemandaTram = $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrDhInclusao;

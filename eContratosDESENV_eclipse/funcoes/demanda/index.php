@@ -157,7 +157,7 @@ function encaminhar() {
             </TR>            
             <TR>
                 <TH class="campoformulario" nowrap width="1%">Situação:</TH>
-                <TD class="campoformulario" width="1%"><?php echo $comboSituacao->getHtmlCombo(voDemanda::$nmAtrSituacao,voDemanda::$nmAtrSituacao, $filtro->vodemanda->situacao, true, "camponaoobrigatorio", false, "");?></TD>
+                <TD class="campoformulario" width="1%"><?php echo $comboSituacao->getHtmlCombo(voDemanda::$nmAtrSituacao,voDemanda::$nmAtrSituacao."[]", $filtro->vodemanda->situacao, true, "camponaoobrigatorio", false, " multiple ");?></TD>
                 <TH class="campoformulario" nowrap width="1%">Prioridade:</TH>
                 <TD class="campoformulario" ><?php echo $comboPrioridade->getHtmlCombo(voDemanda::$nmAtrPrioridade,voDemanda::$nmAtrPrioridade, $filtro->vodemanda->prioridade, true, "camponaoobrigatorio", false, "");?></TD>                                
             </TR>

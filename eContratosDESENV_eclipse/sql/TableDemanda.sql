@@ -168,3 +168,48 @@ END $$
 DELIMITER ;
 call recuperarDemandas();
 /** INCLUSAO DEMANDAS */
+
+
+/** ALTERACAO DA SITUACAO DAS DEMANDAS */
+DELIMITER $$
+DROP PROCEDURE IF EXISTS manterDemandas $$
+CREATE PROCEDURE manterDemandas()
+BEGIN
+
+  DECLARE done INTEGER DEFAULT 0;
+  DECLARE ano_demanda INT;
+  DECLARE cd_demanda INT;
+
+  DECLARE cTabela CURSOR FOR 
+	select demanda.dem_ex, demanda.dem_cd from demanda
+	inner join demanda_tram
+	on demanda.dem_ex = demanda_tram.dem_ex
+	and demanda.dem_cd = demanda_tram.dem_cd
+	where 
+	dem_situacao = 1
+	group by demanda.dem_ex, demanda.dem_cd
+	having count(*) > 1;
+	
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;  
+  
+  OPEN cTabela;  
+  REPEAT
+  -- read_loop: LOOP
+    #aqui você pega os valores do "select", para mais campos vocÇe pode fazer assim:
+    #cTabela INTO c1, c2, c3, ..., cn
+    FETCH cTabela INTO ano_demanda,cd_demanda;
+		IF NOT done THEN
+        
+        update demanda
+		set dem_situacao = 3
+		WHERE demanda.dem_ex = ano_demanda
+          AND demanda.dem_cd = cd_demanda;
+        	
+		END IF;
+  UNTIL done END REPEAT;
+  CLOSE cTabela;
+  
+END $$
+DELIMITER ;
+call manterDemandas();
+/** ALTERACAO DA SITUACAO DAS DEMANDAS */
