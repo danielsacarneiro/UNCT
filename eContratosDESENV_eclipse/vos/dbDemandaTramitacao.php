@@ -220,7 +220,7 @@ class dbDemandaTramitacao extends dbprocesso {
 			$vo->cd = $voDemanda->cd;
 			
 			if ($voDemanda->temContratoParaIncluir ()) {
-				$this->incluirColecaoDemandaContrato($voDemanda);
+				$voDemanda->dbprocesso->incluirColecaoDemandaContrato($voDemanda);				
 			}
 			
 			// a transacao ja eh controlada acima
@@ -234,18 +234,6 @@ class dbDemandaTramitacao extends dbprocesso {
 		}
 		
 		return $voDemanda;
-	}
-	function incluirColecaoDemandaContrato($voDemanda) {
-		$colecao = $voDemanda->colecaoContrato;		
-		foreach ($colecao as $voContrato) {	
-			$voDemContrato = new voDemandaContrato();
-			$voDemContrato = $voDemanda->getVODemandaContrato($voContrato);
-			$this->incluirDemandaContrato($voDemContrato);
-		}		
-	}
-	function incluirDemandaContrato($voDemContrato) {		
-		$voDemContrato->dbprocesso->cDb = $this->cDb;
-		$voDemContrato->dbprocesso->incluir ( $voDemContrato );		
 	}
 	function validarInclusao($vo) {
 		/*

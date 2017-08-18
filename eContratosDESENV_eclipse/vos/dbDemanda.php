@@ -10,7 +10,12 @@ class dbDemanda extends dbprocesso {
 			$voContrato->getDadosBanco ( $colecao );
 			
 			$vo->getDadosBanco ( $colecao );
-			$vo->colecaoContrato = array ($voContrato);
+			$temContrato = $voContrato->cdContrato != null;
+			if ($temContrato) {
+				$vo->colecaoContrato = array (
+						$voContrato 
+				);
+			}
 		} catch ( excecaoMaisDeUmRegistroRetornado $ex ) {
 			// faz consulta a parte
 			// nao valida a consulta por chave
@@ -216,7 +221,7 @@ class dbDemanda extends dbprocesso {
 		
 		$filtro->TemPaginacao = false;
 		$filtro->cdAtrOrdenacao = voDemandaTramitacao::$nmAtrDhInclusao;
-		$filtro->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;		
+		$filtro->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
 		// echo $vo->texto;
 		
 		return parent::consultarFiltro ( $filtro, $querySelect, $queryFrom, false );
@@ -300,7 +305,19 @@ class dbDemanda extends dbprocesso {
 	function alterar($vo) {
 		$isAlteracaoPermitida = $this->validarAlteracao ( $vo );
 		if ($isAlteracaoPermitida) {
-			parent::alterar ( $vo );
+			$this->cDb->retiraAutoCommit ();
+			try {
+				
+				if ($vo->temContratoParaIncluir ()) {
+					$this->excluirDemandaContrato($vo );
+					$this->incluirColecaoDemandaContrato ( $vo );
+				}				
+				parent::alterar ( $vo );
+				
+			} catch ( Exception $e ) {
+				$this->cDb->rollback ();
+				throw new Exception ( $e->getMessage () );
+			}
 		}
 	}
 	
@@ -358,6 +375,18 @@ class dbDemanda extends dbprocesso {
 		// echo $query;
 		return $this->atualizarEntidade ( $query );
 	}
+	function incluirColecaoDemandaContrato($voDemanda) {
+		$colecao = $voDemanda->colecaoContrato;
+		foreach ($colecao as $voContrato) {
+			$voDemContrato = new voDemandaContrato();
+			$voDemContrato = $voDemanda->getVODemandaContrato($voContrato);
+			$this->incluirDemandaContrato($voDemContrato);
+		}
+	}
+	function incluirDemandaContrato($voDemContrato) {
+		$voDemContrato->dbprocesso->cDb = $this->cDb;
+		$voDemContrato->dbprocesso->incluir ( $voDemContrato );
+	}	
 	function incluirSQL($vo) {
 		if ($vo->cd == null || $vo->cd == "") {
 			$vo->cd = $this->getProximoSequencialChaveComposta ( voDemanda::$nmAtrCd, $vo );

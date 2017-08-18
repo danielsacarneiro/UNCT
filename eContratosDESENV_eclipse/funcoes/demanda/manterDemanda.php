@@ -2,7 +2,7 @@
 include_once("../../config_lib.php");
 include_once(caminho_util."bibliotecaHTML.php");
 include_once(caminho_util."selectExercicio.php");
-include_once(caminho_vos."voDemandaTramitacao.php");
+include_once (caminho_funcoes . "demanda/biblioteca_htmlDemanda.php");
 
 //inicia os parametros
 inicioComValidacaoUsuario(true);
@@ -38,12 +38,12 @@ setCabecalho($titulo);
 
 <!DOCTYPE html>
 <HEAD>
-<?=setTituloPagina($vo->getTituloJSP())?>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_cnpfcnpj.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_text.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_oficio.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_pessoa.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_contrato.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_ajax.js"></SCRIPT>
 
 <SCRIPT language="JavaScript" type="text/javascript">
@@ -67,6 +67,7 @@ function confirmar() {
 </SCRIPT>
 
 </HEAD>
+<?=setTituloPagina($vo->getTituloJSP())?>
 <BODY class="paginadados" onload="">
 	  
 <FORM name="frm_principal" method="post" action="confirmarAlteracaoDemanda.php" onSubmit="return confirmar();">
@@ -83,13 +84,7 @@ function confirmar() {
             <DIV id="div_filtro" class="div_filtro">
             <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
             <TBODY>
-            <?php if($isHistorico){?>
-			<TR>
-                <TH class="campoformulario" nowrap width=1%>Sq.Hist:</TH>
-                <TD class="campoformulario" colspan=3><INPUT type="text" value="<?php echo(complementarCharAEsquerda($vo->sqHist, "0", TAMANHO_CODIGOS));?>"  class="camporeadonlyalinhadodireita" size="5" readonly></TD>
-                <INPUT type="hidden" id="<?=voContratoTramitacao::$nmAtrSqHist?>" name="<?=voContratoTramitacao::$nmAtrSqHist?>" value="<?=$vo->sqHist?>">
-            </TR>               
-            <?php }                     
+            <?php                     
             
 	        $comboTipo = new select(dominioTipoDemanda::getColecao());
 	        $comboSetor = new select(dominioSetor::getColecao());
@@ -97,20 +92,10 @@ function confirmar() {
 	        $comboPrioridade = new select(dominioPrioridadeDemanda::getColecao());
 	        $selectExercicio = new selectExercicio();	         
 	        	        	        
-	        $complementoHTML = "";	        
+	        $complementoHTML = "";
+	        
+	        getDemandaDetalhamento($vo);
 	        ?>	        	        
-	        <TR>
-	            <TH class="campoformulario" nowrap width="1%">Demanda:</TH>
-	            <TD class="campoformulario" colspan=3>	            
-	            <?php echo "Ano: " . $selectExercicio->getHtmlCombo("","", $vo->ano, true, "camporeadonly", false, " disabled ");?>	            	            
-	            Número: <INPUT type="text" value="<?=complementarCharAEsquerda($vo->cd, "0", TAMANHO_CODIGOS);?>"  class="camporeadonly" size="6" readonly>
-	            <?php echo "Tipo: " . $comboTipo->getHtmlCombo(voDemanda::$nmAtrTipo, voDemanda::$nmAtrTipo, $vo->tipo, true, "campoobrigatorio", false, " required ");?>
-	            
-	            <INPUT type="hidden" id="<?=voDemanda::$nmAtrAno?>" name="<?=voDemanda::$nmAtrAno?>" value="<?=$vo->ano?>">
-				<INPUT type="hidden" id="<?=voDemanda::$nmAtrCd?>" name="<?=voDemanda::$nmAtrCd?>" value="<?=$vo->cd?>">	            			  
-				<!-- <INPUT type="hidden" id="<?=voDemanda::$nmAtrTipo?>" name="<?=voDemanda::$nmAtrTipo?>" value="<?=$vo->tipo?>"> -->
-				<INPUT type="hidden" id="<?=voDemanda::$nmAtrCdSetor?>" name="<?=voDemanda::$nmAtrCdSetor?>" value="<?=$vo->cdSetor?>">
-	        </TR>
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Setor Responsável:</TH>
 	            <TD class="campoformulario" width="1%">
@@ -129,9 +114,13 @@ function confirmar() {
 	            <INPUT type="text" id="<?=voDemanda::$nmAtrTexto?>" name="<?=voDemanda::$nmAtrTexto?>" value="<?=$vo->texto?>"  class="campoobrigatorio" size="80" required>	            	                        	                        
 	        </TR>	        	        
 	        <?php
- 	        require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
- 	        getColecaoContratoDet($vo->colecaoContrato);
-	        ?>            
+	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");	        
+	        ?>
+	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
+	            <TD class="campoformulario" colspan=3><?php getCampoDadosColecaoContratos($vo->colecaoContrato, true);?>	            
+	            </TD>
+	        </TR>	        
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Situação:</TH>
 	            <TD class="campoformulario" colspan=3>

@@ -7,6 +7,12 @@ inicioComValidacaoUsuario(true);
 $vo = new voDemanda();
 $vo->getDadosFormulario();
 
+/*if ($vo->temContratoParaIncluir ()) {
+	echo "tem contrato";
+}else{
+	echo "NAO tem contrato";
+}*/
+
 putObjetoSessao("vo", $vo);
 
 //redirecionar mantendo o post

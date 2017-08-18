@@ -258,13 +258,7 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	            <?php echo "Tipo: " . $comboTipoEditado->getHtmlCombo(voDemanda::$nmAtrTipo,voDemanda::$nmAtrTipo, "", true, "campoobrigatorio", false, " required onChange='validaFormulario();'");?>			  
 	        </TR>
 	        <?php	        
-	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
-	        /*$arrayCssClass = array("camponaoobrigatorio","camponaoobrigatorio", "camponaoobrigatorio");
-	        $arrayComplementoHTML = array(" required onChange='carregaContratada();' ",
-	        		" required onBlur='carregaContratada();' ",
-	        		" required onChange='carregaContratada();' "
-	        );*/
-	        
+	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");	        
 	        ?>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
