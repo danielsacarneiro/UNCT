@@ -1,6 +1,6 @@
 <?php
 
-function getDemandaDetalhamento($voDemanda, $colspan=null){
+function getDemandaDetalhamento($voDemanda, $exibeTipoDemanda = true, $colspan=null){
 	if($colspan==null){
 		$colspan=3;
 	}
@@ -10,14 +10,14 @@ function getDemandaDetalhamento($voDemanda, $colspan=null){
 	<TD class="campoformulario" colspan=<?=$colspan?>>
 	<?php	
 	echo getDetalhamentoHTMLCodigoAno($voDemanda->ano, $voDemanda->cd); 
-	if($voDemanda->tipo != null){
+	if($voDemanda->tipo != null && $exibeTipoDemanda){
 		$comboTipo = new select(dominioTipoDemanda::getColecao());
 		echo "Tipo: " . $comboTipo->getHtmlCombo("","", $voDemanda->tipo, true, "camporeadonly", false, " disabled ");
+		echo "<INPUT type='hidden' id='" . voDemanda::$nmAtrTipo . "' name='" . voDemanda::$nmAtrTipo . "' value='$voDemanda->tipo'>";
 	}					
 	?>		            
 		<INPUT type="hidden" id="<?=voDemanda::$nmAtrAno?>" name="<?=voDemanda::$nmAtrAno?>" value="<?=$voDemanda->ano?>">
-		<INPUT type="hidden" id="<?=voDemanda::$nmAtrCd?>" name="<?=voDemanda::$nmAtrCd?>" value="<?=$voDemanda->cd?>">	            			  
-		<INPUT type="hidden" id="<?=voDemanda::$nmAtrTipo?>" name="<?=voDemanda::$nmAtrTipo?>" value="<?=$voDemanda->tipo?>">
+		<INPUT type="hidden" id="<?=voDemanda::$nmAtrCd?>" name="<?=voDemanda::$nmAtrCd?>" value="<?=$voDemanda->cd?>">		
 		<INPUT type="hidden" id="<?=voDemanda::$nmAtrCdSetor?>" name="<?=voDemanda::$nmAtrCdSetor?>" value="<?=$voDemanda->cdSetor?>">
 		<INPUT type="hidden" id="<?=voDemanda::$nmAtrSituacao?>" name="<?=voDemanda::$nmAtrSituacao?>" value="<?=$voDemanda->situacao?>">
 	</TR>

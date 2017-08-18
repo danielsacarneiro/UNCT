@@ -94,8 +94,13 @@ function confirmar() {
 	        	        	        
 	        $complementoHTML = "";
 	        
-	        getDemandaDetalhamento($vo);
+	        getDemandaDetalhamento($vo, false);
 	        ?>	        	        
+	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">Tipo:</TH>
+	            <TD class="campoformulario" colspan=3>	            
+	            <?php echo "Tipo: " . $comboTipo->getHtmlCombo(voDemanda::$nmAtrTipo, voDemanda::$nmAtrTipo, $vo->tipo, true, "campoobrigatorio", false, " required ");?>
+	        </TR>	        
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Setor Responsável:</TH>
 	            <TD class="campoformulario" width="1%">
