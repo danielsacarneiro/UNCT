@@ -305,9 +305,12 @@ function encaminhar() {
                         //$especie = getDsEspecie($voAtual);
                         $cdSituacao = $voAtual->situacao;
                         $situacao = $dominioSituacao->getDescricao($cdSituacao);
-                        $classColunaSituacao = "tabeladadosdestacado";                        
+                        
+                        $classColunaSituacao = "tabeladadosdestacadoverde";
                         if($cdSituacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA){
                         	$classColunaSituacao = "tabeladadosdestacadoazulclaro";
+                        } else if($cdSituacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_ABERTA){
+                        	$classColunaSituacao = "tabeladadosdestacado";
                         }
                         
                         $setor = $dominioSetor->getDescricao($voAtual->cdSetor);
