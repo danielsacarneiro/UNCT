@@ -1,17 +1,11 @@
 <?php
 include_once (caminho_util . "multiplosConstrutores.php");
+include_once (caminho_util . "bibliotecaFuncoesPrincipal.php");
 class voentidade extends multiplosConstrutores {
-	var $NM_METODO_RETORNO_CONFIRMAR;
-	var $varChaves;
-	var $varAtributos;
-	var $varAtributosARemover;
-	var $temTabHistorico;
-	
-	// atributo que indica se a entidade implementa a desativacao
-	// a desativacao soh eh necessaria quando ha tabelas de relacionamento que impedem a exclusao direta
-	var $temTabsRelacionamentoQueImpedemExclusaoDireta;
 	static $nmTabelaSufixoHistorico = "_hist";
 	static $nmTabelaSufixoSequencial = "_seq";
+	static $nmAtrConfirmarNaoInclusaoDeCamposObrigatorios = "ConfirmarNaoInclusaoDeCamposObrigatorios";
+	static $nmAtrTemDesativado = "TemDesativado";
 	static $nmAtrSqHist = "hist";
 	static $nmAtrDhInclusao = "dh_inclusao";
 	static $nmAtrDhUltAlteracao = "dh_ultima_alt";
@@ -23,6 +17,12 @@ class voentidade extends multiplosConstrutores {
 	static $nmAtrNmUsuarioUltAlteracao = "nm_usuario_ultalt";
 	static $nmAtrNmUsuarioOperacao = "nm_usuario_operacao";
 	static $nmAtrInDesativado = "in_desativado";
+	var $NM_METODO_RETORNO_CONFIRMAR;
+	var $varChaves;
+	var $varAtributos;
+	var $varAtributosARemover;
+	var $temTabHistorico;
+	var $dbprocesso = "";
 	var $dhInclusao;
 	var $dhUltAlteracao;
 	var $dhOperacao;
@@ -50,7 +50,6 @@ class voentidade extends multiplosConstrutores {
 		$this->cdUsuarioUltAlteracao = id_user;
 		$this->NM_METODO_RETORNO_CONFIRMAR = null;
 		$this->temTabHistorico = true;
-		$this->temTabsRelacionamentoQueImpedemExclusaoDireta = true;
 		
 		// cria a classe processo para todo vo
 		/*
@@ -144,6 +143,12 @@ class voentidade extends multiplosConstrutores {
 		return $atributo . " = " . $valor;
 	}
 	function getDadosFormularioEntidade() {
+		
+		// chama o getdadosformulario do filho
+		//SOMENTE DESCOMENTAR QUANDO TODOS OS VOS NAO CHAMAREM O METODO PAI getDadosFormularioEntidade, SE NAO CAUSA DEADLOCK
+		//$this->getDadosFormulario ();
+		
+		// completa com os dados da entidade se existirem
 		$this->dhUltAlteracao = @$_POST [self::$nmAtrDhUltAlteracao];
 		$this->sqHist = @$_POST [self::$nmAtrSqHist];
 		// usuario de ultima manutencao sempre sera o id_user
@@ -170,8 +175,20 @@ class voentidade extends multiplosConstrutores {
 		$this->getDadosRegistroBanco ( $registrobanco );
 		$this->getDadosBancoEntidade ( $registrobanco );
 	}
+	// usado para operacoes mais complexas apenas quando se consulta por chave primaria
+	function getDadosBancoPorChave($registrobanco) {
+		$this->getDadosBanco ( $registrobanco );
+		
+		// metodo geralmente usado para exibir o objeto em paginas de detalhamento
+		// quando necessita de consultas maiores
+		// evitando que as consultas nas paginas de consultas sejam pesadas
+		if (method_exists ( $this, "getDadosChaveOperacaoMaixComplexa" )) {
+			$this->getDadosChaveOperacaoMaixComplexa ( $registrobanco );
+		}
+	}
 	function removeAtributos($arrayAtribRemover) {
 		$this->varAtributos = removeColecaoAtributos ( $this->varAtributos, $arrayAtribRemover );
+		$this->varAtributosARemover = $arrayAtribRemover;
 	}
 	function removeTodosAtributosPai() {
 		unset ( $this->varAtributos );
@@ -269,8 +286,11 @@ class voentidade extends multiplosConstrutores {
 	function getMensagemComplementarTelaSucesso() {
 		return "";
 	}
-	function getMensagemComplementarTelaSucessoPadrao($titulo, $cd, $descricao) {
-		$retorno = "$titulo: " . $descricao . " (" . complementarCharAEsquerda ( $cd, "0", TAMANHO_CODIGOS ) . ")";
+	function getMensagemComplementarTelaSucessoPadrao($titulo, $cd, $descricao, $sqHistorico = null) {
+		$retorno = "$titulo: " . $descricao . " (Código: " . complementarCharAEsquerda ( $cd, "0", TAMANHO_CODIGOS ) . ")";
+		if ($sqHistorico != null) {
+			$retorno .= "<br>" . "Histórico: " . complementarCharAEsquerda ( $sqHistorico, "0", TAMANHO_CODIGOS );
+		}
 		return $retorno;
 	}
 	function isHistorico() {
@@ -279,12 +299,21 @@ class voentidade extends multiplosConstrutores {
 	function temTabHistorico() {
 		return $this->temTabHistorico;
 	}
-	function temTabsRelacionamentoQueImpedemExclusaoDireta() {
-		return $this->temTabsRelacionamentoQueImpedemExclusaoDireta;
-	}
 	function getValoresWhereSQLChaveSemNomeTabela($isHistorico) {
 		return str_replace ( $this->getNmTabelaEntidade ( $isHistorico ) . ".", "", $this->getValoresWhereSQLChave ( $isHistorico ) );
 	}
+	static function getCodigoFormatado($codigo) {
+		return complementarCharAEsquerda ( $codigo, "0", TAMANHO_CODIGOS );
+	}
+	static function getCodigoDEscricaoFormatado($codigo, $ds) {
+		return static::getCodigoFormatado ( $codigo ) . " - " . $ds;
+	}
+	static function excluirArquivo($enderecoArquivo) {
+		if (file_exists ( $enderecoArquivo )) {
+			unlink ( $enderecoArquivo );
+		}
+	}
+	
 	/*
 	 * function validaExclusaoRelacionamentoHistorico(){
 	 * $retorno = false;
