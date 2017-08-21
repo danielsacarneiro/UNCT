@@ -206,6 +206,7 @@ function alterar() {
                     <TH class="headertabeladados" width="1%">Tipo</TH>
                     <TH class="headertabeladados" width="80%">Contratada</TH>
                     <TH class="headertabeladados" width="1%">CNPJ/CNPF</TH>
+                    <TH class="headertabeladados" width="1%">Proposta</TH>
                     <TH class="headertabeladados" width="1%">Autorização</TH>
                 </TR>
                 <?php								
@@ -214,7 +215,7 @@ function alterar() {
                 else 
                         $tamanho = 0;                                
                                 
-                $colspan=7;
+                $colspan=8;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -248,6 +249,7 @@ function alterar() {
                     <TD class="tabeladados" nowrap><?php echo $tipo?></TD>
 					<TD class="tabeladados" nowrap><?php echo $voPessoa->nome?></TD>
 					<TD class="tabeladados" nowrap><?php echo documentoPessoa::getNumeroDocFormatado($voPessoa->doc)?></TD>
+                    <TD class="tabeladados" nowrap><?php echo getData($voAtual->dtProposta)?></TD>
                     <TD class="tabeladados" nowrap><?php echo $dominioAutorizacao->getDescricao($autorizacaoAtual)?></TD>
                 </TR>					
                 <?php

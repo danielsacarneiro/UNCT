@@ -3,7 +3,7 @@ include_once (caminho_util . "dominio.class.php");
 class dominioTpDocumento extends dominio {
 	static $ENDERECO_DRIVE = "\\\\sf044836\\_dag$";
 	// static $ENDERECO_DRIVE_HTML = "\\sf044836\\\\_dag$";
-	static $ENDERECO_DRIVE_HTML = "H:";
+	static $ENDERECO_DRIVE_HTML = "I:";
 	static $ENDERECO_PASTABASE = "ASSESSORIA JURÍDICA\ATJA";
 	static $ENDERECO_PASTABASE_UNCT = "UNCT";
 	static $ENDERECO_PASTA_DOCUMENTOS = "\Documentos";
@@ -17,6 +17,8 @@ class dominioTpDocumento extends dominio {
 	static $CD_TP_DOC_OUTROS = "OT";
 	static $CD_TP_DOC_PARECER = "PA";
 	static $CD_TP_DOC_PLANILHA_CUSTOS = "PC";
+	static $CD_TP_DOC_RELATORIO = "RE";
+	
 	static $DS_TP_DOC_APOSTILAMENTO = "Apostilamento";
 	static $DS_TP_DOC_CI = "CI";
 	static $DS_TP_DOC_INTIMACAO = "Intimação";
@@ -27,11 +29,13 @@ class dominioTpDocumento extends dominio {
 	static $DS_TP_DOC_OUTROS = "Outros";
 	static $DS_TP_DOC_PARECER = "Parecer";
 	static $DS_TP_DOC_PLANILHA_CUSTOS = "Planilha de Custos";
+	static $DS_TP_DOC_RELATORIO = "Relatório";
 	
 	// ...............................................................
 	// Construtor
 	function __construct() {
 		$this->colecao = self::getColecao ();
+		ksort($this->colecao);
 	}
 	static function getColecao() {
 		return array (
@@ -44,13 +48,15 @@ class dominioTpDocumento extends dominio {
 				self::$CD_TP_DOC_NOTIFICACAO => self::$DS_TP_DOC_NOTIFICACAO,
 				self::$CD_TP_DOC_PLANILHA_CUSTOS => self::$DS_TP_DOC_PLANILHA_CUSTOS,
 				self::$CD_TP_DOC_APOSTILAMENTO => self::$DS_TP_DOC_APOSTILAMENTO,
-				self::$CD_TP_DOC_OUTROS => self::$DS_TP_DOC_OUTROS 
+				self::$CD_TP_DOC_OUTROS => self::$DS_TP_DOC_OUTROS,
+				self::$CD_TP_DOC_RELATORIO => self::$DS_TP_DOC_RELATORIO,
 		);
 	}
 	static function getColecaoDocsPAAP() {
 		return array (
 				self::$CD_TP_DOC_INTIMACAO => self::$DS_TP_DOC_INTIMACAO,
-				self::$CD_TP_DOC_NOTA_IMPUTACAO => self::$DS_TP_DOC_NOTA_IMPUTACAO 
+				self::$CD_TP_DOC_NOTA_IMPUTACAO => self::$DS_TP_DOC_NOTA_IMPUTACAO,
+				self::$CD_TP_DOC_RELATORIO => self::$DS_TP_DOC_RELATORIO
 		);
 	}
 	static function getEnderecoPastaBase() {

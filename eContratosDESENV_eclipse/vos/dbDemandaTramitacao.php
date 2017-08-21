@@ -279,7 +279,7 @@ class dbDemandaTramitacao extends dbprocesso {
 				
 			$voDemanda->dbprocesso->cDb = $this->cDb;
 			$voDemanda->situacao = dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO;
-			$voDemanda->dbprocesso->alterar($voDemanda);			
+			$voDemanda->dbprocesso->alterarApenasVODemanda($voDemanda);			
 			
 			/*
 			 * $voDemanda = new voDemanda();

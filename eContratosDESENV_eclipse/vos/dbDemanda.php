@@ -302,23 +302,31 @@ class dbDemanda extends dbprocesso {
 		
 		return true;
 	}
-	function alterar($vo) {
+	function alterarMais($vo, $isAlteracaoTelaDemanda = true) {
 		$isAlteracaoPermitida = $this->validarAlteracao ( $vo );
 		if ($isAlteracaoPermitida) {
 			$this->cDb->retiraAutoCommit ();
 			try {
-				
-				if ($vo->temContratoParaIncluir ()) {
+	
+				//so altera o contrato se vier da tela de alteracao de demanda
+				if ($isAlteracaoTelaDemanda && $vo->temContratoParaIncluir ()) {
 					$this->excluirDemandaContrato($vo );
 					$this->incluirColecaoDemandaContrato ( $vo );
-				}				
+				}
 				parent::alterar ( $vo );
-				
+	
 			} catch ( Exception $e ) {
 				$this->cDb->rollback ();
 				throw new Exception ( $e->getMessage () );
 			}
 		}
+	}
+	function alterarApenasVODemanda($vo) {
+		return $this->alterarMais($vo, false);
+		
+	}
+	function alterar($vo) {
+		return $this->alterarMais($vo, true);
 	}
 	
 	// o excluir eh implementado para nao usar da voentidade

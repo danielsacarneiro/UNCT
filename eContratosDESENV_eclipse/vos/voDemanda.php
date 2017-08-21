@@ -100,7 +100,7 @@ class voDemanda extends voentidade {
 	 * }
 	 */
 	function temContratoParaIncluir() {
-		$retorno = $this->colecaoContrato != null && (count ( $this->colecaoContrato ) > 0);
+		$retorno = $this->colecaoContrato != null && $this->colecaoContrato != "" && (count ( $this->colecaoContrato ) > 0);
 		return $retorno;
 	}
 	
