@@ -15,12 +15,16 @@ include_once (caminho_filtros."filtroManterPA.php");
   		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
   		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );
   		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( false );
+  		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
   	
   		$arrayColunasRetornadas = array (
   				$nmTabela . ".*",
   				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato,
   				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato,
-  				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato
+  				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato,
+  				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdEspecieContrato,
+  				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato,
+  				$nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato
   		);
   	
   		$queryFrom .= "\n INNER JOIN ". $nmTabelaDemanda;
@@ -29,7 +33,20 @@ include_once (caminho_filtros."filtroManterPA.php");
   		
   		$queryFrom .= "\n INNER JOIN ". $nmTabelaDemandaContrato;
   		$queryFrom .= "\n ON ". $nmTabelaDemanda . "." . voDemanda::$nmAtrCd. "=" . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdDemanda;
-  		$queryFrom .= "\n AND ". $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoDemanda;  		  	
+  		$queryFrom .= "\n AND ". $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoDemanda; 
+  		
+  		$queryFrom .= "\n LEFT JOIN " . $nmTabelaContrato;
+  		$queryFrom .= "\n ON ";
+  		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato;
+  		$queryFrom .= "\n AND ";
+  		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato;
+  		$queryFrom .= "\n AND ";
+  		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato;
+  		$queryFrom .= "\n AND ";
+  		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdEspecieContrato;
+  		$queryFrom .= "\n AND ";
+  		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato;
+  		
   		
   		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryFrom, $isHistorico );
   	}
