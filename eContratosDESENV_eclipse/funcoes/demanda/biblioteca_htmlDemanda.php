@@ -4,7 +4,7 @@ function getDemandaDetalhamento($voDemanda, $exibeTipoDemanda = true, $colspan=n
 	if($colspan==null){
 		$colspan=3;
 	}
-?>
+	?>
 	<TR>
 	<TH class="campoformulario" nowrap width="1%">Demanda:</TH>
 	<TD class="campoformulario" colspan=<?=$colspan?>>
