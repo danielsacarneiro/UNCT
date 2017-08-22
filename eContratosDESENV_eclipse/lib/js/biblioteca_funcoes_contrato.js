@@ -61,3 +61,13 @@ function formataFormTpGarantia(pNmCampoTemGarantia, pNmCampoTpGarantia) {
 		habilitarElementoMais(pNmCampoTpGarantia, false, false);
 	}		
 }
+
+/**
+ * 
+ * importar a biblioteca funcoes radiobutton
+ * @returns
+ */
+function movimentacoes(chave){	
+    url = "movimentacaoContrato.php?chave=" + chave;	
+    abrirJanelaAuxiliar(url, true, false, false);    
+}

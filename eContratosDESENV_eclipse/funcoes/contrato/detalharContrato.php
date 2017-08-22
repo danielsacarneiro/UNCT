@@ -65,10 +65,10 @@ setCabecalho($titulo);
 <!DOCTYPE html>
 
 <HEAD>    
-<?=setTituloPagina($titulo)?>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_cnpfcnpj.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_oficio.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_contrato.js"></SCRIPT>
 
 <SCRIPT language="JavaScript" type="text/javascript">
 
@@ -92,6 +92,7 @@ function confirmar() {
 </SCRIPT>
 
 </HEAD>
+<?=setTituloPagina($titulo)?>
 <BODY class="paginadados" onload="">
 	  
 <FORM name="frm_principal" method="post" action="confirmarManterContrato.php" onSubmit="return confirmar();">
@@ -322,7 +323,8 @@ function confirmar() {
 						<TD>
                     		<TABLE class="barraacoesaux" cellpadding="0" cellspacing="0">
 	                    	<TR>
-							<?=getBotoesRodape();?>						    
+							<?=getBotoesRodape();?>
+							<TD class="botaofuncao"><?=getBotao("bttMovimentacao", "Movimentações", null, false, "onClick=\"javascript:movimentacoes('".$voContrato->getValorChaveHTML()."');\" accesskey='m'")?></TD>						    
 							</TR>
 		                    </TABLE>
 	                    </TD>
