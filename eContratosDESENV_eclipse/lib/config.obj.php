@@ -9,7 +9,7 @@ Class config {
         var $odbc;
         var $driver;
         var $servidor;
-				var $cDb;
+		var $cDb;
           // ...............................................................
          // Construtor
 
