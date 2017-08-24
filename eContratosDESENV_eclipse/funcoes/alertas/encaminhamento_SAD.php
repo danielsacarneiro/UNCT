@@ -23,10 +23,12 @@ try {
 	);
 	$colecao = $dbprocesso->consultarTelaConsulta ( $voDemanda, $filtro );
 	
-	$enviarEmail = false;
+	$enviarEmail = true;
+	
+	$mensagem = "PARABÉNS!! Não há demandas a serem analisadas.";
+	
 	if (! isColecaoVazia ( $colecao )) {
-		$enviarEmail = true;
-		$mensagem = "";
+		$mensagem = "DEMANDAS A ANALISAR: \n\n";
 		// enviar o email com os registros a serem analisados
 		$mensagem .=				
 		"<TABLE id='table_tabeladados' class='tabeladados' cellpadding='2' cellspacing='2' BORDER=1>\n
@@ -50,7 +52,7 @@ try {
 			"</TBODY>\n
 			</TABLE>";
 			
-			echo $mensagem;
+			//echo $mensagem;
 		
 	} 
 	
