@@ -152,7 +152,7 @@ function encaminhar() {
             <TR>
                 <TH class="campoformulario" nowrap width="1%">Setor.Resp.:</TH>
                 <TD class="campoformulario" width="1%" ><?php echo $comboSetor->getHtmlCombo(voDemanda::$nmAtrCdSetor,voDemanda::$nmAtrCdSetor, $filtro->vodemanda->cdSetor, true, "camponaoobrigatorio", false, "");?></TD>
-                <TH class="campoformulario" nowrap width="1%">Setor.Atual.:</TH>
+                <TH class="campoformulario" nowrap width="1%">Setor.Atual:</TH>
                 <TD class="campoformulario" ><?php echo $comboSetor->getHtmlCombo(voDemandaTramitacao::$nmAtrCdSetorDestino,voDemandaTramitacao::$nmAtrCdSetorDestino, $filtro->vodemanda->cdSetorDestino, true, "camponaoobrigatorio", false, "");?></TD>
             </TR>            
             <TR>

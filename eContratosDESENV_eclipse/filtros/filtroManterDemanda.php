@@ -191,16 +191,18 @@ class filtroManterDemanda extends filtroManter{
 			$filtro = $filtro . $conector
 			. $nmTabela. "." .voDemanda::$nmAtrTipo;
 			
-			if($this->vodemanda->tipo != dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO){			
-				$filtro .= 	" = "
-					. $this->vodemanda->tipo
-					;			
+			$tipoDem = $this->vodemanda->tipo;
+			
+			if($tipoDem == dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO){			
+				$tipoDem = array_keys(dominioTipoDemanda::getColecaoTipoDemandaContrato());
+			}
+			
+			if(is_array($tipoDem)){
+				$filtro .= 	" IN (" . getSQLStringFormatadaColecaoIN($tipoDem, false) . ") ";
+				
 			}else{
-				$filtro .= 	" IN ("
-						. getSQLStringFormatadaColecaoIN(array_keys(dominioTipoDemanda::getColecaoTipoDemandaContrato()), false)
-						. ") "
-						;				
-			}			
+				$filtro .= 	" = " . $tipoDem;				
+			}				
 			
 			$conector  = "\n AND ";
 		}

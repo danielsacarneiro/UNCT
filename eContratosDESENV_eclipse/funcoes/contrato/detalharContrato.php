@@ -127,11 +127,11 @@ function confirmar() {
                     <INPUT type="text" value="<?php echo(complementarCharAEsquerda($voContrato->cdContrato, "0", 3)."/".$voContrato->anoContrato);?>"  class="<?=$classChaves?>" size="10" <?=$readonly?>>
                     <INPUT type="text" id="<?=vocontrato::$nmAtrTipoContrato?>" name="<?=vocontrato::$nmAtrTipoContrato?>"  value="<?php echo($dominioTipoContrato->getDescricao($voContrato->tipo));?>"  class="camporeadonly" size="7" maxlength="5" <?=$readonly?>>
                     <?php 
-                    $voContratoInfo = new voContratoInfo();
-                    $voContratoInfo->anoContrato = $voContrato->anoContrato;
-                    $voContratoInfo->cdContrato = $voContrato->cdContrato;
-                    $voContratoInfo->tipo = $voContrato->tipo;
-                    $chaveContratoInfo = $voContratoInfo->getValorChavePrimaria();
+                    $voContratoInfoDet = new voContratoInfo();
+                    $voContratoInfoDet->anoContrato = $voContrato->anoContrato;
+                    $voContratoInfoDet->cdContrato = $voContrato->cdContrato;
+                    $voContratoInfoDet->tipo = $voContrato->tipo;
+                    $chaveContratoInfo = $voContratoInfoDet->getValorChavePrimaria();
                     echo getLinkPesquisa ( "../contrato_info/detalhar.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $chaveContratoInfo );?>
             </TD>			
         </TR>

@@ -180,7 +180,11 @@ Class voContratoInfo extends voentidade{
 		return $retorno; 
 	}
 	
-	static function getOperacaoFiltroCdAutorizacaoOR_AND($colecaoAutorizacao, $InOR_AND){
+	static function getOperacaoFiltroCdAutorizacaoOR_AND($colecaoAutorizacao, $InOR_AND = null){
+		//valor default
+		if($InOR_AND == null){
+			$InOR_AND = constantes::$CD_OPCAO_OR;
+		}
 		
 		$parametroMetodoEspecifico = dominioAutorizacao::getColecaoCdAutorizacaoIntercace($colecaoAutorizacao, $InOR_AND);
 		$operador = " IN ";

@@ -47,6 +47,7 @@ cabecalho;
 	f5 = new Tree('Serviço 05 (ADMINISTRADOR)');
     f5.adicionarItem(new Link('Usuários', '<?=caminho_funcoesHTML?>usuario_info', ''));
 	f5.adicionarItem(new Link("Tramitação Demanda", "<?=caminho_funcoesHTML?>demanda_tram", ""));
+	f5.adicionarItem(new Link("Alerta envio a SAD", "<?=caminho_funcoesHTML?>alertas/encaminhamento_SAD.php", ""));
 	f5.adicionarItem(new Link('______', '#', ''));
 	f5.adicionarItem(new Link('______', '#', ''));
 	f5.adicionarItem(new Link('______', '#', ''));	

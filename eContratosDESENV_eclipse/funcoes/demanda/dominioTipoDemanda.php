@@ -48,14 +48,24 @@ Class dominioTipoDemanda extends dominio{
 	}
 
 	static function getColecaoTipoDemandaContrato(){
+		$retorno = static::getColecaoTipoDemandaContratoSemProcAdmin();
+		$retorno = putElementoArray2NoArray1ComChaves ( $retorno, array(self::$CD_TIPO_DEMANDA_PROCADM => self::$DS_TIPO_DEMANDA_PROCADM));
+
+		return $retorno;
+	}
+	
+	static function getColecaoTipoDemandaContratoSemProcAdmin(){
 		return array(
 				self::$CD_TIPO_DEMANDA_CONTRATO => self::$DS_TIPO_DEMANDA_CONTRATO,
 				self::$CD_TIPO_DEMANDA_CONTRATO_MATER => self::$DS_TIPO_DEMANDA_CONTRATO_MATER,
 				self::$CD_TIPO_DEMANDA_CONTRATO_REAJUSTE => self::$DS_TIPO_DEMANDA_CONTRATO_REAJUSTE,
 				self::$CD_TIPO_DEMANDA_CONTRATO_PRORROGACAO => self::$DS_TIPO_DEMANDA_CONTRATO_PRORROGACAO,
-				self::$CD_TIPO_DEMANDA_CONTRATO_MODIFICACAO => self::$DS_TIPO_DEMANDA_CONTRATO_MODIFICACAO,
-				self::$CD_TIPO_DEMANDA_PROCADM => self::$DS_TIPO_DEMANDA_PROCADM
+				self::$CD_TIPO_DEMANDA_CONTRATO_MODIFICACAO => self::$DS_TIPO_DEMANDA_CONTRATO_MODIFICACAO
 		);
+	}
+	
+	static function getColecaoTipoDemandaSAD(){
+		return static::getColecaoTipoDemandaContratoSemProcAdmin();
 	}
 	
 	static function isContratoObrigatorio($cdTipoDemanda){

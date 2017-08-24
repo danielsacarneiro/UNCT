@@ -84,7 +84,7 @@ class dominio extends multiplosConstrutores {
 					$array2 = array (
 							$cd => $colecao [$cd] 
 					);
-					$retorno = putElementoArrayComChaves ( $retorno, $array2 );
+					$retorno = putElementoArray2NoArray1ComChaves ( $retorno, $array2 );
 				}
 			}
 		}

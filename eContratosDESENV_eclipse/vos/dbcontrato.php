@@ -12,23 +12,7 @@ include_once(caminho_util."DocumentoPessoa.php");
 // Classe select
 // cria um combo select html
 
-  Class dbcontrato extends dbprocesso{
-    
-    //transacoes multiplas
-    function exemploTransacoesmultriplas(){
-        //Start transaction         
-        $this->retiraAutoCommit();        
-        try{
-            $retorno = $this->cDb->atualizar($query1);
-            $retorno = $this->cDb->atualizar($query2);
-            
-            //End transaction           
-            $this->commit();
-        }catch(Exception $e){
-            $this->rollback();
-        }        
-    }
-    
+  Class dbcontrato extends dbprocesso{        
     
     function consultarFiltroManterContrato($voentidade, $filtro){    	
     	$isArquivo = ("S" == $filtro->cdConsultarArquivo);

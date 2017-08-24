@@ -216,6 +216,7 @@ function removeElementoArray($input, $elem) {
 	
 	return $input;
 }
+
 /*
  * faz o merge de array com as chaves
  */
@@ -230,8 +231,8 @@ function array_merge_keys() {
 	return $result;
 }
 
-function putElementoArrayComChaves($input, $elem) {
-	return array_merge_keys ( $input, $elem);	
+function putElementoArray2NoArray1ComChaves($array1, $array2) {
+	return array_merge_keys ( $array1, $array2);	
 }
 function getColecaoEntreSeparador($colecaoAtributos, $separador) {
 	return getColecaoEntreSeparadorAspas ( $colecaoAtributos, $separador, false );
