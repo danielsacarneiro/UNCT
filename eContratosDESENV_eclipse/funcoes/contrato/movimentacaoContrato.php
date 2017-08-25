@@ -59,10 +59,9 @@ $dtFinalAConsiderar = $colecaoMov[$tamanho-1][vocontrato::$nmAtrDtVigenciaFinalC
 <HTML lang="pt-BR">
 
 <HEAD>
-<?=setTituloPagina(null)?>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_cnpfcnpj.js"></SCRIPT>
-
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_oficio.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript">
 
 function cancela() {	
@@ -71,7 +70,7 @@ function cancela() {
 }
 
 </SCRIPT>
-
+<?=setTituloPagina(null)?>
 </HEAD>
 <BODY class="paginadados" onload="">
 	  
@@ -175,11 +174,11 @@ function cancela() {
                       <!--<TH class='headertabeladados' width='1%'>&nbsp;&nbsp;X</TH>-->
                         <TH class='headertabeladados' width='1%'>Espécie</TH>
                         <TH class='headertabeladados' width='50%'>Objeto</TH>
-                        <TH class='headertabeladados' width='1%' nowrap>Dt.Início</TH>
-                        <TH class='headertabeladados' width='1%' nowrap>Dt.Fim</TH>
                         <TH class='headertabeladados' width='1%' nowrap>Dt.Assinatura</TH>
                         <TH class='headertabeladados' width='1%' nowrap>Vl.Mensal</TH>
                         <TH class='headertabeladados' width='1%' nowrap>Vl.Global</TH>
+                        <TH class='headertabeladados' width='1%' nowrap>Dt.Início</TH>
+                        <TH class='headertabeladados' width='1%' nowrap>Dt.Fim</TH>                        
                     </TR>
                     <?php
                     $dominioTipoContrato = new dominioTipoContrato();                                
@@ -208,14 +207,24 @@ function cancela() {
                     <TR class='dados'>
                         <!--<TD class='tabeladados' <?=$msgAlertaSq?>>
                         <INPUT type='radio' id='rdb_consulta' name='rdb_consulta' value='<?php echo($chave);?>'>
-                        </TD>-->
-                        <TD class='tabeladados'><?php echo $especie?></TD>
+                        </TD>-->                        
+                        <TD class='tabeladados'>                        
+                        <?php
+				        $endereco = $voAtual->getLinkDocumento();
+				        $nmCampoEndereco = vocontrato::$nmAtrLinkDoc.$chave;
+				        if($endereco != null){
+				    		echo getBotaoAbrirDocumento($nmCampoEndereco);
+				        }
+				    	?>				    	
+                        <?php echo $especie?>
+                        <INPUT type='hidden' id='<?=$nmCampoEndereco?>' name='<?=$nmCampoEndereco?>' value='<?=$endereco;?>'>
+                        </TD>
                         <TD class='tabeladados'><?php echo $colecaoMov[$i]["ct_objeto"]?></TD>
-                        <TD class='tabeladados' nowrap><?php echo getData($colecaoMov[$i][vocontrato::$nmAtrDtVigenciaInicialContrato])?></TD>
-                        <TD class='tabeladados' nowrap><?php echo getData($colecaoMov[$i][vocontrato::$nmAtrDtVigenciaFinalContrato])?></TD>											
                         <TD class='tabeladados'><?php echo getData($dtAssinatura)?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($colecaoMov[$i]["ct_valor_mensal"])?></TD>                    
                         <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($colecaoMov[$i]["ct_valor_global"])?></TD>
+                        <TD class='tabeladados' nowrap><?php echo getData($colecaoMov[$i][vocontrato::$nmAtrDtVigenciaInicialContrato])?></TD>
+                        <TD class='tabeladados' nowrap><?php echo getData($colecaoMov[$i][vocontrato::$nmAtrDtVigenciaFinalContrato])?></TD>                        
                     </TR>					
                     <?php
                     }		

@@ -22,11 +22,11 @@ function formatarCodigoDocumento($sq, $cdSetor, $ano, $tpDoc){
 	return $str;
 }
 
-function getBotaoAbrirDocumentoMais($pLink, $nmFuncaoJavaScript){
+function getBotaoAbrirDocumentoMais($pNmCampolink, $nmFuncaoJavaScript){
 	$retorno = "";
-	$complementoJS = "onClick=javascript:".$nmFuncaoJavaScript."Cliente('" . $pLink. "');";
+	$complementoJS = "onClick=javascript:".$nmFuncaoJavaScript."Cliente('" . $pNmCampolink. "');";
 	if(isUsuarioAdmin()){
-		$complementoJS = "onClick=javascript:".$nmFuncaoJavaScript."('" . $pLink. "');";
+		$complementoJS = "onClick=javascript:".$nmFuncaoJavaScript."('" . $pNmCampolink. "');";
 	}		
 	$retorno = getBotaoValidacaoAcesso("bttabrirpasta", "Abrir", "botaofuncaop", false,true,true,true, "$complementoJS accesskey='m'");
 	return $retorno;
