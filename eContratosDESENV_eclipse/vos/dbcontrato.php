@@ -66,8 +66,9 @@ include_once(caminho_util."DocumentoPessoa.php");
 
 	function consultarContratoMovimentacoes($voContrato){
         $nmTabela = $voContrato->getNmTabelaEntidade(false);
-        $atributos = $voContrato->getAtributosMovimentacoes();
-        $atributos = getColecaoEntreSeparador($atributos, ",");
+        $nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic(false);
+        //$atributos = $voContrato->getAtributosMovimentacoes();
+        //$atributos = getColecaoEntreSeparador($atributos, ",");
         
         $nmAtributosWhere = array(
                             vocontrato::$nmAtrAnoContrato => $voContrato->anoContrato,
@@ -75,11 +76,25 @@ include_once(caminho_util."DocumentoPessoa.php");
                             vocontrato::$nmAtrTipoContrato => "'$voContrato->tipo'"
                             );
         
-		$query = "SELECT ";
-        $query.= $atributos;
-        $query.= "\n FROM ".$nmTabela;        
+		$query = "SELECT $nmTabela.* ";
+//        $query.= $atributos;
+        $query.= ", $nmTabelaContratoInfo." . voContratoInfo::$nmAtrDtProposta;
+        $query.= "\n FROM ".$nmTabela;
+        
+        $query .= "\n LEFT JOIN " . $nmTabelaContratoInfo;
+        $query .= "\n ON ";
+        $query .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrCdContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrCdContrato;
+        $query .= "\n AND ";
+        $query .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrAnoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrAnoContrato;
+        $query .= "\n AND ";
+        $query .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrTipoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
+        
         $query.= "\n WHERE ";
-        $query.= $voContrato->getValoresWhereSQL($voContrato, $nmAtributosWhere);
+        //$query.= $voContrato->getValoresWhereSQL($voContrato, $nmAtributosWhere);
+        //$voContrato = new vocontrato();
+        $query.= "$nmTabela.".vocontrato::$nmAtrAnoContrato . " = " . $voContrato->anoContrato;
+        $query.= "\n AND $nmTabela." . vocontrato::$nmAtrCdContrato . " = " . $voContrato->cdContrato;
+        $query.= "\n AND $nmTabela." . vocontrato::$nmAtrTipoContrato . " = " . getVarComoString($voContrato->tipo);
         $query.= "\n ORDER BY " . vocontrato::$nmAtrDtAssinaturaContrato;
         
 		//echo $query;

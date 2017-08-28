@@ -9,6 +9,7 @@ include(caminho_vos."dbcontrato.php");
 inicio();
 
 $voContrato = new voContrato();
+$voContratoInfo = new voContratoInfo();
 
 $classChaves = "camporeadonly";
 $readonly = "readonly";
@@ -20,6 +21,7 @@ $isHistorico = ($voContrato->sqHist != null && $voContrato->sqHist != "");
 	$colecao = $dbprocesso->limpaResultado();
 	$colecao = $dbprocesso->consultarContratoPorChave($voContrato, $isHistorico);	
 	$voContrato->getDadosBanco($colecao[0]);   
+	$voContratoInfo->getDadosBanco($colecao[0]);
 
 	$nmGestor  = $voContrato->gestor;
 	$nmGestorPessoa  = $voContrato->nmGestorPessoa;
@@ -127,7 +129,7 @@ function cancela() {
             	<INPUT type="text" 
             	       id="<?=vocontrato::$nmAtrDtProposta?>" 
             	       name="<?=vocontrato::$nmAtrDtProposta?>" 
-            			value="<?php echo($voContrato->dtProposta);?>"
+            			value="<?php echo(getData($voContratoInfo->dtProposta));?>"
             			onkeyup="formatarCampoData(this, event, false);" 
             			class="camporeadonly" 
             			size="10" 

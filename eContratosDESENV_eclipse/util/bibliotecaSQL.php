@@ -296,6 +296,5 @@ include_once ("bibliotecaFuncoesPrincipal.php");
 		//echo "NÃO É NÚMERO! <BR>";
 	
 		return $retorno;
-	}
-	
+	}	
 ?>
