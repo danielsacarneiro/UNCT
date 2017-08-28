@@ -172,7 +172,7 @@ function formataFormClassificacao(pCampoChamada) {
 	            			onkeyup="formatarCampoData(this, event, false);" 
 	            			class="camponaoobrigatorio" 
 	            			size="10" 
-	            			maxlength="10">
+	            			maxlength="10" required>
 				</TD>
 	        </TR>	       
 	        <?php	        
@@ -195,6 +195,7 @@ function formataFormClassificacao(pCampoChamada) {
 	            	colecaoIDCamposRequired = ["<?=voContratoInfo::$nmAtrCdAutorizacaoContrato?>",
 		            	"<?=voContratoInfo::$nmAtrCdClassificacao?>",
 		            	"<?=voContratoInfo::$nmAtrInMaoDeObra?>",
+		            	"<?=voContratoInfo::$nmAtrDtProposta?>",		            	
 	            		"<?=voContratoInfo::$nmAtrInTemGarantia?>",
 	            		"<?=voContratoInfo::$nmAtrTpGarantia?>"];
 	            </SCRIPT>
