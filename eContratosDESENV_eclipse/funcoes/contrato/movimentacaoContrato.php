@@ -219,11 +219,11 @@ function cancela() {
                         <TD class='tabeladados' nowrap><?php echo getData($colecaoMov[$i][vocontrato::$nmAtrDtVigenciaInicialContrato])?></TD>
                         <TD class='tabeladados' nowrap><?php echo getData($colecaoMov[$i][vocontrato::$nmAtrDtVigenciaFinalContrato])?></TD>                        
                         <TD class='tabeladados' nowrap>
-                        <INPUT type='hidden' id='<?=$nmCampoEndereco?>' name='<?=$nmCampoEndereco?>' value='<?=$endereco;?>'>
                         <?php
 				        $endereco = $voAtual->getLinkDocumento();
 				        $nmCampoEndereco = vocontrato::$nmAtrLinkDoc.$chave;
 				        if($endereco != null){
+				        	echo "<INPUT type='hidden' id='$nmCampoEndereco' name='$nmCampoEndereco' value='$endereco'>";
 				    		echo getBotaoAbrirDocumento($nmCampoEndereco);
 				        }
 				    	?>                        
