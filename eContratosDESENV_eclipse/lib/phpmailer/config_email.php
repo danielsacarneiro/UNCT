@@ -26,7 +26,22 @@ class email_sefaz extends multiplosConstrutores{
 		$this->FromName = $remetente;
 	}
 	
-	function enviarMensagem($mensagem, $assunto = null){
+	static function getListaEmailJuridico(){
+		return array("daniel.ribeiro@sefaz.pe.gov.br",
+				"patricia.farias@sefaz.pe.gov.br",
+				"rogerio.f-carvalho@sefaz.pe.gov.br"
+		);
+	}
+	
+	protected static function setListaEmail($mail, $listaDestinatarios){
+		foreach ($listaDestinatarios as $destinatario){
+			$mail->AddAddress($destinatario, '');
+			//$mail->AddCC('ciclano@site.net', 'Ciclano'); // Copia
+			//$mail->AddBCC('fulano@dominio.com.br', 'Fulano da Silva'); // Cópia Oculta
+		}
+	}
+	
+	protected function criarEmail($listaDestinatarios){
 		$mail = new PHPMailer();
 		// Define os dados do servidor e tipo de conexão
 		// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -40,20 +55,20 @@ class email_sefaz extends multiplosConstrutores{
 		// Define o remetente
 		// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 		$mail->From = $this->Username; // Seu e-mail
-		$mail->FromName = $this->FromName; // Seu nome
-		
+		$mail->FromName = $this->FromName; // Seu nome	
 		// Define os destinatário(s)
-		// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=		
-		$mail->AddAddress("daniel.ribeiro@sefaz.pe.gov.br", '');
-		$mail->AddAddress("patricia.farias@sefaz.pe.gov.br", '');		
-		//$mail->AddCC('ciclano@site.net', 'Ciclano'); // Copia
-		//$mail->AddBCC('fulano@dominio.com.br', 'Fulano da Silva'); // Cópia Oculta
-		
+		// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+		static::setListaEmail($mail, $listaDestinatarios);	
 		// Define os dados técnicos da Mensagem
 		// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 		$mail->IsHTML(true); // Define que o e-mail será enviado como HTML
 		$mail->CharSet = 'iso-8859-1'; // Charset da mensagem (opcional)
 		
+		return $mail; 
+	}
+	
+	function enviarMensagem($listaDestinatarios, $mensagem, $assunto = null){
+		$mail = $this->criarEmail($listaDestinatarios);		
 		// Define a mensagem (Texto e Assunto)
 		// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 		if($assunto == null){

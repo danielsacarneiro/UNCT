@@ -57,9 +57,10 @@ try {
 	} 
 	
 	// Exibe uma mensagem de resultado
+	echo $assunto . "<br>";
 	if ($enviarEmail) {
 		$mail = new email_sefaz();
-		$enviado = $mail->enviarMensagem($mensagem, $assunto);
+		$enviado = $mail->enviarMensagem(email_sefaz::getListaEmailJuridico(), $mensagem, $assunto);
 		if ($enviado) {
 			echo "Alerta realizado com sucesso";
 		} else {
@@ -70,6 +71,9 @@ try {
 		echo "Não há alerta para exibir.";
 	}
 } catch ( Exception $ex ) {
-	tratarExcecaoHTML ( $ex, $voDemanda );
+	$msg = $ex->getMessage ();
+	echo $msg;
 }
+
+echo "<br><br>";
 ?>
