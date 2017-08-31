@@ -171,7 +171,8 @@ class filtroManterContratoInfo extends filtroManter {
 		$varAtributos = array (
 				voContratoInfo::$nmAtrAnoContrato => "Ano",
 				voContratoInfo::$nmAtrCdContrato => "Número",
-				voContratoInfo::$nmAtrTipoContrato => "Tipo" 
+				voContratoInfo::$nmAtrTipoContrato => "Tipo",
+				voContratoInfo::$nmAtrDhUltAlteracao => "Data Alteração"
 		);
 		return $varAtributos;
 	}

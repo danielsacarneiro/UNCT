@@ -169,7 +169,7 @@ function abrirJanelaAuxiliarGestor(){
                 <TH class="campoformulario" nowrap width=1%>Nome:</TH>
                 <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>"  value="<?php echo($nome);?>"  class="camponaoobrigatorio" size="50" required></TD>
                 <TH class="campoformulario" width="1%" nowrap>CNPJ/CPF:</TH>
-                <TD class="campoformulario" ><INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo(documentoPessoa::getNumeroDocFormatado($doc));?>" class="camponaoobrigatorio" size="20" maxlength="18"></TD>
+                <TD class="campoformulario" ><INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo(documentoPessoa::getNumeroDocFormatado($doc));?>" required class="camponaoobrigatorio" size="20" maxlength="18"></TD>
             </TR>
 			<TR>
                 <TH class="campoformulario" nowrap width=1%>Email:</TH>
@@ -189,6 +189,13 @@ function abrirJanelaAuxiliarGestor(){
                 <TH class="campoformulario" nowrap width=1%>Observação:</TH>
                 <TD class="campoformulario" width="1%" colspan=3>
                 				<textarea rows="2" cols="60" id="<?=vopessoa::$nmAtrObservacao?>" name="<?=vopessoa::$nmAtrObservacao?>" class="camponaoobrigatorio" maxlength="300"><?php echo($vo->obs);?></textarea>
+                				
+	            <SCRIPT language="JavaScript" type="text/javascript">
+	            	colecaoIDCamposRequired = ["<?=vopessoa::$nmAtrEmail?>",
+	            							"<?=vopessoa::$nmAtrDoc?>"];
+	            </SCRIPT>
+	            <INPUT type="checkbox" id="checkResponsabilidade" name="checkResponsabilidade" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCamposRequired);"> *Assumo a responsabilidade de não incluir os valores obrigatórios.
+                				
 				</TD>
             </TR>     
             <TR>

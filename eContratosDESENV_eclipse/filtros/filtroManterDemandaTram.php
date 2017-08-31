@@ -6,10 +6,13 @@ class filtroManterDemandaTram extends filtroManterDemanda{
 	public $nmFiltro = "filtroManterDemandaTram";
 		
 	function getFiltroFormulario(){
+		if($this->cdOrdenacao == null){
+			$this->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
+		}		
 		parent::getFiltroFormulario();
-	
+		
 		$sqDemandaTram = @$_POST[voDemandaTramitacao::$nmAtrSq];
-		$this->vodemanda->sq = $sqDemandaTram; 
+		$this->vodemanda->sq = $sqDemandaTram;				
 	}
 	
 	function getFiltroConsultaSQL($comAtributoOrdenacao = null){

@@ -3,7 +3,7 @@
 require_once (caminho_funcoes . vocontrato::getNmTabela () . "/dominioAutorizacao.php");
 require_once (caminho_lib . "phpmailer/config_email.php");
 
-$assunto = "DEMANDAS QUE DEVEM SER ENCAMINHADAS À SAD";
+$assunto = "SAD: NÃO HÁ DEMANDAS PARA ANALISAR";
 $voDemanda = new voDemanda ();
 try {
 	$filtro = new filtroManterDemanda ( false );
@@ -28,6 +28,7 @@ try {
 	$mensagem = "PARABÉNS!! Não há demandas a serem analisadas.";
 	
 	if (! isColecaoVazia ( $colecao )) {
+		$assunto = "SAD: DEMANDAS PENDENTES";
 		$mensagem = "DEMANDAS A ANALISAR: \n\n";
 		// enviar o email com os registros a serem analisados
 		$mensagem .=				
