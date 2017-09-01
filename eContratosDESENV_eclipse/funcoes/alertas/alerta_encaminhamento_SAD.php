@@ -4,6 +4,7 @@ require_once (caminho_funcoes . vocontrato::getNmTabela () . "/dominioAutorizaca
 require_once (caminho_lib . "phpmailer/config_email.php");
 
 $assunto = "SAD: NÃO HÁ DEMANDAS PARA ANALISAR";
+$mensagem = "Nada a exibir";
 $voDemanda = new voDemanda ();
 try {
 	$filtro = new filtroManterDemanda ( false );
@@ -59,7 +60,7 @@ try {
 	
 	// Exibe uma mensagem de resultado
 	echo $assunto . "<br>";
-	if ($enviarEmail) {
+	if ($enviarEmail && email_sefaz::$FLAG_ENVIAR_EMAIL) {
 		$mail = new email_sefaz();
 		$enviado = $mail->enviarMensagem(email_sefaz::getListaEmailJuridico(), $mensagem, $assunto);
 		if ($enviado) {

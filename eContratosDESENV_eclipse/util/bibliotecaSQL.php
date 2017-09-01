@@ -296,5 +296,14 @@ include_once ("bibliotecaFuncoesPrincipal.php");
 		//echo "NÃO É NÚMERO! <BR>";
 	
 		return $retorno;
-	}	
+	}
+	
+	function getDataSQLFormatada($ano, $mes, $dia){
+		return " CONCAT($ano,'-', RIGHT(CONCAT ('0',$mes),2), '-', RIGHT(CONCAT ('0',$dia),2)) ";
+	}
+	
+	function getDataSQLDiferencaAnos($data1, $data2){		
+		return " TIMESTAMPDIFF(YEAR, $data1, $data2) " ;
+	}
+	
 ?>

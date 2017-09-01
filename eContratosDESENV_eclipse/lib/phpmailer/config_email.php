@@ -6,6 +6,9 @@ require_once ("class.phpmailer.php");
 require_once ("class.smtp.php");
 
 class email_sefaz extends multiplosConstrutores{
+	
+	static $FLAG_ENVIAR_EMAIL = true;
+	
 	private $Host;
 	private $Port;
 	private $Username;

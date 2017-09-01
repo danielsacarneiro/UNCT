@@ -35,7 +35,8 @@ class filtroManterDemanda extends filtroManter{
 	var $vlGlobalInicial;
 	var $vlGlobalFinal;
 	
-	var $InOR_AND;
+	var $inOR_AND;
+	var $inContratoComDtPropostaVencida;
 	
 	// ...............................................................
 	// construtor
@@ -86,9 +87,9 @@ class filtroManterDemanda extends filtroManter{
 		$this->vlGlobalFinal = @$_POST[self::$NmAtrVlGlobalFinal];
 		
 		$this->cdUsuarioTramitacao = @$_POST[self::$NmAtrCdUsuarioTramitacao];
-		$this->InOR_AND = @$_POST[self::$NmAtrInOR_AND];
-		if($this->InOR_AND == null){
-			$this->InOR_AND = constantes::$CD_OPCAO_OR;
+		$this->inOR_AND = @$_POST[self::$NmAtrInOR_AND];
+		if($this->inOR_AND == null){
+			$this->inOR_AND = constantes::$CD_OPCAO_OR;
 		}
 		
 		if($this->cdOrdenacao == null){
@@ -359,7 +360,7 @@ class filtroManterDemanda extends filtroManter{
 			}else{
 				
 				$colecaoAutorizacao = $this->vocontrato->cdAutorizacao;				
-				$filtro = $filtro . $conector . $strComparacao . voContratoInfo::getOperacaoFiltroCdAutorizacaoOR_AND($colecaoAutorizacao, $this->InOR_AND);
+				$filtro = $filtro . $conector . $strComparacao . voContratoInfo::getOperacaoFiltroCdAutorizacaoOR_AND($colecaoAutorizacao, $this->inOR_AND);
 				
 			}			
 			
@@ -422,6 +423,36 @@ class filtroManterDemanda extends filtroManter{
 					. getVarComoDecimal($this->vlGlobalFinal);
 					$conector  = "\n AND ";
 		
+		}
+		
+		if($this->inContratoComDtPropostaVencida != null){			
+			if($this->vocontrato->dtProposta == null){
+				throw new excecaoGenerica("Consulta data proposta futura: campo obrigatório: vocontrato->dtproposta.");
+			}			
+			
+			$dtReferencia = getVarComoDataSQL($this->vocontrato->dtProposta); 
+			$dtPropostaPAram = $nmTabelaContratoInfo . "." .voContratoInfo::$nmAtrDtProposta;
+			//CONSIDERA 1 ANO ANTES DO ATUAL PARA FAZER A DIFERENCA DE 1 ANO PARA A CONCESSAO DE REAJUSTE
+			$ano = "YEAR($dtReferencia)-1";
+			$mes = "MONTH($dtPropostaPAram)";
+			$dia = "DAY($dtPropostaPAram)";
+			$dtPropostaPAram = getDataSQLFormatada($ano,$mes, $dia);
+			
+			//se a diferenca de anos for zero, quer dizer que nao ha diferenca de 1 ano
+			//nesse caso, o vencimento da data da proposta nao ocorreu, nao podendo ser a demanda analisada para fins de reajuste
+			if(getAtributoComoBooleano($this->inContratoComDtPropostaVencida)){
+				//deseja-se as demandas com propostas vencidas
+				$operacao = " > 0 ";
+			}else{
+				//deseja-se as demandas com propostas a vencer
+				$operacao = " = 0 ";
+			}			
+			
+			$filtro = $filtro . $conector
+			. getDataSQLDiferencaAnos($dtPropostaPAram, $dtReferencia)
+			. $operacao;
+			
+			$conector  = "\n AND ";
 		}
 		
 		$this->formataCampoOrdenacao(new voDemanda());
