@@ -122,8 +122,8 @@
                        <TD>
                         <TABLE class="barraacoesaux" cellpadding="0" cellspacing="0">
 	                   	<TR>
-	                   	<?=getBotoesRodape();?> 
-                            <TD class="botaofuncao"><?=getBotao("bttMovimentacao", "Movimentações", null, false, "onClick='javascript:movimentacoes();' accesskey='m'")?></TD>
+	                   	    <TD class="botaofuncao"><?=getBotao("bttMovimentacao", "Movimentações", null, false, "onClick='javascript:movimentacoes();' accesskey='m'")?></TD>
+	                   		<?=getBotoesRodape();?> 
                          </TR>
                          </TABLE>
 	                   </TD>
