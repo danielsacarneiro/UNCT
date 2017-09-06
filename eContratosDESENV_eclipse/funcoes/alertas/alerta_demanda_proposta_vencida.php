@@ -29,25 +29,43 @@ try {
 	$enviarEmail = false;	
 	if (! isColecaoVazia ( $colecao )) {
 		$enviarEmail = true;
-		$assunto = "REAJUSTES: DEMANDAS PENDENTES";
+		$assunto = "REAJUSTES PENDENTES";
 		// enviar o email com os registros a serem analisados
 		$mensagem = "DEMANDAS A ANALISAR: \n\n";
 		$mensagem .=
 		"<TABLE id='table_tabeladados' class='tabeladados' cellpadding='2' cellspacing='2' BORDER=1>\n
 		<TBODY>";
 		
+		$dominioTipoContrato = new dominioTipoContrato();
+		
 		foreach ( $colecao as $registro ) {
 			$voAtual = new voDemanda ();
 			$voAtual->getDadosBanco ( $registro );
+			
+			$voDemandaContrato = new voDemandaContrato();
+			$voDemandaContrato->getDadosBanco($registro);
+				
+			$contrato = "";
+			$empresa = $registro[vopessoa::$nmAtrNome];
+			if($qtContratos > 1){
+				$contrato = "VÁRIOS";
+			}else{
+				$contrato = formatarCodigoAnoComplemento($voDemandaContrato->voContrato->cdContrato,
+						$voDemandaContrato->voContrato->anoContrato,
+						$dominioTipoContrato->getDescricao($voDemandaContrato->voContrato->tipo));
+			
+				if($empresa != null){
+					$contrato .= ": ".$empresa;
+				}
+			}				
 					
 			$mensagem .= 
 					"<TR>\n
 						<TD class='tabeladadosalinhadodireita'> $voAtual->ano </TD>\n
 						<TD class='tabeladadosdestacadonegrito'> " . complementarCharAEsquerda($voAtual->cd, '0', TAMANHO_CODIGOS) . "</TD>\n
+						<TD class='tabeladados' > $contrato </TD>\n
 						<TD class='tabeladados'> $voAtual->texto </TD>\n
 					</TR>\n";
-			
-			//$mensagem .= "DEMANDA: $voAtual->ano - " . complementarCharAEsquerda($voAtual->cd, '0', TAMANHO_CODIGOS) . " - $voAtual->texto \r\n"; 
 				
 		}
 			$mensagem .=

@@ -16,7 +16,6 @@ cabecalho;
 <!DOCTYPE html>
 <HTML>
 <HEAD>
-<?=setTituloPagina(null)?>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>tooltip.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_treemenu.js"></SCRIPT>
@@ -72,7 +71,7 @@ cabecalho;
 
 </SCRIPT>
 </HEAD>
-
+<?=setTituloPagina($titulo)?>
 <BODY CLASS="paginadados">
 	<FORM name="frm_principal" method="post">
 		<INPUT type="hidden" id="id_contexto_sessao" name="id_contexto_sessao" value=""> 

@@ -433,8 +433,9 @@ class filtroManterDemanda extends filtroManter{
 			$dtReferencia = getVarComoDataSQL($this->vocontrato->dtProposta); 
 			$dtPropostaPAram = $nmTabelaContratoInfo . "." .voContratoInfo::$nmAtrDtProposta;
 			//CONSIDERA 1 ANO ANTES DO ATUAL PARA FAZER A DIFERENCA DE 1 ANO PARA A CONCESSAO DE REAJUSTE
+			//CONSIDERA TAMBEM 1 MES ANTES DO ATUAL, pois a logica definida pela SAFI eh a de que o indice calculado vai do mes da proposta ate o mes-1 do ano seguinte
 			$ano = "YEAR($dtReferencia)-1";
-			$mes = "MONTH($dtPropostaPAram)";
+			$mes = "MONTH($dtPropostaPAram)-1";
 			$dia = "DAY($dtPropostaPAram)";
 			$dtPropostaPAram = getDataSQLFormatada($ano,$mes, $dia);
 			

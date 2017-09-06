@@ -26,7 +26,9 @@ try {
 	
 	$enviarEmail = true;
 	
-	$mensagem = "PARABÉNS!! Não há demandas a serem analisadas.";
+	$mensagem = "PARABÉNS! Não há demandas a serem analisadas.";
+	
+	$dominioTipoContrato = new dominioTipoContrato();
 	
 	if (! isColecaoVazia ( $colecao )) {
 		$assunto = "SAD: DEMANDAS PENDENTES";
@@ -39,15 +41,31 @@ try {
 		foreach ( $colecao as $registro ) {
 			$voAtual = new voDemanda ();
 			$voAtual->getDadosBanco ( $registro );
+			
+			$voDemandaContrato = new voDemandaContrato();
+			$voDemandaContrato->getDadosBanco($registro);
+			
+			$contrato = "";
+			$empresa = $registro[vopessoa::$nmAtrNome];
+			if($qtContratos > 1){
+				$contrato = "VÁRIOS";
+			}else{
+				$contrato = formatarCodigoAnoComplemento($voDemandaContrato->voContrato->cdContrato,
+						$voDemandaContrato->voContrato->anoContrato,
+						$dominioTipoContrato->getDescricao($voDemandaContrato->voContrato->tipo));
+					
+				if($empresa != null){
+					$contrato .= ": ".$empresa;
+				}
+			}				
 					
 			$mensagem .= 
 					"<TR>\n
 						<TD class='tabeladadosalinhadodireita'> $voAtual->ano </TD>\n
 						<TD class='tabeladadosdestacadonegrito'> " . complementarCharAEsquerda($voAtual->cd, '0', TAMANHO_CODIGOS) . "</TD>\n
+						<TD class='tabeladados' > $contrato </TD>\n						
 						<TD class='tabeladados'> $voAtual->texto </TD>\n
 					</TR>\n";
-			
-			//$mensagem .= "DEMANDA: $voAtual->ano - " . complementarCharAEsquerda($voAtual->cd, '0', TAMANHO_CODIGOS) . " - $voAtual->texto \r\n"; 
 				
 		}
 			$mensagem .=
