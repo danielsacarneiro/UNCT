@@ -150,13 +150,13 @@ function confirmar() {
             <TD class="campoformulario" colspan="3">
                 <?php
                  include_once(caminho_funcoes. "gestor/biblioteca_htmlGestor.php");
-                 if($voContrato->cdGestor != null)
+                 /*if($voContrato->cdGestor != null){
                     echo getComboGestorMais(new dbgestor(), vocontrato::$nmAtrCdGestorPessoaContrato, vocontrato::$nmAtrCdGestorPessoaContrato, $voContrato->cdGestor, "camporeadonly", " disabled ");
-                 
+                 }
                  
                  if($voContrato->gestor != null){
                     echo "<INPUT type='text' id='nmGestor' name='nmGestor'  value='". $nmGestor ."'  class='camporeadonly' size='50' " . $readonly . ">";
-                }
+                }*/
                 ?>
                 </TD>
         </TR>
@@ -209,16 +209,14 @@ function confirmar() {
             	<INPUT type="text" 
             	       id="<?=vocontrato::$nmAtrDtVigenciaInicialContrato?>" 
             	       name="<?=vocontrato::$nmAtrDtVigenciaInicialContrato?>" 
-            			value="<?php echo($dtVigenciaInicial);?>"
-            			onkeyup="formatarCampoData(this, event, false);" 
+            			value="<?php echo($dtVigenciaInicial);?>" 
             			class="camporeadonly" 
             			size="10" 
             			maxlength="10" <?=$readonly?>> a
             	<INPUT type="text" 
             	       id="<?=vocontrato::$nmAtrDtVigenciaFinalContrato?>" 
             	       name="<?=vocontrato::$nmAtrDtVigenciaFinalContrato?>" 
-            			value="<?php echo($dtVigenciaFinal);?>"
-            			onkeyup="formatarCampoData(this, event, false);" 
+            			value="<?php echo($dtVigenciaFinal);?>" 
             			class="camporeadonly" 
             			size="10" 
             			maxlength="10" <?=$readonly?>>
@@ -230,8 +228,7 @@ function confirmar() {
             	<INPUT type="text" 
             	       id="<?=vocontrato::$nmAtrDtAssinaturaContrato?>" 
             	       name="<?=vocontrato::$nmAtrDtAssinaturaContrato?>" 
-            			value="<?php echo($voContrato->dtAssinatura);?>"
-            			onkeyup="formatarCampoData(this, event, false);" 
+            			value="<?php echo($voContrato->dtAssinatura);?>" 
             			class="camporeadonly" 
             			size="10" 
             			maxlength="10" <?=$readonly?>>
@@ -243,8 +240,7 @@ function confirmar() {
             	<INPUT type="text" 
             	       id="<?=vocontrato::$nmAtrDtPublicacaoContrato?>" 
             	       name="<?=vocontrato::$nmAtrDtPublicacaoContrato?>" 
-            			value="<?php echo($dtPublicacao);?>"
-            			onkeyup="formatarCampoData(this, event, false);" 
+            			value="<?php echo($dtPublicacao);?>" 
             			class="camporeadonly" 
             			size="10" 
             			maxlength="10" <?=$readonly?>>
@@ -264,8 +260,7 @@ function confirmar() {
             	<INPUT type="text" 
             	       id="<?=vocontrato::$nmAtrDtProposta?>" 
             	       name="<?=vocontrato::$nmAtrDtProposta?>" 
-            			value="<?php echo(getData($voContratoInfo->dtProposta));?>"
-            			onkeyup="formatarCampoData(this, event, false);" 
+            			value="<?php echo(getData($voContratoInfo->dtProposta));?>" 
             			class="camporeadonly" 
             			size="10" 
             			maxlength="10"

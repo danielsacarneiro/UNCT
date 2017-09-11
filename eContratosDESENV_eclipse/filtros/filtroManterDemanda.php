@@ -430,8 +430,9 @@ class filtroManterDemanda extends filtroManter{
 				throw new excecaoGenerica("Consulta data proposta futura: campo obrigatório: vocontrato->dtproposta.");
 			}			
 			
-			$dtReferencia = getVarComoDataSQL($this->vocontrato->dtProposta); 
-			$dtPropostaPAram = $nmTabelaContratoInfo . "." .voContratoInfo::$nmAtrDtProposta;
+			$dtReferencia = getVarComoDataSQL($this->vocontrato->dtProposta);
+			$nmAtributoDataProposta = $nmTabelaContratoInfo . "." .voContratoInfo::$nmAtrDtProposta;
+			$dtPropostaPAram = $nmAtributoDataProposta;
 			//CONSIDERA 1 ANO ANTES DO ATUAL PARA FAZER A DIFERENCA DE 1 ANO PARA A CONCESSAO DE REAJUSTE
 			//CONSIDERA TAMBEM 1 MES ANTES DO ATUAL, pois a logica definida pela SAFI eh a de que o indice calculado vai do mes da proposta ate o mes-1 do ano seguinte
 			$ano = "YEAR($dtReferencia)-1";
@@ -442,16 +443,19 @@ class filtroManterDemanda extends filtroManter{
 			//se a diferenca de anos for zero, quer dizer que nao ha diferenca de 1 ano
 			//nesse caso, o vencimento da data da proposta nao ocorreu, nao podendo ser a demanda analisada para fins de reajuste
 			if(getAtributoComoBooleano($this->inContratoComDtPropostaVencida)){
-				//deseja-se as demandas com propostas vencidas
+				//desejam-se as demandas com propostas vencidas
 				$operacao = " > 0 ";
 			}else{
-				//deseja-se as demandas com propostas a vencer
+				//desejam-se as demandas com propostas a vencer
 				$operacao = " = 0 ";
 			}			
 			
+			//se a data da proposta for nula, exibe o alerta de todo o jeito, ate que ela seja preenchida
 			$filtro = $filtro . $conector
+			. " ($nmAtributoDataProposta IS NULL OR ($nmAtributoDataProposta IS NOT NULL AND "
 			. getDataSQLDiferencaAnos($dtPropostaPAram, $dtReferencia)
-			. $operacao;
+			. $operacao
+			. ")) ";
 			
 			$conector  = "\n AND ";
 		}

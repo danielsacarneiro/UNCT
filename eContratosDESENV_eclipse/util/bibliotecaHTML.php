@@ -85,8 +85,14 @@ function setCabecalhoPorNivel($titulo, $qtdNiveisAcimaEmSeEncontraPagina) {
 		$titulo = " - " . $titulo;
 	}
 	
-	$diaExtenso = strftime ( '%A, %d de %B de %Y', strtotime ( 'today' ) );
-	// $diaExtenso = date ( 'l jS \of F Y' );
+	date_default_timezone_set('America/Recife');	
+	$data = new DateTime();
+	$formatter = new IntlDateFormatter('pt_BR',
+			IntlDateFormatter::FULL,
+			IntlDateFormatter::GREGORIAN);
+	
+	//$diaExtenso = strftime ( '%A, %d de %B de %Y', strtotime ( 'today' ) );
+	$diaExtenso = $formatter->format($data);
 	
 	$cabecalho = "		<TABLE id='table_conteiner' class='conteiner' cellpadding='0' cellspacing='0'>
                         <TBODY>
