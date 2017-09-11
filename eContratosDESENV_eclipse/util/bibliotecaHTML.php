@@ -85,7 +85,8 @@ function setCabecalhoPorNivel($titulo, $qtdNiveisAcimaEmSeEncontraPagina) {
 		$titulo = " - " . $titulo;
 	}
 	
-	date_default_timezone_set('America/Recife');	
+	//descomentar a linha extension=php_intl.dll no php.ini
+	date_default_timezone_set('America/Recife');
 	$data = new DateTime();
 	$formatter = new IntlDateFormatter('pt_BR',
 			IntlDateFormatter::FULL,
