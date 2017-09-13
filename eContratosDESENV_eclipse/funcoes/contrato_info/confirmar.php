@@ -7,7 +7,11 @@ inicioComValidacaoUsuario(true);
 $vo = new voContratoInfo();
 $vo->getDadosFormulario();
 
-//echo "RESOLVER PROBLEMA DA CHAMADA AO INCLUIR"; 
+/*$novaObs = @$_POST[voContratoInfo::$nmAtrObs];
+$vo->setObsParaIncluirNoBanco($novaObs);*/
+//$vo->setCarimboObsParaIncluirNoBanco();
+
+//imprimeHtml($vo->obs);
 
 putObjetoSessao("vo", $vo);
 

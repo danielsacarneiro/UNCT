@@ -201,8 +201,7 @@ function formataFormClassificacao(pCampoChamada) {
 	            </SCRIPT>
 	            <INPUT type="checkbox" id="checkResponsabilidade" name="checkResponsabilidade" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCamposRequired);"> *Assumo a responsabilidade de não incluir os valores obrigatórios.
 				</TD>
-	        </TR>
-	        
+	        </TR>	        
 <TR>
 	<TD halign="left" colspan="4">
 	<DIV class="textoseparadorgrupocampos">&nbsp;</DIV>

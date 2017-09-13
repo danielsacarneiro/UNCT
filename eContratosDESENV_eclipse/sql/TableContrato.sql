@@ -140,6 +140,7 @@ CREATE TABLE contrato_info (
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_incl INT,
     cd_usuario_ultalt INT,
+    in_desativado CHAR(1) NOT NULL DEFAULT 'N',
     
     CONSTRAINT pk PRIMARY KEY (ct_exercicio, ct_numero, ct_tipo)
 );
@@ -152,6 +153,7 @@ ALTER TABLE contrato_info ADD COLUMN ctinf_in_garantia CHAR(1) NULL AFTER ctinf_
 ALTER TABLE contrato_info ADD COLUMN ctinf_tp_garantia INT NULL AFTER ctinf_in_garantia;
 ALTER TABLE contrato_info ADD COLUMN ctinf_in_mao_obra CHAR(1) NULL AFTER ctinf_tp_garantia;
 ALTER TABLE contrato_info ADD COLUMN ctinf_cd_classificacao INT NULL AFTER ctinf_in_mao_obra;
+ALTER TABLE contrato_info ADD COLUMN in_desativado CHAR(1) NOT NULL DEFAULT 'N' AFTER cd_usuario_ultalt;
 
 -- ALTER TABLE contrato_info ADD COLUMN in_desativado CHAR(1) NOT NULL AFTER cd_usuario_ultalt;
  -- ALTER TABLE contrato_info DROP COLUMN ctinf_in_pat;
@@ -178,6 +180,7 @@ CREATE TABLE contrato_info_hist (
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_incl INT,
     cd_usuario_ultalt INT,
+    in_desativado CHAR(1) NOT NULL,
     
 	dh_operacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_operacao INT,    
@@ -189,6 +192,7 @@ ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_garantia CHAR(1) NULL AFTER c
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_tp_garantia INT NULL AFTER ctinf_in_garantia;
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_mao_obra CHAR(1) NULL AFTER ctinf_tp_garantia;
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_cd_classificacao INT NULL AFTER ctinf_in_mao_obra;
+ALTER TABLE contrato_info_hist ADD COLUMN in_desativado CHAR(1) NULL AFTER cd_usuario_ultalt;
 -- ALTER TABLE contrato_info_hist DROP FOREIGN KEY desativacao_demanda; 
 -- ALTER TABLE contrato_info_hist DROP COLUMN ctinf_in_prestacao_garantia;
 

@@ -10,7 +10,7 @@ Class voContratoInfo extends voentidade{
 	static $nmAtrTipoContrato =  "ct_tipo";
 	
 	static $nmAtrCdAutorizacaoContrato =  	"ctinf_cd_autorizacao";
-	static $nmAtrObs = "ctinf_obs";
+	static $nmAtrObs = "ctinf_obs";	
 	static $nmAtrDtProposta = "ctinf_dt_proposta";
 		
 	static $nmAtrInTemGarantia = "ctinf_in_garantia";
@@ -150,6 +150,17 @@ Class voContratoInfo extends voentidade{
 		//completa com os dados da entidade
 		$this->getDadosFormularioEntidade();
 	}
+	
+	/*function setCarimboObsParaIncluirNoBanco(){
+		$novaObs = $this->obs;
+		if($novaObs != null && $novaObs != ""){
+			$nmUsuario = name_user;
+			$dhAlteracao = getDataHoraAtual();				
+			$novaObs = "\n[$nmUsuario, em $dhAlteracao]: " . $novaObs;
+			
+			$this->obs = $novaObs;
+		}		 
+	}*/
 	 
 	function toString(){
 		/*$retorno.= $this->ano;

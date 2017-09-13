@@ -16,6 +16,7 @@ require_once (caminho_funcoes . "contrato/dominioTipoContrato.php");
 function inicio() {
 	inicioComValidacaoUsuario ( false );
 }
+
 function inicioComValidacaoUsuario($validarPermissaoAcesso) {
 	
 	// include_path = ".:/usr/share/pear:/home/SEU_LOGIN_DE_FTP/SEU_DIRETORIO";
@@ -35,7 +36,7 @@ function inicioComValidacaoUsuario($validarPermissaoAcesso) {
 	}
 	
 	define ( 'id_user', $idUsuario );
-	define ( 'name_user', $nomeUsuario );
+	define ( 'name_user', utf8_decode($nomeUsuario));
 	
 	define ( 'anoDefault', date ( 'Y' ) );
 	define ( 'dtHoje', getDataHoje () );
@@ -104,7 +105,7 @@ function setCabecalhoPorNivel($titulo, $qtdNiveisAcimaEmSeEncontraPagina) {
                                 </TR>                                
                                 <TR>
                                 <TH class=headertabeladados>&nbsp;" . constantes::$nomeSistema . "$titulo<br></TH>
-                                <TH class=headertabeladadosalinhadodireita width='1%' nowrap>&nbsp" . utf8_decode ( name_user ) . ",
+                                <TH class=headertabeladadosalinhadodireita width='1%' nowrap>&nbsp" . name_user . ",
                                 <a class='linkbranco' href='" . $pastaMenu . "index.php' >Menu</a>
                                 <a href='" . $pastaMenu . "login.php?funcao=I' ><img  title='Entrar' src='" . $pastaImagens . "botao_home_laranja.gif' width='20' height='20'></a>
                                 <a href='" . $pastaMenu . "login.php?funcao=O' ><img  title='Sair' src='" . $pastaImagens . "logout.gif' width='25' height='20'></a>";

@@ -8,17 +8,19 @@ include_once(caminho_filtros . "filtroManterContratoInfo.php");
 //inicia os parametros
 inicio();
 
+$vo = new voContratoInfo();
+
 $titulo = "CONSULTAR " . voContratoInfo::getTituloJSP();
 setCabecalho($titulo);
 
 $filtro  = new filtroManterContratoInfo();
+$filtro->voPrincipal = $vo;
 $filtro = filtroManter::verificaFiltroSessao($filtro);
-	
+
 $cdHistorico = $filtro->cdHistorico;
 $cdOrdenacao = $filtro->cdOrdenacao;
 $isHistorico = "S" == $cdHistorico; 
 
-$vo = new voContratoInfo();
 $dbprocesso = $vo->dbprocesso;
 $colecao = $dbprocesso->consultarTelaConsulta($vo, $filtro);
 

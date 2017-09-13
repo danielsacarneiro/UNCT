@@ -11,6 +11,7 @@ Class dominioTipoDemanda extends dominio{
 	static $CD_TIPO_DEMANDA_CONTRATO_MATER = 6;
 	static $CD_TIPO_DEMANDA_CONTRATO_MODIFICACAO = 7;
 	static $CD_TIPO_DEMANDA_CONTRATO_PRORROGACAO = 8;
+	static $CD_TIPO_DEMANDA_PARECER = 9;
 	static $CD_TIPO_DEMANDA_A_CLASSIFICAR = 99;
 	
 	static $DS_TIPO_DEMANDA_CONTRATO = "Contrato";
@@ -21,6 +22,7 @@ Class dominioTipoDemanda extends dominio{
 	static $DS_TIPO_DEMANDA_CONTRATO_MATER = "Contrato Mater";
 	static $DS_TIPO_DEMANDA_CONTRATO_MODIFICACAO = "Contrato Modificacao";
 	static $DS_TIPO_DEMANDA_CONTRATO_PRORROGACAO = "Contrato Prorrogação";
+	static $DS_TIPO_DEMANDA_PARECER = "Parecer";
 	
 	static $DS_TIPO_DEMANDA_A_CLASSIFICAR = "A classificar";
 	// ...............................................................
@@ -42,6 +44,7 @@ Class dominioTipoDemanda extends dominio{
 				self::$CD_TIPO_DEMANDA_CONTRATO_MATER => self::$DS_TIPO_DEMANDA_CONTRATO_MATER,
 				self::$CD_TIPO_DEMANDA_EDITAL => self::$DS_TIPO_DEMANDA_EDITAL,
 				self::$CD_TIPO_DEMANDA_PROCADM => self::$DS_TIPO_DEMANDA_PROCADM,
+				self::$CD_TIPO_DEMANDA_PARECER => self::$DS_TIPO_DEMANDA_PARECER,
 				self::$CD_TIPO_DEMANDA_JUDICIAL => self::$DS_TIPO_DEMANDA_JUDICIAL,
 				self::$CD_TIPO_DEMANDA_A_CLASSIFICAR => self::$DS_TIPO_DEMANDA_A_CLASSIFICAR
 		);

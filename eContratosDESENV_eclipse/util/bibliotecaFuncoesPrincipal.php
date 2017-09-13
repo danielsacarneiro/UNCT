@@ -1,5 +1,9 @@
 <?php
 
+function imprimeHtml($texto){
+	echo str_replace("\n", "<br>", $texto);
+}
+
 /*
  * implementa a busca insensitive de uma palavra em outra
  * diferente de strpos que eh case sensitive

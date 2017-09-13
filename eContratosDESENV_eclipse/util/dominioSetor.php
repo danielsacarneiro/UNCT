@@ -11,6 +11,7 @@ include_once(caminho_util."dominio.class.php");
   	static $CD_SETOR_UNCP= 7;
   	static $CD_SETOR_CPL= 8;
   	static $CD_SETOR_UNSG= 9;
+  	static $CD_SETOR_DIFIN = 10;
 
   	static $DS_SETOR_SAFI= "SAFI";
   	static $DS_SETOR_UNCT= "UNCT";
@@ -21,6 +22,7 @@ include_once(caminho_util."dominio.class.php");
   	static $DS_SETOR_SAD= "SAD";
   	static $DS_SETOR_CPL= "CPL";
   	static $DS_SETOR_UNSG= "UNSG";
+  	static $DS_SETOR_DIFIN = "DIFIN";
   	 
 // ...............................................................
 // Construtor
@@ -39,7 +41,8 @@ include_once(caminho_util."dominio.class.php");
 				self::$CD_SETOR_UNSG => self::$DS_SETOR_UNSG,				
 				self::$CD_SETOR_SAFI => "SAFI",
 				self::$CD_SETOR_SAD => self::$DS_SETOR_SAD,
-				self::$CD_SETOR_PGE => self::$DS_SETOR_PGE
+				self::$CD_SETOR_PGE => self::$DS_SETOR_PGE,
+				self::$CD_SETOR_DIFIN => self::$DS_SETOR_DIFIN
 		);
 		
 		uksort($retorno, 'strnatcmp');

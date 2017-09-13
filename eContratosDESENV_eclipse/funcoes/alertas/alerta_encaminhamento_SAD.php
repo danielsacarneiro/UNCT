@@ -71,13 +71,11 @@ try {
 			$mensagem .=
 			"</TBODY>\n
 			</TABLE>";
-			
-			//echo $mensagem;
-		
 	} 
 	
 	// Exibe uma mensagem de resultado
 	echo $assunto . "<br>";
+	echo $mensagem  . "<br>";
 	if ($enviarEmail && email_sefaz::$FLAG_ENVIAR_EMAIL) {
 		$mail = new email_sefaz();
 		$enviado = $mail->enviarMensagem(email_sefaz::getListaEmailJuridico(), $mensagem, $assunto);
