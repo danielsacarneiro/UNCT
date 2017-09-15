@@ -7,6 +7,7 @@ class voPA extends voentidade {
 	static $nmAtrCdResponsavel = "pa_cd_responsavel";
 	static $nmAtrObservacao = "pa_observacao";
 	static $nmAtrDtAbertura = "pa_dt_abertura";
+	static $nmAtrDtNotificacao = "pa_dt_notificacao";
 	static $nmAtrSituacao = "pa_si";
 	var $cdPA = "";
 	var $anoPA = "";
@@ -14,6 +15,7 @@ class voPA extends voentidade {
 	var $anoDemanda = "";
 	var $obs = "";
 	var $dtAbertura = "";
+	var $dtNotificacao = "";
 	var $situacao = "";
 	var $cdResponsavel = "";
 	
@@ -65,6 +67,7 @@ class voPA extends voentidade {
 				self::$nmAtrCdResponsavel,
 				self::$nmAtrObservacao,
 				self::$nmAtrDtAbertura,
+				self::$nmAtrDtNotificacao,
 				self::$nmAtrSituacao 
 		);
 		
@@ -89,6 +92,7 @@ class voPA extends voentidade {
 		
 		$this->obs = $registrobanco [self::$nmAtrObservacao];
 		$this->dtAbertura = $registrobanco [self::$nmAtrDtAbertura];
+		$this->dtNotificacao = $registrobanco [self::$nmAtrDtNotificacao];
 		$this->situacao = $registrobanco [self::$nmAtrSituacao];
 
 	}
@@ -101,12 +105,11 @@ class voPA extends voentidade {
 		
 		$this->obs = @$_POST [self::$nmAtrObservacao];
 		$this->dtAbertura = @$_POST [self::$nmAtrDtAbertura];
+		$this->dtNotificacao = @$_POST [self::$nmAtrDtNotificacao];
 		$this->situacao = @$_POST [self::$nmAtrSituacao];
 		
-		$this->dhUltAlteracao = @$_POST [self::$nmAtrDhUltAlteracao];
-		$this->sqHist = @$_POST [self::$nmAtrSqHist];
-		// usuario de ultima manutencao sempre sera o id_user
-		$this->cdUsuarioUltAlteracao = id_user;
+		//completa com os dados da entidade
+		$this->getDadosFormularioEntidade();
 	}
 	function toString() {
 		$retorno .= $this->anoPA . ",";

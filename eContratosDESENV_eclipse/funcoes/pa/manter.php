@@ -186,6 +186,19 @@ function carregaDadosContratada(){
 	            			maxlength="10" required>
 				</TD>
         	</TR>
+			<TR>
+	            <TH class="campoformulario" nowrap>Dt.Recebimento Nota Imputação:</TH>
+	            <TD class="campoformulario" colspan="3">
+	            	<INPUT type="text" 
+	            	       id="<?=voPA::$nmAtrDtNotificacao?>" 
+	            	       name="<?=voPA::$nmAtrDtNotificacao?>" 
+	            			value="<?php echo(getData($vo->dtNotificacao));?>"
+	            			onkeyup="formatarCampoData(this, event, false);" 
+	            			class="camponaoobrigatorio" 
+	            			size="10" 
+	            			maxlength="10" required>
+				</TD>
+        	</TR>
     
 <TR>
 	<TD halign="left" colspan="4">

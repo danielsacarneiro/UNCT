@@ -29,7 +29,7 @@ $doc  = $vo->doc;
 $email  = $vo->email;
     
 $nmFuncao = "DETALHAR ";
-$titulo = "PESSOA";
+$titulo = $vo::getTituloJSP();
 $complementoTit = "";
 $isExclusao = false;
 if($isHistorico)

@@ -128,21 +128,22 @@ function validaFormulario() {
     <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
         <TBODY>
 			<TR>
-                <TH class="campoformulario" nowrap>Cód.Contratada:</TH>
-                <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vopessoa::$nmAtrCd?>" name="<?=vopessoa::$nmAtrCd?>"  value="<?php echo complementarCharAEsquerda($filtro->cdPessoa, "0", TAMANHO_CODIGOS);?>"  class="camponaoobrigatorio" size="7" ></TD>
-                <TH class="campoformulario" nowrap width="1%">Nome:</TH>
-                <TD class="campoformulario" ><INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>"  value="<?php echo($nome);?>"  class="camponaoobrigatorio" size="50" ></TD>
-            </TR>            
-            <TR>
+                <TH class="campoformulario" nowrap>Contratada:</TH>
+                <TD class="campoformulario" width="1%">
+                Cód: <INPUT type="text" id="<?=vopessoa::$nmAtrCd?>" name="<?=vopessoa::$nmAtrCd?>"  value="<?php echo complementarCharAEsquerda($filtro->cdPessoa, "0", TAMANHO_CODIGOS);?>"  class="camponaoobrigatorio" size="7" >
+                Nome: <INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>"  value="<?php echo($nome);?>"  class="camponaoobrigatorio" size="30" ></TD>
                 <TH class="campoformulario" width="1%" nowrap>CNPJ/CPF:</TH>
                 <TD class="campoformulario"><INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($doc);?>" class="camponaoobrigatorio" size="20" maxlength="18"></TD>
+            </TR>
+        
+			<TR>
 				<TH class="campoformulario" nowrap>Situação:</TH>
-                <TD class="campoformulario" colspan="1">
+                <TD class="campoformulario" colspan="3">
                      <?php
                     include_once("biblioteca_htmlPA.php");                    
                     echo getComboSituacaoPA(voPA::$nmAtrSituacao, voPA::$nmAtrSituacao, $filtro->situacao, "camponaoobrigatorio", "");                                        
                     ?>
-            </TR>
+            </TR>            
             <TR>
 				<TH class="campoformulario" nowrap>Servidor Responsável:</TH>
                 <TD class="campoformulario" colspan="3">

@@ -110,7 +110,8 @@ include_once (caminho_filtros."filtroManterPA.php");
 
 		$retorno.= $this-> getVarComoNumero($vo->cdResponsavel). ",";
 		$retorno.= $this-> getVarComoString($vo->obs). ",";
-		$retorno.= $this-> getDataSQL($vo->dtAbertura). ",";
+		$retorno.= $this-> getVarComoData($vo->dtAbertura). ",";
+		$retorno.= $this-> getVarComoData($vo->dtNotificacao). ",";
 		$retorno.= $this-> getVarComoNumero($vo->situacao);		
 	
 		$retorno.= $vo->getSQLValuesInsertEntidade();
@@ -128,7 +129,12 @@ include_once (caminho_filtros."filtroManterPA.php");
         }
         
         if($vo->dtAbertura != null){
-        	$retorno.= $sqlConector . voPA::$nmAtrDtAbertura . " = " . $this->getDataSQL($vo->dtAbertura);
+        	$retorno.= $sqlConector . voPA::$nmAtrDtAbertura . " = " . $this->getVarComoData($vo->dtAbertura);
+        	$sqlConector = ",";
+        }
+        
+        if($vo->dtNotificacao != null){
+        	$retorno.= $sqlConector . voPA::$nmAtrDtNotificacao . " = " . $this->getVarComoData($vo->dtNotificacao);
         	$sqlConector = ",";
         }
         

@@ -137,7 +137,7 @@ class filtroManterPA extends filtroManter{
 			$filtro = $filtro . $conector
 						. $nmTabelaPessoaContrato. "." .vopessoa::$nmAtrDoc
 						. "='"
-						. $this->doc
+						. documentoPessoa::getNumeroDocSemMascara($this->doc)
 						. "'";
 			
 			$conector  = "\n AND ";

@@ -32,7 +32,7 @@ if($isInclusao){
     $nmFuncao = "ALTERAR ";
 }
 
-$titulo = "PESSOA";
+$titulo = $vo::getTituloJSP();
 $titulo = $nmFuncao . $titulo;
 setCabecalho($titulo);
 

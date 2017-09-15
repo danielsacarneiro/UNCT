@@ -9,9 +9,9 @@ include_once(caminho_filtros . "filtroManterPessoa.php");
 //inicia os parametros
 inicio();
 
-$titulo = "CONSULTAR PESSOAS";
-setCabecalho($titulo);
 $vo = new vopessoa();
+$titulo = "CONSULTAR " . $vo->getTituloJSP();
+setCabecalho($titulo);
 
 $filtro  = new filtroManterPessoa(true);
 $filtro->voPrincipal = $vo;
@@ -97,7 +97,7 @@ function alterar() {
 }
 
 </SCRIPT>
-<?=setTituloPagina(null)?>
+<?=setTituloPagina($titulo)?>
 </HEAD>
 <BODY class="paginadados" onload="">
 	  
