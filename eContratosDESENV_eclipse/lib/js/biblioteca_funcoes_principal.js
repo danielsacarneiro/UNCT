@@ -148,6 +148,8 @@ function tornarRequiredCamposColecaoFormulario(colecaoIDCampos, pIsRequired){
 		id = colecaoIDCampos[i];		
 		element = document.getElementById(id);
 		element.required = pIsRequired;
+		
+		//alert(element.id + " " + pIsRequired);
 	}
 }
 

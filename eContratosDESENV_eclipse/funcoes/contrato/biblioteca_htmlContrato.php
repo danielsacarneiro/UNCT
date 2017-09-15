@@ -16,7 +16,7 @@ function getContratoDet($voContrato) {
 function getColecaoContratoDet($colecao) {
 	$html = "";
 	// var_dump($colecao);
-	
+
 	foreach ( $colecao as $voContrato ) {
 		$html .= getContratoDet ( $voContrato );
 	}
@@ -24,13 +24,13 @@ function getColecaoContratoDet($colecao) {
 }
 function getContratoDetalhamento($voContrato, $colecao) {
 	$vo = new vocontrato ();
-	
+
 	// so exibe contrato se tiver
 	if (isContratoValido ( $voContrato )) {
-		
+
 		$dominioTipoContrato = new dominioTipoContrato ();
 		$contrato = formatarCodigoAnoComplemento ( $voContrato->cdContrato, $voContrato->anoContrato, $dominioTipoContrato->getDescricao ( $voContrato->tipo ) );
-		
+
 		// $voContrato = new vocontrato();
 		$chaveContrato = $voContrato->getValorChaveHTML ();
 		$campoContratado = getCampoContratada ( "", "", $chaveContrato );
@@ -51,7 +51,7 @@ function getContratoDetalhamento($voContrato, $colecao) {
 				}
 			}
 		}
-		
+
 		?>
 <TR>
 	<INPUT type="hidden" id="<?=vocontrato::$nmAtrAnoContrato?>"
@@ -224,7 +224,15 @@ function consultarDadosContratoCompilado($voContrato) {
 function getCampoDadosContratoSimples($nmClass = "camponaoobrigatorio") {
 	return getCampoDadosContratoMultiplosPorIndice ( null, $nmClass );
 }
-function getCampoDadosContratoMultiplos($nmClass = "campoobrigatorio") {
+//function getCampoDadosContratoMultiplos($nmClass = "campoobrigatorio") {
+function getCampoDadosContratoMultiplos($isCampoObrigatorio = true) {	
+	//porque a funcao pode receber tanto um booleano quanto a string do nome da class
+	if($isCampoObrigatorio || $isCampoObrigatorio == constantes::$CD_CLASS_CAMPO_OBRIGATORIO){
+		$nmClass = constantes::$CD_CLASS_CAMPO_OBRIGATORIO;
+	}else{
+		$nmClass = constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO;
+	}
+	
 	$indiceQtdContrato = 1;
 	$html = getCampoDadosContratoMultiplosPorIndice ( $indiceQtdContrato, $nmClass );
 	// $html .= "<INPUT type='hidden' id='". vocontrato::$ID_REQ_QTD_CONTRATOS . "' name='" . vocontrato::$ID_REQ_QTD_CONTRATOS . "' value='".$indiceQtdContrato."'>";
@@ -255,8 +263,8 @@ function getCampoDadosVariosContrato($tipoContrato, $cdContrato, $anoContrato, $
 	$vocontrato->tipo = $tipoContrato;
 	$vocontrato->anoContrato = $anoContrato;
 	$vocontrato->cdContrato = $cdContrato;
-	
-	return getCampoDadosContratoVOPorIndice ( $vocontrato, $indice, false );
+		
+	return getCampoDadosContratoVOPorIndice ( $vocontrato, $indice, false, $nmClass );
 }
 function getCampoDadosContratoVOPorIndice($vocontrato, $indice, $isExibirContratadaSePreenchido, $nmClass = "camponaoobrigatorio", $comChaveCompletaSeNulo = true) {
 	/*
@@ -282,6 +290,10 @@ function getCampoDadosContratoVOPorIndice($vocontrato, $indice, $isExibirContrat
 	if ($nmClass == constantes::$CD_CLASS_CAMPO_OBRIGATORIO) {
 		$required = "required";
 	}
+	
+	//a class sera sempre nao obrigatorio
+	//pois o atributo required eh utilizado para alterar a class do css
+	$nmClass = constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO;
 	
 	$arrayCssClass = array (
 			$nmClass,

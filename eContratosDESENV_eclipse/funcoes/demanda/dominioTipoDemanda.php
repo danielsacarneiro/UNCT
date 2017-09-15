@@ -57,6 +57,15 @@ Class dominioTipoDemanda extends dominio{
 		return $retorno;
 	}
 	
+	static function getColecaoTipoDemandaContratoValidacaoEncaminhar(){
+		$retorno = static::getColecaoTipoDemandaContrato();
+		$retorno = putElementoArray2NoArray1ComChaves ( $retorno, array(self::$CD_TIPO_DEMANDA_PARECER=> self::$DS_TIPO_DEMANDA_PARECER));
+		$retorno = putElementoArray2NoArray1ComChaves ( $retorno, array(self::$CD_TIPO_DEMANDA_JUDICIAL=> self::$DS_TIPO_DEMANDA_JUDICIAL));
+		$retorno = putElementoArray2NoArray1ComChaves ( $retorno, array(self::$CD_TIPO_DEMANDA_A_CLASSIFICAR=> self::$DS_TIPO_DEMANDA_A_CLASSIFICAR));
+	
+		return $retorno;
+	}
+	
 	static function getColecaoTipoDemandaContratoSemProcAdmin(){
 		return array(
 				self::$CD_TIPO_DEMANDA_CONTRATO => self::$DS_TIPO_DEMANDA_CONTRATO,

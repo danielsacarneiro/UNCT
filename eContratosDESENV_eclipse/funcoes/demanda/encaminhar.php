@@ -122,7 +122,7 @@ function formataForm() {
 
 function formataFormContratoPorTpDemanda(pNmCampoTpDemanda, pColecaoNmObjetosFormContrato) {
 	<?php
-			$dominioTipoDemanda = new dominioTipoDemanda(dominioTipoDemanda::getColecaoTipoDemandaContrato());
+			$dominioTipoDemanda = new dominioTipoDemanda(dominioTipoDemanda::getColecaoTipoDemandaContratoValidacaoEncaminhar());
 			echo $dominioTipoDemanda->getArrayHTMLChaves("colecaoTpDemandaContrato");	
 			?>
 	
@@ -262,7 +262,16 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	        ?>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" colspan=3><?php getCampoDadosContratoMultiplos("camponaoobrigatorio");?>	            
+	            <TD class="campoformulario" colspan=3><?php getCampoDadosContratoMultiplos();?>
+	            	            <SCRIPT language="JavaScript" type="text/javascript">
+	            	 //segue com o numero 1 ao fim do id porque o contrato eh definido por indices
+	            	 //para entender, basta olhar o metodo acima getCampoDadosContratoMultiplos
+	            	colecaoIDCamposRequired = ["<?=vocontrato::$nmAtrTipoContrato?>1",
+		            	"<?=vocontrato::$nmAtrCdContrato?>1",
+		            	"<?=vocontrato::$nmAtrAnoContrato?>1"];
+	            </SCRIPT>
+	            <INPUT type="checkbox" id="checkTemContrato" name="checkTemContrato" onClick="validaFormRequiredCheckBox(this, colecaoIDCamposRequired);"> *Não tem contrato.
+	            	            
 	            </TD>
 	        </TR>	        
 			<TR>
