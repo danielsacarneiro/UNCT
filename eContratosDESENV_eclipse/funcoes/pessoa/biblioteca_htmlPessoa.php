@@ -4,6 +4,7 @@ include_once("dominioVinculoPessoa.php");
 include_once(caminho_vos . "dbpessoa.php");
 include_once(caminho_vos . "vogestor.php");
 include_once(caminho_filtros. "filtroManterPessoa.php");
+include_once (caminho_funcoes . "contrato/biblioteca_htmlContrato.php");
 
 function getDadosContratada($chave, $voentidade = null) {
 	$isConsultaPessoaPorDemanda = $voentidade == "vodemanda";
@@ -37,11 +38,14 @@ function getDadosContratada($chave, $voentidade = null) {
 			$vo = new voDemanda ();
 			$vo->getChavePrimariaVOExplodeParam ( $chave );
 			$colecaoContrato = consultarContratosDemanda ( $vo );
+			
+			$vo->getDadosBanco($colecaoContrato[0]);
 				
 			$colecaoContrato = converteRecordSetEmColecaoVOsContrato ( $colecaoContrato );
 				
+			$retorno = "<TR><TD>Título: <INPUT type='text' value='" . $vo->texto . "'  class='camporeadonly' size='70' readonly></TD></TR>"; 
 			// vai na bibliotacontrato
-			$retorno = getColecaoContratoDet ( $colecaoContrato );
+			$retorno = $retorno . getColecaoContratoDet ( $colecaoContrato );
 		}
 	}
 

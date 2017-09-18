@@ -115,6 +115,12 @@ class voDocumento extends voentidade {
 		if ($this->tp != null) {
 			$enderecoTemp = "\\" . dominioTpDocumento::getEnderecoPastaBasePorTpDocumento ( $this->tp );
 			
+			$isDocPA = in_array($this->tp, array_keys(dominioTpDocumento::getColecaoDocsPAAP()));
+			//verifica se eh doc de PA
+			if ($isDocPA){
+				$enderecoPA = dominioTpDocumento::$ENDERECO_PASTA_PA;
+			}
+			
 			// excecao
 			if ($this->tp == dominioTpDocumento::$CD_TP_DOC_APOSTILAMENTO) {
 				$retorno .= "\\ANO $this->ano" . $enderecoTemp;
@@ -122,7 +128,7 @@ class voDocumento extends voentidade {
 			} else {
 				// regra geral
 				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_DOCUMENTOS;
-				$retorno .= $enderecoTemp;
+				$retorno .= $enderecoPA . $enderecoTemp;
 				$retorno .= $enderecoTemp . " $this->ano\\";
 			}
 			

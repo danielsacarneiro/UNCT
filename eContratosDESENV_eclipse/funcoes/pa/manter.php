@@ -132,6 +132,7 @@ function carregaDadosContratada(){
 			
 	        }else{
 	            $selectExercicio = new selectExercicio();
+	            $vo->dtAbertura = dtHojeSQL;
 			  ?>			            
 			<TR>
 		        <TH class="campoformulario" nowrap width="1%">P.A.D.:</TH>
@@ -197,6 +198,11 @@ function carregaDadosContratada(){
 	            			class="camponaoobrigatorio" 
 	            			size="10" 
 	            			maxlength="10" required>
+	            			
+	            <SCRIPT language="JavaScript" type="text/javascript">
+	            	colecaoIDCamposRequired = ["<?=voPA::$nmAtrDtNotificacao?>"];
+	            </SCRIPT>
+	            <INPUT type="checkbox" id="checkResponsabilidade" name="checkResponsabilidade" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCamposRequired);"> *Assumo a responsabilidade de não incluir os valores obrigatórios.	            			
 				</TD>
         	</TR>
     

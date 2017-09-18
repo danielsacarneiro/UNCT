@@ -114,11 +114,6 @@ function confirmar() {
 	            echo $comboPrioridade->getHtmlCombo(voDemanda::$nmAtrPrioridade,voDemanda::$nmAtrPrioridade, $vo->prioridade, true, "camporeadonly", false, " disabled ");?>
 				</TD>				
 	        </TR>
-	        <TR>
-	            <TH class="campoformulario" nowrap width="1%">Título:</TH>
-	            <TD class="campoformulario" colspan=3>				
-	            <INPUT type="text" value="<?=$vo->texto?>"  class="camporeadonly" size="80" readonly>	            	                        	                        
-	        </TR>	        	        
 	        <?php
  	        require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
  	       // var_dump($vo->colecaoContrato);

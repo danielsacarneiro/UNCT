@@ -47,14 +47,21 @@ class voPA extends voentidade {
 	public static function getNmClassProcesso() {
 		return "dbPA";
 	}
+	
 	function getValoresWhereSQLChave($isHistorico) {
 		$nmTabela = $this->getNmTabelaEntidade ( $isHistorico );
-		$query = $nmTabela . "." . self::$nmAtrAnoPA . "=" . $this->anoPA;
+		$query = $this->getValoresWhereSQLChaveLogicaSemSQ ( $isHistorico );
 		$query .= " AND " . $nmTabela . "." . self::$nmAtrCdPA . "=" . $this->cdPA;
-		
+	
 		if ($isHistorico)
 			$query .= " AND " . $nmTabela . "." . self::$nmAtrSqHist . "=" . $this->sqHist;
-		
+	
+			return $query;
+	}
+	function getValoresWhereSQLChaveLogicaSemSQ($isHistorico) {
+		$nmTabela = $this->getNmTabelaEntidade ( $isHistorico );		
+		$query = $nmTabela . "." . self::$nmAtrAnoPA . "=" . $this->anoPA;
+			
 		return $query;
 	}
 	

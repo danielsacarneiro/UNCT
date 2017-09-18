@@ -10,11 +10,21 @@ function getDemandaDetalhamento($voDemanda, $exibeTipoDemanda = true, $colspan=n
 	<TD class="campoformulario" colspan=<?=$colspan?>>
 	<?php	
 	echo getDetalhamentoHTMLCodigoAno($voDemanda->ano, $voDemanda->cd); 
-	if($voDemanda->tipo != null && $exibeTipoDemanda){
-		$comboTipo = new select(dominioTipoDemanda::getColecao());
-		echo "Tipo: " . $comboTipo->getHtmlCombo("","", $voDemanda->tipo, true, "camporeadonly", false, " disabled ");
-		echo "<INPUT type='hidden' id='" . voDemanda::$nmAtrTipo . "' name='" . voDemanda::$nmAtrTipo . "' value='$voDemanda->tipo'>";
-	}					
+	
+	if($exibeTipoDemanda){
+		if($voDemanda->tipo != null && $exibeTipoDemanda){
+			$comboTipo = new select(dominioTipoDemanda::getColecao());
+			echo "Tipo: " . $comboTipo->getHtmlCombo("","", $voDemanda->tipo, true, "camporeadonly", false, " disabled ");
+			echo "<INPUT type='hidden' id='" . voDemanda::$nmAtrTipo . "' name='" . voDemanda::$nmAtrTipo . "' value='$voDemanda->tipo'>";
+		}
+		//$voDemanda = new voDemanda();
+		if($voDemanda->texto != null){
+		?>
+          <br>Título: <INPUT type="text" value="<?=$voDemanda->texto?>"  class="camporeadonly" size="70" readonly>		
+		<?php
+		}	
+	}
+
 	?>		            
 		<INPUT type="hidden" id="<?=voDemanda::$nmAtrAno?>" name="<?=voDemanda::$nmAtrAno?>" value="<?=$voDemanda->ano?>">
 		<INPUT type="hidden" id="<?=voDemanda::$nmAtrCd?>" name="<?=voDemanda::$nmAtrCd?>" value="<?=$voDemanda->cd?>">		
@@ -137,7 +147,7 @@ function mostrarGridDemanda($colecaoTramitacao, $isDetalhamento) {
 	echo $html;
 }
 
-function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento) {
+function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDadosDemanda = true) {
 	// var_dump($colecaoTramitacao);
 
 	if (is_array ( $colecaoTramitacao )) {
@@ -150,6 +160,9 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento) {
 	if ($tamanho > 0) {
 
 		$numColunas = 9;
+		if($comDadosDemanda){
+			$numColunas --;
+		}
 
 		$html .= "<TR>\n";
 		$html .= "<TH class='textoseparadorgrupocampos' halign='left' colspan='4'>\n";
@@ -165,7 +178,9 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento) {
 		$html .= "<TH class='headertabeladados' width='1%'>Ano</TH>   \n";
 		$html .= "<TH class='headertabeladados' width='1%'>Dem.</TH> \n";
 		$html .= "<TH class='headertabeladados' width='1%'>Tram.</TH> \n";
-		$html .= "<TH class='headertabeladados' width='20%'>Título</TH> \n";
+		if($comDadosDemanda){
+			$html .= "<TH class='headertabeladados' width='20%'>Título</TH> \n";
+		}
 		$html .= "<TH class='headertabeladados' width='30%'>Texto</TH> \n";
 		$html .= "<TH class='headertabeladados' width='1%' nowrap>Anexo</TH> \n";
 		$html .= "<TH class='headertabeladados' width='1%' nowrap>Usuário</TH> \n";
@@ -194,7 +209,9 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento) {
 				$html .= "<TD class='tabeladados' nowrap>" . $voAtual->ano . "</TD> \n";
 				$html .= "<TD class='tabeladados' nowrap>" . complementarCharAEsquerda ( $voAtual->cd, "0", TAMANHO_CODIGOS ) . "</TD> \n";
 				$html .= "<TD class='tabeladados' nowrap>" . complementarCharAEsquerda ( $voAtual->sq, "0", TAMANHO_CODIGOS ) . "</TD> \n";
-				$html .= "<TD class='tabeladados'>" .  $voAtual->texto . "</TD> \n";
+				if($comDadosDemanda){
+					$html .= "<TD class='tabeladados'>" .  $voAtual->texto . "</TD> \n";
+				}
 				$html .= "<TD class='tabeladados' >" . $voAtual->textoTram . "</TD> \n";
 				
 				$html .= getHtmlDocumento($voAtual, true);

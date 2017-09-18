@@ -158,7 +158,7 @@ function confirmar() {
 				
 				$dbcontrato = new dbcontratoinfo();
 				$colecaoTramitacao = $dbcontrato->consultarDemandaTramitacaoContrato($filtroTramitacaoContrato);
-				mostrarGridDemandaContrato($colecaoTramitacao, true);
+				mostrarGridDemandaContrato($colecaoTramitacao, true, false);
 				?>	 
 <TR>
 	<TD halign="left" colspan="4">

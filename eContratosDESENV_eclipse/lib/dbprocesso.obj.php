@@ -13,7 +13,7 @@ class dbprocesso {
 	static $nmTabelaUsuarioInclusao = "TAB_USU_INCLUSAO";
 	static $nmTabelaUsuarioUltAlteracao = "TAB_USU_ULT_ALTERACAO";
 	static $nmTabelaUsuarioOperacao = "TAB_USU_OPERACAO";
-
+	
 	// ...............................................................
 	// construtor
 	function __construct() {
@@ -30,9 +30,9 @@ class dbprocesso {
 		 * 3 - o usuario da operacao id_user logado que fez a operacao
 		 */
 		$tabelaHistorico = $voEntidade->getNmTabelaEntidade ( true );
-
+		
 		$novoSeq = " SELECT MAX(" . voentidade::$nmAtrSqHist . ")+1 FROM " . $tabelaHistorico;
-
+		
 		$query = "INSERT INTO " . $tabelaHistorico;
 		$query .= " SELECT ($novoSeq),";
 		$query .= $voEntidade->getNmTabela () . ".*,";
@@ -41,9 +41,9 @@ class dbprocesso {
 		$query .= " FROM " . $voEntidade->getNmTabela ();
 		$query .= " WHERE ";
 		$query .= $voEntidade->getValoresWhereSQLChave ( false );
-
+		
 		// echo $query;
-
+		
 		$retorno = $this->cDb->atualizar ( $query );
 		return $retorno;
 	}
@@ -51,22 +51,22 @@ class dbprocesso {
 		$query = "SELECT " . voentidade::$nmAtrDhUltAlteracao . " FROM " . $voEntidade->getNmTabela ();
 		$query .= " WHERE ";
 		$query .= $voEntidade->getValoresWhereSQLChave ( false );
-
+		
 		// echo $query;
 		$registro = $this->consultarEntidade ( $query, true );
 		$dhValidacao = $registro [0] [voentidade::$nmAtrDhUltAlteracao];
-
+		
 		if ($dhValidacao != $voEntidade->dhUltAlteracao) {
 			$msg = "Registro desatualizado.";
 			$msg .= "<br>data banco: " . $dhValidacao;
 			$msg .= "<br>data registro: " . $voEntidade->dhUltAlteracao;
-				
+			
 			throw new Exception ( $msg );
 		}
-
+		
 		return $registro [0];
 	}
-
+	
 	// acrescenta os dados dos usuarios guardados na tabela
 	function getQueryNmUsuarioTabelaAComparar($vo, $nmTabelaACompararCdUsuario, $queryJoin, $isHistorico) {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
@@ -74,9 +74,9 @@ class dbprocesso {
 		$temUsuInclusao = existeItemNoArray ( voentidade::$nmAtrCdUsuarioInclusao, $vo->getTodosAtributos () );
 		$temUsuUltAlteracao = existeItemNoArray ( voentidade::$nmAtrCdUsuarioUltAlteracao, $vo->getTodosAtributos () );
 		$temUsuHistorico = $vo->temTabHistorico && $isHistorico;
-
+		
 		// var_dump($vo->getTodosAtributos ());
-
+		
 		/*
 		 * if($temUsuHistorico){
 		 * echo "tem usu ";
@@ -94,9 +94,9 @@ class dbprocesso {
 		if ($temUsuHistorico) {
 			$query .= ", " . self::$nmTabelaUsuarioOperacao . "." . vousuario::$nmAtrName . " AS " . voentidade::$nmAtrNmUsuarioOperacao;
 		}
-
+		
 		$query .= $this->getQueryFrom_NmUsuarioTabelaAComparar ( $vo, $nmTabelaACompararCdUsuario, $queryJoin, $isHistorico );
-
+		
 		return $query;
 	}
 	function getQueryFrom_NmUsuarioTabelaAComparar($vo, $nmTabelaACompararCdUsuario, $queryJoin, $isHistorico) {
@@ -105,43 +105,43 @@ class dbprocesso {
 		$temUsuInclusao = existeItemNoArray ( voentidade::$nmAtrCdUsuarioInclusao, $vo->getTodosAtributos () );
 		$temUsuUltAlteracao = existeItemNoArray ( voentidade::$nmAtrCdUsuarioUltAlteracao, $vo->getTodosAtributos () );
 		$temUsuHistorico = $vo->temTabHistorico && $isHistorico;
-
+		
 		$queryFrom = "";
 		$queryFrom .= "\n FROM " . $nmTabela;
 		$queryFrom .= $queryJoin;
-
+		
 		if ($temUsuInclusao) {
 			$queryFrom .= "\n LEFT JOIN " . vousuario::$nmEntidade;
 			$queryFrom .= "\n " . self::$nmTabelaUsuarioInclusao . " ON ";
 			$queryFrom .= self::$nmTabelaUsuarioInclusao . "." . vousuario::$nmAtrID . "=" . $nmTabelaACompararCdUsuario . "." . voentidade::$nmAtrCdUsuarioInclusao;
 		}
-
+		
 		if ($temUsuUltAlteracao) {
 			$queryFrom .= "\n LEFT JOIN " . vousuario::$nmEntidade;
 			$queryFrom .= "\n " . self::$nmTabelaUsuarioUltAlteracao . " ON ";
 			$queryFrom .= self::$nmTabelaUsuarioUltAlteracao . "." . vousuario::$nmAtrID . "=" . $nmTabelaACompararCdUsuario . "." . voentidade::$nmAtrCdUsuarioUltAlteracao;
 		}
-
+		
 		if ($temUsuHistorico) {
 			$queryFrom .= "\n LEFT JOIN " . vousuario::$nmEntidade;
 			$queryFrom .= "\n " . self::$nmTabelaUsuarioOperacao . " ON ";
 			$queryFrom .= self::$nmTabelaUsuarioOperacao . "." . vousuario::$nmAtrID . "=" . $nmTabelaACompararCdUsuario . "." . voentidade::$nmAtrCdUsuarioOperacao;
 		}
-
+		
 		return $queryFrom;
 	}
-	function consultarPorChaveVO($vo, $isHistorico) {		
-		$registrobanco = $this->consultarPorChave($vo, $isHistorico);
-		$vo->getDadosBanco($registrobanco);
+	function consultarPorChaveVO($vo, $isHistorico) {
+		$registrobanco = $this->consultarPorChave ( $vo, $isHistorico );
+		$vo->getDadosBanco ( $registrobanco );
 		
 		return $vo;
 	}
 	function consultarPorChave($vo, $isHistorico) {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
 		$arrayColunasRetornadas = array (
-				$nmTabela . ".*"
+				$nmTabela . ".*" 
 		);
-
+		
 		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, "", $isHistorico );
 	}
 	function consultarPorChaveMontandoQuery($vo, $arrayColunasRetornadas, $queryJoin, $isHistorico, $isConsultaPorChave = true) {
@@ -155,17 +155,17 @@ class dbprocesso {
 	}
 	function consultarMontandoQueryTelaConsulta($vo, $filtro, $arrayColunasRetornadas, $queryJoin) {
 		$nmTabelaACompararCdUsuario = $vo->getNmTabelaEntidade ( $filtro->isHistorico );
-		//$retorno = $this->consultarMontandoQueryUsuarioFiltro ( $vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $filtro, false, $filtro->isValidarConsulta );
-		$retorno = $this->consultarMontandoQueryUsuarioFiltro ( $vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $filtro, false);
+		// $retorno = $this->consultarMontandoQueryUsuarioFiltro ( $vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $filtro, false, $filtro->isValidarConsulta );
+		$retorno = $this->consultarMontandoQueryUsuarioFiltro ( $vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $filtro, false );
 		return $retorno;
 	}
 	function consultarMontandoQueryUsuario($vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico, $isConsultaPorChave) {
 		$atributos = getSQLStringFormatadaColecaoIN ( $arrayColunasRetornadas, false );
 		$query = "SELECT " . $atributos;
 		$query .= $this->getQueryNmUsuarioTabelaAComparar ( $vo, $nmTabelaACompararCdUsuario, $queryJoin, $isHistorico );
-
+		
 		$query .= $queryWhere;
-
+		
 		// echo $query;
 		$retorno = $this->consultarEntidade ( $query, $isConsultaPorChave );
 		if ($retorno != "" && $isConsultaPorChave) {
@@ -173,23 +173,23 @@ class dbprocesso {
 		}
 		return $retorno;
 	}
-
+	
 	/**
 	 * removido ultimo parametro
-	 * */
+	 */
 	// function consultarMontandoQueryUsuarioFiltro($vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $filtro, $isConsultaPorChave, $validaConsulta) {
 	function consultarMontandoQueryUsuarioFiltro($vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $filtro, $isConsultaPorChave) {
 		$isHistorico = $filtro->isHistorico;
 		$atributos = getSQLStringFormatadaColecaoIN ( $arrayColunasRetornadas, false );
 		$querySelect = "SELECT " . $atributos;
-
+		
 		$queryFrom = $this->getQueryFrom_NmUsuarioTabelaAComparar ( $vo, $nmTabelaACompararCdUsuario, $queryJoin, $isHistorico );
-
+		
 		$retorno = $this->consultarFiltro ( $filtro, $querySelect, $queryFrom, $filtro->isValidarConsulta );
 		if ($retorno != "" && $isConsultaPorChave) {
 			$retorno = $retorno [0];
 		}
-
+		
 		return $retorno;
 	}
 	function consultarEntidade($query, $isPorChavePrimaria) {
@@ -199,55 +199,55 @@ class dbprocesso {
 		// echo $query;
 		$query = str_replace ( constantes::$CD_NOVA_LINHA, "", $query );
 		$retorno = $this->cDb->consultar ( $query );
-
+		
 		if ($isPorChavePrimaria) {
 			$tamanho = sizeof ( $retorno );
-				
+			
 			if ($retorno == "")
 				throw new excecaoChaveRegistroInexistente ();
-					
-				if ($tamanho > 1)
-					throw new excecaoMaisDeUmRegistroRetornado ();
+			
+			if ($tamanho > 1)
+				throw new excecaoMaisDeUmRegistroRetornado ();
 		}
-
+		
 		if ($levantarExcecaoSeConsultaVazia && $retorno == "") {
 			throw new excecaoConsultaVazia ();
 		}
-
+		
 		// var_dump($retorno);
-
+		
 		// throw new excecaoGenerica("QUALQUER COPISA");
-
+		
 		return $retorno;
 	}
 	function atualizarEntidade($query) {
 		// echo $query;
 		$retorno = $this->cDb->atualizar ( $query );
-
+		
 		return $retorno;
 	}
 	function getEntidadePorChavePrimariaComValoresDiversosEmColunas($recordset, $colecaoAtr) {
 		$retorno = null;
 		if (! isColecaoVazia ( $recordset ) && ! isColecaoVazia ( $colecaoAtr )) {
-				
+			
 			$tamanho = count ( $colecaoAtr );
 			$retorno = $recordset [0];
-				
+			
 			for($i = 0; $i < $tamanho; $i ++) {
 				$nmColuna = $colecaoAtr [$i];
 				$retorno [$nmColuna] = getColunaEmLinha ( $recordset, $nmColuna, CAMPO_SEPARADOR );
 			}
 		}
-
+		
 		return $retorno;
 	}
 	function consultarComPaginacao($voentidade, $filtro) {
 		$isHistorico = ("S" == $filtro->cdHistorico);
 		$nmTabela = $voentidade->getNmTabelaEntidade ( $isHistorico );
-
+		
 		$querySelect = "SELECT * ";
 		$queryFrom = " FROM " . $nmTabela;
-
+		
 		return $this->consultarComPaginacaoQuery ( $voentidade, $filtro, $querySelect, $queryFrom );
 	}
 	function consultarComPaginacaoQuery($voentidade, $filtro, $querySelect, $queryFrom) {
@@ -262,64 +262,64 @@ class dbprocesso {
 	function consultarFiltro($filtro, $querySelect, $queryFrom, $validaConsulta) {
 		$retorno = "";
 		$isHistorico = ("S" == $filtro->cdHistorico);
-
+		
 		// flag que diz se pode consultar ou nao
 		$consultar = @$_GET ["consultar"];
-
+		
 		if ($consultar == "S" || ! $validaConsulta) {
-				
+			
 			// removeObjetoSessao($filtro->nmFiltro);
-				
+			
 			$filtroSQL = $filtro->getSQLWhere ( true );
 			// echo $filtroSQL. "<br>";
-				
+			
 			// para os casos em que o filtro passa conter o sql de consulta internamente
 			if ($filtro->temQueryPadrao ()) {
 				$queryFrom = $filtro->getQueryFromJoin ();
 			}
-				
+			
 			// verifica se tem paginacao
 			$limite = "";
 			if ($filtro->TemPaginacao) {
 				// ECHO "TEM PAGINACAO";
 				$pagina = $filtro->paginacao->getPaginaAtual ();
-
+				
 				$filtroSQLPaginacao = $filtro->getSQLWhere ( false );
 				// echo $filtroSQLPaginacao. "<br>";
 				$queryCount = "SELECT count(*) as " . dbprocesso::$nmCampoCount;
 				$queryCount .= "\n FROM (SELECT 'X' " . $queryFrom . $filtroSQLPaginacao . ") ALIAS_COUNT";
-
+				
 				// guarda o numero total de registros para nao ter que executar a consulta TODOS novamente
 				$numTotalRegistros = $filtro->numTotalRegistros = $this->getNumTotalRegistrosQuery ( $queryCount );
-
+				
 				$qtdRegistrosPorPag = $filtro->qtdRegistrosPorPag;
-
+				
 				// echo $qtdRegistrosPorPag;
 				if ($qtdRegistrosPorPag != null && $qtdRegistrosPorPag != constantes::$CD_OPCAO_TODOS) {
 					// calcula o número de páginas arredondando o resultado para cima
 					$numPaginas = ceil ( $numTotalRegistros / $qtdRegistrosPorPag );
 					$filtro->paginacao->setNumTotalPaginas ( $numPaginas );
-						
+					
 					$inicio = ($qtdRegistrosPorPag * $pagina) - $qtdRegistrosPorPag;
 					$limite = " LIMIT $inicio,$qtdRegistrosPorPag";
 				}
 			}
-				
+			
 			// aqui eh onde faz realmente a consulta a retornar
 			$query = $querySelect . $queryFrom . " $filtroSQL ";
 			$query = $query . " $limite";
-				
+			
 			// echo $filtroSQL;
 			// echo "$queryCount<br>";
 			// echo "$query<br>";
-				
+			
 			// removeObjetoSessao($voentidade->getNmTabela());
-				
+			
 			$retorno = $this->cDb->consultar ( $query );
 		}
-
+		
 		// echo $filtro->toString();
-
+		
 		return $retorno;
 	}
 	function getNumTotalRegistrosQuery($query) {
@@ -327,13 +327,13 @@ class dbprocesso {
 		// echo $queryCount;
 		$retorno = $this->cDb->consultar ( $queryCount );
 		$numTotalRegistros = 0;
-
+		
 		if ($retorno != "") {
 			$numTotalRegistros = $retorno [0] [dbprocesso::$nmCampoCount];
 		}
 		return $numTotalRegistros;
 	}
-
+	
 	// metodo mais simples de inclusao
 	// havendo complexidade, cada class implementa o seu
 	function incluirSQL($vo) {
@@ -355,15 +355,15 @@ class dbprocesso {
 		// var_dump ($atributosInsert);
 		// echo "<br>";
 		// var_dump($arrayAtribRemover);
-
+		
 		$atributosInsert = removeColecaoAtributos ( $atributosInsert, $arrayAtribRemover );
 		// var_dump ($atributosInsert);
 		// echo "<br>";
-
+		
 		$atributosInsert = getColecaoEntreSeparador ( $atributosInsert, "," );
-
+		
 		// echo "<br>$atributosInsert";
-
+		
 		$query = " INSERT INTO " . $voEntidade->getNmTabela () . " \n";
 		$query .= " (";
 		$query .= $atributosInsert;
@@ -372,9 +372,9 @@ class dbprocesso {
 		// o metodo abaixo eh implementado para cada classe filha
 		$query .= $this->getSQLValuesInsert ( $voEntidade );
 		$query .= ")";
-
+		
 		// echo $query;
-
+		
 		return $query;
 	}
 	function validaExclusaoHistorico($voEntidade) {
@@ -386,7 +386,7 @@ class dbprocesso {
 		$voSessao = getObjetoSessao ( $voEntidade->getNmTabela (), true );
 		$isOperacaoHistoricoSelecionadaPeloUsuario = $voSessao->isHistorico ();
 		$isOperacaoHistoricoARealizar = $voEntidade->isHistorico ();
-
+		
 		if ($isOperacaoHistoricoSelecionadaPeloUsuario && ! $isOperacaoHistoricoARealizar) {
 			throw new excecaoGenerica ( "Operação com registro de histórico não pode ser realizada por ausência do SQ Histórico." );
 		}
@@ -397,7 +397,7 @@ class dbprocesso {
 		try {
 			// echo $voEntidade->sqHist;
 			$this->validaExclusaoHistorico ( $voEntidade );
-				
+			
 			$isExcluirHistorico = $voEntidade->isHistorico ();
 			if ($isExcluirHistorico) {
 				// echo "EH HISTORICO";
@@ -417,7 +417,7 @@ class dbprocesso {
 			$this->cDb->rollback ();
 			throw new Exception ( $e->getMessage () );
 		}
-
+		
 		return $retorno;
 	}
 	function desativarOuExcluirPrincipal($voEntidade) {
@@ -437,13 +437,13 @@ class dbprocesso {
 		if (! temPermissaoParamHistorico ( true )) {
 			throw new Exception ( "Usuário não tem permissão para exclusão de histórico." );
 		}
-
+		
 		// sempre exclui o historico em questao
 		$query = $this->excluirSQLRegistroHistorico ( $voEntidade );
-
+		
 		// se implementar historico, verifica se exclui o principal tambem
 		// o principal pode nao ser excluido se existirem outros historicos
-
+		
 		// echo "entrou temhistorico";
 		// se eh o registro de historico, deve verificar se pode excluir o registro desativado na tabela principal
 		// so pode excluir o registro principal se eh o ultimo historico e nao ha outro registro ativo
@@ -453,7 +453,7 @@ class dbprocesso {
 			// exclui o registro desativado na tabela principal
 			$query = $this->excluirHistoricoEPrincipalSQL ( $voEntidade );
 		}
-
+		
 		// echo $query;
 		$retorno = $this->cDb->atualizar ( $query );
 		return $retorno;
@@ -465,14 +465,14 @@ class dbprocesso {
 	}
 	function excluirDesativandoSQL($voEntidade) {
 		$nmTabela = $voEntidade->getNmTabelaEntidade ( false );
-
+		
 		$query = " UPDATE " . $nmTabela . " \n";
 		$query .= " SET " . voentidade::$nmAtrInDesativado . " = 'S' ";
 		$query .= ", " . voentidade::$nmAtrDhUltAlteracao . " = now() ";
 		$query .= "\n WHERE ";
 		// chave primaria
 		$query .= $voEntidade->getValoresWhereSQLChave ( $isHistorico );
-
+		
 		// echo $query;
 		return $query;
 	}
@@ -494,19 +494,19 @@ class dbprocesso {
 	}
 	function excluirSQL($voEntidade, $isHistorico) {
 		$nmTabela = $voEntidade->getNmTabelaEntidade ( $isHistorico );
-
+		
 		$query = " DELETE FROM " . $nmTabela . " \n";
 		$query .= "\n WHERE ";
 		// chave primaria
 		$query .= $voEntidade->getValoresWhereSQLChave ( $isHistorico );
-
+		
 		// echo $query . "<br>";
 		return $query;
 	}
 	function excluirHistoricoEPrincipalSQL($voEntidade) {
 		$nmTabela = $voEntidade->getNmTabelaEntidade ( false );
 		$nmTabelaHist = $voEntidade->getNmTabelaEntidade ( true );
-
+		
 		$query = " DELETE FROM ";
 		$query .= "$nmTabela,$nmTabelaHist";
 		$query .= " USING ";
@@ -517,9 +517,9 @@ class dbprocesso {
 		$query .= " AND $nmTabela." . voentidade::$nmAtrInDesativado . " = '" . constantes::$CD_SIM . "'";
 		$query .= " AND ";
 		$query .= $voEntidade->getValoresWhereSQLChave ( true );
-
+		
 		// DELETE FROM `teste`, `teste2` USING `teste`, `teste2` WHERE `teste`.`id` = 10 AND `teste2`.`id` = 10
-
+		
 		// echo $query . "<br>";
 		return $query;
 	}
@@ -530,20 +530,20 @@ class dbprocesso {
 		$query .= "\n WHERE ";
 		// chave primaria
 		// $query.= vogestorpessoa::$nmAtrSqContrato . " = " . $voContrato->sq;
-
+		
 		$query .= $voEntidade->getValoresWhereSQLChave ( false );
 		// echo $query;
-
+		
 		return $query;
 	}
 	function alterar($voEntidade) {
 		$temTabHistorico = $voEntidade->temTabHistorico;
 		if (! $temTabHistorico)
 			$retorno = $this->alterarPorCima ( $voEntidade );
-			else
-				$retorno = $this->alterarHistoriando ( $voEntidade );
-
-				return $retorno;
+		else
+			$retorno = $this->alterarHistoriando ( $voEntidade );
+		
+		return $retorno;
 	}
 	function alterarPorCima($voEntidade) {
 		$query = $this->alterarSQL ( $voEntidade );
@@ -557,7 +557,7 @@ class dbprocesso {
 		try {
 			$this->validaAlteracao ( $voEntidade );
 			$this->incluirHistorico ( $voEntidade );
-				
+			
 			// altera o registro sendo este o mais vigente
 			$this->alterarPorCima ( $voEntidade );
 			// End transaction
@@ -566,35 +566,35 @@ class dbprocesso {
 			$this->cDb->rollback ();
 			throw new Exception ( $e->getMessage () );
 		}
-
+		
 		return $retorno;
 	}
 	function getSQLSequencialPorTabela($nmColunaSq, $voEntidade, $isHistorico) {
 		$nmTabela = $voEntidade->getNmTabelaEntidade ( $isHistorico );
-
+		
 		$arrayAtribRemover = array (
-				$nmColunaSq
+				$nmColunaSq 
 		);
 		$arrayColunasChaveSemSq = removeColecaoAtributos ( $voEntidade->getAtributosChavePrimaria (), $arrayAtribRemover );
-
+		
 		$query = " SELECT MAX($nmColunaSq) AS $nmColunaSq FROM $nmTabela ";
 		$query .= " WHERE ";
 		$query .= $voEntidade->getValoresWhereSQLChaveLogicaSemSQ ( $isHistorico );
 		$query .= "\n GROUP BY " . getSQLStringFormatadaColecaoIN ( $arrayColunasChaveSemSq, false );
-
+		
 		return $query;
 	}
 	function getProximoSequencial($nmColuna, $voEntidade) {
 		$query = " SELECT MAX(" . $nmColuna . ")+1 AS " . $nmColuna . " FROM " . $voEntidade->getNmTabela () . " ";
 		// echo $query;
 		$registro = $this->consultarEntidade ( $query, false );
-
+		
 		$retorno = $registro [0] [$nmColuna];
-
+		
 		if ($retorno == null) {
 			$retorno = 1;
 		}
-
+		
 		return $retorno;
 	}
 	function getProximoSequencialChaveComposta($nmColunaSq, $voEntidade) {
@@ -602,7 +602,7 @@ class dbprocesso {
 		// a consulta no historico existia para os casos de relacionamento, quando a exclusao do registro principal causava a perda dos relacionamentos
 		// isto porque a implementacao do desativado obriga a existencia de um registro na tabela principal
 		// se nao houver, eh porque o registro desativado tambem foi excluido, e o seu numero pode ser reutilizado
-
+		
 		// porem, nao ha problemas em deixar como esta, apenas por mais seguranca
 		$query = " SELECT COALESCE(MAX(" . $nmColunaSq . "),0)+1 AS " . $nmColunaSq . " FROM ";
 		$query .= "(";
@@ -612,18 +612,18 @@ class dbprocesso {
 			$query .= $this->getSQLSequencialPorTabela ( $nmColunaSq, $voEntidade, true );
 		}
 		$query .= ") TAB_SQ";
-
+		
 		// echo $query;
 		$registro = $this->consultarEntidade ( $query, false );
-
+		
 		if ($registro != "")
 			$retorno = $registro [0] [$nmColunaSq];
-			else
-				$retorno = 1;
-
-				// echo $retorno;
-
-				return $retorno;
+		else
+			$retorno = 1;
+			
+			// echo $retorno;
+		
+		return $retorno;
 	}
 	function existeRegistroVigente($vo) {
 		$retorno = true;
@@ -645,7 +645,7 @@ class dbprocesso {
 		$nmTabela = $vo->getNmTabelaEntidade ( false );
 		$nmTabelaHistorico = $vo->getNmTabelaEntidade ( true );
 		$arrayColunasRetornadas = $vo->getAtributosChavePrimaria ();
-
+		
 		$querySelect .= "SELECT ";
 		$querySelect .= getSQLStringFormatadaColecaoIN ( $arrayColunasRetornadas, false );
 		$querySelect .= ", null  AS " . voentidade::$nmAtrSqHist;
@@ -654,43 +654,43 @@ class dbprocesso {
 		$querySelect .= " WHERE ";
 		$querySelect .= $vo->getValoresWhereSQLChave ( false );
 		$querySelect .= " AND $nmTabela." . voentidade::$nmAtrInDesativado . " = '" . constantes::$CD_SIM . "'";
-
+		
 		// acrescenta o atributo de historico pra trazer no union
 		$arrayColunasRetornadas [] = voentidade::$nmAtrSqHist;
-
+		
 		$querySelect .= "\n\n UNION \n\n SELECT ";
 		$querySelect .= getSQLStringFormatadaColecaoIN ( $arrayColunasRetornadas, false );
 		$querySelect .= ", 0  AS " . voentidade::$nmAtrTemDesativado;
 		$querySelect .= " FROM " . $nmTabelaHistorico;
 		$querySelect .= " WHERE ";
 		$querySelect .= $vo->getValoresWhereSQLChaveSemNomeTabela ( false );
-
-		//echo "<br>" . $querySelect;
+		
+		// echo "<br>" . $querySelect;
 		$temDesativado = false;
 		try {
 			$colecao = $this->consultarEntidadeComValidacao ( $querySelect, false, true );
-				
-			foreach ($colecao as $registro){
-				if($registro[voentidade::$nmAtrTemDesativado] == 1){
+			
+			foreach ( $colecao as $registro ) {
+				if ($registro [voentidade::$nmAtrTemDesativado] == 1) {
 					$temDesativado = true;
 					break;
 				}
 			}
-			$countColecao= count ( $colecao );
+			$countColecao = count ( $colecao );
 		} catch ( excecaoConsultaVazia $ex ) {
-			//throw new excecaoGenerica ( "Erro ao excluir histórico. Inexiste histórico a ser excluído." );
-			$countColecao= 0;
+			// throw new excecaoGenerica ( "Erro ao excluir histórico. Inexiste histórico a ser excluído." );
+			$countColecao = 0;
 		}
 		// se consulta vazia levanta excecao
-
+		
 		// se a qtd de registro for igual a 2, eh o proprio registro consultado, temos o registro de historico + o registro desativado
 		// eh essa situacao que permite a exclusao do principal quando a desativacao eh implementada
 		$retorno = ($vo->isHistorico () && $countColecao == 2 && $temDesativado);
-
+		
 		// echo "<br> valor retorno booleano:". $retorno;
 		return $retorno;
 	}
-
+	
 	// ---------------------------------
 	function limpaResultado() {
 		$this->cDb->limpaResultado ();
@@ -698,7 +698,7 @@ class dbprocesso {
 	Function finalizar() {
 		$this->cDb->fecharConexao ();
 	}
-
+	
 	/**
 	 * FUNCOES MANIPULACAO
 	 * pega na bibliotecaSQL
@@ -711,7 +711,7 @@ class dbprocesso {
 			// pega o metodo na bibliotecaSQL.php
 			$retorno = $nmMetodo ( $param );
 		}
-
+		
 		return $retorno;
 	}
 	function getVarComoString($param) {
@@ -730,7 +730,7 @@ class dbprocesso {
 		// return getDecimalSQL ( $param );
 		return $this->getValorAtributo ( $param, "getDecimalSQL" );
 	}
-
+	
 	/*
 	 * function getVarComoString($param) {
 	 * return getVarComoString ( $param );
@@ -748,23 +748,23 @@ class dbprocesso {
 	 * return getDecimalSQL ( $param );
 	 * }
 	 */
-
+	
 	/**
 	 *
 	 * @deprecated
 	 *
-	 * @param unknown $param
+	 * @param unknown $param        	
 	 * @return string
 	 */
 	function getDataSQL($param) {
 		return getVarComoDataSQL ( $param );
 	}
-
+	
 	/**
 	 *
 	 * @deprecated
 	 *
-	 * @param unknown $param
+	 * @param unknown $param        	
 	 * @return string|mixed
 	 */
 	function getDecimalSQL($param) {

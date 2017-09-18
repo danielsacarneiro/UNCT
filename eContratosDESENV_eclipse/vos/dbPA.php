@@ -24,7 +24,8 @@ include_once (caminho_filtros."filtroManterPA.php");
   				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato,
   				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdEspecieContrato,
   				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato,
-  				$nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato
+  				$nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato,
+  				$nmTabelaDemanda . "." . voDemanda::$nmAtrTexto
   		);
   	
   		$queryFrom .= "\n INNER JOIN ". $nmTabelaDemanda;
@@ -101,6 +102,10 @@ include_once (caminho_filtros."filtroManterPA.php");
     }
     
     function getSQLValuesInsert($vo){
+    	if($vo->cdPA == null){
+    		$vo->cdPA = $this->getProximoSequencialChaveComposta (voPA::$nmAtrCdPA, $vo );
+    	}
+    	
 		$retorno = "";		
 		$retorno.= $this-> getVarComoNumero($vo->cdPA) . ",";
 		$retorno.= $this-> getVarComoNumero($vo->anoPA) . ",";

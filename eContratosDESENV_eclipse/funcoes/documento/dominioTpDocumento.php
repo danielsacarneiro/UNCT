@@ -7,6 +7,9 @@ class dominioTpDocumento extends dominio {
 	static $ENDERECO_PASTABASE = "ASSESSORIA JURÍDICA\ATJA";
 	static $ENDERECO_PASTABASE_UNCT = "UNCT";
 	static $ENDERECO_PASTA_DOCUMENTOS = "\Documentos";
+	static $ENDERECO_PASTA_PA = "\PROCESSO ADMINISTRATIVO";	
+	
+	
 	static $CD_TP_DOC_APOSTILAMENTO = "AP";
 	static $CD_TP_DOC_CI = "CI";
 	static $CD_TP_DOC_INTIMACAO = "IN";
@@ -23,7 +26,7 @@ class dominioTpDocumento extends dominio {
 	static $DS_TP_DOC_CI = "CI";
 	static $DS_TP_DOC_INTIMACAO = "Intimação";
 	static $DS_TP_DOC_NOTA_TECNICA = "Nota Técnica";
-	static $DS_TP_DOC_NOTA_IMPUTACAO = "Nota Imputação";
+	static $DS_TP_DOC_NOTA_IMPUTACAO = "Nota de Imputação";
 	static $DS_TP_DOC_NOTIFICACAO = "Notificação";
 	static $DS_TP_DOC_OFICIO = "Ofício";
 	static $DS_TP_DOC_OUTROS = "Outros";
@@ -44,7 +47,7 @@ class dominioTpDocumento extends dominio {
 				self::$CD_TP_DOC_INTIMACAO => self::$DS_TP_DOC_INTIMACAO,
 				self::$CD_TP_DOC_NOTA_TECNICA => "Nota Técnica",
 				self::$CD_TP_DOC_PARECER => self::$DS_TP_DOC_PARECER,
-				self::$CD_TP_DOC_NOTA_IMPUTACAO => "Nota Imputação",
+				self::$CD_TP_DOC_NOTA_IMPUTACAO => self::$DS_TP_DOC_NOTA_IMPUTACAO,
 				self::$CD_TP_DOC_NOTIFICACAO => self::$DS_TP_DOC_NOTIFICACAO,
 				self::$CD_TP_DOC_PLANILHA_CUSTOS => self::$DS_TP_DOC_PLANILHA_CUSTOS,
 				self::$CD_TP_DOC_APOSTILAMENTO => self::$DS_TP_DOC_APOSTILAMENTO,
@@ -67,6 +70,7 @@ class dominioTpDocumento extends dominio {
 	}
 	static function getEnderecoPastaBasePorTpDocumento($tpDoc) {
 		$retorno = self::getDescricaoStatic ( $tpDoc, self::getColecao () );
+		
 		if ($tpDoc == self::$CD_TP_DOC_APOSTILAMENTO) {
 			$retorno = "Apostilamentos";
 		}
