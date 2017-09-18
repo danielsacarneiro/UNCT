@@ -3,6 +3,7 @@ include_once("../../config_lib.php");
 include_once(caminho_util."bibliotecaHTML.php");
 include_once(caminho_util."constantes.class.php");
 include_once(caminho_util. "select.php");
+include_once(caminho_util."selectExercicio.php");
 include_once(caminho_filtros . "filtroManterPA.php");
 
 //inicia os parametros
@@ -40,6 +41,7 @@ $numTotalRegistros = $filtro->numTotalRegistros;
 <HEAD>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_datahora.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_text.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_cnpfcnpj.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>tooltip.js"></SCRIPT>
@@ -127,6 +129,16 @@ function validaFormulario() {
     <DIV id="div_filtro" class="div_filtro">
     <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
         <TBODY>
+	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">PAAP.:</TH>
+	            <TD class="campoformulario" nowrap width="1%" colspan="3">
+	            <?php
+	            $selectExercicio = new selectExercicio();
+	            echo "Ano: " . $selectExercicio->getHtmlCombo(voPA::$nmAtrAnoPA,voPA::$nmAtrAnoPA, $filtro->anoPA, true, "camponaoobrigatorio", false, "");?>
+			  Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voPA::$nmAtrCdPA?>" name="<?=voPA::$nmAtrCdPA?>"  value="<?php echo(complementarCharAEsquerda($filtro->cdPA, "0", TAMANHO_CODIGOS));?>"  class="camponaoobrigatorio" size="6" maxlength="5">
+			  </TD>			  
+			</TR>			            
+        
 			<TR>
                 <TH class="campoformulario" nowrap>Contratada:</TH>
                 <TD class="campoformulario" width="1%">

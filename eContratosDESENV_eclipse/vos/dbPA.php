@@ -24,8 +24,8 @@ include_once (caminho_filtros."filtroManterPA.php");
   				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato,
   				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdEspecieContrato,
   				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato,
-  				$nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato,
   				$nmTabelaDemanda . "." . voDemanda::$nmAtrTexto
+//  				$nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato,  
   		);
   	
   		$queryFrom .= "\n INNER JOIN ". $nmTabelaDemanda;
@@ -36,7 +36,7 @@ include_once (caminho_filtros."filtroManterPA.php");
   		$queryFrom .= "\n ON ". $nmTabelaDemanda . "." . voDemanda::$nmAtrCd. "=" . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdDemanda;
   		$queryFrom .= "\n AND ". $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoDemanda; 
   		
-  		$queryFrom .= "\n LEFT JOIN " . $nmTabelaContrato;
+  		/*$queryFrom .= "\n LEFT JOIN " . $nmTabelaContrato;
   		$queryFrom .= "\n ON ";
   		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato;
   		$queryFrom .= "\n AND ";
@@ -46,7 +46,7 @@ include_once (caminho_filtros."filtroManterPA.php");
   		$queryFrom .= "\n AND ";
   		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdEspecieContrato;
   		$queryFrom .= "\n AND ";
-  		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato;
+  		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato;*/
   		
   		
   		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryFrom, $isHistorico );
@@ -86,17 +86,39 @@ include_once (caminho_filtros."filtroManterPA.php");
     	$queryFrom .= "\n INNER JOIN ". $nmTabelaDemandaContrato;
     	$queryFrom .= "\n ON ". $nmTabelaDemanda . "." . voDemanda::$nmAtrCd. "=" . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdDemanda;
     	$queryFrom .= "\n AND ". $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoDemanda;
+    	
+    	// o proximo join eh p pegar o registro de contrato mais atual na planilha
+    	//faz o join apenas com os contratos de maximo sequencial (mais atual)
+    	$nmTabelaMAXContrato = "TABELA_MAX_CONTRATO";
+    	$atributosGroupContrato = vocontrato::$nmAtrAnoContrato . "," . vocontrato::$nmAtrTipoContrato . "," . vocontrato::$nmAtrCdContrato;
+    	$queryFrom .= "\n LEFT JOIN (";
+    	$queryFrom .= " SELECT MAX(" . vocontrato::$nmAtrSqContrato . ") AS " . vocontrato::$nmAtrSqContrato
+    	. "," . $atributosGroupContrato . " FROM " . $nmTabelaContrato
+    	. " GROUP BY " . $atributosGroupContrato;
+    	$queryFrom .= ") $nmTabelaMAXContrato";
+    	$queryFrom .= "\n ON ";
+    	$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato . "=" . $nmTabelaMAXContrato . "." . vocontrato::$nmAtrAnoContrato;
+    	$queryFrom .= "\n AND ";
+    	$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato . "=" . $nmTabelaMAXContrato . "." . vocontrato::$nmAtrTipoContrato;
+    	$queryFrom .= "\n AND ";
+    	$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato . "=" . $nmTabelaMAXContrato . "." . vocontrato::$nmAtrCdContrato;
+    	
+    	// agora pega dos dados da ultima tramitacao, se houver
+    	$queryFrom .= "\n LEFT JOIN ";
+    	$queryFrom .= $nmTabelaContrato;
+    	$queryFrom .= "\n ON " . $nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato . " = $nmTabelaMAXContrato." . vocontrato::$nmAtrSqContrato;    	 
     	 
-        $queryFrom .= "\n INNER JOIN ". $nmTabelaContrato;
+        /*$queryFrom .= "\n INNER JOIN ". $nmTabelaContrato;
         $queryFrom .= "\n ON ". $nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato . "=" . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato;
         $queryFrom .= "\n AND ". $nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato;
-        $queryFrom .= "\n AND ". $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato;
+        $queryFrom .= "\n AND ". $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato;*/
+        
         $queryFrom .= "\n LEFT JOIN ". vopessoa::getNmTabela();
         $queryFrom .= " ". $nmTabelaPessoaContrato . " \n ON ". $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada. "=" . $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd;
         $queryFrom .= "\n LEFT JOIN ". vopessoa::getNmTabela();
         $queryFrom .= " ". $nmTabelaPessoaResponsavel . " \n ON ". $nmTabela . "." . voPA::$nmAtrCdResponsavel . "=" . $nmTabelaPessoaResponsavel . "." . vopessoa::$nmAtrCd;
                 
-        $filtro->cdEspecieContrato = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
+        //$filtro->cdEspecieContrato = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
         
         return parent::consultarMontandoQueryTelaConsulta ( $vo, $filtro, $arrayColunasRetornadas, $queryFrom );        
     }

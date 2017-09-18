@@ -118,21 +118,22 @@ class dbDemanda extends dbprocesso {
 		$atributosGroup = voDemandaTramitacao::$nmAtrCd . "," . voDemandaTramitacao::$nmAtrAno;
 		
 		// o proximo join eh p pegar a ultima tramitacao apenas, se houver
+		$nmTabelaMAXTramitacao = "TABELA_MAX";
 		$queryJoin = "";
 		$queryJoin .= "\n LEFT JOIN (";
 		$queryJoin .= " SELECT MAX(" . voDemandaTramitacao::$nmAtrSq . ") AS " . voDemandaTramitacao::$nmAtrSq 
 				. "," . $atributosGroup . " FROM " . $nmTabelaTramitacao 
 				. " GROUP BY " . $atributosGroup;
-		$queryJoin .= ") TABELA_MAX";
-		$queryJoin .= "\n ON " . $nmTabela . "." . voDemandaTramitacao::$nmAtrAno . " = TABELA_MAX." . voDemandaTramitacao::$nmAtrAno;
-		$queryJoin .= "\n AND " . $nmTabela . "." . voDemandaTramitacao::$nmAtrCd . " = TABELA_MAX." . voDemandaTramitacao::$nmAtrCd;
+		$queryJoin .= ") $nmTabelaMAXTramitacao";
+		$queryJoin .= "\n ON " . $nmTabela . "." . voDemandaTramitacao::$nmAtrAno . " = $nmTabelaMAXTramitacao." . voDemandaTramitacao::$nmAtrAno;
+		$queryJoin .= "\n AND " . $nmTabela . "." . voDemandaTramitacao::$nmAtrCd . " = $nmTabelaMAXTramitacao." . voDemandaTramitacao::$nmAtrCd;
 		
 		// agora pega dos dados da ultima tramitacao, se houver
 		$queryJoin .= "\n LEFT JOIN ";
 		$queryJoin .= $nmTabelaTramitacao;
-		$queryJoin .= "\n ON " . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrAno . " = TABELA_MAX." . voDemandaTramitacao::$nmAtrAno;
-		$queryJoin .= "\n AND " . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCd . " = TABELA_MAX." . voDemandaTramitacao::$nmAtrCd;
-		$queryJoin .= "\n AND " . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrSq . " = TABELA_MAX." . voDemandaTramitacao::$nmAtrSq;
+		$queryJoin .= "\n ON " . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrAno . " = $nmTabelaMAXTramitacao." . voDemandaTramitacao::$nmAtrAno;
+		$queryJoin .= "\n AND " . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCd . " = $nmTabelaMAXTramitacao." . voDemandaTramitacao::$nmAtrCd;
+		$queryJoin .= "\n AND " . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrSq . " = $nmTabelaMAXTramitacao." . voDemandaTramitacao::$nmAtrSq;
 		
 		$queryJoin .= "\n LEFT JOIN ";
 		$queryJoin .= $nmTabelaDemandaContrato;
@@ -141,8 +142,26 @@ class dbDemanda extends dbprocesso {
 		
 		// o proximo join eh p pegar o registro de contrato mais atual na planilha
 		//faz o join apenas com os contratos de maximo sequencial (mais atual)
-		//CONFIRMAR SE A MARRETA FUNCIONOU
+		$nmTabelaMAXContrato = "TABELA_MAX_CONTRATO";
 		$atributosGroupContrato = vocontrato::$nmAtrAnoContrato . "," . vocontrato::$nmAtrTipoContrato . "," . vocontrato::$nmAtrCdContrato;
+		$queryJoin .= "\n LEFT JOIN (";
+		$queryJoin .= " SELECT MAX(" . vocontrato::$nmAtrSqContrato . ") AS " . vocontrato::$nmAtrSqContrato
+		. "," . $atributosGroupContrato . " FROM " . $nmTabelaContrato 
+		. " GROUP BY " . $atributosGroupContrato;
+		$queryJoin .= ") $nmTabelaMAXContrato";
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato . "=" . $nmTabelaMAXContrato . "." . vocontrato::$nmAtrAnoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato . "=" . $nmTabelaMAXContrato . "." . vocontrato::$nmAtrTipoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato . "=" . $nmTabelaMAXContrato . "." . vocontrato::$nmAtrCdContrato;
+		
+		// agora pega dos dados da ultima tramitacao, se houver
+		$queryJoin .= "\n LEFT JOIN ";
+		$queryJoin .= $nmTabelaContrato;
+		$queryJoin .= "\n ON " . $nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato . " = $nmTabelaMAXContrato." . vocontrato::$nmAtrSqContrato;
+		
+		/*$atributosGroupContrato = vocontrato::$nmAtrAnoContrato . "," . vocontrato::$nmAtrTipoContrato . "," . vocontrato::$nmAtrCdContrato;
 		$queryJoin .= "\n LEFT JOIN (";
 		$queryJoin .= " SELECT "
 			. $atributosGroupContrato . ","
@@ -156,23 +175,7 @@ class dbDemanda extends dbprocesso {
 		$queryJoin .= "\n AND ";
 		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato;
 		$queryJoin .= "\n AND ";
-		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato;
-		/*$queryJoin .= "\n AND ";
-		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdEspecieContrato;
-		$queryJoin .= "\n AND ";
-		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato;*/		
-		
-		/*$queryJoin .= "\n LEFT JOIN " . $nmTabelaContrato;
-		$queryJoin .= "\n ON ";
-		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato;
-		$queryJoin .= "\n AND ";
-		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato;
-		$queryJoin .= "\n AND ";
-		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato;
-		$queryJoin .= "\n AND ";
-		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdEspecieContrato;
-		$queryJoin .= "\n AND ";
-		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato;*/
+		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato;*/
 		
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaContratoInfo;
 		$queryJoin .= "\n ON ";
