@@ -164,7 +164,9 @@ function criarNomeDocumento(){
                 <TH class="campoformulario" nowrap width="1%">Tp.Documento:</TH>
                 <TD class="campoformulario"><?php echo $comboTp->getHtmlCombo(voDocumento::$nmAtrTp,voDocumento::$nmAtrTp, $vo->tp, true, $classChaves, true, " onChange='criarNomeDocumento();' $disabledChaves $required");?></TD>			
                 <TH class="campoformulario" nowrap>Número:</TH>
-                <TD class="campoformulario"><INPUT type="text" id="<?=voDocumento::$nmAtrSq?>" onkeyup="validarCampoNumericoPositivo(this);" name="<?=voDocumento::$nmAtrSq?>" onBlur='criarNomeDocumento();' value="<?php echo complementarCharAEsquerda($vo->sq, "0", TAMANHO_CODIGOS);?>"  class="<?=$classChaves?>" size="7" <?=$readonlyChaves?>></TD>
+                <TD class="campoformulario">
+                <INPUT type="text" id="<?=voDocumento::$nmAtrSq?>" onkeyup="validarCampoNumericoPositivo(this);" name="<?=voDocumento::$nmAtrSq?>" onBlur='criarNomeDocumento();' value="<?php echo complementarCharAEsquerda($vo->sq, "0", TAMANHO_CODIGOS);?>"  class="camponaoobrigatorio" size="7" required>                
+                </TD>
             </TR>
             <?php 
 	        }else{	        	

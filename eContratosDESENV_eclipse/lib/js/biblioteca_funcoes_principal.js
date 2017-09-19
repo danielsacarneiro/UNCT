@@ -138,9 +138,13 @@ function limparCampoFormularioEConti(element){
 	}
 }
 
-function validaFormRequiredCheckBox(campoCheckBoxValidacao, colecaoIDCampos){
+function validaFormRequiredCheckBox(campoCheckBoxValidacao, colecaoIDCampos, pSetarVazio){
 	pIsRequired = !campoCheckBoxValidacao.checked;
 	tornarRequiredCamposColecaoFormulario(colecaoIDCampos, pIsRequired);
+	
+	if(pSetarVazio != null && pSetarVazio){
+		limparCamposColecaoFormulario(colecaoIDCampos);
+	}
 }
 
 function tornarRequiredCamposColecaoFormulario(colecaoIDCampos, pIsRequired){	

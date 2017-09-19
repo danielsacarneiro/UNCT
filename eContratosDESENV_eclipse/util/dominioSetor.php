@@ -49,6 +49,7 @@ include_once(caminho_util."dominio.class.php");
 		);
 		
 		uksort($retorno, 'strnatcmp');
+		//sort($retorno);
 		
 		return $retorno;
 	}

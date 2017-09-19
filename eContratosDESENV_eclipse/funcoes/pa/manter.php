@@ -136,9 +136,14 @@ function carregaDadosContratada(){
 			  ?>			            
 			<TR>
 		        <TH class="campoformulario" nowrap width="1%">P.A.D.:</TH>
-		        <TD class="campoformulario" colspan=3>
+		        <TD class="campoformulario" colspan=3>		        
 		            	<?php echo "Ano: " . $selectExercicio->getHtmlCombo(voPA::$nmAtrAnoPA,voPA::$nmAtrAnoPA, $vo->anoPA, true, "campoobrigatorio", false, " required ");?>			            
-			            Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voPA::$nmAtrCdPA?>" name="<?=voPA::$nmAtrCdPA?>"  value="<?php echo(complementarCharAEsquerda($voContrato->cdContrato, "0", 3));?>"  class="camponaoobrigatorioalinhadodireita" size="6" maxlength="5" <?=$readonlyChaves?>>                               
+			            Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voPA::$nmAtrCdPA?>" name="<?=voPA::$nmAtrCdPA?>"  value="<?php echo(complementarCharAEsquerda($voContrato->cdContrato, "0", 3));?>"  class="camponaoobrigatorioalinhadodireita" size="6" maxlength="5" required>
+				<SCRIPT language="JavaScript" type="text/javascript">
+	            	colecaoIDCdNaoObrigatorio = ["<?=voPA::$nmAtrCdPA?>"];
+	            </SCRIPT>
+	            <INPUT type="checkbox" id="checkCdNaoObrigatorio" name="checkCdNaoObrigatorio" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCdNaoObrigatorio, true);"> *Incluir código automaticamente.	            			
+			                                           
 	        </TR>			            
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Demanda:</TH>
