@@ -37,7 +37,7 @@ if($filtro->cdConsultarArquivo == dominioConsultaArquivoContrato::$CD_CONSULTA_A
 	//if(!$temContratoSelecionado){
 		$MenuPai->cdControleConsulta = pasta::$IN_FILTRAR_APENAS_PAI;
 	//}
-	$endereco .= "CONTRATOS JÁ ASSINADOS";
+	$endereco .= "CONTRATOS ASSINADOS";
 }else if($filtro->cdConsultarArquivo == dominioConsultaArquivoContrato::$CD_CONSULTA_ARQUIVO_CONTRATO_MATER){
 	$endereco .= "ANO " . $anoArquivo .$barra."CONTRATOS";
 }else if($filtro->cdConsultarArquivo == dominioConsultaArquivoContrato::$CD_CONSULTA_ARQUIVO_TERMO_ADITIVO){
