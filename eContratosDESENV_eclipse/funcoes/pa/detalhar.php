@@ -146,6 +146,20 @@ function confirmar() {
 	            			maxlength="10" readonly>
 				</TD>
         	</TR>
+			<TR>
+	            <TH class="campoformulario" nowrap>Dt.Notificação Nota Imputação:</TH>
+	            <TD class="campoformulario" colspan="3">
+	            	<INPUT type="text" 
+	            	       id="<?=voPA::$nmAtrDtNotificacao?>" 
+	            	       name="<?=voPA::$nmAtrDtNotificacao?>" 
+	            			value="<?php echo(getData($vo->dtNotificacao));?>"
+	            			onkeyup="formatarCampoData(this, event, false);" 
+	            			class="camporeadonly" 
+	            			size="10" 
+	            			maxlength="10" readonly> *para fins de contagem de prazo	            			
+				</TD>
+        	</TR>
+        	
 				<?php				
 				$filtroTramitacaoContrato = new filtroConsultarDemandaContrato(false);
 				$filtroTramitacaoContrato->vocontrato->cdContrato = $voContrato->cdContrato;

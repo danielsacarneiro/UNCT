@@ -124,7 +124,9 @@ function carregaDadosContratada(){
 		         <TH class="campoformulario" nowrap width="1%">P.A.A.P.:</TH>
 		         <TD class="campoformulario" colspan=3>
 		         <?php echo(getDetalhamentoHTMLCodigoAno($vo->anoPA, $vo->cdPA, TAMANHO_CODIGOS_SAFI));?>
-				 </TD>
+			         <INPUT type="hidden" id="<?=voPA::$nmAtrAnoPA?>" name="<?=voPA::$nmAtrAnoPA?>" value="<?=$vo->anoPA?>">
+					 <INPUT type="hidden" id="<?=voPA::$nmAtrCdPA?>" name="<?=voPA::$nmAtrCdPA?>" value="<?=$vo->cdPA?>">		         
+				</TD>
 	        </TR>
 			<?php 
 			getDemandaDetalhamento($voDemanda);
@@ -193,7 +195,7 @@ function carregaDadosContratada(){
 				</TD>
         	</TR>
 			<TR>
-	            <TH class="campoformulario" nowrap>Dt.Recebimento Nota Imputação:</TH>
+	            <TH class="campoformulario" nowrap>Dt.Notificação Nota Imputação:</TH>
 	            <TD class="campoformulario" colspan="3">
 	            	<INPUT type="text" 
 	            	       id="<?=voPA::$nmAtrDtNotificacao?>" 
