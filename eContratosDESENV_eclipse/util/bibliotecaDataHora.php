@@ -1,5 +1,6 @@
 <?php
 include_once("mensagens.class.php");
+include_once("dominioFeriados.php");
 
 function getDataHora($dataSQL) {
 	return getDataHoraParam($dataSQL, true);
@@ -79,6 +80,84 @@ function getQtdDiasEntreDatas($dataini, $datafim) {
 	//echo "Intervalo Ã© de {$intervalo->y} anos, {$intervalo->m} meses e {$intervalo->d} dias";
 			
 	return $retorno*$fator;
+}
+
+function somarOuSubtrairDiasNaData($dataHTML, $qtdDias, $operacao ="+"){
+	//echo date('d/m/Y', strtotime('+5 days', strtotime('14-07-2014')));	
+	return  date('d/m/Y', strtotime($operacao."$qtdDias days", strtotime($dataHTML)));
+}
+
+function somarOuSubtrairDiasUteisNaData($str_data,$int_qtd_dias_somar = 7, $operacao = "+") {
+	$str_data = substr($str_data,0,10);
+
+	if ( preg_match("@/@",$str_data) == 1 ) {
+		$str_data = implode("-", array_reverse(explode("/",$str_data)));
+	}
+
+	$array_data = explode("-", $str_data);
+	$count_days = 0;
+	$int_qtd_dias_uteis = 0;
+
+	while ( $int_qtd_dias_uteis < $int_qtd_dias_somar ) {
+		$count_days++;
+		$dtAcomparar = gmdate('d/m/Y',strtotime($operacao.$count_days.' day',strtotime($str_data)));
+		$dias_da_semana = gmdate('w', strtotime($operacao.$count_days.' day', mktime(0, 0, 0, $array_data[1], $array_data[2], $array_data[0])));
+
+		//echo $dtAcomparar . "<br>";
+
+		//if ( ( $dias_da_semana = gmdate('w', strtotime('+'.$count_days.' day', mktime(0, 0, 0, $array_data[1], $array_data[2], $array_data[0]))) ) != '0'
+		if ( $dias_da_semana != '0'
+				&& $dias_da_semana != '6'
+				&& !isFeriado($dtAcomparar)) {
+						
+					$int_qtd_dias_uteis++;
+				}
+	}
+
+	return gmdate('d/m/Y',strtotime($operacao.$count_days.' day',strtotime($str_data)));
+}
+
+function somarDiasUteisNaData($str_data,$int_qtd_dias_somar = 7) {
+	$str_data = substr($str_data,0,10);
+
+	if ( preg_match("@/@",$str_data) == 1 ) {
+		$str_data = implode("-", array_reverse(explode("/",$str_data)));
+	}
+
+	$array_data = explode("-", $str_data);
+	$count_days = 0;
+	$int_qtd_dias_uteis = 0;
+		
+	while ( $int_qtd_dias_uteis < $int_qtd_dias_somar ) {
+		$count_days++;
+		$dtAcomparar = gmdate('d/m/Y',strtotime('+'.$count_days.' day',strtotime($str_data)));
+		$dias_da_semana = gmdate('w', strtotime('+'.$count_days.' day', mktime(0, 0, 0, $array_data[1], $array_data[2], $array_data[0])));
+		
+		//echo $dtAcomparar . "<br>";
+		
+		//if ( ( $dias_da_semana = gmdate('w', strtotime('+'.$count_days.' day', mktime(0, 0, 0, $array_data[1], $array_data[2], $array_data[0]))) ) != '0' 
+		if ( $dias_da_semana != '0'
+				&& $dias_da_semana != '6' 
+				&& !isFeriado($dtAcomparar)) {
+					
+			$int_qtd_dias_uteis++;
+		}
+	}
+
+	return gmdate('d/m/Y',strtotime('+'.$count_days.' day',strtotime($str_data)));
+}
+
+function isFeriado($data){	
+	if($data == null || $data == "")
+		throw new excecaoGenerica("Data inválida || verificacao feriado");
+	
+	$data = str_replace("/", "-", $data);	
+	$acomparar = date('d/m', strtotime($data));
+	
+	//echo $acomparar;	
+	
+	return in_array($acomparar, dominioFeriados::getColecao());
+	
 }
 
 function getAnoHoje(){
