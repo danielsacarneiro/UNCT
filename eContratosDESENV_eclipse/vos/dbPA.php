@@ -146,8 +146,8 @@ include_once (caminho_filtros."filtroManterPA.php");
     			$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato,
     			$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato,
     			$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato,
-    			$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
-    
+    			$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,    
+    			$nmTabelaPA . "." . voPA::$nmAtrDtNotificacao,
     			// $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . " AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,
     			"COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . "," . $nmTabela . "." . voDemanda::$nmAtrCdSetor . ") AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,
     			"COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrDhInclusao . "," . $nmTabela . "." . voDemanda::$nmAtrDhUltAlteracao . ") AS " . filtroManterDemanda::$NmColDhUltimaMovimentacao,

@@ -4,7 +4,7 @@ include_once(caminho_util."bibliotecaFuncoesPrincipal.php");
 include_once(caminho_util."bibliotecaDataHora.php");
    
 
-$data = "03/10/2017";
+$data = "28/09/2017";
 echo "$data <br>";
 
 //echo somarDiasUteisNaData($data, 1);
@@ -16,7 +16,7 @@ else{
 	echo "nao eh feriado";
 }
 
-$datafim = somarDiasUteisNaData($data, 5);
+$datafim = somarDiasUteisNaData($data, 10);
 echo "<br> $datafim <br>"
 ?>
 

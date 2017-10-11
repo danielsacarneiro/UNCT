@@ -3,15 +3,15 @@
 require_once (caminho_funcoes . vocontrato::getNmTabela () . "/dominioAutorizacao.php");
 require_once (caminho_lib . "phpmailer/config_email.php");
 
-function exibeAlertaDemandasPorFiltroDemanda($filtro, $enviarEmail, $assunto) {	
+function exibeAlertaDemandasPorFiltroDemanda($filtro, $enviarEmail, $assunto, $colunasAAcrescentar = null) {	
 	$voDemanda = new voDemanda ();
 	$dbprocesso = $voDemanda->dbprocesso;
 	$colecao = $dbprocesso->consultarTelaConsulta ( $voDemanda, $filtro );
 	
-	exibeAlertaDemandasPorColecao($colecao, $enviarEmail, $assunto);
+	exibeAlertaDemandasPorColecao($colecao, $enviarEmail, $assunto, $colunasAAcrescentar);
 }
 
-function exibeAlertaDemandasPorColecao($colecao, $enviarEmail, $assuntoParam) {	
+function exibeAlertaDemandasPorColecao($colecao, $enviarEmail, $assuntoParam, $colunasAAcrescentar = null) {	
 	$assunto = $assuntoParam . " NÃO HÁ DEMANDAS PARA ANALISAR";	
 	$mensagem = "Nada a exibir";
 	try {
@@ -25,9 +25,25 @@ function exibeAlertaDemandasPorColecao($colecao, $enviarEmail, $assuntoParam) {
 			$mensagem = "DEMANDAS A ANALISAR: \n\n";
 			
 			$colspan= 4;
+			if($colunasAAcrescentar != null){
+				$colspan = $colspan + count($colunasAAcrescentar);
+			}
 			// enviar o email com os registros a serem analisados
 			$mensagem .= "<TABLE id='table_tabeladados' class='tabeladados' cellpadding='2' cellspacing='2' BORDER=1>\n
 		<TBODY>";
+			
+			$mensagem .= "<TR>\n
+			<TD class='tabeladadosdestacadonegrito'> ANO </TD>\n
+			<TD class='tabeladadosdestacadonegrito'> NÚMERO </TD>\n
+			<TD class='tabeladadosdestacadonegrito' > CONTRATO </TD>\n
+			<TD class='tabeladadosdestacadonegrito'> TÍTULO </TD>\n";
+			if($colunasAAcrescentar != null){				
+				foreach ($colunasAAcrescentar as $coluna){
+					$mensagem .= "<TD class='tabeladadosdestacadonegrito'>". $coluna[constantes::$CD_COLUNA_CHAVE] ."</TD>\n";
+				}				
+			}
+			
+			$mensagem .= "</TR>\n";				
 			
 			$contador = 0;
 			foreach ( $colecao as $registro ) {
@@ -53,8 +69,19 @@ function exibeAlertaDemandasPorColecao($colecao, $enviarEmail, $assuntoParam) {
 			<TD class='tabeladadosalinhadodireita'> $voAtual->ano </TD>\n
 			<TD class='tabeladadosdestacadonegrito'> " . complementarCharAEsquerda ( $voAtual->cd, '0', TAMANHO_CODIGOS ) . "</TD>\n
 			<TD class='tabeladados' > $contrato </TD>\n
-			<TD class='tabeladados'> $voAtual->texto </TD>\n
-			</TR>\n";
+			<TD class='tabeladados'> $voAtual->texto </TD>\n";
+			
+			if($colunasAAcrescentar != null){				
+				foreach ($colunasAAcrescentar as $coluna){
+					$coluna_valor = $registro[$coluna[constantes::$CD_COLUNA_VALOR]];
+					if(constantes::$CD_TP_DADO_DATA == $coluna[constantes::$CD_COLUNA_TP_DADO]){
+						$coluna_valor = getData($coluna_valor);
+					}
+					$mensagem .= "<TD class='tabeladados'>". $coluna_valor ."</TD>\n";
+				}			
+			}				
+				
+			$mensagem .= "</TR>\n";
 				
 				$contador++;
 			}
