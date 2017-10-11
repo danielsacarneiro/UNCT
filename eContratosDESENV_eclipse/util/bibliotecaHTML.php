@@ -86,16 +86,21 @@ function setCabecalhoPorNivel($titulo, $qtdNiveisAcimaEmSeEncontraPagina) {
 		$titulo = " - " . $titulo;
 	}
 	
-	//descomentar a linha extension=php_intl.dll no php.ini
-	date_default_timezone_set('America/Recife');
-	$data = new DateTime();
-	$formatter = new IntlDateFormatter('pt_BR',
-			IntlDateFormatter::FULL,
-			IntlDateFormatter::GREGORIAN);
+	date_default_timezone_set ( 'America/Recife' );
+	setlocale ( LC_ALL, 'pt_BR', 'pt_BR.iso-8859-1', 'pt_BR.utf-8', 'portuguese' );
+	/*
+	 * 	//descomentar a linha extension=php_intl.dll no php.ini
+	 * $data = new DateTime();
+	 * $formatter = new IntlDateFormatter('pt_BR',
+	 * IntlDateFormatter::FULL,
+	 * IntlDateFormatter::GREGORIAN);
+	 * //$diaExtenso = $formatter->format($data);
+	 */
 	
-	//$diaExtenso = strftime ( '%A, %d de %B de %Y', strtotime ( 'today' ) );
-	$diaExtenso = $formatter->format($data);
-	
+	$hour = date ( "H" );
+	$minute = date ( "i" );
+	$diaExtenso = strftime ( '%A, %d de %B de %Y', strtotime ( 'today' ) ) . ", " . $hour . ":" . $minute;
+		
 	$cabecalho = "		<TABLE id='table_conteiner' class='conteiner' cellpadding='0' cellspacing='0'>
                         <TBODY>
                                 <TR>

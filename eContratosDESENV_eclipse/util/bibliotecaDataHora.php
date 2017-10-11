@@ -118,33 +118,7 @@ function somarOuSubtrairDiasUteisNaData($str_data,$int_qtd_dias_somar = 7, $oper
 }
 
 function somarDiasUteisNaData($str_data,$int_qtd_dias_somar = 7) {
-	$str_data = substr($str_data,0,10);
-
-	if ( preg_match("@/@",$str_data) == 1 ) {
-		$str_data = implode("-", array_reverse(explode("/",$str_data)));
-	}
-
-	$array_data = explode("-", $str_data);
-	$count_days = 0;
-	$int_qtd_dias_uteis = 0;
-		
-	while ( $int_qtd_dias_uteis < $int_qtd_dias_somar ) {
-		$count_days++;
-		$dtAcomparar = gmdate('d/m/Y',strtotime('+'.$count_days.' day',strtotime($str_data)));
-		$dias_da_semana = gmdate('w', strtotime('+'.$count_days.' day', mktime(0, 0, 0, $array_data[1], $array_data[2], $array_data[0])));
-		
-		//echo $dtAcomparar . "<br>";
-		
-		//if ( ( $dias_da_semana = gmdate('w', strtotime('+'.$count_days.' day', mktime(0, 0, 0, $array_data[1], $array_data[2], $array_data[0]))) ) != '0' 
-		if ( $dias_da_semana != '0'
-				&& $dias_da_semana != '6' 
-				&& !isFeriado($dtAcomparar)) {
-					
-			$int_qtd_dias_uteis++;
-		}
-	}
-
-	return gmdate('d/m/Y',strtotime('+'.$count_days.' day',strtotime($str_data)));
+	return somarOuSubtrairDiasUteisNaData($str_data,$int_qtd_dias_somar, "+");
 }
 
 function isFeriado($data){	

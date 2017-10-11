@@ -1,4 +1,6 @@
 <?php
+include_once (caminho_funcoes . "pa/dominioSituacaoPA.php");
+
 class voPA extends voentidade {
 	static $nmAtrCdPA = "pa_cd"; // processo administrativo cd
 	static $nmAtrAnoPA = "pa_ex"; // processo administrativo ano

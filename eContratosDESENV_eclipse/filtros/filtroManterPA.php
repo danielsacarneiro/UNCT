@@ -13,6 +13,13 @@ class filtroManterPA extends filtroManter{
     var $cdPA;
     var $anoPA;
     var $situacao;
+
+    var $cdContrato;
+    var $tipoContrato;
+    var $anoContrato;
+
+    var $cdDemanda;
+    var $anoDemanda;
     
     var $nmTabelaPessoaContrato = "TAB_PESSOA_CONTRATO";
     var $nmTabelaPessoaResponsavel = "TAB_PESSOA_RESP";
@@ -37,6 +44,13 @@ class filtroManterPA extends filtroManter{
         $this->anoPA = @$_POST[voPA::$nmAtrAnoPA];
         $this->situacao = @$_POST[voPA::$nmAtrSituacao];
         
+        $this->cdContrato = @$_POST[vocontrato::$nmAtrCdContrato];
+        $this->anoContrato = @$_POST[vocontrato::$nmAtrAnoContrato];
+        $this->tipoContrato = @$_POST[vocontrato::$nmAtrTipoContrato];
+        
+        $this->cdDemanda = @$_POST[voPA::$nmAtrCdDemanda];
+        $this->anoDemanda = @$_POST[voPA::$nmAtrAnoDemanda];
+        
         //isso tudo pq o filtro pode ser usado por mais de um metodo
         //e precisa saber qual voprincipal considera,
         //pra pegar por ex os atributos de ordenacao da tabela correta
@@ -54,6 +68,8 @@ class filtroManterPA extends filtroManter{
 		$nmTabelaPessoaResponsavel = $this->nmTabelaPessoaResponsavel;
 		
 		$nmTabelaContrato= $vocontrato->getNmTabelaEntidade(false);
+		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic(false);
+		
 		$isHistorico = $this->isHistorico;
 		$nmTabela = $voPA->getNmTabelaEntidade($isHistorico);
 		if($this->nmEntidadePrincipal != null){
@@ -66,6 +82,24 @@ class filtroManterPA extends filtroManter{
             //echo "setou o ano defaul";
             ;                        
 		}
+		
+		if($this->cdDemanda != null){
+			$filtro = $filtro . $conector
+			. $nmTabela. "." .voPA::$nmAtrCdDemanda
+			. " = "
+					. $this->cdDemanda;
+		
+					$conector  = "\n AND ";
+		}
+		
+		if($this->anoDemanda != null){
+			$filtro = $filtro . $conector
+			. $nmTabela. "." .voPA::$nmAtrAnoDemanda
+			. " = "
+					. $this->anoDemanda;
+		
+					$conector  = "\n AND ";
+		}		
             				
 		if($this->cdEspecieContrato != null){
 			$filtro = $filtro . $conector
@@ -152,7 +186,36 @@ class filtroManterPA extends filtroManter{
 			
 			$conector  = "\n AND ";
 		}	
-
+		
+		if($this->anoContrato != null){
+			$filtro = $filtro . $conector
+			. $nmTabelaDemandaContrato. "." .voDemandaContrato::$nmAtrAnoContrato
+			. " = "
+					. $this->anoContrato
+					;
+		
+					$conector  = "\n AND ";
+		}
+		
+		if($this->cdContrato != null){
+			$filtro = $filtro . $conector
+			. $nmTabelaDemandaContrato. "." .voDemandaContrato::$nmAtrCdContrato
+			. " = "
+					. $this->cdContrato
+					;
+		
+					$conector  = "\n AND ";
+		}
+		
+		if($this->tipoContrato != null){
+			$filtro = $filtro . $conector
+			. $nmTabelaDemandaContrato. "." .voDemandaContrato::$nmAtrTipoContrato
+			. " = "
+					. getVarComoString($this->tipoContrato)
+					;
+		
+					$conector  = "\n AND ";
+		}
 		//finaliza o filtro
 		$filtro = parent::getFiltroConsulta($filtro);
 		

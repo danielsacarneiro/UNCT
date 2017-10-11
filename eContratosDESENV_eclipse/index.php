@@ -47,6 +47,7 @@ cabecalho;
     f5.adicionarItem(new Link('Usuários', '<?=caminho_funcoesHTML?>usuario_info', ''));
 	f5.adicionarItem(new Link("Tramitação Demanda", "<?=caminho_funcoesHTML?>demanda_tram", ""));
 	f5.adicionarItem(new Link("Agendamento de alertas", "agendamento.php", ""));
+	f5.adicionarItem(new Link("Pagina TESTE", "teste.php", ""));
 	f5.adicionarItem(new Link('______', '#', ''));
 	f5.adicionarItem(new Link('______', '#', ''));
 	f5.adicionarItem(new Link('______', '#', ''));	

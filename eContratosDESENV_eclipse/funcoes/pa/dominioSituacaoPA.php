@@ -21,5 +21,15 @@ class dominioSituacaoPA extends dominio {
 		
 		return $retorno;
 	}
+	
+	static function getColecaoSituacaoAtivos() {
+		$retorno = array (
+				self::$CD_SITUACAO_PA_INSTAURADO => "Instaurado",
+				self::$CD_SITUACAO_PA_EM_ANDAMENTO => "Em Andamento",
+		);
+	
+		return $retorno;
+	}
+	
 }
 ?>

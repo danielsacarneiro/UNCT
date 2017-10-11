@@ -123,6 +123,114 @@ include_once (caminho_filtros."filtroManterPA.php");
         return parent::consultarMontandoQueryTelaConsulta ( $vo, $filtro, $arrayColunasRetornadas, $queryFrom );        
     }
     
+    function consultarDemandaPAAP($filtro) {
+    	$isHistorico = $filtro->isHistorico;
+    	$vo = new voDemanda();
+    	$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
+    	$nmTabelaTramitacao = voDemandaTramitacao::getNmTabela ();
+    	$nmTabelaDemandaContrato = voDemandaContrato::getNmTabela ();
+    	$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
+    	$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
+    	$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
+    	$nmTabelaPA = voPA::getNmTabelaStatic ( false );
+    
+    	$colunaUsuHistorico = "";
+    
+    	if ($isHistorico) {
+    		$colunaUsuHistorico = static::$nmTabelaUsuarioOperacao . "." . vousuario::$nmAtrName . "  AS " . voDemanda::$nmAtrNmUsuarioOperacao;
+    	}
+    	$arrayColunasRetornadas = array (
+    			$nmTabela . ".*",
+    			"COUNT(*)  AS " . filtroManterDemanda::$NmColQtdContratos,
+    			static::$nmTabelaUsuarioInclusao . "." . vousuario::$nmAtrName . "  AS " . voDemanda::$nmAtrNmUsuarioInclusao,
+    			$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato,
+    			$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato,
+    			$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato,
+    			$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
+    
+    			// $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . " AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,
+    			"COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . "," . $nmTabela . "." . voDemanda::$nmAtrCdSetor . ") AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,
+    			"COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrDhInclusao . "," . $nmTabela . "." . voDemanda::$nmAtrDhUltAlteracao . ") AS " . filtroManterDemanda::$NmColDhUltimaMovimentacao,
+    			$colunaUsuHistorico
+    	);
+    
+    	$atributosGroup = voDemandaTramitacao::$nmAtrCd . "," . voDemandaTramitacao::$nmAtrAno;
+    
+    	// o proximo join eh p pegar a ultima tramitacao apenas, se houver
+    	$nmTabelaMAXTramitacao = "TABELA_MAX";
+    	$queryJoin = "";
+    	$queryJoin .= "\n LEFT JOIN (";
+    	$queryJoin .= " SELECT MAX(" . voDemandaTramitacao::$nmAtrSq . ") AS " . voDemandaTramitacao::$nmAtrSq
+    	. "," . $atributosGroup . " FROM " . $nmTabelaTramitacao
+    	. " GROUP BY " . $atributosGroup;
+    	$queryJoin .= ") $nmTabelaMAXTramitacao";
+    	$queryJoin .= "\n ON " . $nmTabela . "." . voDemandaTramitacao::$nmAtrAno . " = $nmTabelaMAXTramitacao." . voDemandaTramitacao::$nmAtrAno;
+    	$queryJoin .= "\n AND " . $nmTabela . "." . voDemandaTramitacao::$nmAtrCd . " = $nmTabelaMAXTramitacao." . voDemandaTramitacao::$nmAtrCd;
+    
+    	// agora pega dos dados da ultima tramitacao, se houver
+    	$queryJoin .= "\n LEFT JOIN ";
+    	$queryJoin .= $nmTabelaTramitacao;
+    	$queryJoin .= "\n ON " . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrAno . " = $nmTabelaMAXTramitacao." . voDemandaTramitacao::$nmAtrAno;
+    	$queryJoin .= "\n AND " . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCd . " = $nmTabelaMAXTramitacao." . voDemandaTramitacao::$nmAtrCd;
+    	$queryJoin .= "\n AND " . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrSq . " = $nmTabelaMAXTramitacao." . voDemandaTramitacao::$nmAtrSq;
+    
+    	$queryJoin .= "\n LEFT JOIN ";
+    	$queryJoin .= $nmTabelaDemandaContrato;
+    	$queryJoin .= "\n ON " . $nmTabela . "." . voDemanda::$nmAtrAno . " = " . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoDemanda;
+    	$queryJoin .= "\n AND " . $nmTabela . "." . voDemanda::$nmAtrCd . " = " . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdDemanda;
+    
+    	// o proximo join eh p pegar o registro de contrato mais atual na planilha
+    	//faz o join apenas com os contratos de maximo sequencial (mais atual)
+    	$nmTabelaMAXContrato = "TABELA_MAX_CONTRATO";
+    	$atributosGroupContrato = vocontrato::$nmAtrAnoContrato . "," . vocontrato::$nmAtrTipoContrato . "," . vocontrato::$nmAtrCdContrato;
+    	$queryJoin .= "\n LEFT JOIN (";
+    	$queryJoin .= " SELECT MAX(" . vocontrato::$nmAtrSqContrato . ") AS " . vocontrato::$nmAtrSqContrato
+    	. "," . $atributosGroupContrato . " FROM " . $nmTabelaContrato
+    	. " GROUP BY " . $atributosGroupContrato;
+    	$queryJoin .= ") $nmTabelaMAXContrato";
+    	$queryJoin .= "\n ON ";
+    	$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato . "=" . $nmTabelaMAXContrato . "." . vocontrato::$nmAtrAnoContrato;
+    	$queryJoin .= "\n AND ";
+    	$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato . "=" . $nmTabelaMAXContrato . "." . vocontrato::$nmAtrTipoContrato;
+    	$queryJoin .= "\n AND ";
+    	$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato . "=" . $nmTabelaMAXContrato . "." . vocontrato::$nmAtrCdContrato;
+    
+    	// agora pega dos dados da ultima tramitacao, se houver
+    	$queryJoin .= "\n LEFT JOIN ";
+    	$queryJoin .= $nmTabelaContrato;
+    	$queryJoin .= "\n ON " . $nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato . " = $nmTabelaMAXContrato." . vocontrato::$nmAtrSqContrato;
+        
+    	$queryJoin .= "\n LEFT JOIN " . $nmTabelaContratoInfo;
+    	$queryJoin .= "\n ON ";
+    	$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato . "=" . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrAnoContrato;
+    	$queryJoin .= "\n AND ";
+    	$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato . "=" . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrTipoContrato;
+    	$queryJoin .= "\n AND ";
+    	$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato . "=" . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrCdContrato;
+    
+    	$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoaContrato;
+    	$queryJoin .= "\n ON ";
+    	$queryJoin .= $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
+    	
+    	$queryJoin .= "\n LEFT JOIN ";
+    	$queryJoin .= $nmTabelaPA;
+    	$queryJoin .= "\n ON " . $nmTabela . "." . voDemanda::$nmAtrAno . " = " . $nmTabelaPA . "." . voPA::$nmAtrAnoDemanda;
+    	$queryJoin .= "\n AND " . $nmTabela . "." . voDemanda::$nmAtrCd . " = " . $nmTabelaPA . "." . voPA::$nmAtrCdDemanda;    	 
+    
+    	$arrayGroupby = array (
+    			$nmTabela . "." . voDemanda::$nmAtrAno,
+    			$nmTabela . "." . voDemanda::$nmAtrCd
+    	);
+    
+    	if ($isHistorico) {
+    		$arrayGroupby [] = voentidade::$nmAtrSqHist;
+    	}
+    
+    	$filtro->groupby = $arrayGroupby;
+    
+    	return parent::consultarMontandoQueryTelaConsulta ( $vo, $filtro, $arrayColunasRetornadas, $queryJoin );
+    }
+    
     function getSQLValuesInsert($vo){
     	if($vo->cdPA == null){
     		$vo->cdPA = $this->getProximoSequencialChaveComposta (voPA::$nmAtrCdPA, $vo );

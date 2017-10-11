@@ -1,59 +1,29 @@
 <?php  
 include_once("config_lib.php");
-include_once(caminho_vos."dbcontrato.php");
 include_once(caminho_util."bibliotecaFuncoesPrincipal.php");
+include_once(caminho_util."bibliotecaDataHora.php");
    
-function teste(){
-    $dbteste = new dbcontrato(null);
-    
-    /*$sqEspecie = "0123%5";
-    $indiceEspecie = $dbteste->getIndicePosteriorAoUltimoNumeroAPartirDoComeco($sqEspecie);
-    
-    echo $indiceEspecie;*/
-    
-    $param = " CONVÊNIO DE INTERCÂMBIO DE EXPERIÊNCIAS E DE INFORMAÇÕES ECONÔMICO-FISCAIS";
-    $param = " T.A ";
-    $cdEspecie = $dbteste->getCdEspecieContrato($param);
-    
-    echo "<br>especie considerada: " . $cdEspecie;    
+
+$data = "03/10/2017";
+echo "$data <br>";
+
+//echo somarDiasUteisNaData($data, 1);
+
+if(isFeriado($data)){
+	echo "eh feriado";
+}
+else{ 
+	echo "nao eh feriado";
 }
 
-function testarNomePasta(){        
-    $aplicacao = "CadastroContratos";
-    $ambiente = "";
-    $arquivo = 'PROD'; 
-    if (!file_exists($arquivo)) {
-        $aplicacao.= "DESENV";
-    } 
-   
-   $path = $_SERVER['DOCUMENT_ROOT'];
-   echo $path .= "/wordpress/$aplicacao/";
-   //include_once($path);   
-}
-
-include_once(caminho_vos."dbpessoavinculo.php");
-include_once(caminho_vos."vopessoavinculo.php");
-include_once(caminho_vos."dbpessoa.php");
-include_once(caminho_vos."vopessoa.php");
-
-include_once(caminho_util."DocumentoPessoa.php");
-
-teste();
-/*$a=array("a"=>"5","b"=>5,"c"=>"5");
-$a=array("a", "b", "c");
-echo array_search("c",$a);*/
-
-/*$array = array(vopessoa::$nmAtrCdUsuarioInclusao);
-
-$vo->varAtributos = removeColecaoAtributos($vo->varAtributos, $array);
-
-var_dump($vo->varAtributos);*/
+$datafim = somarDiasUteisNaData($data, 5);
+echo "<br> $datafim <br>"
 ?>
 
 <html>
 <head>
 <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
-<title>IMPORTAR PLANILHA #01</title>
+
 </head>
-<?php teste();?>
+
 <body>

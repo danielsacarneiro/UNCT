@@ -130,15 +130,30 @@ function validaFormulario() {
     <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
         <TBODY>
 	        <TR>
-	            <TH class="campoformulario" nowrap width="1%">PAAP.:</TH>
+	            <TH class="campoformulario" nowrap width="1%">Demanda:</TH>
 	            <TD class="campoformulario" nowrap width="1%" colspan="3">
 	            <?php
 	            $selectExercicio = new selectExercicio();
-	            echo "Ano: " . $selectExercicio->getHtmlCombo(voPA::$nmAtrAnoPA,voPA::$nmAtrAnoPA, $filtro->anoPA, true, "camponaoobrigatorio", false, "");?>
-			  Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voPA::$nmAtrCdPA?>" name="<?=voPA::$nmAtrCdPA?>"  value="<?php echo(complementarCharAEsquerda($filtro->cdPA, "0", TAMANHO_CODIGOS));?>"  class="camponaoobrigatorio" size="6" maxlength="5">
+	            echo "Ano: " . $selectExercicio->getHtmlCombo(voPA::$nmAtrAnoDemanda,voPA::$nmAtrAnoDemanda, $filtro->anoDemanda, true, "camponaoobrigatorio", false, "");?>
+			  Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voPA::$nmAtrCdDemanda?>" name="<?=voPA::$nmAtrCdDemanda?>"  value="<?php echo(complementarCharAEsquerda($filtro->cdDemanda, "0", TAMANHO_CODIGOS));?>"  class="camponaoobrigatorio" size="6" maxlength="5">
 			  </TD>			  
 			</TR>			            
-        
+	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">PAAP.:</TH>
+	            <TD class="campoformulario" nowrap width="1%" colspan="3">
+	            <?php
+	            echo "Ano: " . $selectExercicio->getHtmlCombo(voPA::$nmAtrAnoPA,voPA::$nmAtrAnoPA, $filtro->anoPA, true, "camponaoobrigatorio", false, "");?>
+			  Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voPA::$nmAtrCdPA?>" name="<?=voPA::$nmAtrCdPA?>"  value="<?php echo(complementarCharAEsquerda($filtro->cdPA, "0", TAMANHO_CODIGOS_SAFI));?>"  class="camponaoobrigatorio" size="6" maxlength="5">
+			  </TD>			  
+			</TR>			            
+	        <?php	        
+	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
+	        $arrayCssClass = array("camponaoobrigatorio","camponaoobrigatorio", "camponaoobrigatorio");
+	        ?>        
+            <TR>
+	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
+	            <TD class="campoformulario" colspan="3"><?php getContratoEntradaDeDados($filtro->tipoContrato, $filtro->cdContrato, $filtro->anoContrato, $arrayCssClass, null, null);?></TD>        	            
+			</TR>        
 			<TR>
                 <TH class="campoformulario" nowrap>Contratada:</TH>
                 <TD class="campoformulario" width="1%">
@@ -186,6 +201,9 @@ function validaFormulario() {
 		                  	<TH class="headertabeladados" rowspan="2" width="1%">Sq.Hist</TH>
 		                  <?php }?>
 						<TH class="headertabeladados" colspan="2">
+						<center>Demanda</center>
+						</TH>
+						<TH class="headertabeladados" colspan="2">
 						<center>P.A.</center>
 						</TH>
 						<TH class="headertabeladados" colspan="3">
@@ -197,6 +215,8 @@ function validaFormulario() {
 	                    <TH class="headertabeladados" rowspan="2"  width="1%" nowrap>Situação</TH>
                     </TR>
                     <TR>
+	                    <TH class="headertabeladados" width="1%" nowrap>Ano</TH>
+	                    <TH class="headertabeladados" width="1%">Num.</TH>
 	                    <TH class="headertabeladados" width="1%" nowrap>Ano</TH>
 	                    <TH class="headertabeladados" width="1%">Num.</TH>
 	                    <TH class="headertabeladados" width="1%" nowrap>Ano</TH>
@@ -214,7 +234,7 @@ function validaFormulario() {
                 $dominioTipoContrato = new dominioTipoContrato();
                 $domSiPA = new dominioSituacaoPA();
                 
-                $colspan=10;
+                $colspan=12;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -248,6 +268,8 @@ function validaFormulario() {
                   <?php 
                   }
                   ?>                    
+                    <TD class="tabeladados" nowrap><?php echo $voAtual->anoDemanda;?></TD>
+                    <TD class="tabeladados" nowrap><?php echo complementarCharAEsquerda($voAtual->cdDemanda, "0", TAMANHO_CODIGOS);?></TD>
                     <TD class="tabeladados" nowrap><?php echo $voAtual->anoPA;?></TD>
                     <TD class="tabeladados" nowrap><?php echo complementarCharAEsquerda($voAtual->cdPA, "0", TAMANHO_CODIGOS_SAFI);?></TD>
                     <TD class="tabeladados" nowrap><?php echo $voContratoAtual->anoContrato;?></TD>

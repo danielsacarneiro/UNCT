@@ -139,8 +139,7 @@ function confirmar() {
 	            	<INPUT type="text" 
 	            	       id="<?=voPA::$nmAtrDtAbertura?>" 
 	            	       name="<?=voPA::$nmAtrDtAbertura?>" 
-	            			value="<?php echo(getData($vo->dtAbertura));?>"
-	            			onkeyup="formatarCampoData(this, event, false);" 
+	            			value="<?php echo(getData($vo->dtAbertura));?>"	            			 
 	            			class="camporeadonly" 
 	            			size="10" 
 	            			maxlength="10" readonly>
@@ -152,8 +151,7 @@ function confirmar() {
 	            	<INPUT type="text" 
 	            	       id="<?=voPA::$nmAtrDtNotificacao?>" 
 	            	       name="<?=voPA::$nmAtrDtNotificacao?>" 
-	            			value="<?php echo(getData($vo->dtNotificacao));?>"
-	            			onkeyup="formatarCampoData(this, event, false);" 
+	            			value="<?php echo(getData($vo->dtNotificacao));?>"	            			 
 	            			class="camporeadonly" 
 	            			size="10" 
 	            			maxlength="10" readonly> *para fins de contagem de prazo	            			
