@@ -1,5 +1,13 @@
 <?php
 
+function imprimeLinhaHTML($texto){
+	echo $texto . "<br>";
+}
+
+function echoo($texto){
+	return imprimeLinhaHTML($texto);
+}
+
 function imprimeHtml($texto){
 	echo str_replace("\n", "<br>", $texto);
 }
@@ -13,6 +21,10 @@ function getMultiPos($haystack, $needles, $sensitive=true, $offset=0){
 		$result[$needle] = ($sensitive) ? strpos($haystack, $needle, $offset) : stripos($haystack, $needle, $offset);
 	}
 	return $result;
+}
+
+function getPosicaoPalavraNaString($string, $noh){
+	return strpos($string, $noh);
 }
 function isColecaoVazia($recordset) {
 	return $recordset == null || $recordset == "" || (is_array($recordset) && count($recordset)==0);
@@ -237,6 +249,7 @@ function array_merge_keys() {
 
 function putElementoArray2NoArray1ComChaves($array1, $array2) {
 	return array_merge_keys ( $array1, $array2);	
+	// ou $result = $array1 + $array2;
 }
 function getColecaoEntreSeparador($colecaoAtributos, $separador) {
 	return getColecaoEntreSeparadorAspas ( $colecaoAtributos, $separador, false );

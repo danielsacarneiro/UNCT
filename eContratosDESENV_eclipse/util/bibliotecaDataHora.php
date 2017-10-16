@@ -13,6 +13,7 @@ function getData($dataSQL) {
 function getDataHoraParam($dataSQL, $temHora) {
 	$retorno = null;
 	if ($dataSQL != null){
+		$dataSQL = str_replace("/", "-", $dataSQL);
 		if($dataSQL == "0000-00-00"){
 			//$retorno = mensagens::$msgDataErro;
 			$retorno = "";
@@ -82,9 +83,11 @@ function getQtdDiasEntreDatas($dataini, $datafim) {
 	return $retorno*$fator;
 }
 
-function somarOuSubtrairDiasNaData($dataHTML, $qtdDias, $operacao ="+"){
-	//echo date('d/m/Y', strtotime('+5 days', strtotime('14-07-2014')));	
-	return  date('d/m/Y', strtotime($operacao."$qtdDias days", strtotime($dataHTML)));
+function somarOuSubtrairDiasNaData($dataHTML, $count_days, $operacao ="+"){
+	$dataHTML = getData($dataHTML);
+	$dataHTML = str_replace("/", "-", $dataHTML);
+
+	return gmdate('d/m/Y',strtotime($operacao.$count_days.' day',strtotime($dataHTML)));
 }
 
 function somarOuSubtrairDiasUteisNaData($str_data,$int_qtd_dias_somar = 7, $operacao = "+") {

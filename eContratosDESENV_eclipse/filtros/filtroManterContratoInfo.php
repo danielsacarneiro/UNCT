@@ -121,14 +121,7 @@ class filtroManterContratoInfo extends filtroManter {
 		
 			$conector = "\n AND ";
 		}
-		
-		/*if ($this->cdAutorizacao != null) {
-		
-			$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrCdAutorizacaoContrato . " = " . getVarComoString ( $this->cdAutorizacao );
-		
-			$conector = "\n AND ";
-		}*/		
-		
+				
 		if($this->cdAutorizacao != null){
 			$strComparacao = $this->getSqlAtributoCoalesceAutorizacao();
 						

@@ -31,7 +31,8 @@ cabecalho;
 	
 	f2 = new Tree('Serviço 02 (Contratos)');
 	f2.adicionarItem(new Link("Contratos-Planilha", "<?=caminho_funcoesHTML?>contrato", ""));
-	f2.adicionarItem(new Link("Contratos-Informações Adicionais", "<?=caminho_funcoesHTML?>contrato_info", ""));	
+	f2.adicionarItem(new Link("Contratos-Informações Adicionais", "<?=caminho_funcoesHTML?>contrato_info", ""));
+	f2.adicionarItem(new Link("Contratos-Consolidação", "<?=caminho_funcoesHTML?>contrato_consolidacao", ""));	
 	f.adicionarItem(f2);
 
 	f3 = new Tree('Serviço 03 (Demanda)');

@@ -343,9 +343,9 @@ include_once(caminho_funcoes. "contrato/dominioClassificacaoContrato.php");
 					. "*"
 					. $this->anoContrato
 					. "*"
-					. $this->tipo
-					. "*"
 					. $this->cdContrato
+					. "*"
+					. $this->tipo
 					. "*"
 					. $this->cdEspecie
 					. "*"
@@ -365,9 +365,9 @@ include_once(caminho_funcoes. "contrato/dominioClassificacaoContrato.php");
 		
 		$array = explode("*",$chave);
 		$this->sq = $array[0];
-		$this->anoContrato = $array[1];
-		$this->tipo = $array[2];
-		$this->cdContrato = $array[3];
+		$this->anoContrato = $array[1];		
+		$this->cdContrato = $array[2];
+		$this->tipo = $array[3];
 		$this->cdEspecie = $array[4];
 		$this->sqEspecie = $array[5];
 		$this->sqHist = $array[6];
@@ -376,8 +376,8 @@ include_once(caminho_funcoes. "contrato/dominioClassificacaoContrato.php");
 	function getChavePrimariaVOExplode($array){
 		$this->sq = $array[0];
 		$this->anoContrato = $array[1];
-		$this->tipo = $array[2];
-		$this->cdContrato = $array[3];
+		$this->cdContrato = $array[2];
+		$this->tipo = $array[3];		
 		$this->cdEspecie = $array[4];
 		$this->sqEspecie = $array[5];
 		$this->sqHist = $array[6];

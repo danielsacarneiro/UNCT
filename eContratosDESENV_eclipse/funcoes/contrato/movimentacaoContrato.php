@@ -14,7 +14,7 @@ $voContratoInfo = new voContratoInfo();
 $classChaves = "camporeadonly";
 $readonly = "readonly";
 
-$voContrato->getVOExplodeChave($chave);
+$voContrato->getVOExplodeChave();
 $isHistorico = ($voContrato->sqHist != null && $voContrato->sqHist != "");
 
 	$dbprocesso = new dbcontrato(null);				

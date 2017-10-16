@@ -69,6 +69,7 @@
     static $CD_COLUNA_CHAVE  = "COLUNA_CD";
     static $CD_COLUNA_VALOR = "COLUNA_VALOR";
     static $CD_COLUNA_TP_DADO = "COLUNA_TP_DADO";
+    static $CD_COLUNA_CONTRATO = "CONTRATO";
     
     static $CD_TP_DADO_DATA = "DATA";
     

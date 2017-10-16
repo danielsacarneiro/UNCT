@@ -99,14 +99,7 @@ function confirmar() {
                 <INPUT type="hidden" id="<?=voPA::$nmAtrSqHist?>" name="<?=voPA::$nmAtrSqHist?>" value="<?=$vo->sqHist?>">
             </TR>               
             <?php }
-            ?>         
-			<TR>
-		         <TH class="campoformulario" nowrap width="1%">P.A.A.P.:</TH>
-		         <TD class="campoformulario" colspan=3>
-		         <?php echo(getDetalhamentoHTMLCodigoAno($vo->anoPA, $vo->cdPA, TAMANHO_CODIGOS_SAFI));?>
-				 </TD>
-	        </TR>
-			<?php 
+ 
 			getDemandaDetalhamento($voDemanda);
 			getContratoDet($voContrato);
 	         
@@ -115,6 +108,12 @@ function confirmar() {
 	        $situacao = $colecao[voPA::$nmAtrSituacao];
 	        $situacao = $domSiPA->getDescricao($situacao);
 	        ?>
+			<TR>
+		         <TH class="campoformulario" nowrap width="1%">P.A.A.P.:</TH>
+		         <TD class="campoformulario" colspan=3>
+		         <?php echo(getDetalhamentoHTMLCodigoAno($vo->anoPA, $vo->cdPA, TAMANHO_CODIGOS_SAFI));?>
+				 </TD>
+	        </TR>
             <TR>
 				<TH class="campoformulario" nowrap>Servidor Responsável:</TH>
                 <TD class="campoformulario" colspan="3">

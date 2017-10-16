@@ -22,14 +22,9 @@ try {
 	
 	$dbprocesso = new dbPA();
 	$colecao = $dbprocesso->consultarDemandaPAAP($filtro );
-	
-	$colunasAAcrescentar = array(
-		array( constantes::$CD_COLUNA_CHAVE => 'Dt.Citação', 
-				constantes::$CD_COLUNA_VALOR => voPA::$nmAtrDtNotificacao, 
-				constantes::$CD_COLUNA_TP_DADO =>  constantes::$CD_TP_DADO_DATA),
-	);	
 		
-	exibeAlertaDemandasPorColecao($colecao, true, $assunto, $colunasAAcrescentar);	
+	$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Dt.Citação', voPA::$nmAtrDtNotificacao, constantes::$CD_TP_DADO_DATA);			
+	exibeAlertaDemandasContrato($colecao, true, $assunto, $colunasAAcrescentar);
 
 } catch ( Exception $ex ) {
 	$msg = $ex->getMessage ();

@@ -2,7 +2,11 @@
 include_once("constantes.class.php");
 include_once ("bibliotecaFuncoesPrincipal.php");
 
-  //Class bibliotecaSQL {
+  //bibliotecaSQL
+  
+function getSQLCASE($atributo, $valorCondicao, $valorTHEN, $valorELSE){
+	return "CASE $atributo WHEN $valorCondicao THEN $valorTHEN ELSE $valorELSE END ";
+}
   
 	function getDataSQL($dataSQL) {
 		$retorno = "";		
@@ -56,8 +60,11 @@ include_once ("bibliotecaFuncoesPrincipal.php");
 			$pNmColDtInicioVigencia,
 			$pNmColDtFimVigencia) {
 	
-			$nmColDtInicioVigencia = "$pNmTableEntidade.$pNmColDtInicioVigencia";
-			$nmColDtFimVigencia = "$pNmTableEntidade.$pNmColDtFimVigencia";
+			if($pNmTableEntidade != null){
+				$pNmTableEntidade = "$pNmTableEntidade.";
+			}
+			$nmColDtInicioVigencia = $pNmTableEntidade . $pNmColDtInicioVigencia;
+			$nmColDtFimVigencia = $pNmTableEntidade.$pNmColDtFimVigencia;
 					
 			$sqlFinal = $sqlClausulaVigenciaAtual =
 					"( "					
@@ -95,8 +102,12 @@ include_once ("bibliotecaFuncoesPrincipal.php");
 		$pNmColDtInicioVigencia,
 		$pNmColDtFimVigencia) {
 		
-		$nmColDtInicioVigencia = "$pNmTableEntidade.$pNmColDtInicioVigencia";
-		$nmColDtFimVigencia = "$pNmTableEntidade.$pNmColDtFimVigencia";
+		if($pNmTableEntidade != null){
+			$pNmTableEntidade = "$pNmTableEntidade.";
+		}
+				
+		$nmColDtInicioVigencia = $pNmTableEntidade.$pNmColDtInicioVigencia;
+		$nmColDtFimVigencia = $pNmTableEntidade.$pNmColDtFimVigencia;
 		
 		//$pDataComparacao = "'" . $pDataComparacao . "'";
 		
@@ -305,5 +316,11 @@ include_once ("bibliotecaFuncoesPrincipal.php");
 	function getDataSQLDiferencaAnos($data1, $data2){		
 		return " TIMESTAMPDIFF(YEAR, $data1, $data2) " ;
 	}
+	
+	function getDataSQLDiferencaDias($data1, $data2){
+		//echoo("data $data1");
+		return " DATEDIFF($data2, $data1) ";
+	}
+	
 	
 ?>

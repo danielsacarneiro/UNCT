@@ -59,6 +59,10 @@ Class voContratoInfo extends voentidade{
 		return  "CONTRATO-INFORMAÇÕES ADICIONAIS";
 	}
 
+	public static function getTituloJSPConsolidacao(){
+		return  "CONTRATO-CONSOLIDAÇÃO";
+	}
+	
 	public static function getNmTabela(){
 		return  "contrato_info";
 	}
@@ -99,9 +103,9 @@ Class voContratoInfo extends voentidade{
 
 	function getAtributosChavePrimaria(){
 		$retorno = array(
-				self::$nmAtrAnoContrato,
+				self::$nmAtrAnoContrato,				
+				self::$nmAtrCdContrato,
 				self::$nmAtrTipoContrato,
-				self::$nmAtrCdContrato
 		);
 
 		return $retorno;
