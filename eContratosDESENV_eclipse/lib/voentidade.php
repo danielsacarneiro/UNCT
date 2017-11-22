@@ -104,7 +104,9 @@ class voentidade extends multiplosConstrutores {
 		$retorno = "";
 		$retorno .= self::$nmAtrDhUltAlteracao . " = now() ";
 		$retorno .= ",";
-		$retorno .= self::$nmAtrCdUsuarioUltAlteracao . " = " . $this->cdUsuarioUltAlteracao;
+		$retorno .= self::$nmAtrCdUsuarioUltAlteracao . " = " . id_user;
+		
+		//echoo($retorno);
 		
 		return $retorno;
 	}
@@ -115,7 +117,7 @@ class voentidade extends multiplosConstrutores {
 		$retorno = "";
 		$conector = ",";
 		if ($temUsuarioAlt) {
-			$retorno .= $conector . self::$nmAtrCdUsuarioUltAlteracao . " = " . $this->cdUsuarioUltAlteracao;
+			$retorno .= $conector . self::$nmAtrCdUsuarioUltAlteracao . " = " . id_user;
 			$conector = ",";
 		}
 		if ($temDtAlt) {
