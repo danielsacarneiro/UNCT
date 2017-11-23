@@ -88,6 +88,10 @@ CREATE TABLE pa_penalidade (
     
     CONSTRAINT pk PRIMARY KEY (pa_ex, pa_cd, pen_sq)
 );
+ALTER TABLE pa_penalidade ADD CONSTRAINT fk_pa_penalidade_pa FOREIGN KEY (pa_ex, pa_cd) REFERENCES pa (pa_ex, pa_cd) 
+	ON DELETE RESTRICT
+	ON UPDATE RESTRICT;
+
 
 drop table if exists pa_penalidade_hist;
 CREATE TABLE pa_penalidade_hist (
