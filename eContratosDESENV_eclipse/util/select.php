@@ -88,8 +88,10 @@ class select extends multiplosConstrutores {
 		}
 		
 		$descricao = $ds;
-		if ($isTrazerValuenoOption)
-			$descricao = $cd . " - " . $ds;
+		if ($isTrazerValuenoOption){
+			$descricao = $this->getDescricaoComValueNoOption($cd, $ds);
+			//$descricao = $cd . " - " . $ds;
+		}
 		
 		return "<option value='" . $cd . "' " . $selected . ">" . $descricao . "</option>\n";
 	}
@@ -200,6 +202,10 @@ class select extends multiplosConstrutores {
 		$html .= "</SCRIPT>";
 		
 		return $html;
+	}
+	
+	static function getDescricaoComValueNoOption($cd, $ds){		
+			return ($cd . " - " . $ds);
 	}
 }
 ?>

@@ -329,5 +329,10 @@ function consultarContratosDemanda($voDemanda) {
 	$colecao = $db->consultarDemandaContrato ( $voDemanda );
 	return $colecao;
 }
+function consultarContratosPAAP($voPAAP) {
+	$db = new dbPA();
+	$colecao = $db->consultarContratoPAAP ( $voPAAP );
+	return $colecao;
+}
 
 ?>

@@ -41,7 +41,7 @@ if($isInclusao){
 	
 	$voDemanda = new voDemanda();
 	$voDemanda->getDadosBanco($colecao);
-	
+		
 	putObjetoSessao($vo->getNmTabela(), $vo);
 
     $nmFuncao = "ALTERAR ";
@@ -65,7 +65,7 @@ setCabecalho($titulo);
 <SCRIPT language="JavaScript" type="text/javascript">
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
 function isFormularioValido() {
-	if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta"))
+	if (!validarPublicacao())
 		return false;		
 	return true;
 }
@@ -76,8 +76,9 @@ function cancelar() {
 }
 
 function confirmar() {
-	/*if(!isFormularioValido())
-		return false;*/
+	if(!isFormularioValido()){
+		return false;
+	}
 	
 	return confirm("Confirmar Alteracoes?");    
 }
@@ -93,6 +94,17 @@ function carregaDadosContratada(){
 		//vai no ajax
 		getDadosContratadaPorDemanda(str, '<?=vopessoa::$nmAtrNome?>');
 	}
+}
+
+function validarPublicacao(){
+	fundamento = document.frm_principal.<?=voPA::$nmAtrPublicacao?>.value;	
+	if(fundamento.indexOf("<?=constantes::$CD_MODELO?>") != -1){
+		//neste caso o campo fundamento está com o valor MODELO
+		exibirMensagem("O MODELO do campo 'publicação' deve ser alterado.");
+		return false;
+	} 
+
+	return true;
 }
 
 </SCRIPT>
@@ -137,7 +149,7 @@ function carregaDadosContratada(){
 	            $vo->dtAbertura = dtHojeSQL;
 			  ?>			            
 			<TR>
-		        <TH class="campoformulario" nowrap width="1%">P.A.D.:</TH>
+		        <TH class="campoformulario" nowrap width="1%">P.A.A.P.:</TH>
 		        <TD class="campoformulario" colspan=3>		        
 		            	<?php echo "Ano: " . $selectExercicio->getHtmlCombo(voPA::$nmAtrAnoPA,voPA::$nmAtrAnoPA, $vo->anoPA, true, "campoobrigatorio", false, " required ");?>			            
 			            Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voPA::$nmAtrCdPA?>" name="<?=voPA::$nmAtrCdPA?>"  value="<?php echo(complementarCharAEsquerda($voContrato->cdContrato, "0", 3));?>"  class="camponaoobrigatorioalinhadodireita" size="6" maxlength="5" required>
@@ -205,13 +217,22 @@ function carregaDadosContratada(){
 	            			class="camponaoobrigatorio" 
 	            			size="10" 
 	            			maxlength="10" required>
-	            			
+				</TD>
+        	</TR>
+        	<?php        	
+        		$modeloPublicacao = voPA::getTextoModeloPublicacaoPenalidade($voContrato);        	 
+        	?>
+			<TR>
+	            <TH class="campoformulario" nowrap>Publicação:</TH>
+	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=voPA::$nmAtrPublicacao?>" name="<?=voPA::$nmAtrPublicacao?>" class="camponaoobrigatorio" ><?php echo($vo->publicacao);?></textarea>
 	            <SCRIPT language="JavaScript" type="text/javascript">
 	            	colecaoIDCamposRequired = ["<?=voPA::$nmAtrDtNotificacao?>"];
 	            </SCRIPT>
-	            <INPUT type="checkbox" id="checkResponsabilidade" name="checkResponsabilidade" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCamposRequired);"> *Assumo a responsabilidade de não incluir os valores obrigatórios.	            			
+	            <br><INPUT type="checkbox" onClick="if(!this.checked){document.frm_principal.<?=voPA::$nmAtrPublicacao?>.value='';}else{document.frm_principal.<?=voPA::$nmAtrPublicacao?>.value='<?=$modeloPublicacao?>'};"> *incluir Modelo Publicação.
+	            <br><INPUT type="checkbox" id="checkResponsabilidade" name="checkResponsabilidade" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCamposRequired);"> *Assumo a responsabilidade de não incluir os valores obrigatórios.	            				            
 				</TD>
-        	</TR>
+	        </TR>
+        	
     
 <TR>
 	<TD halign="left" colspan="4">

@@ -4,7 +4,7 @@ include_once(caminho_util."bibliotecaHTML.php");
 
 inicioComValidacaoUsuario(true);
 
-$vo = new voPA();
+$vo = new voPenalidadePA();
 $vo->getDadosFormulario();
 
 putObjetoSessao("vo", $vo);

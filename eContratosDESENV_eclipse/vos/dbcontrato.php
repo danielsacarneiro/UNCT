@@ -95,7 +95,7 @@ class dbcontrato extends dbprocesso {
 		$query .= "$nmTabela." . vocontrato::$nmAtrAnoContrato . " = " . $voContrato->anoContrato;
 		$query .= "\n AND $nmTabela." . vocontrato::$nmAtrCdContrato . " = " . $voContrato->cdContrato;
 		$query .= "\n AND $nmTabela." . vocontrato::$nmAtrTipoContrato . " = " . getVarComoString ( $voContrato->tipo );
-		$query .= "\n ORDER BY " . vocontrato::$nmAtrDtAssinaturaContrato;
+		$query .= "\n ORDER BY " . vocontrato::$nmAtrSqContrato . " " . constantes::$CD_ORDEM_CRESCENTE;
 		
 		// echo $query;
 		return $this->consultarEntidade ( $query, false );

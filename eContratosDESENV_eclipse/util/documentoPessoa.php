@@ -15,6 +15,7 @@
  */
 class documentoPessoa
 {
+	static $DS_REFERENCIA = "CNPJ/CNPF";
 	static $tpDocCPF = "03";
 	static $tpDocCNPJ = "02";
 	static $tpDocRG = "01";

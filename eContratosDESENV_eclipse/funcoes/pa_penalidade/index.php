@@ -2,18 +2,17 @@
 include_once("../../config_lib.php");
 include_once(caminho_util."bibliotecaHTML.php");
 include_once(caminho_util."constantes.class.php");
-include_once(caminho_util. "select.php");
 include_once(caminho_util."selectExercicio.php");
-include_once(caminho_filtros . "filtroManterPA.php");
+include_once(caminho_filtros . "filtroManterPenalidade.php");
 
 //inicia os parametros
 inicio();
 
-$vo = new voPA();
-$titulo = "CONSULTAR " . voPA::getTituloJSP();
+$vo = new voPenalidadePA();
+$titulo = "CONSULTAR " . voPenalidadePA::getTituloJSP();
 setCabecalho($titulo);
 
-$filtro  = new filtroManterPA();
+$filtro  = new filtroManterPenalidade();
 $filtro->voPrincipal = $vo;
 $filtro = filtroManter::verificaFiltroSessao($filtro);
 	
@@ -24,7 +23,7 @@ $cdOrdenacao = $filtro->cdOrdenacao;
 $isHistorico = "S" == $cdHistorico; 
 
 $dbprocesso = $vo->dbprocesso;
-$colecao = $dbprocesso->consultarPAAP($vo, $filtro);
+$colecao = $dbprocesso->consultarPenalidadeTelaConsulta($vo, $filtro);
 
 $paginacao = $filtro->paginacao;
 if($filtro->temValorDefaultSetado){
@@ -130,20 +129,12 @@ function validaFormulario() {
     <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
         <TBODY>
 	        <TR>
-	            <TH class="campoformulario" nowrap width="1%">Demanda:</TH>
-	            <TD class="campoformulario" nowrap width="1%" colspan="3">
-	            <?php
-	            $selectExercicio = new selectExercicio();
-	            echo "Ano: " . $selectExercicio->getHtmlCombo(voPA::$nmAtrAnoDemanda,voPA::$nmAtrAnoDemanda, $filtro->anoDemanda, true, "camponaoobrigatorio", false, "");?>
-			  Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voPA::$nmAtrCdDemanda?>" name="<?=voPA::$nmAtrCdDemanda?>"  value="<?php echo(complementarCharAEsquerda($filtro->cdDemanda, "0", TAMANHO_CODIGOS));?>"  class="camponaoobrigatorio" size="6" maxlength="5">
-			  </TD>			  
-			</TR>			            
-	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">PAAP.:</TH>
 	            <TD class="campoformulario" nowrap width="1%" colspan="3">
 	            <?php
-	            echo "Ano: " . $selectExercicio->getHtmlCombo(voPA::$nmAtrAnoPA,voPA::$nmAtrAnoPA, $filtro->anoPA, true, "camponaoobrigatorio", false, "");?>
-			  Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voPA::$nmAtrCdPA?>" name="<?=voPA::$nmAtrCdPA?>"  value="<?php echo(complementarCharAEsquerda($filtro->cdPA, "0", TAMANHO_CODIGOS_SAFI));?>"  class="camponaoobrigatorio" size="6" maxlength="5">
+	            $selectExercicio = new selectExercicio();
+	            echo "Ano: " . $selectExercicio->getHtmlCombo(voPenalidadePA::$nmAtrAnoPA,voPenalidadePA::$nmAtrAnoPA, $filtro->anoPA, true, "camponaoobrigatorio", false, "");?>
+			  Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voPenalidadePA::$nmAtrCdPA?>" name="<?=voPenalidadePA::$nmAtrCdPA?>"  value="<?php echo(complementarCharAEsquerda($filtro->cdPA, "0", TAMANHO_CODIGOS_SAFI));?>"  class="camponaoobrigatorio" size="6" maxlength="5">
 			  </TD>			  
 			</TR>			            
 	        <?php	        
@@ -161,26 +152,9 @@ function validaFormulario() {
                 Nome: <INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>"  value="<?php echo($nome);?>"  class="camponaoobrigatorio" size="30" ></TD>
                 <TH class="campoformulario" width="1%" nowrap>CNPJ/CPF:</TH>
                 <TD class="campoformulario"><INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($doc);?>" class="camponaoobrigatorio" size="20" maxlength="18"></TD>
-            </TR>
-        
-			<TR>
-				<TH class="campoformulario" nowrap>Situação:</TH>
-                <TD class="campoformulario" colspan="3">
-                     <?php
-                    include_once("biblioteca_htmlPA.php");                    
-                    echo getComboSituacaoPA(voPA::$nmAtrSituacao, voPA::$nmAtrSituacao, $filtro->situacao, "camponaoobrigatorio", "");                                        
-                    ?>
-            </TR>            
-            <TR>
-				<TH class="campoformulario" nowrap>Servidor Responsável:</TH>
-                <TD class="campoformulario" colspan="3">
-                     <?php
-                    include_once(caminho_funcoes."pessoa/biblioteca_htmlPessoa.php");                    
-                    echo getComboPessoaRespPA(voPA::$nmAtrCdResponsavel, voPA::$nmAtrCdResponsavel, $filtro->cdResponsavel, "camponaoobrigatorio", "");                                        
-                    ?>
-            </TR>            
+            </TR>        
        <?php
-        /*$comboOrdenacao = new select(voPA::getAtributosOrdenacao($cdHistorico));
+        /*$comboOrdenacao = new select(voPenalidadePA::getAtributosOrdenacao($cdHistorico));
         $cdAtrOrdenacao = $filtro->cdAtrOrdenacao;
         echo getComponenteConsulta($comboOrdenacao, $cdAtrOrdenacao, $cdOrdenacao, $qtdRegistrosPorPag, true, $cdHistorico)*/
        echo getComponenteConsultaFiltro($vo->temTabHistorico, $filtro);
@@ -200,23 +174,19 @@ function validaFormulario() {
 		                  <?php if($isHistorico){?>
 		                  	<TH class="headertabeladados" rowspan="2" width="1%">Sq.Hist</TH>
 		                  <?php }?>
+		                <TH class="headertabeladados" rowspan="2" width="1%">Num.</TH>		                  
 						<TH class="headertabeladados" colspan="2">
 						<center>P.A.</center>
-						</TH>
-						<TH class="headertabeladados" colspan="2">
-						<center>Demanda</center>
 						</TH>
 						<TH class="headertabeladados" colspan="3">
 						<center>Contrato</center>
 						</TH>
 	                    <TH class="headertabeladados" rowspan="2" width="1%" nowrap >Doc.Contratada</TH>
 	                    <TH class="headertabeladados" rowspan="2" width="90%">Contratada</TH>
-	                    <TH class="headertabeladados" rowspan="2" width="1%" nowrap>Servidor.Resp.</TH>
-	                    <TH class="headertabeladados" rowspan="2"  width="1%" nowrap>Situação</TH>
+	                    <TH class="headertabeladados" rowspan="2" nowrap width="1%">Penalidade</TH>
+	                    <TH class="headertabeladados" rowspan="2"  width="1%" nowrap>Data</TH>
                     </TR>
                     <TR>
-	                    <TH class="headertabeladados" width="1%" nowrap>Ano</TH>
-	                    <TH class="headertabeladados" width="1%">Num.</TH>
 	                    <TH class="headertabeladados" width="1%" nowrap>Ano</TH>
 	                    <TH class="headertabeladados" width="1%">Num.</TH>
 	                    <TH class="headertabeladados" width="1%" nowrap>Ano</TH>
@@ -234,28 +204,19 @@ function validaFormulario() {
                 $dominioTipoContrato = new dominioTipoContrato();
                 $domSiPA = new dominioSituacaoPA();
                 
-                $colspan=12;
+                $colspan=13;
                 if($isHistorico){
                 	$colspan++;
                 }
                 
                 for ($i=0;$i<$tamanho;$i++) {
-                        $voAtual = new voPA();
+                        $voAtual = new voPenalidadePA();
                         $voContratoAtual = new vocontrato();
-                        $voAtual->getDadosBanco($colecao[$i]);     
+                        $voAtual->getDadosBanco($colecao[$i]);
                         $voContratoAtual->getDadosBanco($colecao[$i]);
-                        
-                        /*$contrato = formatarCodigoAnoComplemento($colecao[$i][voPA::$nmAtrCdContrato],
-                        						$colecao[$i][voPA::$nmAtrAnoContrato], 
-                        						$dominioTipoContrato->getDescricao($colecao[$i][voPA::$nmAtrTipoContrato]));
                                                 
-                        $procAdm = formatarCodigoAno($colecao[$i][voPA::$nmAtrCdPA],
-                        		$colecao[$i][voPA::$nmAtrAnoPA]);*/
-                        
-                        $situacao = $colecao[$i][voPA::$nmAtrSituacao];
-                        $situacao = $domSiPA->getDescricao($situacao);  
-                        $tipo = $dominioTipoContrato->getDescricao($voContratoAtual->tipo);
-                        
+                        $tipoContrato = $dominioTipoContrato->getDescricao($voContratoAtual->tipo);                        
+                        $tipoPenalidade = dominioTipoPenalidade::getDescricaoStatic($voAtual->tipo);
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados">
@@ -264,21 +225,20 @@ function validaFormulario() {
                   <?php                  
                   if($isHistorico){                  	
                   	?>
-                  	<TD class="tabeladados"><?php echo complementarCharAEsquerda($colecao[$i][voPA::$nmAtrSqHist], "0", TAMANHO_CODIGOS);?></TD>
+                  	<TD class="tabeladados"><?php echo complementarCharAEsquerda($colecao[$i][voPenalidadePA::$nmAtrSqHist], "0", TAMANHO_CODIGOS);?></TD>
                   <?php 
                   }
                   ?>                    
+                    <TD class="tabeladados" nowrap><?php echo complementarCharAEsquerda($voAtual->sq, "0", TAMANHO_CODIGOS_SAFI);?></TD>
                     <TD class="tabeladados" nowrap><?php echo $voAtual->anoPA;?></TD>
                     <TD class="tabeladados" nowrap><?php echo complementarCharAEsquerda($voAtual->cdPA, "0", TAMANHO_CODIGOS_SAFI);?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $voAtual->anoDemanda;?></TD>
-                    <TD class="tabeladados" nowrap><?php echo complementarCharAEsquerda($voAtual->cdDemanda, "0", TAMANHO_CODIGOS);?></TD>
                     <TD class="tabeladados" nowrap><?php echo $voContratoAtual->anoContrato;?></TD>
                     <TD class="tabeladados" nowrap><?php echo complementarCharAEsquerda($voContratoAtual->cdContrato, "0", TAMANHO_CODIGOS_SAFI);?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $tipo;?></TD>
+                    <TD class="tabeladados" nowrap><?php echo $tipoContrato;?></TD>
                     <TD class="tabeladados" nowrap><?php echo documentoPessoa::getNumeroDocFormatado($colecao[$i][vopessoa::$nmAtrDoc]);?></TD>
                     <TD class="tabeladados"><?php echo $colecao[$i][$filtro->nmColNomePessoaContrato];?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $colecao[$i][$filtro->nmColNomePessoaResponsavel];?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $situacao;?></TD>
+                    <TD class="tabeladados" nowrap><?php echo $tipoPenalidade;?></TD>
+                    <TD class="tabeladados" nowrap><?php echo getData($voAtual->dtAplicacao);?></TD>
                 </TR>					
                 <?php
 				}				

@@ -1,5 +1,6 @@
 <?php
 include_once (caminho_funcoes . "pa/dominioSituacaoPA.php");
+include_once (caminho_funcoes . "pa_penalidade/dominioTipoPenalidade.php");
 
 class voPA extends voentidade {
 	static $nmAtrCdPA = "pa_cd"; // processo administrativo cd
@@ -8,6 +9,7 @@ class voPA extends voentidade {
 	static $nmAtrCdDemanda = "dem_cd";
 	static $nmAtrCdResponsavel = "pa_cd_responsavel";
 	static $nmAtrObservacao = "pa_observacao";
+	static $nmAtrPublicacao = "pa_publicacao";
 	static $nmAtrDtAbertura = "pa_dt_abertura";
 	static $nmAtrDtNotificacao = "pa_dt_notificacao";
 	static $nmAtrSituacao = "pa_si";
@@ -16,6 +18,7 @@ class voPA extends voentidade {
 	var $cdDemanda = "";
 	var $anoDemanda = "";
 	var $obs = "";
+	var $publicacao = "";
 	var $dtAbertura = "";
 	var $dtNotificacao = "";
 	var $situacao = "";
@@ -75,6 +78,7 @@ class voPA extends voentidade {
 				self::$nmAtrCdDemanda,
 				self::$nmAtrCdResponsavel,
 				self::$nmAtrObservacao,
+				self::$nmAtrPublicacao,
 				self::$nmAtrDtAbertura,
 				self::$nmAtrDtNotificacao,
 				self::$nmAtrSituacao 
@@ -100,6 +104,7 @@ class voPA extends voentidade {
 		$this->cdResponsavel = $registrobanco [self::$nmAtrCdResponsavel];
 		
 		$this->obs = $registrobanco [self::$nmAtrObservacao];
+		$this->publicacao = $registrobanco [self::$nmAtrPublicacao];
 		$this->dtAbertura = $registrobanco [self::$nmAtrDtAbertura];
 		$this->dtNotificacao = $registrobanco [self::$nmAtrDtNotificacao];
 		$this->situacao = $registrobanco [self::$nmAtrSituacao];
@@ -113,6 +118,7 @@ class voPA extends voentidade {
 		$this->cdResponsavel = @$_POST [self::$nmAtrCdResponsavel];
 		
 		$this->obs = @$_POST [self::$nmAtrObservacao];
+		$this->publicacao = @$_POST [self::$nmAtrPublicacao];
 		$this->dtAbertura = @$_POST [self::$nmAtrDtAbertura];
 		$this->dtNotificacao = @$_POST [self::$nmAtrDtNotificacao];
 		$this->situacao = @$_POST [self::$nmAtrSituacao];
@@ -120,6 +126,32 @@ class voPA extends voentidade {
 		//completa com os dados da entidade
 		$this->getDadosFormularioEntidade();
 	}
+	
+	static function getTextoModeloPublicacaoPenalidade($voContrato=null){
+		//$voContrato = new vocontrato();
+		$codigoContrato = "XXX";
+		$nomeEmpresa = "XXX, " .documentoPessoa::$DS_REFERENCIA. " n° XXX";
+		
+		if($voContrato != null){
+			$codigoContrato = $voContrato->getCodigoContratoFormatado();
+			
+			$colecao = consultarPessoasContrato($voContrato);
+			$voPessoa = new vopessoa();
+			$voPessoa->getDadosBanco($colecao[0]);
+			
+			$nomeEmpresa = "$voPessoa->nome, CNPJ/CNPF n° ". documentoPessoa::getNumeroDocFormatado($voPessoa->doc); 				
+		}
+		
+		$diaExtenso = strftime ( '%d de %B de %Y', strtotime ( 'today' ) );
+	
+		$retorno = constantes::$CD_MODELO_TEXTO . " Contrato: $codigoContrato. Empresa: $nomeEmpresa. Penalidade: XXX. Fundamento: XXX.";
+		$retorno .= "Recurso: desta decisão cabe recurso no prazo XXX dias úteis, contados da intimação do ato, conforme art. 33, do Decreto n° 42.191/2015.";
+		$retorno .= "O Processo encontra-se com vista franqueada na ATJA/SEFAZ, localizada na Avenida Cruz Cabugá, n° 1419, Sala 108, Bairro Santo Amaro,";
+		$retorno .= "Recife/PE, no horário das 09h às 16h. Recife, $diaExtenso. Marcelo José Mendonça de Sá - Superintendente Administrativo e Financeiro da SEFAZ-PE.";
+		
+		return $retorno;
+	}
+	
 	function toString() {
 		$retorno .= $this->anoPA . ",";
 		$retorno .= $this->cdPA . ",";

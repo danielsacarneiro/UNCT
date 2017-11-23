@@ -73,5 +73,8 @@
     
     static $CD_TP_DADO_DATA = "DATA";
     
+    static $CD_MODELO_TEXTO = "[XXX MODELO - ALTERAR XXX]";
+    static $CD_MODELO = "MODELO";
+    
 }
 ?>

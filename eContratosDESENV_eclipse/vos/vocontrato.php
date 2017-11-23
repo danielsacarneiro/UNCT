@@ -388,5 +388,16 @@ include_once(caminho_funcoes. "contrato/dominioClassificacaoContrato.php");
 		//$link = str_replace("G:", "H:", $this->linkDoc);
 		return $link; 
 	}
+	
+	function getCodigoContratoFormatado() {
+		return static::getCodigoContratoFormatadoStatic($this->cdContrato, $this->anoContrato, $this->tipo);
+	}
+	
+	static function getCodigoContratoFormatadoStatic($cd, $ano, $tipo) {
+		$dominioTipoContrato = new dominioTipoContrato ();
+		$complemento = $dominioTipoContrato->getDescricao ( $tipo );
+		return formatarCodigoAnoComplemento ( $cd, $ano, $complemento );
+	}
+	
 }
 ?>

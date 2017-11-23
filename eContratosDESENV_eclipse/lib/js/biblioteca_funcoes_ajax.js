@@ -48,6 +48,11 @@
      imprimeResultado(result, "../pessoa/campoDadosContratadaAjax.php?voentidade=vodemanda&chave=" + chaveDemanda);     
  }
 
+ function getDadosContratadaPorPAAP(chavePAAP, idDivResultado) {
+     var result = document.getElementById(idDivResultado);          
+     imprimeResultado(result, "../pessoa/campoDadosContratadaAjax.php?voentidade=voPA&chave=" + chavePAAP);     
+ }
+
  function getNovoCampoDadosContratoAjax(idDivResultado, pIndiceContratoAtual, pIsLimpar) {
      var result = document.getElementById(idDivResultado);
      var limpar = (pIsLimpar != null && pIsLimpar);

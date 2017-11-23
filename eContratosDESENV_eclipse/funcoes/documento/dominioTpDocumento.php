@@ -9,9 +9,10 @@ class dominioTpDocumento extends dominio {
 	static $ENDERECO_PASTA_DOCUMENTOS = "\Documentos";
 	static $ENDERECO_PASTA_PA = "\PROCESSO ADMINISTRATIVO";	
 	
-	
 	static $CD_TP_DOC_APOSTILAMENTO = "AP";
 	static $CD_TP_DOC_CI = "CI";
+	static $CD_TP_DOC_DECISAO = "DC";
+	static $CD_TP_DOC_DESPACHO = "DE";
 	static $CD_TP_DOC_INTIMACAO = "IN";
 	static $CD_TP_DOC_NOTA_TECNICA = "NT";
 	static $CD_TP_DOC_NOTA_IMPUTACAO = "NI";
@@ -21,9 +22,12 @@ class dominioTpDocumento extends dominio {
 	static $CD_TP_DOC_PARECER = "PA";
 	static $CD_TP_DOC_PLANILHA_CUSTOS = "PC";
 	static $CD_TP_DOC_RELATORIO = "RE";
+	static $CD_TP_DOC_RELATORIO_CONCLUSAO = "RC";
 	
 	static $DS_TP_DOC_APOSTILAMENTO = "Apostilamento";
 	static $DS_TP_DOC_CI = "CI";
+	static $DS_TP_DOC_DECISAO = "Decisão";
+	static $DS_TP_DOC_DESPACHO = "Despacho";
 	static $DS_TP_DOC_INTIMACAO = "Intimação";
 	static $DS_TP_DOC_NOTA_TECNICA = "Nota Técnica";
 	static $DS_TP_DOC_NOTA_IMPUTACAO = "Nota de Imputação";
@@ -33,6 +37,7 @@ class dominioTpDocumento extends dominio {
 	static $DS_TP_DOC_PARECER = "Parecer";
 	static $DS_TP_DOC_PLANILHA_CUSTOS = "Planilha de Custos";
 	static $DS_TP_DOC_RELATORIO = "Relatório";
+	static $DS_TP_DOC_RELATORIO_CONCLUSAO = "Relatório Com Alegações Finais";
 	
 	// ...............................................................
 	// Construtor
@@ -44,6 +49,8 @@ class dominioTpDocumento extends dominio {
 		return array (
 				self::$CD_TP_DOC_OFICIO => self::$DS_TP_DOC_OFICIO,
 				self::$CD_TP_DOC_CI => self::$DS_TP_DOC_CI,
+				self::$CD_TP_DOC_DECISAO => self::$DS_TP_DOC_DECISAO,
+				self::$CD_TP_DOC_DESPACHO => self::$DS_TP_DOC_DESPACHO,				
 				self::$CD_TP_DOC_INTIMACAO => self::$DS_TP_DOC_INTIMACAO,
 				self::$CD_TP_DOC_NOTA_TECNICA => "Nota Técnica",
 				self::$CD_TP_DOC_PARECER => self::$DS_TP_DOC_PARECER,
@@ -53,13 +60,17 @@ class dominioTpDocumento extends dominio {
 				self::$CD_TP_DOC_APOSTILAMENTO => self::$DS_TP_DOC_APOSTILAMENTO,
 				self::$CD_TP_DOC_OUTROS => self::$DS_TP_DOC_OUTROS,
 				self::$CD_TP_DOC_RELATORIO => self::$DS_TP_DOC_RELATORIO,
+				//self::$CD_TP_DOC_RELATORIO_CONCLUSAO => self::$DS_TP_DOC_RELATORIO_CONCLUSAO,
 		);
 	}
 	static function getColecaoDocsPAAP() {
 		return array (
+				self::$CD_TP_DOC_DECISAO => self::$DS_TP_DOC_DECISAO,
+				self::$CD_TP_DOC_DESPACHO => self::$DS_TP_DOC_DESPACHO,
 				self::$CD_TP_DOC_INTIMACAO => self::$DS_TP_DOC_INTIMACAO,
 				self::$CD_TP_DOC_NOTA_IMPUTACAO => self::$DS_TP_DOC_NOTA_IMPUTACAO,
-				self::$CD_TP_DOC_RELATORIO => self::$DS_TP_DOC_RELATORIO
+				self::$CD_TP_DOC_RELATORIO => self::$DS_TP_DOC_RELATORIO,
+				//self::$CD_TP_DOC_RELATORIO_CONCLUSAO => self::$DS_TP_DOC_RELATORIO_CONCLUSAO,
 		);
 	}
 	static function getEnderecoPastaBase() {

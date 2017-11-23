@@ -136,7 +136,7 @@ function cancela() {
             			maxlength="10" <?=$readonly?>>
 			</TD>
         </TR>
-		<TR>
+		<!--  <TR>
             <TH class="campoformulario" nowrap>Período de Movimentação:</TH>
             <TD class="campoformulario" colspan="3">
             	<INPUT type="text" 
@@ -156,7 +156,7 @@ function cancela() {
             			size="10" 
             			maxlength="10" <?=$readonly?>>
 			</TD>
-        </TR>
+        </TR>-->
         </TBODY>
     </TABLE>
     </DIV>

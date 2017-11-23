@@ -1,0 +1,85 @@
+<?php
+include_once (caminho_util . "dominio.class.php");
+/*
+ *
+ * Lei 8666
+ * Art. 87. Pela inexecução total ou parcial do contrato a Administração poderá, garantida a prévia defesa, aplicar ao
+ * contratado as seguintes sanções:
+ * I - advertência;
+ * II - multa, na forma prevista no instrumento convocatório ou no contrato;
+ * III - suspensão temporária de participação em licitação e impedimento de contratar com a Administração,
+ * por prazo não superior a 2 (dois) anos;
+ * IV - declaração de inidoneidade para licitar ou contratar com a Administração Pública enquanto perdurarem
+ * os motivos determinantes da punição ou até que seja promovida a reabilitação perante a própria autoridade
+ * que aplicou a penalidade, que será concedida sempre que o contratado ressarcir
+ * a Administração pelos prejuízos resultantes e após decorrido o prazo da sanção aplicada com base no inciso anterior.
+ */
+class dominioTipoPenalidade extends dominio {
+	static $CD_TP_PENALIDADE_ADVERTENCIA = 1;
+	static $CD_TP_PENALIDADE_MULTA = 2;
+	static $CD_TP_PENALIDADE_SUSPENSAO = 3;
+	static $CD_TP_PENALIDADE_DECLARACAO_INIDONEIDADE = 4;
+	
+	static $DS_TP_PENALIDADE_ADVERTENCIA = "Advertência";
+	static $DS_TP_PENALIDADE_MULTA = "Multa";
+	static $DS_TP_PENALIDADE_SUSPENSAO = "Suspensão Temporária";
+	static $DS_TP_PENALIDADE_DECLARACAO_INIDONEIDADE = "Declaração de inidoneidade";
+	
+	// ...............................................................
+	// Construtor
+	function __construct() {
+		$this->colecao = self::getColecao ();
+	}
+	static function getColecao() {
+		$retorno = array (
+				self::$CD_TP_PENALIDADE_ADVERTENCIA => self::$DS_TP_PENALIDADE_ADVERTENCIA,
+				self::$CD_TP_PENALIDADE_MULTA => self::$DS_TP_PENALIDADE_MULTA,
+				self::$CD_TP_PENALIDADE_SUSPENSAO => self::$DS_TP_PENALIDADE_SUSPENSAO,
+				self::$CD_TP_PENALIDADE_DECLARACAO_INIDONEIDADE => self::$DS_TP_PENALIDADE_DECLARACAO_INIDONEIDADE 
+		);
+		
+		return $retorno;
+	}
+		
+	static function getColecaoComReferenciaLegal() {		
+		$array = self::getColecao();
+		$retorno = array();
+		foreach (array_keys($array) as $chavePenalidade){
+			$texto = static::getDescricaoStatic($chavePenalidade);
+			$retorno[$chavePenalidade] = $texto;
+		}
+		return $retorno;
+	}
+	
+	static function getTextoReferenciaLegal($cd){
+		$artigo = "art. 87";
+		$lei = "Lei 8.666/93";		
+		$extenso = " ($artigo, ".constantes::$CD_CAMPO_SUBSTITUICAO.", $lei)";
+		
+		$subs = static::getIncisoReferenciaLegal($cd);
+		
+		$retorno = str_replace(constantes::$CD_CAMPO_SUBSTITUICAO, $subs, $extenso);
+		
+		return $retorno;
+	}
+	
+	static function getIncisoReferenciaLegal($cd){
+		$array = array(
+				static::$CD_TP_PENALIDADE_ADVERTENCIA => "I",
+				static::$CD_TP_PENALIDADE_MULTA => "II",
+				static::$CD_TP_PENALIDADE_SUSPENSAO => "III",
+				static::$CD_TP_PENALIDADE_DECLARACAO_INIDONEIDADE => "IV",
+		);
+		
+		return $array[$cd];
+	}
+	
+	static function getDescricaoStatic($chave) {
+		$retorno = parent::getDescricaoStatic($chave);
+		$retorno = $retorno.static::getTextoReferenciaLegal($chave);
+		
+		return $retorno;
+	}
+	
+}
+?>

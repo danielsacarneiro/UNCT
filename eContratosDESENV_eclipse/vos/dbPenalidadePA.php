@@ -1,21 +1,17 @@
 <?php
 include_once(caminho_lib. "dbprocesso.obj.php");
 include_once (caminho_util."bibliotecaFuncoesPrincipal.php");
-include_once (caminho_funcoes."contrato/dominioEspeciesContrato.php");
 include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
 include_once (caminho_filtros."filtroManterPA.php");
 
 // .................................................................................................................
-// Classe select
-// cria um combo select html
-
-  Class dbPA extends dbprocesso{
+  Class dbPenalidadePA extends dbprocesso{
     
   	function consultarPorChaveTela($vo, $isHistorico) {
   		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
   		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );
   		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( false );
-  		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
+  		$nmTabelaPA = voPA::getNmTabelaStatic ( false );
   	
   		$arrayColunasRetornadas = array (
   				$nmTabela . ".*",
@@ -24,42 +20,34 @@ include_once (caminho_filtros."filtroManterPA.php");
   				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato,
   				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdEspecieContrato,
   				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato,
-  				$nmTabelaDemanda . "." . voDemanda::$nmAtrTexto
-//  				$nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato,  
+  				$nmTabelaDemanda . "." . voDemanda::$nmAtrCd,
+  				$nmTabelaDemanda . "." . voDemanda::$nmAtrAno,
+  				$nmTabelaDemanda . "." . voDemanda::$nmAtrTexto,
   		);
   	
+  		$queryFrom .= "\n INNER JOIN ". $nmTabelaPA;
+  		$queryFrom .= "\n ON ". $nmTabelaPA . "." . voPA::$nmAtrCdPA. "=" . $nmTabela . "." . voPenalidadePA::$nmAtrCdPA;
+  		$queryFrom .= "\n AND ". $nmTabelaPA . "." . voPA::$nmAtrAnoPA . "=" . $nmTabela . "." . voPenalidadePA::$nmAtrAnoPA;
+  		
   		$queryFrom .= "\n INNER JOIN ". $nmTabelaDemanda;
-  		$queryFrom .= "\n ON ". $nmTabelaDemanda . "." . voDemanda::$nmAtrCd. "=" . $nmTabela . "." . voPA::$nmAtrCdDemanda;
-  		$queryFrom .= "\n AND ". $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $nmTabela . "." . voPA::$nmAtrAnoDemanda;
+  		$queryFrom .= "\n ON ". $nmTabelaDemanda . "." . voDemanda::$nmAtrCd. "=" . $nmTabelaPA . "." . voPA::$nmAtrCdDemanda;
+  		$queryFrom .= "\n AND ". $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaPA . "." . voPA::$nmAtrAnoDemanda;
   		
   		$queryFrom .= "\n INNER JOIN ". $nmTabelaDemandaContrato;
   		$queryFrom .= "\n ON ". $nmTabelaDemanda . "." . voDemanda::$nmAtrCd. "=" . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdDemanda;
   		$queryFrom .= "\n AND ". $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoDemanda; 
-  		
-  		/*$queryFrom .= "\n LEFT JOIN " . $nmTabelaContrato;
-  		$queryFrom .= "\n ON ";
-  		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato;
-  		$queryFrom .= "\n AND ";
-  		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato;
-  		$queryFrom .= "\n AND ";
-  		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato;
-  		$queryFrom .= "\n AND ";
-  		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdEspecieContrato;
-  		$queryFrom .= "\n AND ";
-  		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato;*/
-  		
-  		
+  		  		
   		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryFrom, $isHistorico );
   	}
     
-    function consultarPAAP($vo, $filtro){    	
-    	$isHistorico = ("S" == $filtro->cdHistorico);
-    	$nmTabela = $vo->getNmTabelaEntidade($isHistorico);    	
+    function consultarPenalidadeTelaConsulta($vo, $filtro){    	
+    	$isHistorico = $filtro->isHistorico();
+    	$nmTabelaPenalidade = $vo->getNmTabelaEntidade($isHistorico);
+    	$nmTabelaPA = voPA::getNmTabelaStatic(false);
     	$nmTabelaContrato = vocontrato::getNmTabelaStatic(false);
     	$nmTabelaDemanda = voDemanda::getNmTabelaStatic(false);
     	$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic(false);
     	$nmTabelaPessoaContrato = $filtro->nmTabelaPessoaContrato;
-    	$nmTabelaPessoaResponsavel = $filtro->nmTabelaPessoaResponsavel;
     	
     	$colunaUsuHistorico = "";
     	
@@ -67,9 +55,7 @@ include_once (caminho_filtros."filtroManterPA.php");
     		$colunaUsuHistorico = static::$nmTabelaUsuarioOperacao . "." . vousuario::$nmAtrName . "  AS " . voDemanda::$nmAtrNmUsuarioOperacao;
     	}
     	$arrayColunasRetornadas = array (
-    			$nmTabela . ".*",
-    			$nmTabelaPessoaResponsavel . "." . vopessoa::$nmAtrCd,
-    			$nmTabelaPessoaResponsavel . "." . vopessoa::$nmAtrNome . " AS " . $filtro->nmColNomePessoaResponsavel,    			 
+    			$nmTabelaPenalidade . ".*",
     			$nmTabelaContrato. "." . vocontrato::$nmAtrTipoContrato,
     			$nmTabelaContrato. "." . vocontrato::$nmAtrAnoContrato,
     			$nmTabelaContrato. "." . vocontrato::$nmAtrCdContrato,
@@ -79,9 +65,13 @@ include_once (caminho_filtros."filtroManterPA.php");
     			$colunaUsuHistorico
     	);
 
+    	$queryFrom .= "\n INNER JOIN ". $nmTabelaPA;
+    	$queryFrom .= "\n ON ". $nmTabelaPenalidade . "." . voPenalidadePA::$nmAtrCdPA. "=" . $nmTabelaPA . "." . voPA::$nmAtrCdPA;
+    	$queryFrom .= "\n AND ". $nmTabelaPenalidade . "." . voPenalidadePA::$nmAtrAnoPA . "=" . $nmTabelaPA . "." . voPA::$nmAtrAnoPA;
+    	 
     	$queryFrom .= "\n INNER JOIN ". $nmTabelaDemanda;
-    	$queryFrom .= "\n ON ". $nmTabelaDemanda . "." . voDemanda::$nmAtrCd. "=" . $nmTabela . "." . voPA::$nmAtrCdDemanda;
-    	$queryFrom .= "\n AND ". $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $nmTabela . "." . voPA::$nmAtrAnoDemanda;
+    	$queryFrom .= "\n ON ". $nmTabelaDemanda . "." . voDemanda::$nmAtrCd. "=" . $nmTabelaPA . "." . voPA::$nmAtrCdDemanda;
+    	$queryFrom .= "\n AND ". $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaPA . "." . voPA::$nmAtrAnoDemanda;
     	 
     	$queryFrom .= "\n INNER JOIN ". $nmTabelaDemandaContrato;
     	$queryFrom .= "\n ON ". $nmTabelaDemanda . "." . voDemanda::$nmAtrCd. "=" . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdDemanda;
@@ -103,22 +93,12 @@ include_once (caminho_filtros."filtroManterPA.php");
     	$queryFrom .= "\n AND ";
     	$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato . "=" . $nmTabelaMAXContrato . "." . vocontrato::$nmAtrCdContrato;
     	
-    	// agora pega dos dados da ultima tramitacao, se houver
     	$queryFrom .= "\n LEFT JOIN ";
     	$queryFrom .= $nmTabelaContrato;
     	$queryFrom .= "\n ON " . $nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato . " = $nmTabelaMAXContrato." . vocontrato::$nmAtrSqContrato;    	 
-    	 
-        /*$queryFrom .= "\n INNER JOIN ". $nmTabelaContrato;
-        $queryFrom .= "\n ON ". $nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato . "=" . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato;
-        $queryFrom .= "\n AND ". $nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato;
-        $queryFrom .= "\n AND ". $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato;*/
         
         $queryFrom .= "\n LEFT JOIN ". vopessoa::getNmTabela();
         $queryFrom .= " ". $nmTabelaPessoaContrato . " \n ON ". $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada. "=" . $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd;
-        $queryFrom .= "\n LEFT JOIN ". vopessoa::getNmTabela();
-        $queryFrom .= " ". $nmTabelaPessoaResponsavel . " \n ON ". $nmTabela . "." . voPA::$nmAtrCdResponsavel . "=" . $nmTabelaPessoaResponsavel . "." . vopessoa::$nmAtrCd;
-                
-        //$filtro->cdEspecieContrato = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
         
         return parent::consultarMontandoQueryTelaConsulta ( $vo, $filtro, $arrayColunasRetornadas, $queryFrom );        
     }
@@ -231,76 +211,20 @@ include_once (caminho_filtros."filtroManterPA.php");
     	return parent::consultarMontandoQueryTelaConsulta ( $vo, $filtro, $arrayColunasRetornadas, $queryJoin );
     }
     
-    function consultarContratoPAAP($vo) {
-    	$isHistorico = $vo->isHistorico ();
-    	
-    	$nmTabelaPAAP = voPA::getNmTabelaStatic ( $isHistorico );
-    	$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( $isHistorico );
-    	$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );
-    	$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
-    	$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
-    
-    	$querySelect = "SELECT ";
-    	$querySelect .= $nmTabelaPAAP . ".*,";
-    	$querySelect .= $nmTabelaDemandaContrato . ".*";
-    	$queryFrom = " FROM " . $nmTabelaPAAP;
-    
-    	$queryFrom .= "\n INNER JOIN ";
-    	$queryFrom .= $nmTabelaDemanda;
-    	$queryFrom .= "\n ON " . $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . " = " . $nmTabelaPAAP . "." . voPA::$nmAtrAnoDemanda;
-    	$queryFrom .= "\n AND " . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd . " = " . $nmTabelaPAAP . "." . voPA::$nmAtrCdDemanda;
-    
-    	$queryFrom .= "\n INNER JOIN ";
-    	$queryFrom .= $nmTabelaDemandaContrato;
-    	$queryFrom .= "\n ON " . $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . " = " . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoDemanda;
-    	$queryFrom .= "\n AND " . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd . " = " . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdDemanda;
-    	 
-    	$queryFrom .= "\n LEFT JOIN " . $nmTabelaContrato;
-    	$queryFrom .= "\n ON ";
-    	$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato;
-    	$queryFrom .= "\n AND ";
-    	$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato;
-    	$queryFrom .= "\n AND ";
-    	$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato;
-    	$queryFrom .= "\n AND ";
-    	$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdEspecieContrato;
-    	$queryFrom .= "\n AND ";
-    	$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato;
-    
-    	$queryFrom .= "\n LEFT JOIN " . $nmTabelaPessoaContrato;
-    	$queryFrom .= "\n ON ";
-    	$queryFrom .= $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
-    
-    	$filtro = new filtroManterPA(false );
-    	// var_dump($vo);
-    	$filtro->anoPA = $vo->anoPA;
-    	$filtro->cdPA = $vo->cdPA;
-    	$filtro->sqHistPA = $vo->sqHist;
-    	
-    	$filtro->TemPaginacao = false;
-    	$filtro->isHistorico = $isHistorico;
-    
-    	return parent::consultarFiltro ( $filtro, $querySelect, $queryFrom, false );
-    }
-    
     function getSQLValuesInsert($vo){
-    	if($vo->cdPA == null){
-    		$vo->cdPA = $this->getProximoSequencialChaveComposta (voPA::$nmAtrCdPA, $vo );
+    	if($vo->sq == null){
+    		$vo->sq = $this->getProximoSequencialChaveComposta (voPenalidadePA::$nmAtrSq, $vo );
     	}
     	
 		$retorno = "";		
 		$retorno.= $this-> getVarComoNumero($vo->cdPA) . ",";
 		$retorno.= $this-> getVarComoNumero($vo->anoPA) . ",";
+		$retorno.= $this-> getVarComoNumero($vo->sq) . ",";
 		
-		$retorno.= $this-> getVarComoNumero($vo->anoDemanda) . ",";
-		$retorno.= $this-> getVarComoNumero($vo->cdDemanda) . ",";
-
-		$retorno.= $this-> getVarComoNumero($vo->cdResponsavel). ",";
+		$retorno.= $this-> getVarComoNumero($vo->tipo). ",";
 		$retorno.= $this-> getVarComoString($vo->obs). ",";
-		$retorno.= $this-> getVarComoString($vo->publicacao). ",";
-		$retorno.= $this-> getVarComoData($vo->dtAbertura). ",";
-		$retorno.= $this-> getVarComoData($vo->dtNotificacao). ",";
-		$retorno.= $this-> getVarComoNumero($vo->situacao);		
+		$retorno.= $this-> getVarComoString($vo->fundamento). ",";
+		$retorno.= $this-> getVarComoData($vo->dtAplicacao);
 	
 		$retorno.= $vo->getSQLValuesInsertEntidade();
 	
@@ -312,35 +236,20 @@ include_once (caminho_filtros."filtroManterPA.php");
         $sqlConector = "";
                 
         if($vo->obs != null){
-            $retorno.= $sqlConector . voPA::$nmAtrObservacao . " = " . $this->getVarComoString($vo->obs);
+            $retorno.= $sqlConector . voPenalidadePA::$nmAtrObservacao . " = " . $this->getVarComoString($vo->obs);
             $sqlConector = ",";
         }
         
-        if($vo->publicacao != null){
-        	$retorno.= $sqlConector . voPA::$nmAtrPublicacao . " = " . $this->getVarComoString($vo->publicacao);
+        if($vo->fundamento != null){
+        	$retorno.= $sqlConector . voPenalidadePA::$nmAtrFundamento . " = " . $this->getVarComoString($vo->fundamento);
         	$sqlConector = ",";
         }
         
-        if($vo->dtAbertura != null){
-        	$retorno.= $sqlConector . voPA::$nmAtrDtAbertura . " = " . $this->getVarComoData($vo->dtAbertura);
+        if($vo->dtAplicacao != null){
+        	$retorno.= $sqlConector . voPenalidadePA::$nmAtrDtAplicacao . " = " . $this->getVarComoData($vo->dtAplicacao);
         	$sqlConector = ",";
         }
-        
-        if($vo->dtNotificacao != null){
-        	$retorno.= $sqlConector . voPA::$nmAtrDtNotificacao . " = " . $this->getVarComoData($vo->dtNotificacao);
-        	$sqlConector = ",";
-        }
-        
-        if($vo->cdResponsavel != null){
-        	$retorno.= $sqlConector . voPA::$nmAtrCdResponsavel. " = " . $this->getVarComoNumero($vo->cdResponsavel);
-        	$sqlConector = ",";
-        }
-        
-        if($vo->situacao != null){
-        	$retorno.= $sqlConector . voPA::$nmAtrSituacao. " = " . $this->getVarComoNumero($vo->situacao);
-        	$sqlConector = ",";
-        }
-        
+                
         $retorno = $retorno . $sqlConector . $vo->getSQLValuesUpdate();
 		        
 		return $retorno;                

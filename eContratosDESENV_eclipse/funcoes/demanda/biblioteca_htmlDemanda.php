@@ -224,6 +224,11 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDad
 				$sq ++;
 			}
 		}
+		
+		$html .= "<TR>\n
+		<TD class='totalizadortabeladadosalinhadodireita' colspan=$numColunas> Total registros: $i </TD>\n
+		</TR>\n";
+		
 
 		$html .= "</TBODY> \n";
 		$html .= "</TABLE> \n";

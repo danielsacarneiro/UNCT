@@ -8,47 +8,24 @@ class dominio extends multiplosConstrutores {
 	// herda do pai
 	
 	// ...............................................................
-	// FunÃ§Ãµes ( Propriedades e mÃ©todos da classe )
+	// Funcoes ( Propriedades e metodos da classe )
 	function getDescricao($chave) {
 		return self::getDescricaoStatic ( $chave, $this->colecao );
 	}
 	
 	/**
-	 * 
-	 * @param unknown $chave
+	 *
+	 * @param unknown $chave        	
 	 * @deprecated
+	 *
 	 */
 	static function getDescricaoStaticTeste($chave) {
-		return static::getDescricaoStatic($chave);
+		return static::getDescricaoStatic ( $chave );
 	}
-	
-	/*static function getDescricaoStaticTeste($chave) {
-		$retorno = $chave;
-		$colecao = static::getColecao();
-		if ($colecao != null) {
-			$totalResultado = count ( $colecao );
-			$chaves = array_keys ( $colecao );
-				
-			// echo "chave selecionada: ". $chave. "<br>";
-				
-			for($i = 0; $i < $totalResultado; $i ++) {
-				$cd = $chaves [$i];
-				// echo "chave: ". $cd . "<br>";
-		
-				if ($cd == $chave) {
-					$retorno = $colecao [$cd];
-					break;
-				}
-			}
-		}
-		
-		return $retorno;		
-	}*/
-	
 	static function getDescricaoStatic($chave, $colecao = null) {
 		$retorno = $chave;
-		if($colecao == null){
-			$colecao = static::getColecao();
+		if ($colecao == null) {
+			$colecao = static::getColecao ();
 		}
 		if ($colecao != null) {
 			$totalResultado = count ( $colecao );
@@ -91,9 +68,9 @@ class dominio extends multiplosConstrutores {
 		
 		return $retorno;
 	}
-	static function getColecaoComElementosARemover($chaveARemover, $colecao=null) {
-		//usado para o caso de um dominio que tenha a colecao chamar sem o 2 argumento
-		if($colecao == null){
+	static function getColecaoComElementosARemover($chaveARemover, $colecao = null) {
+		// usado para o caso de um dominio que tenha a colecao chamar sem o 2 argumento
+		if ($colecao == null) {
 			$colecao = static::getColecao ();
 		}
 		
@@ -115,9 +92,9 @@ class dominio extends multiplosConstrutores {
 		}
 		return $retorno;
 	}
-	static function getColecaoApenasComElementos($chaves, $colecao=null) {	
-		//usado para o caso de um dominio que tenha a colecao chamar sem o 2 argumento
-		if($colecao == null){
+	static function getColecaoApenasComElementos($chaves, $colecao = null) {
+		// usado para o caso de um dominio que tenha a colecao chamar sem o 2 argumento
+		if ($colecao == null) {
 			$colecao = static::getColecao ();
 		}
 		
@@ -125,9 +102,9 @@ class dominio extends multiplosConstrutores {
 		$retorno = $colecao;
 		if ($chaves != null) {
 			
-			foreach ( array_keys($colecao) as $chave ) {
+			foreach ( array_keys ( $colecao ) as $chave ) {
 				
-				if(!in_array($chave, $chaves)){				
+				if (! in_array ( $chave, $chaves )) {
 					$retorno = self::removeElementoStatic ( $chave, $retorno );
 				}
 			}
@@ -152,19 +129,30 @@ class dominio extends multiplosConstrutores {
 		return $retorno;
 	}
 	
-	/*function ordenaSetor( $a, $b ) {
-	 if ( $a['pontos'] == $b['pontos'] ) {
-	 return 0;
-	 }
-	 return ( $a['pontos'] < $b['pontos'] ) ? -1 : 1;
-	 }
-	 $ranking = array(
-	 0 => array( 'nome' => 'Davi', 'pontos' => 2 ),
-	 1 => array( 'nome' => 'Letícia', 'pontos' => 4 ),
-	 2 => array( 'nome' => 'Francisco', 'pontos' => 1 ),
-	 3 => array( 'nome' => 'Cecília', 'pontos' => 3 ),
-	 )
-	 usort( $ranking, 'ordenaPontos' );*/
+	function getHtmlDetalhamento($id, $nm, $opcaoSelecionada, $isTrazerValuenoOption) {
+		$html = "";
+		$value = $this->getDescricao($opcaoSelecionada);
+		if($isTrazerValuenoOption){
+			$value = select::getDescricaoComValueNoOption($opcaoSelecionada, $value);
+		}
+		$html = getInputText($id, $nm, $value, constantes::$CD_CLASS_CAMPO_READONLY)."\n";	
+		return $html;
+	}
 	
+	/*
+	 * function ordenaSetor( $a, $b ) {
+	 * if ( $a['pontos'] == $b['pontos'] ) {
+	 * return 0;
+	 * }
+	 * return ( $a['pontos'] < $b['pontos'] ) ? -1 : 1;
+	 * }
+	 * $ranking = array(
+	 * 0 => array( 'nome' => 'Davi', 'pontos' => 2 ),
+	 * 1 => array( 'nome' => 'Letícia', 'pontos' => 4 ),
+	 * 2 => array( 'nome' => 'Francisco', 'pontos' => 1 ),
+	 * 3 => array( 'nome' => 'Cecília', 'pontos' => 3 ),
+	 * )
+	 * usort( $ranking, 'ordenaPontos' );
+	 */
 }
 ?>

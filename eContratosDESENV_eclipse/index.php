@@ -41,6 +41,7 @@ cabecalho;
 
 	f4 = new Tree('Serviço 04 (Proc.Admin.)');	
     f4.adicionarItem(new Link('P.A.s de Aplicação de Penalidade (PAAP)', '<?=caminho_funcoesHTML?>pa', ''));    
+    f4.adicionarItem(new Link('Penalidades (PAAP)', '<?=caminho_funcoesHTML?>pa_penalidade', ''));
 	f.adicionarItem(f4);
 	
 	<?php if(isUsuarioAdmin()){?>

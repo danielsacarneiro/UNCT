@@ -1,12 +1,12 @@
-input:invalid, select:invalid  {  
+input:invalid, select:invalid, textarea:invalid  {  
   border: 1px solid #b03535;  
 }
 
-input:required, select:required {    
+input:required, select:required, textarea:required {    
   border: 1px solid #FFA500;
 }
 
-input:disabled, select:disabled {    
+input:disabled, select:disabled, textarea:disabled {    
   border: 1px solid #CCC;
 }
 

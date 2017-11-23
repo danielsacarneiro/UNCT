@@ -256,7 +256,6 @@ class dbDemanda extends dbprocesso {
 	}
 	function consultarDemandaContrato($vo) {
 		$isHistorico = $vo->isHistorico ();
-		// $isHistorico = false;
 		
 		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( $isHistorico );
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );

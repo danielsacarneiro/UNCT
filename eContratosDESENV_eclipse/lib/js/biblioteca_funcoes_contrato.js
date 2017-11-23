@@ -47,6 +47,7 @@ function carregaContratada(pIndice, pNmCampoCdContrato, pNmCampoAnoContrato, pNm
 	pNmCampoDivNomePessoa = pNmCampoDivNomePessoa + pIndice;
 
 	//alert(pNmCampoCdContrato + " " + pNmCampoAnoContrato + " " + pNmCampoTipoContrato + " " + pNmCampoCdEspecieContrato + " " + pNmCampoSqEspecieContrato + " " + pNmCampoDivNomePessoa);
+	//chama biblioteca_funcoes_pessoa.js
 	carregaDadosContratada(pNmCampoAnoContrato, pNmCampoTipoContrato, pNmCampoCdContrato, pNmCampoCdEspecieContrato, pNmCampoSqEspecieContrato,pNmCampoDivNomePessoa);		    
 }
 

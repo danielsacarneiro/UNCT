@@ -25,7 +25,7 @@ function carregaDadosContratada(pNmCampoAnoContrato, pNmCampoTipoContrato, pNmCa
 
 	//fica assim por conta do formato da chave do vocontrato
 	if(cdContrato != "" && anoContrato != "" && tpContrato != ""){
-		str = "" + CD_CAMPO_SEPARADOR + anoContrato + CD_CAMPO_SEPARADOR + tpContrato + CD_CAMPO_SEPARADOR + cdContrato;
+		str = "" + CD_CAMPO_SEPARADOR + anoContrato + CD_CAMPO_SEPARADOR + cdContrato + CD_CAMPO_SEPARADOR + tpContrato;
 		
 		if(cdEspecieContrato != null)
 			str = str + CD_CAMPO_SEPARADOR + cdEspecieContrato;

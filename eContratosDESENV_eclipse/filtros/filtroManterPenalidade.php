@@ -2,39 +2,27 @@
 include_once(caminho_util."bibliotecaSQL.php");
 include_once(caminho_lib ."filtroManter.php");
 
-class filtroManterPA extends filtroManter{
+class filtroManterPenalidade extends filtroManter{
     
-    var $nmFiltro = "filtroManterPA";
+    var $nmFiltro = "filtroManterPenalidade";
     
-    var $sqHistPA;
-    var $cdPessoa ;    
-    var $cdResponsavel ;
+    var $cdPessoa ;
     var $doc;
     var $nome;
     var $cdPA;
     var $anoPA;
-    var $situacao;
 
     var $cdContrato;
     var $tipoContrato;
     var $anoContrato;
-
-    var $cdDemanda;
-    var $anoDemanda;
     
-    var $nmTabelaPessoaContrato = "TAB_PESSOA_CONTRATO";
-    var $nmTabelaPessoaResponsavel = "TAB_PESSOA_RESP";
-    
+    var $nmTabelaPessoaContrato = "TAB_PESSOA_CONTRATO";    
     var $nmColNomePessoaContrato = "NmColPessoaContrato";
-    var $nmColNomePessoaResponsavel = "NmColPessoaResponsavel";
     
     // ...............................................................
 	// construtor
     
-	function __construct() {
-        //parent::__construct(true);
-		parent::__construct();
-        
+    function getFiltroFormulario(){        
         $this->cdPessoa = @$_POST[vopessoa::$nmAtrCd];
         $this->cdResponsavel = @$_POST[voPA::$nmAtrCdResponsavel];
         //$this->cdGestor = @$_POST[voPA::$nmAtrCdGestor];
@@ -43,22 +31,13 @@ class filtroManterPA extends filtroManter{
         
         $this->cdPA = @$_POST[voPA::$nmAtrCdPA];
         $this->anoPA = @$_POST[voPA::$nmAtrAnoPA];
-        $this->situacao = @$_POST[voPA::$nmAtrSituacao];
         
         $this->cdContrato = @$_POST[vocontrato::$nmAtrCdContrato];
         $this->anoContrato = @$_POST[vocontrato::$nmAtrAnoContrato];
-        $this->tipoContrato = @$_POST[vocontrato::$nmAtrTipoContrato];
-        
-        $this->cdDemanda = @$_POST[voPA::$nmAtrCdDemanda];
-        $this->anoDemanda = @$_POST[voPA::$nmAtrAnoDemanda];
-        
-        //isso tudo pq o filtro pode ser usado por mais de um metodo
-        //e precisa saber qual voprincipal considera,
-        //pra pegar por ex os atributos de ordenacao da tabela correta
-        $this->nmEntidadePrincipal = "voPA";
+        $this->tipoContrato = @$_POST[vocontrato::$nmAtrTipoContrato];                
     }
     	
-	function getFiltroConsultaSQL(){
+	function getFiltroConsultaSQL(){	
         $voPA= new voPA();
         $vopessoa= new vopessoa();
         $vocontrato= new vocontrato();
@@ -217,15 +196,6 @@ class filtroManterPA extends filtroManter{
 		
 					$conector  = "\n AND ";
 		}
-		
-		if($this->isHistorico() && $this->sqHistPA != null){
-			$filtro = $filtro . $conector
-			. $nmTabela. "." .voPA::$nmAtrSqHist
-			. " = "
-					. $this->sqHistPA
-					;
-					$conector  = "\n AND ";
-		}		
 		//finaliza o filtro
 		$filtro = parent::getFiltroConsulta($filtro);
 		
@@ -236,7 +206,8 @@ class filtroManterPA extends filtroManter{
 	
 	function getAtributosOrdenacao(){
 		$varAtributos = array(
-				voPA::$nmAtrCdPA=> "PA",
+				voPenalidadePA::$nmAtrSq=> "Penalidade",
+				voPenalidadePA::getNmTabelaStatic($this->isHistorico).".".voPA::$nmAtrCdPA=> "PA",
 				vocontrato::getNmTabelaStatic($this->isHistorico).".".vocontrato::$nmAtrCdContrato => "Contrato"
 		);
 		return $varAtributos;

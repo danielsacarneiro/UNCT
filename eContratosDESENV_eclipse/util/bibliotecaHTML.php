@@ -36,6 +36,7 @@ function inicioComValidacaoUsuario($validarPermissaoAcesso) {
 	}
 	
 	define ( 'id_user', $idUsuario );
+	//echo $idUsuario;
 	define ( 'name_user', utf8_decode($nomeUsuario));
 	
 	define ( 'anoDefault', date ( 'Y' ) );
@@ -537,8 +538,14 @@ function getComponenteConsultaPaginacao($comboOrdenacao, $cdAtrOrdenacao, $cdOrd
 	return $html;
 }
 function getHTMLRadioButtonConsulta($nmRadio, $idRadio, $voAtualOuChaveString) {
+	return getHTMLGridConsulta ( $nmRadio, $idRadio, $voAtualOuChaveString, false );
+}
+function getHTMLCheckBoxConsulta($nmRadio, $idRadio, $voAtualOuChaveString) {
+	return getHTMLGridConsulta ( $nmRadio, $idRadio, $voAtualOuChaveString, true );
+}
+function getHTMLGridConsulta($nmRadio, $idRadio, $voAtualOuChaveString, $isCheckBox) {
 	$isSelecionado = false;
-	
+
 	$ID = "";
 	if ($voAtualOuChaveString instanceof voentidade) {
 		$ID = $voAtualOuChaveString->getNmTabela ();
@@ -550,7 +557,7 @@ function getHTMLRadioButtonConsulta($nmRadio, $idRadio, $voAtualOuChaveString) {
 		// a chave eh o proprio parametro
 		$chave = $voAtualOuChaveString;
 	}
-	
+
 	/*
 	 * if($voAtual != null){
 	 * $voSessao = getObjetoSessao($voAtual->getNmTabela());
@@ -558,18 +565,82 @@ function getHTMLRadioButtonConsulta($nmRadio, $idRadio, $voAtualOuChaveString) {
 	 * $chave = $voAtual->getValorChaveHTML();
 	 * }
 	 */
-	
+
 	$checked = "";
 	if ($isSelecionado)
 		$checked = "checked";
-	
-	$retorno = "<INPUT type='radio' id='" . $idRadio . "' name='" . $nmRadio . "' value='" . $chave . "' " . $checked . ">";
-	// echo $chave;
-	
+
+		$tipoComponente = "radio";
+		if ($isCheckBox) {
+			$tipoComponente = "checkbox";
+		}
+
+		$retorno = "<INPUT type='$tipoComponente' id='" . $idRadio . "' name='" . $nmRadio . "' value='" . $chave . "' " . $checked . ">";
+		// echo $chave;
+
+		return $retorno;
+}
+function getXGridConsulta($nmRadio, $isCheckBox, $comParenteses = null) {
+	if ($comParenteses == null) {
+		$comParenteses = false;
+	}
+	$retorno = "&nbsp;&nbsp;X";
+	if ($comParenteses) {
+		$retorno = "&nbsp;&nbsp;(X)";
+	}
+
+	if ($isCheckBox) {
+		// $js = "try{marcarTodosCheckBoxes('$nmRadio');}catch(erro){;}";
+		$js = "marcarTodosCheckBoxes('$nmRadio');";
+		$retorno = "<a onClick=\"javascript:" . $js . "\" A style='CURSOR: POINTER'>$retorno</a>\n";
+	}
+
 	return $retorno;
 }
 function getRadioButton($idRadio, $nmRadio, $chave, $checked, $complementoHTML) {
-	$retorno = "<INPUT type='radio' id='" . $idRadio . "' name='" . $nmRadio . "' value='" . $chave . "' " . $checked . ">";
+	$retorno = "<INPUT type='radio' id='" . $idRadio . "' name='" . $nmRadio . "' value='" . $chave . "' " . $checked . " $complementoHTML>";
+	return $retorno;
+}
+function getCheckBox($idRadio, $nmRadio, $chave, $checked = null, $complementoHTML = null) {
+	$retorno = "<INPUT type='checkbox' id='" . $idRadio . "' name='" . $nmRadio . "' value='" . $chave . "' " . $checked . " $complementoHTML>";
+	return $retorno;
+}
+function getCheckBoxBoolean($idRadio, $nmRadio, $chave, $checked = null, $complementoHTML = null) {
+	if ($checked == null) {
+		$checked = false;
+	}
+	if ($checked) {
+		$strchecked = "checked";
+	}
+
+	$retorno = "<INPUT type='checkbox' id='" . $idRadio . "' name='" . $nmRadio . "' value='" . $chave . "' " . $strchecked . " $complementoHTML>";
+	return $retorno;
+}
+function getInputText($idText, $nmText, $value, $class = null, $size = null, $maxlength = null, $complementoHTML = null) {
+	if ($maxlength == null) {
+		$maxlength = 20;
+	}
+	if ($size == null) {
+		if($value != null){
+			$size = strlen($value) + 1;
+		}else{
+			$size = 20;
+		}
+	}
+	if ($class == null) {
+		$class = "camponaoobrigatorio";
+	}
+	
+	if($class == constantes::$CD_CLASS_CAMPO_READONLY){
+		$complementoHTML .= " readonly ";
+	}
+
+	$retorno = "<INPUT type='text' id='" . $idText . "' name='" . $nmText . "' value='" . $value . "' class='$class' size='$size' maxlength='$maxlength' $complementoHTML>";
+
+	return $retorno;
+}
+function getInputHidden($idText, $nmText, $value, $complementoHTML = null) {
+	$retorno = "<INPUT type='hidden' id='" . $idText . "' name='" . $nmText . "' value='" . $value . "' $complementoHTML>";
 	return $retorno;
 }
 function getSelectGestor() {
@@ -622,9 +693,10 @@ function removeObjetoSessao($ID) {
 	unset ( $_SESSION [$ID] );
 }
 function formatarCodigoContrato($cd, $ano, $tipo) {
-	$dominioTipoContrato = new dominioTipoContrato ();
+	return vocontrato::getCodigoContratoFormatadoStatic($cd, $ano, $tipo);
+	/*$dominioTipoContrato = new dominioTipoContrato ();
 	$complemento = $dominioTipoContrato->getDescricao ( $tipo );
-	return formatarCodigoAnoComplemento ( $cd, $ano, $complemento );
+	return formatarCodigoAnoComplemento ( $cd, $ano, $complemento );*/
 }
 function formatarCodigoAnoComplemento($cd, $ano, $complemento) {
 	return formatarCodigoAnoComplementoArgs ( $cd, $ano, null, $complemento );
