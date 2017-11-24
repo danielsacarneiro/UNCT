@@ -26,7 +26,7 @@ cabecalho;
 <?php
 echo "EXECUCAO DE AGENDADOR DE TAREFAS WINDOWS.<br><br>";
 
-require (caminho_funcoes. "alertas/ativos.php");
+require (caminho_funcoes. "alertas/alertas_ativos.php");
 
 
 //envia alertas de contratos a vencer
