@@ -7,6 +7,8 @@ include_once (caminho_util . "bibliotecaSQL.php");
 include_once (caminho_util . "bibliotecaFuncoesPrincipal.php");
 // include_once (caminho_excecoes . "ExcecaoMaisDeUmRegistroRetornado.php");
 class dbprocesso {
+	static $FLAG_PRINTAR_SQL = false;
+	
 	var $cDb;
 	var $cConfig;
 	static $nmCampoCount = "nmCampoCount";
@@ -311,7 +313,9 @@ class dbprocesso {
 			
 			// echo $filtroSQL;
 			// echo "$queryCount<br>";
-			// echo "$query<br>";
+			if(static::$FLAG_PRINTAR_SQL){
+				echo "$query<br>";
+			}
 			
 			// removeObjetoSessao($voentidade->getNmTabela());
 			

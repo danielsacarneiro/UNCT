@@ -81,7 +81,7 @@ function formataFormClassificacao(pCampoChamada) {
 	if(classificacao == "<?=dominioClassificacaoContrato::$CD_MAO_OBRA?>"){
 		campoMaodeObra.value = "<?=constantes::$CD_SIM?>";
 	}
-	else if(classificacao == "<?=dominioClassificacaoContrato::$CD_FORNECIMENTO_AQUISICAO?>"){
+	else if(classificacao != "<?=dominioClassificacaoContrato::$CD_SERVICOS?>"){
 		campoMaodeObra.value = "<?=constantes::$CD_NAO?>";
 	}
 	else if(pCampoChamada == null || pCampoChamada.name != "<?=voContratoInfo::$nmAtrInMaoDeObra?>"){		

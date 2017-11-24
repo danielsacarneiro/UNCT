@@ -48,46 +48,39 @@ function getDescricaoTipoContrato(tipo){
 	return retorno;
 }
 
+/**
+ * 
+ * @param cdSetor
+ * @returns
+ * @deprecate
+ * 
+ */
 function getDescricaoSetor(cdSetor){
-	retorno = "";
-  	/*static $CD_SETOR_SAFI= 1;
-  	static $CD_SETOR_UNCT= 2;
-  	static $CD_SETOR_ATJA= 3;
-  	static $CD_SETOR_DIlC= 4;
-  	static $CD_SETOR_PGE= 5;
-  	static $CD_SETOR_SAD= 6;
-  	static $CD_SETOR_UNCP= 7;
-  	static $CD_SETOR_CPL= 8;	
-	static $CD_SETOR_UNSG= 9;*/
-	
-	if(cdSetor == 1){
-		retorno = "SAFI";		
-	}else if(cdSetor == 2){
-		retorno = "UNCT";
-	}else if(cdSetor == 3){
-		retorno = "ATJA";
-	}else if(cdSetor == 4){
-		retorno = "DILC";
-	}else if(cdSetor == 5){
-		retorno = "PGE";
-	}else if(cdSetor == 6){
-		retorno = "SAD";
-	}else if(cdSetor == 7){
-		retorno = "UNCP";
-	}else if(cdSetor == 8){
-		retorno = "CPL";
-	}else if(cdSetor == 9){
-		retorno = "UNSG";
-	}
-	
-	return retorno;
+	alert("FUNCAO DEPRECIADA");
 }
 
-function formatarCodigoDocumento(sq, cdSetor, ano, tpDoc){	
+/**
+ * @param cd
+ * @param colecaoCdDS
+ * @returns
+ * 
+ * Esse metodo diferencia do metodo acima porque aceita uma colecao de setores
+ * geralmente determinada pelo servidor PHP, que pode sofrer constantes atualizacoes
+ */
+function getDescricaoChaveDS(cd, colecaoCdDS){
+	return colecaoCdDS[cd];
+	
+}
+
+function formatarCodigoDocumento(sq, cdSetor, ano, tpDoc, colecaoSetor){
 	str = "";
 	conector = "";
 	if(cdSetor != null && cdSetor != ""){
-		str = str + conector + getDescricaoSetor(cdSetor);
+		//str = str + conector + getDescricaoSetor(cdSetor);
+		if(colecaoSetor == null){
+			exibirMensagem("Coleção dos Setores indefinida.");
+		}
+		str = str + conector + getDescricaoChaveDS(cdSetor,colecaoSetor);
 		conector = " ";
 	}
 
@@ -109,11 +102,11 @@ function formatarCodigoDocumento(sq, cdSetor, ano, tpDoc){
 	return str;	
 }
 
-function formatarNomeDocumento(sq, cdSetor, ano, tpDoc, complemento){	
+function formatarNomeDocumento(sq, cdSetor, ano, tpDoc, complemento, colecaoSetor){	
 	if(sq == "")
 		sq = "XXX";	
 	
-	str = formatarCodigoDocumento(sq, cdSetor, ano, tpDoc);	
+	str = formatarCodigoDocumento(sq, cdSetor, ano, tpDoc, colecaoSetor);	
 	if(complemento != "")
 		str = str  + complemento;
 	

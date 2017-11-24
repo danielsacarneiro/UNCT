@@ -154,14 +154,21 @@ function validaFormulario() {
 	formataFormContratoPorTpDemanda('<?=voDemanda::$nmAtrTipo?>', pColecaoNmObjetosFormContrato);
 }
 
+<?php
+//guarda os setores do econti
+$varColecaoGlobalSetor = "_globalColecaoSetor";
+echo getColecaoComoVariavelJS(dominioSetor::getColecao(), $varColecaoGlobalSetor);
+?>
+
 function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	chave = ano
 	+ CD_CAMPO_SEPARADOR +  cdSetor
 	+ CD_CAMPO_SEPARADOR +  tpDoc
 	+ CD_CAMPO_SEPARADOR +  sq;
 
+	colecaoSetor=<?=$varColecaoGlobalSetor?>;
 	document.getElementsByName("<?=voDocumento::getNmTabela()?>").item(0).value = chave;
-	document.getElementsByName("<?=voDocumento::$nmAtrSq?>").item(0).value = formatarCodigoDocumento(sq, cdSetor, ano, tpDoc);
+	document.getElementsByName("<?=voDocumento::$nmAtrSq?>").item(0).value = formatarCodigoDocumento(sq, cdSetor, ano, tpDoc, colecaoSetor);
 
 	//alert(document.frm_principal.<?=voDocumento::getNmTabela()?>.value);
 }

@@ -75,6 +75,12 @@ function confirmar() {
 	return confirm("Confirmar Alteracoes?");    
 }
 
+<?php
+//guarda os setores do econti
+$varColecaoGlobalSetor = "_globalColecaoSetor";
+echo getColecaoComoVariavelJS(dominioSetor::getColecao(), $varColecaoGlobalSetor);
+?>
+
 function criarNomeDocumento(){
 	//formatarNomeDocumento(sq, cdSetor, ano, tpDoc, complemento);
 	
@@ -90,30 +96,35 @@ function criarNomeDocumento(){
 	
 	complemento = "";
 	isContrato = (cdContrato != "" && anoContrato != "" && tpContrato != "");
+	
+	colecaoSetor=<?=$varColecaoGlobalSetor?>;
 	if(isContrato){
 		nome = getNomePessoaContratada('<?=vopessoa::$ID_NOME_DADOS_CONTRATADA?>');
 		nome = "_" + nome  + "_";
 		//se nao eh parecer, eh contrato
 		//pega o contrato
-		complemento = formatarCodigoDocumento(cdContrato, "", anoContrato, tpContrato);		
+		complemento = formatarCodigoDocumento(cdContrato, "", anoContrato, tpContrato, colecaoSetor);		
 	}else{
 		anoProcLic = document.frm_principal.<?=voProcLicitatorio::$nmAtrAnoProcLicitatorio?>.value;
 		cdProcLic = document.frm_principal.<?=voProcLicitatorio::$nmAtrCdProcLicitatorio?>.value;
 		
-		nome = "_Edital_PL-" + formatarCodigoDocumento(cdProcLic, null, anoProcLic, null);
+		nome = "_Edital_PL-" + formatarCodigoDocumento(cdProcLic, null, anoProcLic, null, colecaoSetor);
 	}
 	
 	complemento = nome + complemento;
 	//complemento = complemento + ".doc";
 	complemento = complemento + getExtensaoDocumento(tpDoc);	
 		
-	document.frm_principal.<?=voDocumento::$nmAtrLink?>.value = formatarNomeDocumento(sq, cdSetor, ano, tpDoc, complemento);
+	document.frm_principal.<?=voDocumento::$nmAtrLink?>.value = formatarNomeDocumento(sq, cdSetor, ano, tpDoc, complemento, colecaoSetor);
 }
 
+function iniciar(){
+	//alert(getDescricaoChaveDS(11,<?=$varColecaoGlobalSetor?>));
+}
 </SCRIPT>
 <?=setTituloPagina($vo->getTituloJSP())?>
 </HEAD>
-<BODY class="paginadados" onload="">
+<BODY class="paginadados" onload="iniciar();">
 	  
 <FORM name="frm_principal" method="post" action="confirmar.php" onSubmit="return confirmar();">
 

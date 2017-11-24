@@ -153,8 +153,7 @@ class filtroManter extends multiplosConstrutores {
 		// se o inDesativado for null, eh porque nao tem desativacao
 		//echo "desativado: ". $this->inDesativado;
 		//so tem desativado quando a consulta NAO eh por historico
-		if (!$this->isHistorico() && $this->voPrincipal != null) {
-			
+		if (!$this->isHistorico() && $this->voPrincipal != null) {			
 			if($this->voPrincipal->temTabHistorico() && $this->inDesativado == null){				
 				//seta para nao, para nao trazer os desativados como default
 				$this->inDesativado = constantes::$CD_NAO;

@@ -95,21 +95,21 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		// atributos do filtromanter
 		if ($this->anoContrato != null) {
 			
-			$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrAnoContrato . " = " . $this->anoContrato;
+			$filtro = $filtro . $conector . $nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato . " = " . $this->anoContrato;
 			
 			$conector = "\n AND ";
 		}
 		
 		if ($this->cdContrato != null) {
 			
-			$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrCdContrato . " = " . $this->cdContrato;
+			$filtro = $filtro . $conector . $nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato . " = " . $this->cdContrato;
 			
 			$conector = "\n AND ";
 		}
 		
 		if ($this->tipoContrato != null) {
 			
-			$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrTipoContrato . " = " . getVarComoString ( $this->tipoContrato );
+			$filtro = $filtro . $conector . $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato . " = " . getVarComoString ( $this->tipoContrato );
 			
 			$conector = "\n AND ";
 		}

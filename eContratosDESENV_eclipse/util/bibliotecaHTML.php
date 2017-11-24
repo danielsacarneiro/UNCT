@@ -754,4 +754,16 @@ function getDetalhamentoHTMLCodigoAno($ano, $cd, $tamanhoCodigo = null) {
 	$retorno .= "Número: <INPUT type='text' value='" . complementarCharAEsquerda ( $cd, "0", $tamanhoCodigo ) . "'  class='camporeadonlyalinhadodireita' size='6' readonly>";	
 	return $retorno;
 }
+
+function getColecaoComoVariavelJS($colecao, $nmVariavelJS){
+	if(!isColecaoVazia($colecao)){		
+		$jsvarColecao = "$nmVariavelJS = new Array();\n";
+		$chaves = array_keys($colecao);
+		for ($i=0; $i<count($colecao);$i++){
+			$chave = $chaves[$i];
+			$jsvarColecao .=  $nmVariavelJS."[$chave]='". $colecao[$chave] . "';\n";
+		}
+	}
+	return 	$jsvarColecao;
+}
 ?>

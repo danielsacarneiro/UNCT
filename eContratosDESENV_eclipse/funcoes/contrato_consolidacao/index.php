@@ -14,7 +14,7 @@ setCabecalho($titulo);
 
 $filtro  = new filtroConsultarContratoConsolidacao();
 
-$filtro->voPrincipal = $vo;
+//$filtro->voPrincipal = new vocontrato();
 $filtro = filtroManter::verificaFiltroSessao($filtro);
 
 $cdHistorico = $filtro->cdHistorico;

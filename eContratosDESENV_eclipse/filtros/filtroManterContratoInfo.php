@@ -142,7 +142,7 @@ class filtroManterContratoInfo extends filtroManter {
 						
 					$conector  = "\n AND ";
 		}		
-		
+				
 		$this->formataCampoOrdenacao ( new voContratoInfo () );
 		// finaliza o filtro
 		$filtro = parent::getFiltroSQL ( $filtro, $comAtributoOrdenacao );
@@ -152,14 +152,16 @@ class filtroManterContratoInfo extends filtroManter {
 		return $filtro;
 	}
 	
-	/*
-	 * function getAtributoOrdenacaoDefault(){
-	 * $nmTabela = voContratoInfo::getNmTabelaStatic($this->isHistorico);
-	 * $retorno = $nmTabela . "." . voContratoInfo::$nmAtrPrioridade . " " . constantes::$CD_ORDEM_CRESCENTE
-	 * . "," . $nmTabelaDemanda . "." . voDemanda::$nmAtrDhInclusao . " " . constantes::$CD_ORDEM_DECRESCENTE;
-	 * return $retorno;
-	 * }
-	 */
+	
+	function getAtributoOrdenacaoDefault(){
+	  $nmTabela = voContratoInfo::getNmTabelaStatic($this->isHistorico);
+	  $retorno = $nmTabela . "." . voContratoInfo::$nmAtrAnoContrato . " " . $this->cdOrdenacao
+	  . "," . $nmTabela . "." . voContratoInfo::$nmAtrTipoContrato . " " . $this->cdOrdenacao
+	  . "," . $nmTabela . "." . voContratoInfo::$nmAtrCdContrato . " " . $this->cdOrdenacao;
+	  
+	  return $retorno;
+	}
+	 
 	function getAtributosOrdenacao() {
 		$varAtributos = array (
 				voContratoInfo::$nmAtrAnoContrato => "Ano",

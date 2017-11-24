@@ -61,5 +61,7 @@ function getNomePessoaContratada(pNmCampoPessoa){
 		nmContrata = "";
 	}
 	
+	nmContrata = nmContrata.replace('&', 'E');
+	
 	return nmContrata;
 }
