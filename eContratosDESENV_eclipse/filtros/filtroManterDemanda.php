@@ -37,6 +37,7 @@ class filtroManterDemanda extends filtroManter{
 	
 	var $inOR_AND;
 	var $inContratoComDtPropostaVencida;
+	var $inRetornarReajusteSeLocacaoImovel;
 	
 	// ...............................................................
 	// construtor
@@ -459,6 +460,19 @@ class filtroManterDemanda extends filtroManter{
 			. ")) ";
 			
 			$conector  = "\n AND ";
+		}
+						
+		if($this->inRetornarReajusteSeLocacaoImovel != null && !getAtributoComoBooleano($this->inRetornarReajusteSeLocacaoImovel)){
+			$filtro = $filtro . $conector
+			. " NOT ($nmTabela." .voDemanda::$nmAtrTipo 
+			. " = "
+			. dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO_REAJUSTE
+			. " AND $nmTabelaContratoInfo." .voContratoInfo::$nmAtrCdClassificacao
+			. " = "
+			. dominioClassificacaoContrato::$CD_LOCACAO_IMOVEL
+			. ")";
+					$conector  = "\n AND ";
+		
 		}
 		
 		$this->formataCampoOrdenacao(new voDemanda());

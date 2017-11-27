@@ -22,6 +22,8 @@ try {
 	$filtro->vocontrato->cdAutorizacao = array (
 			dominioAutorizacao::$CD_AUTORIZ_SAD 
 	);
+	//de acordo com a portaria 1.116/2016 (em se tratando de reajuste, o contrato de locacao de imovel prescinde de autorizacao da SAD)
+	$filtro->inRetornarReajusteSeLocacaoImovel = constantes::$CD_NAO;
 	$colecao = $dbprocesso->consultarTelaConsulta ( $voDemanda, $filtro );
 	
 	$enviarEmail = true;
