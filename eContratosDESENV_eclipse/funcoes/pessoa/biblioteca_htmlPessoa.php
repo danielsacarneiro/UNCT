@@ -23,9 +23,11 @@ function getHTMLConsultaPorDemanda($chave){
 function getHTMLConsultaPorPAAP($chave){
 	$vo = new voPA();
 	$vo->getChavePrimariaVOExplodeParam ( $chave );
-	$colecaoContrato = consultarContratosPAAP ( $vo );	
-	$vo->getDadosBanco($colecaoContrato[0]);	
-	$colecaoContrato = converteRecordSetEmColecaoVOsContrato ( $colecaoContrato );
+	$colecaoContrato = consultarContratosPAAP ( $vo );
+	if(!isColecaoVazia($colecaoContrato)){
+		$vo->getDadosBanco($colecaoContrato[0]);	
+		$colecaoContrato = converteRecordSetEmColecaoVOsContrato ( $colecaoContrato );
+	}
 	// vai na bibliotacontrato
 	$retorno = $retorno . getColecaoContratoDet ( $colecaoContrato );
 	return $retorno;	

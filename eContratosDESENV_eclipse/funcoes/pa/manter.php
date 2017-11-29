@@ -106,7 +106,6 @@ function validarPublicacao(){
 
 	return true;
 }
-
 </SCRIPT>
 <?=setTituloPagina($vo->getTituloJSP())?>
 </HEAD>
@@ -231,9 +230,7 @@ function validarPublicacao(){
 	            <br><INPUT type="checkbox" onClick="if(!this.checked){document.frm_principal.<?=voPA::$nmAtrPublicacao?>.value='';}else{document.frm_principal.<?=voPA::$nmAtrPublicacao?>.value='<?=$modeloPublicacao?>'};"> *incluir Modelo Publicação.
 	            <br><INPUT type="checkbox" id="checkResponsabilidade" name="checkResponsabilidade" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCamposRequired);"> *Assumo a responsabilidade de não incluir os valores obrigatórios.	            				            
 				</TD>
-	        </TR>
-        	
-    
+	        </TR>	        
 <TR>
 	<TD halign="left" colspan="4">
 	<DIV class="textoseparadorgrupocampos">&nbsp;</DIV>

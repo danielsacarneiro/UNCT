@@ -117,6 +117,8 @@ function getExtensaoDocumento(tpDoc) {
 	retorno = ".doc";
 	if(tpDoc == 'PC')
 		retorno = ".xls";
+	else if(tpDoc == 'PU')
+		retorno = ".pdf";
 	
 	return retorno;	
 }

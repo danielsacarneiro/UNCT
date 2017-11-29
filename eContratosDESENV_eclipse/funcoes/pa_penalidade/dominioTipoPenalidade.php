@@ -19,11 +19,13 @@ class dominioTipoPenalidade extends dominio {
 	static $CD_TP_PENALIDADE_MULTA = 2;
 	static $CD_TP_PENALIDADE_SUSPENSAO = 3;
 	static $CD_TP_PENALIDADE_DECLARACAO_INIDONEIDADE = 4;
+	static $CD_TP_PENALIDADE_IMPEDIM_LICITAR = 5;
 	
 	static $DS_TP_PENALIDADE_ADVERTENCIA = "Advertência";
 	static $DS_TP_PENALIDADE_MULTA = "Multa";
 	static $DS_TP_PENALIDADE_SUSPENSAO = "Suspensão Temporária";
 	static $DS_TP_PENALIDADE_DECLARACAO_INIDONEIDADE = "Declaração de inidoneidade";
+	static $DS_TP_PENALIDADE_IMPEDIM_LICITAR = "Impedimento de licitar";
 	
 	// ...............................................................
 	// Construtor
@@ -35,7 +37,8 @@ class dominioTipoPenalidade extends dominio {
 				self::$CD_TP_PENALIDADE_ADVERTENCIA => self::$DS_TP_PENALIDADE_ADVERTENCIA,
 				self::$CD_TP_PENALIDADE_MULTA => self::$DS_TP_PENALIDADE_MULTA,
 				self::$CD_TP_PENALIDADE_SUSPENSAO => self::$DS_TP_PENALIDADE_SUSPENSAO,
-				self::$CD_TP_PENALIDADE_DECLARACAO_INIDONEIDADE => self::$DS_TP_PENALIDADE_DECLARACAO_INIDONEIDADE 
+				self::$CD_TP_PENALIDADE_DECLARACAO_INIDONEIDADE => self::$DS_TP_PENALIDADE_DECLARACAO_INIDONEIDADE,
+				self::$CD_TP_PENALIDADE_IMPEDIM_LICITAR => self::$DS_TP_PENALIDADE_IMPEDIM_LICITAR
 		);
 		
 		return $retorno;
@@ -53,11 +56,16 @@ class dominioTipoPenalidade extends dominio {
 	
 	static function getTextoReferenciaLegal($cd){
 		$artigo = "art. 87";
-		$lei = "Lei 8.666/93";		
-		$extenso = " ($artigo, ".constantes::$CD_CAMPO_SUBSTITUICAO.", $lei)";
+		$lei = "Lei 8.666/93";
 		
-		$subs = static::getIncisoReferenciaLegal($cd);
+		if($cd == static::$CD_TP_PENALIDADE_IMPEDIM_LICITAR){
+			$artigo = "art. 7";
+			$lei = "Lei 10.520/02";
+		}
 		
+		$extenso = " ($artigo, ".constantes::$CD_CAMPO_SUBSTITUICAO." $lei)";
+		
+		$subs = static::getIncisoReferenciaLegal($cd);		
 		$retorno = str_replace(constantes::$CD_CAMPO_SUBSTITUICAO, $subs, $extenso);
 		
 		return $retorno;
@@ -69,9 +77,12 @@ class dominioTipoPenalidade extends dominio {
 				static::$CD_TP_PENALIDADE_MULTA => "II",
 				static::$CD_TP_PENALIDADE_SUSPENSAO => "III",
 				static::$CD_TP_PENALIDADE_DECLARACAO_INIDONEIDADE => "IV",
-		);
+		);		
 		
-		return $array[$cd];
+		if(array_key_exists($cd, $array)){
+			$retorno = $array[$cd] . ",";
+		}
+		return $retorno;
 	}
 	
 	static function getDescricaoStatic($chave) {

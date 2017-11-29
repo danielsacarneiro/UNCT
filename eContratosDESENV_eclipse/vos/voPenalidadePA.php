@@ -8,6 +8,9 @@ class voPenalidadePA extends voentidade {
 	static $nmAtrFundamento = "pen_fundamento";
 	static $nmAtrObservacao = "pen_observacao";
 	static $nmAtrDtAplicacao = "pen_dt_aplicacao";
+	
+	static $NM_COL_inTemPublicacao = "NM_COL_inTemPublicacao";
+	
 	var $cdPA = "";
 	var $anoPA = "";
 	var $sq = "";
@@ -15,6 +18,9 @@ class voPenalidadePA extends voentidade {
 	var $obs = "";
 	var $fundamento = "";
 	var $dtAplicacao = "";
+	
+	var $inTemPublicacao = "";
+	
 	var $dbprocesso = null;
 	
 	// ...............................................................
@@ -92,6 +98,8 @@ class voPenalidadePA extends voentidade {
 		$this->obs = $registrobanco [self::$nmAtrObservacao];
 		$this->fundamento = $registrobanco [self::$nmAtrFundamento];
 		$this->dtAplicacao = $registrobanco [self::$nmAtrDtAplicacao];
+		
+		$this->inTemPublicacao = $registrobanco [self::$NM_COL_inTemPublicacao];
 	}
 	function getDadosFormulario() {
 

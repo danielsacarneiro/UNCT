@@ -167,6 +167,13 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	+ CD_CAMPO_SEPARADOR +  sq;
 
 	colecaoSetor=<?=$varColecaoGlobalSetor?>;
+
+	if("<?=$vo->tipo?>" != "<?=dominioTipoDemanda::$CD_TIPO_DEMANDA_PROCADM?>" 
+		&& tpDoc == "<?=dominioTpDocumento::$CD_TP_DOC_PUBLICACAO_PAAP?>"){
+		exibirMensagem("Somente é permitido anexar '<?=dominioTpDocumento::$DS_TP_DOC_PUBLICACAO_PAAP?>' aos PAAP.");
+		return;
+	}
+	
 	document.getElementsByName("<?=voDocumento::getNmTabela()?>").item(0).value = chave;
 	document.getElementsByName("<?=voDocumento::$nmAtrSq?>").item(0).value = formatarCodigoDocumento(sq, cdSetor, ano, tpDoc, colecaoSetor);
 

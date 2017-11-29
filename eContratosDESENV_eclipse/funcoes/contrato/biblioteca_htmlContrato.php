@@ -15,10 +15,13 @@ function getContratoDet($voContrato) {
 }
 function getColecaoContratoDet($colecao) {
 	$html = "";
-	// var_dump($colecao);
-
-	foreach ( $colecao as $voContrato ) {
-		$html .= getContratoDet ( $voContrato );
+	//var_dump($colecao);
+	if(!isColecaoVazia($colecao)){
+		foreach ( $colecao as $voContrato ) {
+			$html .= getContratoDet ( $voContrato );
+		}
+	}else{
+		$html = "NAO ENCONTRADO";
 	}
 	return $html;
 }

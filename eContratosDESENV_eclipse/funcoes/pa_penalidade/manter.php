@@ -106,7 +106,6 @@ function validarFundamento(){
 
 	return true;
 }
-
 </SCRIPT>
 <?=setTituloPagina($vo->getTituloJSP())?>
 </HEAD>
@@ -189,13 +188,13 @@ function validarFundamento(){
 				</TD>
 	        </TR>	        
 			<TR>
-	            <TH class="campoformulario" nowrap>Data Aplicação:</TH>
+	            <TH class="campoformulario" nowrap>Data.Pub.:</TH>
 	            <TD class="campoformulario" colspan="3">
 	            	<INPUT type="text" 
 	            	       id="<?=voPenalidadePA::$nmAtrDtAplicacao?>" 
 	            	       name="<?=voPenalidadePA::$nmAtrDtAplicacao?>" 
 	            			value="<?php echo(getData($vo->dtAplicacao));?>"
-	            			onkeyup="formatarCampoData(this, event, false);" 
+	            			onkeyup="javascript:if('<?=$vo->inTemPublicacao;?>'=='N'){exibirMensagem('Não há publicação anexada à demanda.');this.value='';return;}formatarCampoData(this, event, false);" 
 	            			class="camponaoobrigatorio" 
 	            			size="10" 
 	            			maxlength="10" required>
@@ -207,7 +206,6 @@ function validarFundamento(){
 	            <INPUT type="checkbox" id="checkResponsabilidade" name="checkResponsabilidade" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCamposRequired);"> *Assumo a responsabilidade de não incluir os valores obrigatórios.	            			
 				</TD>
         	</TR>
-    
 <TR>
 	<TD halign="left" colspan="4">
 	<DIV class="textoseparadorgrupocampos">&nbsp;</DIV>

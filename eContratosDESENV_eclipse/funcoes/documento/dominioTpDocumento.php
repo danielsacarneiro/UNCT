@@ -22,6 +22,7 @@ class dominioTpDocumento extends dominio {
 	static $CD_TP_DOC_PARECER = "PA";
 	static $CD_TP_DOC_PLANILHA_CUSTOS = "PC";
 	static $CD_TP_DOC_PROPOSTA_PRECOS = "PP";
+	static $CD_TP_DOC_PUBLICACAO_PAAP = "PU";
 	static $CD_TP_DOC_RELATORIO = "RE";
 	static $CD_TP_DOC_RELATORIO_CONCLUSAO = "RC";
 	
@@ -38,6 +39,7 @@ class dominioTpDocumento extends dominio {
 	static $DS_TP_DOC_PARECER = "Parecer";
 	static $DS_TP_DOC_PLANILHA_CUSTOS = "Planilha de Custos";
 	static $DS_TP_DOC_PROPOSTA_PRECOS = "Proposta de Preços";
+	static $DS_TP_DOC_PUBLICACAO_PAAP = "Publicação Penalidade";
 	static $DS_TP_DOC_RELATORIO = "Relatório";
 	static $DS_TP_DOC_RELATORIO_CONCLUSAO = "Relatório Com Alegações Finais";
 	
@@ -62,6 +64,7 @@ class dominioTpDocumento extends dominio {
 				self::$CD_TP_DOC_PARECER => self::$DS_TP_DOC_PARECER,
 				self::$CD_TP_DOC_PLANILHA_CUSTOS => self::$DS_TP_DOC_PLANILHA_CUSTOS,
 				self::$CD_TP_DOC_PROPOSTA_PRECOS => self::$DS_TP_DOC_PROPOSTA_PRECOS,
+				self::$CD_TP_DOC_PUBLICACAO_PAAP => self::$DS_TP_DOC_PUBLICACAO_PAAP,
 				self::$CD_TP_DOC_RELATORIO => self::$DS_TP_DOC_RELATORIO,
 				//self::$CD_TP_DOC_RELATORIO_CONCLUSAO => self::$DS_TP_DOC_RELATORIO_CONCLUSAO,
 		);
@@ -72,6 +75,7 @@ class dominioTpDocumento extends dominio {
 				self::$CD_TP_DOC_DESPACHO => self::$DS_TP_DOC_DESPACHO,
 				self::$CD_TP_DOC_INTIMACAO => self::$DS_TP_DOC_INTIMACAO,
 				self::$CD_TP_DOC_NOTA_IMPUTACAO => self::$DS_TP_DOC_NOTA_IMPUTACAO,
+				self::$CD_TP_DOC_PUBLICACAO_PAAP => self::$DS_TP_DOC_PUBLICACAO_PAAP,
 				self::$CD_TP_DOC_RELATORIO => self::$DS_TP_DOC_RELATORIO,
 				//self::$CD_TP_DOC_RELATORIO_CONCLUSAO => self::$DS_TP_DOC_RELATORIO_CONCLUSAO,
 		);

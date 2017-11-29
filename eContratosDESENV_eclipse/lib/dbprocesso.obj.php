@@ -200,13 +200,18 @@ class dbprocesso {
 	function consultarEntidadeComValidacao($query, $isPorChavePrimaria, $levantarExcecaoSeConsultaVazia) {
 		// echo $query;
 		$query = str_replace ( constantes::$CD_NOVA_LINHA, "", $query );
-		$retorno = $this->cDb->consultar ( $query );
+		
+		if(static::$FLAG_PRINTAR_SQL){
+			echo "$query<br>";
+		}
+		
+		$retorno = $this->cDb->consultar ( $query );			
 		
 		if ($isPorChavePrimaria) {
 			$tamanho = sizeof ( $retorno );
 			
 			if ($retorno == "")
-				throw new excecaoChaveRegistroInexistente ();
+				throw new excecaoChaveRegistroInexistente ("");
 			
 			if ($tamanho > 1)
 				throw new excecaoMaisDeUmRegistroRetornado ();

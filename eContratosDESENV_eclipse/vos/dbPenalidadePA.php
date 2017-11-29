@@ -10,7 +10,8 @@ include_once (caminho_filtros."filtroManterPA.php");
   	function consultarPorChaveTela($vo, $isHistorico) {
   		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
   		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );
-  		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( false );
+  		$nmTabelaDemandaDocumento = voDemandaTramDoc::getNmTabelaStatic ( false );
+  		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( false );  		
   		$nmTabelaPA = voPA::getNmTabelaStatic ( false );
   	
   		$arrayColunasRetornadas = array (
@@ -23,6 +24,9 @@ include_once (caminho_filtros."filtroManterPA.php");
   				$nmTabelaDemanda . "." . voDemanda::$nmAtrCd,
   				$nmTabelaDemanda . "." . voDemanda::$nmAtrAno,
   				$nmTabelaDemanda . "." . voDemanda::$nmAtrTexto,
+  				//define se a penalidade tem anexo de publicacao ou nao
+  				"if(".voDemandaTramDoc::$nmAtrTpDoc." IS NULL,".getVarComoString(constantes::$CD_NAO).",".getVarComoString(constantes::$CD_SIM).")"
+  				. " AS " . voPenalidadePA::$NM_COL_inTemPublicacao,
   		);
   	
   		$queryFrom .= "\n INNER JOIN ". $nmTabelaPA;
@@ -36,8 +40,23 @@ include_once (caminho_filtros."filtroManterPA.php");
   		$queryFrom .= "\n INNER JOIN ". $nmTabelaDemandaContrato;
   		$queryFrom .= "\n ON ". $nmTabelaDemanda . "." . voDemanda::$nmAtrCd. "=" . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdDemanda;
   		$queryFrom .= "\n AND ". $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoDemanda; 
-  		  		
-  		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryFrom, $isHistorico );
+		
+  		$NM_TAB_TEMP_DEM_DOC = "TAB_DEMANDA_DOC";
+  		$listaAtributos = voDemandaTramDoc::$nmAtrAnoDemanda . "," . voDemandaTramDoc::$nmAtrCdDemanda;
+  		$queryFrom .= "\n LEFT JOIN (";
+  		$queryFrom .= "SELECT $listaAtributos,". voDemandaTramDoc::$nmAtrTpDoc." FROM $nmTabelaDemandaDocumento ";
+  		$queryFrom .= "\n WHERE ". voDemandaTramDoc::$nmAtrTpDoc . " = " . getVarComoString(dominioTpDocumento::$CD_TP_DOC_PUBLICACAO_PAAP);
+  		$queryFrom .= "\n GROUP BY ". $listaAtributos;
+  		$queryFrom .= ") " . $NM_TAB_TEMP_DEM_DOC;
+  		$queryFrom .= "\n ON ". $nmTabelaDemanda . "." . voDemanda::$nmAtrCd. "=" . $NM_TAB_TEMP_DEM_DOC . "." . voDemandaContrato::$nmAtrCdDemanda;
+  		$queryFrom .= "\n AND ". $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $NM_TAB_TEMP_DEM_DOC . "." . voDemandaContrato::$nmAtrAnoDemanda;
+  		
+  		$queryWhere = " WHERE ";  		
+  		$queryWhere .= $vo->getValoresWhereSQLChave ( $isHistorico );
+  		//$queryWhere .= " AND " . voDemandaTramDoc::$nmAtrTpDoc . " = " . getVarComoString(dominioTpDocumento::$CD_TP_DOC_PUBLICACAO_PAAP);
+  		
+  		return $this->consultarMontandoQuery ( $vo, $arrayColunasRetornadas, $queryFrom, $queryWhere, $isHistorico, true );  		
+  		//return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryFrom, $isHistorico );
   	}
     
     function consultarPenalidadeTelaConsulta($vo, $filtro){    	
