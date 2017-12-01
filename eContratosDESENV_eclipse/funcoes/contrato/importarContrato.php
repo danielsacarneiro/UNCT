@@ -51,6 +51,7 @@ $tipoContrato = "C";
 
 for ($k=6; $k<=$totalResultado; $k++) {
 		
+		echo "linha registro" . $k . " <BR>";
 		$linha = $sheetData[$k];
         
         if($linha["A"] == "FIM")
@@ -70,9 +71,7 @@ for ($k=6; $k<=$totalResultado; $k++) {
 		if(!$result){
 			echo "<br> --- REGISTRO $k: ---";		
 			imprimeLinha($linha);
-		}
-				
-		echo "linha registro" . $k . " <BR>";
+		}				
 }
 
 //libera memoria

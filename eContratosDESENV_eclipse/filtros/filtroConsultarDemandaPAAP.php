@@ -136,6 +136,19 @@ class filtroConsultarDemandaPAAP extends filtroManterDemanda{
 
 		return $filtro;
 	}	
+	
+	function getAtributoOrdenacaoDefault(){
+		$nmTabelaDemanda = voDemanda::getNmTabelaStatic($this->isHistorico);
+		$nmTabelaPA = voPA::getNmTabelaStatic($this->isHistorico);
+		$retorno = 
+		$nmTabelaPA . "." . voPA::$nmAtrDtNotificacao . " " . constantes::$CD_ORDEM_CRESCENTE
+		. "," .$nmTabelaPA . "." . voPA::$nmAtrAnoPA . " " . constantes::$CD_ORDEM_CRESCENTE
+		. "," . $nmTabelaPA . "." . voPA::$nmAtrCdPA . " " . constantes::$CD_ORDEM_CRESCENTE
+		;
+		
+		return $retorno;
+	}
+	
 
 }
 

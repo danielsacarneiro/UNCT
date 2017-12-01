@@ -1,6 +1,10 @@
 <?php
 
 function getDemandaDetalhamento($voDemanda, $exibeTipoDemanda = true, $colspan=null){
+	return getDemandaDetalhamentoComLupa($voDemanda, true, $exibeTipoDemanda, $colspan);
+	
+}
+function getDemandaDetalhamentoComLupa($voDemanda, $temLupaDet, $exibeTipoDemanda = true, $colspan=null){
 	if($colspan==null){
 		$colspan=3;
 	}
@@ -9,22 +13,27 @@ function getDemandaDetalhamento($voDemanda, $exibeTipoDemanda = true, $colspan=n
 	<TH class="campoformulario" nowrap width="1%">Demanda:</TH>
 	<TD class="campoformulario" colspan=<?=$colspan?>>
 	<?php	
-	echo getDetalhamentoHTMLCodigoAno($voDemanda->ano, $voDemanda->cd); 
-	
+	echo getDetalhamentoHTMLCodigoAno($voDemanda->ano, $voDemanda->cd);
+		
 	if($exibeTipoDemanda){
 		if($voDemanda->tipo != null && $exibeTipoDemanda){
 			$comboTipo = new select(dominioTipoDemanda::getColecao());
 			echo "Tipo: " . $comboTipo->getHtmlCombo("","", $voDemanda->tipo, true, "camporeadonly", false, " disabled ");
 			echo "<INPUT type='hidden' id='" . voDemanda::$nmAtrTipo . "' name='" . voDemanda::$nmAtrTipo . "' value='$voDemanda->tipo'>";
 		}
-		//$voDemanda = new voDemanda();
-		if($voDemanda->texto != null){
-		?>
-          <br>Título: <INPUT type="text" value="<?=$voDemanda->texto?>"  class="camporeadonly" size="70" readonly>		
-		<?php
-		}	
 	}
-
+		
+	if ($voDemanda!=null && $temLupaDet) {
+		//$voDemanda = new voDemanda();
+		echo getLinkPesquisa ( "../demanda/detalhar.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $voDemanda->getValorChaveHTML() );
+	}
+		
+	//$voDemanda = new voDemanda();
+	if($voDemanda->texto != null){
+	?>
+         <br>Título: <INPUT type="text" value="<?=$voDemanda->texto?>"  class="camporeadonly" size="70" readonly>		
+	<?php
+	}
 	?>		            
 		<INPUT type="hidden" id="<?=voDemanda::$nmAtrAno?>" name="<?=voDemanda::$nmAtrAno?>" value="<?=$voDemanda->ano?>">
 		<INPUT type="hidden" id="<?=voDemanda::$nmAtrCd?>" name="<?=voDemanda::$nmAtrCd?>" value="<?=$voDemanda->cd?>">		

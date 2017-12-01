@@ -100,7 +100,7 @@ function confirmar() {
 	        $selectExercicio = new selectExercicio();	         
 	        	        	        
 	        $complementoHTML = "";	
-	        getDemandaDetalhamento($vo);
+	        getDemandaDetalhamentoComLupa($vo, false);
 	        ?>	        	        
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Setor Responsável:</TH>

@@ -28,7 +28,7 @@ function exibeAlertaContrato($colecao, $enviarEmail, $assuntoParam, $colunasAAcr
 
 function exibeAlertaDemandasContrato($colecao, $enviarEmail, $assuntoParam, $colunasAAcrescentar) {
 		
-	$colunas = incluirColunaColecao($colunas, 'ANO', voDemanda::$nmAtrAno);
+	$colunas = incluirColunaColecao($colunas, 'ANO DEMANDA', voDemanda::$nmAtrAno);
 	$colunas = incluirColunaColecao($colunas, 'NÚMERO', voDemanda::$nmAtrCd, constantes::$TAMANHO_CODIGOS);	
 	$colunas = incluirColunaColecao($colunas, 'TÍTULO', voDemanda::$nmAtrTexto);
 	$colunas = incluirColunaColecao($colunas, constantes::$CD_COLUNA_CONTRATO, null);

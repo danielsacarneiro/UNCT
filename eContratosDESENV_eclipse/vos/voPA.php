@@ -145,7 +145,7 @@ class voPA extends voentidade {
 		$diaExtenso = strftime ( '%d de %B de %Y', strtotime ( 'today' ) );
 	
 		$retorno = constantes::$CD_MODELO_TEXTO . " Contrato: $codigoContrato. Empresa: $nomeEmpresa. Penalidade: XXX. Fundamento: XXX.";
-		$retorno .= "Recurso: desta decisão cabe recurso no prazo XXX dias úteis, contados da intimação do ato, conforme art. 33, do Decreto n° 42.191/2015.";
+		$retorno .= "Recurso: desta decisão cabe recurso no prazo 05 dias úteis, contados da intimação do ato, conforme art. 33, do Decreto n° 42.191/2015.";
 		$retorno .= "O Processo encontra-se com vista franqueada na ATJA/SEFAZ, localizada na Avenida Cruz Cabugá, n° 1419, Sala 108, Bairro Santo Amaro,";
 		$retorno .= "Recife/PE, no horário das 09h às 16h. Recife, $diaExtenso. Marcelo José Mendonça de Sá - Superintendente Administrativo e Financeiro da SEFAZ-PE.";
 		

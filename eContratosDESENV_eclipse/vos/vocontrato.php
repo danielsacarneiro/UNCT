@@ -384,7 +384,7 @@ include_once(caminho_funcoes. "contrato/dominioClassificacaoContrato.php");
 	}	
 	
 	function getLinkDocumento(){		
-		$link = str_replace("G:", dominioTpDocumento::$ENDERECO_DRIVE, $this->linkDoc);
+		$link = str_ireplace("G:", dominioTpDocumento::$ENDERECO_DRIVE, $this->linkDoc);
 		//$link = str_replace("G:", "H:", $this->linkDoc);
 		return $link; 
 	}

@@ -343,7 +343,7 @@ class dbcontrato extends dbprocesso {
 		$query .= ") ";
 		
 		$query .= " \nVALUES(";
-		$query .= $this->getAtributosInsertImportacaoPlanilha ( $tipo, $linha );
+		$query .= $this->getAtributosInsertImportacaoPlanilha ( $tipo, $linha, $voContrato );
 		$query .= ")";
 		
 		// echo $query;
@@ -351,6 +351,7 @@ class dbcontrato extends dbprocesso {
 		try {
 			// tenta incluir
 			$retorno = $this->cDb->atualizarImportacao ( $query );
+			echoo("Contrato incluído com sucesso: " . $voContrato->getCodigoContratoFormatado());
 		} catch ( Exception $e ) {
 			echo "<BR> ERRO INCLUSAO. <BR>";
 			$msgErro = $e->getMessage ();
@@ -363,9 +364,8 @@ class dbcontrato extends dbprocesso {
 		
 		return $retorno;
 	}
-	function getAtributosInsertImportacaoPlanilha($tipo, $linha) {
-		$voContrato = $this->getVOImportacaoPlanilha ( $tipo, $linha );
-		
+	private function getAtributosInsertImportacaoPlanilha($tipo, $linha, $voContrato = null) {
+		$voContrato = $this->getVOImportacaoPlanilha ( $tipo, $linha );		
 		$retorno = $this->getSQLValuesInsert ( $voContrato );
 		
 		return $retorno;
