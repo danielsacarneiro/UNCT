@@ -116,25 +116,10 @@ function confirmar() {
         <DIV id="div_filtro" class="div_filtro">
         <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
             <TBODY>
-        <?php                    
-        $dominioTipoContrato = new dominioTipoContrato();
+        <?php        
+        require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
+        getContratoDet($voContrato);                
         ?>
-        <TR>
-            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-            <TD class="campoformulario" colspan=3>
-                    <INPUT type="hidden" id="<?=vocontrato::$nmAtrAnoContrato?>" name="<?=vocontrato::$nmAtrAnoContrato?>"  value="<?php echo($voContrato->anoContrato);?>">
-                    <INPUT type="hidden" id="<?=vocontrato::$nmAtrCdContrato?>" name="<?=vocontrato::$nmAtrCdContrato?>"  value="<?php echo($voContrato->cdContrato);?>">
-                    <INPUT type="text" value="<?php echo(complementarCharAEsquerda($voContrato->cdContrato, "0", 3)."/".$voContrato->anoContrato);?>"  class="<?=$classChaves?>" size="10" <?=$readonly?>>
-                    <INPUT type="text" id="<?=vocontrato::$nmAtrTipoContrato?>" name="<?=vocontrato::$nmAtrTipoContrato?>"  value="<?php echo($dominioTipoContrato->getDescricao($voContrato->tipo));?>"  class="camporeadonly" size="7" maxlength="5" <?=$readonly?>>
-                    <?php 
-                    $voContratoInfoDet = new voContratoInfo();
-                    $voContratoInfoDet->anoContrato = $voContrato->anoContrato;
-                    $voContratoInfoDet->cdContrato = $voContrato->cdContrato;
-                    $voContratoInfoDet->tipo = $voContrato->tipo;
-                    $chaveContratoInfo = $voContratoInfoDet->getValorChavePrimaria();
-                    echo getLinkPesquisa ( "../contrato_info/detalhar.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $chaveContratoInfo );?>
-            </TD>			
-        </TR>
         <TR>
             <TH class="campoformulario" nowrap>Espécie/Ordem:</TH>
             <TD class="campoformulario" colspan="3">
@@ -173,12 +158,6 @@ function confirmar() {
                  }
                 ?>
                 </TD>
-        </TR>
-		<TR>
-            <TH class="campoformulario" nowrap>Nome Contratada:</TH>
-            <TD class="campoformulario" width="1%"><INPUT type="text" id="nmContratada" name="nmContratada"  value="<?php echo($nmContratada);?>"  class="camporeadonly" size="50" <?=$readonly?>></TD>
-            <TH class="campoformulario" width="1%" nowrap>CNPJ/CNPF Contratada:</TH>
-            <TD class="campoformulario" ><INPUT type="text" id="docContratada" name="docContratada"  value="<?php echo(documentoPessoa::getNumeroDocFormatado($docContratada));?>"  onkeyup="formatarCampoCNPFouCNPJ(this, event);" class="camporeadonly" size="20" maxlength="20" <?=$readonly?>></TD>
         </TR>
 		<TR>
             <TH class="campoformulario" nowrap>Objeto:</TH>

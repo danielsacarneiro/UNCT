@@ -98,17 +98,9 @@ function cancela() {
         <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
             <TBODY>
         <?php                    
-        $dominioTipoContrato = new dominioTipoContrato();
+        require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
+        getContratoDet($voContrato);
         ?>
-        <TR>
-            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-            <TD class="campoformulario" colspan=3>
-                    <INPUT type="hidden" id="<?=vocontrato::$nmAtrAnoContrato?>" name="<?=vocontrato::$nmAtrAnoContrato?>"  value="<?php echo($voContrato->anoContrato);?>">
-                    <INPUT type="hidden" id="<?=vocontrato::$nmAtrCdContrato?>" name="<?=vocontrato::$nmAtrCdContrato?>"  value="<?php echo($voContrato->cdContrato);?>">
-                    <INPUT type="text" value="<?php echo(complementarCharAEsquerda($voContrato->cdContrato, "0", 3)."/".$voContrato->anoContrato);?>"  class="<?=$classChaves?>" size="10" <?=$readonly?>>
-                    <INPUT type="text" id="<?=vocontrato::$nmAtrTipoContrato?>" name="<?=vocontrato::$nmAtrTipoContrato?>"  value="<?php echo($dominioTipoContrato->getDescricao($voContrato->tipo));?>"  class="camporeadonly" size="7" maxlength="5" <?=$readonly?>>
-            </TD>			
-        </TR>
 		<TR>
             <TH class="campoformulario" nowrap>Gestor:</TH>
             <TD class="campoformulario" colspan="3"><INPUT type="text" id="nmGestor" name="nmGestor"  value="<?php echo($nmGestor);?>"  class="camporeadonly" size="50" <?=$readonly?>></TD>
@@ -117,12 +109,6 @@ function cancela() {
             <TH class="campoformulario" nowrap>Responsavel:</TH>
             <TD class="campoformulario" colspan="3"><INPUT type="text" id="nmGestor" name="nmGestor"  value="<?php echo($nmGestorPessoa);?>"  class="camporeadonly" size="50" <?=$readonly?>></TD>
         </TR>
-		<TR>
-            <TH class="campoformulario" nowrap>Nome Contratada:</TH>
-            <TD class="campoformulario" width="1%"><INPUT type="text" id="nmContratada" name="nmContratada"  value="<?php echo($nmContratada);?>"  class="camporeadonly" size="50" <?=$readonly?>></TD>
-            <TH class="campoformulario" width="1%" nowrap>CNPJ/CNPF Contratada:</TH>
-            <TD class="campoformulario" ><INPUT type="text" id="docContratada" name="docContratada"  value="<?php echo(documentoPessoa::getNumeroDocFormatado($docContratada));?>"  onkeyup="formatarCampoCNPFouCNPJ(this, event);" class="camporeadonly" size="20" maxlength="20" <?=$readonly?>></TD>
-        </TR>		
 		<TR>
             <TH class="campoformulario" nowrap>Data Proposta:</TH>
             <TD class="campoformulario" colspan="3">
