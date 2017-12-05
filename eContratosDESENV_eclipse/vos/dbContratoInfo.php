@@ -17,7 +17,7 @@ class dbContratoInfo extends dbprocesso {
 		
 		$nmTabContratoInterna = vocontrato::getNmTabelaStatic ( false );
 		$nmTabContratoSqMAX = "TAB_MAXCONTRATO";
-		$queryJoin .= "\n INNER JOIN ";
+		$queryJoin .= "\n left JOIN ";
 		$queryJoin .= " (SELECT " . $groupbyinterno . ", MAX(" . vocontrato::$nmAtrSqContrato . ") AS " . vocontrato::$nmAtrSqContrato . " FROM " . $nmTabContratoInterna;
 		$queryJoin .= " INNER JOIN " . $nmTabela;
 		$queryJoin .= "\n ON ";
@@ -35,7 +35,7 @@ class dbContratoInfo extends dbprocesso {
 		$queryJoin .= "\n AND ";
 		$queryJoin .= $nmTabela . "." . voContratoInfo::$nmAtrTipoContrato . "=" . $nmTabContratoSqMAX . "." . vocontrato::$nmAtrTipoContrato;
 		
-		$queryJoin .= "\n INNER JOIN " . $nmTabelaContrato;
+		$queryJoin .= "\n left JOIN " . $nmTabelaContrato;
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato . "=" . $nmTabContratoSqMAX . "." . vocontrato::$nmAtrSqContrato;
 		
@@ -74,7 +74,7 @@ class dbContratoInfo extends dbprocesso {
 		
 		$nmTabContratoInterna = vocontrato::getNmTabelaStatic ( false );
 		$nmTabContratoSqMAX = "TAB_MAXCONTRATO";
-		$queryJoin .= "\n INNER JOIN ";
+		$queryJoin .= "\n left JOIN ";
 		$queryJoin .= " (SELECT " . $groupbyinterno . ", MAX(" . vocontrato::$nmAtrSqContrato . ") AS " . vocontrato::$nmAtrSqContrato . " FROM " . $nmTabContratoInterna;
 		$queryJoin .= " INNER JOIN " . $nmTabela;
 		$queryJoin .= "\n ON ";
@@ -92,7 +92,7 @@ class dbContratoInfo extends dbprocesso {
 		$queryJoin .= "\n AND ";
 		$queryJoin .= $nmTabela . "." . voContratoInfo::$nmAtrTipoContrato . "=" . $nmTabContratoSqMAX . "." . vocontrato::$nmAtrTipoContrato;
 		
-		$queryJoin .= "\n INNER JOIN " . $nmTabelaContrato;
+		$queryJoin .= "\n left JOIN " . $nmTabelaContrato;
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato . "=" . $nmTabContratoSqMAX . "." . vocontrato::$nmAtrSqContrato;
 		

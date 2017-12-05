@@ -119,7 +119,9 @@ function confirmar() {
 				$dadosContratoCompilado = consultarDadosContratoCompilado($voContrato);
 				//por enquanto ta pegando do registro mais antigo (na teoria eh o contrato mater)
 				//MELHORAR
-				$cdAutorizacaoPlanilha =  $dadosContratoCompilado[vocontrato::$nmAtrCdAutorizacaoContrato];
+				if($dadosContratoCompilado!=null){
+					$cdAutorizacaoPlanilha =  $dadosContratoCompilado[vocontrato::$nmAtrCdAutorizacaoContrato];
+				}
 				?>
 	            <TH class="campoformulario" width="1%" nowrap>Autorização:</TH>
 	            <TD class="campoformulario" colspan=3>

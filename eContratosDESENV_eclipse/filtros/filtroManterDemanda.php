@@ -36,6 +36,8 @@ class filtroManterDemanda extends filtroManter{
 	var $vlGlobalFinal;
 	
 	var $inOR_AND;
+	var $cdClassificacaoContrato;
+	var $inMaoDeObra = "";
 	var $inContratoComDtPropostaVencida;
 	var $inRetornarReajusteSeLocacaoImovel;
 	
@@ -89,6 +91,8 @@ class filtroManterDemanda extends filtroManter{
 		$this->vlGlobalFinal = @$_POST[self::$NmAtrVlGlobalFinal];
 		
 		$this->cdUsuarioTramitacao = @$_POST[self::$NmAtrCdUsuarioTramitacao];
+		$this->cdClassificacaoContrato = @$_POST [voContratoInfo::$nmAtrCdClassificacao];
+		$this->inMaoDeObra = @$_POST [voContratoInfo::$nmAtrInMaoDeObra];
 		$this->inOR_AND = @$_POST[self::$NmAtrInOR_AND];
 		if($this->inOR_AND == null){
 			$this->inOR_AND = constantes::$CD_OPCAO_OR;
@@ -425,6 +429,22 @@ class filtroManterDemanda extends filtroManter{
 					. getVarComoDecimal($this->vlGlobalFinal);
 					$conector  = "\n AND ";
 		
+		}
+		
+		if($this->cdClassificacaoContrato != null){
+			$filtro = $filtro . $conector
+			. $nmTabelaContratoInfo . "." .voContratoInfo::$nmAtrCdClassificacao
+			. " = "
+			. getVarComoNumero($this->cdClassificacaoContrato);
+			$conector  = "\n AND ";
+		
+		}
+		
+		if ($this->inMaoDeObra != null) {
+		
+			$filtro = $filtro . $conector . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrInMaoDeObra . " = " . getVarComoString ( $this->inMaoDeObra);
+		
+			$conector = "\n AND ";
 		}
 		
 		if($this->inContratoComDtPropostaVencida != null){			

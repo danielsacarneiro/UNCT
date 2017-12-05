@@ -219,6 +219,24 @@ function encaminhar() {
                 <TH class="campoformulario" width="1%" nowrap>CNPJ/CPF Contratada:</TH>
                 <TD class="campoformulario" ><INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($filtro->docContratada);?>" class="camponaoobrigatorio" size="20" maxlength="18"></TD>
             </TR>
+			<TR>
+				<?php
+				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioClassificacaoContrato.php");
+				$comboClassificacao = new select(dominioClassificacaoContrato::getColecao());
+				?>
+	            <TH class="campoformulario" nowrap>Classificação:</TH>
+	            <TD class="campoformulario" width="1%" colspan=3>
+	            <?php 
+	            echo $comboClassificacao->getHtmlCombo(voContratoInfo::$nmAtrCdClassificacao,voContratoInfo::$nmAtrCdClassificacao, $filtro->cdClassificacaoContrato, true, "camponaoobrigatorio", true, "");
+	            //$radioMaodeObra = new radiobutton ( dominioSimNao::getColecao());
+	            //echo "&nbsp;&nbsp;Mão de obra incluída (planilha de custos)?: " . $radioMaodeObra->getHtmlRadioButton ( voContratoInfo::$nmAtrInMaoDeObra, voContratoInfo::$nmAtrInMaoDeObra, $vo->inMaoDeObra, false, " required " );
+	            
+	            include_once(caminho_util. "dominioSimNao.php");
+	            $comboSimNao = new select(dominioSimNao::getColecao());	             
+	            echo "&nbsp;&nbsp;Mão de obra incluída (planilha de custos)?: ";
+	            echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInMaoDeObra,voContratoInfo::$nmAtrInMaoDeObra, $filtro->inMaoDeObra, true, "camponaoobrigatorio", false,"");
+	            ?>
+	        </TR>
             <?php            
             $comboTpDoc = new select(dominioTpDocumento::getColecao());
             $comboSetor = new select(dominioSetor::getColecao());
