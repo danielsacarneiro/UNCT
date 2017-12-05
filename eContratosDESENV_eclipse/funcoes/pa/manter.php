@@ -16,7 +16,7 @@ $funcao = @$_GET["funcao"];
 $readonly = "";
 $isInclusao = $funcao == constantes::$CD_FUNCAO_INCLUIR;
 
-$classChaves = "campoobrigatorio";
+$classChaves = "camponaoobrigatorioalinhadodireita";
 $readonlyChaves = "";
 
 session_start();

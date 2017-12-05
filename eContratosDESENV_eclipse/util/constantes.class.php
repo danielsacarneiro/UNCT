@@ -41,22 +41,14 @@
     static $CD_OPCAO_AND = "AND";
     static $DS_OPCAO_OR = "OU";
     static $DS_OPCAO_AND = "E";
-    
-    /*"01" => "Mater",
-    "02" => "Apostilamento",
-    "03" => "Termo Aditivo",
-    "04" => "Termo de Ajuste",
-    "05" => "Termo de Cessão de Uso",
-    "06" => "Termo de Rerratificação",
-    "07" => "Termo de Cooperação",
-    "08" => "Termo de Convalidação",
-    "09" => "Termo de Rescisão Amigável",
-    "10" => "Termo de Rescisão Unilateral",
-    "11" => "Termo de Rescisão Encerramento",*/
-    
+        
     static $CD_CLASS_CAMPO_OBRIGATORIO = "campoobrigatorio";
     static $CD_CLASS_CAMPO_NAO_OBRIGATORIO = "camponaoobrigatorio";
     static $CD_CLASS_CAMPO_READONLY = "camporeadonly";
+    static $CD_CLASS_CAMPO_OBRIGATORIO_DIREITA = "campoobrigatorioalinhadodireita";
+    static $CD_CLASS_CAMPO_NAO_OBRIGATORIO_DIREITA = "camponaoobrigatorioalinhadodireita";
+    static $CD_CLASS_CAMPO_READONLY_DIREITA = "camporeadonlyalinhadodireita";
+    
     static $CD_NOVA_LINHA = "\n";
     
     static $TAMANHO_CODIGOS = 5;
