@@ -324,7 +324,7 @@ function getProcLicitatorioEntradaDados($cdProcLic, $anoProcLic, $arrayCssClass,
 	$pNmCampoCdProcLicitatorio = voProcLicitatorio::$nmAtrCdProcLicitatorio;
 	$pNmCampoAnoProcLicitatorio = voProcLicitatorio::$nmAtrAnoProcLicitatorio;
 	
-	echo "Número: <INPUT type='text' onkeyup='validarCampoNumericoPositivo(this)' id='" . $pNmCampoCdProcLicitatorio . "' name='" . $pNmCampoCdProcLicitatorio . "'  value='" . complementarCharAEsquerda ( $cdProcLic, "0", TAMANHO_CODIGOS_SAFI ) . "'  class='" . $cssCdProcLic . "' size='4' maxlength='3'  " . $htmlCdProcLic . ">";
+	echo "Número: <INPUT type='text' onkeyup='validarCampoNumericoPositivo(this)' id='" . $pNmCampoCdProcLicitatorio . "' name='" . $pNmCampoCdProcLicitatorio . "'  value='" . complementarCharAEsquerda ( $cdProcLic, "0", TAMANHO_CODIGOS_SAFI ) . "'  class='" . $cssCdProcLic . "' size='5' maxlength='5'  " . $htmlCdProcLic . ">";
 	echo "&nbsp;Ano: " . $selectExercicio->getHtmlCombo ( $pNmCampoAnoProcLicitatorio, $pNmCampoAnoProcLicitatorio, $anoProcLic, true, $cssAnoProcLic, false, $htmlAnoProcLic );
 }
 function consultarContratosDemanda($voDemanda) {

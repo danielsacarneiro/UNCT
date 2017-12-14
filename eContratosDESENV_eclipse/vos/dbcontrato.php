@@ -525,8 +525,8 @@ class dbcontrato extends dbprocesso {
 			}
 		}
 		
-		imprimeLinhaHTML ( "parametro:$param" );
-		imprimeLinhaHTML ( "resultado:$retorno" );
+		/*imprimeLinhaHTML ( "parametro:$param" );
+		imprimeLinhaHTML ( "resultado:$retorno" );*/
 		
 		return $retorno;
 	}

@@ -5,6 +5,9 @@ include_once("../../config_lib.php");
 error_reporting(E_ALL);
 set_time_limit(0);
 
+include_once(caminho_util."bibliotecaHTML.php");
+inicioComValidacaoUsuario(true);
+
 ?>
 <html>
 <head>

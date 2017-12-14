@@ -142,7 +142,7 @@ function getIndiceBarraOuPonto($param) {
 }
 function getDocLinkMascaraImportacao($param) {
 	$linkDoc = str_replace ( "\\", "\\\\", $param );
-	$linkDoc = str_replace ( "&", "E", $param );
+	$linkDoc = str_replace ( "&", "E", $linkDoc );
 	return $linkDoc;
 }
 function getMoedaMascaraImportacao($param) {
