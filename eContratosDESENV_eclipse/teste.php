@@ -1,12 +1,15 @@
 <?php  
 include_once("config_lib.php");
 include_once(caminho_util."bibliotecaFuncoesPrincipal.php");
+include_once(caminho_util."bibliotecaHTML.php");
 include_once(caminho_util."bibliotecaDataHora.php");
    
 
-$_SESSION["dois"]["teste"] = "daniel";
+/*$_SESSION["dois"]["teste"] = "daniel";
+echo $_SESSION["dois"]["teste"];*/
 
-echo $_SESSION["dois"]["teste"];
+$dtNotificacaoPAram = somarOuSubtrairDiasUteisNaData(getDataHoje(), 15, "+");
+echo $dtNotificacaoPAram;
 
 ?>
 
