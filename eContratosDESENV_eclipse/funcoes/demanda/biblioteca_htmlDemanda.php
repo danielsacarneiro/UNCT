@@ -223,7 +223,7 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDad
 				}
 				$html .= "<TD class='tabeladados' >" . $voAtual->textoTram . "</TD> \n";
 				
-				$html .= getHtmlDocumento($voAtual, true);
+				$html .= getHtmlDocumento($voAtual, false);				
 
 				$html .= "<TD class='tabeladados' nowrap>" . $voAtual->nmUsuarioInclusao . "</TD> \n";
 				$html .= "<TD class='tabeladados' nowrap>" . getData ( $voAtual->dhInclusao ) . "</TD> \n";

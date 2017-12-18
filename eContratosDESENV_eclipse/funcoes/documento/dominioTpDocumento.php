@@ -12,6 +12,7 @@ class dominioTpDocumento extends dominio {
 	static $CD_TP_DOC_APOSTILAMENTO = "AP";
 	static $CD_TP_DOC_CI = "CI";
 	static $CD_TP_DOC_DECISAO = "DC";
+	static $CD_TP_DOC_DEFESA = "DF";
 	static $CD_TP_DOC_DESPACHO = "DE";
 	static $CD_TP_DOC_INTIMACAO = "IN";
 	static $CD_TP_DOC_NOTA_TECNICA = "NT";
@@ -29,6 +30,7 @@ class dominioTpDocumento extends dominio {
 	static $DS_TP_DOC_APOSTILAMENTO = "Apostilamento";
 	static $DS_TP_DOC_CI = "CI";
 	static $DS_TP_DOC_DECISAO = "Decisão";
+	static $DS_TP_DOC_DEFESA = "Defesa";
 	static $DS_TP_DOC_DESPACHO = "Despacho";
 	static $DS_TP_DOC_INTIMACAO = "Intimação";
 	static $DS_TP_DOC_NOTA_TECNICA = "Nota Técnica";
@@ -54,6 +56,7 @@ class dominioTpDocumento extends dominio {
 				self::$CD_TP_DOC_APOSTILAMENTO => self::$DS_TP_DOC_APOSTILAMENTO,
 				self::$CD_TP_DOC_CI => self::$DS_TP_DOC_CI,
 				self::$CD_TP_DOC_DECISAO => self::$DS_TP_DOC_DECISAO,
+				self::$CD_TP_DOC_DEFESA => self::$DS_TP_DOC_DEFESA,
 				self::$CD_TP_DOC_DESPACHO => self::$DS_TP_DOC_DESPACHO,
 				self::$CD_TP_DOC_INTIMACAO => self::$DS_TP_DOC_INTIMACAO,
 				self::$CD_TP_DOC_OFICIO => self::$DS_TP_DOC_OFICIO,
@@ -72,6 +75,7 @@ class dominioTpDocumento extends dominio {
 	static function getColecaoDocsPAAP() {
 		return array (
 				self::$CD_TP_DOC_DECISAO => self::$DS_TP_DOC_DECISAO,
+				self::$CD_TP_DOC_DEFESA => self::$DS_TP_DOC_DEFESA,
 				self::$CD_TP_DOC_DESPACHO => self::$DS_TP_DOC_DESPACHO,
 				self::$CD_TP_DOC_INTIMACAO => self::$DS_TP_DOC_INTIMACAO,
 				self::$CD_TP_DOC_NOTA_IMPUTACAO => self::$DS_TP_DOC_NOTA_IMPUTACAO,

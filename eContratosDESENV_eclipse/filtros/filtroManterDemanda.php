@@ -277,9 +277,15 @@ class filtroManterDemanda extends filtroManter{
 		}*/
 		
 		if ($this->vodemanda->situacao != null && !$this->isAtributoArrayVazio($this->vodemanda->situacao)) {
+						
 			$comparar = " = '" . $this->vodemanda->situacao . "'";
 			if(is_array($this->vodemanda->situacao)){
-				$comparar = " IN (" . getSQLStringFormatadaColecaoIN($this->vodemanda->situacao, true) . ")";
+				
+				if(count($this->vodemanda->situacao) == 1 && $this->vodemanda->situacao[0] == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_A_FAZER){
+					$comparar = " IN (" . getSQLStringFormatadaColecaoIN(array_keys(dominioSituacaoDemanda::getColecaoAFazer()), true) . ")";
+				}else{
+					$comparar = " IN (" . getSQLStringFormatadaColecaoIN($this->vodemanda->situacao, true) . ")";
+				}
 			}
 				
 			$filtro = $filtro . $conector . $nmTabela . "." . voDemanda::$nmAtrSituacao . $comparar;

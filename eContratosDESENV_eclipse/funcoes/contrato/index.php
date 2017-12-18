@@ -89,7 +89,8 @@ function formataForm() {
 		document.frm_principal.<?=filtroManterContrato::$nmAtrAnoArquivo?>.disabled = true;
 	}
 	
-	if(isConsultarArquivo == "<?=dominioConsultaArquivoContrato::$CD_CONSULTA_ARQUIVO_CONTRATO_ASSINADO?>"){
+	//if(isConsultarArquivo == "<?=dominioConsultaArquivoContrato::$CD_CONSULTA_ARQUIVO_CONTRATO_ASSINADO?>"){
+	if(isConsultarArquivo != "<?=dominioConsultaArquivoContrato::$CD_CONSULTA_COMUM?>"){	
 			//por conta da estrutura de arquivos da _dag$/UNCT, deve-se obrigar o nome da contratada			
 		document.frm_principal.<?=vocontrato::$nmAtrContratadaContrato?>.required = true;
 	}else{
@@ -100,7 +101,7 @@ function formataForm() {
 function validaFormulario() {
 
 	isConsultarArquivo = document.frm_principal.cdConsultarArquivo.value;
-	if(isConsultarArquivo != "N"){							
+	if(isConsultarArquivo != "<?=dominioConsultaArquivoContrato::$CD_CONSULTA_COMUM?>"){							
 		var colecaoNmCamposForm = ["<?=vocontrato::$nmAtrCdContrato?>", "<?=vocontrato::$nmAtrContratadaContrato?>"];
 		var colecaoDescricaoCamposForm = ["Número do Contrato", " ou Nome Contratada"];
 		if(!isPeloMenosUmCampoFormularioSelecionado(colecaoNmCamposForm, colecaoDescricaoCamposForm, true))

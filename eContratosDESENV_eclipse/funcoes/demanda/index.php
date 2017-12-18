@@ -132,7 +132,7 @@ function encaminhar() {
         <TBODY>
 	        <?php	        	
 	        	$comboTipo = new select(dominioTipoDemanda::getColecao());
-	        	$comboSituacao = new select(dominioSituacaoDemanda::getColecao());
+	        	$comboSituacao = new select(dominioSituacaoDemanda::getColecaoHTMLConsulta());
 	        	$comboSetor = new select(dominioSetor::getColecao());
 	        	$comboPrioridade = new select(dominioPrioridadeDemanda::getColecao());
 	            $selectExercicio = new selectExercicio();

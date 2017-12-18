@@ -125,7 +125,7 @@ function confirmar() {
 				?>
 	            <TH class="campoformulario" width="1%" nowrap>Autorização:</TH>
 	            <TD class="campoformulario" colspan=3>
-	            Planinha: <?php echo $combo->getHtmlCombo("","", $cdAutorizacaoPlanilha, true, "camporeadonly", true, " disabled ");?>	            
+	            Planilha: <?php echo $combo->getHtmlCombo("","", $cdAutorizacaoPlanilha, true, "camporeadonly", true, " disabled ");?>	            
 	            Atual: <?php echo $combo->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato,voContratoInfo::$nmAtrCdAutorizacaoContrato, $vo->cdAutorizacao, true, "camporeadonly", true, " disabled ");?>	        </TR>
 	        <TR>	       
 	            <TH class="campoformulario" nowrap width="1%">Data.Proposta de preços:</TH>
