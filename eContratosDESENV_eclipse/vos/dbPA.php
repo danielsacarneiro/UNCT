@@ -283,6 +283,33 @@ include_once (caminho_filtros."filtroManterPA.php");
     	return parent::consultarFiltro ( $filtro, $querySelect, $queryFrom, false );
     }
     
+    function temPenalidade($vo) {
+    	//$vo = new voPA();
+    	$dbpenalidade = new dbPenalidadePA();
+    	$filtro = new filtroManterPenalidade();
+    	$filtro->anoPA = $vo->anoPA;
+    	$filtro->cdPA = $vo->cdPA;
+    	$colecao = $dbpenalidade->consultarPenalidadeTelaConsulta($vo, $filtro);
+    	return !isColecaoVazia($colecao);
+    }
+    
+    function validarAlteracao($vo) {
+    	//$vo = new voPA();    	
+    	//$retorno = true;    	
+    	if($vo->situacao == dominioSituacaoPA::$CD_SITUACAO_PA_ENCERRADO){
+    		$temPenalidade = $this->temPenalidade($vo);
+    		if(!$temPenalidade){
+    			throw new excecaoGenerica("Só é permitido encerrar o processo que possua penalidades cadastradas.");
+    		}
+    	}     	
+    	//return $retorno;
+    }
+    
+    function alterar($vo) {
+    	$this->validarAlteracao($vo);
+    	return parent::alterar($vo);
+    }    
+    
     function getSQLValuesInsert($vo){
     	if($vo->cdPA == null){
     		$vo->cdPA = $this->getProximoSequencialChaveComposta (voPA::$nmAtrCdPA, $vo );

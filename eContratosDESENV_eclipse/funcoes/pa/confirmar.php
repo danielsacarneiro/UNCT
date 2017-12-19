@@ -7,6 +7,8 @@ inicioComValidacaoUsuario(true);
 $vo = new voPA();
 $vo->getDadosFormulario();
 
+//$vo->dbprocesso->validarAlteracao($vo);
+
 putObjetoSessao("vo", $vo);
 
 //redirecionar mantendo o post
