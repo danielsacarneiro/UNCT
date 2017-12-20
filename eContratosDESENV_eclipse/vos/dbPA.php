@@ -10,14 +10,13 @@ include_once (caminho_filtros."filtroManterPA.php");
 // cria um combo select html
 
   Class dbPA extends dbprocesso{
+  	static $nmTabelaPublicacao = "nmTabelaPublicacao";
     
   	function consultarPorChaveTela($vo, $isHistorico) {
   		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
   		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );
   		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( false );
-  		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
-  		$nmTabelaTramitacao = voDemandaTramitacao::getNmTabelaStatic ( false );
-  		$nmTabelaTramDoc = voDemandaTramDoc::getNmTabelaStatic ( false );
+  		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );  		
   	
   		$arrayColunasRetornadas = array (
   				$nmTabela . ".*",
@@ -27,7 +26,7 @@ include_once (caminho_filtros."filtroManterPA.php");
   				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdEspecieContrato,
   				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato,
   				$nmTabelaDemanda . "." . voDemanda::$nmAtrTexto,
-  				$nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrDtReferencia,
+  				self::$nmTabelaPublicacao . "." . voDemandaTramitacao::$nmAtrDtReferencia,
 //  				$nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato,  
   		);
   	
@@ -39,10 +38,29 @@ include_once (caminho_filtros."filtroManterPA.php");
   		$queryFrom .= "\n ON ". $nmTabelaDemanda . "." . voDemanda::$nmAtrCd. "=" . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdDemanda;
   		$queryFrom .= "\n AND ". $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoDemanda;
   		
+  		$queryFrom .= $this->getSQLJoinDataPublicacaoPAAP($nmTabelaDemanda);
+  		  		  		 		
+  		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryFrom, $isHistorico );
+  	}
+  	
+  	static function getSQLNmAtributoDtPublicacao(){
+  		return self::$nmTabelaPublicacao . "." . voDemandaTramitacao::$nmAtrDtReferencia;  		
+  	}
+  	
+  	function getSQLJoinDataPublicacaoPAAP($nmTabelaDemanda, $nmTabelaTramDoc=null){
+  		//se nao passar $nmTabelaTramDoc a tabela default sera a sem historico, por obvio
+  		if($nmTabelaTramDoc == null){
+  			$nmTabelaTramDoc = voDemandaTramDoc::getNmTabelaStatic ( false );
+  		}
+  		
+  		$nmTabelaPublicacao = self::$nmTabelaPublicacao;
+  		
+  		//tudo para pegar a data da publicacao atraves do doc do tipo PUBLICACAO DE PENALIDADE anexado na demanda
+  		$nmTabelaTramitacao = voDemandaTramitacao::getNmTabelaStatic ( false );
   		$atributosGroupDem = "$nmTabelaTramitacao.".voDemandaTramitacao::$nmAtrCd . ",$nmTabelaTramitacao." . voDemandaTramitacao::$nmAtrAno;
   		$nmTABELA_MAX_TRAM_PUBLIC = "TABELA_MAX_TRAM_PUBLIC";
   		$queryFrom .= "\n LEFT JOIN (";
-  		$queryFrom .= " SELECT MAX($nmTabelaTramitacao." . voDemandaTramitacao::$nmAtrSq . ") AS " . voDemandaTramitacao::$nmAtrSq . ", ". $atributosGroupDem 
+  		$queryFrom .= " SELECT MAX($nmTabelaTramitacao." . voDemandaTramitacao::$nmAtrSq . ") AS " . voDemandaTramitacao::$nmAtrSq . ", ". $atributosGroupDem
   		. " FROM " . $nmTabelaTramitacao
   		. "\n INNER JOIN ". $nmTabelaTramDoc
   		. "\n ON ". $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCd. "=" . $nmTabelaTramDoc . "." . voDemandaTramDoc::$nmAtrCdDemanda
@@ -53,13 +71,12 @@ include_once (caminho_filtros."filtroManterPA.php");
   		$queryFrom .= ") $nmTABELA_MAX_TRAM_PUBLIC";
   		$queryFrom .= "\n ON ". "$nmTABELA_MAX_TRAM_PUBLIC." . voDemandaTramitacao::$nmAtrCd. "=" . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd;
   		$queryFrom .= "\n AND ". "$nmTABELA_MAX_TRAM_PUBLIC." . voDemandaTramitacao::$nmAtrAno . "=" . $nmTabelaDemanda . "." . voDemanda::$nmAtrAno;
+  		$queryFrom .= "\n LEFT JOIN ". $nmTabelaTramitacao . " $nmTabelaPublicacao ";
+  		$queryFrom .= "\n ON ". "$nmTABELA_MAX_TRAM_PUBLIC." . voDemandaTramitacao::$nmAtrCd. "=" . $nmTabelaPublicacao . "." . voDemandaTramitacao::$nmAtrCd;
+  		$queryFrom .= "\n AND ". "$nmTABELA_MAX_TRAM_PUBLIC." . voDemandaTramitacao::$nmAtrAno . "=" . $nmTabelaPublicacao . "." . voDemandaTramitacao::$nmAtrAno;
+  		$queryFrom .= "\n AND " . "$nmTABELA_MAX_TRAM_PUBLIC." . voDemandaTramitacao::$nmAtrSq . " = " . $nmTabelaPublicacao . "." . voDemandaTramitacao::$nmAtrSq;
   		
-  		$queryFrom .= "\n LEFT JOIN ". $nmTabelaTramitacao;
-  		$queryFrom .= "\n ON ". "$nmTABELA_MAX_TRAM_PUBLIC." . voDemandaTramitacao::$nmAtrCd. "=" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCd;
-  		$queryFrom .= "\n AND ". "$nmTABELA_MAX_TRAM_PUBLIC." . voDemandaTramitacao::$nmAtrAno . "=" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrAno;
-  		$queryFrom .= "\n AND " . "$nmTABELA_MAX_TRAM_PUBLIC." . voDemandaTramitacao::$nmAtrSq . " = " . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrSq;
-  		  		 		
-  		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryFrom, $isHistorico );
+  		return $queryFrom;
   	}
     
     function consultarPAAP($vo, $filtro){    	
@@ -161,7 +178,8 @@ include_once (caminho_filtros."filtroManterPA.php");
     			// $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . " AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,
     			"COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . "," . $nmTabela . "." . voDemanda::$nmAtrCdSetor . ") AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,
     			"COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrDhInclusao . "," . $nmTabela . "." . voDemanda::$nmAtrDhUltAlteracao . ") AS " . filtroManterDemanda::$NmColDhUltimaMovimentacao,
-    			$colunaUsuHistorico
+    			self::$nmTabelaPublicacao . "." . voDemandaTramitacao::$nmAtrDtReferencia,
+    			$colunaUsuHistorico,
     	);
     
     	$atributosGroup = voDemandaTramitacao::$nmAtrCd . "," . voDemandaTramitacao::$nmAtrAno;
@@ -225,7 +243,10 @@ include_once (caminho_filtros."filtroManterPA.php");
     	$queryJoin .= "\n LEFT JOIN ";
     	$queryJoin .= $nmTabelaPA;
     	$queryJoin .= "\n ON " . $nmTabela . "." . voDemanda::$nmAtrAno . " = " . $nmTabelaPA . "." . voPA::$nmAtrAnoDemanda;
-    	$queryJoin .= "\n AND " . $nmTabela . "." . voDemanda::$nmAtrCd . " = " . $nmTabelaPA . "." . voPA::$nmAtrCdDemanda;    	 
+    	$queryJoin .= "\n AND " . $nmTabela . "." . voDemanda::$nmAtrCd . " = " . $nmTabelaPA . "." . voPA::$nmAtrCdDemanda;
+    	
+    	//pega a data da publicacao para o caso de calcular quando deve emitir o alerta
+    	$queryJoin .= $this->getSQLJoinDataPublicacaoPAAP($nmTabela);
     
     	$arrayGroupby = array (
     			$nmTabela . "." . voDemanda::$nmAtrAno,
