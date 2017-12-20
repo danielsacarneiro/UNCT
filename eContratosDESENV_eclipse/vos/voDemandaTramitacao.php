@@ -3,7 +3,7 @@ include_once("voDemanda.php");
 include_once("voDemandaContrato.php");
 
   Class voDemandaTramitacao extends voDemanda{
-    	   		  	
+  	
   	static $nmAtrInResponsabilidadePRT = "nmAtrInResponsabilidadePRT";
   	
   	static $nmAtrSq = "dtm_sq";
@@ -132,6 +132,7 @@ include_once("voDemandaContrato.php");
     	$this->cdSetorDestino = $registrobanco[self::$nmAtrCdSetorDestino];
     	$this->textoTram  = $registrobanco[self::$nmAtrTexto];
     	$this->prt = $registrobanco[self::$nmAtrProtocolo];
+    	$this->prt = voDemandaTramitacao::getNumeroPRTComMascara($this->prt, false);
     	$this->dtReferencia = $registrobanco[self::$nmAtrDtReferencia];
     	
     	if($registrobanco[voDocumento::$nmAtrSq] != null){
@@ -232,7 +233,42 @@ include_once("voDemandaContrato.php");
 		$this->ano = $array[0];
 		$this->cd = $array[1];
 		$this->sq = $array[2];
-	}		
+	}
+	
+	static function formataPRTParaApenasNumero($numPRT) {
+		$formatado = str_replace(".", "", $numPRT);
+		$formatado = str_replace("-", "", $formatado);
+		return $formatado;
+	}
+	
+	static function isPRTValido($numPRT, $levantarExcecao=true) {
+		$formatado = static::formataPRTParaApenasNumero($numPRT);		
+		$isValido = strlen($formatado) == 18;		
+		if($levantarExcecao && !$isValido){
+			throw new excecaoGenerica("PRT Inválido.");			
+		}
+		return $isValido;		
+	}
+		
+	static function getNumeroPRTComMascara($numPRT, $levantarExcecao=true){
+		if(static::isPRTValido($numPRT, $levantarExcecao)){
+			$formatado  = substr( $numPRT, 0, 4 ) . '.';
+			$formatado .= substr( $numPRT, 4, 5 ) . '.';
+			$formatado .= substr( $numPRT, 9, 4 ) . '.';
+			$formatado .= substr( $numPRT, 13, 3 ) .'-';
+			$formatado .= substr( $numPRT, 16, 2 );
+		}else{
+			$formatado = $numPRT;
+		}
+		
+		return $formatado;
+	}
+	
+	static function getNumeroPRTSemMascara($numPRT, $levantarExcecao=true){
+		static::isPRTValido($numPRT, $levantarExcecao);
+		$retorno = static::formataPRTParaApenasNumero($numPRT);				
+		return $retorno;
+	}
 	
 }
 ?>

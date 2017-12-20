@@ -319,9 +319,10 @@ class filtroManterDemanda extends filtroManter{
 			. " WHERE " 
 			. $nmTabela . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrAno
 			. " AND " . $nmTabela . "." . voDemanda::$nmAtrCd . "=" . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrCd
-			. " AND " . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrProtocolo . "="			
-			. getVarComoString($this->vodemanda->prt)
-			. ")\n";
+			. " AND " . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrProtocolo 
+			. " LIKE '%"			
+			. voDemandaTramitacao::getNumeroPRTSemMascara($this->vodemanda->prt,false)
+			. "%')\n";
 		
 			$conector  = "\n AND ";
 		}

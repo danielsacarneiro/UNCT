@@ -7,9 +7,12 @@ include_once(caminho_util."bibliotecaDataHora.php");
 
 /*$_SESSION["dois"]["teste"] = "daniel";
 echo $_SESSION["dois"]["teste"];*/
+$teste = "444444444555698a36";
+$format = voDemandaTramitacao::getNumeroPRTComMascara($teste, true);
+$formatSem = voDemandaTramitacao::getNumeroPRTSemMascara($teste, true);
 
-$dtNotificacaoPAram = somarOuSubtrairDiasUteisNaData(getDataHoje(), 15, "+");
-echo $dtNotificacaoPAram;
+echoo($format);
+echoo($formatSem);
 
 ?>
 

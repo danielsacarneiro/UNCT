@@ -84,6 +84,15 @@ ALTER TABLE demanda_tram ADD CONSTRAINT fk_demanda_tram FOREIGN KEY (dem_ex, dem
 ALTER TABLE demanda_tram ADD UNIQUE KEY chave_logica_prt (dtm_prt);
 ALTER TABLE demanda_tram DROP INDEX chave_logica_prt;
 
+
+UPDATE demanda_tram SET
+dtm_prt = replace(replace(dtm_prt,'.',''),'-','')
+-- where dem_ex = 2015 and dem_cd = 1 and dtm_sq = 1
+;
+
+
+
+
 drop table demanda_contrato;
 CREATE TABLE demanda_contrato (	
     dem_ex INT NOT NULL,

@@ -389,7 +389,7 @@ class dbDemandaTramitacao extends dbprocesso {
 		$retorno .= $this->getVarComoNumero ( $vo->cdSetorOrigem ) . ",";
 		$retorno .= $this->getVarComoNumero ( $vo->cdSetorDestino ) . ",";
 		$retorno .= $this->getVarComoString ( $vo->textoTram ) . ",";
-		$retorno .= $this->getVarComoString ( $vo->prt ) . ",";
+		$retorno .= $this->getVarComoString ( voDemandaTramitacao::getNumeroPRTSemMascara($vo->prt) ) . ",";
 		$retorno .= $this->getVarComoData ( $vo->dtReferencia );
 		
 		$retorno .= $vo->getSQLValuesInsertEntidade ();
@@ -406,7 +406,7 @@ class dbDemandaTramitacao extends dbprocesso {
 		}
 		
 		if ($vo->prt != null) {
-			$retorno .= $sqlConector . voDemandaTramitacao::$nmAtrProtocolo . " = " . $this->getVarComoString ( $vo->prt );
+			$retorno .= $sqlConector . voDemandaTramitacao::$nmAtrProtocolo . " = " . $this->getVarComoString ( voDemandaTramitacao::getNumeroPRTSemMascara($vo->prt));
 			$sqlConector = ",";
 		}
 		
