@@ -157,6 +157,20 @@ function confirmar() {
 	            			maxlength="10" readonly> *para fins de contagem de prazo	            			
 				</TD>
         	</TR>
+        	<?php 
+        	//$dtPublicacao = $colecao[voDemandaTramitacao::$nmAtrDtReferencia];        	
+        	$dtPublicacao = $vo->dtPublicacao;
+        	?>
+			<TR>
+	            <TH class="campoformulario" nowrap>Dt.Publicação:</TH>
+	            <TD class="campoformulario" colspan="3">
+	            	<INPUT type="text" 
+	            			value="<?php echo(getData($dtPublicacao));?>"	            			 
+	            			class="camporeadonly" 
+	            			size="10" 
+	            			maxlength="10" readonly>	            			
+				</TD>
+        	</TR>
 			<TR>
 	            <TH class="campoformulario" nowrap>Publicação:</TH>
 	            <TD class="campoformulario" colspan="3"><textarea rows="3" cols="80" class="camporeadonly" readonly><?php echo($vo->publicacao);?></textarea>

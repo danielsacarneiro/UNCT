@@ -16,6 +16,8 @@ include_once (caminho_filtros."filtroManterPA.php");
   		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );
   		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( false );
   		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
+  		$nmTabelaTramitacao = voDemandaTramitacao::getNmTabelaStatic ( false );
+  		$nmTabelaTramDoc = voDemandaTramDoc::getNmTabelaStatic ( false );
   	
   		$arrayColunasRetornadas = array (
   				$nmTabela . ".*",
@@ -24,7 +26,8 @@ include_once (caminho_filtros."filtroManterPA.php");
   				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato,
   				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdEspecieContrato,
   				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato,
-  				$nmTabelaDemanda . "." . voDemanda::$nmAtrTexto
+  				$nmTabelaDemanda . "." . voDemanda::$nmAtrTexto,
+  				$nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrDtReferencia,
 //  				$nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato,  
   		);
   	
@@ -34,21 +37,28 @@ include_once (caminho_filtros."filtroManterPA.php");
   		
   		$queryFrom .= "\n INNER JOIN ". $nmTabelaDemandaContrato;
   		$queryFrom .= "\n ON ". $nmTabelaDemanda . "." . voDemanda::$nmAtrCd. "=" . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdDemanda;
-  		$queryFrom .= "\n AND ". $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoDemanda; 
+  		$queryFrom .= "\n AND ". $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoDemanda;
   		
-  		/*$queryFrom .= "\n LEFT JOIN " . $nmTabelaContrato;
-  		$queryFrom .= "\n ON ";
-  		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato;
-  		$queryFrom .= "\n AND ";
-  		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato;
-  		$queryFrom .= "\n AND ";
-  		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato;
-  		$queryFrom .= "\n AND ";
-  		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdEspecieContrato;
-  		$queryFrom .= "\n AND ";
-  		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato;*/
+  		$atributosGroupDem = "$nmTabelaTramitacao.".voDemandaTramitacao::$nmAtrCd . ",$nmTabelaTramitacao." . voDemandaTramitacao::$nmAtrAno;
+  		$nmTABELA_MAX_TRAM_PUBLIC = "TABELA_MAX_TRAM_PUBLIC";
+  		$queryFrom .= "\n LEFT JOIN (";
+  		$queryFrom .= " SELECT MAX($nmTabelaTramitacao." . voDemandaTramitacao::$nmAtrSq . ") AS " . voDemandaTramitacao::$nmAtrSq . ", ". $atributosGroupDem 
+  		. " FROM " . $nmTabelaTramitacao
+  		. "\n INNER JOIN ". $nmTabelaTramDoc
+  		. "\n ON ". $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCd. "=" . $nmTabelaTramDoc . "." . voDemandaTramDoc::$nmAtrCdDemanda
+  		. "\n AND ". $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrAno . "=" . $nmTabelaTramDoc . "." . voDemandaTramDoc::$nmAtrAnoDemanda
+  		. "\n AND ". $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrSq . "=" . $nmTabelaTramDoc . "." . voDemandaTramDoc::$nmAtrSqDemandaTram
+  		. "\n WHERE ". $nmTabelaTramDoc . "." . voDemandaTramDoc::$nmAtrTpDoc . "=" . getVarComoString(dominioTpDocumento::$CD_TP_DOC_PUBLICACAO_PAAP)
+  		. " GROUP BY " . $atributosGroupDem;
+  		$queryFrom .= ") $nmTABELA_MAX_TRAM_PUBLIC";
+  		$queryFrom .= "\n ON ". "$nmTABELA_MAX_TRAM_PUBLIC." . voDemandaTramitacao::$nmAtrCd. "=" . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd;
+  		$queryFrom .= "\n AND ". "$nmTABELA_MAX_TRAM_PUBLIC." . voDemandaTramitacao::$nmAtrAno . "=" . $nmTabelaDemanda . "." . voDemanda::$nmAtrAno;
   		
-  		
+  		$queryFrom .= "\n LEFT JOIN ". $nmTabelaTramitacao;
+  		$queryFrom .= "\n ON ". "$nmTABELA_MAX_TRAM_PUBLIC." . voDemandaTramitacao::$nmAtrCd. "=" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCd;
+  		$queryFrom .= "\n AND ". "$nmTABELA_MAX_TRAM_PUBLIC." . voDemandaTramitacao::$nmAtrAno . "=" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrAno;
+  		$queryFrom .= "\n AND " . "$nmTABELA_MAX_TRAM_PUBLIC." . voDemandaTramitacao::$nmAtrSq . " = " . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrSq;
+  		  		 		
   		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryFrom, $isHistorico );
   	}
     
@@ -285,7 +295,7 @@ include_once (caminho_filtros."filtroManterPA.php");
     
     function temPenalidade($vo) {
     	//$vo = new voPA();
-    	$dbpenalidade = new dbPenalidadePA();
+    	$dbpenalidade = new dbPenalidadePA();    	
     	$filtro = new filtroManterPenalidade();
     	$filtro->anoPA = $vo->anoPA;
     	$filtro->cdPA = $vo->cdPA;
@@ -301,6 +311,14 @@ include_once (caminho_filtros."filtroManterPA.php");
     		if(!$temPenalidade){
     			throw new excecaoGenerica("Só é permitido encerrar o processo que possua penalidades cadastradas.");
     		}
+    		
+    		$registro = $this->consultarPorChaveTela($vo, false);
+    		$voBanco = new voPA();
+    		$voBanco->getDadosBanco($registro);
+    		if($voBanco->dtPublicacao == null){
+    			throw new excecaoGenerica("Só é permitido encerrar o processo que tenha sido publicado.");
+    		}
+    		
     	}     	
     	//return $retorno;
     }

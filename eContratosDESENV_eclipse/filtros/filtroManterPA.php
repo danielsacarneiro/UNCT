@@ -27,6 +27,7 @@ class filtroManterPA extends filtroManter{
     
     var $nmColNomePessoaContrato = "NmColPessoaContrato";
     var $nmColNomePessoaResponsavel = "NmColPessoaResponsavel";
+    //var $nmColDtPublicacao = "nmColDtPublicacao";
     
     // ...............................................................
 	// construtor

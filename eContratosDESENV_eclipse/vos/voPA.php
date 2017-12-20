@@ -19,6 +19,7 @@ class voPA extends voentidade {
 	var $anoDemanda = "";
 	var $obs = "";
 	var $publicacao = "";
+	var $dtPublicacao = "";
 	var $dtAbertura = "";
 	var $dtNotificacao = "";
 	var $situacao = "";
@@ -108,6 +109,7 @@ class voPA extends voentidade {
 		$this->dtAbertura = $registrobanco [self::$nmAtrDtAbertura];
 		$this->dtNotificacao = $registrobanco [self::$nmAtrDtNotificacao];
 		$this->situacao = $registrobanco [self::$nmAtrSituacao];
+		$this->dtPublicacao = $registrobanco [voDemandaTramitacao::$nmAtrDtReferencia];
 
 	}
 	function getDadosFormulario() {
