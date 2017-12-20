@@ -21,6 +21,7 @@ class filtroManterPA extends filtroManter{
 
     var $cdDemanda;
     var $anoDemanda;
+    var $tpDocumento;
     
     var $nmTabelaPessoaContrato = "TAB_PESSOA_CONTRATO";
     var $nmTabelaPessoaResponsavel = "TAB_PESSOA_RESP";
@@ -52,6 +53,7 @@ class filtroManterPA extends filtroManter{
         
         $this->cdDemanda = @$_POST[voPA::$nmAtrCdDemanda];
         $this->anoDemanda = @$_POST[voPA::$nmAtrAnoDemanda];
+        $this->tpDocumento = @$_POST[voDocumento::$nmAtrTp];
         
         //isso tudo pq o filtro pode ser usado por mais de um metodo
         //e precisa saber qual voprincipal considera,
@@ -71,6 +73,7 @@ class filtroManterPA extends filtroManter{
 		
 		$nmTabelaContrato= $vocontrato->getNmTabelaEntidade(false);
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic(false);
+		$nmTabelaTramitacaoDoc = voDemandaTramDoc::getNmTabelaStatic(false);
 		
 		$isHistorico = $this->isHistorico;
 		$nmTabela = $voPA->getNmTabelaEntidade($isHistorico);
@@ -215,6 +218,21 @@ class filtroManterPA extends filtroManter{
 			. " = "
 					. getVarComoString($this->tipoContrato)
 					;
+		
+					$conector  = "\n AND ";
+		}
+		
+		if($this->tpDocumento != null){			
+			$filtro = $filtro . $conector
+			. " EXISTS (SELECT 'X' FROM " . $nmTabelaTramitacaoDoc
+			. " WHERE "
+					. $nmTabela . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaTramitacaoDoc. "." . voDemandaTramDoc::$nmAtrAnoDemanda
+					. " AND " . $nmTabela . "." . voDemanda::$nmAtrCd . "=" . $nmTabelaTramitacaoDoc. "." . voDemandaTramDoc::$nmAtrCdDemanda;						
+					
+						$filtro .= " AND " . $nmTabelaTramitacaoDoc. "." . voDemandaTramDoc::$nmAtrTpDoc. "="
+								. getVarComoString($this->tpDocumento);
+						
+					$filtro .= ")\n";
 		
 					$conector  = "\n AND ";
 		}

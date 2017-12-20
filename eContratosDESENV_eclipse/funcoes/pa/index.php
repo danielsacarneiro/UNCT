@@ -163,14 +163,20 @@ function validaFormulario() {
                 <TD class="campoformulario"><INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($doc);?>" class="camponaoobrigatorio" size="20" maxlength="18"></TD>
             </TR>
         
-			<TR>
-				<TH class="campoformulario" nowrap>Situação:</TH>
-                <TD class="campoformulario" colspan="3">
+            <?php            
+            $comboTpDoc = new select(dominioTpDocumento::getColecaoDocsPAAP());
+            ?>	                    
+            <TR>
+	            <TH class="campoformulario" nowrap>Situação:</TH>
+				<TD class="campoformulario" width="1%">
                      <?php
                     include_once("biblioteca_htmlPA.php");                    
                     echo getComboSituacaoPA(voPA::$nmAtrSituacao, voPA::$nmAtrSituacao, $filtro->situacao, "camponaoobrigatorio", "");                                        
                     ?>
-            </TR>            
+				<TH class="campoformulario" nowrap width="1%">Doc.Anexo:</TH>
+				<TD class="campoformulario" >
+				<?php echo $comboTpDoc->getHtmlSelect(voDocumento::$nmAtrTp,voDocumento::$nmAtrTp, $filtro->tpDocumento, true, "camponaoobrigatorio", true);?>								
+			</TR>
             <TR>
 				<TH class="campoformulario" nowrap>Servidor Responsável:</TH>
                 <TD class="campoformulario" colspan="3">
