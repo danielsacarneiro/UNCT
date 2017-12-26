@@ -368,6 +368,17 @@ function limparCampo(pCampo) {
 	}
 }
 
+function habilitarCampos(pCampos, pHabilitar, pIsObrigatorio) {
+	var tam =  pCampos.length;
+	if(tam ==1){
+		habilitarElementoMais(pCampos.id, pHabilitar, pIsObrigatorio);		
+	}else {
+		for (var i = 0; i < pCampos.length; i++) {
+			campo = pCampos[i];
+			habilitarElementoMais(campo.id, pHabilitar, pIsObrigatorio);
+		}
+	}
+}
 function habilitarCampoElementoMais(pCampoElemento, pHabilitar, pIsObrigatorio) {
 	//alert(pCampoElemento.value);
 	return habilitarElementoMais(pCampoElemento.id, pHabilitar, pIsObrigatorio);

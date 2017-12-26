@@ -1,25 +1,65 @@
-<?php  
+<?php
 include_once("config_lib.php");
-include_once(caminho_util."bibliotecaFuncoesPrincipal.php");
 include_once(caminho_util."bibliotecaHTML.php");
+include_once(caminho_util."constantes.class.php");
 include_once(caminho_util."bibliotecaDataHora.php");
-   
 
-/*$_SESSION["dois"]["teste"] = "daniel";
-echo $_SESSION["dois"]["teste"];*/
-$teste = "444444444555698a36";
-$format = voDemandaTramitacao::getNumeroPRTComMascara($teste, true);
-$formatSem = voDemandaTramitacao::getNumeroPRTSemMascara($teste, true);
+//inicia os parametros
+inicio();
 
-echoo($format);
-echoo($formatSem);
+$titulo = "TESTE de Funções UNCT";
+setCabecalho($titulo);
+
+$dtinical = "01/09/2017";
+$qtddias = 300;
+
+echo somarOuSubtrairDiasNaData($dtinical, $qtddias);
 
 ?>
 
-<html>
-<head>
-<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+<!DOCTYPE html>
+<HTML>
+<HEAD>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>tooltip.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_treemenu.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_checkbox.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_demanda.js"></SCRIPT>
 
-</head>
+</HEAD>
+<?=setTituloPagina($titulo)?>
+<BODY CLASS="paginadados">
+	<FORM name="frm_principal" method="post">
+			<TABLE id="table_conteiner" class="conteiner" cellpadding="0" cellspacing="0">
+    			<TBODY>
+        			<?=cabecalho?>
+    			<TR>
+          			<TD class="conteinerconteudodados">
+					<TABLE id="table_conteudodados" class="conteudodados" cellpadding="0" cellspacing="0">
+					<TR>
+				        <?php
+							$vodemanda = new voDemanda();
+				        	//INCLUSAO
+				        	$comboTipoEditado = new select(dominioTipoDemanda::getColecaoTipoDemanda());
+				        	//var_dump($comboTipoEditado->colecao);
+						  ?>			            
+				        <TR>
+				            <TH class="campoformulario" nowrap width="1%">Demanda:</TH>
+				            <TD class="campoformulario">				            
+				            <?php echo "Tipo: " . $comboTipoEditado->getHtmlCombo(voDemanda::$nmAtrTipo,voDemanda::$nmAtrTipo, "", true, "campoobrigatorio", false, " required onChange=\"formataFormTpDemanda('".voDemanda::$nmAtrTipo."', 'teste');\"");?>			  
+				        </TR>					
+		                <TH class="campoformulario" nowrap width=1% colspan=2>
+							<?php
+							echo dominioTipoDemanda::getHtmlChecksBox("teste", "4", dominioTipoDemanda::getColecaoTipoDemandaContratoValido(), 2, true);
+							?>
+						</TH>
+		            </TR>							
 
-<body>
+					</TABLE>
+            		</TD>
+        		</TR>        			
+    			</TBODY>
+			</TABLE>
+		</FORM>
+</BODY>
+</HTML>

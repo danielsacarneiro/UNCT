@@ -446,6 +446,11 @@ function getImagemLink($href, $nmImagem) {
 	
 	return $html;
 }
+function getTextoLink($texto, $href, $javascript=null) {
+	$html = "<A id='lnkFramework$texto' name='lnkFramework$texto' " . "href=\"" . $href . "\"" . " class='linkNormal' $javascript>$texto</A>";
+	return $html;
+}
+
 function getBorracha($nmCampos) {
 	$tam = count ( $nmCampos );
 	

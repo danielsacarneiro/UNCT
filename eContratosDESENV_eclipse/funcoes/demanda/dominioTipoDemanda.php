@@ -11,6 +11,7 @@ Class dominioTipoDemanda extends dominio{
 	static $CD_TIPO_DEMANDA_CONTRATO_MATER = 6;
 	static $CD_TIPO_DEMANDA_CONTRATO_MODIFICACAO = 7;
 	static $CD_TIPO_DEMANDA_CONTRATO_PRORROGACAO = 8;
+	static $CD_TIPO_DEMANDA_CONTRATO_APOSTILAMENTO= 10;
 	static $CD_TIPO_DEMANDA_PARECER = 9;
 	static $CD_TIPO_DEMANDA_A_CLASSIFICAR = 99;
 	
@@ -22,6 +23,7 @@ Class dominioTipoDemanda extends dominio{
 	static $DS_TIPO_DEMANDA_CONTRATO_MATER = "Contrato Mater";
 	static $DS_TIPO_DEMANDA_CONTRATO_MODIFICACAO = "Contrato Modificacao";
 	static $DS_TIPO_DEMANDA_CONTRATO_PRORROGACAO = "Contrato Prorrogação";
+	static $DS_TIPO_DEMANDA_CONTRATO_APOSTILAMENTO= "Apostilamento";
 	static $DS_TIPO_DEMANDA_PARECER = "Parecer";
 	
 	static $DS_TIPO_DEMANDA_A_CLASSIFICAR = "A classificar";
@@ -36,20 +38,19 @@ Class dominioTipoDemanda extends dominio{
 	}
 	
 	static function getColecao(){
-		return array(				
-				self::$CD_TIPO_DEMANDA_CONTRATO => self::$DS_TIPO_DEMANDA_CONTRATO,
-				self::$CD_TIPO_DEMANDA_CONTRATO_REAJUSTE => self::$DS_TIPO_DEMANDA_CONTRATO_REAJUSTE,
-				self::$CD_TIPO_DEMANDA_CONTRATO_PRORROGACAO => self::$DS_TIPO_DEMANDA_CONTRATO_PRORROGACAO,
-				self::$CD_TIPO_DEMANDA_CONTRATO_MODIFICACAO => self::$DS_TIPO_DEMANDA_CONTRATO_MODIFICACAO,
-				self::$CD_TIPO_DEMANDA_CONTRATO_MATER => self::$DS_TIPO_DEMANDA_CONTRATO_MATER,
-				self::$CD_TIPO_DEMANDA_EDITAL => self::$DS_TIPO_DEMANDA_EDITAL,
-				self::$CD_TIPO_DEMANDA_PROCADM => self::$DS_TIPO_DEMANDA_PROCADM,
-				self::$CD_TIPO_DEMANDA_PARECER => self::$DS_TIPO_DEMANDA_PARECER,
-				self::$CD_TIPO_DEMANDA_JUDICIAL => self::$DS_TIPO_DEMANDA_JUDICIAL,
-				self::$CD_TIPO_DEMANDA_A_CLASSIFICAR => self::$DS_TIPO_DEMANDA_A_CLASSIFICAR
-		);
+		$retorno = static::getColecaoTipoDemandaContratoValidacaoEncaminhar();
+		return $retorno;		
 	}
 
+	static function getColecaoTipoDemanda(){
+		$retorno = 	array(
+				self::$CD_TIPO_DEMANDA_CONTRATO => self::$DS_TIPO_DEMANDA_CONTRATO,
+		);	
+		$retorno = putElementoArray2NoArray1ComChaves ( $retorno, static::getColecaoTipoDemandaComplementar());
+	
+		return $retorno;
+	}
+	
 	static function getColecaoTipoDemandaContrato(){
 		$retorno = static::getColecaoTipoDemandaContratoSemProcAdmin();
 		$retorno = putElementoArray2NoArray1ComChaves ( $retorno, array(self::$CD_TIPO_DEMANDA_PROCADM => self::$DS_TIPO_DEMANDA_PROCADM));
@@ -59,20 +60,36 @@ Class dominioTipoDemanda extends dominio{
 	
 	static function getColecaoTipoDemandaContratoValidacaoEncaminhar(){
 		$retorno = static::getColecaoTipoDemandaContrato();
-		$retorno = putElementoArray2NoArray1ComChaves ( $retorno, array(self::$CD_TIPO_DEMANDA_PARECER=> self::$DS_TIPO_DEMANDA_PARECER));
-		$retorno = putElementoArray2NoArray1ComChaves ( $retorno, array(self::$CD_TIPO_DEMANDA_JUDICIAL=> self::$DS_TIPO_DEMANDA_JUDICIAL));
-		$retorno = putElementoArray2NoArray1ComChaves ( $retorno, array(self::$CD_TIPO_DEMANDA_A_CLASSIFICAR=> self::$DS_TIPO_DEMANDA_A_CLASSIFICAR));
+		$retorno = putElementoArray2NoArray1ComChaves ( $retorno, static::getColecaoTipoDemandaComplementar());
 	
 		return $retorno;
 	}
 	
 	static function getColecaoTipoDemandaContratoSemProcAdmin(){
-		return array(
+		$retorno = array(
 				self::$CD_TIPO_DEMANDA_CONTRATO => self::$DS_TIPO_DEMANDA_CONTRATO,
+		);
+		$retorno = putElementoArray2NoArray1ComChaves ( $retorno, static::getColecaoTipoDemandaContratoValido());
+		
+		return $retorno;
+	}
+	
+	static function getColecaoTipoDemandaContratoValido(){
+		return array(
 				self::$CD_TIPO_DEMANDA_CONTRATO_MATER => self::$DS_TIPO_DEMANDA_CONTRATO_MATER,
 				self::$CD_TIPO_DEMANDA_CONTRATO_REAJUSTE => self::$DS_TIPO_DEMANDA_CONTRATO_REAJUSTE,
 				self::$CD_TIPO_DEMANDA_CONTRATO_PRORROGACAO => self::$DS_TIPO_DEMANDA_CONTRATO_PRORROGACAO,
-				self::$CD_TIPO_DEMANDA_CONTRATO_MODIFICACAO => self::$DS_TIPO_DEMANDA_CONTRATO_MODIFICACAO
+				self::$CD_TIPO_DEMANDA_CONTRATO_MODIFICACAO => self::$DS_TIPO_DEMANDA_CONTRATO_MODIFICACAO,
+				self::$CD_TIPO_DEMANDA_CONTRATO_APOSTILAMENTO=> self::$DS_TIPO_DEMANDA_CONTRATO_APOSTILAMENTO,
+		);
+	}
+	
+	static function getColecaoTipoDemandaComplementar(){
+		return array(
+				self::$CD_TIPO_DEMANDA_EDITAL => self::$DS_TIPO_DEMANDA_EDITAL,
+				self::$CD_TIPO_DEMANDA_PARECER => self::$DS_TIPO_DEMANDA_PARECER,
+				self::$CD_TIPO_DEMANDA_JUDICIAL => self::$DS_TIPO_DEMANDA_JUDICIAL,
+				self::$CD_TIPO_DEMANDA_A_CLASSIFICAR => self::$DS_TIPO_DEMANDA_A_CLASSIFICAR,				
 		);
 	}
 	

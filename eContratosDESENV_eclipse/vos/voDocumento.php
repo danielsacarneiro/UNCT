@@ -10,6 +10,8 @@ class voDocumento extends voentidade {
 	static $nmAtrSq = "sq";
 	static $nmAtrTp = "doc_tp";
 	static $nmAtrLink = "doc_link";
+	static $nmAtrComplemento = "nmAtrComplemento";
+	
 	var $sq = "";
 	var $cdSetor = "";
 	var $ano = "";

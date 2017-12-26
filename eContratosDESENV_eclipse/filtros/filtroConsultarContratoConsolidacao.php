@@ -178,18 +178,17 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		return $filtro;
 	}
 	function getAtributoOrdenacaoDefault() {
-		$nmTabela = voContratoInfo::getNmTabelaStatic ( $this->isHistorico );
-		$retorno = $nmTabela . "." . voContratoInfo::$nmAtrTipoContrato . " " . $this->cdOrdenacao 
-		. "," . $nmTabela . "." . voContratoInfo::$nmAtrAnoContrato . " " . $this->cdOrdenacao
-		. "," . $nmTabela . "." . voContratoInfo::$nmAtrCdContrato . " " . $this->cdOrdenacao;
+		$nmTabela = voContrato::getNmTabelaStatic ( $this->isHistorico );
+		$retorno = $nmTabela . "." . voContrato::$nmAtrTipoContrato . " " . $this->cdOrdenacao 
+		. "," . $nmTabela . "." . voContrato::$nmAtrAnoContrato . " " . $this->cdOrdenacao
+		. "," . $nmTabela . "." . voContrato::$nmAtrCdContrato . " " . $this->cdOrdenacao;
 		return $retorno;
 	}
 	function getAtributosOrdenacao() {
 		$varAtributos = array (
-				voContratoInfo::$nmAtrAnoContrato => "Ano",
-				voContratoInfo::$nmAtrCdContrato => "Número",
-				voContratoInfo::$nmAtrTipoContrato => "Tipo",
-				voContratoInfo::$nmAtrDhUltAlteracao => "Data Alteração" 
+				voContrato::$nmAtrAnoContrato => "Ano",
+				voContrato::$nmAtrCdContrato => "Número",
+				voContrato::$nmAtrTipoContrato => "Tipo", 
 		);
 		return $varAtributos;
 	}

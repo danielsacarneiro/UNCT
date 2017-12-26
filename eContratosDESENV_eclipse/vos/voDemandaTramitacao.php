@@ -242,16 +242,19 @@ include_once("voDemandaContrato.php");
 	}
 	
 	static function isPRTValido($numPRT, $levantarExcecao=true) {
-		$formatado = static::formataPRTParaApenasNumero($numPRT);		
-		$isValido = strlen($formatado) == 18;		
-		if($levantarExcecao && !$isValido){
-			throw new excecaoGenerica("PRT Inválido.");			
+		$isValido = true;
+		if($numPRT != null){
+			$formatado = static::formataPRTParaApenasNumero($numPRT);		
+			$isValido = strlen($formatado) == 18;		
+			if($levantarExcecao && !$isValido){
+				throw new excecaoGenerica("PRT Inválido.");			
+			}			
 		}
-		return $isValido;		
+		return $isValido;
 	}
 		
 	static function getNumeroPRTComMascara($numPRT, $levantarExcecao=true){
-		if(static::isPRTValido($numPRT, $levantarExcecao)){
+		if($numPRT != null && static::isPRTValido($numPRT, $levantarExcecao)){
 			$formatado  = substr( $numPRT, 0, 4 ) . '.';
 			$formatado .= substr( $numPRT, 4, 5 ) . '.';
 			$formatado .= substr( $numPRT, 9, 4 ) . '.';

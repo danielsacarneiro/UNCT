@@ -132,7 +132,7 @@ function abrirJanelaAuxiliarGestor(){
 }
 
 </SCRIPT>
-<?=setTituloPagina(null)?>
+<?=setTituloPagina($titulo)?>
 </HEAD>
 <BODY class="paginadados" onload="iniciar();">
 	  

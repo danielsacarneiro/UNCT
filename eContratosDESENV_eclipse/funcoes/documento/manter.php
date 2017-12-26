@@ -87,7 +87,8 @@ function criarNomeDocumento(){
 	ano = document.frm_principal.<?=voDocumento::$nmAtrAno?>.value;
 	cdSetor = document.frm_principal.<?=voDocumento::$nmAtrCdSetor?>.value;
 	tpDoc = document.frm_principal.<?=voDocumento::$nmAtrTp?>.value;
-	sq = document.frm_principal.<?=voDocumento::$nmAtrSq?>.value;;
+	sq = document.frm_principal.<?=voDocumento::$nmAtrSq?>.value;
+	textoComplemento = document.frm_principal.<?=voDocumento::$nmAtrComplemento?>.value;
 
 	anoContrato = document.frm_principal.<?=vocontrato::$nmAtrAnoContrato?>.value;
 	cdContrato = document.frm_principal.<?=vocontrato::$nmAtrCdContrato?>.value;
@@ -110,6 +111,10 @@ function criarNomeDocumento(){
 		
 		nome = "_Edital_PL-" + formatarCodigoDocumento(cdProcLic, null, anoProcLic, null, colecaoSetor);
 	}
+
+	if(textoComplemento != null && textoComplemento != ""){
+		nome = "_" + textoComplemento.toUpperCase() + nome;
+	}	
 	
 	complemento = nome + complemento;
 	//complemento = complemento + ".doc";
@@ -177,6 +182,12 @@ function iniciar(){
                 <TH class="campoformulario" nowrap>Número:</TH>
                 <TD class="campoformulario">
                 <INPUT type="text" id="<?=voDocumento::$nmAtrSq?>" onkeyup="validarCampoNumericoPositivo(this);" name="<?=voDocumento::$nmAtrSq?>" onBlur='criarNomeDocumento();' value="<?php echo complementarCharAEsquerda($vo->sq, "0", TAMANHO_CODIGOS);?>"  class="camponaoobrigatorio" size="7" required>                
+                </TD>
+            </TR>
+			<TR>
+                <TH class="campoformulario" nowrap>Complemento:</TH>
+                <TD class="campoformulario" colspan=3>
+                <INPUT type="text" id="<?=voDocumento::$nmAtrComplemento?>" name="<?=voDocumento::$nmAtrComplemento?>" onBlur='criarNomeDocumento();' class="camponaoobrigatorio" size="15" maxlength=15>                
                 </TD>
             </TR>
             <?php 
