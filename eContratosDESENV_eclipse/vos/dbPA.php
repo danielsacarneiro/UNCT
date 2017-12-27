@@ -314,13 +314,23 @@ include_once (caminho_filtros."filtroManterPA.php");
     	return parent::consultarFiltro ( $filtro, $querySelect, $queryFrom, false );
     }
     
-    function temPenalidade($vo) {
+    function consultarPenalidade($vo) {
     	//$vo = new voPA();
     	$dbpenalidade = new dbPenalidadePA();    	
-    	$filtro = new filtroManterPenalidade();
+    	$filtro = new filtroManterPenalidade(false, false);
+    	$vopenalidade = new voPenalidadePA();
+    	$filtro->voPrincipal = $vopenalidade;
+    	$filtro->inDesativado = "N";
+    	//$filtro->TemPaginacao = false;
+    	
     	$filtro->anoPA = $vo->anoPA;
     	$filtro->cdPA = $vo->cdPA;
-    	$colecao = $dbpenalidade->consultarPenalidadeTelaConsulta($vo, $filtro);
+    	$colecao = $dbpenalidade->consultarPenalidadeTelaConsulta($vopenalidade, $filtro);
+    	return $colecao;
+    }
+    
+    function temPenalidade($vo) {
+    	$colecao = $this->consultarPenalidade($vo);
     	return !isColecaoVazia($colecao);
     }
     
@@ -332,8 +342,9 @@ include_once (caminho_filtros."filtroManterPA.php");
     		if(!$temPenalidade){
     			throw new excecaoGenerica("Só é permitido encerrar o processo que possua penalidades cadastradas.");
     		}
-    		
+    		    		
     		$registro = $this->consultarPorChaveTela($vo, false);
+    		
     		$voBanco = new voPA();
     		$voBanco->getDadosBanco($registro);
     		if($voBanco->dtPublicacao == null){

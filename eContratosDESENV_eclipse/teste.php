@@ -13,7 +13,18 @@ setCabecalho($titulo);
 $dtinical = "01/09/2017";
 $qtddias = 300;
 
-echo somarOuSubtrairDiasNaData($dtinical, $qtddias);
+//echo somarOuSubtrairDiasNaData($dtinical, $qtddias);
+
+$dbpenalidade = new dbPenalidadePA();
+$filtro = new filtroManterPenalidade();
+$filtro->voPrincipal = new voPenalidadePA();
+$filtro->isValidarConsulta = false;
+$filtro->inDesativado = "N";
+$filtro->anoPA = 2017;
+$filtro->cdPA = 3;
+$colecao = $dbpenalidade->consultarPenalidadeTelaConsulta(new voPenalidadePA(), $filtro);
+echoo("imprimindo");
+var_dump($colecao);
 
 ?>
 

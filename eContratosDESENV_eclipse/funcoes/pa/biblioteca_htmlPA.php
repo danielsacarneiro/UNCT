@@ -38,14 +38,9 @@ function getComboGestorPessoaMais($db, $idCampo, $nmCampo, $cdGestor, $cdOpcaoSe
 function mostrarGridPenalidade($voPA) {
 	//$voPA = new voPA();
 	// var_dump($colecao);
-	
-	$filtro = new filtroManterPenalidade(false);
-	$filtro->anoPA = $voPA->anoPA; 
-	$filtro->cdPA = $voPA->cdPA;
-	$filtro->TemPaginacao = false;
-	
-	$db = new dbPenalidadePA();
-	$colecao = $db->consultarPenalidadeTelaConsulta(new voPenalidadePA(), $filtro);	
+
+	$db = new dbPA();
+	$colecao = $db->consultarPenalidade($voPA);	
 
 	if (is_array ( $colecao )) {
 		$tamanho = sizeof ( $colecao );

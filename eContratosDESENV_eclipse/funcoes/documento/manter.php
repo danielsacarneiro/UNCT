@@ -94,22 +94,30 @@ function criarNomeDocumento(){
 	cdContrato = document.frm_principal.<?=vocontrato::$nmAtrCdContrato?>.value;
 	tpContrato = document.frm_principal.<?=vocontrato::$nmAtrTipoContrato?>.value;
 	tpContrato = getDescricaoTipoContrato(tpContrato);
+
+	anoProcLic = document.frm_principal.<?=voProcLicitatorio::$nmAtrAnoProcLicitatorio?>.value;
+	cdProcLic = document.frm_principal.<?=voProcLicitatorio::$nmAtrCdProcLicitatorio?>.value;	
 	
+	anoARP = document.frm_principal.<?=voDocumento::$nmAtrAnoARP?>.value;
+	cdARP = document.frm_principal.<?=voDocumento::$nmAtrCdARP?>.value;	
+
 	complemento = "";
 	isContrato = (cdContrato != "" && anoContrato != "" && tpContrato != "");
+	isEdital = (anoProcLic != "" && cdProcLic != "");
+	isARP = (anoARP != "" && cdARP != "");
 	
 	colecaoSetor=<?=$varColecaoGlobalSetor?>;
+	nome = "";
 	if(isContrato){
 		nome = getNomePessoaContratada('<?=vopessoa::$ID_NOME_DADOS_CONTRATADA?>');
 		nome = "_" + nome  + "_";
 		//se nao eh parecer, eh contrato
 		//pega o contrato
 		complemento = formatarCodigoDocumento(cdContrato, "", anoContrato, tpContrato, colecaoSetor);		
-	}else{
-		anoProcLic = document.frm_principal.<?=voProcLicitatorio::$nmAtrAnoProcLicitatorio?>.value;
-		cdProcLic = document.frm_principal.<?=voProcLicitatorio::$nmAtrCdProcLicitatorio?>.value;
-		
+	}else if(isEdital){
 		nome = "_Edital_PL-" + formatarCodigoDocumento(cdProcLic, null, anoProcLic, null, colecaoSetor);
+	}else if(isARP){
+		nome = "_AQUISICAO_ARP-" + formatarCodigoDocumento(cdARP, null, anoARP, null, colecaoSetor);
 	}
 
 	if(textoComplemento != null && textoComplemento != ""){
@@ -160,16 +168,36 @@ function iniciar(){
 	        $nmClass = constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO;	        
 	        $arrayCssClass = array($nmClass,$nmClass);
 	        $js_procLic = " onChange='criarNomeDocumento();' ";
-	        $arrayComplementoHTML = array($js_procLic, $js_procLic);	        
+	        $arrayComplementoHTML = array($js_procLic, $js_procLic);
 	        ?>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" colspan=3><?php getCampoDadosContratoSimples();//getContratoEntradaDeDados($tipoContrato, $cdContrato, $anoContrato, $arrayCssClass, $arrayComplementoHTML);?></TD>
+	            <TD class="campoformulario" width="1%"><?php getCampoDadosContratoSimples("camponaoobrigatorio", "criarNomeDocumento();");//getContratoEntradaDeDados($tipoContrato, $cdContrato, $anoContrato, $arrayCssClass, $arrayComplementoHTML);?></TD>
+	            <TH class="campoformulario" nowrap width="1%">Limpar:</TH>
+	            <TD class="campoformulario">
+	            <?php	            
+	            $nmCampos = array(vocontrato::$nmAtrAnoContrato,
+	            		vocontrato::$nmAtrCdContrato,
+	            		vocontrato::$nmAtrTipoContrato,
+	            		voProcLicitatorio::$nmAtrAnoProcLicitatorio,
+	            		voProcLicitatorio::$nmAtrCdProcLicitatorio,
+	            		voDocumento::$nmAtrAnoARP,
+	            		voDocumento::$nmAtrCdARP
+	            );
+	            echo "<br>".getBorracha($nmCampos, "criarNomeDocumento();");
+	            ?>
+	            </TD>	            
+	            
 	        </TR>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Proc.Licitatório:</TH>
 	            <TD class="campoformulario" colspan=3><?php getProcLicitatorioEntradaDados("", "", $arrayCssClass, $arrayComplementoHTML);?></TD>
 	        </TR>
+	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">ARP:</TH>
+	            <TD class="campoformulario" colspan=3><?php getEntradaDadosCdAno("", "", voDocumento::$nmAtrCdARP, voDocumento::$nmAtrAnoARP, $arrayCssClass, $arrayComplementoHTML);
+	            ?></TD>	            
+	        </TR>	        
 			<TR>
                 <TH class="campoformulario" nowrap width="1%">Ano.Doc.:</TH>
                 <TD class="campoformulario" nowrap width="1%"><?php echo $selectExercicio->getHtmlCombo(voDocumento::$nmAtrAno,voDocumento::$nmAtrAno, $vo->ano, true, $classChaves, false, " onChange='criarNomeDocumento();' $disabledChaves $required");?></TD>
@@ -215,7 +243,7 @@ function iniciar(){
 	        }?>
 			<TR>
                 <TH class="campoformulario" nowrap width="1%">Arquivo:</TH>
-                <TD class="campoformulario" colspan=3><INPUT type="text" id="<?=voDocumento::$nmAtrLink?>" name="<?=voDocumento::$nmAtrLink?>" value="<?php echo $vo->link;?>"  class="camponaoobrigatorio" size="80" ></TD>
+                <TD class="campoformulario" colspan=3><INPUT type="text" id="<?=voDocumento::$nmAtrLink?>" name="<?=voDocumento::$nmAtrLink?>" value="<?php echo $vo->link;?>"  class="camponaoobrigatorio" size="80" required></TD>
             </TR>
 	        
 <TR>

@@ -118,7 +118,7 @@ include_once (caminho_filtros."filtroManterPA.php");
         
         $queryFrom .= "\n LEFT JOIN ". vopessoa::getNmTabela();
         $queryFrom .= " ". $nmTabelaPessoaContrato . " \n ON ". $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada. "=" . $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd;
-        
+                
         return parent::consultarMontandoQueryTelaConsulta ( $vo, $filtro, $arrayColunasRetornadas, $queryFrom );        
     }
     

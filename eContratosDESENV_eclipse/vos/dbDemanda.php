@@ -304,15 +304,36 @@ class dbDemanda extends dbprocesso {
 		
 		return parent::consultarFiltro ( $filtro, $querySelect, $queryFrom, false );
 	}
+	
+	function consultarPAAPDemanda($vo){
+		//$vo = new voDemanda();
+		$voPA = null;
+		$filtro = new filtroManterPA();
+		$filtro->anoDemanda = $vo->ano;
+		$filtro->cdDemanda = $vo->cd;
+		$dbpa = new dbPA();		
+		$colecao = $dbpa->consultarPAAP(new voPA(),$filtro);
+		if(!isColecaoVazia($colecao)){
+			if(count($colecao)>1){
+				throw new excecaoMaisDeUmRegistroRetornado("A consulta de PAAP trouxe mais de um registro para esta demanda.");
+			}
+			
+			$registro = $colecao[0];
+			$voPA = new voPA();
+			$voPA->getDadosBancoPorChave($registro);
+		}
+		
+		return $voPA;
+		
+	}
+	
 	function validarAlteracao($vo) {
 		if ($vo->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA) {
 			// verifica se o setor atual eh igual ao setor de origem
 			$filtro = new filtroManterDemanda ( false );
-			// $filtro->vodemanda = new voDemanda();
 			$filtro->vodemanda = new voDemanda ();
 			$filtro->vodemanda->cd = $vo->cd;
-			$filtro->vodemanda->ano = $vo->ano;
-			
+			$filtro->vodemanda->ano = $vo->ano;			
 			// echo "SITUACAO FECHADA";
 			$colecao = $this->consultarTelaConsulta ( $vo, $filtro );
 			if ($colecao != "") {
@@ -323,6 +344,19 @@ class dbDemanda extends dbprocesso {
 					throw new Exception ( $msg );
 				}
 			} // else echo "COLECAO VAZIA";
+			
+			//verifica se tem PAAP para encerrar
+			//$vo = new voDemanda();
+			if($vo->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_PROCADM){
+				$voPA = $this->consultarPAAPDemanda($vo);
+				if($voPA!=null){
+					$situacaoPAAP = $voPA->situacao; 
+					$isSituacaoPAAPAtivo = dominioSituacaoPA::existeItem($situacaoPAAP, dominioSituacaoPA::getColecaoSituacaoAtivos()); 
+					if($isSituacaoPAAPAtivo){
+						throw new excecaoGenerica("Fechamento não permitido para demanda cujo PAAP esteja ativo.");
+					}					
+				}				
+			}
 		}
 		
 		// throw new Exception("REMOVER!!:" . $msg);

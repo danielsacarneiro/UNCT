@@ -303,4 +303,18 @@ class filtroManter extends multiplosConstrutores {
  * }
  * }
  */
+
+/** 
+ * usado para consultas genericas, sem tela 
+ * @author daniel.ribeiro
+ *
+ */
+class filtroConsultar extends filtroManter {
+	function __construct($temPaginacao=false) {
+		parent::__construct2($temPaginacao, false);
+		$this->isValidarConsulta = false;
+		//$this->inDesativado = "N";
+	}
+}
+	
 ?>

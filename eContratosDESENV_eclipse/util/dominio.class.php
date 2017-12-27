@@ -46,6 +46,12 @@ class dominio extends multiplosConstrutores {
 		
 		return $retorno;
 	}
+	static function existeItem($chave, $colecao=null) {
+		if($colecao==null){
+			$colecao = static::getColecao();
+		}		
+		return array_key_exists($chave, $colecao);		
+	}
 	static function removeElementoStatic($chave, $colecao) {
 		$retorno = array ();
 		if ($colecao != null) {

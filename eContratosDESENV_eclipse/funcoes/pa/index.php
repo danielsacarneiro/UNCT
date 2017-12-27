@@ -218,6 +218,7 @@ function validaFormulario() {
 	                    <TH class="headertabeladados" rowspan="2" width="1%" nowrap >Doc.Contratada</TH>
 	                    <TH class="headertabeladados" rowspan="2" width="90%">Contratada</TH>
 	                    <TH class="headertabeladados" rowspan="2" width="1%" nowrap>Servidor.Resp.</TH>
+	                    <TH class="headertabeladados" rowspan="2"  width="1%" nowrap>Dt.Abertura</TH>
 	                    <TH class="headertabeladados" rowspan="2"  width="1%" nowrap>Situação</TH>
                     </TR>
                     <TR>
@@ -240,7 +241,7 @@ function validaFormulario() {
                 $dominioTipoContrato = new dominioTipoContrato();
                 $domSiPA = new dominioSituacaoPA();
                 
-                $colspan=12;
+                $colspan=13;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -284,6 +285,7 @@ function validaFormulario() {
                     <TD class="tabeladados" nowrap><?php echo documentoPessoa::getNumeroDocFormatado($colecao[$i][vopessoa::$nmAtrDoc]);?></TD>
                     <TD class="tabeladados"><?php echo $colecao[$i][$filtro->nmColNomePessoaContrato];?></TD>
                     <TD class="tabeladados" nowrap><?php echo $colecao[$i][$filtro->nmColNomePessoaResponsavel];?></TD>
+                    <TD class="tabeladados" nowrap><?php echo getData($voAtual->dtAbertura);?></TD>
                     <TD class="tabeladados" nowrap><?php echo $situacao;?></TD>
                 </TR>					
                 <?php

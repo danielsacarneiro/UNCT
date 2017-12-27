@@ -451,19 +451,6 @@ function getTextoLink($texto, $href, $javascript=null) {
 	return $html;
 }
 
-function getBorracha($nmCampos) {
-	$tam = count ( $nmCampos );
-	
-	$js = "";
-	for($i = 0; $i < $tam; $i ++) {
-		$nmCampoAtual = $nmCampos [$i];
-		$js .= "document.frm_principal." . $nmCampoAtual . ".value='';";
-	}
-	
-	$html = "&nbsp;&nbsp;<a onClick=\"javascript:" . $js . "\" ><img  title='Limpar' src='" . caminho_imagens . "borracha.jpg' width='15' height='15' A style='CURSOR: POINTER'></a>\n";
-	
-	return $html;
-}
 function getColecaoPermissaoUsuarioLogado() {
 	$current_user = wp_get_current_user ();
 	$permissao_user = $current_user->roles;
@@ -537,12 +524,39 @@ function getComponenteConsultaPaginacao($comboOrdenacao, $cdAtrOrdenacao, $cdOrd
 		$html .= " &nbsp;Histórico: " . $radioHistorico->getHtmlRadio ( "cdHistorico", "cdHistorico", $cdHistorico, false, false );
 	
 	$html .= "&nbsp;<button id='localizar' class='botaoconsulta' type='submit'>Consultar</button>\n";
-	$html .= "&nbsp;&nbsp;&nbsp;<a href='javascript:limparFormularioGeral();' ><img  title='Limpar' src='" . caminho_imagens . "borracha.jpg' width='20' height='20'></a></TD>\n
-                    </TR>";
+	$html .= "&nbsp;".getBorrachaTotalConsulta(). "</TR>";
 	// $html .= "<imput type='hidden' id='javascript:ID_REQ_DT_HOJE' name='javascript:ID_REQ_DT_HOJE'>\n";
 	
 	return $html;
 }
+
+function getBorrachaTotalConsulta() {
+	$html = "&nbsp;&nbsp;<a href='javascript:limparFormularioGeral();' ><img  title='Limpar' src='" . caminho_imagens . "borracha.jpg' width='20' height='20'></a></TD>\n";
+	return $html;
+}
+
+/**
+ * 
+ * @param unknown $nmCampos
+ * @return string
+ */
+function getBorracha($nmCampos, $jsComplementar=null) {
+	$tam = count ( $nmCampos );
+
+	$js = "";
+	for($i = 0; $i < $tam; $i ++) {
+		$nmCampoAtual = $nmCampos [$i];
+		$js .= "document.frm_principal." . $nmCampoAtual . ".value='';";
+	}
+	if($jsComplementar !=null){
+		$js .= $jsComplementar;
+	}
+	
+	$html = "&nbsp;&nbsp;<a onClick=\"javascript:" . $js . "\" ><img  title='Limpar' src='" . caminho_imagens . "borracha.jpg' width='15' height='15' A style='CURSOR: POINTER'></a>\n";
+
+	return $html;
+}
+
 function getHTMLRadioButtonConsulta($nmRadio, $idRadio, $voAtualOuChaveString) {
 	return getHTMLGridConsulta ( $nmRadio, $idRadio, $voAtualOuChaveString, false );
 }
@@ -748,6 +762,19 @@ function getDetalhamentoHTMLCodigoAno($ano, $cd, $tamanhoCodigo = null) {
 	$retorno .= "Número: <INPUT type='text' value='" . complementarCharAEsquerda ( $cd, "0", $tamanhoCodigo ) . "'  class='camporeadonlyalinhadodireita' size='6' readonly>";	
 	return $retorno;
 }
+
+function getEntradaDadosCdAno($cd, $ano, $pNmCampoCd, $pNmCampoAno, $arrayCssClass, $arrayComplementoHTML) {
+	$selectExercicio = new selectExercicio ();
+	$cssCd = $arrayCssClass [0];
+	$cssAno = $arrayCssClass [1];
+
+	$htmlCd = $arrayComplementoHTML [0];
+	$htmlAno = $arrayComplementoHTML [1];
+
+	echo "Número: <INPUT type='text' onkeyup='validarCampoNumericoPositivo(this)' id='" . $pNmCampoCd . "' name='" . $pNmCampoCd . "'  value='" . complementarCharAEsquerda ( $cd, "0", TAMANHO_CODIGOS_SAFI ) . "'  class='" . $cssCd . "' size='5' maxlength='5'  " . $htmlCd . ">";
+	echo "&nbsp;Ano: " . $selectExercicio->getHtmlCombo ( $pNmCampoAno, $pNmCampoAno, $ano, true, $cssAno, false, $htmlAno );
+}
+
 
 function getColecaoComoVariavelJS($colecao, $nmVariavelJS){
 	if(!isColecaoVazia($colecao)){		
