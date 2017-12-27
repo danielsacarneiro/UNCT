@@ -5,12 +5,17 @@ include_once (caminho_funcoes . "documento/dominioTpDocumento.php");
 include_once (caminho_funcoes . "documento/biblioteca_htmlDocumento.php");
 include_once (caminho_util . "dominioSetor.php");
 class voDocumento extends voentidade {
+	
+	static $nmAtrComplemento = "nmAtrComplemento";
+	static $nmAtrCdARP = "nmAtrCdARP";
+	static $nmAtrAnoARP = "nmAtrAnoARP";
+	
 	static $nmAtrCdSetor = "doc_cd_setor";
 	static $nmAtrAno = "doc_ex";
 	static $nmAtrSq = "sq";
 	static $nmAtrTp = "doc_tp";
 	static $nmAtrLink = "doc_link";
-	static $nmAtrComplemento = "nmAtrComplemento";
+	
 	
 	var $sq = "";
 	var $cdSetor = "";
