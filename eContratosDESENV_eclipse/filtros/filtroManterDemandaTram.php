@@ -12,7 +12,10 @@ class filtroManterDemandaTram extends filtroManterDemanda{
 		parent::getFiltroFormulario();
 		
 		$sqDemandaTram = @$_POST[voDemandaTramitacao::$nmAtrSq];
-		$this->vodemanda->sq = $sqDemandaTram;				
+		$this->vodemanda->sq = $sqDemandaTram;
+		
+		$this->vodemanda->cdSetorOrigem = @$_POST[voDemandaTramitacao::$nmAtrCdSetorOrigem];
+		$this->vodemanda->cdSetorDestino = @$_POST[voDemandaTramitacao::$nmAtrCdSetorDestino];
 	}
 	
 	function getFiltroConsultaSQL($comAtributoOrdenacao = null){
@@ -87,16 +90,26 @@ class filtroManterDemandaTram extends filtroManterDemanda{
 					$conector  = "\n AND ";
 		}
 	
+		if($this->vodemanda->cdSetorOrigem != null){
+			$filtro = $filtro . $conector
+			. $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrCdSetorOrigem
+			. " = "
+					. $this->vodemanda->cdSetorOrigem
+					;
+	
+					$conector  = "\n AND ";
+		}
+	
 		if($this->vodemanda->cdSetorDestino != null){
 			$filtro = $filtro . $conector
 			. $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrCdSetorDestino
 			. " = "
 					. $this->vodemanda->cdSetorDestino
 					;
-	
+		
 					$conector  = "\n AND ";
 		}
-	
+		
 		if($this->vodemanda->prioridade != null){
 			$filtro = $filtro . $conector
 			. $nmTabela. "." .voDemanda::$nmAtrPrioridade

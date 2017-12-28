@@ -127,11 +127,19 @@ function alterar() {
 	        <?php	        
 	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
 	        $arrayCssClass = array("camponaoobrigatorio","camponaoobrigatorio", "camponaoobrigatorio");
+	        
+	        $comboSetor = new select(dominioSetor::getColecao());
 	        ?>        
             <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
 	            <TD class="campoformulario" colspan="3"><?php getContratoEntradaDeDados($filtro->vocontrato->tipo, $filtro->vocontrato->cdContrato, $filtro->vocontrato->anoContrato, $arrayCssClass, null, null);?></TD>
 			</TR>
+            <TR>
+                <TH class="campoformulario" nowrap width="1%">Setor.Origem.:</TH>
+                <TD class="campoformulario" width="1%" ><?php echo $comboSetor->getHtmlCombo(voDemandaTramitacao::$nmAtrCdSetorOrigem,voDemandaTramitacao::$nmAtrCdSetorOrigem, $filtro->vodemanda->cdSetorOrigem, true, "camponaoobrigatorio", false, "");?></TD>
+                <TH class="campoformulario" nowrap width="1%">Setor.Destino:</TH>
+                <TD class="campoformulario" ><?php echo $comboSetor->getHtmlCombo(voDemandaTramitacao::$nmAtrCdSetorDestino,voDemandaTramitacao::$nmAtrCdSetorDestino, $filtro->vodemanda->cdSetorDestino, true, "camponaoobrigatorio", false, "");?></TD>
+            </TR>			
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Texto:</TH>
 	            <TD class="campoformulario" nowrap width="1%" colspan="3">				

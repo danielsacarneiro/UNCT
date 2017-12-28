@@ -7,6 +7,7 @@ require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioAutorizacao
 class filtroManterDemanda extends filtroManter{
 
 	public $nmFiltro = "filtroManterDemanda";
+	static $NmAtrCdSetorPassagem = "NmAtrCdSetorPassagem";
 	static $NmColDhUltimaMovimentacao = "NmColDhUltimaMovimentacao";
 	static $NmColQtdContratos = "NmColQtdContratos";
 
@@ -24,6 +25,7 @@ class filtroManterDemanda extends filtroManter{
 	var $docContratada;
 	var $temDocumentoAnexo;
 	var $cdSetorDocumento;
+	var $cdSetorPassagem;
 	var $tpDocumento;
 	var $sqDocumento;
 	
@@ -65,6 +67,7 @@ class filtroManterDemanda extends filtroManter{
 		$vodemanda->texto = @$_POST[voDemanda::$nmAtrTexto];
 		$vodemanda->cdSetor = @$_POST[voDemanda::$nmAtrCdSetor];
 		$vodemanda->cdSetorDestino = @$_POST[voDemandaTramitacao::$nmAtrCdSetorDestino];
+		$this->cdSetorPassagem = @$_POST[static::$NmAtrCdSetorPassagem];
 		$vodemanda->tipo = @$_POST[voDemanda::$nmAtrTipo];
 		$vodemanda->situacao  = @$_POST[voDemanda::$nmAtrSituacao];
 		$vodemanda->prioridade  = @$_POST[voDemanda::$nmAtrPrioridade];
@@ -255,6 +258,21 @@ class filtroManterDemanda extends filtroManter{
 										
 			$conector  = "\n AND ";
 		}
+		
+		if($this->cdSetorPassagem != null){
+			$filtro = $filtro . $conector
+			. " EXISTS (SELECT 'X' FROM " . $nmTabelaTramitacao
+			. " WHERE "
+					. $nmTabela . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrAno
+					. " AND " . $nmTabela . "." . voDemanda::$nmAtrCd . "=" . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrCd
+					. " AND (" . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrCdSetorOrigem. "=" . $this->cdSetorPassagem
+					. " OR "
+					. $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrCdSetorDestino . "=" . $this->cdSetorPassagem							
+					. "))\n ";
+		
+							$conector  = "\n AND ";
+		}
+		
 		
 		if($this->vodemanda->prioridade != null){
 			$filtro = $filtro . $conector

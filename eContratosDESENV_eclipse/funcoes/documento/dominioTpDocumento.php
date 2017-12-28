@@ -10,6 +10,7 @@ class dominioTpDocumento extends dominio {
 	static $ENDERECO_PASTA_PA = "\PROCESSO ADMINISTRATIVO";	
 	
 	static $CD_TP_DOC_APOSTILAMENTO = "AP";
+	static $CD_TP_DOC_CONTROLE_AQUISICAO = "CA";
 	static $CD_TP_DOC_CI = "CI";
 	static $CD_TP_DOC_DECISAO = "DC";
 	static $CD_TP_DOC_DEFESA = "DF";
@@ -28,6 +29,7 @@ class dominioTpDocumento extends dominio {
 	static $CD_TP_DOC_RELATORIO_CONCLUSAO = "RC";
 	
 	static $DS_TP_DOC_APOSTILAMENTO = "Apostilamento";
+	static $DS_TP_DOC_CONTROLE_AQUISICAO = "Controle Aquisição";
 	static $DS_TP_DOC_CI = "CI";
 	static $DS_TP_DOC_DECISAO = "Decisão";
 	static $DS_TP_DOC_DEFESA = "Defesa";
@@ -54,6 +56,7 @@ class dominioTpDocumento extends dominio {
 	static function getColecao() {
 		return array (
 				self::$CD_TP_DOC_APOSTILAMENTO => self::$DS_TP_DOC_APOSTILAMENTO,
+				self::$CD_TP_DOC_CONTROLE_AQUISICAO => self::$DS_TP_DOC_CONTROLE_AQUISICAO,
 				self::$CD_TP_DOC_CI => self::$DS_TP_DOC_CI,
 				self::$CD_TP_DOC_DECISAO => self::$DS_TP_DOC_DECISAO,
 				self::$CD_TP_DOC_DEFESA => self::$DS_TP_DOC_DEFESA,
