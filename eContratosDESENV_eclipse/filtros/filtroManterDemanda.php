@@ -529,11 +529,17 @@ class filtroManterDemanda extends filtroManter{
 		return $filtro;
 	}	
 	
+	function getAtributoOrdenacaoAnteriorDefault(){
+		$nmTabelaDemanda = voDemanda::getNmTabelaStatic($this->isHistorico);
+		$retorno = $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . " " . $this->cdOrdenacao; 
+		return $retorno; 		
+	}
+	
 	function getAtributoOrdenacaoDefault(){
 		$nmTabelaDemanda = voDemanda::getNmTabelaStatic($this->isHistorico);
 		$retorno = $nmTabelaDemanda . "." . voDemanda::$nmAtrPrioridade . " " . constantes::$CD_ORDEM_CRESCENTE
-				. "," . $nmTabelaDemanda . "." . voDemanda::$nmAtrDhInclusao . " " . constantes::$CD_ORDEM_CRESCENTE; 
-		return $retorno; 		
+		. "," . $nmTabelaDemanda . "." . voDemanda::$nmAtrDhInclusao . " " . constantes::$CD_ORDEM_CRESCENTE;
+		return $retorno;
 	}
 	
 	function getAtributosOrdenacao(){

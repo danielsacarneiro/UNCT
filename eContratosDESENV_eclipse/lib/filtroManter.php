@@ -182,8 +182,13 @@ class filtroManter extends multiplosConstrutores {
 		
 		// pega do filho, se existir
 		$strOrdemDefault = "";
+		$strOrdemAnteriorDefault = "";
 		if ($this->getAtributoOrdenacaoDefault ()) {
 			$strOrdemDefault = $this->getAtributoOrdenacaoDefault ();
+		}
+		
+		if ($this->getAtributoOrdenacaoAnteriorDefault ()) {
+			$strOrdemAnteriorDefault = $this->getAtributoOrdenacaoAnteriorDefault ();
 		}
 		
 		if ($this->cdAtrOrdenacao != null) {
@@ -209,10 +214,15 @@ class filtroManter extends multiplosConstrutores {
 			$conectorOrdem = ",";
 		}
 
-		if($strOrdemDefault != ""){
-			$ordenacaoFinal = $atributoOrdenacao . $conectorOrdem. $strOrdemDefault;
+		if($strOrdemAnteriorDefault != ""){
+			$ordenacaoFinal = $strOrdemAnteriorDefault . $conectorOrdem.  $ordenacaoFinal;
+			$conectorOrdem = ",";
 		}
 		
+		if($strOrdemDefault != ""){
+			$ordenacaoFinal = $ordenacaoFinal . $conectorOrdem. $strOrdemDefault;
+		}
+				
 		if ($comAtributoOrdenacao && $ordenacaoFinal != "") {
 			$strFiltro = $strFiltro . "\n ORDER BY $ordenacaoFinal ";
 		}
@@ -279,7 +289,19 @@ class filtroManter extends multiplosConstrutores {
 		
 		return $retorno;
 	}
+	/**
+	 * Usado quando se deseja que ocorra uma ordenacao configurada combinada ou apos a selecao do atributo ordenacao
+	 * @return string
+	 */
 	function getAtributoOrdenacaoDefault() {
+		return "";
+	}
+	/**
+	 * Usado quando se deseja que SEMPRE ocorra uma ordenacao configurada, independente do atributo ordenacao
+	 * selecionado pelo usuario 
+	 * @return string
+	 */	 
+	function getAtributoOrdenacaoAnteriorDefault() {
 		return "";
 	}
 	function setaFiltroConsultaSemLimiteRegistro() {
