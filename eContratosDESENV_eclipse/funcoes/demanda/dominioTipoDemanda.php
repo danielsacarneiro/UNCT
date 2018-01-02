@@ -13,18 +13,22 @@ Class dominioTipoDemanda extends dominio{
 	static $CD_TIPO_DEMANDA_CONTRATO_PRORROGACAO = 8;
 	static $CD_TIPO_DEMANDA_CONTRATO_APOSTILAMENTO= 10;
 	static $CD_TIPO_DEMANDA_PARECER = 9;
+	
+	static $CD_TIPO_DEMANDA_CONTROLE_AQUISICAO= 11;
+	
 	static $CD_TIPO_DEMANDA_A_CLASSIFICAR = 99;
 	
 	static $DS_TIPO_DEMANDA_CONTRATO = "Contrato";
-	static $DS_TIPO_DEMANDA_PROCADM = "Proc.Admin";
+	static $DS_TIPO_DEMANDA_PROCADM = "Proc.Admin(PAAP)";
 	static $DS_TIPO_DEMANDA_EDITAL = "Edital";
 	static $DS_TIPO_DEMANDA_JUDICIAL = "Judicial/PGE";
 	static $DS_TIPO_DEMANDA_CONTRATO_REAJUSTE = "Contrato Reajuste";
 	static $DS_TIPO_DEMANDA_CONTRATO_MATER = "Contrato Mater";
 	static $DS_TIPO_DEMANDA_CONTRATO_MODIFICACAO = "Contrato Modificacao";
 	static $DS_TIPO_DEMANDA_CONTRATO_PRORROGACAO = "Contrato Prorrogação";
-	static $DS_TIPO_DEMANDA_CONTRATO_APOSTILAMENTO= "Apostilamento";
+	static $DS_TIPO_DEMANDA_CONTRATO_APOSTILAMENTO= "Contrato Apostilamento";
 	static $DS_TIPO_DEMANDA_PARECER = "Parecer";
+	static $DS_TIPO_DEMANDA_CONTROLE_AQUISICAO= "Controle Aquisição";
 	
 	static $DS_TIPO_DEMANDA_A_CLASSIFICAR = "A classificar";
 	// ...............................................................
@@ -86,6 +90,7 @@ Class dominioTipoDemanda extends dominio{
 	
 	static function getColecaoTipoDemandaComplementar(){
 		return array(
+				self::$CD_TIPO_DEMANDA_CONTROLE_AQUISICAO => self::$DS_TIPO_DEMANDA_CONTROLE_AQUISICAO,
 				self::$CD_TIPO_DEMANDA_EDITAL => self::$DS_TIPO_DEMANDA_EDITAL,
 				self::$CD_TIPO_DEMANDA_PARECER => self::$DS_TIPO_DEMANDA_PARECER,
 				self::$CD_TIPO_DEMANDA_JUDICIAL => self::$DS_TIPO_DEMANDA_JUDICIAL,
