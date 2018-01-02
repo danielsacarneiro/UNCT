@@ -19,7 +19,7 @@ class email_sefaz extends multiplosConstrutores{
 	// ...............................................................
 	// Construtor
 	Function __construct0() {
-		$this->getConfigEmailSefaz("correio.sefaz.pe.gov.br", "25", 'daniel.ribeiro@sefaz.pe.gov.br', 'C@rbeiro01', "e-Conti" );
+		$this->getConfigEmailSefaz("correio.sefaz.pe.gov.br", "25", 'daniel.ribeiro@sefaz.pe.gov.br', 'C@rbeiro03', constantes::$nomeSistema);
 	}
 	private function getConfigEmailSefaz($host, $port, $user, $pwd, $remetente) {
 		$this->Host = $host;
@@ -34,6 +34,11 @@ class email_sefaz extends multiplosConstrutores{
 				"patricia.farias@sefaz.pe.gov.br",
 				"rogerio.f-carvalho@sefaz.pe.gov.br"
 		);
+		
+		/*return array("atja@sefaz.pe.gov.br",
+				"rogerio.f-carvalho@sefaz.pe.gov.br"
+		);*/
+		
 	}
 	
 	protected static function setListaEmail($mail, $listaDestinatarios){
@@ -77,6 +82,9 @@ class email_sefaz extends multiplosConstrutores{
 		if($assunto == null){
 			$assunto = "AVISO";
 		}
+		
+		$assunto .= " " . constantes::$nomeSistema . " - ALERTA AUTOMÁTICO";
+		
 		$mail->Subject  = $assunto; // Assunto da mensagem
 		
 		$mail->Body = $mensagem;
