@@ -6,11 +6,17 @@ class dbContratoInfo extends dbprocesso {
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
 		
+		$colecaoAtributoCoalesceNmPessoa = array(
+				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
+				$nmTabelaContrato . "." . vocontrato::$nmAtrContratadaContrato,
+		);
+		
 		$arrayColunasRetornadas = array (
 				$nmTabela . ".*",
 				$nmTabelaContrato . "." . vocontrato::$nmAtrCdAutorizacaoContrato,
 				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
-				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome 
+				//$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
+				getSQLCOALESCE($colecaoAtributoCoalesceNmPessoa,vopessoa::$nmAtrNome),
 		);
 		
 		$groupbyinterno = $nmTabela . "." . vocontrato::$nmAtrAnoContrato . "," . $nmTabela . "." . vocontrato::$nmAtrCdContrato . "," . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
@@ -62,10 +68,17 @@ class dbContratoInfo extends dbprocesso {
 		if ($isHistorico) {
 			$colunaUsuHistorico = static::$nmTabelaUsuarioOperacao . "." . vousuario::$nmAtrName . "  AS " . voDemanda::$nmAtrNmUsuarioOperacao;
 		}
+		
+		$colecaoAtributoCoalesceNmPessoa = array(
+				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
+				$nmTabelaContrato . "." . vocontrato::$nmAtrContratadaContrato,
+		);
+		
 		$arrayColunasRetornadas = array (
 				$nmTabela . ".*",
 				$filtro->getSqlAtributoCoalesceAutorizacao() . " AS " . filtroManterContratoInfo::$NmColAutorizacao,
-				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
+				//$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome. " AS " . vopessoa::$nmAtrNome,
+				getSQLCOALESCE($colecaoAtributoCoalesceNmPessoa,vopessoa::$nmAtrNome),				
 				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
 				$colunaUsuHistorico 
 		);

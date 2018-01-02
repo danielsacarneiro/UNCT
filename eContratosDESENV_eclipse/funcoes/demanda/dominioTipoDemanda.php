@@ -99,7 +99,12 @@ Class dominioTipoDemanda extends dominio{
 	}
 	
 	static function getColecaoTipoDemandaSAD(){
-		return static::getColecaoTipoDemandaContratoSemProcAdmin();
+		$retorno = array(
+				self::$CD_TIPO_DEMANDA_A_CLASSIFICAR => self::$DS_TIPO_DEMANDA_A_CLASSIFICAR,
+		);
+		$retorno = putElementoArray2NoArray1ComChaves ( $retorno, static::getColecaoTipoDemandaContratoSemProcAdmin());
+		
+		return $retorno;		
 	}
 	
 	static function isContratoObrigatorio($cdTipoDemanda){

@@ -59,20 +59,27 @@ class dbpessoa extends dbprocesso {
 		$nmTabela = vopessoa::getNmTabela ();
 		$nmTabelaPessoaVinculo = vopessoavinculo::getNmTabela ();
 	
+		$colecaoAtributoCoalesceNmPessoa = array(
+				$nmTabela . "." . vopessoa::$nmAtrNome,
+				$nmTabelaContrato . "." . vocontrato::$nmAtrContratadaContrato,
+		);						
+		
 		$atributosConsulta = $nmTabela . "." . vopessoa::$nmAtrCd;
-		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrNome;
+		//$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrNome;
+		$atributosConsulta .= "," . getSQLCOALESCE($colecaoAtributoCoalesceNmPessoa,vopessoa::$nmAtrNome);
 		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrDoc;
 		$atributosConsulta .= "," . $nmTabelaPessoaVinculo . "." . vopessoavinculo::$nmAtrCd;
 		//$atributosConsulta .= "," . $nmTabelaContrato . "." . vocontrato::$nmAtrCdAutorizacaoContrato;
 	
-		$querySelect = "SELECT " . $atributosConsulta;
-	
-		$queryFrom = "\n FROM " . $nmTabela;
-		$queryFrom .= "\n INNER JOIN " . $nmTabelaPessoaVinculo;
-		$queryFrom .= "\n ON " . $nmTabela . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaPessoaVinculo . "." . vopessoavinculo::$nmAtrCdPessoa;
-	
-		$queryFrom .= "\n LEFT JOIN " . $nmTabelaContrato;
+		$querySelect = "SELECT " . $atributosConsulta;	
+		$queryFrom .= "\n FROM " . $nmTabelaContrato;		
+		
+		$queryFrom .= "\n LEFT JOIN " . $nmTabela;		
 		$queryFrom .= "\n ON " . $nmTabela . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
+		
+		$queryFrom .= "\n LEFT JOIN " . $nmTabelaPessoaVinculo;
+		$queryFrom .= "\n ON " . $nmTabela . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaPessoaVinculo . "." . vopessoavinculo::$nmAtrCdPessoa;
+		
 		// echo $querySelect."<br>";
 		// echo $queryFrom;
 	

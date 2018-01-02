@@ -513,6 +513,8 @@ class filtroManterDemanda extends filtroManter{
 			. " = "
 			. dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO_REAJUSTE
 			. " AND $nmTabelaContratoInfo." .voContratoInfo::$nmAtrCdClassificacao
+			. " IS NOT NULL "
+			. " AND $nmTabelaContratoInfo." .voContratoInfo::$nmAtrCdClassificacao
 			. " = "
 			. dominioClassificacaoContrato::$CD_LOCACAO_IMOVEL
 			. ")";

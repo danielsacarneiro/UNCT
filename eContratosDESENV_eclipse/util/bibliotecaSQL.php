@@ -3,7 +3,34 @@ include_once("constantes.class.php");
 include_once ("bibliotecaFuncoesPrincipal.php");
 
   //bibliotecaSQL
-  
+
+function getSQLNmContratada(){
+	$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
+	$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
+	
+	$colecaoAtributoCoalesceNmPessoa = array(
+			$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
+			$nmTabelaContrato . "." . vocontrato::$nmAtrContratadaContrato,
+	);	
+	return getSQLCOALESCE($colecaoAtributoCoalesceNmPessoa,vopessoa::$nmAtrNome);	
+}
+
+function getSQLCOALESCE($arrayAtributos, $nmAtributoRetornoClausulaAS = null){
+	$retorno = "COALESCE (";
+	foreach ($arrayAtributos as $item){
+		$retorno .= $item . ",";		
+	}
+	
+	//retira a ultima virgula
+	$retorno = substr($retorno, 0, strlen($retorno)-1);
+	
+	$retorno .= ") ";
+	if($nmAtributoRetornoClausulaAS != null){
+		$retorno .= " AS " . $nmAtributoRetornoClausulaAS;
+	}	
+	return $retorno;
+}
+
 function getSQLCASE($atributo, $valorCondicao, $valorTHEN, $valorELSE){
 	return "CASE $atributo WHEN $valorCondicao THEN $valorTHEN ELSE $valorELSE END ";
 }

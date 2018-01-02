@@ -44,7 +44,8 @@ class dbDemanda extends dbprocesso {
 				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato,
 				$nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato,
 				$nmTabelaPessoa . "." . vopessoa::$nmAtrDoc,
-				$nmTabelaPessoa . "." . vopessoa::$nmAtrNome,
+				//$nmTabelaPessoa . "." . vopessoa::$nmAtrNome,
+				getSQLNmContratada(),
 				"COALESCE (" . " . $nmTabelaTramitacao." . voDemandaTramitacao::$nmAtrCdSetorDestino . "," . $nmTabela . "." . voDemanda::$nmAtrCdSetor . ") AS " . voDemanda::$nmAtrCdSetorAtual 
 		);
 		
@@ -94,7 +95,7 @@ class dbDemanda extends dbprocesso {
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
-		
+				
 		$colunaUsuHistorico = "";
 		
 		if ($isHistorico) {
@@ -107,8 +108,7 @@ class dbDemanda extends dbprocesso {
 				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato,
 				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato,
 				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato,
-				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
-				
+				getSQLNmContratada(),				
 				// $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . " AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,
 				"COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . "," . $nmTabela . "." . voDemanda::$nmAtrCdSetor . ") AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,
 				"COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrDhInclusao . "," . $nmTabela . "." . voDemanda::$nmAtrDhUltAlteracao . ") AS " . filtroManterDemanda::$NmColDhUltimaMovimentacao,
