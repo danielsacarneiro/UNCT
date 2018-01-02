@@ -12,6 +12,8 @@ include_once (caminho_util . "DocumentoPessoa.php");
 // Classe select
 // cria um combo select html
 class dbcontrato extends dbprocesso {
+	static $CD_CONSTANTE_FIM_IMPORTACAO = "FIM";
+	
 	function consultarFiltroManterContrato($voentidade, $filtro) {
 		$isArquivo = ("S" == $filtro->cdConsultarArquivo);
 		
@@ -336,40 +338,49 @@ class dbcontrato extends dbprocesso {
 		
 		$atributosInsert = removeColecaoAtributos ( $atributosInsert, $arrayAtribRemover );
 		$atributosInsert = getColecaoEntreSeparador ( $atributosInsert, "," );
-		
-		$query = " INSERT INTO " . $voContrato->getNmTabela () . " \n";
-		$query .= " (";
-		$query .= $atributosInsert;
-		$query .= ") ";
-		
-		$query .= " \nVALUES(";
-		$query .= $this->getAtributosInsertImportacaoPlanilha ( $tipo, $linha, $voContrato );
-		$query .= ")";
-		
-		// echo $query;
-		
+				
 		try {
+			$voContrato = $this->getVOImportacaoPlanilha ( $tipo, $linha );
+			
+			$query = " INSERT INTO " . $voContrato->getNmTabela () . " \n";
+			$query .= " (";
+			$query .= $atributosInsert;
+			$query .= ") ";
+			
+			$query .= " \nVALUES(";
+			$query .= $this->getAtributosInsertImportacaoPlanilha ($voContrato );
+			$query .= ")";
+			
+			// echo $query;
+					
 			// tenta incluir
 			$retorno = $this->cDb->atualizarImportacao ( $query );
 			echoo("Contrato incluído com sucesso: " . $voContrato->getCodigoContratoFormatado());
+		} catch ( excecaoFimImportacaoContrato $exFim ) {
+			echo "<BR> FIM DA IMPORTAÇÃO. <BR>";
+			throw $exFim;
 		} catch ( Exception $e ) {
-			echo "<BR> ERRO INCLUSAO. <BR>";
-			$msgErro = $e->getMessage ();
-			echo "<BR>" . $msgErro . "<BR>";
-			
-			$query = "";
-			// se der pau, vai alterar
-			// $retorno = $this->cDb->atualizarImportacao($query);
-		}
+				echo "<BR> ERRO INCLUSAO. <BR>";
+				$msgErro = $e->getMessage ();
+				echo "<BR>" . $msgErro . "<BR>";
+				
+				//$query = "";
+				// se der pau, vai alterar
+				// $retorno = $this->cDb->atualizarImportacao($query);
+		}	
 		
 		return $retorno;
 	}
-	private function getAtributosInsertImportacaoPlanilha($tipo, $linha, $voContrato = null) {
+	/*private function getAtributosInsertImportacaoPlanilha($tipo, $linha, $voContrato = null) {
 		$voContrato = $this->getVOImportacaoPlanilha ( $tipo, $linha );		
 		$retorno = $this->getSQLValuesInsert ( $voContrato );
 		
 		return $retorno;
-	}
+	}*/
+	private function getAtributosInsertImportacaoPlanilha($voContrato) {
+		$retorno = $this->getSQLValuesInsert ( $voContrato );	
+		return $retorno;
+	}	
 	function getCdAutorizacao($tipoAutorizacao) {
 		include_once (caminho_funcoes . "contrato/dominioAutorizacao.php");
 		
@@ -627,6 +638,13 @@ class dbcontrato extends dbprocesso {
 		; // $retorno = $this->cDb->atualizar($query);
 	}
 	function getVOImportacaoPlanilha($tipo, $linha) {
+		$tpContrato = $linha ["A"];
+		echoo("|".$tpContrato."|");
+				
+		if($tpContrato == trim(static::$CD_CONSTANTE_FIM_IMPORTACAO)){
+			throw new excecaoFimImportacaoContrato();
+		}
+		
 		$numero = $linha ["B"];
 		$ano = $linha ["B"];
 		$especie = $linha ["C"];

@@ -1,0 +1,17 @@
+<?php
+/**
+ * Define uma classe de exceção
+*/
+class excecaoFimImportacaoContrato extends excecaoGenerica
+{
+	// Redefine a exceção de forma que a mensagem não seja opcional
+	public function __construct($message, $code = 0, Exception $previous = null) {
+		// código
+
+		$message = "Fim importação contrato." . $message;
+
+		// garante que tudo está corretamente inicializado
+		parent::__construct($message, $code, $previous);
+	}
+
+}

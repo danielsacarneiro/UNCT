@@ -68,6 +68,9 @@ for ($k=3; $k<=$totalResultado; $k++) {
         	//echo $linha[vocontrato::$nmAtrLinkDoc];
         	
             $result = $dbprocesso->incluirContratoImport($tipoContrato, $linha);
+        }catch(excecaoFimImportacaoContrato $ex){
+           	//encerra a busca
+           	break;            
         }catch(Exception $e){
             $msgErro = $e->getMessage();
             echo $msgErro;
