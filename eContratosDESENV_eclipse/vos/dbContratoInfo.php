@@ -78,9 +78,9 @@ class dbContratoInfo extends dbprocesso {
 				$nmTabela . ".*",
 				$filtro->getSqlAtributoCoalesceAutorizacao() . " AS " . filtroManterContratoInfo::$NmColAutorizacao,
 				//$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome. " AS " . vopessoa::$nmAtrNome,
-				getSQLCOALESCE($colecaoAtributoCoalesceNmPessoa,vopessoa::$nmAtrNome),				
+				getSQLCOALESCE($colecaoAtributoCoalesceNmPessoa,vopessoa::$nmAtrNome),
 				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
-				$colunaUsuHistorico 
+				$colunaUsuHistorico
 		);
 		
 		$groupbyinterno = $nmTabela . "." . vocontrato::$nmAtrAnoContrato . "," . $nmTabela . "." . vocontrato::$nmAtrCdContrato . "," . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;

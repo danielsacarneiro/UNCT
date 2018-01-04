@@ -124,7 +124,7 @@ function exibeAlertaPorColecao($colecao, $enviarEmail, $assuntoParam, $colunasAE
 		echo $assunto . "<br>";
 		echo $mensagem . "<br>";
 		if ($enviarEmail && email_sefaz::$FLAG_ENVIAR_EMAIL) {
-			$mail = new email_sefaz ();
+			$mail = new email_sefaz ($assunto);
 			$enviado = $mail->enviarMensagem ( email_sefaz::getListaEmailJuridico (), $mensagem, $assunto );
 			if ($enviado) {
 				echo "Alerta realizado com sucesso";

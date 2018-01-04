@@ -81,7 +81,20 @@ function isFormularioValido() {
 		exibirMensagem("Tipo da Demanda não permite inclusão de contrato");	
 		return false;		
 	}
-	
+
+	campoDataReferencia = document.frm_principal.<?=voDemandaTramitacao::$nmAtrDtReferencia?>;
+	campoAno = document.frm_principal.<?=voDemandaTramitacao::$nmAtrAno?>;
+	<?php 
+	if($isInclusao){
+	?>
+	if(!isCampoDataValidoPorCampoAno(campoDataReferencia, campoAno)){
+		exibirMensagem("Data deve pertencer ao ano selecionado.");	
+		return false;		
+	}
+	<?php 
+	}
+	?>
+			
 	return true;
 }
 
