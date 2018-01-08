@@ -75,9 +75,15 @@ class filtroManterPessoa extends filtroManter{
 		
 		if($this->inAtribuicaoPAAP != null){
 			$filtro = $filtro . $conector
-			. $nmTabelaPessoaVinculo. "." .vopessoavinculo::$nmAtrInAtribuicaoPAAP
+			. "($nmTabelaPessoaVinculo." .vopessoavinculo::$nmAtrInAtribuicaoPAAP
 			. " = "
-					. getVarComoString($this->inAtribuicaoPAAP);
+			. getVarComoString($this->inAtribuicaoPAAP);
+			
+			if($this->inAtribuicaoPAAP == constantes::$CD_NAO){
+				$filtro .= " OR $nmTabelaPessoaVinculo." . vopessoavinculo::$nmAtrInAtribuicaoPAAP . " IS NULL";
+			}
+			
+			$filtro .= ") ";
 		
 					$conector  = "\n AND ";
 		}

@@ -133,7 +133,13 @@ function alterar() {
                      <?php
                     include_once("biblioteca_htmlPessoa.php");
                     include_once(caminho_vos . "vopessoavinculo.php");
-                    echo getComboPessoaVinculo(vopessoavinculo::$nmAtrCd, vopessoavinculo::$nmAtrCd, $filtro->cdvinculo, "camponaoobrigatorio", "");                                        
+                    echo getComboPessoaVinculo(vopessoavinculo::$nmAtrCd, vopessoavinculo::$nmAtrCd, $filtro->cdvinculo, "camponaoobrigatorio", "");
+                    
+                    include_once(caminho_util. "dominioSimNao.php");
+                    $comboSimNao = new select(dominioSimNao::getColecao());
+                    echo "&nbsp;&nbsp;Atribuição de PAAP?: ";
+                    echo $comboSimNao->getHtmlCombo(vopessoavinculo::$nmAtrInAtribuicaoPAAP,vopessoavinculo::$nmAtrInAtribuicaoPAAP, $filtro->inAtribuicaoPAAP, true, "camponaoobrigatorio", false,"");
+                    
                     ?>
             </TR>
             <TR>

@@ -235,7 +235,7 @@ function abrirJanelaAuxiliarGestor(){
 			            include_once(caminho_util. "dominioSimNao.php");
 			            $comboSimNao = new select(dominioSimNao::getColecao());	             
 			            echo "Tem atribuição de instruir PAAP?: ";
-			            echo $comboSimNao->getHtmlCombo(vopessoavinculo::$nmAtrInAtribuicaoPAAP,vopessoavinculo::$nmAtrInAtribuicaoPAAP, $vopessoavinculo->inAtribuicaoPAAP, true, "camponaoobrigatorio", false,"");
+			            echo $comboSimNao->getHtmlCombo(vopessoavinculo::$nmAtrInAtribuicaoPAAP,vopessoavinculo::$nmAtrInAtribuicaoPAAP, $vopessoavinculo->inAtribuicaoPAAP, true, "camponaoobrigatorio", false," required ");
 			            ?>
                     </div>
             </TR>               
