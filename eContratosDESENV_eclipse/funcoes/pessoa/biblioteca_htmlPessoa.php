@@ -102,6 +102,7 @@ function getComboPessoaRespPA($idCampo, $nmCampo, $cdOpcaoSelecionada, $classCam
 	$dbprocesso = new dbpessoa();
 	$filtro = new filtroManterPessoa(false);
 	$filtro->cdvinculo = dominioVinculoPessoa::$CD_VINCULO_SERVIDOR;
+	$filtro->inAtribuicaoPAAP = constantes::$CD_SIM;
 	$filtro->cdAtrOrdenacao = null;
 	$recordset = $dbprocesso->consultarPessoaManter($filtro, false);
 		

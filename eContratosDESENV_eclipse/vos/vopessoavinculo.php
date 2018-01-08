@@ -3,10 +3,12 @@ include_once(caminho_lib."voentidade.php");
 
   Class vopessoavinculo extends voentidade{
 		static $nmAtrCd  = "vi_cd";
-		static $nmAtrCdPessoa  = "pe_cd";		
+		static $nmAtrCdPessoa  = "pe_cd";
+		static $nmAtrInAtribuicaoPAAP = "vi_inatribuicaoPAAP";
         
 		var $cd  = "";		
         var $cdPessoa  = "";
+        var $inAtribuicaoPAAP = "";
 
 // ...............................................................
 // Funcoes ( Propriedades e métodos da classe )
@@ -14,6 +16,7 @@ include_once(caminho_lib."voentidade.php");
    function __construct() {
        parent::__construct();
        $this->temTabHistorico = false;
+       $this->inAtribuicaoPAAP = constantes::$CD_NAO;
               
        //retira os atributos padrao que nao possui
        //remove tambem os que o banco deve incluir default
@@ -48,7 +51,8 @@ include_once(caminho_lib."voentidade.php");
     function getAtributosFilho(){                
         $retorno = array(
             self::$nmAtrCd,            
-        	self::$nmAtrCdPessoa
+        	self::$nmAtrCdPessoa,
+        	self::$nmAtrInAtribuicaoPAAP,
         );
         
         return $retorno;    
@@ -58,6 +62,7 @@ include_once(caminho_lib."voentidade.php");
         //as colunas default de voentidade sao incluidas pelo metodo getDadosBanco do voentidade
 		$this->cd = $registrobanco[self::$nmAtrCd];
 		$this->cdPessoa = $registrobanco[self::$nmAtrCdPessoa];
+		$this->inAtribuicaoPAAP = $registrobanco[self::$nmAtrInAtribuicaoPAAP];
 	}   
 	
 	/*function getDadosFormulario(){
@@ -78,7 +83,8 @@ include_once(caminho_lib."voentidade.php");
                 
 	function toString(){						
 		$retorno.= $this->cd . ",";
-        $retorno.= $this->cdPessoa . ",";		
+        $retorno.= $this->cdPessoa . ",";
+        $retorno.= $this->inAtribuicaoPAAP . ",";
 		return $retorno;		
 	}   
 	
@@ -91,6 +97,7 @@ include_once(caminho_lib."voentidade.php");
 		$array = explode(CAMPO_SEPARADOR,$chave);
 		$this->cd = $array[0];
 		$this->cdPessoa = $array[1];
+		$this->inAtribuicaoPAAP = $array[2];
 	}	
 
 }

@@ -75,27 +75,32 @@ class dbContratoInfo extends dbprocesso {
 		);
 		
 		$arrayColunasRetornadas = array (
-				$nmTabela . ".*",
+				//$nmTabela . ".*",
+				"$nmTabela.". voContratoInfo::$nmAtrAnoContrato,
+				"$nmTabela.". voContratoInfo::$nmAtrTipoContrato,
+				"$nmTabela.". voContratoInfo::$nmAtrCdContrato,
+				"$nmTabela.". voContratoInfo::$nmAtrDtProposta,
 				$filtro->getSqlAtributoCoalesceAutorizacao() . " AS " . filtroManterContratoInfo::$NmColAutorizacao,
-				//$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome. " AS " . vopessoa::$nmAtrNome,
-				getSQLCOALESCE($colecaoAtributoCoalesceNmPessoa,vopessoa::$nmAtrNome),
+				getSQLNmContratada(),
+				//getSQLCOALESCE($colecaoAtributoCoalesceNmPessoa,vopessoa::$nmAtrNome),
 				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
 				$colunaUsuHistorico
 		);
 		
-		$groupbyinterno = $nmTabela . "." . vocontrato::$nmAtrAnoContrato . "," . $nmTabela . "." . vocontrato::$nmAtrCdContrato . "," . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
+		//$groupbyinterno = $nmTabela . "." . vocontrato::$nmAtrAnoContrato . "," . $nmTabela . "." . vocontrato::$nmAtrCdContrato . "," . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
+		$groupbyinterno = $nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato . "," . $nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato . "," . $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato;
 		
 		$nmTabContratoInterna = vocontrato::getNmTabelaStatic ( false );
 		$nmTabContratoSqMAX = "TAB_MAXCONTRATO";
-		$queryJoin .= "\n left JOIN ";
+		$queryJoin .= "\n LEFT JOIN ";
 		$queryJoin .= " (SELECT " . $groupbyinterno . ", MAX(" . vocontrato::$nmAtrSqContrato . ") AS " . vocontrato::$nmAtrSqContrato . " FROM " . $nmTabContratoInterna;
-		$queryJoin .= " INNER JOIN " . $nmTabela;
+		/*$queryJoin .= " INNER JOIN " . $nmTabela;
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabela . "." . voContratoInfo::$nmAtrAnoContrato . "=" . $nmTabContratoInterna . "." . vocontrato::$nmAtrAnoContrato;
 		$queryJoin .= "\n AND ";
 		$queryJoin .= $nmTabela . "." . voContratoInfo::$nmAtrTipoContrato . "=" . $nmTabContratoInterna . "." . vocontrato::$nmAtrTipoContrato;
 		$queryJoin .= "\n AND ";
-		$queryJoin .= $nmTabela . "." . voContratoInfo::$nmAtrCdContrato . "=" . $nmTabContratoInterna . "." . vocontrato::$nmAtrCdContrato;
+		$queryJoin .= $nmTabela . "." . voContratoInfo::$nmAtrCdContrato . "=" . $nmTabContratoInterna . "." . vocontrato::$nmAtrCdContrato;*/
 		$queryJoin .= " GROUP BY " . $groupbyinterno;
 		$queryJoin .= "\n) " . $nmTabContratoSqMAX;
 		$queryJoin .= "\n ON ";
@@ -105,7 +110,7 @@ class dbContratoInfo extends dbprocesso {
 		$queryJoin .= "\n AND ";
 		$queryJoin .= $nmTabela . "." . voContratoInfo::$nmAtrTipoContrato . "=" . $nmTabContratoSqMAX . "." . vocontrato::$nmAtrTipoContrato;
 		
-		$queryJoin .= "\n left JOIN " . $nmTabelaContrato;
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaContrato;
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato . "=" . $nmTabContratoSqMAX . "." . vocontrato::$nmAtrSqContrato;
 		
@@ -159,7 +164,7 @@ class dbContratoInfo extends dbprocesso {
 				//$nmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato . " AS " . filtroConsultarContratoConsolidacao::$NmColDtFimVigencia,
 				$nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrDtProposta,
 				$filtro->getSqlAtributoCoalesceAutorizacao() . " AS " . filtroManterContratoInfo::$NmColAutorizacao,
-				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
+				getSQLNmContratada(),
 				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
 		);
 	

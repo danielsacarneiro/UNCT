@@ -91,6 +91,8 @@ class db {
 	}
 	
 	function levantaExcecao($query, $ex = null){	
+		$query = str_replace ( constantes::$CD_NOVA_LINHA, "", $query );
+		
 		$msg = "<br>----ERROR------:<br>" . mysqli_error ( $this->id_conexao ) . "<br>";
 		$msg .= $ex->getMessage (). "<br>";
 		$msg = "$msg. Query: $query";

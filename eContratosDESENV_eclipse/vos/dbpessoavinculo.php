@@ -29,7 +29,8 @@ include_once(caminho_lib. "dbprocesso.obj.php");
     function getSQLValuesInsert($vopessoavinculo){
 		$retorno = "";        
         $retorno.= $this-> getVarComoNumero($vopessoavinculo->cd) . ",";
-        $retorno.= $this-> getVarComoNumero($vopessoavinculo->cdPessoa);
+        $retorno.= $this-> getVarComoNumero($vopessoavinculo->cdPessoa) . ",";
+        $retorno.= $this-> getVarComoString($vopessoavinculo->inAtribuicaoPAAP);
         
         $retorno.= $vopessoavinculo->getSQLValuesInsertEntidade();
 		        
@@ -50,6 +51,11 @@ include_once(caminho_lib. "dbprocesso.obj.php");
             $sqlConector = ",";
         }
                 
+        if($vo->inAtribuicaoPAAP != null){
+        	$retorno.= $sqlConector . vopessoavinculo::$nmAtrInAtribuicaoPAAP . " = " . $this->getVarComoString($vo->inAtribuicaoPAAP);
+        	$sqlConector = ",";
+        }
+        
         $retorno = $retorno . $sqlConector . $vo->getSQLValuesUpdate();
 		        
 		return $retorno;                

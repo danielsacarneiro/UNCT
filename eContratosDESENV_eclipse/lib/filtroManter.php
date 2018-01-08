@@ -158,11 +158,22 @@ class filtroManter extends multiplosConstrutores {
 				//seta para nao, para nao trazer os desativados como default
 				$this->inDesativado = constantes::$CD_NAO;
 			}
-				
+			
 			if($this->inDesativado != null && $this->inDesativado != constantes::$CD_OPCAO_TODOS){
 				$strFiltro = $strFiltro . $conector . $this->voPrincipal->getNmTabela() . "." . voentidade::$nmAtrInDesativado . " = '" . $this->inDesativado . "'";
 				$conector = "\n AND ";
-			}
+			}				
+			
+			/*if($this->inDesativado != null && $this->inDesativado != constantes::$CD_OPCAO_TODOS){				
+				$atributoComparar = $this->voPrincipal->getNmTabela() . "." . voentidade::$nmAtrInDesativado;
+				
+				//MARRETA: so esta com a condicao de IS NULL NA UNICA OPCAO de que ha um JOIN com outra tabela que nao utilize o in_desativado
+				//como por exemplo a consulta da tela de vocontratoinfo, em que se busca na tabela principal vocontrato, e ai nesse caso
+				//o in_desativado, que tem o vocontratoinfo como voprincipal, pode ser nulo
+				//
+				$strFiltro = $strFiltro . $conector . "($atributoComparar IS NULL OR ($atributoComparar IS NOT NULL AND $atributoComparar = '" . $this->inDesativado . "')) ";
+				$conector = "\n AND ";
+			}*/
 		}
 		
 		// agora sim inclui os valores de filtro

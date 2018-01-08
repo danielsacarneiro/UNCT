@@ -6,7 +6,8 @@ include_once(caminho_util."DocumentoPessoa.php");
   Class vopessoa extends voentidade{
         //var $nmTable = "contrato_import";
 		//para teste       
-		static $ID_REQ_DIV_CONTRATADO = "ID_REQ_DIV_CONTRATADO";	
+		static $ID_REQ_DIV_CONTRATADO = "ID_REQ_DIV_CONTRATADO";
+		static $ID_REQ_DIV_SERVIDOR = "ID_REQ_DIV_SERVIDOR";
   	
 		static $nmAtrCd  = "pe_cd";
 		static $nmAtrIdUser  = "ID";
@@ -30,6 +31,8 @@ include_once(caminho_util."DocumentoPessoa.php");
         var $tel =  "";
         var $obs =  "";
         var $inPAT = "";
+        var $cdVinculo = "";
+        var $inAtribuicaoPAAP = "";
 
 // ...............................................................
 // Funções ( Propriedades e métodos da classe )
@@ -119,6 +122,7 @@ include_once(caminho_util."DocumentoPessoa.php");
                 
         //vinculo
         $this->cdVinculo = @$_POST[vopessoavinculo::$nmAtrCd];
+        $this->inAtribuicaoPAAP = @$_POST[vopessoavinculo::$nmAtrInAtribuicaoPAAP];
         $this->cdGestor = @$_POST[vogestor::$nmAtrCd];
         
         //completa com os dados da entidade

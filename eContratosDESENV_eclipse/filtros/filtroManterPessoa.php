@@ -15,6 +15,7 @@ class filtroManterPessoa extends filtroManter{
     var $doc="";
     var $nome="";
     var $cdvinculo="";
+    var $inAtribuicaoPAAP ="";
     
     var $cdContrato="";
     var $anoContrato="";
@@ -32,6 +33,7 @@ class filtroManterPessoa extends filtroManter{
 		$this->doc = @$_POST[vopessoa::$nmAtrDoc];
 		$this->nome = @$_POST[vopessoa::$nmAtrNome];
 		$this->cdvinculo = @$_POST[vopessoavinculo::$nmAtrCd];
+		$this->inAtribuicaoPAAP = @$_POST[vopessoavinculo::$nmAtrInAtribuicaoPAAP];
 	}
 	
 	function getFiltroConsultaSQL($comAtributoOrdenacao = null){
@@ -68,6 +70,15 @@ class filtroManterPessoa extends filtroManter{
 					. " = "
 					. $this->cdvinculo;
 						
+					$conector  = "\n AND ";
+		}
+		
+		if($this->inAtribuicaoPAAP != null){
+			$filtro = $filtro . $conector
+			. $nmTabelaPessoaVinculo. "." .vopessoavinculo::$nmAtrInAtribuicaoPAAP
+			. " = "
+					. getVarComoString($this->inAtribuicaoPAAP);
+		
 					$conector  = "\n AND ";
 		}
 		

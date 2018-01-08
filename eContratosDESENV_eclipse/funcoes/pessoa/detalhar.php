@@ -164,6 +164,16 @@ function confirmar() {
 		                    <TD class="tabeladados">Órgão Gestor: <?php echo complementarCharAEsquerda($cdGestor, "0", TAMANHO_CODIGOS) . " - " . $gestor;?></TD>
 			                <?php
 							}				
+
+							if($cdVinculo == dominioVinculoPessoa::$CD_VINCULO_SERVIDOR){								
+								$inPAAP = $colecao[vopessoavinculo::$nmAtrInAtribuicaoPAAP];
+								if($inPAAP == null){
+									$inPAAP = constantes::$CD_NAO;
+								}
+							?>
+							<TD class="tabeladados">Atribuição de PAAP: <?php echo dominioSimNao::getDescricaoStatic($inPAAP);?></TD>
+							<?php
+							}
 							
 							if($cdVinculo == dominioVinculoPessoa::$CD_VINCULO_CONTRATADO){
 								include_once(caminho_util. "dominioSimNao.php");

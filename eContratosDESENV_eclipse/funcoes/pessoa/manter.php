@@ -27,6 +27,10 @@ if($isInclusao){
 	$dbprocesso = new dbpessoa(null);					
 	$colecao = $dbprocesso->consultarPorChave($vo, $isHistorico);	
 	$vo->getDadosBanco($colecao);
+	
+	$vopessoavinculo = new vopessoavinculo();
+	$vopessoavinculo->getDadosBanco($colecao);
+	
 	putObjetoSessao($vo->getNmTabela(), $vo);
 
     $nmFuncao = "ALTERAR ";
@@ -106,6 +110,7 @@ function verificaVinculo(){
 	vinculo = document.frm_principal.<?=vopessoavinculo::$nmAtrCd?>.value;
 	campoDIVGestor = document.getElementById("<?=vogestor::getNmTabela()?>");
 	campoDIVContratado = document.getElementById("<?=vopessoa::$ID_REQ_DIV_CONTRATADO?>");
+	campoDIVServidor = document.getElementById("<?=vopessoa::$ID_REQ_DIV_SERVIDOR?>");
 	if(vinculo == <?=dominioVinculoPessoa::$CD_VINCULO_RESPONSAVEL?>){
 		campoDIVGestor.style.display = "";		
 	}
@@ -120,7 +125,14 @@ function verificaVinculo(){
 	else{ 
 		campoDIVContratado.style.display = "none";
 	}	
-		
+
+	if(vinculo == <?=dominioVinculoPessoa::$CD_VINCULO_SERVIDOR?>){
+		campoDIVServidor.style.display = "";		
+	}
+	else{ 
+		campoDIVServidor.style.display = "none";
+	}	
+	
 }
 
 function iniciar(){
@@ -203,7 +215,7 @@ function abrirJanelaAuxiliarGestor(){
                 <TD class="campoformulario" colspan="3">
                      <?php
                     include_once("biblioteca_htmlPessoa.php");
-                    echo getComboPessoaVinculo(vopessoavinculo::$nmAtrCd, vopessoavinculo::$nmAtrCd, $colecao[vopessoavinculo::$nmAtrCd], "camponaoobrigatorio", " required onChange='verificaVinculo();' ");                    
+                    echo getComboPessoaVinculo(vopessoavinculo::$nmAtrCd, vopessoavinculo::$nmAtrCd, $vopessoavinculo->cd, "camponaoobrigatorio", " required onChange='verificaVinculo();' ");                    
                     ?>                     
                     <div id="<?=vogestor::getNmTabela()?>">
 	                    Órgão Gestor/Código:<INPUT type="text" id="<?=vogestor::$nmAtrCd?>" name="<?=vogestor::$nmAtrCd?>" value="<?=complementarCharAEsquerda($colecao[vogestor::$nmAtrCd], "0", TAMANHO_CODIGOS)?>"  class="camporeadonly" size="5" readonly>
@@ -216,6 +228,14 @@ function abrirJanelaAuxiliarGestor(){
 			            $comboSimNao = new select(dominioSimNao::getColecao());	             
 			            echo "Participa do PAT (Programa de Alimentação do Trabalhador)?: ";
 			            echo $comboSimNao->getHtmlCombo(vopessoa::$nmAtrInPAT,vopessoa::$nmAtrInPAT, $vo->inPAT, true, "camponaoobrigatorio", false,"");
+			            ?>
+                    </div>
+                    <div id="<?=vopessoa::$ID_REQ_DIV_SERVIDOR?>">
+		                <?php 
+			            include_once(caminho_util. "dominioSimNao.php");
+			            $comboSimNao = new select(dominioSimNao::getColecao());	             
+			            echo "Tem atribuição de instruir PAAP?: ";
+			            echo $comboSimNao->getHtmlCombo(vopessoavinculo::$nmAtrInAtribuicaoPAAP,vopessoavinculo::$nmAtrInAtribuicaoPAAP, $vopessoavinculo->inAtribuicaoPAAP, true, "camponaoobrigatorio", false,"");
 			            ?>
                     </div>
             </TR>               

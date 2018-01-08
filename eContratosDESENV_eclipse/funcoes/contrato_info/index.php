@@ -216,7 +216,9 @@ function alterar() {
                 if (is_array($colecao))
                         $tamanho = sizeof($colecao);
                 else 
-                        $tamanho = 0;                                
+                        $tamanho = 0;
+                
+                //echoo($tamanho);               
                                 
                 $colspan=8;
                 if($isHistorico){
@@ -226,7 +228,7 @@ function alterar() {
                 $dominioTipoContrato = new dominioTipoContrato();
                 $dominioAutorizacao = new dominioAutorizacao();
                 
-                for ($i=0;$i<$tamanho;$i++) {
+               for ($i=0;$i<$tamanho;$i++) {
                         $voAtual = new voContratoInfo();
                         $voAtual->getDadosBanco($colecao[$i]);     
 
@@ -262,7 +264,7 @@ function alterar() {
                     <TD class="tabeladados" nowrap><?php echo $dominioAutorizacao->getDescricao($autorizacaoAtual)?></TD>
                 </TR>					
                 <?php
-				}				
+				}                
                 ?>
                 <TR>
                     <TD class="tabeladadosalinhadocentro" colspan=<?=$colspan?>><?=$paginacao->criarLinkPaginacaoGET()?></TD>

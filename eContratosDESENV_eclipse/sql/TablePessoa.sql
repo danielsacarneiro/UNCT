@@ -133,12 +133,15 @@ drop table pessoa_vinculo;
 CREATE TABLE pessoa_vinculo (
 	vi_cd INT NOT NULL,
     pe_cd INT NOT NULL,
+    vi_inatribuicaoPAAP CHAR(1),
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_ultalt INT,
 
         
     CONSTRAINT pk PRIMARY KEY (vi_cd, pe_cd)
 );
+ALTER TABLE pessoa_vinculo ADD COLUMN vi_inatribuicaoPAAP CHAR(1) NULL AFTER pe_cd;
+
 ALTER TABLE pessoa_vinculo ADD CONSTRAINT fk_pessoa_vinculo FOREIGN KEY ( pe_cd ) REFERENCES pessoa (pe_cd) 
 ON DELETE RESTRICT
 ON UPDATE RESTRICT;

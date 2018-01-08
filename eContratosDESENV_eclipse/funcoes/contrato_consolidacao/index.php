@@ -270,6 +270,11 @@ function movimentacoes(){
                                            
                         $tipo = $dominioTipoContrato->getDescricao($colecao[$i]["ct_tipo"]);
                         $autorizacaoAtual = $colecao[$i][filtroConsultarContratoConsolidacao::$NmColAutorizacao];
+                        
+                        $dsPessoa = $voPessoa->nome;
+                        if($dsPessoa == null){
+                        	$dsPessoa = "<B>CONTRATO NÃO INCLUÍDO NA PLANILHA</B>";
+                        }
                    ?>
                 <TR class="dados">
                     <TD class="tabeladados">
@@ -285,7 +290,7 @@ function movimentacoes(){
                     <TD class="tabeladadosalinhadodireita"><?php echo $voAtual->anoContrato;?></TD>
                     <TD class="tabeladadosalinhadodireita" ><?php echo complementarCharAEsquerda($voAtual->cdContrato, "0", TAMANHO_CODIGOS_SAFI)?></TD>
                     <TD class="tabeladados" nowrap><?php echo $tipo?></TD>
-					<TD class="tabeladados" nowrap><?php echo $voPessoa->nome?></TD>
+					<TD class="tabeladados" nowrap><?php echo $dsPessoa?></TD>
 					<TD class="tabeladados" nowrap><?php echo documentoPessoa::getNumeroDocFormatado($voPessoa->doc)?></TD>
 					<TD class="tabeladados" nowrap><?php echo getData($voAtual->dtProposta)?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($colecao[$i][filtroConsultarContratoConsolidacao::$NmColDtInicioVigencia])?></TD>

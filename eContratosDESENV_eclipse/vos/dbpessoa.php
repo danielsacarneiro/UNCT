@@ -16,6 +16,7 @@ class dbpessoa extends dbprocesso {
 		
 		$arrayColunasRetornadas = array($nmTabela . ".*",
 				vopessoavinculo::getNmTabela () . "." . vopessoavinculo::$nmAtrCd,
+				vopessoavinculo::getNmTabela () . "." . vopessoavinculo::$nmAtrInAtribuicaoPAAP,
 				vogestor::getNmTabela () . "." . vogestor::$nmAtrCd,
 				vogestor::getNmTabela () . "." . vogestor::$nmAtrDescricao
 		);		
@@ -93,6 +94,7 @@ class dbpessoa extends dbprocesso {
 		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrEmail;
 		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrTel;
 		$atributosConsulta .= "," . vopessoavinculo::getNmTabela () . "." . vopessoavinculo::$nmAtrCd;
+		$atributosConsulta .= "," . vopessoavinculo::getNmTabela () . "." . vopessoavinculo::$nmAtrInAtribuicaoPAAP;
 		
 		if($filtro->isHistorico()){
 			$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrSqHist;
@@ -184,6 +186,8 @@ class dbpessoa extends dbprocesso {
 		$vopvinculo = new vopessoavinculo ();
 		$vopvinculo->cd = $vopessoa->cdVinculo;
 		$vopvinculo->cdPessoa = $vopessoa->cd;
+		$vopvinculo->inAtribuicaoPAAP = $vopessoa->inAtribuicaoPAAP;
+		
 		$dbpvinculo = new dbpessoavinculo ();
 		$dbpvinculo->cDb = $this->cDb;
 		$dbpvinculo->incluir ( $vopvinculo );
