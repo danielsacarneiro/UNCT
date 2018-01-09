@@ -45,9 +45,12 @@
 	}
     
 	public function criarLinkPaginacaoGET() {
+		$cdlupa = getCdLupa();
+		//echoo("eh lupa?" . $cdlupa);
 		for($i = 1; $i < $this->numPaginas + 1; $i++) {
-			if($this->paginaAtual != null && $i != $this->paginaAtual){					
-				echo "<a rel='nofollow' href=index.php?consultar=S&paginaAtual=".$i.">$i</a> ";										
+			if($this->paginaAtual != null && $i != $this->paginaAtual){
+				$link = "index.php?consultar=S&paginaAtual=$i&".constantes::$ID_REQ_CD_LUPA."=$cdlupa";
+				echo "<a rel='nofollow' href='$link'>$i</a> ";										
 			}else
 				echo "($i)";
 		}

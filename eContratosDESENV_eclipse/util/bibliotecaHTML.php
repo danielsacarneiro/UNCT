@@ -289,16 +289,24 @@ function getBotao($idBotao, $descricao, $classe, $isSubmit, $complementoHTML) {
 	
 	return $retorno;
 }
-function isLupa() {
+function getCdLupa() {
 	// vem do linkPesquisa ou do campo formulario
-	$lupa = @$_GET ["lupa"];
+	$lupa = @$_GET [constantes::$ID_REQ_CD_LUPA];
 	if ($lupa == null || $lupa == "") {
-		$lupa = @$_POST ["lupa"];
+		$lupa = @$_POST [constantes::$ID_REQ_CD_LUPA];
+	}
+
+	if ($lupa == null){
+		$lupa = "N";
 	}
 	
-	if ($lupa == null)
-		$lupa = "N";
-	
+	//echoo("eh lupa?" . $lupa);
+
+	return $lupa;
+}
+
+function isLupa() {
+	$lupa = getCdLupa();
 	return $lupa == "S";
 }
 function getBotaoValidacaoAcesso($idBotao, $descricao, $classe, $isSubmit, $imprimirNaLupa, $imprimirNaManutencao, $todosTemAcesso, $complementoHTML) {
@@ -359,7 +367,9 @@ function getRodape() {
 	if ($isLupa)
 		$lupa = "S";
 	
-	$retorno = "<INPUT type='hidden' name='lupa' id='lupa' value='" . $lupa . "'>\n";
+	$nmobjeto = constantes::$ID_REQ_CD_LUPA;
+	
+	$retorno = "<INPUT type='hidden' name='$nmobjeto' id='$nmobjeto' value='" . $lupa . "'>\n";
 	return $retorno;
 }
 function getBotoesRodape() {
