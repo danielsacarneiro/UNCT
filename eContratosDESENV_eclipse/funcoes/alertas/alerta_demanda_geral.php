@@ -15,10 +15,18 @@ function exibeAlertaDemandasPorFiltroDemanda($filtro, $enviarEmail, $assunto, $c
 	$dbprocesso = $voDemanda->dbprocesso;
 	$colecao = $dbprocesso->consultarTelaConsulta ( $voDemanda, $filtro );
 	
-	exibeAlertaDemandasPorColecao($colecao, $enviarEmail, $assunto, $colunasAAcrescentar);
+	$colunas = incluirColunaColecao($colunas, 'ANO DEMANDA', voDemanda::$nmAtrAno);
+	$colunas = incluirColunaColecao($colunas, 'NÚMERO', voDemanda::$nmAtrCd, constantes::$TAMANHO_CODIGOS);
+	$colunas = incluirColunaColecao($colunas, 'TÍTULO', voDemanda::$nmAtrTexto);
+	
+	if($colunasAAcrescentar !=null){
+		$colunas = array_merge($colunas, $colunasAAcrescentar);
+	}
+	
+	exibeAlertaPorColecao($colecao, $enviarEmail, $assunto, $colunas);
 }
 
-function exibeAlertaContrato($colecao, $enviarEmail, $assuntoParam, $colunasAAcrescentar) {
+function exibeAlertaContrato($colecao, $enviarEmail, $assuntoParam, $colunas) {
 
 	$colunas = incluirColunaColecao($colunas, constantes::$CD_COLUNA_CONTRATO, null);
 	$colunas = array_merge($colunas, $colunasAAcrescentar);
