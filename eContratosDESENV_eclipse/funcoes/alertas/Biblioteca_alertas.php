@@ -76,7 +76,7 @@ function getCorpoMensagemPorColecao($titulo, $colecao, $colunasAExibir) {
 			$mensagem = "HÁ PENDÊNCIAS.<BR>";				
 			$colspan = count($colunasAExibir);				
 			// enviar o email com os registros a serem analisados
-			$mensagem .= "<TABLE id='table_tabeladados' class='tabeladados' cellpadding='2' cellspacing='2' BORDER=1>\n
+			$mensagem .= "\n<TABLE id='table_tabeladados' class='tabeladados' cellpadding='2' cellspacing='2' BORDER=1>\n
 		<TBODY>";
 				
 			$mensagem .= "<TR>\n";
@@ -144,7 +144,7 @@ function getCorpoMensagemPorColecao($titulo, $colecao, $colunasAExibir) {
 	}
 	
 	$mensagem = $titulo . "<br>". $mensagem;
-	$mensagem .= "<br><br>";
+	$mensagem .= "<br>";
 	
 	return $mensagem;
 }
