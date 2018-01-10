@@ -1,12 +1,14 @@
 <?php
 //include_once ("../../config_lib.php");
+require_once (caminho_funcoes . vocontrato::getNmTabela () . "/dominioAutorizacao.php");
 require_once (caminho_lib . "phpmailer/config_email.php");
 
-$assunto = "REAJUSTES: NÃO HÁ DEMANDAS PARA ANALISAR";
+$assunto = "SAD: NÃO HÁ DEMANDAS PARA ANALISAR";
 $mensagem = "Nada a exibir";
-$voDemanda = new voDemanda ();
+
 try {
 	$filtro = new filtroManterDemanda ( false );
+	$voDemanda = new voDemanda ();
 	$dbprocesso = $voDemanda->dbprocesso;
 	
 	$filtro->isValidarConsulta = false;
@@ -16,27 +18,28 @@ try {
 			dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_ABERTA,
 			dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO 
 	);
-	$filtro->inContratoComDtPropostaVencida = constantes::$CD_SIM;
-	//$filtro->vodemanda->tipo = array_keys ( dominioTipoDemanda::getColecaoTipoDemandaSAD () );
-	$filtro->vodemanda->tipo = array(dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO_REAJUSTE);
-	
-	$filtro->vocontrato->dtProposta = getDataHoje();
-	//$filtro->vocontrato->dtProposta = "11/11/2017";
+	$filtro->vodemanda->tipo = array_keys ( dominioTipoDemanda::getColecaoTipoDemandaSAD () );
 	$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_ATJA;
+	$filtro->vocontrato->cdAutorizacao = array (
+			dominioAutorizacao::$CD_AUTORIZ_SAD 
+	);
+	//de acordo com a portaria 1.116/2016 (em se tratando de reajuste, o contrato de locacao de imovel prescinde de autorizacao da SAD)
+	$filtro->inRetornarReajusteSeLocacaoImovel = constantes::$CD_NAO;
 	$colecao = $dbprocesso->consultarTelaConsulta ( $voDemanda, $filtro );
 	
-	//so envia email se a consulta nao for vazia
-	$enviarEmail = false;	
+	$enviarEmail = true;
+	
+	$mensagem = "PARABÉNS! Não há demandas a serem analisadas.";
+	
+	$dominioTipoContrato = new dominioTipoContrato();
+	
 	if (! isColecaoVazia ( $colecao )) {
-		$enviarEmail = true;
-		$assunto = "REAJUSTES PENDENTES";
-		// enviar o email com os registros a serem analisados
+		$assunto = "SAD: DEMANDAS PENDENTES";
 		$mensagem = "DEMANDAS A ANALISAR: \n\n";
-		$mensagem .=
+		// enviar o email com os registros a serem analisados
+		$mensagem .=				
 		"<TABLE id='table_tabeladados' class='tabeladados' cellpadding='2' cellspacing='2' BORDER=1>\n
 		<TBODY>";
-		
-		$dominioTipoContrato = new dominioTipoContrato();
 		
 		foreach ( $colecao as $registro ) {
 			$voAtual = new voDemanda ();
@@ -44,7 +47,7 @@ try {
 			
 			$voDemandaContrato = new voDemandaContrato();
 			$voDemandaContrato->getDadosBanco($registro);
-				
+			
 			$contrato = "";
 			$empresa = $registro[vopessoa::$nmAtrNome];
 			if($qtContratos > 1){
@@ -53,7 +56,7 @@ try {
 				$contrato = formatarCodigoAnoComplemento($voDemandaContrato->voContrato->cdContrato,
 						$voDemandaContrato->voContrato->anoContrato,
 						$dominioTipoContrato->getDescricao($voDemandaContrato->voContrato->tipo));
-			
+					
 				if($empresa != null){
 					$contrato .= ": ".$empresa;
 				}
@@ -63,7 +66,7 @@ try {
 					"<TR>\n
 						<TD class='tabeladadosalinhadodireita'> $voAtual->ano </TD>\n
 						<TD class='tabeladadosdestacadonegrito'> " . complementarCharAEsquerda($voAtual->cd, '0', TAMANHO_CODIGOS) . "</TD>\n
-						<TD class='tabeladados' > $contrato </TD>\n
+						<TD class='tabeladados' > $contrato </TD>\n						
 						<TD class='tabeladados'> $voAtual->texto </TD>\n
 					</TR>\n";
 				
@@ -71,14 +74,11 @@ try {
 			$mensagem .=
 			"</TBODY>\n
 			</TABLE>";
-			
-			//echo $mensagem;
-		
 	} 
 	
 	// Exibe uma mensagem de resultado
 	echo $assunto . "<br>";
-	echo $mensagem . "<br>";
+	echo $mensagem  . "<br>";
 	if ($enviarEmail && email_sefaz::$FLAG_ENVIAR_EMAIL) {
 		$mail = new email_sefaz();
 		$enviado = $mail->enviarMensagem(email_sefaz::getListaEmailJuridico(), $mensagem, $assunto);
@@ -91,7 +91,6 @@ try {
 	}else {
 		echo "Não há alerta para exibir.";
 	}
-	
 } catch ( Exception $ex ) {
 	$msg = $ex->getMessage ();
 	echo $msg;
