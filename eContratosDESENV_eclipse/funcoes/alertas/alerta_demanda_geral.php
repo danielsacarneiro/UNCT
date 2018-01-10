@@ -48,6 +48,11 @@ function exibeAlertaDemandasContrato($colecao, $enviarEmail, $assuntoParam, $col
 
 //recebe colecao de registros e imprime as colunas indicadas em $colunasAExibir
 function exibeAlertaPorColecao($colecao, $enviarEmail, $assuntoParam, $colunasAExibir) {
+	
+	if($colunasAExibir == null){
+		throw new excecaoGenerica("Indique pelo menos uma coluna dos dados consultados para exibir.");
+	}
+	
 	$dominioTipoContrato = new dominioTipoContrato ();
 	$assunto = $assuntoParam . " NÃO HÁ PENDÊNCIAS";
 	$mensagem = "Nada a exibir";
