@@ -22,18 +22,36 @@ function formatarCodigoDocumento($sq, $cdSetor, $ano, $tpDoc){
 	return $str;
 }
 
-function getBotaoAbrirDocumentoMais($pNmCampolink, $nmFuncaoJavaScript){
+function getBotaoAbrirDocumentoMais($pNmCampolink, $nmFuncaoJavaScript, $isMenuSistema=false){
+	
+	$paramIsMenu = "false";
+	if($isMenuSistema){
+		$paramIsMenu = "true";
+	}
+	
 	$retorno = "";
-	$complementoJS = "onClick=javascript:".$nmFuncaoJavaScript."Cliente('" . $pNmCampolink. "');";
+	$complementoJS = "onClick=javascript:".$nmFuncaoJavaScript."Cliente('" . $pNmCampolink. "',$paramIsMenu);";
 	if(isUsuarioAdmin()){
-		$complementoJS = "onClick=javascript:".$nmFuncaoJavaScript."('" . $pNmCampolink. "');";
+		$complementoJS = "onClick=javascript:".$nmFuncaoJavaScript."('" . $pNmCampolink. "',$paramIsMenu);";
 	}		
 	$retorno = getBotaoValidacaoAcesso("bttabrirpasta", "Abrir", "botaofuncaop", false,true,true,true, "$complementoJS accesskey='m'");
 	return $retorno;
 }
 
-function getBotaoAbrirDocumento($pNmCampolink){	
-	return getBotaoAbrirDocumentoMais($pNmCampolink, "abrirArquivo");
+function getBotaoAbrirDocumento($pNmCampolink, $isMenuSistema=false){	
+	return getBotaoAbrirDocumentoMais($pNmCampolink, "abrirArquivo", $isMenuSistema);
+}
+
+function getBotaoAbrirDocumentoVO($vodoc, $isMenuSistema = true){
+	//$vodoc = new voDocumento();	
+	if($vodoc->ano == null){
+		throw new excecaoGenerica("Indique a chave do documento para o link.");
+	}
+	$chave = $vodoc->getValorChaveHTML();
+	$endereco = $vodoc->getEnderecoTpDocumento();
+	echo getInputHidden($chave, $chave, $endereco);
+	
+	return getBotaoAbrirDocumento($chave, $isMenuSistema);
 }
 
 ?>

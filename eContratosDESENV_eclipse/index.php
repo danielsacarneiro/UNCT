@@ -3,14 +3,12 @@ include_once("config_lib.php");
 include_once(caminho_util."bibliotecaHTML.php");
 include_once(caminho_util."constantes.class.php");
 
+try{
 //inicia os parametros
 inicio();
 
 $titulo = "MENU de Funções UNCT";
 setCabecalho($titulo);
-
-cabecalho;
-
 ?>
 
 <!DOCTYPE html>
@@ -19,6 +17,7 @@ cabecalho;
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>tooltip.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_treemenu.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_oficio.js"></SCRIPT>
 
 <SCRIPT language="javascript">
 	f = new Tree('Menu de Funcionalidades finalizadas e entregue a SEFAZ-PE (Homologação)', true);
@@ -39,11 +38,11 @@ cabecalho;
 	f3.adicionarItem(new Link("Demandas", "<?=caminho_funcoesHTML?>demanda", ""));
 	f.adicionarItem(f3);
 
-	f4 = new Tree('Serviço 04 (Proc.Admin.)');	
+	f4 = new Tree('Serviço 04 (Proc.Admin.)');
     f4.adicionarItem(new Link('P.A.s de Aplicação de Penalidade (PAAP)', '<?=caminho_funcoesHTML?>pa', ''));    
     f4.adicionarItem(new Link('Penalidades (PAAP)', '<?=caminho_funcoesHTML?>pa_penalidade', ''));
 	f.adicionarItem(f4);
-	
+
 	<?php if(isUsuarioAdmin()){?>
 	f5 = new Tree('Serviço 05 (ADMINISTRADOR)');
     f5.adicionarItem(new Link('Usuários', '<?=caminho_funcoesHTML?>usuario_info', ''));
@@ -86,13 +85,36 @@ cabecalho;
             			<TD class="conteinerconteudodados">
             			 <DIV id="div_conteudodados" class="conteudodados">
 							<TABLE id="table_conteudodados" class="conteudodados" cellpadding="0" cellspacing="0">
-
+									<?=$endereco?>
                     				<TR>
                         				<TD valign="top" bgcolor="#A5B9D7">
 											<SCRIPT>f.escrever(false, 0);</SCRIPT>
                         				</TD>
                     				</TR>
-                    				
+                    				<TR>
+                        				<TD class="tabeladadosdestacadonegrito">AJUDA (CHECKLIST):
+                        				</TD>
+                    				</TR>
+                    				<TR>
+                        				<TD class="campoformulario">
+                        					Visto Edital:
+											<?php
+											$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_OUTROS, 3));
+											$vodocumento = $vodocumento->dbprocesso->consultarPorChaveVO($vodocumento, false);
+											echo getBotaoAbrirDocumentoVO($vodocumento);
+											?>
+                        				</TD>
+                    				</TR>
+                    				<TR>
+                        				<TD class="campoformulario">
+                        					Visto Contratos:
+											<?php
+											$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_OUTROS, 4));
+											$vodocumento = $vodocumento->dbprocesso->consultarPorChaveVO($vodocumento, false);
+											echo getBotaoAbrirDocumentoVO($vodocumento);
+											?>
+                        				</TD>
+                    				</TR>                    				
                      				<!--<TR>
                                     	<TH  class="titulopassoapasso" ><B>Outros Sistemas</B></TH>
                                 	</TR>
@@ -110,3 +132,8 @@ cabecalho;
 		</FORM>
 </BODY>
 </HTML>
+<?php 
+}catch(Exception $ex){
+	tratarExcecaoHTML($ex, null, "funcoes/mensagemErro.php");
+}
+?>

@@ -134,7 +134,7 @@ class dbprocesso {
 	}
 	function consultarPorChaveVO($vo, $isHistorico) {
 		$registrobanco = $this->consultarPorChave ( $vo, $isHistorico );
-		$vo->getDadosBanco ( $registrobanco );
+		$vo->getDadosBancoPorChave ( $registrobanco );
 		
 		return $vo;
 	}

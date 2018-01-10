@@ -26,8 +26,8 @@ class voDocumento extends voentidade {
 	
 	// ...............................................................
 	// Funcoes ( Propriedades e métodos da classe )
-	function __construct() {
-		parent::__construct ();
+	function __construct($arrayChave = null) {
+		parent::__construct ($arrayChave);
 		$this->temTabHistorico = false;
 		$this->dbprocesso = new dbDocumento ();
 		

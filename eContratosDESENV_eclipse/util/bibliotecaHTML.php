@@ -743,7 +743,7 @@ function getDataHoraAtual() {
 function getDataHoje() {
 	return date ( 'd/m/Y' );
 }
-function tratarExcecaoHTML($ex, $vo = null) {
+function tratarExcecaoHTML($ex, $vo = null, $paginaErro="../mensagemErro.php") {
 	if ($vo != null) {
 		putObjetoSessao ( $vo->getNmTabela (), $vo );
 		// a debaixo eh para a tela de msg de erro
@@ -752,8 +752,8 @@ function tratarExcecaoHTML($ex, $vo = null) {
 	
 	$msg = $ex->getMessage ();
 	$msg = str_replace ( "\n", "", $msg );
-	
-	header ( "Location: ../mensagemErro.php?texto=" . $msg, TRUE, 307 );
+		
+	header ( "Location: $paginaErro?texto=" . $msg, TRUE, 307 );
 }
 function getStrComPuloLinhaHTML($str) {
 	return getStrComPuloLinhaGenerico ( $str, "<br>" );

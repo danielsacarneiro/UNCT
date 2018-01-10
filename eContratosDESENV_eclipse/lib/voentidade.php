@@ -36,8 +36,11 @@ class voentidade extends multiplosConstrutores {
 	var $nmUsuarioOperacao;
 	var $sqHist;
 	
-	// var $dbprocesso;
 	function __construct0() {
+		self::__construct1 (null);		
+	}
+	// var $dbprocesso;
+	function __construct1($arrayChave = null) {
 		// exemplo de chamada de construtor da classe pai em caso de override
 		// parent::__construct($altura,$grossura,$largura,$cor);
 		$this->varAtributos = array (
@@ -51,6 +54,11 @@ class voentidade extends multiplosConstrutores {
 		$this->NM_METODO_RETORNO_CONFIRMAR = null;
 		$this->temTabHistorico = true;
 		
+				
+		if ($arrayChave != null && method_exists ( $this, "getChavePrimariaVOExplode" )) {
+			$this->getChavePrimariaVOExplode ( $arrayChave );
+		}
+				
 		// cria a classe processo para todo vo
 		/*
 		 * $class = static::getNmClassProcesso();
