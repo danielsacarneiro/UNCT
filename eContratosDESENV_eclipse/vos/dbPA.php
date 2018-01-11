@@ -329,6 +329,13 @@ include_once (caminho_filtros."filtroManterPA.php");
     	return $colecao;
     }
     
+    function consultarVODemanda($vo) {    	
+    	//$vo = new voPA();
+    	$vodemanda = new voDemanda(array($vo->anoDemanda, $vo->cdDemanda));
+    	$vodemanda = $vodemanda->dbprocesso->consultarPorChaveVO($vodemanda, false);
+    	return $vodemanda;
+    }
+    
     function temPenalidade($vo) {
     	$colecao = $this->consultarPenalidade($vo);
     	return !isColecaoVazia($colecao);
@@ -337,6 +344,16 @@ include_once (caminho_filtros."filtroManterPA.php");
     function validarAlteracao($vo) {
     	//$vo = new voPA();    	
     	//$retorno = true;    	
+    	$vodemanda = $this->consultarVODemanda($vo);
+    	//$vodemanda = new voDemanda();
+    	$isDemandaFechada = $vodemanda->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA; 
+
+    	if(dominioSituacaoPA::existeItem($vo->situacao, dominioSituacaoPA::getColecaoSituacaoTerminados())){    		
+    		if(!$isDemandaFechada){
+    			throw new excecaoGenerica("Só é permitido terminar o processo cuja demanda esteja concluída.");
+    		}
+    	}
+    	
     	if($vo->situacao == dominioSituacaoPA::$CD_SITUACAO_PA_ENCERRADO){
     		$temPenalidade = $this->temPenalidade($vo);
     		if(!$temPenalidade){
@@ -350,7 +367,6 @@ include_once (caminho_filtros."filtroManterPA.php");
     		if($voBanco->dtPublicacao == null){
     			throw new excecaoGenerica("Só é permitido encerrar o processo que tenha sido publicado.");
     		}
-    		
     	}     	
     	//return $retorno;
     }

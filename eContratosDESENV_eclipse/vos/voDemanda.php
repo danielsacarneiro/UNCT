@@ -29,8 +29,8 @@ class voDemanda extends voentidade {
 	var $colecaoContrato = null;
 	// ...............................................................
 	// Funcoes ( Propriedades e métodos da classe )
-	function __construct() {
-		parent::__construct ();
+	function __construct($arrayChave = null) {
+		parent::__construct ($arrayChave);
 		$this->temTabHistorico = true;
 		$class = self::getNmClassProcesso ();
 		$this->dbprocesso = new $class ();
