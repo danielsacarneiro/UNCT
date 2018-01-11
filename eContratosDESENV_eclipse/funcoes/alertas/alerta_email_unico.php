@@ -11,6 +11,8 @@ $mensagem .= getMensagemDemandaSAD();
 $mensagem .= getMensagemFimPrazoPAAP();
 //envia alertas das demandas que devem ser analisadas pois ja tem suas proposta de precos vencida, tornando possivel o calculo do reajuste
 $mensagem .= getMensagemDemandaContratoPropostaVencida();
+//envia alertas dos contratos a vencer. Ainda depende de definicao da diretoria
+//$mensagem .= getMensagemContratosAVencer();
 
 echo $mensagem;
 
