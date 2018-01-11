@@ -10,14 +10,19 @@ function getHTMLConsultaPorDemanda($chave){
 	$vo = new voDemanda ();
 	$vo->getChavePrimariaVOExplodeParam ( $chave );
 	$colecaoContrato = consultarContratosDemanda ( $vo );
+	
+	if(!isColecaoVazia($colecaoContrato)){
+		$vo->getDadosBanco($colecaoContrato[0]);
+		$colecaoContrato = converteRecordSetEmColecaoVOsContrato ( $colecaoContrato );
 		
-	$vo->getDadosBanco($colecaoContrato[0]);
+		$retorno = "<TR><TD>Título: <INPUT type='text' value='" . $vo->texto . "'  class='camporeadonly' size='70' readonly></TD></TR>";
+		// vai na bibliotacontrato
+		$retorno = $retorno . getColecaoContratoDet ( $colecaoContrato );		
+	}else{
+		$stringTexto = getHTMLTextoObjetoNaoEncontrato();
+		$retorno = $stringTexto;
+	}
 	
-	$colecaoContrato = converteRecordSetEmColecaoVOsContrato ( $colecaoContrato );
-	
-	$retorno = "<TR><TD>Título: <INPUT type='text' value='" . $vo->texto . "'  class='camporeadonly' size='70' readonly></TD></TR>";
-	// vai na bibliotacontrato
-	$retorno = $retorno . getColecaoContratoDet ( $colecaoContrato );
 	return $retorno; 
 }
 function getHTMLConsultaPorPAAP($chave){

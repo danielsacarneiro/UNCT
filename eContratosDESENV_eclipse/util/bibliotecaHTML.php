@@ -797,4 +797,8 @@ function getColecaoComoVariavelJS($colecao, $nmVariavelJS){
 	}
 	return 	$jsvarColecao;
 }
+
+function getHTMLTextoObjetoNaoEncontrato(){
+	return "<INPUT type='text' class='camporeadonly' size=30 readonly value='NÃO ENCONTRADO'>\n";
+}
 ?>
