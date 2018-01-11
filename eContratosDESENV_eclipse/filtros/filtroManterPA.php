@@ -73,6 +73,7 @@ class filtroManterPA extends filtroManter{
 		
 		$nmTabelaContrato= $vocontrato->getNmTabelaEntidade(false);
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic(false);
+		$nmTabelaDemanda = voDemanda::getNmTabelaStatic(false);
 		$nmTabelaTramitacaoDoc = voDemandaTramDoc::getNmTabelaStatic(false);
 		
 		$isHistorico = $this->isHistorico;
@@ -117,11 +118,31 @@ class filtroManterPA extends filtroManter{
 		}
 		
 		if($this->situacao != null){
+			//a situacao EM ANDAMENTO nao existe no PA, ele pega da demanda
+			if($this->situacao == dominioSituacaoPA::$CD_SITUACAO_PA_EM_ANDAMENTO){
+				$filtro = $filtro . $conector
+				. $nmTabelaDemanda. "." .voDemanda::$nmAtrSituacao
+				. " = "
+				. dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO
+				;				
+			}else if($this->situacao == dominioSituacaoPA::$CD_SITUACAO_PA_INSTAURADO){
+				$filtro = $filtro . $conector
+				. "$nmTabelaDemanda." .voDemanda::$nmAtrSituacao
+				. " <> "
+				. dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO
+				. " AND $nmTabela." .voPA::$nmAtrSituacao
+				. " = "
+				. dominioSituacaoPA::$CD_SITUACAO_PA_INSTAURADO
+				
+				;				
+			}else{
+			
 			$filtro = $filtro . $conector
 					. $nmTabela. "." .voPA::$nmAtrSituacao
 					. " = "
 					. $this->situacao
 					;
+			}
 						
 			$conector  = "\n AND ";
 		}

@@ -5,6 +5,8 @@ class dominioSituacaoPA extends dominio {
 	static $CD_SITUACAO_PA_ARQUIVADO = 2;
 	static $CD_SITUACAO_PA_ENCERRADO = 3;
 	
+	static $CD_SITUACAO_PA_EM_ANDAMENTO= 99;
+	
 	static $DS_SITUACAO_PA_INSTAURADO = "Instaurado";
 	static $DS_SITUACAO_PA_ARQUIVADO = "Arquivado";
 	static $DS_SITUACAO_PA_ENCERRADO = "Encerrado";
@@ -20,6 +22,19 @@ class dominioSituacaoPA extends dominio {
 				self::$CD_SITUACAO_PA_ENCERRADO => self::$DS_SITUACAO_PA_ENCERRADO
 		);
 		
+		return $retorno;
+	}
+	
+	static function getColecaoConsulta() {
+		include_once (caminho_funcoes . "pa/dominioSituacaoPA.php");
+		
+		$acrescentar= array(
+				self::$CD_SITUACAO_PA_EM_ANDAMENTO => dominioSituacaoDemanda::$DS_SITUACAO_DEMANDA_EM_ANDAMENTO,
+				self::$CD_SITUACAO_PA_INSTAURADO => "Ainda não movimentado",
+		);
+		
+		$retorno = putElementoArray2NoArray1ComChaves($acrescentar, static::getColecaoSituacaoTerminados());
+	
 		return $retorno;
 	}
 	

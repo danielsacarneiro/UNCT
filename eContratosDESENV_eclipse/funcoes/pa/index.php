@@ -255,26 +255,21 @@ function validaFormulario() {
                         
                         $cdSituacaoDemanda = $registroAtual[voDemanda::$nmAtrSituacao];
                         $cdSituacao = $voAtual->situacao;
-                        $situacao = $domSiPA->getDescricao($cdSituacao);
-                        
-                        /*if($cdSituacaoDemanda != dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_ABERTA){
-                        	$situacao = dominioSituacaoPA::getDescricaoStatic($cdSituacao);
-                        }*/
-                        
-                        /*$contrato = formatarCodigoAnoComplemento($colecao[$i][voPA::$nmAtrCdContrato],
-                        						$colecao[$i][voPA::$nmAtrAnoContrato], 
-                        						$dominioTipoContrato->getDescricao($colecao[$i][voPA::$nmAtrTipoContrato]));
+                        if($cdSituacaoDemanda == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO){
+                        	$situacao = dominioSituacaoDemanda::getDescricaoStatic($cdSituacaoDemanda);
+                        	$classColunaSituacao = "tabeladadosdestacadoverde";
+                        }else{
+                        	$situacao = $domSiPA->getDescricao($cdSituacao);
+                        	
+                        	$classColunaSituacao = "tabeladadosdestacado";
+                        	if($cdSituacao == dominioSituacaoPA::$CD_SITUACAO_PA_ARQUIVADO
+                        			|| $cdSituacao == dominioSituacaoPA::$CD_SITUACAO_PA_ENCERRADO){
+                        				$classColunaSituacao = "tabeladadosdestacadoazulclaro";
+                        	}                        	
+                        }
                                                 
-                        $procAdm = formatarCodigoAno($colecao[$i][voPA::$nmAtrCdPA],
-                        		$colecao[$i][voPA::$nmAtrAnoPA]);*/
-                        
                         $tipo = $dominioTipoContrato->getDescricao($voContratoAtual->tipo);
                         
-                        $classColunaSituacao = "tabeladadosdestacado";
-                        if($cdSituacao == dominioSituacaoPA::$CD_SITUACAO_PA_ARQUIVADO
-                        		|| $cdSituacao == dominioSituacaoPA::$CD_SITUACAO_PA_ENCERRADO){
-                        	$classColunaSituacao = "tabeladadosdestacadoazulclaro";
-                        }
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados">

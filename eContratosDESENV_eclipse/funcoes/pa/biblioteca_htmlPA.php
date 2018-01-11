@@ -4,10 +4,8 @@ include_once(caminho_vos . "vocontrato.php");
 //include_once("dominioSituacaoPA.php");
 
 function getComboSituacaoPA($idCampo, $nmCampo, $cdOpcaoSelecionada, $classCampo, $tagHtml){
-	$dominio = new dominioSituacaoPA();
-	$select = new select($dominio->colecao);
-
-	$retorno = $select->getHtmlCombo($idCampo, $nmCampo, $cdOpcaoSelecionada, true, $classCampo, true, $tagHtml);
+	$select = new select(dominioSituacaoPA::getColecaoConsulta());
+	$retorno = $select->getHtmlCombo($idCampo, $nmCampo, $cdOpcaoSelecionada, true, $classCampo, false, $tagHtml);
 
 	return $retorno;
 }
