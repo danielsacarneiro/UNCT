@@ -259,10 +259,15 @@ function validaFormulario() {
                         $procAdm = formatarCodigoAno($colecao[$i][voPA::$nmAtrCdPA],
                         		$colecao[$i][voPA::$nmAtrAnoPA]);*/
                         
-                        $situacao = $colecao[$i][voPA::$nmAtrSituacao];
-                        $situacao = $domSiPA->getDescricao($situacao);  
+                        $cdSituacao = $voAtual->situacao;
+                        $situacao = $domSiPA->getDescricao($cdSituacao);  
                         $tipo = $dominioTipoContrato->getDescricao($voContratoAtual->tipo);
                         
+                        $classColunaSituacao = "tabeladadosdestacado";
+                        if($cdSituacao == dominioSituacaoPA::$CD_SITUACAO_PA_ARQUIVADO
+                        		|| $cdSituacao == dominioSituacaoPA::$CD_SITUACAO_PA_ENCERRADO){
+                        	$classColunaSituacao = "tabeladadosdestacadoazulclaro";
+                        }
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados">
@@ -286,7 +291,7 @@ function validaFormulario() {
                     <TD class="tabeladados"><?php echo $colecao[$i][$filtro->nmColNomePessoaContrato];?></TD>
                     <TD class="tabeladados" nowrap><?php echo $colecao[$i][$filtro->nmColNomePessoaResponsavel];?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($voAtual->dtAbertura);?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $situacao;?></TD>
+                    <TD class="<?=$classColunaSituacao?>" nowrap><?php echo $situacao;?></TD>
                 </TR>					
                 <?php
 				}				
