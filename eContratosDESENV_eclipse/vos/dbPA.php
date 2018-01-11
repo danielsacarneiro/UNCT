@@ -91,10 +91,19 @@ include_once (caminho_filtros."filtroManterPA.php");
     	$colunaUsuHistorico = "";
     	
     	if ($isHistorico) {
+    		$sqHist = $nmTabela . "." . voPA::$nmAtrSqHist;
     		$colunaUsuHistorico = static::$nmTabelaUsuarioOperacao . "." . vousuario::$nmAtrName . "  AS " . voDemanda::$nmAtrNmUsuarioOperacao;
     	}
     	$arrayColunasRetornadas = array (
-    			$nmTabela . ".*",
+    			//$nmTabela . ".*",
+    			$nmTabelaDemanda . "." . voDemanda::$nmAtrSituacao,
+    			$nmTabela . "." . voPA::$nmAtrAnoPA,
+    			$nmTabela . "." . voPA::$nmAtrCdPA,
+    			$nmTabela . "." . voPA::$nmAtrAnoDemanda,
+    			$nmTabela . "." . voPA::$nmAtrCdDemanda,
+    			$nmTabela . "." . voPA::$nmAtrSituacao,
+    			$nmTabela . "." . voPA::$nmAtrDtAbertura,
+    			$nmTabela . "." . voPA::$nmAtrCdResponsavel,
     			$nmTabelaPessoaResponsavel . "." . vopessoa::$nmAtrCd,
     			$nmTabelaPessoaResponsavel . "." . vopessoa::$nmAtrNome . " AS " . $filtro->nmColNomePessoaResponsavel,    			 
     			$nmTabelaContrato. "." . vocontrato::$nmAtrTipoContrato,
@@ -103,7 +112,8 @@ include_once (caminho_filtros."filtroManterPA.php");
     			$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd,
     			$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
     			$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome . " AS " . $filtro->nmColNomePessoaContrato,    			 
-    			$colunaUsuHistorico
+    			$colunaUsuHistorico,
+    			$sqHist
     	);
 
     	$queryFrom .= "\n INNER JOIN ". $nmTabelaDemanda;

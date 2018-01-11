@@ -143,10 +143,24 @@ function validarPublicacao(){
 			getDemandaDetalhamento($voDemanda);
 			getContratoDet($voContrato);
 			
+			$domSiPA = new dominioSituacaoPA();
+			$comboSituacao = new select($domSiPA::getColecao());				
+	        ?>
+			<TR>
+	            <TH class="campoformulario" nowrap>Situação:</TH>
+	            <TD class="campoformulario" colspan=3><?php echo $comboSituacao->getHtmlCombo(voPA::$nmAtrSituacao,voPA::$nmAtrSituacao, $vo->situacao, true, "campoobrigatorio", false, " required ");?></TD>
+				</TD>
+	        </TR>
+			
+			<?php			
 	        }else{
 	            $selectExercicio = new selectExercicio();
 	            $vo->dtAbertura = dtHojeSQL;
-			  ?>			            
+	            
+	            $domSiPA = new dominioSituacaoPA();
+	            $comboSituacao = new select($domSiPA::getColecao());
+	            echoo(getInputHidden(voPA::$nmAtrSituacao, voPA::$nmAtrSituacao, dominioSituacaoPA::$CD_SITUACAO_PA_INSTAURADO));
+	        ?>
 			<TR>
 		        <TH class="campoformulario" nowrap width="1%">P.A.A.P.:</TH>
 		        <TD class="campoformulario" colspan=3>		        
@@ -169,16 +183,6 @@ function validarPublicacao(){
 	        <?php 
 	       }	                    
 	       ?>	           				
-	        <?php 
-	        //require_once ("dominioSituacaoPA.php");	        
-	        $domSiPA = new dominioSituacaoPA();
-	        $comboSituacao = new select($domSiPA::getColecao());	        
-	        ?>
-			<TR>
-	            <TH class="campoformulario" nowrap>Situação:</TH>
-	            <TD class="campoformulario" colspan=3><?php echo $comboSituacao->getHtmlCombo(voPA::$nmAtrSituacao,voPA::$nmAtrSituacao, $vo->situacao, true, "campoobrigatorio", false, " required ");?></TD>
-				</TD>
-	        </TR>
             <TR>
 				<TH class="campoformulario" nowrap>Servidor Responsável:</TH>
                 <TD class="campoformulario" colspan="3">

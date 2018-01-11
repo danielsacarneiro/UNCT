@@ -249,8 +249,17 @@ function validaFormulario() {
                 for ($i=0;$i<$tamanho;$i++) {
                         $voAtual = new voPA();
                         $voContratoAtual = new vocontrato();
-                        $voAtual->getDadosBanco($colecao[$i]);     
-                        $voContratoAtual->getDadosBanco($colecao[$i]);
+                        $registroAtual = $colecao[$i];
+                        $voAtual->getDadosBanco($registroAtual);     
+                        $voContratoAtual->getDadosBanco($registroAtual);
+                        
+                        $cdSituacaoDemanda = $registroAtual[voDemanda::$nmAtrSituacao];
+                        $cdSituacao = $voAtual->situacao;
+                        $situacao = $domSiPA->getDescricao($cdSituacao);
+                        
+                        /*if($cdSituacaoDemanda != dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_ABERTA){
+                        	$situacao = dominioSituacaoPA::getDescricaoStatic($cdSituacao);
+                        }*/
                         
                         /*$contrato = formatarCodigoAnoComplemento($colecao[$i][voPA::$nmAtrCdContrato],
                         						$colecao[$i][voPA::$nmAtrAnoContrato], 
@@ -259,8 +268,6 @@ function validaFormulario() {
                         $procAdm = formatarCodigoAno($colecao[$i][voPA::$nmAtrCdPA],
                         		$colecao[$i][voPA::$nmAtrAnoPA]);*/
                         
-                        $cdSituacao = $voAtual->situacao;
-                        $situacao = $domSiPA->getDescricao($cdSituacao);  
                         $tipo = $dominioTipoContrato->getDescricao($voContratoAtual->tipo);
                         
                         $classColunaSituacao = "tabeladadosdestacado";
