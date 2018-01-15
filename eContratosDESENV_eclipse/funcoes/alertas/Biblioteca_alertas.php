@@ -70,7 +70,7 @@ function getCorpoMensagemPorColecao($titulo, $colecao, $colunasAExibir) {
 	$mensagem = "Nada a exibir";
 	try {
 
-		$mensagem = "PARABÉNS! Não há pendências.";
+		$mensagem = "PARABÉNS! Não há pendências.<br>";
 
 		if (! isColecaoVazia ( $colecao )) {
 			$mensagem = "HÁ PENDÊNCIAS.<BR>";				

@@ -43,8 +43,12 @@ setCabecalho($titulo);
     f4.adicionarItem(new Link('Penalidades (PAAP)', '<?=caminho_funcoesHTML?>pa_penalidade', ''));
 	f.adicionarItem(f4);
 
+	/*flegislacao = new Tree('Serviço 05 (Legislação)');    
+	flegislacao.adicionarItem(new Link('Decreto 42.191 - Aplicação de penalidade(PAAP)', 'h:\\ASSESSORIA JURÍDICA\\ATJA\\LEGISLAÇÃO\\DECRETO Nº 42.191 DE 2015 - APLICAÇÃO DE PENALIDADES A LICITANTES.pdf', ''));
+	f.adicionarItem(flegislacao);*/
+
 	<?php if(isUsuarioAdmin()){?>
-	f5 = new Tree('Serviço 05 (ADMINISTRADOR)');
+	f5 = new Tree('ADMINISTRADOR');
     f5.adicionarItem(new Link('Usuários', '<?=caminho_funcoesHTML?>usuario_info', ''));
 	f5.adicionarItem(new Link("Tramitação Demanda", "<?=caminho_funcoesHTML?>demanda_tram", ""));
 	f5.adicionarItem(new Link("Agendamento de alertas", "agendamento.php", ""));

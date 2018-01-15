@@ -215,7 +215,7 @@ function iniciar(){
 			<TR>
                 <TH class="campoformulario" nowrap>Complemento:</TH>
                 <TD class="campoformulario" colspan=3>
-                <INPUT type="text" id="<?=voDocumento::$nmAtrComplemento?>" name="<?=voDocumento::$nmAtrComplemento?>" onBlur='criarNomeDocumento();' class="camponaoobrigatorio" size="15" maxlength=15>                
+                <INPUT type="text" id="<?=voDocumento::$nmAtrComplemento?>" name="<?=voDocumento::$nmAtrComplemento?>" onBlur='criarNomeDocumento();' class="camponaoobrigatorio" size="30" maxlength=30>                
                 </TD>
             </TR>
             <?php 
