@@ -22,7 +22,17 @@ function formatarDataWeb(data) {
     return [dia, mes, ano].join('/'); // "join" é o caracter para separar a formatação da data, neste caso, a barra (/)
 }
 
+function formatarDataParaInternacional(data) {
+	var anoParts = data.split('/');
+	var dia =anoParts[0];
+	var mes =anoParts[1];
+	var ano =anoParts[2];
+
+    return [mes,dia, ano].join('/'); // "join" é o caracter para separar a formatação da data, neste caso, a barra (/)
+}
+
 function getAnoData(data) {
+	data=formatarDataParaInternacional(data); 
     var d = new Date(data);
     ano = d.getFullYear();
 
@@ -34,6 +44,8 @@ function isCampoDataValidoPorCampoAno(pCampoData, pCampoAno) {
 	if(pCampoData != null && pCampoAno != null){
 		data = pCampoData.value;
 	    ano = getAnoData(data);
+	    
+	    //alert("data:" + data + " ano:" + ano + " data:" + pCampoAno.value);
 	    
 	    if(ano != pCampoAno.value){
 	    	pCampoData.focus();
