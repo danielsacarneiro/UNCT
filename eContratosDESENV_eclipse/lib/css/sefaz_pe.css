@@ -1155,7 +1155,7 @@ TD.tabeladadossemborda {
 }
 
 /*  Representa uma célula de um campo de formulário, inclusive filtros */
-TD.campoformulario,TD.campoformulario_nowrap,TD.campoformularioalinhadodireita,TD.campoformularioalinhadocentro,TD.campoformulariosemborda,TD.campoformulariopreto
+TD.campoformulario,TD.campoformulario_nowrap,TD.campoformularioalinhadodireita,TD.campoformularioalinhadocima,TD.campoformularioalinhadocentro,TD.campoformulariosemborda,TD.campoformulariopreto
 	{
 	background-color: #f8f8f8;
 	font-family: Helvetica, Arial, sans-serif;
@@ -1164,7 +1164,7 @@ TD.campoformulario,TD.campoformulario_nowrap,TD.campoformularioalinhadodireita,T
 	height: 11px;
 	color: #222;
 	padding: 2px;
-	border: 1px solid #d3d3d5;
+	border: 1px solid #d3d3d5;		
 }
 
 TD.campoformulario_nowrap {
@@ -1175,6 +1175,12 @@ TD.campoformulario_nowrap {
 TD.campoformularioalinhadodireita {
 	text-align: right;
 }
+
+/*  Representa uma célula de um campo de formulário, inclusive filtros, alinhados TOP*/
+TD.campoformularioalinhadocima{
+	vertical-align: top;
+}
+
 
 /*  Representa uma célula de um campo de formulário, inclusive filtros, alinhados ao centro*/
 TD.campoformularioalinhadocentro {
@@ -1283,7 +1289,7 @@ TD.celulapassoapassoatual {
 
 /* Classes para Tag DH */
 	/*  Título das tabelas de formulário, inclusive filtro */
-TH.campoformulario,TH.campoformularioalinhadocentro,TH.campoformularioalinhadodireita,TH.campoformulariosemborda,TH.campoformulariosembordaalinhadodireita
+TH.campoformulario,TH.campoformularioalinhadocentro,TH.campoformularioalinhadodireita,TH.campoformularioalinhadocima,TH.campoformulariosemborda,TH.campoformulariosembordaalinhadodireita
 	{
 	background-color: #E7E7E7;
 	font-family: Helvetica, Arial, sans-serif;
@@ -1319,6 +1325,10 @@ TH.campoformularioalinhadocentro {
 /*  Título das tabelas de formulário, inclusive filtro alinhados a direita */
 TH.campoformularioalinhadodireita {
 	text-align: right;
+}
+
+TH.campoformularioalinhadocima {
+	vertical-align: top;
 }
 
 TH.campoformulariosemborda {
@@ -1994,7 +2004,7 @@ HR.protocolosmenu {
 }
 
 @media print {
-	TD.campoformulario,TD.campoformulario_nowrap,TD.campoformularioalinhadodireita,TD.campoformularioalinhadocentro,TD.campoformulariosemborda,TD.campoformulariopreto,
+	TD.campoformulario,TD.campoformulario_nowrap,TD.campoformularioalinhadodireita,TD.campoformularioalinhadocima,TD.campoformularioalinhadocentro,TD.campoformulariosemborda,TD.campoformulariopreto,
 	TD.conteinertextoregistrosporpagina {
 		color: #000;
 		background: #fff;
@@ -2007,7 +2017,7 @@ HR.protocolosmenu {
 	TD.conteinerbarrapaginacao {
 		border-top: 0;
 	}
-	TH.campoformulario,TH.campoformularioalinhadocentro,TH.campoformularioalinhadodireita,TH.campoformulariosemborda,TH.campoformulariosembordaalinhadodireita {
+	TH.campoformulario,TH.campoformularioalinhadocentro,TH.campoformularioalinhadodireita,TH.campoformularioalinhadocima,TH.campoformulariosemborda,TH.campoformulariosembordaalinhadodireita {
 		color: #000;
 		border: solid 1px #777;
 		background: #f7f7f7;

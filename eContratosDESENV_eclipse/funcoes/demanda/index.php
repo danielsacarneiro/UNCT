@@ -141,13 +141,14 @@ function encaminhar() {
 	            <TH class="campoformulario" nowrap width="1%">Demanda:</TH>
 	            <TD class="campoformulario" nowrap width="1%">
 	            <?php echo "Ano: " . $selectExercicio->getHtmlCombo(voDemanda::$nmAtrAno,voDemanda::$nmAtrAno, $filtro->vodemanda->ano, true, "camponaoobrigatorio", false, "");?>
-			  Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voDemanda::$nmAtrCd?>" name="<?=voDemanda::$nmAtrCd?>"  value="<?php echo(complementarCharAEsquerda($filtro->vodemanda->cd, "0", TAMANHO_CODIGOS));?>"  class="camponaoobrigatorio" size="6" maxlength="5">
-			  <?php echo "Tipo: " . $comboTipo->getHtmlCombo(voDemanda::$nmAtrTipo, voDemanda::$nmAtrTipo, $filtro->vodemanda->tipo, true, "camponaoobrigatorio", false, "");?>
-	            <TH class="campoformulario" nowrap width="1%">Intervalo.Demanda:</TH>
+			  Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voDemanda::$nmAtrCd?>" name="<?=voDemanda::$nmAtrCd?>"  value="<?php echo(complementarCharAEsquerda($filtro->vodemanda->cd, "0", TAMANHO_CODIGOS));?>"  class="camponaoobrigatorio" size="6" maxlength="5">			  
+	            <!-- <TH class="campoformulario" nowrap width="1%">Intervalo.Demanda:</TH>
 	            <TD class="campoformulario" >
 				  Inicial: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=filtroManterDemanda::$NmAtrCdDemandaInicial?>" name="<?=filtroManterDemanda::$NmAtrCdDemandaInicial?>"  value="<?php echo(complementarCharAEsquerda($filtro->cdDemandaInicial, "0", TAMANHO_CODIGOS));?>"  class="camponaoobrigatorio" size="6" maxlength="5">
 				  Final: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=filtroManterDemanda::$NmAtrCdDemandaFinal?>" name="<?=filtroManterDemanda::$NmAtrCdDemandaFinal?>"  value="<?php echo(complementarCharAEsquerda($filtro->cdDemandaFinal, "0", TAMANHO_CODIGOS));?>"  class="camponaoobrigatorio" size="6" maxlength="5">
-			  </TD>			  
+			  </TD>-->
+			  	<TH class="campoformulario" nowrap width="1%">Prioridade:</TH>
+                <TD class="campoformulario" ><?php echo $comboPrioridade->getHtmlCombo(voDemanda::$nmAtrPrioridade,voDemanda::$nmAtrPrioridade, $filtro->vodemanda->prioridade, true, "camponaoobrigatorio", false, "");?></TD>			  		  
 			</TR>			            
             <TR>
                 <TH class="campoformulario" nowrap width="1%">Setor.Resp.:</TH>
@@ -160,8 +161,22 @@ function encaminhar() {
             <TR>
                 <TH class="campoformulario" nowrap width="1%">Situação:</TH>
                 <TD class="campoformulario" width="1%"><?php echo $comboSituacao->getHtmlCombo(voDemanda::$nmAtrSituacao,voDemanda::$nmAtrSituacao."[]", $filtro->vodemanda->situacao, true, "camponaoobrigatorio", false, " multiple ");?></TD>
-                <TH class="campoformulario" nowrap width="1%">Prioridade:</TH>
-                <TD class="campoformulario" ><?php echo $comboPrioridade->getHtmlCombo(voDemanda::$nmAtrPrioridade,voDemanda::$nmAtrPrioridade, $filtro->vodemanda->prioridade, true, "camponaoobrigatorio", false, "");?></TD>                                
+                <TH class="campoformularioalinhadocima" nowrap width="1%">Tipo:</TH>
+                <TD class="campoformulario" >
+	                <TABLE class="filtro" cellpadding="0" cellspacing="0">
+	                <TR>
+	                	<TD class="campoformulario" width="1%">Incluindo:</TD>
+	                	<TD class="campoformulario" >
+		                <?php echo $comboTipo->getHtmlCombo(voDemanda::$nmAtrTipo, voDemanda::$nmAtrTipo, $filtro->vodemanda->tipo, true, "camponaoobrigatorio", false, "") . "<br>";?>
+	                	</TD>
+	                <TR>
+						<TD class="campoformulario" width="1%">Excluindo:</TD>
+	                	<TD class="campoformulario" >
+		                <?php echo $comboTipo->getHtmlCombo(filtroManterDemanda::$NmAtrTipoExcludente, filtroManterDemanda::$NmAtrTipoExcludente."[]", $filtro->tipoExcludente, true, "camponaoobrigatorio", false, " multiple ");?>
+	                	</TD>
+	                <TR>
+	                </TABLE>
+                </TD>                                
             </TR>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Título:</TH>

@@ -18,6 +18,7 @@ class filtroManterDemanda extends filtroManter{
 	static $NmAtrVlGlobalInicial = "NmAtrVlGlobalInicial";
 	static $NmAtrVlGlobalFinal = "NmAtrVlGlobalFinal";
 	static $NmAtrInOR_AND = "NmAtrInOR_AND";
+	static $NmAtrTipoExcludente = "NmAtrTipoExcludente";
 	
 	var $vodemanda;
 	var $vocontrato;
@@ -38,6 +39,7 @@ class filtroManterDemanda extends filtroManter{
 	var $vlGlobalFinal;
 	
 	var $inOR_AND;
+	var $tipoExcludente;
 	var $cdClassificacaoContrato;
 	var $inMaoDeObra = "";
 	var $inContratoComDtPropostaVencida;
@@ -70,6 +72,7 @@ class filtroManterDemanda extends filtroManter{
 		$this->cdSetorPassagem = @$_POST[static::$NmAtrCdSetorPassagem];
 		$vodemanda->tipo = @$_POST[voDemanda::$nmAtrTipo];
 		$vodemanda->situacao  = @$_POST[voDemanda::$nmAtrSituacao];
+		$this->tipoExcludente = @$_POST[static::$NmAtrTipoExcludente];
 		$vodemanda->prioridade  = @$_POST[voDemanda::$nmAtrPrioridade];
 		$vodemanda->prt = @$_POST[voDemandaTramitacao::$nmAtrProtocolo];
 		
@@ -310,6 +313,17 @@ class filtroManterDemanda extends filtroManter{
 				
 			$conector = "\n AND ";
 		}		
+		
+		if ($this->tipoExcludente != null && !$this->isAtributoArrayVazio($this->tipoExcludente)) {
+			$comparar = " <> '" . $this->tipoExcludente. "'";
+			if(is_array($this->tipoExcludente)){		
+				$comparar = " NOT IN (" . getSQLStringFormatadaColecaoIN($this->tipoExcludente, true) . ")";
+			}
+		
+			$filtro = $filtro . $conector . $nmTabela . "." . voDemanda::$nmAtrTipo . $comparar;
+		
+			$conector = "\n AND ";
+		}
 		
 		if($this->dtUltMovimentacao != null){
 			$colDemandaTram = $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrDhInclusao;
