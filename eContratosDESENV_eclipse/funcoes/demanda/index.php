@@ -161,7 +161,7 @@ function encaminhar() {
             <TR>
                 <TH class="campoformulario" nowrap width="1%">Situação:</TH>
                 <TD class="campoformulario" width="1%"><?php echo $comboSituacao->getHtmlCombo(voDemanda::$nmAtrSituacao,voDemanda::$nmAtrSituacao."[]", $filtro->vodemanda->situacao, true, "camponaoobrigatorio", false, " multiple ");?></TD>
-                <TH class="campoformularioalinhadocima" nowrap width="1%">Tipo:</TH>
+                <TH class="campoformulario" nowrap width="1%">Tipo:</TH>
                 <TD class="campoformulario" >
 	                <TABLE class="filtro" cellpadding="0" cellspacing="0">
 	                <TR>
