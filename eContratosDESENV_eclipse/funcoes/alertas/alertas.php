@@ -1,6 +1,20 @@
 <?php
-function getMensagemEdital(){
+/***
+ * 
+ * @param unknown $assunto
+ * @param number $count //tem um & na frente pra indicar que eh passagem por referencia
+ * @return string
+ */
+function getSequenciaAssunto($assunto, &$count = 0){
+	$count++;
+	$assunto = "$count - $assunto";
+	return $assunto;
+}
+
+function getMensagemEdital(&$count = 0){
 	$assunto = "EDITAL:";	
+	$assunto = getSequenciaAssunto($assunto, $count);
+	
 	try {
 		$voDemanda = new voDemanda ();
 		$dbprocesso = $voDemanda->dbprocesso;
@@ -26,8 +40,9 @@ function getMensagemEdital(){
 	return $msg;
 }
 
-function getMensagemFimPrazoPAAP(){
+function getMensagemFimPrazoPAAP(&$count = 0){
 	$assunto = "PAAP:";	
+	$assunto = getSequenciaAssunto($assunto, $count);
 	try {
 		$filtro = new filtroConsultarDemandaPAAP( false );
 		$filtro->isValidarConsulta = false;
@@ -57,8 +72,9 @@ function getMensagemFimPrazoPAAP(){
 	return $msg;
 }
 
-function getMensagemDemandaContratoPropostaVencida(){
+function getMensagemDemandaContratoPropostaVencida(&$count = 0){
 	$assunto = "REAJUSTES:";
+	$assunto = getSequenciaAssunto($assunto, $count);
 	try {
 		$filtro = new filtroManterDemanda ( false );
 		$voDemanda = new voDemanda ();
@@ -89,8 +105,9 @@ function getMensagemDemandaContratoPropostaVencida(){
 	return $msg;
 }
 
-function getMensagemDemandaSAD(){
+function getMensagemDemandaSAD(&$count = 0){
 	$assunto = "ENCAMINHAMENTO SAD:";
+	$assunto = getSequenciaAssunto($assunto, $count);
 	try {
 		$filtro = new filtroManterDemanda ( false );
 		$voDemanda = new voDemanda ();
@@ -125,8 +142,9 @@ function getMensagemDemandaSAD(){
  * 
  * @return string
  */
-function getMensagemContratosAVencer(){
+function getMensagemContratosAVencer(&$count = 0){
 	$assunto = "CONTRATOS A VENCER:";
+	$assunto = getSequenciaAssunto($assunto, $count);
 	try {
 		$filtro = new filtroConsultarContratoConsolidacao(false);
 		$filtro->isValidarConsulta = false;
