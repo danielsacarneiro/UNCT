@@ -275,11 +275,13 @@ class dbDemandaTramitacao extends dbprocesso {
 			/*$registrobanco = $voDemanda->dbprocesso->consultarPorChave($voDemanda, false);
 			$voDemanda->getDadosBanco($registrobanco);*/
 			
-			$voDemanda = $voDemanda->dbprocesso->consultarPorChaveVO($voDemanda, false);			
-				
-			$voDemanda->dbprocesso->cDb = $this->cDb;
-			$voDemanda->situacao = dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO;
-			$voDemanda->dbprocesso->alterarApenasVODemanda($voDemanda);			
+			$voDemanda = $voDemanda->dbprocesso->consultarPorChaveVO($voDemanda, false);				
+			
+			if($voDemanda->situacao != dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO){
+				$voDemanda->dbprocesso->cDb = $this->cDb;
+				$voDemanda->situacao = dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO;				
+				$voDemanda->dbprocesso->alterarApenasVODemanda($voDemanda);
+			}
 			
 			/*
 			 * $voDemanda = new voDemanda();

@@ -28,7 +28,8 @@ class email_sefaz extends multiplosConstrutores{
 			$str .= " - $texto";
 		}
 		
-		$this->getConfigEmailSefaz("correio.sefaz.pe.gov.br", "25", 'daniel.ribeiro@sefaz.pe.gov.br', 'C@rbeiro03', $str);
+		//$this->getConfigEmailSefaz("correio.sefaz.pe.gov.br", "25", 'daniel.ribeiro@sefaz.pe.gov.br', 'C@rbeiro03', $str);
+		$this->getConfigEmailSefaz("correio.sefaz.pe.gov.br", "25", 'atja@sefaz.pe.gov.br', '', $str);
 	}
 	private function getConfigEmailSefaz($host, $port, $user, $pwd, $remetente) {
 		$this->Host = $host;

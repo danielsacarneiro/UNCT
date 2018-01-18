@@ -86,9 +86,9 @@ function cancela() {
 }
 
 function confirmar() {
-	if(!isFormularioValido())
+	if(!isFormularioValido()){
 		return false;
-	
+	}
 	return confirm("Confirmar Alteracoes?");    
 }
 
@@ -126,11 +126,13 @@ function verificaVinculo(){
 		campoDIVContratado.style.display = "none";
 	}	
 
+	pColecaoIDCamposRequired = ["<?=vopessoavinculo::$nmAtrInAtribuicaoPAAP?>"];
 	if(vinculo == <?=dominioVinculoPessoa::$CD_VINCULO_SERVIDOR?>){
-		campoDIVServidor.style.display = "";		
+		//biblioteca_funcoes_principal.js
+		esconderDiv(campoDIVServidor, pColecaoIDCamposRequired, false);		
 	}
 	else{ 
-		campoDIVServidor.style.display = "none";
+		esconderDiv(campoDIVServidor, pColecaoIDCamposRequired, true);
 	}	
 	
 }

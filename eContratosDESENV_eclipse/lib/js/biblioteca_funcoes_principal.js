@@ -157,6 +157,16 @@ function tornarRequiredCamposColecaoFormulario(colecaoIDCampos, pIsRequired){
 	}
 }
 
+function esconderDiv(pCampoDiv, pColecaoIDCamposRequired, pEsconder){
+	if(pEsconder){
+		pCampoDiv.style.display = "none";
+		tornarRequiredCamposColecaoFormulario(pColecaoIDCamposRequired, false);
+	}else{
+		pCampoDiv.style.display = "";
+		tornarRequiredCamposColecaoFormulario(pColecaoIDCamposRequired, true);
+	}
+}
+
 function limparCamposColecaoFormulario(colecaoIDCampos){
 	
 	for(i=0;i<colecaoIDCampos.length;i++){					
