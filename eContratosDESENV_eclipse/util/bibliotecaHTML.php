@@ -679,37 +679,7 @@ function getSelectGestor() {
 	
 	$select = new select ( $registros );
 }
-/*function putObjetoSessao($ID, $voEntidade) {
-	session_start ();
-	$_SESSION [$ID] = $voEntidade;
-}
-function existeObjetoSessao($ID) {
-	session_start ();
-	return isset ( $_SESSION [$ID] ) && $_SESSION [$ID] != null;
-}
-function getObjetoSessao($ID, $levantarExcecaoSeObjetoInexistente = false) {
-	session_start ();
-	
-	$objeto = null;
-	
-	if ($_SESSION [$ID] != null) {
-		$objeto = $_SESSION [$ID];
-	} else if ($levantarExcecaoSeObjetoInexistente) {
-		throw new excecaoObjetoSessaoInexistente ( $ID );
-	}
-	
-	$isUsarSessao = @$_POST ["utilizarSessao"] != "N";
-	if (! $isUsarSessao) {
-		$objeto = null;
-		removeObjetoSessao ( $ID );
-	}
-	
-	return $objeto;
-}
-function removeObjetoSessao($ID) {
-	session_start ();
-	unset ( $_SESSION [$ID] );
-}*/
+
 function formatarCodigoContrato($cd, $ano, $tipo) {
 	return vocontrato::getCodigoContratoFormatadoStatic($cd, $ano, $tipo);
 	/*$dominioTipoContrato = new dominioTipoContrato ();

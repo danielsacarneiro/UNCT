@@ -2,6 +2,10 @@
 //envia alertas dos editais
 require_once ("alertas.php");
 require_once ("Biblioteca_alertas.php");
+require_once (caminho_util . "bibliotecaFuncoesPrincipal.php");
+
+$enviarEmail = @$_GET [constantes::$ID_REQ_IN_ENVIAR_EMAIL];
+$enviarEmail = getAtributoComoBooleano($enviarEmail);
 
 $count = 0;
 //envia alertas dos editais
@@ -18,4 +22,4 @@ $mensagem .= getMensagemDemandaContratoPropostaVencida($count);
 echo $mensagem;
 
 $assunto = "Relatório diário";
-enviarEmail($assunto, $mensagem);
+enviarEmail($assunto, $mensagem, $enviarEmail);

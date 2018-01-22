@@ -193,7 +193,9 @@ function limparFormularioGeral(){
 						|| element.name == "utilizarSessao"
 						|| element.name == "consultar"
 						|| element.name == "cdHistorico"							
-						|| element.name == "cdOrdenacao"; 
+						|| element.name == "lupa"
+						|| element.name == "rdb_consulta"							
+						|| element.name == "cdOrdenacao";
 		if(!naoValidar){
 			//alert(element.type);
 			limparCampoFormularioEConti(element);

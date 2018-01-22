@@ -42,7 +42,10 @@ if($filtro->cdConsultarArquivo == dominioConsultaArquivoContrato::$CD_CONSULTA_A
 	$endereco .= "ANO " . $anoArquivo .$barra."CONTRATOS";
 }else if($filtro->cdConsultarArquivo == dominioConsultaArquivoContrato::$CD_CONSULTA_ARQUIVO_TERMO_ADITIVO){
 	$endereco .= "ANO " . $anoArquivo .$barra."TERMOS ADITIVOS";
-}	
+}else if($filtro->cdConsultarArquivo == dominioConsultaArquivoContrato::$CD_CONSULTA_ARQUIVO_TERMO_RERRATIFICACAO){
+		$endereco .= "ANO " . $anoArquivo .$barra."TERMOS DE RERRATIFICAÇÃO";
+}
+	
 	
 	
 $MenuPai->setDir($endereco);
