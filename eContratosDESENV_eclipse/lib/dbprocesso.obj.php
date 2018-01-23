@@ -273,7 +273,9 @@ class dbprocesso {
 		// flag que diz se pode consultar ou nao
 		$consultar = @$_GET ["consultar"];
 		
+		//echoo("valida consulta " . $filtro->nmFiltro);
 		if ($consultar == "S" || ! $validaConsulta) {
+			//echoo("valida consulta " . $filtro->nmFiltro);
 			
 			// removeObjetoSessao($filtro->nmFiltro);
 			

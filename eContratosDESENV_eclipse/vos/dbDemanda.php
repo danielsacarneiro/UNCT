@@ -34,6 +34,7 @@ class dbDemanda extends dbprocesso {
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );
 		$nmTabelaPessoa = vopessoa::getNmTabelaStatic ( false );
 		$nmTabelaTramitacao = voDemandaTramitacao::getNmTabela ();
+		//$nmTabelaPAAP = voPA::getNmTabelaStatic ( false );
 		
 		$arrayColunasRetornadas = array (
 				$nmTabela . ".*",
@@ -83,6 +84,12 @@ class dbDemanda extends dbprocesso {
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoa;
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaPessoa . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
+		
+		/*$queryJoin .= "\n LEFT JOIN " . $nmTabelaPAAP;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaPAAP . "." . voPA::$nmAtrCdDemanda. "=" . $nmTabela . "." . voDemanda::$nmAtrCd;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaPAAP . "." . voPA::$nmAtrAnoDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrAno;*/
 		
 		$colecao = $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryJoin, $isHistorico, $isConsultaPorChave );
 		return $colecao;
@@ -306,13 +313,14 @@ class dbDemanda extends dbprocesso {
 	}
 	
 	function consultarPAAPDemanda($vo){
-		//$vo = new voDemanda();
+		//$vo = new voDemanda();		
 		$voPA = null;
-		$filtro = new filtroManterPA();
+		$filtro = new filtroManterPA(false);
 		$filtro->anoDemanda = $vo->ano;
 		$filtro->cdDemanda = $vo->cd;
 		$dbpa = new dbPA();		
 		$colecao = $dbpa->consultarPAAP(new voPA(),$filtro);
+		//var_dump($filtro);
 		if(!isColecaoVazia($colecao)){
 			if(count($colecao)>1){
 				throw new excecaoMaisDeUmRegistroRetornado("A consulta de PAAP trouxe mais de um registro para esta demanda.");

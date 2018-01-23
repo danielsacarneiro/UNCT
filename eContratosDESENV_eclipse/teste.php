@@ -15,7 +15,7 @@ $qtddias = 300;
 
 //echo somarOuSubtrairDiasNaData($dtinical, $qtddias);
 
-$dbpenalidade = new dbPenalidadePA();
+/*$dbpenalidade = new dbPenalidadePA();
 $filtro = new filtroManterPenalidade();
 $filtro->voPrincipal = new voPenalidadePA();
 $filtro->isValidarConsulta = false;
@@ -24,7 +24,65 @@ $filtro->anoPA = 2017;
 $filtro->cdPA = 3;
 $colecao = $dbpenalidade->consultarPenalidadeTelaConsulta(new voPenalidadePA(), $filtro);
 echoo("imprimindo");
-var_dump($colecao);
+var_dump($colecao);*/
+
+$unidadeEstudo = 2; //2 horas
+$chaveMateria = "cd";
+$chavePeso = "peso";
+
+$array = array(
+		array( $chaveMateria => 'A4', $chavePeso => 4 ),
+		array( $chaveMateria => 'B3', $chavePeso => 3 ),
+		array( $chaveMateria => 'C5', $chavePeso => 5 ),
+		array( $chaveMateria => 'D3', $chavePeso => 3 ),
+		array( $chaveMateria => 'E2', $chavePeso => 2 ),
+		array( $chaveMateria => 'F1', $chavePeso => 1 ),
+		array( $chaveMateria => 'G1', $chavePeso => 1 ),
+);
+
+// Compara se $a é maior que $b
+function ordenarMaior($a, $b) {
+	return $a["peso"] < $b["peso"];
+}
+
+function ordenarMenor($a, $b) {
+	return $a["peso"] > $b["peso"];
+}
+
+print_r( $array );
+// Ordena
+usort($array, 'ordenarMaior');
+
+// Mostra os valores
+/*echo '<pre>';
+print_r( $array );
+echo '</pre>';*/
+
+echo imprimeOrdem($array, 5);
+
+function imprimeOrdem($colecao, $qtdCasas){
+	$retorno = "";
+	$i=0;
+	while(count($colecao) != 0 && $i<$qtdCasas){			
+			/*if($i%2==0){
+				usort($colecao, 'ordenarMaior');				
+			}else{
+				usort($colecao, 'ordenarMenor');
+			}*/
+			
+			$retorno .= $colecao[0]["cd"] . ",";
+			array_shift($colecao);
+			//unset($colecao[$i]);
+			$i++;		
+	}
+	return $retorno;
+}
+
+function getMateriaReOrdenando(&$colecao){
+	if($colecao == null){
+		throw new excecaoGenerica("colecao vazia");
+	}	
+}
 
 ?>
 

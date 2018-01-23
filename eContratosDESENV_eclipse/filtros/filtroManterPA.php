@@ -33,32 +33,29 @@ class filtroManterPA extends filtroManter{
     // ...............................................................
 	// construtor
     
-	function __construct() {
-        //parent::__construct(true);
-		parent::__construct();
-        
-        $this->cdPessoa = @$_POST[vopessoa::$nmAtrCd];
-        $this->cdResponsavel = @$_POST[voPA::$nmAtrCdResponsavel];
-        //$this->cdGestor = @$_POST[voPA::$nmAtrCdGestor];
-        $this->doc = @$_POST[vopessoa::$nmAtrDoc];
-        $this->nome = @$_POST[vopessoa::$nmAtrNome];
-        
-        $this->cdPA = @$_POST[voPA::$nmAtrCdPA];
-        $this->anoPA = @$_POST[voPA::$nmAtrAnoPA];
-        $this->situacao = @$_POST[voPA::$nmAtrSituacao];
-        
-        $this->cdContrato = @$_POST[vocontrato::$nmAtrCdContrato];
-        $this->anoContrato = @$_POST[vocontrato::$nmAtrAnoContrato];
-        $this->tipoContrato = @$_POST[vocontrato::$nmAtrTipoContrato];
-        
-        $this->cdDemanda = @$_POST[voPA::$nmAtrCdDemanda];
-        $this->anoDemanda = @$_POST[voPA::$nmAtrAnoDemanda];
-        $this->tpDocumento = @$_POST[voDocumento::$nmAtrTp];
-        
-        //isso tudo pq o filtro pode ser usado por mais de um metodo
-        //e precisa saber qual voprincipal considera,
-        //pra pegar por ex os atributos de ordenacao da tabela correta
-        $this->nmEntidadePrincipal = "voPA";
+    function getFiltroFormulario(){
+    	$this->cdPessoa = @$_POST[vopessoa::$nmAtrCd];
+    	$this->cdResponsavel = @$_POST[voPA::$nmAtrCdResponsavel];
+    	//$this->cdGestor = @$_POST[voPA::$nmAtrCdGestor];
+    	$this->doc = @$_POST[vopessoa::$nmAtrDoc];
+    	$this->nome = @$_POST[vopessoa::$nmAtrNome];
+    	
+    	$this->cdPA = @$_POST[voPA::$nmAtrCdPA];
+    	$this->anoPA = @$_POST[voPA::$nmAtrAnoPA];
+    	$this->situacao = @$_POST[voPA::$nmAtrSituacao];
+    	
+    	$this->cdContrato = @$_POST[vocontrato::$nmAtrCdContrato];
+    	$this->anoContrato = @$_POST[vocontrato::$nmAtrAnoContrato];
+    	$this->tipoContrato = @$_POST[vocontrato::$nmAtrTipoContrato];
+    	
+    	$this->cdDemanda = @$_POST[voPA::$nmAtrCdDemanda];
+    	$this->anoDemanda = @$_POST[voPA::$nmAtrAnoDemanda];
+    	$this->tpDocumento = @$_POST[voDocumento::$nmAtrTp];
+    	
+    	//isso tudo pq o filtro pode ser usado por mais de um metodo
+    	//e precisa saber qual voprincipal considera,
+    	//pra pegar por ex os atributos de ordenacao da tabela correta
+    	$this->nmEntidadePrincipal = "voPA";
     }
     	
 	function getFiltroConsultaSQL(){

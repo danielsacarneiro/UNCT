@@ -20,6 +20,8 @@ $dbprocesso = $vo->dbprocesso;
 $vo = $dbprocesso->consultarPorChaveTelaColecaoContrato($vo, $isHistorico);
 putObjetoSessao($vo->getNmTabela(), $vo);
 
+$voPAAP = $dbprocesso->consultarPAAPDemanda($vo);
+
 $nmFuncao = "DETALHAR ";
 $titulo = $vo->getTituloJSP();
 $complementoTit = "";
@@ -101,7 +103,20 @@ function confirmar() {
 	        	        	        
 	        $complementoHTML = "";	
 	        getDemandaDetalhamentoComLupa($vo, false);
-	        ?>	        	        
+	        if($voPAAP != null){
+	        ?>
+            <TR>
+		         <TH class="campoformulario" nowrap width="1%">P.A.A.P.:</TH>
+		         <TD class="campoformulario" colspan=3>
+		         <?php 
+		         echo(getDetalhamentoHTMLCodigoAno($voPAAP->anoPA, $voPAAP->cdPA, TAMANHO_CODIGOS_SAFI));
+		         echo getLinkPesquisa ( "../pa/detalhar.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $voPAAP->getValorChaveHTML() );
+		         ?>
+				 </TD>
+	        </TR>
+	        <?php
+	        }?>                         
+	        
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Setor Responsável:</TH>
 	            <TD class="campoformulario" width="1%">
