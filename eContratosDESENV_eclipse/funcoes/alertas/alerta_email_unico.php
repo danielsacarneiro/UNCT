@@ -5,7 +5,9 @@ require_once ("Biblioteca_alertas.php");
 require_once (caminho_util . "bibliotecaFuncoesPrincipal.php");
 
 $enviarEmail = @$_GET [constantes::$ID_REQ_IN_ENVIAR_EMAIL];
-$enviarEmail = getAtributoComoBooleano($enviarEmail);
+if($enviarEmail != null){
+	$enviarEmail = getAtributoComoBooleano($enviarEmail);
+}
 
 $count = 0;
 //envia alertas dos editais
