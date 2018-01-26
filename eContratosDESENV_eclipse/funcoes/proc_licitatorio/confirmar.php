@@ -1,17 +1,13 @@
 <?php
 include_once("../../config_lib.php");
 include_once(caminho_util."bibliotecaHTML.php");
-include_once(caminho_vos."voContratoInfo.php");
+
 inicioComValidacaoUsuario(true);
 
-$vo = new voContratoInfo();
+$vo = new voProcLicitatorio();
 $vo->getDadosFormulario();
 
-/*$novaObs = @$_POST[voContratoInfo::$nmAtrObs];
-$vo->setObsParaIncluirNoBanco($novaObs);*/
-//$vo->setCarimboObsParaIncluirNoBanco();
-
-//imprimeHtml($vo->obs);
+//$vo->dbprocesso->validarAlteracao($vo);
 
 putObjetoSessao("vo", $vo);
 

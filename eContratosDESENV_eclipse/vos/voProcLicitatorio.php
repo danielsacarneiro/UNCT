@@ -2,25 +2,51 @@
 include_once (caminho_lib . "voentidade.php");
 //include_once ("dbProcLicitatorio.php");
 include_once (caminho_util . "bibliotecaFuncoesPrincipal.php");
-
-//ALTERAR TODA A CLASSE QUANDO IMPLEMENTAR A TABELA DE DADOS
+include_once (caminho_util . "dominioSetor.php");
+include_once (caminho_funcoes . "proc_licitatorio/dominioModalidadeProcLicitatorio.php");
+include_once (caminho_funcoes . "proc_licitatorio/dominioTipoProcLicitatorio.php");
+include_once (caminho_funcoes . "proc_licitatorio/dominioComissaoProcLicitatorio.php");
 
 class voProcLicitatorio extends voentidade {
-	static $nmAtrCdProcLicitatorio = "proclic_cd";
-	static $nmAtrAnoProcLicitatorio = "proclic_ex";
+	static $nmAtrCd = "pl_cd";
+	static $nmAtrAno = "pl_ex";	
 
+	static $nmAtrCdOrgaoResponsavel = "pl_orgao_responsavel";
+	static $nmAtrCdComissao = "pl_comissao_cd";	
+	static $nmAtrCdModalidade = "pl_mod_cd";
+	static $nmAtrNumModalidade = "pl_mod_num";
+	static $nmAtrTipo = "pl_tp";
+	static $nmAtrCdPregoeiro = "pl_cd_pregoeiro";
+	
+	static $nmAtrDtAbertura = "pl_dt_abertura";
+	static $nmAtrDtPublicacao = "pl_dt_publicacao";
+	static $nmAtrObjeto = "pl_objeto";
+	static $nmAtrObservacao = "pl_observacao";
+	static $nmAtrSituacao = "pl_si";
+	
 	var $cd = "";
 	var $ano = "";
-
+	var $cdDemanda = "";
+	var $anoDemanda = "";
+	
+	var $cdOrgaoResponsavel = "";
+	var $cdComissao = "";
+	var $cdModalidade = "";
+	var $numModalidade = "";
+	var $tipo = "";
+	var $cdPregoeiro = "";
+	
+	var $dtAbertura = "";
+	var $dtPublicacao = "";
+	var $objeto = "";
+	var $obs = "";
+	var $situacao = "";	
+	
 	// ...............................................................
 	// Funcoes ( Propriedades e mÃ©todos da classe )
 	function __construct() {
 		parent::__construct ();
-		$this->temTabHistorico = true;
-		$class = self::getNmClassProcesso ();
-		$this->dbprocesso = new $class ();
-		$this->colecaoContrato = array ();
-		
+		$this->temTabHistorico = false;		
 		// retira os atributos padrao que nao possui
 		// remove tambem os que o banco deve incluir default
 		$arrayAtribRemover = array (
@@ -28,16 +54,15 @@ class voProcLicitatorio extends voentidade {
 				self::$nmAtrDhUltAlteracao 
 		);
 		$this->removeAtributos ( $arrayAtribRemover );
-		$this->varAtributosARemover = $arrayAtribRemover;
 	}
 	public static function getTituloJSP() {
-		return "DEMANDA";
+		return "PROCESSO LICITATÓRIO";
 	}
 	public static function getNmTabela() {
-		return "demanda";
+		return "proc_licitatorio";
 	}
 	public static function getNmClassProcesso() {
-		return "dbDemanda";
+		return "dbProcLicitatorio";
 	}
 	function getValoresWhereSQLChave($isHistorico) {
 		$nmTabela = $this->getNmTabelaEntidade ( $isHistorico );
@@ -59,12 +84,17 @@ class voProcLicitatorio extends voentidade {
 		$retorno = array (
 				self::$nmAtrAno,
 				self::$nmAtrCd,
+				self::$nmAtrCdOrgaoResponsavel,
+				self::$nmAtrCdComissao,
+				self::$nmAtrCdModalidade,
+				self::$nmAtrNumModalidade,
 				self::$nmAtrTipo,
-				self::$nmAtrCdSetor,
-				self::$nmAtrSituacao,
-				self::$nmAtrTexto,
-				self::$nmAtrPrioridade,
-				self::$nmAtrDtReferencia 
+				self::$nmAtrCdPregoeiro,
+				self::$nmAtrDtAbertura,
+				self::$nmAtrDtPublicacao,				
+				self::$nmAtrObjeto,
+				self::$nmAtrObservacao,
+				self::$nmAtrSituacao,				
 		);
 		
 		return $retorno;
@@ -78,105 +108,47 @@ class voProcLicitatorio extends voentidade {
 		return $retorno;
 	}
 	
-	/*
-	 * function temContratoParaIncluir(){
-	 * $retorno = $this->voContrato->tipo != null && $this->voContrato->anoContrato != null && $this->voContrato->cdContrato != null;
-	 * return $retorno;
-	 * }
-	 */
-	function temContratoParaIncluir() {
-		$retorno = $this->colecaoContrato != null && (count ( $this->colecaoContrato ) > 0);
-		return $retorno;
-	}
-	
-	/*
-	 * function getVODemandaContrato(){
-	 * $voDemanda = new voDemandaContrato();
-	 * $voDemanda->anoDemanda = $this->ano;
-	 * $voDemanda->cdDemanda = $this->cd;
-	 * $voDemanda->voContrato = $this->voContrato;
-	 *
-	 * return $voDemanda;
-	 * }
-	 */
-	function getVODemandaContrato($voContrato) {
-		$voDemanda = new voDemandaContrato ();
-		$voDemanda->anoDemanda = $this->ano;
-		$voDemanda->cdDemanda = $this->cd;
-		$voDemanda->voContrato = $voContrato;
-		return $voDemanda;
-	}
-	function getDadosRegistroBanco($registrobanco) {
+	function getDadosRegistroBanco($registrobanco) {		
 		// as colunas default de voentidade sao incluidas pelo metodo getDadosBanco do voentidade
 		$this->cd = $registrobanco [self::$nmAtrCd];
 		$this->ano = $registrobanco [self::$nmAtrAno];
-		$this->cdSetor = $registrobanco [self::$nmAtrCdSetor];
-		$this->tipo = $registrobanco [self::$nmAtrTipo];
-		$this->situacao = $registrobanco [self::$nmAtrSituacao];
-		$this->texto = $registrobanco [self::$nmAtrTexto];
-		$this->prioridade = $registrobanco [self::$nmAtrPrioridade];
-		$this->dtReferencia = $registrobanco [self::$nmAtrDtReferencia];
+		$this->cdDemanda = $registrobanco [voDemanda::$nmAtrCd];
+		$this->anoDemanda = $registrobanco [voDemanda::$nmAtrAno];
 		
-		/*
-		 * $chaveContrato = $registrobanco[vocontrato::$nmAtrCdContrato];
-		 * if($chaveContrato != null){
-		 * $voContrato = new vocontrato();
-		 * $voContrato->cdContrato = $registrobanco[voDemandaContrato::$nmAtrCdContrato];
-		 * $voContrato->anoContrato = $registrobanco[voDemandaContrato::$nmAtrAnoContrato];
-		 * $voContrato->tipo = $registrobanco[voDemandaContrato::$nmAtrTipoContrato];
-		 * $voContrato->sqEspecie = $registrobanco[voDemandaContrato::$nmAtrSqEspecieContrato];
-		 * $voContrato->cdEspecie = $registrobanco[voDemandaContrato::$nmAtrCdEspecieContrato];
-		 *
-		 * $this->voContrato = $voContrato;
-		 * }
-		 */
+		$this->cdOrgaoResponsavel = $registrobanco [self::$nmAtrCdOrgaoResponsavel];
+		$this->cdComissao = $registrobanco [self::$nmAtrCdComissao];		
+		$this->cdModalidade = $registrobanco [self::$nmAtrCdModalidade];
+		$this->numModalidade = $registrobanco [self::$nmAtrNumModalidade];
+		$this->tipo = $registrobanco [self::$nmAtrTipo];
+		$this->cdPregoeiro = $registrobanco [self::$nmAtrCdPregoeiro];
+		$this->dtAbertura = $registrobanco [self::$nmAtrDtAbertura];
+		$this->dtPublicacao = $registrobanco [self::$nmAtrDtPublicacao];
+		$this->objeto = $registrobanco [self::$nmAtrObjeto];
+		$this->obs = $registrobanco [self::$nmAtrObservacao];
+		$this->situacao = $registrobanco [self::$nmAtrSituacao];
 	}
 	function getDadosFormulario() {
-		// constante definida em bibliotecahtml
+
 		$this->cd = @$_POST [self::$nmAtrCd];
 		$this->ano = @$_POST [self::$nmAtrAno];
-		$this->cdSetor = @$_POST [self::$nmAtrCdSetor];
-		$this->tipo = @$_POST [self::$nmAtrTipo];
-		$this->situacao = @$_POST [self::$nmAtrSituacao];
-		$this->texto = @$_POST [self::$nmAtrTexto];
-		$this->prioridade = @$_POST [self::$nmAtrPrioridade];
-		$this->dtReferencia = @$_POST [self::$nmAtrDtReferencia];
-		// quando existir
-		// recupera quando da consulta da contratada, ao inserir o contrato na tela
-		$chaveContrato = @$_POST [vopessoa::$ID_CONTRATO];
-		// echo "chave contrato:" . $chaveContrato;
-		if ($chaveContrato != null) {
-			$this->setColecaoContratoFormulario ( $chaveContrato );
-		}
 		
+		$this->cdOrgaoResponsavel = dominioSetor::$CD_SETOR_SEFAZ;
+		//$this->cdOrgaoResponsavel = @$_POST [self::$nmAtrCdOrgaoResponsavel];
+		$this->cdComissao = @$_POST [self::$nmAtrCdComissao];
+		$this->cdModalidade = @$_POST [self::$nmAtrCdModalidade];
+		$this->numModalidade = @$_POST [self::$nmAtrNumModalidade];
+		$this->tipo = @$_POST [self::$nmAtrTipo];
+		$this->cdPregoeiro = @$_POST [self::$nmAtrCdPregoeiro];
+		$this->dtAbertura = @$_POST [self::$nmAtrDtAbertura];
+		$this->dtPublicacao = @$_POST [self::$nmAtrDtPublicacao];
+		$this->objeto = @$_POST [self::$nmAtrObjeto];
+		$this->obs = @$_POST [self::$nmAtrObservacao];
+		$this->situacao = @$_POST [self::$nmAtrSituacao];
+				
 		// completa com os dados da entidade
 		$this->getDadosFormularioEntidade ();
 	}
-	function setColecaoContratoFormulario($colecao) {
-		$retorno = null;
-		if ($colecao != null) {
-			$retorno = array ();
-			foreach ( $colecao as $chaveContrato ) {
-				$voContrato = new vocontrato ();
-				$voContrato->getChavePrimariaVOExplodeParam ( $chaveContrato );
-				$retorno [] = $voContrato;
-			}
-		}
-		$this->colecaoContrato = $retorno;
-	}
-	function setColecaoContratoRegistroBanco($colecao) {
-		$retorno = null;
-		if ($colecao != null) {
-			$retorno = array ();
-			foreach ( $colecao as $registrobanco ) {
-				$voContrato = new vocontrato ();
-				$voContrato->getDadosBanco ( $registrobanco );
-				$retorno [] = $voContrato;
-			}
-		}
-		
-		$this->colecaoContrato = $retorno;
-	}
+
 	function toString() {
 		$retorno .= $this->ano;
 		$retorno .= "," . $this->cd;
@@ -191,7 +163,7 @@ class voProcLicitatorio extends voentidade {
 		$this->sqHist = $array [2];
 	}
 	function getMensagemComplementarTelaSucesso() {
-		$retorno = "Demanda (Número - Ano): " . formatarCodigoAnoComplementoArgs ( $this->cd, $this->ano, TAMANHO_CODIGOS, null );
+		$retorno = static::getTituloJSP() . " (Número - Ano): " . formatarCodigoAnoComplementoArgs ( $this->cd, $this->ano, TAMANHO_CODIGOS, null );
 		if ($this->sqHist != null) {
 			$retorno .= "<br>Núm. Histórico: " . complementarCharAEsquerda ( $this->sqHist, "0", TAMANHO_CODIGOS );
 		}

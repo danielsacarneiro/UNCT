@@ -51,9 +51,9 @@ Class vousuario extends voentidade{
 		return  "wp_users";
 	}
 	
-	public static function getNmClassProcesso(){
+	/*public static function getNmClassProcesso(){
 		return  "dbusuario";
-	}
+	}*/
 
 	function getValoresWhereSQLChave($isHistorico){
 		$nmTabela = $this->getNmTabelaEntidade($isHistorico);

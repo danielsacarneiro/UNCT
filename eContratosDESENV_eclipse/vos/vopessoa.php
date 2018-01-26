@@ -18,7 +18,7 @@ include_once(caminho_util."DocumentoPessoa.php");
 		static $nmAtrEndereco =  "pe_endereco";
 		static $nmAtrObservacao =  "pe_obs";
 		//indicador de participacao ao programa de acesso ao trabalhador
-		static $nmAtrInPAT = "pe_in_pat";		
+		static $nmAtrInPAT = "pe_in_pat";
 		
 		static $ID_CONTRATO = "ID_CONTRATO_PESSOA";
 		static $ID_NOME_DADOS_CONTRATADA = "ID_NOME_DADOS_CONTRATADA";
@@ -33,6 +33,7 @@ include_once(caminho_util."DocumentoPessoa.php");
         var $inPAT = "";
         var $cdVinculo = "";
         var $inAtribuicaoPAAP = "";
+        var $inAtribuicaoPregoeiro = "";
 
 // ...............................................................
 // Funções ( Propriedades e métodos da classe )
@@ -123,6 +124,8 @@ include_once(caminho_util."DocumentoPessoa.php");
         //vinculo
         $this->cdVinculo = @$_POST[vopessoavinculo::$nmAtrCd];
         $this->inAtribuicaoPAAP = @$_POST[vopessoavinculo::$nmAtrInAtribuicaoPAAP];
+        $this->inAtribuicaoPregoeiro = @$_POST[vopessoavinculo::$nmAtrInAtribuicaoPregoeiro];
+               
         $this->cdGestor = @$_POST[vogestor::$nmAtrCd];
         
         //completa com os dados da entidade

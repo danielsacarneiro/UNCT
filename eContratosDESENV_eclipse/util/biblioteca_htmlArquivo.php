@@ -1,5 +1,4 @@
 <?php
-include_once("../../config_lib.php");
 include_once 'bibliotecaFuncoesPrincipal.php';
 
 Class arquivo{

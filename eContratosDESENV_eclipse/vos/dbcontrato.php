@@ -5,8 +5,6 @@ include_once (caminho_vos . "vocontrato.php");
 include_once (caminho_vos . "vousuario.php");
 include_once (caminho_filtros . "filtroManterContrato.php");
 include_once (caminho_util . "bibliotecaFuncoesPrincipal.php");
-include_once (caminho_util . "biblioteca_htmlArquivo.php");
-include_once (caminho_util . "DocumentoPessoa.php");
 
 // .................................................................................................................
 // Classe select

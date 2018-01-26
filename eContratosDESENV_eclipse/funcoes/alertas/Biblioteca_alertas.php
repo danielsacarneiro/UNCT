@@ -40,7 +40,7 @@ function getCorpoMensagemDemandaContratoColecao($assunto, $colecao, $colunasAAcr
 	return getCorpoMensagemPorColecao($assunto, $colecao, $colunas);
 }
 
-function enviarEmail($assuntoParam, $mensagemParam, $enviarEmail=true) {	
+function enviarEmail($assuntoParam, $mensagemParam, $enviarEmail=true) {
 	try {
 		if ($enviarEmail && email_sefaz::$FLAG_ENVIAR_EMAIL) {
 			$mail = new email_sefaz ($assuntoParam);

@@ -8,7 +8,7 @@ include_once (caminho_funcoes . "demanda/biblioteca_htmlDemanda.php");
 //inicia os parametros
 inicioComValidacaoUsuario(true);
 
-$vo = new voPA();
+$vo = new voProcLicitatorio();
 //var_dump($vo->varAtributos);
 
 $funcao = @$_GET["funcao"];
@@ -36,18 +36,12 @@ if($isInclusao){
 	$colecao = $dbprocesso->consultarPorChaveTela($vo, $isHistorico);	
 	$vo->getDadosBanco($colecao);
 	
-	$voContrato = new vocontrato();
-	$voContrato->getDadosBanco($colecao);
-	
-	$voDemanda = new voDemanda();
-	$voDemanda->getDadosBanco($colecao);
-		
 	putObjetoSessao($vo->getNmTabela(), $vo);
 
     $nmFuncao = "ALTERAR ";
 }
 	
-$titulo = voPA::getTituloJSP();
+$titulo = voProcLicitatorio::getTituloJSP();
 $titulo = $nmFuncao . $titulo;
 setCabecalho($titulo);
 
@@ -65,8 +59,8 @@ setCabecalho($titulo);
 <SCRIPT language="JavaScript" type="text/javascript">
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
 function isFormularioValido() {
-	if (!validarPublicacao())
-		return false;		
+	/*if (!validarPublicacao())
+		return false;*/		
 	return true;
 }
 
@@ -83,29 +77,6 @@ function confirmar() {
 	return confirm("Confirmar Alteracoes?");    
 }
 
-function carregaDadosContratada(){    
-	str = "";
-
-	cdDemanda = document.frm_principal.<?=voPA::$nmAtrCdDemanda?>.value;
-	anoDemanda = document.frm_principal.<?=voPA::$nmAtrAnoDemanda?>.value;
-	
-	if(cdDemanda != "" && anoDemanda != ""){
-		str = anoDemanda + '<?=CAMPO_SEPARADOR?>' + cdDemanda;
-		//vai no ajax
-		getDadosContratadaPorDemanda(str, '<?=vopessoa::$nmAtrNome?>');
-	}
-}
-
-function validarPublicacao(){
-	fundamento = document.frm_principal.<?=voPA::$nmAtrPublicacao?>.value;	
-	if(fundamento.indexOf("<?=constantes::$CD_MODELO?>") != -1){
-		//neste caso o campo fundamento está com o valor MODELO
-		exibirMensagem("O MODELO do campo 'publicação' deve ser alterado.");
-		return false;
-	} 
-
-	return true;
-}
 </SCRIPT>
 <?=setTituloPagina($vo->getTituloJSP())?>
 </HEAD>
@@ -126,82 +97,95 @@ function validarPublicacao(){
             <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
             <TBODY>
 	        <?php	         
-	        $procAdm = formatarCodigoAno($colecao[voPA::$nmAtrCdPA],
-	        		$colecao[voPA::$nmAtrAnoPA]);
+	        $procAdm = formatarCodigoAno($colecao[voProcLicitatorio::$nmAtrCd],
+	        		$colecao[voProcLicitatorio::$nmAtrAno]);
 	         
 	        if(!$isInclusao){
 	        ?>	        	        
 			<TR>
-		         <TH class="campoformulario" nowrap width="1%">P.A.A.P.:</TH>
+		         <TH class="campoformulario" nowrap width="1%">P.L.:</TH>
 		         <TD class="campoformulario" colspan=3>
-		         <?php echo(getDetalhamentoHTMLCodigoAno($vo->anoPA, $vo->cdPA, TAMANHO_CODIGOS_SAFI));?>
-			         <INPUT type="hidden" id="<?=voPA::$nmAtrAnoPA?>" name="<?=voPA::$nmAtrAnoPA?>" value="<?=$vo->anoPA?>">
-					 <INPUT type="hidden" id="<?=voPA::$nmAtrCdPA?>" name="<?=voPA::$nmAtrCdPA?>" value="<?=$vo->cdPA?>">		         
+		         <?php echo(getDetalhamentoHTMLCodigoAno($vo->ano, $vo->cd, TAMANHO_CODIGOS_SAFI));?>
+			         <INPUT type="hidden" id="<?=voProcLicitatorio::$nmAtrAno?>" name="<?=voProcLicitatorio::$nmAtrAno?>" value="<?=$vo->ano?>">
+					 <INPUT type="hidden" id="<?=voProcLicitatorio::$nmAtrCd?>" name="<?=voProcLicitatorio::$nmAtrCd?>" value="<?=$vo->cd?>">		         
 				</TD>
 	        </TR>
-			<?php 
-			getDemandaDetalhamento($voDemanda);
-			getContratoDet($voContrato);
-			
+			<TR>
+	            <TH class="campoformulario" nowrap width="1%">Modalidade:</TH>
+	            <TD class="campoformulario" width="1%" colspan=3>
+	            <?php echo(getDetalhamentoHTMLCodigoAno($vo->ano, $vo->numModalidade, TAMANHO_CODIGOS_SAFI)) 
+	            . " " 
+				. getInputText("", "", dominioModalidadeProcLicitatorio::getDescricaoStatic($vo->cdModalidade, null, true), constantes::$CD_CLASS_CAMPO_READONLY);?>
+				</TD>
+	        </TR>
+			<?php 			
 			$domSiPA = new dominioSituacaoPA();
-			$comboSituacao = new select($domSiPA::getColecao());				
+			$comboSituacao = new select($domSiPA::getColecao());
 	        ?>
 			<TR>
-	            <TH class="campoformulario" nowrap>Situação:</TH>
-	            <TD class="campoformulario" colspan=3><?php echo $comboSituacao->getHtmlCombo(voPA::$nmAtrSituacao,voPA::$nmAtrSituacao, $vo->situacao, true, "campoobrigatorio", false, " required ");?></TD>
+	            <TH class="campoformulario" width="1%" nowrap>Situação:</TH>
+	            <TD class="campoformulario" colspan=3><?php echo $comboSituacao->getHtmlCombo(voProcLicitatorio::$nmAtrSituacao,voProcLicitatorio::$nmAtrSituacao, $vo->situacao, true, "campoobrigatorio", false, " required ");?></TD>
 				</TD>
 	        </TR>
-			
 			<?php			
 	        }else{
 	            $selectExercicio = new selectExercicio();
-	            $vo->dtAbertura = dtHojeSQL;
+	            //$vo->dtAbertura = dtHojeSQL;
 	            
 	            $domSiPA = new dominioSituacaoPA();
 	            $comboSituacao = new select($domSiPA::getColecao());
-	            echoo(getInputHidden(voPA::$nmAtrSituacao, voPA::$nmAtrSituacao, dominioSituacaoPA::$CD_SITUACAO_PA_INSTAURADO));
+	            echo getInputHidden(voProcLicitatorio::$nmAtrSituacao, voProcLicitatorio::$nmAtrSituacao, dominioSituacaoPA::$CD_SITUACAO_PA_INSTAURADO);
 	        ?>
 			<TR>
-		        <TH class="campoformulario" nowrap width="1%">P.A.A.P.:</TH>
+		        <TH class="campoformulario" nowrap width="1%">P.L.:</TH>
 		        <TD class="campoformulario" colspan=3>		        
-		            	<?php echo "Ano: " . $selectExercicio->getHtmlCombo(voPA::$nmAtrAnoPA,voPA::$nmAtrAnoPA, $vo->anoPA, true, "campoobrigatorio", false, " required ");?>			            
-			            Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voPA::$nmAtrCdPA?>" name="<?=voPA::$nmAtrCdPA?>"  value="<?php echo(complementarCharAEsquerda($vo->cdPA, "0", 3));?>"  class="camponaoobrigatorioalinhadodireita" size="6" maxlength="5" required>
+		        <?php echo "Ano: " . $selectExercicio->getHtmlCombo(voProcLicitatorio::$nmAtrAno,voProcLicitatorio::$nmAtrAno, $vo->ano, true, "campoobrigatorio", false, " required ");?>			            
+			    Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voProcLicitatorio::$nmAtrCd?>" name="<?=voProcLicitatorio::$nmAtrCd?>"  value="<?php echo(complementarCharAEsquerda($vo->cd, "0", 3));?>"  class="camponaoobrigatorioalinhadodireita" size="6" maxlength="5" required>
 				<SCRIPT language="JavaScript" type="text/javascript">
-	            	colecaoIDCdNaoObrigatorio = ["<?=voPA::$nmAtrCdPA?>"];
+	            	colecaoIDCdNaoObrigatorio = ["<?=voProcLicitatorio::$nmAtrCd?>"];
 	            </SCRIPT>
-	            <INPUT type="checkbox" id="checkCdNaoObrigatorio" name="checkCdNaoObrigatorio" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCdNaoObrigatorio, true);"> *Incluir código automaticamente.	            			
-			                                           
-	        </TR>			            
-	        <TR>
-	            <TH class="campoformulario" nowrap width="1%">Demanda:</TH>
+	            <INPUT type="checkbox" id="checkCdNaoObrigatorio" name="checkCdNaoObrigatorio" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCdNaoObrigatorio, true);"> *Incluir código automaticamente.			                                           
+	        </TR>
+			<?php 
+			$comboModalidade = new select(dominioModalidadeProcLicitatorio::getColecao());
+	        ?>	        
+			<TR>
+	            <TH class="campoformulario" nowrap width="1%">Modalidade:</TH>
 	            <TD class="campoformulario" colspan=3>
-	            <?php echo "Ano: " . $selectExercicio->getHtmlCombo(voPA::$nmAtrAnoDemanda,voPA::$nmAtrAnoDemanda, $vo->anoDemanda, true, "campoobrigatorio", false, " required onChange='carregaDadosContratada();'");?>
-			  Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voPA::$nmAtrCdDemanda?>" name="<?=voPA::$nmAtrCdDemanda?>"  value="<?php echo(complementarCharAEsquerda($vo->cdDemanda, "0", 5));?>"  class="<?=$classChaves?>" size="6" maxlength="5" <?=$readonlyChaves?> required onBlur='carregaDadosContratada();'>
-			  <div id="<?=vopessoa::$nmAtrNome?>">
-	          </div>
-	        </TR>			            
+	            <?php 
+	            echo $comboModalidade->getHtmlCombo(voProcLicitatorio::$nmAtrCdModalidade,voProcLicitatorio::$nmAtrCdModalidade, $vo->cdModalidade, true, "campoobrigatorio", false, " required ");
+	            echo " Número: "
+	            ?>
+	            <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voProcLicitatorio::$nmAtrNumModalidade?>" name="<?=voProcLicitatorio::$nmAtrNumModalidade?>"  value="<?php echo(complementarCharAEsquerda($vo->numModalidade, "0", 5));?>"  class="<?=$classChaves?>" size="6" maxlength="5" <?=$readonlyChaves?> required>
+	            </TD>
+	        </TR>
+	        			            
 	        <?php 
-	       }	                    
-	       ?>	           				
-            <TR>
-				<TH class="campoformulario" nowrap>Servidor Responsável:</TH>
-                <TD class="campoformulario" colspan="3">
+	       }
+	        ?>	        
+	        <?php	       			
+			$comboTipo = new select(dominioTipoProcLicitatorio::getColecao());
+	        ?>
+			<TR>
+	            <TH class="campoformulario" nowrap>Tipo:</TH>
+	            <TD class="campoformulario" colspan=3><?php echo $comboTipo->getHtmlCombo(voProcLicitatorio::$nmAtrTipo,voProcLicitatorio::$nmAtrTipo, $vo->tipo, true, "campoobrigatorio", false, " required ");?>
+				</TD>
+	        </TR>
+			<TR>
+				<TH class="campoformulario" width="1%" nowrap>Pregoeiro:</TH>
+                <TD class="campoformulario" colspan=3>
                      <?php
                     include_once(caminho_funcoes."pessoa/biblioteca_htmlPessoa.php");                    
-                    echo getComboPessoaRespPA(voPA::$nmAtrCdResponsavel, voPA::$nmAtrCdResponsavel, $vo->cdResponsavel, "camponaoobrigatorio", "required");                                        
+                    echo getComboPessoaPregoeiro(voProcLicitatorio::$nmAtrCdPregoeiro, voProcLicitatorio::$nmAtrCdPregoeiro, $vo->cdPregoeiro, "camponaoobrigatorio", "required");                                        
                     ?>
-            </TR>	        
-			<TR>
-	            <TH class="campoformulario" nowrap>Observação:</TH>
-	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=voPA::$nmAtrObservacao?>" name="<?=voPA::$nmAtrObservacao?>" class="camponaoobrigatorio" ><?php echo($vo->obs);?></textarea>
 				</TD>
 	        </TR>
 			<TR>
 	            <TH class="campoformulario" nowrap>Data Abertura:</TH>
 	            <TD class="campoformulario" colspan="3">
 	            	<INPUT type="text" 
-	            	       id="<?=voPA::$nmAtrDtAbertura?>" 
-	            	       name="<?=voPA::$nmAtrDtAbertura?>" 
+	            	       id="<?=voProcLicitatorio::$nmAtrDtAbertura?>" 
+	            	       name="<?=voProcLicitatorio::$nmAtrDtAbertura?>" 
 	            			value="<?php echo(getData($vo->dtAbertura));?>"
 	            			onkeyup="formatarCampoData(this, event, false);" 
 	            			class="camponaoobrigatorio" 
@@ -210,28 +194,31 @@ function validarPublicacao(){
 				</TD>
         	</TR>
 			<TR>
-	            <TH class="campoformulario" nowrap>Dt.Notificação Nota Imputação:</TH>
+	            <TH class="campoformulario" nowrap>Dt.Publicação:</TH>
 	            <TD class="campoformulario" colspan="3">
 	            	<INPUT type="text" 
-	            	       id="<?=voPA::$nmAtrDtNotificacao?>" 
-	            	       name="<?=voPA::$nmAtrDtNotificacao?>" 
-	            			value="<?php echo(getData($vo->dtNotificacao));?>"
+	            	       id="<?=voProcLicitatorio::$nmAtrDtPublicacao?>" 
+	            	       name="<?=voProcLicitatorio::$nmAtrDtPublicacao?>" 
+	            			value="<?php echo(getData($vo->dtPublicacao));?>"
 	            			onkeyup="formatarCampoData(this, event, false);" 
 	            			class="camponaoobrigatorio" 
 	            			size="10" 
 	            			maxlength="10" required>
 				</TD>
         	</TR>
-        	<?php        	
-        		$modeloPublicacao = voPA::getTextoModeloPublicacaoPenalidade($voContrato);        	 
-        	?>
 			<TR>
-	            <TH class="campoformulario" nowrap>Publicação:</TH>
-	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=voPA::$nmAtrPublicacao?>" name="<?=voPA::$nmAtrPublicacao?>" class="camponaoobrigatorio" ><?php echo($vo->publicacao);?></textarea>
+	            <TH class="campoformulario" nowrap>Objeto:</TH>
+	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=voProcLicitatorio::$nmAtrObjeto?>" name="<?=voProcLicitatorio::$nmAtrObjeto?>" class="camponaoobrigatorio" required><?php echo($vo->objetos); required?></textarea>
+				</TD>
+	        </TR>	        
+			<TR>
+	            <TH class="campoformulario" nowrap>Observação:</TH>
+	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=voProcLicitatorio::$nmAtrObservacao?>" name="<?=voProcLicitatorio::$nmAtrObservacao?>" class="camponaoobrigatorio" ><?php echo($vo->obs);?></textarea>
 	            <SCRIPT language="JavaScript" type="text/javascript">
-	            	colecaoIDCamposRequired = ["<?=voPA::$nmAtrDtNotificacao?>"];
+	            	colecaoIDCamposRequired = ["<?=voProcLicitatorio::$nmAtrDtAbertura?>",
+	            		"<?=voProcLicitatorio::$nmAtrDtPublicacao?>",
+	        		"<?=voProcLicitatorio::$nmAtrObjeto?>"];
 	            </SCRIPT>
-	            <br><INPUT type="checkbox" onClick="if(!this.checked){document.frm_principal.<?=voPA::$nmAtrPublicacao?>.value='';}else{document.frm_principal.<?=voPA::$nmAtrPublicacao?>.value='<?=$modeloPublicacao?>'};"> *incluir Modelo Publicação.
 	            <br><INPUT type="checkbox" id="checkResponsabilidade" name="checkResponsabilidade" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCamposRequired);"> *Assumo a responsabilidade de não incluir os valores obrigatórios.	            				            
 				</TD>
 	        </TR>	        

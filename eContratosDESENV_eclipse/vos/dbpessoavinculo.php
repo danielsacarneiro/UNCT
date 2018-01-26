@@ -30,7 +30,8 @@ include_once(caminho_lib. "dbprocesso.obj.php");
 		$retorno = "";        
         $retorno.= $this-> getVarComoNumero($vopessoavinculo->cd) . ",";
         $retorno.= $this-> getVarComoNumero($vopessoavinculo->cdPessoa) . ",";
-        $retorno.= $this-> getVarComoString($vopessoavinculo->inAtribuicaoPAAP);
+        $retorno.= $this-> getVarComoString($vopessoavinculo->inAtribuicaoPAAP). ",";
+        $retorno.= $this-> getVarComoString($vopessoavinculo->inAtribuicaoPregoeiro);
         
         $retorno.= $vopessoavinculo->getSQLValuesInsertEntidade();
 		        
@@ -53,6 +54,11 @@ include_once(caminho_lib. "dbprocesso.obj.php");
                 
         if($vo->inAtribuicaoPAAP != null){
         	$retorno.= $sqlConector . vopessoavinculo::$nmAtrInAtribuicaoPAAP . " = " . $this->getVarComoString($vo->inAtribuicaoPAAP);
+        	$sqlConector = ",";
+        }
+        
+        if($vo->inAtribuicaoPregoeiro != null){
+        	$retorno.= $sqlConector . vopessoavinculo::$nmAtrInAtribuicaoPregoeiro . " = " . $this->getVarComoString($vo->inAtribuicaoPregoeiro);
         	$sqlConector = ",";
         }
         

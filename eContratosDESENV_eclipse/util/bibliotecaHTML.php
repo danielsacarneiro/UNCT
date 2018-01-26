@@ -652,7 +652,7 @@ function getInputText($idText, $nmText, $value, $class = null, $size = null, $ma
 	}
 	if ($size == null) {
 		if($value != null){
-			$size = strlen($value) + 1;
+			$size = strlen($value) + 2;
 		}else{
 			$size = 20;
 		}

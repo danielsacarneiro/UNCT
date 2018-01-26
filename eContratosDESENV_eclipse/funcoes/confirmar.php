@@ -23,20 +23,19 @@ include_once(caminho_vos.$class.".php");
 });*/
 
 //inicio();
-inicioComValidacaoUsuario(true);
-
-setCabecalhoPorNivel(null,1);
-$funcao = @$_POST["funcao"];
-//echo $funcao;
-$isInclusao = $funcao == constantes::$CD_FUNCAO_INCLUIR;
-$isExclusao = $funcao == constantes::$CD_FUNCAO_EXCLUIR;
-$isAlteracao = $funcao == constantes::$CD_FUNCAO_ALTERAR;
-
-$msgErro = "";
-$nmFuncao = "";
-
 try{
-    
+	
+	inicioComValidacaoUsuario(true);
+	
+	$funcao = @$_POST["funcao"];
+	//echo $funcao;
+	$isInclusao = $funcao == constantes::$CD_FUNCAO_INCLUIR;
+	$isExclusao = $funcao == constantes::$CD_FUNCAO_EXCLUIR;
+	$isAlteracao = $funcao == constantes::$CD_FUNCAO_ALTERAR;
+	
+	$msgErro = "";
+	$nmFuncao = "";
+	
     session_start();
     if(!isset($_SESSION["vo"])){
         throw new Exception("Sessão expirada. Realize nova consulta.");
@@ -44,6 +43,13 @@ try{
     
     //$vo = $_SESSION["vo"];
     $vo = getObjetoSessao("vo");
+    try{
+    	$titulo = $vo->getTituloJSP();
+    }catch (Exception $exs){
+    	$titulo = constantes::$nomeSistema;
+    }
+    setCabecalhoPorNivel($titulo,1);
+    
     $dbprocesso = new $class(null);
     //session_destroy();
     
@@ -95,7 +101,7 @@ try{
 ?>
 <!DOCTYPE html>
 <HEAD>
-<?=setTituloPaginaPorNivel(null,1)?>
+<?=setTituloPaginaPorNivel($titulo,1)?>
 
 <SCRIPT language="JavaScript" type="text/javascript">
 

@@ -126,7 +126,8 @@ function verificaVinculo(){
 		campoDIVContratado.style.display = "none";
 	}	
 
-	pColecaoIDCamposRequired = ["<?=vopessoavinculo::$nmAtrInAtribuicaoPAAP?>"];
+	pColecaoIDCamposRequired = ["<?=vopessoavinculo::$nmAtrInAtribuicaoPAAP?>",
+		"<?=vopessoavinculo::$nmAtrInAtribuicaoPregoeiro?>"];
 	if(vinculo == <?=dominioVinculoPessoa::$CD_VINCULO_SERVIDOR?>){
 		//biblioteca_funcoes_principal.js
 		esconderDiv(campoDIVServidor, pColecaoIDCamposRequired, false);		
@@ -235,9 +236,9 @@ function abrirJanelaAuxiliarGestor(){
                     <div id="<?=vopessoa::$ID_REQ_DIV_SERVIDOR?>">
 		                <?php 
 			            include_once(caminho_util. "dominioSimNao.php");
-			            $comboSimNao = new select(dominioSimNao::getColecao());	             
-			            echo "Tem atribuição de instruir PAAP?: ";
-			            echo $comboSimNao->getHtmlCombo(vopessoavinculo::$nmAtrInAtribuicaoPAAP,vopessoavinculo::$nmAtrInAtribuicaoPAAP, $vopessoavinculo->inAtribuicaoPAAP, true, "camponaoobrigatorio", false," required ");
+			            $comboSimNao = new select(dominioSimNao::getColecao());
+			            echoo("Tem atribuição de instruir PAAP?: ". $comboSimNao->getHtmlCombo(vopessoavinculo::$nmAtrInAtribuicaoPAAP,vopessoavinculo::$nmAtrInAtribuicaoPAAP, $vopessoavinculo->inAtribuicaoPAAP, true, "camponaoobrigatorio", false," required "));
+			            echo "É pregoeiro?: ".$comboSimNao->getHtmlCombo(vopessoavinculo::$nmAtrInAtribuicaoPregoeiro ,vopessoavinculo::$nmAtrInAtribuicaoPregoeiro , $vopessoavinculo->inAtribuicaoPregoeiro, true, "camponaoobrigatorio", false," required ");
 			            ?>
                     </div>
             </TR>               

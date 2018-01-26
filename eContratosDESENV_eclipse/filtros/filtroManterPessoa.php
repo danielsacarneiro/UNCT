@@ -16,6 +16,7 @@ class filtroManterPessoa extends filtroManter{
     var $nome="";
     var $cdvinculo="";
     var $inAtribuicaoPAAP ="";
+    var $inAtribuicaoPregoeiro ="";
     
     var $cdContrato="";
     var $anoContrato="";
@@ -34,6 +35,8 @@ class filtroManterPessoa extends filtroManter{
 		$this->nome = @$_POST[vopessoa::$nmAtrNome];
 		$this->cdvinculo = @$_POST[vopessoavinculo::$nmAtrCd];
 		$this->inAtribuicaoPAAP = @$_POST[vopessoavinculo::$nmAtrInAtribuicaoPAAP];
+		$this->inAtribuicaoPregoeiro = @$_POST[vopessoavinculo::$nmAtrInAtribuicaoPregoeiro];
+		
 	}
 	
 	function getFiltroConsultaSQL($comAtributoOrdenacao = null){
@@ -84,6 +87,21 @@ class filtroManterPessoa extends filtroManter{
 			}
 			
 			$filtro .= ") ";
+		
+					$conector  = "\n AND ";
+		}
+		
+		if($this->inAtribuicaoPregoeiro != null){
+			$filtro = $filtro . $conector
+			. "($nmTabelaPessoaVinculo." .vopessoavinculo::$nmAtrInAtribuicaoPregoeiro 
+			. " = "
+					. getVarComoString($this->inAtribuicaoPregoeiro);
+						
+					if($this->inAtribuicaoPregoeiro == constantes::$CD_NAO){
+						$filtro .= " OR $nmTabelaPessoaVinculo." . vopessoavinculo::$nmAtrInAtribuicaoPregoeiro . " IS NULL";
+					}
+						
+					$filtro .= ") ";
 		
 					$conector  = "\n AND ";
 		}

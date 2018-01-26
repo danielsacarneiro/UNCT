@@ -267,11 +267,6 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	            echo $comboSituacao->getHtmlCombo("","", $vo->situacao, true, "camporeadonly", false, " disabled ");?>
 				</TD>				
 	        </TR>
-				<?php 
-				include_once 'biblioteca_htmlDemanda.php';
-				$colecaoTramitacao = $vo->dbprocesso->consultarDemandaTramitacao($vo);
-				mostrarGridDemanda($colecaoTramitacao, true);
-				?>
 	        <?php
 	        }else{
 	        	//INCLUSAO
@@ -374,6 +369,14 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	            			maxlength="10" required>
 				</TD>
         	</TR>
+        		<?php 
+				if(!$isInclusao){
+					include_once 'biblioteca_htmlDemanda.php';
+					$colecaoTramitacao = $vo->dbprocesso->consultarDemandaTramitacao($vo);
+					mostrarGridDemanda($colecaoTramitacao, true);
+				}
+				?>
+        	
 	        
 <TR>
 	<TD halign="left" colspan="4">

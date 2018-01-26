@@ -118,6 +118,21 @@ function getComboPessoaRespPA($idCampo, $nmCampo, $cdOpcaoSelecionada, $classCam
 	
 }
 
+function getComboPessoaPregoeiro($idCampo, $nmCampo, $cdOpcaoSelecionada, $classCampo, $tagHtml){
+	$dbprocesso = new dbpessoa();
+	$filtro = new filtroManterPessoa(false);
+	$filtro->cdvinculo = dominioVinculoPessoa::$CD_VINCULO_SERVIDOR;
+	$filtro->inAtribuicaoPregoeiro = constantes::$CD_SIM;
+	$filtro->cdAtrOrdenacao = null;
+	$recordset = $dbprocesso->consultarPessoaManter($filtro, false);
+
+	$select = new select(array());
+	$select->getRecordSetComoColecaoSelect(vopessoa::$nmAtrCd, vopessoa::$nmAtrNome, $recordset);
+
+	return getComboColecaoGenerico($select->colecao, $idCampo, $nmCampo, $cdOpcaoSelecionada, $classCampo, $tagHtml);
+}
+
+
 function getComboPessoaVinculo($idCampo, $nmCampo, $cdOpcaoSelecionada, $classCampo, $tagHtml){
 	$dominioVinculo = new dominioVinculoPessoa();
 	return getComboColecaoGenerico($dominioVinculo->colecao, $idCampo, $nmCampo, $cdOpcaoSelecionada, $classCampo, $tagHtml);

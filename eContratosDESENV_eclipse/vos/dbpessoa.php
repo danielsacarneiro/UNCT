@@ -1,11 +1,6 @@
 <?php
 include_once (caminho_lib . "dbprocesso.obj.php");
-include_once (caminho_vos . "vopessoa.php");
-include_once (caminho_vos . "vousuario.php");
 include_once (caminho_util . "bibliotecaFuncoesPrincipal.php");
-include_once (caminho_vos . "dbgestor.php");
-include_once (caminho_vos . "dbpessoavinculo.php");
-include_once (caminho_vos . "dbpessoagestor.php");
 
 // .................................................................................................................
 // Classe select
@@ -17,6 +12,7 @@ class dbpessoa extends dbprocesso {
 		$arrayColunasRetornadas = array($nmTabela . ".*",
 				vopessoavinculo::getNmTabela () . "." . vopessoavinculo::$nmAtrCd,
 				vopessoavinculo::getNmTabela () . "." . vopessoavinculo::$nmAtrInAtribuicaoPAAP,
+				vopessoavinculo::getNmTabela () . "." . vopessoavinculo::$nmAtrInAtribuicaoPregoeiro,
 				vogestor::getNmTabela () . "." . vogestor::$nmAtrCd,
 				vogestor::getNmTabela () . "." . vogestor::$nmAtrDescricao
 		);		
@@ -95,6 +91,7 @@ class dbpessoa extends dbprocesso {
 		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrTel;
 		$atributosConsulta .= "," . vopessoavinculo::getNmTabela () . "." . vopessoavinculo::$nmAtrCd;
 		$atributosConsulta .= "," . vopessoavinculo::getNmTabela () . "." . vopessoavinculo::$nmAtrInAtribuicaoPAAP;
+		$atributosConsulta .= "," . vopessoavinculo::getNmTabela () . "." . vopessoavinculo::$nmAtrInAtribuicaoPregoeiro;
 		
 		if($filtro->isHistorico()){
 			$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrSqHist;
@@ -187,6 +184,7 @@ class dbpessoa extends dbprocesso {
 		$vopvinculo->cd = $vopessoa->cdVinculo;
 		$vopvinculo->cdPessoa = $vopessoa->cd;
 		$vopvinculo->inAtribuicaoPAAP = $vopessoa->inAtribuicaoPAAP;
+		$vopvinculo->inAtribuicaoPregoeiro = $vopessoa->inAtribuicaoPregoeiro;
 		
 		$dbpvinculo = new dbpessoavinculo ();
 		$dbpvinculo->cDb = $this->cDb;

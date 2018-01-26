@@ -170,8 +170,19 @@ function confirmar() {
 								if($inPAAP == null){
 									$inPAAP = constantes::$CD_NAO;
 								}
+								
+								$inPregoeiro = $colecao[vopessoavinculo::$nmAtrInAtribuicaoPregoeiro];
+								if($inPregoeiro == null){
+									$inPregoeiro = constantes::$CD_NAO;
+								}
+								
 							?>
-							<TD class="tabeladados">Atribuição de PAAP: <?php echo dominioSimNao::getDescricaoStatic($inPAAP);?></TD>
+							<TD class="tabeladados">
+							Atribuição de PAAP: <?php echo dominioSimNao::getDescricaoStatic($inPAAP);?>
+							</TD>
+							<TD class="tabeladados">
+							Pregoeiro: <?php echo dominioSimNao::getDescricaoStatic($inPregoeiro);?>
+							</TD>
 							<?php
 							}
 							

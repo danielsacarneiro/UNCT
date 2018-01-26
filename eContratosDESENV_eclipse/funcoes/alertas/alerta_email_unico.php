@@ -7,6 +7,8 @@ require_once (caminho_util . "bibliotecaFuncoesPrincipal.php");
 $enviarEmail = @$_GET [constantes::$ID_REQ_IN_ENVIAR_EMAIL];
 if($enviarEmail != null){
 	$enviarEmail = getAtributoComoBooleano($enviarEmail);
+}else{
+	$enviarEmail = true;
 }
 
 $count = 0;

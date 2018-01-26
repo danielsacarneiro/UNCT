@@ -43,6 +43,10 @@ setCabecalho($titulo);
     f4.adicionarItem(new Link('Penalidades (PAAP)', '<?=caminho_funcoesHTML?>pa_penalidade', ''));
 	f.adicionarItem(f4);
 
+	fprocLic = new Tree('Serviço 05 (Proc.Licitatório.)');
+	fprocLic.adicionarItem(new Link('Proc.Licitatório', '<?=caminho_funcoesHTML.voProcLicitatorio::getNmTabela()?>', ''));
+	f.adicionarItem(fprocLic);
+
 	/*flegislacao = new Tree('Serviço 05 (Legislação)');    
 	flegislacao.adicionarItem(new Link('Decreto 42.191 - Aplicação de penalidade(PAAP)', 'h:\\ASSESSORIA JURÍDICA\\ATJA\\LEGISLAÇÃO\\DECRETO Nº 42.191 DE 2015 - APLICAÇÃO DE PENALIDADES A LICITANTES.pdf', ''));
 	f.adicionarItem(flegislacao);*/

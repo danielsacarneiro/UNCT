@@ -27,6 +27,7 @@ class dominioTpDocumento extends dominio {
 	static $CD_TP_DOC_PUBLICACAO_PAAP = "PU";
 	static $CD_TP_DOC_RELATORIO = "RE";
 	static $CD_TP_DOC_RELATORIO_CONCLUSAO = "RC";
+	static $CD_TP_DOC_TERMO_ADITIVO = "TA";
 	
 	static $DS_TP_DOC_APOSTILAMENTO = "Apostilamento";
 	static $DS_TP_DOC_CONTROLE_AQUISICAO = "Controle Aquisição";
@@ -46,6 +47,7 @@ class dominioTpDocumento extends dominio {
 	static $DS_TP_DOC_PUBLICACAO_PAAP = "Publicação Penalidade";
 	static $DS_TP_DOC_RELATORIO = "Relatório";
 	static $DS_TP_DOC_RELATORIO_CONCLUSAO = "Relatório Com Alegações Finais";
+	static $DS_TP_DOC_TERMO_ADITIVO = "Termo Aditivo";
 	
 	// ...............................................................
 	// Construtor
@@ -72,6 +74,7 @@ class dominioTpDocumento extends dominio {
 				self::$CD_TP_DOC_PROPOSTA_PRECOS => self::$DS_TP_DOC_PROPOSTA_PRECOS,
 				self::$CD_TP_DOC_PUBLICACAO_PAAP => self::$DS_TP_DOC_PUBLICACAO_PAAP,
 				self::$CD_TP_DOC_RELATORIO => self::$DS_TP_DOC_RELATORIO,
+				self::$CD_TP_DOC_TERMO_ADITIVO => self::$DS_TP_DOC_TERMO_ADITIVO,
 				//self::$CD_TP_DOC_RELATORIO_CONCLUSAO => self::$DS_TP_DOC_RELATORIO_CONCLUSAO,
 		);
 	}

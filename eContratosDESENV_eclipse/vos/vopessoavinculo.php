@@ -5,10 +5,12 @@ include_once(caminho_lib."voentidade.php");
 		static $nmAtrCd  = "vi_cd";
 		static $nmAtrCdPessoa  = "pe_cd";
 		static $nmAtrInAtribuicaoPAAP = "vi_inatribuicaoPAAP";
+		static $nmAtrInAtribuicaoPregoeiro = "vi_inatribuicaoPregoeiro";
         
 		var $cd  = "";		
         var $cdPessoa  = "";
         var $inAtribuicaoPAAP = "";
+        var $inAtribuicaoPregoeiro = "";
 
 // ...............................................................
 // Funcoes ( Propriedades e métodos da classe )
@@ -17,6 +19,7 @@ include_once(caminho_lib."voentidade.php");
        parent::__construct();
        $this->temTabHistorico = false;
        $this->inAtribuicaoPAAP = constantes::$CD_NAO;
+       $this->inAtribuicaoPregoeiro = constantes::$CD_NAO;
               
        //retira os atributos padrao que nao possui
        //remove tambem os que o banco deve incluir default
@@ -53,6 +56,7 @@ include_once(caminho_lib."voentidade.php");
             self::$nmAtrCd,            
         	self::$nmAtrCdPessoa,
         	self::$nmAtrInAtribuicaoPAAP,
+        	self::$nmAtrInAtribuicaoPregoeiro,
         );
         
         return $retorno;    
@@ -63,6 +67,7 @@ include_once(caminho_lib."voentidade.php");
 		$this->cd = $registrobanco[self::$nmAtrCd];
 		$this->cdPessoa = $registrobanco[self::$nmAtrCdPessoa];
 		$this->inAtribuicaoPAAP = $registrobanco[self::$nmAtrInAtribuicaoPAAP];
+		$this->inAtribuicaoPregoeiro = $registrobanco[self::$nmAtrInAtribuicaoPregoeiro];
 	}   
 	
 	/*function getDadosFormulario(){
@@ -85,6 +90,7 @@ include_once(caminho_lib."voentidade.php");
 		$retorno.= $this->cd . ",";
         $retorno.= $this->cdPessoa . ",";
         $retorno.= $this->inAtribuicaoPAAP . ",";
+        $retorno.= $this->inAtribuicaoPregoeiro . ",";
 		return $retorno;		
 	}   
 	
@@ -98,6 +104,7 @@ include_once(caminho_lib."voentidade.php");
 		$this->cd = $array[0];
 		$this->cdPessoa = $array[1];
 		$this->inAtribuicaoPAAP = $array[2];
+		$this->inAtribuicaoPregoeiro = $array[3];
 	}	
 
 }

@@ -22,7 +22,7 @@ class dominio extends multiplosConstrutores {
 	static function getDescricaoStaticTeste($chave) {
 		return static::getDescricaoStatic ( $chave );
 	}
-	static function getDescricaoStatic($chave, $colecao = null) {
+	static function getDescricaoStatic($chave, $colecao = null, $isDescricaoMaiuscula=false) {
 		$retorno = $chave;
 		if ($colecao == null) {
 			$colecao = static::getColecao ();
@@ -42,6 +42,10 @@ class dominio extends multiplosConstrutores {
 					break;
 				}
 			}
+		}
+		
+		if($isDescricaoMaiuscula){
+			$retorno = strtoupper($retorno);
 		}
 		
 		return $retorno;
@@ -135,9 +139,9 @@ class dominio extends multiplosConstrutores {
 		return $retorno;
 	}
 	
-	function getHtmlDetalhamento($id, $nm, $opcaoSelecionada, $isTrazerValuenoOption) {
+	static function getHtmlDetalhamento($id, $nm, $opcaoSelecionada, $isTrazerValuenoOption) {
 		$html = "";
-		$value = $this->getDescricao($opcaoSelecionada);
+		$value = self::getDescricaoStatic($opcaoSelecionada);
 		if($isTrazerValuenoOption){
 			$value = select::getDescricaoComValueNoOption($opcaoSelecionada, $value);
 		}

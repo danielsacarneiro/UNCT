@@ -54,6 +54,11 @@ class voentidade extends multiplosConstrutores {
 		$this->NM_METODO_RETORNO_CONFIRMAR = null;
 		$this->temTabHistorico = true;
 		
+		if (method_exists ( $this, "getNmClassProcesso" )) {
+			$class = static::getNmClassProcesso ();
+			$this->dbprocesso = new $class ();
+		}
+
 				
 		if ($arrayChave != null && method_exists ( $this, "getChavePrimariaVOExplode" )) {
 			$this->getChavePrimariaVOExplode ( $arrayChave );

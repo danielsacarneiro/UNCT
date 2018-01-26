@@ -3,16 +3,20 @@ ALTER DATABASE unct CHARACTER SET utf8 COLLATE utf8_general_ci;
 drop table if exists proc_licitatorio;
 CREATE TABLE proc_licitatorio (
     pl_ex INT NOT NULL, 
-    pl_cd INT NOT NULL, 
-    mod_cd INT NOT NULL, -- modalidade/identificacao do certame
+    pl_cd INT NOT NULL,     
     
 	dem_ex INT NOT NULL, -- dados da demanda
     dem_cd INT NOT NULL,    
+		
+	pl_orgao_responsavel INT NOT NULL, -- orgao responsavel pelo PL (SAD ou SEFAZ)
+	pl_comissao_cd INT, -- numero da comissao de licitacao
+	pl_mod_cd char(2) NOT NULL, -- Modalidade/identificacao do certame
+	pl_mod_num INT NOT NULL, -- NUMERO DA modalidade/identificacao do certame
+    pl_tp char(2) NOT NULL, -- menor preço...
+	pl_cd_pregoeiro INT NULL,    
 	
-    pl_tp INT NOT NULL, -- menor preço...
-    pl_dt_sessao DATE NULL,
-    pl_dt_publicacao DATE NULL,            
-    pl_cd_pregoeiro INT NULL,    
+    pl_dt_abertura DATE NULL,
+    pl_dt_publicacao DATE NULL,
     pl_objeto TEXT,
     pl_observacao TEXT,
     pl_si INT NOT NULL,
@@ -23,11 +27,13 @@ CREATE TABLE proc_licitatorio (
     cd_usuario_ultalt INT,    
     in_desativado CHAR(1) NOT NULL DEFAULT 'N',
     
-    CONSTRAINT pk PRIMARY KEY (pl_ex, pl_cd)
-);
-ALTER TABLE proc_licitatorio ADD CONSTRAINT fk_pl_demanda FOREIGN KEY (dem_ex, dem_cd) REFERENCES demanda (dem_ex, dem_cd) 
+    CONSTRAINT pk PRIMARY KEY (pl_ex, pl_cd),
+
+   	CONSTRAINT fk_pl_pregoeiro FOREIGN KEY (pl_cd_pregoeiro) REFERENCES pessoa (pe_cd) 
 	ON DELETE RESTRICT
-	ON UPDATE RESTRICT;
+	ON UPDATE RESTRICT
+
+);
 
 drop table if exists pa_hist;
 CREATE TABLE pa_hist (
