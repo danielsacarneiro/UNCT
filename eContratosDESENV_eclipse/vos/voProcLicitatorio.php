@@ -46,7 +46,7 @@ class voProcLicitatorio extends voentidade {
 	// Funcoes ( Propriedades e métodos da classe )
 	function __construct() {
 		parent::__construct ();
-		$this->temTabHistorico = false;		
+		$this->temTabHistorico = true;		
 		// retira os atributos padrao que nao possui
 		// remove tambem os que o banco deve incluir default
 		$arrayAtribRemover = array (
