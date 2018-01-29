@@ -323,8 +323,8 @@ function getProcLicitatorioEntradaDados($cdProcLic, $anoProcLic, $arrayCssClass,
 	$htmlCdProcLic = $arrayComplementoHTML [0];
 	$htmlAnoProcLic = $arrayComplementoHTML [1];
 	
-	$pNmCampoCdProcLicitatorio = voProcLicitatorio::$nmAtrCdProcLicitatorio;
-	$pNmCampoAnoProcLicitatorio = voProcLicitatorio::$nmAtrAnoProcLicitatorio;
+	$pNmCampoCdProcLicitatorio = voProcLicitatorio::$nmAtrCd;
+	$pNmCampoAnoProcLicitatorio = voProcLicitatorio::$nmAtrAno;
 	
 	echo "Número: <INPUT type='text' onkeyup='validarCampoNumericoPositivo(this)' id='" . $pNmCampoCdProcLicitatorio . "' name='" . $pNmCampoCdProcLicitatorio . "'  value='" . complementarCharAEsquerda ( $cdProcLic, "0", TAMANHO_CODIGOS_SAFI ) . "'  class='" . $cssCdProcLic . "' size='5' maxlength='5'  " . $htmlCdProcLic . ">";
 	echo "&nbsp;Ano: " . $selectExercicio->getHtmlCombo ( $pNmCampoAnoProcLicitatorio, $pNmCampoAnoProcLicitatorio, $anoProcLic, true, $cssAnoProcLic, false, $htmlAnoProcLic );
