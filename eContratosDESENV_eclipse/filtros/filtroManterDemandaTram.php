@@ -219,11 +219,12 @@ class filtroManterDemandaTram extends filtroManterDemanda{
 	function getAtributoOrdenacaoDefault(){
 		$nmTabelaDemanda = voDemanda::getNmTabelaStatic($this->isHistorico);
 		$nmTabelaDemandaTram = voDemandaTramitacao::getNmTabelaStatic($this->isHistorico);
-		$retorno = $nmTabelaDemandaTram . "." . voDemandaTramitacao::$nmAtrAno . " " . constantes::$CD_ORDEM_CRESCENTE
-				. ",". $nmTabelaDemandaTram . "." . voDemandaTramitacao::$nmAtrCd . " " . constantes::$CD_ORDEM_CRESCENTE
-				. ",". $nmTabelaDemandaTram . "." . voDemandaTramitacao::$nmAtrSq . " " . constantes::$CD_ORDEM_CRESCENTE
-				. ",". $nmTabelaDemanda . "." . voDemanda::$nmAtrPrioridade . " " . constantes::$CD_ORDEM_CRESCENTE
-				. "," . $nmTabelaDemanda . "." . voDemanda::$nmAtrDhInclusao . " " . constantes::$CD_ORDEM_DECRESCENTE; 
+		$ordem = $this->cdOrdenacao;
+		$retorno = $nmTabelaDemandaTram . "." . voDemandaTramitacao::$nmAtrAno . " " . $ordem
+				. ",". $nmTabelaDemandaTram . "." . voDemandaTramitacao::$nmAtrCd . " " . $ordem
+				. ",". $nmTabelaDemandaTram . "." . voDemandaTramitacao::$nmAtrSq . " " . $ordem
+				. ",". $nmTabelaDemanda . "." . voDemanda::$nmAtrPrioridade . " " . $ordem
+				. "," . $nmTabelaDemanda . "." . voDemanda::$nmAtrDhInclusao . " " . $ordem; 
 		return $retorno; 		
 	}
 	

@@ -475,6 +475,7 @@ class dbDemanda extends dbprocesso {
 		$retorno .= $this->getVarComoNumero ( $vo->ano ) . ",";
 		$retorno .= $this->getVarComoNumero ( $vo->cd ) . ",";
 		$retorno .= $this->getVarComoNumero ( $vo->tipo ) . ",";
+		$retorno .= $this->getVarComoString( $vo->inTpDemandaReajusteComMontanteA ) . ",";		
 		$retorno .= $this->getVarComoNumero ( $vo->cdSetor ) . ",";
 		// $retorno.= $this-> getVarComoNumero($vo->situacao);
 		$retorno .= $this->getVarComoNumero ( dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_ABERTA ) . ",";
@@ -506,7 +507,12 @@ class dbDemanda extends dbprocesso {
 		}
 		
 		if ($vo->tipo != null) {
-			$retorno .= $sqlConector . voDemanda::$nmAtrTipo . " = " . $this->getVarComoString ( $vo->tipo );
+			$retorno .= $sqlConector . voDemanda::$nmAtrTipo . " = " . $this->getVarComoNumero ( $vo->tipo );
+			$sqlConector = ",";
+		}
+		
+		if ($vo->inTpDemandaReajusteComMontanteA != null) {
+			$retorno .= $sqlConector . voDemanda::$nmAtrInTpDemandaReajusteComMontanteA . " = " . $this->getVarComoString ( $vo->inTpDemandaReajusteComMontanteA );
 			$sqlConector = ",";
 		}
 		

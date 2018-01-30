@@ -26,3 +26,20 @@ function formataFormTpDemanda(pNmCampoTpDemanda, pNmCampoAtributos) {
 		habilitarCampos(campoCheckBoxAtributos, false, false);
 	}		
 }
+
+function formataFormTpDemandaReajuste(pIDCampoTipo, pIDCampoDivMontanteA, pColecaoTpDemandaReajuste){		
+	campoTpDemanda = document.getElementById(pIDCampoTipo);
+	cdTpDemanda = campoTpDemanda.value;	
+	isDemandaReajuste = pColecaoTpDemandaReajuste.indexOf(cdTpDemanda) != -1;	
+
+	campoDIVMontanteA= document.getElementById(pIDCampoDivMontanteA);
+	pColecaoIDCamposRequired = null;
+	if(isDemandaReajuste){
+		//biblioteca_funcoes_principal.js
+		esconderDiv(campoDIVMontanteA, pColecaoIDCamposRequired, false);		
+	}
+	else{ 
+		esconderDiv(campoDIVMontanteA, pColecaoIDCamposRequired, true);
+	}	
+}
+

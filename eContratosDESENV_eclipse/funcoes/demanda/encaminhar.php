@@ -64,6 +64,7 @@ setCabecalho($titulo);
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_ajax.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_pessoa.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_contrato.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_demanda.js"></SCRIPT>
 
 <SCRIPT language="JavaScript" type="text/javascript">
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
@@ -165,6 +166,7 @@ function formataFormContratoPorTpDemanda(pNmCampoTpDemanda, pColecaoNmObjetosFor
 function validaFormulario() {
 	pColecaoNmObjetosFormContrato = ['<?=vocontrato::$nmAtrTipoContrato;?>', '<?=vocontrato::$nmAtrCdContrato;?>','<?=vocontrato::$nmAtrAnoContrato;?>'];	
 	formataFormContratoPorTpDemanda('<?=voDemanda::$nmAtrTipo?>', pColecaoNmObjetosFormContrato);
+	formataTpDemandaReajuste();
 }
 
 <?php
@@ -193,10 +195,22 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	//alert(document.frm_principal.<?=voDocumento::getNmTabela()?>.value);
 }
 
+function formataTpDemandaReajuste(){	
+	<?php
+	$dominioTipoDemanda = new dominioTipoDemanda(dominioTipoDemanda::getColecaoTipoDemandaContratoReajuste());
+	echo $dominioTipoDemanda->getArrayHTMLChaves("colecaoTpDemandaContrato");	
+	?>			
+	formataFormTpDemandaReajuste("<?=voDemanda::$nmAtrTipo?>", "<?=voDemanda::$ID_REQ_DIV_REAJUSTE_MONTANTE_A?>", colecaoTpDemandaContrato);
+}
+
+function iniciar(){	
+	formataTpDemandaReajuste();
+}
+
 </SCRIPT>
 <?=setTituloPagina($vo->getTituloJSP())?>
 </HEAD>
-<BODY class="paginadados" onload="">
+<BODY class="paginadados" onload="iniciar();">
 	  
 <FORM name="frm_principal" method="post" action="confirmar.php" onSubmit="return confirmar();">
 
@@ -276,8 +290,20 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Demanda:</TH>
 	            <TD class="campoformulario" colspan=3>	            
-	            <?php echo "Ano: " . $selectExercicio->getHtmlCombo(voDemanda::$nmAtrAno,voDemanda::$nmAtrAno, anoDefault, true, "campoobrigatorio", false, " required ");?>
-	            <?php echo "Tipo: " . $comboTipoEditado->getHtmlCombo(voDemanda::$nmAtrTipo,voDemanda::$nmAtrTipo, "", true, "campoobrigatorio", false, " required onChange='validaFormulario();'");?>			  
+	            <?php 
+	            include_once(caminho_util. "dominioSimNao.php");
+	            $comboSimNao = new select(dominioSimNao::getColecao());         
+	             
+	            echo "Ano: " . $selectExercicio->getHtmlCombo(voDemanda::$nmAtrAno,voDemanda::$nmAtrAno, anoDefault, true, "campoobrigatorio", false, " required ");
+	            echo "Tipo: " . $comboTipoEditado->getHtmlCombo(voDemanda::$nmAtrTipo,voDemanda::$nmAtrTipo, "", true, "campoobrigatorio", false, " required onChange='validaFormulario();'");
+	            ?>			  
+                    <div id="<?=voDemanda::$ID_REQ_DIV_REAJUSTE_MONTANTE_A?>">
+		                <?php 
+			            include_once(caminho_util. "dominioSimNao.php");
+			            $comboSimNao = new select(dominioSimNao::getColecao());
+			            echo "É reajuste com Montante A?: " . $comboSimNao->getHtmlCombo(voDemanda::$nmAtrInTpDemandaReajusteComMontanteA,voDemanda::$nmAtrInTpDemandaReajusteComMontanteA, "", true, "camponaoobrigatorio", false,"");
+			            ?>
+                    </div>
 	        </TR>
 	        <?php	        
 	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");	        

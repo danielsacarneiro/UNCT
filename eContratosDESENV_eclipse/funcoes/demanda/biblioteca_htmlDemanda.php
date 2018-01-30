@@ -18,7 +18,12 @@ function getDemandaDetalhamentoComLupa($voDemanda, $temLupaDet, $exibeTipoDemand
 	if($exibeTipoDemanda){
 		if($voDemanda->tipo != null && $exibeTipoDemanda){
 			$comboTipo = new select(dominioTipoDemanda::getColecao());
-			echo "Tipo: " . $comboTipo->getHtmlCombo("","", $voDemanda->tipo, true, "camporeadonly", false, " disabled ");
+			echo "Tipo: " . $comboTipo->getHtmlCombo("","", $voDemanda->tipo, true, "camporeadonly", false, " disabled ");			
+			if(dominioTipoDemanda::isTipoDemandaContratoReajuste($voDemanda->tipo)){
+				include_once(caminho_util. "dominioSimNao.php");
+				$comboSimNao = new select(dominioSimNao::getColecao());
+				echo "É reajuste com Montante A?: " . dominioSimNao::getHtmlDetalhamento("", "", $voDemanda->inTpDemandaReajusteComMontanteA, false);			 
+			}			
 			echo "<INPUT type='hidden' id='" . voDemanda::$nmAtrTipo . "' name='" . voDemanda::$nmAtrTipo . "' value='$voDemanda->tipo'>";
 		}
 	}

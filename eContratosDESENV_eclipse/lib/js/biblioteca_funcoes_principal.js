@@ -158,12 +158,17 @@ function tornarRequiredCamposColecaoFormulario(colecaoIDCampos, pIsRequired){
 }
 
 function esconderDiv(pCampoDiv, pColecaoIDCamposRequired, pEsconder){
+	validarCamposRequired = pColecaoIDCamposRequired != null;
 	if(pEsconder){
 		pCampoDiv.style.display = "none";
-		tornarRequiredCamposColecaoFormulario(pColecaoIDCamposRequired, false);
+		if(validarCamposRequired){
+			tornarRequiredCamposColecaoFormulario(pColecaoIDCamposRequired, false);
+		}
 	}else{
 		pCampoDiv.style.display = "";
-		tornarRequiredCamposColecaoFormulario(pColecaoIDCamposRequired, true);
+		if(validarCamposRequired){
+			tornarRequiredCamposColecaoFormulario(pColecaoIDCamposRequired, true);
+		}
 	}
 }
 

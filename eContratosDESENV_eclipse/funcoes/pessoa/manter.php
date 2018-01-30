@@ -228,7 +228,7 @@ function abrirJanelaAuxiliarGestor(){
                     <div id="<?=vopessoa::$ID_REQ_DIV_CONTRATADO?>">
 		                <?php 
 			            include_once(caminho_util. "dominioSimNao.php");
-			            $comboSimNao = new select(dominioSimNao::getColecao());	             
+			            $comboSimNao = new select(dominioSimNao::getColecao());
 			            echo "Participa do PAT (Programa de Alimentação do Trabalhador)?: ";
 			            echo $comboSimNao->getHtmlCombo(vopessoa::$nmAtrInPAT,vopessoa::$nmAtrInPAT, $vo->inPAT, true, "camponaoobrigatorio", false,"");
 			            ?>

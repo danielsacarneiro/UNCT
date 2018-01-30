@@ -7,11 +7,14 @@ include_once (caminho_funcoes . "demanda/dominioSituacaoDemanda.php");
 include_once (caminho_funcoes . "demanda/dominioTipoDemanda.php");
 include_once (caminho_funcoes . "demanda/dominioPrioridadeDemanda.php");
 class voDemanda extends voentidade {
+	static $ID_REQ_DIV_REAJUSTE_MONTANTE_A = "ID_REQ_DIV_REAJUSTE_MONTANTE_A";
+	
 	static $nmAtrCd = "dem_cd";
 	static $nmAtrAno = "dem_ex";
 	static $nmAtrCdSetor = "dem_cd_setor";
 	static $nmAtrCdSetorAtual = "NM_COL_SETOR_ATUAL";
 	static $nmAtrTipo = "dem_tipo";
+	static $nmAtrInTpDemandaReajusteComMontanteA = "dem_tp_temreajustemontanteA";
 	static $nmAtrSituacao = "dem_situacao";
 	static $nmAtrTexto = "dem_texto";
 	static $nmAtrPrioridade = "dem_prioridade";
@@ -21,12 +24,14 @@ class voDemanda extends voentidade {
 	var $cdSetor = "";
 	var $cdSetorAtual = "";
 	var $tipo = "";
+	var $inTpDemandaReajusteComMontanteA = "";
 	var $situacao = "";
 	var $texto = "";
 	var $prioridade = "";
 	var $dtReferencia = "";
 	var $dbprocesso = null;
 	var $colecaoContrato = null;
+	var $procLicitatorio = null;
 	// ...............................................................
 	// Funcoes ( Propriedades e métodos da classe )
 	function __construct($arrayChave = null) {
@@ -75,6 +80,7 @@ class voDemanda extends voentidade {
 				self::$nmAtrAno,
 				self::$nmAtrCd,
 				self::$nmAtrTipo,
+				self::$nmAtrInTpDemandaReajusteComMontanteA,
 				self::$nmAtrCdSetor,
 				self::$nmAtrSituacao,
 				self::$nmAtrTexto,
@@ -104,6 +110,10 @@ class voDemanda extends voentidade {
 		return $retorno;
 	}
 	
+	function temProcLicitatorioParaIncluir() {
+		$retorno = $this->procLicitatorio != null && $this->procLicitatorio->cd != null;
+		return $retorno;
+	}
 	/*
 	 * function getVODemandaContrato(){
 	 * $voDemanda = new voDemandaContrato();
@@ -128,6 +138,7 @@ class voDemanda extends voentidade {
 		$this->cdSetor = $registrobanco [self::$nmAtrCdSetor];
 		$this->cdSetorAtual = $registrobanco [self::$nmAtrCdSetorAtual];
 		$this->tipo = $registrobanco [self::$nmAtrTipo];
+		$this->inTpDemandaReajusteComMontanteA = $registrobanco [self::$nmAtrInTpDemandaReajusteComMontanteA];
 		$this->situacao = $registrobanco [self::$nmAtrSituacao];
 		$this->texto = $registrobanco [self::$nmAtrTexto];
 		$this->prioridade = $registrobanco [self::$nmAtrPrioridade];
@@ -153,6 +164,7 @@ class voDemanda extends voentidade {
 		$this->ano = @$_POST [self::$nmAtrAno];
 		$this->cdSetor = @$_POST [self::$nmAtrCdSetor];
 		$this->tipo = @$_POST [self::$nmAtrTipo];
+		$this->inTpDemandaReajusteComMontanteA = @$_POST [self::$nmAtrInTpDemandaReajusteComMontanteA];
 		$this->situacao = @$_POST [self::$nmAtrSituacao];
 		$this->texto = @$_POST [self::$nmAtrTexto];
 		$this->prioridade = @$_POST [self::$nmAtrPrioridade];

@@ -116,5 +116,23 @@ Class dominioTipoDemanda extends dominio{
 		
 		return $retorno;
 	}
+	
+	static function isTipoDemandaContratoReajuste($cdTipoDemanda){	
+		return static::$CD_TIPO_DEMANDA_CONTRATO_REAJUSTE == $cdTipoDemanda;
+	}
+	
+	static function getColecaoTipoDemandaContratoReajuste(){
+		$retorno = array(
+				self::$CD_TIPO_DEMANDA_CONTRATO_REAJUSTE => self::$DS_TIPO_DEMANDA_CONTRATO_REAJUSTE,
+		);		
+		return $retorno;
+	}
+	/*static function getSQLisTipoDemandaContratoReajuste($tipo){
+		$retorno = "FALSE";
+		if($tipo != null && static::$CD_TIPO_DEMANDA_CONTRATO_REAJUSTE)
+	
+		return $retorno;
+	}*/
+	
 }
 ?>

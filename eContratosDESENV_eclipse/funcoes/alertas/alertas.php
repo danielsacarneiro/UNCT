@@ -88,10 +88,10 @@ function getMensagemDemandaContratoPropostaVencida(&$count = 0){
 				dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO
 		);
 		$filtro->inContratoComDtPropostaVencida = constantes::$CD_SIM;
+		$filtro->vocontrato->dtProposta = getDataHoje();
 		//$filtro->vodemanda->tipo = array_keys ( dominioTipoDemanda::getColecaoTipoDemandaSAD () );
 		$filtro->vodemanda->tipo = array(dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO_REAJUSTE);
 		
-		$filtro->vocontrato->dtProposta = getDataHoje();
 		//$filtro->vocontrato->dtProposta = "11/11/2017";
 		$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_ATJA;
 		$colecao = $dbprocesso->consultarTelaConsulta ( $voDemanda, $filtro );

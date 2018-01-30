@@ -5,6 +5,7 @@ CREATE TABLE demanda (
 	dem_ex INT NOT NULL,
     dem_cd INT NOT NULL,    
     dem_tipo INT NOT NULL,
+    dem_tp_temreajustemontanteA CHAR(1) NULL, -- so valera para o tipo de demanda de reajuste
     dem_situacao INT NOT NULL,        
     dem_cd_setor INT NOT NULL,
     dem_texto MEDIUMTEXT NOT NULL,
@@ -21,8 +22,8 @@ CREATE TABLE demanda (
     CONSTRAINT pk PRIMARY KEY (dem_ex, dem_cd)
 );
 
+ALTER TABLE demanda ADD COLUMN dem_tp_temreajustemontanteA CHAR(1) AFTER dem_tipo;
 ALTER TABLE demanda ADD COLUMN in_desativado CHAR(1) NOT NULL DEFAULT 'N' AFTER cd_usuario_ultalt;
-
 
 -- ALTER TABLE demanda CHANGE dem_cd dem_cd INT AUTO_INCREMENT;
 -- ALTER TABLE demanda AUTO_INCREMENT=100;
@@ -35,6 +36,7 @@ CREATE TABLE demanda_hist (
 	dem_ex INT NOT NULL,
     dem_cd INT NOT NULL,    
     dem_tipo INT NOT NULL,
+    dem_tp_temreajustemontanteA CHAR(1) NULL, -- so valera para o tipo de demanda de reajuste
     dem_situacao INT NOT NULL,        
     dem_cd_setor INT NOT NULL,
     dem_texto MEDIUMTEXT NOT NULL,
@@ -51,8 +53,10 @@ CREATE TABLE demanda_hist (
 	dh_operacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_operacao INT,
     
-    CONSTRAINT pk PRIMARY KEY (hist)
+    CONSTRAINT pk PRIMARY KEY (hist),
+    CONSTRAINT desativacao_demanda CHECK (in_desativado NOT IN ('S'))
 );
+ALTER TABLE demanda_hist ADD COLUMN dem_tp_temreajustemontanteA CHAR(1) AFTER dem_tipo;
 ALTER TABLE demanda_hist ADD COLUMN in_desativado CHAR(1) NOT NULL AFTER cd_usuario_ultalt;
 ALTER TABLE demanda_hist ADD CONSTRAINT desativacao_demanda CHECK (in_desativado NOT IN ('S'))
 
@@ -90,9 +94,6 @@ dtm_prt = replace(replace(dtm_prt,'.',''),'-','')
 -- where dem_ex = 2015 and dem_cd = 1 and dtm_sq = 1
 ;
 
-
-
-
 drop table demanda_contrato;
 CREATE TABLE demanda_contrato (	
     dem_ex INT NOT NULL,
@@ -113,7 +114,24 @@ CREATE TABLE demanda_contrato (
 ALTER TABLE demanda_contrato ADD CONSTRAINT fk_demanda_contrato FOREIGN KEY (dem_ex, dem_cd) REFERENCES demanda (dem_ex, dem_cd) 
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;
+    
+drop table demanda_pl;
+CREATE TABLE demanda_pl(	
+    dem_ex INT NOT NULL,
+    dem_cd INT NOT NULL,
+    
+    pl_ex INT NOT NULL, 
+    pl_cd INT NOT NULL,     
 
+    dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    cd_usuario_incl INT,
+    
+    CONSTRAINT pk PRIMARY KEY (dem_ex, dem_cd, pl_ex, pl_cd),
+    CONSTRAINT fk_demanda_pl_pl FOREIGN KEY (pl_ex, pl_cd) REFERENCES proc_licitatorio (pl_ex, pl_cd) 
+	ON DELETE RESTRICT
+	ON UPDATE RESTRICT
+);
+    
 drop table demanda_doc;
 CREATE TABLE demanda_doc (
 	dtm_sq INT NOT NULL,

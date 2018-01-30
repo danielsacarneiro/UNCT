@@ -7,7 +7,7 @@ include_once (caminho_util . "bibliotecaSQL.php");
 include_once (caminho_util . "bibliotecaFuncoesPrincipal.php");
 // include_once (caminho_excecoes . "ExcecaoMaisDeUmRegistroRetornado.php");
 class dbprocesso {
-	static $FLAG_PRINTAR_SQL = false;
+	static $FLAG_PRINTAR_SQL = FALSE;
 	
 	var $cDb;
 	var $cConfig;

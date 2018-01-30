@@ -43,6 +43,7 @@ class filtroManterDemanda extends filtroManter{
 	var $cdClassificacaoContrato;
 	var $inMaoDeObra = "";
 	var $inContratoComDtPropostaVencida;
+	private $sqlComplementoContratoComDtPropostaVencida;
 	var $inRetornarReajusteSeLocacaoImovel;
 	
 	// ...............................................................
@@ -303,6 +304,10 @@ class filtroManterDemanda extends filtroManter{
 			if(is_array($this->vodemanda->situacao)){
 				
 				if(count($this->vodemanda->situacao) == 1 && $this->vodemanda->situacao[0] == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_A_FAZER){
+					$this->inContratoComDtPropostaVencida = constantes::$CD_SIM;
+					$this->vocontrato->dtProposta = getDataHoje();
+					//$this->sqlComplementoContratoComDtPropostaVencida = " AND $nmTabela." . voDemanda::$nmAtrTipo . " = " . dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO_PRORROGACAO;
+						
 					$comparar = " IN (" . getSQLStringFormatadaColecaoIN(array_keys(dominioSituacaoDemanda::getColecaoAFazer()), true) . ")";
 				}else{
 					$comparar = " IN (" . getSQLStringFormatadaColecaoIN($this->vodemanda->situacao, true) . ")";
@@ -495,9 +500,12 @@ class filtroManterDemanda extends filtroManter{
 			$nmAtributoDataProposta = $nmTabelaContratoInfo . "." .voContratoInfo::$nmAtrDtProposta;
 			$dtPropostaPAram = $nmAtributoDataProposta;
 			//CONSIDERA 1 ANO ANTES DO ATUAL PARA FAZER A DIFERENCA DE 1 ANO PARA A CONCESSAO DE REAJUSTE
+
 			//CONSIDERA TAMBEM 1 MES ANTES DO ATUAL, pois a logica definida pela SAFI eh a de que o indice calculado vai do mes da proposta ate o mes-1 do ano seguinte
 			$ano = "YEAR($dtReferencia)-1";
-			$mes = "MONTH($dtPropostaPAram)-1";
+			//$mes = "MONTH($dtPropostaPAram)-1";
+			$mes = "MONTH($dtPropostaPAram)";			
+			
 			$dia = "DAY($dtPropostaPAram)";
 			$dtPropostaPAram = getDataSQLFormatada($ano,$mes, $dia);
 			
@@ -512,8 +520,16 @@ class filtroManterDemanda extends filtroManter{
 			}			
 			
 			//se a data da proposta for nula, exibe o alerta de todo o jeito, ate que ela seja preenchida
+			//ainda verifica se tem ou nao montanteA, caso tenha, traz a demanda pois ela sera analisada de imediato
+			//se nao tiver montanteA, trarah apenas em caso positivo de aniversario da data da proposta					
+			$nmAtributoInTpDemandaReajusteComMontanteA = voDemanda::$nmAtrInTpDemandaReajusteComMontanteA; 
+			$sqlTrazerTipoReajusteComMontanteA =  " $nmAtributoInTpDemandaReajusteComMontanteA IS NULL OR $nmAtributoInTpDemandaReajusteComMontanteA <> 'N' ";
+			$sqlTrazerTipoReajusteComMontanteB = "$nmAtributoInTpDemandaReajusteComMontanteA = 'N' ";
 			$filtro = $filtro . $conector
-			. " ($nmAtributoDataProposta IS NULL OR ($nmAtributoDataProposta IS NOT NULL AND "
+			. " ($nmAtributoDataProposta IS NULL 
+				OR $sqlTrazerTipoReajusteComMontanteA 
+				OR 
+				($nmAtributoDataProposta IS NOT NULL AND $sqlTrazerTipoReajusteComMontanteB AND "
 			. getDataSQLDiferencaAnos($dtPropostaPAram, $dtReferencia)
 			. $operacao
 			. ")) ";
@@ -547,7 +563,7 @@ class filtroManterDemanda extends filtroManter{
 	
 	function getAtributoOrdenacaoAnteriorDefault(){
 		$nmTabelaDemanda = voDemanda::getNmTabelaStatic($this->isHistorico);
-		$retorno = $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . " " . $this->cdOrdenacao; 
+		//$retorno = $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . " " . $this->cdOrdenacao; 
 		return $retorno; 		
 	}
 	
@@ -560,6 +576,7 @@ class filtroManterDemanda extends filtroManter{
 	
 	function getAtributosOrdenacao(){
 		$varAtributos = array(
+				voDemanda::$nmAtrAno => "Ano",
 				voDemanda::$nmAtrCd => "Número",
 				voDemanda::$nmAtrDtReferencia => "Data.Referência",
 				filtroManterDemanda::$NmColDhUltimaMovimentacao => "Data.Movimentação",

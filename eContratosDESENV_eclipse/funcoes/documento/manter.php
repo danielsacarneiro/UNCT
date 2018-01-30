@@ -95,8 +95,8 @@ function criarNomeDocumento(){
 	tpContrato = document.frm_principal.<?=vocontrato::$nmAtrTipoContrato?>.value;
 	tpContrato = getDescricaoTipoContrato(tpContrato);
 
-	anoProcLic = document.frm_principal.<?=voProcLicitatorio::$nmAtrAnoProcLicitatorio?>.value;
-	cdProcLic = document.frm_principal.<?=voProcLicitatorio::$nmAtrCdProcLicitatorio?>.value;	
+	anoProcLic = document.frm_principal.<?=voProcLicitatorio::$nmAtrAno?>.value;
+	cdProcLic = document.frm_principal.<?=voProcLicitatorio::$nmAtrCd?>.value;	
 	
 	anoARP = document.frm_principal.<?=voDocumento::$nmAtrAnoARP?>.value;
 	cdARP = document.frm_principal.<?=voDocumento::$nmAtrCdARP?>.value;	
@@ -179,8 +179,8 @@ function iniciar(){
 	            $nmCampos = array(vocontrato::$nmAtrAnoContrato,
 	            		vocontrato::$nmAtrCdContrato,
 	            		vocontrato::$nmAtrTipoContrato,
-	            		voProcLicitatorio::$nmAtrAnoProcLicitatorio,
-	            		voProcLicitatorio::$nmAtrCdProcLicitatorio,
+	            		voProcLicitatorio::$nmAtrAno,
+	            		voProcLicitatorio::$nmAtrCd,
 	            		voDocumento::$nmAtrAnoARP,
 	            		voDocumento::$nmAtrCdARP
 	            );

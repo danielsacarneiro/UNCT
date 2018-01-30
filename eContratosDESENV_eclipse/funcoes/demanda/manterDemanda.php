@@ -45,6 +45,7 @@ setCabecalho($titulo);
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_pessoa.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_contrato.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_ajax.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_demanda.js"></SCRIPT>
 
 <SCRIPT language="JavaScript" type="text/javascript">
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
@@ -64,11 +65,23 @@ function confirmar() {
 	return confirm("Confirmar Alteracoes?");    
 }
 
+function formataTpDemandaReajuste(){	
+	<?php
+	$dominioTipoDemanda = new dominioTipoDemanda(dominioTipoDemanda::getColecaoTipoDemandaContratoReajuste());
+	echo $dominioTipoDemanda->getArrayHTMLChaves("colecaoTpDemandaContrato");	
+	?>			
+	formataFormTpDemandaReajuste("<?=voDemanda::$nmAtrTipo?>", "<?=voDemanda::$ID_REQ_DIV_REAJUSTE_MONTANTE_A?>", colecaoTpDemandaContrato);
+}
+
+function iniciar(){
+	formataTpDemandaReajuste();
+}
+
 </SCRIPT>
 
 </HEAD>
 <?=setTituloPagina($vo->getTituloJSP())?>
-<BODY class="paginadados" onload="">
+<BODY class="paginadados" onload="iniciar();">
 	  
 <FORM name="frm_principal" method="post" action="confirmarAlteracaoDemanda.php" onSubmit="return confirmar();">
 
@@ -99,7 +112,14 @@ function confirmar() {
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Tipo:</TH>
 	            <TD class="campoformulario" colspan=3>	            
-	            <?php echo "Tipo: " . $comboTipo->getHtmlCombo(voDemanda::$nmAtrTipo, voDemanda::$nmAtrTipo, $vo->tipo, true, "campoobrigatorio", false, " required ");?>
+	            <?php echo "Tipo: " . $comboTipo->getHtmlCombo(voDemanda::$nmAtrTipo, voDemanda::$nmAtrTipo, $vo->tipo, true, "campoobrigatorio", false, " required onChange='formataTpDemandaReajuste();'");?>
+                    <div id="<?=voDemanda::$ID_REQ_DIV_REAJUSTE_MONTANTE_A?>">
+		                <?php 
+			            include_once(caminho_util. "dominioSimNao.php");
+			            $comboSimNao = new select(dominioSimNao::getColecao());
+			            echo "É reajuste com Montante A?: " . $comboSimNao->getHtmlCombo(voDemanda::$nmAtrInTpDemandaReajusteComMontanteA,voDemanda::$nmAtrInTpDemandaReajusteComMontanteA, $vo->inTpDemandaReajusteComMontanteA, true, "camponaoobrigatorio", false,"");
+			            ?>
+                    </div>
 	        </TR>	        
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Setor Responsável:</TH>
