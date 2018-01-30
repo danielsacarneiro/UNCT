@@ -11,7 +11,8 @@ class dominioTpDocumento extends dominio {
 	
 	static $CD_TP_DOC_APOSTILAMENTO = "AP";
 	static $CD_TP_DOC_CONTROLE_AQUISICAO = "CA";
-	static $CD_TP_DOC_CI = "CI";
+	static $CD_TP_DOC_CHECKLIST = "CK";
+	static $CD_TP_DOC_CI = "CI";	
 	static $CD_TP_DOC_DECISAO = "DC";
 	static $CD_TP_DOC_DEFESA = "DF";
 	static $CD_TP_DOC_DESPACHO = "DE";
@@ -31,6 +32,7 @@ class dominioTpDocumento extends dominio {
 	
 	static $DS_TP_DOC_APOSTILAMENTO = "Apostilamento";
 	static $DS_TP_DOC_CONTROLE_AQUISICAO = "Controle Aquisição";
+	static $DS_TP_DOC_CHECKLIST = "Checklist";
 	static $DS_TP_DOC_CI = "CI";
 	static $DS_TP_DOC_DECISAO = "Decisão";
 	static $DS_TP_DOC_DEFESA = "Defesa";
@@ -59,11 +61,12 @@ class dominioTpDocumento extends dominio {
 		return array (
 				self::$CD_TP_DOC_APOSTILAMENTO => self::$DS_TP_DOC_APOSTILAMENTO,
 				self::$CD_TP_DOC_CONTROLE_AQUISICAO => self::$DS_TP_DOC_CONTROLE_AQUISICAO,
+				self::$CD_TP_DOC_CHECKLIST => self::$DS_TP_DOC_CHECKLIST,
 				self::$CD_TP_DOC_CI => self::$DS_TP_DOC_CI,
 				self::$CD_TP_DOC_DECISAO => self::$DS_TP_DOC_DECISAO,
 				self::$CD_TP_DOC_DEFESA => self::$DS_TP_DOC_DEFESA,
 				self::$CD_TP_DOC_DESPACHO => self::$DS_TP_DOC_DESPACHO,
-				self::$CD_TP_DOC_INTIMACAO => self::$DS_TP_DOC_INTIMACAO,
+				//self::$CD_TP_DOC_INTIMACAO => self::$DS_TP_DOC_INTIMACAO,
 				self::$CD_TP_DOC_OFICIO => self::$DS_TP_DOC_OFICIO,
 				self::$CD_TP_DOC_OUTROS => self::$DS_TP_DOC_OUTROS,
 				self::$CD_TP_DOC_NOTA_IMPUTACAO => self::$DS_TP_DOC_NOTA_IMPUTACAO,
@@ -83,7 +86,7 @@ class dominioTpDocumento extends dominio {
 				self::$CD_TP_DOC_DECISAO => self::$DS_TP_DOC_DECISAO,
 				self::$CD_TP_DOC_DEFESA => self::$DS_TP_DOC_DEFESA,
 				self::$CD_TP_DOC_DESPACHO => self::$DS_TP_DOC_DESPACHO,
-				self::$CD_TP_DOC_INTIMACAO => self::$DS_TP_DOC_INTIMACAO,
+				//self::$CD_TP_DOC_INTIMACAO => self::$DS_TP_DOC_INTIMACAO,
 				self::$CD_TP_DOC_NOTA_IMPUTACAO => self::$DS_TP_DOC_NOTA_IMPUTACAO,
 				self::$CD_TP_DOC_PUBLICACAO_PAAP => self::$DS_TP_DOC_PUBLICACAO_PAAP,
 				self::$CD_TP_DOC_RELATORIO => self::$DS_TP_DOC_RELATORIO,
