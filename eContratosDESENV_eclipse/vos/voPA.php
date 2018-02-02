@@ -12,6 +12,7 @@ class voPA extends voentidade {
 	static $nmAtrPublicacao = "pa_publicacao";
 	static $nmAtrDtAbertura = "pa_dt_abertura";
 	static $nmAtrDtNotificacao = "pa_dt_notificacao";
+	static $nmAtrDtUltNotificacaoParaManifestacao = "pa_dt_ult_notmanifestacao";
 	static $nmAtrSituacao = "pa_si";
 	var $cdPA = "";
 	var $anoPA = "";
@@ -22,6 +23,7 @@ class voPA extends voentidade {
 	var $dtPublicacao = "";
 	var $dtAbertura = "";
 	var $dtNotificacao = "";
+	var $dtUlNotificacaoParaManifestacao = "";
 	var $situacao = "";
 	var $cdResponsavel = "";
 	
@@ -82,6 +84,7 @@ class voPA extends voentidade {
 				self::$nmAtrPublicacao,
 				self::$nmAtrDtAbertura,
 				self::$nmAtrDtNotificacao,
+				self::$nmAtrDtUltNotificacaoParaManifestacao,
 				self::$nmAtrSituacao 
 		);
 		
@@ -108,6 +111,7 @@ class voPA extends voentidade {
 		$this->publicacao = $registrobanco [self::$nmAtrPublicacao];
 		$this->dtAbertura = $registrobanco [self::$nmAtrDtAbertura];
 		$this->dtNotificacao = $registrobanco [self::$nmAtrDtNotificacao];
+		$this->dtUlNotificacaoParaManifestacao = $registrobanco [self::$nmAtrDtUltNotificacaoParaManifestacao];
 		$this->situacao = $registrobanco [self::$nmAtrSituacao];
 		$this->dtPublicacao = $registrobanco [voDemandaTramitacao::$nmAtrDtReferencia];
 
@@ -123,6 +127,7 @@ class voPA extends voentidade {
 		$this->publicacao = @$_POST [self::$nmAtrPublicacao];
 		$this->dtAbertura = @$_POST [self::$nmAtrDtAbertura];
 		$this->dtNotificacao = @$_POST [self::$nmAtrDtNotificacao];
+		$this->dtUlNotificacaoParaManifestacao = @$_POST [self::$nmAtrDtUltNotificacaoParaManifestacao];
 		$this->situacao = @$_POST [self::$nmAtrSituacao];
 		
 		//completa com os dados da entidade

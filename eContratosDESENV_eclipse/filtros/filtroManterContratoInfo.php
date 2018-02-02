@@ -20,6 +20,7 @@ class filtroManterContratoInfo extends filtroManter {
 	
 	var $cdClassificacao = "";
 	var $inMaoDeObra = "";
+	var $objeto = "";
 		
 	// ...............................................................
 	function getFiltroFormulario() {
@@ -36,6 +37,7 @@ class filtroManterContratoInfo extends filtroManter {
 		
 		$this->cdClassificacao = @$_POST [voContratoInfo::$nmAtrCdClassificacao];
 		$this->inMaoDeObra = @$_POST [voContratoInfo::$nmAtrInMaoDeObra];
+		$this->objeto = @$_POST [vocontrato::$nmAtrObjetoContrato];
 		
 		$this->InOR_AND = @$_POST[self::$NmAtrInOR_AND];
 		if($this->InOR_AND == null){
@@ -141,7 +143,13 @@ class filtroManterContratoInfo extends filtroManter {
 					}
 						
 					$conector  = "\n AND ";
-		}		
+		}
+		
+		if ($this->objeto != null) {
+			$filtro = $filtro . $conector . $nmTabelaContrato . "." . vocontrato::$nmAtrObjetoContrato . " LIKE '%" . utf8_encode ( $this->objeto ) . "%'";
+		
+			$conector = "\n AND ";
+		}
 				
 		$this->formataCampoOrdenacao ( new voContratoInfo () );
 		// finaliza o filtro

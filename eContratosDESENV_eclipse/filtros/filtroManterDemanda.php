@@ -19,6 +19,7 @@ class filtroManterDemanda extends filtroManter{
 	static $NmAtrVlGlobalFinal = "NmAtrVlGlobalFinal";
 	static $NmAtrInOR_AND = "NmAtrInOR_AND";
 	static $NmAtrTipoExcludente = "NmAtrTipoExcludente";
+	static $NmAtrPrioridadeExcludente = "NmAtrPrioridadeExcludente";
 	
 	var $vodemanda;
 	var $vocontrato;
@@ -40,6 +41,7 @@ class filtroManterDemanda extends filtroManter{
 	
 	var $inOR_AND;
 	var $tipoExcludente;
+	var $prioridadeExcludente;
 	var $cdClassificacaoContrato;
 	var $inMaoDeObra = "";
 	var $inContratoComDtPropostaVencida;
@@ -72,14 +74,15 @@ class filtroManterDemanda extends filtroManter{
 		$vodemanda->cdSetorDestino = @$_POST[voDemandaTramitacao::$nmAtrCdSetorDestino];
 		$this->cdSetorPassagem = @$_POST[static::$NmAtrCdSetorPassagem];
 		$vodemanda->tipo = @$_POST[voDemanda::$nmAtrTipo];
-		$vodemanda->situacao  = @$_POST[voDemanda::$nmAtrSituacao];
-		$this->tipoExcludente = @$_POST[static::$NmAtrTipoExcludente];
+		$vodemanda->situacao  = @$_POST[voDemanda::$nmAtrSituacao];		
 		$vodemanda->prioridade  = @$_POST[voDemanda::$nmAtrPrioridade];
+		$this->prioridadeExcludente = @$_POST[static::$NmAtrPrioridadeExcludente];
 		$vodemanda->prt = @$_POST[voDemandaTramitacao::$nmAtrProtocolo];
 		
 		$vocontrato->anoContrato = @$_POST[vocontrato::$nmAtrAnoContrato];
 		$vocontrato->cdContrato = @$_POST[vocontrato::$nmAtrCdContrato];
 		$vocontrato->tipo = @$_POST[vocontrato::$nmAtrTipoContrato];
+		$this->tipoExcludente = @$_POST[static::$NmAtrTipoExcludente];
 		$vocontrato->cdAutorizacao = @$_POST[vocontrato::$nmAtrCdAutorizacaoContrato];
 		
 		$this->vodemanda = $vodemanda;
@@ -330,6 +333,17 @@ class filtroManterDemanda extends filtroManter{
 			$conector = "\n AND ";
 		}
 		
+		if ($this->prioridadeExcludente != null && !$this->isAtributoArrayVazio($this->prioridadeExcludente)) {
+			$comparar = " <> '" . $this->prioridadeExcludente. "'";
+			if(is_array($this->prioridadeExcludente)){
+				$comparar = " NOT IN (" . getSQLStringFormatadaColecaoIN($this->prioridadeExcludente, true) . ")";
+			}
+		
+			$filtro = $filtro . $conector . $nmTabela . "." . voDemanda::$nmAtrPrioridade . $comparar;
+		
+			$conector = "\n AND ";
+		}
+		
 		if($this->dtUltMovimentacao != null){
 			$colDemandaTram = $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrDhInclusao;
 			$colDemanda = $nmTabela. "." .voDemanda::$nmAtrDhUltAlteracao;
@@ -576,12 +590,12 @@ class filtroManterDemanda extends filtroManter{
 	
 	function getAtributosOrdenacao(){
 		$varAtributos = array(
+				filtroManterDemanda::$NmColDhUltimaMovimentacao => "Data.Movimentação",
 				voDemanda::$nmAtrAno => "Ano",
 				voDemanda::$nmAtrCd => "Número",
-				voDemanda::$nmAtrDtReferencia => "Data.Referência",
-				filtroManterDemanda::$NmColDhUltimaMovimentacao => "Data.Movimentação",
+				voDemanda::$nmAtrDtReferencia => "Data.Referência",				
 				voDemanda::$nmAtrPrioridade => "Prioridade",				
-				voDemanda::$nmAtrTipo => "Tipo"				
+				voDemanda::$nmAtrTipo => "Tipo",
 		);
 		return $varAtributos;
 	}	

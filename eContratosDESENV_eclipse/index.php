@@ -124,6 +124,16 @@ setCabecalho($titulo);
 											?>
                         				</TD>
                     				</TR>                    				
+                    				<TR>
+                        				<TD class="campoformulario">
+                        					Decreto Penalidade:
+											<?php
+											$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_LEGISLACAO, 1));
+											$vodocumento = $vodocumento->dbprocesso->consultarPorChaveVO($vodocumento, false);
+											echo getBotaoAbrirDocumentoVO($vodocumento);
+											?>
+                        				</TD>
+                    				</TR>                    				
                      				<!--<TR>
                                     	<TH  class="titulopassoapasso" ><B>Outros Sistemas</B></TH>
                                 	</TR>

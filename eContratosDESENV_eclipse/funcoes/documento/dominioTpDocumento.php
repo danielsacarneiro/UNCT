@@ -16,7 +16,8 @@ class dominioTpDocumento extends dominio {
 	static $CD_TP_DOC_DECISAO = "DC";
 	static $CD_TP_DOC_DEFESA = "DF";
 	static $CD_TP_DOC_DESPACHO = "DE";
-	static $CD_TP_DOC_INTIMACAO = "IN";
+	//static $CD_TP_DOC_INTIMACAO = "IN";
+	static $CD_TP_DOC_LEGISLACAO = "LE";
 	static $CD_TP_DOC_NOTA_TECNICA = "NT";
 	static $CD_TP_DOC_NOTA_IMPUTACAO = "NI";
 	static $CD_TP_DOC_NOTIFICACAO = "NO";
@@ -37,7 +38,8 @@ class dominioTpDocumento extends dominio {
 	static $DS_TP_DOC_DECISAO = "Decisão";
 	static $DS_TP_DOC_DEFESA = "Defesa";
 	static $DS_TP_DOC_DESPACHO = "Despacho";
-	static $DS_TP_DOC_INTIMACAO = "Intimação";
+	//static $DS_TP_DOC_INTIMACAO = "Intimação";
+	static $DS_TP_DOC_LEGISLACAO = "Legislação";
 	static $DS_TP_DOC_NOTA_TECNICA = "Nota Técnica";
 	static $DS_TP_DOC_NOTA_IMPUTACAO = "Nota de Imputação";
 	static $DS_TP_DOC_NOTIFICACAO = "Notificação";
@@ -67,6 +69,7 @@ class dominioTpDocumento extends dominio {
 				self::$CD_TP_DOC_DEFESA => self::$DS_TP_DOC_DEFESA,
 				self::$CD_TP_DOC_DESPACHO => self::$DS_TP_DOC_DESPACHO,
 				//self::$CD_TP_DOC_INTIMACAO => self::$DS_TP_DOC_INTIMACAO,
+				self::$CD_TP_DOC_LEGISLACAO => self::$DS_TP_DOC_LEGISLACAO,
 				self::$CD_TP_DOC_OFICIO => self::$DS_TP_DOC_OFICIO,
 				self::$CD_TP_DOC_OUTROS => self::$DS_TP_DOC_OUTROS,
 				self::$CD_TP_DOC_NOTA_IMPUTACAO => self::$DS_TP_DOC_NOTA_IMPUTACAO,

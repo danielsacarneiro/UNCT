@@ -147,15 +147,25 @@ function confirmar() {
         	</TR>
 			<TR>
 	            <TH class="campoformulario" nowrap>Dt.Notificação Nota Imputação:</TH>
-	            <TD class="campoformulario" colspan="3">
+	            <TD class="campoformulario">
 	            	<INPUT type="text" 
 	            	       id="<?=voPA::$nmAtrDtNotificacao?>" 
 	            	       name="<?=voPA::$nmAtrDtNotificacao?>" 
 	            			value="<?php echo(getData($vo->dtNotificacao));?>"	            			 
 	            			class="camporeadonly" 
 	            			size="10" 
-	            			maxlength="10" readonly> *para fins de contagem de prazo	            			
+	            			maxlength="10" readonly>	            			
 				</TD>
+	            <TH class="campoformulario">Dt.Notificação.Últ.Manifestação:</TH>
+	            <TD class="campoformulario">
+	            	<INPUT type="text" 
+	            	       id="<?=voPA::$nmAtrDtUltNotificacaoParaManifestacao?>" 
+	            	       name="<?=voPA::$nmAtrDtUltNotificacaoParaManifestacao?>" 
+	            			value="<?php echo(getData($vo->dtUlNotificacaoParaManifestacao));?>"
+							class="camporeadonly" 
+	            			size="10" 
+	            			maxlength="10" readonly> *para fins de contagem de prazo
+				</TD>				
         	</TR>
         	<?php 
         	//$dtPublicacao = $colecao[voDemandaTramitacao::$nmAtrDtReferencia];        	

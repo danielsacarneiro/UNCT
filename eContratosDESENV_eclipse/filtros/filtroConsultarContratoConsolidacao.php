@@ -169,6 +169,12 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 			$conector = "\n AND ";
 		}
 		
+		if ($this->objeto != null) {
+			$filtro = $filtro . $conector . $nmTabelaContrato . "." . vocontrato::$nmAtrObjetoContrato . " LIKE '%" . utf8_encode ( $this->objeto ) . "%'";
+				
+			$conector = "\n AND ";
+		}
+		
 		$this->formataCampoOrdenacao ( new voContratoInfo () );
 		// finaliza o filtro
 		$filtro = parent::getFiltroSQL ( $filtro, $comAtributoOrdenacao );

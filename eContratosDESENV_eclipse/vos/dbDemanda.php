@@ -378,10 +378,14 @@ class dbDemanda extends dbprocesso {
 			try {
 	
 				//so altera o contrato se vier da tela de alteracao de demanda
-				if ($isAlteracaoTelaDemanda && $vo->temContratoParaIncluir ()) {
+				if ($isAlteracaoTelaDemanda) {
 					$this->excluirDemandaContrato($vo );
-					$this->incluirColecaoDemandaContrato ( $vo );
+					
+					if ($vo->temContratoParaIncluir ()) {
+						$this->incluirColecaoDemandaContrato ( $vo );
+					}
 				}
+				
 				parent::alterar ( $vo );
 	
 			} catch ( Exception $e ) {

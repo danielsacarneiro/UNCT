@@ -18,19 +18,20 @@ function getDemandaDetalhamentoComLupa($voDemanda, $temLupaDet, $exibeTipoDemand
 	if($exibeTipoDemanda){
 		if($voDemanda->tipo != null && $exibeTipoDemanda){
 			$comboTipo = new select(dominioTipoDemanda::getColecao());
-			echo "Tipo: " . $comboTipo->getHtmlCombo("","", $voDemanda->tipo, true, "camporeadonly", false, " disabled ");			
+			echo "Tipo: " . $comboTipo->getHtmlCombo("","", $voDemanda->tipo, true, "camporeadonly", false, " disabled ");
+			
+			if ($voDemanda!=null && $temLupaDet) {
+				//$voDemanda = new voDemanda();
+				echo getLinkPesquisa ( "../demanda/detalhar.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $voDemanda->getValorChaveHTML() );
+			}
+				
 			if(dominioTipoDemanda::isTipoDemandaContratoReajuste($voDemanda->tipo)){
 				include_once(caminho_util. "dominioSimNao.php");
 				$comboSimNao = new select(dominioSimNao::getColecao());
-				echo "É reajuste com Montante A?: " . dominioSimNao::getHtmlDetalhamento("", "", $voDemanda->inTpDemandaReajusteComMontanteA, false);			 
+				echo " Tem Montante A?: " . dominioSimNao::getHtmlDetalhamento("", "", $voDemanda->inTpDemandaReajusteComMontanteA, false);			 
 			}			
 			echo "<INPUT type='hidden' id='" . voDemanda::$nmAtrTipo . "' name='" . voDemanda::$nmAtrTipo . "' value='$voDemanda->tipo'>";
 		}
-	}
-		
-	if ($voDemanda!=null && $temLupaDet) {
-		//$voDemanda = new voDemanda();
-		echo getLinkPesquisa ( "../demanda/detalhar.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $voDemanda->getValorChaveHTML() );
 	}
 		
 	//$voDemanda = new voDemanda();

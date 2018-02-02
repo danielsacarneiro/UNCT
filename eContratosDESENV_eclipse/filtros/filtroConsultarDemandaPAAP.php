@@ -118,19 +118,20 @@ class filtroConsultarDemandaPAAP extends filtroManterDemanda{
 		
 		
 		if($this->qtdDiasPrazo != null){
-			$nmAtributoDataNotificacao = $nmTabelaPA . "." .voPA::$nmAtrDtNotificacao;
+			$nmAtributoDataNotificacao = $nmTabelaPA . "." .voPA::$nmAtrDtUltNotificacaoParaManifestacao;
 			$nmAtributoDataPublicacao = dbpa::getSQLNmAtributoDtPublicacao();
 			
 			$dtNotificacaoPAram = getVarComoDataSQL(somarOuSubtrairDiasUteisNaData(getDataHoje(), $this->qtdDiasPrazo, "-"));						
 			
 			//se a data consultada + qtddiasprazo for menor que a data de hoje, significa que o prazo ja passou, entao a demanda deve ser exibida
 			$filtro = $filtro . $conector
-			. " (($nmAtributoDataPublicacao IS NOT NULL AND $nmAtributoDataPublicacao <= $dtNotificacaoPAram) OR "
-			. " ($nmAtributoDataPublicacao IS NULL AND $nmAtributoDataNotificacao IS NOT NULL AND $nmAtributoDataNotificacao <= $dtNotificacaoPAram )) ";
+			. " ($nmAtributoDataNotificacao IS NOT NULL AND $nmAtributoDataNotificacao <= $dtNotificacaoPAram) "
+			;
 			
 			/*$filtro = $filtro . $conector
-			. " ($nmAtributoDataNotificacao IS NOT NULL AND $nmAtributoDataNotificacao <= $dtNotificacaoPAram ) ";*/				
-			
+			. " (($nmAtributoDataPublicacao IS NOT NULL AND $nmAtributoDataPublicacao <= $dtNotificacaoPAram) OR "
+			. " ($nmAtributoDataPublicacao IS NULL AND $nmAtributoDataNotificacao IS NOT NULL AND $nmAtributoDataNotificacao <= $dtNotificacaoPAram )) ";*/
+				
 			$conector  = "\n AND ";
 		}
 		
@@ -147,7 +148,7 @@ class filtroConsultarDemandaPAAP extends filtroManterDemanda{
 		$nmTabelaDemanda = voDemanda::getNmTabelaStatic($this->isHistorico);
 		$nmTabelaPA = voPA::getNmTabelaStatic($this->isHistorico);
 		$retorno = 
-		$nmTabelaPA . "." . voPA::$nmAtrDtNotificacao . " " . constantes::$CD_ORDEM_CRESCENTE
+		$nmTabelaPA . "." . voPA::$nmAtrDtUltNotificacaoParaManifestacao . " " . constantes::$CD_ORDEM_CRESCENTE
 		. "," .$nmTabelaPA . "." . voPA::$nmAtrAnoPA . " " . constantes::$CD_ORDEM_CRESCENTE
 		. "," . $nmTabelaPA . "." . voPA::$nmAtrCdPA . " " . constantes::$CD_ORDEM_CRESCENTE
 		;

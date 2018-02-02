@@ -211,7 +211,7 @@ function validarPublicacao(){
         	</TR>
 			<TR>
 	            <TH class="campoformulario" nowrap>Dt.Notificação Nota Imputação:</TH>
-	            <TD class="campoformulario" colspan="3">
+	            <TD class="campoformulario">
 	            	<INPUT type="text" 
 	            	       id="<?=voPA::$nmAtrDtNotificacao?>" 
 	            	       name="<?=voPA::$nmAtrDtNotificacao?>" 
@@ -221,6 +221,17 @@ function validarPublicacao(){
 	            			size="10" 
 	            			maxlength="10" required>
 				</TD>
+	            <TH class="campoformulario">Dt.Notificação.Últ.Manifestação:</TH>
+	            <TD class="campoformulario">
+	            	<INPUT type="text" 
+	            	       id="<?=voPA::$nmAtrDtUltNotificacaoParaManifestacao?>" 
+	            	       name="<?=voPA::$nmAtrDtUltNotificacaoParaManifestacao?>" 
+	            			value="<?php echo(getData($vo->dtUlNotificacaoParaManifestacao));?>"
+	            			onkeyup="formatarCampoData(this, event, false);" 
+	            			class="camponaoobrigatorio" 
+	            			size="10" 
+	            			maxlength="10" required> *para fins de contagem de prazo
+				</TD>				
         	</TR>
         	<?php        	
         		$modeloPublicacao = voPA::getTextoModeloPublicacaoPenalidade($voContrato);        	 
@@ -229,7 +240,8 @@ function validarPublicacao(){
 	            <TH class="campoformulario" nowrap>Publicação:</TH>
 	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=voPA::$nmAtrPublicacao?>" name="<?=voPA::$nmAtrPublicacao?>" class="camponaoobrigatorio" ><?php echo($vo->publicacao);?></textarea>
 	            <SCRIPT language="JavaScript" type="text/javascript">
-	            	colecaoIDCamposRequired = ["<?=voPA::$nmAtrDtNotificacao?>"];
+	            	colecaoIDCamposRequired = ["<?=voPA::$nmAtrDtNotificacao?>",
+	            		"<?=voPA::$nmAtrDtUltNotificacaoParaManifestacao?>"];
 	            </SCRIPT>
 	            <br><INPUT type="checkbox" onClick="if(!this.checked){document.frm_principal.<?=voPA::$nmAtrPublicacao?>.value='';}else{document.frm_principal.<?=voPA::$nmAtrPublicacao?>.value='<?=$modeloPublicacao?>'};"> *incluir Modelo Publicação.
 	            <br><INPUT type="checkbox" id="checkResponsabilidade" name="checkResponsabilidade" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCamposRequired);"> *Assumo a responsabilidade de não incluir os valores obrigatórios.	            				            

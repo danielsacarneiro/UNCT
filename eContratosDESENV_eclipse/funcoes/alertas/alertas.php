@@ -62,7 +62,7 @@ function getMensagemFimPrazoPAAP(&$count = 0){
 	
 		$dbprocesso = new dbPA();
 		$colecao = $dbprocesso->consultarDemandaPAAP($filtro );	
-		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Dt.Citação', voPA::$nmAtrDtNotificacao, constantes::$CD_TP_DADO_DATA);		
+		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Dt.Citação', voPA::$nmAtrDtUltNotificacaoParaManifestacao, constantes::$CD_TP_DADO_DATA);		
 		$msg = getCorpoMensagemDemandaContratoColecao($assunto, $colecao, null);
 	
 	} catch ( Exception $ex ) {
@@ -122,6 +122,7 @@ function getMensagemDemandaSAD(&$count = 0){
 		);
 		$filtro->vodemanda->tipo = array_keys ( dominioTipoDemanda::getColecaoTipoDemandaSAD () );
 		$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_ATJA;
+		$filtro->prioridadeExcludente = dominioPrioridadeDemanda::$CD_PRIORI_BAIXA;
 		$filtro->vocontrato->cdAutorizacao = array (
 				dominioAutorizacao::$CD_AUTORIZ_SAD
 		);

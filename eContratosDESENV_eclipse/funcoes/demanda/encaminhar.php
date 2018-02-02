@@ -200,7 +200,7 @@ function formataTpDemandaReajuste(){
 	$dominioTipoDemanda = new dominioTipoDemanda(dominioTipoDemanda::getColecaoTipoDemandaContratoReajuste());
 	echo $dominioTipoDemanda->getArrayHTMLChaves("colecaoTpDemandaContrato");	
 	?>			
-	formataFormTpDemandaReajuste("<?=voDemanda::$nmAtrTipo?>", "<?=voDemanda::$ID_REQ_DIV_REAJUSTE_MONTANTE_A?>", colecaoTpDemandaContrato);
+	formataFormTpDemandaReajuste("<?=voDemanda::$nmAtrTipo?>", "<?=voDemanda::$ID_REQ_DIV_REAJUSTE_MONTANTE_A?>", colecaoTpDemandaContrato, false);
 }
 
 function iniciar(){	

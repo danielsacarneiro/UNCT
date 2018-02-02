@@ -202,15 +202,19 @@ function movimentacoes(){
 					Contratos IMProrrogáveis?: <?php echo $comboSimNao->getHtmlCombo(filtroConsultarContratoConsolidacao::$nmAtrInIMProrrogavel,filtroConsultarContratoConsolidacao::$nmAtrInIMProrrogavel, $filtro->inIMProrrogavel, true, "camponaoobrigatorio", false,
 	            		"");?>
 				</TD>
-			</TR>	        
-		<TR>
-			<TH class="campoformulario" nowrap>Tp.Vigência:</TH>
-			<?php
-			include_once(caminho_util."dominioTpVigencia.php");
-			$comboVigencia = new select(dominioTpVigencia::getColecao());						
-			?>
-            <TD class="campoformulario" nowrap colspan=3><?php echo $comboVigencia->getHtmlOpcao($filtro::$nmAtrTpVigencia,$filtro::$nmAtrTpVigencia, $filtro->tpVigencia, false);?></TD>
-	    </TR>					
+			</TR>
+			<TR>
+				<TH class="campoformulario" nowrap>Objeto:</TH>
+				<TD class="campoformulario" width="1%" colspan=3><INPUT type="text" id="<?=vocontrato::$nmAtrObjetoContrato?>" name="<?=vocontrato::$nmAtrObjetoContrato?>"  value="<?php echo($filtro->objeto);?>"  class="camponaoobrigatorio" size="50" ></TD>
+			</TR>
+			<TR>
+				<TH class="campoformulario" nowrap>Tp.Vigência:</TH>
+				<?php
+				include_once(caminho_util."dominioTpVigencia.php");
+				$comboVigencia = new select(dominioTpVigencia::getColecao());						
+				?>
+	            <TD class="campoformulario" nowrap colspan=3><?php echo $comboVigencia->getHtmlOpcao($filtro::$nmAtrTpVigencia,$filtro::$nmAtrTpVigencia, $filtro->tpVigencia, false);?></TD>
+		    </TR>					
 	        
        <?php
        echo getComponenteConsultaFiltro(false, $filtro);

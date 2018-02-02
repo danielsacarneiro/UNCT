@@ -27,13 +27,33 @@ function formataFormTpDemanda(pNmCampoTpDemanda, pNmCampoAtributos) {
 	}		
 }
 
-function formataFormTpDemandaReajuste(pIDCampoTipo, pIDCampoDivMontanteA, pColecaoTpDemandaReajuste){		
+function formataFormTpDemandaReajuste(pIDCampoTipo, pIDCampoDivMontanteA, pColecaoTpDemandaReajuste, pExibirMensagemErro){
+	if(pExibirMensagemErro == null){
+		pExibirMensagemErro = true;
+	}
 	campoTpDemanda = document.getElementById(pIDCampoTipo);
+	campoDIVMontanteA= document.getElementById(pIDCampoDivMontanteA);
+	
+	if(campoTpDemanda == null || campoDIVMontanteA == null){
+		nmCampo = "";
+		if(campoTpDemanda == null){
+			nmCampo = pIDCampoTipo;
+		}
+		if(campoDIVMontanteA == null){
+			nmCampo = pIDCampoDivMontanteA;
+		}
+	
+		if(pExibirMensagemErro){
+			exibirMensagem(nmCampo + " não encontrado.");
+		}
+		
+		return;
+	}
+	
 	cdTpDemanda = campoTpDemanda.value;	
 	isDemandaReajuste = pColecaoTpDemandaReajuste.indexOf(cdTpDemanda) != -1;	
-
-	campoDIVMontanteA= document.getElementById(pIDCampoDivMontanteA);
 	pColecaoIDCamposRequired = null;
+			
 	if(isDemandaReajuste){
 		//biblioteca_funcoes_principal.js
 		esconderDiv(campoDIVMontanteA, pColecaoIDCamposRequired, false);		
