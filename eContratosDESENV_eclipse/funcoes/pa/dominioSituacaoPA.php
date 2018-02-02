@@ -4,12 +4,14 @@ class dominioSituacaoPA extends dominio {
 	static $CD_SITUACAO_PA_INSTAURADO = 1;
 	static $CD_SITUACAO_PA_ARQUIVADO = 2;
 	static $CD_SITUACAO_PA_ENCERRADO = 3;
+	static $CD_SITUACAO_PA_AGUARDANDO_ACAO = 4;
 	
 	static $CD_SITUACAO_PA_EM_ANDAMENTO= 99;
 	
 	static $DS_SITUACAO_PA_INSTAURADO = "Instaurado";
 	static $DS_SITUACAO_PA_ARQUIVADO = "Arquivado";
 	static $DS_SITUACAO_PA_ENCERRADO = "Encerrado";
+	static $DS_SITUACAO_PA_AGUARDANDO_ACAO = "Aguardando ação";
 	// ...............................................................
 	// Construtor
 	function __construct() {
@@ -18,8 +20,10 @@ class dominioSituacaoPA extends dominio {
 	static function getColecao() {
 		$retorno = array (
 				self::$CD_SITUACAO_PA_INSTAURADO => self::$DS_SITUACAO_PA_INSTAURADO,
+				self::$CD_SITUACAO_PA_AGUARDANDO_ACAO => self::$DS_SITUACAO_PA_AGUARDANDO_ACAO,
 				self::$CD_SITUACAO_PA_ARQUIVADO => self::$DS_SITUACAO_PA_ARQUIVADO,
-				self::$CD_SITUACAO_PA_ENCERRADO => self::$DS_SITUACAO_PA_ENCERRADO
+				self::$CD_SITUACAO_PA_ENCERRADO => self::$DS_SITUACAO_PA_ENCERRADO,
+				
 		);
 		
 		return $retorno;
@@ -31,6 +35,7 @@ class dominioSituacaoPA extends dominio {
 		$acrescentar= array(
 				self::$CD_SITUACAO_PA_EM_ANDAMENTO => dominioSituacaoDemanda::$DS_SITUACAO_DEMANDA_EM_ANDAMENTO,
 				self::$CD_SITUACAO_PA_INSTAURADO => "Ainda não movimentado",
+				self::$CD_SITUACAO_PA_AGUARDANDO_ACAO => self::$DS_SITUACAO_PA_AGUARDANDO_ACAO,
 		);
 		
 		$retorno = putElementoArray2NoArray1ComChaves($acrescentar, static::getColecaoSituacaoTerminados());
@@ -41,6 +46,7 @@ class dominioSituacaoPA extends dominio {
 	static function getColecaoSituacaoAtivos() {
 		$retorno = array (
 				self::$CD_SITUACAO_PA_INSTAURADO => self::$DS_SITUACAO_PA_INSTAURADO,
+				self::$CD_SITUACAO_PA_AGUARDANDO_ACAO => self::$DS_SITUACAO_PA_AGUARDANDO_ACAO,
 		);
 	
 		return $retorno;

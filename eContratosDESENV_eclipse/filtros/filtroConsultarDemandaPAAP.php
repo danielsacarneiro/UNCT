@@ -124,8 +124,10 @@ class filtroConsultarDemandaPAAP extends filtroManterDemanda{
 			$dtNotificacaoPAram = getVarComoDataSQL(somarOuSubtrairDiasUteisNaData(getDataHoje(), $this->qtdDiasPrazo, "-"));						
 			
 			//se a data consultada + qtddiasprazo for menor que a data de hoje, significa que o prazo ja passou, entao a demanda deve ser exibida
+			//se a situacao for AGUARDANDO ACAO, traga o PAAP de todo jeito
 			$filtro = $filtro . $conector
-			. " ($nmAtributoDataNotificacao IS NOT NULL AND $nmAtributoDataNotificacao <= $dtNotificacaoPAram) "
+			. " (($nmTabelaPA." .voPA::$nmAtrSituacao . "=" . dominioSituacaoPA::$CD_SITUACAO_PA_AGUARDANDO_ACAO . ") OR " 
+			. " ($nmAtributoDataNotificacao IS NOT NULL AND $nmAtributoDataNotificacao <= $dtNotificacaoPAram)) "
 			;
 			
 			/*$filtro = $filtro . $conector
