@@ -66,7 +66,15 @@ setCabecalho($titulo);
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
 function isFormularioValido() {
 	if (!validarPublicacao())
-		return false;		
+		return false;
+
+	campoDataUltNotificacao = document.frm_principal.<?=voPA::$nmAtrDtUltNotificacaoParaManifestacao?>;
+	campoSituacao = document.frm_principal.<?=voPA::$nmAtrSituacao?>;
+	if (campoDataUltNotificacao.value != "" && campoSituacao.value == <?=dominioSituacaoPA::$CD_SITUACAO_PA_AGUARDANDO_ACAO?>){
+		campoSituacao.focus();		
+		return confirm("VERIFIQUE SE A SITUAÇÃO 'AGUARDANDO AÇÃO' ESTÁ CORRETA!");		
+	}
+			
 	return true;
 }
 
@@ -80,7 +88,7 @@ function confirmar() {
 		return false;
 	}
 	
-	return confirm("Confirmar Alteracoes?");    
+	return confirm("Confirmar Alteracoes?");
 }
 
 function carregaDadosContratada(){    
