@@ -130,6 +130,9 @@ function confirmar() {
 				</TD>				
 	        </TR>
 	        <?php
+	        require_once (caminho_funcoes . voProcLicitatorio::getNmTabela() . "/biblioteca_htmlProcLicitatorio.php");
+	        getProcLicitatorioDetalhamento($vo->voProcLicitatorio);
+	         
  	        require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
  	       // var_dump($vo->colecaoContrato);
  	        getColecaoContratoDet($vo->colecaoContrato);

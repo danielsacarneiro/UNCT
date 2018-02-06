@@ -192,6 +192,7 @@ include_once("voDemandaContrato.php");
 		$voDemanda->texto  = $this->texto;
 		$voDemanda->prioridade  = $this->prioridade;
 		$voDemanda->dtReferencia  = $this->dtReferencia;
+		$voDemanda->voProcLicitatorio  = $this->voProcLicitatorio;
 		
 		$voDemanda->colecaoContrato = $this->colecaoContrato;
 		//$voDemanda->dhUltAlteracao = date('Y-m-d H:i:s');

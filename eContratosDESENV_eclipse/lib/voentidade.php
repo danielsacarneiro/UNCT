@@ -329,6 +329,18 @@ class voentidade extends multiplosConstrutores {
 		}
 	}
 	
+	function isChavePrimariaPreenchida() {
+		$chave = $this->getValorChavePrimaria();
+		$chave = str_replace(constantes::$CD_CAMPO_SEPARADOR, "", $chave);
+		$chave = str_replace(" ", "", $chave);
+		
+		$retorno = false;
+		if (strlen($chave)>1) {
+			$retorno = true;
+		}
+		
+		return $retorno;
+	}
 	/*
 	 * function validaExclusaoRelacionamentoHistorico(){
 	 * $retorno = false;

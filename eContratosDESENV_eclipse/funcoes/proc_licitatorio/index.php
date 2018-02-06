@@ -154,10 +154,10 @@ function alterar() {
             <TR>
 	            <TH class="campoformulario" nowrap>Situação:</TH>
 				<TD class="campoformulario" width="1%">
-                     <?php
-                    include_once("biblioteca_htmlProcLicitatorio.php");                    
-                    echo getComboSituacaoPA(voProcLicitatorio::$nmAtrSituacao, voProcLicitatorio::$nmAtrSituacao, $filtro->situacao, "camponaoobrigatorio", "");                                        
-                    ?>
+				<?php
+				$comboSituacaoPL = new select(dominioSituacaoPL::getColecao());
+				echo $comboSituacaoPL->getHtmlSelect(voProcLicitatorio::$nmAtrSituacao, voProcLicitatorio::$nmAtrSituacao, $filtro->situacao, true, "camponaoobrigatorio", "");
+				?>
 				<TH class="campoformulario" nowrap width="1%">Doc.Anexo:</TH>
 				<TD class="campoformulario" >
 				<?php echo $comboTpDoc->getHtmlSelect(voDocumento::$nmAtrTp,voDocumento::$nmAtrTp, $filtro->tpDocumento, true, "camponaoobrigatorio", true);?>								
@@ -165,10 +165,10 @@ function alterar() {
             <TR>
 				<TH class="campoformulario" nowrap>Pregoeiro:</TH>
                 <TD class="campoformulario" colspan="3">
-                     <?php
-                    include_once(caminho_funcoes."pessoa/biblioteca_htmlPessoa.php");                    
-                    echo getComboPessoaRespPA(voProcLicitatorio::$nmAtrCdPregoeiro, voProcLicitatorio::$nmAtrCdPregoeiro, $filtro->cdPregoeiro, "camponaoobrigatorio", "");                                        
-                    ?>
+				<?php
+				include_once(caminho_funcoes."pessoa/biblioteca_htmlPessoa.php");
+				echo getComboPessoaPregoeiro(voProcLicitatorio::$nmAtrCdPregoeiro, voProcLicitatorio::$nmAtrCdPregoeiro, $filtro->cdPregoeiro, "camponaoobrigatorio", "");                                        
+				?>
             </TR>            
        <?php
 	       echo getComponenteConsultaFiltro($vo->temTabHistorico, $filtro);
@@ -207,12 +207,7 @@ function alterar() {
                         $tamanho = sizeof($colecao);
                 else 
                         $tamanho = 0;
-                
-                include_once (caminho_funcoes."contrato/dominioTipoContrato.php");
-                //require_once ("dominioSituacaoPA.php");
-                $dominioTipoContrato = new dominioTipoContrato();
-                $domSiPA = new dominioSituacaoPA();
-                
+                                
                 $colspan=9;
                 if($isHistorico){
                 	$colspan++;
@@ -229,11 +224,10 @@ function alterar() {
                         	$situacao = dominioSituacaoDemanda::getDescricaoStatic($cdSituacaoDemanda);
                         	$classColunaSituacao = "tabeladadosdestacadoverde";
                         }else{
-                        	$situacao = $domSiPA->getDescricao($cdSituacao);
+                        	$situacao = dominioSituacaoPL::getDescricaoStatic($cdSituacao);
                         	
                         	$classColunaSituacao = "tabeladadosdestacado";
-                        	if($cdSituacao == dominioSituacaoPA::$CD_SITUACAO_PA_ARQUIVADO
-                        			|| $cdSituacao == dominioSituacaoPA::$CD_SITUACAO_PA_ENCERRADO){
+                        	if($cdSituacao == dominioSituacaoPL::$CD_SITUACAO_PL_CONCLUIDO){
                         				$classColunaSituacao = "tabeladadosdestacadoazulclaro";
                         	}                        	
                         }
@@ -255,7 +249,7 @@ function alterar() {
                   ?>                    
                     <TD class="tabeladados" nowrap><?php echo $voAtual->ano;?></TD>
                     <TD class="tabeladados" nowrap><?php echo complementarCharAEsquerda($voAtual->cd, "0", TAMANHO_CODIGOS_SAFI);?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $voAtual->objeto;?></TD>
+                    <TD class="tabeladados"><?php echo $voAtual->objeto;?></TD>
                     <TD class="tabeladados"><?php echo $modalidade;?></TD>
                     <TD class="tabeladados" nowrap><?php echo $tipo;?></TD>
 					<TD class="tabeladados" nowrap><?php echo $colecao[$i][filtroManterProcLicitatorio::$nmColNomePregoeiro];?></TD>

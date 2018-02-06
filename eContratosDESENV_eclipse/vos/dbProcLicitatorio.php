@@ -27,6 +27,7 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
     	$nmTabelaContrato = vocontrato::getNmTabelaStatic(false);
     	$nmTabelaDemanda = voDemanda::getNmTabelaStatic(false);
     	$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic(false);
+    	$nmTabelaDemandaPL = voDemandaPL::getNmTabelaStatic(false);
     	//$nmTabelaPessoaContrato = $filtro->nmTabelaPessoaContrato;
     	$nmTabelaPessoaPregoeiro = filtroManterProcLicitatorio::$nmTabelaPregoeiro;
     	
@@ -38,18 +39,29 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
     	}
     	$arrayColunasRetornadas = array (
     			$nmTabela . ".*",
+    			$nmTabelaDemanda . "." . voDemanda::$nmAtrSituacao,
     			$nmTabelaPessoaPregoeiro . "." . vopessoa::$nmAtrCd,
     			$nmTabelaPessoaPregoeiro . "." . vopessoa::$nmAtrNome . " AS " . filtroManterProcLicitatorio::$nmColNomePregoeiro,    			 
     			$colunaUsuHistorico,
     			$sqHist
     	);
     	        
-        $queryFrom .= "\n LEFT JOIN ". vopessoa::getNmTabela();
-        $queryFrom .= " ". $nmTabelaPessoaPregoeiro . " \n ON ". $nmTabela . "." . voProcLicitatorio::$nmAtrCdPregoeiro . "=" . $nmTabelaPessoaPregoeiro . "." . vopessoa::$nmAtrCd;
+    	$queryJoin .= "\n LEFT JOIN ". vopessoa::getNmTabela();
+    	$queryJoin .= " ". $nmTabelaPessoaPregoeiro . " \n ON ". $nmTabela . "." . voProcLicitatorio::$nmAtrCdPregoeiro . "=" . $nmTabelaPessoaPregoeiro . "." . vopessoa::$nmAtrCd;
+        
+        $queryJoin .= "\n LEFT JOIN " . $nmTabelaDemandaPL;
+        $queryJoin .= "\n ON ";
+        $queryJoin .= $nmTabela . "." . voProcLicitatorio::$nmAtrAno . "=" . $nmTabelaDemandaPL . "." . voDemandaPL::$nmAtrAnoProcLic;
+        $queryJoin .= "\n AND " . $nmTabela . "." . voProcLicitatorio::$nmAtrCd . "=" . $nmTabelaDemandaPL . "." . voDemandaPL::$nmAtrCdProcLic;
                 
+        $queryJoin .= "\n LEFT JOIN " . $nmTabelaDemanda;
+        $queryJoin .= "\n ON ";
+        $queryJoin .= $nmTabelaDemandaPL . "." . voDemandaPL::$nmAtrAnoDemanda . "=" . $nmTabelaDemanda . "." . voDemanda::$nmAtrAno;
+        $queryJoin .= "\n AND " . $nmTabelaDemandaPL . "." . voDemandaPL::$nmAtrCdDemanda . "=" . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd;
+        
         //$filtro->cdEspecieContrato = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
         
-        return parent::consultarMontandoQueryTelaConsulta ( $vo, $filtro, $arrayColunasRetornadas, $queryFrom );        
+        return parent::consultarMontandoQueryTelaConsulta ( $vo, $filtro, $arrayColunasRetornadas, $queryJoin );        
     }
     
     function consultarDemandaPAAP($filtro) {

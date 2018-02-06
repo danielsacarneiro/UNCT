@@ -153,6 +153,11 @@ function tornarRequiredCamposColecaoFormulario(colecaoIDCampos, pIsRequired){
 		element = document.getElementById(id);
 		element.required = pIsRequired;
 		
+		if(pIsRequired){
+			element.className="campoobrigatorio";
+		}else{
+			element.className="camponaoobrigatorio";
+		}
 		//alert(element.id + " " + pIsRequired);
 	}
 }

@@ -8,7 +8,11 @@ class dbDemanda extends dbprocesso {
 			$colecao = $this->consultarPorChaveTelaJoinContrato ( $vo, $isHistorico, true );
 			$voContrato = new vocontrato ();
 			$voContrato->getDadosBanco ( $colecao );
-			
+
+			$voProcLic = new voProcLicitatorio();
+			$voProcLic->getDadosBanco ( $colecao );
+			$vo->voProcLicitatorio = $voProcLic;
+				
 			$vo->getDadosBanco ( $colecao );
 			$temContrato = $voContrato->cdContrato != null;
 			if ($temContrato) {
@@ -32,6 +36,7 @@ class dbDemanda extends dbprocesso {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );
+		$nmTabelaDemandaProcLic= voDemandaPL::getNmTabelaStatic ( false );
 		$nmTabelaPessoa = vopessoa::getNmTabelaStatic ( false );
 		$nmTabelaTramitacao = voDemandaTramitacao::getNmTabela ();
 		//$nmTabelaPAAP = voPA::getNmTabelaStatic ( false );
@@ -45,6 +50,8 @@ class dbDemanda extends dbprocesso {
 				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato,
 				$nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato,
 				$nmTabelaPessoa . "." . vopessoa::$nmAtrDoc,
+				$nmTabelaDemandaProcLic . "." . voProcLicitatorio::$nmAtrCd,
+				$nmTabelaDemandaProcLic . "." . voProcLicitatorio::$nmAtrAno,
 				//$nmTabelaPessoa . "." . vopessoa::$nmAtrNome,
 				getSQLNmContratada(),
 				"COALESCE (" . " . $nmTabelaTramitacao." . voDemandaTramitacao::$nmAtrCdSetorDestino . "," . $nmTabela . "." . voDemanda::$nmAtrCdSetor . ") AS " . voDemanda::$nmAtrCdSetorAtual 
@@ -81,6 +88,11 @@ class dbDemanda extends dbprocesso {
 		$queryJoin .= "\n AND ";
 		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato;
 		
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaDemandaProcLic;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrAnoDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrAno;
+		$queryJoin .= "\n AND " . $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrCd;
+		
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoa;
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaPessoa . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
@@ -99,6 +111,7 @@ class dbDemanda extends dbprocesso {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
 		$nmTabelaTramitacao = voDemandaTramitacao::getNmTabela ();
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabela ();
+		$nmTabelaDemandaProcLic= voDemandaPL::getNmTabelaStatic ( false );
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
@@ -115,6 +128,8 @@ class dbDemanda extends dbprocesso {
 				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato,
 				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato,
 				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato,
+				$nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdProcLic,
+				$nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrAnoProcLic,
 				getSQLNmContratada(),				
 				// $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . " AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,
 				"COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . "," . $nmTabela . "." . voDemanda::$nmAtrCdSetor . ") AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,
@@ -167,23 +182,7 @@ class dbDemanda extends dbprocesso {
 		$queryJoin .= "\n LEFT JOIN ";
 		$queryJoin .= $nmTabelaContrato;
 		$queryJoin .= "\n ON " . $nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato . " = $nmTabelaMAXContrato." . vocontrato::$nmAtrSqContrato;
-		
-		/*$atributosGroupContrato = vocontrato::$nmAtrAnoContrato . "," . vocontrato::$nmAtrTipoContrato . "," . vocontrato::$nmAtrCdContrato;
-		$queryJoin .= "\n LEFT JOIN (";
-		$queryJoin .= " SELECT "
-			. $atributosGroupContrato . ","
-			. vocontrato::$nmAtrCdPessoaContratada . ","
-			. " MAX(" . vocontrato::$nmAtrSqContrato . ") AS " . vocontrato::$nmAtrSqContrato
-			. " FROM " . $nmTabelaContrato
-			. " GROUP BY " . $atributosGroupContrato;
-		$queryJoin .= ") $nmTabelaContrato";
-		$queryJoin .= "\n ON ";
-		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato;
-		$queryJoin .= "\n AND ";
-		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato;
-		$queryJoin .= "\n AND ";
-		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato;*/
-		
+				
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaContratoInfo;
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato . "=" . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrAnoContrato;
@@ -194,7 +193,12 @@ class dbDemanda extends dbprocesso {
 		
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoaContrato;
 		$queryJoin .= "\n ON ";
-		$queryJoin .= $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;				
+		$queryJoin .= $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
+		
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaDemandaProcLic;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrAnoDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrAno;
+		$queryJoin .= "\n AND " . $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrCd;
 		
 		$arrayGroupby = array (
 				$nmTabela . "." . voDemanda::$nmAtrAno,
@@ -379,11 +383,18 @@ class dbDemanda extends dbprocesso {
 	
 				//so altera o contrato se vier da tela de alteracao de demanda
 				if ($isAlteracaoTelaDemanda) {
-					$this->excluirDemandaContrato($vo );
-					
+					$this->excluirDemandaContrato($vo );					
 					if ($vo->temContratoParaIncluir ()) {
 						$this->incluirColecaoDemandaContrato ( $vo );
 					}
+					
+					//$vo=new voDemanda();
+					$this->excluirDemandaProcLicitatorio($vo );
+					if ($vo->temProcLicitatorioParaIncluir()) {
+						$voProcLic = $vo->voProcLicitatorio;
+						$this->incluirDemandaProcLicitatorio($vo->getVODemandaProcLicitatorio($voProcLic));
+					}
+						
 				}
 				
 				parent::alterar ( $vo );
@@ -415,6 +426,7 @@ class dbDemanda extends dbprocesso {
 			if ($permiteExcluirPrincipal) {
 				$this->excluirDemandaTramitacao ( $vo );
 				$this->excluirDemandaContrato ( $vo );
+				$this->excluirDemandaProcLicitatorio($vo );				
 			}
 			$vo = parent::excluir ( $vo );
 			// End transaction
@@ -456,6 +468,16 @@ class dbDemanda extends dbprocesso {
 		// echo $query;
 		return $this->atualizarEntidade ( $query );
 	}
+	function excluirDemandaProcLicitatorio($voDemanda) {
+		$vo = new voDemandaPL();
+	
+		$nmTabela = $vo->getNmTabelaEntidade ( false );
+		$query = "DELETE FROM " . $nmTabela;
+		$query .= "\n WHERE " . voDemandaPL::$nmAtrAnoDemanda. " = " . $voDemanda->ano;
+		$query .= "\n AND " . voDemandaPL::$nmAtrCdDemanda . " = " . $voDemanda->cd;
+		// echo $query;
+		return $this->atualizarEntidade ( $query );
+	}
 	function incluirColecaoDemandaContrato($voDemanda) {
 		$colecao = $voDemanda->colecaoContrato;
 		foreach ($colecao as $voContrato) {
@@ -468,6 +490,10 @@ class dbDemanda extends dbprocesso {
 		$voDemContrato->dbprocesso->cDb = $this->cDb;
 		$voDemContrato->dbprocesso->incluir ( $voDemContrato );
 	}	
+	function incluirDemandaProcLicitatorio($voDemandaProcLic) {
+		$voDemandaProcLic->dbprocesso->cDb = $this->cDb;
+		$voDemandaProcLic->dbprocesso->incluir ( $voDemandaProcLic );
+	}
 	function incluirSQL($vo) {
 		if ($vo->cd == null || $vo->cd == "") {
 			$vo->cd = $this->getProximoSequencialChaveComposta ( voDemanda::$nmAtrCd, $vo );

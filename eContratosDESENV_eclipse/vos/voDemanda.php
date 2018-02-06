@@ -31,7 +31,7 @@ class voDemanda extends voentidade {
 	var $dtReferencia = "";
 	var $dbprocesso = null;
 	var $colecaoContrato = null;
-	var $procLicitatorio = null;
+	var $voProcLicitatorio = null;
 	// ...............................................................
 	// Funcoes ( Propriedades e métodos da classe )
 	function __construct($arrayChave = null) {
@@ -111,7 +111,7 @@ class voDemanda extends voentidade {
 	}
 	
 	function temProcLicitatorioParaIncluir() {
-		$retorno = $this->procLicitatorio != null && $this->procLicitatorio->cd != null;
+		$retorno = $this->voProcLicitatorio != null && $this->voProcLicitatorio->cd != null;
 		return $retorno;
 	}
 	/*
@@ -131,6 +131,14 @@ class voDemanda extends voentidade {
 		$voDemanda->voContrato = $voContrato;
 		return $voDemanda;
 	}
+	function getVODemandaProcLicitatorio($voProcLic) {
+		$voDemanda = new voDemandaPL();
+		$voDemanda->anoDemanda = $this->ano;
+		$voDemanda->cdDemanda = $this->cd;
+		$voDemanda->anoProcLic = $voProcLic->ano;
+		$voDemanda->cdProcLic = $voProcLic->cd;
+		return $voDemanda;
+	}
 	function getDadosRegistroBanco($registrobanco) {
 		// as colunas default de voentidade sao incluidas pelo metodo getDadosBanco do voentidade
 		$this->cd = $registrobanco [self::$nmAtrCd];
@@ -143,6 +151,8 @@ class voDemanda extends voentidade {
 		$this->texto = $registrobanco [self::$nmAtrTexto];
 		$this->prioridade = $registrobanco [self::$nmAtrPrioridade];
 		$this->dtReferencia = $registrobanco [self::$nmAtrDtReferencia];
+		
+		$this->getProcLicitatorioRegistroBanco($registrobanco);
 		
 		/*
 		 * $chaveContrato = $registrobanco[vocontrato::$nmAtrCdContrato];
@@ -177,8 +187,23 @@ class voDemanda extends voentidade {
 			$this->setColecaoContratoFormulario ( $chaveContrato );
 		}
 		
+		$this->getProcLicitatorioFormulario();
+		
 		// completa com os dados da entidade
 		$this->getDadosFormularioEntidade ();
+	}
+	function getProcLicitatorioFormulario() {
+		$voProcLic = new voProcLicitatorio();
+		$voProcLic->getDadosFormulario();
+		
+		if($voProcLic->isChavePrimariaPreenchida()){
+			$this->voProcLicitatorio = $voProcLic; 
+		}		
+	}
+	function getProcLicitatorioRegistroBanco($registrobanco) {
+		$voProcLic = new voProcLicitatorio();
+		$voProcLic->getDadosBanco($registrobanco);
+		$this->voProcLicitatorio = $voProcLic;
 	}
 	function getContratoColecaoFormulario($itemColecao) {
 		$voContrato = new vocontrato ();

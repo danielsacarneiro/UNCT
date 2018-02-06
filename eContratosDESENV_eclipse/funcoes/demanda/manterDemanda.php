@@ -137,7 +137,15 @@ function iniciar(){
 	            <TH class="campoformulario" nowrap width="1%">Título:</TH>
 	            <TD class="campoformulario" colspan=3>				
 	            <INPUT type="text" id="<?=voDemanda::$nmAtrTexto?>" name="<?=voDemanda::$nmAtrTexto?>" value="<?=$vo->texto?>"  class="campoobrigatorio" size="80" required>	            	                        	                        
-	        </TR>	        	        
+	        </TR>
+	        <?php	        
+	        require_once (caminho_funcoes . voProcLicitatorio::getNmTabela() . "/biblioteca_htmlProcLicitatorio.php");
+	        ?>
+	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">Proc.Licitatório:</TH>
+	            <TD class="campoformulario" colspan=3><?php getCampoDadosProcLicitatorio($vo->voProcLicitatorio);?>
+	            </TD>
+	        </TR>	        
 	        <?php
 	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");	        
 	        ?>

@@ -134,18 +134,8 @@ function formataForm() {
 	}
 }
 
-function formataFormContratoPorTpDemanda(pNmCampoTpDemanda, pColecaoNmObjetosFormContrato) {
-	<?php
-			$dominioTipoDemanda = new dominioTipoDemanda(dominioTipoDemanda::getColecaoTipoDemandaContratoValidacaoEncaminhar());
-			echo $dominioTipoDemanda->getArrayHTMLChaves("colecaoTpDemandaContrato");	
-			?>
-	
-	campoTpDemanda = document.getElementById(pNmCampoTpDemanda);
-	cdTpDemanda = campoTpDemanda.value;
-	
-	isDemandaContrato = colecaoTpDemandaContrato.indexOf(cdTpDemanda) != -1;	
-	tam = pColecaoNmObjetosFormContrato.length;
-	
+function habilitarCampos(pHabilitar, pColecaoNmObjetosFormContrato) {
+	tam = pColecaoNmObjetosFormContrato.length;	
 	for(i=0; i<tam;i++){
 		nmCampo = pColecaoNmObjetosFormContrato[i];		
 		camposForm = document.getElementsByName(nmCampo);
@@ -153,19 +143,44 @@ function formataFormContratoPorTpDemanda(pNmCampoTpDemanda, pColecaoNmObjetosFor
 		for(k=0; k<camposForm.length;k++){
 			campo = camposForm[k];
 			//alert(campo);
-			if(isDemandaContrato){
+			if(pHabilitar){				
 				habilitarCampoElementoMais(campo, true, true);
 			}else{
 				habilitarCampoElementoMais(campo, true, false);
 			}
 		}
-		
-	}
+	}	
+}
+
+function formataFormContratoPorTpDemanda(pNmCampoTpDemanda, pColecaoNmObjetosFormContrato) {
+	<?php
+	$dominioTipoDemanda = new dominioTipoDemanda(dominioTipoDemanda::getColecaoTipoDemandaContrato());
+	echo $dominioTipoDemanda->getArrayHTMLChaves("colecaoTpDemandaContrato");	
+	?>
+	
+	campoTpDemanda = document.getElementById(pNmCampoTpDemanda);
+	cdTpDemanda = campoTpDemanda.value;
+	
+	isDemandaContrato = colecaoTpDemandaContrato.indexOf(cdTpDemanda) != -1;
+	habilitarCampos(isDemandaContrato, pColecaoNmObjetosFormContrato);
+	
+}
+
+function formataFormEditalPorTpDemanda(pNmCampoTpDemanda, pColecaoNmObjetosForm) {
+	campoTpDemanda = document.getElementById(pNmCampoTpDemanda);
+	cdTpDemanda = campoTpDemanda.value;
+	
+	isDemandaEdital = cdTpDemanda == <?=dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL?>;
+	habilitarCampos(isDemandaEdital, pColecaoNmObjetosForm);	
 }
 
 function validaFormulario() {
 	pColecaoNmObjetosFormContrato = ['<?=vocontrato::$nmAtrTipoContrato;?>', '<?=vocontrato::$nmAtrCdContrato;?>','<?=vocontrato::$nmAtrAnoContrato;?>'];	
 	formataFormContratoPorTpDemanda('<?=voDemanda::$nmAtrTipo?>', pColecaoNmObjetosFormContrato);
+
+	pColecaoNmObjetosFormEdital = ['<?=voProcLicitatorio::$nmAtrCd;?>', '<?=voProcLicitatorio::$nmAtrAno;?>'];
+	formataFormEditalPorTpDemanda('<?=voDemanda::$nmAtrTipo?>', pColecaoNmObjetosFormEdital);
+	
 	formataTpDemandaReajuste();
 }
 
@@ -265,8 +280,11 @@ function iniciar(){
 				</TD>
 	        </TR>	        
 	        <?php
+	        require_once (caminho_funcoes . voProcLicitatorio::getNmTabela() . "/biblioteca_htmlProcLicitatorio.php");
+	        getProcLicitatorioDetalhamento($vo->voProcLicitatorio);
+	         
  	        require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
- 	        getColecaoContratoDet($vo->colecaoContrato);
+ 	        getColecaoContratoDet($vo->colecaoContrato); 	        
 	        ?>            
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Data.Demanda:</TH>
@@ -306,7 +324,15 @@ function iniciar(){
                     </div>
 	        </TR>
 	        <?php	        
-	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");	        
+	        require_once (caminho_funcoes . voProcLicitatorio::getNmTabela() . "/biblioteca_htmlProcLicitatorio.php");
+	        ?>
+	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">Proc.Licitatório:</TH>
+	            <TD class="campoformulario" colspan=3><?php getCampoDadosProcLicitatorio($voProcLicitatorio);?>
+	            </TD>
+	        </TR>	        
+	        <?php	        
+	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
 	        ?>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>

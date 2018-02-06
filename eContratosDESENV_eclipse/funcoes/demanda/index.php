@@ -305,7 +305,7 @@ function encaminhar() {
                     <TH class="headertabeladados" width="1%">Origem</TH>
                     <TH class="headertabeladados" width="1%">Atual</TH>
                     <TH class="headertabeladados" width="1%">Tipo</TH>
-                    <TH class="headertabeladados" width="40%">Contrato</TH>
+                    <TH class="headertabeladados" width="40%">Contrato/PL</TH>
                     <TH class="headertabeladados"width="50%" nowrap >Título</TH>
                     <TH class="headertabeladados" width="1%">Situação</TH>                    
                     <TH class="headertabeladados" width="1%">Prior.</TH>
@@ -359,6 +359,9 @@ function encaminhar() {
                         $voDemandaContrato = new voDemandaContrato();
                         $voDemandaContrato->getDadosBanco($colecao[$i]);
                         
+                        $voDemandaPL = new voDemandaPL();
+                        $voDemandaPL->getDadosBanco($colecao[$i]);
+                        
                         $qtContratos = $colecao[$i][filtroManterDemanda::$NmColQtdContratos];                        
                         if($voDemandaContrato->voContrato->cdContrato != null){
                         	
@@ -374,7 +377,12 @@ function encaminhar() {
 	                        	}
                         	}                        	 
                         	//$tipo = $tipo . ":". $contrato;
+                        }else if($voDemandaPL->cdProcLic != null){                        	
+	                        	$contrato = formatarCodigoAnoComplemento($voDemandaPL->cdProcLic,
+	                        			$voDemandaPL->anoProcLic,
+	                        			"");
                         }
+                        	
                         $prioridade = $dominioPrioridade->getDescricao($voAtual->prioridade);
                         
                         $nmUsuario = $voAtual->nmUsuarioInclusao;

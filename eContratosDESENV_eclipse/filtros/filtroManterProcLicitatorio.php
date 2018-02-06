@@ -268,8 +268,8 @@ class filtroManterProcLicitatorio extends filtroManter{
 	function getAtributosOrdenacao(){
 		$nmTabela = voProcLicitatorio::getNmTabelaStatic($this->isHistorico());
 		$varAtributos = array(
-				voProcLicitatorio::$nmAtrCd=> "P.L.",
-				voProcLicitatorio::$nmAtrAno=> "Ano",
+				"$nmTabela.".voProcLicitatorio::$nmAtrCd=> "P.L.",
+				"$nmTabela.".voProcLicitatorio::$nmAtrAno=> "Ano",
 				$nmTabela . "." . voProcLicitatorio::$nmAtrDhUltAlteracao=> "Dt.Alteração",
 		);
 		return $varAtributos;

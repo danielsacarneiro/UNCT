@@ -5,6 +5,7 @@ include_once (caminho_util . "bibliotecaFuncoesPrincipal.php");
 include_once (caminho_util . "dominioSetor.php");
 include_once (caminho_funcoes . "proc_licitatorio/dominioModalidadeProcLicitatorio.php");
 include_once (caminho_funcoes . "proc_licitatorio/dominioTipoProcLicitatorio.php");
+include_once (caminho_funcoes . "proc_licitatorio/dominioSituacaoPL.php");
 include_once (caminho_funcoes . "proc_licitatorio/dominioComissaoProcLicitatorio.php");
 
 class voProcLicitatorio extends voentidade {

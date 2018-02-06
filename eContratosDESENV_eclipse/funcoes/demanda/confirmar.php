@@ -7,6 +7,8 @@ inicioComValidacaoUsuario(true);
 $vo = new voDemandaTramitacao();
 $vo->getDadosFormulario();
 
+//echo $vo->voProcLicitatorio->toString();
+
 /*echo $vo->cdSetor . " cd setor <BR>";
 echo $vo->cdSetorAtual . " cd setor atual <BR>";
 echo $vo->cdSetorDestino . " cd setor destino <BR>";

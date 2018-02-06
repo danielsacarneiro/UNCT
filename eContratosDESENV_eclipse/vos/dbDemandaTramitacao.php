@@ -222,7 +222,14 @@ class dbDemandaTramitacao extends dbprocesso {
 			if ($voDemanda->temContratoParaIncluir ()) {
 				$voDemanda->dbprocesso->incluirColecaoDemandaContrato($voDemanda);				
 			}
-			
+
+			//$voDemanda = new voDemandaTramitacao();
+			if ($voDemanda->temProcLicitatorioParaIncluir()) {
+				$voProcLic = $voDemanda->voProcLicitatorio;
+				$voDemandaProcLic = $voDemanda->getVODemandaProcLicitatorio($voProcLic);
+				$voDemanda->dbprocesso->incluirDemandaProcLicitatorio($voDemandaProcLic);
+			}
+				
 			// a transacao ja eh controlada acima
 			$this->incluirDemandaTramitacaoSEMControleTransacao ( $vo );
 			

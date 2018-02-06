@@ -126,11 +126,15 @@ CREATE TABLE demanda_pl(
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_incl INT,
     
-    CONSTRAINT pk PRIMARY KEY (dem_ex, dem_cd, pl_ex, pl_cd),
+    CONSTRAINT pk PRIMARY KEY (dem_ex, dem_cd, pl_ex, pl_cd)/*,
     CONSTRAINT fk_demanda_pl_pl FOREIGN KEY (pl_ex, pl_cd) REFERENCES proc_licitatorio (pl_ex, pl_cd) 
 	ON DELETE RESTRICT
-	ON UPDATE RESTRICT
+	ON UPDATE RESTRICT*/
 );
+ALTER TABLE demanda_pl ADD CONSTRAINT fk_demanda_pl_pl FOREIGN KEY (pl_ex, pl_cd) REFERENCES proc_licitatorio (pl_ex, pl_cd) 
+	ON DELETE RESTRICT
+	ON UPDATE RESTRICT;
+
     
 drop table demanda_doc;
 CREATE TABLE demanda_doc (

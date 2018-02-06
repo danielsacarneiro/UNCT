@@ -162,9 +162,8 @@ function confirmar() {
 	        			            
 	        <?php 
 	       }
-	        ?>	        
-	        <?php	       			
-			$comboTipo = new select(dominioTipoProcLicitatorio::getColecao());
+
+	       $comboTipo = new select(dominioTipoProcLicitatorio::getColecao());
 	        ?>
 			<TR>
 	            <TH class="campoformulario" nowrap>Tipo:</TH>
@@ -175,7 +174,7 @@ function confirmar() {
 				<TH class="campoformulario" width="1%" nowrap>Pregoeiro:</TH>
                 <TD class="campoformulario" colspan=3>
                      <?php
-                    include_once(caminho_funcoes."pessoa/biblioteca_htmlPessoa.php");                    
+                    include_once(caminho_funcoes."pessoa/biblioteca_htmlPessoa.php");
                     echo getComboPessoaPregoeiro(voProcLicitatorio::$nmAtrCdPregoeiro, voProcLicitatorio::$nmAtrCdPregoeiro, $vo->cdPregoeiro, "camponaoobrigatorio", "required");                                        
                     ?>
 				</TD>
@@ -215,9 +214,10 @@ function confirmar() {
 	            <TH class="campoformulario" nowrap>Observação:</TH>
 	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=voProcLicitatorio::$nmAtrObservacao?>" name="<?=voProcLicitatorio::$nmAtrObservacao?>" class="camponaoobrigatorio" ><?php echo($vo->obs);?></textarea>
 	            <SCRIPT language="JavaScript" type="text/javascript">
-	            	colecaoIDCamposRequired = ["<?=voProcLicitatorio::$nmAtrDtAbertura?>",
-	            		"<?=voProcLicitatorio::$nmAtrDtPublicacao?>",
-	        		"<?=voProcLicitatorio::$nmAtrObjeto?>"];
+	            	colecaoIDCamposRequired = [
+	            		"<?=voProcLicitatorio::$nmAtrTipo?>",
+	            		"<?=voProcLicitatorio::$nmAtrDtAbertura?>",
+	            		"<?=voProcLicitatorio::$nmAtrDtPublicacao?>"];
 	            </SCRIPT>
 	            <br><INPUT type="checkbox" id="checkResponsabilidade" name="checkResponsabilidade" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCamposRequired);"> *Assumo a responsabilidade de não incluir os valores obrigatórios.	            				            
 				</TD>
