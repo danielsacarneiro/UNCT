@@ -256,19 +256,20 @@ function validaFormulario() {
                         
                         $cdSituacaoDemanda = $registroAtual[voDemanda::$nmAtrSituacao];
                         $cdSituacao = $voAtual->situacao;
-                        if($cdSituacaoDemanda == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO){
-                        	$situacao = dominioSituacaoDemanda::getDescricaoStatic($cdSituacaoDemanda);
-                        	$classColunaSituacao = "tabeladadosdestacadoverde";
-                        }else{
-                        	$situacao = $domSiPA->getDescricao($cdSituacao);
-                        	
-                        	$classColunaSituacao = "tabeladadosdestacado";
-                        	if($cdSituacao == dominioSituacaoPA::$CD_SITUACAO_PA_ARQUIVADO
-                        			|| $cdSituacao == dominioSituacaoPA::$CD_SITUACAO_PA_ENCERRADO){
-                        				$classColunaSituacao = "tabeladadosdestacadoazulclaro";
-                        	}                        	
+                        
+                        $classColunaSituacao = "tabeladadosdestacado";
+                        $situacao = $domSiPA->getDescricao($cdSituacao);
+                        
+                        if($cdSituacao != dominioSituacaoPA::$CD_SITUACAO_PA_AGUARDANDO_NOTIFICACAO_ENVIADA){
+	                        if($cdSituacao == dominioSituacaoPA::$CD_SITUACAO_PA_ARQUIVADO
+	                        		|| $cdSituacao == dominioSituacaoPA::$CD_SITUACAO_PA_ENCERRADO){
+	                        			$classColunaSituacao = "tabeladadosdestacadoazulclaro";
+	                        }else if($cdSituacaoDemanda == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO){
+	                        	$situacao = dominioSituacaoDemanda::getDescricaoStatic($cdSituacaoDemanda);
+	                        	$classColunaSituacao = "tabeladadosdestacadoverde";
+	                        }
                         }
-                                                
+                                                                        
                         $tipo = $dominioTipoContrato->getDescricao($voContratoAtual->tipo);
                         
                 ?>

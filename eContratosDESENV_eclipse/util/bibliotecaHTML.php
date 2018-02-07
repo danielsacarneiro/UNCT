@@ -771,4 +771,100 @@ function getColecaoComoVariavelJS($colecao, $nmVariavelJS){
 function getHTMLTextoObjetoNaoEncontrato(){
 	return "<INPUT type='text' class='camporeadonly' size=30 readonly value='NÃO ENCONTRADO'>\n";
 }
+
+function getCampoDadosVOAnoCd($vo, $arrayParametroXNmAtributo, $nmClass = "camponaoobrigatorio", $complementoHTML=null) {
+	if($arrayParametroXNmAtributo == null)
+		throw new excecaoGenerica("Atributo de parâmetros de códigos vazio.");
+
+		$required = "";
+		if ($nmClass == constantes::$CD_CLASS_CAMPO_OBRIGATORIO) {
+			$required = "required";
+		}
+		//a class sera sempre nao obrigatorio
+		//pois o atributo required eh utilizado para alterar a class do css
+		$nmClass = constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO;
+
+		$arrayCssClass = array (
+				$nmClass,
+				$nmClass,
+		);
+		$arrayComplementoHTML = array (
+				" $required onBlur=$chamadaFuncaoJS ",
+				" $required onChange=$chamadaFuncaoJS "
+		);
+
+		$chaves = array_keys($arrayParametroXNmAtributo);
+		$atribCd = $chaves[0];
+		$atribAno = $chaves[1];
+		if ($vo != null) {
+			$cd = $vo->$atribCd;
+			$ano = $vo->$atribAno;
+		}
+
+		$selectExercicio = new selectExercicio ();
+
+		$cssCd = $arrayCssClass [0];
+		$cssAno = $arrayCssClass [1];
+
+		$htmlCd = $arrayComplementoHTML [0];
+		$htmlAno = $arrayComplementoHTML [1];
+
+		$pNmCampoCd = $arrayParametroXNmAtributo[$atribCd];
+		$pNmCampoAno = $arrayParametroXNmAtributo[$atribAno];
+
+		$pIDCampoCd = $pNmCampoCd;
+		$pIDCampoAno = $pNmCampoAno;
+
+		//$strCamposALimparSeparador = $pIDCampoCd . "*" . $pIDCampoAno;
+		?>
+	Número:
+<INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)"
+	id="<?=$pIDCampoCd?>" name="<?=$pNmCampoCd?>"
+	value="<?php echo(complementarCharAEsquerda($cd, "0", TAMANHO_CODIGOS_SAFI));?>"
+	class="<?=$cssCd?>" size="4" maxlength="3" <?=$htmlCd?>>
+<?php
+	echo "Ano: " . $selectExercicio->getHtmlCombo ( $pIDCampoAno, $pNmCampoAno, $ano, true, $cssAno, false, $htmlAno );
+	
+}
+
+function getCampoDadosVOAnoCdDetalhamento($vo,$arrayParametroXNmAtributo,$temLupa=true) {
+	if($arrayParametroXNmAtributo == null)
+		throw new excecaoGenerica("Atributo de parâmetros de códigos vazio.");	
+
+		$chaves = array_keys($arrayParametroXNmAtributo);
+		$atribCd = $chaves[0];
+		$atribAno = $chaves[1];
+		if ($vo != null) {
+			$cd = $vo->$atribCd;
+			$ano = $vo->$atribAno;
+		}
+		
+		$cd = formatarCodigoAnoComplemento ( $cd, $ano, "");
+		// $voContrato = new vocontrato();
+		$chave = $vo->getValorChaveHTML ();
+		
+		$pNmCampoCd = $arrayParametroXNmAtributo[$atribCd];
+		$pNmCampoAno = $arrayParametroXNmAtributo[$atribAno];
+		
+		?>
+	<INPUT type="hidden" id="<?=$pNmCampoCd?>"
+		name="<?=$pNmCampoCd?>"
+		value="<?=$cd?>">
+	<INPUT type="hidden" id="<?=$pNmCampoAno?>"
+		name="<?=$pNmCampoAno?>"
+		value="<?=$ano?>">
+		
+	<INPUT type="text" value="<?php echo($cd);?>" class="camporeadonlyalinhadodireita" size="<?=strlen($cd)+1?>" readonly>	
+	<?php
+	
+	//$vo = new voPA();
+	if ($temLupa) {
+		echo getLinkPesquisa ( "../".$vo::getNmTabela()."/detalhar.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $chave );
+	}
+	?>	
+</TR>
+<?php
+	
+}
+
 ?>

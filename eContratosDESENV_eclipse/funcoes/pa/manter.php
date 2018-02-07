@@ -72,7 +72,7 @@ function isFormularioValido() {
 	campoSituacao = document.frm_principal.<?=voPA::$nmAtrSituacao?>;
 	if (campoDataUltNotificacao.value != "" && campoSituacao.value == <?=dominioSituacaoPA::$CD_SITUACAO_PA_AGUARDANDO_ACAO?>){
 		campoSituacao.focus();		
-		return confirm("VERIFIQUE SE A SITUA플O 'AGUARDANDO A플O' EST� CORRETA!");		
+		return confirm("VERIFIQUE SE A SITUA플O '<?=dominioSituacaoPA::$DS_SITUACAO_PA_AGUARDANDO_ACAO?>' EST� CORRETA!");		
 	}
 			
 	return true;

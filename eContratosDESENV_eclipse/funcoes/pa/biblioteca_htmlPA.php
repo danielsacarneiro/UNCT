@@ -3,6 +3,14 @@ include_once("../../config_lib.php");
 include_once(caminho_vos . "vocontrato.php");
 //include_once("dominioSituacaoPA.php");
 
+function getCampoDadosPAAP($voPAAP, $nmClass = "camponaoobrigatorio", $complementoHTML=null) {
+	$arrayParametroXNmAtributo = array ("cdPA" => voPA::$nmAtrCdPA,
+			"anoPA" => voPA::$nmAtrAnoPA
+	);
+
+	getCampoDadosVOAnoCd($voPAAP, $arrayParametroXNmAtributo, $nmClass, $complementoHTML);
+}
+
 function getComboSituacaoPA($idCampo, $nmCampo, $cdOpcaoSelecionada, $classCampo, $tagHtml){
 	$select = new select(dominioSituacaoPA::getColecaoConsulta());
 	$retorno = $select->getHtmlCombo($idCampo, $nmCampo, $cdOpcaoSelecionada, true, $classCampo, false, $tagHtml);
