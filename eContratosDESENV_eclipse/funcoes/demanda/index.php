@@ -157,12 +157,12 @@ function encaminhar() {
 				<font color=red><b>Setor.Atual</b>:</font> <?php echo $comboSetor->getHtmlCombo(voDemandaTramitacao::$nmAtrCdSetorDestino,voDemandaTramitacao::$nmAtrCdSetorDestino, $filtro->vodemanda->cdSetorDestino, true, "camponaoobrigatorio", false, "");?>
 				Passou.por: <?php echo $comboSetor->getHtmlCombo(filtroManterDemanda::$NmAtrCdSetorPassagem,filtroManterDemanda::$NmAtrCdSetorPassagem, $filtro->cdSetorPassagem, true, "camponaoobrigatorio", false, "");?>
 				</TD>				
-            </TR>            
+            </TR>           
             <TR>
                 <TH class="campoformulario" nowrap width="1%">Situação:</TH>
                 <TD class="campoformulario" width="1%"><?php echo $comboSituacao->getHtmlCombo(voDemanda::$nmAtrSituacao,voDemanda::$nmAtrSituacao."[]", $filtro->vodemanda->situacao, true, "camponaoobrigatorio", false, " multiple ");?></TD>
-                <TH class="campoformulario" nowrap width="1%">Tipo:</TH>
-                <TD class="campoformulario" >
+                <TH class="campoformulario" nowrap width="1%" rowspan=2>Tipo:</TH>
+                <TD class="campoformulario" rowspan=2>
 	                <TABLE class="filtro" cellpadding="0" cellspacing="0">
 	                <TR>
 	                	<TD class="campoformulario" width="1%">Incluindo:</TD>
@@ -178,6 +178,14 @@ function encaminhar() {
 	                </TABLE>
                 </TD>                                
             </TR>
+	        <?php	        
+	        require_once (caminho_funcoes . voProcLicitatorio::getNmTabela() . "/biblioteca_htmlProcLicitatorio.php");
+	        ?>
+	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">Proc.Licitatório:</TH>
+	            <TD class="campoformulario"><?php getCampoDadosProcLicitatorio($filtro->voproclic);?>
+	            </TD>
+	        </TR>	                    
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Título:</TH>
 	            <TD class="campoformulario" nowrap width="1%">				
