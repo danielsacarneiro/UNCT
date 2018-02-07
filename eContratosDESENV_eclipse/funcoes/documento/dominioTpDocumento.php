@@ -20,7 +20,7 @@ class dominioTpDocumento extends dominio {
 	static $CD_TP_DOC_LEGISLACAO = "LE";
 	static $CD_TP_DOC_NOTA_TECNICA = "NT";
 	static $CD_TP_DOC_NOTA_IMPUTACAO = "NI";
-	static $CD_TP_DOC_NOTIFICACAO = "NO";
+	//static $CD_TP_DOC_NOTIFICACAO = "NO";
 	static $CD_TP_DOC_OFICIO = "OF";
 	static $CD_TP_DOC_OUTROS = "OT";
 	static $CD_TP_DOC_PARECER = "PA";
@@ -42,7 +42,7 @@ class dominioTpDocumento extends dominio {
 	static $DS_TP_DOC_LEGISLACAO = "Legislação";
 	static $DS_TP_DOC_NOTA_TECNICA = "Nota Técnica";
 	static $DS_TP_DOC_NOTA_IMPUTACAO = "Nota de Imputação";
-	static $DS_TP_DOC_NOTIFICACAO = "Notificação";
+	//static $DS_TP_DOC_NOTIFICACAO = "Notificação";
 	static $DS_TP_DOC_OFICIO = "Ofício";
 	static $DS_TP_DOC_OUTROS = "Outros";
 	static $DS_TP_DOC_PARECER = "Parecer";
@@ -74,7 +74,7 @@ class dominioTpDocumento extends dominio {
 				self::$CD_TP_DOC_OUTROS => self::$DS_TP_DOC_OUTROS,
 				self::$CD_TP_DOC_NOTA_IMPUTACAO => self::$DS_TP_DOC_NOTA_IMPUTACAO,
 				self::$CD_TP_DOC_NOTA_TECNICA => "Nota Técnica",
-				self::$CD_TP_DOC_NOTIFICACAO => self::$DS_TP_DOC_NOTIFICACAO,
+				//self::$CD_TP_DOC_NOTIFICACAO => self::$DS_TP_DOC_NOTIFICACAO,
 				self::$CD_TP_DOC_PARECER => self::$DS_TP_DOC_PARECER,
 				self::$CD_TP_DOC_PLANILHA_CUSTOS => self::$DS_TP_DOC_PLANILHA_CUSTOS,
 				self::$CD_TP_DOC_PROPOSTA_PRECOS => self::$DS_TP_DOC_PROPOSTA_PRECOS,

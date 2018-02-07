@@ -101,39 +101,23 @@ setCabecalho($titulo);
                         				</TD>
                     				</TR>
                     				<TR>
-                        				<TD class="tabeladadosdestacadonegrito">AJUDA (CHECKLIST):
+                        				<TD class="tabeladadosdestacadonegrito">ORIENTAÇÃO:
                         				</TD>
                     				</TR>
-                    				<TR>
-                        				<TD class="campoformulario">
-                        					Visto Edital:
-											<?php
-											$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_OUTROS, 3));
-											$vodocumento = $vodocumento->dbprocesso->consultarPorChaveVO($vodocumento, false);
-											echo getBotaoAbrirDocumentoVO($vodocumento);
-											?>
-                        				</TD>
-                    				</TR>
-                    				<TR>
-                        				<TD class="campoformulario">
-                        					Visto Contratos:
-											<?php
-											$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_OUTROS, 4));
-											$vodocumento = $vodocumento->dbprocesso->consultarPorChaveVO($vodocumento, false);
-											echo getBotaoAbrirDocumentoVO($vodocumento);
-											?>
-                        				</TD>
-                    				</TR>                    				
-                    				<TR>
-                        				<TD class="campoformulario">
-                        					Decreto Penalidade:
-											<?php
-											$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_LEGISLACAO, 1));
-											$vodocumento = $vodocumento->dbprocesso->consultarPorChaveVO($vodocumento, false);
-											echo getBotaoAbrirDocumentoVO($vodocumento);
-											?>
-                        				</TD>
-                    				</TR>                    				
+                    				<?php 
+                    				$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_OUTROS, 3));
+                    				echo imprimeBotaoDocumento($vodocumento, "Visto Edital");
+                    				
+                    				$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_OUTROS, 4));
+                    				echo imprimeBotaoDocumento($vodocumento, "Visto Contratos");
+                    				
+                    				$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_LEGISLACAO, 1));
+                    				echo imprimeBotaoDocumento($vodocumento, "Decreto Penalidade");
+                    				
+                    				$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_PGE,dominioTpDocumento::$CD_TP_DOC_CHECKLIST, 1));
+                    				echo imprimeBotaoDocumento($vodocumento, "Consulta boletins PGE");
+                    				
+                    				?>
                      				<!--<TR>
                                     	<TH  class="titulopassoapasso" ><B>Outros Sistemas</B></TH>
                                 	</TR>

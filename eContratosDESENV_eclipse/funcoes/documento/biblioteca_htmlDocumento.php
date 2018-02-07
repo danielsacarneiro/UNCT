@@ -1,6 +1,24 @@
 <?php
 include_once(caminho_util."dominioSetor.php");
 
+function imprimeBotaoDocumento($vodocumento, $descricao){
+	
+	$vodocumento = $vodocumento->dbprocesso->consultarPorChaveVO($vodocumento, false);
+	
+	$html = 
+	"\n<TR>
+	\n <TD class='campoformulario'>
+	$descricao: ";	
+	
+	$html .= getBotaoAbrirDocumentoVO($vodocumento);
+	
+	$html .= 
+	"\n </TD>
+	\n</TR>";
+	
+	return $html; 
+}
+
 function formatarCodigoDocumento($sq, $cdSetor, $ano, $tpDoc){	
 	$dominioSetor = new dominioSetor();	
 	$str = "";	

@@ -164,7 +164,6 @@ function iniciar(){
 
 	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
 	        
-	        
 	        $nmClass = constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO;	        
 	        $arrayCssClass = array($nmClass,$nmClass);
 	        $js_procLic = " onChange='criarNomeDocumento();' ";
