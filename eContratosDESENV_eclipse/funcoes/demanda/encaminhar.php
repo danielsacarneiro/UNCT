@@ -279,13 +279,6 @@ function iniciar(){
 	            <INPUT type="text" value="<?=$vo->texto?>"  class="camporeadonly" size="80" readonly>
 				</TD>
 	        </TR>	        
-	        <?php
-	        require_once (caminho_funcoes . voProcLicitatorio::getNmTabela() . "/biblioteca_htmlProcLicitatorio.php");
-	        getProcLicitatorioDetalhamento($vo->voProcLicitatorio);
-	         
- 	        require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
- 	        getColecaoContratoDet($vo->colecaoContrato); 	        
-	        ?>            
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Data.Demanda:</TH>
 	            <TD class="campoformulario" colspan=3>	            	            	            

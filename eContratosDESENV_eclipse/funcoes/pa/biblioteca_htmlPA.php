@@ -1,7 +1,38 @@
 <?php
 include_once("../../config_lib.php");
 include_once(caminho_vos . "vocontrato.php");
-//include_once("dominioSituacaoPA.php");
+
+function isPAAPValido($vo) {
+	// so exibe contrato se tiver
+	return $vo != null && $vo->cdPA;
+}
+
+function getPAAPDetalhamento($vo,$temLupa=true) {
+	if(isPAAPValido($vo)){
+
+		?>
+<TR>
+	<INPUT type="hidden" id="<?=voPA::$nmAtrCdPA?>"
+		name="<?=voPA::$nmAtrCdPA?>"
+		value="<?=$vo->cdPA?>">
+	<INPUT type="hidden" id="<?=voPA::$nmAtrAnoPA?>"
+		name="<?=voPA::$nmAtrAnoPA?>"
+		value="<?=$vo->anoPA?>">
+	<TH class="campoformulario" nowrap width=1%>PAAP:</TH>
+	<TD class="campoformulario" colspan=3>
+	<?php
+	$arrayParametroXNmAtributo = array ("cdPA" => voPA::$nmAtrCdPA,
+			"anoPA" => voPA::$nmAtrAnoPA
+	);
+	
+	echo getCampoDadosVOAnoCdDetalhamento($vo,$arrayParametroXNmAtributo,$temLupa);
+	?>
+	</TD>	
+</TR>
+<?php
+	}
+	
+}
 
 function getCampoDadosPAAP($voPAAP, $nmClass = "camponaoobrigatorio", $complementoHTML=null) {
 	$arrayParametroXNmAtributo = array ("cdPA" => voPA::$nmAtrCdPA,

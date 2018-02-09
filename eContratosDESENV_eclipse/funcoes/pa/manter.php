@@ -138,17 +138,8 @@ function validarPublicacao(){
 	        		$colecao[voPA::$nmAtrAnoPA]);
 	         
 	        if(!$isInclusao){
-	        ?>	        	        
-			<TR>
-		         <TH class="campoformulario" nowrap width="1%">P.A.A.P.:</TH>
-		         <TD class="campoformulario" colspan=3>
-		         <?php echo(getDetalhamentoHTMLCodigoAno($vo->anoPA, $vo->cdPA, TAMANHO_CODIGOS_SAFI));?>
-			         <INPUT type="hidden" id="<?=voPA::$nmAtrAnoPA?>" name="<?=voPA::$nmAtrAnoPA?>" value="<?=$vo->anoPA?>">
-					 <INPUT type="hidden" id="<?=voPA::$nmAtrCdPA?>" name="<?=voPA::$nmAtrCdPA?>" value="<?=$vo->cdPA?>">		         
-				</TD>
-	        </TR>
-			<?php 
-			getDemandaDetalhamento($voDemanda);
+
+	        getDemandaDetalhamento($voDemanda);
 			getContratoDet($voContrato);
 			
 			$domSiPA = new dominioSituacaoPA();

@@ -9,11 +9,11 @@ include_once (caminho_funcoes . "contrato/biblioteca_htmlContrato.php");
 function getHTMLConsultaPorDemanda($chave){
 	$vo = new voDemanda ();
 	$vo->getChavePrimariaVOExplodeParam ( $chave );
-	$colecaoContrato = consultarContratosDemanda ( $vo );
+	$colecao= consultarDadosHTMLDemanda ( $vo );
 	
-	if(!isColecaoVazia($colecaoContrato)){
-		$vo->getDadosBanco($colecaoContrato[0]);
-		$colecaoContrato = converteRecordSetEmColecaoVOsContrato ( $colecaoContrato );
+	if(!isColecaoVazia($colecao)){
+		$vo->getDadosBanco($colecao[0]);
+		$colecaoContrato = converteRecordSetEmColecaoVOsContrato ( $colecao );
 		
 		$retorno = "<TR><TD>Título: <INPUT type='text' value='" . $vo->texto . "'  class='camporeadonly' size='70' readonly></TD></TR>";
 		// vai na bibliotacontrato
@@ -69,17 +69,6 @@ function getDadosContratada($chave, $voentidade = null) {
 			}
 		} else {
 			if($isConsultaPessoaPorDemanda){
-			/*$vo = new voDemanda ();
-			$vo->getChavePrimariaVOExplodeParam ( $chave );
-			$colecaoContrato = consultarContratosDemanda ( $vo );
-			
-			$vo->getDadosBanco($colecaoContrato[0]);
-				
-			$colecaoContrato = converteRecordSetEmColecaoVOsContrato ( $colecaoContrato );
-				
-			$retorno = "<TR><TD>Título: <INPUT type='text' value='" . $vo->texto . "'  class='camporeadonly' size='70' readonly></TD></TR>"; 
-			// vai na bibliotacontrato
-			$retorno = $retorno . getColecaoContratoDet ( $colecaoContrato );*/
 				$retorno =	getHTMLConsultaPorDemanda($chave);
 			}else{
 				$retorno =	getHTMLConsultaPorPAAP($chave);

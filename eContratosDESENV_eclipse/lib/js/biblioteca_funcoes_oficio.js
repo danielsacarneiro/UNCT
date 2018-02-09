@@ -96,6 +96,11 @@ function formatarCodigoDocumento(sq, cdSetor, ano, tpDoc, colecaoSetor){
 	}
 
 	if(tpDoc != null && tpDoc != ""){
+		//mascara para o documento PAAP
+		if(tpDoc == "PE"){
+			tpDoc = "PAAP";
+		}
+			
 		str = str + conector + tpDoc;
 		conector = " ";
 	}

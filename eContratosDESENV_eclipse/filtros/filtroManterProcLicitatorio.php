@@ -10,7 +10,7 @@ class filtroManterProcLicitatorio extends filtroManter{
     
     var $sqHistPA;
     var $cdPessoa ;    
-    var $cdResponsavel ;
+    var $cdPregoeiro;
     var $doc;
     var $nome;
     var $cdProc;
@@ -30,31 +30,31 @@ class filtroManterProcLicitatorio extends filtroManter{
     
     function getFiltroFormulario(){
     	$this->cdPessoa = @$_POST[vopessoa::$nmAtrCd];
-    	$this->cdResponsavel = @$_POST[voPA::$nmAtrCdResponsavel];
-    	//$this->cdGestor = @$_POST[voPA::$nmAtrCdGestor];
+    	$this->cdPregoeiro = @$_POST[voProcLicitatorio::$nmAtrCdPregoeiro];
+    	//$this->cdGestor = @$_POST[voProcLicitatorio::$nmAtrCdGestor];
     	$this->doc = @$_POST[vopessoa::$nmAtrDoc];
     	$this->nome = @$_POST[vopessoa::$nmAtrNome];
     	
-    	$this->cdPA = @$_POST[voPA::$nmAtrCdPA];
-    	$this->anoPA = @$_POST[voPA::$nmAtrAnoPA];
-    	$this->situacao = @$_POST[voPA::$nmAtrSituacao];
+    	$this->cdProc = @$_POST[voProcLicitatorio::$nmAtrCd];
+    	$this->anoProc = @$_POST[voProcLicitatorio::$nmAtrAno];
+    	$this->situacao = @$_POST[voProcLicitatorio::$nmAtrSituacao];
     	
     	$this->cdContrato = @$_POST[vocontrato::$nmAtrCdContrato];
     	$this->anoContrato = @$_POST[vocontrato::$nmAtrAnoContrato];
     	$this->tipoContrato = @$_POST[vocontrato::$nmAtrTipoContrato];
     	
-    	$this->cdDemanda = @$_POST[voPA::$nmAtrCdDemanda];
-    	$this->anoDemanda = @$_POST[voPA::$nmAtrAnoDemanda];
+    	$this->cdDemanda = @$_POST[voDemandaPL::$nmAtrCdDemanda];
+    	$this->anoDemanda = @$_POST[voDemandaPL::$nmAtrAnoDemanda];
     	$this->tpDocumento = @$_POST[voDocumento::$nmAtrTp];
     	
     	//isso tudo pq o filtro pode ser usado por mais de um metodo
     	//e precisa saber qual voprincipal considera,
     	//pra pegar por ex os atributos de ordenacao da tabela correta
-    	$this->nmEntidadePrincipal = "voPA";
+    	$this->nmEntidadePrincipal = "voProcLicitatorio";
     }
     	
 	function getFiltroConsultaSQL(){
-        $voPA= new voPA();
+        $voProcLicitatorio= new voProcLicitatorio();
         $vopessoa= new vopessoa();
         $vocontrato= new vocontrato();
 		$filtro = "";
@@ -68,7 +68,7 @@ class filtroManterProcLicitatorio extends filtroManter{
 		$nmTabelaTramitacaoDoc = voDemandaTramDoc::getNmTabelaStatic(false);
 		
 		$isHistorico = $this->isHistorico;
-		$nmTabela = $voPA->getNmTabelaEntidade($isHistorico);
+		$nmTabela = $voProcLicitatorio->getNmTabelaEntidade($isHistorico);
 		if($this->nmEntidadePrincipal != null){
 			$nmTabela = $this->getVOEntidadePrincipal()->getNmTabelaEntidade($isHistorico);
 		}
@@ -82,7 +82,7 @@ class filtroManterProcLicitatorio extends filtroManter{
 		
 		if($this->cdDemanda != null){
 			$filtro = $filtro . $conector
-			. $nmTabela. "." .voPA::$nmAtrCdDemanda
+			. $nmTabela. "." .voDemandaPL::$nmAtrCdDemanda
 			. " = "
 					. $this->cdDemanda;
 		
@@ -91,7 +91,7 @@ class filtroManterProcLicitatorio extends filtroManter{
 		
 		if($this->anoDemanda != null){
 			$filtro = $filtro . $conector
-			. $nmTabela. "." .voPA::$nmAtrAnoDemanda
+			. $nmTabela. "." .voDemandaPL::$nmAtrCdDemanda
 			. " = "
 					. $this->anoDemanda;
 		
@@ -121,7 +121,7 @@ class filtroManterProcLicitatorio extends filtroManter{
 				. "$nmTabelaDemanda." .voDemanda::$nmAtrSituacao
 				. " <> "
 				. dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO
-				. " AND $nmTabela." .voPA::$nmAtrSituacao
+				. " AND $nmTabela." .voProcLicitatorio::$nmAtrSituacao
 				. " = "
 				. dominioSituacaoPA::$CD_SITUACAO_PA_INSTAURADO
 				
@@ -129,7 +129,7 @@ class filtroManterProcLicitatorio extends filtroManter{
 			}else{
 			
 			$filtro = $filtro . $conector
-					. $nmTabela. "." .voPA::$nmAtrSituacao
+					. $nmTabela. "." .voProcLicitatorio::$nmAtrSituacao
 					. " = "
 					. $this->situacao
 					;
@@ -138,20 +138,20 @@ class filtroManterProcLicitatorio extends filtroManter{
 			$conector  = "\n AND ";
 		}
 		
-		if($this->cdPA != null){
+		if($this->cdProc != null){
 			$filtro = $filtro . $conector
-			. $nmTabela. "." .voPA::$nmAtrCdPA
+			. $nmTabela. "." .voProcLicitatorio::$nmAtrCd 
 			. " = "
-					. $this->cdPA;
+					. $this->cdProc;
 		
 					$conector  = "\n AND ";
 		}
 		
-		if($this->anoPA != null){
+		if($this->anoProc != null){
 			$filtro = $filtro . $conector
-					. $nmTabela. "." .voPA::$nmAtrAnoPA
+					. $nmTabela. "." .voProcLicitatorio::$nmAtrAno
 					. " = "
-					. $this->anoPA;
+					. $this->anoProc;
 						
 			$conector  = "\n AND ";
 		}
@@ -189,16 +189,6 @@ class filtroManterProcLicitatorio extends filtroManter{
 						. $nmTabelaPessoaContrato. "." .vopessoa::$nmAtrDoc
 						. "='"
 						. documentoPessoa::getNumeroDocSemMascara($this->doc)
-						. "'";
-			
-			$conector  = "\n AND ";
-		}	
-
-		if($this->cdGestor != null){
-			$filtro = $filtro . $conector
-						//. $nmTabela. "." .voPA::$nmAtrCdGestor
-						. "='"
-						. $this->cdGestor
 						. "'";
 			
 			$conector  = "\n AND ";
@@ -249,9 +239,9 @@ class filtroManterProcLicitatorio extends filtroManter{
 					$conector  = "\n AND ";
 		}
 		
-		if($this->isHistorico() && $this->sqHistPA != null){
+		if($this->isHistorico() && $this->sqHistProcLic != null){
 			$filtro = $filtro . $conector
-			. $nmTabela. "." .voPA::$nmAtrSqHist
+			. $nmTabela. "." .voProcLicitatorio::$nmAtrSqHist
 			. " = "
 					. $this->sqHistPA
 					;

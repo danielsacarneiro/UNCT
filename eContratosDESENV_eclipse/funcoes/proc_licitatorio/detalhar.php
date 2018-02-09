@@ -164,19 +164,18 @@ function confirmar() {
 	        </TR>
         	
 				<?php				
-				/*mostrarGridPenalidade($vo);
+				/*$filtroTramitacao = new filtroManterDemandaTram(false);
+				$filtroTramitacao->vocontrato->cdContrato = $voContrato->cdContrato;
+				$filtroTramitacao->vocontrato->anoContrato = $voContrato->anoContrato;
+				$filtroTramitacao->vocontrato->tipo = $voContrato->tipo;
+				$filtroTramitacao->vodemanda->cd = $voDemanda->cd;
+				$filtroTramitacao->vodemanda->ano = $voDemanda->ano;
+				//$filtroTramitacao->temDocumentoAnexo = constantes::$CD_SIM;
+				$filtroTramitacao->TemPaginacao = false;			
 				
-				$filtroTramitacaoContrato = new filtroConsultarDemandaContrato(false);
-				$filtroTramitacaoContrato->vocontrato->cdContrato = $voContrato->cdContrato;
-				$filtroTramitacaoContrato->vocontrato->anoContrato = $voContrato->anoContrato;
-				$filtroTramitacaoContrato->vocontrato->tipo = $voContrato->tipo;
-				$filtroTramitacaoContrato->vodemanda->cd = $voDemanda->cd;
-				$filtroTramitacaoContrato->vodemanda->ano = $voDemanda->ano;
-				//$filtroTramitacaoContrato->temDocumentoAnexo = constantes::$CD_SIM;
-				$filtroTramitacaoContrato->TemPaginacao = false;			
-				
-				$dbcontrato = new dbcontratoinfo();
-				$colecaoTramitacao = $dbcontrato->consultarDemandaTramitacaoContrato($filtroTramitacaoContrato);
+				$vo = new voDemandaTramitacao();
+				$db = $vo->dbprocesso;
+				$colecaoTramitacao = $db->consultarTelaConsulta($vo, $filtroTramitacao);
 				mostrarGridDemandaContrato($colecaoTramitacao, true, false);*/
 				?>	 
 <TR>

@@ -107,7 +107,8 @@ function iniciar(){
 	        	        	        
 	        $complementoHTML = "";
 	        
-	        getDemandaDetalhamento($vo, false);
+	        getDemandaDetalhamentoComLupa($vo, false, true, null, true);
+	        //function getDemandaDetalhamentoComLupa($voDemanda, $temLupaDet, $exibeTipoDemanda = true, $colspan=null, $comProcLici = true){
 	        ?>	        	        
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Tipo:</TH>

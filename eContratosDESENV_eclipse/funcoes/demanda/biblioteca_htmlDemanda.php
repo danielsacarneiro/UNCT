@@ -4,7 +4,10 @@ function getDemandaDetalhamento($voDemanda, $exibeTipoDemanda = true, $colspan=n
 	return getDemandaDetalhamentoComLupa($voDemanda, true, $exibeTipoDemanda, $colspan);
 	
 }
-function getDemandaDetalhamentoComLupa($voDemanda, $temLupaDet, $exibeTipoDemanda = true, $colspan=null){
+function getDemandaDetalhamentoComLupa($voDemanda, $temLupaDet, $exibeTipoDemanda = true, $colspan=null, $isAlteracaoDemanda = false){
+	
+	$comProcLici = $comContrato = !$isAlteracaoDemanda;
+	
 	if($colspan==null){
 		$colspan=3;
 	}
@@ -46,6 +49,26 @@ function getDemandaDetalhamentoComLupa($voDemanda, $temLupaDet, $exibeTipoDemand
 		<INPUT type="hidden" id="<?=voDemanda::$nmAtrCdSetor?>" name="<?=voDemanda::$nmAtrCdSetor?>" value="<?=$voDemanda->cdSetor?>">
 		<INPUT type="hidden" id="<?=voDemanda::$nmAtrSituacao?>" name="<?=voDemanda::$nmAtrSituacao?>" value="<?=$voDemanda->situacao?>">
 	</TR>
+	<?php	
+	$dbprocesso = $voDemanda->dbprocesso;
+	$voPAAP = $dbprocesso->consultarPAAPDemanda($voDemanda);
+	if($voPAAP != null){
+		require_once (caminho_funcoes . voPA::getNmTabela() . "/biblioteca_htmlPA.php");
+		getPAAPDetalhamento($voPAAP);
+	}
+		
+	if($comProcLici){
+		require_once (caminho_funcoes . voProcLicitatorio::getNmTabela() . "/biblioteca_htmlProcLicitatorio.php");
+		getProcLicitatorioDetalhamento($voDemanda->voProcLicitatorio);
+	}
+	
+	if($comContrato){
+	require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
+		getColecaoContratoDet($voDemanda->colecaoContrato);
+	}
+	
+	?>	
+	
 <?php 
 }
 

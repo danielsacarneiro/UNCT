@@ -265,6 +265,58 @@ class dbDemanda extends dbprocesso {
 		
 		return parent::consultarFiltro ( $filtro, $querySelect, $queryFrom, false );
 	}
+	function consultarDadosDemanda($vo) {
+		$isHistorico = $vo->isHistorico ();
+	
+		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( $isHistorico );
+		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );
+		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
+		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
+		$nmTabelaPAAP = voPA::getNmTabelaStatic ( false );
+		//$nmTabelaPL = voProcLicitatorio::getNmTabelaStatic ( false );
+	
+		$querySelect = "SELECT ";
+		$querySelect .= $nmTabelaDemanda . ".*,";
+		$querySelect .= $nmTabelaDemandaContrato . ".*,";
+		$querySelect .= "$nmTabelaPAAP." . voPA::$nmAtrAnoPA . ",$nmTabelaPAAP." . voPA::$nmAtrCdPA;
+		$queryFrom = " FROM " . $nmTabelaDemanda;
+	
+		$queryFrom .= "\n LEFT JOIN ";
+		$queryFrom .= $nmTabelaDemandaContrato;
+		$queryFrom .= "\n ON " . $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . " = " . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoDemanda;
+		$queryFrom .= "\n AND " . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd . " = " . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdDemanda;
+	
+		$queryFrom .= "\n LEFT JOIN " . $nmTabelaContrato;
+		$queryFrom .= "\n ON ";
+		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato;
+		$queryFrom .= "\n AND ";
+		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato;
+		$queryFrom .= "\n AND ";
+		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato;
+		$queryFrom .= "\n AND ";
+		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdEspecieContrato;
+		$queryFrom .= "\n AND ";
+		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato;
+
+		$queryFrom .= "\n LEFT JOIN " . $nmTabelaPessoaContrato;
+		$queryFrom .= "\n ON ";
+		$queryFrom .= $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
+		
+		$queryFrom .= "\n LEFT JOIN ". $nmTabelaPAAP;
+		$queryFrom .= "\n ON ". $nmTabelaDemanda . "." . voDemanda::$nmAtrCd. "=" . $nmTabelaPAAP . "." . voPA::$nmAtrCdDemanda;
+		$queryFrom .= "\n AND ". $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaPAAP . "." . voPA::$nmAtrAnoDemanda;		
+	
+		$filtro = new filtroManterDemanda ( false );
+		// var_dump($vo);
+		$filtro->vodemanda->cd = $vo->cd;
+		$filtro->vodemanda->ano = $vo->ano;
+		$filtro->vodemanda->sqHist = $vo->sqHist;
+		$filtro->TemPaginacao = false;
+		$filtro->isHistorico = $isHistorico;
+	
+		return parent::consultarFiltro ( $filtro, $querySelect, $queryFrom, false );
+	}
+	
 	function consultarDemandaContrato($vo) {
 		$isHistorico = $vo->isHistorico ();
 		

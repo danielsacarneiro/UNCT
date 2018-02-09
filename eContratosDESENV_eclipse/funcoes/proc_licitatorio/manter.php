@@ -118,9 +118,8 @@ function confirmar() {
 				. getInputText("", "", dominioModalidadeProcLicitatorio::getDescricaoStatic($vo->cdModalidade, null, true), constantes::$CD_CLASS_CAMPO_READONLY);?>
 				</TD>
 	        </TR>
-			<?php 			
-			$domSiPA = new dominioSituacaoPA();
-			$comboSituacao = new select($domSiPA::getColecao());
+			<?php			
+			$comboSituacao = new select(dominioSituacaoPL::getColecao());
 	        ?>
 			<TR>
 	            <TH class="campoformulario" width="1%" nowrap>Situação:</TH>
@@ -132,9 +131,7 @@ function confirmar() {
 	            $selectExercicio = new selectExercicio();
 	            //$vo->dtAbertura = dtHojeSQL;
 	            
-	            $domSiPA = new dominioSituacaoPA();
-	            $comboSituacao = new select($domSiPA::getColecao());
-	            echo getInputHidden(voProcLicitatorio::$nmAtrSituacao, voProcLicitatorio::$nmAtrSituacao, dominioSituacaoPA::$CD_SITUACAO_PA_INSTAURADO);
+	            echo getInputHidden(voProcLicitatorio::$nmAtrSituacao, voProcLicitatorio::$nmAtrSituacao, dominioSituacaoPL::$CD_SITUACAO_PL_ABERTO);
 	        ?>
 			<TR>
 		        <TH class="campoformulario" nowrap width="1%">P.L.:</TH>

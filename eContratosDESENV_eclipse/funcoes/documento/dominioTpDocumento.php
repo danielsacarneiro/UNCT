@@ -9,6 +9,7 @@ class dominioTpDocumento extends dominio {
 	static $ENDERECO_PASTA_DOCUMENTOS = "\Documentos";
 	static $ENDERECO_PASTA_PA = "\PROCESSO ADMINISTRATIVO";	
 	
+	static $CD_TP_DOC_PAAP = "PE";
 	static $CD_TP_DOC_APOSTILAMENTO = "AP";
 	static $CD_TP_DOC_CONTROLE_AQUISICAO = "CA";
 	static $CD_TP_DOC_CHECKLIST = "CK";
@@ -31,6 +32,7 @@ class dominioTpDocumento extends dominio {
 	static $CD_TP_DOC_RELATORIO_CONCLUSAO = "RC";
 	static $CD_TP_DOC_TERMO_ADITIVO = "TA";
 	
+	static $DS_TP_DOC_PAAP = "PAAP";
 	static $DS_TP_DOC_APOSTILAMENTO = "Apostilamento";
 	static $DS_TP_DOC_CONTROLE_AQUISICAO = "Controle Aquisição";
 	static $DS_TP_DOC_CHECKLIST = "Checklist";
@@ -81,6 +83,7 @@ class dominioTpDocumento extends dominio {
 				self::$CD_TP_DOC_PUBLICACAO_PAAP => self::$DS_TP_DOC_PUBLICACAO_PAAP,
 				self::$CD_TP_DOC_RELATORIO => self::$DS_TP_DOC_RELATORIO,
 				self::$CD_TP_DOC_TERMO_ADITIVO => self::$DS_TP_DOC_TERMO_ADITIVO,
+				self::$CD_TP_DOC_PAAP => self::$DS_TP_DOC_PAAP,
 				//self::$CD_TP_DOC_RELATORIO_CONCLUSAO => self::$DS_TP_DOC_RELATORIO_CONCLUSAO,
 		);
 	}
@@ -93,6 +96,7 @@ class dominioTpDocumento extends dominio {
 				self::$CD_TP_DOC_NOTA_IMPUTACAO => self::$DS_TP_DOC_NOTA_IMPUTACAO,
 				self::$CD_TP_DOC_PUBLICACAO_PAAP => self::$DS_TP_DOC_PUBLICACAO_PAAP,
 				self::$CD_TP_DOC_RELATORIO => self::$DS_TP_DOC_RELATORIO,
+				self::$CD_TP_DOC_PAAP => self::$DS_TP_DOC_PAAP,
 				//self::$CD_TP_DOC_RELATORIO_CONCLUSAO => self::$DS_TP_DOC_RELATORIO_CONCLUSAO,
 		);
 	}

@@ -118,7 +118,7 @@ function confirmar() {
             <TBODY>
         <?php        
         require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
-        getContratoDet($voContrato);                
+        getContratoDet($voContrato, true);                
         ?>
         <TR>
             <TH class="campoformulario" nowrap>Espécie/Ordem:</TH>

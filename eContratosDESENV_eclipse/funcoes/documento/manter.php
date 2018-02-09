@@ -54,6 +54,7 @@ setCabecalho($titulo);
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_pessoa.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_oficio.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_contrato.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_demanda.js"></SCRIPT>
 
 <SCRIPT language="JavaScript" type="text/javascript">
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
@@ -130,6 +131,18 @@ function criarNomeDocumento(){
 		
 	document.frm_principal.<?=voDocumento::$nmAtrLink?>.value = formatarNomeDocumento(sq, cdSetor, ano, tpDoc, complemento, colecaoSetor);
 }
+/*function carregaDadosContratada(){
+	str = "";
+
+	cdDemanda = document.frm_principal.<?=voDemanda::$nmAtrCd?>.value;
+	anoDemanda = document.frm_principal.<?=voDemanda::$nmAtrAno?>.value;
+	
+	if(cdDemanda != "" && anoDemanda != ""){
+		str = anoDemanda + '<?=CAMPO_SEPARADOR?>' + cdDemanda;
+		//vai no ajax
+		getDadosContratadaPorDemanda(str, '<?=vopessoa::$nmAtrNome?>');
+	}
+}*/
 
 function iniciar(){
 	//alert(getDescricaoChaveDS(11,<?=$varColecaoGlobalSetor?>));
@@ -152,11 +165,11 @@ function iniciar(){
             <TD class="conteinerfiltro">
             <DIV id="div_filtro" class="div_filtro">
             <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
-            <TBODY>
+            <TBODY>           
 	        <?php
+	        $selectExercicio = new selectExercicio();
 	        $domSetor = new dominioSetor();
 	        $domTp = new dominioTpDocumento();
-	        $selectExercicio = new selectExercicio();
 	        
 	        if($isInclusao){	            
 	            $comboSetor = new select($domSetor->colecao);	            
@@ -169,6 +182,14 @@ function iniciar(){
 	        $js_procLic = " onChange='criarNomeDocumento();' ";
 	        $arrayComplementoHTML = array($js_procLic, $js_procLic);
 	        ?>
+	        <!--  <TR>
+	            <TH class="campoformulario" nowrap width="1%">Demanda:</TH>
+	            <TD class="campoformulario" colspan=3>
+	            <?php echo "Ano: " . $selectExercicio->getHtmlCombo(voDemanda::$nmAtrAno,voDemanda::$nmAtrAno, $vo->anoDemanda, true, "camponaoobrigatorio", false, " onChange='carregaDadosContratada();'");?>
+			  Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voDemanda::$nmAtrCd?>" name="<?=voDemanda::$nmAtrCd?>"  value="<?php echo(complementarCharAEsquerda($vo->cdDemanda, "0", 5));?>"  class="camponaoobrigatorio" size="6" maxlength="5" onBlur='carregaDadosContratada();'>
+			  <div id="<?=vopessoa::$nmAtrNome?>">
+	          </div>
+	        </TR>-->	        
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
 	            <TD class="campoformulario" width="1%"><?php getCampoDadosContratoSimples("camponaoobrigatorio", "criarNomeDocumento();");//getContratoEntradaDeDados($tipoContrato, $cdContrato, $anoContrato, $arrayCssClass, $arrayComplementoHTML);?></TD>

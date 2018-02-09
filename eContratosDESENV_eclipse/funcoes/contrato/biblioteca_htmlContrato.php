@@ -9,9 +9,9 @@ function isContratoValido($voContrato) {
 	// so exibe contrato se tiver
 	return $voContrato != null && $voContrato->cdContrato;
 }
-function getContratoDet($voContrato) {
+function getContratoDet($voContrato, $detalharContratoInfo = false) {
 	$colecao = consultarPessoasContrato ( $voContrato );
-	return getContratoDetalhamento ( $voContrato, $colecao );
+	return getContratoDetalhamento ( $voContrato, $colecao, $detalharContratoInfo);
 }
 function getColecaoContratoDet($colecao) {
 	$html = "";
@@ -25,7 +25,7 @@ function getColecaoContratoDet($colecao) {
 	}
 	return $html;
 }
-function getContratoDetalhamento($voContrato, $colecao) {
+function getContratoDetalhamento($voContrato, $colecao,  $detalharContratoInfo = false) {
 	$vo = new vocontrato ();
 
 	// so exibe contrato se tiver
@@ -81,7 +81,17 @@ function getContratoDetalhamento($voContrato, $colecao) {
 		}
 		
 		if ($temLupa) {
-			echo getLinkPesquisa ( "../contrato/detalharContrato.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $chaveContrato );
+			if($detalharContratoInfo){
+				$voContratoInfo = new voContratoInfo();
+//				$vocontratoasdsa = new vocontrato();
+				$voContratoInfo->cdContrato = $voContrato->cdContrato;
+				$voContratoInfo->anoContrato = $voContrato->anoContrato;
+				$voContratoInfo->tipo = $voContrato->tipo;
+				
+				echo getLinkPesquisa ( "../".voContratoInfo::getNmTabela()."/detalhar.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $voContratoInfo->getValorChaveHTML() );
+			}else{
+				echo getLinkPesquisa ( "../contrato/detalharContrato.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $chaveContrato );
+			}
 		}
 		?>							
 				<div id=""><?=$campoContratado?></div></TD>
@@ -332,6 +342,11 @@ function getProcLicitatorioEntradaDados($cdProcLic, $anoProcLic, $arrayCssClass,
 function consultarContratosDemanda($voDemanda) {
 	$db = new dbDemanda ();
 	$colecao = $db->consultarDemandaContrato ( $voDemanda );
+	return $colecao;
+}
+function consultarDadosHTMLDemanda($voDemanda) {
+	$db = new dbDemanda ();
+	$colecao = $db->consultarDadosDemanda ( $voDemanda );
 	return $colecao;
 }
 function consultarContratosPAAP($voPAAP) {
