@@ -10,6 +10,7 @@ class filtroManterDemanda extends filtroManter{
 	static $NmAtrCdSetorPassagem = "NmAtrCdSetorPassagem";
 	static $NmColDhUltimaMovimentacao = "NmColDhUltimaMovimentacao";
 	static $NmColQtdContratos = "NmColQtdContratos";
+	static $NmColDtReferenciaSetorAtual = "NmColDtReferenciaSetorAtual";
 
 	static $NmAtrCdDemandaInicial = "NmAtrCdDemandaInicial";
 	static $NmAtrCdDemandaFinal = "NmAtrCdDemandaFinal";
@@ -606,6 +607,11 @@ class filtroManterDemanda extends filtroManter{
 		return $filtro;
 	}	
 	
+	function isSetorAtualSelecionado(){
+		$cdSetorAtual = $this->vodemanda->cdSetorDestino;
+		return $cdSetorAtual != null && $cdSetorAtual != "";		
+	}
+	
 	function getAtributoOrdenacaoAnteriorDefault(){
 		$nmTabelaDemanda = voDemanda::getNmTabelaStatic($this->isHistorico);
 		//$retorno = $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . " " . $this->cdOrdenacao; 
@@ -628,6 +634,12 @@ class filtroManterDemanda extends filtroManter{
 				voDemanda::$nmAtrPrioridade => "Prioridade",				
 				voDemanda::$nmAtrTipo => "Tipo",
 		);
+		
+		if($this->isSetorAtualSelecionado()){
+			$atributoDtReferenciaSetorAtual = static::$NmColDtReferenciaSetorAtual;				
+			$varAtributos = putElementoArray2NoArray1ComChaves ( $varAtributos, array($atributoDtReferenciaSetorAtual => "Dt.Chegada.SetorAtual"));		
+		}
+		
 		return $varAtributos;
 	}	
 

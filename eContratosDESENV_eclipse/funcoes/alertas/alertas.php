@@ -30,6 +30,7 @@ function getMensagemEdital(&$count = 0){
 	
 		$filtro->vodemanda->tipo = array(dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL);
 		$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_ATJA;
+		$filtro->cdAtrOrdenacao = filtroManterDemanda::$NmColDtReferenciaSetorAtual;
 		
 		$msg = getCorpoMensagemDemandaPorColecao($assunto, $filtro, null);
 	
@@ -97,6 +98,7 @@ function getMensagemDemandaContratoPropostaVencida(&$count = 0){
 		
 		//$filtro->vocontrato->dtProposta = "11/11/2017";
 		$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_ATJA;
+		$filtro->cdAtrOrdenacao = filtroManterDemanda::$NmColDtReferenciaSetorAtual;
 		$colecao = $dbprocesso->consultarTelaConsulta ( $voDemanda, $filtro );
 
 		$msg = getCorpoMensagemDemandaContratoColecao($assunto, $colecao, null);
@@ -125,6 +127,7 @@ function getMensagemDemandaSAD(&$count = 0){
 		);
 		$filtro->vodemanda->tipo = array_keys ( dominioTipoDemanda::getColecaoTipoDemandaSAD () );
 		$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_ATJA;
+		$filtro->cdAtrOrdenacao = filtroManterDemanda::$NmColDtReferenciaSetorAtual;
 		$filtro->prioridadeExcludente = dominioPrioridadeDemanda::$CD_PRIORI_BAIXA;
 		$filtro->vocontrato->cdAutorizacao = array (
 				dominioAutorizacao::$CD_AUTORIZ_SAD

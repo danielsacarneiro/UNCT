@@ -115,11 +115,23 @@ class dbDemanda extends dbprocesso {
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
+		
+		$cdSetorAtual = $filtro->vodemanda->cdSetorDestino;
+		$isSetorAtualSelecionado = $filtro->isSetorAtualSelecionado();
+		$nmTabelaMINDestinoTramitacao = "TABELA_MIN_TRAMDESTINO";
+		$nmTabelaDestinoTramitacao = "TABELA_DESTINO_TRAM";
 				
 		$colunaUsuHistorico = "";
 		
 		if ($isHistorico) {
 			$colunaUsuHistorico = static::$nmTabelaUsuarioOperacao . "." . vousuario::$nmAtrName . "  AS " . voDemanda::$nmAtrNmUsuarioOperacao;
+		}
+		
+		//para nao dar pau caso seja des-selecionado
+		if($isSetorAtualSelecionado){
+			$colunaDtReferenciaSetorAtual = "$nmTabelaDestinoTramitacao." . voDemandaTramitacao::$nmAtrDtReferencia. "  AS " . filtroManterDemanda::$NmColDtReferenciaSetorAtual;
+		}else if($filtro->cdAtrOrdenacao == filtroManterDemanda::$NmColDtReferenciaSetorAtual){
+			$filtro->cdAtrOrdenacao = "";			
 		}
 		$arrayColunasRetornadas = array (
 				$nmTabela . ".*",
@@ -134,7 +146,8 @@ class dbDemanda extends dbprocesso {
 				// $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . " AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,
 				"COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . "," . $nmTabela . "." . voDemanda::$nmAtrCdSetor . ") AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,
 				"COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrDhInclusao . "," . $nmTabela . "." . voDemanda::$nmAtrDhUltAlteracao . ") AS " . filtroManterDemanda::$NmColDhUltimaMovimentacao,
-				$colunaUsuHistorico 
+				$colunaUsuHistorico,
+				$colunaDtReferenciaSetorAtual
 		);
 		
 		$atributosGroup = voDemandaTramitacao::$nmAtrCd . "," . voDemandaTramitacao::$nmAtrAno;
@@ -199,6 +212,26 @@ class dbDemanda extends dbprocesso {
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrAnoDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrAno;
 		$queryJoin .= "\n AND " . $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrCd;
+		
+		//Para o caso de se desejar ordenar pela primeira vez que foi encaminhada ao setor atual selecionado pelo usuario
+		
+		if($isSetorAtualSelecionado){
+			//echo "tem";
+			$queryJoin .= "\n LEFT JOIN (";
+			$queryJoin .= " SELECT MIN(" . voDemandaTramitacao::$nmAtrSq . ") AS " . voDemandaTramitacao::$nmAtrSq
+			. "," . $atributosGroup . " FROM " . $nmTabelaTramitacao . " WHERE " . voDemandaTramitacao::$nmAtrCdSetorDestino . " = " . $cdSetorAtual
+			. " GROUP BY " . $atributosGroup;
+			$queryJoin .= ") $nmTabelaMINDestinoTramitacao ";
+			$queryJoin .= "\n ON " . $nmTabela . "." . voDemandaTramitacao::$nmAtrAno . " = $nmTabelaMINDestinoTramitacao." . voDemandaTramitacao::$nmAtrAno;
+			$queryJoin .= "\n AND " . $nmTabela . "." . voDemandaTramitacao::$nmAtrCd . " = $nmTabelaMINDestinoTramitacao." . voDemandaTramitacao::$nmAtrCd;
+			
+			// agora pega dos dados da ultima tramitacao, se houver
+			$queryJoin .= "\n LEFT JOIN ";
+			$queryJoin .= "$nmTabelaTramitacao $nmTabelaDestinoTramitacao";
+			$queryJoin .= "\n ON " . $nmTabelaDestinoTramitacao . "." . voDemandaTramitacao::$nmAtrAno . " = $nmTabelaMINDestinoTramitacao." . voDemandaTramitacao::$nmAtrAno;
+			$queryJoin .= "\n AND " . $nmTabelaDestinoTramitacao . "." . voDemandaTramitacao::$nmAtrCd . " = $nmTabelaMINDestinoTramitacao." . voDemandaTramitacao::$nmAtrCd;
+			$queryJoin .= "\n AND " . $nmTabelaDestinoTramitacao . "." . voDemandaTramitacao::$nmAtrSq . " = $nmTabelaMINDestinoTramitacao." . voDemandaTramitacao::$nmAtrSq;
+		}
 		
 		$arrayGroupby = array (
 				$nmTabela . "." . voDemanda::$nmAtrAno,
