@@ -115,31 +115,10 @@ class filtroConsultarDemandaPAAP extends filtroManterDemanda{
 		
 															$conector  = "\n AND ";
 		}
-		
-		
-		if($this->qtdDiasPrazo != null){
-			$nmAtributoDataNotificacao = $nmTabelaPA . "." .voPA::$nmAtrDtUltNotificacaoParaManifestacao;
-			//$nmAtributoDataPublicacao = dbpa::getSQLNmAtributoDtPublicacao();
 			
-			$dtNotificacaoPAram = getVarComoDataSQL(somarOuSubtrairDiasUteisNaData(getDataHoje(), $this->qtdDiasPrazo, "-"));			
-			//verifica se tem um prazo cadastrado para a data. Se tiver, o utiliza. Se nao, pega o valor passado como parametro como default
-			//NAO RESOLVE PARA DIAS UTEIS
-			$dtNotificacaoPAram = "DATE_ADD($nmAtributoDataNotificacao, INTERVAL COALESCE(".voPA::$nmAtrNumDiasPrazoUltNotificacao.",$this->qtdDiasPrazo) DAY)";			
-			
-			//se a data consultada + qtddiasprazo for menor que a data de hoje, significa que o prazo ja passou, entao a demanda deve ser exibida
-			//se a situacao for AGUARDANDO ACAO, traga o PAAP de todo jeito
-			$filtro = $filtro . $conector
-			. " ($nmTabelaPA." .voPA::$nmAtrSituacao . "=" . dominioSituacaoPA::$CD_SITUACAO_PA_AGUARDANDO_ACAO . " OR "
-			. " ($nmTabelaPA." .voPA::$nmAtrSituacao . "<>" . dominioSituacaoPA::$CD_SITUACAO_PA_AGUARDANDO_NOTIFICACAO_ENVIADA . " AND " 					
-			. " $nmAtributoDataNotificacao IS NOT NULL AND $nmAtributoDataNotificacao <= $dtNotificacaoPAram)) "
-			;
-			
-			/*$filtro = $filtro . $conector
-			. " (($nmAtributoDataPublicacao IS NOT NULL AND $nmAtributoDataPublicacao <= $dtNotificacaoPAram) OR "
-			. " ($nmAtributoDataPublicacao IS NULL AND $nmAtributoDataNotificacao IS NOT NULL AND $nmAtributoDataNotificacao <= $dtNotificacaoPAram )) ";*/
-				
-			$conector  = "\n AND ";
-		}
+		//verifica prazo encerrado da notificacao
+		$filtro = $this->getDataComparacaoPrazoEncerrado($filtro, $nmTabelaPA, $conector);
+		$conector  = "\n AND ";		
 		
 		$this->formataCampoOrdenacao(new voDemanda());
 		//finaliza o filtro
@@ -148,7 +127,23 @@ class filtroConsultarDemandaPAAP extends filtroManterDemanda{
 		//echo "Filtro:$filtro<br>";
 
 		return $filtro;
-	}	
+	}
+	
+	function getDataComparacaoPrazoEncerrado($filtro, $nmTabelaPA, $conector){
+		
+		$nmAtributoDataPrazoEncerrado = $nmTabelaPA . "." .voPA::$nmAtrDtUltNotificacaoPrazoEncerrado;
+		$dtParam = " NOW() ";
+			
+		//se a data consultada $nmAtributoDataPrazoEncerrado for menor que a data de hoje, significa que o prazo ja passou, entao a demanda deve ser exibida
+		//se a situacao for AGUARDANDO ACAO, traga o PAAP de todo jeito
+		$filtro = $filtro . $conector
+		. " ($nmTabelaPA." .voPA::$nmAtrSituacao . "=" . dominioSituacaoPA::$CD_SITUACAO_PA_AGUARDANDO_ACAO . " OR "
+		. " ($nmTabelaPA." .voPA::$nmAtrSituacao . "<>" . dominioSituacaoPA::$CD_SITUACAO_PA_AGUARDANDO_NOTIFICACAO_ENVIADA . " AND "
+		. " $nmAtributoDataPrazoEncerrado IS NOT NULL AND $nmAtributoDataPrazoEncerrado <= $dtParam)) "
+		;
+		
+		return $filtro; 
+	}
 	
 	function getAtributoOrdenacaoDefault(){
 		$nmTabelaDemanda = voDemanda::getNmTabelaStatic($this->isHistorico);
