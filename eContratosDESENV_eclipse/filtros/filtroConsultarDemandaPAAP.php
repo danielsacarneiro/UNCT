@@ -119,9 +119,12 @@ class filtroConsultarDemandaPAAP extends filtroManterDemanda{
 		
 		if($this->qtdDiasPrazo != null){
 			$nmAtributoDataNotificacao = $nmTabelaPA . "." .voPA::$nmAtrDtUltNotificacaoParaManifestacao;
-			$nmAtributoDataPublicacao = dbpa::getSQLNmAtributoDtPublicacao();
+			//$nmAtributoDataPublicacao = dbpa::getSQLNmAtributoDtPublicacao();
 			
-			$dtNotificacaoPAram = getVarComoDataSQL(somarOuSubtrairDiasUteisNaData(getDataHoje(), $this->qtdDiasPrazo, "-"));						
+			$dtNotificacaoPAram = getVarComoDataSQL(somarOuSubtrairDiasUteisNaData(getDataHoje(), $this->qtdDiasPrazo, "-"));			
+			//verifica se tem um prazo cadastrado para a data. Se tiver, o utiliza. Se nao, pega o valor passado como parametro como default
+			//NAO RESOLVE PARA DIAS UTEIS
+			$dtNotificacaoPAram = "DATE_ADD($nmAtributoDataNotificacao, INTERVAL COALESCE(".voPA::$nmAtrNumDiasPrazoUltNotificacao.",$this->qtdDiasPrazo) DAY)";			
 			
 			//se a data consultada + qtddiasprazo for menor que a data de hoje, significa que o prazo ja passou, entao a demanda deve ser exibida
 			//se a situacao for AGUARDANDO ACAO, traga o PAAP de todo jeito
