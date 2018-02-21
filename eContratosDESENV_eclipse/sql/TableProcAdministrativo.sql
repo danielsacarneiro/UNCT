@@ -33,6 +33,8 @@ ALTER TABLE pa ADD CONSTRAINT fk_pa_demanda FOREIGN KEY (dem_ex, dem_cd) REFEREN
 ALTER TABLE pa ADD COLUMN pa_publicacao LONGTEXT AFTER pa_observacao;
 ALTER TABLE pa ADD COLUMN pa_dt_notificacao DATE AFTER pa_dt_abertura;
 ALTER TABLE pa ADD COLUMN pa_dt_ult_notmanifestacao DATE AFTER pa_dt_notificacao;
+ALTER TABLE pa ADD COLUMN pa_prazodias_ult_notificacao INT AFTER pa_dt_ult_notmanifestacao;
+ALTER TABLE pa ADD COLUMN pa_dt_ultnotprazoencerrado DATE AFTER pa_prazodias_ult_notificacao;
 
 drop table if exists pa_hist;
 CREATE TABLE pa_hist (
@@ -69,6 +71,8 @@ ALTER TABLE pa_hist ADD CONSTRAINT desativacao_pa CHECK (in_desativado NOT IN ('
 ALTER TABLE pa_hist ADD COLUMN pa_publicacao LONGTEXT AFTER pa_observacao;
 ALTER TABLE pa_hist ADD COLUMN pa_dt_notificacao DATE AFTER pa_dt_abertura;
 ALTER TABLE pa_hist ADD COLUMN pa_dt_ult_notmanifestacao DATE AFTER pa_dt_notificacao;
+ALTER TABLE pa_hist ADD COLUMN pa_prazodias_ult_notificacao INT AFTER pa_dt_ult_notmanifestacao;
+ALTER TABLE pa_hist ADD COLUMN pa_dt_ultnotprazoencerrado DATE AFTER pa_prazodias_ult_notificacao;
 
 show create table pa_hist;
 

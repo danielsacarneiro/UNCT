@@ -62,8 +62,10 @@ function getMensagemFimPrazoPAAP(&$count = 0){
 	
 		$dbprocesso = new dbPA();
 		$colecao = $dbprocesso->consultarDemandaPAAP($filtro );	
-		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Dt.Citação', voPA::$nmAtrDtUltNotificacaoParaManifestacao, constantes::$CD_TP_DADO_DATA);		
-		$msg = getCorpoMensagemDemandaContratoColecao($assunto, $colecao, null);
+		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Ano PAAP', voPA::$nmAtrAnoPA);
+		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Nº PAAP', voPA::$nmAtrCdPA, constantes::$TAMANHO_CODIGOS_SAFI);
+		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Dt.Notificação.Recebida', voPA::$nmAtrDtUltNotificacaoParaManifestacao, constantes::$CD_TP_DADO_DATA);		
+		$msg = getCorpoMensagemDemandaContratoColecao($assunto, $colecao, $colunasAAcrescentar);
 	
 	} catch ( Exception $ex ) {
 		$msg = $ex->getMessage ();
@@ -91,6 +93,7 @@ function getMensagemDemandaContratoPropostaVencida(&$count = 0){
 		$filtro->vocontrato->dtProposta = getDataHoje();
 		//$filtro->vodemanda->tipo = array_keys ( dominioTipoDemanda::getColecaoTipoDemandaSAD () );
 		$filtro->vodemanda->tipo = array(dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO_REAJUSTE);
+		//$filtro->prioridadeExcludente = dominioPrioridadeDemanda::$CD_PRIORI_BAIXA;
 		
 		//$filtro->vocontrato->dtProposta = "11/11/2017";
 		$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_ATJA;

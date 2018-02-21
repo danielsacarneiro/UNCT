@@ -3,6 +3,7 @@ include_once("../../config_lib.php");
 include_once(caminho_util."bibliotecaHTML.php");
 include_once(caminho_util."selectExercicio.php");
 include_once (caminho_funcoes . "contrato/biblioteca_htmlContrato.php");
+include_once(caminho_funcoes . "pa/biblioteca_htmlPA.php");
 include_once (caminho_funcoes . "demanda/biblioteca_htmlDemanda.php");
 
 //inicia os parametros
@@ -114,6 +115,26 @@ function validarPublicacao(){
 
 	return true;
 }
+
+function getDataPrazo(){
+	pNmCampoDiv = "<?=voPA::$ID_REQ_DIV_PRAZO?>";
+	pIDCampoData = "<?=voPA::$nmAtrDtUltNotificacaoParaManifestacao?>";
+	pIDCampoDataFim = "<?=voPA::$nmAtrDtUltNotificacaoPrazoEncerrado?>";
+	pIDCampoPrazo = "<?=voPA::$nmAtrNumDiasPrazoUltNotificacao?>";
+	
+	dtNotificacao = document.getElementById(pIDCampoData).value;
+	prazo = document.getElementById(pIDCampoPrazo).value;
+	
+	if(prazo != "" && dtNotificacao != "" ){
+		//alert("aqui");
+		//vai no ajax
+		chave = pIDCampoDataFim + '<?=CAMPO_SEPARADOR?>' + dtNotificacao + '<?=CAMPO_SEPARADOR?>' + prazo;			
+		getDataFimPrazo(chave, pNmCampoDiv) ;		
+	}else{
+		//limpa o campodiv da contratada
+		limpaCampoDiv(pNmCampoDiv);		
+	}	
+}
 </SCRIPT>
 <?=setTituloPagina($vo->getTituloJSP())?>
 </HEAD>
@@ -133,10 +154,8 @@ function validarPublicacao(){
             <DIV id="div_filtro" class="div_filtro">
             <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
             <TBODY>
-	        <?php	         
-	        $procAdm = formatarCodigoAno($colecao[voPA::$nmAtrCdPA],
-	        		$colecao[voPA::$nmAtrAnoPA]);
-	         
+	        <?php
+	        
 	        if(!$isInclusao){
 
 	        getDemandaDetalhamento($voDemanda);
@@ -208,9 +227,9 @@ function validarPublicacao(){
 	            			maxlength="10" required>
 				</TD>
         	</TR>
-			<TR>
+			<!-- <TR>
 	            <TH class="campoformulario" nowrap>Dt.Notificação Nota Imputação:</TH>
-	            <TD class="campoformulario">
+	            <TD class="campoformulario" colspan=3>
 	            	<INPUT type="text" 
 	            	       id="<?=voPA::$nmAtrDtNotificacao?>" 
 	            	       name="<?=voPA::$nmAtrDtNotificacao?>" 
@@ -220,16 +239,24 @@ function validarPublicacao(){
 	            			size="10" 
 	            			maxlength="10" required>
 				</TD>
+        	</TR>-->
+			<TR>
 	            <TH class="campoformulario">Dt.Notificação.Últ.Manifestação:</TH>
-	            <TD class="campoformulario">
+	            <TD class="campoformulario" colspan=3>
 	            	<INPUT type="text" 
 	            	       id="<?=voPA::$nmAtrDtUltNotificacaoParaManifestacao?>" 
 	            	       name="<?=voPA::$nmAtrDtUltNotificacaoParaManifestacao?>" 
 	            			value="<?php echo(getData($vo->dtUlNotificacaoParaManifestacao));?>"
-	            			onkeyup="formatarCampoData(this, event, false);" 
+	            			onkeyup="formatarCampoData(this, event, false);"
+		            		onBlur="getDataPrazo()" 
 	            			class="camponaoobrigatorio" 
 	            			size="10" 
-	            			maxlength="10" required> *para fins de contagem de prazo
+	            			maxlength="10" required>
+	            				            			
+				<?php echo " Prazo:".getInputText(voPA::$nmAtrNumDiasPrazoUltNotificacao, voPA::$nmAtrNumDiasPrazoUltNotificacao, $vo->numDiasPrazoUltNotificacao, constantes::$CD_CLASS_CAMPO_OBRIGATORIO, 3,3, " onBlur='getDataPrazo()' ")?> *para fins de contagem de prazo	            	
+			  <div id="<?=voPA::$ID_REQ_DIV_PRAZO?>">
+			  <?=getCampoDataPrazoFinal(voPA::$nmAtrDtUltNotificacaoPrazoEncerrado, $vo->dtUlNotificacaoPrazoEncerrado);?>
+	          </div>
 				</TD>				
         	</TR>
         	<?php        	
@@ -240,7 +267,8 @@ function validarPublicacao(){
 	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=voPA::$nmAtrPublicacao?>" name="<?=voPA::$nmAtrPublicacao?>" class="camponaoobrigatorio" ><?php echo($vo->publicacao);?></textarea>
 	            <SCRIPT language="JavaScript" type="text/javascript">
 	            	colecaoIDCamposRequired = ["<?=voPA::$nmAtrDtNotificacao?>",
-	            		"<?=voPA::$nmAtrDtUltNotificacaoParaManifestacao?>"];
+	            		"<?=voPA::$nmAtrDtUltNotificacaoParaManifestacao?>",
+	            		"<?=voPA::$nmAtrNumDiasPrazoUltNotificacao?>"];
 	            </SCRIPT>
 	            <br><INPUT type="checkbox" onClick="if(!this.checked){document.frm_principal.<?=voPA::$nmAtrPublicacao?>.value='';}else{document.frm_principal.<?=voPA::$nmAtrPublicacao?>.value='<?=$modeloPublicacao?>'};"> *incluir Modelo Publicação.
 	            <br><INPUT type="checkbox" id="checkResponsabilidade" name="checkResponsabilidade" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCamposRequired);"> *Assumo a responsabilidade de não incluir os valores obrigatórios.	            				            

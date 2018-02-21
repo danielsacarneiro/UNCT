@@ -7,6 +7,8 @@ inicioComValidacaoUsuario(true);
 $vo = new voPA();
 $vo->getDadosFormulario();
 
+//echo $vo->dtUlNotificacaoPrazoEncerrado;
+
 //$vo->dbprocesso->validarAlteracao($vo);
 
 putObjetoSessao("vo", $vo);

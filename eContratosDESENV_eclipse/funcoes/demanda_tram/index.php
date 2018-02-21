@@ -174,6 +174,7 @@ function alterar() {
                     <TH class="headertabeladados" width="1%">Tram.</TH>
                     <TH class="headertabeladados" width="1%">Origem</TH>
                     <TH class="headertabeladados" width="1%">Destino</TH>
+                    <TH class="headertabeladados" width="1%">Tipo</TH>
                     <TH class="headertabeladados"width="90%" >Texto</TH>
                     <TH class="headertabeladados"width="1%" nowrap >Usuário</TH>
                     <TH class="headertabeladados"width="1%" nowrap >Dt.Referência</TH>
@@ -189,7 +190,7 @@ function alterar() {
                 $dominioSituacao = new dominioSituacaoDemanda();
                 $dominioSetor = new dominioSetor();                
                                 
-                $colspan=10;
+                $colspan=11;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -200,6 +201,9 @@ function alterar() {
                         
                         $setor = $dominioSetor->getDescricao($voAtual->cdSetorOrigem);                        
                         $setorDestino = $dominioSetor->getDescricao($voAtual->cdSetorDestino);
+                        
+                        $tipo = $voAtual->tipo;
+                        $tipo = dominioTipoDemanda::getDescricaoStatic($tipo);
                                                 
                         $nmUsuario = $voAtual->nmUsuarioInclusao;
                         if($isHistorico){
@@ -224,6 +228,7 @@ function alterar() {
                     <TD class="tabeladadosalinhadodireita" ><?php echo complementarCharAEsquerda($voAtual->sq, "0", TAMANHO_CODIGOS)?></TD>
 					<TD class="tabeladados" nowrap><?php echo $setor?></TD>
 					<TD class="tabeladados" nowrap><?php echo $setorDestino?></TD>
+					<TD class="tabeladados" nowrap><?php echo $tipo?></TD>
                     <TD class="tabeladados" ><?php echo $voAtual->textoTram;?></TD>                    
                     <TD class="tabeladados" nowrap><?php echo $nmUsuario;?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($voAtual->dtReferencia);?></TD>

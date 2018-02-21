@@ -140,7 +140,7 @@ function confirmar() {
         	</TR>
 			<TR>
 	            <TH class="campoformulario" nowrap>Dt.Notificação Nota Imputação:</TH>
-	            <TD class="campoformulario">
+	            <TD class="campoformulario" colspan=3>
 	            	<INPUT type="text" 
 	            	       id="<?=voPA::$nmAtrDtNotificacao?>" 
 	            	       name="<?=voPA::$nmAtrDtNotificacao?>" 
@@ -149,15 +149,28 @@ function confirmar() {
 	            			size="10" 
 	            			maxlength="10" readonly>	            			
 				</TD>
+        	</TR>
+			<TR>
 	            <TH class="campoformulario">Dt.Notificação.Últ.Manifestação:</TH>
-	            <TD class="campoformulario">
+	            <TD class="campoformulario" colspan=3>
 	            	<INPUT type="text" 
 	            	       id="<?=voPA::$nmAtrDtUltNotificacaoParaManifestacao?>" 
 	            	       name="<?=voPA::$nmAtrDtUltNotificacaoParaManifestacao?>" 
 	            			value="<?php echo(getData($vo->dtUlNotificacaoParaManifestacao));?>"
 							class="camporeadonly" 
 	            			size="10" 
-	            			maxlength="10" readonly> *para fins de contagem de prazo
+	            			maxlength="10" readonly>
+	            			
+				<?php echo " Prazo:".getInputText(voPA::$nmAtrNumDiasPrazoUltNotificacao, voPA::$nmAtrNumDiasPrazoUltNotificacao, $vo->numDiasPrazoUltNotificacao, constantes::$CD_CLASS_CAMPO_READONLY, 3, "")?>
+				Prazo Final:
+							<INPUT type="text" 
+	            	       id="<?=voPA::$nmAtrDtUltNotificacaoPrazoEncerrado?>" 
+	            	       name="<?=voPA::$nmAtrDtUltNotificacaoPrazoEncerrado?>" 
+	            			value="<?php echo(getData($vo->dtUlNotificacaoPrazoEncerrado));?>"
+							class="camporeadonly" 
+	            			size="10" 
+	            			maxlength="10" readonly>
+				
 				</TD>				
         	</TR>
         	<?php 

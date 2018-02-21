@@ -69,6 +69,5 @@
     
     static $CD_MODELO_TEXTO = "[XXX MODELO - ALTERAR XXX]";
     static $CD_MODELO = "MODELO";
-    
 }
 ?>

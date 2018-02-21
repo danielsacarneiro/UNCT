@@ -87,6 +87,10 @@ function formataFormClassificacao(pCampoChamada) {
 	else if(pCampoChamada == null || pCampoChamada.name != "<?=voContratoInfo::$nmAtrInMaoDeObra?>"){		
 		campoMaodeObra.value = "";
 	}
+
+	if(classificacao == "<?=dominioClassificacaoContrato::$CD_LOCACAO_IMOVEL?>"){
+		exibirMensagem("<?=voContratoInfo::getTextoAlertaContratoLocação()?>");
+	}
 }
 
 </SCRIPT>

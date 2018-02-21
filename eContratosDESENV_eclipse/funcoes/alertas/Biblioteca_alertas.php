@@ -97,9 +97,10 @@ function getCorpoMensagemPorColecao($titulo, $colecao, $colunasAExibir) {
 					if(constantes::$CD_TP_DADO_DATA == $coluna[constantes::$CD_COLUNA_TP_DADO]){
 						$coluna_valor = getData($coluna_valor);
 					}
-						
-					if(constantes::$TAMANHO_CODIGOS == $coluna[constantes::$CD_COLUNA_TP_DADO]){
-						$coluna_valor = complementarCharAEsquerda ( $coluna_valor, '0', constantes::$TAMANHO_CODIGOS );
+					
+					$colunaTipoDado = $coluna[constantes::$CD_COLUNA_TP_DADO];
+					if(constantes::$TAMANHO_CODIGOS == $colunaTipoDado || constantes::$TAMANHO_CODIGOS_SAFI == $colunaTipoDado){
+						$coluna_valor = complementarCharAEsquerda ( $coluna_valor, '0', $colunaTipoDado );
 					}
 
 					//para o caso de ter dados do contrato

@@ -1,6 +1,31 @@
 <?php
 include_once("../../config_lib.php");
-include_once(caminho_vos . "vocontrato.php");
+include_once(caminho_util."bibliotecaDataHora.php");
+
+function getCampoDataPrazoFinal($idCampo, $valor) {
+	
+	if($valor != null){
+	$retorno = "Prazo Final:
+	<INPUT type='text'
+	id='$idCampo'
+	name='$idCampo'
+	value='".getData($valor)."'
+	 onkeyup='formatarCampoData(this, event, false);'
+	 class='camponaoobrigatorio'
+	 size='10'
+	 maxlength='10' readonly>";
+	}
+	
+	return $retorno;
+	
+}
+function getDataPrazoFinal($dtinicio, $prazo, $idCampo, $isDiasUteis=true) {	
+	$data= somarOuSubtrairDiasUteisNaData($dtinicio, $prazo, "+");
+
+	$retorno = getCampoDataPrazoFinal($idCampo, $data);
+	
+	return $retorno;
+}
 
 function isPAAPValido($vo) {
 	// so exibe contrato se tiver
@@ -12,12 +37,6 @@ function getPAAPDetalhamento($vo,$temLupa=true) {
 
 		?>
 <TR>
-	<INPUT type="hidden" id="<?=voPA::$nmAtrCdPA?>"
-		name="<?=voPA::$nmAtrCdPA?>"
-		value="<?=$vo->cdPA?>">
-	<INPUT type="hidden" id="<?=voPA::$nmAtrAnoPA?>"
-		name="<?=voPA::$nmAtrAnoPA?>"
-		value="<?=$vo->anoPA?>">
 	<TH class="campoformulario" nowrap width=1%>PAAP:</TH>
 	<TD class="campoformulario" colspan=3>
 	<?php

@@ -839,7 +839,7 @@ function getCampoDadosVOAnoCdDetalhamento($vo,$arrayParametroXNmAtributo,$temLup
 			$ano = $vo->$atribAno;
 		}
 		
-		$cd = formatarCodigoAnoComplemento ( $cd, $ano, "");
+		$cdStr = formatarCodigoAnoComplemento ( $cd, $ano, "");
 		// $voContrato = new vocontrato();
 		$chave = $vo->getValorChaveHTML ();
 		
@@ -854,7 +854,7 @@ function getCampoDadosVOAnoCdDetalhamento($vo,$arrayParametroXNmAtributo,$temLup
 		name="<?=$pNmCampoAno?>"
 		value="<?=$ano?>">
 		
-	<INPUT type="text" value="<?php echo($cd);?>" class="camporeadonlyalinhadodireita" size="<?=strlen($cd)+1?>" readonly>	
+	<INPUT type="text" value="<?php echo($cdStr);?>" class="camporeadonlyalinhadodireita" size="<?=strlen($cdStr)+1?>" readonly>	
 	<?php
 	
 	//$vo = new voPA();

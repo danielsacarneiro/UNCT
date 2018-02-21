@@ -43,9 +43,13 @@ setCabecalho($titulo);
     f4.adicionarItem(new Link('Penalidades (PAAP)', '<?=caminho_funcoesHTML?>pa_penalidade', ''));
 	f.adicionarItem(f4);
 
-	fprocLic = new Tree('Serviço 05 (Proc.Licitatório.)');
+	fprocLic = new Tree('Serviço 05 (Proc.Licitatório)');
 	fprocLic.adicionarItem(new Link('Proc.Licitatório', '<?=caminho_funcoesHTML.voProcLicitatorio::getNmTabela()?>', ''));
 	f.adicionarItem(fprocLic);
+
+	fadm = new Tree('Serviço 06 (Administrativo)');
+	fadm.adicionarItem(new Link("Agendamento de alertas (SEM EMAIL)", "agendamento.php?<?=constantes::$ID_REQ_IN_ENVIAR_EMAIL?>=N", ""));
+	f.adicionarItem(fadm);
 
 	/*flegislacao = new Tree('Serviço 05 (Legislação)');    
 	flegislacao.adicionarItem(new Link('Decreto 42.191 - Aplicação de penalidade(PAAP)', 'h:\\ASSESSORIA JURÍDICA\\ATJA\\LEGISLAÇÃO\\DECRETO Nº 42.191 DE 2015 - APLICAÇÃO DE PENALIDADES A LICITANTES.pdf', ''));
@@ -55,8 +59,7 @@ setCabecalho($titulo);
 	f5 = new Tree('ADMINISTRADOR');
     f5.adicionarItem(new Link('Usuários', '<?=caminho_funcoesHTML?>usuario_info', ''));
 	f5.adicionarItem(new Link("Tramitação Demanda", "<?=caminho_funcoesHTML?>demanda_tram", ""));
-	f5.adicionarItem(new Link("Agendamento de alertas COM EMAIL", "agendamento.php?<?=constantes::$ID_REQ_IN_ENVIAR_EMAIL?>=S", ""));
-	f5.adicionarItem(new Link("Agendamento de alertas SEM EMAIL", "agendamento.php?<?=constantes::$ID_REQ_IN_ENVIAR_EMAIL?>=N", ""));
+	f5.adicionarItem(new Link("Agendamento de alertas (COM EMAIL)", "agendamento.php?<?=constantes::$ID_REQ_IN_ENVIAR_EMAIL?>=S", ""));
 	f5.adicionarItem(new Link("Pagina TESTE", "teste.php", ""));
 	f5.adicionarItem(new Link('______', '#', ''));
 	f5.adicionarItem(new Link('______', '#', ''));

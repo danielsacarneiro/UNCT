@@ -5,6 +5,7 @@ include_once(caminho_util."constantes.class.php");
 
 //inicia os parametros
 inicio();
+//inicioComValidacaoUsuario(true);
 $titulo = "AGENDAMENTO ALERTAS";
 setCabecalho($titulo);
 ?>

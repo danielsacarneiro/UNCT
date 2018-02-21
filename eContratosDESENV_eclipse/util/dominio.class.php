@@ -145,7 +145,11 @@ class dominio extends multiplosConstrutores {
 		if($isTrazerValuenoOption){
 			$value = select::getDescricaoComValueNoOption($opcaoSelecionada, $value);
 		}
-		$html = getInputText($id, $nm, $value, constantes::$CD_CLASS_CAMPO_READONLY)."\n";	
+		if($value == null || $value == ""){
+			$value = " ";			
+		}
+		
+		$html = getInputText($id, $nm, $value, constantes::$CD_CLASS_CAMPO_READONLY)."\n";
 		return $html;
 	}
 	

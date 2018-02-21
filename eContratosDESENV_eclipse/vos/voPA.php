@@ -3,6 +3,8 @@ include_once (caminho_funcoes . "pa/dominioSituacaoPA.php");
 include_once (caminho_funcoes . "pa_penalidade/dominioTipoPenalidade.php");
 
 class voPA extends voentidade {
+	static $ID_REQ_DIV_PRAZO = "ID_REQ_DIV_PRAZO";
+	
 	static $nmAtrCdPA = "pa_cd"; // processo administrativo cd
 	static $nmAtrAnoPA = "pa_ex"; // processo administrativo ano
 	static $nmAtrAnoDemanda = "dem_ex";
@@ -13,6 +15,8 @@ class voPA extends voentidade {
 	static $nmAtrDtAbertura = "pa_dt_abertura";
 	static $nmAtrDtNotificacao = "pa_dt_notificacao";
 	static $nmAtrDtUltNotificacaoParaManifestacao = "pa_dt_ult_notmanifestacao";
+	static $nmAtrNumDiasPrazoUltNotificacao = "pa_prazodias_ult_notificacao";
+	static $nmAtrDtUltNotificacaoPrazoEncerrado = "pa_dt_ultnotprazoencerrado";
 	static $nmAtrSituacao = "pa_si";
 	var $cdPA = "";
 	var $anoPA = "";
@@ -24,6 +28,8 @@ class voPA extends voentidade {
 	var $dtAbertura = "";
 	var $dtNotificacao = "";
 	var $dtUlNotificacaoParaManifestacao = "";
+	var $dtUlNotificacaoPrazoEncerrado = "";
+	var $numDiasPrazoUltNotificacao = "";
 	var $situacao = "";
 	var $cdResponsavel = "";
 	
@@ -85,6 +91,8 @@ class voPA extends voentidade {
 				self::$nmAtrDtAbertura,
 				self::$nmAtrDtNotificacao,
 				self::$nmAtrDtUltNotificacaoParaManifestacao,
+				self::$nmAtrDtUltNotificacaoPrazoEncerrado,
+				self::$nmAtrNumDiasPrazoUltNotificacao,
 				self::$nmAtrSituacao 
 		);
 		
@@ -112,6 +120,8 @@ class voPA extends voentidade {
 		$this->dtAbertura = $registrobanco [self::$nmAtrDtAbertura];
 		$this->dtNotificacao = $registrobanco [self::$nmAtrDtNotificacao];
 		$this->dtUlNotificacaoParaManifestacao = $registrobanco [self::$nmAtrDtUltNotificacaoParaManifestacao];
+		$this->dtUlNotificacaoPrazoEncerrado = $registrobanco [self::$nmAtrDtUltNotificacaoPrazoEncerrado];
+		$this->numDiasPrazoUltNotificacao = $registrobanco [self::$nmAtrNumDiasPrazoUltNotificacao];
 		$this->situacao = $registrobanco [self::$nmAtrSituacao];
 		$this->dtPublicacao = $registrobanco [voDemandaTramitacao::$nmAtrDtReferencia];
 
@@ -128,6 +138,8 @@ class voPA extends voentidade {
 		$this->dtAbertura = @$_POST [self::$nmAtrDtAbertura];
 		$this->dtNotificacao = @$_POST [self::$nmAtrDtNotificacao];
 		$this->dtUlNotificacaoParaManifestacao = @$_POST [self::$nmAtrDtUltNotificacaoParaManifestacao];
+		$this->dtUlNotificacaoPrazoEncerrado = @$_POST [self::$nmAtrDtUltNotificacaoPrazoEncerrado];
+		$this->numDiasPrazoUltNotificacao = @$_POST [self::$nmAtrNumDiasPrazoUltNotificacao];
 		$this->situacao = @$_POST [self::$nmAtrSituacao];
 		
 		//completa com os dados da entidade
