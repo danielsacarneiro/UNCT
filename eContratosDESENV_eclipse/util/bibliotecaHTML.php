@@ -673,6 +673,27 @@ function getInputHidden($idText, $nmText, $value, $complementoHTML = null) {
 	$retorno = "<INPUT type='hidden' id='" . $idText . "' name='" . $nmText . "' value='" . $value . "' $complementoHTML>";
 	return $retorno;
 }
+function getInputTextArea($idText, $nmText, $value, $class = null, $rows = null, $cols = null, $maxlength = null, $complementoHTML = null) {
+	if ($maxlength == null) {
+		$maxlength = 300;
+	}
+	if ($rows == null) {
+		$rows = 3;
+	}
+	if ($cols == null) {
+		$cols = 80;
+	}
+	if ($class == null) {
+		$class = "camponaoobrigatorio";
+	}
+	
+	if($class == constantes::$CD_CLASS_CAMPO_READONLY){
+		$complementoHTML .= " readonly ";
+	}
+	
+	$retorno = "<textarea rows='$rows' cols='$cols' id='$idText' name='$nmText' class='$class' maxlength='$maxlength' $complementoHTML>$value</textarea>";
+	return $retorno;
+}
 function getSelectGestor() {
 	$dbgestor = new dbgestor ();
 	$registros = $dbgestor->consultarSelect ();
@@ -862,10 +883,8 @@ function getCampoDadosVOAnoCdDetalhamento($vo,$arrayParametroXNmAtributo,$temLup
 	if ($temLupa) {
 		echo getLinkPesquisa ( "../".$vo::getNmTabela()."/detalhar.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $chave );
 	}
-	?>	
-</TR>
-<?php
 	
 }
 
 ?>
+</TR>

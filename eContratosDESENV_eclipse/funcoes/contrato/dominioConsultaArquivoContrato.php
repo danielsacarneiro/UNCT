@@ -2,6 +2,10 @@
 include_once(caminho_util."dominio.class.php");
 
 Class dominioConsultaArquivoContrato extends dominio{
+	
+	static $ENDERECO_DIGITALIZADOS = "CONTRATOS DIGITALIZADOS";
+	//static $ENDERECO_DIGITALIZADOS = "\\MARCIO\\CONTRATOS EM PDF";
+	
 	static $CD_CONSULTA_COMUM = "N";
 	static $CD_CONSULTA_ARQUIVO_CONTRATO_ASSINADO = "ASS";
 	static $CD_CONSULTA_ARQUIVO_CONTRATO_MATER = "CM";

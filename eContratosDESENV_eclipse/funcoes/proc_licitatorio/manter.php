@@ -204,7 +204,7 @@ function confirmar() {
         	</TR>
 			<TR>
 	            <TH class="campoformulario" nowrap>Objeto:</TH>
-	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=voProcLicitatorio::$nmAtrObjeto?>" name="<?=voProcLicitatorio::$nmAtrObjeto?>" class="camponaoobrigatorio" required><?php echo($vo->objeto); required?></textarea>
+	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=voProcLicitatorio::$nmAtrObjeto?>" name="<?=voProcLicitatorio::$nmAtrObjeto?>" class="camponaoobrigatorio" required><?php echo($vo->objeto);?></textarea>
 				</TD>
 	        </TR>	        
 			<TR>

@@ -24,6 +24,9 @@ function getProcLicitatorioDetalhamento($voProcLicitatorio,$temLupa=true) {
 	);
 	
 	echo getCampoDadosVOAnoCdDetalhamento($voProcLicitatorio,$arrayParametroXNmAtributo,$temLupa);
+	if($voProcLicitatorio->objeto != null){
+		echo "<br>" . getInputTextArea(voProcLicitatorio::$nmAtrObjeto, voProcLicitatorio::$nmAtrObjeto, $voProcLicitatorio->objeto, constantes::$CD_CLASS_CAMPO_READONLY);
+	}
 	?>
 	</TD>	
 </TR>

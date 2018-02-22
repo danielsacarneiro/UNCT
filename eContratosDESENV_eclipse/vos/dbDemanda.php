@@ -37,6 +37,7 @@ class dbDemanda extends dbprocesso {
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );
 		$nmTabelaDemandaProcLic= voDemandaPL::getNmTabelaStatic ( false );
+		$nmTabelaProcLic= voProcLicitatorio::getNmTabelaStatic ( false );
 		$nmTabelaPessoa = vopessoa::getNmTabelaStatic ( false );
 		$nmTabelaTramitacao = voDemandaTramitacao::getNmTabela ();
 		//$nmTabelaPAAP = voPA::getNmTabelaStatic ( false );
@@ -52,6 +53,7 @@ class dbDemanda extends dbprocesso {
 				$nmTabelaPessoa . "." . vopessoa::$nmAtrDoc,
 				$nmTabelaDemandaProcLic . "." . voProcLicitatorio::$nmAtrCd,
 				$nmTabelaDemandaProcLic . "." . voProcLicitatorio::$nmAtrAno,
+				$nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrObjeto,
 				//$nmTabelaPessoa . "." . vopessoa::$nmAtrNome,
 				getSQLNmContratada(),
 				"COALESCE (" . " . $nmTabelaTramitacao." . voDemandaTramitacao::$nmAtrCdSetorDestino . "," . $nmTabela . "." . voDemanda::$nmAtrCdSetor . ") AS " . voDemanda::$nmAtrCdSetorAtual 
@@ -92,6 +94,11 @@ class dbDemanda extends dbprocesso {
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrAnoDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrAno;
 		$queryJoin .= "\n AND " . $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrCd;
+		
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaProcLic;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrAnoProcLic. "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrAno;
+		$queryJoin .= "\n AND " . $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdProcLic . "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrCd;
 		
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoa;
 		$queryJoin .= "\n ON ";

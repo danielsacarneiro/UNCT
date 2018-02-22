@@ -153,7 +153,7 @@ function confirmar() {
 			<TR>
 	            <TH class="campoformulario" nowrap>Objeto:</TH>
 	            <TD class="campoformulario" colspan="3">
-	            <textarea rows="5" cols="80" id="<?=voProcLicitatorio::$nmAtrObjeto?>" name="<?=voProcLicitatorio::$nmAtrObjeto?>" class="camporeadonly" readonly><?php echo($vo->objeto); required?></textarea>
+	            <textarea rows="5" cols="80" id="<?=voProcLicitatorio::$nmAtrObjeto?>" name="<?=voProcLicitatorio::$nmAtrObjeto?>" class="camporeadonly" readonly><?php echo($vo->objeto);?></textarea>
 				</TD>
 	        </TR>	        
 			<TR>
