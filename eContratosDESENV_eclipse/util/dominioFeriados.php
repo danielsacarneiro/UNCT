@@ -6,6 +6,7 @@ Class dominioFeriados extends dominio{
 	static $CD_PASCOA = 'pascoa';
 	static $CD_SEXTA_SANTA = 'sexta_santa';
 	static $CD_CARNAVAL  = 'carnaval';
+	static $CD_DATA_MAGNA = 'data.magna';
 	static $CD_TIRADENTES = 'tiradentes';
 	static $CD_TRABALHO = 'trabalho';
 	static $CD_SAO_JOAO = 'sao_joao';
@@ -32,6 +33,7 @@ Class dominioFeriados extends dominio{
 				date('d/m',$datas['carnaval']),
 				date('d/m',$datas['sexta_santa']),
 				date('d/m',$datas['pascoa']),
+				'06/03', //data magna
 				'21/04', //tiradentes
 				'01/05',//dia do trabalho
 				'24/06', //SAO JOAO
