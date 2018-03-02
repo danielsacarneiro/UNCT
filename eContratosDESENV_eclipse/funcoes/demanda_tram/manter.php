@@ -67,7 +67,10 @@ function cancelar() {
 }
 
 function confirmar() {
-	return confirm("Confirmar Alteracoes?");    
+	return confirm("Confirmar Alteracoes?");
+	/*alert(document.getElementsByName("<?=voDocumento::getNmTabela()?>").item(0).value);
+	alert(document.getElementsByName("<?=voDocumento::$nmAtrSq?>").item(0).value);
+	return false;*/
 }
 <?php
 //guarda os setores do econti
@@ -134,11 +137,11 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Setor Origem:</TH>
 	            <TD class="campoformulario" width="1%">
-	            <?php echo $comboSetor->getHtmlCombo("","", $vo->cdSetorOrigem, true, "camporeadonly", false, " disabled ");?>
+	            <?php echo $comboSetor->getHtmlCombo(voDemandaTramitacao::$nmAtrCdSetorOrigem,voDemandaTramitacao::$nmAtrCdSetorOrigem, $vo->cdSetorOrigem, true, "camponaoobrigatorio", false, " required ");?>
 				</TD>
 	            <TH class="campoformulario" nowrap width="1%">Setor Destino:</TH>
 	            <TD class="campoformulario">
-	            <?php echo $comboSetor->getHtmlCombo("","", $vo->cdSetorDestino, true, "camporeadonly", false, " disabled ");?>
+	            <?php echo $comboSetor->getHtmlCombo(voDemandaTramitacao::$nmAtrCdSetorDestino,voDemandaTramitacao::$nmAtrCdSetorDestino, $vo->cdSetorDestino, true, "camponaoobrigatorio", false, " required ");?>
 				</TD>
 	        </TR>
 	        <TR>
@@ -172,7 +175,7 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 		        <TH class="campoformulario" width="1%" nowrap>Documento:</TH>
 		        <TD class="campoformulario" nowrap colspan=3>
 		        	<INPUT type="text" id="<?=voDocumento::$nmAtrSq?>" name="<?=voDocumento::$nmAtrSq?>" class="camporeadonly" size="15" readonly value="<?=$vo->voDoc->formatarCodigo()?>">
-		        	<INPUT type="hidden" id="<?=voDocumento::getNmTabela()?>" name="<?=voDocumento::getNmTabela()?>" value="">
+		        	<INPUT type="hidden" id="<?=voDocumento::getNmTabela()?>" name="<?=voDocumento::getNmTabela()?>" value="<?=$vo->voDoc->getValorChaveHTML()?>">
 		        	<?php 
 		        	echo getLinkPesquisa("../documento");		        	
 		        	$nmCampo = array(voDocumento::getNmTabela(), voDocumento::$nmAtrSq);

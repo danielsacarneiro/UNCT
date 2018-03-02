@@ -55,6 +55,7 @@
     static $TAMANHO_CODIGOS_SAFI = 3;
     static $CD_CAMPO_SEPARADOR = "*";
     static $CD_CAMPO_SUBSTITUICAO = "[[*]]";
+    static $DS_CAMPO_NAO_ENCONTRADO= "NAO.ENCONTRADO";
     static $CD_CAMPO_NULO = "null";
     static $ID_REQ_SESSAO_VO = "vo";
     static $ID_REQ_CD_LUPA = "lupa";

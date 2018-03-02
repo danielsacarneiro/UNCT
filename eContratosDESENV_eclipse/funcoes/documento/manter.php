@@ -59,8 +59,9 @@ setCabecalho($titulo);
 <SCRIPT language="JavaScript" type="text/javascript">
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
 function isFormularioValido() {
-	if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta"))
+	if (!isNomeDocumentoValido())
 		return false;		
+			
 	return true;
 }
 
@@ -70,10 +71,28 @@ function cancelar() {
 }
 
 function confirmar() {
-	/*if(!isFormularioValido())
-		return false;*/
-	
-	return confirm("Confirmar Alteracoes?");    
+	retorno = true;
+	if(!isFormularioValido()){
+		retorno = false;
+	}
+
+	if(retorno){
+		retorno = confirm("Confirmar Alteracoes?"); 
+	}
+
+	return  retorno;	
+}
+
+function isNomeDocumentoValido(){
+	var naoencontrado = "<?=constantes::$DS_CAMPO_NAO_ENCONTRADO?>";
+	var nomeDoc = document.frm_principal.<?=voDocumento::$nmAtrLink?>.value;
+
+	if(nomeDoc.indexOf(naoencontrado) == -1){
+		return true;
+	}else{
+		exibirMensagem("altere o nome não encontrado para o nome do contratado.");
+		return false;
+	}	
 }
 
 <?php
@@ -128,9 +147,10 @@ function criarNomeDocumento(){
 	complemento = nome + complemento;
 	//complemento = complemento + ".doc";
 	complemento = complemento + getExtensaoDocumento(tpDoc);	
-		
+	
 	document.frm_principal.<?=voDocumento::$nmAtrLink?>.value = formatarNomeDocumento(sq, cdSetor, ano, tpDoc, complemento, colecaoSetor);
 }
+
 /*function carregaDadosContratada(){
 	str = "";
 
@@ -170,6 +190,7 @@ function iniciar(){
 	        $selectExercicio = new selectExercicio();
 	        $domSetor = new dominioSetor();
 	        $domTp = new dominioTpDocumento();
+	        $comboTipoDocMinuta = new select(dominioEspeciesContrato::getColecao());
 	        
 	        if($isInclusao){	            
 	            $comboSetor = new select($domSetor->colecao);	            

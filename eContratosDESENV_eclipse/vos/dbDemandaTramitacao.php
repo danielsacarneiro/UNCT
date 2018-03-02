@@ -335,7 +335,9 @@ class dbDemandaTramitacao extends dbprocesso {
 		
 		$this->cDb->retiraAutoCommit ();
 		try {
-			if ($vo->temDocParaIncluir ()) {
+			$this->excluirDemandaTramDoc($vo);
+			
+			if ($vo->temDocParaIncluir ()) {				
 				//echo "tem doc p incluir";
 				$voDemandaTramDoc = new voDemandaTramDoc ();
 				$voDemandaTramDoc = $vo->getVODemandaTramDoc ();
@@ -409,6 +411,16 @@ class dbDemandaTramitacao extends dbprocesso {
 	function getSQLValuesUpdate($vo) {
 		$retorno = "";
 		$sqlConector = "";
+		
+		if ($vo->cdSetorOrigem != null) {
+			$retorno .= $sqlConector . voDemandaTramitacao::$nmAtrCdSetorOrigem . " = " . $this->getVarComoNumero($vo->cdSetorOrigem);
+			$sqlConector = ",";
+		}
+		
+		if ($vo->cdSetorDestino != null) {
+			$retorno .= $sqlConector . voDemandaTramitacao::$nmAtrCdSetorDestino . " = " . $this->getVarComoNumero($vo->cdSetorDestino);
+			$sqlConector = ",";
+		}
 		
 		if ($vo->textoTram != null) {
 			$retorno .= $sqlConector . voDemandaTramitacao::$nmAtrTexto . " = " . $this->getVarComoString ( $vo->textoTram );

@@ -135,6 +135,8 @@ ALTER TABLE demanda_pl ADD CONSTRAINT fk_demanda_pl_pl FOREIGN KEY (pl_ex, pl_cd
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;
 
+ALTER TABLE demanda_pl DROP FOREIGN KEY fk_demanda_pl_pl;
+
     
 drop table demanda_doc;
 CREATE TABLE demanda_doc (

@@ -29,10 +29,11 @@ class dominioTpDocumento extends dominio {
 	static $CD_TP_DOC_PROPOSTA_PRECOS = "PP";
 	static $CD_TP_DOC_PUBLICACAO_PAAP = "PU";
 	static $CD_TP_DOC_RELATORIO = "RE";
-	static $CD_TP_DOC_RELATORIO_CONCLUSAO = "RC";
-	static $CD_TP_DOC_TERMO_ADITIVO = "TA";
+	//static $CD_TP_DOC_RELATORIO_CONCLUSAO = "RC";
+	static $CD_TP_DOC_MINUTA = "MI";
+	static $CD_TP_DOC_APRECIACAO_RECURSO = "AR";
 	
-	static $DS_TP_DOC_PAAP = "PAAP";
+	static $DS_TP_DOC_PAAP = "PAAP(digitalizado)";
 	static $DS_TP_DOC_APOSTILAMENTO = "Apostilamento";
 	static $DS_TP_DOC_CONTROLE_AQUISICAO = "Controle Aquisição";
 	static $DS_TP_DOC_CHECKLIST = "Checklist";
@@ -52,8 +53,9 @@ class dominioTpDocumento extends dominio {
 	static $DS_TP_DOC_PROPOSTA_PRECOS = "Proposta de Preços";
 	static $DS_TP_DOC_PUBLICACAO_PAAP = "Publicação Penalidade";
 	static $DS_TP_DOC_RELATORIO = "Relatório";
-	static $DS_TP_DOC_RELATORIO_CONCLUSAO = "Relatório Com Alegações Finais";
-	static $DS_TP_DOC_TERMO_ADITIVO = "Termo Aditivo";
+	//static $DS_TP_DOC_RELATORIO_CONCLUSAO = "Relatório Com Alegações Finais";
+	static $DS_TP_DOC_MINUTA = "Minuta";
+	static $DS_TP_DOC_APRECIACAO_RECURSO = "Apreciação Recurso";
 	
 	// ...............................................................
 	// Construtor
@@ -63,7 +65,7 @@ class dominioTpDocumento extends dominio {
 	}
 	static function getColecao() {
 		return array (
-				self::$CD_TP_DOC_APOSTILAMENTO => self::$DS_TP_DOC_APOSTILAMENTO,
+				//self::$CD_TP_DOC_APOSTILAMENTO => self::$DS_TP_DOC_APOSTILAMENTO,
 				self::$CD_TP_DOC_CONTROLE_AQUISICAO => self::$DS_TP_DOC_CONTROLE_AQUISICAO,
 				self::$CD_TP_DOC_CHECKLIST => self::$DS_TP_DOC_CHECKLIST,
 				self::$CD_TP_DOC_CI => self::$DS_TP_DOC_CI,
@@ -82,8 +84,9 @@ class dominioTpDocumento extends dominio {
 				self::$CD_TP_DOC_PROPOSTA_PRECOS => self::$DS_TP_DOC_PROPOSTA_PRECOS,
 				self::$CD_TP_DOC_PUBLICACAO_PAAP => self::$DS_TP_DOC_PUBLICACAO_PAAP,
 				self::$CD_TP_DOC_RELATORIO => self::$DS_TP_DOC_RELATORIO,
-				self::$CD_TP_DOC_TERMO_ADITIVO => self::$DS_TP_DOC_TERMO_ADITIVO,
 				self::$CD_TP_DOC_PAAP => self::$DS_TP_DOC_PAAP,
+				self::$CD_TP_DOC_MINUTA => self::$DS_TP_DOC_MINUTA,
+				self::$CD_TP_DOC_APRECIACAO_RECURSO => self::$DS_TP_DOC_APRECIACAO_RECURSO,
 				//self::$CD_TP_DOC_RELATORIO_CONCLUSAO => self::$DS_TP_DOC_RELATORIO_CONCLUSAO,
 		);
 	}
@@ -97,6 +100,7 @@ class dominioTpDocumento extends dominio {
 				self::$CD_TP_DOC_PUBLICACAO_PAAP => self::$DS_TP_DOC_PUBLICACAO_PAAP,
 				self::$CD_TP_DOC_RELATORIO => self::$DS_TP_DOC_RELATORIO,
 				self::$CD_TP_DOC_PAAP => self::$DS_TP_DOC_PAAP,
+				self::$CD_TP_DOC_APRECIACAO_RECURSO => self::$DS_TP_DOC_APRECIACAO_RECURSO,
 				//self::$CD_TP_DOC_RELATORIO_CONCLUSAO => self::$DS_TP_DOC_RELATORIO_CONCLUSAO,
 		);
 	}

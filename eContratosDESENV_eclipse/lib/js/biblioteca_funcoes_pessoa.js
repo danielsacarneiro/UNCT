@@ -58,7 +58,7 @@ function getNomePessoaContratada(pNmCampoPessoa){
 		nmContrata = campoNomeContratada.value;		
 		nmContrata = truncarTexto(nmContrata, 20, "");
 	}catch(ex){
-		nmContrata = "";
+		nmContrata = "NAO.ENCONTRADO";
 	}
 	
 	nmContrata = nmContrata.replace('&', 'E');
