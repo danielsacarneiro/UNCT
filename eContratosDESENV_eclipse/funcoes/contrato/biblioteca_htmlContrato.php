@@ -172,6 +172,12 @@ function getContratoEntradaDeDadosVO($vocontrato, $arrayCssClass, $arrayCompleme
 	class="<?=$cssCdContrato?>" size="4" maxlength="3" <?=$htmlCdContrato?>>
 <?php
 	echo "Ano: " . $selectExercicio->getHtmlCombo ( $pIDCampoAnoContrato, $pNmCampoAnoContrato, $anoContrato, true, $cssAnoContrato, false, $htmlAnoContrato );
+	$nmCamposContrato = array(vocontrato::$nmAtrAnoContrato,
+			vocontrato::$nmAtrCdContrato,
+			vocontrato::$nmAtrTipoContrato,
+	);
+	echo getBorracha($nmCamposContrato, "");
+	
 	if ($isOpcaoMultiplos) {
 		echo "&nbsp;" . getImagemLink ( "javascript:carregaNovoCampoContrato('$nmCampoDivNovoContrato', $indiceContrato);\" ", "sinal_mais.gif" );
 		

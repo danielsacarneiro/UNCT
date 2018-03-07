@@ -236,7 +236,8 @@ function encaminhar() {
 	            <TD class="campoformulario" ><INPUT type="text" id="<?=filtroManterDemanda::$NmAtrVlGlobalInicial?>" name="<?=filtroManterDemanda::$NmAtrVlGlobalInicial?>"  value="<?php echo($filtro->vlGlobalInicial);?>"
 	            							onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="camponaoobrigatorioalinhadodireita" size="15" >
 	            							a <INPUT type="text" id="<?=filtroManterDemanda::$NmAtrVlGlobalFinal?>" name="<?=filtroManterDemanda::$NmAtrVlGlobalFinal?>"  value="<?php echo($filtro->vlGlobalFinal);?>"
-	            							onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="camponaoobrigatorioalinhadodireita" size="15" ></TD>        	            
+	            							onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="camponaoobrigatorioalinhadodireita" size="15" >
+	            							</TD>        	            
 			</TR>
 			<TR>
                 <TH class="campoformulario" nowrap>Nome Contratada:</TH>
@@ -278,8 +279,17 @@ function encaminhar() {
 				Tipo: <?php echo $comboTpDoc->getHtmlSelect(voDocumento::$nmAtrTp,voDocumento::$nmAtrTp, $filtro->tpDocumento, true, "camponaoobrigatorio", true);?>
 				Ano: <?php echo $selectExercicio->getHtmlCombo(voDocumento::$nmAtrAno,voDocumento::$nmAtrAno, $filtro->anoDocumento, true, "camponaoobrigatorio", false, "");?>
 				Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voDocumento::$nmAtrSq?>" name="<?=voDocumento::$nmAtrSq?>"  value="<?php echo(complementarCharAEsquerda($filtro->sqDocumento, "0", TAMANHO_CODIGOS));?>"  class="camponaoobrigatorio" size="6" maxlength="5">
-				Setor: <?php echo $comboSetor->getHtmlCombo(voDocumento::$nmAtrCdSetor,voDocumento::$nmAtrCdSetor, $filtro->cdSetorDocumento, true, "camponaoobrigatorio", true, "");?>
-								
+				Setor: <?php 
+				echo $comboSetor->getHtmlCombo(voDocumento::$nmAtrCdSetor,voDocumento::$nmAtrCdSetor, $filtro->cdSetorDocumento, true, "camponaoobrigatorio", true, "");
+				
+				$nmCamposDoc = array(
+						voDocumento::$nmAtrTp,
+						voDocumento::$nmAtrAno,
+						voDocumento::$nmAtrSq,
+						voDocumento::$nmAtrCdSetor,
+				);
+				echo getBorracha($nmCamposDoc, "");
+				?>
 			</TR>
             <TR>
 	            <TH class="campoformulario" nowrap width="1%">Usuário:</TH>

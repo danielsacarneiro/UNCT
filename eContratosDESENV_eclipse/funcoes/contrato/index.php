@@ -220,7 +220,7 @@ function confirmar() {
 	        ?>        
             <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" width="1%"><?php getContratoEntradaDeDados($tipo, $cdContrato, $anoContrato, $arrayCssClass, null, null, false);?></TD>
+	            <TD class="campoformulario" width="1%" nowrap><?php getContratoEntradaDeDados($tipo, $cdContrato, $anoContrato, $arrayCssClass, null, null, false);?></TD>
 				<?php 
 				$comboConsultaArquivo = new select(dominioConsultaArquivoContrato::getColecao());
 				$selectExercicio = new selectExercicio();
