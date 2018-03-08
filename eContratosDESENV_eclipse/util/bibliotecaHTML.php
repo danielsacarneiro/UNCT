@@ -104,7 +104,7 @@ function setCabecalhoPorNivel($titulo, $qtdNiveisAcimaEmSeEncontraPagina) {
 	$diaExtenso = strftime ( '%A, %d de %B de %Y', strtotime ( 'today' ) ) . ", " . $hour . ":" . $minute;
 	
 	if(!isLupa()){
-		$linkmenu = ", <a class='linkbranco' href='" . $pastaMenu . "index.php' >Menu</a>";
+		$linkmenu = ", <a class='linkbranco' href='" . $pastaMenu . "index.php' >Menu</a> ";
 		$linkmenu .= "<a href='" . $pastaMenu . "login.php?funcao=I' ><img  title='Entrar' src='" . $pastaImagens . "botao_home_laranja.gif' width='20' height='20'></a>
 		<a href='" . $pastaMenu . "login.php?funcao=O' ><img  title='Sair' src='" . $pastaImagens . "logout.gif' width='25' height='20'></a>";
 		
