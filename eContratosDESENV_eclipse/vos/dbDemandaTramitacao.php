@@ -432,6 +432,11 @@ class dbDemandaTramitacao extends dbprocesso {
 			$sqlConector = ",";
 		}
 		
+		if ($vo->dtReferencia != null) {
+			$retorno .= $sqlConector . voDemandaTramitacao::$nmAtrDtReferencia . " = " . $this->getVarComoData($vo->dtReferencia);
+			$sqlConector = ",";
+		}
+		
 		$retorno = $retorno . $vo->getSQLValuesEntidadeUpdate ();
 		
 		return $retorno;
