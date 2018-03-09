@@ -4,7 +4,7 @@ class dominioTpDocumento extends dominio {
 	static $ENDERECO_DRIVE = "\\\\sf044836\\_dag$";
 	// static $ENDERECO_DRIVE_HTML = "\\sf044836\\\\_dag$";
 	static $ENDERECO_DRIVE_HTML = "H:";
-	static $ENDERECO_PASTABASE = "ASSESSORIA JURÍDICA\ATJA";
+	static $ENDERECO_PASTABASE = "ATJA";
 	static $ENDERECO_PASTABASE_UNCT = "UNCT";
 	static $ENDERECO_PASTA_DOCUMENTOS = "\Documentos";
 	static $ENDERECO_PASTA_PA = "\PROCESSO ADMINISTRATIVO";	
