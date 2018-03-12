@@ -109,7 +109,7 @@ function setCabecalhoPorNivel($titulo, $qtdNiveisAcimaEmSeEncontraPagina) {
 		<a href='" . $pastaMenu . "login.php?funcao=O' ><img  title='Sair' src='" . $pastaImagens . "logout.gif' width='25' height='20'></a>";
 		
 		if (isUsuarioAdmin ()) {
-			$linkmenu .= "<a href='http://sf300451/wordpress/wp-admin/' ><img  title='WORDPRESS' src='" . $pastaImagens . "w-logo-white.png' width='25' height='20'></a>";
+			$linkmenu .= "<a href='http://sf300451/wordpress/wp-admin/' target='_blank'><img  title='WORDPRESS' src='" . $pastaImagens . "w-logo-white.png' width='25' height='20'></a>";
 		}
 		
 	}
