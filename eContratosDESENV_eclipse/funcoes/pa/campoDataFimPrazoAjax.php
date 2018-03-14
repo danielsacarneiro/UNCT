@@ -7,8 +7,17 @@ $array = explode ( CAMPO_SEPARADOR, $chave );
 $idCampo = $array[0];
 $data = $array[1];
 $prazo = $array[2];
+$inDiasUteis = $array[3];
+
+//echo "eh dia util: $inDiasUteis";
+
+if($inDiasUteis == "N"){
+	$inDiasUteis = false;
+}else{
+	$inDiasUteis = true;
+}
 
 //NAO SE PERMITE DECLARACAO DE QUALQUER FUNCAO NESTA PAGINA
-echo getDataPrazoFinal($data, $prazo, $idCampo);
+echo getDataPrazoFinal($data, $prazo, $idCampo, $inDiasUteis);
 
 ?>

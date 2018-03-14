@@ -16,6 +16,7 @@ class voPA extends voentidade {
 	static $nmAtrDtNotificacao = "pa_dt_notificacao";
 	static $nmAtrDtUltNotificacaoParaManifestacao = "pa_dt_ult_notmanifestacao";
 	static $nmAtrNumDiasPrazoUltNotificacao = "pa_prazodias_ult_notificacao";
+	static $nmAtrInDiasUteisPrazoUltNotificacao = "pa_in_diasuteisprazo_ult_notificacao";
 	static $nmAtrDtUltNotificacaoPrazoEncerrado = "pa_dt_ultnotprazoencerrado";
 	static $nmAtrSituacao = "pa_si";
 	var $cdPA = "";

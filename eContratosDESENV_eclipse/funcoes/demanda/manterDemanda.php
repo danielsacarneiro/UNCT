@@ -107,7 +107,7 @@ function iniciar(){
 	        	        	        
 	        $complementoHTML = "";
 	        
-	        getDemandaDetalhamentoComLupa($vo, false, true, null, true);
+	        getDemandaDetalhamentoComLupa($vo, false, false, null, true);
 	        //function getDemandaDetalhamentoComLupa($voDemanda, $temLupaDet, $exibeTipoDemanda = true, $colspan=null, $comProcLici = true){
 	        ?>	        	        
 	        <TR>

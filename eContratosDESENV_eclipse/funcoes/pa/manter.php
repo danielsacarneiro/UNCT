@@ -121,14 +121,21 @@ function getDataPrazo(){
 	pIDCampoData = "<?=voPA::$nmAtrDtUltNotificacaoParaManifestacao?>";
 	pIDCampoDataFim = "<?=voPA::$nmAtrDtUltNotificacaoPrazoEncerrado?>";
 	pIDCampoPrazo = "<?=voPA::$nmAtrNumDiasPrazoUltNotificacao?>";
-	
+	pCampoInDiasUteis = document.frm_principal.<?=voPA::$nmAtrInDiasUteisPrazoUltNotificacao?>;
+
+	inDiasUteis = "N";
+	if(pCampoInDiasUteis.checked){
+		inDiasUteis = "S";
+	}
+
+	//alert(inDiasUteis);
 	dtNotificacao = document.getElementById(pIDCampoData).value;
 	prazo = document.getElementById(pIDCampoPrazo).value;
 	
 	if(prazo != "" && dtNotificacao != "" ){
 		//alert("aqui");
 		//vai no ajax
-		chave = pIDCampoDataFim + '<?=CAMPO_SEPARADOR?>' + dtNotificacao + '<?=CAMPO_SEPARADOR?>' + prazo;			
+		chave = pIDCampoDataFim + '<?=CAMPO_SEPARADOR?>' + dtNotificacao + '<?=CAMPO_SEPARADOR?>' + prazo + '<?=CAMPO_SEPARADOR?>' + inDiasUteis;			
 		getDataFimPrazo(chave, pNmCampoDiv) ;		
 	}else{
 		//limpa o campodiv da contratada
@@ -253,7 +260,20 @@ function getDataPrazo(){
 	            			size="10" 
 	            			maxlength="10" required>
 	            				            			
-				<?php echo " Prazo:".getInputText(voPA::$nmAtrNumDiasPrazoUltNotificacao, voPA::$nmAtrNumDiasPrazoUltNotificacao, $vo->numDiasPrazoUltNotificacao, constantes::$CD_CLASS_CAMPO_OBRIGATORIO, 3,3, " onBlur='getDataPrazo()' ")?> *para fins de contagem de prazo	            	
+				<?php echo " Prazo:".getInputText(voPA::$nmAtrNumDiasPrazoUltNotificacao, voPA::$nmAtrNumDiasPrazoUltNotificacao, $vo->numDiasPrazoUltNotificacao, constantes::$CD_CLASS_CAMPO_OBRIGATORIO, 3,3, " onBlur='getDataPrazo()' ")
+				
+				/*include_once(caminho_util. "dominioSimNao.php");
+				$comboSimNao = new select(dominioSimNao::getColecao());
+				echo "&nbsp;&nbsp;Mão de obra incluída (planilha de custos)?: ";
+				echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInMaoDeObra,voContratoInfo::$nmAtrInMaoDeObra, $vo->inMaoDeObra, true, "camponaoobrigatorio", false,
+						" onChange='formataFormClassificacao(this);' required ");*/
+				
+				?> 
+				
+				<INPUT type="checkbox" id="<?=voPA::$nmAtrInDiasUteisPrazoUltNotificacao?>" name="<?=voPA::$nmAtrInDiasUteisPrazoUltNotificacao?>"
+				onClick ="getDataPrazo()" checked>
+				
+				(dias úteis?) *para fins de contagem de prazo	            	
 			  <div id="<?=voPA::$ID_REQ_DIV_PRAZO?>">
 			  <?=getCampoDataPrazoFinal(voPA::$nmAtrDtUltNotificacaoPrazoEncerrado, $vo->dtUlNotificacaoPrazoEncerrado);?>
 	          </div>

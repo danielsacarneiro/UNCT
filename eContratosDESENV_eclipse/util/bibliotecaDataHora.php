@@ -83,6 +83,13 @@ function getQtdDiasEntreDatas($dataini, $datafim) {
 	return $retorno*$fator;
 }
 
+function somarOuSubtrairDias($dataHTML, $count_days, $operacao ="+", $isDiasUteis=true){
+	if($isDiasUteis)
+		return somarOuSubtrairDiasUteisNaData($dataHTML,$count_days, $operacao);
+	else
+		return somarOuSubtrairDiasNaData($dataHTML, $count_days, $operacao);
+}
+
 function somarOuSubtrairDiasNaData($dataHTML, $count_days, $operacao ="+"){
 	$dataHTML = getData($dataHTML);
 	$dataHTML = str_replace("/", "-", $dataHTML);

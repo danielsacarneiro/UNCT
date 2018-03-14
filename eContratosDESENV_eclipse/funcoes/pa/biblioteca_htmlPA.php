@@ -19,9 +19,10 @@ function getCampoDataPrazoFinal($idCampo, $valor) {
 	return $retorno;
 	
 }
-function getDataPrazoFinal($dtinicio, $prazo, $idCampo, $isDiasUteis=true) {	
-	$data= somarOuSubtrairDiasUteisNaData($dtinicio, $prazo, "+");
-
+function getDataPrazoFinal($dtinicio, $prazo, $idCampo, $isDiasUteis=true) {
+	//$data= somarOuSubtrairDiasUteisNaData($dtinicio, $prazo, "+");	
+	$data = somarOuSubtrairDias($dtinicio, $prazo, "+", $isDiasUteis);
+	
 	$retorno = getCampoDataPrazoFinal($idCampo, $data);
 	
 	return $retorno;

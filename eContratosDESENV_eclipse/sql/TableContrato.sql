@@ -209,4 +209,8 @@ ALTER TABLE contrato_info_hist ADD COLUMN in_desativado CHAR(1) NULL AFTER cd_us
 -- ALTER TABLE contrato_info_hist DROP COLUMN ctinf_in_prestacao_garantia;
 
 
+SELECT count(*) FROM CONTRATO
+WHERE ct_tipo = 'C'
 
+DELETE FROM CONTRATO
+WHERE ct_tipo = 'C'
