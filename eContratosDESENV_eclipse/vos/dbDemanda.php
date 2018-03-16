@@ -13,6 +13,10 @@ class dbDemanda extends dbprocesso {
 			$voProcLic->getDadosBanco ( $colecao );
 			$vo->voProcLicitatorio = $voProcLic;
 				
+			$voPA = new voPA();
+			$voPA->getDadosBanco ( $colecao );
+			$vo->voPA= $voPA;
+				
 			$vo->getDadosBanco ( $colecao );
 			$temContrato = $voContrato->cdContrato != null;
 			if ($temContrato) {
@@ -38,6 +42,7 @@ class dbDemanda extends dbprocesso {
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );
 		$nmTabelaDemandaProcLic= voDemandaPL::getNmTabelaStatic ( false );
 		$nmTabelaProcLic= voProcLicitatorio::getNmTabelaStatic ( false );
+		$nmTabelaPA = voPA::getNmTabelaStatic ( false );
 		$nmTabelaPessoa = vopessoa::getNmTabelaStatic ( false );
 		$nmTabelaTramitacao = voDemandaTramitacao::getNmTabela ();
 		//$nmTabelaPAAP = voPA::getNmTabelaStatic ( false );
@@ -100,6 +105,11 @@ class dbDemanda extends dbprocesso {
 		$queryJoin .= $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrAnoProcLic. "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrAno;
 		$queryJoin .= "\n AND " . $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdProcLic . "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrCd;
 		
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPA;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaPA . "." . voPA::$nmAtrAnoDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrAno;
+		$queryJoin .= "\n AND " . $nmTabelaPA . "." . voPA::$nmAtrCdDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrCd;
+		
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoa;
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaPessoa . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
@@ -122,6 +132,7 @@ class dbDemanda extends dbprocesso {
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
+		$nmTabelaPA = voPA::getNmTabelaStatic ( false );
 		
 		$cdSetorAtual = $filtro->vodemanda->cdSetorDestino;
 		$isSetorAtualSelecionado = $filtro->isSetorAtualSelecionado();
@@ -219,6 +230,11 @@ class dbDemanda extends dbprocesso {
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrAnoDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrAno;
 		$queryJoin .= "\n AND " . $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrCd;
+		
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPA;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaPA . "." . voPA::$nmAtrAnoDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrAno;
+		$queryJoin .= "\n AND " . $nmTabelaPA . "." . voPA::$nmAtrCdDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrCd;
 		
 		//Para o caso de se desejar ordenar pela primeira vez que foi encaminhada ao setor atual selecionado pelo usuario
 		

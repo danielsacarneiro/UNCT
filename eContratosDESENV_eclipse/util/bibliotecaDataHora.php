@@ -1,6 +1,7 @@
 <?php
 include_once("mensagens.class.php");
 include_once("dominioFeriados.php");
+include_once("bibliotecaSQL.php");
 
 function getDataHora($dataSQL) {
 	return getDataHoraParam($dataSQL, true);
@@ -81,6 +82,29 @@ function getQtdDiasEntreDatas($dataini, $datafim) {
 	//echo "Intervalo é de {$intervalo->y} anos, {$intervalo->m} meses e {$intervalo->d} dias";
 			
 	return $retorno*$fator;
+}
+
+function getDataContagemPrazoFinal($dtinicio, $prazo, $isDiasUteis=true) {
+	//o prazo comeca a contar do primeiro dia util seguinte
+	$dtinicio = somarOuSubtrairDias($dtinicio, 1, "+", true);
+		
+	$retorno = somarOuSubtrairDias($dtinicio, $prazo, "+", $isDiasUteis);
+	return $retorno;
+}
+
+function isDiaUtil($data) {
+	return  isDiaDaSemana($data) && !isFeriado($data);	
+}
+function isDiaDaSemana($data) {
+	$data = getDataSQL($data);	
+	$format = 'Y-m-d';
+	$dt = DateTime::createFromFormat($format, $data);	
+		 
+	if ((date_format($dt, 'N') === '6') || (date_format($dt, 'N') === '7')) {
+		return false;
+	}else{
+		return true;
+	}
 }
 
 function somarOuSubtrairDias($dataHTML, $count_days, $operacao ="+", $isDiasUteis=true){

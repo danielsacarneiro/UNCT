@@ -260,7 +260,7 @@ function getDataPrazo(){
 	            			size="10" 
 	            			maxlength="10" required>
 	            				            			
-				<?php echo " Prazo:".getInputText(voPA::$nmAtrNumDiasPrazoUltNotificacao, voPA::$nmAtrNumDiasPrazoUltNotificacao, $vo->numDiasPrazoUltNotificacao, constantes::$CD_CLASS_CAMPO_OBRIGATORIO, 3,3, " onBlur='getDataPrazo()' ")
+				<?php echo " Prazo:".getInputText(voPA::$nmAtrNumDiasPrazoUltNotificacao, voPA::$nmAtrNumDiasPrazoUltNotificacao, $vo->numDiasPrazoUltNotificacao, constantes::$CD_CLASS_CAMPO_OBRIGATORIO, 3,3, " onKeyUp='validarCampoNumericoPositivo(this)' onBlur='getDataPrazo()' ")
 				
 				/*include_once(caminho_util. "dominioSimNao.php");
 				$comboSimNao = new select(dominioSimNao::getColecao());

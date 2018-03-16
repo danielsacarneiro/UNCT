@@ -25,6 +25,7 @@ class filtroManterDemanda extends filtroManter{
 	var $vodemanda;
 	var $vocontrato;
 	var $voproclic;
+	var $voPA;
 	var $nmContratada;
 	var $docContratada;
 	var $temDocumentoAnexo;
@@ -71,6 +72,9 @@ class filtroManterDemanda extends filtroManter{
 		$vocontrato = new vocontrato();
 		$this->voproclic = new voProcLicitatorio();
 		$this->voproclic->getDadosFormulario();
+		
+		$this->voPA = new voPA();
+		$this->voPA->getDadosFormulario();
 		
 		$vodemanda->cd  = @$_POST[voDemanda::$nmAtrCd];
 		$vodemanda->ano  = @$_POST[voDemanda::$nmAtrAno];
@@ -128,6 +132,7 @@ class filtroManterDemanda extends filtroManter{
 		$nmTabelaTramitacaoDoc = voDemandaTramDoc::getNmTabelaStatic(false);
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic(false);
 		$nmTabelaDemandaPL = voDemandaPL::getNmTabelaStatic(false);
+		$nmTabelaPA = voPA::getNmTabelaStatic(false);
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic(false);
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic(false);
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic(false);
@@ -593,6 +598,26 @@ class filtroManterDemanda extends filtroManter{
 			. $nmTabelaDemandaPL . "." .voDemandaPL::$nmAtrAnoProcLic
 			. " = "
 					. $this->voproclic->ano
+					;
+		
+					$conector  = "\n AND ";
+		}
+		
+		if($this->voPA->cdPA != null){
+			$filtro = $filtro . $conector
+			. $nmTabelaPA . "." .voPA::$nmAtrCdPA
+			. " = "
+					. $this->voPA->cdPA
+					;
+		
+					$conector  = "\n AND ";
+		}
+		
+		if($this->voPA->anoPA != null){
+			$filtro = $filtro . $conector
+			. $nmTabelaPA . "." .voPA::$nmAtrAnoPA
+			. " = "
+					. $this->voPA->anoPA
 					;
 		
 					$conector  = "\n AND ";

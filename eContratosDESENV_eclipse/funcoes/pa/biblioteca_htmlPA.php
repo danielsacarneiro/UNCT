@@ -19,10 +19,9 @@ function getCampoDataPrazoFinal($idCampo, $valor) {
 	return $retorno;
 	
 }
-function getDataPrazoFinal($dtinicio, $prazo, $idCampo, $isDiasUteis=true) {
-	//$data= somarOuSubtrairDiasUteisNaData($dtinicio, $prazo, "+");	
-	$data = somarOuSubtrairDias($dtinicio, $prazo, "+", $isDiasUteis);
-	
+function getDataPrazoFinal($dtinicio, $prazo, $idCampo, $isDiasUteis=true) {	
+	//PARA FINS DE CONTAGEM DE PRAZO PROCESSUAL, A CONTAGEM SE INICIA NO PRIMEIRO DIA UTIL SEGUINTE AO PRAZO INICIAL
+	$data = getDataContagemPrazoFinal($dtinicio, $prazo, $isDiasUteis);
 	$retorno = getCampoDataPrazoFinal($idCampo, $data);
 	
 	return $retorno;

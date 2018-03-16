@@ -161,8 +161,8 @@ function encaminhar() {
             <TR>
                 <TH class="campoformulario" nowrap width="1%">Situação:</TH>
                 <TD class="campoformulario" width="1%"><?php echo $comboSituacao->getHtmlCombo(voDemanda::$nmAtrSituacao,voDemanda::$nmAtrSituacao."[]", $filtro->vodemanda->situacao, true, "camponaoobrigatorio", false, " multiple ");?></TD>
-                <TH class="campoformulario" nowrap width="1%" rowspan=2>Tipo:</TH>
-                <TD class="campoformulario" rowspan=2>
+                <TH class="campoformulario" nowrap width="1%" rowspan=3>Tipo:</TH>
+                <TD class="campoformulario" rowspan=3>
 	                <TABLE class="filtro" cellpadding="0" cellspacing="0">
 	                <TR>
 	                	<TD class="campoformulario" width="1%">Incluindo:</TD>
@@ -180,10 +180,16 @@ function encaminhar() {
             </TR>
 	        <?php	        
 	        require_once (caminho_funcoes . voProcLicitatorio::getNmTabela() . "/biblioteca_htmlProcLicitatorio.php");
+	        require_once (caminho_funcoes . voPA::getNmTabela() . "/biblioteca_htmlPA.php");
 	        ?>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Proc.Licitatório:</TH>
 	            <TD class="campoformulario"><?php getCampoDadosProcLicitatorio($filtro->voproclic);?>
+	            </TD>
+	        </TR>	                    
+	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">PAAP:</TH>
+	            <TD class="campoformulario"><?php getCampoDadosPAAP($filtro->voPA);?>
 	            </TD>
 	        </TR>	                    
 	        <TR>
