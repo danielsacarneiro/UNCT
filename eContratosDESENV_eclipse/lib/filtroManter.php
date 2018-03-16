@@ -138,6 +138,9 @@ class filtroManter extends multiplosConstrutores {
 		return $this->getFiltroConsultaSQL ( $comAtributoOrdenacao );
 	}
 	function getFiltroConsulta($filtro) {
+		//serve para formatar o atributo de ordenacao caso ele nao esteja referenciando a tabela correta(de historico ou nao)
+		$this->formataCampoOrdenacao(new voProcLicitatorio());
+		
 		return $this->getFiltroSQL ( $filtro, true );
 	}
 	function getFiltroSQL($strFiltro, $comAtributoOrdenacao) {
@@ -278,6 +281,13 @@ class filtroManter extends multiplosConstrutores {
 		
 		return $comboOrdenacao;
 	}
+	
+	/**  
+	 * serve para formatar o atributo de ordenacao caso ele nao esteja 
+	 * referenciando a tabela correta(de historico ou nao)
+	 * se a tabela ja for a correta, ele nao faz nada, ou seja, permite a indicacao forcada da tabela que se deseja
+	 * sem alterar a funcionalidade
+	 */
 	function formataCampoOrdenacao($voEntidade) {
 		
 		$nmTabela = $voEntidade->getNmTabelaStatic ( $this->isHistorico );

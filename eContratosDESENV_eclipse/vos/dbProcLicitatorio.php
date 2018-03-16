@@ -59,6 +59,8 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
         $queryJoin .= $nmTabelaDemandaPL . "." . voDemandaPL::$nmAtrAnoDemanda . "=" . $nmTabelaDemanda . "." . voDemanda::$nmAtrAno;
         $queryJoin .= "\n AND " . $nmTabelaDemandaPL . "." . voDemandaPL::$nmAtrCdDemanda . "=" . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd;
         
+        $filtro->tpDemanda = dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL;
+        
         //$filtro->cdEspecieContrato = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
         
         return parent::consultarMontandoQueryTelaConsulta ( $vo, $filtro, $arrayColunasRetornadas, $queryJoin );        

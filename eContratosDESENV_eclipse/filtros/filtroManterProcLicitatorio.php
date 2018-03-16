@@ -8,7 +8,6 @@ class filtroManterProcLicitatorio extends filtroManter{
     static  $nmColNomePregoeiro = "NmColNomePregoeiro";
     static  $nmTabelaPregoeiro = "TAB_PESSOA_PREGOEIRO";
     
-    var $sqHistPA;
     var $cdPessoa ;    
     var $cdPregoeiro;
     var $doc;
@@ -23,6 +22,7 @@ class filtroManterProcLicitatorio extends filtroManter{
 
     var $cdDemanda;
     var $anoDemanda;
+    var $tpDemanda;
     var $tpDocumento;
         
     // ...............................................................
@@ -45,6 +45,7 @@ class filtroManterProcLicitatorio extends filtroManter{
     	
     	$this->cdDemanda = @$_POST[voDemandaPL::$nmAtrCdDemanda];
     	$this->anoDemanda = @$_POST[voDemandaPL::$nmAtrAnoDemanda];
+    	$this->tpDemanda = @$_POST[voDemanda::$nmAtrTipo];
     	$this->tpDocumento = @$_POST[voDocumento::$nmAtrTp];
     	
     	//isso tudo pq o filtro pode ser usado por mais de um metodo
@@ -99,6 +100,20 @@ class filtroManterProcLicitatorio extends filtroManter{
 					$conector  = "\n AND ";
 		}		
             				
+		if($this->tpDemanda != null){
+			$filtro = $filtro 
+			. $conector
+			. "("
+			. $nmTabelaDemanda. "." .voDemanda::$nmAtrTipo
+			. " IS NULL OR "
+			. $nmTabelaDemanda. "." .voDemanda::$nmAtrTipo
+			. " = "
+			. $this->tpDemanda
+			.")";
+		
+					$conector  = "\n AND ";
+		}
+		
 		if($this->cdEspecieContrato != null){
 			$filtro = $filtro . $conector
 					. $nmTabelaContrato. "." .vocontrato::$nmAtrCdEspecieContrato
@@ -240,14 +255,15 @@ class filtroManterProcLicitatorio extends filtroManter{
 					$conector  = "\n AND ";
 		}
 		
-		if($this->isHistorico() && $this->sqHistProcLic != null){
+		/*if($this->isHistorico() && $this->sqHistProcLic != null){
 			$filtro = $filtro . $conector
 			. $nmTabela. "." .voProcLicitatorio::$nmAtrSqHist
 			. " = "
 					. $this->sqHistPA
 					;
 					$conector  = "\n AND ";
-		}		
+		}*/
+		
 		//finaliza o filtro
 		$filtro = parent::getFiltroConsulta($filtro);
 		
@@ -256,13 +272,14 @@ class filtroManterProcLicitatorio extends filtroManter{
 		return $filtro;
 	}
 	
-	function getAtributosOrdenacao(){
-		$nmTabela = voProcLicitatorio::getNmTabelaStatic($this->isHistorico());
+	function getAtributosOrdenacao(){		
+		//$nmTabela = voProcLicitatorio::getNmTabelaStatic($this->isHistorico());		
 		$varAtributos = array(
-				"$nmTabela.".voProcLicitatorio::$nmAtrCd=> "P.L.",
-				"$nmTabela.".voProcLicitatorio::$nmAtrAno=> "Ano",
-				$nmTabela . "." . voProcLicitatorio::$nmAtrDhUltAlteracao=> "Dt.Alteração",
+				voProcLicitatorio::$nmAtrCd=> "P.L.",
+				voProcLicitatorio::$nmAtrAno=> "Ano",
+				voProcLicitatorio::$nmAtrDhUltAlteracao=> "Dt.Alteração",
 		);
+		
 		return $varAtributos;
 	}
 	
