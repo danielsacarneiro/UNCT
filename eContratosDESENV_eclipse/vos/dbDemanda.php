@@ -8,15 +8,15 @@ class dbDemanda extends dbprocesso {
 			$colecao = $this->consultarPorChaveTelaJoinContrato ( $vo, $isHistorico, true );
 			$voContrato = new vocontrato ();
 			$voContrato->getDadosBanco ( $colecao );
-
-			$voProcLic = new voProcLicitatorio();
+			
+			$voProcLic = new voProcLicitatorio ();
 			$voProcLic->getDadosBanco ( $colecao );
 			$vo->voProcLicitatorio = $voProcLic;
-				
-			$voPA = new voPA();
+			
+			$voPA = new voPA ();
 			$voPA->getDadosBanco ( $colecao );
-			$vo->voPA= $voPA;
-				
+			$vo->voPA = $voPA;
+			
 			$vo->getDadosBanco ( $colecao );
 			$temContrato = $voContrato->cdContrato != null;
 			if ($temContrato) {
@@ -40,12 +40,12 @@ class dbDemanda extends dbprocesso {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );
-		$nmTabelaDemandaProcLic= voDemandaPL::getNmTabelaStatic ( false );
-		$nmTabelaProcLic= voProcLicitatorio::getNmTabelaStatic ( false );
+		$nmTabelaDemandaProcLic = voDemandaPL::getNmTabelaStatic ( false );
+		$nmTabelaProcLic = voProcLicitatorio::getNmTabelaStatic ( false );
 		$nmTabelaPA = voPA::getNmTabelaStatic ( false );
 		$nmTabelaPessoa = vopessoa::getNmTabelaStatic ( false );
 		$nmTabelaTramitacao = voDemandaTramitacao::getNmTabela ();
-		//$nmTabelaPAAP = voPA::getNmTabelaStatic ( false );
+		// $nmTabelaPAAP = voPA::getNmTabelaStatic ( false );
 		
 		$arrayColunasRetornadas = array (
 				$nmTabela . ".*",
@@ -59,8 +59,8 @@ class dbDemanda extends dbprocesso {
 				$nmTabelaDemandaProcLic . "." . voProcLicitatorio::$nmAtrCd,
 				$nmTabelaDemandaProcLic . "." . voProcLicitatorio::$nmAtrAno,
 				$nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrObjeto,
-				//$nmTabelaPessoa . "." . vopessoa::$nmAtrNome,
-				getSQLNmContratada(),
+				// $nmTabelaPessoa . "." . vopessoa::$nmAtrNome,
+				getSQLNmContratada (),
 				"COALESCE (" . " . $nmTabelaTramitacao." . voDemandaTramitacao::$nmAtrCdSetorDestino . "," . $nmTabela . "." . voDemanda::$nmAtrCdSetor . ") AS " . voDemanda::$nmAtrCdSetorAtual 
 		);
 		
@@ -102,7 +102,7 @@ class dbDemanda extends dbprocesso {
 		
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaProcLic;
 		$queryJoin .= "\n ON ";
-		$queryJoin .= $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrAnoProcLic. "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrAno;
+		$queryJoin .= $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrAnoProcLic . "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrAno;
 		$queryJoin .= "\n AND " . $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdProcLic . "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrCd;
 		
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPA;
@@ -114,11 +114,13 @@ class dbDemanda extends dbprocesso {
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaPessoa . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
 		
-		/*$queryJoin .= "\n LEFT JOIN " . $nmTabelaPAAP;
-		$queryJoin .= "\n ON ";
-		$queryJoin .= $nmTabelaPAAP . "." . voPA::$nmAtrCdDemanda. "=" . $nmTabela . "." . voDemanda::$nmAtrCd;
-		$queryJoin .= "\n AND ";
-		$queryJoin .= $nmTabelaPAAP . "." . voPA::$nmAtrAnoDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrAno;*/
+		/*
+		 * $queryJoin .= "\n LEFT JOIN " . $nmTabelaPAAP;
+		 * $queryJoin .= "\n ON ";
+		 * $queryJoin .= $nmTabelaPAAP . "." . voPA::$nmAtrCdDemanda. "=" . $nmTabela . "." . voDemanda::$nmAtrCd;
+		 * $queryJoin .= "\n AND ";
+		 * $queryJoin .= $nmTabelaPAAP . "." . voPA::$nmAtrAnoDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrAno;
+		 */
 		
 		$colecao = $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryJoin, $isHistorico, $isConsultaPorChave );
 		return $colecao;
@@ -128,28 +130,28 @@ class dbDemanda extends dbprocesso {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
 		$nmTabelaTramitacao = voDemandaTramitacao::getNmTabela ();
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabela ();
-		$nmTabelaDemandaProcLic= voDemandaPL::getNmTabelaStatic ( false );
+		$nmTabelaDemandaProcLic = voDemandaPL::getNmTabelaStatic ( false );
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
 		$nmTabelaPA = voPA::getNmTabelaStatic ( false );
 		
 		$cdSetorAtual = $filtro->vodemanda->cdSetorDestino;
-		$isSetorAtualSelecionado = $filtro->isSetorAtualSelecionado();
+		$isSetorAtualSelecionado = $filtro->isSetorAtualSelecionado ();
 		$nmTabelaMINDestinoTramitacao = "TABELA_MIN_TRAMDESTINO";
 		$nmTabelaDestinoTramitacao = "TABELA_DESTINO_TRAM";
-				
+		
 		$colunaUsuHistorico = "";
 		
 		if ($isHistorico) {
 			$colunaUsuHistorico = static::$nmTabelaUsuarioOperacao . "." . vousuario::$nmAtrName . "  AS " . voDemanda::$nmAtrNmUsuarioOperacao;
 		}
 		
-		//para nao dar pau caso seja des-selecionado
-		if($isSetorAtualSelecionado){
-			$colunaDtReferenciaSetorAtual = "$nmTabelaDestinoTramitacao." . voDemandaTramitacao::$nmAtrDtReferencia. "  AS " . filtroManterDemanda::$NmColDtReferenciaSetorAtual;
-		}else if($filtro->cdAtrOrdenacao == filtroManterDemanda::$NmColDtReferenciaSetorAtual){
-			$filtro->cdAtrOrdenacao = "";			
+		// para nao dar pau caso seja des-selecionado
+		if ($isSetorAtualSelecionado) {
+			$colunaDtReferenciaSetorAtual = "$nmTabelaDestinoTramitacao." . voDemandaTramitacao::$nmAtrDtReferencia . "  AS " . filtroManterDemanda::$NmColDtReferenciaSetorAtual;
+		} else if ($filtro->cdAtrOrdenacao == filtroManterDemanda::$NmColDtReferenciaSetorAtual) {
+			$filtro->cdAtrOrdenacao = "";
 		}
 		$arrayColunasRetornadas = array (
 				$nmTabela . ".*",
@@ -160,12 +162,12 @@ class dbDemanda extends dbprocesso {
 				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato,
 				$nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdProcLic,
 				$nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrAnoProcLic,
-				getSQLNmContratada(),				
+				getSQLNmContratada (),
 				// $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . " AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,
 				"COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . "," . $nmTabela . "." . voDemanda::$nmAtrCdSetor . ") AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,
 				"COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrDhInclusao . "," . $nmTabela . "." . voDemanda::$nmAtrDhUltAlteracao . ") AS " . filtroManterDemanda::$NmColDhUltimaMovimentacao,
 				$colunaUsuHistorico,
-				$colunaDtReferenciaSetorAtual
+				$colunaDtReferenciaSetorAtual 
 		);
 		
 		$atributosGroup = voDemandaTramitacao::$nmAtrCd . "," . voDemandaTramitacao::$nmAtrAno;
@@ -174,9 +176,7 @@ class dbDemanda extends dbprocesso {
 		$nmTabelaMAXTramitacao = "TABELA_MAX";
 		$queryJoin = "";
 		$queryJoin .= "\n LEFT JOIN (";
-		$queryJoin .= " SELECT MAX(" . voDemandaTramitacao::$nmAtrSq . ") AS " . voDemandaTramitacao::$nmAtrSq 
-				. "," . $atributosGroup . " FROM " . $nmTabelaTramitacao 
-				. " GROUP BY " . $atributosGroup;
+		$queryJoin .= " SELECT MAX(" . voDemandaTramitacao::$nmAtrSq . ") AS " . voDemandaTramitacao::$nmAtrSq . "," . $atributosGroup . " FROM " . $nmTabelaTramitacao . " GROUP BY " . $atributosGroup;
 		$queryJoin .= ") $nmTabelaMAXTramitacao";
 		$queryJoin .= "\n ON " . $nmTabela . "." . voDemandaTramitacao::$nmAtrAno . " = $nmTabelaMAXTramitacao." . voDemandaTramitacao::$nmAtrAno;
 		$queryJoin .= "\n AND " . $nmTabela . "." . voDemandaTramitacao::$nmAtrCd . " = $nmTabelaMAXTramitacao." . voDemandaTramitacao::$nmAtrCd;
@@ -194,13 +194,11 @@ class dbDemanda extends dbprocesso {
 		$queryJoin .= "\n AND " . $nmTabela . "." . voDemanda::$nmAtrCd . " = " . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdDemanda;
 		
 		// o proximo join eh p pegar o registro de contrato mais atual na planilha
-		//faz o join apenas com os contratos de maximo sequencial (mais atual)
+		// faz o join apenas com os contratos de maximo sequencial (mais atual)
 		$nmTabelaMAXContrato = "TABELA_MAX_CONTRATO";
 		$atributosGroupContrato = vocontrato::$nmAtrAnoContrato . "," . vocontrato::$nmAtrTipoContrato . "," . vocontrato::$nmAtrCdContrato;
 		$queryJoin .= "\n LEFT JOIN (";
-		$queryJoin .= " SELECT MAX(" . vocontrato::$nmAtrSqContrato . ") AS " . vocontrato::$nmAtrSqContrato
-		. "," . $atributosGroupContrato . " FROM " . $nmTabelaContrato 
-		. " GROUP BY " . $atributosGroupContrato;
+		$queryJoin .= " SELECT MAX(" . vocontrato::$nmAtrSqContrato . ") AS " . vocontrato::$nmAtrSqContrato . "," . $atributosGroupContrato . " FROM " . $nmTabelaContrato . " GROUP BY " . $atributosGroupContrato;
 		$queryJoin .= ") $nmTabelaMAXContrato";
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato . "=" . $nmTabelaMAXContrato . "." . vocontrato::$nmAtrAnoContrato;
@@ -213,7 +211,7 @@ class dbDemanda extends dbprocesso {
 		$queryJoin .= "\n LEFT JOIN ";
 		$queryJoin .= $nmTabelaContrato;
 		$queryJoin .= "\n ON " . $nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato . " = $nmTabelaMAXContrato." . vocontrato::$nmAtrSqContrato;
-				
+		
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaContratoInfo;
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato . "=" . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrAnoContrato;
@@ -236,14 +234,12 @@ class dbDemanda extends dbprocesso {
 		$queryJoin .= $nmTabelaPA . "." . voPA::$nmAtrAnoDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrAno;
 		$queryJoin .= "\n AND " . $nmTabelaPA . "." . voPA::$nmAtrCdDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrCd;
 		
-		//Para o caso de se desejar ordenar pela primeira vez que foi encaminhada ao setor atual selecionado pelo usuario
+		// Para o caso de se desejar ordenar pela primeira vez que foi encaminhada ao setor atual selecionado pelo usuario
 		
-		if($isSetorAtualSelecionado){
-			//echo "tem";
+		if ($isSetorAtualSelecionado) {
+			// echo "tem";
 			$queryJoin .= "\n LEFT JOIN (";
-			$queryJoin .= " SELECT MIN(" . voDemandaTramitacao::$nmAtrSq . ") AS " . voDemandaTramitacao::$nmAtrSq
-			. "," . $atributosGroup . " FROM " . $nmTabelaTramitacao . " WHERE " . voDemandaTramitacao::$nmAtrCdSetorDestino . " = " . $cdSetorAtual
-			. " GROUP BY " . $atributosGroup;
+			$queryJoin .= " SELECT MIN(" . voDemandaTramitacao::$nmAtrSq . ") AS " . voDemandaTramitacao::$nmAtrSq . "," . $atributosGroup . " FROM " . $nmTabelaTramitacao . " WHERE " . voDemandaTramitacao::$nmAtrCdSetorDestino . " = " . $cdSetorAtual . " GROUP BY " . $atributosGroup;
 			$queryJoin .= ") $nmTabelaMINDestinoTramitacao ";
 			$queryJoin .= "\n ON " . $nmTabela . "." . voDemandaTramitacao::$nmAtrAno . " = $nmTabelaMINDestinoTramitacao." . voDemandaTramitacao::$nmAtrAno;
 			$queryJoin .= "\n AND " . $nmTabela . "." . voDemandaTramitacao::$nmAtrCd . " = $nmTabelaMINDestinoTramitacao." . voDemandaTramitacao::$nmAtrCd;
@@ -323,25 +319,25 @@ class dbDemanda extends dbprocesso {
 	}
 	function consultarDadosDemanda($vo) {
 		$isHistorico = $vo->isHistorico ();
-	
+		
 		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( $isHistorico );
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
 		$nmTabelaPAAP = voPA::getNmTabelaStatic ( false );
-		//$nmTabelaPL = voProcLicitatorio::getNmTabelaStatic ( false );
-	
+		// $nmTabelaPL = voProcLicitatorio::getNmTabelaStatic ( false );
+		
 		$querySelect = "SELECT ";
 		$querySelect .= $nmTabelaDemanda . ".*,";
 		$querySelect .= $nmTabelaDemandaContrato . ".*,";
 		$querySelect .= "$nmTabelaPAAP." . voPA::$nmAtrAnoPA . ",$nmTabelaPAAP." . voPA::$nmAtrCdPA;
 		$queryFrom = " FROM " . $nmTabelaDemanda;
-	
+		
 		$queryFrom .= "\n LEFT JOIN ";
 		$queryFrom .= $nmTabelaDemandaContrato;
 		$queryFrom .= "\n ON " . $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . " = " . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoDemanda;
 		$queryFrom .= "\n AND " . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd . " = " . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdDemanda;
-	
+		
 		$queryFrom .= "\n LEFT JOIN " . $nmTabelaContrato;
 		$queryFrom .= "\n ON ";
 		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato;
@@ -353,15 +349,15 @@ class dbDemanda extends dbprocesso {
 		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdEspecieContrato;
 		$queryFrom .= "\n AND ";
 		$queryFrom .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato;
-
+		
 		$queryFrom .= "\n LEFT JOIN " . $nmTabelaPessoaContrato;
 		$queryFrom .= "\n ON ";
 		$queryFrom .= $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
 		
-		$queryFrom .= "\n LEFT JOIN ". $nmTabelaPAAP;
-		$queryFrom .= "\n ON ". $nmTabelaDemanda . "." . voDemanda::$nmAtrCd. "=" . $nmTabelaPAAP . "." . voPA::$nmAtrCdDemanda;
-		$queryFrom .= "\n AND ". $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaPAAP . "." . voPA::$nmAtrAnoDemanda;		
-	
+		$queryFrom .= "\n LEFT JOIN " . $nmTabelaPAAP;
+		$queryFrom .= "\n ON " . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd . "=" . $nmTabelaPAAP . "." . voPA::$nmAtrCdDemanda;
+		$queryFrom .= "\n AND " . $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaPAAP . "." . voPA::$nmAtrAnoDemanda;
+		
 		$filtro = new filtroManterDemanda ( false );
 		// var_dump($vo);
 		$filtro->vodemanda->cd = $vo->cd;
@@ -369,10 +365,9 @@ class dbDemanda extends dbprocesso {
 		$filtro->vodemanda->sqHist = $vo->sqHist;
 		$filtro->TemPaginacao = false;
 		$filtro->isHistorico = $isHistorico;
-	
+		
 		return parent::consultarFiltro ( $filtro, $querySelect, $queryFrom, false );
 	}
-	
 	function consultarDemandaContrato($vo) {
 		$isHistorico = $vo->isHistorico ();
 		
@@ -423,37 +418,34 @@ class dbDemanda extends dbprocesso {
 		
 		return parent::consultarFiltro ( $filtro, $querySelect, $queryFrom, false );
 	}
-	
-	function consultarPAAPDemanda($vo){
-		//$vo = new voDemanda();		
+	function consultarPAAPDemanda($vo) {
+		// $vo = new voDemanda();
 		$voPA = null;
-		$filtro = new filtroManterPA(false);
+		$filtro = new filtroManterPA ( false );
 		$filtro->anoDemanda = $vo->ano;
 		$filtro->cdDemanda = $vo->cd;
-		$dbpa = new dbPA();		
-		$colecao = $dbpa->consultarPAAP(new voPA(),$filtro);
-		//var_dump($filtro);
-		if(!isColecaoVazia($colecao)){
-			if(count($colecao)>1){
-				throw new excecaoMaisDeUmRegistroRetornado("A consulta de PAAP trouxe mais de um registro para esta demanda.");
+		$dbpa = new dbPA ();
+		$colecao = $dbpa->consultarPAAP ( new voPA (), $filtro );
+		// var_dump($filtro);
+		if (! isColecaoVazia ( $colecao )) {
+			if (count ( $colecao ) > 1) {
+				throw new excecaoMaisDeUmRegistroRetornado ( "A consulta de PAAP trouxe mais de um registro para esta demanda." );
 			}
 			
-			$registro = $colecao[0];
-			$voPA = new voPA();
-			$voPA->getDadosBancoPorChave($registro);
+			$registro = $colecao [0];
+			$voPA = new voPA ();
+			$voPA->getDadosBancoPorChave ( $registro );
 		}
 		
 		return $voPA;
-		
 	}
-	
 	function validarAlteracao($vo) {
 		if ($vo->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA) {
 			// verifica se o setor atual eh igual ao setor de origem
 			$filtro = new filtroManterDemanda ( false );
 			$filtro->vodemanda = new voDemanda ();
 			$filtro->vodemanda->cd = $vo->cd;
-			$filtro->vodemanda->ano = $vo->ano;			
+			$filtro->vodemanda->ano = $vo->ano;
 			// echo "SITUACAO FECHADA";
 			$colecao = $this->consultarTelaConsulta ( $vo, $filtro );
 			if ($colecao != "") {
@@ -464,18 +456,18 @@ class dbDemanda extends dbprocesso {
 					throw new Exception ( $msg );
 				}
 			} // else echo "COLECAO VAZIA";
-			
-			//verifica se tem PAAP para encerrar
-			//$vo = new voDemanda();
-			if($vo->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_PROCADM){
-				$voPA = $this->consultarPAAPDemanda($vo);
-				if($voPA!=null){
-					$situacaoPAAP = $voPA->situacao; 
-					$isSituacaoPAAPAtivo = dominioSituacaoPA::existeItem($situacaoPAAP, dominioSituacaoPA::getColecaoSituacaoAtivos()); 
-					if($isSituacaoPAAPAtivo){
-						throw new excecaoGenerica("Fechamento não permitido para demanda cujo PAAP esteja ativo.");
-					}					
-				}				
+			  
+			// verifica se tem PAAP para encerrar
+			  // $vo = new voDemanda();
+			if ($vo->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_PROCADM) {
+				$voPA = $this->consultarPAAPDemanda ( $vo );
+				if ($voPA != null) {
+					$situacaoPAAP = $voPA->situacao;
+					$isSituacaoPAAPAtivo = dominioSituacaoPA::existeItem ( $situacaoPAAP, dominioSituacaoPA::getColecaoSituacaoAtivos () );
+					if ($isSituacaoPAAPAtivo) {
+						throw new excecaoGenerica ( "Fechamento não permitido para demanda cujo PAAP esteja ativo." );
+					}
+				}
 			}
 		}
 		
@@ -488,25 +480,23 @@ class dbDemanda extends dbprocesso {
 		if ($isAlteracaoPermitida) {
 			$this->cDb->retiraAutoCommit ();
 			try {
-	
-				//so altera o contrato se vier da tela de alteracao de demanda
+				
+				// so altera o contrato se vier da tela de alteracao de demanda
 				if ($isAlteracaoTelaDemanda) {
-					$this->excluirDemandaContrato($vo );					
+					$this->excluirDemandaContrato ( $vo );
 					if ($vo->temContratoParaIncluir ()) {
 						$this->incluirColecaoDemandaContrato ( $vo );
 					}
 					
-					//$vo=new voDemanda();
-					$this->excluirDemandaProcLicitatorio($vo );
-					if ($vo->temProcLicitatorioParaIncluir()) {
+					// $vo=new voDemanda();
+					$this->excluirDemandaProcLicitatorio ( $vo );
+					if ($vo->temProcLicitatorioParaIncluir ()) {
 						$voProcLic = $vo->voProcLicitatorio;
-						$this->incluirDemandaProcLicitatorio($vo->getVODemandaProcLicitatorio($voProcLic));
+						$this->incluirDemandaProcLicitatorio ( $vo->getVODemandaProcLicitatorio ( $voProcLic ) );
 					}
-						
 				}
 				
 				parent::alterar ( $vo );
-	
 			} catch ( Exception $e ) {
 				$this->cDb->rollback ();
 				throw new Exception ( $e->getMessage () );
@@ -514,34 +504,72 @@ class dbDemanda extends dbprocesso {
 		}
 	}
 	function alterarApenasVODemanda($vo) {
-		return $this->alterarMais($vo, false);
-		
+		return $this->alterarMais ( $vo, false );
 	}
 	function alterar($vo) {
-		return $this->alterarMais($vo, true);
+		return $this->alterarMais ( $vo, true );
+	}
+	function isSetorDestinoIgualDemandante($vo, $textoFuncao) {
+		// verifica se o setor atual eh igual ao setor de origem
+		$filtro = new filtroManterDemanda ( false );
+		$filtro->vodemanda = new voDemanda ();
+		$filtro->vodemanda->cd = $vo->cd;
+		$filtro->vodemanda->ano = $vo->ano;
+		// echo "SITUACAO FECHADA";
+		$colecao = $this->consultarTelaConsulta ( $vo, $filtro );
+		if ($colecao != "") {
+			$setorAtual = $colecao [0] [voDemandaTramitacao::$nmAtrCdSetorDestino];
+			// echo "setor atual:" . $setorAtual;
+			if ($setorAtual != null && $vo->cdSetor != $setorAtual) {
+				$msg = "A demanda deve estar encaminhada ao setor responsável para $textoFuncao.";
+				throw new Exception ( $msg );
+			}
+		} // else echo "COLECAO VAZIA";
+		
+		return true;
+	}
+	function isDemandaPAAPInativo($vo, $textoFuncao) {
+		if ($vo->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_PROCADM) {
+			$voPA = $this->consultarPAAPDemanda ( $vo );
+			if ($voPA != null) {
+				$situacaoPAAP = $voPA->situacao;
+				$isSituacaoPAAPAtivo = dominioSituacaoPA::existeItem ( $situacaoPAAP, dominioSituacaoPA::getColecaoSituacaoAtivos () );
+				if ($isSituacaoPAAPAtivo) {
+					throw new excecaoGenerica ( "$textoFuncao não permitido(a) para demanda cujo PAAP esteja ativo." );
+				}
+			}
+		}
+		return true;
+	}
+	function validarExclusao($vo) {
+		$textoFuncao = "Exclusão";
+		return $this->isSetorDestinoIgualDemandante ( $vo, $textoFuncao ) && $this->isDemandaPAAPInativo ( $vo, $textoFuncao );
 	}
 	
 	// o excluir eh implementado para nao usar da voentidade
 	// por ser mais complexo
 	function excluir($vo) {
 		// Start transaction
-		$this->cDb->retiraAutoCommit ();
-		try {
-			$permiteExcluirPrincipal = $this->permiteExclusaoPrincipal ( $vo );
-			// so exclui os relacionamentos se a exclusao for de registro historico
-			// e nao existir outro registro vigente que possa utilizar os relacionamentos
-			// if($vo->validaExclusaoRelacionamentoHistorico()){
-			if ($permiteExcluirPrincipal) {
-				$this->excluirDemandaTramitacao ( $vo );
-				$this->excluirDemandaContrato ( $vo );
-				$this->excluirDemandaProcLicitatorio($vo );				
+		$isExclusaoPermitida = $this->validarExclusao ( $vo );
+		if ($isExclusaoPermitida) {
+			$this->cDb->retiraAutoCommit ();
+			try {
+				$permiteExcluirPrincipal = $this->permiteExclusaoPrincipal ( $vo );
+				// so exclui os relacionamentos se a exclusao for de registro historico
+				// e nao existir outro registro vigente que possa utilizar os relacionamentos
+				// if($vo->validaExclusaoRelacionamentoHistorico()){
+				if ($permiteExcluirPrincipal) {
+					$this->excluirDemandaTramitacao ( $vo );
+					$this->excluirDemandaContrato ( $vo );
+					$this->excluirDemandaProcLicitatorio ( $vo );
+				}
+				$vo = parent::excluir ( $vo );
+				// End transaction
+				$this->cDb->commit ();
+			} catch ( Exception $e ) {
+				$this->cDb->rollback ();
+				throw new Exception ( $e->getMessage () );
 			}
-			$vo = parent::excluir ( $vo );
-			// End transaction
-			$this->cDb->commit ();
-		} catch ( Exception $e ) {
-			$this->cDb->rollback ();
-			throw new Exception ( $e->getMessage () );
 		}
 		
 		return $vo;
@@ -577,27 +605,27 @@ class dbDemanda extends dbprocesso {
 		return $this->atualizarEntidade ( $query );
 	}
 	function excluirDemandaProcLicitatorio($voDemanda) {
-		$vo = new voDemandaPL();
-	
+		$vo = new voDemandaPL ();
+		
 		$nmTabela = $vo->getNmTabelaEntidade ( false );
 		$query = "DELETE FROM " . $nmTabela;
-		$query .= "\n WHERE " . voDemandaPL::$nmAtrAnoDemanda. " = " . $voDemanda->ano;
+		$query .= "\n WHERE " . voDemandaPL::$nmAtrAnoDemanda . " = " . $voDemanda->ano;
 		$query .= "\n AND " . voDemandaPL::$nmAtrCdDemanda . " = " . $voDemanda->cd;
 		// echo $query;
 		return $this->atualizarEntidade ( $query );
 	}
 	function incluirColecaoDemandaContrato($voDemanda) {
 		$colecao = $voDemanda->colecaoContrato;
-		foreach ($colecao as $voContrato) {
-			$voDemContrato = new voDemandaContrato();
-			$voDemContrato = $voDemanda->getVODemandaContrato($voContrato);
-			$this->incluirDemandaContrato($voDemContrato);
+		foreach ( $colecao as $voContrato ) {
+			$voDemContrato = new voDemandaContrato ();
+			$voDemContrato = $voDemanda->getVODemandaContrato ( $voContrato );
+			$this->incluirDemandaContrato ( $voDemContrato );
 		}
 	}
 	function incluirDemandaContrato($voDemContrato) {
 		$voDemContrato->dbprocesso->cDb = $this->cDb;
 		$voDemContrato->dbprocesso->incluir ( $voDemContrato );
-	}	
+	}
 	function incluirDemandaProcLicitatorio($voDemandaProcLic) {
 		$voDemandaProcLic->dbprocesso->cDb = $this->cDb;
 		$voDemandaProcLic->dbprocesso->incluir ( $voDemandaProcLic );
@@ -613,7 +641,7 @@ class dbDemanda extends dbprocesso {
 		$retorno .= $this->getVarComoNumero ( $vo->ano ) . ",";
 		$retorno .= $this->getVarComoNumero ( $vo->cd ) . ",";
 		$retorno .= $this->getVarComoNumero ( $vo->tipo ) . ",";
-		$retorno .= $this->getVarComoString( $vo->inTpDemandaReajusteComMontanteA ) . ",";		
+		$retorno .= $this->getVarComoString ( $vo->inTpDemandaReajusteComMontanteA ) . ",";
 		$retorno .= $this->getVarComoNumero ( $vo->cdSetor ) . ",";
 		// $retorno.= $this-> getVarComoNumero($vo->situacao);
 		$retorno .= $this->getVarComoNumero ( dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_ABERTA ) . ",";

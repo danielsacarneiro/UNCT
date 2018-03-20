@@ -186,8 +186,7 @@ function mostrarGridDemanda($colecaoTramitacao, $isDetalhamento) {
 }
 
 function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDadosDemanda = true) {
-	// var_dump($colecaoTramitacao);
-
+	// var_dump($colecaoTramitacao);	
 	if (is_array ( $colecaoTramitacao )) {
 		$tamanho = sizeof ( $colecaoTramitacao );
 	} else {
@@ -216,6 +215,8 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDad
 		$html .= "<TH class='headertabeladados' width='1%'>Ano</TH>   \n";
 		$html .= "<TH class='headertabeladados' width='1%'>Dem.</TH> \n";
 		$html .= "<TH class='headertabeladados' width='1%'>Tram.</TH> \n";
+		$html .= "<TH class='headertabeladados' width='1%'>Origem</TH> \n";
+		$html .= "<TH class='headertabeladados' width='1%'>Destino</TH> \n";
 		if($comDadosDemanda){
 			$html .= "<TH class='headertabeladados' width='20%'>Título</TH> \n";
 		}
@@ -247,6 +248,8 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDad
 				$html .= "<TD class='tabeladados' nowrap>" . $voAtual->ano . "</TD> \n";
 				$html .= "<TD class='tabeladados' nowrap>" . complementarCharAEsquerda ( $voAtual->cd, "0", TAMANHO_CODIGOS ) . "</TD> \n";
 				$html .= "<TD class='tabeladados' nowrap>" . complementarCharAEsquerda ( $voAtual->sq, "0", TAMANHO_CODIGOS ) . "</TD> \n";
+				$html .= "<TD class='tabeladados' nowrap>" . $dominioSetor->getDescricao ( $voAtual->cdSetorOrigem ) . "</TD> \n";
+				$html .= "<TD class='tabeladados' nowrap>" . $dominioSetor->getDescricao ( $voAtual->cdSetorDestino ) . "</TD> \n";				
 				if($comDadosDemanda){
 					$html .= "<TD class='tabeladados'>" .  $voAtual->texto . "</TD> \n";
 				}

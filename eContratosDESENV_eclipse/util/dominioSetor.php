@@ -14,6 +14,7 @@ class dominioSetor extends dominio {
 	static $CD_SETOR_DIENG = 11;
 	static $CD_SETOR_SEFAZ = 12;
 	static $CD_SETOR_GEBES = 13;
+	static $CD_SETOR_GOV = 14;
 	
 	static $DS_SETOR_SAFI = "SAFI";
 	static $DS_SETOR_UNCT = "UNCT";
@@ -28,6 +29,7 @@ class dominioSetor extends dominio {
 	static $DS_SETOR_DIENG = "DIENG";
 	static $DS_SETOR_SEFAZ = "SEFAZ";
 	static $DS_SETOR_GEBES = "GEBES";
+	static $DS_SETOR_GOV = "GOV";
 	
 	// ...............................................................
 	// Construtor
@@ -48,6 +50,7 @@ class dominioSetor extends dominio {
 				self::$CD_SETOR_PGE => self::$DS_SETOR_PGE,
 				self::$CD_SETOR_DIFIN => self::$DS_SETOR_DIFIN,
 				self::$CD_SETOR_DIENG => self::$DS_SETOR_DIENG,
+				self::$CD_SETOR_GOV => self::$DS_SETOR_GOV,
 				//self::$CD_SETOR_GEBES => self::$DS_SETOR_GEBES,
 		);
 		
@@ -64,6 +67,6 @@ class dominioSetor extends dominio {
 		uksort ( $retorno, 'strnatcmp' );
 		
 		return $retorno;
-	}
+	}	
 }
 ?>
