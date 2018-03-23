@@ -223,7 +223,7 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDad
 		$html .= "<TH class='headertabeladados' width='30%'>Texto</TH> \n";
 		$html .= "<TH class='headertabeladados' width='1%' nowrap>Anexo</TH> \n";
 		$html .= "<TH class='headertabeladados' width='1%' nowrap>Usuário</TH> \n";
-		$html .= "<TH class='headertabeladados' width='1%' nowrap>Ult.Mov.</TH> \n";
+		$html .= "<TH class='headertabeladados' width='1%' nowrap>Referência</TH> \n";
 		$html .= "</TR> \n";
 
 		$sq = 1;
@@ -258,7 +258,7 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDad
 				$html .= getHtmlDocumento($voAtual, false);				
 
 				$html .= "<TD class='tabeladados' nowrap>" . $voAtual->nmUsuarioInclusao . "</TD> \n";
-				$html .= "<TD class='tabeladados' nowrap>" . getData ( $voAtual->dhInclusao ) . "</TD> \n";
+				$html .= "<TD class='tabeladados' nowrap>" . getData ( $voAtual->dtReferencia) . "</TD> \n";
 
 				$html .= "</TR> \n";
 

@@ -13,7 +13,7 @@ class dominioSituacaoPA extends dominio {
 	static $DS_SITUACAO_PA_ARQUIVADO = "Arquivado";
 	static $DS_SITUACAO_PA_ENCERRADO = "Encerrado";
 	static $DS_SITUACAO_PA_AGUARDANDO_ACAO = "Aguardando ATJA";
-	static $DS_SITUACAO_PA_AGUARDANDO_NOTIFICACAO_ENVIADA = "Aguardando notificação";
+	static $DS_SITUACAO_PA_AGUARDANDO_NOTIFICACAO_ENVIADA = "Aguardando prazo";
 	// ...............................................................
 	// Construtor
 	function __construct() {

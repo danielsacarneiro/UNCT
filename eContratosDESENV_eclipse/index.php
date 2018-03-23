@@ -114,6 +114,15 @@ setCabecalho($titulo);
                     				$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_OUTROS, 4));
                     				echo imprimeBotaoDocumento($vodocumento, "Visto Contratos");
                     				
+                    				$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_CHECKLIST, 3));
+                    				echo imprimeBotaoDocumento($vodocumento, "Compilação Decreto 42.191/15 - PAAP");
+                    				
+                    				?>
+                    				<TR>
+                        				<TD class="tabeladadosdestacadonegrito">LEGISLAÇÃO:
+                        				</TD>
+                    				</TR>                    				
+                    				<?php 
                     				$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_LEGISLACAO, 1));
                     				echo imprimeBotaoDocumento($vodocumento, "Decreto Penalidade");
                     				
@@ -121,7 +130,7 @@ setCabecalho($titulo);
                     				echo imprimeBotaoDocumento($vodocumento, "Consulta boletins PGE");
                     				
                     				$vodocumento = new voDocumento(array(2015, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_LEGISLACAO, 1));
-                    				echo imprimeBotaoDocumento($vodocumento, "Centralização SAD");
+                    				echo imprimeBotaoDocumento($vodocumento, "Centralização SAD");                    				
                     				?>
                      				<!--<TR>
                                     	<TH  class="titulopassoapasso" ><B>Outros Sistemas</B></TH>
