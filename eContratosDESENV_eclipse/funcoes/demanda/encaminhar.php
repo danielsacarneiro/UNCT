@@ -175,8 +175,8 @@ function formataFormEditalPorTpDemanda(pNmCampoTpDemanda, pColecaoNmObjetosForm)
 }
 
 function validaFormulario() {
-	pColecaoNmObjetosFormContrato = ['<?=vocontrato::$nmAtrTipoContrato;?>', '<?=vocontrato::$nmAtrCdContrato;?>','<?=vocontrato::$nmAtrAnoContrato;?>'];	
-	formataFormContratoPorTpDemanda('<?=voDemanda::$nmAtrTipo?>', pColecaoNmObjetosFormContrato);
+	/*pColecaoNmObjetosFormContrato = ['<?=vocontrato::$nmAtrTipoContrato;?>', '<?=vocontrato::$nmAtrCdContrato;?>','<?=vocontrato::$nmAtrAnoContrato;?>'];	
+	formataFormContratoPorTpDemanda('<?=voDemanda::$nmAtrTipo?>', pColecaoNmObjetosFormContrato);*/
 
 	pColecaoNmObjetosFormEdital = ['<?=voProcLicitatorio::$nmAtrCd;?>', '<?=voProcLicitatorio::$nmAtrAno;?>'];
 	formataFormEditalPorTpDemanda('<?=voDemanda::$nmAtrTipo?>', pColecaoNmObjetosFormEdital);

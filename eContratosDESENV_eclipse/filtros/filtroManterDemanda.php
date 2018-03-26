@@ -21,6 +21,7 @@ class filtroManterDemanda extends filtroManter{
 	static $NmAtrInOR_AND = "NmAtrInOR_AND";
 	static $NmAtrTipoExcludente = "NmAtrTipoExcludente";
 	static $NmAtrPrioridadeExcludente = "NmAtrPrioridadeExcludente";
+	static $NmAtrInComPAAPInstaurado = "NmAtrInComPAAPInstaurado";
 	
 	var $vodemanda;
 	var $vocontrato;
@@ -49,6 +50,7 @@ class filtroManterDemanda extends filtroManter{
 	var $cdClassificacaoContrato;
 	var $inMaoDeObra = "";
 	var $inContratoComDtPropostaVencida;
+	var $inComPAAPInstaurado;
 	private $sqlComplementoContratoComDtPropostaVencida;
 	var $inRetornarReajusteSeLocacaoImovel;
 	
@@ -114,6 +116,7 @@ class filtroManterDemanda extends filtroManter{
 		$this->cdClassificacaoContrato = @$_POST [voContratoInfo::$nmAtrCdClassificacao];
 		$this->inMaoDeObra = @$_POST [voContratoInfo::$nmAtrInMaoDeObra];
 		$this->inOR_AND = @$_POST[self::$NmAtrInOR_AND];
+		$this->inComPAAPInstaurado = @$_POST[self::$NmAtrInComPAAPInstaurado];
 		if($this->inOR_AND == null){
 			$this->inOR_AND = constantes::$CD_OPCAO_OR;
 		}
@@ -322,7 +325,7 @@ class filtroManterDemanda extends filtroManter{
 						
 			$comparar = " = '" . $this->vodemanda->situacao . "'";
 			if(is_array($this->vodemanda->situacao)){
-				
+							
 				if(count($this->vodemanda->situacao) == 1 && $this->vodemanda->situacao[0] == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_A_FAZER){
 					$this->inContratoComDtPropostaVencida = constantes::$CD_SIM;
 					$this->vocontrato->dtProposta = getDataHoje();
@@ -349,6 +352,20 @@ class filtroManterDemanda extends filtroManter{
 		
 			$conector = "\n AND ";
 		}
+		
+		if($this->inComPAAPInstaurado != null){
+			$comparacao = " IS NOT NULL ";
+			if(!getAtributoComoBooleano($this->inComPAAPInstaurado)){
+				$comparacao = " IS NULL ";
+			}
+			
+			$filtro = $filtro . $conector
+			. $nmTabelaPA . "." .voPA::$nmAtrCdPA
+			. " $comparacao "
+					;
+		
+					$conector  = "\n AND ";
+		}		
 		
 		if ($this->prioridadeExcludente != null && !$this->isAtributoArrayVazio($this->prioridadeExcludente)) {
 			$comparar = " <> '" . $this->prioridadeExcludente. "'";

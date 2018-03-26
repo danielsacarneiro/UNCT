@@ -131,6 +131,9 @@ function encaminhar() {
     <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
         <TBODY>
 	        <?php	        	
+	        include_once(caminho_util. "dominioSimNao.php");
+	        $comboSimNao = new select(dominioSimNao::getColecao());
+	         
 	        	$comboTipo = new select(dominioTipoDemanda::getColecao());
 	        	$comboSituacao = new select(dominioSituacaoDemanda::getColecaoHTMLConsulta());
 	        	$comboSetor = new select(dominioSetor::getColecao());
@@ -189,7 +192,11 @@ function encaminhar() {
 	        </TR>	                    
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">PAAP:</TH>
-	            <TD class="campoformulario"><?php getCampoDadosPAAP($filtro->voPA);?>
+	            <TD class="campoformulario">
+	            <?php getCampoDadosPAAP($filtro->voPA);
+	            echo " com PAAP?: " . $comboSimNao->getHtmlCombo(filtroManterDemanda::$NmAtrInComPAAPInstaurado,
+	            								filtroManterDemanda::$NmAtrInComPAAPInstaurado, 
+	            								$filtro->inComPAAPInstaurado, true, "camponaoobrigatorio", false,"");?>
 	            </TD>
 	        </TR>	                    
 	        <TR>
@@ -263,8 +270,6 @@ function encaminhar() {
 	            //$radioMaodeObra = new radiobutton ( dominioSimNao::getColecao());
 	            //echo "&nbsp;&nbsp;Mão de obra incluída (planilha de custos)?: " . $radioMaodeObra->getHtmlRadioButton ( voContratoInfo::$nmAtrInMaoDeObra, voContratoInfo::$nmAtrInMaoDeObra, $vo->inMaoDeObra, false, " required " );
 	            
-	            include_once(caminho_util. "dominioSimNao.php");
-	            $comboSimNao = new select(dominioSimNao::getColecao());	             
 	            echo "&nbsp;&nbsp;Mão de obra incluída (planilha de custos)?: ";
 	            echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInMaoDeObra,voContratoInfo::$nmAtrInMaoDeObra, $filtro->inMaoDeObra, true, "camponaoobrigatorio", false,"");
 	            ?>
