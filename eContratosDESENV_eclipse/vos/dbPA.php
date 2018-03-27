@@ -16,7 +16,9 @@ include_once (caminho_filtros."filtroManterPA.php");
   		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
   		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );
   		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( false );
-  		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );  		
+  		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
+  		$nmTabelaDemandaProcLic = voDemandaPL::getNmTabelaStatic ( false );
+  		$nmTabelaProcLic = voProcLicitatorio::getNmTabelaStatic ( false );  		
   	
   		$arrayColunasRetornadas = array (
   				$nmTabela . ".*",
@@ -27,6 +29,9 @@ include_once (caminho_filtros."filtroManterPA.php");
   				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato,
   				$nmTabelaDemanda . "." . voDemanda::$nmAtrTexto,
   				self::$nmTabelaPublicacao . "." . voDemandaTramitacao::$nmAtrDtReferencia,
+  				$nmTabelaDemandaProcLic . "." . voProcLicitatorio::$nmAtrCd,
+  				$nmTabelaDemandaProcLic . "." . voProcLicitatorio::$nmAtrAno,
+  				
 //  				$nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato,  
   		);
   	
@@ -34,9 +39,20 @@ include_once (caminho_filtros."filtroManterPA.php");
   		$queryFrom .= "\n ON ". $nmTabelaDemanda . "." . voDemanda::$nmAtrCd. "=" . $nmTabela . "." . voPA::$nmAtrCdDemanda;
   		$queryFrom .= "\n AND ". $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $nmTabela . "." . voPA::$nmAtrAnoDemanda;
   		
-  		$queryFrom .= "\n INNER JOIN ". $nmTabelaDemandaContrato;
+  		$queryFrom .= "\n LEFT JOIN ". $nmTabelaDemandaContrato;
   		$queryFrom .= "\n ON ". $nmTabelaDemanda . "." . voDemanda::$nmAtrCd. "=" . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdDemanda;
   		$queryFrom .= "\n AND ". $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoDemanda;
+  		
+  		$queryFrom .= "\n LEFT JOIN " . $nmTabelaDemandaProcLic;
+  		$queryFrom .= "\n ON ";
+  		$queryFrom .= $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrAnoDemanda . "=" . $nmTabelaDemanda . "." . voDemanda::$nmAtrAno;
+  		$queryFrom .= "\n AND " . $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdDemanda . "=" . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd;
+  		
+  		$queryFrom .= "\n LEFT JOIN " . $nmTabelaProcLic;
+  		$queryFrom .= "\n ON ";
+  		$queryFrom .= $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrAnoProcLic . "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrAno;
+  		$queryFrom .= "\n AND " . $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdProcLic . "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrCd;
+  		
   		
   		$queryFrom .= $this->getSQLJoinDataPublicacaoPAAP($nmTabelaDemanda);
   		  		  		 		
@@ -87,6 +103,8 @@ include_once (caminho_filtros."filtroManterPA.php");
     	$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic(false);
     	$nmTabelaPessoaContrato = $filtro->nmTabelaPessoaContrato;
     	$nmTabelaPessoaResponsavel = $filtro->nmTabelaPessoaResponsavel;
+    	$nmTabelaDemandaProcLic = voDemandaPL::getNmTabelaStatic ( false );
+    	$nmTabelaProcLic = voProcLicitatorio::getNmTabelaStatic ( false );
     	
     	$colunaUsuHistorico = "";
     	
@@ -111,7 +129,10 @@ include_once (caminho_filtros."filtroManterPA.php");
     			$nmTabelaContrato. "." . vocontrato::$nmAtrCdContrato,
     			$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd,
     			$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
-    			$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome . " AS " . $filtro->nmColNomePessoaContrato,    			 
+    			$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome . " AS " . $filtro->nmColNomePessoaContrato,
+    			$nmTabelaDemandaProcLic . "." . voProcLicitatorio::$nmAtrCd,
+    			$nmTabelaDemandaProcLic . "." . voProcLicitatorio::$nmAtrAno,
+    			 
     			$colunaUsuHistorico,
     			$sqHist
     	);
@@ -120,7 +141,7 @@ include_once (caminho_filtros."filtroManterPA.php");
     	$queryFrom .= "\n ON ". $nmTabelaDemanda . "." . voDemanda::$nmAtrCd. "=" . $nmTabela . "." . voPA::$nmAtrCdDemanda;
     	$queryFrom .= "\n AND ". $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $nmTabela . "." . voPA::$nmAtrAnoDemanda;
     	 
-    	$queryFrom .= "\n INNER JOIN ". $nmTabelaDemandaContrato;
+    	$queryFrom .= "\n LEFT JOIN ". $nmTabelaDemandaContrato;
     	$queryFrom .= "\n ON ". $nmTabelaDemanda . "." . voDemanda::$nmAtrCd. "=" . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdDemanda;
     	$queryFrom .= "\n AND ". $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoDemanda;
     	
@@ -154,6 +175,16 @@ include_once (caminho_filtros."filtroManterPA.php");
         $queryFrom .= " ". $nmTabelaPessoaContrato . " \n ON ". $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada. "=" . $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd;
         $queryFrom .= "\n LEFT JOIN ". vopessoa::getNmTabela();
         $queryFrom .= " ". $nmTabelaPessoaResponsavel . " \n ON ". $nmTabela . "." . voPA::$nmAtrCdResponsavel . "=" . $nmTabelaPessoaResponsavel . "." . vopessoa::$nmAtrCd;
+        
+        $queryFrom .= "\n LEFT JOIN " . $nmTabelaDemandaProcLic;
+        $queryFrom .= "\n ON ";
+        $queryFrom .= $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrAnoDemanda . "=" . $nmTabelaDemanda . "." . voDemanda::$nmAtrAno;
+        $queryFrom .= "\n AND " . $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdDemanda . "=" . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd;
+        
+        $queryFrom .= "\n LEFT JOIN " . $nmTabelaProcLic;
+        $queryFrom .= "\n ON ";
+        $queryFrom .= $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrAnoProcLic . "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrAno;
+        $queryFrom .= "\n AND " . $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdProcLic . "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrCd;
                 
         //$filtro->cdEspecieContrato = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
         

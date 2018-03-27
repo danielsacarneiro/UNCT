@@ -213,9 +213,7 @@ function validaFormulario() {
 						<TH class="headertabeladados" colspan="2">
 						<center>Demanda</center>
 						</TH>
-						<TH class="headertabeladados" colspan="3">
-						<center>Contrato</center>
-						</TH>
+						<TH class="headertabeladados" rowspan="2">Contrato/PL</TH>
 	                    <TH class="headertabeladados" rowspan="2" width="1%" nowrap >Doc.Contratada</TH>
 	                    <TH class="headertabeladados" rowspan="2" width="90%">Contratada</TH>
 	                    <TH class="headertabeladados" rowspan="2" width="1%" nowrap>Servidor.Resp.</TH>
@@ -227,9 +225,6 @@ function validaFormulario() {
 	                    <TH class="headertabeladados" width="1%">Num.</TH>
 	                    <TH class="headertabeladados" width="1%" nowrap>Ano</TH>
 	                    <TH class="headertabeladados" width="1%">Num.</TH>
-	                    <TH class="headertabeladados" width="1%" nowrap>Ano</TH>
-	                    <TH class="headertabeladados" width="1%">Num.</TH>
-	                    <TH class="headertabeladados" width="1%">Tipo</TH>	                    
                     </TR>                 
                 <?php								
                 if (is_array($colecao))
@@ -253,6 +248,8 @@ function validaFormulario() {
                         $registroAtual = $colecao[$i];
                         $voAtual->getDadosBanco($registroAtual);     
                         $voContratoAtual->getDadosBanco($registroAtual);
+                        $voDemandaPL = new voDemandaPL();
+                        $voDemandaPL->getDadosBanco($registroAtual);
                         
                         $cdSituacaoDemanda = $registroAtual[voDemanda::$nmAtrSituacao];
                         $cdSituacao = $voAtual->situacao;
@@ -269,8 +266,17 @@ function validaFormulario() {
 	                        	$classColunaSituacao = "tabeladadosdestacadoverde";
 	                        }
                         }
-                                                                        
-                        $tipo = $dominioTipoContrato->getDescricao($voContratoAtual->tipo);
+                        $contrato = "";
+                        if($voContratoAtual->cdContrato != null){                        	 
+                        		$contrato = formatarCodigoAnoComplemento($voContratoAtual->cdContrato,
+                        				$voContratoAtual->anoContrato,
+                        				$dominioTipoContrato->getDescricao($voContratoAtual->tipo));                        	
+                        	//$tipo = $tipo . ":". $contrato;
+                        }else if($voDemandaPL->cdProcLic != null){
+                        	$contrato = formatarCodigoAnoComplemento($voDemandaPL->cdProcLic,
+                        			$voDemandaPL->anoProcLic,
+                        			"");
+                        }
                         
                 ?>
                 <TR class="dados">
@@ -288,9 +294,7 @@ function validaFormulario() {
                     <TD class="tabeladados" nowrap><?php echo complementarCharAEsquerda($voAtual->cdPA, "0", TAMANHO_CODIGOS_SAFI);?></TD>
                     <TD class="tabeladados" nowrap><?php echo $voAtual->anoDemanda;?></TD>
                     <TD class="tabeladados" nowrap><?php echo complementarCharAEsquerda($voAtual->cdDemanda, "0", TAMANHO_CODIGOS);?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $voContratoAtual->anoContrato;?></TD>
-                    <TD class="tabeladados" nowrap><?php echo complementarCharAEsquerda($voContratoAtual->cdContrato, "0", TAMANHO_CODIGOS_SAFI);?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $tipo;?></TD>
+                    <TD class="tabeladados" nowrap><?php echo $contrato;?></TD>
                     <TD class="tabeladados" nowrap><?php echo documentoPessoa::getNumeroDocFormatado($colecao[$i][vopessoa::$nmAtrDoc]);?></TD>
                     <TD class="tabeladados"><?php echo $colecao[$i][$filtro->nmColNomePessoaContrato];?></TD>
                     <TD class="tabeladados" nowrap><?php echo $colecao[$i][$filtro->nmColNomePessoaResponsavel];?></TD>
