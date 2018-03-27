@@ -338,12 +338,12 @@ function encaminhar() {
                     <TH class="headertabeladados" width="1%">Atual</TH>
                     <TH class="headertabeladados" width="1%">Tipo</TH>
                     <TH class="headertabeladados" width="40%">Contrato/PL</TH>
-                    <TH class="headertabeladados"width="50%" nowrap >Título</TH>
-                    <TH class="headertabeladados" width="1%">Situação</TH>                    
+                    <TH class="headertabeladados"width="50%" nowrap >Título</TH>                    
                     <TH class="headertabeladados" width="1%">Prior.</TH>
                     <TH class="headertabeladados"width="1%" nowrap >Usuário</TH>
                     <TH class="headertabeladados"width="1%" nowrap >Dt.Abertura</TH>
                     <TH class="headertabeladados"width="1%" nowrap >Últ.Movim.</TH>
+                    <TH class="headertabeladados" width="1%">Situação</TH>                    
                 </TR>
                 <?php								
                 if (is_array($colecao))
@@ -441,12 +441,12 @@ function encaminhar() {
 					<TD class="tabeladados" nowrap><?php echo $setorDestinoAtual?></TD>
 					<TD class="tabeladados" nowrap><?php echo $tipo?></TD>
 					<TD class="tabeladados" ><?php echo $contrato?></TD>
-                    <TD class="tabeladados" ><?php echo $voAtual->texto;?></TD>
-                    <TD class="<?=$classColunaSituacao;?>" nowrap><?php echo $situacao?></TD>                    
+                    <TD class="tabeladados" ><?php echo $voAtual->texto;?></TD>                    
                     <TD class="tabeladados" nowrap><?php echo $prioridade?></TD>
                     <TD class="tabeladados" nowrap><?php echo $nmUsuario;?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($voAtual->dtReferencia);?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($dataUltimaMovimentacao);?></TD>
+                    <TD class="<?=$classColunaSituacao;?>" nowrap><?php echo $situacao?></TD>                    
                 </TR>					
                 <?php
 				}				
