@@ -138,7 +138,7 @@ class filtroConsultarDemandaPAAP extends filtroManterDemanda{
 		//se a situacao for AGUARDANDO ACAO, traga o PAAP de todo jeito
 		$filtro = $filtro . $conector
 		. " ($nmTabelaPA." .voPA::$nmAtrSituacao . "=" . dominioSituacaoPA::$CD_SITUACAO_PA_AGUARDANDO_ACAO . " OR "
-		. " ($nmTabelaPA." .voPA::$nmAtrSituacao . "<>" . dominioSituacaoPA::$CD_SITUACAO_PA_AGUARDANDO_NOTIFICACAO_ENVIADA . " AND "
+		. " ($nmTabelaPA." .voPA::$nmAtrSituacao . "=" . dominioSituacaoPA::$CD_SITUACAO_PA_AGUARDANDO_NOTIFICACAO_ENVIADA . " AND "
 		. " $nmAtributoDataPrazoEncerrado IS NOT NULL AND $nmAtributoDataPrazoEncerrado <= $dtParam)) "
 		;
 		

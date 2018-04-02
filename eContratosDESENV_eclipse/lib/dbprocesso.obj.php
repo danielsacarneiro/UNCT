@@ -202,7 +202,7 @@ class dbprocesso {
 		$query = str_replace ( constantes::$CD_NOVA_LINHA, "", $query );
 		
 		if(static::$FLAG_PRINTAR_SQL){
-			echo "$query<br>";
+			echo "<br>$query<br>";
 		}
 		
 		$retorno = $this->cDb->consultar ( $query );			

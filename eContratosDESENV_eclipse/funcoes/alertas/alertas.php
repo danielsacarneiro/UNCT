@@ -59,7 +59,7 @@ function getMensagemFimPrazoPAAP(&$count = 0){
 		$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_ATJA;
 	
 		//art. 25, inciso II, do Decreto n42.191/2015
-		$filtro->qtdDiasPrazo = 10;
+		//$filtro->qtdDiasPrazo = 10;
 	
 		$dbprocesso = new dbPA();
 		$colecao = $dbprocesso->consultarDemandaPAAP($filtro );	
