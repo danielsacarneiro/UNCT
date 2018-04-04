@@ -1,6 +1,21 @@
 <?php
 include_once(caminho_util."dominioSetor.php");
 
+function getSqDocumentoAtual($arrayParam) {
+	$ano = $arrayParam[0];
+	$setor = $arrayParam[1];
+	$tipo = $arrayParam[2];
+	$filtro = new filtroManterDocumento();
+	$filtro->ano = $ano;
+	$filtro->cdSetor = $setor;
+	$filtro->tp = $tipo;
+	
+	$dbdocumento = new dbDocumento();
+	$retorno = $dbdocumento->getProximoSqDoc($filtro); 
+
+	return $retorno;
+}
+
 function imprimeBotaoDocumento($vodocumento, $descricao){
 	
 	$vodocumento = $vodocumento->dbprocesso->consultarPorChaveVO($vodocumento, false);

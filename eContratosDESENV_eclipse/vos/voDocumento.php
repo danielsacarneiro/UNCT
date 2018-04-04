@@ -6,6 +6,7 @@ include_once (caminho_funcoes . "documento/biblioteca_htmlDocumento.php");
 include_once (caminho_util . "dominioSetor.php");
 class voDocumento extends voentidade {
 	
+	static $ID_REQ_DIV_SQATUAL = "ID_REQ_DIV_SQATUAL";
 	static $nmAtrComplemento = "nmAtrComplemento";
 	static $nmAtrCdARP = "nmAtrCdARP";
 	static $nmAtrAnoARP = "nmAtrAnoARP";

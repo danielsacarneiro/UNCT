@@ -101,7 +101,7 @@ $varColecaoGlobalSetor = "_globalColecaoSetor";
 echo getColecaoComoVariavelJS(dominioSetor::getColecao(), $varColecaoGlobalSetor);
 ?>
 
-function criarNomeDocumento(){
+function criarNomeDocumento(campoChamada){
 	//formatarNomeDocumento(sq, cdSetor, ano, tpDoc, complemento);
 	
 	ano = document.frm_principal.<?=voDocumento::$nmAtrAno?>.value;
@@ -149,6 +149,17 @@ function criarNomeDocumento(){
 	complemento = complemento + getExtensaoDocumento(tpDoc);	
 	
 	document.frm_principal.<?=voDocumento::$nmAtrLink?>.value = formatarNomeDocumento(sq, cdSetor, ano, tpDoc, complemento, colecaoSetor);
+
+	isCampoChaveDoc = false;
+	if(campoChamada != null){
+		isCampoChaveDoc = campoChamada.name == "<?=vodocumento::$nmAtrAno?>" || campoChamada.name == "<?=vodocumento::$nmAtrCdSetor?>" || campoChamada.name == "<?=vodocumento::$nmAtrTp?>";
+		//alert(isCampoChaveDoc);		
+	} 
+
+	if(isCampoChaveDoc){
+		getSqAtual();	
+	}
+	
 }
 
 /*function carregaDadosContratada(){
@@ -163,6 +174,26 @@ function criarNomeDocumento(){
 		getDadosContratadaPorDemanda(str, '<?=vopessoa::$nmAtrNome?>');
 	}
 }*/
+
+function getSqAtual(){
+	pNmCampoDiv = "<?=voDocumento::$ID_REQ_DIV_SQATUAL?>";
+	pIDCampoAno = "<?=voDocumento::$nmAtrAno?>";
+	pIDCampoSetor = "<?=voDocumento::$nmAtrCdSetor?>";
+	pIDCampoTp = "<?=voDocumento::$nmAtrTp?>";	
+	
+	//alert(inDiasUteis);
+	ano = document.getElementById(pIDCampoAno).value;
+	setor = document.getElementById(pIDCampoSetor).value;
+	tipo = document.getElementById(pIDCampoTp).value;
+	
+	if(ano != "" && setor != "" && tipo != ""){
+		chave = ano + '<?=CAMPO_SEPARADOR?>' + setor + '<?=CAMPO_SEPARADOR?>' + tipo;			
+		getSqDocumentoAtual(chave, pNmCampoDiv) ;		
+	}else{
+		//limpa o campodiv da contratada
+		limpaCampoDiv(pNmCampoDiv);		
+	}	
+}
 
 function iniciar(){
 	//alert(getDescricaoChaveDS(11,<?=$varColecaoGlobalSetor?>));
@@ -241,16 +272,18 @@ function iniciar(){
 	        </TR>	        
 			<TR>
                 <TH class="campoformulario" nowrap width="1%">Ano.Doc.:</TH>
-                <TD class="campoformulario" nowrap width="1%"><?php echo $selectExercicio->getHtmlCombo(voDocumento::$nmAtrAno,voDocumento::$nmAtrAno, $vo->ano, true, $classChaves, false, " onChange='criarNomeDocumento();' $disabledChaves $required");?></TD>
+                <TD class="campoformulario" nowrap width="1%"><?php echo $selectExercicio->getHtmlCombo(voDocumento::$nmAtrAno,voDocumento::$nmAtrAno, $vo->ano, true, $classChaves, false, " onChange='criarNomeDocumento(this);' $disabledChaves $required");?></TD>
                 <TH class="campoformulario" nowrap width="1%">Setor:</TH>
-                <TD class="campoformulario"><?php echo $comboSetor->getHtmlCombo(voDocumento::$nmAtrCdSetor,voDocumento::$nmAtrCdSetor, $vo->cdSetor, true, $classChaves, true, "onChange='criarNomeDocumento();' $disabledChaves $required");?></TD>
+                <TD class="campoformulario"><?php echo $comboSetor->getHtmlCombo(voDocumento::$nmAtrCdSetor,voDocumento::$nmAtrCdSetor, $vo->cdSetor, true, $classChaves, true, "onChange='criarNomeDocumento(this);' $disabledChaves $required");?></TD>
             </TR>            
 			<TR>
                 <TH class="campoformulario" nowrap width="1%">Tp.Documento:</TH>
-                <TD class="campoformulario"><?php echo $comboTp->getHtmlCombo(voDocumento::$nmAtrTp,voDocumento::$nmAtrTp, $vo->tp, true, $classChaves, true, " onChange='criarNomeDocumento();' $disabledChaves $required");?></TD>			
+                <TD class="campoformulario"><?php echo $comboTp->getHtmlCombo(voDocumento::$nmAtrTp,voDocumento::$nmAtrTp, $vo->tp, true, $classChaves, true, " onChange='criarNomeDocumento(this);' $disabledChaves $required");?></TD>			
                 <TH class="campoformulario" nowrap>Número:</TH>
                 <TD class="campoformulario">
-                <INPUT type="text" id="<?=voDocumento::$nmAtrSq?>" onkeyup="validarCampoNumericoPositivo(this);" name="<?=voDocumento::$nmAtrSq?>" onBlur='criarNomeDocumento();' value="<?php echo complementarCharAEsquerda($vo->sq, "0", TAMANHO_CODIGOS);?>"  class="camponaoobrigatorio" size="7" required>                
+                <INPUT type="text" id="<?=voDocumento::$nmAtrSq?>" onkeyup="validarCampoNumericoPositivo(this);" name="<?=voDocumento::$nmAtrSq?>" onBlur='criarNomeDocumento();' value="<?php echo complementarCharAEsquerda($vo->sq, "0", TAMANHO_CODIGOS);?>"  class="camponaoobrigatorio" size="7" required>
+                <div id="<?=voDocumento::$ID_REQ_DIV_SQATUAL?>">				  
+		        </div>
                 </TD>
             </TR>
 			<TR>

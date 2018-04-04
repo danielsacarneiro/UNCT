@@ -4,14 +4,23 @@ include_once 'voDocumento.php';
 
   Class dbDocumento extends dbprocesso{
             
+  	function getProximoSqDoc($filtro){
+  		//$filtro = new filtroManterDocumento();
+  		$voentidade = new voDocumento();
+  		$voentidade->cdSetor = $filtro->cdSetor; 
+  		$voentidade->ano = $filtro->ano;
+  		$voentidade->tp = $filtro->tp;
+  		return $this->getProximoSequencialChaveComposta(voDocumento::$nmAtrSq, $voentidade);
+  	}
+  	 
   	function consultarDocumento($voentidade, $filtro){
   		$isHistorico = ("S" == $filtro->cdHistorico);
   		$nmTabela = $voentidade->getNmTabelaEntidade($isHistorico);
-  		 
-  		$atributosConsulta = "*";  		   			 
-  		$querySelect = "SELECT ". $atributosConsulta;  	
-		$queryFrom = "\n FROM ". $nmTabela;
-  		
+  			
+  		$atributosConsulta = "*";
+  		$querySelect = "SELECT ". $atributosConsulta;
+  		$queryFrom = "\n FROM ". $nmTabela;
+  	
   		return $this->consultarComPaginacaoQuery($voentidade, $filtro, $querySelect, $queryFrom);
   	}
   	 
