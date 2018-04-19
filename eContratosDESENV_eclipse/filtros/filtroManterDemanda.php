@@ -8,6 +8,7 @@ class filtroManterDemanda extends filtroManter{
 
 	public $nmFiltro = "filtroManterDemanda";
 	static $NmAtrCdSetorPassagem = "NmAtrCdSetorPassagem";
+	static $NmColQtdDiasDataDtReferencia = "NmColQtdDiasDataDtReferencia";
 	static $NmColDhUltimaMovimentacao = "NmColDhUltimaMovimentacao";
 	static $NmColQtdContratos = "NmColQtdContratos";
 	static $NmColDtReferenciaSetorAtual = "NmColDtReferenciaSetorAtual";

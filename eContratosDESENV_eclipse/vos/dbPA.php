@@ -209,6 +209,7 @@ include_once (caminho_filtros."filtroManterPA.php");
     	}
     	$arrayColunasRetornadas = array (
     			$nmTabela . ".*",
+    			getDataSQLDiferencaDias(voDemanda::$nmAtrDtReferencia,"NOW()") . " AS " . filtroManterDemanda::$NmColQtdDiasDataDtReferencia,
     			"COUNT(*)  AS " . filtroManterDemanda::$NmColQtdContratos,
     			static::$nmTabelaUsuarioInclusao . "." . vousuario::$nmAtrName . "  AS " . voDemanda::$nmAtrNmUsuarioInclusao,
     			$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato,

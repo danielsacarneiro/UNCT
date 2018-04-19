@@ -3,11 +3,16 @@
 require_once (caminho_funcoes . vocontrato::getNmTabela () . "/dominioAutorizacao.php");
 require_once (caminho_lib . "phpmailer/config_email.php");
 
-function incluirColunaColecao($colecao, $tituloColuna, $valorColuna, $tipoDado = null){	
-	$colecao[] =array( constantes::$CD_COLUNA_CHAVE => $tituloColuna,
-					constantes::$CD_COLUNA_VALOR => $valorColuna,
-					constantes::$CD_COLUNA_TP_DADO =>  $tipoDado);	 
-	return $colecao; 
+function incluirColunaColecao($colecao, $tituloColuna, $valorColuna, $tipoDado = null, $valorReferencia = null, $tpValidacao = null){	
+	$colecao[] =array( 
+			constantes::$CD_COLUNA_CHAVE => $tituloColuna,
+			constantes::$CD_COLUNA_VALOR => $valorColuna,
+			constantes::$CD_COLUNA_TP_DADO =>  $tipoDado,
+			constantes::$CD_COLUNA_VL_REFERENCIA =>  $valorReferencia,
+			constantes::$CD_COLUNA_TP_VALIDACAO =>  $tpValidacao,
+			
+	);
+	return $colecao;
 }
 
 function getCorpoMensagemDemandaPorColecao($assunto, $filtro, $colunasAAcrescentar = null){	
@@ -103,6 +108,18 @@ function getCorpoMensagemPorColecao($titulo, $colecao, $colunasAExibir) {
 						$coluna_valor = complementarCharAEsquerda ( $coluna_valor, '0', $colunaTipoDado );
 					}
 
+					$colunaVlReferencia = $coluna[constantes::$CD_COLUNA_VL_REFERENCIA];
+					$colunaTpValidacao = $coluna[constantes::$CD_COLUNA_TP_VALIDACAO];
+					$classColuna = "tabeladados";
+					if($colunaVlReferencia != null){						
+						if($colunaTpValidacao == constantes::$CD_ALERTA_TP_VALIDACAO_MAIORQUE){
+							if($coluna_valor > $colunaVlReferencia){
+								$classColuna = "tabeladadosdestacadovermelho";
+							}
+							//$coluna_valor = complementarCharAEsquerda ( $coluna_valor, '0', $colunaTipoDado );
+						}						
+					}
+						
 					//para o caso de ter dados do contrato
 					if(constantes::$CD_COLUNA_CONTRATO == $coluna[constantes::$CD_COLUNA_CHAVE]){
 
@@ -124,7 +141,7 @@ function getCorpoMensagemPorColecao($titulo, $colecao, $colunasAExibir) {
 
 					}
 						
-					$mensagem .= "<TD class='tabeladados'>". $coluna_valor ."</TD>\n";
+					$mensagem .= "<TD class='$classColuna'>". $coluna_valor ."</TD>\n";
 				}
 					
 
