@@ -16,6 +16,7 @@ class filtroConsultarDemandaPAAP extends filtroManterDemanda{
 	var $voPA;
 	var $vodemanda;
 	var $qtdDiasPrazo;
+	var $InVerificarPrazo;
 	
 	// ...............................................................
 	// construtor	
@@ -26,6 +27,7 @@ class filtroConsultarDemandaPAAP extends filtroManterDemanda{
 		
 		//default
 		$this->qtdDiasPrazo = 15;
+		$this->InVerificarPrazo = constantes::$CD_SIM;
 	}	
 			
 	function getFiltroFormulario(){
@@ -115,9 +117,25 @@ class filtroConsultarDemandaPAAP extends filtroManterDemanda{
 		
 															$conector  = "\n AND ";
 		}
+		
+		if($this->inComPAAPInstaurado != null){
+			$comparacao = " IS NOT NULL ";
+			if(!getAtributoComoBooleano($this->inComPAAPInstaurado)){
+				$comparacao = " IS NULL ";
+			}
+				
+			$filtro = $filtro . $conector
+			. $nmTabelaPA . "." .voPA::$nmAtrCdPA
+			. " $comparacao "
+			;
+		
+			$conector  = "\n AND ";
+		}
 			
 		//verifica prazo encerrado da notificacao
-		$filtro = $this->getDataComparacaoPrazoEncerrado($filtro, $nmTabelaPA, $conector);
+		if(getAtributoComoBooleano($this->InVerificarPrazo)){
+			$filtro = $this->getDataComparacaoPrazoEncerrado($filtro, $nmTabelaPA, $conector);
+		}
 		$conector  = "\n AND ";		
 		
 		$this->formataCampoOrdenacao(new voDemanda());

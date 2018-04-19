@@ -138,7 +138,7 @@ function confirmar() {
 	            			maxlength="10" readonly>
 				</TD>
         	</TR>
-			<TR>
+			<!-- <TR>
 	            <TH class="campoformulario" nowrap>Dt.Notificação Nota Imputação:</TH>
 	            <TD class="campoformulario" colspan=3>
 	            	<INPUT type="text" 
@@ -149,7 +149,7 @@ function confirmar() {
 	            			size="10" 
 	            			maxlength="10" readonly>	            			
 				</TD>
-        	</TR>
+        	</TR>-->
 			<TR>
 	            <TH class="campoformulario">Dt.Notificação.Últ.Manifestação:</TH>
 	            <TD class="campoformulario" colspan=3>

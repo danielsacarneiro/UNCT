@@ -321,7 +321,7 @@ class dbprocesso {
 			// echo $filtroSQL;
 			// echo "$queryCount<br>";
 			if(static::$FLAG_PRINTAR_SQL){
-				echo "$query<br>";
+				echo "<br> ".$filtro->getNmFiltro()." $query<br>";
 			}
 			
 			// removeObjetoSessao($voentidade->getNmTabela());

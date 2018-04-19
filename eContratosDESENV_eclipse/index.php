@@ -117,6 +117,8 @@ setCabecalho($titulo);
                     				$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_CHECKLIST, 3));
                     				echo imprimeBotaoDocumento($vodocumento, "Compilação Decreto 42.191/15 - PAAP");
                     				
+                    				$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_CHECKLIST, 4));
+                    				echo imprimeBotaoDocumento($vodocumento, "Quadro Resumo Competência e Autorização Prévia SAD");
                     				?>
                     				<TR>
                         				<TD class="tabeladadosdestacadonegrito">LEGISLAÇÃO:

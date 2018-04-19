@@ -335,6 +335,10 @@ class filtroManter extends multiplosConstrutores {
 		return is_array($colecao) && count($colecao)==1 && $colecao[0]=="";		
 	}
 	
+	function getNmFiltro(){
+		return $this->nmFiltro;
+	}
+	
 }
 
 /*

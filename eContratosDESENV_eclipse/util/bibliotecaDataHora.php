@@ -88,7 +88,10 @@ function getDataContagemPrazoFinal($dtinicio, $prazo, $isDiasUteis=true) {
 	//o prazo comeca a contar do primeiro dia util seguinte
 	$dtinicio = somarOuSubtrairDias($dtinicio, 1, "+", true);
 		
-	$retorno = somarOuSubtrairDias($dtinicio, $prazo, "+", $isDiasUteis);
+	$retorno = somarOuSubtrairDias($dtinicio, $prazo-1, "+", $isDiasUteis);
+	if(!isDiaUtil($retorno)){
+		$retorno = somarOuSubtrairDias($retorno, 1, "+", true);
+	}
 	return $retorno;
 }
 

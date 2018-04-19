@@ -15,6 +15,7 @@ Class dominioTipoDemanda extends dominio{
 	static $CD_TIPO_DEMANDA_PARECER = 9;
 	
 	static $CD_TIPO_DEMANDA_CONTROLE_AQUISICAO= 11;
+	//static $CD_TIPO_DEMANDA_LICON = 12;
 	
 	static $CD_TIPO_DEMANDA_A_CLASSIFICAR = 99;
 	
