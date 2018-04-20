@@ -45,27 +45,6 @@ function getCorpoMensagemDemandaContratoColecao($assunto, $colecao, $colunasAAcr
 	return getCorpoMensagemPorColecao($assunto, $colecao, $colunas);
 }
 
-function enviarEmail($assuntoParam, $mensagemParam, $enviarEmail=true) {
-	try {
-		if ($enviarEmail && email_sefaz::$FLAG_ENVIAR_EMAIL) {
-			$mail = new email_sefaz ($assuntoParam);
-			$enviado = $mail->enviarMensagem ( email_sefaz::getListaEmailJuridico (), $mensagemParam, $assuntoParam );
-			if ($enviado) {
-				echo "Email enviado com sucesso";
-			} else {
-				echo "Não foi possível enviar o e-mail.<br /><br />";
-				echo "<b>Informações do erro:</b> <br />" . $mail->mail->ErrorInfo;
-			}
-		} else {
-			echo "Seleção: NÃO enviar email.";
-		}
-	} catch ( Exception $ex ) {
-		$msg = $ex->getMessage ();
-		echo $msg;
-	}
-	
-}
-
 function getCorpoMensagemPorColecao($titulo, $colecao, $colunasAExibir) {
 	if($colunasAExibir == null){
 		throw new excecaoGenerica("Indique pelo menos uma coluna dos dados consultados para exibir.");
@@ -81,7 +60,7 @@ function getCorpoMensagemPorColecao($titulo, $colecao, $colunasAExibir) {
 			$mensagem = "HÁ PENDÊNCIAS.<BR>";				
 			$colspan = count($colunasAExibir);				
 			// enviar o email com os registros a serem analisados
-			$mensagem .= "\n<TABLE id='table_tabeladados' class='tabeladados' cellpadding='2' cellspacing='2' BORDER=1>\n
+			$mensagem .= "\n<TABLE width='100%' id='table_tabeladados' class='tabeladados' cellpadding='2' cellspacing='2' BORDER=1>\n
 		<TBODY>";
 				
 			$mensagem .= "<TR>\n";
@@ -166,4 +145,223 @@ function getCorpoMensagemPorColecao($titulo, $colecao, $colunasAExibir) {
 	
 	return $mensagem;
 }
+
+function getEnderecoImagens(){
+	return "C:/xampp/htdocs/wordpress/UNCT/eContratosDESENV_eclipse/imagens/";
+}
+
+function getPadraoHTMLMensagem($corpoMensagem, &$mail){
+	include_once("config_lib.php");
+	include_once(caminho_util."bibliotecaHTML.php");
+	include_once(caminho_util."constantes.class.php");
+	
+	$enderecoImagem = getEnderecoImagens();	
+	//$mail = new email_sefaz ($assuntoParam);	
+	$mail->addImagem("$enderecoImagem/marca_sefaz.png", email_sefaz::$CD_IMAGEM_SEFAZLOGO);
+	
+	//inicia os parametros
+	//inicio();
+	$titulo = "EMAIL INFORMATIVO";
+	$cabecalho = setCabecalhoEmail($titulo, $mail);
+	$html =
+	"<!DOCTYPE html>
+	<HTML>
+	<HEAD>
+	".
+	getStyleEmail()
+	.
+	"			
+	<SCRIPT language='JavaScript' type='text/javascript' src='<?=caminho_js?>tooltip.js'></SCRIPT>
+	<SCRIPT language='JavaScript' type='text/javascript' src='<?=caminho_js?>biblioteca_funcoes_principal.js'></SCRIPT>
+	</HEAD>"
+			. setTituloPagina($titulo) . "
+	<BODY CLASS='paginadados'>
+		<FORM name='frm_principal' method='post'>
+			<INPUT type='hidden' id='id_contexto_sessao' name='id_contexto_sessao' value=''>
+			<INPUT type='hidden' id='evento' name='evento' value=''>
+				<TABLE id='table_conteiner' class='conteiner' cellpadding='0' cellspacing='0'>
+	    			<TBODY>
+	        			" . $cabecalho . "
+	        			<TR>
+	            			<TD class='conteinerconteudodados'>
+	            			 <DIV id='div_conteudodados' class='conteudodados'>
+								<TABLE id='table_conteudodados' class='conteudodados' cellpadding='0' cellspacing='0'>
+								"
+	        					. $corpoMensagem
+	        					. "
+	            				</TABLE>
+	            			</TD>
+	        			</TR>
+	    			</TBODY>
+				</TABLE>
+			</FORM>
+	</BODY>
+	</HTML>";
+
+	return $html;
+
+}
+
+function enviarEmail($assuntoParam, $mensagemParam, $enviarEmail=true) {
+	try {
+		if ($enviarEmail && email_sefaz::$FLAG_ENVIAR_EMAIL) {
+			$mail = new email_sefaz ($assuntoParam, email_sefaz::getListaEmailJuridico ());
+			$mensagemParam = getPadraoHTMLMensagem($mensagemParam, $mail);
+			
+			$enviado = $mail->enviarMensagem ($mensagemParam, $assuntoParam );
+			if ($enviado) {
+				echo "Email enviado com sucesso";
+			} else {
+				echo "Não foi possível enviar o e-mail.<br /><br />";
+				echo "<b>Informações do erro:</b> <br />" . $mail->mail->ErrorInfo;
+			}
+		} else {
+			echo "Seleção: NÃO enviar email.";
+		}
+	} catch ( Exception $ex ) {
+		$msg = $ex->getMessage ();
+		echo $msg;
+	}
+
+}
+
+function getStyleEmail(){
+	$html = "	
+<style type='text/css'>
+TABLE.conteiner {
+		height: 98%;
+		width: 100%;
+		text-align: left;
+		border-width: 0;
+		vertical-align: top;
+	}
+
+TABLE.conteiner table {
+		border-collapse: collapse
+}
+		
+TABLE.conteudodados {
+	width: 100%;
+	background-color: #ffffff;
+	text-align: left;
+	vertical-align: top;
+}
+			
+TD.conteinerconteudodados {
+	height: 100%;
+	vertical-align: top;
+}
+		
+/*  Representa o header de uma tabela de visualização de dados */
+TD.tabeladados,TD.tabeladadosalinhadodireita,TD.tabeladadosalinhadocentro,TD.tabeladadosdestacado,TD.tabeladadosdestacadoamarelo, TD.tabeladadosdestacadoverde,TD.tabeladadosdestacadovermelho,TD.tabeladadosdestacadoazulclaro,TD.tabeladadosdestacadonegrito
+	{
+	color: #222;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 13px;
+	/*font-weight: bolder;*/
+	border-right: 1px solid #D3D3D5;
+	border-bottom: 1px solid #D3D3D5;
+	padding: 4px;
+	vertical-align: top;
+}
+		
+TD.tabeladados,TD.tabeladadosalinhadodireita,TD.tabeladadosalinhadocentro,TD.tabeladadosdestacado,TD.tabeladadosdestacadoverde,TD.tabeladadosdestacadovermelho,TD.tabeladadosdestacadoazulclaro,TD.tabeladadosdestacadonegrito{
+		color: #000;
+		border: 1px solid #aaa;
+}
+		
+TD.tabeladadosdestacadovermelho {
+	text-align: left;
+	background-color: red;
+	color: white;
+}
+		
+TD.tabeladadosdestacadonegrito {
+	text-align: center;
+	font-weight: bolder;
+}
+
+/* Totalizador para campos calculados na tabela de resultado da interface de consulta*/
+TD.totalizadortabeladadosalinhadodireita {
+	background-color: #cccccc;
+	color: #000000;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 13px;
+	font-weight: bolder;
+	text-align: right;
+	border-width: 1px;
+	border-color: #ffffff;
+	border-style: solid;
+	padding-left: 3px;
+}
+
+TABLE.headertabeladados {
+	width: 100%;
+	height: 32px;
+	background-color: #ffffff;
+	text-align: left;
+	background-color: black;
+	vertical-align: top;
+}
+
+
+TD.conteinerheadertabeladados {
+	height: 32px;
+	vertical-align: top;
+}
+
+/*  Representa o header de uma tabela de visualização de dados
+ */
+TH.headertabeladados,TH.headertabeladadosalinhadodireita,TH.headertabeladadosalinhadocentro
+	{
+	background: #006CA9;
+	font-weight: bold;
+	color: #fff;
+	text-shadow: 0 1px 1px #194b7e;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#00599C),
+		to(#006CA9) );
+	background-image: -webkit-linear-gradient(#00599C, #006CA9);
+	background-image: -moz-linear-gradient(#00599C, #006CA9);
+	background-image: -ms-linear-gradient(#00599C, #006CA9);
+	background-image: -o-linear-gradient(#00599C, #006CA9);
+	background-image: linear-gradient(#00599C, #006CA9);
+	/*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00599C', endColorstr='#006CA9',GradientType=0 ); /* IE6-9 */
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	text-align: left;
+	padding: 0.2em 4px;
+	border: 1px solid #FFF;
+	font-weight: bold;
+	border-collapse: collapse;
+}
+
+/*  Representa o header de uma tabela de visualização de dados
+ */
+TH.headertabeladados {
+	text-align: left;
+}
+
+/*  Representa o header de uma tabela de visualização de dados
+ */
+TH.headertabeladadosalinhadodireita {
+	text-align: right;
+}
+
+/*  Representa o header de uma tabela de visualização de dados
+ */
+TH.headertabeladadosalinhadocentro {
+	text-align: center;
+}
+TH.headertabeladados,TH.headertabeladadosalinhadodireita,TH.headertabeladadosalinhadocentro {
+		text-shadow: none;
+		color: #000;
+		background: #e5e8f0;
+		border: solid 1px #777;
+}
+	</style>
+";
+
+	return $html;
+}
+
 ?>

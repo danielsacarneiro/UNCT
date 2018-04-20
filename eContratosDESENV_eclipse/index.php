@@ -7,7 +7,7 @@ try{
 //inicia os parametros
 inicio();
 
-$titulo = "MENU de Funções UNCT";
+$titulo = "MENU de Funções";
 setCabecalho($titulo);
 ?>
 
@@ -97,7 +97,6 @@ setCabecalho($titulo);
             			<TD class="conteinerconteudodados">
             			 <DIV id="div_conteudodados" class="conteudodados">
 							<TABLE id="table_conteudodados" class="conteudodados" cellpadding="0" cellspacing="0">
-									<?=$endereco?>
                     				<TR>
                         				<TD valign="top" bgcolor="#A5B9D7">
 											<SCRIPT>f.escrever(false, 0);</SCRIPT>

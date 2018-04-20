@@ -8,6 +8,7 @@ require_once ("class.smtp.php");
 class email_sefaz extends multiplosConstrutores{
 	
 	static $FLAG_ENVIAR_EMAIL = true;
+	static $CD_IMAGEM_SEFAZLOGO = "SEFAZ_LOGO";
 	
 	private $Host;
 	private $Port;
@@ -30,6 +31,10 @@ class email_sefaz extends multiplosConstrutores{
 		
 		//$this->getConfigEmailSefaz("correio.sefaz.pe.gov.br", "25", 'daniel.ribeiro@sefaz.pe.gov.br', 'C@rbeiro03', $str);
 		$this->getConfigEmailSefaz("correio.sefaz.pe.gov.br", "25", 'atja@sefaz.pe.gov.br', '', $str);
+	}
+	function __construct2($texto, $listaDestinatarios) {
+		$this->__construct1($texto);
+		$this->mail = $this->criarEmail($listaDestinatarios);
 	}
 	private function getConfigEmailSefaz($host, $port, $user, $pwd, $remetente) {
 		$this->Host = $host;
@@ -85,8 +90,13 @@ class email_sefaz extends multiplosConstrutores{
 		return $mail; 
 	}
 	
-	function enviarMensagem($listaDestinatarios, $mensagem, $assunto = null){
-		$mail = $this->criarEmail($listaDestinatarios);		
+	function addImagem($imagem, $cid){
+		$this->mail->AddEmbeddedImage($imagem, $cid, $imagem);		
+	}
+	
+	function enviarMensagem($mensagem, $assunto = null, $listaDestinatarios = null){
+		//$mail = $this->criarEmail($listaDestinatarios);		
+		$mail = $this->mail;
 		// Define a mensagem (Texto e Assunto)
 		// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 		if($assunto == null){

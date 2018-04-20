@@ -50,6 +50,9 @@ function setTituloPagina($titulo) {
 function setCabecalho($titulo) {
 	return setCabecalhoPorNivel ( $titulo, null );
 }
+function setCabecalhoEmail($titulo, $mail) {
+	return setCabecalhoPorNivel ( $titulo, null , $mail);
+}
 function setTituloPaginaPorNivel($titulo, $qtdNiveisAcimaEmSeEncontraPagina) {
 	$pastaCSS = caminho_css;
 	$pastaCSS = subirNivelPasta ( $pastaCSS, $qtdNiveisAcimaEmSeEncontraPagina );
@@ -78,7 +81,7 @@ function getPastaImagensPorNivel($qtdNiveisAcimaEmSeEncontraPagina) {
 	$pastaImagens = subirNivelPasta ( caminho_imagens, $qtdNiveisAcimaEmSeEncontraPagina );
 	return $pastaImagens;
 }
-function setCabecalhoPorNivel($titulo, $qtdNiveisAcimaEmSeEncontraPagina) {
+function setCabecalhoPorNivel($titulo, $qtdNiveisAcimaEmSeEncontraPagina, $mail = null) {
 	// se precisar fazer o mesmo para pasta menu
 	$pastaImagens = getPastaImagensPorNivel ( $qtdNiveisAcimaEmSeEncontraPagina );
 	$pastaMenu = subirNivelPasta ( caminho_menu, $qtdNiveisAcimaEmSeEncontraPagina );
@@ -103,32 +106,52 @@ function setCabecalhoPorNivel($titulo, $qtdNiveisAcimaEmSeEncontraPagina) {
 	$minute = date ( "i" );
 	$diaExtenso = strftime ( '%A, %d de %B de %Y', strtotime ( 'today' ) ) . ", " . $hour . ":" . $minute;
 	
+	$ehMontagemPorEmail = $mail != null; 
+	if(!$ehMontagemPorEmail){
+		$imagemEntrar = "<img  title='Entrar' src='" . $pastaImagens . "botao_home_laranja.gif' width='20' height='20'>";
+		$imagemSair = "<img  title='Sair' src='" . $pastaImagens . "logout.gif' width='25' height='20'>";
+		$imagemWordPress = "<img  title='WORDPRESS' src='" . $pastaImagens . "w-logo-white.png' width='25' height='20'>";
+		$imagemSefaz = "<img id=imgLogotipoSefaz src='" . $pastaImagens . "marca_sefaz.png' alt='SEFAZ-PE'>";
+	}else{
+		/*$imagemEntrar = "<img  title='Entrar' src='" . $pastaImagens . "botao_home_laranja.gif' width='20' height='20'>";
+		$imagemSair = "<img  title='Sair' src='" . $pastaImagens . "logout.gif' width='25' height='20'>";
+		$imagemWordPress = "<img  title='WORDPRESS' src='" . $pastaImagens . "w-logo-white.png' width='25' height='20'>";*/		
+		$imagemSefaz = "<img src='cid:".email_sefaz::$CD_IMAGEM_SEFAZLOGO."'>";		
+		;
+	}
+	
 	if(!isLupa()){
 		$linkmenu = ", <a class='linkbranco' href='" . $pastaMenu . "index.php' >Menu</a> ";
-		$linkmenu .= "<a href='" . $pastaMenu . "login.php?funcao=I' ><img  title='Entrar' src='" . $pastaImagens . "botao_home_laranja.gif' width='20' height='20'></a>
-		<a href='" . $pastaMenu . "login.php?funcao=O' ><img  title='Sair' src='" . $pastaImagens . "logout.gif' width='25' height='20'></a>";
+		$linkmenu .= "<a href='" . $pastaMenu . "login.php?funcao=I' >$imagemEntrar</a>
+		<a href='" . $pastaMenu . "login.php?funcao=O' >$imagemSair</a>";
 		
 		if (isUsuarioAdmin ()) {
-			$linkmenu .= "<a href='http://sf300451/wordpress/wp-admin/' target='_blank'><img  title='WORDPRESS' src='" . $pastaImagens . "w-logo-white.png' width='25' height='20'></a>";
+			$linkmenu .= "<a href='http://sf300451/wordpress/wp-admin/' target='_blank'>$imagemWordPress</a>";
 		}
 		
 	}
-		
+	
+	$nmSetor = "SAFI/DILC-DIRETORIA DE LICITAÇÕES E CONTRATOS";
+	
+	if(!$ehMontagemPorEmail){
+		$colspan = "colspan=2";
+	}
+	
 	$cabecalho = "		<TABLE id='table_conteiner' class='conteiner' cellpadding='0' cellspacing='0'>
                         <TBODY>
                                 <TR>
-                                <TH class=headertabeladados colspan=2>
-                                    <img id=imgLogotipoSefaz src='" . $pastaImagens . "marca_sefaz.png' alt='SEFAZ-PE'> SAFI - UNIDADE DE CONTRATOS, " . $diaExtenso . "
+                                <TH class=headertabeladados $colspan>
+                                    $imagemSefaz $nmSetor, " . $diaExtenso . "
                                 </TH>
                                 </TR>                                
                                 <TR>
-                                <TH class=headertabeladados>&nbsp;" . constantes::$nomeSistema . "$titulo<br></TH>
-                                <TH class=headertabeladadosalinhadodireita width='1%' nowrap>&nbsp" 
-                                . name_user . "$linkmenu";
-	
+                                <TH class=headertabeladados>&nbsp;" . constantes::$nomeSistema . "$titulo<br></TH>";
+                                
+	if(!$ehMontagemPorEmail){
+		$cabecalho .= "<TH class=headertabeladadosalinhadodireita width='1%' nowrap>&nbsp" . name_user . "$linkmenu" . "</TH>";
+	}
 	
 	$cabecalho .= "\n
-                                </TH>                                                                                                
                                 </TR>
                         </TBODY>
                     </TABLE>";
@@ -136,6 +159,8 @@ function setCabecalhoPorNivel($titulo, $qtdNiveisAcimaEmSeEncontraPagina) {
 	// <a href='http:/wordpress' ><img title='Home' src='imagens/botao_home_laranja.png' width='20' height='20'></a>
 	
 	define ( 'cabecalho', $cabecalho );
+	//retorna para a funcao setCabecalhoEmail
+	return $cabecalho;
 }
 function complementarCharAEsquerda($texto, $char, $qtdfinal) {
 	$retorno = $texto;
