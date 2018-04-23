@@ -69,7 +69,7 @@ class voDocumento extends voentidade {
 		
 		return $query;
 	}
-	function getAtributosFilho() {
+	static function getAtributosFilho() {
 		$retorno = array (
 				self::$nmAtrSq,
 				self::$nmAtrCdSetor,
@@ -80,7 +80,7 @@ class voDocumento extends voentidade {
 		
 		return $retorno;
 	}
-	function getAtributosChavePrimaria() {
+	static function getAtributosChavePrimaria() {
 		$retorno = array (
 				self::$nmAtrSq,
 				self::$nmAtrCdSetor,

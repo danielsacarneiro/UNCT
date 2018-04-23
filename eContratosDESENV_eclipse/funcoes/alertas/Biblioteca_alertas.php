@@ -167,15 +167,18 @@ function getPadraoHTMLMensagem($corpoMensagem, &$mail){
 	"<!DOCTYPE html>
 	<HTML>
 	<HEAD>
-	".
+	". 
 	getStyleEmail()
 	.
 	"			
 	<SCRIPT language='JavaScript' type='text/javascript' src='<?=caminho_js?>tooltip.js'></SCRIPT>
 	<SCRIPT language='JavaScript' type='text/javascript' src='<?=caminho_js?>biblioteca_funcoes_principal.js'></SCRIPT>
 	</HEAD>"
-			. setTituloPagina($titulo) . "
-	<BODY CLASS='paginadados'>
+	. setTituloPagina($titulo) 
+	//.
+	//"\n<LINK href='http://sf300451/wordpress/UNCT/eContratosDesenv_eclipse/lib/css/sefaz_pe.css' rel='stylesheet' type='text/css'>\n"
+	.
+	"<BODY CLASS='paginadados'>
 		<FORM name='frm_principal' method='post'>
 			<INPUT type='hidden' id='id_contexto_sessao' name='id_contexto_sessao' value=''>
 			<INPUT type='hidden' id='evento' name='evento' value=''>

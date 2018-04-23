@@ -172,6 +172,8 @@ function confirmar() {
 				$filtroTramitacaoContrato->vocontrato->anoContrato = $vo->anoContrato;
 				$filtroTramitacaoContrato->vocontrato->tipo = $vo->tipo;				
 				$filtroTramitacaoContrato->temDocumentoAnexo = constantes::$CD_SIM;
+				//agrupa por documentos
+				$filtroTramitacaoContrato->groupby = voDocumento::getAtributosChavePrimaria();
 				$filtroTramitacaoContrato->TemPaginacao = false;			
 				
 				$colecaoTramitacao = $vo->dbprocesso->consultarDemandaTramitacaoContrato($filtroTramitacaoContrato);

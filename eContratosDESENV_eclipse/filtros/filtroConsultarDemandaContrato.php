@@ -4,6 +4,7 @@ include_once (caminho_lib . "filtroManter.php");
 include_once (caminho_vos . "voDemandaTramitacao.php");
 require_once (caminho_funcoes . vocontrato::getNmTabela () . "/dominioAutorizacao.php");
 class filtroConsultarDemandaContrato extends filtroManterDemanda {
+	
 	public $nmFiltro = "filtroConsultarDemandaContrato";
 	function getFiltroConsultaSQL($comAtributoOrdenacao = null) {
 		$filtro = "";
