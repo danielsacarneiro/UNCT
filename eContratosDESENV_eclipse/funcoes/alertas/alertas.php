@@ -32,7 +32,7 @@ function getMensagemEdital(&$count = 0){
 		$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_ATJA;
 		$filtro->cdAtrOrdenacao = filtroManterDemanda::$NmColDtReferenciaSetorAtual;
 		
-		$msg = getCorpoMensagemDemandaPorColecao($assunto, $filtro, null);
+		$msg = getCorpoMensagemDemandaPorColecao($assunto, $filtro, null, true);
 	
 	} catch ( Exception $ex ) {
 		$msg = $ex->getMessage ();

@@ -15,7 +15,7 @@ function incluirColunaColecao($colecao, $tituloColuna, $valorColuna, $tipoDado =
 	return $colecao;
 }
 
-function getCorpoMensagemDemandaPorColecao($assunto, $filtro, $colunasAAcrescentar = null){	
+function getCorpoMensagemDemandaPorColecao($assunto, $filtro, $colunasAAcrescentar = null, $isPrioritario = false){	
 	$voDemanda = new voDemanda ();
 	$dbprocesso = $voDemanda->dbprocesso;
 	$colecao = $dbprocesso->consultarTelaConsulta ( $voDemanda, $filtro );
@@ -28,7 +28,7 @@ function getCorpoMensagemDemandaPorColecao($assunto, $filtro, $colunasAAcrescent
 		$colunas = array_merge($colunas, $colunasAAcrescentar);
 	}
 	
-	return getCorpoMensagemPorColecao($assunto, $colecao, $colunas);
+	return getCorpoMensagemPorColecao($assunto, $colecao, $colunas, $isPrioritario);
 }
 
 function getCorpoMensagemDemandaContratoColecao($assunto, $colecao, $colunasAAcrescentar=null) {
@@ -45,7 +45,7 @@ function getCorpoMensagemDemandaContratoColecao($assunto, $colecao, $colunasAAcr
 	return getCorpoMensagemPorColecao($assunto, $colecao, $colunas);
 }
 
-function getCorpoMensagemPorColecao($titulo, $colecao, $colunasAExibir) {
+function getCorpoMensagemPorColecao($titulo, $colecao, $colunasAExibir, $isPrioritario=false) {
 	if($colunasAExibir == null){
 		throw new excecaoGenerica("Indique pelo menos uma coluna dos dados consultados para exibir.");
 	}
@@ -89,7 +89,12 @@ function getCorpoMensagemPorColecao($titulo, $colecao, $colunasAExibir) {
 
 					$colunaVlReferencia = $coluna[constantes::$CD_COLUNA_VL_REFERENCIA];
 					$colunaTpValidacao = $coluna[constantes::$CD_COLUNA_TP_VALIDACAO];
-					$classColuna = "tabeladados";
+					
+					if($isPrioritario)
+						$classColuna = "tabeladadosdestacadovermelho";
+					else					
+						$classColuna = "tabeladados";
+					
 					if($colunaVlReferencia != null){						
 						if($colunaTpValidacao == constantes::$CD_ALERTA_TP_VALIDACAO_MAIORQUE){
 							if($coluna_valor > $colunaVlReferencia){
