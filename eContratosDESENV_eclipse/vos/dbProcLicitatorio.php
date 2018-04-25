@@ -13,11 +13,29 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
     
   	function consultarPorChaveTela($vo, $isHistorico) {
   		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
+  		$nmTabelaDemandaPL = voDemandaPL::getNmTabela();
+  		$nmTabelaDemanda = voDemanda::getNmTabela();
   	
   		$arrayColunasRetornadas = array (
   				$nmTabela . ".*",  
+  				$nmTabelaDemanda . "." . voDemanda::$nmAtrCd,
+  				$nmTabelaDemanda . "." . voDemanda::$nmAtrAno,
   		);
-  		  		  		 		
+  		
+  		$queryFrom .= "\n INNER JOIN ". $nmTabelaDemandaPL;
+  		$queryFrom .= "\n ON $nmTabela." . voProcLicitatorio::$nmAtrCd . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrCdProcLic;
+  		$queryFrom .= "\n AND $nmTabela." . voProcLicitatorio::$nmAtrAno . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrAnoProcLic;
+  		  		
+  		$queryFrom .= "\n INNER JOIN (";
+  		$queryFrom .= " SELECT * FROM $nmTabelaDemanda WHERE " . voDemanda::$nmAtrTipo . "=" . dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL;
+  		$queryFrom .= ") $nmTabelaDemanda";
+  		$queryFrom .= "\n ON $nmTabelaDemanda." . voDemanda::$nmAtrCd . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrCdDemanda;
+  		$queryFrom .= "\n AND $nmTabelaDemanda." . voDemanda::$nmAtrAno . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrAnoDemanda;
+  		
+  		/*$queryFrom .= "\n INNER JOIN ". $nmTabelaDemanda;
+  		$queryFrom .= "\n ON $nmTabelaDemandaPL." . voDemandaPL::$nmAtrCdDemanda . "=$nmTabelaDemanda." . voDemanda::$nmAtrCd;
+  		$queryFrom .= "\n AND $nmTabelaDemandaPL." . voDemandaPL::$nmAtrAnoDemanda . "=$nmTabelaDemanda." . voDemanda::$nmAtrAno;*/
+  		
   		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryFrom, $isHistorico );
   	}
     
@@ -258,7 +276,7 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
     }
     
     function validarAlteracao($vo) {
-    	//$vo = new voPA();    	
+    	/*//$vo = new voPA();    	
     	//$retorno = true;    	
     	$vodemanda = $this->consultarVODemanda($vo);
     	//$vodemanda = new voDemanda();
@@ -284,7 +302,7 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
     			throw new excecaoGenerica("Só é permitido encerrar o processo que tenha sido publicado.");
     		}
     	}     	
-    	//return $retorno;
+    	//return $retorno;*/;
     }
     
     function alterar($vo) {
@@ -323,33 +341,28 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
         $retorno = "";
         $sqlConector = "";
                 
-        if($vo->obs != null){
-            $retorno.= $sqlConector . voPA::$nmAtrObservacao . " = " . $this->getVarComoString($vo->obs);
+        if($vo->objeto != null){
+            $retorno.= $sqlConector . voProcLicitatorio::$nmAtrObjeto . " = " . $this->getVarComoString($vo->objeto);
             $sqlConector = ",";
         }
         
-        if($vo->publicacao != null){
-        	$retorno.= $sqlConector . voPA::$nmAtrPublicacao . " = " . $this->getVarComoString($vo->publicacao);
+        if($vo->obs != null){
+        	$retorno.= $sqlConector . voProcLicitatorio::$nmAtrObservacao . " = " . $this->getVarComoString($vo->obs);
         	$sqlConector = ",";
         }
-        
+                
         if($vo->dtAbertura != null){
-        	$retorno.= $sqlConector . voPA::$nmAtrDtAbertura . " = " . $this->getVarComoData($vo->dtAbertura);
+        	$retorno.= $sqlConector . voProcLicitatorio::$nmAtrDtAbertura . " = " . $this->getVarComoData($vo->dtAbertura);
         	$sqlConector = ",";
         }
         
-        if($vo->dtNotificacao != null){
-        	$retorno.= $sqlConector . voPA::$nmAtrDtNotificacao . " = " . $this->getVarComoData($vo->dtNotificacao);
-        	$sqlConector = ",";
-        }
-        
-        if($vo->cdResponsavel != null){
-        	$retorno.= $sqlConector . voPA::$nmAtrCdResponsavel. " = " . $this->getVarComoNumero($vo->cdResponsavel);
+        if($vo->dtPublicacao != null){
+        	$retorno.= $sqlConector . voProcLicitatorio::$nmAtrDtPublicacao . " = " . $this->getVarComoData($vo->dtPublicacao);
         	$sqlConector = ",";
         }
         
         if($vo->situacao != null){
-        	$retorno.= $sqlConector . voPA::$nmAtrSituacao. " = " . $this->getVarComoNumero($vo->situacao);
+        	$retorno.= $sqlConector . voProcLicitatorio::$nmAtrSituacao. " = " . $this->getVarComoNumero($vo->situacao);
         	$sqlConector = ",";
         }
         

@@ -127,8 +127,8 @@ function alterar() {
 	            <TD class="campoformulario" nowrap width="1%" colspan="3">
 	            <?php
 
-	            echo "Ano: " . $selectExercicio->getHtmlCombo(voDemanda::$nmAtrAno,voDemanda::$nmAtrAno, $filtro->anoDemanda, true, "camponaoobrigatorio", false, "");?>
-			  Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voDemanda::$nmAtrCd?>" name="<?=voDemanda::$nmAtrCd?>"  value="<?php echo(complementarCharAEsquerda($filtro->cdDemanda, "0", TAMANHO_CODIGOS));?>"  class="camponaoobrigatorio" size="6" maxlength="5">
+	            echo "Ano: " . $selectExercicio->getHtmlCombo(voDemandaPL::$nmAtrAnoDemanda,voDemandaPL::$nmAtrAnoDemanda, $filtro->anoDemanda, true, "camponaoobrigatorio", false, "");?>
+			  Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voDemandaPL::$nmAtrCdDemanda?>" name="<?=voDemandaPL::$nmAtrCdDemanda?>"  value="<?php echo(complementarCharAEsquerda($filtro->cdDemanda, "0", TAMANHO_CODIGOS));?>"  class="camponaoobrigatorio" size="6" maxlength="5">
 			  </TD>			  
 			</TR>			            
 	        <?php	        

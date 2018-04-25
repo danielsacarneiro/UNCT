@@ -84,7 +84,7 @@ class filtroManterProcLicitatorio extends filtroManter{
 		
 		if($this->cdDemanda != null){
 			$filtro = $filtro . $conector
-			. $nmTabela. "." .voDemandaPL::$nmAtrCdDemanda
+			. $nmTabelaDemanda. "." .voDemanda::$nmAtrCd
 			. " = "
 					. $this->cdDemanda;
 		
@@ -93,7 +93,7 @@ class filtroManterProcLicitatorio extends filtroManter{
 		
 		if($this->anoDemanda != null){
 			$filtro = $filtro . $conector
-			. $nmTabela. "." .voDemandaPL::$nmAtrCdDemanda
+			. $nmTabelaDemanda. "." .voDemanda::$nmAtrCd
 			. " = "
 					. $this->anoDemanda;
 		
