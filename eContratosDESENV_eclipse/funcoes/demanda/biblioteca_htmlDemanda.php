@@ -21,7 +21,8 @@ function getDemandaDetalhamentoComLupa($voDemanda, $temLupaDet, $exibeTipoDemand
 	if($exibeTipoDemanda){
 		if($voDemanda->tipo != null && $exibeTipoDemanda){
 			$comboTipo = new select(dominioTipoDemanda::getColecao());
-			echo "Tipo: " . $comboTipo->getHtmlCombo("","", $voDemanda->tipo, true, "camporeadonly", false, " disabled ");
+			//echo "Tipo: " . $comboTipo->getHtmlCombo("","", $voDemanda->tipo, true, "camporeadonly", false, " disabled ");
+			echo "Tipo: " . getInputText("", "", dominioTipoDemanda::getDescricaoStaticTeste($voDemanda->tipo),constantes::$CD_CLASS_CAMPO_READONLY);
 			
 			if ($voDemanda!=null && $temLupaDet) {
 				//$voDemanda = new voDemanda();
