@@ -83,9 +83,12 @@ function getDescricaoChaveDS(cd, colecaoCdDS){
 	
 }
 
-function formatarCodigoDocumento(sq, cdSetor, ano, tpDoc, colecaoSetor){
+function formatarCodigoDocumento(sq, cdSetor, ano, tpDoc, colecaoSetor, separador){
 	str = "";
 	conector = "";
+	if(separador == null){
+		separador = "-";
+	}
 	if(cdSetor != null && cdSetor != ""){
 		//str = str + conector + getDescricaoSetor(cdSetor);
 		if(colecaoSetor == null){
@@ -107,12 +110,12 @@ function formatarCodigoDocumento(sq, cdSetor, ano, tpDoc, colecaoSetor){
 	
 	if(sq != null && sq != ""){
 		str = str + conector + completarNumeroComZerosEsquerda(sq, TAMANHO_CODIGOS_DOCUMENTOS);
-		conector = "-";
+		conector = separador;
 	}
 
 	if(ano != null && ano != ""){
 		str = str + conector + ano.substr(2,2);
-		conector = "-";
+		conector = separador;
 	}
 			
 	return str;	

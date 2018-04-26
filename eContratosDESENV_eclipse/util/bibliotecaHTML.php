@@ -825,7 +825,7 @@ function getHTMLTextoObjetoNaoEncontrato(){
 	return "<INPUT type='text' class='camporeadonly' size=30 readonly value='NÃO ENCONTRADO'>\n";
 }
 
-function getCampoDadosVOAnoCd($vo, $arrayParametroXNmAtributo, $nmClass = "camponaoobrigatorio", $complementoHTML=null) {
+function getCampoDadosVOAnoCd($vo, $arrayParametroXNmAtributo, $nmClass = "camponaoobrigatorio", $arrayComplementoHTML=null) {
 	if($arrayParametroXNmAtributo == null)
 		throw new excecaoGenerica("Atributo de parâmetros de códigos vazio.");
 
@@ -842,8 +842,8 @@ function getCampoDadosVOAnoCd($vo, $arrayParametroXNmAtributo, $nmClass = "campo
 				$nmClass,
 		);
 		$arrayComplementoHTML = array (
-				" $required onBlur=$chamadaFuncaoJS ",
-				" $required onChange=$chamadaFuncaoJS "
+				" $required $arrayComplementoHTML[0] ",
+				" $required $arrayComplementoHTML[1] "
 		);
 
 		$chaves = array_keys($arrayParametroXNmAtributo);

@@ -53,12 +53,12 @@ function getPAAPDetalhamento($vo,$temLupa=true) {
 	
 }
 
-function getCampoDadosPAAP($voPAAP, $nmClass = "camponaoobrigatorio", $complementoHTML=null) {
+function getCampoDadosPAAP($voPAAP, $nmClass = "camponaoobrigatorio", $arrayComplementoHTML=null) {
 	$arrayParametroXNmAtributo = array ("cdPA" => voPA::$nmAtrCdPA,
 			"anoPA" => voPA::$nmAtrAnoPA
 	);
 
-	getCampoDadosVOAnoCd($voPAAP, $arrayParametroXNmAtributo, $nmClass, $complementoHTML);
+	getCampoDadosVOAnoCd($voPAAP, $arrayParametroXNmAtributo, $nmClass, $arrayComplementoHTML);
 }
 
 function getComboSituacaoPA($idCampo, $nmCampo, $cdOpcaoSelecionada, $classCampo, $tagHtml){

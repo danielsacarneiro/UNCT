@@ -33,6 +33,13 @@
      imprimeResultado(result, link);     
  }
 
+ function getTpDocumentoPorSetorAjax(chave, idDivResultado) {
+     var result = document.getElementById(idDivResultado);
+     link = "../documento/campoTpDocumentoAtual.php?chave=" + chave;
+     //alert(link);
+     imprimeResultado(result, link);     
+ }
+
  /**
   * consulta os gestores para serem atribuidos a um responsavel
   * @param idCampoGestor

@@ -101,14 +101,32 @@ $varColecaoGlobalSetor = "_globalColecaoSetor";
 echo getColecaoComoVariavelJS(dominioSetor::getColecao(), $varColecaoGlobalSetor);
 ?>
 
+function getDSPAAP(){
+
+	anoPAAP = document.frm_principal.<?=voPA::$nmAtrAnoPA?>.value;
+	cdPAAP = document.frm_principal.<?=voPA::$nmAtrCdPA?>.value;
+
+	retorno = "";
+	if(anoPAAP != "" && cdPAAP != ""){
+		retorno = "PAAP." + formatarCodigoDocumento(cdPAAP, null, anoPAAP, null, null, ".");
+	}
+	return retorno;
+}
+
+
 function criarNomeDocumento(campoChamada){
 	//formatarNomeDocumento(sq, cdSetor, ano, tpDoc, complemento);
 	
-	ano = document.frm_principal.<?=voDocumento::$nmAtrAno?>.value;
-	cdSetor = document.frm_principal.<?=voDocumento::$nmAtrCdSetor?>.value;
-	tpDoc = document.frm_principal.<?=voDocumento::$nmAtrTp?>.value;
-	sq = document.frm_principal.<?=voDocumento::$nmAtrSq?>.value;
-	textoComplemento = document.frm_principal.<?=voDocumento::$nmAtrComplemento?>.value;
+	var ano = document.frm_principal.<?=voDocumento::$nmAtrAno?>.value;
+	var cdSetor = document.frm_principal.<?=voDocumento::$nmAtrCdSetor?>.value;	
+	var sq = document.frm_principal.<?=voDocumento::$nmAtrSq?>.value;
+	var tpDoc = "";
+
+	try{
+		tpDoc = document.frm_principal.<?=voDocumento::$nmAtrTp?>.value;
+	}catch(e){
+		tpDoc = "";
+	}
 
 	anoContrato = document.frm_principal.<?=vocontrato::$nmAtrAnoContrato?>.value;
 	cdContrato = document.frm_principal.<?=vocontrato::$nmAtrCdContrato?>.value;
@@ -128,6 +146,7 @@ function criarNomeDocumento(campoChamada){
 	
 	colecaoSetor=<?=$varColecaoGlobalSetor?>;
 	nome = "";
+	
 	if(isContrato){
 		nome = getNomePessoaContratada('<?=vopessoa::$ID_NOME_DADOS_CONTRATADA?>');
 		nome = "_" + nome  + "_";
@@ -138,12 +157,26 @@ function criarNomeDocumento(campoChamada){
 		nome = "_Edital_PL-" + formatarCodigoDocumento(cdProcLic, null, anoProcLic, null, colecaoSetor);
 	}else if(isARP){
 		nome = "_AQUISICAO_ARP-" + formatarCodigoDocumento(cdARP, null, anoARP, null, colecaoSetor);
-	}
-
-	if(textoComplemento != null && textoComplemento != ""){
-		nome = "_" + textoComplemento.toUpperCase() + nome;
 	}	
 	
+	textoComplemento = "";
+	conectorLocal = "";
+	//paap = "PAAP001";
+	paap = getDSPAAP();	
+	if(paap != null && paap != ""){
+		textoComplemento = conectorLocal + paap;
+		conectorLocal = ".";
+	}		
+
+	textoComplementoHTML = document.frm_principal.<?=voDocumento::$nmAtrComplemento?>.value;
+	if(textoComplementoHTML != null && textoComplementoHTML != ""){
+		textoComplemento = textoComplemento + conectorLocal + textoComplementoHTML;
+	}
+	
+	if(textoComplemento != null && textoComplemento != ""){
+		nome = "_" + textoComplemento.toUpperCase() + nome;
+	}
+
 	complemento = nome + complemento;
 	//complemento = complemento + ".doc";
 	complemento = complemento + getExtensaoDocumento(tpDoc);	
@@ -151,6 +184,8 @@ function criarNomeDocumento(campoChamada){
 	document.frm_principal.<?=voDocumento::$nmAtrLink?>.value = formatarNomeDocumento(sq, cdSetor, ano, tpDoc, complemento, colecaoSetor);
 
 	isCampoChaveDoc = false;
+	//isChavesPreenchidas = ano != "" && cdSetor != "" && tpDoc != "" && sq != "";
+				
 	if(campoChamada != null){
 		isCampoChaveDoc = campoChamada.name == "<?=vodocumento::$nmAtrAno?>" || campoChamada.name == "<?=vodocumento::$nmAtrCdSetor?>" || campoChamada.name == "<?=vodocumento::$nmAtrTp?>";
 		//alert(isCampoChaveDoc);		
@@ -176,16 +211,21 @@ function criarNomeDocumento(campoChamada){
 }*/
 
 function getSqAtual(){
-	pNmCampoDiv = "<?=voDocumento::$ID_REQ_DIV_SQATUAL?>";
-	pIDCampoAno = "<?=voDocumento::$nmAtrAno?>";
-	pIDCampoSetor = "<?=voDocumento::$nmAtrCdSetor?>";
-	pIDCampoTp = "<?=voDocumento::$nmAtrTp?>";	
+	var pNmCampoDiv = "<?=voDocumento::$ID_REQ_DIV_SQATUAL?>";
+	var pIDCampoAno = "<?=voDocumento::$nmAtrAno?>";
+	var pIDCampoSetor = "<?=voDocumento::$nmAtrCdSetor?>";
+	var pIDCampoTp = "<?=voDocumento::$nmAtrTp?>";	
 	
 	//alert(inDiasUteis);
-	ano = document.getElementById(pIDCampoAno).value;
-	setor = document.getElementById(pIDCampoSetor).value;
-	tipo = document.getElementById(pIDCampoTp).value;
-	
+	var ano = document.getElementById(pIDCampoAno).value;
+	var setor = document.getElementById(pIDCampoSetor).value;
+	var tipo = "";
+	try{
+		tipo = document.getElementById(pIDCampoTp).value;
+	}catch(e){
+		tipo = "";
+	}
+	//alert(tipo);	
 	if(ano != "" && setor != "" && tipo != ""){
 		chave = ano + '<?=CAMPO_SEPARADOR?>' + setor + '<?=CAMPO_SEPARADOR?>' + tipo;			
 		getSqDocumentoAtual(chave, pNmCampoDiv) ;		
@@ -194,6 +234,20 @@ function getSqAtual(){
 		limpaCampoDiv(pNmCampoDiv);		
 	}	
 }
+
+function getTpDocumentoSetor(){
+	
+	var pNmCampoDiv = "<?=voDocumento::$ID_REQ_DIV_TpDocumentoSetor?>";
+	var pIDCampoSetor = "<?=voDocumento::$nmAtrCdSetor?>";
+	var setor = document.getElementById(pIDCampoSetor).value;	
+	
+	if(setor != ""){
+		var chave = setor;			
+		//chave = ano + '<?=CAMPO_SEPARADOR?>' + setor + '<?=CAMPO_SEPARADOR?>' + tipo;
+		getTpDocumentoPorSetorAjax(chave, pNmCampoDiv) ;		
+	}	
+}
+
 
 function iniciar(){
 	//alert(getDescricaoChaveDS(11,<?=$varColecaoGlobalSetor?>));
@@ -223,11 +277,13 @@ function iniciar(){
 	        $domTp = new dominioTpDocumento();
 	        $comboTipoDocMinuta = new select(dominioEspeciesContrato::getColecao());
 	        
+	        require_once (caminho_funcoes . voPA::getNmTabela() . "/biblioteca_htmlPA.php");
+	        
 	        if($isInclusao){	            
-	            $comboSetor = new select($domSetor->colecao);	            
-	            $comboTp= new select($domTp->colecao);
+	            $comboSetor = new select($domSetor->colecao);
 
 	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
+	        
 	        
 	        $nmClass = constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO;	        
 	        $arrayCssClass = array($nmClass,$nmClass);
@@ -254,7 +310,10 @@ function iniciar(){
 	            		voProcLicitatorio::$nmAtrAno,
 	            		voProcLicitatorio::$nmAtrCd,
 	            		voDocumento::$nmAtrAnoARP,
-	            		voDocumento::$nmAtrCdARP
+	            		voDocumento::$nmAtrCdARP,
+	            		voPA::$nmAtrAnoPA,
+	            		voPA::$nmAtrCdPA,
+	            		 
 	            );
 	            echo "<br>".getBorracha($nmCampos, "criarNomeDocumento();");
 	            ?>
@@ -269,16 +328,27 @@ function iniciar(){
 	            <TH class="campoformulario" nowrap width="1%">ARP:</TH>
 	            <TD class="campoformulario" colspan=3><?php getEntradaDadosCdAno("", "", voDocumento::$nmAtrCdARP, voDocumento::$nmAtrAnoARP, $arrayCssClass, $arrayComplementoHTML);
 	            ?></TD>	            
-	        </TR>	        
+	        </TR>
+			<TR>
+		        <TH class="campoformulario" nowrap width="1%">P.A.A.P.:</TH>
+				<TD class="campoformulario" colspan=3><?php getCampoDadosPAAP($voPAAP, "camponaoobrigatorio", $arrayComplementoHTML);?></TD>			                                           
+	        </TR>			            
 			<TR>
                 <TH class="campoformulario" nowrap width="1%">Ano.Doc.:</TH>
                 <TD class="campoformulario" nowrap width="1%"><?php echo $selectExercicio->getHtmlCombo(voDocumento::$nmAtrAno,voDocumento::$nmAtrAno, $vo->ano, true, $classChaves, false, " onChange='criarNomeDocumento(this);' $disabledChaves $required");?></TD>
                 <TH class="campoformulario" nowrap width="1%">Setor:</TH>
-                <TD class="campoformulario"><?php echo $comboSetor->getHtmlCombo(voDocumento::$nmAtrCdSetor,voDocumento::$nmAtrCdSetor, $vo->cdSetor, true, $classChaves, true, "onChange='criarNomeDocumento(this);' $disabledChaves $required");?></TD>
+                <TD class="campoformulario"><?php echo $comboSetor->getHtmlCombo(voDocumento::$nmAtrCdSetor,voDocumento::$nmAtrCdSetor, $vo->cdSetor, true, $classChaves, true, "onChange='getTpDocumentoSetor();criarNomeDocumento(this);' $disabledChaves $required");?></TD>
             </TR>            
 			<TR>
                 <TH class="campoformulario" nowrap width="1%">Tp.Documento:</TH>
-                <TD class="campoformulario"><?php echo $comboTp->getHtmlCombo(voDocumento::$nmAtrTp,voDocumento::$nmAtrTp, $vo->tp, true, $classChaves, true, " onChange='criarNomeDocumento(this);' $disabledChaves $required");?></TD>			
+                <TD class="campoformulario">
+                <div id="<?=voDocumento::$ID_REQ_DIV_TpDocumentoSetor?>">
+                	<?php 
+                	$comboTp= new select(array());
+                	echo $comboTp->getHtmlCombo(voDocumento::$nmAtrTp,voDocumento::$nmAtrTp, $vo->tp, true, $classChaves, true, " onChange='criarNomeDocumento(this);' $disabledChaves $required");
+                	?>
+                	</TD>
+				</div>			
                 <TH class="campoformulario" nowrap>Número:</TH>
                 <TD class="campoformulario">
                 <INPUT type="text" id="<?=voDocumento::$nmAtrSq?>" onkeyup="validarCampoNumericoPositivo(this);" name="<?=voDocumento::$nmAtrSq?>" onBlur='criarNomeDocumento();' value="<?php echo complementarCharAEsquerda($vo->sq, "0", TAMANHO_CODIGOS);?>"  class="camponaoobrigatorio" size="7" required>
