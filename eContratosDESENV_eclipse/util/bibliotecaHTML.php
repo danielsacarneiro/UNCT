@@ -352,9 +352,11 @@ function getBotaoGeral($idBotao, $descricao, $classe, $isSubmit, $imprimirNaLupa
 	$isLupa = isLupa ();
 	
 	if ($isLupa) {
-		// echo "EH LUPA";
-		if (! $imprimirNaLupa)
+		//echo "EH LUPA";
+		if (! $imprimirNaLupa){
 			$retorno = "";
+			//echo "NAO IMPRIME CANCELAR";
+		}
 	} else {
 		// echo "NAO EH LUPA";
 		if ($imprimirNaManutencao) {
@@ -427,9 +429,9 @@ function getBotoesRodapeComRestricao($arrayBotoesARemover, $restringeBotaoSemVal
 	
 	$isManutencao = false;
 	$isDetalhamento = false;
-	$funcao = @$_GET ["funcao"];
+	$funcao = @$_GET ["funcao"]; 
 	
-	// considera que qq funcao chamado que nao sejam as funcoes baiscas (alterar, excluir, incluir...) caira nessa opcao
+	// considera que qq funcao chamado que nao sejam as funcoes basicas (alterar, excluir, incluir...) caira nessa opcao
 	// marreta: verifica pelo tamanho do nome da funcao
 	// um exemplo eh o metodo encaminhar chamado no encaminhamento de demanda (voDemandaTramitacao)
 	$isMetodoChamadoEspecifico = strlen ( $funcao ) > 2;
@@ -462,7 +464,18 @@ function getBotoesRodapeComRestricao($arrayBotoesARemover, $restringeBotaoSemVal
 		if (getBotaoConfirmar () != "")
 			$html .= "<TD class='botaofuncao'>" . getBotaoConfirmar () . "</TD>\n";
 	}
+		
+	//if (getBotaoCancelar () != "" && (($isDetalhamento && VEMDETELADECONSULTA) || $isManutencao))
 	
+	/*$paginaAnterior = $_SERVER['HTTP_REFERER'];	
+	$isPaginaAnteriorDetalhamento = mb_stripos ( $paginaAnterior, "detalhar" );	
+	$mostrarCancelamento = !isLupa() || $isPaginaAnteriorDetalhamento === false;*/
+	
+	/*if($isPaginaAnteriorDeConsulta)
+		echo "eh de consulta";
+	else
+	echo "NAO eh de consulta";*/
+		
 	if (getBotaoCancelar () != "" && ($isDetalhamento || $isManutencao))
 		$html .= "<TD class='botaofuncao'>" . getBotaoCancelar () . "</TD>\n";
 	
@@ -598,20 +611,23 @@ function getBorracha($nmCampos, $jsComplementar=null) {
 	return $html;
 }
 
-function getHTMLRadioButtonConsulta($nmRadio, $idRadio, $voAtualOuChaveString) {
-	return getHTMLGridConsulta ( $nmRadio, $idRadio, $voAtualOuChaveString, false );
+function getHTMLRadioButtonConsulta($nmRadio, $idRadio, $voAtualOuChaveString, $comVerificacaoObjetoSessao = true) {
+	return getHTMLGridConsulta ( $nmRadio, $idRadio, $voAtualOuChaveString, false, $comVerificacaoObjetoSessao);
 }
 function getHTMLCheckBoxConsulta($nmRadio, $idRadio, $voAtualOuChaveString) {
 	return getHTMLGridConsulta ( $nmRadio, $idRadio, $voAtualOuChaveString, true );
 }
-function getHTMLGridConsulta($nmRadio, $idRadio, $voAtualOuChaveString, $isCheckBox) {
+function getHTMLGridConsulta($nmRadio, $idRadio, $voAtualOuChaveString, $isCheckBox, $comVerificacaoObjetoSessao = true) {
 	$isSelecionado = false;
 
 	$ID = "";
 	if ($voAtualOuChaveString instanceof voentidade) {
 		$ID = $voAtualOuChaveString->getNmTabela ();
-		$voSessao = getObjetoSessao ( $ID );
-		$isSelecionado = $voAtualOuChaveString->isIgualChavePrimaria ( $voSessao );
+		
+		if($comVerificacaoObjetoSessao){
+			$voSessao = getObjetoSessao ( $ID );
+			$isSelecionado = $voAtualOuChaveString->isIgualChavePrimaria ( $voSessao );
+		}		
 		$chave = $voAtualOuChaveString->getValorChaveHTML ();
 	} else {
 		// voAtual nao existe

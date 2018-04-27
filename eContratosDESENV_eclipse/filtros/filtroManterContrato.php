@@ -40,6 +40,7 @@ class filtroManterContrato extends filtroManter {
 	var $inTrazerConsolidadoVigencia;
 	
 	var $tpDemanda;
+	var $licon;
 	
 	// ...............................................................
 	// construtor
@@ -88,6 +89,7 @@ class filtroManterContrato extends filtroManter {
 		$this->tpDemanda = @$_POST [self::$nmAtrTpDemanda];
 		
 		$this->cdAutorizacao = @$_POST [vocontrato::$nmAtrCdAutorizacaoContrato];
+		$this->licon = @$_POST [vocontrato::$nmAtrInLicomContrato];
 		$this->InOR_AND = @$_POST[self::$NmAtrInOR_AND];
 		if($this->InOR_AND == null){
 			$this->InOR_AND = constantes::$CD_OPCAO_OR;
@@ -323,6 +325,11 @@ class filtroManterContrato extends filtroManter {
 					}
 						
 					$conector  = "\n AND ";
+		}
+		
+		if ($this->licon != null && $this->licon != constantes::$CD_OPCAO_TODOS) {
+			$filtro = $filtro . $conector . "$nmTabela." . vocontrato::$nmAtrInLicomContrato. "=" . getVarComoString($this->licon);				
+			$conector = "\n AND ";
 		}
 		
 		//serve para retirar a ambiguidade, quando existir, do atributo da ordenacao

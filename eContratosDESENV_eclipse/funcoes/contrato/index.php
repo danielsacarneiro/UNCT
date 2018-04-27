@@ -127,7 +127,7 @@ function selecionar() {
 	}
 }
 
-function detalhar(isExcluir) {    
+function detalhar(isExcluir) {
     if(isExcluir == null || !isExcluir)
         funcao = "<?=constantes::$CD_FUNCAO_DETALHAR?>";
     else
@@ -270,17 +270,13 @@ function confirmar() {
 			<TR>
 				<TH class="campoformulario" nowrap>Objeto:</TH>
 				<TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vocontrato::$nmAtrObjetoContrato?>" name="<?=vocontrato::$nmAtrObjetoContrato?>"  value="<?php echo($dsObjeto);?>"  class="camponaoobrigatorio" size="50" ></TD>
-               <TH class="campoformulario" nowrap>Data Inclusão:</TH>
-               <TD class="campoformulario" >
-                        	<INPUT type="text" 
-                        	       id="<?=vocontrato::$nmAtrDhInclusao?>" 
-                        	       name="<?=vocontrato::$nmAtrDhInclusao?>"
-                        			value="<?php echo($filtro->dtInclusao);?>" 
-                        			onkeyup="formatarCampoData(this, event, false);" 
-                        			class="camponaoobrigatorio" 
-                        			size="10" 
-                        			maxlength="10" >
-                </TD>				
+	            <TH class="campoformulario" width="1%" nowrap>Licon:</TH>
+	            <TD class="campoformulario">
+	            <?php 	            
+	            include_once(caminho_util. "dominioSimNao.php");
+	            $comboSimNao = new select(dominioSimNao::getColecao());
+	            echo $comboSimNao->getHtmlCombo(vocontrato::$nmAtrInLicomContrato,vocontrato::$nmAtrInLicomContrato, $filtro->licon, true, "camponaoobrigatorio", false,"");
+	            ?>
 			</TR>
 			<TR>
 				<TH class="campoformulario" nowrap>Intervalo Data Inicial:</TH>

@@ -61,6 +61,8 @@ $dtFinalAConsiderar = $colecaoMov[$tamanho-1][vocontrato::$nmAtrDtVigenciaFinalC
 <HTML lang="pt-BR">
 
 <HEAD>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>mensagens_globais.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_cnpfcnpj.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_oficio.js"></SCRIPT>
@@ -71,16 +73,26 @@ function cancela() {
 	//location.href="index.php";	
 }
 
+function detalhar(isExcluir) {
+    if(isExcluir == null || !isExcluir)
+        funcao = "<?=constantes::$CD_FUNCAO_DETALHAR?>";
+    else
+        funcao = "<?=constantes::$CD_FUNCAO_EXCLUIR?>";
+    
+    if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta"))
+            return;
+    	
+	chave = document.frm_principal.rdb_consulta.value;
+	lupa = document.frm_principal.lupa.value;
+	location.href="detalharContrato.php?funcao=" + funcao + "&chave=" + chave + "&lupa="+ lupa;	
+}
+
 </SCRIPT>
 <?=setTituloPagina(null)?>
 </HEAD>
 <BODY class="paginadados" onload="">
 	  
 <FORM name="frm_principal" method="post" action="confirmarManterContrato.php">
-
-<INPUT type="hidden" id="id_contexto_sessao" name="<%=PRManterReferenciaLegal.ID_REQ_CONTEXTO_SESSAO%>" value="<%=idContextoSessao%>"> 
-<INPUT type="hidden" id="evento" name="<%=PRManterReferenciaLegal.ID_REQ_EVENTO%>" value=""> 
-<INPUT type="hidden" id="nao_utilizar_id_contexto_sessao" name="<%=PRManterReferenciaLegal.ID_REQ_NAO_UTILIZAR_ID_CONTEXTO_SESSAO%>" value=""> 
 
 <INPUT type="hidden" id="funcao" name="funcao" value="<?=$funcao?>">
 <INPUT type="hidden" id="<?=vousuario::$nmAtrID?>" name="<?=vousuario::$nmAtrID?>" value="<?=id_user?>">
@@ -159,7 +171,7 @@ function cancela() {
              <TABLE id='table_tabeladados' class='tabeladados' cellpadding='0' cellspacing='0'>						
                  <TBODY>
                     <TR>
-                      <!--<TH class='headertabeladados' width='1%'>&nbsp;&nbsp;X</TH>-->
+                      	<TH class='headertabeladados' width='1%'>&nbsp;&nbsp;X</TH>
                         <TH class='headertabeladados' width='1%'>Espécie</TH>
                         <TH class='headertabeladados' width='50%'>Objeto</TH>
                         <TH class='headertabeladados' width='1%' nowrap>Dt.Assinatura</TH>
@@ -194,9 +206,9 @@ function cancela() {
                             //$especie = $especiesContrato->getDescricao($colecaoMov[$i]["ct_cd_especie"]);                        
                     ?>
                     <TR class='dados'>
-                        <!--<TD class='tabeladados' <?=$msgAlertaSq?>>
-                        <INPUT type='radio' id='rdb_consulta' name='rdb_consulta' value='<?php echo($chave);?>'>
-                        </TD>-->                        
+                        <TD class='tabeladados'>
+                        <?=getHTMLRadioButtonConsulta("rdb_consulta", "rdb_consulta", $voAtual, false);?>
+                        </TD>                        
                         <TD class='tabeladados'>                        
                         <?php echo $especie?>                        
                         </TD>
@@ -236,7 +248,7 @@ function cancela() {
 						<TD>
                     		<TABLE class="barraacoesaux" cellpadding="0" cellspacing="0">
 	                    	<TR>
-								<TD class="botaofuncao"><button id="cancelar" onClick="javascript:cancela();" class="botaofuncaop" type="button" accesskey="f">Fechar</button></TD>
+	                    		<?=getBotoesRodape();?>
 						    </TR>
 		                    </TABLE>
 	                    </TD>
