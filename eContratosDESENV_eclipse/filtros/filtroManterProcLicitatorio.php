@@ -172,6 +172,15 @@ class filtroManterProcLicitatorio extends filtroManter{
 			$conector  = "\n AND ";
 		}
 		
+		if($this->cdPregoeiro != null){
+			$filtro = $filtro . $conector
+			. $nmTabela. "." .voProcLicitatorio::$nmAtrCdPregoeiro
+			. " = "
+					. $this->cdPregoeiro;
+		
+					$conector  = "\n AND ";
+		}
+		
 		if($this->cdResponsavel!= null){
 			$filtro = $filtro . $conector
 					. $nmTabelaPessoaResponsavel. "." .vopessoa::$nmAtrCd
