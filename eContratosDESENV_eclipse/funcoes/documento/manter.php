@@ -334,10 +334,10 @@ function iniciar(){
 				<TD class="campoformulario" colspan=3><?php getCampoDadosPAAP($voPAAP, "camponaoobrigatorio", $arrayComplementoHTML);?></TD>			                                           
 	        </TR>			            
 			<TR>
-                <TH class="campoformulario" nowrap width="1%">Ano.Doc.:</TH>
-                <TD class="campoformulario" nowrap width="1%"><?php echo $selectExercicio->getHtmlCombo(voDocumento::$nmAtrAno,voDocumento::$nmAtrAno, $vo->ano, true, $classChaves, false, " onChange='criarNomeDocumento(this);' $disabledChaves $required");?></TD>
                 <TH class="campoformulario" nowrap width="1%">Setor:</TH>
-                <TD class="campoformulario"><?php echo $comboSetor->getHtmlCombo(voDocumento::$nmAtrCdSetor,voDocumento::$nmAtrCdSetor, $vo->cdSetor, true, $classChaves, true, "onChange='getTpDocumentoSetor();criarNomeDocumento(this);' $disabledChaves $required");?></TD>
+                <TD class="campoformulario" width="1%"><?php echo $comboSetor->getHtmlCombo(voDocumento::$nmAtrCdSetor,voDocumento::$nmAtrCdSetor, $vo->cdSetor, true, $classChaves, true, "onChange='getTpDocumentoSetor();criarNomeDocumento(this);' $disabledChaves $required");?></TD>
+                <TH class="campoformulario" nowrap width="1%">Ano.Doc.:</TH>
+                <TD class="campoformulario" nowrap><?php echo $selectExercicio->getHtmlCombo(voDocumento::$nmAtrAno,voDocumento::$nmAtrAno, $vo->ano, true, $classChaves, false, " onChange='criarNomeDocumento(this);' $disabledChaves $required");?></TD>                
             </TR>            
 			<TR>
                 <TH class="campoformulario" nowrap width="1%">Tp.Documento:</TH>
