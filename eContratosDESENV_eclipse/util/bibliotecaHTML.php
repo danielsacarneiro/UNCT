@@ -177,6 +177,13 @@ function complementarCharAEsquerda($texto, $char, $qtdfinal) {
 	
 	return $retorno;
 }
+function getVarComoStringHTML($string) {
+	$retorno = "";
+	if ($string != null){
+		$retorno = str_ireplace("\"", "'", $string);
+	}
+	return $retorno;
+}
 function getMoeda($valorSQL) {
 	$retorno = "";
 	if ($valorSQL != null)

@@ -34,6 +34,8 @@ if($funcao == constantes::$CD_FUNCAO_EXCLUIR){
 
 $titulo = $nmFuncao. $titulo. $complementoTit;
 setCabecalho($titulo);
+
+//echo $vo->texto;
 ?>
 
 <!DOCTYPE html>
@@ -131,13 +133,17 @@ function iniciar(){
 	            <TD class="campoformulario" >
 	            <?php 
 	            //o setor destino da ultima tramitacao sera o origem da nova
-	            echo $comboPrioridade->getHtmlCombo(voDemanda::$nmAtrPrioridade,voDemanda::$nmAtrPrioridade, $vo->prioridade, true, "campoobrigatorio", false, " required ");?>
+	            echo $comboPrioridade->getHtmlCombo(voDemanda::$nmAtrPrioridade,voDemanda::$nmAtrPrioridade, $vo->prioridade, true, "campoobrigatorio", false, " required ");
+	            
+	            
+	            //$vo->texto = "TESTE ASDAD AS DAS DAS DAS DAASDASDASDASDAS DAS DAS AS ADASDSA TESTE";
+	            ?>
 				</TD>				
 	        </TR>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Título:</TH>
 	            <TD class="campoformulario" colspan=3>				
-	            <INPUT type="text" id="<?=voDemanda::$nmAtrTexto?>" name="<?=voDemanda::$nmAtrTexto?>" value="<?=$vo->texto?>"  class="campoobrigatorio" size="80" required>	            	                        	                        
+	            <INPUT type="text" id="<?=voDemanda::$nmAtrTexto?>" name="<?=voDemanda::$nmAtrTexto?>" value="<?=getVarComoStringHTML($vo->texto)?>"  class="campoobrigatorio" size="80" required>
 	        </TR>
 	        <?php	        
 	        require_once (caminho_funcoes . voProcLicitatorio::getNmTabela() . "/biblioteca_htmlProcLicitatorio.php");

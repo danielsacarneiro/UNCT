@@ -114,7 +114,8 @@ function getCorpoMensagemPorColecao($titulo, $colecao, $colunasAExibir, $isPrior
 						$empresa = $registro [vopessoa::$nmAtrNome];
 						if ($qtContratos > 1) {
 							$contrato = "VÁRIOS";
-						} else {
+						} else if($voDemandaContrato->voContrato->cdContrato != null){
+							
 							$contrato = formatarCodigoAnoComplemento ( $voDemandaContrato->voContrato->cdContrato, $voDemandaContrato->voContrato->anoContrato, $dominioTipoContrato->getDescricao ( $voDemandaContrato->voContrato->tipo ) );
 
 							if ($empresa != null) {

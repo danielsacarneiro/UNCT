@@ -41,7 +41,7 @@ function getDemandaDetalhamentoComLupa($voDemanda, $temLupaDet, $exibeTipoDemand
 	//$voDemanda = new voDemanda();
 	if($voDemanda->texto != null){
 	?>
-         <br>Título: <INPUT type="text" value="<?=$voDemanda->texto?>"  class="camporeadonly" size="70" readonly>		
+         <br>Título: <INPUT type="text" value="<?=getVarComoStringHTML($voDemanda->texto)?>"  class="camporeadonly" size="70" readonly>		
 	<?php
 	}
 	?>		            
