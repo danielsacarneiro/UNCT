@@ -607,7 +607,7 @@ function getBorracha($nmCampos, $jsComplementar=null) {
 	$js = "";
 	for($i = 0; $i < $tam; $i ++) {
 		$nmCampoAtual = $nmCampos [$i];
-		$js .= "document.frm_principal." . $nmCampoAtual . ".value='';";
+		$js .= "try{document.frm_principal." . $nmCampoAtual . ".value='';}catch(ex){;}";
 	}
 	if($jsComplementar !=null){
 		$js .= $jsComplementar;

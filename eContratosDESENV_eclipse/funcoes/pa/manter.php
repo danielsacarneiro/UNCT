@@ -271,9 +271,17 @@ function getDataPrazo(){
 				?> 
 				
 				<INPUT type="checkbox" id="<?=voPA::$nmAtrInDiasUteisPrazoUltNotificacao?>" name="<?=voPA::$nmAtrInDiasUteisPrazoUltNotificacao?>"
-				onClick ="getDataPrazo()" checked>
-				
-				(dias úteis?) *para fins de contagem de prazo	            	
+				onClick ="getDataPrazo()" checked>				
+				(dias úteis?) *para fins de contagem de prazo
+	            <?php	            
+	            $nmCampos = array(vocontrato::$nmAtrAnoContrato,
+	            		voPA::$nmAtrDtUltNotificacaoParaManifestacao,
+	            		voPA::$nmAtrNumDiasPrazoUltNotificacao,
+	            		voPA::$nmAtrDtUltNotificacaoPrazoEncerrado,
+	            );
+	            echo getBorracha($nmCampos, "getDataPrazo();");
+	            ?>
+
 			  <div id="<?=voPA::$ID_REQ_DIV_PRAZO?>">
 			  <?=getCampoDataPrazoFinal(voPA::$nmAtrDtUltNotificacaoPrazoEncerrado, $vo->dtUlNotificacaoPrazoEncerrado);?>
 	          </div>
