@@ -114,7 +114,7 @@ include_once (caminho_filtros."filtroManterPA.php");
     	}
     	$arrayColunasRetornadas = array (
     			//$nmTabela . ".*",
-    			$nmTabelaDemanda . "." . voDemanda::$nmAtrSituacao,
+    			$nmTabelaDemanda . "." . voDemanda::$nmAtrSituacao,    			
     			$nmTabela . "." . voPA::$nmAtrAnoPA,
     			$nmTabela . "." . voPA::$nmAtrCdPA,
     			$nmTabela . "." . voPA::$nmAtrAnoDemanda,
@@ -129,7 +129,7 @@ include_once (caminho_filtros."filtroManterPA.php");
     			$nmTabelaContrato. "." . vocontrato::$nmAtrCdContrato,
     			$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd,
     			$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
-    			$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome . " AS " . $filtro->nmColNomePessoaContrato,
+    			getSQLCOALESCE(array($nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome, $nmTabelaDemanda . "." . voDemanda::$nmAtrTexto), $filtro->nmColNomePessoaContrato),
     			$nmTabelaDemandaProcLic . "." . voProcLicitatorio::$nmAtrCd,
     			$nmTabelaDemandaProcLic . "." . voProcLicitatorio::$nmAtrAno,
     			 

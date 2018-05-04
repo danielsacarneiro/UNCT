@@ -182,7 +182,8 @@ class filtroManterPA extends filtroManter{
 		
 		if($this->nome != null){
 			$filtro = $filtro . $conector
-			. $nmTabelaPessoaContrato. "." .vopessoa::$nmAtrNome
+			//. $nmTabelaPessoaContrato. "." .vopessoa::$nmAtrNome
+			. getSQLCOALESCE(array($nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome, $nmTabelaDemanda . "." . voDemanda::$nmAtrTexto))
 			. " LIKE '%"
 					. utf8_encode($this->nome)
 					. "%'";

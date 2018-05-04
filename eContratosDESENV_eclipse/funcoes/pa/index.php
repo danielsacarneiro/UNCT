@@ -215,7 +215,7 @@ function validaFormulario() {
 						</TH>
 						<TH class="headertabeladados" rowspan="2">Contrato/PL</TH>
 	                    <TH class="headertabeladados" rowspan="2" width="1%" nowrap >Doc.Contratada</TH>
-	                    <TH class="headertabeladados" rowspan="2" width="90%">Contratada</TH>
+	                    <TH class="headertabeladados" rowspan="2" width="90%">Descrição</TH>
 	                    <TH class="headertabeladados" rowspan="2" width="1%" nowrap>Servidor.Resp.</TH>
 	                    <TH class="headertabeladados" rowspan="2"  width="1%" nowrap>Dt.Abertura</TH>
 	                    <TH class="headertabeladados" rowspan="2"  width="1%" nowrap>Situação</TH>
