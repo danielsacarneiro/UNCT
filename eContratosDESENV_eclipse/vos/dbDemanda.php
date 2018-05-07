@@ -418,7 +418,7 @@ class dbDemanda extends dbprocesso {
 		
 		return parent::consultarFiltro ( $filtro, $querySelect, $queryFrom, false );
 	}
-	function consultarPAAPDemanda($vo) {
+	function consultarPAAPDemanda($vo, $validarUnicoPAAP = true) {
 		// $vo = new voDemanda();
 		$voPA = null;
 		$filtro = new filtroManterPA ( false );
@@ -428,7 +428,7 @@ class dbDemanda extends dbprocesso {
 		$colecao = $dbpa->consultarPAAP ( new voPA (), $filtro );
 		// var_dump($filtro);
 		if (! isColecaoVazia ( $colecao )) {
-			if (count ( $colecao ) > 1) {
+			if (count ( $colecao ) > 1 && $validarUnicoPAAP) {
 				throw new excecaoMaisDeUmRegistroRetornado ( "A consulta de PAAP trouxe mais de um registro para esta demanda." );
 			}
 			
@@ -439,23 +439,32 @@ class dbDemanda extends dbprocesso {
 		
 		return $voPA;
 	}
+	function isSetorDestinoIgualDemandante($vo, $textoFuncao, $naoValidar = false) {
+		// verifica se o setor atual eh igual ao setor de origem
+		$filtro = new filtroManterDemanda ( false );
+		$filtro->vodemanda = new voDemanda ();
+		$filtro->vodemanda->cd = $vo->cd;
+		$filtro->vodemanda->ano = $vo->ano;
+		// echo "SITUACAO FECHADA";
+		$colecao = $this->consultarTelaConsulta ( $vo, $filtro );
+		$retorno = true;
+		if ($colecao != "") {
+			$setorAtual = $colecao [0] [voDemandaTramitacao::$nmAtrCdSetorDestino];
+			// echo "setor atual:" . $setorAtual;
+			if ($setorAtual != null && $vo->cdSetor != $setorAtual && !$naoValidar) {
+				$retorno = false;
+				$msg = "A demanda deve estar encaminhada ao setor responsável para $textoFuncao.";
+				throw new Exception ( $msg );
+			}
+		} // else echo "COLECAO VAZIA";
+	
+		return $retorno;
+	}	
 	function validarAlteracao($vo) {
+		//asdas		
 		if ($vo->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA) {
-			// verifica se o setor atual eh igual ao setor de origem
-			$filtro = new filtroManterDemanda ( false );
-			$filtro->vodemanda = new voDemanda ();
-			$filtro->vodemanda->cd = $vo->cd;
-			$filtro->vodemanda->ano = $vo->ano;
-			// echo "SITUACAO FECHADA";
-			$colecao = $this->consultarTelaConsulta ( $vo, $filtro );
-			if ($colecao != "") {
-				$setorAtual = $colecao [0] [voDemandaTramitacao::$nmAtrCdSetorDestino];
-				// echo "setor atual:" . $setorAtual;
-				if ($setorAtual != null && $vo->cdSetor != $setorAtual) {
-					$msg = "A demanda deve estar encaminhada ao setor responsável para fechamento.";
-					throw new Exception ( $msg );
-				}
-			} // else echo "COLECAO VAZIA";
+
+			$this->isSetorDestinoIgualDemandante ( $vo, "fechamento" );
 			  
 			// verifica se tem PAAP para encerrar
 			  // $vo = new voDemanda();
@@ -508,25 +517,6 @@ class dbDemanda extends dbprocesso {
 	}
 	function alterar($vo) {
 		return $this->alterarMais ( $vo, true );
-	}
-	function isSetorDestinoIgualDemandante($vo, $textoFuncao) {
-		// verifica se o setor atual eh igual ao setor de origem
-		$filtro = new filtroManterDemanda ( false );
-		$filtro->vodemanda = new voDemanda ();
-		$filtro->vodemanda->cd = $vo->cd;
-		$filtro->vodemanda->ano = $vo->ano;
-		// echo "SITUACAO FECHADA";
-		$colecao = $this->consultarTelaConsulta ( $vo, $filtro );
-		if ($colecao != "") {
-			$setorAtual = $colecao [0] [voDemandaTramitacao::$nmAtrCdSetorDestino];
-			// echo "setor atual:" . $setorAtual;
-			if ($setorAtual != null && $vo->cdSetor != $setorAtual) {
-				$msg = "A demanda deve estar encaminhada ao setor responsável para $textoFuncao.";
-				throw new Exception ( $msg );
-			}
-		} // else echo "COLECAO VAZIA";
-		
-		return true;
 	}
 	function isDemandaPAAPInativo($vo, $textoFuncao) {
 		if ($vo->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_PROCADM) {

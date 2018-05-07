@@ -52,7 +52,7 @@ function getDemandaDetalhamentoComLupa($voDemanda, $temLupaDet, $exibeTipoDemand
 	</TR>
 	<?php	
 	$dbprocesso = $voDemanda->dbprocesso;
-	$voPAAP = $dbprocesso->consultarPAAPDemanda($voDemanda);
+	$voPAAP = $dbprocesso->consultarPAAPDemanda($voDemanda, false);
 	if($voPAAP != null){
 		require_once (caminho_funcoes . voPA::getNmTabela() . "/biblioteca_htmlPA.php");
 		getPAAPDetalhamento($voPAAP);

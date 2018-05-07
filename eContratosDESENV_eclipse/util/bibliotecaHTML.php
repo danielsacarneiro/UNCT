@@ -799,6 +799,8 @@ function tratarExcecaoHTML($ex, $vo = null, $paginaErro="../mensagemErro.php") {
 	$msg = str_replace ( "\n", "", $msg );
 	$msg = str_replace ( "<br>", "", $msg );
 	
+	//echo $msg;
+	
 	header ( "Location: $paginaErro?texto=" . $msg, TRUE, 307 );	
 }
 function getStrComPuloLinhaHTML($str) {

@@ -388,7 +388,7 @@ include_once (caminho_filtros."filtroManterPA.php");
     function validarAlteracao($vo) {
     	//$vo = new voPA();    	
     	//$retorno = true;    	
-    	$vodemanda = $this->consultarVODemanda($vo);
+    	/*$vodemanda = $this->consultarVODemanda($vo);
     	//$vodemanda = new voDemanda();
     	$isDemandaFechada = $vodemanda->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA; 
 
@@ -396,7 +396,7 @@ include_once (caminho_filtros."filtroManterPA.php");
     		if(!$isDemandaFechada){
     			throw new excecaoGenerica("Só é permitido terminar o processo cuja demanda esteja concluída.");
     		}
-    	}
+    	}*/
     	
     	if($vo->situacao == dominioSituacaoPA::$CD_SITUACAO_PA_ENCERRADO){
     		$temPenalidade = $this->temPenalidade($vo);

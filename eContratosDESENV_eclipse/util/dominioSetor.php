@@ -15,6 +15,7 @@ class dominioSetor extends dominio {
 	static $CD_SETOR_SEFAZ = 12;
 	static $CD_SETOR_GEBES = 13;
 	static $CD_SETOR_GOV = 14;
+	static $CD_SETOR_DAFE = 15;
 	
 	static $DS_SETOR_SAFI = "SAFI";
 	static $DS_SETOR_UNCT = "UNCT";
@@ -30,6 +31,7 @@ class dominioSetor extends dominio {
 	static $DS_SETOR_SEFAZ = "SEFAZ";
 	static $DS_SETOR_GEBES = "GEBES";
 	static $DS_SETOR_GOV = "GOV";
+	static $DS_SETOR_DAFE = "DAFE";
 	
 	// ...............................................................
 	// Construtor
@@ -41,6 +43,7 @@ class dominioSetor extends dominio {
 		$retorno = array (
 				self::$CD_SETOR_ATJA => "ATJA",
 				self::$CD_SETOR_CPL => self::$DS_SETOR_CPL,
+				self::$CD_SETOR_DAFE => self::$DS_SETOR_DAFE,
 				self::$CD_SETOR_DILC => self::$DS_SETOR_DILC,
 				self::$CD_SETOR_UNCP => self::$DS_SETOR_UNCP,
 				self::$CD_SETOR_UNCT => "UNCT",
