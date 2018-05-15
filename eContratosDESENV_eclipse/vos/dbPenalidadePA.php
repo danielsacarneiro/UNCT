@@ -230,6 +230,25 @@ include_once (caminho_filtros."filtroManterPA.php");
     	return parent::consultarMontandoQueryTelaConsulta ( $vo, $filtro, $arrayColunasRetornadas, $queryJoin );
     }
     
+    function validar($vo) {
+    	$validar = $vo->validarFundamento();
+    	if (!$validar) {  
+    		throw new excecaoGenerica("Verifique as palavras chave para o fundamento da penalidade: " . voPenalidadePA::getPalavraChaveFundamento());    		
+    	}
+    }
+    
+    function alterar($vo) {
+    	$this->validar($vo);
+    	 
+    	parent::alterar ( $vo );
+    }
+    
+    function incluir($vo) {
+    	$this->validar($vo);
+    	
+    	parent::incluir ( $vo );
+    }    
+    
     function getSQLValuesInsert($vo){
     	if($vo->sq == null){
     		$vo->sq = $this->getProximoSequencialChaveComposta (voPenalidadePA::$nmAtrSq, $vo );

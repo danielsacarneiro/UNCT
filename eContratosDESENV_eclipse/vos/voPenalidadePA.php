@@ -1,6 +1,7 @@
 <?php
 include_once (caminho_funcoes . "pa_penalidade/dominioTipoPenalidade.php");
 class voPenalidadePA extends voentidade {
+		
 	static $nmAtrCdPA = "pa_cd"; // processo administrativo cd
 	static $nmAtrAnoPA = "pa_ex"; // processo administrativo ano
 	static $nmAtrSq = "pen_sq";
@@ -147,6 +148,24 @@ class voPenalidadePA extends voentidade {
 			$retorno .= "<br>Núm. Histórico: " . complementarCharAEsquerda ( $this->sqHist, "0", TAMANHO_CODIGOS );
 		}
 		return $retorno;
+	}
+	
+	static function getPalavraChaveFundamento(){
+		$retorno = array("valor", "prazo", "tempo");
+		$retorno = getStringDoArrayComSeparador($retorno);
+		//var_dump($retorno);
+		
+		return $retorno;
+	}	
+	
+	function validarFundamento() {
+		$fundamento = $this->fundamento;
+		$palavrasChave = static::getPalavraChaveFundamento();
+		$retorno = true;
+		if(!existeStr1NaStr2ComSeparador($fundamento, $palavrasChave)){
+			$retorno = false;
+		}		
+		return $retorno;		
 	}
 }
 ?>

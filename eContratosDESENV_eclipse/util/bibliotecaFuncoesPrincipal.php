@@ -23,6 +23,17 @@ function getMultiPos($haystack, $needles, $sensitive=true, $offset=0){
 	return $result;
 }
 
+function getStringDoArrayComSeparador($array, $separador = CAMPO_SEPARADOR){
+	$result = "";
+	foreach($array as $needle) {
+		$result .= $needle . $separador;
+	}
+	//substituira o separador + substituicao, que so aparecera no fim da string
+	$result.=CAMPO_SUBSTITUICAO;
+	$result = str_replace(CAMPO_SEPARADOR.CAMPO_SUBSTITUICAO, "", $result);
+	return $result;
+}
+
 function getPosicaoPalavraNaString($string, $noh){
 	return strpos($string, $noh);
 }
