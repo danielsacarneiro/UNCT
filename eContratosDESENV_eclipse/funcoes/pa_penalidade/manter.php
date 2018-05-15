@@ -142,7 +142,10 @@ function validarFundamento(){
 			<TR>
 		         <TH class="campoformulario" nowrap width="1%">Número:</TH>
 		         <TD class="campoformulario" colspan=3>
-		         <?php echo getInputText(voPenalidadePA::$nmAtrSq, voPenalidadePA::$nmAtrSq, complementarCharAEsquerda($vo->sq, "0", TAMANHO_CODIGOS_SAFI), constantes::$CD_CLASS_CAMPO_READONLY);?>
+		         <?php 
+		         echo getInputText(voPenalidadePA::$nmAtrSq, voPenalidadePA::$nmAtrSq, complementarCharAEsquerda($vo->sq, "0", TAMANHO_CODIGOS_SAFI), constantes::$CD_CLASS_CAMPO_READONLY);
+		         echo "Tipo:" .dominioTipoPenalidade::getHtmlDetalhamento("", "", $vo->tipo, false);
+		         ?>
 				</TD>
 	        </TR>
 			<?php 
@@ -178,15 +181,15 @@ function validarFundamento(){
 	       
 	       ?>	           				
 			<TR>
-	            <TH class="campoformulario" nowrap>Fundamento:</TH>
+	            <TH class="campoformulario" nowrap>Descrição/Fundamento:</TH>
 	            <TD class="campoformulario" colspan="3"><textarea rows="3" cols="80" id="<?=voPenalidadePA::$nmAtrFundamento?>" name="<?=voPenalidadePA::$nmAtrFundamento?>" class="camponaoobrigatorio" required><?php echo($vo->fundamento);?></textarea>
 				</TD>
 	        </TR>
-			<TR>
+			<!-- <TR>
 	            <TH class="campoformulario" nowrap>Observação:</TH>
 	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=voPenalidadePA::$nmAtrObservacao?>" name="<?=voPenalidadePA::$nmAtrObservacao?>" class="camponaoobrigatorio" ><?php echo($vo->obs);?></textarea>
 				</TD>
-	        </TR>	        
+	        </TR> -->	        
 			<TR>
 	            <TH class="campoformulario" nowrap>Data.Pub.:</TH>
 	            <TD class="campoformulario" colspan="3">

@@ -110,7 +110,10 @@ function confirmar() {
 			<TR>
 		         <TH class="campoformulario" nowrap width="1%">Número:</TH>
 		         <TD class="campoformulario" colspan=3>
-		         <?php echo getInputText(voPenalidadePA::$nmAtrSq, voPenalidadePA::$nmAtrSq, complementarCharAEsquerda($vo->sq, "0", TAMANHO_CODIGOS_SAFI), constantes::$CD_CLASS_CAMPO_READONLY);?>
+		         <?php 
+		         echo getInputText(voPenalidadePA::$nmAtrSq, voPenalidadePA::$nmAtrSq, complementarCharAEsquerda($vo->sq, "0", TAMANHO_CODIGOS_SAFI), constantes::$CD_CLASS_CAMPO_READONLY);
+		         echo "Tipo:" . dominioTipoPenalidade::getHtmlDetalhamento("", "", $vo->tipo, false);
+		         ?>
 				</TD>
 	        </TR>	        
             <?php
@@ -118,27 +121,17 @@ function confirmar() {
 			getDemandaDetalhamento($voDemanda);
 			getContratoDet($voContrato);
 
-			$comboTipo = new select(dominioTipoPenalidade::getColecaoComReferenciaLegal());
 	        ?>
-	        <TR>
-	            <TH class="campoformulario" nowrap width="1%">Tipo:</TH>
-	            <TD class="campoformulario" nowrap colspan=3>
-				  <?php
-				  $dominioTipo = new dominioTipoPenalidade();
-				  echo $dominioTipo->getHtmlDetalhamento(voPenalidadePA::$nmAtrTipo, voPenalidadePA::$nmAtrTipo, $vo->tipo, true);
-				  ?>
-			  </TD>			  
-			</TR>	        
 			<TR>
-	            <TH class="campoformulario" nowrap>Fundamento:</TH>
+	            <TH class="campoformulario" nowrap>Descrição/Fundamento:</TH>
 	            <TD class="campoformulario" colspan="3"><textarea rows="3" cols="80" class="camporeadonly" readonly><?php echo($vo->fundamento);?></textarea>
 				</TD>
 	        </TR>
-			<TR>
+			<!-- <TR>
 	            <TH class="campoformulario" nowrap>Observação:</TH>
 	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" class="camporeadonly" readonly><?php echo($vo->obs);?></textarea>
 				</TD>
-	        </TR>
+	        </TR>-->
 			<TR>
 	            <TH class="campoformulario" nowrap>Data Aplicação:</TH>
 	            <TD class="campoformulario" colspan="3">

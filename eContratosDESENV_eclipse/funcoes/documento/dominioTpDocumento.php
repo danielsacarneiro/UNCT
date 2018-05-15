@@ -30,7 +30,7 @@ class dominioTpDocumento extends dominio {
 	static $CD_TP_DOC_RELATORIO = "RE";
 	// static $CD_TP_DOC_RELATORIO_CONCLUSAO = "RC";
 	static $CD_TP_DOC_MINUTA = "MI";
-	static $CD_TP_DOC_APRECIACAO_RECURSO = "AR";
+	static $CD_TP_DOC_CERTIDAO_TRANSITO_JULGADO = "TJ";
 	static $DS_TP_DOC_PAAP = "PAAP(digitalizado)";
 	static $DS_TP_DOC_APOSTILAMENTO = "Apostilamento";
 	static $DS_TP_DOC_CONTROLE_AQUISICAO = "Controle Aquisição";
@@ -53,7 +53,7 @@ class dominioTpDocumento extends dominio {
 	static $DS_TP_DOC_RELATORIO = "Relatório";
 	// static $DS_TP_DOC_RELATORIO_CONCLUSAO = "Relatório Com Alegações Finais";
 	static $DS_TP_DOC_MINUTA = "Minuta";
-	static $DS_TP_DOC_APRECIACAO_RECURSO = "Apreciação Recurso";
+	static $DS_TP_DOC_CERTIDAO_TRANSITO_JULGADO = "Certidão Transito Julgado";
 	
 	// ...............................................................
 	// Construtor
@@ -87,7 +87,7 @@ class dominioTpDocumento extends dominio {
 				self::$CD_TP_DOC_RELATORIO => self::$DS_TP_DOC_RELATORIO,
 				self::$CD_TP_DOC_PAAP => self::$DS_TP_DOC_PAAP,
 				// self::$CD_TP_DOC_MINUTA => self::$DS_TP_DOC_MINUTA,
-				self::$CD_TP_DOC_APRECIACAO_RECURSO => self::$DS_TP_DOC_APRECIACAO_RECURSO 
+				self::$CD_TP_DOC_CERTIDAO_TRANSITO_JULGADO => self::$DS_TP_DOC_CERTIDAO_TRANSITO_JULGADO,
 		);
 		
 		if($comComum)
@@ -130,7 +130,7 @@ class dominioTpDocumento extends dominio {
 				self::$CD_TP_DOC_PUBLICACAO_PAAP => self::$DS_TP_DOC_PUBLICACAO_PAAP,
 				self::$CD_TP_DOC_RELATORIO => self::$DS_TP_DOC_RELATORIO,
 				self::$CD_TP_DOC_PAAP => self::$DS_TP_DOC_PAAP,
-				self::$CD_TP_DOC_APRECIACAO_RECURSO => self::$DS_TP_DOC_APRECIACAO_RECURSO, 
+				self::$CD_TP_DOC_CERTIDAO_TRANSITO_JULGADO => self::$DS_TP_DOC_CERTIDAO_TRANSITO_JULGADO, 
 		);
 
 		ksort ( $retorno );

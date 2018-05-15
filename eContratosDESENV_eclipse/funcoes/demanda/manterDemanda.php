@@ -158,7 +158,7 @@ function iniciar(){
 	        ?>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" colspan=3><?php getCampoDadosColecaoContratos($vo->colecaoContrato, true);?>	            
+	            <TD class="campoformulario" colspan=3><?php getCampoDadosColecaoContratos($vo->colecaoContrato, true, "camponaoobrigatorio", true);?>	            
 	            </TD>
 	        </TR>	        
 			<TR>

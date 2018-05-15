@@ -26,7 +26,7 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
   		$queryFrom .= "\n ON $nmTabela." . voProcLicitatorio::$nmAtrCd . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrCdProcLic;
   		$queryFrom .= "\n AND $nmTabela." . voProcLicitatorio::$nmAtrAno . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrAnoProcLic;
   		  		
-  		$queryFrom .= "\n INNER JOIN (";
+  		$queryFrom .= "\n LEFT JOIN (";
   		$queryFrom .= " SELECT * FROM $nmTabelaDemanda WHERE " . voDemanda::$nmAtrTipo . "=" . dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL;
   		$queryFrom .= ") $nmTabelaDemanda";
   		$queryFrom .= "\n ON $nmTabelaDemanda." . voDemanda::$nmAtrCd . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrCdDemanda;

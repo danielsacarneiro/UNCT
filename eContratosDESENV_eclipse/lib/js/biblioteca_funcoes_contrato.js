@@ -20,8 +20,11 @@ function carregaNovoCampoContrato(pNmCampoDiv, pIndice) {
 	//campoQtdContrato.value = _globalQtdContrato;		    
 }
 
-function limparCampoContrato(pNmCampoDiv, pIndice, pNmCampoDivContratada, pColecaoCamposALimpar) {	
-	if(pIndice == 1){
+function limparCampoContrato(pNmCampoDiv, pIndice, pNmCampoDivContratada, pColecaoCamposALimpar, pIsAlterarDemanda) {
+	if(pIsAlterarDemanda == null)
+		pIsAlterarDemanda = false;
+	
+	if(pIndice == 1 || pIsAlterarDemanda){
 		//biblioteca_funcoes_principal.js	
 		//alert(pColecaoCamposALimpar);
 		var colecaoElementos = pColecaoCamposALimpar.split(CD_CAMPO_SEPARADOR);
