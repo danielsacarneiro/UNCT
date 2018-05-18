@@ -165,6 +165,8 @@ function getMensagemDemandaSAD(&$count = 0){
 				dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO
 		);
 		$filtro->vodemanda->tipo = array_keys ( dominioTipoDemanda::getColecaoTipoDemandaSAD () );
+		$filtro->tipoExcludente = array(dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO_MATER);
+		
 		$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_ATJA;
 		$filtro->cdAtrOrdenacao = filtroManterDemanda::$NmColDtReferenciaSetorAtual;
 		$filtro->prioridadeExcludente = dominioPrioridadeDemanda::$CD_PRIORI_BAIXA;
