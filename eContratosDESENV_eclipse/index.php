@@ -58,6 +58,7 @@ setCabecalho($titulo);
 	<?php if(isUsuarioAdmin()){?>
 	f5 = new Tree('ADMINISTRADOR');
     f5.adicionarItem(new Link('Usuários', '<?=caminho_funcoesHTML?>usuario_info', ''));
+	f5.adicionarItem(new Link("Controle LICON", "<?=caminho_funcoesHTML?>contrato_licon", ""));    
 	f5.adicionarItem(new Link("Tramitação Demanda", "<?=caminho_funcoesHTML?>demanda_tram", ""));
 	f5.adicionarItem(new Link("Agendamento de alertas (COM EMAIL)", "agendamento.php?<?=constantes::$ID_REQ_IN_ENVIAR_EMAIL?>=S", ""));
 	f5.adicionarItem(new Link("Pagina TESTE", "teste.php", ""));

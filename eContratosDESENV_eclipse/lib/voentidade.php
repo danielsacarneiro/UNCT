@@ -10,9 +10,11 @@ class voentidade extends multiplosConstrutores {
 	static $nmAtrDhInclusao = "dh_inclusao";
 	static $nmAtrDhUltAlteracao = "dh_ultima_alt";
 	static $nmAtrDhOperacao = "dh_operacao";
+	
 	static $nmAtrCdUsuarioInclusao = "cd_usuario_incl";
 	static $nmAtrCdUsuarioUltAlteracao = "cd_usuario_ultalt";
 	static $nmAtrCdUsuarioOperacao = "cd_usuario_operacao";
+	
 	static $nmAtrNmUsuarioInclusao = "nm_usuario_incl";
 	static $nmAtrNmUsuarioUltAlteracao = "nm_usuario_ultalt";
 	static $nmAtrNmUsuarioOperacao = "nm_usuario_operacao";
@@ -52,6 +54,8 @@ class voentidade extends multiplosConstrutores {
 		
 		$this->cdUsuarioUltAlteracao = id_user;
 		$this->NM_METODO_RETORNO_CONFIRMAR = null;
+		//CASO NAO TENHA TAB HISTORICO, O USUARIO DE CONTROLE SERA O DE ULTIMA_ALTERACAO
+		//O DE INCLUSAO NAO EXISTIRA
 		$this->temTabHistorico = true;
 		
 		if (method_exists ( $this, "getNmClassProcesso" )) {
@@ -75,9 +79,10 @@ class voentidade extends multiplosConstrutores {
 	// Funcoes ( Propriedades e metodos da classe )
 	function getSQLValuesInsertEntidade() {
 		$userManutencao = $this->cdUsuarioUltAlteracao;
-		if ($this->cdUsuarioInclusao == null)
+		if ($this->cdUsuarioInclusao == null || $this->cdUsuarioInclusao == ""){
 			$this->cdUsuarioInclusao = $userManutencao;
-		
+		}
+				
 		$temAtributosParaChecar = $this->varAtributos != null;
 		$temUsuarioInc = false;
 		$temUsuarioAlt = false;
@@ -314,8 +319,18 @@ class voentidade extends multiplosConstrutores {
 	function temTabHistorico() {
 		return $this->temTabHistorico;
 	}
+	function getValoresWhereSQLChaveComOutraTabela($isHistorico, $nmOutraTabela) {
+		$nmTabelaOriginal = $this->getNmTabelaEntidade ( $isHistorico );
+		if($nmOutraTabela == null || $nmOutraTabela == ""){
+			$nmTabelaOriginal .= ".";
+			$nmOutraTabela = "";
+		}
+		
+		return str_replace ($nmTabelaOriginal , $nmOutraTabela, $this->getValoresWhereSQLChave ( $isHistorico ) );
+	}
 	function getValoresWhereSQLChaveSemNomeTabela($isHistorico) {
-		return str_replace ( $this->getNmTabelaEntidade ( $isHistorico ) . ".", "", $this->getValoresWhereSQLChave ( $isHistorico ) );
+		return $this->getValoresWhereSQLChaveComOutraTabela($isHistorico, "");
+		//return str_replace ( $this->getNmTabelaEntidade ( $isHistorico ) . ".", "", $this->getValoresWhereSQLChave ( $isHistorico ) );
 	}
 	static function getCodigoFormatado($codigo) {
 		return complementarCharAEsquerda ( $codigo, "0", TAMANHO_CODIGOS );

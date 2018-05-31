@@ -208,6 +208,37 @@ ALTER TABLE contrato_info_hist ADD COLUMN in_desativado CHAR(1) NULL AFTER cd_us
 -- ALTER TABLE contrato_info_hist DROP FOREIGN KEY desativacao_demanda; 
 -- ALTER TABLE contrato_info_hist DROP COLUMN ctinf_in_prestacao_garantia;
 
+drop table contrato_licon;
+CREATE TABLE contrato_licon (
+	dem_ex INT NOT NULL,
+    dem_cd INT NOT NULL,    
+
+    ct_exercicio INT NOT NULL,
+    ct_numero INT NOT NULL,
+    ct_tipo char(1) NOT NULL,
+    ct_cd_especie CHAR(2) NOT NULL, -- especie do registro (mater, apostilamento, aditivo)
+	ct_sq_especie INT DEFAULT 1 NOT NULL, -- indice do documento em questao (primeiro ou segundo apostilamento, por ex)
+    
+    ctl_situacao CHAR(1) DEFAULT 1 NOT NULL,
+
+    ctl_obs MEDIUMTEXT NULL,
+        
+    dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    cd_usuario_ultalt INT NOT NULL,
+    
+    CONSTRAINT pk PRIMARY KEY (dem_ex, dem_cd, ct_exercicio, ct_numero, ct_tipo, ct_cd_especie, ct_sq_especie),
+    CONSTRAINT fk_contrato_licon FOREIGN KEY (ct_exercicio, ct_numero, ct_tipo, ct_cd_especie, ct_sq_especie) 
+		REFERENCES contrato (ct_exercicio, ct_numero, ct_tipo, ct_cd_especie, ct_sq_especie)
+			ON DELETE RESTRICT
+			ON UPDATE RESTRICT,
+	CONSTRAINT fk_demanda_licon FOREIGN KEY (dem_ex, dem_cd) 
+		REFERENCES demanda (dem_ex, dem_cd) 
+			ON DELETE RESTRICT
+			ON UPDATE RESTRICT
+            
+    -- CONSTRAINT ck_demanda_licon_userinclusao CHECK(cd_usuario_incl > 0)            
+);    
+
 
 SELECT count(*) FROM CONTRATO
 WHERE ct_tipo = 'C'

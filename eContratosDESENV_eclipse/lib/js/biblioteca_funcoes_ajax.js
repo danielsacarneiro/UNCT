@@ -69,6 +69,11 @@
      imprimeResultado(result, "../pessoa/campoDadosContratadaAjax.php?voentidade=vodemanda&chave=" + chaveDemanda);     
  }
 
+ function getDadosContratoLicon(chave, idDivResultado) {
+     var result = document.getElementById(idDivResultado);          
+     imprimeResultado(result, "../contrato_licon/campoDadosContratoLicon.php?chave=" + chave);     
+ }
+
  function getDadosContratadaPorPAAP(chavePAAP, idDivResultado) {
      var result = document.getElementById(idDivResultado);          
      imprimeResultado(result, "../pessoa/campoDadosContratadaAjax.php?voentidade=voPA&chave=" + chavePAAP);     

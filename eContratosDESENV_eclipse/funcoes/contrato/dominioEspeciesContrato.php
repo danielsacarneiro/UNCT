@@ -52,6 +52,13 @@ include_once(caminho_util. "dominio.class.php");
 				);
 	}	
     
+	static function getColecaoLicon(){
+		return array(
+				self::$CD_ESPECIE_CONTRATO_MATER => "Mater",
+				self::$CD_ESPECIE_CONTRATO_TERMOADITIVO => "Termo Aditivo",
+		);
+	}
+	
 	function getDominioImportacaoPlanilha() {            
             return self::getColecaoImportacaoPlanilha();
 	}

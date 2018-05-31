@@ -9,9 +9,9 @@ function isContratoValido($voContrato) {
 	// so exibe contrato se tiver
 	return $voContrato != null && $voContrato->cdContrato;
 }
-function getContratoDet($voContrato, $detalharContratoInfo = false) {
+function getContratoDet($voContrato, $detalharContratoInfo = false, $isDetalharChaveCompleta=false) {
 	$colecao = consultarPessoasContrato ( $voContrato );
-	return getContratoDetalhamento ( $voContrato, $colecao, $detalharContratoInfo);
+	return getContratoDetalhamento ( $voContrato, $colecao, $detalharContratoInfo,$isDetalharChaveCompleta);
 }
 function getColecaoContratoDet($colecao) {
 	$html = "";
@@ -25,7 +25,7 @@ function getColecaoContratoDet($colecao) {
 	}
 	return $html;
 }
-function getContratoDetalhamento($voContrato, $colecao,  $detalharContratoInfo = false) {
+function getContratoDetalhamento($voContrato, $colecao,  $detalharContratoInfo = false, $isDetalharChaveCompleta=false) {
 	$vo = new vocontrato ();
 
 	// so exibe contrato se tiver
@@ -71,7 +71,7 @@ function getContratoDetalhamento($voContrato, $colecao,  $detalharContratoInfo =
 		type="text" value="<?php echo($contrato);?>"
 		class="camporeadonlyalinhadodireita" size="<?=strlen($contrato)+1?>"
 		readonly>	
-				<?php
+	<?php				
 		// $voContrato = new vocontrato();
 		if ($voContrato->cdEspecie == null) {
 			$voContrato->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
@@ -79,6 +79,11 @@ function getContratoDetalhamento($voContrato, $colecao,  $detalharContratoInfo =
 		if ($voContrato->sqEspecie == null) {
 			$voContrato->sqEspecie = 1;
 		}
+		
+		if($isDetalharChaveCompleta){
+			$str = getContratoDescricaoEspecie($voContrato);
+			echo getDetalhamentoHTML("", "", $str);
+		}		
 		
 		if ($temLupa) {
 			if($detalharContratoInfo){
@@ -98,6 +103,15 @@ function getContratoDetalhamento($voContrato, $colecao,  $detalharContratoInfo =
 </TR>
 <?php
 	}
+}
+function getContratoDescricaoEspecie($voContrato){
+	if($voContrato->cdEspecie != null){
+		if($voContrato->cdEspecie != dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER){
+			$strSqEspecie = $voContrato->sqEspecie . "º ";
+		}
+		$str = $strSqEspecie . dominioEspeciesContrato::getDescricaoStatic($voContrato->cdEspecie);
+	}
+	return $str;	
 }
 function getContratoEntradaDeDados($tipoContrato, $cdContrato, $anoContrato, $arrayCssClass, $arrayComplementoHTML, $comChaveCompletaSeNulo = true) {
 	return getContratoEntradaDeDadosMais ( $tipoContrato, $cdContrato, $anoContrato, $arrayCssClass, $arrayComplementoHTML, null, $comChaveCompletaSeNulo );
@@ -245,8 +259,8 @@ function consultarDadosContratoCompilado($voContrato) {
 	// echo $query;
 	return $retorno;
 }
-function getCampoDadosContratoSimples($nmClass = "camponaoobrigatorio", $complementoHTML=null) {	
-	return getCampoDadosContratoMultiplosPorIndice ( null, $nmClass,$complementoHTML);
+function getCampoDadosContratoSimples($nmClass = "camponaoobrigatorio", $complementoHTML=null,$comChaveCompletaSeNulo = true) {	
+	return getCampoDadosContratoMultiplosPorIndice ( null, $nmClass,$complementoHTML,$comChaveCompletaSeNulo);
 }
 //function getCampoDadosContratoMultiplos($nmClass = "campoobrigatorio") {
 function getCampoDadosContratoMultiplos($isCampoObrigatorio = true) {	
@@ -262,8 +276,8 @@ function getCampoDadosContratoMultiplos($isCampoObrigatorio = true) {
 	// $html .= "<INPUT type='hidden' id='". vocontrato::$ID_REQ_QTD_CONTRATOS . "' name='" . vocontrato::$ID_REQ_QTD_CONTRATOS . "' value='".$indiceQtdContrato."'>";
 	return $html;
 }
-function getCampoDadosContratoMultiplosPorIndice($indice, $nmClass = "camponaoobrigatorio", $complementoHTML=null) {
-	return getCampoDadosVariosContrato ( "", "", "", $indice, $nmClass,$complementoHTML );
+function getCampoDadosContratoMultiplosPorIndice($indice, $nmClass = "camponaoobrigatorio", $complementoHTML=null, $comChaveCompletaSeNulo = true) {
+	return getCampoDadosVariosContrato ( "", "", "", $indice, $nmClass,$complementoHTML,$comChaveCompletaSeNulo);
 }
 function getCampoDadosColecaoContratos($colecaoContrato, $isExibirContratadaSePreenchido, $nmClass = "camponaoobrigatorio", $pIsAlterarDemanda=false) {	
 	// var_dump($colecaoContrato);
@@ -281,14 +295,14 @@ function getCampoDadosColecaoContratos($colecaoContrato, $isExibirContratadaSePr
 		$html = getCampoDadosContratoVOPorIndice ( null, $i, $isExibirContratadaSePreenchido, $nmClass, true,null,$pIsAlterarDemanda );
 	}
 }
-function getCampoDadosVariosContrato($tipoContrato, $cdContrato, $anoContrato, $indice, $nmClass = "camponaoobrigatorio", $complementoHTML=null) {
+function getCampoDadosVariosContrato($tipoContrato, $cdContrato, $anoContrato, $indice, $nmClass = "camponaoobrigatorio", $complementoHTML=null, $comChaveCompletaSeNulo = true) {
 	
 	$vocontrato = new vocontrato ();
 	$vocontrato->tipo = $tipoContrato;
 	$vocontrato->anoContrato = $anoContrato;
 	$vocontrato->cdContrato = $cdContrato;
 		
-	return getCampoDadosContratoVOPorIndice ( $vocontrato, $indice, false, $nmClass, true, $complementoHTML);
+	return getCampoDadosContratoVOPorIndice ( $vocontrato, $indice, false, $nmClass, $comChaveCompletaSeNulo, $complementoHTML);
 }
 function getCampoDadosContratoVOPorIndice($vocontrato, $indice, $isExibirContratadaSePreenchido, $nmClass = "camponaoobrigatorio", $comChaveCompletaSeNulo = true, $complementoHTML=null, $pIsAlterarDemanda=false) {
 	
@@ -364,5 +378,43 @@ function consultarContratosPAAP($voPAAP) {
 	$colecao = $db->consultarContratoPAAP ( $voPAAP );
 	return $colecao;
 }
+
+function getDadosContratoLicon($chave) {
+	//echo $chave;
+	if ($chave != null && $chave != "") {		
+			$vo = new vocontrato ();
+			$vo->getChavePrimariaVOExplodeParam ( $chave );
+			$dbcontrato = new dbcontrato();
+			
+			try{
+				$recordSet = $dbcontrato->consultarPorChaveTela($vo, false);
+				$retorno = getCamposContratoLicon($recordSet);
+			}catch(excecaoChaveRegistroInexistente $ex){
+				$retorno = "Dados: <INPUT type='text' class='camporeadonly' size=50 readonly value='NÃO ENCONTRADO - VERIFIQUE O CONTRATO'>\n";
+			}
+						
+	}
+
+	return $retorno;
+}
+
+function getCamposContratoLicon($recordSet){
+	$registrobanco = $recordSet;
+	$voContrato = new vocontrato();
+	$voContrato->getDadosBanco($registrobanco);
+	
+	$voContratoInfo = new voContratoInfo();
+	$voContratoInfo->getDadosBanco($registrobanco);	
+	
+	
+	if($voContrato != null){		
+		$retorno = "Data Vigência Inicial " . getInputText("", "", getData($voContrato->dtVigenciaInicial), constantes::$CD_CLASS_CAMPO_READONLY);
+		$retorno .= " a Data Final " . getInputText("", "", getData($voContrato->dtVigenciaFinal), constantes::$CD_CLASS_CAMPO_READONLY);
+		$retorno .= "<br>Data Assinatura " . getInputText("", "", getData($voContrato->dtAssinatura), constantes::$CD_CLASS_CAMPO_READONLY);
+	}
+
+	return $retorno;
+}
+
 
 ?>

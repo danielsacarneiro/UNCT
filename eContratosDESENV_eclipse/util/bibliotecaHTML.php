@@ -236,7 +236,7 @@ function incluirUsuarioDataHoraDetalhamento($voEntidade) {
 	if ($voEntidade->dhUltAlteracao != null) {
 		$retorno .= "<TR>
 	            <TH class='campoformulario' nowrap>Data Ult.Alteração:</TH>
-	            <TD class='campoformulario'>
+	            <TD class='campoformulario' width='1%'>
 	            	<INPUT type='text'	            	        
 	            			value='" . getDataHoraSQLComoString ( $voEntidade->dhUltAlteracao ) . "'
 	            			class='camporeadonly' 
@@ -248,7 +248,7 @@ function incluirUsuarioDataHoraDetalhamento($voEntidade) {
 	            			value='" . $voEntidade->dhUltAlteracao . "'>
 	            					
 				</TD>
-	            <TH class='campoformulario' nowrap>Usuário Ult.Alteração:</TH>
+	            <TH class='campoformulario' nowrap width='1%'>Usuário Ult.Alteração:</TH>
 	            <TD class='campoformulario'>
 	            	<INPUT type='text' 
 	            	       id='" . voentidade::$nmAtrCdUsuarioUltAlteracao . "' 
@@ -818,6 +818,11 @@ function getDetalhamentoHTMLCodigoAno($ano, $cd, $tamanhoCodigo = null) {
 	}
 	$retorno .= "Ano: <INPUT type='text' value='$ano'  class='camporeadonly' size='5' readonly>";
 	$retorno .= "Número: <INPUT type='text' value='" . complementarCharAEsquerda ( $cd, "0", $tamanhoCodigo ) . "'  class='camporeadonlyalinhadodireita' size='6' readonly>";	
+	return $retorno;
+}
+
+function getDetalhamentoHTML($id, $nm, $texto, $tamanhoCodigo = null) {
+	$retorno = getInputText($id, $nm, $texto, constantes::$CD_CLASS_CAMPO_READONLY, $tamanhoCodigo)."\n";
 	return $retorno;
 }
 

@@ -65,7 +65,7 @@ function getDadosContratada($chave, $voentidade = null) {
 					$arrayCdAutorizacao [] = $registro [vocontrato::$nmAtrCdAutorizacaoContrato];
 				}
 
-				putObjetoSessao ( "teste", $arrayCdAutorizacao );
+				//putObjetoSessao ( "teste", $arrayCdAutorizacao );
 			}
 		} else {
 			if($isConsultaPessoaPorDemanda){

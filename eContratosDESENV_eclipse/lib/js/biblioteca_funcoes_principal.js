@@ -151,6 +151,7 @@ function tornarRequiredCamposColecaoFormulario(colecaoIDCampos, pIsRequired){
 	for(i=0;i<colecaoIDCampos.length;i++){					
 		id = colecaoIDCampos[i];		
 		element = document.getElementById(id);
+		//alert(id);
 		if(element != null){
 			element.required = pIsRequired;			
 			if(pIsRequired){

@@ -66,7 +66,7 @@ Class voDemandaContrato extends voentidade{
 			return $query;
 	}
 
-	function getAtributosFilho(){
+	static function getAtributosFilho(){
 		$retorno = array(
 				self::$nmAtrAnoDemanda,
 				self::$nmAtrCdDemanda,
@@ -80,8 +80,8 @@ Class voDemandaContrato extends voentidade{
 		return $retorno;
 	}
 
-	function getAtributosChavePrimaria(){
-		return $this->getAtributosFilho();
+	static function getAtributosChavePrimaria(){
+		return static::getAtributosFilho();
 	}
 
 	function getDadosRegistroBanco($registrobanco){
@@ -126,18 +126,19 @@ Class voDemandaContrato extends voentidade{
 		. CAMPO_SEPARADOR
 		. $this->cdDemanda
 		. CAMPO_SEPARADOR
-		. $this->voContrato->getValorChaveHTML();		
+		. $this->voContrato->getValorChaveHTML();
 	}
 
 	function getChavePrimariaVOExplode($array){
+		//se mudar a ordem, lembrar de mudar no voContratoLicon
 		$this->anoDemanda = $array[0];
 		$this->cdDemanda = $array[1];		
 		
 		$this->voContrato->anoContrato = $array[3];
-		$this->voContrato->tipo = $array[4];
-		$this->voContrato->cdContrato = $array[5];
+		$this->voContrato->cdContrato = $array[4];
+		$this->voContrato->tipo = $array[5];
 		$this->voContrato->cdEspecie = $array[6];		
-		$this->voContrato->cdEspecie = $array[7];
+		$this->voContrato->sqEspecie = $array[7];
 	}
 
 }

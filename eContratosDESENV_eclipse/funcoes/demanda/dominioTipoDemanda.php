@@ -15,6 +15,8 @@ Class dominioTipoDemanda extends dominio{
 	static $CD_TIPO_DEMANDA_PARECER = 9;
 	
 	static $CD_TIPO_DEMANDA_CONTROLE_AQUISICAO= 11;
+	static $CD_TIPO_DEMANDA_LICON = 12;
+	static $CD_TIPO_DEMANDA_PORTALTRANSPARENCIA = 13;
 	//static $CD_TIPO_DEMANDA_LICON = 12;
 	
 	static $CD_TIPO_DEMANDA_A_CLASSIFICAR = 99;
@@ -29,9 +31,12 @@ Class dominioTipoDemanda extends dominio{
 	static $DS_TIPO_DEMANDA_CONTRATO_PRORROGACAO = "Contrato Prorrogação";
 	static $DS_TIPO_DEMANDA_CONTRATO_APOSTILAMENTO= "Contrato Apostilamento";
 	static $DS_TIPO_DEMANDA_PARECER = "Parecer";
-	static $DS_TIPO_DEMANDA_CONTROLE_AQUISICAO= "Controle Aquisição";
-	
+	static $DS_TIPO_DEMANDA_CONTROLE_AQUISICAO= "Controle Aquisição";	
 	static $DS_TIPO_DEMANDA_A_CLASSIFICAR = "A classificar";
+	
+	static $DS_TIPO_DEMANDA_LICON = "LICON";
+	static $DS_TIPO_DEMANDA_PORTALTRANSPARENCIA = "Portal Transparência";
+	
 	// ...............................................................
 	// Construtor
 	function __construct0 () {
@@ -95,6 +100,10 @@ Class dominioTipoDemanda extends dominio{
 				self::$CD_TIPO_DEMANDA_EDITAL => self::$DS_TIPO_DEMANDA_EDITAL,
 				self::$CD_TIPO_DEMANDA_PARECER => self::$DS_TIPO_DEMANDA_PARECER,
 				self::$CD_TIPO_DEMANDA_JUDICIAL => self::$DS_TIPO_DEMANDA_JUDICIAL,
+				
+				self::$CD_TIPO_DEMANDA_LICON => self::$DS_TIPO_DEMANDA_LICON,
+				self::$CD_TIPO_DEMANDA_PORTALTRANSPARENCIA => self::$DS_TIPO_DEMANDA_PORTALTRANSPARENCIA,
+				
 				self::$CD_TIPO_DEMANDA_A_CLASSIFICAR => self::$DS_TIPO_DEMANDA_A_CLASSIFICAR,				
 		);
 	}

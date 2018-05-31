@@ -8,7 +8,7 @@ Class dbDemandaContrato extends dbprocesso{
 		return $this->incluirQueryVO($vo);
 	}	
 	
-	function getSQLValuesInsert($vo){		
+	function getSQLValuesInsert($vo, $comColunasVOEntidade = true){		
 		if($vo->voContrato->cdEspecie == dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER){
 			$vo->voContrato->sqEspecie = 1;
 		}
@@ -23,7 +23,10 @@ Class dbDemandaContrato extends dbprocesso{
 		$retorno.= $this-> getVarComoNumero($vo->voContrato->cdContrato) . ",";		
 		$retorno.= $this-> getVarComoNumero($vo->voContrato->sqEspecie);
 				
-		$retorno.= $vo->getSQLValuesInsertEntidade();
+		if($comColunasVOEntidade){
+			//usado pelo dbContratoLicon
+			$retorno.= $vo->getSQLValuesInsertEntidade();
+		}
 
 		return $retorno;
 	}

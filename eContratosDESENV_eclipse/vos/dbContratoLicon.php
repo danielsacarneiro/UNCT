@@ -1,0 +1,125 @@
+<?php
+include_once(caminho_lib. "dbprocesso.obj.php");
+include_once 'voContratoLicon.php';
+
+  Class dbContratoLicon extends dbprocesso{
+  	function consultarPorChaveTela($vo, $isHistorico) {
+  		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
+  		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( false );
+  		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
+  		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
+  		
+  		$colecaoAtributoCoalesceNmPessoa = array(
+  				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
+  				$nmTabelaContrato . "." . vocontrato::$nmAtrContratadaContrato,
+  		);
+  		 
+  		$arrayColunasRetornadas = array (
+  				$nmTabela . ".*",
+  				$nmTabelaDemanda . "." . voDemanda::$nmAtrTipo,
+  				$nmTabelaContrato . "." . vocontrato::$nmAtrDtAssinaturaContrato,
+  				$nmTabelaContrato . "." . vocontrato::$nmAtrDtVigenciaInicialContrato,
+  				$nmTabelaContrato . "." . vocontrato::$nmAtrDtVigenciaFinalContrato,
+  				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
+  				//$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
+  				getSQLCOALESCE($colecaoAtributoCoalesceNmPessoa,vopessoa::$nmAtrNome),
+  		);
+  		
+  		$queryJoin .= "\n left JOIN " . $nmTabelaDemanda;
+  		$queryJoin .= "\n ON ";
+  		$queryJoin .= $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $nmTabela . "." . voContratoLicon::$nmAtrAnoDemanda;
+  		$queryJoin .= " AND " . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd . "=" . $nmTabela . "." . voContratoLicon::$nmAtrCdDemanda;
+  		
+  		$queryJoin .= "\n left JOIN " . $nmTabelaContrato;
+  		$queryJoin .= "\n ON ";
+  		$queryJoin .= $nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabela . "." . voContratoLicon::$nmAtrAnoContrato;
+  		$queryJoin .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato. "=" . $nmTabela . "." . voContratoLicon::$nmAtrCdContrato;
+  		$queryJoin .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabela . "." . voContratoLicon::$nmAtrTipoContrato;
+  		$queryJoin .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrCdEspecieContrato . "=" . $nmTabela . "." . voContratoLicon::$nmAtrCdEspecieContrato;
+  		$queryJoin .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato . "=" . $nmTabela . "." . voContratoLicon::$nmAtrSqEspecieContrato;
+  		 
+  		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoaContrato;
+  		$queryJoin .= "\n ON ";
+  		$queryJoin .= $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
+  	
+  		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryJoin, $isHistorico );
+  	}
+  	
+  	function consultarTelaConsulta($vo, $filtro) {
+  		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );  		
+  		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( false );
+  		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
+  		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
+  	
+  		$colecaoAtributoCoalesceNmPessoa = array(
+  				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
+  				$nmTabelaContrato . "." . vocontrato::$nmAtrContratadaContrato,
+  		);
+  	
+  		$arrayColunasRetornadas = array (
+  				$nmTabela . ".*",
+  				$nmTabelaDemanda . "." . voDemanda::$nmAtrTipo,
+  				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
+  				//$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
+  				getSQLCOALESCE($colecaoAtributoCoalesceNmPessoa,vopessoa::$nmAtrNome),
+  		);
+  	  	
+  		$queryJoin .= "\n left JOIN " . $nmTabelaDemanda;
+  		$queryJoin .= "\n ON ";
+  		$queryJoin .= $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $nmTabela . "." . voContratoLicon::$nmAtrAnoDemanda;
+  		$queryJoin .= " AND " . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd . "=" . $nmTabela . "." . voContratoLicon::$nmAtrCdDemanda;
+  		
+  		$queryJoin .= "\n left JOIN " . $nmTabelaContrato;
+  		$queryJoin .= "\n ON ";
+  		$queryJoin .= $nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabela . "." . voContratoLicon::$nmAtrAnoContrato;
+  		$queryJoin .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato. "=" . $nmTabela . "." . voContratoLicon::$nmAtrCdContrato;
+  		$queryJoin .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabela . "." . voContratoLicon::$nmAtrTipoContrato;
+  		$queryJoin .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrCdEspecieContrato . "=" . $nmTabela . "." . voContratoLicon::$nmAtrCdEspecieContrato;
+  		$queryJoin .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato . "=" . $nmTabela . "." . voContratoLicon::$nmAtrSqEspecieContrato;
+  	
+  		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoaContrato;
+  		$queryJoin .= "\n ON ";
+  		$queryJoin .= $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
+  	  	
+  		return parent::consultarMontandoQueryTelaConsulta ( $vo, $filtro, $arrayColunasRetornadas, $queryJoin );
+  	}
+  	 
+  	/*function consultarTelaConsulta($vo, $filtro){
+  		$isHistorico = $filtro->isHistorico;
+  		$nmTabela = $vo->getNmTabelaEntidade($isHistorico);
+  			
+  		$atributosConsulta = "*";
+  		$querySelect = "SELECT ". $atributosConsulta;
+  		$queryFrom = "\n FROM ". $nmTabela;
+  	
+  		return $this->consultarComPaginacaoQuery($vo, $filtro, $querySelect, $queryFrom);
+  	}*/
+  	 
+    function getSQLValuesInsert($vo){
+		$retorno = "";
+		$retorno.= $vo->vodemandacontrato->dbprocesso->getSQLValuesInsert($vo->vodemandacontrato, false) . ",";
+		
+        $retorno.= $this-> getVarComoNumero($vo->situacao). ",";
+        $retorno.= $this-> getVarComoString($vo->obs);
+        
+        $retorno.= $vo->getSQLValuesInsertEntidade();
+		        
+		return $retorno;                
+    }
+        
+    /*function getSQLValuesUpdate($vo){        
+        $retorno = "";
+        $sqlConector = "";
+                
+        if($vo->link != null){
+            $retorno.= $sqlConector . voDocumento::$nmAtrLink. " = " . $this->getVarComoString($vo->link);
+            $sqlConector = ",";
+        }
+                
+        $retorno = $retorno . $sqlConector . $vo->getSQLValuesUpdate();
+		        
+		return $retorno;                
+    }*/
+   
+}
+?>

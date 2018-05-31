@@ -28,6 +28,33 @@ class dbcontrato extends dbprocesso {
 			return $retorno;
 		}
 	}
+	function consultarPorChaveTela($vo, $isHistorico) {
+		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
+		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
+		
+		$arrayColunasRetornadas = array (
+				$nmTabela . ".*",
+				"$nmTabelaContratoInfo." . voContratoInfo::$nmAtrDtProposta,
+				"TAB2." . vousuario::$nmAtrName . " AS " . voentidade::$nmAtrNmUsuarioUltAlteracao,
+		);		
+						
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaContratoInfo;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrCdContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrCdContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrAnoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrAnoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrTipoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
+		
+		$queryJoin .= "\n LEFT JOIN " . vousuario::$nmEntidade;
+		$queryJoin .= "\n TAB1 ON ";
+		$queryJoin .= "TAB1." . vousuario::$nmAtrID . "=$nmTabela." . vocontrato::$nmAtrCdUsuarioInclusao;
+		$queryJoin .= "\n LEFT JOIN " . vousuario::$nmEntidade;
+		$queryJoin .= "\n TAB2 ON ";
+		$queryJoin .= "TAB2." . vousuario::$nmAtrID . "=$nmTabela." . vocontrato::$nmAtrCdUsuarioUltAlteracao;		
+			
+		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryJoin, $isHistorico );
+	}
 	function consultarContratoPorChave($voContrato, $isHistorico) {
 		$nmTabela = $voContrato->getNmTabelaEntidade ( $isHistorico );
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
