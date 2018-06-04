@@ -22,6 +22,7 @@ $mensagem .= getMensagemPAAPAbertoNaoEncaminhado($count);
 $mensagem .= getMensagemFimPrazoPAAP($count);
 //envia alertas das demandas que devem ser analisadas pois ja tem suas proposta de precos vencida, tornando possivel o calculo do reajuste
 $mensagem .= getMensagemDemandaContratoPropostaVencida($count);
+$mensagem .= getMensagemSistemasExternos($count);
 //envia alertas dos contratos a vencer. Ainda depende de definicao da diretoria
 //$mensagem .= getMensagemContratosAVencer();
 

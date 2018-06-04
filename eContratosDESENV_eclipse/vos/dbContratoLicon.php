@@ -94,6 +94,21 @@ include_once 'voContratoLicon.php';
   	
   		return $this->consultarComPaginacaoQuery($vo, $filtro, $querySelect, $queryFrom);
   	}*/
+  	
+  	function validarInclusao($vo){  		
+  		$vodemanda = $vo->vodemandacontrato->getVODemandaChave();
+  		$dbdemanda = new dbDemanda();
+  		$vodemanda = $dbdemanda->consultarPorChaveVO($vodemanda, false);
+  		if($vodemanda->tipo != dominioTipoDemanda::existeItem($vodemanda->tipo, dominioTipoDemanda::getColecaoTipoDemandaSistemasExternos())){
+  			throw new excecaoGenerica("Demanda deve ser do tipo 'Sistemas Externos'");
+  		}  		
+  	}
+  	 
+  	 function incluir($vo){
+  	 	$this->validarInclusao($vo);
+  	 	
+  		parent::incluir($vo);
+  	}
   	 
     function getSQLValuesInsert($vo){
 		$retorno = "";

@@ -5,7 +5,7 @@ include_once(caminho_vos ."voDocumento.php");
 
 class filtroManterDocumento extends filtroManter{
     
-    public static $nmFiltro = "filtroManterDocumento";
+    public $nmFiltro = "filtroManterDocumento";
     
     	var $sq = "";
     	var $cdSetor = "";

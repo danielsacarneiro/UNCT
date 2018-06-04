@@ -3,9 +3,10 @@ include_once (caminho_util . "bibliotecaSQL.php");
 include_once (caminho_lib . "filtroManter.php");
 
 class filtroManterContratoLicon extends filtroManter {
-	public static $nmFiltro = "filtroManterContratoLicon";
+	//public static $nmFiltro = "filtroManterContratoLicon";
+	public $nmFiltro = "filtroManterContratoLicon";
 	
-	var $sq = "";
+	var $sq = "";	
 	
 	function getFiltroFormulario() {
 		$this->sq = @$_POST [voDemanda::$nmAtrCd];
@@ -27,32 +28,7 @@ class filtroManterContratoLicon extends filtroManter {
 			// echo "setou o ano defaul";
 			;
 		}
-				
-		if ($this->cdSetor != null) {
-			$filtro = $filtro . $conector . $nmTabela . "." . voDocumento::$nmAtrCdSetor . " = " . $this->cdSetor;
-			
-			$conector = "\n AND ";
-		}
-		
-		if ($this->ano != null) {
-			$filtro = $filtro . $conector . $nmTabela . "." . voDocumento::$nmAtrAno . " = " . $this->ano;
-			
-			$conector = "\n AND ";
-		}
-		
-		if ($this->tp != null) {
-			$filtro = $filtro . $conector . $nmTabela . "." . voDocumento::$nmAtrTp . " = '" . $this->tp . "'";
-			
-			$conector = "\n AND ";
-		}
-		
-		if ($this->link != null) {
-			$filtro = $filtro . $conector . $nmTabela . "." . voDocumento::$nmAtrLink . " LIKE '%" . 
-			// . substituirCaracterSQLLike($this->link)
-			$this->link . "%'";
-			$conector = "\n AND ";
-		}
-		
+						
 		$this->formataCampoOrdenacao ( new voContratoLicon () );
 		// finaliza o filtro
 		$filtro = parent::getFiltroSQL ( $filtro, $comAtributoOrdenacao );

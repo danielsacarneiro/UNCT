@@ -49,6 +49,7 @@ setCabecalho($titulo);
 
 	fadm = new Tree('Serviço 06 (Administrativo)');
 	fadm.adicionarItem(new Link("Agendamento de alertas (SEM EMAIL)", "agendamento.php?<?=constantes::$ID_REQ_IN_ENVIAR_EMAIL?>=N", ""));
+	fadm.adicionarItem(new Link("Controle Sistemas Externos (LICON)", "<?=caminho_funcoesHTML?>contrato_licon", ""));	
 	f.adicionarItem(fadm);
 
 	/*flegislacao = new Tree('Serviço 05 (Legislação)');    
@@ -57,8 +58,7 @@ setCabecalho($titulo);
 
 	<?php if(isUsuarioAdmin()){?>
 	f5 = new Tree('ADMINISTRADOR');
-    f5.adicionarItem(new Link('Usuários', '<?=caminho_funcoesHTML?>usuario_info', ''));
-	f5.adicionarItem(new Link("Controle LICON", "<?=caminho_funcoesHTML?>contrato_licon", ""));    
+    f5.adicionarItem(new Link('Usuários', '<?=caminho_funcoesHTML?>usuario_info', ''));    
 	f5.adicionarItem(new Link("Tramitação Demanda", "<?=caminho_funcoesHTML?>demanda_tram", ""));
 	f5.adicionarItem(new Link("Agendamento de alertas (COM EMAIL)", "agendamento.php?<?=constantes::$ID_REQ_IN_ENVIAR_EMAIL?>=S", ""));
 	f5.adicionarItem(new Link("Pagina TESTE", "teste.php", ""));
@@ -108,6 +108,9 @@ setCabecalho($titulo);
                         				</TD>
                     				</TR>
                     				<?php 
+                    				$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_OUTROS, 47));
+                    				echo imprimeBotaoDocumento($vodocumento, "Documentação exigida pela SAD");
+                    				
                     				$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_OUTROS, 3));
                     				echo imprimeBotaoDocumento($vodocumento, "Visto Edital");
                     				

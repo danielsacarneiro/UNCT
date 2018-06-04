@@ -3,15 +3,36 @@
 require_once (caminho_funcoes . vocontrato::getNmTabela () . "/dominioAutorizacao.php");
 require_once (caminho_lib . "phpmailer/config_email.php");
 
+function incluirColunaColecaoArray($colecao, $array){		
+	$colecao[] = $array;
+	return $colecao;
+}
+	/**
+	 *
+	 * @deprecated
+	 *        	
+	 * @return string
+	 */
+
 function incluirColunaColecao($colecao, $tituloColuna, $valorColuna, $tipoDado = null, $valorReferencia = null, $tpValidacao = null){	
-	$colecao[] =array( 
+	/*$colecao[] =array( 
 			constantes::$CD_COLUNA_CHAVE => $tituloColuna,
 			constantes::$CD_COLUNA_VALOR => $valorColuna,
 			constantes::$CD_COLUNA_TP_DADO =>  $tipoDado,
 			constantes::$CD_COLUNA_VL_REFERENCIA =>  $valorReferencia,
 			constantes::$CD_COLUNA_TP_VALIDACAO =>  $tpValidacao,
 			
-	);
+	);*/
+	
+	$array =array(
+	 constantes::$CD_COLUNA_CHAVE => $tituloColuna,
+	 constantes::$CD_COLUNA_VALOR => $valorColuna,
+	 constantes::$CD_COLUNA_TP_DADO =>  $tipoDado,
+	 constantes::$CD_COLUNA_VL_REFERENCIA =>  $valorReferencia,
+	 constantes::$CD_COLUNA_TP_VALIDACAO =>  $tpValidacao,	 	
+	 );
+	
+	$colecao = incluirColunaColecaoArray($colecao, $array);
 	return $colecao;
 }
 
@@ -80,6 +101,10 @@ function getCorpoMensagemPorColecao($titulo, $colecao, $colunasAExibir, $isPrior
 					$coluna_valor = $registro[$coluna[constantes::$CD_COLUNA_VALOR]];
 					if(constantes::$CD_TP_DADO_DATA == $coluna[constantes::$CD_COLUNA_TP_DADO]){
 						$coluna_valor = getData($coluna_valor);
+					}else if(constantes::$CD_TP_DADO_DOMINIO == $coluna[constantes::$CD_COLUNA_TP_DADO]){
+						$nmClasseDominio = $coluna[constantes::$CD_COLUNA_NM_CLASSE_DOMINIO];
+						$dominio = new $nmClasseDominio();
+						$coluna_valor = $dominio->getDescricaoStatic($coluna_valor);
 					}
 					
 					$colunaTipoDado = $coluna[constantes::$CD_COLUNA_TP_DADO];

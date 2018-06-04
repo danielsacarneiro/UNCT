@@ -157,7 +157,7 @@ CREATE TABLE contrato_info (
     CONSTRAINT pk PRIMARY KEY (ct_exercicio, ct_numero, ct_tipo)
 );
 
-ALTER TABLE contrato_info ADD CONSTRAINT fk_contrato_info FOREIGN KEY (ct_exercicio, ct_numero, ct_tipo) REFERENCES contrato (ct_exercicio, ct_numero, ct_tipo)
+/*ALTER TABLE contrato_info ADD CONSTRAINT fk_contrato_info FOREIGN KEY (ct_exercicio, ct_numero, ct_tipo) REFERENCES contrato (ct_exercicio, ct_numero, ct_tipo)
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;
     
@@ -170,7 +170,7 @@ ALTER TABLE contrato_info ADD COLUMN in_desativado CHAR(1) NOT NULL DEFAULT 'N' 
 -- ALTER TABLE contrato_info ADD COLUMN in_desativado CHAR(1) NOT NULL AFTER cd_usuario_ultalt;
  -- ALTER TABLE contrato_info DROP COLUMN ctinf_in_pat;
     
-ALTER TABLE contrato_info DROP FOREIGN KEY fk_contrato_info;
+ALTER TABLE contrato_info DROP FOREIGN KEY fk_contrato_info;*/
 
 drop table contrato_info_hist;
 CREATE TABLE contrato_info_hist (
@@ -200,13 +200,13 @@ CREATE TABLE contrato_info_hist (
 	CONSTRAINT pk PRIMARY KEY (hist)
 );
 
-ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_garantia CHAR(1) NULL AFTER ctinf_obs;
+/*ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_garantia CHAR(1) NULL AFTER ctinf_obs;
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_tp_garantia INT NULL AFTER ctinf_in_garantia;
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_mao_obra CHAR(1) NULL AFTER ctinf_tp_garantia;
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_cd_classificacao INT NULL AFTER ctinf_in_mao_obra;
 ALTER TABLE contrato_info_hist ADD COLUMN in_desativado CHAR(1) NULL AFTER cd_usuario_ultalt;
 -- ALTER TABLE contrato_info_hist DROP FOREIGN KEY desativacao_demanda; 
--- ALTER TABLE contrato_info_hist DROP COLUMN ctinf_in_prestacao_garantia;
+-- ALTER TABLE contrato_info_hist DROP COLUMN ctinf_in_prestacao_garantia;*/
 
 drop table contrato_licon;
 CREATE TABLE contrato_licon (
@@ -227,17 +227,20 @@ CREATE TABLE contrato_licon (
     cd_usuario_ultalt INT NOT NULL,
     
     CONSTRAINT pk PRIMARY KEY (dem_ex, dem_cd, ct_exercicio, ct_numero, ct_tipo, ct_cd_especie, ct_sq_especie),
-    CONSTRAINT fk_contrato_licon FOREIGN KEY (ct_exercicio, ct_numero, ct_tipo, ct_cd_especie, ct_sq_especie) 
-		REFERENCES contrato (ct_exercicio, ct_numero, ct_tipo, ct_cd_especie, ct_sq_especie)
-			ON DELETE RESTRICT
-			ON UPDATE RESTRICT,
 	CONSTRAINT fk_demanda_licon FOREIGN KEY (dem_ex, dem_cd) 
 		REFERENCES demanda (dem_ex, dem_cd) 
 			ON DELETE RESTRICT
 			ON UPDATE RESTRICT
             
     -- CONSTRAINT ck_demanda_licon_userinclusao CHECK(cd_usuario_incl > 0)            
-);    
+); 
+
+/*CONSTRAINT fk_contrato_licon FOREIGN KEY (ct_exercicio, ct_numero, ct_tipo, ct_cd_especie, ct_sq_especie) 
+		REFERENCES contrato (ct_exercicio, ct_numero, ct_tipo, ct_cd_especie, ct_sq_especie)
+			ON DELETE RESTRICT
+			ON UPDATE RESTRICT,
+
+ALTER TABLE contrato_licon DROP FOREIGN KEY fk_contrato_licon;*/
 
 
 SELECT count(*) FROM CONTRATO

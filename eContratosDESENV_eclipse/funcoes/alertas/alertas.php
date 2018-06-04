@@ -186,6 +186,45 @@ function getMensagemDemandaSAD(&$count = 0){
 	return $msg;
 }
 
+function getMensagemSistemasExternos(&$count = 0){
+	$assunto = "Sistemas Externos:";
+	$assunto = getSequenciaAssunto($assunto, $count);
+
+	try {
+		$voDemanda = new voDemanda ();
+		$dbprocesso = $voDemanda->dbprocesso;
+
+		$filtro = new filtroManterDemanda( false );
+		$filtro->isValidarConsulta = false;
+		// $filtro->voPrincipal = $voDemanda;
+		$filtro->setaFiltroConsultaSemLimiteRegistro ();
+		$filtro->vodemanda->situacao = array (
+				dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_ABERTA,
+				dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO
+		);
+
+		$filtro->vodemanda->tipo = array(dominioTipoDemanda::$CD_TIPO_DEMANDA_PORTALTRANSPARENCIA, dominioTipoDemanda::$CD_TIPO_DEMANDA_LICON);
+		$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_ATJA;
+		$filtro->cdAtrOrdenacao = filtroManterDemanda::$NmColDtReferenciaSetorAtual;
+		
+		$coluna1 =array(
+				constantes::$CD_COLUNA_CHAVE => "Sistema",
+				constantes::$CD_COLUNA_VALOR => vodemanda::$nmAtrTipo,
+				constantes::$CD_COLUNA_TP_DADO =>  constantes::$CD_TP_DADO_DOMINIO,
+				constantes::$CD_COLUNA_NM_CLASSE_DOMINIO =>  "dominioTipoDemanda",
+		);
+		
+		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $coluna1);
+
+		$msg = getCorpoMensagemDemandaPorColecao($assunto, $filtro, $colunasAAcrescentar, false);
+
+	} catch ( Exception $ex ) {
+		$msg = $ex->getMessage ();
+	}
+
+	return $msg;
+}
+
 /**
  * 
  * @return string

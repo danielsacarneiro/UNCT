@@ -7,7 +7,7 @@ Class dominioSituacaoContratoLicon extends dominio{
 	static $CD_SITUACAO_EXISTENTE = 2;
 		
 	static $DS_SITUACAO_INCLUIDO = 'Incluído';
-	static $DS_SITUACAO_EXISTENTE = 'Existente';
+	static $DS_SITUACAO_EXISTENTE = 'Já Existia';
 	
 	// ...............................................................
 	// Construtor

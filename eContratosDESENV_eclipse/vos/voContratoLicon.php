@@ -114,7 +114,10 @@ class voContratoLicon extends voentidade {
 		$retorno .= "Ano.Demanda:" . $this->vodemandacontrato->anoDemanda;
 		$retorno .= "|Cd.Demanda:" . $this->vodemandacontrato->cdDemanda;
 		$retorno .= "|Contrato:" . formatarCodigoContrato($this->vodemandacontrato->voContrato->cdContrato, $this->vodemandacontrato->voContrato->anoContrato, $this->vodemandacontrato->voContrato->tipo);
-		$retorno .= "Situacao:" . dominioSituacaoContratoLicon::getDescricaoStatic($this->situacao);
+		
+		if($this->situacao != null){
+			$retorno .= "Situacao:" . dominioSituacaoContratoLicon::getDescricaoStatic($this->situacao);
+		}
 
 		return $retorno;
 	}

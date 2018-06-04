@@ -137,6 +137,15 @@ Class dominioTipoDemanda extends dominio{
 		);		
 		return $retorno;
 	}
+	
+	static function getColecaoTipoDemandaSistemasExternos(){
+		$retorno = array(
+				self::$CD_TIPO_DEMANDA_LICON => self::$DS_TIPO_DEMANDA_LICON,
+				self::$CD_TIPO_DEMANDA_PORTALTRANSPARENCIA => self::$DS_TIPO_DEMANDA_PORTALTRANSPARENCIA,
+		);
+		return $retorno;
+	}
+	
 	/*static function getSQLisTipoDemandaContratoReajuste($tipo){
 		$retorno = "FALSE";
 		if($tipo != null && static::$CD_TIPO_DEMANDA_CONTRATO_REAJUSTE)

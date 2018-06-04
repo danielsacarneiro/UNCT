@@ -113,6 +113,12 @@ Class voDemandaContrato extends voentidade{
 		}
 		
 	}
+	
+	function getVODemandaChave(){
+		$array = array($this->anoDemanda, $this->cdDemanda);
+		$voDemanda = new voDemanda($array);
+		return $voDemanda;
+	}
 	 
 	function toString(){
 		$retorno.= $this->anoDemanda;

@@ -3,6 +3,7 @@ include_once (caminho_util . "paginacao.php");
 include_once (caminho_util . "multiplosConstrutores.php");
 include_once (caminho_util . "dominioTpVigencia.php");
 class filtroManter extends multiplosConstrutores {
+	
 	// ...............................................................
 	// construtor
 	static $nmAtrCdConsultarArquivo = "cdConsultarArquivo";
@@ -105,8 +106,8 @@ class filtroManter extends multiplosConstrutores {
 	function isSetaValorDefault() {
 		$retorno = false;
 	}
-	static function verificaFiltroSessao($filtro) {
-		// echo $filtro->nmFiltro;
+	static function verificaFiltroSessao($filtro) {		
+		//echoo("FILTRO: " . $filtro->nmFiltro);
 		session_start ();
 		$utilizarSessao = @$_POST ["utilizarSessao"];
 		$isUtilizarSessao = $utilizarSessao != "N";
@@ -130,7 +131,7 @@ class filtroManter extends multiplosConstrutores {
 		} else {
 			// echo "incluiu filtro sessao";
 			putObjetoSessao ( $filtro->nmFiltro, $filtro );
-		}
+		}		 
 		
 		return $filtro;
 	}

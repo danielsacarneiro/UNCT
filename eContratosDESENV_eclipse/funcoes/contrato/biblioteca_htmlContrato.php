@@ -83,6 +83,8 @@ function getContratoDetalhamento($voContrato, $colecao,  $detalharContratoInfo =
 		if($isDetalharChaveCompleta){
 			$str = getContratoDescricaoEspecie($voContrato);
 			echo getDetalhamentoHTML("", "", $str);
+			echo getInputHidden(vocontrato::$nmAtrCdEspecieContrato, vocontrato::$nmAtrCdEspecieContrato, $voContrato->cdEspecie);
+			echo getInputHidden(vocontrato::$nmAtrSqEspecieContrato, vocontrato::$nmAtrSqEspecieContrato, $voContrato->sqEspecie);
 		}		
 		
 		if ($temLupa) {
