@@ -55,7 +55,11 @@ function getDadosContratada($chave, $voentidade = null) {
 				// $recordSet = getRecordSetGroupBy($recordSet, $colecaoColunasAgrupar);
 				$tam = count ( $recordSet );
 
-				$retorno = "";
+				//$retorno = "";
+				
+				//bota a lupa sempre pro mater
+				$retorno = getLupaContratoMaterPorChaveHTML($chave);
+				
 				for($i = 0; $i < $tam; $i ++) {
 					$registro = $recordSet [$i];
 						
@@ -75,8 +79,17 @@ function getDadosContratada($chave, $voentidade = null) {
 			}
 		}
 	}
-
+	
 	return $retorno;
+}
+function getLupaContratoMaterPorChaveHTML($chave){
+	//bota a lupa sempre pro mater
+	$voContTemp = new vocontrato();
+	$voContTemp->getChavePrimariaVOExplodeParam($chave);
+	$voContTemp->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
+	$voContTemp->sqEspecie = 1;
+	$chaveTemp = $voContTemp->getValorChaveHTML();
+	return getLinkPesquisa ( "../contrato/detalharContrato.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $chaveTemp );	
 }
 function converteRecordSetEmColecaoVOsContrato($colecao) {
 	$retorno = "";

@@ -125,7 +125,7 @@ function carregaDadosContrato(){
             <TD class="conteinerfiltro">
             <DIV id="div_filtro" class="div_filtro">
             <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
-            <TBODY>
+            <TBODY>            
 	        <?php	        
 	        $selectExercicio = new selectExercicio();	        
 	        $complementoHTML = "";

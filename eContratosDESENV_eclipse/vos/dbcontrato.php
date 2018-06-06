@@ -628,31 +628,36 @@ class dbcontrato extends dbprocesso {
 		
 		$qtdRegistros = 0;
 		
-		for($i = 0; $i < $tam; $i ++) {
-			$voContrato = new voContrato ();
-			$voContrato->getDadosBanco ( $colecaoContratos [$i] );
-			$docContrato = new documentoPessoa ( $voContrato->docContratada );
-			$doc = $docContrato->getNumDoc ();
-			
-			echo "<br> Documento: " . $doc;
-			echo "<br> Cd.Pessoa: " . $arrayDocs [$doc];
-			
-			/*
-			 * $key = array_search($doc, $arrayDocs);
-			 * $key = in_array($doc, $arrayDocs);
-			 *
-			 * echo $key;
-			 */
-			
-			if ($voContrato->cdPessoaContratada == 0) {
-				$voContrato->cdPessoaContratada = $arrayDocs [$doc];
-				$voContrato->cdUsuarioUltAlteracao = 1;
-				$this->alterarPorCima ( $voContrato );
+		if(!isColecaoVazia($colecaoContratos)){		
+			for($i = 0; $i < $tam; $i ++) {
+				$voContrato = new voContrato ();
+				$voContrato->getDadosBanco ( $colecaoContratos [$i] );
+				$docContrato = new documentoPessoa ( $voContrato->docContratada );
+				$doc = $docContrato->getNumDoc ();
 				
-				$qtdRegistros ++;
-			}
-			
-			ECHO "<br> Contrato: " . $voContrato->toString ();
+				echoo("<br>__________");
+				echo "<br> Documento: " . $doc;
+				echo "<br> Cd.Pessoa: " . $arrayDocs [$doc];
+				/*
+				 * $key = array_search($doc, $arrayDocs);
+				 * $key = in_array($doc, $arrayDocs);
+				 *
+				 * echo $key;
+				 */
+				
+				$cdPessoa = $arrayDocs [$doc];
+				if ($voContrato->cdPessoaContratada == 0 && $cdPessoa != null && $cdPessoa != "") {
+					$voContrato->cdPessoaContratada = $cdPessoa;
+					$voContrato->cdUsuarioUltAlteracao = 1;
+					$this->alterarPorCima ( $voContrato );			
+					
+					$qtdRegistros ++;
+					
+					echoo("<br>ALTERADO");
+				}
+				
+				echoo("CONTRATO:: " . $voContrato->getCodigoContratoFormatado() . "," .$voContrato->sqEspecie . " " . dominioEspeciesContrato::getDescricaoStatic($voContrato->cdEspecie));
+			}		
 		}
 		
 		echo "<br>quantidade registros alterados:" . $qtdRegistros;

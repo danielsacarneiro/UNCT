@@ -107,7 +107,7 @@ include_once 'voContratoLicon.php';
   	 function incluir($vo){
   	 	$this->validarInclusao($vo);
   	 	
-  		parent::incluir($vo);
+  		return parent::incluir($vo);
   	}
   	 
     function getSQLValuesInsert($vo){

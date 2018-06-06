@@ -222,10 +222,11 @@ function getContratoEntradaDeDadosVO($vocontrato, $arrayCssClass, $arrayCompleme
 	if ($isExibirContratadaSePreenchido && $vocontrato != null) {
 		$vocontrato->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
 		$vocontrato->sqEspecie = 1;
-		
+				
 		$chaveContrato = $vocontrato->getValorChaveHTML ();
 		echo getDadosContratada ( $chaveContrato );
 	}
+	//echo getLinkPesquisa ( "../contrato/detalharContrato.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $chaveContrato );
 	?>
 </div>
 <div id="<?=$nmCampoDivNovoContrato?>"></div>
