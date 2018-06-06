@@ -6,10 +6,26 @@ class filtroManterContratoLicon extends filtroManter {
 	//public static $nmFiltro = "filtroManterContratoLicon";
 	public $nmFiltro = "filtroManterContratoLicon";
 	
-	var $sq = "";	
+	var $cdDemanda = "";
+	var $anoDemanda = "";
+	
+	var $cdContrato = "";
+	var $anoContrato = "";
+	var $tipoContrato = "";
+	var $nmContratada = "";
+	var $docContratada = "";
+	
 	
 	function getFiltroFormulario() {
-		$this->sq = @$_POST [voDemanda::$nmAtrCd];
+		$this->anoDemanda = @$_POST [voContratoLicon::$nmAtrAnoDemanda];
+		$this->cdDemanda = @$_POST [voContratoLicon::$nmAtrCdDemanda];
+		
+		$this->cdContrato = @$_POST [voContratoLicon::$nmAtrCdContrato];
+		$this->anoContrato = @$_POST [voContratoLicon::$nmAtrAnoContrato];
+		$this->tipoContrato = @$_POST [voContratoLicon::$nmAtrTipoContrato];
+		
+		$this->nmContratada = @$_POST [vopessoa::$nmAtrNome];
+		$this->docContratada = @$_POST [vopessoa::$nmAtrDoc];
 		
 		if ($this->cdOrdenacao == null) {
 			$this->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
@@ -21,12 +37,59 @@ class filtroManterContratoLicon extends filtroManter {
 		$conector = "";
 		
 		$nmTabela = voContratoLicon::getNmTabelaStatic ( $this->isHistorico () );
+		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
+		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
 		
 		// seta os filtros obrigatorios
 		if ($this->isSetaValorDefault ()) {
 			// anoDefault foi definido como constante na index.php
 			// echo "setou o ano defaul";
 			;
+		}
+		
+		if ($this->anoDemanda != null) {
+		
+			$filtro = $filtro . $conector . $nmTabela . "." . voContratoLicon::$nmAtrAnoDemanda . " = " . $this->anoDemanda;
+		
+			$conector = "\n AND ";
+		}
+		
+		if ($this->cdDemanda != null) {
+		
+			$filtro = $filtro . $conector . $nmTabela . "." . voContratoLicon::$nmAtrCdDemanda . " = " . $this->cdDemanda;
+		
+			$conector = "\n AND ";
+		}
+		
+		if ($this->anoContrato != null) {
+				
+			$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrAnoContrato . " = " . $this->anoContrato;
+				
+			$conector = "\n AND ";
+		}
+		
+		if ($this->cdContrato != null) {
+				
+			$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrCdContrato . " = " . $this->cdContrato;
+				
+			$conector = "\n AND ";
+		}
+		
+		if ($this->tipoContrato != null) {
+				
+			$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrTipoContrato . " = " . getVarComoString ( $this->tipoContrato );
+				
+			$conector = "\n AND ";
+		}
+		
+		if ($this->nmContratada != null) {
+			$filtro = $filtro . $conector . $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome . " LIKE '%" .  $this->nmContratada . "%'";
+			$conector = "\n AND ";
+		}
+		
+		if ($this->docContratada != null) {
+			$filtro = $filtro . $conector . $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc . " = '" . documentoPessoa::getNumeroDocSemMascara ( $this->docContratada ) . "'";
+			$conector = "\n AND ";
 		}
 						
 		$this->formataCampoOrdenacao ( new voContratoLicon () );
@@ -48,7 +111,8 @@ class filtroManterContratoLicon extends filtroManter {
 	function getAtributosOrdenacao() {
 		$varAtributos = array (
 				voDemandaContrato::$nmAtrAnoDemanda => "Ano.Demanda",
-				voDemandaContrato::$nmAtrCdDemanda => "Cd.Demanda" 
+				voDemandaContrato::$nmAtrCdDemanda => "Cd.Demanda",
+				voDemandaContrato::$nmAtrDhUltAlteracao => "Data"
 		);
 		return $varAtributos;
 	}

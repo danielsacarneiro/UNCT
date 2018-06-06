@@ -111,8 +111,15 @@ function alterar() {
 	        <?php	        	
 	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
 	        $arrayCssClass = array("camponaoobrigatorio","camponaoobrigatorio", "camponaoobrigatorio");
-	        ?>        
+	        
+	        $selectExercicio = new selectExercicio();
+	        ?>
             <TR>
+				<TH class="campoformulario" nowrap width="1%">Demanda:</TH>
+				<TD class="campoformulario" nowrap width="1%">
+					<?php echo "Ano: " . $selectExercicio->getHtmlCombo(voContratoLicon::$nmAtrAnoDemanda,voContratoLicon::$nmAtrAnoDemanda, $filtro->anoDemanda, true, "camponaoobrigatorio", false, "");?>
+					Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voContratoLicon::$nmAtrCdDemanda?>" name="<?=voContratoLicon::$nmAtrCdDemanda?>"  value="<?php echo(complementarCharAEsquerda($filtro->cdDemanda, "0", TAMANHO_CODIGOS));?>"  class="camponaoobrigatorio" size="6" maxlength="5">		  
+				</TD>            
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
 	            <TD class="campoformulario" colspan="3"><?php getContratoEntradaDeDados($filtro->tipoContrato, $filtro->cdContrato, $filtro->anoContrato, $arrayCssClass, null, null);?></TD>
 			</TR>
@@ -146,13 +153,14 @@ function alterar() {
                   <?php 
                   }
                   ?>
+                    <TH class="headertabeladados" width="1%" nowrap>Demanda</TH>                    
                     <TH class="headertabeladados" width="1%" nowrap>Sistema</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Contrato</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Tipo</TH>
                     <TH class="headertabeladados" width="80%">Contratada</TH>
-                    <TH class="headertabeladados" width="1%">CNPJ/CNPF</TH>
+                    <TH class="headertabeladados" width="1%">CNPJ/CNPF</TH>                    
                     <TH class="headertabeladados" width="1%">Situação</TH>
-                    <TH class="headertabeladados" width="1%" nowrap>Demanda</TH>
+                    <TH class="headertabeladados" width="1%" nowrap>Data</TH>
                 </TR>
                 <?php								
                 if (is_array($colecao))
@@ -161,7 +169,7 @@ function alterar() {
                         $tamanho = 0;
                 
                 //echoo($tamanho);                                
-                $colspan=8;
+                $colspan=9;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -215,13 +223,14 @@ function alterar() {
                   <?php 
                   }
                   ?>                    
+                    <TD class="tabeladados" nowrap><?php echo $demanda?></TD>
                   	<TD class="tabeladados" nowrap><?php echo $tipo?></TD>
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo $contrato;?></TD>
                     <TD class="tabeladados" nowrap><?php echo $complementoContrato?></TD>                    
 					<TD class="tabeladados" nowrap><?php echo $dsPessoa?></TD>					
 					<TD class="tabeladados" nowrap><?php echo documentoPessoa::getNumeroDocFormatado($voPessoa->doc)?></TD>
                     <TD class="tabeladados" nowrap><?php echo $situacao?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $demanda?></TD>
+                    <TD class="tabeladados" nowrap><?php echo getData($voAtual->dhUltAlteracao)?></TD>
                 </TR>					
                 <?php
 				}                
