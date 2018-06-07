@@ -191,7 +191,7 @@ function validarFundamento(){
 				</TD>
 	        </TR> -->	        
 			<TR>
-	            <TH class="campoformulario" nowrap>Data.Pub.:</TH>
+	            <TH class="campoformulario" nowrap>Data.Publicação:</TH>
 	            <TD class="campoformulario" colspan="3">
 	            	<INPUT type="text" 
 	            	       id="<?=voPenalidadePA::$nmAtrDtAplicacao?>" 

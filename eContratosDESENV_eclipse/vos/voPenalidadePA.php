@@ -162,7 +162,8 @@ class voPenalidadePA extends voentidade {
 		$fundamento = $this->fundamento;
 		$palavrasChave = static::getPalavraChaveFundamento();
 		$retorno = true;
-		if(!existeStr1NaStr2ComSeparador($fundamento, $palavrasChave)){
+		if($this->tipo != dominioTipoPenalidade::$CD_TP_PENALIDADE_ADVERTENCIA 
+				&& !existeStr1NaStr2ComSeparador($fundamento, $palavrasChave)){
 			$retorno = false;
 		}		
 		return $retorno;		

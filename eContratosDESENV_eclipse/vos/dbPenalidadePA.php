@@ -240,13 +240,13 @@ include_once (caminho_filtros."filtroManterPA.php");
     function alterar($vo) {
     	$this->validar($vo);
     	 
-    	parent::alterar ( $vo );
+    	return parent::alterar ( $vo );
     }
     
     function incluir($vo) {
     	$this->validar($vo);
     	
-    	parent::incluir ( $vo );
+    	return parent::incluir ( $vo );
     }    
     
     function getSQLValuesInsert($vo){
