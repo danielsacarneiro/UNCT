@@ -390,7 +390,7 @@ include_once (caminho_util . "DocumentoPessoa.php");
 		$pastaUNCTPrincipalSubs = dominioTpDocumento::$ENDERECO_DRIVE . "\\" . dominioTpDocumento::$ENDERECO_PASTABASE_UNCT;
 		//$link = str_ireplace("..", $pastaUNCTPrincipalSubs . "" , $this->linkDoc);
 		$link = str_ireplace("../", $pastaUNCTPrincipalSubs . "\\" , $this->linkDoc);
-		$link = str_ireplace("..\\", $pastaUNCTPrincipalSubs . "\\" , $this->linkDoc);
+		$link = str_ireplace("..\\", $pastaUNCTPrincipalSubs . "\\" , $link);
 		$link = str_ireplace("/", "\\" , $link);
 		
 		//faz a substituicao normal

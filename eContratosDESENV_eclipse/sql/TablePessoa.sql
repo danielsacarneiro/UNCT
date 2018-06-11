@@ -36,7 +36,11 @@ CREATE TABLE pessoa (
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_incl INT,
     cd_usuario_ultalt INT,
+    in_desativado CHAR(1) NOT NULL DEFAULT 'N',
         
+    CONSTRAINT fk_pessoa_usuario FOREIGN KEY (ID) REFERENCES wp_users (ID)
+		ON DELETE RESTRICT
+		ON UPDATE RESTRICT,
     CONSTRAINT pk PRIMARY KEY (pe_cd)
 );
 ALTER TABLE pessoa ADD CONSTRAINT fk_pessoa_usuario FOREIGN KEY (ID) REFERENCES wp_users (ID)
@@ -67,6 +71,7 @@ CREATE TABLE pessoa_hist (
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_incl INT,
     cd_usuario_ultalt INT,
+    in_desativado CHAR(1) NOT NULL,
     
 	dh_operacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_operacao INT,    
