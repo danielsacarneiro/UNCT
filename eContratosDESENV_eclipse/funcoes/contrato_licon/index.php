@@ -129,6 +129,16 @@ function alterar() {
                 <TH class="campoformulario" width="1%" nowrap>CNPJ/CPF Contratada:</TH>
                 <TD class="campoformulario" ><INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($filtro->docContratada);?>" class="camponaoobrigatorio" size="20" maxlength="18"></TD>
             </TR>
+            <TR>
+                <TH class="campoformulario" nowrap width="1%">Situação:</TH>
+                <TD class="campoformulario" width="1%" colspan=3>
+                <?php
+                $comboSituacao = new select(dominioSituacaoContratoLicon::getColecao());
+                echo $comboSituacao->getHtmlCombo(voContratoLicon::$nmAtrSituacao,voContratoLicon::$nmAtrSituacao, $filtro->situacao, true, "camponaoobrigatorio", false, "");
+                ?>
+				</TD>				
+            </TR>           
+            
 	        
        <?php
        echo getComponenteConsultaFiltro($vo->temTabHistorico, $filtro);
@@ -159,8 +169,9 @@ function alterar() {
                     <TH class="headertabeladados" width="1%" nowrap>Tipo</TH>
                     <TH class="headertabeladados" width="80%">Contratada</TH>
                     <TH class="headertabeladados" width="1%">CNPJ/CNPF</TH>                    
-                    <TH class="headertabeladados" width="1%">Situação</TH>
-                    <TH class="headertabeladados" width="1%" nowrap>Data</TH>
+					<TH class="headertabeladados" width="1%" nowrap>Dt.Publicação</TH>
+                    <TH class="headertabeladados" width="1%" nowrap>Dt.Registro</TH>
+                    <TH class="headertabeladados" width="1%">Situação</TH>                    
                 </TR>
                 <?php								
                 if (is_array($colecao))
@@ -169,7 +180,7 @@ function alterar() {
                         $tamanho = 0;
                 
                 //echoo($tamanho);                                
-                $colspan=9;
+                $colspan=10;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -229,8 +240,9 @@ function alterar() {
                     <TD class="tabeladados" nowrap><?php echo $complementoContrato?></TD>                    
 					<TD class="tabeladados" nowrap><?php echo $dsPessoa?></TD>					
 					<TD class="tabeladados" nowrap><?php echo documentoPessoa::getNumeroDocFormatado($voPessoa->doc)?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $situacao?></TD>
+                    <TD class="tabeladados" nowrap><?php echo getData($registroBanco[vocontrato::$nmAtrDtPublicacaoContrato])?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($voAtual->dhUltAlteracao)?></TD>
+                    <TD class="tabeladados" nowrap><?php echo $situacao?></TD>                    
                 </TR>					
                 <?php
 				}                
@@ -258,7 +270,7 @@ function alterar() {
                         <TABLE class="barraacoesaux" cellpadding="0" cellspacing="0">
 	                   	<TR> 
                             <?php
-                            $arrayBotoesARemover = array(constantes::$CD_FUNCAO_ALTERAR);
+                            //$arrayBotoesARemover = array(constantes::$CD_FUNCAO_ALTERAR);
                             echo getBotoesRodapeComRestricao($arrayBotoesARemover, true);                            
                             ?>
                          </TR>

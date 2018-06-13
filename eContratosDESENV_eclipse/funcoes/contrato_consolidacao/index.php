@@ -208,6 +208,20 @@ function movimentacoes(){
 				<TD class="campoformulario" width="1%" colspan=3><INPUT type="text" id="<?=vocontrato::$nmAtrObjetoContrato?>" name="<?=vocontrato::$nmAtrObjetoContrato?>"  value="<?php echo($filtro->objeto);?>"  class="camponaoobrigatorio" size="50" ></TD>
 			</TR>
 			<TR>
+               <TH class="campoformulario" nowrap>Vigente.até:</TH>
+               <TD class="campoformulario">
+                        	<INPUT type="text" 
+                        	       id="<?=vocontrato::$nmAtrDtVigenciaFinalContrato?>" 
+                        	       name="<?=vocontrato::$nmAtrDtVigenciaFinalContrato?>" 
+                        			value="<?php echo($filtro->dtFimVigencia);?>" 
+                        			onkeyup="formatarCampoData(this, event, false);" 
+                        			class="camponaoobrigatorio" 
+                        			size="10" 
+                        			maxlength="10" >                        			                	 
+                </TD>
+            </TR>
+			
+			<TR>
 				<TH class="campoformulario" nowrap>Tp.Vigência:</TH>
 				<?php
 				include_once(caminho_util."dominioTpVigencia.php");

@@ -147,8 +147,14 @@ class dbContratoInfo extends dbprocesso {
 				$nmTabela . "." . vocontrato::$nmAtrTipoContrato,
 				$nmTabContratoMater . "." . vocontrato::$nmAtrSqContrato . " AS " . filtroConsultarContratoConsolidacao::$NmColSqContratoMater,
 				$nmTabContratoATUAL . "." . vocontrato::$nmAtrSqContrato . " AS " . filtroConsultarContratoConsolidacao::$NmColSqContratoAtual,
-								
-				getSQLCASE($nmTabContratoMater . "." . vocontrato::$nmAtrDtVigenciaInicialContrato
+				
+				filtroConsultarContratoConsolidacao::getComparacaoWhereDataVigencia($nmTabContratoMater . "." . vocontrato::$nmAtrDtVigenciaInicialContrato)
+				. " AS " . filtroConsultarContratoConsolidacao::$NmColDtInicioVigencia,
+				
+				filtroConsultarContratoConsolidacao::getComparacaoWhereDataVigencia($nmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato)
+				. " AS " . filtroConsultarContratoConsolidacao::$NmColDtFimVigencia,
+				
+				/*getSQLCASE($nmTabContratoMater . "." . vocontrato::$nmAtrDtVigenciaInicialContrato
 						, '0000-00-00'
 						, 'NULL'
 						, $nmTabContratoMater . "." . vocontrato::$nmAtrDtVigenciaInicialContrato) . " AS " . filtroConsultarContratoConsolidacao::$NmColDtInicioVigencia,
@@ -156,7 +162,7 @@ class dbContratoInfo extends dbprocesso {
 				getSQLCASE($nmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato
 						, '0000-00-00'						
 						, 'NULL'
-						, $nmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato) . " AS " . filtroConsultarContratoConsolidacao::$NmColDtFimVigencia,
+						, $nmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato) . " AS " . filtroConsultarContratoConsolidacao::$NmColDtFimVigencia,*/
 				
 				getDataSQLDiferencaDias(getVarComoDataSQL(getDataHoje()), $nmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato) . " AS " . filtroConsultarContratoConsolidacao::$NmColQtdDiasParaVencimento,
 				
@@ -175,7 +181,8 @@ class dbContratoInfo extends dbprocesso {
 		$nmTabContratoMAXSq = "TAB_CONTRATO_MAX_SQ";
 		
 		$queryJoin .= "\n LEFT JOIN ";
-		$queryJoin .= " (SELECT " . $groupbyinterno . ", MIN(" . vocontrato::$nmAtrSqContrato . ") AS " . vocontrato::$nmAtrSqContrato . " FROM " . $nmTabContratoInterna;
+		$queryJoin .= " (SELECT " . $groupbyinterno . ", MIN(" . vocontrato::$nmAtrSqContrato . ") AS " . vocontrato::$nmAtrSqContrato 
+		. " FROM " . $nmTabContratoInterna;
 		$queryJoin .= " GROUP BY " . $groupbyinterno;
 		$queryJoin .= "\n) " . $nmTabContratoMINSq;
 		$queryJoin .= "\n ON ";
@@ -187,7 +194,8 @@ class dbContratoInfo extends dbprocesso {
 		$queryJoin .= $nmTabContratoMINSq . "." . vocontrato::$nmAtrSqContrato . "=" . $nmTabContratoMater . "." . vocontrato::$nmAtrSqContrato;
 		
 		$queryJoin .= "\n LEFT JOIN ";
-		$queryJoin .= " (SELECT " . $groupbyinterno . ", MAX(" . vocontrato::$nmAtrSqContrato . ") AS " . vocontrato::$nmAtrSqContrato . " FROM " . $nmTabContratoInterna;
+		$queryJoin .= " (SELECT " . $groupbyinterno . ", MAX(" . vocontrato::$nmAtrSqContrato . ") AS " . vocontrato::$nmAtrSqContrato
+		. " FROM " . $nmTabContratoInterna;
 		$queryJoin .= constantes::$CD_CAMPO_SUBSTITUICAO . " GROUP BY " . $groupbyinterno;
 		$queryJoin .= "\n) " . $nmTabContratoMAXSq;
 		$queryJoin .= "\n ON ";

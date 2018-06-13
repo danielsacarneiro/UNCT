@@ -16,6 +16,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	var $cdEspecie = "";
 	var $qtdDiasParaVencimento = "";
 	var $inIMProrrogavel = "";
+	var $dtFimVigencia = "";
 		
 	function __construct1($pegarFiltrosDaTela) {
 		parent::__construct1($pegarFiltrosDaTela);
@@ -28,6 +29,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		$this->cdEspecie = @$_POST [vocontrato::$nmAtrCdEspecieContrato];
 		$this->qtdDiasParaVencimento = @$_POST [static::$nmAtrQtdDiasParaVencimento];
 		$this->inIMProrrogavel = @$_POST [static::$nmAtrInIMProrrogavel];
+		$this->dtFimVigencia = @$_POST [vocontrato::$nmAtrDtVigenciaFinalContrato];
 	}
 	function getSQFiltroCdEspecie($nmTabelaContrato) {
 		if ($this->cdEspecie != null && ! $this->isAtributoArrayVazio ( $this->cdEspecie )) {
@@ -83,6 +85,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		if ($this->tpVigencia != null && $this->tpVigencia != constantes::$CD_OPCAO_TODOS) {
 			$nmcoldtinicio = static::$NmTabContratoMater . "." . vocontrato::$nmAtrDtVigenciaInicialContrato;
 			$nmcoldtfim = static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato;
+							
 			if ($this->tpVigencia == dominioTpVigencia::$CD_OPCAO_VIGENTES) {
 				$filtro = $filtro . $conector . getSQLDataVigenteSqSimples ( null, $nmcoldtinicio, $nmcoldtfim );
 			} else {
@@ -175,6 +178,15 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 			$conector = "\n AND ";
 		}
 		
+		if ($this->dtFimVigencia != null) {
+			$colunaAComparar = static::getComparacaoWhereDataVigencia(static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato);
+				
+			$filtro = $filtro . $conector . "($colunaAComparar IS NOT NULL AND $colunaAComparar <= " . getVarComoData($this->dtFimVigencia) . ") ";
+				
+			$conector = "\n AND ";
+		}
+		
+		
 		$this->formataCampoOrdenacao ( new voContratoInfo () );
 		// finaliza o filtro
 		$filtro = parent::getFiltroSQL ( $filtro, $comAtributoOrdenacao );
@@ -183,6 +195,14 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		
 		return $filtro;
 	}
+	
+	static function getComparacaoWhereDataVigencia($nmAtributoTabela){
+		return getSQLCASE($nmAtributoTabela
+						, '0000-00-00'						
+						, 'NULL'
+						, $nmAtributoTabela);
+	}
+	
 	function getAtributoOrdenacaoDefault() {
 		$nmTabela = voContrato::getNmTabelaStatic ( $this->isHistorico );
 		$retorno = $nmTabela . "." . voContrato::$nmAtrTipoContrato . " " . $this->cdOrdenacao 

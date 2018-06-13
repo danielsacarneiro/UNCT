@@ -18,6 +18,7 @@ include_once 'voContratoLicon.php';
   				$nmTabela . ".*",
   				$nmTabelaDemanda . "." . voDemanda::$nmAtrTipo,
   				$nmTabelaContrato . "." . vocontrato::$nmAtrDtAssinaturaContrato,
+  				$nmTabelaContrato . "." . vocontrato::$nmAtrDtPublicacaoContrato,
   				$nmTabelaContrato . "." . vocontrato::$nmAtrDtVigenciaInicialContrato,
   				$nmTabelaContrato . "." . vocontrato::$nmAtrDtVigenciaFinalContrato,
   				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
@@ -60,6 +61,7 @@ include_once 'voContratoLicon.php';
   				$nmTabela . ".*",
   				$nmTabelaDemanda . "." . voDemanda::$nmAtrTipo,
   				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
+  				$nmTabelaContrato . "." . vocontrato::$nmAtrDtPublicacaoContrato,
   				//$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
   				getSQLCOALESCE($colecaoAtributoCoalesceNmPessoa,vopessoa::$nmAtrNome),
   		);
@@ -110,7 +112,13 @@ include_once 'voContratoLicon.php';
   		return parent::incluir($vo);
   	}
   	 
-    function getSQLValuesInsert($vo){
+  	function alterar($vo){
+  		$this->validarInclusao($vo);
+  			
+  		return parent::alterar($vo);
+  	}
+  	 
+  	function getSQLValuesInsert($vo){
 		$retorno = "";
 		$retorno.= $vo->vodemandacontrato->dbprocesso->getSQLValuesInsert($vo->vodemandacontrato, false) . ",";
 		
@@ -122,19 +130,24 @@ include_once 'voContratoLicon.php';
 		return $retorno;                
     }
         
-    /*function getSQLValuesUpdate($vo){        
+    function getSQLValuesUpdate($vo){        
         $retorno = "";
         $sqlConector = "";
                 
-        if($vo->link != null){
-            $retorno.= $sqlConector . voDocumento::$nmAtrLink. " = " . $this->getVarComoString($vo->link);
+        if($vo->situacao != null){
+            $retorno.= $sqlConector . voContratoLicon::$nmAtrSituacao . " = " . $this->getVarComoNumero($vo->situacao);
             $sqlConector = ",";
         }
                 
+        if($vo->obs != null){
+        	$retorno.= $sqlConector . voContratoLicon::$nmAtrObs . " = " . $this->getVarComoString($vo->obs);
+        	$sqlConector = ",";
+        }
+        
         $retorno = $retorno . $sqlConector . $vo->getSQLValuesUpdate();
 		        
 		return $retorno;                
-    }*/
+    }
    
 }
 ?>

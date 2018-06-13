@@ -25,11 +25,17 @@ try{
 
 		$readonly = "readonly";
 		$vo->getVOExplodeChave();
-		$isHistorico = ($voContrato->sqHist != null && $voContrato->sqHist != "");
+		$isHistorico = ($vo->sqHist != null && $vo->sqHist != "");
 
 		$dbprocesso = $vo->dbprocesso;
 		$colecao = $dbprocesso->consultarPorChaveTela($vo, $isHistorico);
 		$vo->getDadosBanco($colecao);
+		
+		$voContrato = new vocontrato();
+		$voContrato->getDadosBanco($colecao);
+		
+		$voDemanda = new voDemanda();
+		$voDemanda->getDadosBanco($colecao);
 
 		putObjetoSessao($vo->getNmTabela(), $vo);
 
@@ -136,16 +142,44 @@ function carregaDadosContrato(){
 	        	$complementoHTML = " required ";
 	        	$readonlyChaves = " readonly ";
 	          
-	        	$voContrato = $vo->getVOContrato();	 	        
-	        	getContratoDet($voContrato);	 	         
+	        	/*$voContrato = $vo->getVOContrato();	 	        
+	        	getContratoDet($voContrato);*/
+	        	getContratoDet($voContrato, false, true);
+	        ?>
+	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">Demanda:</TH>
+	            <TD class="campoformulario" colspan=3>
+	            <?php	            
+	            echo getDetalhamentoHTMLCodigoAno($vo->vodemandacontrato->anoDemanda, $vo->vodemandacontrato->cdDemanda);
+	            echo getInputHidden(voDemandaContrato::$nmAtrAnoDemanda, voDemandaContrato::$nmAtrAnoDemanda, $vo->vodemandacontrato->anoDemanda);
+	            echo getInputHidden(voDemandaContrato::$nmAtrCdDemanda, voDemandaContrato::$nmAtrCdDemanda, $vo->vodemandacontrato->cdDemanda);
+	            $vodemandaTemp = new voDemanda(array($vo->vodemandacontrato->anoDemanda, $vo->vodemandacontrato->cdDemanda));
+	            echo getLinkPesquisa ( "../".voDemanda::getNmTabela()."/detalhar.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $vodemandaTemp->getValorChaveHTML() );
+	             
+				echo "Tipo: " . dominioTipoDemanda::getHtmlDetalhamento("", "", $voDemanda->tipo, false);
+				?>	            
+	        </TR>	        
+	        <TR>	       
+	            <TH class="campoformulario" nowrap width="1%">Vigência:</TH>
+	            <TD class="campoformulario" colspan=3>
+	            <?php echo getDetalhamentoHTML("", "", $voContrato->dtVigenciaInicial) . " a " . getDetalhamentoHTML("", "", $voContrato->dtVigenciaFinal)?>
+				</TD>
+	        </TR>
+	        <TR>	       
+	            <TH class="campoformulario" nowrap width="1%">Dt.Assinatura:</TH>
+	            <TD class="campoformulario" width="1%">
+	            <?php echo getDetalhamentoHTML("", "", $voContrato->dtAssinatura)?>
+				</TD>
+	            <TH class="campoformulario" nowrap width="1%">Dt.Publicação:</TH>
+	            <TD class="campoformulario">
+	            <?php echo getDetalhamentoHTML("", "", $voContrato->dtPublicacao)?>
+				</TD>				
+	        </TR>	        
+	        
+	        <?php
 	        }else{
 	        	//INCLUSAO
 
-	        /*$arrayCssClass = array("camponaoobrigatorio","camponaoobrigatorio", "camponaoobrigatorio");
-	        $arrayComplementoHTML = array(" required onChange='carregaContratada();' ",
-	        		" required onBlur='carregaContratada();' ",
-	        		" required onChange='carregaContratada();' "	        		
-	        );*/	        
 	        ?>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Demanda:</TH>
@@ -156,11 +190,8 @@ function carregaDadosContrato(){
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
 	            <TD class="campoformulario" colspan=3><?php getCampoDadosContratoSimples(constantes::$CD_CLASS_CAMPO_OBRIGATORIO, "carregaDadosContrato()", false);//getContratoEntradaDeDados($tipoContrato, $anoContrato, $cdContrato, $arrayCssClass, $arrayComplementoHTML, $nmCampoDiv);?></TD>
-	        </TR>	        
-	        <?php 
-	       }	       
-	       ?>
-			<TR>
+	        </TR>
+	       	<TR>
 	            <TH class="campoformulario" nowrap>Espécie:</TH>
 	            <TD class="campoformulario" colspan="3">
 				<?php                        
@@ -172,13 +203,17 @@ function carregaDadosContrato(){
 				<div id="<?=voContratoLicon::$ID_REQ_DIV_DADOS_CONTRATO_LICON?>">
 				</div>				
 	        </TR>
+	        	        
+	        <?php 
+	       }	       
+	       ?>
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Situação:</TH>
 	            <TD class="campoformulario" colspan="3">
 				<?php                        
 				$comboSituacaoLicon = new select(dominioSituacaoContratoLicon::getColecao());                        
 				//cria o combo
-				echo $comboSituacaoLicon->getHtmlCombo(voContratoLicon::$nmAtrSituacao, voContratoLicon::$nmAtrSituacao, "", true, "camponaoobrigatorio", false, " required");
+				echo $comboSituacaoLicon->getHtmlCombo(voContratoLicon::$nmAtrSituacao, voContratoLicon::$nmAtrSituacao, $vo->situacao, true, "camponaoobrigatorio", false, " required");
 				?>
 				</TD>
 	        </TR>	        

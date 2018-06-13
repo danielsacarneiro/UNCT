@@ -115,6 +115,8 @@ function confirmar() {
 	            echo getDetalhamentoHTMLCodigoAno($vo->vodemandacontrato->anoDemanda, $vo->vodemandacontrato->cdDemanda);
 	            echo getInputHidden(voDemandaContrato::$nmAtrAnoDemanda, voDemandaContrato::$nmAtrAnoDemanda, $vo->vodemandacontrato->anoDemanda);
 	            echo getInputHidden(voDemandaContrato::$nmAtrCdDemanda, voDemandaContrato::$nmAtrCdDemanda, $vo->vodemandacontrato->cdDemanda);
+	            $vodemandaTemp = new voDemanda(array($vo->vodemandacontrato->anoDemanda, $vo->vodemandacontrato->cdDemanda));
+	            echo getLinkPesquisa ( "../".voDemanda::getNmTabela()."/detalhar.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $vodemandaTemp->getValorChaveHTML() );
 	             
 				echo "Tipo: " . dominioTipoDemanda::getHtmlDetalhamento("", "", $voDemanda->tipo, false);
 				?>	            
@@ -135,9 +137,13 @@ function confirmar() {
 	        </TR>
 	        <TR>	       
 	            <TH class="campoformulario" nowrap width="1%">Dt.Assinatura:</TH>
-	            <TD class="campoformulario" colspan=3>
+	            <TD class="campoformulario" width="1%">
 	            <?php echo getDetalhamentoHTML("", "", $voContrato->dtAssinatura)?>
 				</TD>
+	            <TH class="campoformulario" nowrap width="1%">Dt.Publicação:</TH>
+	            <TD class="campoformulario">
+	            <?php echo getDetalhamentoHTML("", "", $voContrato->dtPublicacao)?>
+				</TD>				
 	        </TR>
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Observação:</TH>
