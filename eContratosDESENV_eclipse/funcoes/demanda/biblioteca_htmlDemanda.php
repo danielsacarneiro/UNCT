@@ -197,7 +197,7 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDad
 	$html = "";
 	if ($tamanho > 0) {
 
-		$numColunas = 9;
+		$numColunas = 11;
 		if($comDadosDemanda){
 			$numColunas --;
 		}

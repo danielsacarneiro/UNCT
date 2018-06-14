@@ -125,9 +125,12 @@ function formatarNomeDocumento(sq, cdSetor, ano, tpDoc, complemento, colecaoSeto
 	if(sq == "")
 		sq = "XXX";	
 	
-	str = formatarCodigoDocumento(sq, cdSetor, ano, tpDoc, colecaoSetor);	
-	if(complemento != "")
+	var str = formatarCodigoDocumento(sq, cdSetor, ano, tpDoc, colecaoSetor);	
+	if(complemento != ""){
+		complemento = complemento.replace("\"", "_");
+		complemento = complemento.replace("/", "_");
 		str = str  + complemento;
+	}
 	
 	return str;	
 }

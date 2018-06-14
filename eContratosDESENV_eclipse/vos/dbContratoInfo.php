@@ -62,20 +62,13 @@ class dbContratoInfo extends dbprocesso {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
-		
-		$colunaUsuHistorico = "";
-		
-		if ($isHistorico) {
-			$colunaUsuHistorico = static::$nmTabelaUsuarioOperacao . "." . vousuario::$nmAtrName . "  AS " . voDemanda::$nmAtrNmUsuarioOperacao;
-		}
-		
+				
 		$colecaoAtributoCoalesceNmPessoa = array(
 				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
 				$nmTabelaContrato . "." . vocontrato::$nmAtrContratadaContrato,
 		);
 		
 		$arrayColunasRetornadas = array (
-				//$nmTabela . ".*",
 				"$nmTabela.". voContratoInfo::$nmAtrAnoContrato,
 				"$nmTabela.". voContratoInfo::$nmAtrTipoContrato,
 				"$nmTabela.". voContratoInfo::$nmAtrCdContrato,
@@ -84,8 +77,17 @@ class dbContratoInfo extends dbprocesso {
 				getSQLNmContratada(),
 				//getSQLCOALESCE($colecaoAtributoCoalesceNmPessoa,vopessoa::$nmAtrNome),
 				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
-				$colunaUsuHistorico
-		);
+		);		
+		
+		if ($isHistorico) {			
+			$colunaUsuHistorico = static::$nmTabelaUsuarioOperacao . "." . vousuario::$nmAtrName . "  AS " . voDemanda::$nmAtrNmUsuarioOperacao;
+			$arrayColunasHistorico = array (
+					"$nmTabela.". voContratoInfo::$nmAtrSqHist,
+					$colunaUsuHistorico,
+					);
+			
+			$arrayColunasRetornadas = array_merge($arrayColunasRetornadas, $arrayColunasHistorico);
+		}		
 		
 		//$groupbyinterno = $nmTabela . "." . vocontrato::$nmAtrAnoContrato . "," . $nmTabela . "." . vocontrato::$nmAtrCdContrato . "," . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
 		$groupbyinterno = $nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato . "," . $nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato . "," . $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato;
