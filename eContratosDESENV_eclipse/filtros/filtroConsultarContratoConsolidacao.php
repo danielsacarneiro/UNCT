@@ -2,6 +2,7 @@
 include_once (caminho_util . "bibliotecaSQL.php");
 class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	public $nmFiltro = "filtroConsultarContratoConsolidacao";
+	
 	static $NmColDtInicioVigencia = "NmColDtInicioVigencia";
 	static $NmColQtdDiasParaVencimento = "NmColQtdDiasParaVencimento";
 	static $NmColDtFimVigencia = "NmColDtFimVigencia";
@@ -13,10 +14,14 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	static $nmAtrQtdDiasParaVencimento = "nmAtrQtdDiasParaVencimento";
 	static $nmAtrInIMProrrogavel = "nmAtrInIMProrrogavel";
 	
+	static $ID_REQ_DtFimVigenciaInicial = "ID_REQ_DtFimVigenciaInicial";
+	static $ID_REQ_DtFimVigenciaFinal = "ID_REQ_DtFimVigenciaFinal";
+	
 	var $cdEspecie = "";
 	var $qtdDiasParaVencimento = "";
 	var $inIMProrrogavel = "";
-	var $dtFimVigencia = "";
+	var $dtFimVigenciaInicial = "";
+	var $dtFimVigenciaFinal = "";
 		
 	function __construct1($pegarFiltrosDaTela) {
 		parent::__construct1($pegarFiltrosDaTela);
@@ -29,7 +34,8 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		$this->cdEspecie = @$_POST [vocontrato::$nmAtrCdEspecieContrato];
 		$this->qtdDiasParaVencimento = @$_POST [static::$nmAtrQtdDiasParaVencimento];
 		$this->inIMProrrogavel = @$_POST [static::$nmAtrInIMProrrogavel];
-		$this->dtFimVigencia = @$_POST [vocontrato::$nmAtrDtVigenciaFinalContrato];
+		$this->dtFimVigenciaFinal = @$_POST [static::$ID_REQ_DtFimVigenciaFinal];
+		$this->dtFimVigenciaInicial = @$_POST [static::$ID_REQ_DtFimVigenciaInicial];
 	}
 	function getSQFiltroCdEspecie($nmTabelaContrato) {
 		if ($this->cdEspecie != null && ! $this->isAtributoArrayVazio ( $this->cdEspecie )) {
@@ -178,11 +184,17 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 			$conector = "\n AND ";
 		}
 		
-		if ($this->dtFimVigencia != null) {
-			$colunaAComparar = static::getComparacaoWhereDataVigencia(static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato);
+		if ($this->dtFimVigenciaInicial != null) {
+			$colunaAComparar = static::getComparacaoWhereDataVigencia(static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato);				
+			$filtro = $filtro . $conector . "($colunaAComparar IS NOT NULL AND $colunaAComparar >= " . getVarComoData($this->dtFimVigenciaInicial) . ") ";
 				
-			$filtro = $filtro . $conector . "($colunaAComparar IS NOT NULL AND $colunaAComparar <= " . getVarComoData($this->dtFimVigencia) . ") ";
-				
+			$conector = "\n AND ";
+		}
+
+		if ($this->dtFimVigenciaFinal != null) {
+			$colunaAComparar = static::getComparacaoWhereDataVigencia(static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato);		
+			$filtro = $filtro . $conector . "($colunaAComparar IS NOT NULL AND $colunaAComparar <= " . getVarComoData($this->dtFimVigenciaFinal) . ") ";
+		
 			$conector = "\n AND ";
 		}
 		

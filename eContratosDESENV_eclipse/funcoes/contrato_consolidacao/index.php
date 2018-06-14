@@ -208,12 +208,21 @@ function movimentacoes(){
 				<TD class="campoformulario" width="1%" colspan=3><INPUT type="text" id="<?=vocontrato::$nmAtrObjetoContrato?>" name="<?=vocontrato::$nmAtrObjetoContrato?>"  value="<?php echo($filtro->objeto);?>"  class="camponaoobrigatorio" size="50" ></TD>
 			</TR>
 			<TR>
-               <TH class="campoformulario" nowrap>Vigente.até:</TH>
-               <TD class="campoformulario">
+               <TH class="campoformulario" nowrap>Intervalo.Fim.Vigência:</TH>
+               <TD class="campoformulario" colspan=3>
+               
+               				<INPUT type="text" 
+                        	       id="<?=filtroConsultarContratoConsolidacao::$ID_REQ_DtFimVigenciaInicial?>" 
+                        	       name="<?=filtroConsultarContratoConsolidacao::$ID_REQ_DtFimVigenciaInicial?>" 
+                        			value="<?php echo($filtro->dtFimVigenciaInicial);?>" 
+                        			onkeyup="formatarCampoData(this, event, false);" 
+                        			class="camponaoobrigatorio" 
+                        			size="10" 
+                        			maxlength="10" > a               
                         	<INPUT type="text" 
-                        	       id="<?=vocontrato::$nmAtrDtVigenciaFinalContrato?>" 
-                        	       name="<?=vocontrato::$nmAtrDtVigenciaFinalContrato?>" 
-                        			value="<?php echo($filtro->dtFimVigencia);?>" 
+                        	       id="<?=filtroConsultarContratoConsolidacao::$ID_REQ_DtFimVigenciaFinal?>" 
+                        	       name="<?=filtroConsultarContratoConsolidacao::$ID_REQ_DtFimVigenciaFinal?>" 
+                        			value="<?php echo($filtro->dtFimVigenciaFinal);?>" 
                         			onkeyup="formatarCampoData(this, event, false);" 
                         			class="camponaoobrigatorio" 
                         			size="10" 
