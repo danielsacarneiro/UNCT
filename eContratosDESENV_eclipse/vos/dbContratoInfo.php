@@ -156,20 +156,14 @@ class dbContratoInfo extends dbprocesso {
 				filtroConsultarContratoConsolidacao::getComparacaoWhereDataVigencia($nmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato)
 				. " AS " . filtroConsultarContratoConsolidacao::$NmColDtFimVigencia,
 				
-				/*getSQLCASE($nmTabContratoMater . "." . vocontrato::$nmAtrDtVigenciaInicialContrato
-						, '0000-00-00'
-						, 'NULL'
-						, $nmTabContratoMater . "." . vocontrato::$nmAtrDtVigenciaInicialContrato) . " AS " . filtroConsultarContratoConsolidacao::$NmColDtInicioVigencia,
-				
-				getSQLCASE($nmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato
-						, '0000-00-00'						
-						, 'NULL'
-						, $nmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato) . " AS " . filtroConsultarContratoConsolidacao::$NmColDtFimVigencia,*/
-				
+				//repete as colunas para trazer com outro nome - usado na consulta por chave de contratoinfo quando precisar consolidar
+				filtroConsultarContratoConsolidacao::getComparacaoWhereDataVigencia($nmTabContratoMater . "." . vocontrato::$nmAtrDtVigenciaInicialContrato)
+				. " AS " . vocontrato::$nmAtrDtVigenciaInicialContrato,				
+				filtroConsultarContratoConsolidacao::getComparacaoWhereDataVigencia($nmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato)
+				. " AS " . vocontrato::$nmAtrDtVigenciaFinalContrato,				
+								
 				getDataSQLDiferencaDias(getVarComoDataSQL(getDataHoje()), $nmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato) . " AS " . filtroConsultarContratoConsolidacao::$NmColQtdDiasParaVencimento,
 				
-				//$nmTabContratoMater . "." . vocontrato::$nmAtrDtVigenciaInicialContrato . " AS " . filtroConsultarContratoConsolidacao::$NmColDtInicioVigencia,
-				//$nmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato . " AS " . filtroConsultarContratoConsolidacao::$NmColDtFimVigencia,
 				$nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrDtProposta,
 				$filtro->getSqlAtributoCoalesceAutorizacao() . " AS " . filtroManterContratoInfo::$NmColAutorizacao,
 				getSQLNmContratada(),
@@ -182,6 +176,7 @@ class dbContratoInfo extends dbprocesso {
 		$nmTabContratoMINSq = "TAB_CONTRATO_MIN_SQ";
 		$nmTabContratoMAXSq = "TAB_CONTRATO_MAX_SQ";
 		
+		//TABELA $nmTabContratoMater
 		$queryJoin .= "\n LEFT JOIN ";
 		$queryJoin .= " (SELECT " . $groupbyinterno . ", MIN(" . vocontrato::$nmAtrSqContrato . ") AS " . vocontrato::$nmAtrSqContrato 
 		. " FROM " . $nmTabContratoInterna;
@@ -195,6 +190,8 @@ class dbContratoInfo extends dbprocesso {
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabContratoMINSq . "." . vocontrato::$nmAtrSqContrato . "=" . $nmTabContratoMater . "." . vocontrato::$nmAtrSqContrato;
 		
+		//TABELA $nmTabContratoATUAL
+		//pega o registro com maior sequencial, desde que a data final de vigencia nao seja nula ou '0000-00-00'
 		$queryJoin .= "\n LEFT JOIN ";
 		$queryJoin .= " (SELECT " . $groupbyinterno . ", MAX(" . vocontrato::$nmAtrSqContrato . ") AS " . vocontrato::$nmAtrSqContrato
 		. " FROM " . $nmTabContratoInterna;
@@ -222,8 +219,10 @@ class dbContratoInfo extends dbprocesso {
 		$queryJoin .= $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrCdPessoaContratada;
 	
 		$cdCampoSubstituir = "";
-		if($filtro->cdEspecie != null){
-			$cdCampoSubstituir = " WHERE " . $filtro->getSQFiltroCdEspecie($nmTabContratoInterna);
+		$nmColunaComparacao = vocontrato::$nmAtrDtVigenciaFinalContrato;
+		$cdCampoSubstituir = " WHERE $nmColunaComparacao IS NOT NULL AND $nmColunaComparacao <> '0000-00-00'";
+		if($filtro->cdEspecie != null){			
+			$cdCampoSubstituir .= " AND " . $filtro->getSQFiltroCdEspecie($nmTabContratoInterna);
 		}
 		
 		$queryJoin = str_replace(constantes::$CD_CAMPO_SUBSTITUICAO, $cdCampoSubstituir, $queryJoin);

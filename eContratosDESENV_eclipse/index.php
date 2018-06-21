@@ -31,7 +31,8 @@ setCabecalho($titulo);
 	f2 = new Tree('Serviço 02 (Contratos)');
 	f2.adicionarItem(new Link("Contratos-Planilha", "<?=caminho_funcoesHTML?>contrato", ""));
 	f2.adicionarItem(new Link("Contratos-Informações Adicionais", "<?=caminho_funcoesHTML?>contrato_info", ""));
-	f2.adicionarItem(new Link("Contratos-Consolidação", "<?=caminho_funcoesHTML?>contrato_consolidacao", ""));	
+	f2.adicionarItem(new Link("Contratos-Consolidação", "<?=caminho_funcoesHTML?>contrato_consolidacao", ""));
+	f2.adicionarItem(new Link("Controle Sistemas Externos (LICON)", "<?=caminho_funcoesHTML?>contrato_licon", ""));
 	f.adicionarItem(f2);
 
 	f3 = new Tree('Serviço 03 (Demanda)');
@@ -45,12 +46,13 @@ setCabecalho($titulo);
 
 	fprocLic = new Tree('Serviço 05 (Proc.Licitatório)');
 	fprocLic.adicionarItem(new Link('Proc.Licitatório', '<?=caminho_funcoesHTML.voProcLicitatorio::getNmTabela()?>', ''));
-	f.adicionarItem(fprocLic);
+	f.adicionarItem(fprocLic);	
+	
+	fmsg = new Tree('Serviço 06 (Administrativo)');
+	fmsg.adicionarItem(new Link("Agendamento de alertas (SEM EMAIL)", "agendamento.php?<?=constantes::$ID_REQ_IN_ENVIAR_EMAIL?>=N", ""));
+	fmsg.adicionarItem(new Link('Mensageria', '<?=caminho_funcoesHTML.voMensageria::getNmTabela()?>', ''));	
 
-	fadm = new Tree('Serviço 06 (Administrativo)');
-	fadm.adicionarItem(new Link("Agendamento de alertas (SEM EMAIL)", "agendamento.php?<?=constantes::$ID_REQ_IN_ENVIAR_EMAIL?>=N", ""));
-	fadm.adicionarItem(new Link("Controle Sistemas Externos (LICON)", "<?=caminho_funcoesHTML?>contrato_licon", ""));	
-	f.adicionarItem(fadm);
+	f.adicionarItem(fmsg);
 
 	/*flegislacao = new Tree('Serviço 05 (Legislação)');    
 	flegislacao.adicionarItem(new Link('Decreto 42.191 - Aplicação de penalidade(PAAP)', 'h:\\ASSESSORIA JURÍDICA\\ATJA\\LEGISLAÇÃO\\DECRETO Nº 42.191 DE 2015 - APLICAÇÃO DE PENALIDADES A LICITANTES.pdf', ''));

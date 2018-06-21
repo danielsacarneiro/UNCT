@@ -407,8 +407,7 @@ function getCamposContratoLicon($recordSet){
 	$voContrato->getDadosBanco($registrobanco);
 	
 	$voContratoInfo = new voContratoInfo();
-	$voContratoInfo->getDadosBanco($registrobanco);	
-	
+	$voContratoInfo->getDadosBanco($registrobanco);		
 	
 	if($voContrato != null){		
 		$retorno = "Data Vigência Inicial " . getInputText("", "", getData($voContrato->dtVigenciaInicial), constantes::$CD_CLASS_CAMPO_READONLY);

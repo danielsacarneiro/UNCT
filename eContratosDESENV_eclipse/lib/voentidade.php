@@ -79,7 +79,7 @@ class voentidade extends multiplosConstrutores {
 	// Funcoes ( Propriedades e metodos da classe )
 	function getSQLValuesInsertEntidade() {
 		$userManutencao = $this->cdUsuarioUltAlteracao;
-		if ($this->cdUsuarioInclusao == null || $this->cdUsuarioInclusao == ""){
+		if ($this->cdUsuarioInclusao == null || $this->cdUsuarioInclusao == "" || $this->cdUsuarioInclusao == "null"){
 			$this->cdUsuarioInclusao = $userManutencao;
 		}
 				
