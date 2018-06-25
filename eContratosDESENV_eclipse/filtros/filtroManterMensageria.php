@@ -69,7 +69,7 @@ class filtroManterMensageria extends filtroManter {
 		
 		if ($this->inHabilitado != null) {
 		
-			$filtro = $filtro . $conector . $nmTabela . "." . voContratoLicon::$nmAtrSituacao . " = " . getVarComoNumero($this->inHabilitado);
+			$filtro = $filtro . $conector . $nmTabela . "." . voMensageria::$nmAtrInHabilitado . " = " . getVarComoString($this->inHabilitado);
 		
 			$conector = "\n AND ";
 		}

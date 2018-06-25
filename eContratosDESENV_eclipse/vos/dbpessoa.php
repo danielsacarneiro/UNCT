@@ -6,6 +6,11 @@ include_once (caminho_util . "bibliotecaFuncoesPrincipal.php");
 // Classe select
 // cria um combo select html
 class dbpessoa extends dbprocesso {
+	
+	function consultarPorChaveTela($vo, $isHistorico) {
+		return 	$this->consultarPorChave($vo, $isHistorico);
+	}
+	
 	function consultarPorChave($vo, $isHistorico) {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
 		

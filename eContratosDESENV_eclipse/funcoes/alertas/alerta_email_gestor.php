@@ -11,16 +11,17 @@ $count = 0;
 
 $filtro = new filtroManterMensageria(false );
 $filtro->isValidarConsulta = false;
+$filtro->inHabilitado = constantes::$CD_SIM;
 // $filtro->voPrincipal = $voDemanda;
 $filtro->setaFiltroConsultaSemLimiteRegistro ();
 
 $dbMensageria = new dbMensageria();
 $colecao = $dbMensageria->consultarTelaConsulta(new voMensageria(), $filtro);
 
-foreach ($colecao as $registro){
-
-	enviarEmailGestor($registro, $enviarEmail);
-	
+if(!isColecaoVazia($colecao)){
+	foreach ($colecao as $registro){	
+		enviarEmailGestor($registro, $enviarEmail);		
+	}
 }
 
 function enviarEmailGestor($registro, $enviarEmail){
@@ -59,6 +60,7 @@ function getMensagemGestor($vocontratoinfo, $emailGestor){
 	try {
 		$codigo = formatarCodigoContrato($vocontratoinfo->cdContrato, $vocontratoinfo->anoContrato, $vocontratoinfo->tipo);
 		$msg = "<br><br>Caro Gestor, favor verificar o vencimento do contrato $codigo.";
+		//$msg .= "<br>O contrato vencerá em dias.";
 		
 		if(!$isAlertaValido){
 			$mensagem = "<br><br>Contrato $codigo SEM E-MAIL VÁLIDO para o Gestor.";

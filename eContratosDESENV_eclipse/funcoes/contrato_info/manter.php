@@ -206,7 +206,16 @@ function transferirDadosPessoa(cd, nm) {
 	            <TD class="campoformulario" colspan="3">
                     Código:<INPUT type="text" id="<?=voContratoInfo::$nmAtrCdPessoaGestor?>" name="<?=voContratoInfo::$nmAtrCdPessoaGestor?>" value="<?=complementarCharAEsquerda($colecao[voContratoInfo::$nmAtrCdPessoaGestor], "0", TAMANHO_CODIGOS)?>"  class="camporeadonly" size="5" readonly>
                     Nome: <INPUT type="text" id="<?=voContratoInfo::$IDREQNmPessoaGestor?>" name="<?=voContratoInfo::$IDREQNmPessoaGestor?>" value="<?=$colecao[voContratoInfo::$IDREQNmPessoaGestor]?>"   class="camporeadonly" size="30" readonly>
-                    <?php echo getLinkPesquisa("../pessoa");?>
+                    <?php 
+                    echo getLinkPesquisa("../pessoa");
+                    
+                    $nmCamposDocApagar = array(
+                    		voContratoInfo::$nmAtrCdPessoaGestor,
+                    		voContratoInfo::$IDREQNmPessoaGestor,
+                    );
+                    echo getBorracha($nmCamposDocApagar, "");
+                    
+                    ?>
 	            </TD>
 	        </TR>	        
 			<TR>

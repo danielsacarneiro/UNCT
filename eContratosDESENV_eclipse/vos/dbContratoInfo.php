@@ -18,6 +18,7 @@ class dbContratoInfo extends dbprocesso {
 				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
 				//$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
 				getSQLCOALESCE($colecaoAtributoCoalesceNmPessoa,vopessoa::$nmAtrNome),
+				$nmTabelaPessoaGestor . "." . vopessoa::$nmAtrCd . " AS " . voContratoInfo::$nmAtrCdPessoaGestor,
 				$nmTabelaPessoaGestor . "." . vopessoa::$nmAtrNome . " AS " . voContratoInfo::$IDREQNmPessoaGestor,
 		);
 		
@@ -367,6 +368,9 @@ class dbContratoInfo extends dbprocesso {
 		if ($vo->cdPessoaGestor != null) {
 			$retorno .= $sqlConector . voContratoInfo::$nmAtrCdPessoaGestor . " = " . $this->getVarComoNumero( $vo->cdPessoaGestor);
 			$sqlConector = ",";
+		}else{
+			$retorno .= $sqlConector . voContratoInfo::$nmAtrCdPessoaGestor . " = null ";
+			$sqlConector = ",";				
 		}
 		
 		$retorno = $retorno . $vo->getSQLValuesEntidadeUpdate ();

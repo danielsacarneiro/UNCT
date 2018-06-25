@@ -7,6 +7,8 @@ inicioComValidacaoUsuario(true);
 $vo = new voMensageria();
 $vo->getDadosFormulario();
 
+//$vo->dbprocesso->validar($vo);
+
 //var_dump($vo);
 
 /*$novaObs = @$_POST[voContratoInfo::$nmAtrObs];

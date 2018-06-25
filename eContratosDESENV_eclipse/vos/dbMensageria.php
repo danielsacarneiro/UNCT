@@ -82,6 +82,37 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		return parent::consultarMontandoQueryTelaConsulta ( $vo, $filtro, $arrayColunasRetornadas, $queryJoin );
   	}
   	
+  	function validar($vo){
+  		//$vomensa = new voMensageria();  		
+  		$vocontratoinfo = $vo->vocontratoinfo;
+  		$vocontratoInformacoesGerais = new voContratoInfo();
+  		$registro = $vocontratoInformacoesGerais->dbprocesso->consultarPorChaveTela($vocontratoinfo, false);
+  		$vocontratoInformacoesGerais->getDadosBanco($registro);
+  		
+  		if($vocontratoInformacoesGerais->cdPessoaGestor == null){
+  			throw new excecaoGenerica("O contrato não possui gestor cadastrado.");
+  		}  			
+  		
+  		$vopessoa = new vopessoa();
+  		$vopessoa->cd =$vocontratoInformacoesGerais->cdPessoaGestor;
+  		$registro = $vopessoa->dbprocesso->consultarPorChaveTela($vopessoa, false);
+  		$vopessoa->getDadosBanco($registro);
+  		
+  		$email = $vopessoa->email; 
+  		if($email == null || $email == ""){  		
+  			throw new excecaoGenerica("O e-mail do gestor do contrato não é válido.");
+  		}
+  	}
+  	 
+  	function incluir($vo){
+  		$this->validar($vo);  			
+  		return parent::incluir($vo);
+  	}
+  	
+  	function alterar($vo){
+  		$this->validar($vo);  			
+  		return parent::alterar($vo);
+  	}  	 
   	 
   	function getSQLValuesInsert($vo){
   		  		
