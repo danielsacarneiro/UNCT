@@ -253,8 +253,8 @@ function confirmar() {
                                 <INPUT type="text" id="<?=vocontrato::$nmAtrGestorContrato?>" name="<?=vocontrato::$nmAtrGestorContrato?>"  value="<?php echo($nmGestor);?>"  class="camponaoobrigatorio" size="50" ></TD>
                 <TH class="campoformulario" nowrap>Modalidade:</TH>
 				<?php
-				include_once("dominioModalidadeLicitacao.php");
-				$modalidades = new dominioModalidadeLicitacao();
+				include_once("../proc_licitatorio/dominioModalidadeProcLicitatorio.php");
+				$modalidades = new dominioModalidadeProcLicitatorio();
 				$combo = new select($modalidades->colecao);						
 				?>
                  <TD class="campoformulario" nowrap><?php echo $combo->getHtml("cdModalidade","cdModalidade", $modalidade);?>
