@@ -148,7 +148,7 @@ CREATE TABLE contrato_info (
     ctinf_in_mao_obra CHAR(1) NULL,
     ctinf_cd_classificacao INT,
     
-    ctinf_email_gestor VARCHAR(300) NULL,
+    ctinf_cd_pegestor INT, 
     
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
@@ -158,7 +158,7 @@ CREATE TABLE contrato_info (
     
     CONSTRAINT pk PRIMARY KEY (ct_exercicio, ct_numero, ct_tipo)
 );
-ALTER TABLE contrato_info ADD COLUMN ctinf_email_gestor VARCHAR(300) AFTER ctinf_cd_classificacao;
+ALTER TABLE contrato_info ADD COLUMN ctinf_cd_pegestor INT AFTER ctinf_cd_classificacao;
 
 /*ALTER TABLE contrato_info ADD CONSTRAINT fk_contrato_info FOREIGN KEY (ct_exercicio, ct_numero, ct_tipo) REFERENCES contrato (ct_exercicio, ct_numero, ct_tipo)
 	ON DELETE RESTRICT
@@ -191,7 +191,7 @@ CREATE TABLE contrato_info_hist (
     ctinf_in_mao_obra CHAR(1) NULL,
     ctinf_cd_classificacao INT,
     
-    ctinf_email_gestor VARCHAR(300) NULL,
+    ctinf_cd_pegestor INT, 
     
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
@@ -205,8 +205,9 @@ CREATE TABLE contrato_info_hist (
 	CONSTRAINT pk PRIMARY KEY (hist)
 );
 
-ALTER TABLE contrato_info_hist ADD COLUMN ctinf_email_gestor VARCHAR(300) AFTER ctinf_cd_classificacao;
-/*ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_garantia CHAR(1) NULL AFTER ctinf_obs;
+ALTER TABLE contrato_info_hist ADD COLUMN ctinf_cd_pegestor INT AFTER ctinf_cd_classificacao;
+/*ALTER TABLE contrato_info_hist DROP COLUMN ctinf_email_gestor;
+ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_garantia CHAR(1) NULL AFTER ctinf_obs;
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_tp_garantia INT NULL AFTER ctinf_in_garantia;
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_mao_obra CHAR(1) NULL AFTER ctinf_tp_garantia;
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_cd_classificacao INT NULL AFTER ctinf_in_mao_obra;

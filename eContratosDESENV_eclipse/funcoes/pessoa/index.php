@@ -96,6 +96,23 @@ function alterar() {
 
 }
 
+//Transfere dados selecionados para a janela principal
+function selecionar() {
+	if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta"))
+		return;
+		
+	if (window.opener != null) {
+		array = retornarValorRadioButtonSelecionadoComoArray("document.frm_principal.rdb_consulta", "<?=CAMPO_SEPARADOR?>");
+
+		cd = array[0];
+		nome = array[1];
+				
+		window.opener.transferirDadosPessoa(cd, nome);
+		window.close();
+	}
+}
+
+
 </SCRIPT>
 <?=setTituloPagina($titulo)?>
 </HEAD>
@@ -244,10 +261,7 @@ function alterar() {
                        <TD>
                         <TABLE class="barraacoesaux" cellpadding="0" cellspacing="0">
 	                   	<TR> 
-                            <TD class="botaofuncao"><button id="bttdetalhar" class="botaofuncaop" type="button" onClick="javascript:detalhar(false);" accesskey="d">Detalhar</button></TD>
-                            <TD class="botaofuncao"><?=getBotaoIncluir()?></TD>
-                            <TD class="botaofuncao"><?=getBotaoAlterar()?></TD>
-                            <TD class="botaofuncao"><?=getBotaoExcluir()?></TD>                            
+		                   	<?=getBotoesRodape();?>
                          </TR>
                          </TABLE>
 	                   </TD>

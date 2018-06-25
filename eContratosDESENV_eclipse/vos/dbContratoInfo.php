@@ -5,6 +5,7 @@ class dbContratoInfo extends dbprocesso {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
+		$nmTabelaPessoaGestor = "NM_TAB_PESSOA_GESTOR";
 		
 		$colecaoAtributoCoalesceNmPessoa = array(
 				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
@@ -17,6 +18,7 @@ class dbContratoInfo extends dbprocesso {
 				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
 				//$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
 				getSQLCOALESCE($colecaoAtributoCoalesceNmPessoa,vopessoa::$nmAtrNome),
+				$nmTabelaPessoaGestor . "." . vopessoa::$nmAtrNome . " AS " . voContratoInfo::$IDREQNmPessoaGestor,
 		);
 		
 		$groupbyinterno = $nmTabela . "." . vocontrato::$nmAtrAnoContrato . "," . $nmTabela . "." . vocontrato::$nmAtrCdContrato . "," . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
@@ -49,6 +51,9 @@ class dbContratoInfo extends dbprocesso {
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
 		
+		$queryJoin .= "\n LEFT JOIN $nmTabelaPessoaContrato $nmTabelaPessoaGestor";
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaPessoaGestor . "." . vopessoa::$nmAtrCd . "=" . $nmTabela . "." . voContratoInfo::$nmAtrCdPessoaGestor;		
 		/*
 		 * $queryWhere = "\n WHERE ";
 		 * $queryWhere .= $vo->getValoresWhereSQLChave ( $isHistorico );
@@ -307,7 +312,8 @@ class dbContratoInfo extends dbprocesso {
 		$retorno .= $this->getVarComoNumero ( $vo->tpGarantia ) . ",";
 		
 		$retorno .= $this->getVarComoNumero($vo->cdClassificacao) . ",";
-		$retorno .= $this->getVarComoString( $vo->inMaoDeObra );
+		$retorno .= $this->getVarComoString( $vo->inMaoDeObra ) . ",";
+		$retorno .= $this->getVarComoNumero($vo->cdPessoaGestor);		
 		
 		$retorno .= $vo->getSQLValuesInsertEntidade ();
 		
@@ -355,6 +361,11 @@ class dbContratoInfo extends dbprocesso {
 		
 		if ($vo->inMaoDeObra != null) {
 			$retorno .= $sqlConector . voContratoInfo::$nmAtrInMaoDeObra . " = " . $this->getVarComoString( $vo->inMaoDeObra );
+			$sqlConector = ",";
+		}
+		
+		if ($vo->cdPessoaGestor != null) {
+			$retorno .= $sqlConector . voContratoInfo::$nmAtrCdPessoaGestor . " = " . $this->getVarComoNumero( $vo->cdPessoaGestor);
 			$sqlConector = ",";
 		}
 		

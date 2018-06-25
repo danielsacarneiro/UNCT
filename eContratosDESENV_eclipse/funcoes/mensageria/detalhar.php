@@ -110,6 +110,14 @@ function confirmar() {
  	        //getContratoDetalhamento($voContrato, $colecao);
  	        getContratoDet($voContrato, false, true);
 			?>
+			<TR>
+	            <TH class="campoformulario" nowrap width="1%">Gestor:</TH>
+	            <TD class="campoformulario" colspan="3">
+                    Código:<INPUT type="text" id="<?=voContratoInfo::$nmAtrCdPessoaGestor?>" name="<?=voContratoInfo::$nmAtrCdPessoaGestor?>" value="<?=complementarCharAEsquerda($colecao[voContratoInfo::$nmAtrCdPessoaGestor], "0", TAMANHO_CODIGOS)?>"  class="camporeadonly" size="5" readonly>
+                    Nome: <INPUT type="text" id="<?=voContratoInfo::$IDREQNmPessoaGestor?>" name="<?=voContratoInfo::$IDREQNmPessoaGestor?>" value="<?=$colecao[voContratoInfo::$IDREQNmPessoaGestor]?>"   class="camporeadonly" size="30" readonly>
+                    E-mail: <INPUT type="text" id="<?=vopessoa::$nmAtrEmail?>" name="<?=vopessoa::$nmAtrEmail?>" value="<?=$colecao[vopessoa::$nmAtrEmail]?>"   class="camporeadonly" size="30" readonly>
+	            </TD>
+	        </TR>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Habilitado:</TH>
 	            <TD class="campoformulario" colspan=3>

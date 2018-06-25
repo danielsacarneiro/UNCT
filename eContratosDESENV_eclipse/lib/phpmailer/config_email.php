@@ -48,12 +48,14 @@ class email_sefaz extends multiplosConstrutores{
 		return array("daniel.ribeiro@sefaz.pe.gov.br",
 				"patricia.farias@sefaz.pe.gov.br",
 				"rogerio.f-carvalho@sefaz.pe.gov.br"
+		);	
+	}
+	
+	static function getListaEmailAvisoGestorContrato(){
+		return array(
+				"rogerio.f-carvalho@sefaz.pe.gov.br",
+				"margarida.vasconcelos@sefaz.pe.gov.br"
 		);
-		
-		/*return array("atja@sefaz.pe.gov.br",
-				"rogerio.f-carvalho@sefaz.pe.gov.br"
-		);*/
-		
 	}
 	
 	protected static function setListaEmail($mail, $listaDestinatarios){

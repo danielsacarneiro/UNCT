@@ -5,6 +5,8 @@ include_once (caminho_util."dominioSetor.php");
 
 Class voContratoInfo extends voentidade{
 	
+	static $IDREQNmPessoaGestor = "IDREQNmPessoaGestor";
+	
 	static $nmAtrCdContrato  = "ct_numero";
 	static $nmAtrAnoContrato  = "ct_exercicio";
 	static $nmAtrTipoContrato =  "ct_tipo";
@@ -18,6 +20,7 @@ Class voContratoInfo extends voentidade{
 	 
 	static $nmAtrCdClassificacao = "ctinf_cd_classificacao";
 	static $nmAtrInMaoDeObra = "ctinf_in_mao_obra";
+	static $nmAtrCdPessoaGestor = "ctinf_cd_pegestor";
 		
 	var $cdContrato = "";
 	var $anoContrato  = "";
@@ -31,6 +34,7 @@ Class voContratoInfo extends voentidade{
 	 
 	var $inMaoDeObra = "";
 	var $cdClassificacao = "";	
+	var $cdPessoaGestor = "";
 	
 	var $dbprocesso = null;
 	// ...............................................................
@@ -95,7 +99,8 @@ Class voContratoInfo extends voentidade{
 				self::$nmAtrInTemGarantia,
 				self::$nmAtrTpGarantia,
 				self::$nmAtrCdClassificacao,
-				self::$nmAtrInMaoDeObra
+				self::$nmAtrInMaoDeObra,
+				self::$nmAtrCdPessoaGestor,
 		);
 
 		return $retorno;
@@ -136,6 +141,7 @@ Class voContratoInfo extends voentidade{
 		
 		$this->cdClassificacao = $registrobanco[self::$nmAtrCdClassificacao];
 		$this->inMaoDeObra = $registrobanco[self::$nmAtrInMaoDeObra];
+		$this->cdPessoaGestor = $registrobanco[self::$nmAtrCdPessoaGestor];
 	}
 
 	function getDadosFormulario(){
@@ -151,6 +157,7 @@ Class voContratoInfo extends voentidade{
 		
 		$this->cdClassificacao = $_POST[self::$nmAtrCdClassificacao];
 		$this->inMaoDeObra = $_POST[self::$nmAtrInMaoDeObra];		
+		$this->cdPessoaGestor = $_POST[self::$nmAtrCdPessoaGestor];
 		//completa com os dados da entidade
 		$this->getDadosFormularioEntidade();
 	}

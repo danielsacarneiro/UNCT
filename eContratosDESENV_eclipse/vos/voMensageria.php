@@ -3,6 +3,8 @@ include_once (caminho_lib . "voentidade.php");
 
 class voMensageria extends voentidade {	
 	
+	static $ATIVADO = false;
+	
 	static $nmAtrSq = "msg_sq";
 	static $nmAtrAnoContrato  = "ct_exercicio";
 	static $nmAtrCdContrato  = "ct_numero";

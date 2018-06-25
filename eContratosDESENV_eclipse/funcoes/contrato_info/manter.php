@@ -93,6 +93,15 @@ function formataFormClassificacao(pCampoChamada) {
 	}
 }
 
+function transferirDadosPessoa(cd, nm) {		
+	document.getElementById("<?=voContratoInfo::$nmAtrCdPessoaGestor?>").value = completarNumeroComZerosEsquerda(cd, <?=TAMANHO_CODIGOS?>);
+	document.getElementById("<?=voContratoInfo::$IDREQNmPessoaGestor?>").value = nm;	
+
+	/*document.getElementsByName("<?=voContratoInfo::$nmAtrCdPessoaGestor?>").item(0).value = completarNumeroComZerosEsquerda(cd, <?=TAMANHO_CODIGOS?>);
+	document.getElementsByName("<?=vopessoa::$nmAtrNome?>").item(0).value = nm;*/
+}
+
+
 </SCRIPT>
 <?=setTituloPagina($vo->getTituloJSP())?>
 </HEAD>
@@ -192,6 +201,14 @@ function formataFormClassificacao(pCampoChamada) {
 	            Tipo: <?php echo $comboGarantia->getHtmlCombo(voContratoInfo::$nmAtrTpGarantia,voContratoInfo::$nmAtrTpGarantia, $vo->tpGarantia, true, "camponaoobrigatorio", true, " disabled ");?>
 	            </TD>
 	        </TR>
+			<TR>
+	            <TH class="campoformulario" nowrap width="1%">Gestor:</TH>
+	            <TD class="campoformulario" colspan="3">
+                    Código:<INPUT type="text" id="<?=voContratoInfo::$nmAtrCdPessoaGestor?>" name="<?=voContratoInfo::$nmAtrCdPessoaGestor?>" value="<?=complementarCharAEsquerda($colecao[voContratoInfo::$nmAtrCdPessoaGestor], "0", TAMANHO_CODIGOS)?>"  class="camporeadonly" size="5" readonly>
+                    Nome: <INPUT type="text" id="<?=voContratoInfo::$IDREQNmPessoaGestor?>" name="<?=voContratoInfo::$IDREQNmPessoaGestor?>" value="<?=$colecao[voContratoInfo::$IDREQNmPessoaGestor]?>"   class="camporeadonly" size="30" readonly>
+                    <?php echo getLinkPesquisa("../pessoa");?>
+	            </TD>
+	        </TR>	        
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Observação:</TH>
 	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=voContratoInfo::$nmAtrObs?>" name="<?=voContratoInfo::$nmAtrObs?>" class="camponaoobrigatorio"><?=$vo->obs?></textarea>

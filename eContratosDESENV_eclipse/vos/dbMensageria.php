@@ -4,30 +4,31 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   Class dbMensageria extends dbprocesso{
   	function consultarPorChaveTela($vo, $isHistorico) {
   		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
-  		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
-  		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
+  		$nmTabelaContrato = voContratoInfo::getNmTabelaStatic ( false );
+  		$nmTabelaPessoaGestor = vopessoa::getNmTabelaStatic ( false );
   		
   		$colecaoAtributoCoalesceNmPessoa = array(
-  				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
+  				$nmTabelaPessoaGestor . "." . vopessoa::$nmAtrNome,
   				$nmTabelaContrato . "." . vocontrato::$nmAtrContratadaContrato,
   		);
   		 
   		$arrayColunasRetornadas = array (
   				$nmTabela . ".*",
-  				/*$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
-  				//$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
-  				getSQLCOALESCE($colecaoAtributoCoalesceNmPessoa,vopessoa::$nmAtrNome),*/
+  				$nmTabelaPessoaGestor . "." . vopessoa::$nmAtrCd. " AS " . voContratoInfo::$nmAtrCdPessoaGestor,
+  				$nmTabelaPessoaGestor . "." . vopessoa::$nmAtrNome. " AS " . voContratoInfo::$IDREQNmPessoaGestor,
+  				$nmTabelaPessoaGestor . "." . vopessoa::$nmAtrEmail,
+  				/*getSQLCOALESCE($colecaoAtributoCoalesceNmPessoa,vopessoa::$nmAtrNome),*/
   		);
   		  		
-  		/*$queryJoin .= "\n left JOIN " . $nmTabelaContrato;
+  		$queryJoin .= "\n left JOIN " . $nmTabelaContrato;
   		$queryJoin .= "\n ON ";
-  		$queryJoin .= $nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabela . "." . voMensageria::$nmAtrAnoContrato;
-  		$queryJoin .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato. "=" . $nmTabela . "." . voMensageria::$nmAtrCdContrato;
-  		$queryJoin .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabela . "." . voMensageria::$nmAtrTipoContrato;
+  		$queryJoin .= $nmTabelaContrato . "." . voContratoInfo::$nmAtrAnoContrato . "=" . $nmTabela . "." . voMensageria::$nmAtrAnoContrato;
+  		$queryJoin .= " AND " . $nmTabelaContrato . "." . voContratoInfo::$nmAtrCdContrato. "=" . $nmTabela . "." . voMensageria::$nmAtrCdContrato;
+  		$queryJoin .= " AND " . $nmTabelaContrato . "." . voContratoInfo::$nmAtrTipoContrato . "=" . $nmTabela . "." . voMensageria::$nmAtrTipoContrato;
   		
-  		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoaContrato;
+  		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoaGestor;
   		$queryJoin .= "\n ON ";
-  		$queryJoin .= $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;*/
+  		$queryJoin .= $nmTabelaPessoaGestor . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . voContratoInfo::$nmAtrCdPessoaGestor;
   	
   		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryJoin, $isHistorico );
   	}
@@ -35,7 +36,9 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   	function consultarTelaConsulta($vo, $filtro) {
   		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );  		
   		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
+  		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
   		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
+  		$nmTabelaPessoaGestor = "NM_TAB_PESSOAGESTOR";
   	
   		$colecaoAtributoCoalesceNmPessoa = array(
   				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
@@ -48,6 +51,9 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   				$nmTabelaContrato . "." . vocontrato::$nmAtrDtPublicacaoContrato,
   				//$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
   				getSQLCOALESCE($colecaoAtributoCoalesceNmPessoa,vopessoa::$nmAtrNome),
+  				$nmTabelaPessoaGestor . "." . vopessoa::$nmAtrCd . " AS " . voContratoInfo::$nmAtrCdPessoaGestor,
+  				$nmTabelaPessoaGestor . "." . vopessoa::$nmAtrNome . " AS " . voContratoInfo::$IDREQNmPessoaGestor,
+  				$nmTabelaPessoaGestor . "." . vopessoa::$nmAtrEmail,
   		);
   	  	  		
   		$queryJoin .= "\n left JOIN " . $nmTabelaContrato;
@@ -59,6 +65,16 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoaContrato;
   		$queryJoin .= "\n ON ";
   		$queryJoin .= $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
+  		
+  		$queryJoin .= "\n left JOIN " . $nmTabelaContratoInfo;
+  		$queryJoin .= "\n ON ";
+  		$queryJoin .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrAnoContrato . "=" . $nmTabela . "." . voMensageria::$nmAtrAnoContrato;
+  		$queryJoin .= " AND " . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrCdContrato. "=" . $nmTabela . "." . voMensageria::$nmAtrCdContrato;
+  		$queryJoin .= " AND " . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrTipoContrato . "=" . $nmTabela . "." . voMensageria::$nmAtrTipoContrato;
+  		 
+  		$queryJoin .= "\n LEFT JOIN $nmTabelaPessoaContrato $nmTabelaPessoaGestor";
+  		$queryJoin .= "\n ON ";
+  		$queryJoin .= $nmTabelaPessoaGestor . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrCdPessoaGestor;
   		
   		$arrayGroupby = array("$nmTabela.".voMensageria::$nmAtrAnoContrato, "$nmTabela.".voMensageria::$nmAtrCdContrato, "$nmTabela.".voMensageria::$nmAtrTipoContrato);
   		$filtro->groupby = $arrayGroupby; 

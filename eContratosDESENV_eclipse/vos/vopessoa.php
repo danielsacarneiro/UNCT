@@ -139,16 +139,17 @@ include_once(caminho_util."DocumentoPessoa.php");
 	}   
 	
 	function getValorChavePrimaria(){
-		return $this->cd . constantes::$CD_CAMPO_SEPARADOR . $this->sqHist;
+		return $this->cd 
+		. constantes::$CD_CAMPO_SEPARADOR . $this->nome
+		. constantes::$CD_CAMPO_SEPARADOR . $this->sqHist;
 	}
-		
-	function getVOExplodeChave(){
-		$chave = @$_GET["chave"];	
-		$array = explode(CAMPO_SEPARADOR,$chave);
+	
+	function getChavePrimariaVOExplode($array){
 		$this->cd = $array[0];
-		$this->sqHist = $array[1];
-	}
-		
+		$this->nome = $array[1];
+		$this->sqHist = $array[2];
+	}	
+				
 	function getMensagemComplementarTelaSucesso(){				
 		$retorno = $this->getMensagemComplementarTelaSucessoPadrao($this->getTituloJSP(), $this->cd, $this->nome);
 		return $retorno;
