@@ -25,10 +25,26 @@ class dominioComissaoProcLicitatorio extends dominio {
 		return $retorno;
 	}
 	
-	static function getColecaoConsulta() {
-	
+	static function getColecaoConsulta() {	
 		return $retorno;
 	}
+	
+	static function getCPLPorPregoeiro($nmPregoeiro, $retornarDescricao=false) {
+		$retorno = null;
+		if(existeStr1NaStr2ComSeparador($nmPregoeiro, "gorete")){
+			$retorno = static::$CD_CPL_II;
+		}else if(existeStr1NaStr2ComSeparador($nmPregoeiro, "odacy")){
+			$retorno = static::$CD_CPL_I;
+		}else if(existeStr1NaStr2ComSeparador($nmPregoeiro, "patricia".CAMPO_SEPARADOR."patrícia")){
+				$retorno = static::$CD_CPL_III;
+		}		
+		
+		if($retornarDescricao){
+			$retorno = static::getDescricaoStatic($retorno);
+		}
+		return $retorno;
+	}
+	
 		
 }
 ?>

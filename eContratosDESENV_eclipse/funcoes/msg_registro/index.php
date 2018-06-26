@@ -116,21 +116,6 @@ function alterar() {
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
 	            <TD class="campoformulario" colspan="3"><?php getContratoEntradaDeDados($filtro->tipoContrato, $filtro->cdContrato, $filtro->anoContrato, $arrayCssClass, null, null);?></TD>
 			</TR>
-			<TR>
-                <TH class="campoformulario" nowrap>Nome Contratada:</TH>
-                <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>"  value="<?php echo($filtro->nmContratada);?>"  class="camponaoobrigatorio" size="50"></TD>
-                <TH class="campoformulario" width="1%" nowrap>CNPJ/CPF Contratada:</TH>
-                <TD class="campoformulario" ><INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($filtro->docContratada);?>" class="camponaoobrigatorio" size="20" maxlength="18"></TD>
-            </TR>
-            <TR>
-                <TH class="campoformulario" nowrap width="1%">Habilitado:</TH>
-                <TD class="campoformulario" width="1%" colspan=3>
-                <?php
-                $comboSituacao = new select(dominioSimNao::getColecao());
-                echo $comboSituacao->getHtmlCombo(voMensageria::$nmAtrInHabilitado,voMensageria::$nmAtrInHabilitado, $filtro->inHabilitado, true, "camponaoobrigatorio", false, "");
-                ?>
-				</TD>				
-            </TR>	        
        <?php
        echo getComponenteConsultaFiltro($vo->temTabHistorico, $filtro);
         ?>
@@ -156,9 +141,7 @@ function alterar() {
                   ?>
                     <TH class="headertabeladados" width="1%" nowrap>Alerta</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Sequencial</TH>
-                    <TH class="headertabeladados" width="1%" nowrap>Contrato</TH>
-                    <TH class="headertabeladados" width="80%">Contratada</TH>
-                    <TH class="headertabeladados" width="1%">CNPJ/CNPF</TH>                    
+                    <TH class="headertabeladados" width="90%" nowrap>Contrato</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Dt.Envio</TH>
                 </TR>
                 <?php								
@@ -168,7 +151,7 @@ function alterar() {
                         $tamanho = 0;
                 
                 //echoo($tamanho);                                
-                $colspan=7;
+                $colspan=5;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -208,7 +191,7 @@ function alterar() {
                    ?>
                 <TR class="dados">
                     <TD class="tabeladados">
-                    <?=getHTMLRadioButtonConsulta("rdb_consulta", "rdb_consulta", $voAtual);?>					
+                    <?//=getHTMLRadioButtonConsulta("rdb_consulta", "rdb_consulta", $voAtual);?>					
                     </TD>
                   <?php                  
                   if($isHistorico){                  	
@@ -220,8 +203,6 @@ function alterar() {
                   	<TD class="tabeladados" nowrap><?php echo complementarCharAEsquerda($voAtual->sqMensageria, "0", constantes::$TAMANHO_CODIGOS)?></TD>
                   	<TD class="tabeladados" nowrap><?php echo complementarCharAEsquerda($voAtual->sq, "0", constantes::$TAMANHO_CODIGOS)?></TD>
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo $contrato;?></TD>                    
-					<TD class="tabeladados" nowrap><?php echo $dsPessoa?></TD>					
-					<TD class="tabeladados" nowrap><?php echo documentoPessoa::getNumeroDocFormatado($voPessoa->doc)?></TD>
                     <TD class="tabeladados" nowrap><?php echo getDataHora($voAtual->dhUltAlteracao)?></TD>
                 </TR>					
                 <?php

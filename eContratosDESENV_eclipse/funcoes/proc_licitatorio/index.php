@@ -195,6 +195,7 @@ function alterar() {
 	                    <TH class="headertabeladados" rowspan="2" width="1%" nowrap>Modalidade</TH>
 	                    <TH class="headertabeladados" rowspan="2" width="1%" nowrap>Tipo</TH>
 	                    <TH class="headertabeladados" rowspan="2" width="1%" nowrap>Pregoeiro</TH>
+	                    <TH class="headertabeladados" rowspan="2" width="1%" nowrap>CPL</TH>
 	                    <TH class="headertabeladados" rowspan="2"  width="1%" nowrap>Dt.Abertura</TH>
 	                    <TH class="headertabeladados" rowspan="2"  width="1%" nowrap>Situação</TH>
                     </TR>
@@ -208,7 +209,7 @@ function alterar() {
                 else 
                         $tamanho = 0;
                                 
-                $colspan=9;
+                $colspan=10;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -234,6 +235,7 @@ function alterar() {
                                                 
                         $tipo = dominioTipoProcLicitatorio::getDescricaoStatic($voAtual->tipo);
                         $modalidade = dominioModalidadeProcLicitatorio::getDescricaoStatic($voAtual->cdModalidade);
+                        $pregoeiro = $colecao[$i][filtroManterProcLicitatorio::$nmColNomePregoeiro];
                         
                 ?>
                 <TR class="dados">
@@ -252,7 +254,8 @@ function alterar() {
                     <TD class="tabeladados"><?php echo $voAtual->objeto;?></TD>
                     <TD class="tabeladados"><?php echo $modalidade;?></TD>
                     <TD class="tabeladados" nowrap><?php echo $tipo;?></TD>
-					<TD class="tabeladados" nowrap><?php echo $colecao[$i][filtroManterProcLicitatorio::$nmColNomePregoeiro];?></TD>
+					<TD class="tabeladados" nowrap><?php echo $pregoeiro;?></TD>
+					<TD class="tabeladados" nowrap><?php echo dominioComissaoProcLicitatorio::getCPLPorPregoeiro($pregoeiro, true);?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($voAtual->dtAbertura);?></TD>
                     <TD class="<?=$classColunaSituacao?>" nowrap><?php echo $situacao;?></TD>
                 </TR>					
