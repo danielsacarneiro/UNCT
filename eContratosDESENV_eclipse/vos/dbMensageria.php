@@ -2,6 +2,8 @@
 include_once(caminho_lib. "dbprocesso.obj.php");
 
   Class dbMensageria extends dbprocesso{
+  	static $FLAG_PRINTAR_SQL = false;
+  	
   	function consultarPorChaveTela($vo, $isHistorico) {
   		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
   		$nmTabelaContrato = voContratoInfo::getNmTabelaStatic ( false );
@@ -122,7 +124,8 @@ include_once(caminho_lib. "dbprocesso.obj.php");
 		$retorno.= $this-> getVarComoNumero($vo->vocontratoinfo->cdContrato). ",";
 		$retorno.= $this-> getVarComoString($vo->vocontratoinfo->tipo). ",";
 		
-		$retorno.= $this-> getVarComoData($vo->dtReferencia). ",";
+		$retorno.= $this-> getVarComoData($vo->dtInicio). ",";
+		$retorno.= $this-> getVarComoData($vo->dtFim). ",";
         $retorno.= $this-> getVarComoString("S"). ",";
         $retorno.= $this-> getVarComoNumero($vo->numDiasFrequencia). ",";
         $retorno.= $this-> getVarComoString($vo->obs);
@@ -136,8 +139,13 @@ include_once(caminho_lib. "dbprocesso.obj.php");
         $retorno = "";
         $sqlConector = "";
                 
-        if($vo->dtReferencia != null){
-        	$retorno.= $sqlConector . voMensageria::$nmAtrDtReferencia . " = " . $this->getVarComoData($vo->dtReferencia);
+        if($vo->dtInicio != null){
+        	$retorno.= $sqlConector . voMensageria::$nmAtrDtInicio . " = " . $this->getVarComoData($vo->dtInicio);
+        	$sqlConector = ",";
+        }        
+        
+        if($vo->dtFim != null){
+        	$retorno.= $sqlConector . voMensageria::$nmAtrDtFim. " = " . $this->getVarComoData($vo->dtFim);
         	$sqlConector = ",";
         }
         

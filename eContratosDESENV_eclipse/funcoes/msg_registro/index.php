@@ -6,12 +6,12 @@ include_once(caminho_util."constantes.class.php");
 //inicia os parametros
 inicio();
 
-$vo = new voMensageria();
+$vo = new voMensageriaRegistro();
 
 $titulo = "CONSULTAR " . $vo::getTituloJSP();
 setCabecalho($titulo);
 
-$filtro  = new filtroManterMensageria();
+$filtro  = new filtroManterMensageriaRegistro();
 $filtro->voPrincipal = $vo;
 $filtro = filtroManter::verificaFiltroSessao($filtro);
 
@@ -155,13 +155,11 @@ function alterar() {
                   }
                   ?>
                     <TH class="headertabeladados" width="1%" nowrap>Alerta</TH>
+                    <TH class="headertabeladados" width="1%" nowrap>Sequencial</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Contrato</TH>
                     <TH class="headertabeladados" width="80%">Contratada</TH>
                     <TH class="headertabeladados" width="1%">CNPJ/CNPF</TH>                    
-                    <TH class="headertabeladados" width="1%" nowrap>Dt.Inclusão</TH>
-                    <TH class="headertabeladados" width="1%" nowrap>Dt.Inicio</TH>
-                    <TH class="headertabeladados" width="1%" nowrap>Dt.Fim</TH>
-                    <TH class="headertabeladados" width="1%">Habilitado</TH>                    
+                    <TH class="headertabeladados" width="1%" nowrap>Dt.Envio</TH>
                 </TR>
                 <?php								
                 if (is_array($colecao))
@@ -170,7 +168,7 @@ function alterar() {
                         $tamanho = 0;
                 
                 //echoo($tamanho);                                
-                $colspan=9;
+                $colspan=7;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -179,9 +177,12 @@ function alterar() {
                 
                for ($i=0;$i<$tamanho;$i++) {
                		$registroBanco = $colecao[$i];
-                        $voAtual = new voMensageria();
+                        $voAtual = new voMensageriaRegistro();
                         $voAtual->getDadosBanco($registroBanco);
 
+                        $voAtualMensageria = new voMensageria();
+                        $voAtualMensageria->getDadosBanco($registroBanco);
+                        
                         $voPessoa = new voPessoa();
                         $voPessoa->getDadosBanco($registroBanco);                        
                                                                    
@@ -194,7 +195,7 @@ function alterar() {
                         $tipo = dominioTipoDemanda::getDescricaoStatic($tipo);
                         //var_dump($voAtual);
                         						
-                        $vocontrato = $voAtual->vocontratoinfo;
+                        $vocontrato = $voAtualMensageria->vocontratoinfo;
                         $contrato = formatarCodigoAnoComplemento($vocontrato->cdContrato,
                         				$vocontrato->anoContrato,
                         				$dominioTipoContrato->getDescricao($vocontrato->tipo))
@@ -216,14 +217,12 @@ function alterar() {
                   <?php 
                   }
                   ?>                  
-                  	<TD class="tabeladados" nowrap><?php echo complementarCharAEsquerda($voAtual->sq, "0", constantes::$TAMANHO_CODIGOS)?></TD>  
+                  	<TD class="tabeladados" nowrap><?php echo complementarCharAEsquerda($voAtual->sqMensageria, "0", constantes::$TAMANHO_CODIGOS)?></TD>
+                  	<TD class="tabeladados" nowrap><?php echo complementarCharAEsquerda($voAtual->sq, "0", constantes::$TAMANHO_CODIGOS)?></TD>
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo $contrato;?></TD>                    
 					<TD class="tabeladados" nowrap><?php echo $dsPessoa?></TD>					
 					<TD class="tabeladados" nowrap><?php echo documentoPessoa::getNumeroDocFormatado($voPessoa->doc)?></TD>
-                    <TD class="tabeladados" nowrap><?php echo getData($voAtual->dhInclusao)?></TD>
-                    <TD class="tabeladados" nowrap><?php echo getData($voAtual->dtInicio)?></TD>
-                    <TD class="tabeladados" nowrap><?php echo getData($voAtual->dtFim)?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $habilitado?></TD>                    
+                    <TD class="tabeladados" nowrap><?php echo getDataHora($voAtual->dhUltAlteracao)?></TD>
                 </TR>					
                 <?php
 				}                

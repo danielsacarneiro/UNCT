@@ -10,7 +10,8 @@ class voMensageria extends voentidade {
 	static $nmAtrCdContrato  = "ct_numero";
 	static $nmAtrTipoContrato =  "ct_tipo";
 	
-	static $nmAtrDtReferencia = "msg_dt_referencia";
+	static $nmAtrDtInicio = "msg_dt_inicio";
+	static $nmAtrDtFim = "msg_dt_fim";
 	static $nmAtrInHabilitado = "msg_in_habilitado";
 	static $nmAtrNumDiasFrequencia = "msg_num_dias_frequencia";
 	
@@ -18,7 +19,8 @@ class voMensageria extends voentidade {
 			
 	var $sq;
 	var $vocontratoinfo;
-	var $dtReferencia;
+	var $dtInicio;
+	var $dtFim;
 	var $inHabilitado;
 	var $numDiasFrequencia;
 	var $obs;	
@@ -80,7 +82,8 @@ class voMensageria extends voentidade {
 				self::$nmAtrCdContrato,				
 				self::$nmAtrTipoContrato,
 				
-				self::$nmAtrDtReferencia,
+				self::$nmAtrDtInicio,
+				self::$nmAtrDtFim,
 				self::$nmAtrInHabilitado,
 				self::$nmAtrNumDiasFrequencia,
 				self::$nmAtrObs,
@@ -93,7 +96,8 @@ class voMensageria extends voentidade {
 		$this->sq = $registrobanco[self::$nmAtrSq];
 		$this->vocontratoinfo->getDadosRegistroBanco($registrobanco);
 		
-		$this->dtReferencia = $registrobanco[self::$nmAtrDtReferencia];		
+		$this->dtInicio = $registrobanco[self::$nmAtrDtInicio];		
+		$this->dtFim = $registrobanco[self::$nmAtrDtFim];
 		$this->inHabilitado = $registrobanco[self::$nmAtrInHabilitado];
 		$this->numDiasFrequencia = $registrobanco[self::$nmAtrNumDiasFrequencia];
 		$this->obs = $registrobanco[self::$nmAtrObs];
@@ -102,7 +106,9 @@ class voMensageria extends voentidade {
 		$this->sq = @$_POST[self::$nmAtrSq];
 		$this->vocontratoinfo->getDadosFormulario();
 		
-		$this->dtReferencia = @$_POST[self::$nmAtrDtReferencia];
+		$this->dtInicio = @$_POST[self::$nmAtrDtInicio];
+		$this->dtFim = getCampoRequest(self::$nmAtrDtFim, true);
+		
 		$this->inHabilitado = @$_POST[self::$nmAtrInHabilitado];
 		$this->numDiasFrequencia = @$_POST[self::$nmAtrNumDiasFrequencia];
 		$this->obs = @$_POST[self::$nmAtrObs];

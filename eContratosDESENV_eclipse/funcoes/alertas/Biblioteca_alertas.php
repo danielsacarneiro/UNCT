@@ -249,7 +249,7 @@ function enviarEmail($assuntoParam, $mensagemParam, $enviarEmail=true, $listaEma
 			
 			$enviado = $mail->enviarMensagem ($mensagemParam, $assuntoParam );
 			if ($enviado) {
-				echo "Email enviado com sucesso";
+				echoo ("Email enviado com sucesso");
 			} else {
 				echo "Não foi possível enviar o e-mail.<br /><br />";
 				echo "<b>Informações do erro:</b> <br />" . $mail->mail->ErrorInfo;

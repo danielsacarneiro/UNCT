@@ -27,11 +27,12 @@ echo "EXECUCAO DE AGENDADOR DE TAREFAS WINDOWS.<br><br>";
 require (caminho_funcoes. "alertas/alerta_email_unico.php");
 
 $enviarEmail = @$_GET [constantes::$ID_REQ_IN_ENVIAR_EMAIL];
-$isEnvioEmailRelatorio = getAtributoComoBooleano($enviarEmail);
+$isEnvioEmailGestor = getAtributoComoBooleano($enviarEmail);
 
-if($isEnvioEmailRelatorio && voMensageria::$ATIVADO){
+if($isEnvioEmailGestor && voMensageria::$ATIVADO){
 	//so deve enviar a mensageria se se tratar do agendamento automatico
-	//para tanto o $isEnvioEmailRelatorio será true
+	//para tanto o $isEnvioEmailGestor será true
+	echoo("___________________________");
 	echoo("Enviando email aos gestores.");
 	require (caminho_funcoes. "alertas/alerta_email_gestor.php");
 }

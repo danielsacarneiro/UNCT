@@ -131,7 +131,7 @@ function setCabecalhoPorNivel($titulo, $qtdNiveisAcimaEmSeEncontraPagina, $mail 
 		
 	}
 	
-	$nmSetor = "SAFI/DILC-DIRETORIA DE LICITAÇÕES E CONTRATOS";
+	$nmSetor = "<br>SAFI/DILC-DIRETORIA DE LICITAÇÕES E CONTRATOS";
 	
 	if(!$ehMontagemPorEmail){
 		$colspan = "colspan=2";
@@ -700,10 +700,12 @@ function getCheckBoxBoolean($idRadio, $nmRadio, $chave, $checked = null, $comple
 	$retorno = "<INPUT type='checkbox' id='" . $idRadio . "' name='" . $nmRadio . "' value='" . $chave . "' " . $strchecked . " $complementoHTML>";
 	return $retorno;
 }
+         
 function getInputText($idText, $nmText, $value, $class = null, $size = null, $maxlength = null, $complementoHTML = null) {
 	if ($maxlength == null) {
 		$maxlength = 20;
 	}
+	
 	if ($size == null) {
 		if($value != null){
 			$size = strlen($value) + 2;
@@ -719,7 +721,7 @@ function getInputText($idText, $nmText, $value, $class = null, $size = null, $ma
 		$complementoHTML .= " readonly ";
 	}
 
-	$retorno = "<INPUT type='text' id='" . $idText . "' name='" . $nmText . "' value='" . $value . "' class='$class' size='$size' maxlength='$maxlength' $complementoHTML>";
+	$retorno .= "<INPUT type='text' id='" . $idText . "' name='" . $nmText . "' value='" . $value . "' class='$class' size='$size' maxlength='$maxlength' $complementoHTML>";
 
 	return $retorno;
 }

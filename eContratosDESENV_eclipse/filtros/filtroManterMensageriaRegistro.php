@@ -2,7 +2,7 @@
 include_once (caminho_util . "bibliotecaSQL.php");
 include_once (caminho_lib . "filtroManter.php");
 
-class filtroManterMensageria extends filtroManter {
+class filtroManterMensageriaRegistro extends filtroManter {
 	//public static $nmFiltro = "filtroManterContratoLicon";
 	public $nmFiltro = "filtroManterMensageria";
 	
@@ -16,8 +16,6 @@ class filtroManterMensageria extends filtroManter {
 	var $inHabilitado = "";
 	var $dtInicio = "";
 	var $dtFim = "";
-	var $inVerificarPeriodoVigente = null;	
-	var $inVerificarFrequencia = null;
 	
 	function getFiltroFormulario() {
 		
@@ -40,7 +38,8 @@ class filtroManterMensageria extends filtroManter {
 		$filtro = "";
 		$conector = "";
 		
-		$nmTabela = voMensageria::getNmTabelaStatic ( $this->isHistorico () );
+		$nmTabela = voMensageriaRegistro::getNmTabelaStatic ( false);
+		$nmTabelaMensageria = voMensageria::getNmTabelaStatic ( $this->isHistorico () );
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
 		
@@ -53,56 +52,42 @@ class filtroManterMensageria extends filtroManter {
 				
 		if ($this->anoContrato != null) {
 				
-			$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrAnoContrato . " = " . $this->anoContrato;
+			$filtro = $filtro . $conector . $nmTabelaMensageria . "." . voMensageria::$nmAtrAnoContrato . " = " . $this->anoContrato;
 				
 			$conector = "\n AND ";
 		}
 		
 		if ($this->cdContrato != null) {
 				
-			$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrCdContrato . " = " . $this->cdContrato;
+			$filtro = $filtro . $conector . $nmTabelaMensageria . "." . voMensageria::$nmAtrCdContrato . " = " . $this->cdContrato;
 				
 			$conector = "\n AND ";
 		}
 		
 		if ($this->tipoContrato != null) {
 				
-			$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrTipoContrato . " = " . getVarComoString ( $this->tipoContrato );
+			$filtro = $filtro . $conector . $nmTabelaMensageria . "." . voMensageria::$nmAtrTipoContrato . " = " . getVarComoString ( $this->tipoContrato );
 				
 			$conector = "\n AND ";
 		}
 		
 		if ($this->inHabilitado != null) {
 		
-			$filtro = $filtro . $conector . $nmTabela . "." . voMensageria::$nmAtrInHabilitado . " = " . getVarComoString($this->inHabilitado);
+			$filtro = $filtro . $conector . $nmTabelaMensageria . "." . voMensageria::$nmAtrInHabilitado . " = " . getVarComoString($this->inHabilitado);
 		
 			$conector = "\n AND ";
 		}
 		
 		if ($this->dtInicio != null) {		
-			$filtro = $filtro . $conector . $nmTabela . "." . voMensageria::$nmAtrDtInicio . " >= " . getVarComoData($this->dtInicio);		
+			$filtro = $filtro . $conector . "DATE($nmTabela." . voMensageriaRegistro::$nmAtrDhUltAlteracao . ") >= " . getVarComoData($this->dtInicio);		
 			$conector = "\n AND ";
 		}
 		
 		if ($this->dtFim != null) {
-			$filtro = $filtro . $conector . $nmTabela . "." . voMensageria::$nmAtrDtFim . " <= " . getVarComoData($this->dtFim);
+			$filtro = $filtro . $conector . "DATE($nmTabela." . voMensageriaRegistro::$nmAtrDhUltAlteracao . ") <= " . getVarComoData($this->dtFim);
 			$conector = "\n AND ";
 		}
-		
-		if (getAtributoComoBooleano($this->inVerificarPeriodoVigente)) {
-			$dataHoje = getDataHoje();
-			$filtro = $filtro . $conector . $nmTabela . "." . voMensageria::$nmAtrDtInicio . " <= " . getVarComoData($dataHoje);
-			$conector = "\n AND ";
-			$atributoComparar = "$nmTabela." . voMensageria::$nmAtrDtFim;
-			$filtro = $filtro . $conector . "($atributoComparar IS NULL OR $atributoComparar >= " . getVarComoData($dataHoje) . ") ";
-			$conector = "\n AND ";
-		}
-		
-		if (getAtributoComoBooleano($this->inVerificarFrequencia)) {
-			$filtro = $this->getDataComparacaoFrequenciaComDtUltimoEnvio($filtro, $conector);
-			$conector = "\n AND ";
-		}
-		
+				
 		if ($this->nmContratada != null) {
 			$filtro = $filtro . $conector . $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome . " LIKE '%" .  $this->nmContratada . "%'";
 			$conector = "\n AND ";
@@ -122,20 +107,6 @@ class filtroManterMensageria extends filtroManter {
 		return $filtro;
 	}
 	
-	function getDataComparacaoFrequenciaComDtUltimoEnvio($filtro, $conector){
-		$nmTabela = voMensageria::getNmTabela();
-	
-		$nmColunaDataAComparar = "$nmTabela." . voMensageria::$nmAtrDtInicio;
-		$nmColunaFrequencia = "$nmTabela." . voMensageria::$nmAtrNumDiasFrequencia;
-		$dtParam = " NOW() ";
-		$diferencaEntreDatas = getDataSQLDiferencaDias($nmColunaDataAComparar, $dtParam);
-		$restoDaDivisaoSQL = "($diferencaEntreDatas % $nmColunaFrequencia)=0" ;
-		
-		//so trara as mensagerias cuja frequencia seja satisfeita a partir da diferenca entre a data inicio e a data atual			
-		$filtro = $filtro . $conector . $restoDaDivisaoSQL;	
-		return $filtro;
-	}
-	
 	function getAtributoOrdenacaoAnteriorDefault() {
 		$nmTabela = voMensageria::getNmTabelaStatic ( $this->isHistorico );
 		$retorno = $nmTabela . "." . voMensageria::$nmAtrSq . " " . $this->cdOrdenacao;
@@ -149,7 +120,6 @@ class filtroManterMensageria extends filtroManter {
 				voMensageria::$nmAtrSq => "Sequencial",
 				voMensageria::$nmAtrAnoContrato => "Ano.Contrato",
 				voMensageria::$nmAtrCdContrato => "Cd.Contrato",
-				voMensageria::$nmAtrDtInicio=> "Dt.Inicio"
 		);
 		return $varAtributos;
 	}

@@ -395,4 +395,12 @@ function getAtributoComoBooleano($param) {
 	return $retorno;
 }
 
+function getCampoRequest($nmCampo, $setarNulo=false) {
+	$retorno = null;	
+	$retorno = @$_POST[$nmCampo];
+	if($retorno == null && $setarNulo){
+		$retorno = constantes::$CD_CAMPO_NULO;
+	}
+	return $retorno;
+}
 ?>

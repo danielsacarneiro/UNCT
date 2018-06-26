@@ -8,7 +8,8 @@ CREATE TABLE mensageria (
     ct_numero INT NOT NULL,
     ct_tipo char(1) NOT NULL,
     
-    msg_dt_referencia DATE NOT NULL,
+    msg_dt_inicio DATE NOT NULL,
+    msg_dt_fim DATE NULL,
     msg_in_habilitado CHAR(1) NOT NULL DEFAULT 'S',
     msg_num_dias_frequencia INT,
     msg_obs MEDIUMTEXT NULL,
@@ -21,16 +22,16 @@ CREATE TABLE mensageria (
     CONSTRAINT pk PRIMARY KEY (msg_sq)
 );
 
+drop table msg_registro;
 CREATE TABLE msg_registro (	
-	msgr_exercicio INT NOT NULL,
-    sq INT NOT NULL,
-    
+    sq INT NOT NULL,    
     msg_sq INT NOT NULL,
         
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_ultalt INT,
     
-    CONSTRAINT pk PRIMARY KEY (msgr_exercicio, sq)
+    CONSTRAINT pk PRIMARY KEY (sq, msg_sq)
 );
 
 select * from mensageria
+select * from msg_registro

@@ -506,6 +506,8 @@ class dbDemanda extends dbprocesso {
 				}
 				
 				parent::alterar ( $vo );
+				// End transaction
+				$this->cDb->commit ();				
 			} catch ( Exception $e ) {
 				$this->cDb->rollback ();
 				throw new Exception ( $e->getMessage () );

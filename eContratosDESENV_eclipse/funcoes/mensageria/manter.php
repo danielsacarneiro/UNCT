@@ -210,14 +210,15 @@ function carregaDadosContrato(){
 				</TD>
 	        </TR>	        
 			<TR>
-	            <TH class="campoformulario" nowrap width="1%">Dt.Início:</TH>
+	            <TH class="campoformulario" nowrap width="1%">Período:</TH>
 	            <TD class="campoformulario" colspan="3">
 				<?php
-				$dataInicio = getData($vo->dtReferencia);
+				$dataInicio = getData($vo->dtInicio);
 				if($dataInicio == null){
 					$dataInicio = getDataHoje();
 				}
-				echo getInputText(voMensageria::$nmAtrDtReferencia, voMensageria::$nmAtrDtReferencia, $dataInicio, constantes::$CD_CLASS_CAMPO_OBRIGATORIO, 10, 10, " onkeyup='formatarCampoData(this, event, false);'");
+				echo getInputText(voMensageria::$nmAtrDtInicio, voMensageria::$nmAtrDtInicio, $dataInicio, constantes::$CD_CLASS_CAMPO_OBRIGATORIO, 10, 10, " onkeyup='formatarCampoData(this, event, false);'");
+				echo " a " . getInputText(voMensageria::$nmAtrDtFim, voMensageria::$nmAtrDtFim, getData($vo->dtFim), constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO, 10, 10, " onkeyup='formatarCampoData(this, event, false);'");
 				?>
 				</TD>
 	        </TR>	        
