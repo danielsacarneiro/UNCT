@@ -30,7 +30,11 @@ CREATE TABLE msg_registro (
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_ultalt INT,
     
-    CONSTRAINT pk PRIMARY KEY (sq, msg_sq)
+    CONSTRAINT pk PRIMARY KEY (sq, msg_sq),
+   	CONSTRAINT fk_mensageria FOREIGN KEY (msg_sq) 
+	REFERENCES mensageria (msg_sq) 
+		ON DELETE RESTRICT
+		ON UPDATE RESTRICT
 );
 
 select * from mensageria
