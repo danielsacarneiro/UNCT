@@ -11,7 +11,7 @@ if ($ativado) {
 	$filtro->isValidarConsulta = false;
 	$filtro->inHabilitado = constantes::$CD_SIM;
 	$filtro->inVerificarPeriodoVigente = constantes::$CD_SIM;
-	// $filtro->inVerificarFrequencia = constantes::$CD_SIM;
+	$filtro->inVerificarFrequencia = constantes::$CD_SIM;
 	$filtro->setaFiltroConsultaSemLimiteRegistro ();
 	
 	$dbMensageria = new dbMensageria ();

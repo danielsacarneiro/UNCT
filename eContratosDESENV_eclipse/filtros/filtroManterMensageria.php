@@ -122,17 +122,24 @@ class filtroManterMensageria extends filtroManter {
 		return $filtro;
 	}
 	
-	function getDataComparacaoFrequenciaComDtUltimoEnvio($filtro, $conector){
-		$nmTabela = voMensageria::getNmTabela();
+	static function getColunaDtUltimoEnvio(){
+		$nmTabelaMsgRegistro = voMensageriaRegistro::getNmTabelaStatic ( false );
+		return "$nmTabelaMsgRegistro." . voMensageriaRegistro::$nmAtrDhUltAlteracao;
+	}
 	
-		$nmColunaDataAComparar = "$nmTabela." . voMensageria::$nmAtrDtInicio;
+	function getDataComparacaoFrequenciaComDtUltimoEnvio($filtro, $conector){		
+		$nmTabela = voMensageria::getNmTabelaStatic ( $this->isHistorico () );
+		$nmTabelaMsgRegistro = voMensageriaRegistro::getNmTabelaStatic ( false );
+	
+		//$nmColunaDataAComparar = "$nmTabela." . voMensageria::$nmAtrDtInicio;
+		$nmColunaDataAComparar = static::getColunaDtUltimoEnvio();		
 		$nmColunaFrequencia = "$nmTabela." . voMensageria::$nmAtrNumDiasFrequencia;
 		$dtParam = " NOW() ";
 		$diferencaEntreDatas = getDataSQLDiferencaDias($nmColunaDataAComparar, $dtParam);
-		$restoDaDivisaoSQL = "($diferencaEntreDatas % $nmColunaFrequencia)=0" ;
+		$restoDaDivisaoSQL = "(($diferencaEntreDatas) % $nmColunaFrequencia)=0" ;
 		
 		//so trara as mensagerias cuja frequencia seja satisfeita a partir da diferenca entre a data inicio e a data atual			
-		$filtro = $filtro . $conector . $restoDaDivisaoSQL;	
+		$filtro = $filtro . $conector . "($nmColunaDataAComparar IS NULL OR (DATE($nmColunaDataAComparar) <> DATE(NOW()) AND $restoDaDivisaoSQL))";	
 		return $filtro;
 	}
 	

@@ -77,28 +77,28 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   	
   		$assunto = "COMUNICAÇÃO:";  	
   		$emailGestor = $registro[vopessoa::$nmAtrEmail];
-  		$isAlertaValido = $emailGestor != null && $emailGestor != "";
-  		$listaEmailTemp = email_sefaz::getListaEmailAvisoGestorContrato();  	
+  		$isEmailGestorValido = $emailGestor != null && $emailGestor != "";
+  		$listaEmailTemp = email_sefaz::getListaEmailAvisoGestorContrato();  		
+  		
+  		if(isColecaoVazia($listaEmailTemp)){
+  			throw new excecaoGenerica("Não há responsáveis na UNCT cadastrados para o mensageria.");
+  		}  		
   		
   		$codigo = formatarCodigoContrato($vocontratoinfo->cdContrato, $vocontratoinfo->anoContrato, $vocontratoinfo->tipo);
   		$msg .= "<br><br>Caro Gestor, favor verificar o vencimento do contrato $codigo.";
   		$msg .= "<br>Este e-mail é reenviado a cada $numFrequencia dias.";
   		//$msg .= "<br>O contrato vencerá em dias.";
-  		if(!$isAlertaValido){
+  		if(!$isEmailGestorValido){
   			//se o alerta nao for valido, envia apenas para os responsaveis
-  			$msg = "<br><br>Contrato $codigo SEM E-MAIL VÁLIDO para o Gestor.";
+  			$msg = "<br><br>Contrato SEM E-MAIL VÁLIDO para o Gestor. Mensageria: $vomensageria->toString().";  			  				
   		}else{
   			//se o alerta for valido, acrescenta o e-mail do gestor  				
   			$array2 = array($emailGestor);
   			$listaEmailTemp = array_merge($listaEmailTemp, $array2);
   		}
   	
-  		if(!isColecaoVazia($listaEmailTemp)){
-  			enviarEmail($assunto, $msg, $enviarEmail, $listaEmailTemp);
-  			echoo($vomensageria->toString());
-  		}else{
-  			throw new excecaoGenerica("Não há destinatários cadastrados para o mensageria: ". $vomensageria->toString());
-  		}  	
+		enviarEmail($assunto, $msg, $enviarEmail, $listaEmailTemp);
+		echoo($vomensageria->toString());
   	}
   	 
   	function getSQLValuesInsert($vo){

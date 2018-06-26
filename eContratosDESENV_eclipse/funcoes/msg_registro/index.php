@@ -202,7 +202,7 @@ function alterar() {
                   ?>                  
                   	<TD class="tabeladados" nowrap><?php echo complementarCharAEsquerda($voAtual->sqMensageria, "0", constantes::$TAMANHO_CODIGOS)?></TD>
                   	<TD class="tabeladados" nowrap><?php echo complementarCharAEsquerda($voAtual->sq, "0", constantes::$TAMANHO_CODIGOS)?></TD>
-                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo $contrato;?></TD>                    
+                    <TD class="tabeladados" nowrap><?php echo $contrato;?></TD>                    
                     <TD class="tabeladados" nowrap><?php echo getDataHora($voAtual->dhUltAlteracao)?></TD>
                 </TR>					
                 <?php

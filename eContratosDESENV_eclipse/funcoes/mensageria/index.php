@@ -161,6 +161,7 @@ function alterar() {
                     <TH class="headertabeladados" width="1%" nowrap>Dt.Inclusão</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Dt.Inicio</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Dt.Fim</TH>
+                    <TH class="headertabeladados" width="1%" nowrap>Dh.Ult.Envio</TH>
                     <TH class="headertabeladados" width="1%">Habilitado</TH>                    
                 </TR>
                 <?php								
@@ -170,7 +171,7 @@ function alterar() {
                         $tamanho = 0;
                 
                 //echoo($tamanho);                                
-                $colspan=9;
+                $colspan=10;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -182,6 +183,9 @@ function alterar() {
                         $voAtual = new voMensageria();
                         $voAtual->getDadosBanco($registroBanco);
 
+                        $voAtualMsgRegistro = new voMensageriaRegistro();
+                        $voAtualMsgRegistro->getDadosBanco($registroBanco);
+                        
                         $voPessoa = new voPessoa();
                         $voPessoa->getDadosBanco($registroBanco);                        
                                                                    
@@ -202,7 +206,9 @@ function alterar() {
                         
                         if($empresa != null){
                         	$contrato .= ": ".$empresa;
-                        }                       
+                        } 
+                        
+                        $dtUltEnvio = $registroBanco[voMensageria::$nmCOLDhUltimoEnvio];
                         
                    ?>
                 <TR class="dados">
@@ -223,6 +229,7 @@ function alterar() {
                     <TD class="tabeladados" nowrap><?php echo getData($voAtual->dhInclusao)?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($voAtual->dtInicio)?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($voAtual->dtFim)?></TD>
+                    <TD class="tabeladados" nowrap><?php echo getDataHora($dtUltEnvio)?></TD>
                     <TD class="tabeladados" nowrap><?php echo $habilitado?></TD>                    
                 </TR>					
                 <?php

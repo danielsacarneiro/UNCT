@@ -41,14 +41,16 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
   		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
   		$nmTabelaPessoaGestor = "NM_TAB_PESSOAGESTOR";
+  		$nmTabelaMsgRegistro = voMensageriaRegistro::getNmTabelaStatic ( false );
   	
   		$colecaoAtributoCoalesceNmPessoa = array(
   				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
-  				$nmTabelaContrato . "." . vocontrato::$nmAtrContratadaContrato,
+  				$nmTabelaContrato . "." . vocontrato::$nmAtrContratadaContrato,  				
   		);
   	
   		$arrayColunasRetornadas = array (
   				$nmTabela . ".*",
+  				filtroManterMensageria::getColunaDtUltimoEnvio(). " AS " . voMensageria::$nmCOLDhUltimoEnvio,
   				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
   				$nmTabelaContrato . "." . vocontrato::$nmAtrDtPublicacaoContrato,
   				//$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
@@ -77,6 +79,23 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		$queryJoin .= "\n LEFT JOIN $nmTabelaPessoaContrato $nmTabelaPessoaGestor";
   		$queryJoin .= "\n ON ";
   		$queryJoin .= $nmTabelaPessoaGestor . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrCdPessoaGestor;
+  		
+  		$nmTabMsgRegistroMAXSq = "TAB_MSGREGISTRO_MAX_SQ";
+  		$groupbyinterno = "$nmTabelaMsgRegistro." . voMensageriaRegistro::$nmAtrSqMensageria;
+  		
+  		//TABELA $nmTabContratoMater
+  		$queryJoin .= "\n LEFT JOIN ";
+  		$queryJoin .= " (SELECT " . $groupbyinterno . ", MAX(" . voMensageriaRegistro::$nmAtrSq. ") AS " . voMensageriaRegistro::$nmAtrSq
+  		. " FROM " . $nmTabelaMsgRegistro;
+  		$queryJoin .= " GROUP BY " . $groupbyinterno;
+  		$queryJoin .= "\n) " . $nmTabMsgRegistroMAXSq;
+  		$queryJoin .= "\n ON ";
+  		$queryJoin .= $nmTabela . "." . voMensageria::$nmAtrSq . "=" . $nmTabMsgRegistroMAXSq . "." . voMensageriaRegistro::$nmAtrSqMensageria;
+
+  		$queryJoin .= "\n LEFT JOIN $nmTabelaMsgRegistro";
+  		$queryJoin .= "\n ON ";
+  		$queryJoin .= $nmTabMsgRegistroMAXSq . "." . voMensageriaRegistro::$nmAtrSq . "=" . $nmTabelaMsgRegistro . "." . voMensageriaRegistro::$nmAtrSq;
+  		$queryJoin .= " AND " . $nmTabela . "." . voMensageria::$nmAtrSq . "=" . $nmTabelaMsgRegistro . "." . voMensageriaRegistro::$nmAtrSqMensageria;  		
   		
   		$arrayGroupby = array("$nmTabela.".voMensageria::$nmAtrAnoContrato, "$nmTabela.".voMensageria::$nmAtrCdContrato, "$nmTabela.".voMensageria::$nmAtrTipoContrato);
   		$filtro->groupby = $arrayGroupby; 
