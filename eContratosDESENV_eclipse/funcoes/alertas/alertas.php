@@ -32,7 +32,10 @@ function getMensagemEdital(&$count = 0){
 		$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_ATJA;
 		$filtro->cdAtrOrdenacao = filtroManterDemanda::$NmColDtReferenciaSetorAtual;
 		
-		$msg = getCorpoMensagemDemandaPorColecao($assunto, $filtro, null, true);
+		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Ano.PL', voProcLicitatorio::$nmAtrAno);
+		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Código.PL', voProcLicitatorio::$nmAtrCd, constantes::$TAMANHO_CODIGOS_SAFI);
+		
+		$msg = getCorpoMensagemDemandaPorColecao($assunto, $filtro, $colunasAAcrescentar, true);
 	
 	} catch ( Exception $ex ) {
 		$msg = $ex->getMessage ();

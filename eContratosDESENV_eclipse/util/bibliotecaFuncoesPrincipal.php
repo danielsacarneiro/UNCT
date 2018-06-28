@@ -387,20 +387,4 @@ function getNomePastaArquivoPHP() {
 function getLinkChamadaPHP() {
 	return $_SERVER ['PHP_SELF'];
 }
-function getAtributoComoBooleano($param) {
-	$retorno = false;
-	if ($param != null && $param == constantes::$CD_SIM) {
-		$retorno = true;
-	}
-	return $retorno;
-}
-
-function getCampoRequest($nmCampo, $setarNulo=false) {
-	$retorno = null;	
-	$retorno = @$_POST[$nmCampo];
-	if($retorno == null && $setarNulo){
-		$retorno = constantes::$CD_CAMPO_NULO;
-	}
-	return $retorno;
-}
 ?>

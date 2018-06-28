@@ -59,6 +59,7 @@
     static $CD_CAMPO_NULO = "null";
     static $ID_REQ_SESSAO_VO = "vo";
     static $ID_REQ_CD_LUPA = "lupa";
+    static $ID_REQ_MULTISELECAO = "multiSelecao";
     static $ID_REQ_IN_ENVIAR_EMAIL = "ENVIAR_EMAIL";
 
     static $CD_COLUNA_CHAVE  = "COLUNA_CD";

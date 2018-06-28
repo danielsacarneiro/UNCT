@@ -131,7 +131,8 @@ function alterar() {
          <TABLE id="table_tabeladados" class="tabeladados" cellpadding="0" cellspacing="0">						
              <TBODY>
                 <TR>
-                  <TH class="headertabeladados" width="1%">&nbsp;&nbsp;X</TH>
+                  <TH class="headertabeladados" width="1%"><?=getXGridConsulta("rdb_consulta", true)?></TH>
+                  <!--  <TH class="headertabeladados" width="1%">&nbsp;&nbsp;X</TH>-->
                   <?php 
                   if($isHistorico){					                  	
                   	?>
@@ -191,7 +192,9 @@ function alterar() {
                    ?>
                 <TR class="dados">
                     <TD class="tabeladados">
-                    <?//=getHTMLRadioButtonConsulta("rdb_consulta", "rdb_consulta", $voAtual);?>					
+                    <?php
+                    echo getHTMLCheckBoxConsulta("rdb_consulta", "rdb_consulta", $voAtual);                    
+                    ?>					
                     </TD>
                   <?php                  
                   if($isHistorico){                  	

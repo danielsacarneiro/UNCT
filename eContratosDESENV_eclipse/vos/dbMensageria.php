@@ -97,7 +97,7 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		$queryJoin .= $nmTabMsgRegistroMAXSq . "." . voMensageriaRegistro::$nmAtrSq . "=" . $nmTabelaMsgRegistro . "." . voMensageriaRegistro::$nmAtrSq;
   		$queryJoin .= " AND " . $nmTabela . "." . voMensageria::$nmAtrSq . "=" . $nmTabelaMsgRegistro . "." . voMensageriaRegistro::$nmAtrSqMensageria;  		
   		
-  		$arrayGroupby = array("$nmTabela.".voMensageria::$nmAtrAnoContrato, "$nmTabela.".voMensageria::$nmAtrCdContrato, "$nmTabela.".voMensageria::$nmAtrTipoContrato);
+  		$arrayGroupby = array("$nmTabela.".voMensageria::$nmAtrSq, "$nmTabela.".voMensageria::$nmAtrAnoContrato, "$nmTabela.".voMensageria::$nmAtrCdContrato, "$nmTabela.".voMensageria::$nmAtrTipoContrato);
   		$filtro->groupby = $arrayGroupby; 
   	  	
   		return parent::consultarMontandoQueryTelaConsulta ( $vo, $filtro, $arrayColunasRetornadas, $queryJoin );

@@ -342,7 +342,14 @@ function getCdLupa() {
 
 	return $lupa;
 }
-
+function isMultiSelecao() {
+	// vem do linkPesquisa ou do campo formulario
+	$flag = @$_GET [constantes::$ID_REQ_MULTISELECAO];
+	if ($flag == null || $flag == "") {
+		$flag = @$_POST [constantes::$ID_REQ_MULTISELECAO];
+	}
+	return $flag == "S";
+}
 function isLupa() {
 	$lupa = getCdLupa();
 	return $lupa == "S";
@@ -949,5 +956,19 @@ function getCampoDadosVOAnoCdDetalhamento($vo,$arrayParametroXNmAtributo,$temLup
 	
 }
 
-?>
-</TR>
+function getAtributoComoBooleano($param) {
+	$retorno = false;
+	if ($param != null && $param == constantes::$CD_SIM) {
+		$retorno = true;
+	}
+	return $retorno;
+}
+
+function getCampoRequest($nmCampo, $setarNulo=false) {
+	$retorno = null;
+	$retorno = @$_POST[$nmCampo];
+	if($retorno == null && $setarNulo){
+		$retorno = constantes::$CD_CAMPO_NULO;
+	}
+	return $retorno;
+}
