@@ -9,6 +9,8 @@ include_once (caminho_funcoes . "proc_licitatorio/dominioSituacaoPL.php");
 include_once (caminho_funcoes . "proc_licitatorio/dominioComissaoProcLicitatorio.php");
 
 class voProcLicitatorio extends voentidade {
+	static $NmColNomePregoeiro = "NmColNomePregoeiro";
+	
 	static $nmAtrCd = "pl_cd";
 	static $nmAtrAno = "pl_ex";	
 

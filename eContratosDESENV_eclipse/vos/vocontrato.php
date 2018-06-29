@@ -44,6 +44,8 @@ include_once (caminho_util . "DocumentoPessoa.php");
 		static $nmAtrGestorContrato =  "ct_gestor";
         static $nmAtrCdGestorContrato =  "gt_cd";//vogestor::$nmAtrCd;
 		static $nmAtrProcessoLicContrato =  "ct_processo_lic";
+		static $nmAtrCdProcessoLicContrato =  "ct_cd_processo_lic";
+		static $nmAtrAnoProcessoLicContrato =  "ct_ano_processo_lic";
 		static $nmAtrModalidadeContrato =  "ct_modalidade_lic";
 		static $nmAtrDataPublicacaoContrato =  "ct_data_public";
         static $nmAtrDtPublicacaoContrato =  "ct_dt_public";
@@ -81,6 +83,8 @@ include_once (caminho_util . "DocumentoPessoa.php");
 		var $vlMensal;
 		var $vlGlobal ; 			
 		var $procLic ;			
+		var $cdProcLic ;
+		var $anoProcLic ;
 		var $modalidade	;
         var $especie;
         var $sqEspecie;
@@ -137,6 +141,8 @@ include_once (caminho_util . "DocumentoPessoa.php");
             self::$nmAtrGestorContrato,
             self::$nmAtrCdGestorContrato,
             self::$nmAtrProcessoLicContrato,
+        	self::$nmAtrCdProcessoLicContrato,
+        	self::$nmAtrAnoProcessoLicContrato,
             self::$nmAtrModalidadeContrato,
             self::$nmAtrDataPublicacaoContrato,
             self::$nmAtrDtPublicacaoContrato,
@@ -211,6 +217,8 @@ include_once (caminho_util . "DocumentoPessoa.php");
 		$this->vlMensal = getMoeda($registrobanco[self::$nmAtrVlMensalContrato]);
 		$this->vlGlobal = getMoeda($registrobanco[self::$nmAtrVlGlobalContrato]);
 		$this->procLic = $registrobanco[self::$nmAtrProcessoLicContrato];				
+		$this->cdProcLic = $registrobanco[self::$nmAtrCdProcessoLicContrato];
+		$this->anoProcLic = $registrobanco[self::$nmAtrAnoProcessoLicContrato];
 		$this->dtAssinatura = getData($registrobanco[self::$nmAtrDtAssinaturaContrato]);
 		
         $this->dtPublicacao = getData($registrobanco[self::$nmAtrDtPublicacaoContrato]);
@@ -260,7 +268,10 @@ include_once (caminho_util . "DocumentoPessoa.php");
 		$this->dtVigenciaFinal = @$_POST[self::$nmAtrDtVigenciaFinalContrato];        		
 		$this->vlMensal = @$_POST[self::$nmAtrVlMensalContrato];
 		$this->vlGlobal = @$_POST[self::$nmAtrVlGlobalContrato];
-		$this->procLic = @$_POST[self::$nmAtrProcessoLicContrato];				
+		$this->procLic = @$_POST[self::$nmAtrProcessoLicContrato];
+		$this->cdProcLic = @$_POST[self::$nmAtrCdProcessoLicContrato];
+		$this->anoProcLic = @$_POST[self::$nmAtrAnoProcessoLicContrato];
+		
 		$this->dtAssinatura = @$_POST[self::$nmAtrDtAssinaturaContrato];
 		$this->dtPublicacao = @$_POST[self::$nmAtrDtPublicacaoContrato];
         $this->dtProposta = @$_POST[self::$nmAtrDtProposta];

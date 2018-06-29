@@ -31,10 +31,14 @@ class dbcontrato extends dbprocesso {
 	function consultarPorChaveTela($vo, $isHistorico) {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
+		$nmTabelaProcLic = voProcLicitatorio::getNmTabelaStatic ( false );
+		$nmTabelaPessoa = vopessoa::getNmTabelaStatic ( false );
+		$nmTabelaPregoeiro = "NM_TAB_PREGOEIRO";
 		
 		$arrayColunasRetornadas = array (
 				$nmTabela . ".*",
 				"$nmTabelaContratoInfo." . voContratoInfo::$nmAtrDtProposta,
+				"$nmTabelaPregoeiro." . vopessoa::$nmAtrNome . " AS " . voProcLicitatorio::$NmColNomePregoeiro,
 				"TAB2." . vousuario::$nmAtrName . " AS " . voentidade::$nmAtrNmUsuarioUltAlteracao,
 		);		
 						
@@ -45,6 +49,16 @@ class dbcontrato extends dbprocesso {
 		$queryJoin .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrAnoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrAnoContrato;
 		$queryJoin .= "\n AND ";
 		$queryJoin .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrTipoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
+		
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaProcLic;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrAnoProcessoLicContrato . "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrAno;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrCdProcessoLicContrato . "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrCd;
+		
+		$queryJoin .= "\n LEFT JOIN $nmTabelaPessoa $nmTabelaPregoeiro" ;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaPregoeiro . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrCdPregoeiro;
 		
 		$queryJoin .= "\n LEFT JOIN " . vousuario::$nmEntidade;
 		$queryJoin .= "\n TAB1 ON ";
@@ -172,6 +186,8 @@ class dbcontrato extends dbprocesso {
 		$retorno .= $this->getVarComoString ( $voContrato->gestor ) . ",";
 		$retorno .= $this->getVarComoNumero ( $voContrato->cdGestor ) . ",";
 		$retorno .= $this->getVarComoString ( $voContrato->procLic ) . ",";
+		$retorno .= $this->getVarComoNumero($voContrato->cdProcLic ) . ",";
+		$retorno .= $this->getVarComoNumero($voContrato->anoProcLic ) . ",";
 		$retorno .= $this->getVarComoString ( $voContrato->modalidade ) . ",";
 		
 		$retorno .= $this->getVarComoString ( $voContrato->dataPublicacao ) . ",";
@@ -273,6 +289,16 @@ class dbcontrato extends dbprocesso {
 		
 		if ($voContrato->procLic != null) {
 			$retorno .= $sqlConector . vocontrato::$nmAtrProcessoLicContrato . " = " . $this->getVarComoString ( $voContrato->procLic );
+			$sqlConector = ",";
+		}
+		
+		if ($voContrato->cdProcLic != null) {
+			$retorno .= $sqlConector . vocontrato::$nmAtrCdProcessoLicContrato . " = " . $this->getVarComoNumero($voContrato->cdProcLic );
+			$sqlConector = ",";
+		}
+		
+		if ($voContrato->anoProcLic != null) {
+			$retorno .= $sqlConector . vocontrato::$nmAtrAnoProcessoLicContrato . " = " . $this->getVarComoNumero($voContrato->anoProcLic );
 			$sqlConector = ",";
 		}
 		
@@ -527,7 +553,7 @@ class dbcontrato extends dbprocesso {
 			$retorno = substr ( $param, 4, 2 ) + 2000;
 		
 		return $retorno;
-	}
+	}	
 	
 	/*
 	 * function getDataLinhaImportacao($param){
@@ -708,7 +734,7 @@ class dbcontrato extends dbprocesso {
 			$gestor = null;
 			$valorGlobal = $linha ["G"];
 			$valorMensal = null;
-			$processoLic = $linha ["H"];
+			//$processoLic = $linha ["H"];
 			$modalidadeLic = $linha ["I"];
 			$dtAssinatura = $linha ["J"];
 			$dataPublic = $linha ["K"];
@@ -765,7 +791,20 @@ class dbcontrato extends dbprocesso {
 		$retorno->gestor = $gestor;
 		$retorno->vlGlobal = $valorGlobal;
 		$retorno->vlMensal = $valorMensal;
-		$retorno->procLic = $processoLic;
+		if($processoLic != null){
+			$retorno->procLic = $processoLic;
+			
+			if($processoLic!= null){
+				try{
+					$arrayProcLic = getArrayFormatadoLinhaImportacaoPorSeparador($processoLic);
+					$retorno->cdProcLic = $arrayProcLic[0];
+					$retorno->anoProcLic = $arrayProcLic[1];
+				}catch(excecaoNumProcLicImportacaoInvalido $exProcLic){
+					echoo($exProcLic->getMessage());				
+				}
+			}
+		}
+
 		$retorno->modalidade = $modalidadeLic;
 		$retorno->dtAssinatura = $dtAssinatura;
 		$retorno->dataPublicacao = $dataPublic;

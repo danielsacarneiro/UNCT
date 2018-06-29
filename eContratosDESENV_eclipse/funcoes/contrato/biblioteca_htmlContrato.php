@@ -401,6 +401,10 @@ function getDadosContratoLicon($chave) {
 	return $retorno;
 }
 
+function getCPLPorNomePregoeiro($recordSet){
+	return dominioComissaoProcLicitatorio::getCPLPorPregoeiro($recordSet[voProcLicitatorio::$NmColNomePregoeiro]);
+}
+
 function getCamposContratoLicon($recordSet){
 	$registrobanco = $recordSet;
 	$voContrato = new vocontrato();
@@ -414,6 +418,13 @@ function getCamposContratoLicon($recordSet){
 		$retorno .= " a Data Final " . getInputText("", "", getData($voContrato->dtVigenciaFinal), constantes::$CD_CLASS_CAMPO_READONLY);
 		$retorno .= "<br>Data Publicação " . getInputText("", "", getData($voContrato->dtPublicacao), constantes::$CD_CLASS_CAMPO_READONLY);
 		$retorno .= "<br>Data Assinatura " . getInputText("", "", getData($voContrato->dtAssinatura), constantes::$CD_CLASS_CAMPO_READONLY);
+		
+		$portaria = getCPLPorNomePregoeiro($recordSet);
+		if($portaria != null && $portaria != ""){
+			$retorno .= "<br>CPL: " . getCPLPorNomePregoeiro($recordSet);
+		}
+		
+		$retorno .= "<br><br>Todas Portarias:<br>" . dominioComissaoProcLicitatorio::getNumPortariaTodasCPL();
 	}
 
 	return $retorno;

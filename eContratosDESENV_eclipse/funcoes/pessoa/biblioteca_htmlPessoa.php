@@ -129,9 +129,20 @@ function getComboPessoaPregoeiro($idCampo, $nmCampo, $cdOpcaoSelecionada, $class
 	$recordset = $dbprocesso->consultarPessoaManter($filtro, false);
 
 	$select = new select(array());
-	$select->getRecordSetComoColecaoSelect(vopessoa::$nmAtrCd, vopessoa::$nmAtrNome, $recordset);
+	$select->getRecordSetComoColecaoSelect(vopessoa::$nmAtrCd, vopessoa::$nmAtrNome, acrescentarCdCPLNomePregoeiro($recordset));
 
 	return getComboColecaoGenerico($select->colecao, $idCampo, $nmCampo, $cdOpcaoSelecionada, $classCampo, $tagHtml);
+}
+
+function acrescentarCdCPLNomePregoeiro($recordset){
+	for($i =0 ; $i<sizeof($recordset);$i++){
+		$registro = $recordset[$i];
+		$nmpessoa = $registro[vopessoa::$nmAtrNome];
+		$registro[vopessoa::$nmAtrNome] = $nmpessoa . "-" . dominioComissaoProcLicitatorio::getCPLPorPregoeiro($nmpessoa, true);
+		$recordset[$i] = $registro;
+	}	
+	
+	return $recordset;
 }
 
 

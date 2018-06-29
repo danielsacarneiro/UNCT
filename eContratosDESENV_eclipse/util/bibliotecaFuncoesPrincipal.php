@@ -387,4 +387,51 @@ function getNomePastaArquivoPHP() {
 function getLinkChamadaPHP() {
 	return $_SERVER ['PHP_SELF'];
 }
+
+function getArrayFormatadoLinhaImportacaoPorSeparador($param) {
+	$param = str_replace("/", ".", $param);
+	$param = str_replace(",", ".", $param);
+	
+	$separador = ".";
+	$array = explode ( $separador, $param );
+	$tam = sizeof($array);	
+	
+	if($param == null){
+		throw new excecaoNumProcLicImportacaoInvalido("Parametro a separar Proc Licitatorio  inválido:$param.");
+	}
+	
+	if($tam<2){
+		//se chegou no $separador=".", e nao conseguiu pelo menos 2 atributos..eh porque o formato esta errado
+		throw new excecaoNumProcLicImportacaoInvalido("Formato Proc Licitatorio inválido:$param.");
+	}
+		
+	//a partir daqui $tam so podera ser 1 ou >=2
+	//0 nao pode ser pq o $param nunca vai ser nulo (se for, excecao eh levantada antes)	
+	if($tam>=2){
+		//pega apenas os 2 primeiros
+		$cd= $array[0];
+		$ano = $array[1];
+		if(!isNumero($ano) || !isNumero($cd)){
+			throw new excecaoNumProcLicImportacaoInvalido("Formato Proc Licitatorio inválido:$param.");
+		}
+		
+		if(strlen($ano)==2){
+			if($ano>90){
+				$ano = $ano + 1900;
+			}else{
+				$ano = $ano + 2000;
+			}
+		}
+		$retorno[0] = $cd;
+		$retorno[1] = $ano;		
+		
+	}else{
+		//apenas por seguranca
+		//a ideia eh nunca chegar aqui
+		throw new excecaoNumProcLicImportacaoInvalido("Tamanho Proc Licitatorio inválido:$param.");
+	}
+			
+	return $retorno;	
+}
+
 ?>
