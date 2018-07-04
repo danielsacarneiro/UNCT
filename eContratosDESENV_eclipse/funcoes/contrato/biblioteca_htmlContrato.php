@@ -418,13 +418,14 @@ function getCamposContratoLicon($recordSet){
 		$retorno .= " a Data Final " . getInputText("", "", getData($voContrato->dtVigenciaFinal), constantes::$CD_CLASS_CAMPO_READONLY);
 		$retorno .= "<br>Data Publicação " . getInputText("", "", getData($voContrato->dtPublicacao), constantes::$CD_CLASS_CAMPO_READONLY);
 		$retorno .= "<br>Data Assinatura " . getInputText("", "", getData($voContrato->dtAssinatura), constantes::$CD_CLASS_CAMPO_READONLY);
-		
-		$portaria = getCPLPorNomePregoeiro($recordSet);
-		if($portaria != null && $portaria != ""){
-			$retorno .= "<br>CPL: " . getCPLPorNomePregoeiro($recordSet);
-		}
-		
-		$retorno .= "<br><br>Todas Portarias:<br>" . dominioComissaoProcLicitatorio::getNumPortariaTodasCPL();
+				
+		if($voContrato->cdEspecie == dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER){
+			$portaria = getCPLPorNomePregoeiro($recordSet);			
+			if($portaria != null && $portaria != ""){
+				$retorno .= "<br>CPL: " . getCPLPorNomePregoeiro($recordSet);				
+			}			
+			$retorno .= "<br><br>Todas Portarias:<br>" . dominioComissaoProcLicitatorio::getNumPortariaTodasCPL();
+		}		
 	}
 
 	return $retorno;

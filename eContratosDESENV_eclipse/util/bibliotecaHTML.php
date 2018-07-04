@@ -428,13 +428,8 @@ function exibeBotao($arrayBotoesARemover, $nmFuncaoBotao, $usuarioLogadoTemPermi
 function getBotoesRodapeComRestricao($arrayBotoesARemover, $restringeBotaoSemValidarPermissao = false) {
 	
 	// o administrador pode ver todos os botoes
-	$usuarioLogadoTemPermissao = dominioPermissaoUsuario::isAdministrador ( getColecaoPermissaoUsuarioLogado () );
-	
-	/*
-	 * $temIncluir = ! existeItemNoArray ( constantes::$CD_FUNCAO_INCLUIR, $arrayBotoesARemover ) || $usuarioLogadoTemPermissao;
-	 * $temAlterar = ! existeItemNoArray ( constantes::$CD_FUNCAO_ALTERAR, $arrayBotoesARemover ) || $usuarioLogadoTemPermissao;
-	 * $temExcluir = ! existeItemNoArray ( constantes::$CD_FUNCAO_EXCLUIR, $arrayBotoesARemover ) || $usuarioLogadoTemPermissao;
-	 */
+	//$usuarioLogadoTemPermissao = dominioPermissaoUsuario::isAdministrador ( getColecaoPermissaoUsuarioLogado () );
+	$usuarioLogadoTemPermissao = dominioPermissaoUsuario::isUsuarioPermissaoIntermediaria();
 	
 	// falta fazer para os outros botoes
 	$temIncluir = exibeBotao ( $arrayBotoesARemover, constantes::$CD_FUNCAO_INCLUIR, $usuarioLogadoTemPermissao, $restringeBotaoSemValidarPermissao );
@@ -531,13 +526,15 @@ function temPermissao($cdFuncaoBotao) {
 function isUsuarioAdmin() {
 	return dominioPermissaoUsuario::isAdministrador ( getColecaoPermissaoUsuarioLogado () );
 }
+function isUsuarioPermissaoIntermediaria() {
+	return dominioPermissaoUsuario::isUsuarioPermissaoIntermediaria();
+}
 function temPermissaoParamHistorico($isHistorico) {
 	return temPermissaoPorFuncao ( constantes::$CD_FUNCAO_HISTORICO, $isHistorico );
 }
-function temPermissaoPorFuncao($cdFuncaoBotao, $isHistorico) {
-	$current_user = wp_get_current_user ();
-	$permissao_user = $current_user->roles;
+function temPermissaoPorFuncao($cdFuncaoBotao, $isHistorico) {	
 	
+	$permissao_user = getColecaoPermissaoUsuarioLogado();	
 	$retorno = true;
 	if ($isHistorico) {
 		$retorno = dominioPermissaoUsuario::temPermissaoPorFuncao ( constantes::$CD_FUNCAO_HISTORICO, $permissao_user );

@@ -31,6 +31,8 @@ class dominioTpDocumento extends dominio {
 	// static $CD_TP_DOC_RELATORIO_CONCLUSAO = "RC";
 	static $CD_TP_DOC_MINUTA = "MI";
 	static $CD_TP_DOC_CERTIDAO_TRANSITO_JULGADO = "TJ";
+	static $CD_TP_DOC_TERMO_CONST_CREDITO = "TC";
+	
 	static $DS_TP_DOC_PAAP = "PAAP(digitalizado)";
 	static $DS_TP_DOC_APOSTILAMENTO = "Apostilamento";
 	static $DS_TP_DOC_CONTROLE_AQUISICAO = "Controle Aquisição";
@@ -54,6 +56,7 @@ class dominioTpDocumento extends dominio {
 	// static $DS_TP_DOC_RELATORIO_CONCLUSAO = "Relatório Com Alegações Finais";
 	static $DS_TP_DOC_MINUTA = "Minuta";
 	static $DS_TP_DOC_CERTIDAO_TRANSITO_JULGADO = "Certidão Transito Julgado";
+	static $DS_TP_DOC_TERMO_CONST_CREDITO = "Termo Const. Crédito";
 	
 	// ...............................................................
 	// Construtor
@@ -70,25 +73,16 @@ class dominioTpDocumento extends dominio {
 	}
 	
 	static function getColecaoATJA($comComum = true) {
+				
 		$retorno = array (
-				// self::$CD_TP_DOC_APOSTILAMENTO => self::$DS_TP_DOC_APOSTILAMENTO,
 				self::$CD_TP_DOC_CONTROLE_AQUISICAO => self::$DS_TP_DOC_CONTROLE_AQUISICAO,
-				self::$CD_TP_DOC_DECISAO => self::$DS_TP_DOC_DECISAO,
-				self::$CD_TP_DOC_DEFESA => self::$DS_TP_DOC_DEFESA,
-				self::$CD_TP_DOC_DESPACHO => self::$DS_TP_DOC_DESPACHO,
-				// self::$CD_TP_DOC_INTIMACAO => self::$DS_TP_DOC_INTIMACAO,
 				self::$CD_TP_DOC_LEGISLACAO => self::$DS_TP_DOC_LEGISLACAO,
-				self::$CD_TP_DOC_NOTA_IMPUTACAO => self::$DS_TP_DOC_NOTA_IMPUTACAO,
-				// self::$CD_TP_DOC_NOTIFICACAO => self::$DS_TP_DOC_NOTIFICACAO,
 				self::$CD_TP_DOC_PARECER => self::$DS_TP_DOC_PARECER,
 				self::$CD_TP_DOC_PLANILHA_CUSTOS => self::$DS_TP_DOC_PLANILHA_CUSTOS,
 				self::$CD_TP_DOC_PROPOSTA_PRECOS => self::$DS_TP_DOC_PROPOSTA_PRECOS,
-				self::$CD_TP_DOC_PUBLICACAO_PAAP => self::$DS_TP_DOC_PUBLICACAO_PAAP,
-				self::$CD_TP_DOC_RELATORIO => self::$DS_TP_DOC_RELATORIO,
-				self::$CD_TP_DOC_PAAP => self::$DS_TP_DOC_PAAP,
-				// self::$CD_TP_DOC_MINUTA => self::$DS_TP_DOC_MINUTA,
-				self::$CD_TP_DOC_CERTIDAO_TRANSITO_JULGADO => self::$DS_TP_DOC_CERTIDAO_TRANSITO_JULGADO,
 		);
+		
+		$retorno = putElementoArray2NoArray1ComChaves ( $retorno, static::getColecaoDocsPAAP());
 		
 		if($comComum)
 			$retorno = putElementoArray2NoArray1ComChaves ( $retorno, static::getColecaoComum () );
@@ -131,6 +125,7 @@ class dominioTpDocumento extends dominio {
 				self::$CD_TP_DOC_RELATORIO => self::$DS_TP_DOC_RELATORIO,
 				self::$CD_TP_DOC_PAAP => self::$DS_TP_DOC_PAAP,
 				self::$CD_TP_DOC_CERTIDAO_TRANSITO_JULGADO => self::$DS_TP_DOC_CERTIDAO_TRANSITO_JULGADO, 
+				self::$CD_TP_DOC_TERMO_CONST_CREDITO => self::$DS_TP_DOC_TERMO_CONST_CREDITO,
 		);
 
 		ksort ( $retorno );

@@ -59,23 +59,28 @@ setCabecalho($titulo);
 	flegislacao.adicionarItem(new Link('Decreto 42.191 - Aplicação de penalidade(PAAP)', 'h:\\ASSESSORIA JURÍDICA\\ATJA\\LEGISLAÇÃO\\DECRETO Nº 42.191 DE 2015 - APLICAÇÃO DE PENALIDADES A LICITANTES.pdf', ''));
 	f.adicionarItem(flegislacao);*/
 
-	<?php if(isUsuarioAdmin()){?>
-	f5 = new Tree('ADMINISTRADOR');
-    f5.adicionarItem(new Link('Usuários', '<?=caminho_funcoesHTML?>usuario_info', ''));    
-	f5.adicionarItem(new Link("Tramitação Demanda", "<?=caminho_funcoesHTML?>demanda_tram", ""));
-	f5.adicionarItem(new Link("Agendamento de alertas (COM EMAIL)", "agendamento.php?<?=constantes::$ID_REQ_IN_ENVIAR_EMAIL?>=S", ""));
-	f5.adicionarItem(new Link("Pagina TESTE", "teste.php", ""));
-	f5.adicionarItem(new Link('______', '#', ''));
-	f5.adicionarItem(new Link('______', '#', ''));
-	f5.adicionarItem(new Link('______', '#', ''));	
-	f5.adicionarItem(new Link("IMPORTAR CSAFI", "<?=caminho_funcoesHTML?>contrato/importarContrato.php", ""));
-	f5.adicionarItem(new Link("IMPORTAR CV-SAFI", "<?=caminho_funcoesHTML?>contrato/importarConvenio.php?tipo=V", ""));
-	f5.adicionarItem(new Link("IMPORTAR PROFISCO", "<?=caminho_funcoesHTML?>contrato/importarConvenio.php?tipo=P", ""));		
-	f5.adicionarItem(new Link("ATUALIZAR CONTRATADA", "<?=caminho_funcoesHTML?>contrato/atualizarContratada.php", ""));
-	f.adicionarItem(f5);	
-	<?php }?>
-	
-
+	<?php 
+	if(isUsuarioAdmin()){?>
+		f5 = new Tree('ADMINISTRADOR');
+	    f5.adicionarItem(new Link('Usuários', '<?=caminho_funcoesHTML?>usuario_info', ''));    
+		f5.adicionarItem(new Link("Tramitação Demanda", "<?=caminho_funcoesHTML?>demanda_tram", ""));
+		f5.adicionarItem(new Link("Agendamento de alertas (COM EMAIL)", "agendamento.php?<?=constantes::$ID_REQ_IN_ENVIAR_EMAIL?>=S", ""));
+		f5.adicionarItem(new Link("Pagina TESTE", "teste.php", ""));
+		f5.adicionarItem(new Link('______', '#', ''));
+		f5.adicionarItem(new Link('______', '#', ''));
+		f5.adicionarItem(new Link('______', '#', ''));	
+		f5.adicionarItem(new Link("IMPORTAR CSAFI", "<?=caminho_funcoesHTML?>contrato/importarContrato.php", ""));
+		f5.adicionarItem(new Link("IMPORTAR CV-SAFI", "<?=caminho_funcoesHTML?>contrato/importarConvenio.php?tipo=V", ""));
+		f5.adicionarItem(new Link("IMPORTAR PROFISCO", "<?=caminho_funcoesHTML?>contrato/importarConvenio.php?tipo=P", ""));		
+		f5.adicionarItem(new Link("ATUALIZAR CONTRATADA", "<?=caminho_funcoesHTML?>contrato/atualizarContratada.php", ""));
+		f.adicionarItem(f5);	
+	<?php 
+	} else if(isUsuarioPermissaoIntermediaria()){?>
+		finter = new Tree('AVANÇADO');    
+		finter.adicionarItem(new Link("Tramitação Demanda", "<?=caminho_funcoesHTML?>demanda_tram", ""));
+		f.adicionarItem(finter);	
+	<?php 
+	}?>
 	/*
 	exemplo
     // SERVIÇO 4

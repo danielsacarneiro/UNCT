@@ -21,16 +21,22 @@ include_once("dominio.class.php");
 				);
 	}
     
-    static function isAdministrador($colecaoAtributos){        
-        return in_array(self::$cd_usuario_admin, $colecaoAtributos);                
+    static function isAdministrador($colecaoAtributos=null){
+        return static::isUsuarioPorCodigo(static::$cd_usuario_admin);
+    }
+        
+    static function isUsuarioPorCodigo($cdUsuario){    	
+    	$colecaoAtributos=getColecaoPermissaoUsuarioLogado();    	    	 
+    	return in_array($cdUsuario, $colecaoAtributos);
     }
     
-    static function temPermissao($colecaoAtributos){ //RESOLVER!
-        return in_array(self::$cd_usuario_admin, $colecaoAtributos) || in_array(self::$cd_usuario_nivel1, $colecaoAtributos);
+    static function isUsuarioPermissaoIntermediaria(){
+    	$colecaoAtributos=getColecaoPermissaoUsuarioLogado();
+    	return static::isAdministrador() || static::isUsuarioPorCodigo(static::$cd_usuario_nivel1);
     }
     
-    static function temPermissaoExcluirHistorico($colecaoAtributos){
-    	return in_array(self::$cd_usuario_admin, $colecaoAtributos);
+    static function temPermissaoExcluirHistorico($colecaoAtributos=null){
+    	return static::isAdministrador($colecaoAtributos);
     }
     
     static function temPermissaoPorFuncao($pCdFuncao, $pArrayPermissaoUsuario){

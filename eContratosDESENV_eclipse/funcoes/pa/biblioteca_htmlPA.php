@@ -121,8 +121,8 @@ function mostrarGridPenalidade($voPA) {
 			$html .= "<TH class='headertabeladados' width='1%'>&nbsp;&nbsp;X</TH>  \n";
 		}*/
 		$html .= "<TH class='headertabeladados' width='1%'>Num</TH>   \n";
-		$html .= "<TH class='headertabeladados' width='1%' nowrap>Tipo</TH> \n";
-		$html .= "<TH class='headertabeladados' width='90%'>Fundamento</TH> \n";
+		$html .= "<TH class='headertabeladados' width='10%' nowrap>Tipo</TH> \n";
+		$html .= "<TH class='headertabeladados' width='80%'>Fundamento</TH> \n";
 		$html .= "</TR> \n";
 
 		for($i = 0; $i < $tamanho; $i ++) {
@@ -142,8 +142,8 @@ function mostrarGridPenalidade($voPA) {
 				}*/
 
 				$html .= "<TD class='tabeladados' nowrap>" . complementarCharAEsquerda ( $voAtual->sq, "0", TAMANHO_CODIGOS_SAFI ) . "</TD> \n";
-				$html .= "<TD class='tabeladados' nowrap>" . $tipoPenalidade . "</TD> \n";
-				$html .= "<TD class='tabeladados' nowrap>" . $voAtual->fundamento . "</TD> \n";
+				$html .= "<TD class='tabeladados'>" . $tipoPenalidade . "</TD> \n";
+				$html .= "<TD class='tabeladados'>" . $voAtual->fundamento . "</TD> \n";
 				$html .= "</TR> \n";
 			}							
 		}
