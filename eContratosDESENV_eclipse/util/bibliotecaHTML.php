@@ -961,6 +961,14 @@ function getAtributoComoBooleano($param) {
 	return $retorno;
 }
 
+function getAtributoBooleanoComoString($param) {
+	$retorno = constantes::$CD_NAO;
+	if ($param != null && $param) {
+		$retorno = constantes::$CD_SIM;
+	}
+	return $retorno;
+}
+
 function getCampoRequest($nmCampo, $setarNulo=false) {
 	$retorno = null;
 	$retorno = @$_POST[$nmCampo];
@@ -968,4 +976,62 @@ function getCampoRequest($nmCampo, $setarNulo=false) {
 		$retorno = constantes::$CD_CAMPO_NULO;
 	}
 	return $retorno;
+}
+
+function getInConsultarHTMLString(){
+	return getAtributoBooleanoComoString(filtroManter::isConsultarHTML());
+}
+
+function getTagHTMLAbreJavaScript(){
+	return "<SCRIPT language='JavaScript' type='text/javascript'>";
+}
+
+function getTagHTMLFechaJavaScript(){
+	return "</SCRIPT>";
+}
+
+function getTagHTMLAbreFormulario($inConsulta=null){
+	return "\n<FORM name='frm_principal' method='post' action='index.php?consultar=$inConsulta'>\n";
+}
+
+function getTagHTMLFechaFormulario(){
+	return "\n</FORM>\n";
+}
+
+function getFuncaoJSDetalharEmailPorVO($vo){
+	$caminhoPagina = 'http://sf300451/wordpress/UNCT/eContratosDESENV_eclipse/funcoes/' . $vo->getNmTabela() . "/";
+	return	getFuncaoJSDetalhar($caminhoPagina);
+}
+
+function getFuncaoJSDetalhar($caminhoPagina=null){
+	$retorno = "";
+	$isConsultaHML = getInConsultarHTMLString();
+	
+	$retorno = "\nfunction detalhar(isExcluir) {\n
+					var funcao ='';\n
+					var chave ='';\n
+					var lupa ='';\n
+					if(isExcluir == null || !isExcluir){\n
+						funcao = '".constantes::$CD_FUNCAO_DETALHAR. "';\n
+					}else{\n
+						funcao = '".constantes::$CD_FUNCAO_EXCLUIR."';\n
+					}\n
+			
+					if (!isRadioButtonConsultaSelecionado('document.frm_principal.rdb_consulta'))\n
+							return;\n
+			
+						chave = document.frm_principal.rdb_consulta.value;\n
+
+						try{\n
+							lupa = document.frm_principal.lupa.value;\n
+						}catch(ex){\n
+							lupa = 'N';\n
+						}\n"
+						. "location.href='".$caminhoPagina."detalhar.php?consultar=$isConsultaHML&funcao=' + funcao + '&chave=' + chave + '&lupa='+ lupa;\n
+				}";
+	
+	/*$retorno = "function detalhar(isExcluir) {\n
+	 alert('funcionou');}";*/	
+				
+	return $retorno;	
 }

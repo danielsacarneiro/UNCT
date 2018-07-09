@@ -58,7 +58,7 @@ function isFormularioValido() {
 	return true;
 }
 
-function detalhar(isExcluir) {    
+/*function detalhar(isExcluir) {    
     if(isExcluir == null || !isExcluir)
         funcao = "<?=constantes::$CD_FUNCAO_DETALHAR?>";
     else
@@ -70,7 +70,8 @@ function detalhar(isExcluir) {
 	chave = document.frm_principal.rdb_consulta.value;	
 	lupa = document.frm_principal.lupa.value;
 	location.href="detalhar.php?funcao=" + funcao + "&chave=" + chave + "&lupa="+ lupa;
-}
+}*/
+<?=getFuncaoJSDetalhar()?>
 
 function excluir() {
     detalhar(true);

@@ -29,9 +29,11 @@ class filtroManter extends multiplosConstrutores {
 	var $isHistorico;
 	var $cdConsultarArquivo;
 	var $isValidarConsulta;
+	var $isConsultarHTML;
 	var $inDesativado;
 	var $groupby;
 	
+	private $inConsultaRealizada = false;
 	private $QUERY_SELECT;
 	private $QUERY_FROM;
 	
@@ -106,18 +108,22 @@ class filtroManter extends multiplosConstrutores {
 	function isSetaValorDefault() {
 		$retorno = false;
 	}
+	
+	static function isConsultarHTML() {
+		$consultar = @$_GET ["consultar"];
+		if ($consultar == null || $consultar == "") {
+			$consultar = @$_POST ["consultar"];
+		}
+		
+		return $consultar == "S"; 
+	}
 	static function verificaFiltroSessao($filtro) {		
 		//echoo("FILTRO: " . $filtro->nmFiltro);
 		session_start ();
 		$utilizarSessao = @$_POST ["utilizarSessao"];
 		$isUtilizarSessao = $utilizarSessao != "N";
 		
-		$consultar = @$_GET ["consultar"];
-		if ($consultar == null || $consultar == "") {
-			$consultar = @$_POST ["consultar"];
-		}
-		
-		$isConsultar = $consultar == "S";
+		$isConsultar = static::isConsultarHTML();		
 		
 		$pegarFiltroSessao = $isUtilizarSessao && $isConsultar;
 		// echo "nome filtro". $filtro->nmFiltro;
@@ -339,7 +345,14 @@ class filtroManter extends multiplosConstrutores {
 	function getNmFiltro(){
 		return $this->nmFiltro;
 	}
+		
+	function isConsultaRealizada(){
+		return $this->inConsultaRealizada;
+	}
 	
+	function setConsultaRealizada(){
+		return $this->inConsultaRealizada = true;
+	}	
 }
 
 /*

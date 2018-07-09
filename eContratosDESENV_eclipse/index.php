@@ -49,7 +49,7 @@ setCabecalho($titulo);
 	f.adicionarItem(fprocLic);	
 	
 	fmsg = new Tree('Serviço 06 (Administrativo)');
-	fmsg.adicionarItem(new Link("Agendamento de alertas (SEM EMAIL)", "agendamento.php?<?=constantes::$ID_REQ_IN_ENVIAR_EMAIL?>=N", ""));
+	fmsg.adicionarItem(new Link("PAINEL (Atividades relevantes)", "agendamento.php?<?=constantes::$ID_REQ_IN_ENVIAR_EMAIL?>=N", ""));
 	fmsg.adicionarItem(new Link('Mensageria', '<?=caminho_funcoesHTML.voMensageria::getNmTabela()?>', ''));	
 	fmsg.adicionarItem(new Link('Mensageria Registro', '<?=caminho_funcoesHTML.voMensageriaRegistro::getNmTabela()?>', ''));
 

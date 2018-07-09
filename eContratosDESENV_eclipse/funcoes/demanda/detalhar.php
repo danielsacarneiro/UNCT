@@ -35,6 +35,8 @@ if($funcao == constantes::$CD_FUNCAO_EXCLUIR){
 
 $titulo = $nmFuncao. $titulo. $complementoTit;
 setCabecalho($titulo);
+
+$inConsultaHTML = getInConsultarHTMLString();
 ?>
 
 <!DOCTYPE html>
@@ -56,10 +58,10 @@ function isFormularioValido() {
 }
 
 function cancelar() {
-	//history.back();
+
 	lupa = document.frm_principal.lupa.value;	
-	location.href="index.php?consultar=S&lupa="+ lupa;	
-	//location.href="index.php?lupa="+ lupa;
+	//location.href="index.php?consultar=S&lupa="+ lupa;	
+	location.href="index.php?consultar=<?=$inConsultaHTML?>&lupa="+ lupa;
 }
 
 function confirmar() {

@@ -12,8 +12,9 @@ if($enviarEmail != null){
 }
 
 $count = 0;
+
 //envia alertas dos editais
-$mensagem = getMensagemEdital($count);
+$mensagem .= getMensagemEdital($count);
 //demandas que seguem para a SAD
 $mensagem .= getMensagemDemandaSAD($count);
 //envia alertas dos PAAPs pendentes de abertura
@@ -26,7 +27,23 @@ $mensagem .= getMensagemSistemasExternos($count);
 //envia alertas dos contratos a vencer. Ainda depende de definicao da diretoria
 //$mensagem .= getMensagemContratosAVencer();
 
-echo $mensagem;
+echo $mensagem . getBotaoDetalharAlertas();
 
 $assunto = "Relatório diário";
 enviarEmail($assunto, $mensagem, $enviarEmail);
+
+function getBotaoDetalharAlertas(){	
+	$retorno .= getTagHTMLAbreJavaScript();
+	$retorno .= getFuncaoJSDetalharEmailPorVO(new voDemanda());
+	$retorno .= getTagHTMLFechaJavaScript();
+	$retorno .= "\n<TABLE width='100%' id='table_tabeladados' class='tabeladados' cellpadding='2' cellspacing='2' BORDER=0>\n
+				<TBODY>";
+	$retorno .= "<TR>\n
+	<TD class='botaofuncao' colspan=$colspan>" . getBotaoDetalhar () . "</TD>\n
+				</TR>\n";
+	$retorno .= "</TBODY>\n
+				</TABLE>";
+	
+	return $retorno;
+
+}

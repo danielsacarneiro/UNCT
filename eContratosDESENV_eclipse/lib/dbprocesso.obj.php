@@ -266,15 +266,15 @@ class dbprocesso {
 	function consultarFiltroManter($filtro, $validaConsulta) {
 		return $this->consultarFiltro ( $filtro, $filtro->getQuerySelect (), $filtro->getQueryFromJoin (), $validaConsulta );
 	}
-	function consultarFiltro($filtro, $querySelect, $queryFrom, $validaConsulta) {
+	function consultarFiltro(&$filtro, $querySelect, $queryFrom, $validaConsulta) {
 		$retorno = "";
 		$isHistorico = ("S" == $filtro->cdHistorico);
 		
 		// flag que diz se pode consultar ou nao
-		$consultar = @$_GET ["consultar"];
+		$isConsultar = $filtro->isConsultarHTML(); 
 		
 		//echoo("valida consulta " . $filtro->nmFiltro);
-		if ($consultar == "S" || ! $validaConsulta) {
+		if ($isConsultar || ! $validaConsulta) {
 			//echoo("valida consulta " . $filtro->nmFiltro);
 			
 			// removeObjetoSessao($filtro->nmFiltro);
@@ -327,6 +327,9 @@ class dbprocesso {
 			// removeObjetoSessao($voentidade->getNmTabela());
 			
 			$retorno = $this->cDb->consultar ( $query );
+			$filtro->setConsultaRealizada();
+			
+			//putObjetoSessao($filtro->getNmFiltro(), $filtro);
 		}
 		
 		// echo $filtro->toString();

@@ -79,12 +79,14 @@ function getCorpoMensagemPorColecao($titulo, $colecao, $colunasAExibir, $isPrior
 
 		if (! isColecaoVazia ( $colecao )) {
 			$mensagem = "HÁ PENDÊNCIAS.<BR>";				
-			$colspan = count($colunasAExibir);				
+			$colspan = count($colunasAExibir)+1;				
 			// enviar o email com os registros a serem analisados
 			$mensagem .= "\n<TABLE width='100%' id='table_tabeladados' class='tabeladados' cellpadding='2' cellspacing='2' BORDER=1>\n
 		<TBODY>";
 				
 			$mensagem .= "<TR>\n";
+			
+			$mensagem .= "<TD class='tabeladadosdestacadonegrito' width='1%'>X</TD>\n";
 				
 			foreach ($colunasAExibir as $coluna){
 				$mensagem .= "<TD class='tabeladadosdestacadonegrito'>". $coluna[constantes::$CD_COLUNA_CHAVE] ."</TD>\n";
@@ -96,6 +98,10 @@ function getCorpoMensagemPorColecao($titulo, $colecao, $colunasAExibir, $isPrior
 			foreach ( $colecao as $registro ) {
 
 				$mensagem .= "<TR>\n";
+				
+				$voDemandaChave = new voDemanda();
+				$voDemandaChave->getDadosBanco ( $registro );				
+				$mensagem .= "<TD class='tabeladadosdestacadonegrito'>".getHTMLRadioButtonConsulta("rdb_consulta", "rdb_consulta", $voDemandaChave, false)."</TD>\n";
 
 				foreach ($colunasAExibir as $coluna){
 					$coluna_valor = $registro[$coluna[constantes::$CD_COLUNA_VALOR]];
@@ -163,8 +169,10 @@ function getCorpoMensagemPorColecao($titulo, $colecao, $colunasAExibir, $isPrior
 			$mensagem .= "<TR>\n
 			<TD class='totalizadortabeladadosalinhadodireita' colspan=$colspan> Total registros: $contador </TD>\n
 			</TR>\n";				
+				
 			$mensagem .= "</TBODY>\n
-			</TABLE>";
+			</TABLE>";			
+						
 		}
 	} catch ( Exception $ex ) {
 		$msg = $ex->getMessage ();
@@ -202,15 +210,16 @@ function getPadraoHTMLMensagem($corpoMensagem, &$mail){
 	getStyleEmail()
 	.
 	"			
-	<SCRIPT language='JavaScript' type='text/javascript' src='<?=caminho_js?>tooltip.js'></SCRIPT>
-	<SCRIPT language='JavaScript' type='text/javascript' src='<?=caminho_js?>biblioteca_funcoes_principal.js'></SCRIPT>
+	<SCRIPT language='JavaScript' type='text/javascript' src='<?=caminho_js?>tooltip.js'></SCRIPT>\n
+	<SCRIPT language='JavaScript' type='text/javascript' src='<?=caminho_js?>biblioteca_funcoes_principal.js'></SCRIPT>\n
+	<SCRIPT language='JavaScript' type='text/javascript' src='<?=caminho_js?>biblioteca_funcoes_radiobutton.js'></SCRIPT>\n
 	</HEAD>"
 	. setTituloPagina($titulo) 
 	//.
 	//"\n<LINK href='http://sf300451/wordpress/UNCT/eContratosDesenv_eclipse/lib/css/sefaz_pe.css' rel='stylesheet' type='text/css'>\n"
 	.
 	"<BODY CLASS='paginadados'>
-		<FORM name='frm_principal' method='post'>
+		<FORM name='frm_principal' method='post' action='index.php?consultar=S'>
 			<INPUT type='hidden' id='id_contexto_sessao' name='id_contexto_sessao' value=''>
 			<INPUT type='hidden' id='evento' name='evento' value=''>
 				<TABLE id='table_conteiner' class='conteiner' cellpadding='0' cellspacing='0'>
@@ -219,9 +228,10 @@ function getPadraoHTMLMensagem($corpoMensagem, &$mail){
 	        			<TR>
 	            			<TD class='conteinerconteudodados'>
 	            			 <DIV id='div_conteudodados' class='conteudodados'>
-								<TABLE id='table_conteudodados' class='conteudodados' cellpadding='0' cellspacing='0'>
-								"
+								<TABLE id='table_conteudodados' class='conteudodados' cellpadding='0' cellspacing='0'>"
+	        					
 	        					. $corpoMensagem
+	        					
 	        					. "
 	            				</TABLE>
 	            			</TD>

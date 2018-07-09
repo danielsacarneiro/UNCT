@@ -13,7 +13,6 @@ $titulo = "CONSULTAR " . voContratoInfo::getTituloJSPConsolidacao();
 setCabecalho($titulo);
 
 $filtro  = new filtroConsultarContratoConsolidacao();
-
 //$filtro->voPrincipal = new vocontrato();
 $filtro = filtroManter::verificaFiltroSessao($filtro);
 
