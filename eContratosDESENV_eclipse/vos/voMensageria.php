@@ -3,7 +3,8 @@ include_once (caminho_lib . "voentidade.php");
 
 class voMensageria extends voentidade {	
 	
-	static $ATIVADO = false;	
+	static $ATIVADO = false;
+	static $ENVIAR_EMAIL_GESTOR = false;
 	static $nmCOLDhUltimoEnvio = "nmCOLDhUltimoEnvio";
 	
 	static $nmAtrSq = "msg_sq";

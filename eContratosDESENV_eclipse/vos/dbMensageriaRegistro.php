@@ -92,9 +92,13 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   			//se o alerta nao for valido, envia apenas para os responsaveis
   			$msg = "<br><br>Contrato SEM E-MAIL VÁLIDO para o Gestor. Mensageria: $vomensageria->toString().";  			  				
   		}else{
-  			//se o alerta for valido, acrescenta o e-mail do gestor  				
-  			$array2 = array($emailGestor);
-  			$listaEmailTemp = array_merge($listaEmailTemp, $array2);
+  			//se o alerta for valido, acrescenta o e-mail do gestor
+  			if(voMensageria::$ENVIAR_EMAIL_GESTOR){
+	  			$array2 = array($emailGestor);
+	  			$listaEmailTemp = array_merge($listaEmailTemp, $array2);
+  			}else{
+  				$msg .= "<br><br>Encaminhamento ao gestor desativado. Entre em contato com o administrador do mensageria.";
+  			}
   		}
   	
 		enviarEmail($assunto, $msg, $enviarEmail, $listaEmailTemp);
