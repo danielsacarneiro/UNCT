@@ -133,14 +133,24 @@ function alterar() {
             </TR>
             <TR>
                 <TH class="campoformulario" nowrap width="1%">Situação:</TH>
-                <TD class="campoformulario" width="1%" colspan=3>
+                <TD class="campoformulario" width="1%">
                 <?php
                 $comboSituacao = new select(dominioSituacaoContratoLicon::getColecao());
                 echo $comboSituacao->getHtmlCombo(voContratoLicon::$nmAtrSituacao,voContratoLicon::$nmAtrSituacao, $filtro->situacao, true, "camponaoobrigatorio", false, "");
                 ?>
+				</TD>	       
+	            <TH class="campoformulario" nowrap width="1%">Dt.Publicação:</TH>
+	            <TD class="campoformulario">
+	            	            	<INPUT type="text" 
+	            	       id="<?=vocontrato::$nmAtrDtPublicacaoContrato?>" 
+	            	       name="<?=vocontrato::$nmAtrDtPublicacaoContrato?>" 
+	            			value="<?php echo(getData($filtro->dtPublicacao));?>"
+	            			onkeyup="formatarCampoData(this, event, false);" 
+	            			class="camponaoobrigatorio" 
+	            			size="10" 
+	            			maxlength="10">	            
 				</TD>				
-            </TR>           
-            
+            </TR>            
 	        
        <?php
        echo getComponenteConsultaFiltro($vo->temTabHistorico, $filtro);

@@ -16,7 +16,7 @@ class filtroManterContratoLicon extends filtroManter {
 	var $docContratada = "";
 	
 	var $situacao = "";
-	
+	var $dtPublicacao = "";	
 	
 	function getFiltroFormulario() {
 		$this->anoDemanda = @$_POST [voContratoLicon::$nmAtrAnoDemanda];
@@ -29,6 +29,7 @@ class filtroManterContratoLicon extends filtroManter {
 		$this->nmContratada = @$_POST [vopessoa::$nmAtrNome];
 		$this->docContratada = @$_POST [vopessoa::$nmAtrDoc];
 		$this->situacao = @$_POST [voContratoLicon::$nmAtrSituacao];
+		$this->dtPublicacao = @$_POST [vocontrato::$nmAtrDtPublicacaoContrato];
 		
 		if ($this->cdOrdenacao == null) {
 			$this->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
@@ -88,6 +89,13 @@ class filtroManterContratoLicon extends filtroManter {
 		if ($this->situacao != null) {
 		
 			$filtro = $filtro . $conector . $nmTabela . "." . voContratoLicon::$nmAtrSituacao . " = " . getVarComoNumero($this->situacao);
+		
+			$conector = "\n AND ";
+		}
+		
+		if ($this->dtPublicacao != null) {
+		
+			$filtro = $filtro . $conector . $nmTabelaContrato . "." . vocontrato::$nmAtrDtPublicacaoContrato . " = " . getVarComoData($this->dtPublicacao);
 		
 			$conector = "\n AND ";
 		}
