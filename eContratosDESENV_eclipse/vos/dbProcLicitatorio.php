@@ -20,13 +20,13 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
   		if(!isColecaoVazia($retornoGeral) && sizeof($retornoGeral)==1){
   			$retorno = $retornoGeral[0];
   		}else{
-  			$temDemandaEdital = false;
+  			//$temDemandaEdital = false;
   			foreach ($retornoGeral as $registrobanco){
   				$voDemanda = new voDemanda();
   				$voDemanda->getDadosBanco($registrobanco);
   				
   				if($voDemanda->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL){
-  					$temDemandaEdital = true;
+  					//$temDemandaEdital = true;
   					break;
   				}
   			}
