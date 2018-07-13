@@ -12,8 +12,33 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
   	static $FLAG_PRINTAR_SQL = false;
   	
   	static $nmTabelaPublicacao = "nmTabelaPublicacao";
+  	
+  	function consultarPorChaveTela($vo, $isHistorico) {  		
+  		$retorno = "";
+  		// para o caso de haver mais de uma demanda por proclic
+  		$retornoGeral = $this->consultarPorChaveTelaColecao ( $vo, $isHistorico, false);
+  		if(!isColecaoVazia($retornoGeral) && sizeof($retornoGeral)==1){
+  			$retorno = $retornoGeral[0];
+  		}else{
+  			$temDemandaEdital = false;
+  			foreach ($retornoGeral as $registrobanco){
+  				$voDemanda = new voDemanda();
+  				$voDemanda->getDadosBanco($registrobanco);
+  				
+  				if($voDemanda->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL){
+  					$temDemandaEdital = true;
+  					break;
+  				}
+  			}
+  			  			
+  			$retorno = $registrobanco;
+  			
+  		}
+  	
+  		return $retorno;
+  	}
     
-  	function consultarPorChaveTela($vo, $isHistorico) {
+  	function consultarPorChaveTelaColecao($vo, $isHistorico, $isConsultarPorChave) {
   		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
   		$nmTabelaDemandaPL = voDemandaPL::getNmTabela();
   		$nmTabelaDemanda = voDemanda::getNmTabela();
@@ -22,9 +47,11 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
   				$nmTabela . ".*",  
   				$nmTabelaDemanda . "." . voDemanda::$nmAtrCd,
   				$nmTabelaDemanda . "." . voDemanda::$nmAtrAno,
+  				$nmTabelaDemanda . "." . voDemanda::$nmAtrTipo,
   		);
   		
-  		$queryFrom .= "\n LEFT JOIN ". $nmTabelaDemandaPL;
+  		//$nmTabelaDemandaEdital = "NM_TAB_DEMANDA_EDITAL";
+  		/*$queryFrom .= "\n LEFT JOIN ". $nmTabelaDemandaPL;
   		$queryFrom .= "\n ON $nmTabela." . voProcLicitatorio::$nmAtrCd . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrCdProcLic;
   		$queryFrom .= "\n AND $nmTabela." . voProcLicitatorio::$nmAtrAno . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrAnoProcLic;
   		  		
@@ -32,13 +59,28 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
   		$queryFrom .= " SELECT * FROM $nmTabelaDemanda WHERE " . voDemanda::$nmAtrTipo . "=" . dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL;
   		$queryFrom .= ") $nmTabelaDemanda";
   		$queryFrom .= "\n ON $nmTabelaDemanda." . voDemanda::$nmAtrCd . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrCdDemanda;
-  		$queryFrom .= "\n AND $nmTabelaDemanda." . voDemanda::$nmAtrAno . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrAnoDemanda;
+  		$queryFrom .= "\n AND $nmTabelaDemanda." . voDemanda::$nmAtrAno . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrAnoDemanda;*/
+
+  		$queryFrom .= "\n LEFT JOIN ". $nmTabelaDemandaPL;
+  		$queryFrom .= "\n ON $nmTabela." . voProcLicitatorio::$nmAtrCd . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrCdProcLic;
+  		$queryFrom .= "\n AND $nmTabela." . voProcLicitatorio::$nmAtrAno . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrAnoProcLic;
+  		
+  		$queryFrom .= "\n LEFT JOIN $nmTabelaDemanda";
+  		$queryFrom .= "\n ON $nmTabelaDemanda." . voDemanda::$nmAtrCd . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrCdDemanda;
+  		$queryFrom .= "\n AND $nmTabelaDemanda." . voDemanda::$nmAtrAno . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrAnoDemanda;  		
   		
   		/*$queryFrom .= "\n INNER JOIN ". $nmTabelaDemanda;
   		$queryFrom .= "\n ON $nmTabelaDemandaPL." . voDemandaPL::$nmAtrCdDemanda . "=$nmTabelaDemanda." . voDemanda::$nmAtrCd;
   		$queryFrom .= "\n AND $nmTabelaDemandaPL." . voDemandaPL::$nmAtrAnoDemanda . "=$nmTabelaDemanda." . voDemanda::$nmAtrAno;*/
   		
-  		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryFrom, $isHistorico );
+  		$queryWhere = " WHERE ";
+  		$queryWhere .= $vo->getValoresWhereSQLChave ( $isHistorico );
+  		/*if($isFiltrarPorDemandaEdital){
+  			$queryWhere .= "\n AND $nmTabelaDemanda.". voDemanda::$nmAtrTipo . "=" . dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL;
+  		}*/
+  		return $this->consultarMontandoQuery ( $vo, $arrayColunasRetornadas, $queryFrom, $queryWhere, $isHistorico, $isConsultarPorChave );
+  		
+  		//return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryFrom, $isHistorico );
   	}
     
     function consultarTelaConsulta($vo, $filtro){    	

@@ -168,6 +168,10 @@ class dbprocesso {
 		
 		$query .= $queryWhere;
 		
+		/*if(!$isHistorico){
+			$conector = "\n AND ";			
+			$query .= $conector . $vo->getNmTabela() . "." . voentidade::$nmAtrInDesativado . " = '" . constantes::$CD_NAO . "'";
+		}	*/			
 		// echo $query;
 		$retorno = $this->consultarEntidade ( $query, $isConsultaPorChave );
 		if ($retorno != "" && $isConsultaPorChave) {
