@@ -92,10 +92,12 @@ function confirmar() {
                 <TD class="campoformulario" colspan=3><INPUT type="text" value="<?php echo(complementarCharAEsquerda($vo->sqHist, "0", TAMANHO_CODIGOS));?>"  class="camporeadonlyalinhadodireita" size="5" readonly></TD>
                 <INPUT type="hidden" id="<?=voProcLicitatorio::$nmAtrSqHist?>" name="<?=voProcLicitatorio::$nmAtrSqHist?>" value="<?=$vo->sqHist?>">
             </TR>  
-            <?php }            
-            $voDemanda = new voDemanda(array($vo->anoDemanda, $vo->cdDemanda));
-            $voDemanda->tipo = dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL;
-            getDemandaDetalhamento($voDemanda, true);
+            <?php }
+            if($vo->anoDemanda != null){
+	            $voDemanda = new voDemanda(array($vo->anoDemanda, $vo->cdDemanda));
+	            $voDemanda->tipo = dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL;
+	            getDemandaDetalhamento($voDemanda, true);
+            }
             ?>
             <TR>
 		         <TH class="campoformulario" nowrap width="1%">P.L.:</TH>

@@ -5,12 +5,11 @@ include_once(caminho_funcoes . voDocumento::getNmTabela(). "/biblioteca_htmlDocu
 $chave = @$_GET ["chave"];
 $array = explode ( CAMPO_SEPARADOR, $chave );
 $setor = $array[0];
-/*$ano = $array[0];
-$setor = $array[1];
-$tipo = $array[2];*/
 
 if($setor == dominioSetor::$CD_SETOR_UNCT){
 	$comboTp= new select(dominioTpDocumento::getColecaoUNCT());
+}else if($setor == dominioSetor::$CD_SETOR_CPL){
+	$comboTp= new select(dominioTpDocumento::getColecaoCPL());
 }else{
 	$comboTp= new select(dominioTpDocumento::getColecaoATJA());
 }

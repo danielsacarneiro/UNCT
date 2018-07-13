@@ -17,6 +17,7 @@ class dominioTpDocumento extends dominio {
 	static $CD_TP_DOC_DEFESA = "DF";
 	static $CD_TP_DOC_DESPACHO = "DE";
 	// static $CD_TP_DOC_INTIMACAO = "IN";
+	static $CD_TP_DOC_EDITAL = "ED";
 	static $CD_TP_DOC_LEGISLACAO = "LE";
 	static $CD_TP_DOC_NOTA_TECNICA = "NT";
 	static $CD_TP_DOC_NOTA_IMPUTACAO = "NI";
@@ -42,6 +43,7 @@ class dominioTpDocumento extends dominio {
 	static $DS_TP_DOC_DEFESA = "Defesa";
 	static $DS_TP_DOC_DESPACHO = "Despacho";
 	// static $DS_TP_DOC_INTIMACAO = "Intimação";
+	static $DS_TP_DOC_EDITAL = "Edital";
 	static $DS_TP_DOC_LEGISLACAO = "Legislação";
 	static $DS_TP_DOC_NOTA_TECNICA = "Nota Técnica";
 	static $DS_TP_DOC_NOTA_IMPUTACAO = "Nota de Imputação";
@@ -68,6 +70,19 @@ class dominioTpDocumento extends dominio {
 		$retorno = static::getColecaoComum();
 		$retorno = putElementoArray2NoArray1ComChaves ( $retorno, static::getColecaoATJA(false));
 		$retorno = putElementoArray2NoArray1ComChaves ( $retorno, static::getColecaoUNCT(false));
+		ksort ( $retorno );
+		return $retorno;
+	}
+	
+	static function getColecaoCPL($comComum = false) {
+	
+		$retorno = array (
+				self::$CD_TP_DOC_EDITAL => self::$DS_TP_DOC_EDITAL,
+		);
+	
+		if($comComum)
+			$retorno = putElementoArray2NoArray1ComChaves ( $retorno, static::getColecaoComum () );
+			// return ksort($retorno);
 		ksort ( $retorno );
 		return $retorno;
 	}

@@ -406,9 +406,9 @@ class dbcontrato extends dbprocesso {
 					
 			// tenta incluir
 			$retorno = $this->cDb->atualizarImportacao ( $query );
-			echoo("Contrato inclu�do com sucesso: " . $voContrato->getCodigoContratoFormatado());
+			echoo("Contrato incluído com sucesso: " . $voContrato->getCodigoContratoFormatado());
 		} catch ( excecaoFimImportacaoContrato $exFim ) {
-			echo "<BR> FIM DA IMPORTA��O. <BR>";
+			echo "<BR> FIM DA IMPORTAÇÃO. <BR>";
 			throw $exFim;
 		} catch ( Exception $e ) {
 				echo "<BR> ERRO INCLUSAO. <BR>";
@@ -601,10 +601,10 @@ class dbcontrato extends dbprocesso {
 		// echo "<br>decimal apos conversao:" . $valor;
 		if (isNumero ( $valor )) {
 			$retorno = getMoedaMascaraImportacao ( $param );
-			// echo "� NښMERO! <BR>";
+			// echo "É NÚMERO! <BR>";
 		}
 		// else
-		// echo "NÃO ɉ NښMERO! <BR>";
+		// echo "NÃO É NÚMERO! <BR>";
 		
 		return $retorno;
 	}
@@ -685,6 +685,14 @@ class dbcontrato extends dbprocesso {
 				echoo("CONTRATO:: " . $voContrato->getCodigoContratoFormatado() . "," .$voContrato->sqEspecie . " " . dominioEspeciesContrato::getDescricaoStatic($voContrato->cdEspecie));
 			}		
 		}
+		
+		$queryUpdate = "UPDATE contrato SET
+		ct_contratada = replace(replace(replace(ct_contratada,'“','\"'),'”','\"'),'–','-'),
+		ct_objeto = replace(replace(replace(ct_objeto,'“','\"'),'”','\"'),'–','-'),
+		ct_processo_lic = replace(replace(replace(ct_processo_lic,'“','\"'),'”','\"'),'–','-')";
+		
+		echoo("Removendo caracteres especiais...");
+		$this->atualizarEntidade($queryUpdate);			
 		
 		echo "<br>quantidade registros alterados:" . $qtdRegistros;
 	}

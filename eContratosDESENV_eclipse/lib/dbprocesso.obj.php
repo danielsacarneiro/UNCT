@@ -201,7 +201,8 @@ class dbprocesso {
 		// echo $query;
 		$query = str_replace ( constantes::$CD_NOVA_LINHA, "", $query );
 		
-		if(static::$FLAG_PRINTAR_SQL){
+		//if(static::$FLAG_PRINTAR_SQL){
+		if(static::isPrintarSQL()){
 			echo "<br>$query<br>";
 		}
 		
@@ -320,7 +321,8 @@ class dbprocesso {
 			
 			// echo $filtroSQL;
 			// echo "$queryCount<br>";
-			if(static::$FLAG_PRINTAR_SQL){
+			//if(static::$FLAG_PRINTAR_SQL){
+			if(static::isPrintarSQL()){
 				echo "<br> ".$filtro->getNmFiltro()." $query<br>";
 			}
 			
@@ -783,5 +785,13 @@ class dbprocesso {
 	 */
 	function getDecimalSQL($param) {
 		return getDecimalSQL ( $param );
+	}
+	
+	static function isPrintarSQL(){
+		$printarFilho = static::$FLAG_PRINTAR_SQL;
+		$printarPAI = self::$FLAG_PRINTAR_SQL;
+		
+		$retorno = $printarPAI || $printarFilho;
+		return $retorno;
 	}
 }

@@ -56,8 +56,6 @@ CREATE TABLE contrato (
 	CONSTRAINT fk_ct_pessoa_contratada FOREIGN KEY ( pe_cd_contratada ) REFERENCES pessoa (pe_cd) 
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT
-    
-    
 );
 -- ALTER TABLE contrato ADD COLUMN pe_cd INT NOT NULL AFTER ct_contratada;
 -- ALTER TABLE contrato ADD COLUMN gp_cd INT NULL AFTER ct_gestor_pessoa;

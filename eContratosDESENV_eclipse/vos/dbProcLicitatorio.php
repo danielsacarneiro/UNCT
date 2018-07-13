@@ -9,6 +9,8 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
 // cria um combo select html
 
   Class dbProcLicitatorio extends dbprocesso{
+  	static $FLAG_PRINTAR_SQL = false;
+  	
   	static $nmTabelaPublicacao = "nmTabelaPublicacao";
     
   	function consultarPorChaveTela($vo, $isHistorico) {
@@ -22,7 +24,7 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
   				$nmTabelaDemanda . "." . voDemanda::$nmAtrAno,
   		);
   		
-  		$queryFrom .= "\n INNER JOIN ". $nmTabelaDemandaPL;
+  		$queryFrom .= "\n LEFT JOIN ". $nmTabelaDemandaPL;
   		$queryFrom .= "\n ON $nmTabela." . voProcLicitatorio::$nmAtrCd . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrCdProcLic;
   		$queryFrom .= "\n AND $nmTabela." . voProcLicitatorio::$nmAtrAno . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrAnoProcLic;
   		  		
