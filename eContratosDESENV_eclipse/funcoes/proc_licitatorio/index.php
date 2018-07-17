@@ -169,7 +169,13 @@ function alterar() {
 				include_once(caminho_funcoes."pessoa/biblioteca_htmlPessoa.php");
 				echo getComboPessoaPregoeiro(voProcLicitatorio::$nmAtrCdPregoeiro, voProcLicitatorio::$nmAtrCdPregoeiro, $filtro->cdPregoeiro, "camponaoobrigatorio", "");                                        
 				?>
-            </TR>            
+            </TR>
+            <TR>
+	            <TH class="campoformulario" nowrap width="1%">Objeto:</TH>
+	            <TD class="campoformulario" colspan=3>
+	            <INPUT type="text" id="<?=voProcLicitatorio::$nmAtrObjeto?>" name="<?=voProcLicitatorio::$nmAtrObjeto?>" value="<?=$filtro->objeto?>"  class="camponaoobrigatorio" size="50">
+	            </TD>
+	        </TR>                        
        <?php
 	       echo getComponenteConsultaFiltro($vo->temTabHistorico, $filtro);
         ?>

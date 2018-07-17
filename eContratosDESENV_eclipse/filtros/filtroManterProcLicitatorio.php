@@ -24,6 +24,7 @@ class filtroManterProcLicitatorio extends filtroManter{
     var $anoDemanda;
     var $tpDemanda;
     var $tpDocumento;
+    var $objeto;
         
     // ...............................................................
 	// construtor
@@ -38,6 +39,7 @@ class filtroManterProcLicitatorio extends filtroManter{
     	$this->cdProc = @$_POST[voProcLicitatorio::$nmAtrCd];
     	$this->anoProc = @$_POST[voProcLicitatorio::$nmAtrAno];
     	$this->situacao = @$_POST[voProcLicitatorio::$nmAtrSituacao];
+    	$this->objeto = @$_POST[voProcLicitatorio::$nmAtrObjeto];
     	
     	$this->cdContrato = @$_POST[vocontrato::$nmAtrCdContrato];
     	$this->anoContrato = @$_POST[vocontrato::$nmAtrAnoContrato];
@@ -179,6 +181,14 @@ class filtroManterProcLicitatorio extends filtroManter{
 					. $this->cdPregoeiro;
 		
 					$conector  = "\n AND ";
+		}
+		
+		if($this->objeto != null){
+			$filtro = $filtro . $conector
+			. $nmTabela. "." .voProcLicitatorio::$nmAtrObjeto
+			. " LIKE " . getVarComoString("%$this->objeto%");					
+		
+			$conector  = "\n AND ";
 		}
 		
 		if($this->cdResponsavel!= null){
