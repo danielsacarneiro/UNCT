@@ -93,11 +93,17 @@ class db {
 	function levantaExcecao($query, $ex = null){	
 		$query = str_replace ( constantes::$CD_NOVA_LINHA, "", $query );
 		
-		$msg = "<br>----ERROR------:<br>" . mysqli_error ( $this->id_conexao ) . "<br>";
+		//$msg = "<br>----ERROR------:<br>" . mysqli_error ( $this->id_conexao ) . "<br>";
+		$msg = "<br>----ERROR------:<br>";
 		$msg .= $ex->getMessage (). "<br>";
-		$msg = "$msg. Query: $query";
+		$msg = $msg. "Query: $query";
 		
-		throw new Exception ($msg);		
+		if($ex != null){
+			throw new excecaoGenerica($msg, $ex->getCode(), $ex);
+		}else{
+			throw new excecaoGenerica($msg);
+		}		
+				
 	}
 	
 	/**

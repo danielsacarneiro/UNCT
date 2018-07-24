@@ -92,7 +92,8 @@ try{
     putObjetoSessao($vo->getNmTabela(), $vo);
     
 }catch(Exception $e) {
-    $msgErro = $e->getMessage();
+    $msgErro = "Codigo.Erro:".$e->getCode();
+    $msgErro .= "<br>Messagem:".$e->getMessage();
     $classMensagem = "campomensagemvermelho";
     $msg = "OPERACAO $nmFuncao FALHOU.<br>$msgErro";
 }

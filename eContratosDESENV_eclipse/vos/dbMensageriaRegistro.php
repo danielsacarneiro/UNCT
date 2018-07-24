@@ -85,8 +85,8 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		}  		
   		
   		$codigo = formatarCodigoContrato($vocontratoinfo->cdContrato, $vocontratoinfo->anoContrato, $vocontratoinfo->tipo);
-  		$msg .= "<br><br>Caro Gestor, favor verificar o vencimento do contrato $codigo.";
-  		$msg .= "<br>Este e-mail é reenviado a cada $numFrequencia dias.";
+  		$msg .= static::getMensagemGestor($codigo,$numFrequencia);
+  		
   		//$msg .= "<br>O contrato vencerá em dias.";
   		if(!$isEmailGestorValido){
   			//se o alerta nao for valido, envia apenas para os responsaveis
@@ -100,11 +100,34 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   				$msg .= "<br><br>Encaminhamento ao gestor desativado. Entre em contato com o administrador do mensageria.";
   			}
   		}
+  		
+  		$msg .= "<br><br>Atenciosamente, <br><br>UNCT-SAFI";
   	
 		enviarEmail($assunto, $msg, $enviarEmail, $listaEmailTemp);
 		echoo($vomensageria->toString());
   	}
-  	 
+  	
+  	static function getMensagemGestor($codigoContrato, $numFrequencia){  		
+  		//$retorno = "<br><br>Caro Gestor, favor verificar o vencimento do contrato $codigo.";
+  		
+  		$numFrequencia = complementarCharAEsquerda($numFrequencia, "0", 3);
+  		
+  		$retorno = "Prezado gestor,
+  		
+  		<br><br><br>Esta Unidade de Contratos solicita informações referentes à prorrogação do contrato <b>$codigoContrato</b>, que em breve se encerrará.
+  		<br>Havendo interesse da SEFAZ pela prorrogação, favor enviar com a maior brevidade possível CI à SAFI.
+  		<br><br>Vale salientar que toda prorrogação deverá ser solicitada com, no mínimo, 60 (sessenta) dias DE ANTECEDÊNCIA ao vencimento do contrato em questão.
+  		<br><br><b>Se o contrato não comportar mais prorrogação e persistindo a necessidade da contratação, o gestor deverá solicitar novo processo licitatório com, no mínimo 5 (cinco) meses de antecedência, e seguir o modelo de C.I., juntamente com o termo de referência, sob pena de ficar sem a prestação do serviço.
+  		
+  		<br><br>Informamos ainda que o envio da garantia contratual atualizada da empresa contratada é necessária à instrução da renovação contratual.</b>  		
+  		<br><br>Caso já tenha enviado o pedido de prorrogação, favor desconsiderar esta solicitação informando o nº e data da C.I.
+  		
+  		<br><br>Aguardamos as providências cabíveis, com a urgência requerida.
+  		<br><br>Este e-mail é reenviado a cada <b>$numFrequencia dias</b>.";  		 		
+  		
+  		return $retorno;
+  	}
+  	
   	function getSQLValuesInsert($vo){
   		  		
 		$retorno = "";

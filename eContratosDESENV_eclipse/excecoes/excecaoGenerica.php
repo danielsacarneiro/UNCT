@@ -16,7 +16,7 @@ class excecaoGenerica extends Exception
     	}
     
         // garante que tudo está corretamente inicializado
-        parent::__construct(get_class($this). ":". $message, $code, $previous);
+        parent::__construct(get_class($this). "->". $message, $code, $previous);
     }
     // personaliza a apresentação do objeto como string
     public function __toString() {
