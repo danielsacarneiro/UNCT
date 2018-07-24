@@ -167,7 +167,14 @@ function confirmar() {
 
 		<TR>
             <TH class="campoformulario" nowrap>Proc.Licitatorio:</TH>
-            <TD class="campoformulario" colspan="3"><INPUT type="text" id="<?=vocontrato::$nmAtrProcessoLicContrato?>" name="<?=vocontrato::$nmAtrProcessoLicContrato?>"  value="<?php echo($procLic);?>"  class="camporeadonly" size="50" <?=$readonly?>></TD>
+            <TD class="campoformulario" colspan="3">
+            <INPUT type="text" id="<?=vocontrato::$nmAtrProcessoLicContrato?>" name="<?=vocontrato::$nmAtrProcessoLicContrato?>"  value="<?php echo($procLic);?>"  class="camporeadonly" size="50" <?=$readonly?>>
+            <?php
+            if($voContrato->cdProcLic != null){
+            	echo "Resultado importação e-Conti: ".formatarCodigoAno($voContrato->cdProcLic, $voContrato->anoProcLic);
+            }
+            ?>
+            </TD>
         </TR>
 		<TR>
             <TH class="campoformulario" nowrap>Modalidade:</TH>

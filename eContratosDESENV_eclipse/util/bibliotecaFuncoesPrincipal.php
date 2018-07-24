@@ -119,6 +119,31 @@ function existeStr1NaStr2ComSeparador($str2, $str1comseparador) {
 	}
 	return $retorno;
 }
+function getNumeroEmbutidoString($param){
+	if($param!=null){
+		$num = getIndiceAnteriorAoPrimeiroNumeroAPartirDoComeco($param);
+		$retorno = substr($param, $num);
+	}
+	
+	return $retorno;
+}
+function getIndiceAnteriorAoPrimeiroNumeroAPartirDoComeco($param) {
+	$tamanho = strlen ( $param );
+	$retorno = null;
+
+	// echo $tamanho;
+	for($i = 0; $i < $tamanho; $i ++) {
+		$char = substr ( $param, $i, 1 );
+		// echo "<br>$char<br>";
+
+		if (isNumero ( $char )) {
+			$retorno = $i;
+			break;
+		}
+	}
+
+	return $retorno;
+}
 function getIndicePosteriorAoUltimoNumeroAPartirDoComeco($param) {
 	$tamanho = strlen ( $param );
 	$retorno = null;
@@ -411,6 +436,14 @@ function getArrayFormatadoLinhaImportacaoPorSeparador($param) {
 		//pega apenas os 2 primeiros
 		$cd= $array[0];
 		$ano = $array[1];
+		//verifica o numero embutido
+		try{
+			$cd = getNumeroEmbutidoString($cd);
+		}catch (Exception $ex){
+			throw new excecaoNumProcLicImportacaoInvalido("Formato Proc Licitatorio inválido:$param.");
+		}
+	
+		
 		if(!isNumero($ano) || !isNumero($cd)){
 			throw new excecaoNumProcLicImportacaoInvalido("Formato Proc Licitatorio inválido:$param.");
 		}

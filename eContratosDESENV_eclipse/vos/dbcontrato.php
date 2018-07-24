@@ -802,7 +802,6 @@ class dbcontrato extends dbprocesso {
 		if($processoLic != null){
 			$retorno->procLic = $processoLic;
 			
-			if($processoLic!= null){
 				try{
 					$arrayProcLic = getArrayFormatadoLinhaImportacaoPorSeparador($processoLic);
 					$retorno->cdProcLic = $arrayProcLic[0];
@@ -810,7 +809,6 @@ class dbcontrato extends dbprocesso {
 				}catch(excecaoNumProcLicImportacaoInvalido $exProcLic){
 					echoo($exProcLic->getMessage());				
 				}
-			}
 		}
 
 		$retorno->modalidade = $modalidadeLic;

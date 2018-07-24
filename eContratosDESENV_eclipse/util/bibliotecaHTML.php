@@ -398,8 +398,8 @@ function getBotaoIncluir() {
 	// return getBotaoValidacaoAcesso ( "bttincluir", "Incluir", "botaofuncaop", false, false, true, false, "onClick='javascript:incluir();' accesskey='n'" );
 	return getBotaoPorFuncao ( "bttincluir", "Incluir", "botaofuncaop", false, false, true, "onClick='javascript:incluir();' accesskey='n'", constantes::$CD_FUNCAO_INCLUIR );
 }
-function getBotaoDetalhar() {
-	return getBotaoValidacaoAcesso ( "bttdetalhar", "Detalhar", "botaofuncaop", false, true, true, true, "onClick='javascript:detalhar(false);' accesskey='d'" );
+function getBotaoDetalhar($javaScriptComplementar = null) {
+	return getBotaoValidacaoAcesso ( "bttdetalhar", "Detalhar", "botaofuncaop", false, true, true, true, "$javaScriptComplementar onClick='javascript:detalhar(false);' accesskey='d'" );
 }
 function getBotaoSelecionar() {
 	return getBotaoValidacaoAcesso ( "bttselecionar", "Selecionar", "botaofuncaop", false, true, false, true, "onClick='javascript:selecionar();' accesskey='s'" );
@@ -1000,10 +1000,10 @@ function getTagHTMLFechaFormulario(){
 
 function getFuncaoJSDetalharEmailPorVO($vo){
 	$caminhoPagina = 'http://sf300451/wordpress/UNCT/eContratosDESENV_eclipse/funcoes/' . $vo->getNmTabela() . "/";
-	return	getFuncaoJSDetalhar($caminhoPagina);
+	return	getFuncaoJSDetalhar($caminhoPagina, true);
 }
 
-function getFuncaoJSDetalhar($caminhoPagina=null){
+function getFuncaoJSDetalhar($caminhoPagina=null, $isNovaGuia=false){
 	$retorno = "";
 	$isConsultaHML = getInConsultarHTMLString();
 	
@@ -1026,9 +1026,15 @@ function getFuncaoJSDetalhar($caminhoPagina=null){
 							lupa = document.frm_principal.lupa.value;\n
 						}catch(ex){\n
 							lupa = 'N';\n
-						}\n"
-						. "location.href='".$caminhoPagina."detalhar.php?consultar=$isConsultaHML&funcao=' + funcao + '&chave=' + chave + '&lupa='+ lupa;\n
-				}";
+						}\n";
+		$link= "'".$caminhoPagina . "detalhar.php?consultar=$isConsultaHML&funcao=' + funcao + '&chave=' + chave + '&lupa='+ lupa";
+		//$retorno.= "location.href=$link;\n";
+		$novaGuia="'_blank'";
+		if(!$isNovaGuia){
+			$novaGuia="'_self'";
+		}
+		$retorno.= "window.open($link, $novaGuia)\n;";
+		$retorno.= "}";
 	
 	/*$retorno = "function detalhar(isExcluir) {\n
 	 alert('funcionou');}";*/	
