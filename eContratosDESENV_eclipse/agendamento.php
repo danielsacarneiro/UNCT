@@ -26,20 +26,14 @@ setCabecalho($titulo);
 <?php
 echo "EXECUCAO DE AGENDADOR DE TAREFAS WINDOWS.<br><br>";
 
+//Relatório diário
 echo getTagHTMLAbreFormulario();
 require (caminho_funcoes. "alertas/alerta_email_unico.php");
 echo getTagHTMLFechaFormulario();
 
-$enviarEmail = @$_GET [constantes::$ID_REQ_IN_ENVIAR_EMAIL];
-$isEnvioEmailGestor = getAtributoComoBooleano($enviarEmail);
+//Mensageria: envio de email aos contratos a vencer cadastrados
+require (caminho_funcoes. "alertas/alerta_email_gestor.php");
 
-if($isEnvioEmailGestor && voMensageria::$ATIVADO){
-	//so deve enviar a mensageria se se tratar do agendamento automatico
-	//para tanto o $isEnvioEmailGestor será true
-	echoo("___________________________");
-	echoo("Enviando email aos gestores.");
-	require (caminho_funcoes. "alertas/alerta_email_gestor.php");
-}
 ?>
             			</TD>
         			</TR>        			

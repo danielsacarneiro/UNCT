@@ -90,14 +90,14 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		//$msg .= "<br>O contrato vencerá em dias.";
   		if(!$isEmailGestorValido){
   			//se o alerta nao for valido, envia apenas para os responsaveis
-  			$msg = "<br><br>Contrato SEM E-MAIL VÁLIDO para o Gestor. Mensageria: $vomensageria->toString().";  			  				
+  			$msg = "<br><br><u><b>Contrato SEM E-MAIL VÁLIDO para o Gestor. Mensageria:</b></u> $vomensageria->toString().";  			  				
   		}else{
   			//se o alerta for valido, acrescenta o e-mail do gestor
   			if(voMensageria::$ENVIAR_EMAIL_GESTOR){
 	  			$array2 = array($emailGestor);
 	  			$listaEmailTemp = array_merge($listaEmailTemp, $array2);
   			}else{
-  				$msg .= "<br><br>Encaminhamento ao gestor desativado. Entre em contato com o administrador do mensageria.";
+  				$msg .= "<br><br><u><b>Encaminhamento ao gestor desativado. Entre em contato com o administrador do mensageria</b></u>.";
   			}
   		}
   		
@@ -112,11 +112,11 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		
   		$numFrequencia = complementarCharAEsquerda($numFrequencia, "0", 3);
   		
-  		$retorno = "Prezado gestor,
+  		$retorno = "<br>Prezado gestor,
   		
   		<br><br><br>Esta Unidade de Contratos solicita informações referentes à prorrogação do contrato <b>$codigoContrato</b>, que em breve se encerrará.
   		<br>Havendo interesse da SEFAZ pela prorrogação, favor enviar com a maior brevidade possível CI à SAFI.
-  		<br><br>Vale salientar que toda prorrogação deverá ser solicitada com, no mínimo, 60 (sessenta) dias DE ANTECEDÊNCIA ao vencimento do contrato em questão.
+  		<br><br>Vale salientar que toda prorrogação deverá ser solicitada com, no mínimo, <b>60 (sessenta) dias DE ANTECEDÊNCIA ao vencimento do contrato em questão<b>.
   		<br><br><b>Se o contrato não comportar mais prorrogação e persistindo a necessidade da contratação, o gestor deverá solicitar novo processo licitatório com, no mínimo 5 (cinco) meses de antecedência, e seguir o modelo de C.I., juntamente com o termo de referência, sob pena de ficar sem a prestação do serviço.
   		
   		<br><br>Informamos ainda que o envio da garantia contratual atualizada da empresa contratada é necessária à instrução da renovação contratual.</b>  		

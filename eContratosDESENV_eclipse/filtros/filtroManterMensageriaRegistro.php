@@ -107,16 +107,20 @@ class filtroManterMensageriaRegistro extends filtroManter {
 		return $filtro;
 	}
 	
+	//serve para criar uma ordenacao independente de qualquer selecao de ordenacao feita pelo usuario
 	function getAtributoOrdenacaoAnteriorDefault() {
-		$nmTabela = voMensageria::getNmTabelaStatic ( $this->isHistorico );
-		$retorno = $nmTabela . "." . voMensageria::$nmAtrSq . " " . $this->cdOrdenacao;
+		$nmTabela = voMensageriaRegistro::getNmTabelaStatic ( $this->isHistorico );
+		return  "$nmTabela." . voMensageria::$nmAtrDhUltAlteracao . " " . $this->cdOrdenacao;
 		return $retorno;
 	}
+	//serve para criar uma ordenacao default
 	function getAtributoOrdenacaoDefault() {
-		return voMensageria::getNmTabelaStatic ( $this->isHistorico ) . "." . voMensageria::$nmAtrSq . " " . constantes::$CD_ORDEM_DECRESCENTE;
+		$nmTabela = voMensageriaRegistro::getNmTabelaStatic ( $this->isHistorico ); 
+		return  "$nmTabela." . voMensageria::$nmAtrDhUltAlteracao . " " . constantes::$CD_ORDEM_DECRESCENTE;
 	}
 	function getAtributosOrdenacao() {
 		$varAtributos = array (
+				voMensageriaRegistro::$nmAtrDhUltAlteracao => "Dt.Envio",
 				voMensageria::$nmAtrSq => "Sequencial",
 				voMensageria::$nmAtrAnoContrato => "Ano.Contrato",
 				voMensageria::$nmAtrCdContrato => "Cd.Contrato",

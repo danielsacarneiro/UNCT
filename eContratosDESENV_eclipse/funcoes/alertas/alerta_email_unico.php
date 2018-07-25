@@ -10,6 +10,7 @@ if($enviarEmail != null){
 }else{
 	$enviarEmail = true;
 }
+$enviarEmail = $enviarEmail && voMensageria::$ENVIAR_EMAIL_RELATORIO_DIARIO;
 
 $count = 0;
 

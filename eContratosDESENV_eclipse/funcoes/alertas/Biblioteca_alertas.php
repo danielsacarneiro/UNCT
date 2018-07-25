@@ -265,7 +265,7 @@ function enviarEmail($assuntoParam, $mensagemParam, $enviarEmail=true, $listaEma
 				echo "<b>Informações do erro:</b> <br />" . $mail->mail->ErrorInfo;
 			}
 		} else {
-			echo "Seleção: NÃO enviar email.";
+			echo "RELATÓRIO DIÁRIO: NÃO enviar email.";
 		}
 	} catch ( Exception $ex ) {
 		$msg = $ex->getMessage ();
