@@ -18,6 +18,7 @@ class filtroManterPenalidade extends filtroManter{
     
     var $nmTabelaPessoaContrato = "TAB_PESSOA_CONTRATO";    
     var $nmColNomePessoaContrato = "NmColPessoaContrato";
+    var $tipoPenalidade;
     
     // ...............................................................
 	// construtor
@@ -34,7 +35,8 @@ class filtroManterPenalidade extends filtroManter{
         
         $this->cdContrato = @$_POST[vocontrato::$nmAtrCdContrato];
         $this->anoContrato = @$_POST[vocontrato::$nmAtrAnoContrato];
-        $this->tipoContrato = @$_POST[vocontrato::$nmAtrTipoContrato];                
+        $this->tipoContrato = @$_POST[vocontrato::$nmAtrTipoContrato];
+        $this->tipoPenalidade = @$_POST[voPenalidadePA::$nmAtrTipo];
     }
     	
 	function getFiltroConsultaSQL(){	
@@ -52,6 +54,7 @@ class filtroManterPenalidade extends filtroManter{
 		
 		$isHistorico = $this->isHistorico;
 		$nmTabela = $voPA->getNmTabelaEntidade($isHistorico);
+		$nmTabelaPenalidade = voPenalidadePA::getNmTabelaStatic($isHistorico);
 		if($this->nmEntidadePrincipal != null){
 			$nmTabela = $this->getVOEntidadePrincipal()->getNmTabelaEntidade($isHistorico);
 		}
@@ -99,6 +102,16 @@ class filtroManterPenalidade extends filtroManter{
 					;
 						
 			$conector  = "\n AND ";
+		}
+		
+		if($this->tipoPenalidade != null){
+			$filtro = $filtro . $conector
+			. $nmTabelaPenalidade. "." .voPenalidadePA::$nmAtrTipo
+			. " = "
+					. getVarComoString($this->tipoPenalidade)
+					;
+		
+					$conector  = "\n AND ";
 		}
 		
 		if($this->cdPA != null){

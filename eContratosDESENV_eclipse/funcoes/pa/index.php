@@ -185,7 +185,16 @@ function validaFormulario() {
                     include_once(caminho_funcoes."pessoa/biblioteca_htmlPessoa.php");                    
                     echo getComboPessoaRespPA(voPA::$nmAtrCdResponsavel, voPA::$nmAtrCdResponsavel, $filtro->cdResponsavel, "camponaoobrigatorio", "");                                        
                     ?>
-            </TR>            
+            </TR>
+	        <?php	        
+	        $comboTipo = new select(dominioTipoPenalidade::getColecao());
+	        ?>
+	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">Penalidade:</TH>
+	            <TD class="campoformulario" nowrap colspan=3>
+				<?php echo $comboTipo->getHtmlCombo(voPenalidadePA::$nmAtrTipo, voPenalidadePA::$nmAtrTipo, $filtro->tipoPenalidade, true, "camponaoobrigatorio", true, "");?>
+			  </TD>			  
+			</TR>            
        <?php
         /*$comboOrdenacao = new select(voPA::getAtributosOrdenacao($cdHistorico));
         $cdAtrOrdenacao = $filtro->cdAtrOrdenacao;

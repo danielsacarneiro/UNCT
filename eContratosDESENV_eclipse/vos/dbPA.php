@@ -105,6 +105,7 @@ include_once (caminho_filtros."filtroManterPA.php");
     	$nmTabelaPessoaResponsavel = $filtro->nmTabelaPessoaResponsavel;
     	$nmTabelaDemandaProcLic = voDemandaPL::getNmTabelaStatic ( false );
     	$nmTabelaProcLic = voProcLicitatorio::getNmTabelaStatic ( false );
+    	$nmTabelaPenalidade = voPenalidadePA::getNmTabelaStatic ( false );
     	
     	$colunaUsuHistorico = "";
     	
@@ -186,6 +187,11 @@ include_once (caminho_filtros."filtroManterPA.php");
         $queryFrom .= $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrAnoProcLic . "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrAno;
         $queryFrom .= "\n AND " . $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdProcLic . "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrCd;
                 
+        $queryFrom .= "\n LEFT JOIN " . $nmTabelaPenalidade;
+        $queryFrom .= "\n ON ";
+        $queryFrom .= $nmTabela . "." . voPA::$nmAtrAnoPA . "=" . $nmTabelaPenalidade . "." . voPenalidadePA::$nmAtrAnoPA;
+        $queryFrom .= "\n AND " . $nmTabela . "." . voPA::$nmAtrCdPA . "=" . $nmTabelaPenalidade . "." . voPenalidadePA::$nmAtrCdPA;
+        
         //$filtro->cdEspecieContrato = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
         
         return parent::consultarMontandoQueryTelaConsulta ( $vo, $filtro, $arrayColunasRetornadas, $queryFrom );        

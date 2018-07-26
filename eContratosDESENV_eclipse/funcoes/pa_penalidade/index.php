@@ -152,7 +152,16 @@ function validaFormulario() {
                 Nome: <INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>"  value="<?php echo($nome);?>"  class="camponaoobrigatorio" size="30" ></TD>
                 <TH class="campoformulario" width="1%" nowrap>CNPJ/CPF:</TH>
                 <TD class="campoformulario"><INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($doc);?>" class="camponaoobrigatorio" size="20" maxlength="18"></TD>
-            </TR>        
+            </TR>
+	        <?php	        
+	        $comboTipo = new select(dominioTipoPenalidade::getColecaoComReferenciaLegal());
+	        ?>
+	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">Tipo:</TH>
+	            <TD class="campoformulario" nowrap colspan=3>
+				  <?php echo $comboTipo->getHtmlCombo(voPenalidadePA::$nmAtrTipo, voPenalidadePA::$nmAtrTipo, $filtro->tipoPenalidade, true, "camponaoobrigatorio", true, "");?>
+			  </TD>			  
+			</TR>
        <?php
         /*$comboOrdenacao = new select(voPenalidadePA::getAtributosOrdenacao($cdHistorico));
         $cdAtrOrdenacao = $filtro->cdAtrOrdenacao;

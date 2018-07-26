@@ -3,6 +3,12 @@ include_once(caminho_util."bibliotecaSQL.php");
 include_once(caminho_lib ."filtroManter.php");
 
 class filtroManterPA extends filtroManter{
+	
+	var $nmTabelaPessoaContrato = "TAB_PESSOA_CONTRATO";
+	var $nmTabelaPessoaResponsavel = "TAB_PESSOA_RESP";
+	
+	var $nmColNomePessoaContrato = "NmColPessoaContrato";
+	var $nmColNomePessoaResponsavel = "NmColPessoaResponsavel";	
     
     var $nmFiltro = "filtroManterPA";
     
@@ -22,12 +28,8 @@ class filtroManterPA extends filtroManter{
     var $cdDemanda;
     var $anoDemanda;
     var $tpDocumento;
-    
-    var $nmTabelaPessoaContrato = "TAB_PESSOA_CONTRATO";
-    var $nmTabelaPessoaResponsavel = "TAB_PESSOA_RESP";
-    
-    var $nmColNomePessoaContrato = "NmColPessoaContrato";
-    var $nmColNomePessoaResponsavel = "NmColPessoaResponsavel";
+        
+    var $tipoPenalidade;
     //var $nmColDtPublicacao = "nmColDtPublicacao";
     
     // ...............................................................
@@ -52,6 +54,8 @@ class filtroManterPA extends filtroManter{
     	$this->anoDemanda = @$_POST[voPA::$nmAtrAnoDemanda];
     	$this->tpDocumento = @$_POST[voDocumento::$nmAtrTp];
     	
+    	$this->tipoPenalidade = @$_POST[voPenalidadePA::$nmAtrTipo];
+    	
     	//isso tudo pq o filtro pode ser usado por mais de um metodo
     	//e precisa saber qual voprincipal considera,
     	//pra pegar por ex os atributos de ordenacao da tabela correta
@@ -72,6 +76,7 @@ class filtroManterPA extends filtroManter{
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic(false);
 		$nmTabelaDemanda = voDemanda::getNmTabelaStatic(false);
 		$nmTabelaTramitacaoDoc = voDemandaTramDoc::getNmTabelaStatic(false);
+		$nmTabelaPenalidade = voPenalidadePA::getNmTabelaStatic($isHistorico);
 		
 		$isHistorico = $this->isHistorico;
 		$nmTabela = $voPA->getNmTabelaEntidade($isHistorico);
@@ -169,6 +174,16 @@ class filtroManterPA extends filtroManter{
 					. $this->cdResponsavel;
 						
 			$conector  = "\n AND ";
+		}
+		
+		if($this->tipoPenalidade != null){
+			$filtro = $filtro . $conector
+			. $nmTabelaPenalidade. "." .voPenalidadePA::$nmAtrTipo
+			. " = "
+					. getVarComoString($this->tipoPenalidade)
+					;
+		
+					$conector  = "\n AND ";
 		}
 		
 		if($this->cdPessoa != null){
@@ -275,7 +290,7 @@ class filtroManterPA extends filtroManter{
 	function getAtributosOrdenacao(){
 		$nmTabelaPA = voPA::getNmTabelaStatic($this->isHistorico());
 		$varAtributos = array(
-				voPA::$nmAtrCdPA=> "PA",
+				"$nmTabelaPA.".voPA::$nmAtrCdPA=> "PA",
 				vocontrato::getNmTabelaStatic($this->isHistorico).".".vocontrato::$nmAtrCdContrato => "Contrato",
 				$nmTabelaPA . "." . voPA::$nmAtrDhUltAlteracao=> "Dt.Alteração",
 		);
