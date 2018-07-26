@@ -57,6 +57,16 @@ class filtroManterDemandaTram extends filtroManterDemanda{
 					$conector  = "\n AND ";
 		}
 	
+		if($this->vodemanda->tipo != null){
+			$filtro = $filtro . $conector
+			. $nmTabela. "." .voDemanda::$nmAtrTipo
+			. " = "
+					. $this->vodemanda->tipo
+					;
+		
+					$conector  = "\n AND ";
+		}
+		
 		if($this->vodemanda->sq != null){
 			$filtro = $filtro . $conector
 			. $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrSq

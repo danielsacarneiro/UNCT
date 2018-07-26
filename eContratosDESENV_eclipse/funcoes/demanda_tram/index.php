@@ -116,12 +116,14 @@ function alterar() {
         <TBODY>
 	        <?php	        	
 	            $selectExercicio = new selectExercicio();
+	            $comboTipoDemanda = new select(dominioTipoDemanda::getColecao());
 			  ?>			            
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Demanda:</TH>
 	            <TD class="campoformulario" colspan=3>
 	            <?php echo "Ano: " . $selectExercicio->getHtmlCombo(voDemanda::$nmAtrAno,voDemanda::$nmAtrAno, $filtro->vodemanda->ano, true, "camponaoobrigatorio", false, "");?>
 			  Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voDemanda::$nmAtrCd?>" name="<?=voDemanda::$nmAtrCd?>"  value="<?php echo(complementarCharAEsquerda($filtro->vodemanda->cd, "0", TAMANHO_CODIGOS));?>"  class="camponaoobrigatorio" size="6" maxlength="5">
+			  Tipo: <?=$comboTipoDemanda->getHtmlCombo(voDemanda::$nmAtrTipo, voDemanda::$nmAtrTipo, $filtro->vodemanda->tipo, true, "camponaoobrigatorio", false, "");?>
 			  Tramitação: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voDemandaTramitacao::$nmAtrSq?>" name="<?=voDemandaTramitacao::$nmAtrSq?>"  value="<?php echo(complementarCharAEsquerda($filtro->vodemanda->sq, "0", TAMANHO_CODIGOS));?>"  class="camponaoobrigatorio" size="6" maxlength="5">
 			</TR>			            
 	        <?php	        
