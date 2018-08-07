@@ -954,6 +954,7 @@ function getCampoDadosVOAnoCdDetalhamento($vo,$arrayParametroXNmAtributo,$temLup
 }
 
 function getAtributoComoBooleano($param) {
+	//echoo($param);
 	$retorno = false;
 	if ($param != null && $param == constantes::$CD_SIM) {
 		$retorno = true;

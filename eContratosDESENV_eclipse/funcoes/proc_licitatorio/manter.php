@@ -54,6 +54,7 @@ setCabecalho($titulo);
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_oficio.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_datahora.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_moeda.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_ajax.js"></script>
 
 <SCRIPT language="JavaScript" type="text/javascript">
@@ -206,7 +207,12 @@ function confirmar() {
 	            <TH class="campoformulario" nowrap>Objeto:</TH>
 	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=voProcLicitatorio::$nmAtrObjeto?>" name="<?=voProcLicitatorio::$nmAtrObjeto?>" class="camponaoobrigatorio" required><?php echo($vo->objeto);?></textarea>
 				</TD>
-	        </TR>	        
+	        </TR>
+			<TR>
+	            <TH class="campoformulario" nowrap>Valor.Total:</TH>
+	            <TD class="campoformulario" colspan="3"><INPUT type="text" id="<?=voProcLicitatorio::$nmAtrValor?>" name="<?=voProcLicitatorio::$nmAtrValor?>"  value="<?php echo($vlMensal);?>"
+	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="camponaoobrigatorioalinhadodireita" size="15" required></TD>
+	        </TR>						        
 			<TR>
 	            <TH class="campoformulario" nowrap>Observação:</TH>
 	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=voProcLicitatorio::$nmAtrObservacao?>" name="<?=voProcLicitatorio::$nmAtrObservacao?>" class="camponaoobrigatorio" ><?php echo($vo->obs);?></textarea>
@@ -214,7 +220,9 @@ function confirmar() {
 	            	colecaoIDCamposRequired = [
 	            		"<?=voProcLicitatorio::$nmAtrTipo?>",
 	            		"<?=voProcLicitatorio::$nmAtrDtAbertura?>",
-	            		"<?=voProcLicitatorio::$nmAtrDtPublicacao?>"];
+	            		//"<?=voProcLicitatorio::$nmAtrValor?>",
+	            		"<?=voProcLicitatorio::$nmAtrDtPublicacao?>",	            		
+	            		];
 	            </SCRIPT>
 	            <br><INPUT type="checkbox" id="checkResponsabilidade" name="checkResponsabilidade" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCamposRequired);"> *Assumo a responsabilidade de não incluir os valores obrigatórios.	            				            
 				</TD>

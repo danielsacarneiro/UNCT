@@ -26,6 +26,7 @@ class voProcLicitatorio extends voentidade {
 	static $nmAtrObjeto = "pl_objeto";
 	static $nmAtrObservacao = "pl_observacao";
 	static $nmAtrSituacao = "pl_si";
+	static $nmAtrValor = "pl_valor";
 	
 	var $cd = "";
 	var $ano = "";
@@ -44,6 +45,7 @@ class voProcLicitatorio extends voentidade {
 	var $objeto = "";
 	var $obs = "";
 	var $situacao = "";	
+	var $valor = "";
 	
 	// ...............................................................
 	// Funcoes ( Propriedades e métodos da classe )
@@ -98,6 +100,7 @@ class voProcLicitatorio extends voentidade {
 				self::$nmAtrObjeto,
 				self::$nmAtrObservacao,
 				self::$nmAtrSituacao,				
+				self::$nmAtrValor,
 		);
 		
 		return $retorno;
@@ -129,6 +132,7 @@ class voProcLicitatorio extends voentidade {
 		$this->objeto = $registrobanco [self::$nmAtrObjeto];
 		$this->obs = $registrobanco [self::$nmAtrObservacao];
 		$this->situacao = $registrobanco [self::$nmAtrSituacao];
+		$this->valor = $registrobanco [self::$nmAtrValor];
 	}
 	function getDadosFormulario() {
 
@@ -147,6 +151,7 @@ class voProcLicitatorio extends voentidade {
 		$this->objeto = @$_POST [self::$nmAtrObjeto];
 		$this->obs = @$_POST [self::$nmAtrObservacao];
 		$this->situacao = @$_POST [self::$nmAtrSituacao];
+		$this->valor = @$_POST[self::$nmAtrValor];
 				
 		// completa com os dados da entidade
 		$this->getDadosFormularioEntidade ();

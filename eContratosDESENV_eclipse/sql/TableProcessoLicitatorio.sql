@@ -17,6 +17,7 @@ CREATE TABLE proc_licitatorio (
     pl_objeto TEXT,
     pl_observacao TEXT,
     pl_si INT NOT NULL,
+    pl_valor DECIMAL (14,4),
         
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
@@ -31,6 +32,7 @@ CREATE TABLE proc_licitatorio (
 	ON UPDATE RESTRICT
 
 );
+ALTER TABLE proc_licitatorio ADD COLUMN pl_valor DECIMAL (14,4) AFTER pl_si;
 
 drop table if exists proc_licitatorio_hist;
 CREATE TABLE proc_licitatorio_hist (
@@ -51,6 +53,7 @@ CREATE TABLE proc_licitatorio_hist (
     pl_objeto TEXT,
     pl_observacao TEXT,
     pl_si INT NOT NULL,
+    pl_valor DECIMAL (14,4),
     
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
@@ -64,6 +67,7 @@ CREATE TABLE proc_licitatorio_hist (
     CONSTRAINT pk PRIMARY KEY (hist),
     CONSTRAINT desativacao_pa CHECK (in_desativado NOT IN ('S'))
 ); 
+ALTER TABLE proc_licitatorio_hist ADD COLUMN pl_valor DECIMAL (14,4) AFTER pl_si;
 
 show create table pa_hist;
 

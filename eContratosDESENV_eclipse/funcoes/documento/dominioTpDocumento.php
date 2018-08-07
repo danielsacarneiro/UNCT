@@ -1,9 +1,11 @@
 <?php
 include_once (caminho_util . "dominio.class.php");
 class dominioTpDocumento extends dominio {
+	static $UNIDADE_REDE_LOCAL = "J:";
+	static $UNIDADE_REDE_PLANILHA = "G:";
 	static $ENDERECO_DRIVE = "\\\\sf044836\\_dag$";
 	// static $ENDERECO_DRIVE_HTML = "\\sf044836\\\\_dag$";
-	static $ENDERECO_DRIVE_HTML = "H:";
+	static $ENDERECO_DRIVE_HTML = "J:";
 	static $ENDERECO_PASTABASE = "ATJA";
 	static $ENDERECO_PASTABASE_UNCT = "UNCT";
 	static $ENDERECO_PASTA_DOCUMENTOS = "\Documentos";

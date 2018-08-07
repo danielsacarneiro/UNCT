@@ -788,7 +788,7 @@ class dbprocesso {
 	 * @return string|mixed
 	 */
 	function getDecimalSQL($param) {
-		return getDecimalSQL ( $param );
+		return $this->getVarComoDecimal ( $param );
 	}
 	
 	static function isPrintarSQL(){

@@ -67,6 +67,7 @@ setCabecalho($titulo);
 		f5.adicionarItem(new Link("Agendamento de alertas (COM EMAIL)", "agendamento.php?<?=constantes::$ID_REQ_IN_ENVIAR_EMAIL?>=S", ""));
 		f5.adicionarItem(new Link("Pagina TESTE", "teste.php", ""));
 		f5.adicionarItem(new Link('______', '#', ''));
+		f5.adicionarItem(new Link("LIMPAR TABELA CONTRATO", "<?=caminho_funcoesHTML. "contrato/importarContrato.php?". dbcontrato::$ID_REQ_INICIAR_TAB_CONTRATO?>=S", ""));
 		f5.adicionarItem(new Link('______', '#', ''));
 		f5.adicionarItem(new Link('______', '#', ''));	
 		f5.adicionarItem(new Link("IMPORTAR CSAFI", "<?=caminho_funcoesHTML?>contrato/importarContrato.php", ""));

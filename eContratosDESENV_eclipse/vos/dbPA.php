@@ -192,7 +192,12 @@ include_once (caminho_filtros."filtroManterPA.php");
         $queryFrom .= $nmTabela . "." . voPA::$nmAtrAnoPA . "=" . $nmTabelaPenalidade . "." . voPenalidadePA::$nmAtrAnoPA;
         $queryFrom .= "\n AND " . $nmTabela . "." . voPA::$nmAtrCdPA . "=" . $nmTabelaPenalidade . "." . voPenalidadePA::$nmAtrCdPA;
         
+        $groupbyPA = array("$nmTabela." .voPA::$nmAtrAnoPA,
+        		"$nmTabela." . voPA::$nmAtrCdPA,        		
+        );
+        
         //$filtro->cdEspecieContrato = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
+        $filtro->groupby = $groupbyPA;
         
         return parent::consultarMontandoQueryTelaConsulta ( $vo, $filtro, $arrayColunasRetornadas, $queryFrom );        
     }

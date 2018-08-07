@@ -122,6 +122,9 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
         $queryJoin .= "\n AND " . $nmTabelaDemandaPL . "." . voDemandaPL::$nmAtrCdDemanda . "=" . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd;
         
         $filtro->tpDemanda = dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL;
+        $groupby = array("$nmTabela.". voProcLicitatorio::$nmAtrAno,
+        		"$nmTabela.". voProcLicitatorio::$nmAtrCd);
+        $filtro->groupby = $groupby; 
         
         //$filtro->cdEspecieContrato = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
         
@@ -374,7 +377,8 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
 		$retorno.= $this-> getVarComoData($vo->dtPublicacao). ",";
 		$retorno.= $this-> getVarComoString($vo->objeto). ",";
 		$retorno.= $this-> getVarComoString($vo->obs). ",";
-		$retorno.= $this-> getVarComoNumero($vo->situacao);		
+		$retorno.= $this-> getVarComoNumero($vo->situacao). ",";
+		$retorno.= $this-> getVarComoDecimal($vo->valor);
 	
 		$retorno.= $vo->getSQLValuesInsertEntidade();
 	
@@ -407,6 +411,11 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
         
         if($vo->situacao != null){
         	$retorno.= $sqlConector . voProcLicitatorio::$nmAtrSituacao. " = " . $this->getVarComoNumero($vo->situacao);
+        	$sqlConector = ",";
+        }
+        
+        if($vo->valor != null){
+        	$retorno.= $sqlConector . voProcLicitatorio::$nmAtrValor . " = " . $this->getVarComoDecimal($vo->valor);
         	$sqlConector = ",";
         }
         

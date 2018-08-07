@@ -11,6 +11,7 @@ include_once (caminho_util . "bibliotecaFuncoesPrincipal.php");
 // cria um combo select html
 class dbcontrato extends dbprocesso {
 	static $CD_CONSTANTE_FIM_IMPORTACAO = "FIM";
+	static $ID_REQ_INICIAR_TAB_CONTRATO= "ID_REQ_INICIAR_TAB_CONTRATO";
 	
 	function consultarFiltroManterContrato($voentidade, $filtro) {
 		$isArquivo = ("S" == $filtro->cdConsultarArquivo);
@@ -711,55 +712,56 @@ class dbcontrato extends dbprocesso {
 		
 		$numero = $linha ["B"];
 		$ano = $linha ["B"];
-		$especie = $linha ["C"];
-		$dtAlteracao = $linha ["D"];
+		$especie = $linha ["D"];
+		$dtAlteracao = $linha ["E"];
 		
-		$objeto = $linha ["E"];
-		$gestorPessoa = $linha ["F"];
+		$objeto = $linha ["F"];
+		$gestorPessoa = $linha ["G"];
 		$linkDoc = $linha [vocontrato::$nmAtrLinkDoc];
 		
 		if ($tipo == "C") {
-			// contrato
-			$gestor = $linha ["G"];
+			// contrato			
+			$gestor = $linha ["H"];
 			
-			$valorGlobal = $linha ["I"];
-			$valorMensal = $linha ["H"];
-			$processoLic = $linha ["J"];
-			$modalidadeLic = $linha ["K"];
-			$dtAssinatura = $linha ["L"];
-			$dataPublic = $linha ["M"];
-			$nomeContratada = $linha ["N"];
-			$docContratada = $linha ["O"];
+			$valorGlobal = $linha ["J"];
+			$valorMensal = $linha ["I"];
+			$processoLic = $linha ["K"];
+			$modalidadeLic = $linha ["L"];
+			$dtAssinatura = $linha ["M"];
+			$dataPublic = $linha ["N"];
+			$nomeContratada = $linha ["O"];
+			$docContratada = $linha ["P"];
 			
-			$dtVigenciaInicio = $linha ["P"];
-			$dtVigenciaFim = $linha ["Q"];
-			$sqEmpenho = $linha ["S"];
-			$tpAutorizacao = $linha ["T"];
-			$inLicom = $linha ["U"];
-			$obs = $linha ["V"];
+			$dtVigenciaInicio = $linha ["Q"];
+			$dtVigenciaFim = $linha ["R"];
+			$sqEmpenho = $linha ["T"];
+			$tpAutorizacao = $linha ["U"];
+			$inLicom = $linha ["V"];
+			$obs = $linha ["W"];
 		} else {
-			// convenio
+			// convenio			
 			$gestor = null;
-			$valorGlobal = $linha ["G"];
+			
+			$valorGlobal = $linha ["H"];
 			$valorMensal = null;
 			//$processoLic = $linha ["H"];
-			$modalidadeLic = $linha ["I"];
-			$dtAssinatura = $linha ["J"];
-			$dataPublic = $linha ["K"];
-			$nomeContratada = $linha ["L"];
-			$docContratada = $linha ["M"];
+			$modalidadeLic = $linha ["J"];
+			$dtAssinatura = $linha ["K"];
+			$dataPublic = $linha ["L"];
+			$nomeContratada = $linha ["M"];
+			$docContratada = $linha ["N"];
 			
-			$dtVigenciaInicio = $linha ["N"];
-			$dtVigenciaFim = $linha ["O"];
+			$dtVigenciaInicio = $linha ["O"];
+			$dtVigenciaFim = $linha ["P"];
 			
 			if ($tipo == "V")
-				$sqEmpenho = $linha ["Q"];
+				$sqEmpenho = $linha ["R"];
 			else
-				$sqEmpenho = $linha ["P"];
+				$sqEmpenho = $linha ["Q"];
 			
 			$tpAutorizacao = null;
-			$inLicom = $linha ["R"];
-			$obs = $linha ["S"];
+			$inLicom = $linha ["S"];
+			$obs = $linha ["T"];
 		}
 		
 		// recupera o sequencial da especie (aditivo, apostilamento) quando existir
@@ -851,6 +853,86 @@ class dbcontrato extends dbprocesso {
 		 */
 		
 		return $retorno;
+	}
+	
+	function iniciarTabelaContrato(){
+		$this->atualizarEntidade("drop table IF EXISTS contrato;");
+		$this->atualizarEntidade(static::getSQLLimparTabelaContrato());
+	}
+	
+	/*function removerCaracterEspecial(){
+		$this->atualizarEntidade(static::getSQLRemoveCaracteresEspeciais());
+	}*/
+	
+	static function getSQLLimparTabelaContrato(){
+		$sql = 
+		"CREATE TABLE contrato (
+		    sq INT NOT NULL AUTO_INCREMENT,
+		    ct_exercicio INT NOT NULL,
+		    ct_numero INT NOT NULL,
+		    ct_tipo char(1) NOT NULL,
+			ct_especie VARCHAR(50),
+		    ct_sq_especie INT DEFAULT 1 NOT NULL, 
+		    ct_cd_especie CHAR(2) NOT NULL, 
+			ct_cd_situacao CHAR(2),
+		    ct_objeto LONGTEXT,
+		    ct_gestor_pessoa VARCHAR(300) ,
+		    pe_cd_resp INT ,
+		    ct_gestor VARCHAR(200) ,
+		    gt_cd INT ,
+			ct_processo_lic VARCHAR(300),
+		    ct_cd_processo_lic INT,
+		    ct_ano_processo_lic INT,
+		    ct_modalidade_lic VARCHAR(300),    
+			ct_data_public VARCHAR(300),
+		    ct_dt_public DATE,
+		    ct_dt_assinatura DATE,
+		    ct_dt_vigencia_inicio DATE,
+		    ct_dt_vigencia_fim DATE,    
+			ct_dt_proposta DATE NULL,
+		    ct_contratada VARCHAR(300),
+		    pe_cd_contratada INT,
+		    ct_doc_contratada VARCHAR(30),
+		    ct_num_empenho VARCHAR(50),    
+		    ct_tp_autorizacao VARCHAR(15), 
+		    ct_cd_autorizacao INT, 
+		    ct_in_licom CHAR(1),
+			ct_in_importacao CHAR(1) DEFAULT 'N',
+		    ct_observacao LONGTEXT,    
+		    ct_valor_global DECIMAL (14,4),
+		    ct_valor_mensal DECIMAL (14,4),
+		    ct_doc_link TEXT NULL,
+		    dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+		    dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
+		    cd_usuario_incl INT,
+		    cd_usuario_ultalt INT,
+		    
+		    CONSTRAINT pk PRIMARY KEY (sq, ct_exercicio, ct_numero, ct_tipo),
+		    UNIQUE KEY chave_logica_contrato (ct_exercicio, ct_numero, ct_tipo, ct_cd_especie, ct_sq_especie),
+		    CONSTRAINT fk_ct_gestor FOREIGN KEY ( gt_cd ) REFERENCES gestor (gt_cd) 
+			ON DELETE RESTRICT
+			ON UPDATE RESTRICT,
+			CONSTRAINT fk_ct_pessoa_resp FOREIGN KEY ( pe_cd_resp ) REFERENCES pessoa (pe_cd) 
+			ON DELETE RESTRICT
+			ON UPDATE RESTRICT,
+			CONSTRAINT fk_ct_pessoa_contratada FOREIGN KEY ( pe_cd_contratada ) REFERENCES pessoa (pe_cd) 
+			ON DELETE RESTRICT
+			ON UPDATE RESTRICT
+		);";
+		return $sql;
+	}
+	
+	static function getSQLRemoveCaracteresEspeciais(){
+		$sql = 
+		"UPDATE contrato SET
+			ct_contratada = replace(replace(replace(ct_contratada,'“','\"'),'”','\"'),'–','-'),
+			ct_objeto = replace(replace(replace(ct_objeto,'“','\"'),'”','\"'),'–','-'),
+			ct_processo_lic = replace(replace(replace(ct_processo_lic,'“','\"'),'”','\"'),'–','-')
+			;"
+		;
+		
+		return $sql;
+		
 	}
 }
 ?>

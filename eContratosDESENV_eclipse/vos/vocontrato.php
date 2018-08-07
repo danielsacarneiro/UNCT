@@ -400,13 +400,19 @@ include_once (caminho_util . "DocumentoPessoa.php");
 		//para o caso de o link do doc vier em endereco relativo ("../")
 		$pastaUNCTPrincipalSubs = dominioTpDocumento::$ENDERECO_DRIVE . "\\" . dominioTpDocumento::$ENDERECO_PASTABASE_UNCT;
 		//$link = str_ireplace("..", $pastaUNCTPrincipalSubs . "" , $this->linkDoc);
+		//echoo($this->linkDoc);
 		$link = str_ireplace("../", $pastaUNCTPrincipalSubs . "\\" , $this->linkDoc);
+		//echoo($link);
 		$link = str_ireplace("..\\", $pastaUNCTPrincipalSubs . "\\" , $link);
+		//echoo($link);
 		$link = str_ireplace("/", "\\" , $link);
+		//echoo($link);
 		
 		//faz a substituicao normal
-		$link = str_ireplace("G:", dominioTpDocumento::$ENDERECO_DRIVE, $link);
-		//$link = str_replace("G:", "H:", $this->linkDoc);
+		//$link = str_ireplace(dominioTpDocumento::$UNIDADE_REDE_PLANILHA, dominioTpDocumento::$UNIDADE_REDE_LOCAL, $link);
+		$link = str_ireplace(dominioTpDocumento::$UNIDADE_REDE_PLANILHA, dominioTpDocumento::$ENDERECO_DRIVE, $link);
+		//echoo($link);
+
 		return $link; 
 	}
 	
