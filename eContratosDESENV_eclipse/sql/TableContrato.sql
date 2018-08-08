@@ -40,6 +40,7 @@ CREATE TABLE contrato (
     ct_valor_global DECIMAL (14,4),
     ct_valor_mensal DECIMAL (14,4),
     ct_doc_link TEXT NULL,
+    ct_doc_minuta TEXT NULL,
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_incl INT,
@@ -57,7 +58,7 @@ CREATE TABLE contrato (
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT
 );
--- ALTER TABLE contrato ADD COLUMN pe_cd INT NOT NULL AFTER ct_contratada;
+-- ALTER TABLE contrato ADD COLUMN ct_doc_minuta TEXT AFTER ct_doc_link;
 -- ALTER TABLE contrato ADD COLUMN gp_cd INT NULL AFTER ct_gestor_pessoa;
         
 /*ALTER TABLE contrato ADD UNIQUE KEY chave_logica_contrato (ct_exercicio, ct_numero, ct_tipo, ct_cd_especie, ct_sq_especie); 
@@ -126,6 +127,8 @@ CREATE TABLE contrato_hist (
     ct_valor_global DECIMAL (14,4),
     ct_valor_mensal DECIMAL (14,4),
     ct_doc_link TEXT NULL,
+    ct_doc_minuta TEXT NULL,
+    
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_incl INT,
@@ -133,7 +136,6 @@ CREATE TABLE contrato_hist (
     
     CONSTRAINT pk PRIMARY KEY (hist)
 );
-
 
 drop table contrato_info;
 CREATE TABLE contrato_info (	

@@ -64,7 +64,8 @@ include_once (caminho_util . "DocumentoPessoa.php");
 		static $nmAtrVlMensalContrato =  	"ct_valor_mensal";
         static $nmAtrDtProposta =  	"ct_dt_proposta";
         static $nmAtrCdPessoaContratada =  	"pe_cd_contratada";
-        static $nmAtrLinkDoc =  	"ct_doc_link";        
+        static $nmAtrLinkDoc =  	"ct_doc_link";
+        static $nmAtrLinkMinutaDoc =  	"ct_doc_minuta";
 		
 		var $sq;
 		var $cdContrato;
@@ -100,6 +101,7 @@ include_once (caminho_util . "DocumentoPessoa.php");
         var $importacao ;
 		var $obs ;
 		var $linkDoc ;
+		var $linkMinutaDoc ;
 		
 
 // ...............................................................
@@ -161,7 +163,8 @@ include_once (caminho_util . "DocumentoPessoa.php");
             self::$nmAtrVlMensalContrato,
             self::$nmAtrDtProposta,
         	self::$nmAtrCdPessoaContratada,
-        	self::$nmAtrLinkDoc
+        	self::$nmAtrLinkDoc,
+        	self::$nmAtrLinkMinutaDoc,
         );
         
         return $retorno;    
@@ -182,7 +185,8 @@ include_once (caminho_util . "DocumentoPessoa.php");
         	self::$nmAtrDtVigenciaFinalContrato,            
             self::$nmAtrVlGlobalContrato,
             self::$nmAtrVlMensalContrato,
-        	self::$nmAtrLinkDoc
+        	self::$nmAtrLinkDoc,
+        	self::$nmAtrLinkMinutaDoc,
         );
         
         return $retorno;    
@@ -231,6 +235,7 @@ include_once (caminho_util . "DocumentoPessoa.php");
         $this->importacao = $registrobanco[self::$nmAtrInImportacaoContrato];
 		$this->obs = $registrobanco[self::$nmAtrObservacaoContrato];
 		$this->linkDoc = $registrobanco[self::$nmAtrLinkDoc];
+		$this->linkMinutaDoc = $registrobanco[self::$nmAtrLinkMinutaDoc];
 		
         $this->dhInclusao = $registrobanco[self::$nmAtrDhInclusao];
         $this->dhUltAlteracao = $registrobanco[self::$nmAtrDhUltAlteracao];
@@ -281,6 +286,7 @@ include_once (caminho_util . "DocumentoPessoa.php");
 		$this->licom = @$_POST[self::$nmAtrInLicomContrato];
 		$this->obs = @$_POST[self::$nmAtrObservacaoContrato];
 		$this->linkDoc = @$_POST[self::$nmAtrLinkDoc];
+		$this->linkMinutaDoc = @$_POST[self::$nmAtrLinkMinutaDoc];
         
         $this->dhUltAlteracao = @$_POST[self::$nmAtrDhUltAlteracao];
         $this->sqHist = @$_POST[self::$nmAtrSqHist];
@@ -397,16 +403,22 @@ include_once (caminho_util . "DocumentoPessoa.php");
 	}	
 	
 	function getLinkDocumento(){
+		return static::getEnredeçoDocumento($this->linkDoc);
+	}
+	static function getEnredeçoDocumento($link){
 		//para o caso de o link do doc vier em endereco relativo ("../")
 		$pastaUNCTPrincipalSubs = dominioTpDocumento::$ENDERECO_DRIVE . "\\" . dominioTpDocumento::$ENDERECO_PASTABASE_UNCT;
-		//$link = str_ireplace("..", $pastaUNCTPrincipalSubs . "" , $this->linkDoc);
-		//echoo($this->linkDoc);
-		$link = str_ireplace("../", $pastaUNCTPrincipalSubs . "\\" , $this->linkDoc);
+		//$link = str_ireplace("..", $pastaUNCTPrincipalSubs . "" , $link);
+		//echoo($link);
+		$link = str_ireplace("../", $pastaUNCTPrincipalSubs . "\\" , $link);
 		//echoo($link);
 		$link = str_ireplace("..\\", $pastaUNCTPrincipalSubs . "\\" , $link);
 		//echoo($link);
 		$link = str_ireplace("/", "\\" , $link);
 		//echoo($link);
+		
+		//$link = str_ireplace("file:", "" , $link);		
+		//file:\\\\\sf044836\
 		
 		//faz a substituicao normal
 		//$link = str_ireplace(dominioTpDocumento::$UNIDADE_REDE_PLANILHA, dominioTpDocumento::$UNIDADE_REDE_LOCAL, $link);

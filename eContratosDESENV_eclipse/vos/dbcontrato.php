@@ -208,7 +208,8 @@ class dbcontrato extends dbprocesso {
 		$retorno .= $this->getDecimalSQL ( $voContrato->vlMensal ) . ",";
 		$retorno .= $this->getDataSQL ( $voContrato->dtProposta ) . ",";
 		$retorno .= $this->getVarComoNumero ( $voContrato->cdPessoaContratada ) . ",";
-		$retorno .= $this->getVarComoString ( $voContrato->linkDoc );
+		$retorno .= $this->getVarComoString ( $voContrato->linkDoc ) . ",";
+		$retorno .= $this->getVarComoString ( $voContrato->linkMinutaDoc );
 		
 		$retorno .= $voContrato->getSQLValuesInsertEntidade ();
 		
@@ -358,8 +359,11 @@ class dbcontrato extends dbprocesso {
 		if ($voContrato->linkDoc != null) {
 			$retorno .= $sqlConector . vocontrato::$nmAtrLinkDoc . " = " . $this->getVarComoString ( $voContrato->linkDoc );
 			$sqlConector = ",";
+		}		
+		if ($voContrato->linkMinutaDoc != null) {
+			$retorno .= $sqlConector . vocontrato::$nmAtrLinkMinutaDoc . " = " . $this->getVarComoString ( $voContrato->linkMinutaDoc );
+			$sqlConector = ",";
 		}
-		
 		$retorno = $retorno . $sqlConector . $voContrato->getSQLValuesUpdate ();
 		
 		return $retorno;
@@ -718,6 +722,7 @@ class dbcontrato extends dbprocesso {
 		$objeto = $linha ["F"];
 		$gestorPessoa = $linha ["G"];
 		$linkDoc = $linha [vocontrato::$nmAtrLinkDoc];
+		$linkMinutaDoc = $linha [vocontrato::$nmAtrLinkMinutaDoc];
 		
 		if ($tipo == "C") {
 			// contrato			
@@ -790,6 +795,7 @@ class dbcontrato extends dbprocesso {
 		$retorno->tipo = $tipo;
 		$retorno->especie = $especie;
 		$retorno->linkDoc = getDocLinkMascaraImportacao ( $linkDoc );
+		$retorno->linkMinutaDoc = getDocLinkMascaraImportacao ( $linkMinutaDoc);
 		
 		if ($sqEspecie != null) {
 			$retorno->sqEspecie = $sqEspecie;
@@ -902,6 +908,7 @@ class dbcontrato extends dbprocesso {
 		    ct_valor_global DECIMAL (14,4),
 		    ct_valor_mensal DECIMAL (14,4),
 		    ct_doc_link TEXT NULL,
+			ct_doc_minuta TEXT NULL,
 		    dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
 		    dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
 		    cd_usuario_incl INT,

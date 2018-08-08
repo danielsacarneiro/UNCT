@@ -65,8 +65,10 @@ for ($k=3; $k<=$totalResultado; $k++) {
         	$linkDoc = $objPHPExcel->getActiveSheet()->getCell('B'.$k)->getHyperlink()->getUrl();        	
         	$linha[vocontrato::$nmAtrLinkDoc] = $linkDoc;
         	
-        	//echo $linha[vocontrato::$nmAtrLinkDoc];
-        	
+        	$linkMinutaDoc = $objPHPExcel->getActiveSheet()->getCell('C'.$k)->getHyperlink()->getUrl();
+        	$linha[vocontrato::$nmAtrLinkMinutaDoc] = $linkMinutaDoc;        	
+
+        	//echo $linha[vocontrato::$nmAtrLinkDoc];        	
             $result = $dbprocesso->incluirContratoImport($tipoContrato, $linha);
         }catch(excecaoFimImportacaoContrato $ex){
            	//encerra a busca

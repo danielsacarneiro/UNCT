@@ -56,7 +56,10 @@ if(!$isLimparContrato){
 	        try{
 	        	$linkDoc = $objPHPExcel->getActiveSheet()->getCell('B'.$k)->getHyperlink()->getUrl();
 	        	$linha[vocontrato::$nmAtrLinkDoc] = $linkDoc;
-	        	 
+
+	        	$linkMinutaDoc = $objPHPExcel->getActiveSheet()->getCell('C'.$k)->getHyperlink()->getUrl();
+	        	$linha[vocontrato::$nmAtrLinkMinutaDoc] = $linkMinutaDoc;
+	        	
 	        	//echo $linha[vocontrato::$nmAtrDocLink];        	     
 	            $result = $dbprocesso->incluirContratoImport($tipoContrato, $linha);
 	        }catch(excecaoFimImportacaoContrato $ex){

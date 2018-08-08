@@ -172,7 +172,9 @@ function encaminhar() {
 	                <TR>
 	                	<TD class="campoformulario" width="1%">Incluindo:</TD>
 	                	<TD class="campoformulario" >
-		                <?php echo $comboTipo->getHtmlCombo(voDemanda::$nmAtrTipo, voDemanda::$nmAtrTipo, $filtro->vodemanda->tipo, true, "camponaoobrigatorio", false, "") . "<br>";?>
+		                <?php //echo $comboTipo->getHtmlCombo(voDemanda::$nmAtrTipo, voDemanda::$nmAtrTipo, $filtro->vodemanda->tipo, true, "camponaoobrigatorio", false, "") . "<br>";
+		                	  echo $comboTipo->getHtmlCombo(voDemanda::$nmAtrTipo, voDemanda::$nmAtrTipo."[]", $filtro->vodemanda->tipo, true, "camponaoobrigatorio", false, " multiple ");
+		               	?>
 	                	</TD>
 	                <TR>
 						<TD class="campoformulario" width="1%">Excluindo:</TD>

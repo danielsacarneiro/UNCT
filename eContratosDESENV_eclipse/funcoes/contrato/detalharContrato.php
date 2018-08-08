@@ -282,13 +282,35 @@ function confirmar() {
         <TH class="campoformulario" nowrap width="1%">Documento:</TH>
         <?php
         $endereco = $voContrato->getLinkDocumento();
-        ?>                
-        <TD class="campoformulario" colspan=3><textarea id="<?=vocontrato::$nmAtrLinkDoc?>" name="<?=vocontrato::$nmAtrLinkDoc?>" rows="2" cols="80" class="camporeadonly" readonly><?php echo  $endereco;?></textarea>
-    	<?php    	
-    	echo getBotaoAbrirDocumento(vocontrato::$nmAtrLinkDoc);
-    	?>
-	</TD>                
-	</TR>	        
+        $enderecoMinuta = $voContrato->getLinkDocumento($voContrato->linkMinutaDoc);
+        ?>
+		<TD class="campoformulario" colspan=3>
+		<TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
+			<TR>
+				<TH class="campoformulario">
+				Minuta:
+				</TH>			
+				<TD class="campoformulario">
+		        <textarea id="<?=vocontrato::$nmAtrLinkMinutaDoc?>" name="<?=vocontrato::$nmAtrLinkMinutaDoc?>" rows="2" cols="80" class="camporeadonly" readonly><?php echo  $enderecoMinuta;?></textarea>
+		    	<?php    	
+		    	echo getBotaoAbrirDocumento(vocontrato::$nmAtrLinkMinutaDoc);
+		    	?>				
+				</TD>			
+			</TR>
+			<TR>
+				<TH class="campoformulario">
+				Assinado:
+				</TH>			
+				<TD class="campoformulario">
+		        <textarea id="<?=vocontrato::$nmAtrLinkDoc?>" name="<?=vocontrato::$nmAtrLinkDoc?>" rows="2" cols="80" class="camporeadonly" readonly><?php echo  $endereco;?></textarea>
+		    	<?php    	
+		    	echo getBotaoAbrirDocumento(vocontrato::$nmAtrLinkDoc);
+		    	?>				
+				</TD>			
+			</TR>
+    	</TABLE>
+		</TD>                
+	</TR>
     
 	<TR><?=incluirUsuarioDataHoraDetalhamento($voContrato);?></TR>
         </TBODY>
