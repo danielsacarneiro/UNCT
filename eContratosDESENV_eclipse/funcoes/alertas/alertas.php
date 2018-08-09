@@ -153,7 +153,7 @@ function getMensagemDemandaContratoPropostaVencida(&$count = 0){
 }
 
 function getMensagemDemandaSAD(&$count = 0){
-	$assunto = "ENCAMINHAMENTO SAD:";
+	$assunto = "DEMANDAS SAD:";
 	$assunto = getSequenciaAssunto($assunto, $count);
 	try {
 		$filtro = new filtroManterDemanda ( false );

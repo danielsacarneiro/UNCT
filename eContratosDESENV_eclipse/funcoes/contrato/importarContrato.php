@@ -31,6 +31,7 @@ if(!$isLimparContrato){
 	
 	$inputFileName = caminho.'planilha/UNCT_contrato.xlsx';
 	$objPHPExcel = PHPExcel_IOFactory::load($inputFileName);
+	$objPHPExcel->setActiveSheetIndexByName(dbcontrato::$NM_PLANILHA_CONTRATOS);
 	$sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
 	
 	echo 'Lendo planilha ',pathinfo($inputFileName,PATHINFO_BASENAME),'<br />';

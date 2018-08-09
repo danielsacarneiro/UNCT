@@ -246,7 +246,15 @@ function confirmar() {
                 <TH class="campoformulario" nowrap>Demandas:</TH>
                 <TD class="campoformulario"><?php echo $comboTpDemanda->getHtmlCombo(filtroManterContrato::$nmAtrTpDemanda, filtroManterContrato::$nmAtrTpDemanda."[]", $filtro->tpDemanda, true, "camponaoobrigatorio", false, " multiple ")?>
                 </TD>                												                
-	        </TR>                 
+	        </TR>
+	        <?php	        
+	        require_once (caminho_funcoes . voProcLicitatorio::getNmTabela() . "/biblioteca_htmlProcLicitatorio.php");
+	        ?>
+	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">Proc.Licitatório:</TH>
+	            <TD class="campoformulario" colspan=3><?php getCampoDadosProcLicitatorio($filtro->voproclic);?>
+	            </TD>
+	        </TR>	        
 			<TR>
                  <TH class="campoformulario" nowrap>Gestor:</TH>
                  <TD class="campoformulario">

@@ -42,6 +42,8 @@ class filtroManterContrato extends filtroManter {
 	var $tpDemanda;
 	var $licon;
 	
+	var $voproclic;
+	
 	// ...............................................................
 	// construtor
 	
@@ -54,13 +56,15 @@ class filtroManterContrato extends filtroManter {
 		//ACRESCENTA A CONSULTA
 		$this->setQueryFromJoin($queryJoin);
 		$this->setQuerySelect($querySelect);
-	
+				
 		if($pegarFiltrosDaTela){
 			$this->getFiltroFormulario();		
 		}	
 	}
 	
 	function getFiltroFormulario(){
+		$this->voproclic = new voProcLicitatorio();
+		$this->voproclic->getDadosFormulario();
 		$this->cdContrato = @$_POST [vocontrato::$nmAtrCdContrato];
 		$this->anoContrato = @$_POST [vocontrato::$nmAtrAnoContrato];
 		$this->anoArquivo = @$_POST [self::$nmAtrAnoArquivo];
@@ -90,6 +94,7 @@ class filtroManterContrato extends filtroManter {
 		
 		$this->cdAutorizacao = @$_POST [vocontrato::$nmAtrCdAutorizacaoContrato];
 		$this->licon = @$_POST [vocontrato::$nmAtrInLicomContrato];
+				
 		$this->InOR_AND = @$_POST[self::$NmAtrInOR_AND];
 		if($this->InOR_AND == null){
 			$this->InOR_AND = constantes::$CD_OPCAO_OR;
@@ -330,6 +335,26 @@ class filtroManterContrato extends filtroManter {
 		if ($this->licon != null && $this->licon != constantes::$CD_OPCAO_TODOS) {
 			$filtro = $filtro . $conector . "$nmTabela." . vocontrato::$nmAtrInLicomContrato. "=" . getVarComoString($this->licon);				
 			$conector = "\n AND ";
+		}
+		
+		if($this->voproclic->cd != null){
+			$filtro = $filtro . $conector
+			. $nmTabela . "." .vocontrato::$nmAtrCdProcessoLicContrato
+			. " = "
+					. $this->voproclic->cd
+					;
+		
+					$conector  = "\n AND ";
+		}
+		
+		if($this->voproclic->ano != null){
+			$filtro = $filtro . $conector
+			. $nmTabela . "." .vocontrato::$nmAtrAnoProcessoLicContrato
+			. " = "
+					. $this->voproclic->ano
+					;
+		
+					$conector  = "\n AND ";
 		}
 		
 		//serve para retirar a ambiguidade, quando existir, do atributo da ordenacao

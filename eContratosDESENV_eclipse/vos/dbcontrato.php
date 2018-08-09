@@ -12,6 +12,8 @@ include_once (caminho_util . "bibliotecaFuncoesPrincipal.php");
 class dbcontrato extends dbprocesso {
 	static $CD_CONSTANTE_FIM_IMPORTACAO = "FIM";
 	static $ID_REQ_INICIAR_TAB_CONTRATO= "ID_REQ_INICIAR_TAB_CONTRATO";
+	static $ID_REQ_REMOVER_CARACTER_ESPECIAL = "ID_REQ_REMOVER_CARACTER_ESPECIAL";
+	static $NM_PLANILHA_CONTRATOS= "Contratos Vigentes";
 	
 	function consultarFiltroManterContrato($voentidade, $filtro) {
 		$isArquivo = ("S" == $filtro->cdConsultarArquivo);
@@ -614,6 +616,8 @@ class dbcontrato extends dbprocesso {
 		return $retorno;
 	}
 	function atualizarPessoasContrato() {
+		echoo("Atualizando contratadas");
+		
 		$query = "SELECT ";
 		$query .= vopessoa::getNmTabela () . "." . vopessoa::$nmAtrDoc;
 		$query .= "," . vopessoa::getNmTabela () . "." . vopessoa::$nmAtrCd;
@@ -691,13 +695,14 @@ class dbcontrato extends dbprocesso {
 			}		
 		}
 		
-		$queryUpdate = "UPDATE contrato SET
+		/*$queryUpdate = "UPDATE contrato SET
 		ct_contratada = replace(replace(replace(ct_contratada,'“','\"'),'”','\"'),'–','-'),
 		ct_objeto = replace(replace(replace(ct_objeto,'“','\"'),'”','\"'),'–','-'),
-		ct_processo_lic = replace(replace(replace(ct_processo_lic,'“','\"'),'”','\"'),'–','-')";
+		ct_processo_lic = replace(replace(replace(ct_processo_lic,'“','\"'),'”','\"'),'–','-');";
 		
 		echoo("Removendo caracteres especiais...");
-		$this->atualizarEntidade($queryUpdate);			
+		$this->atualizarEntidade($queryUpdate);*/
+		$this->removerCaracterEspecial();
 		
 		echo "<br>quantidade registros alterados:" . $qtdRegistros;
 	}
@@ -866,9 +871,10 @@ class dbcontrato extends dbprocesso {
 		$this->atualizarEntidade(static::getSQLLimparTabelaContrato());
 	}
 	
-	/*function removerCaracterEspecial(){
+	function removerCaracterEspecial(){
+		echoo("Removendo caracteres especiais.");
 		$this->atualizarEntidade(static::getSQLRemoveCaracteresEspeciais());
-	}*/
+	}
 	
 	static function getSQLLimparTabelaContrato(){
 		$sql = 

@@ -5,5 +5,10 @@ include_once(caminho_vos."dbcontrato.php");
 $db = new dbcontrato();
 inicio();
 
-echo $db->atualizarPessoasContrato();
-?>
+$isRemoverCaracter = getAtributoComoBooleano(@$_GET[dbcontrato::$ID_REQ_REMOVER_CARACTER_ESPECIAL]);
+if($isRemoverCaracter){
+	echo $db->removerCaracterEspecial();
+}else{
+	echo $db->atualizarPessoasContrato();
+	
+}
