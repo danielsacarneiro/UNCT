@@ -141,10 +141,6 @@ function carregaDadosContrato(){
 	        	//ALTERACAO
 	        	$complementoHTML = " required ";
 	        	$readonlyChaves = " readonly ";
-	          
-	        	/*$voContrato = $vo->getVOContrato();	 	        
-	        	getContratoDet($voContrato);*/
-	        	getContratoDet($voContrato, false, true);
 	        ?>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Demanda:</TH>
@@ -158,7 +154,10 @@ function carregaDadosContrato(){
 	             
 				echo "Tipo: " . dominioTipoDemanda::getHtmlDetalhamento("", "", $voDemanda->tipo, false);
 				?>	            
-	        </TR>	        
+	        </TR>
+	        <?php 
+	        getContratoDet($voContrato, false, true);
+	        ?>	        
 	        <TR>	       
 	            <TH class="campoformulario" nowrap width="1%">Vigência:</TH>
 	            <TD class="campoformulario" colspan=3>
