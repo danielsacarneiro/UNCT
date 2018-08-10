@@ -224,8 +224,11 @@ class filtroManterDemanda extends filtroManter{
 		
 					$conector  = "\n AND ";		
 		}
-		
-		if($this->vodemanda->tipo != null){
+				
+		if ($this->vodemanda->tipo != null 
+				&& $this->vodemanda->tipo != "" 
+				&& !$this->isAtributoArrayVazio($this->vodemanda->tipo)) {
+					
 			$filtro = $filtro . $conector
 			. $nmTabela. "." .voDemanda::$nmAtrTipo;
 			
@@ -343,7 +346,7 @@ class filtroManterDemanda extends filtroManter{
 			$conector = "\n AND ";
 		}		
 		
-		if ($this->tipoExcludente != null && !$this->isAtributoArrayVazio($this->tipoExcludente)) {
+		if ($this->tipoExcludente != null && $this->tipoExcludente != "" && !$this->isAtributoArrayVazio($this->tipoExcludente)) {
 			$comparar = " <> '" . $this->tipoExcludente. "'";
 			if(is_array($this->tipoExcludente)){		
 				$comparar = " NOT IN (" . getSQLStringFormatadaColecaoIN($this->tipoExcludente, true) . ")";
