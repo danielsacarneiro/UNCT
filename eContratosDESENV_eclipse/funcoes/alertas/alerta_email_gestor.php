@@ -10,9 +10,10 @@ $isEnvioEmailGestor = getAtributoComoBooleano($enviarEmail);
 
 if(!$ativado){
 	echoo ("Mensageria Desativado.");
-}
-if(!$isEnvioEmailGestor){
-	echoo ("Mensageria: Seleção NÃO ENVIAR email para os contratos cadastrados.");
+}else{
+	if(!$isEnvioEmailGestor){
+		echoo ("Mensageria: Seleção NÃO ENVIAR email para os contratos cadastrados.");
+	}
 }
 
 $enviarEmailAlerta = $ativado && $isEnvioEmailGestor;
