@@ -138,9 +138,17 @@ function alterar() {
                 $comboSituacao = new select(dominioSituacaoContratoLicon::getColecao());
                 echo $comboSituacao->getHtmlCombo(voContratoLicon::$nmAtrSituacao,voContratoLicon::$nmAtrSituacao, $filtro->situacao, true, "camponaoobrigatorio", false, "");
                 ?>
-				</TD>	       
+				</TD>
+                <TD class="campoformulario" width="1%" colspan=2>
+                Exceto: 
+                <?php
+                echo $comboSituacao->getHtmlCombo(filtroManterContratoLicon::$ID_REQ_SituacaoExceto, filtroManterContratoLicon::$ID_REQ_SituacaoExceto."[]", $filtro->situacaoExceto, true, "camponaoobrigatorio", false, " multiple ");
+                ?>
+				</TD>					       
+            </TR>
+			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Dt.Publicação:</TH>
-	            <TD class="campoformulario">
+	            <TD class="campoformulario" colspan=3>
 	            	            	<INPUT type="text" 
 	            	       id="<?=vocontrato::$nmAtrDtPublicacaoContrato?>" 
 	            	       name="<?=vocontrato::$nmAtrDtPublicacaoContrato?>" 
@@ -151,6 +159,7 @@ function alterar() {
 	            			maxlength="10">	            
 				</TD>				
             </TR>            
+                        
 	        
        <?php
        echo getComponenteConsultaFiltro($vo->temTabHistorico, $filtro);

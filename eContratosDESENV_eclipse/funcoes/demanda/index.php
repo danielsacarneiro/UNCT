@@ -177,7 +177,7 @@ function encaminhar() {
 		               	?>
 	                	</TD>
 	                <TR>
-						<TD class="campoformulario" width="1%">Excluindo:</TD>
+						<TD class="campoformulario" width="1%">Exceto:</TD>
 	                	<TD class="campoformulario" >
 		                <?php echo $comboTipo->getHtmlCombo(filtroManterDemanda::$NmAtrTipoExcludente, filtroManterDemanda::$NmAtrTipoExcludente."[]", $filtro->tipoExcludente, true, "camponaoobrigatorio", false, " multiple ");?>
 	                	</TD>

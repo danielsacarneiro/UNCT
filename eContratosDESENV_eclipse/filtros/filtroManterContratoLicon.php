@@ -6,6 +6,8 @@ class filtroManterContratoLicon extends filtroManter {
 	//public static $nmFiltro = "filtroManterContratoLicon";
 	public $nmFiltro = "filtroManterContratoLicon";
 	
+	static $ID_REQ_SituacaoExceto = "ID_REQ_SituacaoExceto"; 
+	
 	var $cdDemanda = "";
 	var $anoDemanda = "";
 	
@@ -16,6 +18,7 @@ class filtroManterContratoLicon extends filtroManter {
 	var $docContratada = "";
 	
 	var $situacao = "";
+	var $situacaoExceto = "";
 	var $dtPublicacao = "";	
 	
 	function getFiltroFormulario() {
@@ -29,6 +32,7 @@ class filtroManterContratoLicon extends filtroManter {
 		$this->nmContratada = @$_POST [vopessoa::$nmAtrNome];
 		$this->docContratada = @$_POST [vopessoa::$nmAtrDoc];
 		$this->situacao = @$_POST [voContratoLicon::$nmAtrSituacao];
+		$this->situacaoExceto = @$_POST [static::$ID_REQ_SituacaoExceto];
 		$this->dtPublicacao = @$_POST [vocontrato::$nmAtrDtPublicacaoContrato];
 		
 		if ($this->cdOrdenacao == null) {
@@ -92,6 +96,17 @@ class filtroManterContratoLicon extends filtroManter {
 		
 			$conector = "\n AND ";
 		}
+				
+		if ($this->situacaoExceto != null && $this->situacaoExceto != "" && !$this->isAtributoArrayVazio($this->situacaoExceto)) {
+			$comparar = " <> '" . $this->situacaoExceto. "'";
+			if(is_array($this->situacaoExceto)){
+				$comparar = " NOT IN (" . getSQLStringFormatadaColecaoIN($this->situacaoExceto, true) . ")";
+			}
+		
+			$filtro = $filtro . $conector . $nmTabela . "." . voContratoLicon::$nmAtrSituacao . $comparar;
+		
+			$conector = "\n AND ";
+		}		
 		
 		if ($this->dtPublicacao != null) {
 		
