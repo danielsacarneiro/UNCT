@@ -13,7 +13,10 @@ class dbcontrato extends dbprocesso {
 	static $CD_CONSTANTE_FIM_IMPORTACAO = "FIM";
 	static $ID_REQ_INICIAR_TAB_CONTRATO= "ID_REQ_INICIAR_TAB_CONTRATO";
 	static $ID_REQ_REMOVER_CARACTER_ESPECIAL = "ID_REQ_REMOVER_CARACTER_ESPECIAL";
+	
+	static $NM_ARQUIVO_PLANILHA_CONTRATOS= "CONTRATOS C-SAFI  2017- UNCT - ATUAL.xlsx";
 	static $NM_PLANILHA_CONTRATOS= "Contratos Vigentes";
+	static $NM_PLANILHA_CONVENIOS= "Convênios";
 	
 	function consultarFiltroManterContrato($voentidade, $filtro) {
 		$isArquivo = ("S" == $filtro->cdConsultarArquivo);
@@ -691,7 +694,7 @@ class dbcontrato extends dbprocesso {
 					echoo("<br>ALTERADO");
 				}
 				
-				echoo("CONTRATO:: " . $voContrato->getCodigoContratoFormatado() . "," .$voContrato->sqEspecie . " " . dominioEspeciesContrato::getDescricaoStatic($voContrato->cdEspecie));
+				echoo("CONTRATO:: " . $voContrato->getCodigoContratoFormatado() . "|" .$voContrato->sqEspecie . " " . dominioEspeciesContrato::getDescricaoStatic($voContrato->cdEspecie));
 			}		
 		}
 		
