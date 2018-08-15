@@ -107,7 +107,16 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
             <TBODY>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" colspan=3><?php echo getCampoDadosContratoMultiplos();?>	            
+	            <TD class="campoformulario" colspan=3><?php echo getCampoDadosContratoMultiplos();?>
+	            
+	            <?php 
+	            echoo("testando busca pelo primeiro numero");
+	            echoo ($str = "1075asd");
+	            
+	            echoo ($num = getIndiceAnteriorAoPrimeiroNumeroAPartirDoComeco($str));
+	            echoo ("numero eh: " . substr($str, $num));
+	            
+	            ?>	            
 	            </TD>
 	        </TR>	        
             </TBODY>

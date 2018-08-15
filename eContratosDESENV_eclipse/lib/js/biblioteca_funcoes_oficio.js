@@ -137,7 +137,7 @@ function formatarNomeDocumento(sq, cdSetor, ano, tpDoc, complemento, colecaoSeto
 
 function getExtensaoDocumento(tpDoc) {
 	retorno = ".doc";
-	if(tpDoc == 'PC' || tpDoc == 'CA')
+	if(tpDoc == 'PC' || tpDoc == 'CA' || tpDoc == 'LC')
 		retorno = ".xlsx";
 	else if(tpDoc == 'PU' || tpDoc == 'PP' || tpDoc == 'DC')
 		retorno = ".pdf";

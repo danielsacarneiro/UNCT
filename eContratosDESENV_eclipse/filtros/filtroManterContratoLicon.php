@@ -135,7 +135,7 @@ class filtroManterContratoLicon extends filtroManter {
 	}
 	function getAtributoOrdenacaoAnteriorDefault() {
 		$nmTabela = voContratoLicon::getNmTabelaStatic ( $this->isHistorico );
-		$retorno = $nmTabela . "." . voContratoLicon::$nmAtrAnoDemanda . " " . $this->cdOrdenacao;
+		$retorno = $nmTabela . "." . voContratoLicon::$nmAtrDhUltAlteracao . " " . $this->cdOrdenacao;
 		return $retorno;
 	}
 	function getAtributoOrdenacaoDefault() {
@@ -145,7 +145,7 @@ class filtroManterContratoLicon extends filtroManter {
 		$varAtributos = array (
 				voDemandaContrato::$nmAtrAnoDemanda => "Ano.Demanda",
 				voDemandaContrato::$nmAtrCdDemanda => "Cd.Demanda",
-				voDemandaContrato::$nmAtrDhUltAlteracao => "Data"
+				voContratoLicon::$nmAtrDhUltAlteracao => "Data"
 		);
 		return $varAtributos;
 	}

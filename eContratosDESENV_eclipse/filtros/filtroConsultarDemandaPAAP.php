@@ -12,6 +12,8 @@ include_once(caminho_util."bibliotecaSQL.php");
 class filtroConsultarDemandaPAAP extends filtroManterDemanda{
 
 	public $nmFiltro = "filtroConsultarDemandaPAAP";
+	static $NM_TAB_USUARIO_RESP_PAAP = "NM_TAB_USUARIO_RESP_PAAP"; 
+	static $NmColRESP_PAAP = "NM_COL_NM_RESP_PAAP";
 	
 	var $voPA;
 	var $vodemanda;

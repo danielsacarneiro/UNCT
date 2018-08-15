@@ -10,10 +10,16 @@ inicio();
 $titulo = "TESTE de Funções UNCT";
 setCabecalho($titulo);
 
-$dtinical = "25/01/2018";
+$dtinical = "05/03/2018";
 $qtddias = 10;
 
-echo "resultado " . somarOuSubtrairDiasUteisNaData($dtinical, $qtddias, "+");
+//echo "resultado " . somarOuSubtrairDiasUteisNaData($dtinical, $qtddias, "+");
+if(isDiaUtil($dtinical)){
+	echo "DATA EH dia util: " . $dtinical;
+}else{
+	echo "DATA NAO EH dia util: " . $dtinical;	
+}
+
 
 /*$dbpenalidade = new dbPenalidadePA();
 $filtro = new filtroManterPenalidade();

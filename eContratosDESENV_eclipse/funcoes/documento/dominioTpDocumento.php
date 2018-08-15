@@ -28,9 +28,10 @@ class dominioTpDocumento extends dominio {
 	static $CD_TP_DOC_OUTROS = "OT";
 	static $CD_TP_DOC_PARECER = "PA";
 	static $CD_TP_DOC_PLANILHA_CUSTOS = "PC";
+	static $CD_TP_DOC_PLANILHA_LICON = "LC";
 	static $CD_TP_DOC_PROPOSTA_PRECOS = "PP";
 	static $CD_TP_DOC_PUBLICACAO_PAAP = "PU";
-	static $CD_TP_DOC_RELATORIO = "RE";
+	static $CD_TP_DOC_RELATORIO = "RE";	
 	// static $CD_TP_DOC_RELATORIO_CONCLUSAO = "RC";
 	static $CD_TP_DOC_MINUTA = "MI";
 	static $CD_TP_DOC_CERTIDAO_TRANSITO_JULGADO = "TJ";
@@ -54,6 +55,7 @@ class dominioTpDocumento extends dominio {
 	static $DS_TP_DOC_OUTROS = "Outros";
 	static $DS_TP_DOC_PARECER = "Parecer";
 	static $DS_TP_DOC_PLANILHA_CUSTOS = "Planilha de Custos";
+	static $DS_TP_DOC_PLANILHA_LICON = "Planilha Licon";
 	static $DS_TP_DOC_PROPOSTA_PRECOS = "Proposta de Preços";
 	static $DS_TP_DOC_PUBLICACAO_PAAP = "Publicação Penalidade";
 	static $DS_TP_DOC_RELATORIO = "Relatório";
@@ -97,6 +99,7 @@ class dominioTpDocumento extends dominio {
 				self::$CD_TP_DOC_PARECER => self::$DS_TP_DOC_PARECER,
 				self::$CD_TP_DOC_PLANILHA_CUSTOS => self::$DS_TP_DOC_PLANILHA_CUSTOS,
 				self::$CD_TP_DOC_PROPOSTA_PRECOS => self::$DS_TP_DOC_PROPOSTA_PRECOS,
+				self::$CD_TP_DOC_PLANILHA_LICON => self::$DS_TP_DOC_PLANILHA_LICON,
 		);
 		
 		$retorno = putElementoArray2NoArray1ComChaves ( $retorno, static::getColecaoDocsPAAP());

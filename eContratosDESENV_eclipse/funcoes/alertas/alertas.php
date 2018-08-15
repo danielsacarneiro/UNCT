@@ -105,10 +105,11 @@ function getMensagemFimPrazoPAAP(&$count = 0){
 		$colecao = $dbprocesso->consultarDemandaPAAP($filtro );	
 		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Ano PAAP', voPA::$nmAtrAnoPA);
 		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Nº PAAP', voPA::$nmAtrCdPA, constantes::$TAMANHO_CODIGOS_SAFI);
+		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'RESPONSÁVEL', filtroConsultarDemandaPAAP::$NmColRESP_PAAP);
 		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Dt.Inclusão', voPA::$nmAtrDhInclusao, constantes::$CD_TP_DADO_DATA);
 		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Dt.Última.Mov', filtroManterDemanda::$NmColDhUltimaMovimentacao, constantes::$CD_TP_DADO_DATA);
 		
-		$msg = getCorpoMensagemDemandaContratoColecao($assunto, $colecao, $colunasAAcrescentar);
+		$msg = getCorpoMensagemDemandaContratoColecao($assunto, $colecao, $colunasAAcrescentar, true);
 	
 	} catch ( Exception $ex ) {
 		$msg = $ex->getMessage ();

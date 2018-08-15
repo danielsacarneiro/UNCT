@@ -102,10 +102,6 @@ function confirmar() {
             </TR>               
             <?php }	        	        	        
 	       	          
- 	        require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
- 	        //getContratoDetalhamento($voContrato, $colecao);
- 	        getContratoDet($voContrato, false, true);
- 	        //getColecaoContratoDet($vo->colecaoContrato);
  	        $selectExercicio = new selectExercicio();
 			?>
 	        <TR>
@@ -120,7 +116,11 @@ function confirmar() {
 	             
 				echo "Tipo: " . dominioTipoDemanda::getHtmlDetalhamento("", "", $voDemanda->tipo, false);
 				?>	            
-	        </TR>	        
+	        </TR>
+			<?php 
+			require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
+			getContratoDet($voContrato, false, true);
+			?>
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Situação:</TH>
 	            <TD class="campoformulario" colspan="3">

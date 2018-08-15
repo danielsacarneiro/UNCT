@@ -212,21 +212,30 @@ include_once (caminho_filtros."filtroManterPA.php");
     	$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
     	$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
     	$nmTabelaPA = voPA::getNmTabelaStatic ( false );
+    	$nmTabelaPessoa = vopessoa::getNmTabelaStatic ( false );
+    	$nmTabelaUsuarioResponsavelPAAP = filtroConsultarDemandaPAAP::$NM_TAB_USUARIO_RESP_PAAP;
     
     	$colunaUsuHistorico = "";
     
     	if ($isHistorico) {
     		$colunaUsuHistorico = static::$nmTabelaUsuarioOperacao . "." . vousuario::$nmAtrName . "  AS " . voDemanda::$nmAtrNmUsuarioOperacao;
     	}
+    	$arrayColunaNomePessoaContrato = array(
+    			$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
+    			voDemanda::$nmAtrTexto
+    	);
+    	
     	$arrayColunasRetornadas = array (
     			$nmTabela . ".*",
     			getDataSQLDiferencaDias(voDemanda::$nmAtrDtReferencia,"NOW()") . " AS " . filtroManterDemanda::$NmColQtdDiasDataDtReferencia,
     			"COUNT(*)  AS " . filtroManterDemanda::$NmColQtdContratos,
     			static::$nmTabelaUsuarioInclusao . "." . vousuario::$nmAtrName . "  AS " . voDemanda::$nmAtrNmUsuarioInclusao,
+    			"$nmTabelaUsuarioResponsavelPAAP." . vopessoa::$nmAtrNome . "  AS " . filtroConsultarDemandaPAAP::$NmColRESP_PAAP,
     			$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato,
     			$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato,
     			$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato,
-    			$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,    
+    			getSQLCOALESCE($arrayColunaNomePessoaContrato,vopessoa::$nmAtrNome),
+    			//$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,    
     			$nmTabelaPA . "." . voPA::$nmAtrAnoPA,
     			$nmTabelaPA . "." . voPA::$nmAtrCdPA,
     			$nmTabelaPA . "." . voPA::$nmAtrDtUltNotificacaoParaManifestacao,
@@ -300,7 +309,11 @@ include_once (caminho_filtros."filtroManterPA.php");
     	$queryJoin .= "\n ON " . $nmTabela . "." . voDemanda::$nmAtrAno . " = " . $nmTabelaPA . "." . voPA::$nmAtrAnoDemanda;
     	$queryJoin .= "\n AND " . $nmTabela . "." . voDemanda::$nmAtrCd . " = " . $nmTabelaPA . "." . voPA::$nmAtrCdDemanda;
     	
-    	//pega a data da publicacao para o caso de calcular quando deve emitir o alerta
+    	$queryJoin .= "\n LEFT JOIN ";
+    	$queryJoin .= "$nmTabelaPessoa $nmTabelaUsuarioResponsavelPAAP";
+    	$queryJoin .= "\n ON " . $nmTabelaUsuarioResponsavelPAAP . "." . vopessoa::$nmAtrCd . " = " . $nmTabelaPA . "." . voPA::$nmAtrCdResponsavel;
+    	 
+    	 //pega a data da publicacao para o caso de calcular quando deve emitir o alerta
     	$queryJoin .= $this->getSQLJoinDataPublicacaoPAAP($nmTabela);
     
     	$arrayGroupby = array (

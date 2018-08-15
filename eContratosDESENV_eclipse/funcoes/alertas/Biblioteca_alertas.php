@@ -52,11 +52,13 @@ function getCorpoMensagemDemandaPorColecao($assunto, $filtro, $colunasAAcrescent
 	return getCorpoMensagemPorColecao($assunto, $colecao, $colunas, $isPrioritario);
 }
 
-function getCorpoMensagemDemandaContratoColecao($assunto, $colecao, $colunasAAcrescentar=null) {
+function getCorpoMensagemDemandaContratoColecao($assunto, $colecao, $colunasAAcrescentar=null, $semTitulo=false) {
 
 	$colunas = incluirColunaColecao($colunas, 'ANO DEMANDA', voDemanda::$nmAtrAno);
 	$colunas = incluirColunaColecao($colunas, 'NÚMERO', voDemanda::$nmAtrCd, constantes::$TAMANHO_CODIGOS);
-	$colunas = incluirColunaColecao($colunas, 'TÍTULO', voDemanda::$nmAtrTexto);
+	if(!$semTitulo){
+		$colunas = incluirColunaColecao($colunas, 'TÍTULO', voDemanda::$nmAtrTexto);
+	}
 	$colunas = incluirColunaColecao($colunas, constantes::$CD_COLUNA_CONTRATO, null);
 
 	if($colunasAAcrescentar !=null){
@@ -145,9 +147,11 @@ function getCorpoMensagemPorColecao($titulo, $colecao, $colunasAExibir, $isPrior
 						$empresa = $registro [vopessoa::$nmAtrNome];
 						if ($qtContratos > 1) {
 							$contrato = "VÁRIOS";
-						} else if($voDemandaContrato->voContrato->cdContrato != null){
+						} else if($voDemandaContrato->voContrato->cdContrato != null || $empresa != null){
 							
-							$contrato = formatarCodigoAnoComplemento ( $voDemandaContrato->voContrato->cdContrato, $voDemandaContrato->voContrato->anoContrato, $dominioTipoContrato->getDescricao ( $voDemandaContrato->voContrato->tipo ) );
+							if($voDemandaContrato->voContrato->cdContrato != null){
+								$contrato = formatarCodigoAnoComplemento ( $voDemandaContrato->voContrato->cdContrato, $voDemandaContrato->voContrato->anoContrato, $dominioTipoContrato->getDescricao ( $voDemandaContrato->voContrato->tipo ) );
+							}
 
 							if ($empresa != null) {
 								$contrato .= ": " . $empresa;
