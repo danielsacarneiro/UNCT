@@ -149,12 +149,14 @@ function getCorpoMensagemPorColecao($titulo, $colecao, $colunasAExibir, $isPrior
 							$contrato = "VÁRIOS";
 						} else if($voDemandaContrato->voContrato->cdContrato != null || $empresa != null){
 							
+							$conectorContrato = "";
 							if($voDemandaContrato->voContrato->cdContrato != null){
 								$contrato = formatarCodigoAnoComplemento ( $voDemandaContrato->voContrato->cdContrato, $voDemandaContrato->voContrato->anoContrato, $dominioTipoContrato->getDescricao ( $voDemandaContrato->voContrato->tipo ) );
+								$conectorContrato = ": ";
 							}
 
 							if ($empresa != null) {
-								$contrato .= ": " . $empresa;
+								$contrato .= $conectorContrato . $empresa;
 							}
 						}
 						$coluna_valor = $contrato;
