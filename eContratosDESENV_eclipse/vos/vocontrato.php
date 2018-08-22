@@ -116,7 +116,7 @@ include_once (caminho_util . "DocumentoPessoa.php");
 // ...............................................................
 // Funções ( Propriedades e métodos da classe )
 	public static function getTituloJSP(){
-		return  "CONTRATO";
+		return  "CONTRATO-PLANILHA";
 	}
     
     public static function getNmTabela(){

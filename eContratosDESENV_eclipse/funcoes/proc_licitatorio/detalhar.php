@@ -160,6 +160,11 @@ function confirmar() {
 	            <TD class="campoformulario" colspan="3">
 	            <textarea rows="5" cols="80" id="<?=voProcLicitatorio::$nmAtrObjeto?>" name="<?=voProcLicitatorio::$nmAtrObjeto?>" class="camporeadonly" readonly><?php echo($vo->objeto);?></textarea>
 				</TD>
+	        </TR>
+			<TR>
+	            <TH class="campoformulario" nowrap>Valor.Total:</TH>
+	            <TD class="campoformulario" colspan="3"><INPUT type="text" id="<?=voProcLicitatorio::$nmAtrValor?>" name="<?=voProcLicitatorio::$nmAtrValor?>"  value="<?php echo(getMoeda($vo->valor));?>"
+	            class="camporeadonly" size="15" readonly></TD>
 	        </TR>	        
 			<TR>
 	            <TH class="campoformulario" nowrap>Observação:</TH>

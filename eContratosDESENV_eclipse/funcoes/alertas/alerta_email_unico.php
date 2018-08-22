@@ -12,6 +12,10 @@ if($enviarEmail != null){
 }
 $enviarEmail = $enviarEmail && voMensageria::$ENVIAR_EMAIL_RELATORIO_DIARIO;
 
+if (!($enviarEmail && email_sefaz::$FLAG_ENVIAR_EMAIL)) {
+	echoo("<b>RELATÓRIO DIÁRIO: <u>SEM email</u>.</b></br>");
+}
+
 $count = 0;
 
 //envia alertas dos editais

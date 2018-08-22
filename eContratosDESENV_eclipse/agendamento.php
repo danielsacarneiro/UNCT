@@ -24,7 +24,7 @@ setCabecalho($titulo);
             			<TD class="conteinerconteudodados">
 
 <?php
-echo "EXECUCAO DE AGENDADOR DE TAREFAS WINDOWS.<br><br>";
+echo "<b>EXECUCAO DE AGENDADOR DE TAREFAS WINDOWS</b>.<br><br>";
 
 //Relatório diário
 echo getTagHTMLAbreFormulario();

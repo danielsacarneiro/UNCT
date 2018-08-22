@@ -9,7 +9,7 @@ include_once(caminho_vos . "dbcontrato.php");
 try{
 inicio();
 
-$titulo = "CONSULTAR CONTRATOS";
+$titulo = "CONSULTAR CONTRATOS-PLANILHA";
 setCabecalho($titulo);
 
 $voContrato = new voContrato();

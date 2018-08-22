@@ -123,7 +123,13 @@
                         <TABLE class="barraacoesaux" cellpadding="0" cellspacing="0">
 	                   	<TR>
 	                   	    <TD class="botaofuncao"><?=getBotao("bttMovimentacao", "Movimentações", null, false, "onClick='javascript:movimentacoes();' accesskey='m'")?></TD>
-	                   		<?=getBotoesRodape();?> 
+	                   		<?php
+	                   		$arrayBotoesARemover = array(constantes::$CD_FUNCAO_EXCLUIR,
+	                   				constantes::$CD_FUNCAO_INCLUIR,
+	                   				constantes::$CD_FUNCAO_ALTERAR,
+	                   		);
+	                   		echo getBotoesRodapeComRestricao($arrayBotoesARemover, TRUE);
+	                   		?> 
                          </TR>
                          </TABLE>
 	                   </TD>
