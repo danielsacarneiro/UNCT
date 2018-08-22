@@ -185,7 +185,7 @@ function getCorpoMensagemPorColecao($titulo, $colecao, $colunasAExibir, $isPrior
 		echo $msg;
 	}
 	
-	$mensagem = $titulo . "<br>". $mensagem;
+	$mensagem = "<b>$titulo</b><br>$mensagem";
 	$mensagem .= "<br>";
 	
 	return $mensagem;

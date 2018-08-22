@@ -13,7 +13,7 @@ if($enviarEmail != null){
 $enviarEmail = $enviarEmail && voMensageria::$ENVIAR_EMAIL_RELATORIO_DIARIO;
 
 if (!($enviarEmail && email_sefaz::$FLAG_ENVIAR_EMAIL)) {
-	echoo("<b>RELATÓRIO DIÁRIO: <u>SEM email</u>.</b></br>");
+	echoo("<font color='red'><b>RELATÓRIO DIÁRIO: <u>SEM email</u>.</b></font></br>");
 }
 
 $count = 0;
