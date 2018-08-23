@@ -60,6 +60,10 @@ class filtroManterPA extends filtroManter{
     	//e precisa saber qual voprincipal considera,
     	//pra pegar por ex os atributos de ordenacao da tabela correta
     	$this->nmEntidadePrincipal = "voPA";
+    	
+    	if($this->cdOrdenacao == null){
+    		$this->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
+    	}    	 
     }
     	
 	function getFiltroConsultaSQL(){
@@ -286,6 +290,19 @@ class filtroManterPA extends filtroManter{
 
 		return $filtro;
 	}
+	
+	/*function getAtributoOrdenacaoAnteriorDefault(){
+		$nmTabelaDemanda = voDemanda::getNmTabelaStatic($this->isHistorico);
+		//$retorno = $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . " " . $this->cdOrdenacao;
+		return $retorno;
+	}
+	
+	function getAtributoOrdenacaoDefault(){
+		$nmTabelaPA = voPA::getNmTabelaStatic($this->isHistorico());
+		$retorno = $nmTabelaPA . "." . voPA::$nmAtrAnoPA . " " . constantes::$CD_ORDEM_DECRESCENTE
+		. "," . $nmTabelaPA . "." . voPA::$nmAtrCdPA . " " . constantes::$CD_ORDEM_DECRESCENTE;
+		return $retorno;
+	}*/
 	
 	function getAtributosOrdenacao(){
 		$nmTabelaPA = voPA::getNmTabelaStatic($this->isHistorico());
