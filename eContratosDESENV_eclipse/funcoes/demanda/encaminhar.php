@@ -215,7 +215,7 @@ function formataTpDemandaReajuste(){
 	$dominioTipoDemanda = new dominioTipoDemanda(dominioTipoDemanda::getColecaoTipoDemandaContratoReajuste());
 	echo $dominioTipoDemanda->getArrayHTMLChaves("colecaoTpDemandaContrato");	
 	?>			
-	formataFormTpDemandaReajuste("<?=voDemanda::$nmAtrTipo?>", "<?=voDemanda::$ID_REQ_DIV_REAJUSTE_MONTANTE_A?>", colecaoTpDemandaContrato, false);
+	formataFormTpDemandaReajuste("<?=voDemanda::$nmAtrTipo?>", "<?=voDemanda::$ID_REQ_DIV_REAJUSTE_MONTANTE_A?>", colecaoTpDemandaContrato, "<?=voDemanda::$nmAtrInTpDemandaReajusteComMontanteA?>", false);
 }
 
 function iniciar(){	
@@ -301,18 +301,15 @@ function iniciar(){
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Demanda:</TH>
 	            <TD class="campoformulario" colspan=3>	            
-	            <?php 
-	            include_once(caminho_util. "dominioSimNao.php");
-	            $comboSimNao = new select(dominioSimNao::getColecao());         
-	             
+	            <?php	             
 	            echo "Ano: " . $selectExercicio->getHtmlCombo(voDemanda::$nmAtrAno,voDemanda::$nmAtrAno, anoDefault, true, "campoobrigatorio", false, " required ");
 	            echo "Tipo: " . $comboTipoEditado->getHtmlCombo(voDemanda::$nmAtrTipo,voDemanda::$nmAtrTipo, "", true, "campoobrigatorio", false, " required onChange='validaFormulario();'");
 	            ?>			  
                     <div id="<?=voDemanda::$ID_REQ_DIV_REAJUSTE_MONTANTE_A?>">
-		                <?php 
-			            include_once(caminho_util. "dominioSimNao.php");
-			            $comboSimNao = new select(dominioSimNao::getColecao());
-			            echo "É reajuste com Montante A?: " . $comboSimNao->getHtmlCombo(voDemanda::$nmAtrInTpDemandaReajusteComMontanteA,voDemanda::$nmAtrInTpDemandaReajusteComMontanteA, "", true, "camponaoobrigatorio", false,"");
+		                <?php
+			            $comboTpReajuste = new select(dominioTipoReajuste::getColecao());
+			            //echo "Tipo de reajuste: " . $comboTpReajuste->getHtmlCombo(voDemanda::$nmAtrInTpDemandaReajusteComMontanteA,voDemanda::$nmAtrInTpDemandaReajusteComMontanteA, "", true, "camponaoobrigatorio", false,"");
+			            echo "Tipo de reajuste: " . $comboTpReajuste->getHtmlComObrigatorio(voDemanda::$nmAtrInTpDemandaReajusteComMontanteA,voDemanda::$nmAtrInTpDemandaReajusteComMontanteA, "", false,true);
 			            ?>
                     </div>
 	        </TR>
@@ -425,7 +422,13 @@ function iniciar(){
 	        
 <TR>
 	<TD halign="left" colspan="4">
-	<DIV class="textoseparadorgrupocampos">&nbsp;</DIV>
+	<DIV class="textoseparadorgrupocampos">
+				<SCRIPT language="JavaScript" type="text/javascript">
+	            	colecaoIDCdNaoObrigatorio = ["<?=voDemanda::$nmAtrInTpDemandaReajusteComMontanteA?>"];
+	            </SCRIPT>
+	            <INPUT type="checkbox" id="checkCdNaoObrigatorio" name="checkCdNaoObrigatorio" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCdNaoObrigatorio, true);"> <?=constantes::$DS_RESPONSABILIDADE_NAO_INCLUSAO_CAMPOS?>
+	
+	&nbsp;</DIV>
 	</TD>
 </TR>        	        	
 	        <?php

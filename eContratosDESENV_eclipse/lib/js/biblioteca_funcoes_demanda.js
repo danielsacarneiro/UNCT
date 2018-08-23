@@ -27,12 +27,13 @@ function formataFormTpDemanda(pNmCampoTpDemanda, pNmCampoAtributos) {
 	}		
 }
 
-function formataFormTpDemandaReajuste(pIDCampoTipo, pIDCampoDivMontanteA, pColecaoTpDemandaReajuste, pExibirMensagemErro){
+function formataFormTpDemandaReajuste(pIDCampoTipo, pIDCampoDivMontanteA, pColecaoTpDemandaReajuste, pIDCampoTipoReajuste, pExibirMensagemErro){
 	if(pExibirMensagemErro == null){
 		pExibirMensagemErro = true;
 	}
 	campoTpDemanda = document.getElementById(pIDCampoTipo);
 	campoDIVMontanteA= document.getElementById(pIDCampoDivMontanteA);
+	campoTpReajuste = document.getElementById(pIDCampoTipoReajuste);
 	
 	if(campoTpDemanda == null || campoDIVMontanteA == null){
 		nmCampo = "";
@@ -51,14 +52,19 @@ function formataFormTpDemandaReajuste(pIDCampoTipo, pIDCampoDivMontanteA, pColec
 	}
 	
 	cdTpDemanda = campoTpDemanda.value;	
-	isDemandaReajuste = pColecaoTpDemandaReajuste.indexOf(cdTpDemanda) != -1;	
-	pColecaoIDCamposRequired = null;
+	isDemandaReajuste = pColecaoTpDemandaReajuste.indexOf(cdTpDemanda) != -1;
+	var pColecaoIDCamposRequired = null;
+	/*if (pIDCampoTipoReajuste != null){
+		pColecaoIDCamposRequired = [pIDCampoTipoReajuste];
+	}*/
 			
 	if(isDemandaReajuste){
+		tornarCampoObrigatorio(campoTpReajuste, true);
 		//biblioteca_funcoes_principal.js
 		esconderDiv(campoDIVMontanteA, pColecaoIDCamposRequired, false);		
 	}
 	else{ 
+		tornarCampoObrigatorio(campoTpReajuste, false);
 		esconderDiv(campoDIVMontanteA, pColecaoIDCamposRequired, true);
 	}	
 }

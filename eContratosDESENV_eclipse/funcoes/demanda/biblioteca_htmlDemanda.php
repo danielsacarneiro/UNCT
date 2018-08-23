@@ -29,10 +29,13 @@ function getDemandaDetalhamentoComLupa($voDemanda, $temLupaDet, $exibeTipoDemand
 				echo getLinkPesquisa ( "../demanda/detalhar.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $voDemanda->getValorChaveHTML() );
 			}
 				
-			if(dominioTipoDemanda::isTipoDemandaContratoReajuste($voDemanda->tipo)){
-				include_once(caminho_util. "dominioSimNao.php");
+			if(dominioTipoDemanda::isTipoDemandaContratoReajuste($voDemanda->tipo)){				
+				$comboTpReajuste = new select(dominioTipoReajuste::getColecao());				
+				echo "Tipo de reajuste: " . dominioTipoReajuste::getHtmlDetalhamento("", "", $voDemanda->inTpDemandaReajusteComMontanteA, false);
+				
+				/*include_once(caminho_util. "dominioSimNao.php");
 				$comboSimNao = new select(dominioSimNao::getColecao());
-				echo " Tem Montante A?: " . dominioSimNao::getHtmlDetalhamento("", "", $voDemanda->inTpDemandaReajusteComMontanteA, false);			 
+				echo " Tem Montante A?: " . dominioSimNao::getHtmlDetalhamento("", "", $voDemanda->inTpDemandaReajusteComMontanteA, false);*/			 
 			}			
 			echo "<INPUT type='hidden' id='" . voDemanda::$nmAtrTipo . "' name='" . voDemanda::$nmAtrTipo . "' value='$voDemanda->tipo'>";
 		}

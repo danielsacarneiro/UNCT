@@ -123,7 +123,7 @@ class filtroManterDemanda extends filtroManter{
 		}
 		
 		if($this->cdOrdenacao == null){
-			$this->cdOrdenacao = constantes::$CD_ORDEM_CRESCENTE;
+			$this->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
 		}		
 	}
 	 	
@@ -573,10 +573,13 @@ class filtroManterDemanda extends filtroManter{
 			
 			//se a data da proposta for nula, exibe o alerta de todo o jeito, ate que ela seja preenchida
 			//ainda verifica se tem ou nao montanteA, caso tenha, traz a demanda pois ela sera analisada de imediato
-			//se nao tiver montanteA, trarah apenas em caso positivo de aniversario da data da proposta					
+			//se nao tiver montanteA, trarah apenas em caso positivo de aniversario da data da proposta
+			$conjuntoSQLMontanteA = "'".dominioTipoReajuste::$CD_REAJUSTE_AMBOS."','" . dominioTipoReajuste::$CD_REAJUSTE_MONTANTE_A . "'"; 
+			$conjuntoSQLMontanteB = "'".dominioTipoReajuste::$CD_REAJUSTE_AMBOS."','" . dominioTipoReajuste::$CD_REAJUSTE_MONTANTE_B . "'";
+			
 			$nmAtributoInTpDemandaReajusteComMontanteA = voDemanda::$nmAtrInTpDemandaReajusteComMontanteA; 
-			$sqlTrazerTipoReajusteComMontanteA =  " $nmAtributoInTpDemandaReajusteComMontanteA IS NULL OR $nmAtributoInTpDemandaReajusteComMontanteA <> 'N' ";
-			$sqlTrazerTipoReajusteComMontanteB = "$nmAtributoInTpDemandaReajusteComMontanteA = 'N' ";
+			$sqlTrazerTipoReajusteComMontanteA =  " $nmAtributoInTpDemandaReajusteComMontanteA IN ($conjuntoSQLMontanteA) ";
+			$sqlTrazerTipoReajusteComMontanteB = " $nmAtributoInTpDemandaReajusteComMontanteA IN ($conjuntoSQLMontanteB) ";
 			$filtro = $filtro . $conector
 			. " ($nmAtributoDataProposta IS NULL 
 				OR $sqlTrazerTipoReajusteComMontanteA 

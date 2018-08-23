@@ -77,5 +77,7 @@
     
     static $CD_MODELO_TEXTO = "[XXX MODELO - ALTERAR XXX]";
     static $CD_MODELO = "MODELO";
+    
+    static $DS_RESPONSABILIDADE_NAO_INCLUSAO_CAMPOS = "*Assumo a responsabilidade de não incluir os campos obrigatórios";
 }
 ?>

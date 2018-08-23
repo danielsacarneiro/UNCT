@@ -147,18 +147,29 @@ function validaFormRequiredCheckBox(campoCheckBoxValidacao, colecaoIDCampos, pSe
 	}
 }
 
+function tornarCampoObrigatorio(campoForm, pIsRequired){
+	//pIsRequired == true, o campocheckbox de responsabilidade NAO foi setado
+	var validar = pIsRequired;
+	campoForm.required = validar;			
+	/*var isCampoObrigatorioDefault = element.required;
+	var validar = isCampoObrigatorioDefault && pIsRequired;
+	element.required = validar;*/			 
+	if(validar){
+		campoForm.className="campoobrigatorio";
+		//alert("campo tornado obrigatorio");
+	}else{
+		campoForm.className="camponaoobrigatorio";
+		//alert("campo tornado NAO obrigatorio");
+	}
+}
+
 function tornarRequiredCamposColecaoFormulario(colecaoIDCampos, pIsRequired){	
 	for(i=0;i<colecaoIDCampos.length;i++){					
 		id = colecaoIDCampos[i];		
 		element = document.getElementById(id);
 		//alert(id);
-		if(element != null){
-			element.required = pIsRequired;			
-			if(pIsRequired){
-				element.className="campoobrigatorio";
-			}else{
-				element.className="camponaoobrigatorio";
-			}
+		if(element != null){			 
+			tornarCampoObrigatorio(element, pIsRequired)
 		}
 		//alert(element.id + " " + pIsRequired);
 	}
@@ -169,11 +180,13 @@ function esconderDiv(pCampoDiv, pColecaoIDCamposRequired, pEsconder){
 	if(pEsconder){
 		pCampoDiv.style.display = "none";
 		if(validarCamposRequired){
+			//alert("tornar campo NAO obrigatorio");
 			tornarRequiredCamposColecaoFormulario(pColecaoIDCamposRequired, false);
 		}
 	}else{
 		pCampoDiv.style.display = "";
 		if(validarCamposRequired){
+			//alert("tornar campo obrigatorio");
 			tornarRequiredCamposColecaoFormulario(pColecaoIDCamposRequired, true);
 		}
 	}
