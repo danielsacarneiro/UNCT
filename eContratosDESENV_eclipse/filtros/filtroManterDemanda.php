@@ -325,7 +325,8 @@ class filtroManterDemanda extends filtroManter{
 					$conector  = "\n AND ";
 		}*/
 		
-		if ($this->vodemanda->situacao != null && !$this->isAtributoArrayVazio($this->vodemanda->situacao)) {
+		if ($this->vodemanda->situacao != null 
+				&& (!is_array($this->vodemanda->situacao) || (is_array($this->vodemanda->situacao) && !$this->isAtributoArrayVazio($this->vodemanda->situacao)))) {
 						
 			$comparar = " = '" . $this->vodemanda->situacao . "'";
 			if(is_array($this->vodemanda->situacao)){
@@ -582,7 +583,9 @@ class filtroManterDemanda extends filtroManter{
 			$sqlTrazerTipoReajusteComMontanteB = " $nmAtributoInTpDemandaReajusteComMontanteA IN ($conjuntoSQLMontanteB) ";
 			$filtro = $filtro . $conector
 			. " ($nmAtributoDataProposta IS NULL 
-				OR $sqlTrazerTipoReajusteComMontanteA 
+				OR $nmAtributoInTpDemandaReajusteComMontanteA IS NULL
+				OR $nmAtributoInTpDemandaReajusteComMontanteA = " . getVarComoString(dominioTipoReajuste::$CD_REAJUSTE_OUTROS)
+				. " OR $sqlTrazerTipoReajusteComMontanteA 
 				OR 
 				($nmAtributoDataProposta IS NOT NULL AND $sqlTrazerTipoReajusteComMontanteB AND "
 			. getDataSQLDiferencaAnos($dtPropostaPAram, $dtReferencia)

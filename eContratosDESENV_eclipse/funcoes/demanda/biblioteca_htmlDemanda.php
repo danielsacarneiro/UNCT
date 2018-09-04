@@ -18,14 +18,15 @@ function getDemandaDetalhamentoComLupa($voDemanda, $temLupaDet, $exibeTipoDemand
 	<?php	
 	echo getDetalhamentoHTMLCodigoAno($voDemanda->ano, $voDemanda->cd);
 		
-	if($exibeTipoDemanda){
-		if($voDemanda->tipo != null && $exibeTipoDemanda){
+	if($exibeTipoDemanda){	
+		if($voDemanda->tipo != null){
 			$comboTipo = new select(dominioTipoDemanda::getColecao());
 			//echo "Tipo: " . $comboTipo->getHtmlCombo("","", $voDemanda->tipo, true, "camporeadonly", false, " disabled ");
 			echo "Tipo: " . getInputText("", "", dominioTipoDemanda::getDescricaoStaticTeste($voDemanda->tipo),constantes::$CD_CLASS_CAMPO_READONLY);
 			
-			if ($voDemanda!=null && $temLupaDet) {
+			if ($voDemanda != null && $temLupaDet) {
 				//$voDemanda = new voDemanda();
+				
 				echo getLinkPesquisa ( "../demanda/detalhar.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $voDemanda->getValorChaveHTML() );
 			}
 				

@@ -28,6 +28,7 @@ include_once (caminho_filtros."filtroManterPA.php");
   				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdEspecieContrato,
   				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato,
   				$nmTabelaDemanda . "." . voDemanda::$nmAtrTexto,
+  				$nmTabelaDemanda . "." . voDemanda::$nmAtrTipo,
   				self::$nmTabelaPublicacao . "." . voDemandaTramitacao::$nmAtrDtReferencia,
   				$nmTabelaDemandaProcLic . "." . voProcLicitatorio::$nmAtrCd,
   				$nmTabelaDemandaProcLic . "." . voProcLicitatorio::$nmAtrAno,
