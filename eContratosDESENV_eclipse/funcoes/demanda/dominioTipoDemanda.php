@@ -53,33 +53,37 @@ Class dominioTipoDemanda extends dominio{
 	}
 
 	static function getColecaoTipoDemanda(){
-		$retorno = 	array(
+		/*$retorno = 	array(
 				self::$CD_TIPO_DEMANDA_CONTRATO => self::$DS_TIPO_DEMANDA_CONTRATO,
-		);	
+		);*/	
+		
+		$retorno = static::getColecaoTipoDemandaContrato(false);
 		$retorno = putElementoArray2NoArray1ComChaves ( $retorno, static::getColecaoTipoDemandaComplementar());
 	
 		return $retorno;
 	}
 	
-	static function getColecaoTipoDemandaContrato(){
-		$retorno = static::getColecaoTipoDemandaContratoSemProcAdmin();
+	static function getColecaoTipoDemandaContrato($comDetalhamentoContrato = true){
+		$retorno = static::getColecaoTipoDemandaContratoSemProcAdmin($comDetalhamentoContrato);
 		$retorno = putElementoArray2NoArray1ComChaves ( $retorno, array(self::$CD_TIPO_DEMANDA_PROCADM => self::$DS_TIPO_DEMANDA_PROCADM));
 
 		return $retorno;
 	}
 	
-	static function getColecaoTipoDemandaContratoValidacaoEncaminhar(){
-		$retorno = static::getColecaoTipoDemandaContrato();
+	static function getColecaoTipoDemandaContratoValidacaoEncaminhar($comDetalhamentoContrato = true){
+		$retorno = static::getColecaoTipoDemandaContrato($comDetalhamentoContrato);
 		$retorno = putElementoArray2NoArray1ComChaves ( $retorno, static::getColecaoTipoDemandaComplementar());
 	
 		return $retorno;
 	}
 	
-	static function getColecaoTipoDemandaContratoSemProcAdmin(){
+	static function getColecaoTipoDemandaContratoSemProcAdmin($comDetalhamentoContrato = true){
 		$retorno = array(
 				self::$CD_TIPO_DEMANDA_CONTRATO => self::$DS_TIPO_DEMANDA_CONTRATO,
 		);
-		$retorno = putElementoArray2NoArray1ComChaves ( $retorno, static::getColecaoTipoDemandaContratoValido());
+		if($comDetalhamentoContrato){
+			$retorno = putElementoArray2NoArray1ComChaves ( $retorno, static::getColecaoTipoDemandaContratoValido($comDetalhamentoContrato));
+		}
 		
 		return $retorno;
 	}
@@ -135,6 +139,13 @@ Class dominioTipoDemanda extends dominio{
 		$retorno = array(
 				self::$CD_TIPO_DEMANDA_CONTRATO_REAJUSTE => self::$DS_TIPO_DEMANDA_CONTRATO_REAJUSTE,
 		);		
+		return $retorno;
+	}
+	
+	static function getColecaoTipoDemandaContratoGenero(){
+		$retorno = array(
+				self::$CD_TIPO_DEMANDA_CONTRATO => self::$DS_TIPO_DEMANDA_CONTRATO,
+		);
 		return $retorno;
 	}
 	

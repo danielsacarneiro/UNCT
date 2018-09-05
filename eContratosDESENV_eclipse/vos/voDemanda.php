@@ -15,6 +15,7 @@ class voDemanda extends voentidade {
 	static $nmAtrCdSetor = "dem_cd_setor";
 	static $nmAtrCdSetorAtual = "NM_COL_SETOR_ATUAL";
 	static $nmAtrTipo = "dem_tipo";
+	static $nmAtrTipoComplementar = "dem_tipo_complementar";
 	static $nmAtrInTpDemandaReajusteComMontanteA = "dem_tp_temreajustemontanteA";
 	static $nmAtrSituacao = "dem_situacao";
 	static $nmAtrTexto = "dem_texto";

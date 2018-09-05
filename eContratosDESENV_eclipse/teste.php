@@ -115,7 +115,7 @@ function getMateriaReOrdenando(&$colecao){
 				        <?php
 							$vodemanda = new voDemanda();
 				        	//INCLUSAO
-				        	$comboTipoEditado = new select(dominioTipoDemanda::getColecaoTipoDemanda());
+				        	$comboTipoEditado = new select(dominioTipoDemanda::getColecaoTipoDemanda(false));
 				        	//var_dump($comboTipoEditado->colecao);
 						  ?>			            
 				        <TR>
