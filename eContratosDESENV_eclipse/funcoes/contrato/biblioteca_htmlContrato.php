@@ -191,6 +191,8 @@ function getContratoEntradaDeDadosVO($vocontrato, $arrayCssClass, $arrayCompleme
 	$nmCamposContrato = array(vocontrato::$nmAtrAnoContrato.$indiceContrato,
 			vocontrato::$nmAtrCdContrato.$indiceContrato,
 			vocontrato::$nmAtrTipoContrato.$indiceContrato,
+			vocontrato::$nmAtrCdEspecieContrato.$indiceContrato,
+			vocontrato::$nmAtrSqEspecieContrato.$indiceContrato,
 	);
 	echo getBorracha($nmCamposContrato, "");
 	

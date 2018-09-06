@@ -11,6 +11,8 @@ Class voDemandaContrato extends voentidade{
 	static $nmAtrTipoContrato =  "ct_tipo";
 	static $nmAtrSqEspecieContrato =  "ct_sq_especie"; //sequencial da especie (primeiro, segundo TA, por ex)
 	static $nmAtrCdEspecieContrato =  "ct_cd_especie"; //especie propriamente dita(TA, apostilamento)	
+		
+	static $nmAtrTpDemandaContrato =  "dem_tp_contrato"; 
 	
 	var $voContrato = "";
 	var $anoDemanda = "";
