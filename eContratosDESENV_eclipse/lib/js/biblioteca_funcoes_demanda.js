@@ -10,15 +10,7 @@ function formataFormTpDemanda(pNmCampoTpDemanda, pNmCampoAtributos) {
 	//precisa da bibliotecafuncoesprincipal.js
 	campoTpDemanda = document.getElementById(pNmCampoTpDemanda);
 	campoCheckBoxAtributos = document.getElementsByName(pNmCampoAtributos);
-		
-	/*if(isNaN(campoCheckBoxAtributos.length)){
-		campoCheckBoxAtributos.checked = _estadoAtualCheckBox;			
-	}else{
-		for (i = 0; i < checkBox.length; i++) {
-			checkBox.item(i).checked = _estadoAtualCheckBox;			
-		}	
-	}*/
-	
+			
 	if(campoTpDemanda.value == 1){
 		habilitarCampos(campoCheckBoxAtributos, true, true);			
 	}else{
@@ -67,5 +59,44 @@ function formataFormTpDemandaReajuste(pIDCampoTipo, pIDCampoDivMontanteA, pColec
 		tornarCampoObrigatorio(campoTpReajuste, false);
 		esconderDiv(campoDIVMontanteA, pColecaoIDCamposRequired, true);
 	}	
+}
+
+function formataFormTpDemandaReajusteContrato(pIDCampoTipoDemanda, 
+		pIDCampoDivMontanteA, 
+		pColecaoTpDemandaContrato, 
+		pIDCampoTipoReajuste,
+		pIsReajusteSelecionado,
+		pExibirMensagemErro){
+	
+	if(pExibirMensagemErro == null){
+		pExibirMensagemErro = true;
+	}
+	campoTpDemanda = document.getElementById(pIDCampoTipoDemanda);
+	campoDIVMontanteA= document.getElementById(pIDCampoDivMontanteA);
+	campoTpReajuste = document.getElementById(pIDCampoTipoReajuste);
+	
+	if(campoTpDemanda == null || campoDIVMontanteA == null){
+		nmCampo = "";
+		if(campoTpDemanda == null){
+			nmCampo = pIDCampoTipoDemanda;
+		}
+		if(campoDIVMontanteA == null){
+			nmCampo = pIDCampoDivMontanteA;
+		}
+	
+		if(pExibirMensagemErro){
+			exibirMensagem(nmCampo + " não encontrado.");
+		}
+		
+		return;
+	}
+	
+	cdTpDemanda = campoTpDemanda.value;	
+	isDemandaContrato = pColecaoTpDemandaContrato.indexOf(cdTpDemanda) != -1;
+	var pColecaoIDCamposRequired = null;
+	
+	//biblioteca_funcoes_principal.js
+	esconderDiv(campoDIVMontanteA, pColecaoIDCamposRequired, !isDemandaContrato);		
+	tornarCampoObrigatorio(campoTpReajuste, pIsReajusteSelecionado);
 }
 

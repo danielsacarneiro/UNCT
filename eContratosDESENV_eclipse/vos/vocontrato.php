@@ -257,9 +257,14 @@ include_once (caminho_util . "DocumentoPessoa.php");
             $this->sqEspecie = @$_POST[self::$nmAtrSqEspecieContrato];
             
 		$this->especie = @$_POST[self::$nmAtrEspecieContrato];
-        $this->sqEspecie = @$_POST[self::$nmAtrSqEspecieContrato];
+        $this->sqEspecie = @$_POST[self::$nmAtrSqEspecieContrato];        
         $this->cdEspecie = @$_POST[self::$nmAtrCdEspecieContrato]; 
         $this->modalidade = @$_POST[self::$nmAtrModalidadeContrato];
+        
+        //garante o sqEspecie == 1 para o contrato MATER
+        if($this->cdEspecie == dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER){
+        	$this->sqEspecie = 1;
+        }        
         
         $this->cdPessoaContratada= @$_POST[self::$nmAtrCdPessoaContratada];
         $this->contratada = @$_POST[self::$nmAtrContratadaContrato];

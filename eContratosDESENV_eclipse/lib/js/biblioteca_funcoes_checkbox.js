@@ -18,7 +18,8 @@
 function isCheckBoxConsultaSelecionado(pNmCheckBox, pSemMensagem, pInTodosObrigatorios) {
 	var i = 0;
 
-	checkBox = eval(pNmCheckBox);
+	//checkBox = eval(pNmCheckBox);
+	checkBox = document.getElementsByName(pNmCheckBox);
 	
 	if (pInTodosObrigatorios) {
 		
@@ -69,7 +70,11 @@ function retornarValoresCheckBoxesSelecionadosComoArray(pNmCheckBox) {
 	var contador = 0;
 	var aux = 0;
 	var arrayRetorno = new Array();
-	checkBox = eval(pNmCheckBox);
+
+	//checkBox = eval(pNmCheckBox);
+	checkBox = document.getElementsByName(pNmCheckBox);
+	
+	//colecaoIDCampos.length
 	
 	if (checkBox == null) {
 		exibirMensagem(mensagemGlobal(60));

@@ -153,9 +153,13 @@ class dominio extends multiplosConstrutores {
 		return $html;
 	}
 	
-	static function getHtmlChecksBox($nm, $opcaoSelecionada, $colecao=null, $qtdItensPorColuna=4, $comOpcaoMarcarTodos=false) {
+	static function getHtmlChecksBox($nm, $opcaoSelecionada, $colecao=null, $qtdItensPorColuna=4, $comOpcaoMarcarTodos=false, $javascriptadicional=null) {
 		if($colecao==null){
 			$colecao = static::getColecao ();
+		}
+		
+		if($javascriptadicional != null){
+			$javascript = " onClick=$javascriptadicional ";
 		}
 				
 		$colecaoChave = array_keys($colecao);
@@ -168,7 +172,7 @@ class dominio extends multiplosConstrutores {
 		$html.="\n<TR>";
 		if($comOpcaoMarcarTodos){
 			$html.="\n<TD>";
-			$html .= getTextoLink("Todos", "javascript:if(!document.getElementsByName('$nm')[0].disabled){marcarTodosCheckBoxes('$nm');}");
+			$html .= getTextoLink("Todos", "javascript:if(!document.getElementsByName('$nm')[0].disabled){marcarTodosCheckBoxes('$nm');$javascriptadicional;}");
 			$html.="\n</TD>";
 			//$html .= getImagemLink("javascript:marcarTodosCheckBoxes('$nm');", "todos.gif");
 		}
@@ -184,7 +188,7 @@ class dominio extends multiplosConstrutores {
 			}
 					
 			$checked = stripos($opcaoSelecionada, "$chave", 0) !== false;
-			$html .= "\n".$conectorAntes . getCheckBoxBoolean($nm.$chave, $nm, $chave, $checked, $javascript)." ". static::getDescricaoStatic($chave,$colecao) . "<br>";
+			$html .= "\n".$conectorAntes . getCheckBoxBoolean($chave, $nm, $chave, $checked, $javascript)." ". static::getDescricaoStatic($chave,$colecao) . "<br>";
 			$i++;
 		}
 				

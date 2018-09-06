@@ -88,7 +88,7 @@ function formataForm() {
 	tornarRequiredCamposColecaoFormulario(colecaoIDCamposRequired, required);
 }
 
-function carregaDadosContrato(){    
+function carregaDadosContrato(){
 	str = "";
 
 	cdContrato = document.frm_principal.<?=voContratoLicon::$nmAtrCdContrato?>.value;

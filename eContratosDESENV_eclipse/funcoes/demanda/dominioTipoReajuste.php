@@ -21,9 +21,9 @@ class dominioTipoReajuste extends dominio {
 	// Funcoes
 	static function getColecao() {
 		return array (
-				self::$CD_REAJUSTE_AMBOS => self::$DS_REAJUSTE_AMBOS,
 				self::$CD_REAJUSTE_MONTANTE_A => self::$DS_REAJUSTE_MONTANTE_A,
 				self::$CD_REAJUSTE_MONTANTE_B => self::$DS_REAJUSTE_MONTANTE_B,
+				self::$CD_REAJUSTE_AMBOS => self::$DS_REAJUSTE_AMBOS,
 				self::$CD_REAJUSTE_OUTROS => self::$DS_REAJUSTE_OUTROS,
 		);
 	}
