@@ -164,8 +164,19 @@ function formataFormContratoPorTpDemanda(pNmCampoTpDemanda, pColecaoNmObjetosFor
 	
 	isDemandaContrato = colecaoTpDemandaContrato.indexOf(cdTpDemanda) != -1;
 	habilitarCampos(isDemandaContrato, pColecaoNmObjetosFormContrato);
-	
+
 }
+
+function formataFormContratoTA() {
+	var campoEspecie = document.frm_principal.<?=voContratoLicon::$nmAtrCdEspecieContrato?>;
+	var especie = campoEspecie.value;
+	
+	var colecaoIDCamposRequired = ["<?=vocontrato::$nmAtrSqEspecieContrato?>"];
+	var required = especie != "<?=dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER?>";
+	
+	tornarRequiredCamposColecaoFormulario(colecaoIDCamposRequired, required);
+}
+
 
 function formataFormEditalPorTpDemanda(pNmCampoTpDemanda, pColecaoNmObjetosForm) {
 	campoTpDemanda = document.getElementById(pNmCampoTpDemanda);
@@ -309,15 +320,6 @@ function iniciar(){
 	            echo "Ano: " . $selectExercicio->getHtmlCombo(voDemanda::$nmAtrAno,voDemanda::$nmAtrAno, anoDefault, true, "campoobrigatorio", false, " required ");
 	            echo "Tipo: " . $comboTipoEditado->getHtmlCombo(voDemanda::$nmAtrTipo,voDemanda::$nmAtrTipo, "", true, "campoobrigatorio", false, " required onChange='validaFormulario();'");
 	            ?>			  
-                    <div id="<?=voDemanda::$ID_REQ_DIV_REAJUSTE_MONTANTE_A?>">
-		                <?php
-			            $comboTpReajuste = new select(dominioTipoReajuste::getColecao());
-			            //echo "Tipo de reajuste: " . $comboTpReajuste->getHtmlCombo(voDemanda::$nmAtrInTpDemandaReajusteComMontanteA,voDemanda::$nmAtrInTpDemandaReajusteComMontanteA, "", true, "camponaoobrigatorio", false,"");
-			            echo "Tipo de reajuste: " . $comboTpReajuste->getHtmlComObrigatorio(voDemanda::$nmAtrInTpDemandaReajusteComMontanteA,voDemanda::$nmAtrInTpDemandaReajusteComMontanteA, "", false,true);
-			            
-			            echo "<br>".dominioTipoDemanda::getHtmlChecksBox("teste", "4", dominioTipoDemanda::getColecaoTipoDemandaContratoValido(), 2, true);
-			            ?>
-                    </div>
 	        </TR>
 	        <?php	        
 	        require_once (caminho_funcoes . voProcLicitatorio::getNmTabela() . "/biblioteca_htmlProcLicitatorio.php");
@@ -332,18 +334,37 @@ function iniciar(){
 	        ?>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" colspan=3><?php getCampoDadosContratoMultiplos();?>
-	            	            <SCRIPT language="JavaScript" type="text/javascript">
+				<TD class="campoformulario" colspan=3><?php
+				//echo getCampoDadosContratoMultiplos();
+				echo getCampoDadosContratoSimples(constantes::$CD_CLASS_CAMPO_OBRIGATORIO, "", false);
+				?>
+				<INPUT type="text" id="<?=vocontrato::$nmAtrSqEspecieContrato?>" name="<?=vocontrato::$nmAtrSqEspecieContrato?>" value="<?=$voContrato->sqEspecie;?>"  class="camponaoobrigatorio" size="3" maxlength=2 required> º
+				<?php				
+				//cria o combo
+				$combo = new select(dominioEspeciesContrato::getColecao());
+				echo $combo->getHtmlCombo(vocontrato::$nmAtrCdEspecieContrato, vocontrato::$nmAtrCdEspecieContrato, "", true, "camponaoobrigatorio", false, " onChange='formataFormContratoTA();' required");
+				?>				
+	            <SCRIPT language="JavaScript" type="text/javascript">
 	            	 //segue com o numero 1 ao fim do id porque o contrato eh definido por indices
 	            	 //para entender, basta olhar o metodo acima getCampoDadosContratoMultiplos
-	            	colecaoIDCamposRequired = ["<?=vocontrato::$nmAtrTipoContrato?>1",
-		            	"<?=vocontrato::$nmAtrCdContrato?>1",
-		            	"<?=vocontrato::$nmAtrAnoContrato?>1"];
+	            	colecaoIDCamposRequired = ["<?=vocontrato::$nmAtrTipoContrato?>",
+		            	"<?=vocontrato::$nmAtrCdContrato?>",
+		            	"<?=vocontrato::$nmAtrAnoContrato?>",
+		            	"<?=vocontrato::$nmAtrCdEspecieContrato?>",
+		            	"<?=vocontrato::$nmAtrSqEspecieContrato?>",
+		            	];
 	            </SCRIPT>
+                    <div id="<?=voDemanda::$ID_REQ_DIV_REAJUSTE_MONTANTE_A?>">
+		                <?php
+			            echo dominioTipoDemanda::getHtmlChecksBox("teste", "4", dominioTipoDemanda::getColecaoTipoDemandaContratoValido(), 2, true);
+			            $comboTpReajuste = new select(dominioTipoReajuste::getColecao());
+			            //echo "Tipo de reajuste: " . $comboTpReajuste->getHtmlCombo(voDemanda::$nmAtrInTpDemandaReajusteComMontanteA,voDemanda::$nmAtrInTpDemandaReajusteComMontanteA, "", true, "camponaoobrigatorio", false,"");
+			            echo "Tipo de reajuste: " . $comboTpReajuste->getHtmlComObrigatorio(voDemanda::$nmAtrInTpDemandaReajusteComMontanteA,voDemanda::$nmAtrInTpDemandaReajusteComMontanteA, "", false,true);			             
+			            ?>
+                    </div>	            
 	            <INPUT type="checkbox" id="checkTemContrato" name="checkTemContrato" onClick="validaFormRequiredCheckBox(this, colecaoIDCamposRequired);"> *Não tem contrato.
-	            	            
 	            </TD>
-	        </TR>	        
+	        </TR>
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Setor Origem:</TH>
 	            <TD class="campoformulario" colspan=3>
