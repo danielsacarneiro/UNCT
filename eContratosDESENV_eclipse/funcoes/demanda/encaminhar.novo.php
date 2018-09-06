@@ -84,6 +84,15 @@ function isFormularioValido() {
 		return false;		
 	}
 
+	//obrigaca a selecao do tpDemandaContrato
+	var temContratoSelecionado = !isCheckBoxConsultaSelecionado('<?=vodemanda::$ID_REQ_InTemContrato?>', true);
+	if(temContratoSelecionado && campoTipoDemanda.value == "<?=dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO?>"){
+		if(!isCheckBoxConsultaSelecionado('<?=voDemandaContrato::$nmAtrTpDemandaContrato?>', true)){
+			exibirMensagem('Demanda de Contrato exige preenchimento das informações complementares.');			
+			return false;		
+		}
+	}
+
 	campoDataReferencia = document.frm_principal.<?=voDemandaTramitacao::$nmAtrDtReferencia?>;
 	campoAno = document.frm_principal.<?=voDemandaTramitacao::$nmAtrAno?>;
 	<?php 
@@ -135,6 +144,7 @@ function formataForm() {
 	}
 }
 
+//function habilitarCampos(pCampos, pHabilitar, pIsObrigatorio)
 function habilitarCampos(pHabilitar, pColecaoNmObjetosFormContrato) {
 	tam = pColecaoNmObjetosFormContrato.length;	
 	for(i=0; i<tam;i++){
@@ -167,17 +177,6 @@ function formataFormContratoPorTpDemanda(pNmCampoTpDemanda, pColecaoNmObjetosFor
 
 }
 
-function formataFormContratoTA() {
-	var campoEspecie = document.frm_principal.<?=voContratoLicon::$nmAtrCdEspecieContrato?>;
-	var especie = campoEspecie.value;
-	
-	var colecaoIDCamposRequired = ["<?=vocontrato::$nmAtrSqEspecieContrato?>"];
-	var required = especie != "<?=dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER?>";
-	
-	tornarRequiredCamposColecaoFormulario(colecaoIDCamposRequired, required);
-}
-
-
 function formataFormEditalPorTpDemanda(pNmCampoTpDemanda, pColecaoNmObjetosForm) {
 	campoTpDemanda = document.getElementById(pNmCampoTpDemanda);
 	cdTpDemanda = campoTpDemanda.value;
@@ -193,7 +192,7 @@ function validaFormulario() {
 	pColecaoNmObjetosFormEdital = ['<?=voProcLicitatorio::$nmAtrCd;?>', '<?=voProcLicitatorio::$nmAtrAno;?>'];
 	formataFormEditalPorTpDemanda('<?=voDemanda::$nmAtrTipo?>', pColecaoNmObjetosFormEdital);
 	
-	formataTpDemandaReajuste();
+	formataFormTpDemandaContrato();
 }
 
 <?php
@@ -222,18 +221,28 @@ function transferirDadosDocumento(sq, cdSetor, ano, tpDoc){
 	//alert(document.frm_principal.<?=voDocumento::getNmTabela()?>.value);
 }
 
-function formataTpDemandaReajuste(){	
+function formataFormTpDemandaContrato(){
 	<?php
 	$dominioTipoDemanda = new dominioTipoDemanda(dominioTipoDemanda::getColecaoTipoDemandaContratoGenero());
 	echo $dominioTipoDemanda->getArrayHTMLChaves("colecaoTpDemandaContrato");	
-	?>			
-	formataFormTpDemandaReajuste("<?=voDemanda::$nmAtrTipo?>", "<?=voDemanda::$ID_REQ_DIV_REAJUSTE_MONTANTE_A?>", colecaoTpDemandaContrato, "<?=voDemanda::$nmAtrInTpDemandaReajusteComMontanteA?>", false);
+	?>		
 
-	formataFormTpDemanda('<?=voDemanda::$nmAtrTipo?>', 'teste');
+	var nmCampoCheckTpDemandaContrato = '<?=voDemandaContrato::$nmAtrTpDemandaContrato?>';
+	var arrayCheckSelecionado = retornarValoresCheckBoxesSelecionadosComoArray(nmCampoCheckTpDemandaContrato);		
+	var cdTpDemandaContrato = '<?=dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO_REAJUSTE?>';
+	var isReajusteSelecionado = arrayCheckSelecionado.indexOf(cdTpDemandaContrato) != -1;
+		
+	formataFormTpDemandaReajusteContrato("<?=voDemanda::$nmAtrTipo?>", 
+			"<?=voDemanda::$ID_REQ_DIV_REAJUSTE_MONTANTE_A?>", 
+			colecaoTpDemandaContrato, 
+			"<?=voDemanda::$nmAtrInTpDemandaReajusteComMontanteA?>",
+			isReajusteSelecionado, 
+			false);
+	formataFormTpDemanda('<?=voDemanda::$nmAtrTipo?>', nmCampoCheckTpDemandaContrato);
 }
 
 function iniciar(){	
-	formataTpDemandaReajuste();
+	formataFormTpDemandaContrato();
 }
 
 </SCRIPT>
@@ -342,7 +351,7 @@ function iniciar(){
 				<?php				
 				//cria o combo
 				$combo = new select(dominioEspeciesContrato::getColecao());
-				echo $combo->getHtmlCombo(vocontrato::$nmAtrCdEspecieContrato, vocontrato::$nmAtrCdEspecieContrato, "", true, "camponaoobrigatorio", false, " onChange='formataFormContratoTA();' required");
+				echo $combo->getHtmlCombo(vocontrato::$nmAtrCdEspecieContrato, vocontrato::$nmAtrCdEspecieContrato, "", true, "camponaoobrigatorio", false, " required");
 				?>				
 	            <SCRIPT language="JavaScript" type="text/javascript">
 	            	 //segue com o numero 1 ao fim do id porque o contrato eh definido por indices
@@ -354,15 +363,15 @@ function iniciar(){
 		            	"<?=vocontrato::$nmAtrSqEspecieContrato?>",
 		            	];
 	            </SCRIPT>
-                    <div id="<?=voDemanda::$ID_REQ_DIV_REAJUSTE_MONTANTE_A?>">
+                    <div id="<?=voDemanda::$ID_REQ_DIV_REAJUSTE_MONTANTE_A?>"> <b>Informações complementares</b>
 		                <?php
-			            echo dominioTipoDemanda::getHtmlChecksBox("teste", "4", dominioTipoDemanda::getColecaoTipoDemandaContratoValido(), 2, true);
+			            echo dominioTipoDemanda::getHtmlChecksBox(voDemandaContrato::$nmAtrTpDemandaContrato, "4", dominioTipoDemanda::getColecaoTipoDemandaContratoValido(), 2, true, "formataFormTpDemandaContrato();");
 			            $comboTpReajuste = new select(dominioTipoReajuste::getColecao());
 			            //echo "Tipo de reajuste: " . $comboTpReajuste->getHtmlCombo(voDemanda::$nmAtrInTpDemandaReajusteComMontanteA,voDemanda::$nmAtrInTpDemandaReajusteComMontanteA, "", true, "camponaoobrigatorio", false,"");
-			            echo "Tipo de reajuste: " . $comboTpReajuste->getHtmlComObrigatorio(voDemanda::$nmAtrInTpDemandaReajusteComMontanteA,voDemanda::$nmAtrInTpDemandaReajusteComMontanteA, "", false,true);			             
+			            echo "Reajuste: " . $comboTpReajuste->getHtmlComObrigatorio(voDemanda::$nmAtrInTpDemandaReajusteComMontanteA,voDemanda::$nmAtrInTpDemandaReajusteComMontanteA, "", false,false);			             
 			            ?>
                     </div>	            
-	            <INPUT type="checkbox" id="checkTemContrato" name="checkTemContrato" onClick="validaFormRequiredCheckBox(this, colecaoIDCamposRequired);"> *Não tem contrato.
+	            <INPUT type="checkbox" id="<?=vodemanda::$ID_REQ_InTemContrato?>" name="<?=vodemanda::$ID_REQ_InTemContrato?>" onClick="validaFormRequiredCheckBox(this, colecaoIDCamposRequired);"> *Não tem contrato.
 	            </TD>
 	        </TR>
 			<TR>
