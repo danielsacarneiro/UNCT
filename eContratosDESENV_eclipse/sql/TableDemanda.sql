@@ -5,6 +5,7 @@ CREATE TABLE demanda (
 	dem_ex INT NOT NULL,
     dem_cd INT NOT NULL,    
     dem_tipo INT NOT NULL,
+	dem_tp_contrato VARCHAR(100),
     dem_tp_temreajustemontanteA CHAR(1) NULL, -- so valera para o tipo de demanda de reajuste
     dem_situacao INT NOT NULL,        
     dem_cd_setor INT NOT NULL,
@@ -21,8 +22,9 @@ CREATE TABLE demanda (
     
     CONSTRAINT pk PRIMARY KEY (dem_ex, dem_cd)
 );
-
-ALTER TABLE demanda ADD COLUMN dem_tp_temreajustemontanteA CHAR(1) AFTER dem_tipo;
+-- ALTER TABLE demanda_contrato DROP COLUMN dem_tp_contrato;
+ALTER TABLE demanda ADD COLUMN dem_tp_contrato VARCHAR(100) AFTER dem_tipo;
+ALTER TABLE demanda ADD COLUMN dem_tp_temreajustemontanteA CHAR(1) AFTER dem_tp_contrato;
 ALTER TABLE demanda ADD COLUMN in_desativado CHAR(1) NOT NULL DEFAULT 'N' AFTER cd_usuario_ultalt;
 
 -- ALTER TABLE demanda CHANGE dem_cd dem_cd INT AUTO_INCREMENT;
@@ -36,6 +38,7 @@ CREATE TABLE demanda_hist (
 	dem_ex INT NOT NULL,
     dem_cd INT NOT NULL,    
     dem_tipo INT NOT NULL,
+	dem_tp_contrato VARCHAR(100),
     dem_tp_temreajustemontanteA CHAR(1) NULL, -- so valera para o tipo de demanda de reajuste
     dem_situacao INT NOT NULL,        
     dem_cd_setor INT NOT NULL,
@@ -56,7 +59,8 @@ CREATE TABLE demanda_hist (
     CONSTRAINT pk PRIMARY KEY (hist),
     CONSTRAINT desativacao_demanda CHECK (in_desativado NOT IN ('S'))
 );
-ALTER TABLE demanda_hist ADD COLUMN dem_tp_temreajustemontanteA CHAR(1) AFTER dem_tipo;
+ALTER TABLE demanda_hist ADD COLUMN dem_tp_contrato VARCHAR(100) AFTER dem_tipo;
+ALTER TABLE demanda_hist ADD COLUMN dem_tp_temreajustemontanteA CHAR(1) AFTER dem_tp_contrato;
 ALTER TABLE demanda_hist ADD COLUMN in_desativado CHAR(1) NOT NULL AFTER cd_usuario_ultalt;
 ALTER TABLE demanda_hist ADD CONSTRAINT desativacao_demanda CHECK (in_desativado NOT IN ('S'))
 
@@ -97,20 +101,18 @@ dtm_prt = replace(replace(dtm_prt,'.',''),'-','')
 drop table demanda_contrato;
 CREATE TABLE demanda_contrato (	
     dem_ex INT NOT NULL,
-    dem_cd INT NOT NULL,
-    
+    dem_cd INT NOT NULL,    
     ct_exercicio INT NOT NULL,
     ct_numero INT NOT NULL,
     ct_tipo char(1) NOT NULL,
     ct_sq_especie INT NOT NULL, -- indice do documento em questao (primeiro ou segundo apostilamento, por ex)
-    ct_cd_especie CHAR(2) NOT NULL, -- especie do registro (mater, apostilamento, aditivo)
+    ct_cd_especie CHAR(2) NOT NULL, -- especie do registro (mater, apostilamento, aditivo)    
     
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_incl INT,
     
     CONSTRAINT pk PRIMARY KEY (dem_ex, dem_cd, ct_exercicio, ct_numero, ct_tipo, ct_cd_especie, ct_sq_especie)
 );
-
 ALTER TABLE demanda_contrato ADD CONSTRAINT fk_demanda_contrato FOREIGN KEY (dem_ex, dem_cd) REFERENCES demanda (dem_ex, dem_cd) 
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;

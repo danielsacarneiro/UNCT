@@ -7,6 +7,12 @@ inicioComValidacaoUsuario(true);
 $vo = new voDemandaTramitacao();
 $vo->getDadosFormulario();
 
+//var_dump($vo->colecaoContrato);
+
+/*$voDemandaCont = new voDemandaContrato();
+$voDemandaCont->getDadosFormulario();
+var_dump($voDemandaCont->tpDemandaContrato);*/
+
 //echo $vo->voProcLicitatorio->toString();
 
 /*echo $vo->cdSetor . " cd setor <BR>";

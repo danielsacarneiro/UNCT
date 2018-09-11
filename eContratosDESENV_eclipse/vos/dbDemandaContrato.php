@@ -22,7 +22,7 @@ Class dbDemandaContrato extends dbprocesso{
 		$retorno.= $this-> getVarComoString($vo->voContrato->cdEspecie) . ",";
 		$retorno.= $this-> getVarComoNumero($vo->voContrato->cdContrato) . ",";		
 		$retorno.= $this-> getVarComoNumero($vo->voContrato->sqEspecie);
-				
+						
 		if($comColunasVOEntidade){
 			//usado pelo dbContratoLicon
 			$retorno.= $vo->getSQLValuesInsertEntidade();

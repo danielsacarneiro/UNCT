@@ -635,6 +635,15 @@ class dbDemanda extends dbprocesso {
 		$retorno .= $this->getVarComoNumero ( $vo->ano ) . ",";
 		$retorno .= $this->getVarComoNumero ( $vo->cd ) . ",";
 		$retorno .= $this->getVarComoNumero ( $vo->tipo ) . ",";
+		
+		//$vo = new voDemandaContrato();
+		$colecaoTpDemanda = $vo->tpDemandaContrato;
+		$tpDemandaContrato = "null";
+		if(!isColecaoVazia($colecaoTpDemanda)){
+			$tpDemandaContrato = voentidade::getArrayComoStringCampoSeparador($colecaoTpDemanda);
+		}
+		
+		$retorno.= $this-> getVarComoString($tpDemandaContrato). ",";		
 		$retorno .= $this->getVarComoString ( $vo->inTpDemandaReajusteComMontanteA ) . ",";
 		$retorno .= $this->getVarComoNumero ( $vo->cdSetor ) . ",";
 		// $retorno.= $this-> getVarComoNumero($vo->situacao);

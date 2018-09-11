@@ -81,6 +81,10 @@ function incluir() {
 	location.href="encaminhar.php?funcao=<?=constantes::$CD_FUNCAO_INCLUIR?>";
 }
 
+function incluirNovo() {
+	location.href="encaminhar.novo.php?funcao=<?=constantes::$CD_FUNCAO_INCLUIR?>";
+}
+
 function alterar() {
     if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta"))
             return;
@@ -483,7 +487,12 @@ function encaminhar() {
                             //echo getBotoesRodape();
                             ?>
                             <TD class='botaofuncao'>
-                            <?php echo getBotaoValidacaoAcesso("bttEncaminhar", "Encaminhar", "botaofuncaop", false, false,true,false,"onClick='javascript:encaminhar();' accesskey='e'");?>
+                            <?php 
+                            echo getBotaoValidacaoAcesso("bttEncaminhar", "Encaminhar", "botaofuncaop", false, false,true,false,"onClick='javascript:encaminhar();' accesskey='e'");
+                            if(isUsuarioAdmin()){
+                            	echo getBotaoValidacaoAcesso("bttIncluirNovo", "IncluirNovo", "botaofuncaop", false, false,true,false,"onClick='javascript:incluirNovo();' accesskey='n'");
+                            }
+                            ?>
                             </TD>
                          </TR>
                          </TABLE>

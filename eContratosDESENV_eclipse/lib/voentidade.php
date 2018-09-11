@@ -356,6 +356,15 @@ class voentidade extends multiplosConstrutores {
 		
 		return $retorno;
 	}
+	
+	static function getArrayComoStringCampoSeparador($array) {
+		return implode( CAMPO_SEPARADOR, $array );
+	}
+	
+	static function getStringCampoSeparadorComoArray($chave) {
+		$array = explode ( CAMPO_SEPARADOR, $chave );
+		return $array;
+	}
 	/*
 	 * function validaExclusaoRelacionamentoHistorico(){
 	 * $retorno = false;

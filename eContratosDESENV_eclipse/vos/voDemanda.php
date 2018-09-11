@@ -16,6 +16,7 @@ class voDemanda extends voentidade {
 	static $nmAtrCdSetor = "dem_cd_setor";
 	static $nmAtrCdSetorAtual = "NM_COL_SETOR_ATUAL";
 	static $nmAtrTipo = "dem_tipo";
+	static $nmAtrTpDemandaContrato =  "dem_tp_contrato";
 	static $nmAtrInTpDemandaReajusteComMontanteA = "dem_tp_temreajustemontanteA";
 	static $nmAtrSituacao = "dem_situacao";
 	static $nmAtrTexto = "dem_texto";
@@ -26,6 +27,7 @@ class voDemanda extends voentidade {
 	var $cdSetor = "";
 	var $cdSetorAtual = "";
 	var $tipo = "";
+	var $tpDemandaContrato = "";
 	var $inTpDemandaReajusteComMontanteA = "";
 	var $situacao = "";
 	var $texto = "";
@@ -82,6 +84,7 @@ class voDemanda extends voentidade {
 				self::$nmAtrAno,
 				self::$nmAtrCd,
 				self::$nmAtrTipo,
+				self::$nmAtrTpDemandaContrato,
 				self::$nmAtrInTpDemandaReajusteComMontanteA,
 				self::$nmAtrCdSetor,
 				self::$nmAtrSituacao,
@@ -130,6 +133,7 @@ class voDemanda extends voentidade {
 		$voDemanda = new voDemandaContrato ();
 		$voDemanda->anoDemanda = $this->ano;
 		$voDemanda->cdDemanda = $this->cd;
+		
 		$voDemanda->voContrato = $voContrato;
 		return $voDemanda;
 	}
@@ -148,6 +152,7 @@ class voDemanda extends voentidade {
 		$this->cdSetor = $registrobanco [self::$nmAtrCdSetor];
 		$this->cdSetorAtual = $registrobanco [self::$nmAtrCdSetorAtual];
 		$this->tipo = $registrobanco [self::$nmAtrTipo];
+		$this->tpDemandaContrato = $registrobanco [self::$nmAtrTpDemandaContrato];
 		$this->inTpDemandaReajusteComMontanteA = $registrobanco [self::$nmAtrInTpDemandaReajusteComMontanteA];
 		$this->situacao = $registrobanco [self::$nmAtrSituacao];
 		$this->texto = $registrobanco [self::$nmAtrTexto];
@@ -176,17 +181,36 @@ class voDemanda extends voentidade {
 		$this->ano = @$_POST [self::$nmAtrAno];
 		$this->cdSetor = @$_POST [self::$nmAtrCdSetor];
 		$this->tipo = @$_POST [self::$nmAtrTipo];
+		$this->tpDemandaContrato = @$_POST [voDemanda::$nmAtrTpDemandaContrato];
 		$this->inTpDemandaReajusteComMontanteA = @$_POST [self::$nmAtrInTpDemandaReajusteComMontanteA];
 		$this->situacao = @$_POST [self::$nmAtrSituacao];
 		$this->texto = @$_POST [self::$nmAtrTexto];
 		$this->prioridade = @$_POST [self::$nmAtrPrioridade];
 		$this->dtReferencia = @$_POST [self::$nmAtrDtReferencia];
+		
+		
+		var_dump($this->tpDemandaContrato);
 		// quando existir
 		// recupera quando da consulta da contratada, ao inserir o contrato na tela
 		$chaveContrato = @$_POST [vopessoa::$ID_CONTRATO];
 		// echo "chave contrato:" . $chaveContrato;
-		if ($chaveContrato != null) {
+		
+		$isEncaminharNovo = $this->tpDemandaContrato != null;
+		if (!$isEncaminharNovo  && $chaveContrato != null) {
+			//quando vem do encaminhar.php
 			$this->setColecaoContratoFormulario ( $chaveContrato );
+			//echo "enaminharvelho";
+		}else if ($isEncaminharNovo){
+			//quando vem do encaminhar.novo.php
+			//echo "enaminharnova";
+			/*$voDemandaContrato = new voDemandaContrato();
+			$voDemandaContrato->getDadosFormulario();*/
+			
+			$voContratoAvulso = new vocontrato();
+			$voContratoAvulso->getDadosFormulario();
+			//$voDemandaContrato->voContrato = $voContratoAvulso; 
+				
+			$this->colecaoContrato = array($voContratoAvulso);
 		}
 		
 		$this->getProcLicitatorioFormulario();

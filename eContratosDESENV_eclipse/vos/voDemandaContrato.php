@@ -10,9 +10,7 @@ Class voDemandaContrato extends voentidade{
 	static $nmAtrAnoContrato  = "ct_exercicio";
 	static $nmAtrTipoContrato =  "ct_tipo";
 	static $nmAtrSqEspecieContrato =  "ct_sq_especie"; //sequencial da especie (primeiro, segundo TA, por ex)
-	static $nmAtrCdEspecieContrato =  "ct_cd_especie"; //especie propriamente dita(TA, apostilamento)	
-		
-	static $nmAtrTpDemandaContrato =  "dem_tp_contrato"; 
+	static $nmAtrCdEspecieContrato =  "ct_cd_especie"; //especie propriamente dita(TA, apostilamento)	 
 	
 	var $voContrato = "";
 	var $anoDemanda = "";
@@ -68,7 +66,7 @@ Class voDemandaContrato extends voentidade{
 			return $query;
 	}
 
-	static function getAtributosFilho(){
+	static function getAtributosChavePrimaria(){
 		$retorno = array(
 				self::$nmAtrAnoDemanda,
 				self::$nmAtrCdDemanda,
@@ -77,15 +75,15 @@ Class voDemandaContrato extends voentidade{
 				vocontrato::$nmAtrCdEspecieContrato,
 				vocontrato::$nmAtrCdContrato,
 				vocontrato::$nmAtrSqEspecieContrato
-		);
-
+		);		
+		return $retorno;		
+	}
+	
+	static function getAtributosFilho() {
+		$retorno = static::getAtributosChavePrimaria();	
 		return $retorno;
 	}
-
-	static function getAtributosChavePrimaria(){
-		return static::getAtributosFilho();
-	}
-
+	
 	function getDadosRegistroBanco($registrobanco){
 		//as colunas default de voentidade sao incluidas pelo metodo getDadosBanco do voentidade
 

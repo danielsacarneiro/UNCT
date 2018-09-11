@@ -52,6 +52,7 @@ $titulo = voDemanda::getTituloJSP();
 $titulo = $nmFuncao . $titulo;
 setCabecalho($titulo);
 
+$nmCampoTpDemandaContrato = voDemanda::$nmAtrTpDemandaContrato."[]";
 ?>
 <!DOCTYPE html>
 <HEAD>
@@ -87,7 +88,7 @@ function isFormularioValido() {
 	//obrigaca a selecao do tpDemandaContrato
 	var temContratoSelecionado = !isCheckBoxConsultaSelecionado('<?=vodemanda::$ID_REQ_InTemContrato?>', true);
 	if(temContratoSelecionado && campoTipoDemanda.value == "<?=dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO?>"){
-		if(!isCheckBoxConsultaSelecionado('<?=voDemandaContrato::$nmAtrTpDemandaContrato?>', true)){
+		if(!isCheckBoxConsultaSelecionado('<?=$nmCampoTpDemandaContrato?>', true)){
 			exibirMensagem('Demanda de Contrato exige preenchimento das informações complementares.');			
 			return false;		
 		}
@@ -144,26 +145,7 @@ function formataForm() {
 	}
 }
 
-//function habilitarCampos(pCampos, pHabilitar, pIsObrigatorio)
-function habilitarCampos(pHabilitar, pColecaoNmObjetosFormContrato) {
-	tam = pColecaoNmObjetosFormContrato.length;	
-	for(i=0; i<tam;i++){
-		nmCampo = pColecaoNmObjetosFormContrato[i];		
-		camposForm = document.getElementsByName(nmCampo);
-				
-		for(k=0; k<camposForm.length;k++){
-			campo = camposForm[k];
-			//alert(campo);
-			if(pHabilitar){				
-				habilitarCampoElementoMais(campo, true, true);
-			}else{
-				habilitarCampoElementoMais(campo, true, false);
-			}
-		}
-	}	
-}
-
-function formataFormContratoPorTpDemanda(pNmCampoTpDemanda, pColecaoNmObjetosFormContrato) {
+/*function formataFormContratoPorTpDemanda(pNmCampoTpDemanda, pColecaoNmObjetosFormContrato) {
 	<?php
 	$dominioTipoDemanda = new dominioTipoDemanda(dominioTipoDemanda::getColecaoTipoDemandaContrato());
 	echo $dominioTipoDemanda->getArrayHTMLChaves("colecaoTpDemandaContrato");	
@@ -173,16 +155,16 @@ function formataFormContratoPorTpDemanda(pNmCampoTpDemanda, pColecaoNmObjetosFor
 	cdTpDemanda = campoTpDemanda.value;
 	
 	isDemandaContrato = colecaoTpDemandaContrato.indexOf(cdTpDemanda) != -1;
-	habilitarCampos(isDemandaContrato, pColecaoNmObjetosFormContrato);
+	habilitarCamposPorNome(pColecaoNmObjetosFormContrato, isDemandaContrato);
 
-}
+}*/
 
 function formataFormEditalPorTpDemanda(pNmCampoTpDemanda, pColecaoNmObjetosForm) {
 	campoTpDemanda = document.getElementById(pNmCampoTpDemanda);
 	cdTpDemanda = campoTpDemanda.value;
 	
 	isDemandaEdital = cdTpDemanda == <?=dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL?>;
-	habilitarCampos(isDemandaEdital, pColecaoNmObjetosForm);	
+	habilitarCamposPorNome(pColecaoNmObjetosForm, isDemandaEdital);	
 }
 
 function validaFormulario() {
@@ -227,7 +209,7 @@ function formataFormTpDemandaContrato(){
 	echo $dominioTipoDemanda->getArrayHTMLChaves("colecaoTpDemandaContrato");	
 	?>		
 
-	var nmCampoCheckTpDemandaContrato = '<?=voDemandaContrato::$nmAtrTpDemandaContrato?>';
+	var nmCampoCheckTpDemandaContrato = '<?=$nmCampoTpDemandaContrato?>';
 	var arrayCheckSelecionado = retornarValoresCheckBoxesSelecionadosComoArray(nmCampoCheckTpDemandaContrato);		
 	var cdTpDemandaContrato = '<?=dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO_REAJUSTE?>';
 	var isReajusteSelecionado = arrayCheckSelecionado.indexOf(cdTpDemandaContrato) != -1;
@@ -364,8 +346,8 @@ function iniciar(){
 		            	];
 	            </SCRIPT>
                     <div id="<?=voDemanda::$ID_REQ_DIV_REAJUSTE_MONTANTE_A?>"> <b>Informações complementares</b>
-		                <?php
-			            echo dominioTipoDemanda::getHtmlChecksBox(voDemandaContrato::$nmAtrTpDemandaContrato, "4", dominioTipoDemanda::getColecaoTipoDemandaContratoValido(), 2, true, "formataFormTpDemandaContrato();");
+		                <?php		                
+			            echo dominioTipoDemanda::getHtmlChecksBox($nmCampoTpDemandaContrato, "4", dominioTipoDemanda::getColecaoTipoDemandaContratoValido(), 2, true, "formataFormTpDemandaContrato();");
 			            $comboTpReajuste = new select(dominioTipoReajuste::getColecao());
 			            //echo "Tipo de reajuste: " . $comboTpReajuste->getHtmlCombo(voDemanda::$nmAtrInTpDemandaReajusteComMontanteA,voDemanda::$nmAtrInTpDemandaReajusteComMontanteA, "", true, "camponaoobrigatorio", false,"");
 			            echo "Reajuste: " . $comboTpReajuste->getHtmlComObrigatorio(voDemanda::$nmAtrInTpDemandaReajusteComMontanteA,voDemanda::$nmAtrInTpDemandaReajusteComMontanteA, "", false,false);			             

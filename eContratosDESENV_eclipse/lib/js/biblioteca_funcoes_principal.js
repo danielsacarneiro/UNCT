@@ -405,6 +405,27 @@ function limparCampo(pCampo) {
 	}
 }
 
+function habilitarCamposPorNome(pColecaoNmObjetosFormContrato, pHabilitar) {
+	tam = pColecaoNmObjetosFormContrato.length;	
+	for(i=0; i<tam;i++){
+		nmCampo = pColecaoNmObjetosFormContrato[i];		
+		camposForm = document.getElementsByName(nmCampo);
+		
+		/*alert(camposForm[0].name);
+		habilitarCampos(camposForm, true, pHabilitar);*/
+				
+		for(k=0; k<camposForm.length;k++){
+			campo = camposForm[k];
+			//alert(campo);
+			if(pHabilitar){				
+				habilitarCampoElementoMais(campo, true, true);
+			}else{
+				habilitarCampoElementoMais(campo, true, false);
+			}
+		}
+	}	
+}
+
 function habilitarCampos(pCampos, pHabilitar, pIsObrigatorio) {
 	var tam =  pCampos.length;
 	if(tam ==1){
@@ -424,6 +445,7 @@ function habilitarCampoElementoMais(pCampoElemento, pHabilitar, pIsObrigatorio) 
 function habilitarElementoMais(pIdElemento, pHabilitar, pIsObrigatorio) {
 	//alert(pIdElemento);
 	elemento = eval(pIdElemento);
+	
 	if(pHabilitar){
 		habilitarElemento(pIdElemento);
 	}else{
