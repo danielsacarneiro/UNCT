@@ -7,6 +7,14 @@ class dominio extends multiplosConstrutores {
 	// Construtor
 	// herda do pai
 	
+	function __construct0 () {
+		$this->colecao = static::getColecao();
+	}
+	
+	function __construct1 ($colecao) {
+		$this->colecao = $colecao;
+	}	
+	
 	// ...............................................................
 	// Funcoes ( Propriedades e metodos da classe )
 	function getDescricao($chave) {
@@ -47,6 +55,24 @@ class dominio extends multiplosConstrutores {
 		if($isDescricaoMaiuscula){
 			$retorno = strtoupper($retorno);
 		}
+		
+		return $retorno;
+	}
+	//$colecao tem que ser ou string separada por CAMPO_SEPARADOR
+	//ou colecao do tipo dominio
+	//NAO PODE SER COLECAO UNIDIMENSIONAL
+	static function existeItemArrayOuStrCampoSeparador($chave, $colecao) {
+		$retorno = false;
+		if($colecao==null){
+			$colecao = static::getColecao();
+		}
+		
+		if(!is_array($colecao)){
+			$colecao = voentidade::getStringCampoSeparadorComoArray($colecao);
+			$retorno = in_array($chave, $colecao);
+		}else{
+			$retorno = array_key_exists($chave, $colecao);
+		}		
 		
 		return $retorno;
 	}
@@ -188,6 +214,7 @@ class dominio extends multiplosConstrutores {
 			}
 					
 			$checked = stripos($opcaoSelecionada, "$chave", 0) !== false;
+			//echoo("chave:$chave & selecao: $opcaoSelecionada");
 			$html .= "\n".$conectorAntes . getCheckBoxBoolean($chave, $nm, $chave, $checked, $javascript)." ". static::getDescricaoStatic($chave,$colecao) . "<br>";
 			$i++;
 		}

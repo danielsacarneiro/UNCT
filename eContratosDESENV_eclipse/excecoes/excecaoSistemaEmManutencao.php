@@ -1,0 +1,15 @@
+<?php
+/**
+ * Define uma classe de exceção
+*/
+class excecaoSistemaEmManutencao extends excecaoGenerica
+{
+	static $FLAG_MANUTENCAO = false;
+	// Redefine a exceção de forma que a mensagem não seja opcional
+	public function __construct($message = "Sistema em manutenção. Aguarde alguns minutos pelo restabelecimento ou contate o Senhor Doutor Excelentíssimo Administrador.", Exception $previous = null) {
+		// código
+		// garante que tudo está corretamente inicializado
+		parent::__construct($message, excecaoGenerica::$CD_EXCECAO_SISTEMA_MANUTENCAO, $previous);
+	}
+
+}
