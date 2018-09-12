@@ -73,7 +73,6 @@ function retornarValoresCheckBoxesSelecionadosComoArray(pNmCheckBox) {
 
 	//checkBox = eval(pNmCheckBox);
 	checkBox = document.getElementsByName(pNmCheckBox);
-	
 	//colecaoIDCampos.length
 	
 	if (checkBox == null) {
@@ -90,6 +89,7 @@ function retornarValoresCheckBoxesSelecionadosComoArray(pNmCheckBox) {
 	for (i = 0; i < checkBox.length; i++) {
 		if (checkBox.item(i).checked) {
 			valorCheckBox = checkBox.item(i).value;
+			//alert(valorCheckBox);
 			arrayRetorno[aux] = valorCheckBox;
 			aux++;
 		}
