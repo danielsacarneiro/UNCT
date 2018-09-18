@@ -171,22 +171,17 @@ function confirmar() {
 	            <TD class="campoformulario" colspan="3">
 	            <textarea rows="5" cols="80" id="<?=voProcLicitatorio::$nmAtrObservacao?>" name="<?=voProcLicitatorio::$nmAtrObservacao?>" class="camporeadonly" readonly><?php echo($vo->obs);?></textarea>
 				</TD>
-	        </TR>
-        	
+	        </TR>        	
 				<?php				
-				/*$filtroTramitacao = new filtroManterDemandaTram(false);
-				$filtroTramitacao->vocontrato->cdContrato = $voContrato->cdContrato;
-				$filtroTramitacao->vocontrato->anoContrato = $voContrato->anoContrato;
-				$filtroTramitacao->vocontrato->tipo = $voContrato->tipo;
-				$filtroTramitacao->vodemanda->cd = $voDemanda->cd;
-				$filtroTramitacao->vodemanda->ano = $voDemanda->ano;
-				//$filtroTramitacao->temDocumentoAnexo = constantes::$CD_SIM;
-				$filtroTramitacao->TemPaginacao = false;			
+				$filtroTramitacaoContrato = new filtroConsultarDemandaContrato(false);
+				$filtroTramitacaoContrato->vodemanda->cd = $voDemanda->cd;
+				$filtroTramitacaoContrato->vodemanda->ano = $voDemanda->ano;
+				//$filtroTramitacaoContrato->temDocumentoAnexo = constantes::$CD_SIM;
+				$filtroTramitacaoContrato->TemPaginacao = false;			
 				
-				$vo = new voDemandaTramitacao();
-				$db = $vo->dbprocesso;
-				$colecaoTramitacao = $db->consultarTelaConsulta($vo, $filtroTramitacao);
-				mostrarGridDemandaContrato($colecaoTramitacao, true, false);*/
+				$dbcontrato = new dbcontratoinfo();
+				$colecaoTramitacao = $dbcontrato->consultarDemandaTramitacaoContrato($filtroTramitacaoContrato);
+				mostrarGridDemandaContrato($colecaoTramitacao, true, false);
 				?>	 
 <TR>
 	<TD halign="left" colspan="4">

@@ -197,8 +197,8 @@ function alterar() {
 						<TH class="headertabeladados" colspan="2">
 						<center>P.L.</center>
 						</TH>
+	                    <TH class="headertabeladados" rowspan="2" width="1%">Modalidade</TH>
 	                    <TH class="headertabeladados" rowspan="2" width="90%">Objeto</TH>
-	                    <TH class="headertabeladados" rowspan="2" width="1%" nowrap>Modalidade</TH>
 	                    <TH class="headertabeladados" rowspan="2" width="1%" nowrap>Tipo</TH>
 	                    <TH class="headertabeladados" rowspan="2" width="1%" nowrap>Pregoeiro</TH>
 	                    <TH class="headertabeladados" rowspan="2" width="1%" nowrap>CPL</TH>
@@ -207,8 +207,8 @@ function alterar() {
                     </TR>
                     <TR>
 	                    <TH class="headertabeladados" width="1%" nowrap>Ano</TH>
-	                    <TH class="headertabeladados" width="1%">Num.</TH>
-                    </TR>                 
+	                    <TH class="headertabeladados" width="1%">Num.</TH>	                    
+                    </TR>
                 <?php								
                 if (is_array($colecao))
                         $tamanho = sizeof($colecao);
@@ -239,9 +239,12 @@ function alterar() {
                         	}                        	
                         }
                                                 
-                        $tipo = dominioTipoProcLicitatorio::getDescricaoStatic($voAtual->tipo);
-                        $modalidade = dominioModalidadeProcLicitatorio::getDescricaoStatic($voAtual->cdModalidade);
+                        $tipo = dominioTipoProcLicitatorio::getDescricaoStatic($voAtual->tipo);                        
                         $pregoeiro = $colecao[$i][filtroManterProcLicitatorio::$nmColNomePregoeiro];
+                        
+                        $modalidade = complementarCharAEsquerda($voAtual->numModalidade, "0", TAMANHO_CODIGOS_SAFI) 
+	                        . "." 
+	        				. dominioModalidadeProcLicitatorio::getDescricaoStatic($voAtual->cdModalidade); 
                         
                 ?>
                 <TR class="dados">
@@ -257,8 +260,8 @@ function alterar() {
                   ?>                    
                     <TD class="tabeladados" nowrap><?php echo $voAtual->ano;?></TD>
                     <TD class="tabeladados" nowrap><?php echo complementarCharAEsquerda($voAtual->cd, "0", TAMANHO_CODIGOS_SAFI);?></TD>
+                    <TD class="tabeladados" nowrap><?php echo $modalidade;?></TD>
                     <TD class="tabeladados"><?php echo $voAtual->objeto;?></TD>
-                    <TD class="tabeladados"><?php echo $modalidade;?></TD>
                     <TD class="tabeladados" nowrap><?php echo $tipo;?></TD>
 					<TD class="tabeladados" nowrap><?php echo $pregoeiro;?></TD>
 					<TD class="tabeladados" nowrap><?php echo dominioComissaoProcLicitatorio::getCPLPorPregoeiro($pregoeiro, true);?></TD>

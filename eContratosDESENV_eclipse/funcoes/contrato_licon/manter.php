@@ -178,7 +178,6 @@ function carregaDadosContrato(){
 	        <?php
 	        }else{
 	        	//INCLUSAO
-
 	        ?>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Demanda:</TH>
@@ -188,21 +187,16 @@ function carregaDadosContrato(){
 	        </TR>	        
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" colspan=3><?php getCampoDadosContratoSimples(constantes::$CD_CLASS_CAMPO_OBRIGATORIO, "carregaDadosContrato()", false);//getContratoEntradaDeDados($tipoContrato, $anoContrato, $cdContrato, $arrayCssClass, $arrayComplementoHTML, $nmCampoDiv);?></TD>
-	        </TR>
-	       	<TR>
-	            <TH class="campoformulario" nowrap>Espécie:</TH>
-	            <TD class="campoformulario" colspan="3">
-				<?php                        
-				$combo = new select(dominioEspeciesContrato::getColecaoLicon());                        
-				//cria o combo
-				echo $combo->getHtmlCombo(vocontrato::$nmAtrCdEspecieContrato, vocontrato::$nmAtrCdEspecieContrato, "", true, "camponaoobrigatorio", false, " onChange='formataForm();carregaDadosContrato();' required");
-				?>                        
-				Número: <INPUT type="text" id="<?=vocontrato::$nmAtrSqEspecieContrato?>" name="<?=vocontrato::$nmAtrSqEspecieContrato?>" value="<?=$voContrato->sqEspecie;?>"  class="camponaoobrigatorio" size="3" maxlength=2 required onBlur="carregaDadosContrato();"> º
+	            <TD class="campoformulario" colspan=3>
+	            <?php 
+	            //getCampoDadosContratoSimples(constantes::$CD_CLASS_CAMPO_OBRIGATORIO, "carregaDadosContrato()", false);	            
+	            $pArray = array(null,constantes::$CD_CLASS_CAMPO_OBRIGATORIO,true,true,false,true,"carregaDadosContrato();");
+	            getContratoEntradaArray($pArray);	            	 
+	            ?>
 				<div id="<?=voContratoLicon::$ID_REQ_DIV_DADOS_CONTRATO_LICON?>">
-				</div>				
-	        </TR>
-	        	        
+				</div>	            
+	            </TD>
+	        </TR>	        	        
 	        <?php 
 	       }	       
 	       ?>

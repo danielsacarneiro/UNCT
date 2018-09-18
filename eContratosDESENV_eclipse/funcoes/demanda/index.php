@@ -77,15 +77,27 @@ function excluir() {
     detalhar(true);
 }
 
-function incluir() {
+/*function incluir() {
 	location.href="encaminhar.php?funcao=<?=constantes::$CD_FUNCAO_INCLUIR?>";
-}
+}*/
 
-function incluirNovo() {
+function incluir() {
 	location.href="encaminhar.novo.php?funcao=<?=constantes::$CD_FUNCAO_INCLUIR?>";
 }
 
 function alterar() {
+    if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta"))
+            return;        
+    <?php
+    if($isHistorico){
+    	echo "exibirMensagem('Registro de historico nao permite alteracao.');return";
+    }?>
+    
+	chave = document.frm_principal.rdb_consulta.value;	
+	location.href="manterDemanda.novo.php?funcao=<?=constantes::$CD_FUNCAO_ALTERAR?>&chave=" + chave;
+}
+
+/*function alterar() {
     if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta"))
             return;
         
@@ -97,7 +109,7 @@ function alterar() {
 	chave = document.frm_principal.rdb_consulta.value;	
 	location.href="manterDemanda.php?funcao=<?=constantes::$CD_FUNCAO_ALTERAR?>&chave=" + chave;
 
-}
+}*/
 
 function encaminhar() {
     if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta"))
@@ -139,7 +151,7 @@ function encaminhar() {
 	        include_once(caminho_util. "dominioSimNao.php");
 	        $comboSimNao = new select(dominioSimNao::getColecao());
 	         
-	        	$comboTipo = new select(dominioTipoDemanda::getColecao());
+	        	$comboTipo = new select(dominioTipoDemanda::getColecao(false));
 	        	$comboSituacao = new select(dominioSituacaoDemanda::getColecaoHTMLConsulta());
 	        	$comboSetor = new select(dominioSetor::getColecao());
 	        	$comboPrioridade = new select(dominioPrioridadeDemanda::getColecao());
@@ -177,7 +189,9 @@ function encaminhar() {
 	                	<TD class="campoformulario" width="1%">Incluindo:</TD>
 	                	<TD class="campoformulario" >
 		                <?php //echo $comboTipo->getHtmlCombo(voDemanda::$nmAtrTipo, voDemanda::$nmAtrTipo, $filtro->vodemanda->tipo, true, "camponaoobrigatorio", false, "") . "<br>";
-		                	  echo $comboTipo->getHtmlCombo(voDemanda::$nmAtrTipo, voDemanda::$nmAtrTipo."[]", $filtro->vodemanda->tipo, true, "camponaoobrigatorio", false, " multiple ");
+	                	  echo $comboTipo->getHtmlCombo(voDemanda::$nmAtrTipo, voDemanda::$nmAtrTipo."[]", $filtro->vodemanda->tipo, true, "camponaoobrigatorio", false, " multiple ");
+	                	  $nmCampoTpDemandaContrato = voDemanda::$nmAtrTpDemandaContrato."[]";
+	                	  echo dominioTipoDemandaContrato::getHtmlChecksBox($nmCampoTpDemandaContrato, $filtro->vodemanda->tpDemandaContrato, dominioTipoDemandaContrato::getColecaoConsulta(), 2, false, "", true);
 		               	?>
 	                	</TD>
 	                <TR>
@@ -489,9 +503,10 @@ function encaminhar() {
                             <TD class='botaofuncao'>
                             <?php 
                             echo getBotaoValidacaoAcesso("bttEncaminhar", "Encaminhar", "botaofuncaop", false, false,true,false,"onClick='javascript:encaminhar();' accesskey='e'");
-                            if(isUsuarioAdmin()){
+                            /*if(isUsuarioAdmin()){
                             	echo getBotaoValidacaoAcesso("bttIncluirNovo", "IncluirNovo", "botaofuncaop", false, false,true,false,"onClick='javascript:incluirNovo();' accesskey='n'");
-                            }
+                            	echo getBotaoValidacaoAcesso("bttAlterarNovo", "AlterarNovo", "botaofuncaop", false, false,true,false,"onClick='javascript:alterarNovo();' accesskey='v'");
+                            }*/
                             ?>
                             </TD>
                          </TR>

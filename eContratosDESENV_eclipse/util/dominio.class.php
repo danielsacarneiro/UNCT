@@ -179,7 +179,7 @@ class dominio extends multiplosConstrutores {
 		return $html;
 	}
 	
-	static function getHtmlChecksBox($nm, $opcaoSelecionada, $colecao=null, $qtdItensPorColuna=4, $comOpcaoMarcarTodos=false, $javascriptadicional=null) {
+	static function getHtmlChecksBox($nm, $opcaoSelecionada, $colecao=null, $qtdItensPorColuna=4, $comOpcaoMarcarTodos=false, $javascriptadicional=null, $comBorracha = false) {
 		if($colecao==null){
 			$colecao = static::getColecao ();
 		}
@@ -205,6 +205,9 @@ class dominio extends multiplosConstrutores {
 		
 		$html.="\n<TD valign='top'>";
 		$novaTD = false;
+		if(is_array($opcaoSelecionada)){
+			$opcaoSelecionada = getArrayComoStringCampoSeparador($opcaoSelecionada);
+		}
 		foreach ($colecaoChave as $chave){
 			$novaTD = $i%$qtdItensPorColuna==0;				
 			if($novaTD){
@@ -218,8 +221,15 @@ class dominio extends multiplosConstrutores {
 			$html .= "\n".$conectorAntes . getCheckBoxBoolean($chave, $nm, $chave, $checked, $javascript)." ". static::getDescricaoStatic($chave,$colecao) . "<br>";
 			$i++;
 		}
-				
-		$html.="\n</TD>";
+		
+		if($comBorracha){
+			$nmCamposDoc = array(
+					$nm,
+			);				
+			$borracha = getBorracha($nmCamposDoc, "");
+		}
+		
+		$html.="$borracha\n</TD>";
 		$html.="\n</TR>";
 		$html.="\n</TBODY>";
 		$html.="\n</TABLE>";		

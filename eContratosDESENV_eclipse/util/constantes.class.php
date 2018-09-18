@@ -28,11 +28,13 @@
     static $DS_SIM  = "Sim";
     static $DS_NAO  = "Não";
     static $DS_OPCAO_TODOS = "Todos";
+    static $DS_OPCAO_NENHUM = "Nenhum";
      
     static $CD_SIM  = "S";
     static $CD_NAO  = "N"; 
     static $CD_OPCAO_TODOS  = "op_todos";
     static $CD_OPCAO_VAZIO = "op_vazio";
+    static $CD_OPCAO_NENHUM = "op_nenhum";
     
     static $CD_ORDEM_CRESCENTE = "ASC";
     static $CD_ORDEM_DECRESCENTE = "DESC";

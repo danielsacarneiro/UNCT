@@ -47,7 +47,7 @@ function getDadosContratada($chave, $voentidade = null) {
 		if ($isConsultaPorContrato) {				
 			$vo = new vocontrato ();
 			$vo->getChavePrimariaVOExplodeParam ( $chave );
-			$recordSet = consultarPessoasContrato ( $vo );
+			$recordSet = consultarPessoasContrato ( $vo, $vo->sqEspecie != null);
 				
 			$retorno = getCampoContratada ( "", "", $chave );
 			if ($recordSet != "") {
@@ -58,7 +58,8 @@ function getDadosContratada($chave, $voentidade = null) {
 				//$retorno = "";
 				
 				//bota a lupa sempre pro mater
-				$retorno = getLupaContratoMaterPorChaveHTML($chave);
+				$retorno = "";
+				$lupaTemp = getLupaContratoMaterPorChaveHTML($chave);
 				
 				for($i = 0; $i < $tam; $i ++) {
 					$registro = $recordSet [$i];
@@ -68,6 +69,8 @@ function getDadosContratada($chave, $voentidade = null) {
 					// guarda para usar na pagina que chamou o metodo
 					$arrayCdAutorizacao [] = $registro [vocontrato::$nmAtrCdAutorizacaoContrato];
 				}
+				
+				$retorno = $lupaTemp. $retorno;
 
 				//putObjetoSessao ( "teste", $arrayCdAutorizacao );
 			}
@@ -86,8 +89,16 @@ function getLupaContratoMaterPorChaveHTML($chave){
 	//bota a lupa sempre pro mater
 	$voContTemp = new vocontrato();
 	$voContTemp->getChavePrimariaVOExplodeParam($chave);
-	$voContTemp->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
-	$voContTemp->sqEspecie = 1;
+	
+	if($voContTemp->cdEspecie == null){
+		$voContTemp->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
+	}
+	if($voContTemp->cdEspecie == dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER){
+		$voContTemp->sqEspecie = 1;
+	}	
+	//echo $voContTemp->sqEspecie;
+	/*$voContTemp->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
+	$voContTemp->sqEspecie = 1;*/
 	$chaveTemp = $voContTemp->getValorChaveHTML();
 	return getLinkPesquisa ( "../contrato/detalharContrato.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $chaveTemp );	
 }
@@ -194,12 +205,17 @@ function getComboGestorResponsavel($cdGestor){
 	return $retorno;
 }
 
-function consultarPessoasContrato($voContrato){
+function consultarPessoasContrato($voContrato, $pIsChaveCompleta=false){
 	//$voContrato = new vocontrato();
 	$filtro = new filtroManterPessoa(false);
 	$filtro->anoContrato = $voContrato->anoContrato;
 	$filtro->cdContrato = $voContrato->cdContrato;
 	$filtro->tpContrato = $voContrato->tipo;
+	if($pIsChaveCompleta){
+		$filtro->cdEspecieContrato = $voContrato->cdEspecie;
+		$filtro->sqEspecieContrato = $voContrato->sqEspecie;
+	}
+	
 	$filtro->setaFiltroConsultaSemLimiteRegistro();
 	//seta clausula group by
 	$filtro->groupby = array(vopessoa::$nmAtrDoc, vopessoa::$nmAtrNome);

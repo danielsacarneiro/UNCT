@@ -17,7 +17,19 @@ $readonly = "readonly";
         
 	$dbprocesso = new dbcontrato();				
 	$colecao = $dbprocesso->limpaResultado();
-	$colecao = $dbprocesso->consultarContratoPorChave($voContrato, $isHistorico);	
+	$msgComplementar = null;	
+	try{
+		$colecao = $dbprocesso->consultarContratoPorChave($voContrato, $isHistorico);
+	}catch (excecaoChaveRegistroInexistente $excecao){
+		//caso nao exista o contrato passado como parametro, tenta buscar sempre o mater
+		$voContrato->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
+		$voContrato->sqEspecie = 1;
+		$colecao = $dbprocesso->consultarContratoPorChave($voContrato, $isHistorico);
+		$msgComplementar = "TERMO BUSCADO INEXISTENTE - EXIBINDO O CONTRATO MATER.";
+	}catch (excecaoChaveRegistroInexistente $excecao){
+		//nao existindo direciona para a pagina de erro;
+		tratarExcecaoHTML($excecao);
+	}	
 	$voContrato->getDadosBanco($colecao[0]);
 	
 	$voContratoInfo = new voContratoInfo();
@@ -116,7 +128,14 @@ function confirmar() {
         <DIV id="div_filtro" class="div_filtro">
         <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
             <TBODY>
-        <?php        
+           <?php
+           if($msgComplementar != null){
+           ?>
+			<TR>
+	            <TD class="campoformulario" colspan="4"><?=getTextoHTMLDestacado($msgComplementar)?></TD>
+	        </TR>            
+        <?php
+          }
         require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
         getContratoDet($voContrato, true);                
         ?>

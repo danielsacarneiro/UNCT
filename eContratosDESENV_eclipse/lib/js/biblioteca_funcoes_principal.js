@@ -131,7 +131,7 @@ function tratarUnload() {
 function limparCampoFormularioEConti(element){
 	if(element.type == 'select-one'){
 		element[0].selected = true;
-	}else if(element.type == 'checkbox'){
+	}else if(element.type == 'checkbox'){		
 		element.checked = false;				
 	}else {		
 		element.value='';
@@ -193,10 +193,18 @@ function esconderDiv(pCampoDiv, pColecaoIDCamposRequired, pEsconder){
 }
 
 function limparCamposColecaoFormulario(colecaoIDCampos){
-	
+	var i=0;
 	for(i=0;i<colecaoIDCampos.length;i++){					
 		id = colecaoIDCampos[i];		
 		element = document.getElementById(id);		
+		limparCampoFormularioEConti(element);
+	}
+}
+
+function limparCamposColecaoDeCamposFormulario(colecaoCampos){
+	var i=0;
+	for(i=0;i<colecaoCampos.length;i++){					
+		element = colecaoCampos[i];				
 		limparCampoFormularioEConti(element);
 	}
 }

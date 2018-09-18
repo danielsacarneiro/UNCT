@@ -6,6 +6,14 @@
  - biblioteca_funcoes_principal.js
 */
 
+function formataFormEditalPorTpDemanda(pNmCampoTpDemanda, pColecaoNmObjetosForm, pCdTpDemandaEdital) {
+	var campoTpDemanda = document.getElementById(pNmCampoTpDemanda);
+	var cdTpDemanda = campoTpDemanda.value;
+	
+	var isDemandaEdital = cdTpDemanda == pCdTpDemandaEdital;
+	habilitarCamposPorNome(pColecaoNmObjetosForm, isDemandaEdital);	
+}
+
 function formataFormTpDemanda(pNmCampoTpDemanda, pNmCampoAtributos) {
 	//precisa da bibliotecafuncoesprincipal.js
 	campoTpDemanda = document.getElementById(pNmCampoTpDemanda);
@@ -71,9 +79,9 @@ function formataFormTpDemandaReajusteContrato(pIDCampoTipoDemanda,
 	if(pExibirMensagemErro == null){
 		pExibirMensagemErro = true;
 	}
-	campoTpDemanda = document.getElementById(pIDCampoTipoDemanda);
-	campoDIVMontanteA= document.getElementById(pIDCampoDivMontanteA);
-	campoTpReajuste = document.getElementById(pIDCampoTipoReajuste);
+	var campoTpDemanda = document.getElementById(pIDCampoTipoDemanda);
+	var campoDIVMontanteA= document.getElementById(pIDCampoDivMontanteA);
+	var campoTpReajuste = document.getElementById(pIDCampoTipoReajuste);
 	
 	if(campoTpDemanda == null || campoDIVMontanteA == null){
 		nmCampo = "";
@@ -91,8 +99,8 @@ function formataFormTpDemandaReajusteContrato(pIDCampoTipoDemanda,
 		return;
 	}
 	
-	cdTpDemanda = campoTpDemanda.value;	
-	isDemandaContrato = pColecaoTpDemandaContrato.indexOf(cdTpDemanda) != -1;
+	var cdTpDemanda = campoTpDemanda.value;	
+	var isDemandaContrato = pColecaoTpDemandaContrato.indexOf(cdTpDemanda) != -1;
 	var pColecaoIDCamposRequired = null;
 	
 	//biblioteca_funcoes_principal.js

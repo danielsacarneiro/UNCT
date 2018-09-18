@@ -90,6 +90,15 @@ function getMateriaReOrdenando(&$colecao){
 	}	
 }
 
+
+echoo("PREGMATCH");
+$redirectUrl = "http://sf300451/wordpress/UNCT/eContratosDesenv_eclipse/funcoes/mensagemErro.php";
+preg_match( "/[\/][a-z]+[\/]([a-zA-z0-9-\/]*)/", $_SERVER["REQUEST_URI"], $redirectUrl);
+
+header ( "Location: $redirectUrl" . $msg, TRUE, 307 );
+
+
+
 ?>
 
 <!DOCTYPE html>

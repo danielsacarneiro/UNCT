@@ -188,7 +188,7 @@ function alterar() {
                     <TH class="headertabeladados" width="1%" nowrap>Sistema</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Contrato</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Tipo</TH>
-                    <TH class="headertabeladados" width="80%">Contratada</TH>
+                    <TH class="headertabeladados" width="70%">Contratada</TH>
                     <TH class="headertabeladados" width="1%">CNPJ/CNPF</TH>                    
 					<TH class="headertabeladados" width="1%" nowrap>Dt.Publicação</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Dt.Registro</TH>
@@ -259,7 +259,7 @@ function alterar() {
                   	<TD class="tabeladados" nowrap><?php echo $tipo?></TD>
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo $contrato;?></TD>
                     <TD class="tabeladados" nowrap><?php echo $complementoContrato?></TD>                    
-					<TD class="tabeladados" nowrap><?php echo $dsPessoa?></TD>					
+					<TD class="tabeladados"><?php echo $dsPessoa?></TD>					
 					<TD class="tabeladados" nowrap><?php echo documentoPessoa::getNumeroDocFormatado($voPessoa->doc)?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($registroBanco[vocontrato::$nmAtrDtPublicacaoContrato])?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($voAtual->dhUltAlteracao)?></TD>

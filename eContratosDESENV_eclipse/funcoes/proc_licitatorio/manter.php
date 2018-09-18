@@ -210,7 +210,7 @@ function confirmar() {
 	        </TR>
 			<TR>
 	            <TH class="campoformulario" nowrap>Valor.Total:</TH>
-	            <TD class="campoformulario" colspan="3"><INPUT type="text" id="<?=voProcLicitatorio::$nmAtrValor?>" name="<?=voProcLicitatorio::$nmAtrValor?>"  value="<?php echo($vlMensal);?>"
+	            <TD class="campoformulario" colspan="3"><INPUT type="text" id="<?=voProcLicitatorio::$nmAtrValor?>" name="<?=voProcLicitatorio::$nmAtrValor?>"  value="<?php echo(getMoeda($vo->valor));?>"
 	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="camponaoobrigatorioalinhadodireita" size="15" required></TD>
 	        </TR>						        
 			<TR>

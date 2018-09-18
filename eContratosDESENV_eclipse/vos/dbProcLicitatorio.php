@@ -419,6 +419,11 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
         	$sqlConector = ",";
         }
         
+        if($vo->cdPregoeiro != null){
+        	$retorno.= $sqlConector . voProcLicitatorio::$nmAtrCdPregoeiro . " = " . $this->getVarComoNumero($vo->cdPregoeiro);
+        	$sqlConector = ",";
+        }
+        
         $retorno = $retorno . $sqlConector . $vo->getSQLValuesUpdate();
 		        
 		return $retorno;                

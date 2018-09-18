@@ -244,15 +244,8 @@ class dbDemandaTramitacao extends dbprocesso {
 		return $voDemanda;
 	}
 	function validarInclusao($vo) {
-		/*
-		 * echo "tipo da demanda:" . $vo->tipo . "<br>";
-		 * echo "tem contrato:" . $vo->temContratoParaIncluir() . "<br>";
-		 */
-		//if ($vo->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO && ! $vo->temContratoParaIncluir ()) {
-		if (dominioTipoDemanda::isContratoObrigatorio($vo->tipo) && ! $vo->temContratoParaIncluir ()) {			
-			$msg = "Selecione o(s) contrato(s).";
-			throw new Exception ( $msg );
-		}
+		//para o caso do encaminhar.novo.php
+		dbDemanda::validarGenerico($vo);
 	}
 	function validarEncaminhamento($vo) {
 		if ($vo->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA) {
@@ -275,8 +268,7 @@ class dbDemandaTramitacao extends dbprocesso {
 		// Start transaction
 		$this->cDb->retiraAutoCommit ();
 		try {
-			$this->incluirDemandaTramitacaoSEMControleTransacao ( $vo );
-			
+			$this->incluirDemandaTramitacaoSEMControleTransacao ( $vo );			
 			//sempre que uma demanda for encaminhada, ela estara em andamento ate que seja fechada
 			$voDemanda = new voDemanda ();
 			$voDemanda = $vo->getVOPai ();			
@@ -289,8 +281,8 @@ class dbDemandaTramitacao extends dbprocesso {
 				$voDemanda->dbprocesso->cDb = $this->cDb;
 				$voDemanda->situacao = dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO;				
 				$voDemanda->dbprocesso->alterarApenasVODemanda($voDemanda);
-			}
-			
+				//parent::alterarPorCima($voDemanda);
+			}			
 			/*
 			 * $voDemanda = new voDemanda();
 			 * $voDemanda = $vo->getVOPaiChave();

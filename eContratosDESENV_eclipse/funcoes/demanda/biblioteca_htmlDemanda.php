@@ -71,10 +71,16 @@ function getDemandaDetalhamentoComLupa($voDemanda, $temLupaDet, $exibeTipoDemand
 	require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
 		getColecaoContratoDet($voDemanda->colecaoContrato);
 	}
+}
+
+function getTpDemandaContrato($nmCampoTpDemandaContrato, $nmCampoTpDemandaReajuste, $nmDivInformacoesComplementares, $pCdOpcaoSelecionadaTpDemandaContrato=null, $pCdOpcaoSelecionadaReajuste=null){
+	$comboTpReajuste = new select(dominioTipoReajuste::getColecao());
 	
-	?>	
-	
-<?php 
+	$html = "<div id='$nmDivInformacoesComplementares'> <b>Informações complementares</b>";	
+	$html .= dominioTipoDemandaContrato::getHtmlChecksBox($nmCampoTpDemandaContrato, $pCdOpcaoSelecionadaTpDemandaContrato, dominioTipoDemandaContrato::getColecao(), 2, true, "formataFormTpDemandaContrato();");
+	$html .= "Reajuste: " . $comboTpReajuste->getHtmlComObrigatorio($nmCampoTpDemandaReajuste,$nmCampoTpDemandaReajuste, $pCdOpcaoSelecionadaReajuste, false,false);
+	$html .= "</div>";	
+	return $html; 		
 }
 
 function getHtmlDocumento($voAtual, $comDescricaoPorExtenso = false) {

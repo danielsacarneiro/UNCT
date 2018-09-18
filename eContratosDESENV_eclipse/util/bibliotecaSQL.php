@@ -140,11 +140,12 @@ function getSQLStringFormatadaColecaoIN($colecaoValores, $isString) {
 	
 	return getColecaoEntreSeparadorAspas ( $colecaoValores, $separador, $isString );
 }
-function getSQLStringArgumentosFormatadoColecao($colecaoValores, $nmAtributo, $operadorSQL, $operardorValor, $isString) {
+
+function getSQLStringArgumentosFormatadoColecao($colecaoValores, $nmAtributo, $operadorSQL, $operadorValor, $isString) {
 	$retorno = "";
 	$aspas = "'";
 	
-	$isOperadorSQLLIKE = (mb_stripos ( $operardorValor, "LIKE" ) !== false);
+	$isOperadorSQLLIKE = (mb_stripos ( $operadorValor, "LIKE" ) !== false);
 	// echo $isOperadorSQLLIKE;
 	
 	if ($colecaoValores != null) {
@@ -164,7 +165,7 @@ function getSQLStringArgumentosFormatadoColecao($colecaoValores, $nmAtributo, $o
 					$atrib = $aspas . $atrib . $aspas;
 				}
 				
-				$retorno .= "\n" . $nmAtributo . $operardorValor . $atrib . $operadorSQL;
+				$retorno .= "\n" . $nmAtributo . $operadorValor . $atrib . $operadorSQL;
 			}
 			// echo "$retorno<br>";
 		}
@@ -172,6 +173,35 @@ function getSQLStringArgumentosFormatadoColecao($colecaoValores, $nmAtributo, $o
 		$qtdCharFim = strlen ( $retorno ) - strlen ( $operadorSQL );
 		// echo $qtdCharFim;
 		$retorno = substr ( $retorno, 0, $qtdCharFim );
+	}
+	// echo $retorno;
+	return $retorno;
+}
+
+function getSQLBuscarStringCampoSeparador($colecaoAtributos, $nmAtributo, $operador = "OR") {	
+	//$strFormato = " LOCATE('$tpDemandaContrato',".voDemanda::$nmAtrTpDemandaContrato.") ";	
+	$retorno = "";
+	$separador = "";
+	if ($colecaoAtributos != null) {
+		$tamanho = count ( $colecaoAtributos );
+		// echo "<br> qtd registros: " . $tamanho;
+		
+		if(!is_array($colecaoAtributos)){
+			$colecaoAtributos = array($colecaoAtributos);
+		}
+
+		for($i = 0; $i <= $tamanho; $i ++) {
+			$atrib = $colecaoAtributos [$i];
+				
+			if ($atrib != null) {
+				$retorno .= " $separador LOCATE('$atrib',$nmAtributo) ";
+				$separador = " $operador ";
+			}
+			// echo "$retorno<br>";
+		}
+		
+		$retorno = "($retorno)";
+		//$retorno = substr ( $retorno, 0, count ( $retorno ) - 2 );
 	}
 	// echo $retorno;
 	return $retorno;

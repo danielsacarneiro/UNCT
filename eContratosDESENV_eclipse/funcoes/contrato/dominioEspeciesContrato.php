@@ -15,7 +15,11 @@ include_once(caminho_util. "dominio.class.php");
   	static $CD_ESPECIE_CONTRATO_RESCISAO_AMIGAVEL = "RA";
   	static $CD_ESPECIE_CONTRATO_RESCISAO_UNILATERAL = "RU";
   	static $CD_ESPECIE_CONTRATO_RESCISAO_ENCERRAMENTO = "RE";
-  	
+
+  	static $DS_ESPECIE_CONTRATO_MATER = "Mater";
+  	static $DS_ESPECIE_CONTRATO_TERMOADITIVO = "Termo Aditivo";
+  	static $DS_ESPECIE_CONTRATO_APOSTILAMENTO = "Apostilamento";
+  	 
   	 /*
   	 * ANTES ERA ASSIM:
   	"01" => "Mater",
@@ -38,9 +42,9 @@ include_once(caminho_util. "dominio.class.php");
 	
 	static function getColecao(){
 		return array(
-        				self::$CD_ESPECIE_CONTRATO_MATER => "Mater",
-        				self::$CD_ESPECIE_CONTRATO_APOSTILAMENTO => "Apostilamento",
-        				self::$CD_ESPECIE_CONTRATO_TERMOADITIVO => "Termo Aditivo",
+        				self::$CD_ESPECIE_CONTRATO_MATER => self::$DS_ESPECIE_CONTRATO_MATER,
+        				self::$CD_ESPECIE_CONTRATO_APOSTILAMENTO => self::$DS_ESPECIE_CONTRATO_APOSTILAMENTO,
+        				self::$CD_ESPECIE_CONTRATO_TERMOADITIVO => self::$DS_ESPECIE_CONTRATO_TERMOADITIVO,
         				self::$CD_ESPECIE_CONTRATO_TERMOAJUSTE => "Termo de Ajuste",
         				self::$CD_ESPECIE_CONTRATO_CESSAO_USO => "Termo de Cessão de Uso",
         				self::$CD_ESPECIE_CONTRATO_RERRATIFICACAO => "Termo de Rerratificação",
@@ -54,8 +58,8 @@ include_once(caminho_util. "dominio.class.php");
     
 	static function getColecaoLicon(){
 		return array(
-				self::$CD_ESPECIE_CONTRATO_MATER => "Mater",
-				self::$CD_ESPECIE_CONTRATO_TERMOADITIVO => "Termo Aditivo",
+				self::$CD_ESPECIE_CONTRATO_MATER => self::$DS_ESPECIE_CONTRATO_MATER,
+				self::$CD_ESPECIE_CONTRATO_TERMOADITIVO => self::$DS_ESPECIE_CONTRATO_TERMOADITIVO,
 		);
 	}
 	
@@ -68,7 +72,7 @@ include_once(caminho_util. "dominio.class.php");
 		//deixa na ultima posicao as especies que podem se repetir		
 		return array(
         		self::$CD_ESPECIE_CONTRATO_RERRATIFICACAO => "Rerratificação*Rerratificacao",
-        		self::$CD_ESPECIE_CONTRATO_TERMOADITIVO => "T.A",
+        		self::$CD_ESPECIE_CONTRATO_TERMOADITIVO => "T.A*TA*",
         		self::$CD_ESPECIE_CONTRATO_TERMOAJUSTE => "Ajuste",
         		self::$CD_ESPECIE_CONTRATO_CESSAO_USO => "Cessão",
         		self::$CD_ESPECIE_CONTRATO_RESCISAO_AMIGAVEL => "Amigável*Amigavel",

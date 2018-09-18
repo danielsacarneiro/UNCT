@@ -11,21 +11,37 @@
 function carregaDadosContratada(pNmCampoAnoContrato, pNmCampoTipoContrato, pNmCampoCdContrato, pNmCampoCdEspecieContrato, pNmCampoSqEspecieContrato, pNmCampoDiv){
 	str = "";
 		
-	cdContrato = document.getElementById(pNmCampoCdContrato).value;
-	anoContrato = document.getElementById(pNmCampoAnoContrato).value;
-	tpContrato = document.getElementById(pNmCampoTipoContrato).value;
+	var cdContrato = document.getElementById(pNmCampoCdContrato).value;
+	var anoContrato = document.getElementById(pNmCampoAnoContrato).value;
+	var tpContrato = document.getElementById(pNmCampoTipoContrato).value;
+	var isChaveCompleta = false;
+	
+	var cdEspecieContratoMater = 'CM';
 	try{
+		var campoSqEspecieContrato = document.getElementById(pNmCampoSqEspecieContrato);
+		
 		cdEspecieContrato = document.getElementById(pNmCampoCdEspecieContrato).value;
-		sqEspecieContrato = document.getElementById(pNmCampoSqEspecieContrato).value;
+		sqEspecieContrato = campoSqEspecieContrato.value;
+		isChaveCompleta = true;
+					
+		if(cdEspecieContrato == cdEspecieContratoMater){
+			sqEspecieContrato = 1;
+			campoSqEspecieContrato.value = sqEspecieContrato; 
+		}		
 	}catch(ex){		
 		cdEspecieContrato = null;
 		sqEspecieContrato = null;		
 	}
 	//alert(cdContrato + CD_CAMPO_SEPARADOR + anoContrato + CD_CAMPO_SEPARADOR + tpContrato);
+		
+	var colecaoIDCamposRequired = [pNmCampoSqEspecieContrato];
+	var required = cdEspecieContrato != cdEspecieContratoMater;	
+	tornarRequiredCamposColecaoFormulario(colecaoIDCamposRequired, required);
 
 	//fica assim por conta do formato da chave do vocontrato
-	if(cdContrato != "" && anoContrato != "" && tpContrato != ""){
-		str = "" + CD_CAMPO_SEPARADOR + anoContrato + CD_CAMPO_SEPARADOR + cdContrato + CD_CAMPO_SEPARADOR + tpContrato;
+	if(cdContrato != "" && anoContrato != "" && tpContrato != ""
+		&& ((isChaveCompleta && cdEspecieContrato != "" && sqEspecieContrato != "") || !isChaveCompleta)){
+		var str = "" + CD_CAMPO_SEPARADOR + anoContrato + CD_CAMPO_SEPARADOR + cdContrato + CD_CAMPO_SEPARADOR + tpContrato;
 		
 		if(cdEspecieContrato != null)
 			str = str + CD_CAMPO_SEPARADOR + cdEspecieContrato;

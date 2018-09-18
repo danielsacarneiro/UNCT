@@ -422,9 +422,13 @@ class dbcontrato extends dbprocesso {
 			throw $exFim;
 		} catch ( Exception $e ) {
 				echo "<BR> ERRO INCLUSAO. <BR>";
-				$msgErro = $e->getMessage ();
-				echo "<BR>" . $msgErro . "<BR>";
+				$msgErro = "CONTRATO:: " 
+				. $voContrato->getCodigoContratoFormatado() 
+				. "|" .$voContrato->sqEspecie 
+				. "º " . dominioEspeciesContrato::getDescricaoStatic($voContrato->cdEspecie);
 				
+				$msgErro .= "<BR>" . $e->getMessage ();				
+				echo "<BR>" . $msgErro . "<BR>";								
 				//$query = "";
 				// se der pau, vai alterar
 				// $retorno = $this->cDb->atualizarImportacao($query);

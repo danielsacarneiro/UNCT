@@ -462,8 +462,36 @@ class dbDemanda extends dbprocesso {
 	
 		return $retorno;
 	}	
+	
+	static function validarGenerico(&$vo) {
+		$tipo = $vo->tipo;
+		$tpDemandaContrato = $vo->tpDemandaContrato;
+		$tpReajuste = $vo->inTpDemandaReajusteComMontanteA;
+		
+		if ($tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO){
+			if($tpDemandaContrato == null || $tpDemandaContrato == "" || isColecaoVazia($tpDemandaContrato)){
+				throw new excecaoGenerica ( "Os campos informações complementares da demanda/contrato são obrigatórios." );
+			}
+			
+			/*if(is_array($tpDemandaContrato)){
+				$tpDemandaContratoStr = voDemanda::getArrayComoStringCampoSeparador($tpDemandaContrato);
+			}				
+			if(dominioTipoDemandaContrato::existeItemArrayOuStrCampoSeparador(dominioTipoDemandaContrato::$CD_TIPO_REAJUSTE, $tpDemandaContratoStr)
+					&& ($tpReajuste == null || $tpReajuste == "")){
+				throw new excecaoGenerica ( "O campo tipo de reajuste é obrigatório." );
+			}*/
+		}		
+		
+		if (dominioTipoDemanda::isContratoObrigatorio($tipo) && ! $vo->temContratoParaIncluir ()) {
+			$msg = "Selecione ao menos um contrato.";
+			throw new excecaoGenerica ( $msg );
+		}		
+	}
+	
 	function validarAlteracao($vo) {
-		//asdas		
+		
+		$this->validarGenerico($vo);
+		
 		if ($vo->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA) {
 
 			$this->isSetorDestinoIgualDemandante ( $vo, "fechamento" );
@@ -630,36 +658,56 @@ class dbDemanda extends dbprocesso {
 		}
 		return $this->incluirQueryVO ( $vo );
 	}
+	
+	function tratarDados(&$vo){
+		static::validarGenerico($vo);
+		
+		$tpDemandaContrato = $vo->tpDemandaContrato;		
+		//quando vem da tela eh um array
+		//quando vem do banco, deve ser uma string
+		//dai eh importante sempre converter pra string
+		if(is_array($tpDemandaContrato)){
+			$tpDemandaContrato = voDemanda::getArrayComoStringCampoSeparador($tpDemandaContrato);
+		}
+					
+		$vo->tpDemandaContrato = $tpDemandaContrato;
+		if(!dominioTipoDemandaContrato::existeItemArrayOuStrCampoSeparador(dominioTipoDemandaContrato::$CD_TIPO_REAJUSTE, $tpDemandaContrato)){
+			$vo->inTpDemandaReajusteComMontanteA = null;
+		}		
+		
+		if($vo->inLegado==null){
+			$vo->inLegado = constantes::$CD_SIM;
+		}
+		
+		return $vo; 
+	}
 	function getSQLValuesInsert($vo) {
+		$vo = $this->tratarDados($vo);
+		
 		$retorno = "";
 		$retorno .= $this->getVarComoNumero ( $vo->ano ) . ",";
 		$retorno .= $this->getVarComoNumero ( $vo->cd ) . ",";
 		$retorno .= $this->getVarComoNumero ( $vo->tipo ) . ",";
-		
-		//$vo = new voDemandaContrato();
-		$colecaoTpDemanda = $vo->tpDemandaContrato;
-		$tpDemandaContrato = "null";
-		if(!isColecaoVazia($colecaoTpDemanda)){
-			$tpDemandaContrato = voentidade::getArrayComoStringCampoSeparador($colecaoTpDemanda);
-		}
-		
-		$retorno.= $this-> getVarComoString($tpDemandaContrato). ",";		
-		$retorno .= $this->getVarComoString ( $vo->inTpDemandaReajusteComMontanteA ) . ",";
+	
+		$retorno.= $this-> getVarComoString($vo->tpDemandaContrato). ",";		
+		$retorno .= $this->getVarComoString ($vo->inTpDemandaReajusteComMontanteA) . ",";
 		$retorno .= $this->getVarComoNumero ( $vo->cdSetor ) . ",";
 		// $retorno.= $this-> getVarComoNumero($vo->situacao);
 		$retorno .= $this->getVarComoNumero ( dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_ABERTA ) . ",";
 		$retorno .= $this->getVarComoString ( strtoupper ( $vo->texto ) ) . ",";
 		$retorno .= $this->getVarComoNumero ( $vo->prioridade ) . ",";
-		$retorno .= $this->getVarComoData ( $vo->dtReferencia );
+		$retorno .= $this->getVarComoData ( $vo->dtReferencia ). ",";
+		$retorno .= $this->getVarComoString($vo->inLegado);
 		
 		$retorno .= $vo->getSQLValuesInsertEntidade ();
 		
 		return $retorno;
 	}
 	function getSQLValuesUpdate($vo) {
+		$vo = $this->tratarDados($vo);
 		$retorno = "";
 		$sqlConector = "";
-		
+				
 		if ($vo->prioridade != null) {
 			$retorno .= $sqlConector . voDemanda::$nmAtrPrioridade . " = " . $this->getVarComoNumero ( $vo->prioridade );
 			$sqlConector = ",";
@@ -680,10 +728,11 @@ class dbDemanda extends dbprocesso {
 			$sqlConector = ",";
 		}
 		
-		if ($vo->inTpDemandaReajusteComMontanteA != null) {
-			$retorno .= $sqlConector . voDemanda::$nmAtrInTpDemandaReajusteComMontanteA . " = " . $this->getVarComoString ( $vo->inTpDemandaReajusteComMontanteA );
-			$sqlConector = ",";
-		}
+		$retorno .= $sqlConector . voDemanda::$nmAtrTpDemandaContrato . " = " . $this->getVarComoString ( $vo->tpDemandaContrato );
+		$sqlConector = ",";
+		
+		$retorno .= $sqlConector . voDemanda::$nmAtrInTpDemandaReajusteComMontanteA . " = " . $this->getVarComoString ( $vo->inTpDemandaReajusteComMontanteA );
+		$sqlConector = ",";		
 		
 		$retorno = $retorno . $sqlConector . $vo->getSQLValuesUpdate ();
 		

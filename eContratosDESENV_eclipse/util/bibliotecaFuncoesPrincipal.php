@@ -467,4 +467,16 @@ function getArrayFormatadoLinhaImportacaoPorSeparador($param) {
 	return $retorno;	
 }
 
+function getArrayComoStringCampoSeparador($array) {
+	return voentidade::getArrayComoStringCampoSeparador($array);
+}
+
+function getStringCampoSeparadorComoArray($chave) {
+	return voentidade::getStringCampoSeparadorComoArray($chave);
+}
+
+/*function isArrayMultiDimensional($array){
+	return count($array) == count($array, COUNT_RECURSIVE);
+}*/
+
 ?>

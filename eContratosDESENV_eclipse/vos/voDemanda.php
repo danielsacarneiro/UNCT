@@ -5,6 +5,7 @@ include_once (caminho_util . "bibliotecaFuncoesPrincipal.php");
 include_once (caminho_util . "dominioSetor.php");
 include_once (caminho_funcoes . "demanda/dominioSituacaoDemanda.php");
 include_once (caminho_funcoes . "demanda/dominioTipoDemanda.php");
+include_once (caminho_funcoes . "demanda/dominioTipoDemandaContrato.php");
 include_once (caminho_funcoes . "demanda/dominioPrioridadeDemanda.php");
 include_once (caminho_funcoes . "demanda/dominioTipoReajuste.php");
 class voDemanda extends voentidade {
@@ -22,6 +23,8 @@ class voDemanda extends voentidade {
 	static $nmAtrTexto = "dem_texto";
 	static $nmAtrPrioridade = "dem_prioridade";
 	static $nmAtrDtReferencia = "dem_dtreferencia";
+	static $nmAtrInLegado = "dem_inlegado";
+	
 	var $cd = "";
 	var $ano = "";
 	var $cdSetor = "";
@@ -33,6 +36,7 @@ class voDemanda extends voentidade {
 	var $texto = "";
 	var $prioridade = "";
 	var $dtReferencia = "";
+	var $inLegado = "";
 	var $dbprocesso = null;
 	var $colecaoContrato = null;
 	var $voProcLicitatorio = null;
@@ -90,7 +94,8 @@ class voDemanda extends voentidade {
 				self::$nmAtrSituacao,
 				self::$nmAtrTexto,
 				self::$nmAtrPrioridade,
-				self::$nmAtrDtReferencia 
+				self::$nmAtrDtReferencia, 
+				self::$nmAtrInLegado
 		);
 		
 		return $retorno;
@@ -158,6 +163,7 @@ class voDemanda extends voentidade {
 		$this->texto = $registrobanco [self::$nmAtrTexto];
 		$this->prioridade = $registrobanco [self::$nmAtrPrioridade];
 		$this->dtReferencia = $registrobanco [self::$nmAtrDtReferencia];
+		$this->inLegado = $registrobanco [self::$nmAtrInLegado];
 		
 		$this->getProcLicitatorioRegistroBanco($registrobanco);
 		
@@ -187,9 +193,7 @@ class voDemanda extends voentidade {
 		$this->texto = @$_POST [self::$nmAtrTexto];
 		$this->prioridade = @$_POST [self::$nmAtrPrioridade];
 		$this->dtReferencia = @$_POST [self::$nmAtrDtReferencia];
-		
-		
-		var_dump($this->tpDemandaContrato);
+		$this->inLegado = @$_POST [self::$nmAtrInLegado];
 		// quando existir
 		// recupera quando da consulta da contratada, ao inserir o contrato na tela
 		$chaveContrato = @$_POST [vopessoa::$ID_CONTRATO];

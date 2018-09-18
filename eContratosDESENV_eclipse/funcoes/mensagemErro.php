@@ -2,7 +2,7 @@
 include_once("../config_lib.php");
 include_once(caminho_util."bibliotecaHTML.php");
 
-inicio();
+inicio(false);
 setCabecalhoPorNivel(null,1);
 
 $msgErro = @$_GET["texto"];

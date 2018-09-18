@@ -104,6 +104,7 @@ define('caminho_filtros', "$base/filtros/");
 define('caminho_excecoes', "$base/excecoes/");
 define('caminho_funcoesHTML', "funcoes/");
 define('caminho_funcoes', "$base/funcoes/");
+define('url_sistema', 'http://sf300451/wordpress/UNCT/eContratosDesenv_eclipse/');
 
 include_once(caminho_util. "bibliotecaFuncoesPrincipal.php");
 

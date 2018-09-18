@@ -14,11 +14,20 @@ require_once (caminho_funcoes . "contrato/dominioTipoContrato.php");
 // .................................................................................................................
 
 // Class bibliotecaHTML {
-function inicio() {
-	inicioComValidacaoUsuario ( false );
+function inicio($validarRedirecionamentoEmCasoDeErro = true) {
+	inicioComValidacaoUsuario ( false, $validarRedirecionamentoEmCasoDeErro);
 }
 
-function inicioComValidacaoUsuario($validarPermissaoAcesso) {
+function inicioComValidacaoUsuario($validarPermissaoAcesso, $validarRedirecionamentoEmCasoDeErro = true) {
+	
+	if($validarRedirecionamentoEmCasoDeErro 
+			&& !isUsuarioAdmin() 
+			&& excecaoSistemaEmManutencao::$FLAG_MANUTENCAO){		
+		$ex = new excecaoSistemaEmManutencao();
+		$pagina = url_sistema . "funcoes/mensagemErro.php";
+		tratarExcecaoHTML($ex, null, $pagina);
+		//header ( "Location: $pagina?texto=" . $msg);
+	}	
 	
 	// include_path = ".:/usr/share/pear:/home/SEU_LOGIN_DE_FTP/SEU_DIRETORIO";
 	set_include_path ( dirname ( __FILE__ ) );
@@ -610,7 +619,9 @@ function getBorracha($nmCampos, $jsComplementar=null) {
 	$js = "";
 	for($i = 0; $i < $tam; $i ++) {
 		$nmCampoAtual = $nmCampos [$i];
-		$js .= "try{document.frm_principal." . $nmCampoAtual . ".value='';}catch(ex){;}";
+		//$js .= "try{document.frm_principal." . $nmCampoAtual . ".value='';}catch(ex){;}";
+		//$js .= "try{var campos = document.getElementsByName('$nmCampoAtual');[0].value='';}catch(ex){;}";
+		$js .= "try{var campos = document.getElementsByName('$nmCampoAtual');if(campos.length == 1){campos[0].value=''}else{limparCamposColecaoDeCamposFormulario(campos)};}catch(ex){;}";		
 	}
 	if($jsComplementar !=null){
 		$js .= $jsComplementar;
@@ -799,14 +810,11 @@ function tratarExcecaoHTML($ex, $vo = null, $paginaErro="../mensagemErro.php") {
 		// a debaixo eh para a tela de msg de erro
 		putObjetoSessao ( constantes::$ID_REQ_SESSAO_VO, $vo );
 	}
-	
 	$msg = $ex->getMessage ();
 	$msg = str_replace ( "\n", "", $msg );
 	$msg = str_replace ( "<br>", "", $msg );
-	
 	//echo $msg;
-	
-	header ( "Location: $paginaErro?texto=" . $msg, TRUE, 307 );	
+	header ( "Location: $paginaErro?texto=" . $msg, TRUE, 307 );
 }
 function getStrComPuloLinhaHTML($str) {
 	return getStrComPuloLinhaGenerico ( $str, "<br>" );
@@ -1040,4 +1048,8 @@ function getFuncaoJSDetalhar($caminhoPagina=null, $isNovaGuia=false){
 	 alert('funcionou');}";*/	
 				
 	return $retorno;	
+}
+
+function getTextoHTMLDestacado($texto){
+	return "<font color='red'><b><u>$texto</u></b></font>";
 }

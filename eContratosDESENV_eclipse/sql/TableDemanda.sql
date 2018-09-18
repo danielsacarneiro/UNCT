@@ -12,7 +12,8 @@ CREATE TABLE demanda (
     dem_texto MEDIUMTEXT NOT NULL,
     dem_prioridade INT DEFAULT 3 NOT NULL,
     dem_dtreferencia DATE,
-    dem_prt VARCHAR(25),
+    -- dem_prt VARCHAR(25),
+    dem_inlegado CHAR(1) NOT NULL DEFAULT 'N',
     	
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
@@ -22,10 +23,24 @@ CREATE TABLE demanda (
     
     CONSTRAINT pk PRIMARY KEY (dem_ex, dem_cd)
 );
+
 -- ALTER TABLE demanda_contrato DROP COLUMN dem_tp_contrato;
+ALTER TABLE demanda drop COLUMN dem_prt;
+ALTER TABLE demanda ADD COLUMN dem_inlegado CHAR(1) NOT NULL DEFAULT 'S' AFTER dem_dtreferencia;
 ALTER TABLE demanda ADD COLUMN dem_tp_contrato VARCHAR(100) AFTER dem_tipo;
 ALTER TABLE demanda ADD COLUMN dem_tp_temreajustemontanteA CHAR(1) AFTER dem_tp_contrato;
 ALTER TABLE demanda ADD COLUMN in_desativado CHAR(1) NOT NULL DEFAULT 'N' AFTER cd_usuario_ultalt;
+
+select dem_tipo from demanda where dem_tp_contrato is null group by dem_tipo;
+
+UPDATE demanda SET dem_tp_contrato = dem_tipo
+where  dem_tipo in (1,5,6,7,8,10);
+
+UPDATE demanda SET dem_tp_contrato = CONCAT('0',dem_tipo)
+where  dem_tipo in (1,5,6,7,8);
+
+UPDATE demanda SET dem_tipo = 1
+where  dem_tipo in (1,5,6,7,8,10);
 
 -- ALTER TABLE demanda CHANGE dem_cd dem_cd INT AUTO_INCREMENT;
 -- ALTER TABLE demanda AUTO_INCREMENT=100;
@@ -45,7 +60,8 @@ CREATE TABLE demanda_hist (
     dem_texto MEDIUMTEXT NOT NULL,
     dem_prioridade INT DEFAULT 3 NOT NULL,
     dem_dtreferencia DATE,
-    dem_prt VARCHAR(25),
+    -- dem_prt VARCHAR(25),
+    dem_inlegado CHAR(1) NOT NULL DEFAULT 'N',
 	    
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
@@ -59,6 +75,8 @@ CREATE TABLE demanda_hist (
     CONSTRAINT pk PRIMARY KEY (hist),
     CONSTRAINT desativacao_demanda CHECK (in_desativado NOT IN ('S'))
 );
+ALTER TABLE demanda_hist drop COLUMN dem_prt;
+ALTER TABLE demanda_hist ADD COLUMN dem_inlegado CHAR(1) NOT NULL DEFAULT 'S' AFTER dem_dtreferencia;
 ALTER TABLE demanda_hist ADD COLUMN dem_tp_contrato VARCHAR(100) AFTER dem_tipo;
 ALTER TABLE demanda_hist ADD COLUMN dem_tp_temreajustemontanteA CHAR(1) AFTER dem_tp_contrato;
 ALTER TABLE demanda_hist ADD COLUMN in_desativado CHAR(1) NOT NULL AFTER cd_usuario_ultalt;

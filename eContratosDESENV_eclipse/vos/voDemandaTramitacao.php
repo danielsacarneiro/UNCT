@@ -195,6 +195,7 @@ include_once("voDemandaContrato.php");
 		$voDemanda->voProcLicitatorio  = $this->voProcLicitatorio;
 		$voDemanda->tpDemandaContrato = $this->tpDemandaContrato;
 		$voDemanda->inTpDemandaReajusteComMontanteA = $this->inTpDemandaReajusteComMontanteA;
+		$voDemanda->inLegado = $this->inLegado;
 		
 		$voDemanda->colecaoContrato = $this->colecaoContrato;
 		//$voDemanda->dhUltAlteracao = date('Y-m-d H:i:s');

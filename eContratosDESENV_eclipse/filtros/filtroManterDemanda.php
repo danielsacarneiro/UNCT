@@ -5,7 +5,7 @@ include_once(caminho_vos ."voDemandaTramitacao.php");
 require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioAutorizacao.php");
 
 class filtroManterDemanda extends filtroManter{
-
+	
 	public $nmFiltro = "filtroManterDemanda";
 	static $NmAtrCdSetorPassagem = "NmAtrCdSetorPassagem";
 	static $NmColQtdDiasDataDtReferencia = "NmColQtdDiasDataDtReferencia";
@@ -86,6 +86,8 @@ class filtroManterDemanda extends filtroManter{
 		$vodemanda->cdSetorDestino = @$_POST[voDemandaTramitacao::$nmAtrCdSetorDestino];
 		$this->cdSetorPassagem = @$_POST[static::$NmAtrCdSetorPassagem];
 		$vodemanda->tipo = @$_POST[voDemanda::$nmAtrTipo];
+		$vodemanda->tpDemandaContrato = @$_POST[voDemanda::$nmAtrTpDemandaContrato];
+		//var_dump($vodemanda->tpDemandaContrato);
 		$vodemanda->situacao  = @$_POST[voDemanda::$nmAtrSituacao];		
 		$vodemanda->prioridade  = @$_POST[voDemanda::$nmAtrPrioridade];
 		$this->prioridadeExcludente = @$_POST[static::$NmAtrPrioridadeExcludente];
@@ -246,6 +248,17 @@ class filtroManterDemanda extends filtroManter{
 			}				
 			
 			$conector  = "\n AND ";
+		}
+		
+		$tpDemandaContrato = $this->vodemanda->tpDemandaContrato;
+		if ($tpDemandaContrato != null
+				&& $tpDemandaContrato != ""
+				&& !$this->isAtributoArrayVazio($tpDemandaContrato)) {
+				
+				$strFiltroTpDemanda = getSQLBuscarStringCampoSeparador($tpDemandaContrato, voDemanda::$nmAtrTpDemandaContrato, constantes::$CD_OPCAO_OR);
+				//echo $strFiltroTpDemanda;
+				$filtro = $filtro . $conector . $strFiltroTpDemanda;
+				$conector  = "\n AND ";
 		}
 		
 		if($this->vodemanda->cdSetor != null){

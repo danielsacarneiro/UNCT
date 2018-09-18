@@ -52,7 +52,8 @@ $titulo = voDemanda::getTituloJSP();
 $titulo = $nmFuncao . $titulo;
 setCabecalho($titulo);
 
-$nmCampoTpDemandaContrato = voDemanda::$nmAtrTpDemandaContrato."[]";
+$nmCampoTpDemandaContratoSimples = voDemanda::$nmAtrTpDemandaContrato;
+$nmCampoTpDemandaContrato = $nmCampoTpDemandaContratoSimples."[]";
 ?>
 <!DOCTYPE html>
 <HEAD>
@@ -85,7 +86,7 @@ function isFormularioValido() {
 		return false;		
 	}
 
-	//obrigaca a selecao do tpDemandaContrato
+	//obriga a selecao do tpDemandaContrato
 	var temContratoSelecionado = !isCheckBoxConsultaSelecionado('<?=vodemanda::$ID_REQ_InTemContrato?>', true);
 	if(temContratoSelecionado && campoTipoDemanda.value == "<?=dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO?>"){
 		if(!isCheckBoxConsultaSelecionado('<?=$nmCampoTpDemandaContrato?>', true)){
@@ -145,35 +146,9 @@ function formataForm() {
 	}
 }
 
-/*function formataFormContratoPorTpDemanda(pNmCampoTpDemanda, pColecaoNmObjetosFormContrato) {
-	<?php
-	$dominioTipoDemanda = new dominioTipoDemanda(dominioTipoDemanda::getColecaoTipoDemandaContrato());
-	echo $dominioTipoDemanda->getArrayHTMLChaves("colecaoTpDemandaContrato");	
-	?>
-	
-	campoTpDemanda = document.getElementById(pNmCampoTpDemanda);
-	cdTpDemanda = campoTpDemanda.value;
-	
-	isDemandaContrato = colecaoTpDemandaContrato.indexOf(cdTpDemanda) != -1;
-	habilitarCamposPorNome(pColecaoNmObjetosFormContrato, isDemandaContrato);
-
-}*/
-
-function formataFormEditalPorTpDemanda(pNmCampoTpDemanda, pColecaoNmObjetosForm) {
-	campoTpDemanda = document.getElementById(pNmCampoTpDemanda);
-	cdTpDemanda = campoTpDemanda.value;
-	
-	isDemandaEdital = cdTpDemanda == <?=dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL?>;
-	habilitarCamposPorNome(pColecaoNmObjetosForm, isDemandaEdital);	
-}
-
 function validaFormulario() {
-	/*pColecaoNmObjetosFormContrato = ['<?=vocontrato::$nmAtrTipoContrato;?>', '<?=vocontrato::$nmAtrCdContrato;?>','<?=vocontrato::$nmAtrAnoContrato;?>'];	
-	formataFormContratoPorTpDemanda('<?=voDemanda::$nmAtrTipo?>', pColecaoNmObjetosFormContrato);*/
-
 	pColecaoNmObjetosFormEdital = ['<?=voProcLicitatorio::$nmAtrCd;?>', '<?=voProcLicitatorio::$nmAtrAno;?>'];
-	formataFormEditalPorTpDemanda('<?=voDemanda::$nmAtrTipo?>', pColecaoNmObjetosFormEdital);
-	
+	formataFormEditalPorTpDemanda('<?=voDemanda::$nmAtrTipo?>', pColecaoNmObjetosFormEdital, <?=dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL?>);	
 	formataFormTpDemandaContrato();
 }
 
@@ -210,9 +185,11 @@ function formataFormTpDemandaContrato(){
 	?>		
 
 	var nmCampoCheckTpDemandaContrato = '<?=$nmCampoTpDemandaContrato?>';
-	var arrayCheckSelecionado = retornarValoresCheckBoxesSelecionadosComoArray(nmCampoCheckTpDemandaContrato);		
-	var cdTpDemandaContrato = '<?=dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO_REAJUSTE?>';
-	var isReajusteSelecionado = arrayCheckSelecionado.indexOf(cdTpDemandaContrato) != -1;
+	//console.log(nmCampoCheckTpDemandaContrato);
+	var arrayCheckSelecionado = retornarValoresCheckBoxesSelecionadosComoArray(nmCampoCheckTpDemandaContrato);
+	//alert(arrayCheckSelecionado);		
+	var tpReajuste = '<?=dominioTipoDemandaContrato::$CD_TIPO_REAJUSTE?>';
+	var isReajusteSelecionado = arrayCheckSelecionado.indexOf(tpReajuste) != -1;
 		
 	formataFormTpDemandaReajusteContrato("<?=voDemanda::$nmAtrTipo?>", 
 			"<?=voDemanda::$ID_REQ_DIV_REAJUSTE_MONTANTE_A?>", 
@@ -235,6 +212,7 @@ function iniciar(){
 <FORM name="frm_principal" method="post" action="confirmar.php" onSubmit="return confirmar();">
 
 <INPUT type="hidden" id="funcao" name="funcao" value="<?=$funcao?>">
+<?=getInputHidden(voDemanda::$nmAtrInLegado, voDemanda::$nmAtrInLegado, "N")?>
  
 <TABLE id="table_conteiner" class="conteiner" cellpadding="0" cellspacing="0">
     <TBODY>
@@ -327,14 +305,9 @@ function iniciar(){
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
 				<TD class="campoformulario" colspan=3><?php
 				//echo getCampoDadosContratoMultiplos();
-				echo getCampoDadosContratoSimples(constantes::$CD_CLASS_CAMPO_OBRIGATORIO, "", false);
+				//echo getCampoDadosContratoSimples(constantes::$CD_CLASS_CAMPO_OBRIGATORIO, "", false);
+				echo getContratoEntradaDeDadosVOSimples(null, constantes::$CD_CLASS_CAMPO_OBRIGATORIO, true, true, false, true);
 				?>
-				<INPUT type="text" id="<?=vocontrato::$nmAtrSqEspecieContrato?>" name="<?=vocontrato::$nmAtrSqEspecieContrato?>" value="<?=$voContrato->sqEspecie;?>"  class="camponaoobrigatorio" size="3" maxlength=2 required> º
-				<?php				
-				//cria o combo
-				$combo = new select(dominioEspeciesContrato::getColecao());
-				echo $combo->getHtmlCombo(vocontrato::$nmAtrCdEspecieContrato, vocontrato::$nmAtrCdEspecieContrato, "", true, "camponaoobrigatorio", false, " required");
-				?>				
 	            <SCRIPT language="JavaScript" type="text/javascript">
 	            	 //segue com o numero 1 ao fim do id porque o contrato eh definido por indices
 	            	 //para entender, basta olhar o metodo acima getCampoDadosContratoMultiplos
@@ -347,7 +320,7 @@ function iniciar(){
 	            </SCRIPT>
                     <div id="<?=voDemanda::$ID_REQ_DIV_REAJUSTE_MONTANTE_A?>"> <b>Informações complementares</b>
 		                <?php		                
-			            echo dominioTipoDemanda::getHtmlChecksBox($nmCampoTpDemandaContrato, "4", dominioTipoDemanda::getColecaoTipoDemandaContratoValido(), 2, true, "formataFormTpDemandaContrato();");
+			            echo dominioTipoDemandaContrato::getHtmlChecksBox($nmCampoTpDemandaContrato, "", dominioTipoDemandaContrato::getColecao(), 2, true, "formataFormTpDemandaContrato();");
 			            $comboTpReajuste = new select(dominioTipoReajuste::getColecao());
 			            //echo "Tipo de reajuste: " . $comboTpReajuste->getHtmlCombo(voDemanda::$nmAtrInTpDemandaReajusteComMontanteA,voDemanda::$nmAtrInTpDemandaReajusteComMontanteA, "", true, "camponaoobrigatorio", false,"");
 			            echo "Reajuste: " . $comboTpReajuste->getHtmlComObrigatorio(voDemanda::$nmAtrInTpDemandaReajusteComMontanteA,voDemanda::$nmAtrInTpDemandaReajusteComMontanteA, "", false,false);			             
