@@ -26,17 +26,14 @@ function getDemandaDetalhamentoComLupa($voDemanda, $temLupaDet, $exibeTipoDemand
 			
 			if ($voDemanda != null && $temLupaDet) {
 				//$voDemanda = new voDemanda();
-				
 				echo getLinkPesquisa ( "../demanda/detalhar.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $voDemanda->getValorChaveHTML() );
 			}
 				
-			if(dominioTipoDemanda::isTipoDemandaContratoReajuste($voDemanda->tipo)){				
-				$comboTpReajuste = new select(dominioTipoReajuste::getColecao());				
-				echo "Tipo de reajuste: " . dominioTipoReajuste::getHtmlDetalhamento("", "", $voDemanda->inTpDemandaReajusteComMontanteA, false);
+			if(dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO == $voDemanda->tipo){				
+				/*$comboTpReajuste = new select(dominioTipoReajuste::getColecao());				
+				echo "Tipo de reajuste: " . dominioTipoReajuste::getHtmlDetalhamento("", "", $voDemanda->inTpDemandaReajusteComMontanteA, false);*/
 				
-				/*include_once(caminho_util. "dominioSimNao.php");
-				$comboSimNao = new select(dominioSimNao::getColecao());
-				echo " Tem Montante A?: " . dominioSimNao::getHtmlDetalhamento("", "", $voDemanda->inTpDemandaReajusteComMontanteA, false);*/			 
+				echo getTpDemandaContratoDetalhamento("", "", "DIV_DETALHAR", $voDemanda->tpDemandaContrato, $voDemanda->inTpDemandaReajusteComMontanteA);				
 			}			
 			echo "<INPUT type='hidden' id='" . voDemanda::$nmAtrTipo . "' name='" . voDemanda::$nmAtrTipo . "' value='$voDemanda->tipo'>";
 		}
@@ -81,6 +78,15 @@ function getTpDemandaContrato($nmCampoTpDemandaContrato, $nmCampoTpDemandaReajus
 	$html .= "Reajuste: " . $comboTpReajuste->getHtmlComObrigatorio($nmCampoTpDemandaReajuste,$nmCampoTpDemandaReajuste, $pCdOpcaoSelecionadaReajuste, false,false);
 	$html .= "</div>";	
 	return $html; 		
+}
+
+function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpDemandaReajuste, $nmDivInformacoesComplementares, $pCdOpcaoSelecionadaTpDemandaContrato=null, $pCdOpcaoSelecionadaReajuste=null){
+	//$html = "<div id='$nmDivInformacoesComplementares'> <b>Informações complementares</b>";
+	//$html .= dominioTipoDemandaContrato::getHtmlChecksBox($nmCampoTpDemandaContrato, $pCdOpcaoSelecionadaTpDemandaContrato, dominioTipoDemandaContrato::getColecao(), 2, false, "formataFormTpDemandaContrato();", false, " disabled ");
+	$html .= dominioTipoDemandaContrato::getHtmlChecksBoxDetalhamento($nmCampoTpDemandaContrato, $pCdOpcaoSelecionadaTpDemandaContrato, 2);
+	$html .= "Reajuste: " . dominioTipoReajuste::getHtmlDetalhamento($nmCampoTpDemandaReajuste, $nmCampoTpDemandaReajuste, $pCdOpcaoSelecionadaReajuste, false);
+	//$html .= "</div>";
+	return $html;
 }
 
 function getHtmlDocumento($voAtual, $comDescricaoPorExtenso = false) {

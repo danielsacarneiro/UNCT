@@ -662,7 +662,8 @@ class dbDemanda extends dbprocesso {
 	function tratarDados(&$vo){
 		static::validarGenerico($vo);
 		
-		$tpDemandaContrato = $vo->tpDemandaContrato;		
+		$tpDemandaContrato = $vo->tpDemandaContrato;
+		$tipo = $vo->tipo;
 		//quando vem da tela eh um array
 		//quando vem do banco, deve ser uma string
 		//dai eh importante sempre converter pra string
@@ -674,7 +675,7 @@ class dbDemanda extends dbprocesso {
 		if(!dominioTipoDemandaContrato::existeItemArrayOuStrCampoSeparador(dominioTipoDemandaContrato::$CD_TIPO_REAJUSTE, $tpDemandaContrato)){
 			$vo->inTpDemandaReajusteComMontanteA = null;
 		}		
-		
+				
 		if($vo->inLegado==null){
 			$vo->inLegado = constantes::$CD_SIM;
 		}

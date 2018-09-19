@@ -136,7 +136,8 @@ function getMensagemDemandaContratoPropostaVencida(&$count = 0){
 		$filtro->inContratoComDtPropostaVencida = constantes::$CD_SIM;
 		$filtro->vocontrato->dtProposta = getDataHoje();
 		//$filtro->vodemanda->tipo = array_keys ( dominioTipoDemanda::getColecaoTipoDemandaSAD () );
-		$filtro->vodemanda->tipo = array(dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO_REAJUSTE);
+		$filtro->vodemanda->tipo = array(dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO);
+		$filtro->vodemanda->tpDemandaContrato = array(dominioTipoDemandaContrato::$CD_TIPO_REAJUSTE);
 		//$filtro->prioridadeExcludente = dominioPrioridadeDemanda::$CD_PRIORI_BAIXA;
 		
 		//$filtro->vocontrato->dtProposta = "11/11/2017";
@@ -160,6 +161,7 @@ function getMensagemDemandaSAD(&$count = 0){
 		$filtro = new filtroManterDemanda ( false );
 		$voDemanda = new voDemanda ();
 		$dbprocesso = $voDemanda->dbprocesso;
+		$filtro->voPrincipal = $voDemanda;
 		
 		$filtro->isValidarConsulta = false;
 		// $filtro->voPrincipal = $voDemanda;
@@ -179,6 +181,7 @@ function getMensagemDemandaSAD(&$count = 0){
 		);
 		//de acordo com a portaria 1.116/2016 (em se tratando de reajuste, o contrato de locacao de imovel prescinde de autorizacao da SAD)
 		$filtro->inRetornarReajusteSeLocacaoImovel = constantes::$CD_NAO;
+
 		$colecao = $dbprocesso->consultarTelaConsulta ( $voDemanda, $filtro );
 		
 		$msg = getCorpoMensagemDemandaContratoColecao($assunto, $colecao, null);

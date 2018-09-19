@@ -179,7 +179,17 @@ class dominio extends multiplosConstrutores {
 		return $html;
 	}
 	
-	static function getHtmlChecksBox($nm, $opcaoSelecionada, $colecao=null, $qtdItensPorColuna=4, $comOpcaoMarcarTodos=false, $javascriptadicional=null, $comBorracha = false) {
+	static function getHtmlChecksBoxDetalhamento($nm, $opcaoSelecionada, $qtdItensPorColuna=4) {
+		if(!is_array($opcaoSelecionada)){
+			$opcaoSelecionada = getStringCampoSeparadorComoArray($opcaoSelecionada);
+		}
+		
+		$colecao = static::getColecaoApenasComElementos($opcaoSelecionada);
+		
+		return static::getHtmlChecksBox($nm, $opcaoSelecionada, $colecao, $qtdItensPorColuna, false, null, false, " disabled ");
+		
+	}
+	static function getHtmlChecksBox($nm, $opcaoSelecionada, $colecao=null, $qtdItensPorColuna=4, $comOpcaoMarcarTodos=false, $javascriptadicional=null, $comBorracha = false, $htmlAdicional = null) {
 		if($colecao==null){
 			$colecao = static::getColecao ();
 		}
@@ -218,7 +228,7 @@ class dominio extends multiplosConstrutores {
 					
 			$checked = stripos($opcaoSelecionada, "$chave", 0) !== false;
 			//echoo("chave:$chave & selecao: $opcaoSelecionada");
-			$html .= "\n".$conectorAntes . getCheckBoxBoolean($chave, $nm, $chave, $checked, $javascript)." ". static::getDescricaoStatic($chave,$colecao) . "<br>";
+			$html .= "\n".$conectorAntes . getCheckBoxBoolean($chave, $nm, $chave, $checked, "$javascript $htmlAdicional")." ". static::getDescricaoStatic($chave,$colecao) . "<br>";
 			$i++;
 		}
 		
