@@ -30,9 +30,6 @@ function getDemandaDetalhamentoComLupa($voDemanda, $temLupaDet, $exibeTipoDemand
 			}
 				
 			if(dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO == $voDemanda->tipo){				
-				/*$comboTpReajuste = new select(dominioTipoReajuste::getColecao());				
-				echo "Tipo de reajuste: " . dominioTipoReajuste::getHtmlDetalhamento("", "", $voDemanda->inTpDemandaReajusteComMontanteA, false);*/
-				
 				echo getTpDemandaContratoDetalhamento("", "", "DIV_DETALHAR", $voDemanda->tpDemandaContrato, $voDemanda->inTpDemandaReajusteComMontanteA);				
 			}			
 			echo "<INPUT type='hidden' id='" . voDemanda::$nmAtrTipo . "' name='" . voDemanda::$nmAtrTipo . "' value='$voDemanda->tipo'>";
@@ -84,7 +81,9 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 	//$html = "<div id='$nmDivInformacoesComplementares'> <b>Informações complementares</b>";
 	//$html .= dominioTipoDemandaContrato::getHtmlChecksBox($nmCampoTpDemandaContrato, $pCdOpcaoSelecionadaTpDemandaContrato, dominioTipoDemandaContrato::getColecao(), 2, false, "formataFormTpDemandaContrato();", false, " disabled ");
 	$html .= dominioTipoDemandaContrato::getHtmlChecksBoxDetalhamento($nmCampoTpDemandaContrato, $pCdOpcaoSelecionadaTpDemandaContrato, 2);
-	$html .= "Reajuste: " . dominioTipoReajuste::getHtmlDetalhamento($nmCampoTpDemandaReajuste, $nmCampoTpDemandaReajuste, $pCdOpcaoSelecionadaReajuste, false);
+	if(dominioTipoDemandaContrato::existeItemArrayOuStrCampoSeparador(dominioTipoDemandaContrato::$CD_TIPO_REAJUSTE, $pCdOpcaoSelecionadaTpDemandaContrato)){
+		$html .= "Reajuste: " . dominioTipoReajuste::getHtmlDetalhamento($nmCampoTpDemandaReajuste, $nmCampoTpDemandaReajuste, $pCdOpcaoSelecionadaReajuste, false);
+	}
 	//$html .= "</div>";
 	return $html;
 }

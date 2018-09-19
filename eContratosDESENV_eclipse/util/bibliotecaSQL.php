@@ -194,7 +194,12 @@ function getSQLBuscarStringCampoSeparador($colecaoAtributos, $nmAtributo, $opera
 			$atrib = $colecaoAtributos [$i];
 				
 			if ($atrib != null) {
-				$retorno .= " $separador LOCATE('$atrib',$nmAtributo) ";
+				
+				if(constantes::$CD_OPCAO_NENHUM == $atrib){
+					$retorno .= " $separador $nmAtributo  IS NULL ";
+				}else{				
+					$retorno .= " $separador LOCATE('$atrib',$nmAtributo) ";
+				}
 				$separador = " $operador ";
 			}
 			// echo "$retorno<br>";
