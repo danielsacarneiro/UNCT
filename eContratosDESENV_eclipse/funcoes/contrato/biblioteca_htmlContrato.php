@@ -288,7 +288,7 @@ function getContratoEntradaDeDadosVOGenerico($vocontrato, $arrayCssClass, $array
 ?>		
 <div id="<?=$nmCampoDivPessoaContratada?>">
 <?php
-	if ($isExibirContratadaSePreenchido && $vocontrato != null) {
+	if ($isExibirContratadaSePreenchido && $vocontrato != null && $vocontrato->anoContrato != null) {
 		if($vocontrato->cdEspecie == null){
 			$vocontrato->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;			
 		}
