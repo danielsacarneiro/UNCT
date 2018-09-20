@@ -86,27 +86,27 @@ function isFormularioValido() {
 		return false;		
 	}
 
-	//obriga a selecao do tpDemandaContrato
-	var temContratoSelecionado = !isCheckBoxConsultaSelecionado('<?=vodemanda::$ID_REQ_InTemContrato?>', true);
-	if(temContratoSelecionado && campoTipoDemanda.value == "<?=dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO?>"){
-		if(!isCheckBoxConsultaSelecionado('<?=$nmCampoTpDemandaContrato?>', true)){
-			exibirMensagem('Demanda de Contrato exige preenchimento das informações complementares.');			
-			return false;		
-		}
-	}
-
 	campoDataReferencia = document.frm_principal.<?=voDemandaTramitacao::$nmAtrDtReferencia?>;
 	campoAno = document.frm_principal.<?=voDemandaTramitacao::$nmAtrAno?>;
-	<?php 
-	if($isInclusao){
-	?>
-	if(!isCampoDataValidoPorCampoAno(campoDataReferencia, campoAno)){
-		exibirMensagem("Data deve pertencer ao ano selecionado.");	
-		return false;		
+ 
+	if("<?=$isInclusao?>"=="1"){
+
+		//obriga a selecao do tpDemandaContrato
+		var temContratoSelecionado = !isCheckBoxConsultaSelecionado('<?=vodemanda::$ID_REQ_InTemContrato?>', true);
+		if(temContratoSelecionado && campoTipoDemanda.value == "<?=dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO?>"){
+			if(!isCheckBoxConsultaSelecionado('<?=$nmCampoTpDemandaContrato?>', true)){
+				exibirMensagem('Demanda de Contrato exige preenchimento das informações complementares.');			
+				return false;		
+			}
+		}
+	
+		if(!isCampoDataValidoPorCampoAno(campoDataReferencia, campoAno)){
+			exibirMensagem("Data deve pertencer ao ano selecionado.");	
+			return false;		
+		}
+ 
 	}
-	<?php 
-	}
-	?>
+
 			
 	return true;
 }

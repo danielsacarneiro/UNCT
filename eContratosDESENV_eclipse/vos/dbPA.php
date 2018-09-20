@@ -10,6 +10,7 @@ include_once (caminho_filtros."filtroManterPA.php");
 // cria um combo select html
 
   Class dbPA extends dbprocesso{
+  	static $FLAG_PRINTAR_SQL = false;
   	static $nmTabelaPublicacao = "nmTabelaPublicacao";
     
   	function consultarPorChaveTela($vo, $isHistorico) {

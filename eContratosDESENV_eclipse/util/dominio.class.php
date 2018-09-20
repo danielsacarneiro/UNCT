@@ -247,6 +247,18 @@ class dominio extends multiplosConstrutores {
 		return $html;
 	}
 	
+	static function getColecaoComDescricao($colecaoChaveSemDescricao) {
+		
+		$array1 = array();
+		foreach ($colecaoChaveSemDescricao as $chave){
+			$array2 = array($chave => self::getDescricaoStatic($chave));
+			$array1 = putElementoArray2NoArray1ComChaves($array1, $array2);	
+		}
+	
+		return $array1;
+	}
+	
+	
 	/*
 	 * function ordenaSetor( $a, $b ) {
 	 * if ( $a['pontos'] == $b['pontos'] ) {

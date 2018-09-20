@@ -13,12 +13,12 @@ function getContratoDet($voContrato, $detalharContratoInfo = false, $isDetalharC
 	$colecao = consultarPessoasContrato ( $voContrato );
 	return getContratoDetalhamento ( $voContrato, $colecao, $detalharContratoInfo,$isDetalharChaveCompleta);
 }
-function getColecaoContratoDet($colecao) {
+function getColecaoContratoDet($colecao,$isDetalharChaveCompleta=false) {
 	$html = "";
 	//var_dump($colecao);
 	if(!isColecaoVazia($colecao)){
 		foreach ( $colecao as $voContrato ) {
-			$html .= getContratoDet ( $voContrato );
+			$html .= getContratoDet ( $voContrato,false,$isDetalharChaveCompleta );
 		}
 	}else{
 		$html = "NAO ENCONTRADO";

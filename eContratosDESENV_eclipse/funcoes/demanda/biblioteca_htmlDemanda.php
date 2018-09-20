@@ -63,7 +63,7 @@ function getDemandaDetalhamentoComLupa($voDemanda, $temLupaDet, $exibeTipoDemand
 	
 	if($comContrato){
 	require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
-		getColecaoContratoDet($voDemanda->colecaoContrato);
+		getColecaoContratoDet($voDemanda->colecaoContrato, true);
 	}
 }
 

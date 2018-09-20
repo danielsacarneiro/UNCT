@@ -33,7 +33,6 @@ if($filtro->temValorDefaultSetado){
 
 $qtdRegistrosPorPag = $filtro->qtdRegistrosPorPag;
 $numTotalRegistros = $filtro->numTotalRegistros;
-
 ?>
 
 <!DOCTYPE html>
@@ -266,7 +265,7 @@ function validaFormulario() {
                         $classColunaSituacao = "tabeladadosdestacado";
                         $situacao = $domSiPA->getDescricao($cdSituacao);
                         
-                        if($cdSituacao != dominioSituacaoPA::$CD_SITUACAO_PA_AGUARDANDO_NOTIFICACAO_ENVIADA){
+                        if(!dominioSituacaoPA::existeItem($cdSituacao,dominioSituacaoPA::getColecaoSituacaoIndependenteDemanda())){
 	                        if($cdSituacao == dominioSituacaoPA::$CD_SITUACAO_PA_ARQUIVADO
 	                        		|| $cdSituacao == dominioSituacaoPA::$CD_SITUACAO_PA_ENCERRADO){
 	                        			$classColunaSituacao = "tabeladadosdestacadoazulclaro";

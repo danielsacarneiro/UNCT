@@ -121,7 +121,7 @@ function encaminhar() {
     }?>
     
 	chave = document.frm_principal.rdb_consulta.value;	
-	location.href="encaminhar.php?funcao=<?=dbDemandaTramitacao::$NM_FUNCAO_ENCAMINHAR?>&chave=" + chave;
+	location.href="encaminhar.novo.php?funcao=<?=dbDemandaTramitacao::$NM_FUNCAO_ENCAMINHAR?>&chave=" + chave;
 }
 
 </SCRIPT>
@@ -214,9 +214,9 @@ function encaminhar() {
 	        </TR>	                    
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">PAAP:</TH>
-	            <TD class="campoformulario">
+	            <TD class="campoformulario" nowrap>
 	            <?php getCampoDadosPAAP($filtro->voPA);
-	            echo " com PAAP?: " . $comboSimNao->getHtmlCombo(filtroManterDemanda::$NmAtrInComPAAPInstaurado,
+	            echo " tem PAAP?: " . $comboSimNao->getHtmlCombo(filtroManterDemanda::$NmAtrInComPAAPInstaurado,
 	            								filtroManterDemanda::$NmAtrInComPAAPInstaurado, 
 	            								$filtro->inComPAAPInstaurado, true, "camponaoobrigatorio", false,"");?>
 	            </TD>

@@ -6,6 +6,8 @@ class dominioSituacaoPA extends dominio {
 	static $CD_SITUACAO_PA_ENCERRADO = 3;
 	static $CD_SITUACAO_PA_AGUARDANDO_ACAO = 4;
 	static $CD_SITUACAO_PA_AGUARDANDO_NOTIFICACAO_ENVIADA = 5;
+	static $CD_SITUACAO_PA_AGUARDANDO_PUBLICACAO = 6;
+	static $CD_SITUACAO_PA_EM_COBRANCA = 7;
 	
 	static $CD_SITUACAO_PA_EM_ANDAMENTO= 99;
 	
@@ -14,6 +16,8 @@ class dominioSituacaoPA extends dominio {
 	static $DS_SITUACAO_PA_ENCERRADO = "Encerrado";
 	static $DS_SITUACAO_PA_AGUARDANDO_ACAO = "Aguardando ATJA";
 	static $DS_SITUACAO_PA_AGUARDANDO_NOTIFICACAO_ENVIADA = "Aguardando prazo";
+	static $DS_SITUACAO_PA_AGUARDANDO_PUBLICACAO = "Aguardando publicação";
+	static $DS_SITUACAO_PA_EM_COBRANCA = "Em cobrança";
 	// ...............................................................
 	// Construtor
 	function __construct() {
@@ -24,6 +28,8 @@ class dominioSituacaoPA extends dominio {
 				self::$CD_SITUACAO_PA_INSTAURADO => self::$DS_SITUACAO_PA_INSTAURADO,
 				self::$CD_SITUACAO_PA_AGUARDANDO_ACAO => self::$DS_SITUACAO_PA_AGUARDANDO_ACAO,
 				self::$CD_SITUACAO_PA_AGUARDANDO_NOTIFICACAO_ENVIADA => self::$DS_SITUACAO_PA_AGUARDANDO_NOTIFICACAO_ENVIADA,
+				self::$CD_SITUACAO_PA_AGUARDANDO_PUBLICACAO => self::$DS_SITUACAO_PA_AGUARDANDO_PUBLICACAO,
+				self::$CD_SITUACAO_PA_EM_COBRANCA => self::$DS_SITUACAO_PA_EM_COBRANCA,
 				self::$CD_SITUACAO_PA_ARQUIVADO => self::$DS_SITUACAO_PA_ARQUIVADO,
 				self::$CD_SITUACAO_PA_ENCERRADO => self::$DS_SITUACAO_PA_ENCERRADO,
 				
@@ -40,6 +46,8 @@ class dominioSituacaoPA extends dominio {
 				self::$CD_SITUACAO_PA_INSTAURADO => "Ainda não movimentado",
 				self::$CD_SITUACAO_PA_AGUARDANDO_ACAO => self::$DS_SITUACAO_PA_AGUARDANDO_ACAO,
 				self::$CD_SITUACAO_PA_AGUARDANDO_NOTIFICACAO_ENVIADA => self::$DS_SITUACAO_PA_AGUARDANDO_NOTIFICACAO_ENVIADA,
+				self::$CD_SITUACAO_PA_AGUARDANDO_PUBLICACAO => self::$DS_SITUACAO_PA_AGUARDANDO_PUBLICACAO,
+				self::$CD_SITUACAO_PA_EM_COBRANCA => self::$DS_SITUACAO_PA_EM_COBRANCA,
 		);
 		
 		$retorno = putElementoArray2NoArray1ComChaves($acrescentar, static::getColecaoSituacaoTerminados());
@@ -48,22 +56,46 @@ class dominioSituacaoPA extends dominio {
 	}
 	
 	static function getColecaoSituacaoAtivos() {
-		$retorno = array (
-				self::$CD_SITUACAO_PA_INSTAURADO => self::$DS_SITUACAO_PA_INSTAURADO,
-				self::$CD_SITUACAO_PA_AGUARDANDO_ACAO => self::$DS_SITUACAO_PA_AGUARDANDO_ACAO,
-				self::$CD_SITUACAO_PA_AGUARDANDO_NOTIFICACAO_ENVIADA => self::$DS_SITUACAO_PA_AGUARDANDO_NOTIFICACAO_ENVIADA,
+		$colecao = array(
+				self::$CD_SITUACAO_PA_INSTAURADO,
+				self::$CD_SITUACAO_PA_AGUARDANDO_ACAO,
+				self::$CD_SITUACAO_PA_AGUARDANDO_NOTIFICACAO_ENVIADA,
+				self::$CD_SITUACAO_PA_AGUARDANDO_PUBLICACAO,
+				self::$CD_SITUACAO_PA_EM_COBRANCA,
 		);
-	
-		return $retorno;
+			
+		return static::getColecaoComDescricao($colecao);
 	}
 	
 	static function getColecaoSituacaoTerminados() {
-		$retorno = array (
-				self::$CD_SITUACAO_PA_ARQUIVADO => self::$DS_SITUACAO_PA_ARQUIVADO,
-				self::$CD_SITUACAO_PA_ENCERRADO => self::$DS_SITUACAO_PA_ENCERRADO
+		
+		$colecao = array(
+				self::$CD_SITUACAO_PA_ARQUIVADO,
+				self::$CD_SITUACAO_PA_ENCERRADO,
+		);
+		
+		return static::getColecaoComDescricao($colecao);
+	}
+	
+	static function getColecaoSituacaoPendentes() {
+	
+		$colecao = array(
+				self::$CD_SITUACAO_PA_AGUARDANDO_ACAO,
+				self::$CD_SITUACAO_PA_AGUARDANDO_PUBLICACAO,
+				self::$CD_SITUACAO_PA_EM_COBRANCA,
 		);
 	
-		return $retorno;
+		return static::getColecaoComDescricao($colecao);
+	}
+	
+	static function getColecaoSituacaoIndependenteDemanda() {
+		$colecao = array(
+				self::$CD_SITUACAO_PA_AGUARDANDO_NOTIFICACAO_ENVIADA,
+				self::$CD_SITUACAO_PA_AGUARDANDO_PUBLICACAO,
+				self::$CD_SITUACAO_PA_EM_COBRANCA,
+		);
+		
+		return static::getColecaoComDescricao($colecao);
 	}
 	
 }

@@ -913,7 +913,7 @@ function getCampoDadosVOAnoCd($vo, $arrayParametroXNmAtributo, $nmClass = "campo
 
 		//$strCamposALimparSeparador = $pIDCampoCd . "*" . $pIDCampoAno;
 		?>
-	Número:
+	Núm:
 <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)"
 	id="<?=$pIDCampoCd?>" name="<?=$pNmCampoCd?>"
 	value="<?php echo(complementarCharAEsquerda($cd, "0", TAMANHO_CODIGOS_SAFI));?>"

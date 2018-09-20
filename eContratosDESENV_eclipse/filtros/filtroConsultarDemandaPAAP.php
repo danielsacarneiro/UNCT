@@ -156,8 +156,10 @@ class filtroConsultarDemandaPAAP extends filtroManterDemanda{
 			
 		//se a data consultada $nmAtributoDataPrazoEncerrado for menor que a data de hoje, significa que o prazo ja passou, entao a demanda deve ser exibida
 		//se a situacao for AGUARDANDO ACAO, traga o PAAP de todo jeito
-		$filtro = $filtro . $conector
-		. " ($nmTabelaPA." .voPA::$nmAtrSituacao . "=" . dominioSituacaoPA::$CD_SITUACAO_PA_AGUARDANDO_ACAO . " OR "
+		
+		//. " ($nmTabelaPA." .voPA::$nmAtrSituacao . "=" . dominioSituacaoPA::$CD_SITUACAO_PA_AGUARDANDO_ACAO . " OR "
+		$filtro = $filtro . $conector		
+		. " ($nmTabelaPA." . voPA::$nmAtrSituacao . " IN (" . getSQLStringFormatadaColecaoIN(array_keys(dominioSituacaoPA::getColecaoSituacaoPendentes()), false) . ") OR "
 		. " ($nmTabelaPA." .voPA::$nmAtrSituacao . "=" . dominioSituacaoPA::$CD_SITUACAO_PA_AGUARDANDO_NOTIFICACAO_ENVIADA . " AND "
 		. " $nmAtributoDataPrazoEncerrado IS NOT NULL AND $nmAtributoDataPrazoEncerrado <= $dtParam)) "
 		;
