@@ -266,7 +266,28 @@ function encaminhar() {
 	        ?>        
             <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" ><?php getContratoEntradaDeDados($filtro->vocontrato->tipo, $filtro->vocontrato->cdContrato, $filtro->vocontrato->anoContrato, $arrayCssClass, null, null);?></TD>
+	            <TD class="campoformulario" ><?php
+
+	            $voContratoFiltro = new vocontrato();
+	            $voContratoFiltro->tipo = $filtro->vocontrato->tipo;
+	            $voContratoFiltro->cdContrato = $filtro->vocontrato->cdContrato;
+	            $voContratoFiltro->anoContrato = $filtro->vocontrato->anoContrato;
+	            $voContratoFiltro->cdEspecie = $filtro->vocontrato->cdEspecie;
+	            $voContratoFiltro->sqEspecie = $filtro->vocontrato->sqEspecie;
+	             
+	            $pArray = array($voContratoFiltro,
+	            		constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO,
+	            		false,
+	            		true,
+	            		false,
+	            		null,	            		
+	            		null);
+	             
+	            getContratoEntradaArrayGenerico($pArray);
+			             
+	            		//getContratoEntradaDeDados($filtro->vocontrato->tipo, $filtro->vocontrato->cdContrato, $filtro->vocontrato->anoContrato, $arrayCssClass, null, null);
+	            		
+	            		?></TD>
 	            <TH class="campoformulario" >Valor Global:</TH>
 	            <TD class="campoformulario" ><INPUT type="text" id="<?=filtroManterDemanda::$NmAtrVlGlobalInicial?>" name="<?=filtroManterDemanda::$NmAtrVlGlobalInicial?>"  value="<?php echo($filtro->vlGlobalInicial);?>"
 	            							onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="camponaoobrigatorioalinhadodireita" size="15" >

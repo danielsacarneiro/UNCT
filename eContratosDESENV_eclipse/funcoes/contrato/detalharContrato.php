@@ -32,6 +32,8 @@ $readonly = "readonly";
 	}	
 	$voContrato->getDadosBanco($colecao[0]);
 	
+	//echo $voContrato->linkMinutaDoc;
+	
 	$voContratoInfo = new voContratoInfo();
 	$voContratoInfo->getDadosBanco($colecao[0]);
 	
@@ -301,7 +303,9 @@ function confirmar() {
         <TH class="campoformulario" nowrap width="1%">Documento:</TH>
         <?php
         $endereco = $voContrato->getLinkDocumento();
-        $enderecoMinuta = $voContrato->getLinkDocumento($voContrato->linkMinutaDoc);
+        $enderecoMinuta = $voContrato->getEnredeçoDocumento($voContrato->linkMinutaDoc);
+        
+        //echo "endereco: " . $enderecoMinuta; 
         ?>
 		<TD class="campoformulario" colspan=3>
 		<TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">

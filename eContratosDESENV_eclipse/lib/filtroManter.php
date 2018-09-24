@@ -144,13 +144,34 @@ class filtroManter extends multiplosConstrutores {
 	function getSQLWhere($comAtributoOrdenacao) {
 		return $this->getFiltroConsultaSQL ( $comAtributoOrdenacao );
 	}
-	function getFiltroConsulta($filtro) {
+	
+	/**
+	 * 
+	 * @param unknown $filtro
+	 * @return string
+	 * @ deprecated
+	 * 
+	 * o metodo correto eh o getFiltroSQLCompleto($strFiltro, $voEntidadePrincipal = null, $comAtributoOrdenacao = null) {
+	 */
+	/*function getFiltroConsulta($filtro) {
 		//serve para formatar o atributo de ordenacao caso ele nao esteja referenciando a tabela correta(de historico ou nao)
 		$this->formataCampoOrdenacao(new voProcLicitatorio());
+		//$this->formataCampoOrdenacao($this->voPrincipal);
 		
 		return $this->getFiltroSQL ( $filtro, true );
+	}*/
+	
+	
+	function getFiltroSQL($strFiltro, $comAtributoOrdenacao = true) {
+		return $this->getFiltroSQLCompleto($strFiltro, null, $comAtributoOrdenacao);		
 	}
-	function getFiltroSQL($strFiltro, $comAtributoOrdenacao) {
+	
+	function getFiltroSQLCompleto($strFiltro, $voEntidadePrincipal = null, $comAtributoOrdenacao = true) {
+		
+		if($voEntidadePrincipal != null){
+			$this->formataCampoOrdenacao($voEntidadePrincipal);
+		}
+		
 		// ECHO "TESTE";
 		$conector = "";
 		
@@ -299,13 +320,13 @@ class filtroManter extends multiplosConstrutores {
 	function formataCampoOrdenacao($voEntidade) {
 		
 		$nmTabela = $voEntidade->getNmTabelaStatic ( $this->isHistorico );
-		
+					
 		if ($nmTabela != null && $this->cdAtrOrdenacao != null) {
 			//echo "<br>ordenacao original: " . $this->cdAtrOrdenacao;
-			$jaEhFormatado = strpos ( $this->cdAtrOrdenacao, "." );			
-					
+			$jaEhFormatado = strpos ( $this->cdAtrOrdenacao, "." );
+							
 			// so formata se o atrordenacao escolhido pertencer a nmtabela em questao			
-			if ($jaEhFormatado === false && existeItemNoArray ( $this->cdAtrOrdenacao, $voEntidade->getTodosAtributos () )) {				
+			if ($jaEhFormatado === false && existeItemNoArray ( $this->cdAtrOrdenacao, $voEntidade->getTodosAtributos () )) {					
 				$this->cdAtrOrdenacaoConsulta = $nmTabela . "." . $this->cdAtrOrdenacao;
 				//echo "<br>ordenacao formatado: " . $this->cdAtrOrdenacaoConsulta;
 			}

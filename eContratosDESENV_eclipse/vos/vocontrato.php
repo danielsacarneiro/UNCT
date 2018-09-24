@@ -112,7 +112,7 @@ include_once (caminho_util . "DocumentoPessoa.php");
        $this->sqEspecie = 1;
        $this->importacao = "N";
    }
-
+    
 // ...............................................................
 // Funções ( Propriedades e métodos da classe )
 	public static function getTituloJSP(){

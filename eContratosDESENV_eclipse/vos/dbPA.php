@@ -411,19 +411,17 @@ include_once (caminho_filtros."filtroManterPA.php");
     	return !isColecaoVazia($colecao);
     }
     
-    function validarAlteracao($vo) {
-    	//$vo = new voPA();    	
-    	//$retorno = true;    	
-    	/*$vodemanda = $this->consultarVODemanda($vo);
-    	//$vodemanda = new voDemanda();
-    	$isDemandaFechada = $vodemanda->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA; 
-
-    	if(dominioSituacaoPA::existeItem($vo->situacao, dominioSituacaoPA::getColecaoSituacaoTerminados())){    		
-    		if(!$isDemandaFechada){
-    			throw new excecaoGenerica("Só é permitido terminar o processo cuja demanda esteja concluída.");
-    		}
-    	}*/
-    	
+    function validarInclusao($vo) {    
+		$vodemanda = $this->consultarVODemanda($vo);
+		$isDemandaPAAP = $vodemanda->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_PROCADM;
+		    
+		if(!$isDemandaPAAP){
+			$tpDemandaPAAP = dominioTipoDemanda::$DS_TIPO_DEMANDA_PROCADM;
+			throw new excecaoGenerica("A demanda selecionada deve ser do tipo $tpDemandaPAAP.");
+		}    	 
+    }
+    
+    function validarAlteracao($vo) {    	
     	if($vo->situacao == dominioSituacaoPA::$CD_SITUACAO_PA_ENCERRADO){
     		$temPenalidade = $this->temPenalidade($vo);
     		if(!$temPenalidade){
@@ -439,6 +437,13 @@ include_once (caminho_filtros."filtroManterPA.php");
     		}
     	}     	
     	//return $retorno;
+    }
+    
+    // o incluir eh implementado para nao usar da voentidade
+    // por ser mais complexo
+    function incluir($vo) {    	   
+    	$this->validarInclusao ( $vo );
+    	return parent::incluir($vo);
     }
     
     function alterar($vo) {

@@ -367,7 +367,8 @@ class dbprocesso {
 		return $voEntidade;
 	}
 	function incluirQueryVO($voEntidade) {
-		$arrayAtribRemover = $voEntidade->varAtributosARemover;
+		//$arrayAtribRemover = $voEntidade->varAtributosARemover;
+		$arrayAtribRemover = $voEntidade->varAtributosDBDefault;
 		return $this->incluirQuery ( $voEntidade, $arrayAtribRemover );
 	}
 	function incluirQuery($voEntidade, $arrayAtribRemover) {

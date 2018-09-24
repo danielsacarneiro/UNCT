@@ -66,7 +66,7 @@ class filtroManterPA extends filtroManter{
     	}    	 
     }
     	
-	function getFiltroConsultaSQL(){
+	function getFiltroConsultaSQL($comAtributoOrdenacao = null){
         $voPA= new voPA();
         $vopessoa= new vopessoa();
         $vocontrato= new vocontrato();
@@ -283,10 +283,9 @@ class filtroManterPA extends filtroManter{
 					;
 					$conector  = "\n AND ";
 		}		
-		//finaliza o filtro
-		$filtro = parent::getFiltroConsulta($filtro);
 		
-		//echo "Filtro:$filtro<br>";
+		//finaliza o filtro
+		$filtro = parent::getFiltroSQLCompleto($filtro, new voPA(), $comAtributoOrdenacao);	
 
 		return $filtro;
 	}
@@ -306,11 +305,17 @@ class filtroManterPA extends filtroManter{
 	
 	function getAtributosOrdenacao(){
 		$nmTabelaPA = voPA::getNmTabelaStatic($this->isHistorico());
-		$varAtributos = array(
+		/*$varAtributos = array(
 				"$nmTabelaPA.".voPA::$nmAtrCdPA=> "PA",
 				vocontrato::getNmTabelaStatic($this->isHistorico).".".vocontrato::$nmAtrCdContrato => "Contrato",
 				$nmTabelaPA . "." . voPA::$nmAtrDhUltAlteracao=> "Dt.Alteração",
+		);*/
+		$varAtributos = array(
+				voPA::$nmAtrCdPA=> "PA",
+				vocontrato::getNmTabela().".".vocontrato::$nmAtrCdContrato => "Contrato",
+				voPA::$nmAtrDhUltAlteracao=> "Dt.Alteração",
 		);
+		
 		return $varAtributos;
 	}
 	

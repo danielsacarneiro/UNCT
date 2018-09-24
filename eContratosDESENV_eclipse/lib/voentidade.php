@@ -23,6 +23,7 @@ class voentidade extends multiplosConstrutores {
 	var $varChaves;
 	var $varAtributos;
 	var $varAtributosARemover;
+	var $varAtributosDBDefault;
 	var $temTabHistorico;
 	var $dbprocesso = "";
 	var $dhInclusao;
@@ -162,8 +163,7 @@ class voentidade extends multiplosConstrutores {
 	function getAtributoValorSQL($atributo, $valor) {
 		return $atributo . " = " . $valor;
 	}
-	function getDadosFormularioEntidade() {
-		
+	function getDadosFormularioEntidade() {		
 		// chama o getdadosformulario do filho
 		//SOMENTE DESCOMENTAR QUANDO TODOS OS VOS NAO CHAMAREM O METODO PAI getDadosFormularioEntidade, SE NAO CAUSA DEADLOCK
 		//$this->getDadosFormulario ();
@@ -205,6 +205,12 @@ class voentidade extends multiplosConstrutores {
 		if (method_exists ( $this, "getDadosChaveOperacaoMaixComplexa" )) {
 			$this->getDadosChaveOperacaoMaixComplexa ( $registrobanco );
 		}
+	}
+	function setaAtributosRemocaoEInclusaoDBDefault($arrayAtribRemover=null, $arrayAtributosDBDefault=null) {
+		$this->varAtributos = removeColecaoAtributos ( $this->varAtributos, $arrayAtribRemover );
+
+		$this->varAtributosDBDefault = $arrayAtributosDBDefault;
+		$this->varAtributosARemover = $arrayAtribRemover;
 	}
 	function removeAtributos($arrayAtribRemover) {
 		$this->varAtributos = removeColecaoAtributos ( $this->varAtributos, $arrayAtribRemover );

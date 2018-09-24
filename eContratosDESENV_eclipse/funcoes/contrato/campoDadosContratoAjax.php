@@ -11,7 +11,7 @@ function imprime(){
 	$limpar = @$_GET ["limpar"];
 	$limpar = $limpar == "S";
 	
-	$indice = @$_GET ["indice"];
+	$indice = @$_GET ["indice"];	
 	
 	if($limpar){
 		$retorno = limparCampoDadosContrato();

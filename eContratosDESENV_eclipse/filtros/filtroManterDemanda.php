@@ -99,6 +99,9 @@ class filtroManterDemanda extends filtroManter{
 		$vocontrato->anoContrato = @$_POST[vocontrato::$nmAtrAnoContrato];
 		$vocontrato->cdContrato = @$_POST[vocontrato::$nmAtrCdContrato];
 		$vocontrato->tipo = @$_POST[vocontrato::$nmAtrTipoContrato];
+		$vocontrato->cdEspecie = @$_POST[vocontrato::$nmAtrCdEspecieContrato];
+		$vocontrato->sqEspecie = @$_POST[vocontrato::$nmAtrSqEspecieContrato];
+		
 		$this->tipoExcludente = @$_POST[static::$NmAtrTipoExcludente];
 		$vocontrato->cdAutorizacao = @$_POST[vocontrato::$nmAtrCdAutorizacaoContrato];
 		

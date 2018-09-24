@@ -10,11 +10,13 @@ class dominioTipoDemandaContrato extends dominio {
 	
 	static $CD_TIPO_PRORROGACAO = "08";
 	static $CD_TIPO_REAJUSTE = "05";
+	static $CD_TIPO_MATER = "06";
 	static $CD_TIPO_MODIFICACAO = "07";
 	static $CD_TIPO_OUTROS = "99";
 	
 	static $DS_TIPO_REAJUSTE = "Reajuste";
 	static $DS_TIPO_MODIFICACAO = "Modificação";
+	static $DS_TIPO_MATER = "Mater";
 	static $DS_TIPO_PRORROGACAO = "Prorrogação";
 	static $DS_TIPO_OUTROS = "Outros";
 
@@ -30,6 +32,7 @@ class dominioTipoDemandaContrato extends dominio {
 	
 	static function getColecao() {		
 		$retorno = array (
+				static::$CD_TIPO_MATER=> self::$DS_TIPO_MATER,
 				static::$CD_TIPO_PRORROGACAO => self::$DS_TIPO_PRORROGACAO,
 				static::$CD_TIPO_REAJUSTE => self::$DS_TIPO_REAJUSTE,
 				static::$CD_TIPO_MODIFICACAO => self::$DS_TIPO_MODIFICACAO,

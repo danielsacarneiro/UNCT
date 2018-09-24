@@ -300,7 +300,13 @@ function iniciar(){
 	        </TR>-->	        
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" width="1%"><?php getCampoDadosContratoSimples("camponaoobrigatorio", "criarNomeDocumento();");//getContratoEntradaDeDados($tipoContrato, $cdContrato, $anoContrato, $arrayCssClass, $arrayComplementoHTML);?></TD>
+	            <TD class="campoformulario" width="1%" NOWRAP>
+	            <?php
+	            	$pArray = array(null,constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO,true,FALSE,false,true,"criarNomeDocumento();");
+	            	getContratoEntradaArray($pArray);
+	             
+	            	//getCampoDadosContratoSimples("camponaoobrigatorio", "criarNomeDocumento();");
+	            ?></TD>
 	            <TH class="campoformulario" nowrap width="1%">Limpar:</TH>
 	            <TD class="campoformulario">
 	            <?php	            
@@ -312,8 +318,7 @@ function iniciar(){
 	            		voDocumento::$nmAtrAnoARP,
 	            		voDocumento::$nmAtrCdARP,
 	            		voPA::$nmAtrAnoPA,
-	            		voPA::$nmAtrCdPA,
-	            		 
+	            		voPA::$nmAtrCdPA,	            		 
 	            );
 	            echo "<br>".getBorracha($nmCampos, "criarNomeDocumento();");
 	            ?>

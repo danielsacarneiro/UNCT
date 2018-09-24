@@ -54,7 +54,8 @@ class filtroManterProcLicitatorio extends filtroManter{
     	//e precisa saber qual voprincipal considera,
     	//pra pegar por ex os atributos de ordenacao da tabela correta
     	$this->nmEntidadePrincipal = "voProcLicitatorio";
-    	$this->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
+    	if($this->cdOrdenacao == null)
+    		$this->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
     }
     	
 	function getFiltroConsultaSQL(){
@@ -284,7 +285,8 @@ class filtroManterProcLicitatorio extends filtroManter{
 		}*/
 		
 		//finaliza o filtro
-		$filtro = parent::getFiltroConsulta($filtro);
+		$filtro = parent::getFiltroSQLCompleto($filtro, new voProcLicitatorio());
+		
 		
 		//echo "Filtro:$filtro<br>";
 

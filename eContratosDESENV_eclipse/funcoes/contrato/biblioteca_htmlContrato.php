@@ -134,6 +134,80 @@ function getContratoEntradaDeDadosVOSimples($vocontrato, $nmClass = "camponaoobr
 	return getContratoEntradaArray($pArray);
 }
 
+function getContratoEntradaArrayGenerico($pArray) {
+	$vocontrato = $pArray[0];	
+	$nmClass = $pArray[1];
+	$isExibirContratadaSePreenchido = $pArray[2];
+	$pcomChaveCompleta = $pArray[3];
+	$pTemInformacoesComplementares= $pArray[4];
+	$complementoHTML = $pArray[5];
+	$arrayNmCamposFormularioContrato = $pArray[6];
+	
+	$pIsAlterarDemanda= false;
+
+	if($arrayNmCamposContrato == null){
+		$pNmCampoCdContrato = vocontrato::$nmAtrCdContrato;
+		$pNmCampoAnoContrato = vocontrato::$nmAtrAnoContrato;
+		$pNmCampoTipoContrato = vocontrato::$nmAtrTipoContrato;
+		$pNmCampoCdEspecieContrato = vocontrato::$nmAtrCdEspecieContrato;
+		$pNmCampoSqEspecieContrato = vocontrato::$nmAtrSqEspecieContrato;
+		$nmCampoDivPessoaContratada = vopessoa::$nmAtrNome;
+	}else{
+		$pNmCampoCdContrato = $arrayNmCamposContrato[0];
+		$pNmCampoAnoContrato = $arrayNmCamposContrato[1];
+		$pNmCampoTipoContrato = $arrayNmCamposContrato[2];
+		$pNmCampoCdEspecieContrato = $arrayNmCamposContrato[3];
+		$pNmCampoSqEspecieContrato = $arrayNmCamposContrato[4];
+		$nmCampoDivPessoaContratada = $arrayNmCamposContrato[5];
+	}
+
+	$chamadaFuncaoJS = "\"$complementoHTML\"";
+
+	$required = "";
+
+	if($nmClass == null){
+		$nmClass = constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO;
+	}
+	//se nao for um array, cria o array de classes
+	//se nao for o array, todos os componentes terao a mesma classe
+	if (!is_array($nmClass)) {
+		if ($nmClass == constantes::$CD_CLASS_CAMPO_OBRIGATORIO) {
+			$required = "required";
+		}		
+		$arrayCssClass = array (
+				$nmClass,
+				$nmClass,
+				$nmClass,
+				$nmClass,
+				$nmClass
+		);		
+	}else{
+		$arrayCssClass = $nmClass;
+	}
+	
+	//se nao for o array, todos os componentes terao o mesmo javascript
+	if($complementoHTML != null){
+		if (!is_array($complementoHTML)) {
+			$arrayComplementoHTML = array (
+					" $required onChange=$chamadaFuncaoJS ",
+					" $required onBlur=$chamadaFuncaoJS ",
+					" $required onChange=$chamadaFuncaoJS ",
+					" $required onChange=$chamadaFuncaoJS ",
+					" $required onBlur=$chamadaFuncaoJS ",
+					);
+		}else{
+			$arrayComplementoHTML = $complementoHTML;
+			for ($i=0; $i < count($arrayComplementoHTML);$i++){
+				$htmlAtual = $arrayComplementoHTML[$i];
+				$htmlAtual = "$htmlAtual $required ";
+				$arrayComplementoHTML[$i] = $htmlAtual ;			
+			}
+		}
+	}
+	
+	return 	getContratoEntradaDeDadosVOGenerico($vocontrato, $arrayCssClass, $arrayComplementoHTML, null, $isExibirContratadaSePreenchido, $pcomChaveCompleta, $pIsAlterarDemanda,$pcomChaveCompleta);
+}
+
 function getContratoEntradaArray($pArray) {
 	$vocontrato = $pArray[0];
 	$nmClass = $pArray[1];

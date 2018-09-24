@@ -101,7 +101,7 @@ class filtroManterDocumento extends filtroManter{
 		}
 		
 		//finaliza o filtro
-		$filtro = parent::getFiltroConsulta($filtro);
+		$filtro = parent::getFiltroSQL($filtro);
 		
 		//echo "Filtro:$filtro<br>";
 

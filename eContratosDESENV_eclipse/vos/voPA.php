@@ -46,12 +46,11 @@ class voPA extends voentidade {
 		$this->dbprocesso = new $class ();
 		// retira os atributos padrao que nao possui
 		// remove tambem os que o banco deve incluir default
-		$arrayAtribRemover = array (
+		$arrayAtribInclusaoDBDefault = array (
 				self::$nmAtrDhInclusao,
 				self::$nmAtrDhUltAlteracao 
 		);
-		$this->removeAtributos ( $arrayAtribRemover );
-		$this->varAtributosARemover = $arrayAtribRemover;
+		$this->setaAtributosRemocaoEInclusaoDBDefault(null, $arrayAtribInclusaoDBDefault);
 	}
 	public static function getTituloJSP() {
 		return "PROCESSO ADMINISTRATIVO DE APLICAÇÃO DE PENALIDADE (PAAP)";
