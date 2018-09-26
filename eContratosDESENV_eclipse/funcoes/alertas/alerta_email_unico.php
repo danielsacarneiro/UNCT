@@ -24,6 +24,8 @@ $mensagem .= getMensagemEdital($count);
 $mensagem .= getMensagemDemandaSAD($count);
 //envia alertas dos PAAPs pendentes de abertura
 $mensagem .= getMensagemPAAPAbertoNaoEncaminhado($count);
+//envia alertas dos PAAPs A Executar
+$mensagem .= getMensagemPAAPAExecutar($count);
 //envia alertas dos PAAPs cujas analises tiveram prazo vencido
 $mensagem .= getMensagemFimPrazoPAAP($count);
 //envia alertas das demandas que devem ser analisadas pois ja tem suas proposta de precos vencida, tornando possivel o calculo do reajuste

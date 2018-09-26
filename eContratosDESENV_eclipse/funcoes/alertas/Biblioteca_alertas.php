@@ -180,13 +180,18 @@ function getCorpoMensagemPorColecao($titulo, $colecao, $colunasAExibir, $isPrior
 			</TABLE>";			
 						
 		}
+	
 	} catch ( Exception $ex ) {
 		$msg = $ex->getMessage ();
 		echo $msg;
 	}
 	
-	$mensagem = "<b>$titulo</b><br>$mensagem";
-	$mensagem .= "<br>";
+	if (! isColecaoVazia ( $colecao ) || voMensageria::$IMPRIMIR_MENSAGEM_SE_CONSULTA_VAZIA) {
+		$mensagem = "<b>$titulo</b><br>$mensagem";
+		$mensagem .= "<br>";
+	}else{
+		$mensagem = "";
+	}
 	
 	return $mensagem;
 }

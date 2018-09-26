@@ -11,6 +11,7 @@ class voMensageria extends voentidade {
 	static $ENVIAR_EMAIL_GESTOR = false;
 	//ativa o envio do email para teste permitindo o envio de mais de um email por dia
 	static $IN_VERIFICAR_FREQUENCIA = "S";
+	static $IMPRIMIR_MENSAGEM_SE_CONSULTA_VAZIA = true;
 	
 	static $nmCOLDhUltimoEnvio = "nmCOLDhUltimoEnvio";
 	

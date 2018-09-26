@@ -475,6 +475,14 @@ function getStringCampoSeparadorComoArray($chave) {
 	return voentidade::getStringCampoSeparadorComoArray($chave);
 }
 
+function removerUltimaString($stringARemover, $subject){
+	$subject .= constantes::$CD_CAMPO_SUBSTITUICAO;
+	
+	$subject = str_replace($stringARemover.constantes::$CD_CAMPO_SUBSTITUICAO, "", $subject);
+	
+	return $subject;
+}
+
 /*function isArrayMultiDimensional($array){
 	return count($array) == count($array, COUNT_RECURSIVE);
 }*/

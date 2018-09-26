@@ -231,6 +231,8 @@ class dominio extends multiplosConstrutores {
 			$html .= "\n".$conectorAntes . getCheckBoxBoolean($chave, $nm, $chave, $checked, "$javascript $htmlAdicional")." ". static::getDescricaoStatic($chave,$colecao) . "<br>";
 			$i++;
 		}
+		//artificio usado para tirar o ultimo <br>
+		$html = removerUltimaString("<br>",$html);
 		
 		if($comBorracha){
 			$nmCamposDoc = array(

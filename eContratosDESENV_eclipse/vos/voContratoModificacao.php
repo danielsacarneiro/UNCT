@@ -39,16 +39,16 @@ class voContratoModificacao extends voentidade {
 		parent::__construct1 ($arrayChave);
 		$this->temTabHistorico = false;
 		
-		// retira os atributos padrao que nao possui
-		// remove tambem os que o banco deve incluir default
 		$arrayAtribRemover = array (
 				self::$nmAtrDhInclusao,
-				self::$nmAtrDhUltAlteracao,
 				self::$nmAtrCdUsuarioInclusao,
 		);
-		$this->removeAtributos ( $arrayAtribRemover );
-		$this->varAtributosARemover = $arrayAtribRemover;
 		
+		$arrayAtribInclusaoDBDefault = array (
+				self::$nmAtrDhUltAlteracao
+		);
+		$this->setaAtributosRemocaoEInclusaoDBDefault($arrayAtribRemover, $arrayAtribInclusaoDBDefault);
+				
 		$this->vocontrato = new vocontrato();
 	}
 	public static function getTituloJSP() {

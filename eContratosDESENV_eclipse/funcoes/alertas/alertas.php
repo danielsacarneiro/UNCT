@@ -81,6 +81,43 @@ function getMensagemPAAPAbertoNaoEncaminhado(&$count = 0){
 	return $msg;
 }
 
+function getMensagemPAAPAExecutar(&$count = 0){
+	$assunto = "PAAPs Com Multa A Executar:";
+	$assunto = getSequenciaAssunto($assunto, $count);
+	try {
+		$filtro = new filtroConsultarDemandaPAAP( false );
+		$filtro->isValidarConsulta = false;
+		// $filtro->voPrincipal = $voDemanda;
+		$filtro->setaFiltroConsultaSemLimiteRegistro ();
+		$filtro->vodemanda->situacao = array (
+				//dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_ABERTA,
+				dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO
+		);
+
+		$filtro->vodemanda->tipo = array(dominioTipoDemanda::$CD_TIPO_DEMANDA_PROCADM);
+		$filtro->voPA->situacao = array(dominioSituacaoPA::$CD_SITUACAO_PA_EM_COBRANCA);
+		$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_ATJA;
+
+		//art. 25, inciso II, do Decreto n42.191/2015
+		//$filtro->qtdDiasPrazo = 10;
+
+		$dbprocesso = new dbPA();
+		$colecao = $dbprocesso->consultarDemandaPAAP($filtro );
+		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Ano PAAP', voPA::$nmAtrAnoPA);
+		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Nº PAAP', voPA::$nmAtrCdPA, constantes::$TAMANHO_CODIGOS_SAFI);
+		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'RESPONSÁVEL', filtroConsultarDemandaPAAP::$NmColRESP_PAAP);
+		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Dt.Inclusão', voPA::$nmAtrDhInclusao, constantes::$CD_TP_DADO_DATA);
+		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Dt.Última.Mov', filtroManterDemanda::$NmColDhUltimaMovimentacao, constantes::$CD_TP_DADO_DATA);
+
+		$msg = getCorpoMensagemDemandaContratoColecao($assunto, $colecao, $colunasAAcrescentar, true);
+
+	} catch ( Exception $ex ) {
+		$msg = $ex->getMessage ();
+	}
+
+	return $msg;
+}
+
 function getMensagemFimPrazoPAAP(&$count = 0){
 	$assunto = "PAAPs EM ANDAMENTO:";	
 	$assunto = getSequenciaAssunto($assunto, $count);
@@ -95,7 +132,7 @@ function getMensagemFimPrazoPAAP(&$count = 0){
 		);
 	
 		$filtro->vodemanda->tipo = array(dominioTipoDemanda::$CD_TIPO_DEMANDA_PROCADM);
-		$filtro->voPA->situacao = array_keys(dominioSituacaoPA::getColecaoSituacaoAtivos());
+		$filtro->voPA->situacao = array_keys(dominioSituacaoPA::getColecaoSituacaoAtivosFaseInstrucao());
 		$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_ATJA;
 	
 		//art. 25, inciso II, do Decreto n42.191/2015

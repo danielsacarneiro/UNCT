@@ -42,8 +42,8 @@ class voPA extends voentidade {
 		parent::__construct ();
 		$this->temTabHistorico = true;
 		
-		$class = self::getNmClassProcesso ();
-		$this->dbprocesso = new $class ();
+		/*$class = self::getNmClassProcesso ();
+		$this->dbprocesso = new $class ();*/
 		// retira os atributos padrao que nao possui
 		// remove tambem os que o banco deve incluir default
 		$arrayAtribInclusaoDBDefault = array (

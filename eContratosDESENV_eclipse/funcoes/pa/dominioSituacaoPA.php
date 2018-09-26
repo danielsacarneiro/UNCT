@@ -56,12 +56,18 @@ class dominioSituacaoPA extends dominio {
 	}
 	
 	static function getColecaoSituacaoAtivos() {
+		$colecao = array_keys(static::getColecaoSituacaoAtivosFaseInstrucao());
+		$colecao[] = self::$CD_SITUACAO_PA_EM_COBRANCA;
+			
+		return static::getColecaoComDescricao($colecao);
+	}
+	
+	static function getColecaoSituacaoAtivosFaseInstrucao() {
 		$colecao = array(
 				self::$CD_SITUACAO_PA_INSTAURADO,
 				self::$CD_SITUACAO_PA_AGUARDANDO_ACAO,
 				self::$CD_SITUACAO_PA_AGUARDANDO_NOTIFICACAO_ENVIADA,
 				self::$CD_SITUACAO_PA_AGUARDANDO_PUBLICACAO,
-				self::$CD_SITUACAO_PA_EM_COBRANCA,
 		);
 			
 		return static::getColecaoComDescricao($colecao);

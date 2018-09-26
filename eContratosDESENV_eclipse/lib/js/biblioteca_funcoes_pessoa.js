@@ -25,6 +25,7 @@ function carregaDadosContratada(pNmCampoAnoContrato, pNmCampoTipoContrato, pNmCa
 		isChaveCompleta = true;
 					
 		if(cdEspecieContrato == cdEspecieContratoMater){
+			exibirMensagem("Alteração não permitida para Contrato Mater.");
 			sqEspecieContrato = 1;
 			campoSqEspecieContrato.value = sqEspecieContrato; 
 		}		
@@ -74,7 +75,7 @@ function getNomePessoaContratada(pNmCampoPessoa){
 		nmContrata = campoNomeContratada.value;		
 		nmContrata = truncarTexto(nmContrata, 20, "");
 	}catch(ex){
-		nmContrata = "NAO.ENCONTRADO";
+		nmContrata = "NÃO.ENCONTRADO";
 	}
 	
 	nmContrata = nmContrata.replace('&', 'E');
