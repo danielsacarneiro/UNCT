@@ -2,32 +2,21 @@
 include_once(caminho_util."dominio.class.php");
 include_once(caminho_util."constantes.class.php");
 
-Class dominioTpModificacaoContrato extends dominio{	
-	static $CD_SITUACAO_INCLUIDO = 1;
-	static $CD_SITUACAO_EXISTENTE = 2;
-	static $CD_SITUACAO_ERRO = 3;
-	static $CD_SITUACAO_FORMALIZACAO_PENDENTE = 4;
-	static $CD_SITUACAO_INCLUIDO_COM_OBS = 5;
+Class dominioTpContratoModificacao extends dominio{	
+	static $CD_TIPO_ACRESCIMO = 1;
+	static $CD_TIPO_SUPRESSAO = 2;
+	static $CD_TIPO_REAJUSTE = 3;
 		
-	static $DS_SITUACAO_INCLUIDO = 'Incluído Sucesso';
-	static $DS_SITUACAO_EXISTENTE = 'Já Existia';
-	static $DS_SITUACAO_ERRO = "ERRO";
-	static $DS_SITUACAO_FORMALIZACAO_PENDENTE = "Formalização Pendente";
-	static $DS_SITUACAO_INCLUIDO_COM_OBS = "Incluído com Obs.";
-	
+	static $DS_TIPO_ACRESCIMO = "Acréscimo";
+	static $DS_TIPO_SUPRESSAO = "Supressão";
+	static $DS_TIPO_REAJUSTE = "Reajuste";
 	// ...............................................................
-	// Construtor
-	function __construct () {
-		$this->colecao = self::getColecao();
-	}
 
 	static function getColecao(){
 		return array(				
-				self::$CD_SITUACAO_INCLUIDO => self::$DS_SITUACAO_INCLUIDO,
-				self::$CD_SITUACAO_INCLUIDO_COM_OBS => self::$DS_SITUACAO_INCLUIDO_COM_OBS,
-				self::$CD_SITUACAO_EXISTENTE => self::$DS_SITUACAO_EXISTENTE,
-				self::$CD_SITUACAO_ERRO => self::$DS_SITUACAO_ERRO,
-				self::$CD_SITUACAO_FORMALIZACAO_PENDENTE => self::$DS_SITUACAO_FORMALIZACAO_PENDENTE,
+				self::$CD_TIPO_ACRESCIMO => self::$DS_TIPO_ACRESCIMO,
+				self::$CD_TIPO_SUPRESSAO=> self::$DS_TIPO_SUPRESSAO,
+				self::$CD_TIPO_REAJUSTE=> self::$DS_TIPO_REAJUSTE,
 		);
 	}	
 }

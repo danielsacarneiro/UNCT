@@ -147,6 +147,15 @@ function validaFormRequiredCheckBox(campoCheckBoxValidacao, colecaoIDCampos, pSe
 	}
 }
 
+function validaFormReadOnlyCheckBox(campoCheckBoxValidacao, colecaoIDCampos, pSetarVazio, pIsCampoObrigatorio, pIsAlinhadoDireita){
+	pIsReadOnly = !campoCheckBoxValidacao.checked;
+	tornarReadOnlyCamposColecaoFormulario(colecaoIDCampos, pIsReadOnly, pIsCampoObrigatorio, pIsAlinhadoDireita);
+	
+	if(pSetarVazio != null && pSetarVazio){
+		limparCamposColecaoFormulario(colecaoIDCampos);
+	}
+}
+
 function tornarCampoObrigatorio(campoForm, pIsRequired){
 	//pIsRequired == true, o campocheckbox de responsabilidade NAO foi setado
 	var validar = pIsRequired;
@@ -163,6 +172,25 @@ function tornarCampoObrigatorio(campoForm, pIsRequired){
 	}
 }
 
+function tornarCampoReadOnly(campoForm, pIsReadOnly, pIsRequired, pIsAlinhadoDireita){
+	var validar = pIsReadOnly;
+	campoForm.readOnly = validar;
+	
+	var complementoClasse = "";
+	if(pIsAlinhadoDireita)
+		complementoClasse = "alinhadodireita";
+
+	if(validar){
+		classe="camporeadonly";
+	}else{
+		var classe = "camponaoobrigatorio";
+		if(pIsRequired)
+			classe = "campoobrigatorio";		
+	}
+	
+	campoForm.className=classe+complementoClasse;
+}
+
 function tornarRequiredCamposColecaoFormulario(colecaoIDCampos, pIsRequired){	
 	for(i=0;i<colecaoIDCampos.length;i++){					
 		id = colecaoIDCampos[i];		
@@ -170,6 +198,18 @@ function tornarRequiredCamposColecaoFormulario(colecaoIDCampos, pIsRequired){
 		//alert(id);
 		if(element != null){			 
 			tornarCampoObrigatorio(element, pIsRequired)
+		}
+		//alert(element.id + " " + pIsRequired);
+	}
+}
+
+function tornarReadOnlyCamposColecaoFormulario(colecaoIDCampos, pIsReadOnly, pIsRequired,pIsAlinhadoDireita){	
+	for(i=0;i<colecaoIDCampos.length;i++){					
+		id = colecaoIDCampos[i];		
+		element = document.getElementById(id);
+		//alert(id);
+		if(element != null){			 
+			tornarCampoReadOnly(element, pIsReadOnly, pIsRequired, pIsAlinhadoDireita);
 		}
 		//alert(element.id + " " + pIsRequired);
 	}

@@ -361,7 +361,7 @@ class filtroManterContrato extends filtroManter {
 		//nem sempre sera usado pelos filtros
 		$this->formataCampoOrdenacao(new vocontrato());
 		// finaliza o filtro
-		$filtro = parent::getFiltroConsulta ( $filtro );
+		$filtro = parent::getFiltroSQL($filtro );
 		
 		// echo "Filtro:$filtro<br>";
 		

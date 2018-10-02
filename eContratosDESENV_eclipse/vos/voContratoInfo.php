@@ -21,6 +21,8 @@ Class voContratoInfo extends voentidade{
 	static $nmAtrCdClassificacao = "ctinf_cd_classificacao";
 	static $nmAtrInMaoDeObra = "ctinf_in_mao_obra";
 	static $nmAtrCdPessoaGestor = "ctinf_cd_pegestor";
+	
+	static $nmAtrNumPrazo = "ctinf_numprazo";
 		
 	var $cdContrato = "";
 	var $anoContrato  = "";

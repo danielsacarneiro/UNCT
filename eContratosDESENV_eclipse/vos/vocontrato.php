@@ -106,13 +106,34 @@ include_once (caminho_util . "DocumentoPessoa.php");
 
 // ...............................................................
 // Construtor
-   function __construct() {
+   function __construct() {   	
        parent::__construct();
        $this->temTabHistorico = true;
        $this->sqEspecie = 1;
        $this->importacao = "N";
    }
     
+   /*function __construct1($pArrayChavesOuSemSqDefault = null) {
+   		if($pArrayChavesOuSemSqDefault == null){
+   			echo "aqui1";
+   			self::__construct();
+   		}else if(is_array($pArrayChavesOuSemSqDefault)){
+   			echo "aqui2";
+   			parent::__construct1($pArrayChavesOuSemSqDefault);
+   		}else{
+   			echo "aqui3";
+   			self::__construct2($pArrayChavesOuSemSqDefault, null);
+   		}   	
+	   	
+	   	$this->importacao = "N";
+   }
+    
+    function __construct2($pSemSqDefault = false, $pArrayChaves) {
+		self::__construct1($pArrayChaves);		
+		if($pSemSqDefault){
+			$this->sqEspecie = null;
+		}
+	}*/
 // ...............................................................
 // Funções ( Propriedades e métodos da classe )
 	public static function getTituloJSP(){

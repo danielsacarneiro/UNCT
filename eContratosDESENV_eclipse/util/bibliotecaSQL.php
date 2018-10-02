@@ -269,10 +269,10 @@ function getDecimalSQL($param) {
 	// echo $valor;
 	if (isNumero ( $valor )) {
 		$retorno = $valor;
-		// echo "É NÚMERO! <BR>";
+		// echo "$valor É NÚMERO! <BR>";
 	}
-	// else
-	// echo "NÃO É NÚMERO! <BR>";
+	/*else
+	 echo " $valor NÃO É NÚMERO! <BR>";*/
 	
 	return $retorno;
 }

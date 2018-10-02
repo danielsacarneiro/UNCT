@@ -193,10 +193,10 @@ function getVarComoStringHTML($string) {
 	}
 	return $retorno;
 }
-function getMoeda($valorSQL) {
+function getMoeda($valorSQL, $qtCasasDecimais=2) {
 	$retorno = "";
 	if ($valorSQL != null)
-		$retorno = number_format ( $valorSQL, 2, ',', '.' );
+		$retorno = number_format ( $valorSQL, $qtCasasDecimais, ',', '.' );
 	return $retorno;
 }
 function getOrdemAtributos() {

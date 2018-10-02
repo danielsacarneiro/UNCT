@@ -10,6 +10,7 @@ include_once (caminho_util . "bibliotecaFuncoesPrincipal.php");
 // Classe select
 // cria um combo select html
 class dbcontrato extends dbprocesso {
+	static $FLAG_PRINTAR_SQL = false;
 	
 	static $CD_CONSTANTE_FIM_IMPORTACAO = "FIM";
 	static $ID_REQ_INICIAR_TAB_CONTRATO= "ID_REQ_INICIAR_TAB_CONTRATO";
@@ -35,6 +36,104 @@ class dbcontrato extends dbprocesso {
 			return $retorno;
 		}
 	}
+	function consultarContratoModificacao($vo, $isHistorico) {
+		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
+		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
+		$nmTabelaContratoMod = voContratoModificacao::getNmTabelaStatic ( false );
+		$nmTabelaPessoa = vopessoa::getNmTabelaStatic ( false );
+		$nmTabelaContratoUltValorReajustado = "NM_TAB_CONTRATO_VL_REAJUSTADO";
+		$nmTabelaContratoUltValorAtualizado= "NM_TAB_CONTRATO_VL_ATUALIZADO";
+	
+		$arrayColunasRetornadas = array (
+				getSQLCOALESCE(
+						array(
+								"$nmTabelaContratoUltValorAtualizado.".voContratoModificacao::$nmAtrVlMensalAtualizado,
+								"$nmTabela.".vocontrato::$nmAtrVlMensalContrato),
+						vocontrato::$nmAtrVlMensalContrato),
+				getSQLCOALESCE(
+						array(
+								"$nmTabelaContratoUltValorAtualizado.".voContratoModificacao::$nmAtrVlGlobalAtualizado,
+								"$nmTabela.".vocontrato::$nmAtrVlGlobalContrato),
+						vocontrato::$nmAtrVlGlobalContrato),
+				getSQLCOALESCE(
+						array(
+								"$nmTabelaContratoUltValorReajustado.".voContratoModificacao::$nmAtrVlMensalAtualizado,
+								"$nmTabela.".vocontrato::$nmAtrVlMensalContrato),
+						voContratoModificacao::$nmColVlMensalParaFinsDeModAtual),
+				getSQLCOALESCE(
+						array(
+								"$nmTabelaContratoUltValorReajustado.".voContratoModificacao::$nmAtrVlGlobalAtualizado,
+								"$nmTabela.".vocontrato::$nmAtrVlGlobalContrato),
+						voContratoModificacao::$nmColVlGlobalParaFinsDeModAtual),
+				
+				"$nmTabela." . vocontrato::$nmAtrDtVigenciaInicialContrato,
+				"$nmTabela." . vocontrato::$nmAtrDtVigenciaFinalContrato,
+				"$nmTabelaContratoInfo." . voContratoInfo::$nmAtrDtProposta,
+		);
+	
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaContratoInfo;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrCdContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrCdContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrAnoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrAnoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrTipoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
+		
+		$nmTabContratoInterna = voContratoModificacao::getNmTabelaStatic ( false );
+		$groupbyinterno = voContratoModificacao::$nmAtrAnoContrato . "," . voContratoModificacao::$nmAtrCdContrato . "," . voContratoModificacao::$nmAtrTipoContrato;
+		//relacao da tabela que pega o ultimo valor atualizado para fins de reajuste
+		//desconsiderando acrescimos e supressoes
+		$nmTabContratoModSqMAXReajuste = "TAB_MAX_MOD_CONTRATO_REAJUSTE";
+		$queryJoin .= "\n LEFT JOIN ";
+		$queryJoin .= "\n\n (SELECT " . $groupbyinterno . ", MAX(" . voContratoModificacao::$nmAtrSq . ") AS " . voContratoModificacao::$nmAtrSq;
+		$queryJoin .= " FROM " . $nmTabContratoInterna;
+		$queryJoin .= " WHERE " . voContratoModificacao::$nmAtrTpModificacao . " = " . dominioTpContratoModificacao::$CD_TIPO_REAJUSTE;
+		$queryJoin .= " GROUP BY " . $groupbyinterno;
+		$queryJoin .= "\n) " . $nmTabContratoModSqMAXReajuste;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabContratoModSqMAXReajuste . "." . voContratoModificacao::$nmAtrAnoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrCdContrato . "=" . $nmTabContratoModSqMAXReajuste . "." . voContratoModificacao::$nmAtrCdContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabContratoModSqMAXReajuste . "." . voContratoModificacao::$nmAtrTipoContrato;
+		
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaContratoMod . " $nmTabelaContratoUltValorReajustado";
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabContratoModSqMAXReajuste . "." . voContratoModificacao::$nmAtrAnoContrato . "=" . $nmTabelaContratoUltValorReajustado . "." . voContratoModificacao::$nmAtrAnoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabContratoModSqMAXReajuste . "." . voContratoModificacao::$nmAtrCdContrato . "=" . $nmTabelaContratoUltValorReajustado . "." . voContratoModificacao::$nmAtrCdContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabContratoModSqMAXReajuste . "." . voContratoModificacao::$nmAtrTipoContrato . "=" . $nmTabelaContratoUltValorReajustado . "." . voContratoModificacao::$nmAtrTipoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabContratoModSqMAXReajuste . "." . voContratoModificacao::$nmAtrSq . "=" . $nmTabelaContratoUltValorReajustado . "." . voContratoModificacao::$nmAtrSq;
+			
+		//relacao da tabela que pega o ultimo valor atualizado geral		
+		$nmTabContratoModSqMAXAtualizado = "TAB_MAX_MOD_CONTRATO_ATUALIZADO";		
+		$queryJoin .= "\n LEFT JOIN ";
+		$queryJoin .= "\n\n (SELECT " . $groupbyinterno . ", MAX(" . voContratoModificacao::$nmAtrSq . ") AS " . voContratoModificacao::$nmAtrSq;
+		$queryJoin .= " FROM " . $nmTabContratoInterna;
+		$queryJoin .= " GROUP BY " . $groupbyinterno;
+		$queryJoin .= "\n) " . $nmTabContratoModSqMAXAtualizado;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabContratoModSqMAXAtualizado . "." . voContratoModificacao::$nmAtrAnoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrCdContrato . "=" . $nmTabContratoModSqMAXAtualizado . "." . voContratoModificacao::$nmAtrCdContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabContratoModSqMAXAtualizado . "." . voContratoModificacao::$nmAtrTipoContrato;
+		
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaContratoMod . " $nmTabelaContratoUltValorAtualizado";
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabContratoModSqMAXAtualizado . "." . voContratoModificacao::$nmAtrAnoContrato . "=" . $nmTabelaContratoUltValorAtualizado . "." . voContratoModificacao::$nmAtrAnoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabContratoModSqMAXAtualizado . "." . voContratoModificacao::$nmAtrCdContrato . "=" . $nmTabelaContratoUltValorAtualizado . "." . voContratoModificacao::$nmAtrCdContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabContratoModSqMAXAtualizado . "." . voContratoModificacao::$nmAtrTipoContrato . "=" . $nmTabelaContratoUltValorAtualizado . "." . voContratoModificacao::$nmAtrTipoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabContratoModSqMAXAtualizado . "." . voContratoModificacao::$nmAtrSq . "=" . $nmTabelaContratoUltValorAtualizado . "." . voContratoModificacao::$nmAtrSq;
+		
+		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryJoin, $isHistorico );
+	}
+	
 	function consultarPorChaveTela($vo, $isHistorico) {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
@@ -634,6 +733,7 @@ class dbcontrato extends dbprocesso {
 		$query .= "\n GROUP BY " . vopessoa::$nmAtrDoc;
 		$colecaoDocs = $this->consultarEntidade ( $query, false );
 		$tam = count ( $colecaoDocs );
+		echoo("Número de documentos registrados:" . $tam);
 		
 		$arrayDocs = array ();
 		for($i = 0; $i < $tam; $i ++) {
@@ -645,7 +745,7 @@ class dbcontrato extends dbprocesso {
 			$arrayDocs [$doc->getNumDoc ()] = $cdPessoa;
 		}
 		
-		// var_dump($arrayDocs);
+		//var_dump($arrayDocs);
 		
 		$query = "SELECT ";
 		$query .= vocontrato::getNmTabela () . "." . vocontrato::$nmAtrSqContrato;
@@ -689,7 +789,8 @@ class dbcontrato extends dbprocesso {
 				 */
 				
 				$cdPessoa = $arrayDocs [$doc];
-				if ($voContrato->cdPessoaContratada == 0 && $cdPessoa != null && $cdPessoa != "") {
+				if (($voContrato->cdPessoaContratada == null || $voContrato->cdPessoaContratada == "" || $voContrato->cdPessoaContratada == 0) 
+						&& $cdPessoa != null && $cdPessoa != "") {
 					$voContrato->cdPessoaContratada = $cdPessoa;
 					$voContrato->cdUsuarioUltAlteracao = 1;
 					$this->alterarPorCima ( $voContrato );			

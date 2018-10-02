@@ -6,12 +6,12 @@ include_once(caminho_util."constantes.class.php");
 //inicia os parametros
 inicio();
 
-$vo = new voContratoLicon();
+$vo = new voContratoModificacao();
 
-$titulo = "CONSULTAR " . voContratoLicon::getTituloJSP();
+$titulo = "CONSULTAR " . voContratoModificacao::getTituloJSP();
 setCabecalho($titulo);
 
-$filtro  = new filtroManterContratoLicon();
+$filtro  = new filtroManterContratoModificacao();
 $filtro->voPrincipal = $vo;
 $filtro = filtroManter::verificaFiltroSessao($filtro);
 
@@ -86,7 +86,7 @@ function alterar() {
 }
 
 </SCRIPT>
-<?=setTituloPagina(voContratoLicon::getTituloJSP())?>
+<?=setTituloPagina(voContratoModificacao::getTituloJSP())?>
 </HEAD>
 <BODY class="paginadados" onload="">
 	  
@@ -110,21 +110,29 @@ function alterar() {
         <TBODY>
 	        <?php	        	
 	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
-	        $arrayCssClass = array("camponaoobrigatorio","camponaoobrigatorio", "camponaoobrigatorio");
-	        
-	        $selectExercicio = new selectExercicio();
 	        ?>
             <TR>
-				<TH class="campoformulario" nowrap width="1%">Demanda:</TH>
-				<TD class="campoformulario" nowrap colspan="3">
-					<?php echo "Ano: " . $selectExercicio->getHtmlCombo(voContratoLicon::$nmAtrAnoDemanda,voContratoLicon::$nmAtrAnoDemanda, $filtro->anoDemanda, true, "camponaoobrigatorio", false, "");?>
-					Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voContratoLicon::$nmAtrCdDemanda?>" name="<?=voContratoLicon::$nmAtrCdDemanda?>"  value="<?php echo(complementarCharAEsquerda($filtro->cdDemanda, "0", TAMANHO_CODIGOS));?>"  class="camponaoobrigatorio" size="6" maxlength="5">		  
-				</TD>            
-			</TR>
-            <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" colspan="3"><?php getContratoEntradaDeDados($filtro->tipoContrato, $filtro->cdContrato, $filtro->anoContrato, $arrayCssClass, null, null);?></TD>
-			</TR>
+	            <TD class="campoformulario" colspan=3><?php
+
+	            $voContratoFiltro = new vocontrato();	            
+	            $voContratoFiltro->tipo = $filtro->vocontrato->tipo;
+	            $voContratoFiltro->cdContrato = $filtro->vocontrato->cdContrato;
+	            $voContratoFiltro->anoContrato = $filtro->vocontrato->anoContrato;
+	            $voContratoFiltro->cdEspecie = $filtro->vocontrato->cdEspecie;
+	            $voContratoFiltro->sqEspecie = $filtro->vocontrato->sqEspecie;
+	             
+	            $pArray = array($voContratoFiltro,
+	            		constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO,
+	            		false,
+	            		true,
+	            		false,
+	            		null,	            		
+	            		null);
+	             
+	            getContratoEntradaArrayGenerico($pArray);
+			?></TD>
+	        </TR>
 			<TR>
                 <TH class="campoformulario" nowrap>Nome Contratada:</TH>
                 <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>"  value="<?php echo($filtro->nmContratada);?>"  class="camponaoobrigatorio" size="50"></TD>
@@ -132,26 +140,20 @@ function alterar() {
                 <TD class="campoformulario" ><INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($filtro->docContratada);?>" class="camponaoobrigatorio" size="20" maxlength="18"></TD>
             </TR>
             <TR>
-                <TH class="campoformulario" nowrap width="1%">Situação:</TH>
-                <TD class="campoformulario" width="1%">
+                <TH class="campoformulario" nowrap width="1%">Tipo:</TH>
+                <TD class="campoformulario" width="1%" colspan=3>
                 <?php
-                $comboSituacao = new select(dominioSituacaoContratoLicon::getColecao());
-                echo $comboSituacao->getHtmlCombo(voContratoLicon::$nmAtrSituacao,voContratoLicon::$nmAtrSituacao, $filtro->situacao, true, "camponaoobrigatorio", false, "");
+                $comboTipo = new select(dominioTpContratoModificacao::getColecao());
+                echo $comboTipo->getHtmlCombo(voContratoModificacao::$nmAtrTpModificacao,voContratoModificacao::$nmAtrTpModificacao, $filtro->situacao, true, "camponaoobrigatorio", false, "");
                 ?>
 				</TD>
-                <TD class="campoformulario" width="1%" colspan=2>
-                Exceto: 
-                <?php
-                echo $comboSituacao->getHtmlCombo(filtroManterContratoLicon::$ID_REQ_SituacaoExceto, filtroManterContratoLicon::$ID_REQ_SituacaoExceto."[]", $filtro->situacaoExceto, true, "camponaoobrigatorio", false, " multiple ");
-                ?>
-				</TD>					       
             </TR>
 			<TR>
-	            <TH class="campoformulario" nowrap width="1%">Dt.Publicação:</TH>
+	            <TH class="campoformulario" nowrap width="1%">Dt.Modificação:</TH>
 	            <TD class="campoformulario" colspan=3>
 	            	            	<INPUT type="text" 
-	            	       id="<?=vocontrato::$nmAtrDtPublicacaoContrato?>" 
-	            	       name="<?=vocontrato::$nmAtrDtPublicacaoContrato?>" 
+	            	       id="<?=voContratoModificacao::$nmAtrDtModificacao?>" 
+	            	       name="<?=voContratoModificacao::$nmAtrDtModificacao?>" 
 	            			value="<?php echo(getData($filtro->dtPublicacao));?>"
 	            			onkeyup="formatarCampoData(this, event, false);" 
 	            			class="camponaoobrigatorio" 
@@ -184,15 +186,18 @@ function alterar() {
                   <?php 
                   }
                   ?>
-                    <TH class="headertabeladados" width="1%" nowrap>Demanda</TH>                    
-                    <TH class="headertabeladados" width="1%" nowrap>Sistema</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Contrato</TH>
-                    <TH class="headertabeladados" width="1%" nowrap>Tipo</TH>
+                    <TH class="headertabeladados" width="1%" nowrap>Espécie</TH>
                     <TH class="headertabeladados" width="70%">Contratada</TH>
                     <TH class="headertabeladados" width="1%">CNPJ/CNPF</TH>                    
-					<TH class="headertabeladados" width="1%" nowrap>Dt.Publicação</TH>
-                    <TH class="headertabeladados" width="1%" nowrap>Dt.Registro</TH>
-                    <TH class="headertabeladados" width="1%">Situação</TH>                    
+					<TH class="headertabeladados" width="1%" nowrap>Tipo</TH>
+					<TH class="headertabeladados" width="1%" nowrap>%</TH>
+					<TH class="headertabeladados" width="1%" nowrap>Vl.Referencial</TH>
+					<TH class="headertabeladados" width="1%" nowrap>Vl.Mensal.Atual</TH>
+					<TH class="headertabeladados" width="1%" nowrap>Vl.Global.Real</TH>					
+					<TH class="headertabeladados" width="1%" nowrap>Vl.Global.Atual</TH>
+					<TH class="headertabeladados" width="1%" nowrap>Dt.Operação</TH>
+                    <TH class="headertabeladados" width="1%" nowrap>Dt.Registro</TH>                    
                 </TR>
                 <?php								
                 if (is_array($colecao))
@@ -201,7 +206,7 @@ function alterar() {
                         $tamanho = 0;
                 
                 //echoo($tamanho);                                
-                $colspan=10;
+                $colspan=13;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -211,7 +216,7 @@ function alterar() {
                 
                for ($i=0;$i<$tamanho;$i++) {
                		$registroBanco = $colecao[$i];
-                        $voAtual = new voContratoLicon();
+                        $voAtual = new voContratoModificacao();
                         $voAtual->getDadosBanco($registroBanco);
 
                         $voPessoa = new voPessoa();
@@ -221,27 +226,26 @@ function alterar() {
                         if($dsPessoa == null){
                         	$dsPessoa = "<B>CONTRATO NÃO INCLUÍDO NA PLANILHA</B>";
                         }
-                        $situacao = dominioSituacaoContratoLicon::getDescricaoStatic($voAtual->situacao);
-                        $tipo = $registroBanco[voDemanda::$nmAtrTipo];
-                        $tipo = dominioTipoDemanda::getDescricaoStatic($tipo);
-                        //var_dump($voAtual);
                         
-                        $voDemandaContrato = $voAtual->vodemandacontrato;
-                        if($voDemandaContrato!=null){
-                        		$complementoContrato = getContratoDescricaoEspecie($voDemandaContrato->voContrato);
+                        $vocontrato = $voAtual->vocontrato;
+                        $tipo = $vocontrato->tipo;
+                        $tipo = dominioTipoContrato::getDescricaoStatic($tipo);
+                        //var_dump($voAtual);                        
+                        if($vocontrato!=null){
+                        		$complementoContrato = getContratoDescricaoEspecie($vocontrato);
                         		$contrato = 
-                        		 formatarCodigoAnoComplemento($voDemandaContrato->voContrato->cdContrato,
-                        				$voDemandaContrato->voContrato->anoContrato,
-                        				$dominioTipoContrato->getDescricao($voDemandaContrato->voContrato->tipo))
+                        		 formatarCodigoAnoComplemento($vocontrato->cdContrato,
+                        		 		$vocontrato->anoContrato,
+                        				$dominioTipoContrato->getDescricao($vocontrato->tipo))
                         				;
                         
                         		if($empresa != null){
                         			$contrato .= ": ".$empresa;
 
                         	}
-                        	
-                        	$demanda = formatarCodigoAno($voDemandaContrato->cdDemanda, $voDemandaContrato->anoDemanda);                        	 
                         }
+                        
+                        $tipoModificacao = dominioTpContratoModificacao::getDescricaoStatic($voAtual->tpModificacao);
                         
                    ?>
                 <TR class="dados">
@@ -255,15 +259,18 @@ function alterar() {
                   <?php 
                   }
                   ?>                    
-                    <TD class="tabeladados" nowrap><?php echo $demanda?></TD>
-                  	<TD class="tabeladados" nowrap><?php echo $tipo?></TD>
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo $contrato;?></TD>
                     <TD class="tabeladados" nowrap><?php echo $complementoContrato?></TD>                    
 					<TD class="tabeladados"><?php echo $dsPessoa?></TD>					
 					<TD class="tabeladados" nowrap><?php echo documentoPessoa::getNumeroDocFormatado($voPessoa->doc)?></TD>
-                    <TD class="tabeladados" nowrap><?php echo getData($registroBanco[vocontrato::$nmAtrDtPublicacaoContrato])?></TD>
-                    <TD class="tabeladados" nowrap><?php echo getData($voAtual->dhUltAlteracao)?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $situacao?></TD>                    
+                    <TD class="tabeladados" nowrap><?php echo $tipoModificacao?></TD>
+                    <TD class="tabeladados" nowrap><?php echo getMoeda($voAtual->numPercentual)?></TD>
+                    <TD class="tabeladados" nowrap><?php echo getMoeda($voAtual->vlModificacaoReferencial,4)?></TD>
+                    <TD class="tabeladados" nowrap><?php echo getMoeda($voAtual->vlMensalAtual)?></TD>
+                    <TD class="tabeladados" nowrap><?php echo getMoeda($voAtual->vlGlobalReal)?></TD>                    
+                    <TD class="tabeladados" nowrap><?php echo getMoeda($voAtual->vlGlobalAtual)?></TD>                    
+                    <TD class="tabeladados" nowrap><?php echo getData($voAtual->dtModificacao)?></TD>
+                    <TD class="tabeladados" nowrap><?php echo getData($voAtual->dhUltAlteracao)?></TD>                    
                 </TR>					
                 <?php
 				}                

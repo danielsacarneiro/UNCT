@@ -48,8 +48,7 @@ include_once 'dbContratoModificacao.php';
   	}
   	
   	function consultarTelaConsulta($vo, $filtro) {
-  		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );  		
-  		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( false );
+  		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
   		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
   		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
   	
@@ -60,25 +59,19 @@ include_once 'dbContratoModificacao.php';
   	
   		$arrayColunasRetornadas = array (
   				$nmTabela . ".*",
-  				$nmTabelaDemanda . "." . voDemanda::$nmAtrTipo,
   				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
   				$nmTabelaContrato . "." . vocontrato::$nmAtrDtPublicacaoContrato,
   				//$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
   				getSQLCOALESCE($colecaoAtributoCoalesceNmPessoa,vopessoa::$nmAtrNome),
   		);
-  	  	
-  		$queryJoin .= "\n left JOIN " . $nmTabelaDemanda;
-  		$queryJoin .= "\n ON ";
-  		$queryJoin .= $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $nmTabela . "." . voContratoLicon::$nmAtrAnoDemanda;
-  		$queryJoin .= " AND " . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd . "=" . $nmTabela . "." . voContratoLicon::$nmAtrCdDemanda;
-  		
+  	  	  		
   		$queryJoin .= "\n left JOIN " . $nmTabelaContrato;
   		$queryJoin .= "\n ON ";
-  		$queryJoin .= $nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabela . "." . voContratoLicon::$nmAtrAnoContrato;
-  		$queryJoin .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato. "=" . $nmTabela . "." . voContratoLicon::$nmAtrCdContrato;
-  		$queryJoin .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabela . "." . voContratoLicon::$nmAtrTipoContrato;
-  		$queryJoin .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrCdEspecieContrato . "=" . $nmTabela . "." . voContratoLicon::$nmAtrCdEspecieContrato;
-  		$queryJoin .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato . "=" . $nmTabela . "." . voContratoLicon::$nmAtrSqEspecieContrato;
+  		$queryJoin .= $nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabela . "." . voContratoModificacao::$nmAtrAnoContrato;
+  		$queryJoin .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato. "=" . $nmTabela . "." . voContratoModificacao::$nmAtrCdContrato;
+  		$queryJoin .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabela . "." . voContratoModificacao::$nmAtrTipoContrato;
+  		$queryJoin .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrCdEspecieContrato . "=" . $nmTabela . "." . voContratoModificacao::$nmAtrCdEspecieContrato;
+  		$queryJoin .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato . "=" . $nmTabela . "." . voContratoModificacao::$nmAtrSqEspecieContrato;
   	
   		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoaContrato;
   		$queryJoin .= "\n ON ";
@@ -137,8 +130,14 @@ include_once 'dbContratoModificacao.php';
         $retorno.= $this-> getVarComoDecimal($vo->vlModificacaoReferencial). ",";
         $retorno.= $this-> getVarComoDecimal($vo->vlModificacaoReal). ",";
         $retorno.= $this-> getVarComoDecimal($vo->vlModificacaoAoContrato). ",";
-        $retorno.= $this-> getVarComoNumero($vo->numMesesParaOFimdoPeriodo). ",";
+        
+        $retorno.= $this-> getVarComoDecimal($vo->vlMensalAtual). ",";
+        $retorno.= $this-> getVarComoDecimal($vo->vlGlobalAtual). ",";
+        $retorno.= $this-> getVarComoDecimal($vo->vlGlobalReal). ",";
+        
+        $retorno.= $this-> getVarComoDecimal($vo->numMesesParaOFimdoPeriodo). ",";
         $retorno.= $this-> getVarComoDecimal($vo->numPercentual). ",";
+        $retorno.= $this-> getVarComoString($vo->obs);                
         
         $retorno.= $vo->getSQLValuesInsertEntidade();
 		        

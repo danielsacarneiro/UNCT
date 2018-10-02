@@ -214,7 +214,8 @@ function isNumero($param) {
 	return isNumeroComDecimal ( $param, true );
 }
 function isNumeroComDecimal($param, $isDecimal) {
-	$referencia = "0123456789";
+	//o traco é para valores negativos
+	$referencia = "012345678-9";
 	
 	if ($isDecimal)
 		$referencia = $referencia . ".";
@@ -222,6 +223,9 @@ function isNumeroComDecimal($param, $isDecimal) {
 	$retorno = false;
 	
 	$tam = strlen ( $param . "" );
+	//pega o valor absoluto
+	//$param = abs($param);
+	$param = "$param";	
 	// echo "tamanho da string do numero $param :" . $tam . "<br>";
 	
 	for($i = 0; $i < $tam; $i ++) {

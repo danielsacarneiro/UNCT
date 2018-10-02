@@ -1,4 +1,17 @@
- /**
+/**
+ * 
+ * @param chave
+ * @param idDivResultado
+ * @returns
+ * 
+ * funcao generica para buscar dados
+ */ 
+function getDadosPorChaveGenerica(chave, linkRelativoPHPBusca, idDivResultado) {
+     var result = document.getElementById(idDivResultado);          
+     imprimeResultado(result, linkRelativoPHPBusca + "?chave=" + chave);     
+ } 
+
+/**
   * Função abrirPasta
   */
  function abrirPasta(idCampoGestor, idDivResultado) {

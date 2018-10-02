@@ -4,7 +4,7 @@ include_once(caminho_util."bibliotecaHTML.php");
 
 inicioComValidacaoUsuario(true);
 
-$vo = new voContratoLicon();
+$vo = new voContratoModificacao();
 $vo->getDadosFormulario();
 
 //var_dump($vo);

@@ -103,11 +103,12 @@ class voentidade extends multiplosConstrutores {
 			$retorno .= $conector . $this->cdUsuarioInclusao;
 			$conector = ",";
 			
-			// ECHO "TEM USU INCLUSAO";
+			 //ECHO "TEM USU INCLUSAO";
 		} // ELSE ECHO "NAO TEM USU INCLUSAO";
 		
 		if ($temUsuarioAlt) {
 			$retorno .= $conector . $this->cdUsuarioUltAlteracao;
+			//ECHO "TEM USU ALTERACAO";
 			// $conector = ",";
 		}
 		

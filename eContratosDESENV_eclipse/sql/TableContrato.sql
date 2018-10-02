@@ -250,7 +250,37 @@ CREATE TABLE contrato_licon (
 /*ALTER TABLE contrato_licon ADD UNIQUE KEY uk_contrato_licon (ct_exercicio, ct_numero, ct_tipo, ct_cd_especie, ct_sq_especie) 
 
 ALTER TABLE contrato_licon DROP FOREIGN KEY fk_contrato_licon;*/
+drop table contrato_mod;
+CREATE TABLE contrato_mod (
+	ctmod_sq INT NOT NULL,
+    ct_exercicio INT NOT NULL,
+    ct_numero INT NOT NULL,
+    ct_tipo char(1) NOT NULL,
+    ct_cd_especie CHAR(2) NOT NULL, -- especie do registro (mater, apostilamento, aditivo)
+	ct_sq_especie INT DEFAULT 1 NOT NULL, -- indice do documento em questao (primeiro ou segundo apostilamento, por ex)    
+    
+    ctmod_tipo INT NOT NULL,
+    ctmod_dtreferencia DATE NOT NULL,
+    
+    ctmod_vlreferencial DECIMAL (14,4) NOT NULL,
+    ctmod_vlreal DECIMAL (14,4) NOT NULL,
+	ctmod_vlaocontrato DECIMAL (14,4) NOT NULL,
 
+    ctmod_vlmensalatual DECIMAL (14,4) NOT NULL,
+    ctmod_vlglobalatual DECIMAL (14,4) NOT NULL,
+    ctmod_vlglobalreal DECIMAL (14,4) NOT NULL,
+	
+	ctmod_nummesesfimperiodo DECIMAL (4,2),
+    ctmod_numpercentual DECIMAL (6,4),
+    ctmod_obs MEDIUMTEXT NULL,
+        
+    dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    cd_usuario_ultalt INT NOT NULL,
+    
+    CONSTRAINT pk PRIMARY KEY (ctmod_sq, ct_exercicio, ct_numero, ct_tipo, ct_cd_especie, ct_sq_especie)
+            
+    -- CONSTRAINT ck_demanda_licon_userinclusao CHECK(cd_usuario_incl > 0)            
+); 
 
 SELECT count(*) FROM CONTRATO
 WHERE ct_tipo = 'C'

@@ -197,10 +197,14 @@ class dbDemanda extends dbprocesso {
 		
 		// o proximo join eh p pegar o registro de contrato mais atual na planilha
 		// faz o join apenas com os contratos de maximo sequencial (mais atual)
+		// e com pessoa contratada diferente de nulo
 		$nmTabelaMAXContrato = "TABELA_MAX_CONTRATO";
 		$atributosGroupContrato = vocontrato::$nmAtrAnoContrato . "," . vocontrato::$nmAtrTipoContrato . "," . vocontrato::$nmAtrCdContrato;
 		$queryJoin .= "\n LEFT JOIN (";
-		$queryJoin .= " SELECT MAX(" . vocontrato::$nmAtrSqContrato . ") AS " . vocontrato::$nmAtrSqContrato . "," . $atributosGroupContrato . " FROM " . $nmTabelaContrato . " GROUP BY " . $atributosGroupContrato;
+		$queryJoin .= " \n\nSELECT MAX(" . vocontrato::$nmAtrSqContrato . ") AS " . vocontrato::$nmAtrSqContrato . "," . $atributosGroupContrato 
+				. " FROM " . $nmTabelaContrato 
+				. " WHERE " . vocontrato::$nmAtrCdPessoaContratada . " IS NOT NULL "
+				. " GROUP BY " . $atributosGroupContrato;
 		$queryJoin .= ") $nmTabelaMAXContrato";
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato . "=" . $nmTabelaMAXContrato . "." . vocontrato::$nmAtrAnoContrato;
