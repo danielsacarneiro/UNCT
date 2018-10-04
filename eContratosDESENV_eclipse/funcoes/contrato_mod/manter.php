@@ -60,7 +60,7 @@ try{
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
 function isFormularioValido() {
 
-	var campoEspecieContrato = "<?=vocontrato::$nmAtrCdEspecieContrato?>";
+	var campoEspecieContrato = document.frm_principal.<?=vocontrato::$nmAtrCdEspecieContrato?>;
 	var cdEspecieContrato = campoEspecieContrato.value;
 
 	if(cdEspecieContrato == "<?=dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER?>"){
@@ -83,7 +83,11 @@ function confirmar() {
 	return confirm("Confirmar Alteracoes?");    
 }
 
-function formataForm() {
+function formataForm(pCalcular) {
+	if(pCalcular == null){
+		pCalcular = true;
+	}
+
 	var idCampoPercentual = "<?=voContratoModificacao::$nmAtrNumPercentual?>";
 	var colecaoIDCamposRequired = [idCampoPercentual];
 
@@ -97,21 +101,30 @@ function formataForm() {
 		tornarReadOnlyCamposColecaoFormulario(colecaoIDCamposRequired, false, true, true);
 	}else{
 		tornarReadOnlyCamposColecaoFormulario(colecaoIDCamposRequired, true, false, true);
-	}
-	setValorCampoMoedaComSeparadorMilhar(campoVlReferencial, 0, 4);
-	calcular(false);
+	}	
+
+	if(pCalcular){
+		setValorCampoMoedaComSeparadorMilhar(campoVlReferencial, 0, 4);
+		calcular(false);
+	}	
 }
 
-function calcular(pNaoAlterarPrazoMeses){
+function calcular(eElement, pNaoAlterarPrazoMeses){
+
+	pCampoModContrato = document.frm_principal.<?=voContratoModificacao::$nmAtrVlModificacaoAoContrato?>;
+	pCampoVlReferencial = document.frm_principal.<?=voContratoModificacao::$nmAtrVlModificacaoReferencial?>;
+	
 	pArrayCampos = new Array();
-	pArrayCampos[0] = document.frm_principal.<?=voContratoModificacao::$nmAtrVlModificacaoReferencial?>;
-	pArrayCampos[1] = document.frm_principal.<?=voContratoModificacao::$nmAtrVlModificacaoAoContrato?>;
+	pArrayCampos[0] = pCampoVlReferencial;
+	pArrayCampos[1] = pCampoModContrato;
 	pArrayCampos[2] = document.frm_principal.<?=voContratoModificacao::$nmAtrVlModificacaoReal?>;
 	pArrayCampos[3] = document.frm_principal.<?=voContratoModificacao::$nmAtrVlMensalAtualizado?>;
 	pArrayCampos[4] = document.frm_principal.<?=voContratoModificacao::$nmAtrVlGlobalAtualizado?>;
 	pArrayCampos[5] = document.frm_principal.<?=voContratoModificacao::$nmAtrVlGlobalReal?>;
+	//valor base referencia
 	pArrayCampos[6] = document.frm_principal.<?=vocontrato::$nmAtrVlMensalContrato?>;
 	pArrayCampos[7] = document.frm_principal.<?=vocontrato::$nmAtrVlGlobalContrato?>;
+	
 	pArrayCampos[8] = document.frm_principal.<?=vocontrato::$nmAtrDtVigenciaFinalContrato?>;
 	pArrayCampos[9] = document.frm_principal.<?=voContratoModificacao::$nmAtrDtModificacao?>;
 	pArrayCampos[10] = document.frm_principal.<?=voContratoModificacao::$nmAtrNumMesesParaOFimPeriodo?>;
@@ -121,8 +134,18 @@ function calcular(pNaoAlterarPrazoMeses){
 	pArrayCampos[14] = <?=dominioTpContratoModificacao::$CD_TIPO_SUPRESSAO?>;	
 	pArrayCampos[15] = <?=dominioTpContratoModificacao::$CD_TIPO_REAJUSTE?>;
 	pArrayCampos[16] = pNaoAlterarPrazoMeses;
-	pArrayCampos[17] = document.frm_principal.<?=voContratoModificacao::$nmColVlMensalParaFinsDeModAtual?>;
+	pArrayCampos[17] = document.frm_principal.<?=voContratoModificacao::$nmAtrVlMensalModAtual?>;
 	pArrayCampos[18] = document.frm_principal.<?=voContratoModificacao::$ID_REQ_VL_BASE_PERCENTUAL?>;
+
+	pArrayCampos[19] = document.frm_principal.<?=voContratoModificacao::$ID_REQ_NUM_PERCENTUAL_GESTOR?>;
+	pArrayCampos[20] = document.frm_principal.<?=voContratoModificacao::$ID_REQ_VL_BASE_PERCENTUAL_GESTOR?>;
+	
+	//ou um ou outro define o valor a ser utilizado
+	if(eElement.name == pCampoVlReferencial.name){
+		pCampoModContrato.value = "0,00";
+	}else if(eElement.name == pCampoModContrato.name){
+		pCampoVlReferencial.value = "0,00";
+	}
 			
 	calcularModificacao(pArrayCampos);
 }
@@ -135,11 +158,12 @@ function carregaDadosContrato(){
 	tipoContrato = document.frm_principal.<?=voContratoLicon::$nmAtrTipoContrato?>.value;
 	cdEspecie = document.frm_principal.<?=voContratoLicon::$nmAtrCdEspecieContrato?>.value;
 	sqEspecie = document.frm_principal.<?=voContratoLicon::$nmAtrSqEspecieContrato?>.value;
-		
-	if(cdContrato != "" && anoContrato != "" && cdEspecie !="" && tipoContrato !="" ){
+	
+	if(cdContrato != "" && anoContrato != "" && tipoContrato !="" && cdEspecie !=""){
 
-		cdEspecie == '<?=dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER?>';
-		sqEspecie = 1;
+		if(cdEspecie == '<?=dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER?>'){		
+			sqEspecie = 1;
+		}
 
 		if(sqEspecie != ""){		
 			str = "null"+ '<?=CAMPO_SEPARADOR?>' + anoContrato + '<?=CAMPO_SEPARADOR?>' + cdContrato + '<?=CAMPO_SEPARADOR?>' 
@@ -149,12 +173,18 @@ function carregaDadosContrato(){
 			getDadosPorChaveGenerica(str, "../contrato_mod/campoDadosContratoMod.php", '<?=voContratoModificacao::$ID_REQ_DIV_DADOS_CONTRATO_MODIFICACAO?>');
 		}
 	}
+
+}
+
+function iniciar(){
+	carregaDadosContrato();
+	formataForm(false);
 }
 
 </SCRIPT>
 <?=setTituloPagina($vo->getTituloJSP())?>
 </HEAD>
-<BODY class="paginadados" onload="">
+<BODY class="paginadados" onload="iniciar();">
 	  
 <FORM name="frm_principal" method="post" action="confirmar.php" onSubmit="return confirmar();">
 
@@ -170,56 +200,27 @@ function carregaDadosContrato(){
             <DIV id="div_filtro" class="div_filtro">
             <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
             <TBODY>            
-	        <?php	        
-	        $complementoHTML = "";
-	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
-	        
-	        if(!$isInclusao){
-	        getContratoDet($voContrato, false, true);
-	        ?>	        
-	        <TR>	       
-	            <TH class="campoformulario" nowrap width="1%">Vigência:</TH>
-	            <TD class="campoformulario" colspan=3>
-	            <?php echo getDetalhamentoHTML("", "", $voContrato->dtVigenciaInicial) . " a " . getDetalhamentoHTML("", "", $voContrato->dtVigenciaFinal)?>
-				</TD>
-	        </TR>
-	        <TR>	       
-	            <TH class="campoformulario" nowrap width="1%">Dt.Assinatura:</TH>
-	            <TD class="campoformulario" width="1%">
-	            <?php echo getDetalhamentoHTML("", "", $voContrato->dtAssinatura)?>
-				</TD>
-	            <TH class="campoformulario" nowrap width="1%">Dt.Publicação:</TH>
-	            <TD class="campoformulario">
-	            <?php echo getDetalhamentoHTML("", "", $voContrato->dtPublicacao)?>
-				</TD>				
-	        </TR>	        
-	        
-	        <?php
-	        }else{
-	        	//INCLUSAO
-	        ?>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
 	            <TD class="campoformulario" colspan=3>
-	            <?php 
-	            //getCampoDadosContratoSimples(constantes::$CD_CLASS_CAMPO_OBRIGATORIO, "carregaDadosContrato()", false);	            
-	            $pArray = array(null,constantes::$CD_CLASS_CAMPO_OBRIGATORIO,true,true,false,true,"carregaDadosContrato();");
-	            getContratoEntradaArray($pArray);	            	 
+	            <?php
+	            $complementoHTML = "";
+	            require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
+	            
+	            $pArray = array($voContrato,constantes::$CD_CLASS_CAMPO_OBRIGATORIO,true,true,false,true,"carregaDadosContrato();");
+	            getContratoEntradaArray($pArray);	             	            	 
 	            ?>
 				<div id="<?=voContratoModificacao::$ID_REQ_DIV_DADOS_CONTRATO_MODIFICACAO?>">
 				</div>	            
 	            </TD>
 	        </TR>	        	        
-	        <?php 
-	       }	       
-	       ?>
 			<TR>
-	            <TH class="campoformulario" nowrap width="1%">Situação:</TH>
+	            <TH class="campoformulario" nowrap width="1%">Tipo:</TH>
 	            <TD class="campoformulario" colspan="3">
 				<?php                        
 				$combo = new select(dominioTpContratoModificacao::getColecao());                        
 				//cria o combo
-				echo $combo->getHtmlCombo(voContratoModificacao::$nmAtrTpModificacao, voContratoModificacao::$nmAtrTpModificacao, $vo->situacao, true, "camponaoobrigatorio", false, " onChange='formataForm();calcular();' required");
+				echo $combo->getHtmlCombo(voContratoModificacao::$nmAtrTpModificacao, voContratoModificacao::$nmAtrTpModificacao, $vo->tpModificacao, true, "camponaoobrigatorio", false, " onChange='formataForm();calcular(this);' required");
 				?>
 				</TD>
 	        </TR>
@@ -229,44 +230,43 @@ function carregaDadosContrato(){
 	            	<INPUT type="text" 
 	            	       id="<?=voContratoModificacao::$nmAtrDtModificacao?>" 
 	            	       name="<?=voContratoModificacao::$nmAtrDtModificacao?>" 
-	            			value="<?php echo(getData($vo->dtPublicacao));?>"
+	            			value="<?php echo(getData($vo->dtModificacao));?>"
 	            			onkeyup="formatarCampoData(this, event, false);"
-		            		onBlur="calcular();" 
+		            		onBlur="calcular(this);" 
 	            			class="camponaoobrigatorio"	            			 
 	            			size="10" 
 	            			maxlength="10" required>
 				</TD>
 	            <TH class="campoformulario" width=1% nowrap>Prazo restante:</TH>
-	            <TD class="campoformulario" colspan="3"><INPUT type="text" id="<?=voContratoModificacao::$nmAtrNumMesesParaOFimPeriodo?>" name="<?=voContratoModificacao::$nmAtrNumMesesParaOFimPeriodo?>"  value="<?php echo(getMoeda($vo->valor));?>"
-	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" onBlur="calcular(true);" class="<?=constantes::$CD_CLASS_CAMPO_OBRIGATORIO_DIREITA?>" size="5" required>(meses)
+	            <TD class="campoformulario" colspan="3"><INPUT type="text" id="<?=voContratoModificacao::$nmAtrNumMesesParaOFimPeriodo?>" name="<?=voContratoModificacao::$nmAtrNumMesesParaOFimPeriodo?>"  value="<?php echo(getMoeda($vo->numMesesParaOFimdoPeriodo));?>"
+	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" onBlur="calcular(this, true);" class="<?=constantes::$CD_CLASS_CAMPO_OBRIGATORIO_DIREITA?>" size="5" required>(meses)
 	            </TD>				
         	</TR>
 			<TR>
 	            <TH class="campoformulario" nowrap>Valor Referencial:</TH>
-	            <TD class="campoformulario" ><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlModificacaoReferencial?>" name="<?=voContratoModificacao::$nmAtrVlModificacaoReferencial?>"  value="<?php echo(getMoeda($vo->valor));?>"
-	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 4, event);" onBlur='calcular();' class="camponaoobrigatorioalinhadodireita" size="15" required></TD>
+	            <TD class="campoformulario" ><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlModificacaoReferencial?>" name="<?=voContratoModificacao::$nmAtrVlModificacaoReferencial?>"  value="<?php echo(getMoeda($vo->vlModificacaoReferencial,4));?>"
+	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 4, event);" onBlur='calcular(this, false);' class="camponaoobrigatorioalinhadodireita" size="15" required></TD>
 	            <TH class="campoformulario" nowrap>Valor Mensal Atualizado:</TH>
-	            <TD class="campoformulario"><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlMensalAtualizado?>" name="<?=voContratoModificacao::$nmAtrVlMensalAtualizado?>"  value="<?php echo(getMoeda($vo->valor));?>"
+	            <TD class="campoformulario"><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlMensalAtualizado?>" name="<?=voContratoModificacao::$nmAtrVlMensalAtualizado?>"  value="<?php echo(getMoeda($vo->vlMensalAtual));?>"
 	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly></TD>	            
 	        </TR>	        
 			<TR>
 	            <TH class="campoformulario" nowrap>Valor Modificação ao Contrato<br>(em caso de prorrogação):</TH>
-	            <TD class="campoformulario"><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlModificacaoAoContrato?>" name="<?=voContratoModificacao::$nmAtrVlModificacaoAoContrato?>"  value="<?php echo(getMoeda($vo->valor));?>"
-	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly></TD>
+	            <TD class="campoformulario"><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlModificacaoAoContrato?>" name="<?=voContratoModificacao::$nmAtrVlModificacaoAoContrato?>"  value="<?php echo(getMoeda($vo->vlModificacaoAoContrato));?>"
+	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" onBlur='calcular(this, false);' class="<?=constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO_DIREITA?>" size="15" required></TD>
 	            <TH class="campoformulario">Valor Global Atualizado:</TH>
-	            <TD class="campoformulario"><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlGlobalAtualizado?>" name="<?=voContratoModificacao::$nmAtrVlGlobalAtualizado?>"  value="<?php echo(getMoeda($vo->valor));?>"
+	            <TD class="campoformulario"><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlGlobalAtualizado?>" name="<?=voContratoModificacao::$nmAtrVlGlobalAtualizado?>"  value="<?php echo(getMoeda($vo->vlGlobalAtual));?>"
 	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly></TD>	            
 	        </TR>	        
 			<TR>
 	            <TH class="campoformulario" nowrap>Valor Real:</TH>
-	            <TD class="campoformulario" ><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlModificacaoReal?>" name="<?=voContratoModificacao::$nmAtrVlModificacaoReal?>"  value="<?php echo(getMoeda($vo->valor));?>"
+	            <TD class="campoformulario" ><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlModificacaoReal?>" name="<?=voContratoModificacao::$nmAtrVlModificacaoReal?>"  value="<?php echo(getMoeda($vo->vlModificacaoReal));?>"
 	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly></TD>
 	            <TH class="campoformulario" nowrap>Valor Real Contrato:</TH>
-	            <TD class="campoformulario"><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlGlobalReal?>" name="<?=voContratoModificacao::$nmAtrVlGlobalReal?>"  value="<?php echo(getMoeda($vo->valor));?>"
+	            <TD class="campoformulario"><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlGlobalReal?>" name="<?=voContratoModificacao::$nmAtrVlGlobalReal?>"  value="<?php echo(getMoeda($vo->vlGlobalReal));?>"
 	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly>
 	            <SCRIPT language="JavaScript" type="text/javascript">
 	            	colecaoIDCamposRequired = ["<?=voContratoModificacao::$nmAtrVlMensalAtualizado?>",
-		            	"<?=voContratoModificacao::$nmAtrVlModificacaoAoContrato?>",
 		            	"<?=voContratoModificacao::$nmAtrVlGlobalAtualizado?>",
 	            		"<?=voContratoModificacao::$nmAtrVlModificacaoReal?>",
 	            		"<?=voContratoModificacao::$nmAtrVlGlobalReal?>"
@@ -278,11 +278,16 @@ function carregaDadosContrato(){
 			<TR>
 	            <TH class="campoformulario" nowrap>Percentual:</TH>
 	            <TD class="campoformulario" colspan="3">
-	            <INPUT type="text" id="<?=voContratoModificacao::$nmAtrNumPercentual?>" name="<?=voContratoModificacao::$nmAtrNumPercentual?>"  value="<?php echo(getMoeda($vo->numPercentual));?>"
+	            <INPUT type="text" id="<?=voContratoModificacao::$ID_REQ_NUM_PERCENTUAL_GESTOR?>" name="<?=voContratoModificacao::$ID_REQ_NUM_PERCENTUAL_GESTOR?>"  value=""
+	            class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="10" readonly>%
+				de <INPUT type="text" id="<?=voContratoModificacao::$ID_REQ_VL_BASE_PERCENTUAL_GESTOR?>" name="<?=voContratoModificacao::$ID_REQ_VL_BASE_PERCENTUAL_GESTOR?>"  value="<?php echo(getMoeda($vo->vlMensalAtual));?>"
+	            class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly>
+	         	| <b>Valor para fins de Acréscimo: <INPUT type="text" id="<?=voContratoModificacao::$nmAtrNumPercentual?>" name="<?=voContratoModificacao::$nmAtrNumPercentual?>"  value="<?php echo(getMoeda($vo->numPercentual,4));?>"
 	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 4, event);" onBlur='calcular(false);' class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="10" readonly>%
-				de <INPUT type="text" id="<?=voContratoModificacao::$ID_REQ_VL_BASE_PERCENTUAL?>" name="<?=voContratoModificacao::$ID_REQ_VL_BASE_PERCENTUAL?>"  value="<?php echo(getMoeda($vo->valor));?>"
-	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 4, event);" class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly></TD>
-	            
+				de <INPUT type="text" id="<?=voContratoModificacao::$ID_REQ_VL_BASE_PERCENTUAL?>" name="<?=voContratoModificacao::$ID_REQ_VL_BASE_PERCENTUAL?>"  value="<?php echo(getMoeda($vo->vlModificacaoReferencial));?>"
+	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 4, event);" class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly>
+	            </b>	            	            
+	            </TD>
 	        </TR>
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Observação:</TH>
