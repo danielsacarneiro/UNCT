@@ -16,6 +16,7 @@ class dominioSetor extends dominio {
 	static $CD_SETOR_GEBES = 13;
 	static $CD_SETOR_GOV = 14;
 	static $CD_SETOR_DAFE = 15;
+	static $CD_SETOR_UNEO = 16;
 	
 	static $DS_SETOR_SAFI = "SAFI";
 	static $DS_SETOR_UNCT = "UNCT";
@@ -32,6 +33,7 @@ class dominioSetor extends dominio {
 	static $DS_SETOR_GEBES = "GEBES";
 	static $DS_SETOR_GOV = "GOV";
 	static $DS_SETOR_DAFE = "DAFE";
+	static $DS_SETOR_UNEO = "UNEO";
 	
 	// ...............................................................
 	// Construtor
@@ -41,23 +43,24 @@ class dominioSetor extends dominio {
 	}
 	static function getColecao() {
 		$retorno = array (
-				self::$CD_SETOR_ATJA => "ATJA",
-				self::$CD_SETOR_CPL => self::$DS_SETOR_CPL,
-				self::$CD_SETOR_DAFE => self::$DS_SETOR_DAFE,
+				self::$CD_SETOR_SAFI => self::$DS_SETOR_SAFI,
 				self::$CD_SETOR_DILC => self::$DS_SETOR_DILC,
+				self::$CD_SETOR_DIENG => self::$DS_SETOR_DIENG,
+				self::$CD_SETOR_DIFIN => self::$DS_SETOR_DIFIN,				
+				self::$CD_SETOR_ATJA => self::$DS_SETOR_ATJA,
+				self::$CD_SETOR_CPL => self::$DS_SETOR_CPL,
 				self::$CD_SETOR_UNCP => self::$DS_SETOR_UNCP,
-				self::$CD_SETOR_UNCT => "UNCT",
+				self::$CD_SETOR_UNCT => self::$DS_SETOR_UNCT,
 				self::$CD_SETOR_UNSG => self::$DS_SETOR_UNSG,
-				self::$CD_SETOR_SAFI => "SAFI",
+				self::$CD_SETOR_UNEO => self::$DS_SETOR_UNEO,
+				self::$CD_SETOR_DAFE => self::$DS_SETOR_DAFE,
 				self::$CD_SETOR_SAD => self::$DS_SETOR_SAD,
 				self::$CD_SETOR_PGE => self::$DS_SETOR_PGE,
-				self::$CD_SETOR_DIFIN => self::$DS_SETOR_DIFIN,
-				self::$CD_SETOR_DIENG => self::$DS_SETOR_DIENG,
 				self::$CD_SETOR_GOV => self::$DS_SETOR_GOV,
 				//self::$CD_SETOR_GEBES => self::$DS_SETOR_GEBES,
 		);
 		
-		uksort ( $retorno, 'strnatcmp' );
+		//uksort ( $retorno, 'strnatcmp' );
 		// sort($retorno);
 		
 		return $retorno;
@@ -67,7 +70,7 @@ class dominioSetor extends dominio {
 				self::$CD_SETOR_SEFAZ => self::$DS_SETOR_SEFAZ 
 		);
 		
-		uksort ( $retorno, 'strnatcmp' );
+		//uksort ( $retorno, 'strnatcmp' );
 		
 		return $retorno;
 	}	

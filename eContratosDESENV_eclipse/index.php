@@ -33,7 +33,7 @@ setCabecalho($titulo);
 	f2.adicionarItem(new Link("Contratos-Informações Adicionais", "<?=caminho_funcoesHTML?>contrato_info", ""));
 	f2.adicionarItem(new Link("Contratos-Consolidação", "<?=caminho_funcoesHTML?>contrato_consolidacao", ""));
 	f2.adicionarItem(new Link("Controle Sistemas Externos (LICON)", "<?=caminho_funcoesHTML?>contrato_licon", ""));
-	f2.adicionarItem(new Link("Acréscimos e Supressões", '<?=caminho_funcoesHTML.voContratoModificacao::getNmTabela()?>', ""));
+	f2.adicionarItem(new Link("Contrato Execução (Acréscimos, Supressões e Prorrogações)", '<?=caminho_funcoesHTML.voContratoModificacao::getNmTabela()?>', ""));
 	f.adicionarItem(f2);
 
 	f3 = new Tree('Serviço 03 (Demanda)');
@@ -43,6 +43,8 @@ setCabecalho($titulo);
 	f4 = new Tree('Serviço 04 (Proc.Admin.)');
     f4.adicionarItem(new Link('P.A.s de Aplicação de Penalidade (PAAP)', '<?=caminho_funcoesHTML?>pa', ''));    
     f4.adicionarItem(new Link('Penalidades (PAAP)', '<?=caminho_funcoesHTML?>pa_penalidade', ''));
+    f4.adicionarItem(new Link('EXTERNO: Penalidades e-Fisco', 'http://efisco.sefaz.pe.gov.br/sfi_fin_gbp/PREmitirFornecedorPenalidade', ''));
+    f4.adicionarItem(new Link('EXTERNO: Penalidades Portal da Transparência', 'http://www.portaltransparencia.gov.br/sancoes/ceis?ordenarPor=nome&direcao=asc', ''));
 	f.adicionarItem(f4);
 
 	fprocLic = new Tree('Serviço 05 (Proc.Licitatório)');

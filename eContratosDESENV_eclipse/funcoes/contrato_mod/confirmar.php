@@ -7,13 +7,10 @@ inicioComValidacaoUsuario(true);
 $vo = new voContratoModificacao();
 $vo->getDadosFormulario();
 
+/*echoo($vo->numPercentual);
+echoo($vo->vlGlobalModAtual);*/
+
 //var_dump($vo);
-
-/*$novaObs = @$_POST[voContratoInfo::$nmAtrObs];
-$vo->setObsParaIncluirNoBanco($novaObs);*/
-//$vo->setCarimboObsParaIncluirNoBanco();
-
-//imprimeHtml($vo->obs);
 
 putObjetoSessao("vo", $vo);
 

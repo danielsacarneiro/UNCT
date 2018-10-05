@@ -203,7 +203,9 @@ function confirmar() {
 				$filtroTramitacaoContrato->vodemanda->cd = $voDemanda->cd;
 				$filtroTramitacaoContrato->vodemanda->ano = $voDemanda->ano;
 				//$filtroTramitacaoContrato->temDocumentoAnexo = constantes::$CD_SIM;
-				$filtroTramitacaoContrato->TemPaginacao = false;			
+				$filtroTramitacaoContrato->TemPaginacao = false;
+				$filtroTramitacaoContrato->cdAtrOrdenacao = voDemandaTramitacao::$nmAtrDhUltAlteracao;
+				$filtroTramitacaoContrato->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
 				
 				$dbcontrato = new dbcontratoinfo();
 				$colecaoTramitacao = $dbcontrato->consultarDemandaTramitacaoContrato($filtroTramitacaoContrato);

@@ -32,6 +32,7 @@ class filtroManter extends multiplosConstrutores {
 	var $isConsultarHTML;
 	var $inDesativado;
 	var $groupby;
+	var $isConsultaTela;
 	
 	private $inConsultaRealizada = false;
 	private $QUERY_SELECT;
@@ -59,8 +60,10 @@ class filtroManter extends multiplosConstrutores {
 			}
 			
 			$this->isValidarConsulta = true;
+			$this->isConsultaTela = true;
 		} else {
 			$this->isValidarConsulta = false;
+			$this->isConsultaTela = false;
 		}
 		
 		if ($this->numTotalRegistros == null) {
@@ -226,13 +229,16 @@ class filtroManter extends multiplosConstrutores {
 		// pega do filho, se existir
 		$strOrdemDefault = "";
 		$strOrdemAnteriorDefault = "";
-		if ($this->getAtributoOrdenacaoDefault ()) {
-			$strOrdemDefault = $this->getAtributoOrdenacaoDefault ();
-		}
-		
-		if ($this->getAtributoOrdenacaoAnteriorDefault ()) {
-			$strOrdemAnteriorDefault = $this->getAtributoOrdenacaoAnteriorDefault ();
-		}
+		//so se vier da tela
+		if($this->isConsultaTela){
+			if ($this->getAtributoOrdenacaoDefault ()) {
+				$strOrdemDefault = $this->getAtributoOrdenacaoDefault ();
+			}
+			
+			if ($this->getAtributoOrdenacaoAnteriorDefault ()) {
+				$strOrdemAnteriorDefault = $this->getAtributoOrdenacaoAnteriorDefault ();
+			}
+		}		
 		
 		if ($this->cdAtrOrdenacao != null) {
 			

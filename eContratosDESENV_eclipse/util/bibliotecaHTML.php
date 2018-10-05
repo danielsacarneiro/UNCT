@@ -1053,3 +1053,6 @@ function getFuncaoJSDetalhar($caminhoPagina=null, $isNovaGuia=false){
 function getTextoHTMLDestacado($texto){
 	return "<font color='red'><b><u>$texto</u></b></font>";
 }
+function getTextoHTMLNegrito($texto){
+	return "<b>$texto</b>";
+}

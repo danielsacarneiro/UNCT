@@ -191,6 +191,7 @@ class dbprocesso {
 		
 		$queryFrom = $this->getQueryFrom_NmUsuarioTabelaAComparar ( $vo, $nmTabelaACompararCdUsuario, $queryJoin, $isHistorico );
 		
+		//echo $querySelect;
 		$retorno = $this->consultarFiltro ( $filtro, $querySelect, $queryFrom, $filtro->isValidarConsulta );
 		if ($retorno != "" && $isConsultaPorChave) {
 			$retorno = $retorno [0];
@@ -330,6 +331,7 @@ class dbprocesso {
 				echo "<br> ".$filtro->getNmFiltro()." $query<br>";
 			}
 			
+			//echo $query;
 			// removeObjetoSessao($voentidade->getNmTabela());
 			
 			$retorno = $this->cDb->consultar ( $query );

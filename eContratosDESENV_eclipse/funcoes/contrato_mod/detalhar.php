@@ -6,7 +6,7 @@ include_once(caminho_util."selectExercicio.php");
 //inicia os parametros
 inicio();
 
-$vo = new voContratoLicon();
+$vo = new voContratoModificacao();
 $vo->getVOExplodeChave();
 //var_dump($vo);
 
@@ -22,9 +22,6 @@ $vo->getDadosBanco($colecao);
 
 $voContrato = new vocontrato();
 $voContrato->getDadosBanco($colecao);
-
-$voDemanda = new voDemanda();
-$voDemanda->getDadosBanco($colecao);
 
 putObjetoSessao($vo->getNmTabela(), $vo);
 
@@ -55,6 +52,7 @@ setCabecalho($titulo);
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_ajax.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_oficio.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_pessoa.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_moeda.js"></SCRIPT>
 
 <SCRIPT language="JavaScript" type="text/javascript">
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
@@ -83,6 +81,7 @@ function confirmar() {
 <FORM name="frm_principal" method="post" action="confirmar.php" onSubmit="return confirmar();">
 
 <INPUT type="hidden" id="funcao" name="funcao" value="<?=$funcao?>">
+<INPUT type="hidden" id="<?=voContratoModificacao::$nmAtrSq?>" name="<?=voContratoModificacao::$nmAtrSq?>" value="<?=$vo->sq?>">
  
 <TABLE id="table_conteiner" class="conteiner" cellpadding="0" cellspacing="0">
     <TBODY>
@@ -100,56 +99,78 @@ function confirmar() {
                 <TD class="campoformulario" colspan=3><INPUT type="text" value="<?php echo(complementarCharAEsquerda($vo->sqHist, "0", TAMANHO_CODIGOS));?>"  class="camporeadonlyalinhadodireita" size="5" readonly></TD>
                 <INPUT type="hidden" id="<?=voContratoInfo::$nmAtrSqHist?>" name="<?=voContratoInfo::$nmAtrSqHist?>" value="<?=$vo->sqHist?>">
             </TR>               
-            <?php }	        	        	        
-	       	          
- 	        $selectExercicio = new selectExercicio();
+            <?php }	       	          
 			?>
 	        <TR>
-	            <TH class="campoformulario" nowrap width="1%">Demanda:</TH>
-	            <TD class="campoformulario" colspan=3>
-	            <?php	            
-	            echo getDetalhamentoHTMLCodigoAno($vo->vodemandacontrato->anoDemanda, $vo->vodemandacontrato->cdDemanda);
-	            echo getInputHidden(voDemandaContrato::$nmAtrAnoDemanda, voDemandaContrato::$nmAtrAnoDemanda, $vo->vodemandacontrato->anoDemanda);
-	            echo getInputHidden(voDemandaContrato::$nmAtrCdDemanda, voDemandaContrato::$nmAtrCdDemanda, $vo->vodemandacontrato->cdDemanda);
-	            $vodemandaTemp = new voDemanda(array($vo->vodemandacontrato->anoDemanda, $vo->vodemandacontrato->cdDemanda));
-	            echo getLinkPesquisa ( "../".voDemanda::getNmTabela()."/detalhar.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $vodemandaTemp->getValorChaveHTML() );
-	             
-				echo "Tipo: " . dominioTipoDemanda::getHtmlDetalhamento("", "", $voDemanda->tipo, false);
-				?>	            
-	        </TR>
-			<?php 
-			require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
-			getContratoDet($voContrato, false, true);
-			?>
+	            <?php
+	            $complementoHTML = "";
+	            require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
+	            getContratoDet($voContrato, false, true);
+	            ?>
+	        </TR>	        	        
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Situação:</TH>
 	            <TD class="campoformulario" colspan="3">
 				<?php                        
-				echo dominioSituacaoContratoLicon::getHtmlDetalhamento("", "", $vo->situacao, false);
+				echo dominioTpContratoModificacao::getHtmlDetalhamento(voContratoModificacao::$nmAtrTpModificacao, voContratoModificacao::$nmAtrTpModificacao, $vo->tpModificacao);
 				?>
 				</TD>
-	        </TR>	        
-	        <TR>	       
-	            <TH class="campoformulario" nowrap width="1%">Vigência:</TH>
-	            <TD class="campoformulario" colspan=3>
-	            <?php echo getDetalhamentoHTML("", "", $voContrato->dtVigenciaInicial) . " a " . getDetalhamentoHTML("", "", $voContrato->dtVigenciaFinal)?>
-				</TD>
 	        </TR>
-	        <TR>	       
-	            <TH class="campoformulario" nowrap width="1%">Dt.Assinatura:</TH>
-	            <TD class="campoformulario" width="1%">
-	            <?php echo getDetalhamentoHTML("", "", $voContrato->dtAssinatura)?>
+			<TR>
+	            <TH class="campoformulario" nowrap>Data:</TH>
+	            <TD class="campoformulario" width=1%>
+	            	<INPUT type="text" 
+	            	       id="<?=voContratoModificacao::$nmAtrDtModificacao?>" 
+	            	       name="<?=voContratoModificacao::$nmAtrDtModificacao?>" 
+	            			value="<?php echo(getData($vo->dtModificacao));?>"
+	            			onkeyup="formatarCampoData(this, event, false);"
+		            		onBlur="calcular();" 
+	            			class="camporeadonly"	            			 
+	            			size="10" 
+	            			maxlength="10" readonly>
 				</TD>
-	            <TH class="campoformulario" nowrap width="1%">Dt.Publicação:</TH>
-	            <TD class="campoformulario">
-	            <?php echo getDetalhamentoHTML("", "", $voContrato->dtPublicacao)?>
-				</TD>				
+	            <TH class="campoformulario" width=1% nowrap>Prazo restante:</TH>
+	            <TD class="campoformulario" colspan="3"><INPUT type="text" id="<?=voContratoModificacao::$nmAtrNumMesesParaOFimPeriodo?>" name="<?=voContratoModificacao::$nmAtrNumMesesParaOFimPeriodo?>"  value="<?php echo(getMoeda($vo->numMesesParaOFimdoPeriodo));?>"
+	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="5" readonly>(meses)
+	            </TD>				
+        	</TR>
+			<TR>
+	            <TH class="campoformulario" nowrap>Valor Referencial:</TH>
+	            <TD class="campoformulario" ><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlModificacaoReferencial?>" name="<?=voContratoModificacao::$nmAtrVlModificacaoReferencial?>"  value="<?php echo(getMoeda($vo->vlModificacaoReferencial,4));?>"
+	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 4, event);" onBlur='calcular();' class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly></TD>
+	            <TH class="campoformulario" nowrap>Valor Mensal Atualizado:</TH>
+	            <TD class="campoformulario"><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlMensalAtualizado?>" name="<?=voContratoModificacao::$nmAtrVlMensalAtualizado?>"  value="<?php echo(getMoeda($vo->vlMensalAtual));?>"
+	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly></TD>	            
+	        </TR>	        
+			<TR>
+	            <TH class="campoformulario" nowrap>Valor Modificação ao Contrato<br>(em caso de prorrogação):</TH>
+	            <TD class="campoformulario"><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlModificacaoAoContrato?>" name="<?=voContratoModificacao::$nmAtrVlModificacaoAoContrato?>"  value="<?php echo(getMoeda($vo->vlModificacaoAoContrato));?>"
+	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly></TD>
+	            <TH class="campoformulario">Valor Global Atualizado:</TH>
+	            <TD class="campoformulario"><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlGlobalAtualizado?>" name="<?=voContratoModificacao::$nmAtrVlGlobalAtualizado?>"  value="<?php echo(getMoeda($vo->vlGlobalAtual));?>"
+	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly></TD>	            
+	        </TR>	        
+			<TR>
+	            <TH class="campoformulario" nowrap>Valor Real:</TH>
+	            <TD class="campoformulario" ><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlModificacaoReal?>" name="<?=voContratoModificacao::$nmAtrVlModificacaoReal?>"  value="<?php echo(getMoeda($vo->vlModificacaoReal));?>"
+	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly></TD>
+	            <TH class="campoformulario" nowrap>Valor Real Contrato:</TH>
+	            <TD class="campoformulario"><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlGlobalReal?>" name="<?=voContratoModificacao::$nmAtrVlGlobalReal?>"  value="<?php echo(getMoeda($vo->vlGlobalReal));?>"
+	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly>
+	            </TD>
+	        </TR>	        
+			<TR>
+	            <TH class="campoformulario" nowrap>Percentual:</TH>
+	            <TD class="campoformulario" colspan="3">
+	            <INPUT type="text" id="<?=voContratoModificacao::$nmAtrNumPercentual?>" name="<?=voContratoModificacao::$nmAtrNumPercentual?>"  value="<?php echo(getMoeda($vo->numPercentual,4));?>"
+	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 4, event);" onBlur='calcular(false);' class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="10" readonly>%
+			</TD>
 	        </TR>
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Observação:</TH>
-	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=voContratoLicon::$nmAtrObs?>" name="<?=voContratoLicon::$nmAtrObs?>" class="camporeadonly" readonly><?=$vo->obs?></textarea>
+	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=voContratoModificacao::$nmAtrObs?>" name="<?=voContratoModificacao::$nmAtrObs?>" class="camporeadonly" readonly><?=$vo->obs?></textarea>
 				</TD>
-	        </TR>	        
+	        </TR>
 <TR>
 	<TD halign="left" colspan="4">
 	<DIV class="textoseparadorgrupocampos">&nbsp;</DIV>

@@ -37,12 +37,18 @@ class dbcontrato extends dbprocesso {
 		}
 	}
 	function consultarContratoModificacao($vo, $isHistorico) {
+		
+		$vocontratoTemp = clone $vo;
+		$vocontratoTemp->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
+		$vocontratoTemp->sqEspecie = 1;
+		
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
 		$nmTabelaContratoMod = voContratoModificacao::getNmTabelaStatic ( false );
 		$nmTabelaPessoa = vopessoa::getNmTabelaStatic ( false );
 		$nmTabelaContratoUltValorReajustado = "NM_TAB_CONTRATO_VL_REAJUSTADO";
 		$nmTabelaContratoUltValorAtualizado= "NM_TAB_CONTRATO_VL_ATUALIZADO";
+		$nmTabelaContratoInseridoTela= "NM_TAB_CONTRATO_INSERIDO_TELA";
 	
 		$arrayColunasRetornadas = array (
 				getSQLCOALESCE(
@@ -57,18 +63,18 @@ class dbcontrato extends dbprocesso {
 						vocontrato::$nmAtrVlGlobalContrato),
 				getSQLCOALESCE(
 						array(
-								"$nmTabelaContratoUltValorReajustado.".voContratoModificacao::$nmAtrVlMensalAtualizado,
+								"$nmTabelaContratoUltValorReajustado.".voContratoModificacao::$nmAtrVlMensalModAtual,
 								"$nmTabela.".vocontrato::$nmAtrVlMensalContrato),
-						voContratoModificacao::$nmColVlMensalParaFinsDeModAtual),
+						voContratoModificacao::$nmAtrVlMensalModAtual),
 				getSQLCOALESCE(
 						array(
-								"$nmTabelaContratoUltValorReajustado.".voContratoModificacao::$nmAtrVlGlobalAtualizado,
+								"$nmTabelaContratoUltValorReajustado.".voContratoModificacao::$nmAtrVlGlobalModAtual,
 								"$nmTabela.".vocontrato::$nmAtrVlGlobalContrato),
-						voContratoModificacao::$nmColVlGlobalParaFinsDeModAtual),
+						voContratoModificacao::$nmAtrVlGlobalModAtual),
 				
-				"$nmTabela." . vocontrato::$nmAtrDtVigenciaInicialContrato,
-				"$nmTabela." . vocontrato::$nmAtrDtVigenciaFinalContrato,
-				"$nmTabelaContratoInfo." . voContratoInfo::$nmAtrDtProposta,
+				"$nmTabelaContratoInseridoTela." . vocontrato::$nmAtrDtVigenciaInicialContrato,
+				"$nmTabelaContratoInseridoTela." . vocontrato::$nmAtrDtVigenciaFinalContrato,
+				"$nmTabelaContratoInseridoTela." . vocontrato::$nmAtrDtAssinaturaContrato,
 		);
 	
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaContratoInfo;
@@ -131,7 +137,27 @@ class dbcontrato extends dbprocesso {
 		$queryJoin .= "\n AND ";
 		$queryJoin .= $nmTabContratoModSqMAXAtualizado . "." . voContratoModificacao::$nmAtrSq . "=" . $nmTabelaContratoUltValorAtualizado . "." . voContratoModificacao::$nmAtrSq;
 		
-		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryJoin, $isHistorico );
+		
+		$groupbyinterno = vocontrato::$nmAtrAnoContrato
+		. "," . vocontrato::$nmAtrTipoContrato
+		. "," . vocontrato::$nmAtrCdContrato
+		. "," . vocontrato::$nmAtrDtAssinaturaContrato
+		. "," . vocontrato::$nmAtrDtVigenciaInicialContrato
+		. "," . vocontrato::$nmAtrDtVigenciaFinalContrato;
+				
+		//$vocontratoTemp = $vo;
+		$queryJoin .= "\n LEFT JOIN ";
+		$queryJoin .= "\n\n (SELECT $groupbyinterno  FROM  $nmTabela ";
+		$queryJoin .= " WHERE " . $vo->getValoresWhereSQLChave ( $isHistorico );
+		$queryJoin .= "\n) " . $nmTabelaContratoInseridoTela;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabelaContratoInseridoTela . "." . vocontrato::$nmAtrAnoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrCdContrato . "=" . $nmTabelaContratoInseridoTela . "." . vocontrato::$nmAtrCdContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabelaContratoInseridoTela . "." . vocontrato::$nmAtrTipoContrato;
+		
+		return $this->consultarPorChaveMontandoQuery ( $vocontratoTemp, $arrayColunasRetornadas, $queryJoin, $isHistorico );
 	}
 	
 	function consultarPorChaveTela($vo, $isHistorico) {

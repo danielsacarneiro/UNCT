@@ -165,7 +165,7 @@ class dominio extends multiplosConstrutores {
 		return $retorno;
 	}
 	
-	static function getHtmlDetalhamento($id, $nm, $opcaoSelecionada, $isTrazerValuenoOption) {
+	static function getHtmlDetalhamento($id, $nm, $opcaoSelecionada, $isTrazerValuenoOption=false) {
 		$html = "";
 		$value = self::getDescricaoStatic($opcaoSelecionada);
 		if($isTrazerValuenoOption){

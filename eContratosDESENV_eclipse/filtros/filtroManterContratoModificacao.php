@@ -6,6 +6,10 @@ class filtroManterContratoModificacao extends filtroManter {
 
 	public $nmFiltro = "filtroManterContratoModificacao";
 	
+	static $NmColNumPercentualDisponivel = "NmColNumPercentualDisponivel";
+	static $NmColVlGlobalMater = "NmColVlGlobalMater";
+	static $NmColVlMensalMater = "NmColVlMensalMater";
+	
 	static $ID_REQ_SituacaoExceto = "ID_REQ_SituacaoExceto"; 
 		
 	var $vocontrato;
@@ -49,37 +53,51 @@ class filtroManterContratoModificacao extends filtroManter {
 			;
 		}
 				
-		if ($this->anoContrato != null) {
+		if ($this->vocontrato->anoContrato != null) {
 				
-			$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrAnoContrato . " = " . $this->anoContrato;
-				
-			$conector = "\n AND ";
-		}
-		
-		if ($this->cdContrato != null) {
-				
-			$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrCdContrato . " = " . $this->cdContrato;
+			$filtro = $filtro . $conector . $nmTabela . "." . voContratoModificacao::$nmAtrAnoContrato . " = " . $this->vocontrato->anoContrato;
 				
 			$conector = "\n AND ";
 		}
 		
-		if ($this->tipoContrato != null) {
+		if ($this->vocontrato->cdContrato != null) {
 				
-			$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrTipoContrato . " = " . getVarComoString ( $this->tipoContrato );
+			$filtro = $filtro . $conector . $nmTabela . "." . voContratoModificacao::$nmAtrCdContrato . " = " . $this->vocontrato->cdContrato;
 				
 			$conector = "\n AND ";
 		}
 		
-		if ($this->tipo != null) {
+		if ($this->vocontrato->tipoContrato != null) {
+				
+			$filtro = $filtro . $conector . $nmTabela . "." . voContratoModificacao::$nmAtrTipoContrato . " = " . getVarComoString ( $this->vocontrato->tipoContrato );
+				
+			$conector = "\n AND ";
+		}
 		
-			$filtro = $filtro . $conector . $nmTabela . "." . voContratoLicon::$nmAtrSituacao . " = " . getVarComoNumero($this->situacao);
+		if ($this->vocontrato->cdEspecie != null) {
+		
+			$filtro = $filtro . $conector . $nmTabela . "." . voContratoModificacao::$nmAtrCdEspecieContrato . " = " . getVarComoString ( $this->vocontrato->cdEspecie );
+		
+			$conector = "\n AND ";
+		}
+		
+		if ($this->vocontrato->sqEspecie != null) {
+		
+			$filtro = $filtro . $conector . $nmTabela . "." . voContratoModificacao::$nmAtrSqEspecieContrato . " = " . getVarComoNumero($this->vocontrato->sqEspecie);
 		
 			$conector = "\n AND ";
 		}
 						
-		if ($this->dtPublicacao != null) {
+		if ($this->tipo != null) {
 		
-			$filtro = $filtro . $conector . $nmTabelaContrato . "." . vocontrato::$nmAtrDtPublicacaoContrato . " = " . getVarComoData($this->dtPublicacao);
+			$filtro = $filtro . $conector . $nmTabela . "." . voContratoModificacao::$nmAtrTpModificacao . " = " . getVarComoNumero($this->tipo);
+		
+			$conector = "\n AND ";
+		}
+		
+		if ($this->dtModificacao != null) {
+		
+			$filtro = $filtro . $conector . $nmTabelaContrato . "." . voContratoModificacao::$nmAtrDtModificacao . " = " . getVarComoData($this->dtModificacao);
 		
 			$conector = "\n AND ";
 		}

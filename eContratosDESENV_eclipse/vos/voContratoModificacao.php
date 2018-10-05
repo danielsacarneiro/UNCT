@@ -6,9 +6,8 @@ include_once (caminho_funcoes . "contrato_mod/dominioTpModificacaoContrato.php")
 class voContratoModificacao extends voentidade {
 	static $ID_REQ_DIV_DADOS_CONTRATO_MODIFICACAO = "ID_REQ_DIV_DADOS_CONTRATO_MODIFICACAO"; 
 	static $ID_REQ_VL_BASE_PERCENTUAL = "ID_REQ_VL_BASE_PERCENTUAL";
-	
-	static $nmColVlMensalParaFinsDeModAtual= "NmColVlMensalParaFinsDeModAtual";
-	static $nmColVlGlobalParaFinsDeModAtual= "NmColVlGlobalParaFinsDeModAtual";	
+	static $ID_REQ_NUM_PERCENTUAL_GESTOR = "ID_REQ_NUM_PERCENTUAL_GESTOR";
+	static $ID_REQ_VL_BASE_PERCENTUAL_GESTOR = "ID_REQ_VL_BASE_PERCENTUAL_GESTOR";
 	
 	static $nmAtrSq = "ctmod_sq";
 	static $nmAtrCdContrato  = "ct_numero";
@@ -25,9 +24,16 @@ class voContratoModificacao extends voentidade {
 	static $nmAtrVlMensalAtualizado = "ctmod_vlmensalatual";
 	static $nmAtrVlGlobalAtualizado = "ctmod_vlglobalatual";
 	static $nmAtrVlGlobalReal = "ctmod_vlglobalreal";
+
+	static $nmAtrVlMensalAnterior = "ctmod_vlmensalanterior";
+	static $nmAtrVlGlobalAnterior = "ctmod_vlglobalanterior";
+	
+	static $nmAtrVlMensalModAtual = "ctmod_vlmensalmodatual";
+	static $nmAtrVlGlobalModAtual = "ctmod_vlglobalmodatual";
 	
 	static $nmAtrNumPercentual = "ctmod_numpercentual";
 	static $nmAtrDtModificacao = "ctmod_dtreferencia";
+	static $nmAtrDtModificacaoFim = "ctmod_dtreferenciafim";
 
 	static $nmAtrNumMesesParaOFimPeriodo = "ctmod_nummesesfimperiodo";
 	static $nmAtrObs = "ctmod_obs";
@@ -41,9 +47,16 @@ class voContratoModificacao extends voentidade {
 	var $vlMensalAtual;
 	var $vlGlobalAtual;
 	var $vlGlobalReal;
+
+	var $vlMensalAnterior;
+	var $vlGlobalAnterior;
+	
+	var $vlMensalModAtual;
+	var $vlGlobalModAtual;
 	
 	var $numPercentual;
 	var $dtModificacao;
+	var $dtModificacaoFim;
 	var $tpModificacao;
 
 	var $numMesesParaOFimdoPeriodo;
@@ -101,6 +114,7 @@ class voContratoModificacao extends voentidade {
 				self::$nmAtrSqEspecieContrato,
 				self::$nmAtrTpModificacao,
 				self::$nmAtrDtModificacao,
+				self::$nmAtrDtModificacaoFim,
 				self::$nmAtrVlModificacaoReferencial,
 				self::$nmAtrVlModificacaoReal,
 				self::$nmAtrVlModificacaoAoContrato,
@@ -108,6 +122,12 @@ class voContratoModificacao extends voentidade {
 				self::$nmAtrVlMensalAtualizado,
 				self::$nmAtrVlGlobalAtualizado,
 				self::$nmAtrVlGlobalReal,
+				
+				self::$nmAtrVlMensalAnterior,
+				self::$nmAtrVlGlobalAnterior,
+				
+				self::$nmAtrVlMensalModAtual,
+				self::$nmAtrVlGlobalModAtual,
 				
 				self::$nmAtrNumMesesParaOFimPeriodo,
 				self::$nmAtrNumPercentual,
@@ -133,6 +153,7 @@ class voContratoModificacao extends voentidade {
 		$this->sq = $registrobanco[self::$nmAtrSq];
 		$this->tpModificacao = $registrobanco[self::$nmAtrTpModificacao];
 		$this->dtModificacao = $registrobanco[self::$nmAtrDtModificacao];
+		$this->dtModificacaoFim = $registrobanco[self::$nmAtrDtModificacaoFim];
 		$this->vlModificacaoReferencial = $registrobanco[self::$nmAtrVlModificacaoReferencial];
 		$this->vlModificacaoAoContrato = $registrobanco[self::$nmAtrVlModificacaoAoContrato];
 		$this->vlModificacaoReal = $registrobanco[self::$nmAtrVlModificacaoReal];
@@ -141,6 +162,12 @@ class voContratoModificacao extends voentidade {
 		$this->vlGlobalAtual = $registrobanco[self::$nmAtrVlGlobalAtualizado];
 		$this->vlGlobalReal = $registrobanco[self::$nmAtrVlGlobalReal];
 
+		$this->vlMensalAnterior = $registrobanco[self::$nmAtrVlMensalAnterior];
+		$this->vlGlobalAnterior = $registrobanco[self::$nmAtrVlGlobalAnterior];
+		
+		$this->vlMensalModAtual = $registrobanco[self::$nmAtrVlMensalModAtual];
+		$this->vlGlobalModAtual = $registrobanco[self::$nmAtrVlGlobalModAtual];
+		
 		$this->numMesesParaOFimdoPeriodo = $registrobanco[self::$nmAtrNumMesesParaOFimPeriodo];
 		$this->numPercentual = $registrobanco[self::$nmAtrNumPercentual];
 		$this->obs = $registrobanco[self::$nmAtrObs];
@@ -152,6 +179,7 @@ class voContratoModificacao extends voentidade {
 		$this->sq = @$_POST[self::$nmAtrSq];
 		$this->tpModificacao = @$_POST[self::$nmAtrTpModificacao];
 		$this->dtModificacao = @$_POST[self::$nmAtrDtModificacao];
+		$this->dtModificacaoFim = @$_POST[self::$nmAtrDtModificacaoFim];
 		$this->vlModificacaoReferencial = @$_POST[self::$nmAtrVlModificacaoReferencial];
 		$this->vlModificacaoAoContrato = @$_POST[self::$nmAtrVlModificacaoAoContrato];
 		$this->vlModificacaoReal = @$_POST[self::$nmAtrVlModificacaoReal];
@@ -159,9 +187,24 @@ class voContratoModificacao extends voentidade {
 		$this->vlMensalAtual = @$_POST[self::$nmAtrVlMensalAtualizado];
 		$this->vlGlobalAtual = @$_POST[self::$nmAtrVlGlobalAtualizado];
 		$this->vlGlobalReal = @$_POST[self::$nmAtrVlGlobalReal];
+		
+		$this->vlMensalAnterior = @$_POST[vocontrato::$nmAtrVlMensalContrato];
+		$this->vlGlobalAnterior = @$_POST[vocontrato::$nmAtrVlGlobalContrato];
+		
+		$this->numPercentual = @$_POST[self::$nmAtrNumPercentual];
+		
+		$this->vlMensalModAtual = @$_POST[self::$nmAtrVlMensalModAtual];
+		$this->vlGlobalModAtual = @$_POST[self::$nmAtrVlGlobalModAtual];
+		
+		if($this->tpModificacao == dominioTpContratoModificacao::$CD_TIPO_REAJUSTE){
+			$fator = 1 + (getDecimalSQL($this->numPercentual)/100);
+			/*echoo("fator " . $fator);
+			echoo("vl global mod atual " . getDecimalSQL($this->vlGlobalModAtual));*/
+			$this->vlMensalModAtual = getDecimalSQL($this->vlMensalModAtual)*$fator;
+			$this->vlGlobalModAtual = getDecimalSQL($this->vlGlobalModAtual)*$fator;				
+		}
 
 		$this->numMesesParaOFimdoPeriodo = @$_POST[self::$nmAtrNumMesesParaOFimPeriodo];
-		$this->numPercentual = @$_POST[self::$nmAtrNumPercentual];
 		$this->obs = @$_POST[self::$nmAtrObs];
 
 		//completa com os dados da entidade

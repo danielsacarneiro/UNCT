@@ -111,6 +111,7 @@ class dbContratoInfo extends dbprocesso {
 		$queryJoin .= $nmTabela . "." . voContratoInfo::$nmAtrTipoContrato . "=" . $nmTabContratoInterna . "." . vocontrato::$nmAtrTipoContrato;
 		$queryJoin .= "\n AND ";
 		$queryJoin .= $nmTabela . "." . voContratoInfo::$nmAtrCdContrato . "=" . $nmTabContratoInterna . "." . vocontrato::$nmAtrCdContrato;*/
+		$queryJoin .= " WHERE " . vocontrato::$nmAtrContratadaContrato . " IS NOT NULL ";
 		$queryJoin .= " GROUP BY " . $groupbyinterno;
 		$queryJoin .= "\n) " . $nmTabContratoSqMAX;
 		$queryJoin .= "\n ON ";

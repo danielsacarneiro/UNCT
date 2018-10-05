@@ -261,6 +261,7 @@ CREATE TABLE contrato_mod (
     
     ctmod_tipo INT NOT NULL,
     ctmod_dtreferencia DATE NOT NULL,
+	ctmod_dtreferenciaFim DATE NOT NULL,
     
     ctmod_vlreferencial DECIMAL (14,4) NOT NULL,
     ctmod_vlreal DECIMAL (14,4) NOT NULL,
@@ -269,7 +270,13 @@ CREATE TABLE contrato_mod (
     ctmod_vlmensalatual DECIMAL (14,4) NOT NULL,
     ctmod_vlglobalatual DECIMAL (14,4) NOT NULL,
     ctmod_vlglobalreal DECIMAL (14,4) NOT NULL,
+
+    ctmod_vlmensalanterior DECIMAL (14,4) NOT NULL,
+    ctmod_vlglobalanterior DECIMAL (14,4) NOT NULL,
 	
+    ctmod_vlmensalmodatual DECIMAL (14,4) NOT NULL,
+    ctmod_vlglobalmodatual DECIMAL (14,4) NOT NULL,
+
 	ctmod_nummesesfimperiodo DECIMAL (4,2),
     ctmod_numpercentual DECIMAL (6,4),
     ctmod_obs MEDIUMTEXT NULL,

@@ -25,6 +25,17 @@ function getColecaoContratoDet($colecao,$isDetalharChaveCompleta=false) {
 	}
 	return $html;
 }
+function getContratoDetalhamentoAvulso($voContrato, $apenasComplemento=false){
+	if (isContratoValido ( $voContrato )) {
+		//$contrato = getContratoDescricaoEspecie($voContrato);
+		$contrato = getDsEspecie($voContrato);		
+		
+		if(!$apenasComplemento){
+			$contrato = formatarCodigoAnoComplemento ( $voContrato->cdContrato, $voContrato->anoContrato, dominioTipoContrato::getDescricaoStatic($voContrato->tipo ) ) . $contrato;
+		}		
+	}	
+	return $contrato;	
+}
 function getContratoDetalhamento($voContrato, $colecao,  $detalharContratoInfo = false, $isDetalharChaveCompleta=false) {
 	$vo = new vocontrato ();
 
@@ -101,8 +112,13 @@ function getContratoDetalhamento($voContrato, $colecao,  $detalharContratoInfo =
 				echo getLinkPesquisa ( "../contrato/detalharContrato.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $chaveContrato );
 			}
 		}
+		
+		$vlPercentualAcrescimo = getValorNumPercentualAcrescimoContrato(clone $voContrato);
+		if($vlPercentualAcrescimo != 0){
+			echo getTextoHTMLNegrito(" Acréscimo utilizado: " . getMoeda($vlPercentualAcrescimo, 2) . " %");
+		}
 		?>							
-				<div id=""><?=$campoContratado?></div></TD>
+		<div id=""><?=$campoContratado?></div></TD>
 </TR>
 <?php
 	}
@@ -537,16 +553,14 @@ function getDadosContratoMod($chave) {
 	if ($chave != null && $chave != "") {
 		$vo = new vocontrato ();
 		$vo->getChavePrimariaVOExplodeParam ( $chave );
-		//sempre pegarah a partir do mater
-		$vo->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
-		$vo->sqEspecie = 1;
-		$dbcontrato = new dbcontrato();
+		//echo $chave;
 		try{
-			$recordSet = $dbcontrato->consultarContratoModificacao($vo, false);			
-			$retorno = getCamposContratoMod($recordSet);
+			$retorno = getCamposContratoMod($vo);
 		}catch(excecaoChaveRegistroInexistente $ex){
-			$retorno = "Dados: <INPUT type='text' class='camporeadonly' size=50 readonly value='NÃO ENCONTRADO - VERIFIQUE O CONTRATO'>\n";
-		}
+			$retorno = "Dados: <INPUT type='text' class='camporeadonly' size=50 readonly value='NÃO ENCONTRADO - VERIFIQUE O CONTRATO'>\n";		
+		}catch(excecaoMaisDeUmRegistroRetornado $ex){
+			$retorno = "Dados: <INPUT type='text' class='camporeadonly' size=50 readonly value='MAIS DE UM T.A. VIGENTE - VERIFIQUE O CONTRATO'>\n";
+		}			
 
 	}
 
@@ -576,7 +590,36 @@ function getCPLPorNomePregoeiro($recordSet){
 	return dominioComissaoProcLicitatorio::getCPLPorPregoeiro($recordSet[voProcLicitatorio::$NmColNomePregoeiro]);
 }
 
-function getCamposContratoMod($recordSet){
+function getContratoVigentePorData($vocontrato){
+	//$vocontrato = new vocontrato();	
+	$filtro = new filtroManterContrato();
+	$filtro->tipo = $vocontrato->tipo;
+	$filtro->cdContrato = $vocontrato->cdContrato;
+	$filtro->anoContrato = $vocontrato->anoContrato;
+	$filtro->cdEspecie = array(
+			dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER,
+			dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_TERMOADITIVO
+	);
+	$filtro->dtVigencia = $vocontrato->dtAssinatura;
+	
+	$db = new dbcontrato();
+	$recordset = $db->consultarFiltroManter($filtro, false);
+	if(isColecaoVazia($recordset)){
+		throw new excecaoChaveRegistroInexistente();
+	}
+	
+	if(count($recordset) > 2){
+		throw new excecaoMaisDeUmRegistroRetornado();
+	}
+	
+	return $recordset;
+	//var_dump($recordset);	
+}
+
+function getCamposContratoMod($vo){
+	$dbcontrato = new dbcontrato();
+	$recordSet = $dbcontrato->consultarContratoModificacao($vo, false);
+	
 	$registrobanco = $recordSet;
 	$voContrato = new vocontrato();
 	$voContrato->getDadosBanco($registrobanco);
@@ -584,17 +627,33 @@ function getCamposContratoMod($recordSet){
 	$voContratoInfo = new voContratoInfo();
 	$voContratoInfo->getDadosBanco($registrobanco);
 	
-	$vlMensalAtualizadoParaFinsMod = getMoeda($registrobanco[voContratoModificacao::$nmColVlMensalParaFinsDeModAtual]); 
-	$vlGlobalAtualizadoParaFinsMod = getMoeda($registrobanco[voContratoModificacao::$nmColVlGlobalParaFinsDeModAtual]);
+	$vlMensalAtualizadoParaFinsMod = getMoeda($registrobanco[voContratoModificacao::$nmAtrVlMensalModAtual]); 
+	$vlGlobalAtualizadoParaFinsMod = getMoeda($registrobanco[voContratoModificacao::$nmAtrVlGlobalModAtual]);
+	
+	$vo->dtAssinatura = getData($recordSet[vocontrato::$nmAtrDtAssinaturaContrato]);
 
+	//consulta o periodo de vigencia do termo inserido apenas se ele nao for um TA
+	//quando nesse caso, sendo apostilamento ou qualquer outro, o periodo de vigencia sera determinado pelo TA vigente na data de assinatura
+	if($vo->cdEspecie != dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_TERMOADITIVO){
+		$registro = getContratoVigentePorData($vo)[0];		
+		$voContratoTemp = new vocontrato();
+		$voContratoTemp->getDadosBanco($registro);		
+				
+		$voContrato->dtVigenciaInicial = $voContratoTemp->dtVigenciaInicial;
+		$voContrato->dtVigenciaFinal = $voContratoTemp->dtVigenciaFinal;
+		
+		$retorno = "Vigência determinada pelo " . getTextoHTMLNegrito(getContratoDetalhamentoAvulso($voContratoTemp, true)) . "<br>";		
+	}
+		
 	if($voContrato != null){
-		$retorno = "Data Vigência Inicial " . getInputText(vocontrato::$nmAtrDtVigenciaInicialContrato, vocontrato::$nmAtrDtVigenciaInicialContrato, getData($voContrato->dtVigenciaInicial), constantes::$CD_CLASS_CAMPO_READONLY);
-		$retorno .= " a Data Final " . getInputText(vocontrato::$nmAtrDtVigenciaFinalContrato, vocontrato::$nmAtrDtVigenciaFinalContrato, getData($voContrato->dtVigenciaFinal), constantes::$CD_CLASS_CAMPO_READONLY);
+		$retorno .= " Data Assinatura: " . getInputText(vocontrato::$nmAtrDtAssinaturaContrato, vocontrato::$nmAtrDtAssinaturaContrato, getData($voContrato->dtAssinatura), constantes::$CD_CLASS_CAMPO_READONLY);
+		$retorno .= ", Vigência de " . getInputText(vocontrato::$nmAtrDtVigenciaInicialContrato, vocontrato::$nmAtrDtVigenciaInicialContrato, getData($voContrato->dtVigenciaInicial), constantes::$CD_CLASS_CAMPO_READONLY);
+		$retorno .= " a " . getInputText(vocontrato::$nmAtrDtVigenciaFinalContrato, vocontrato::$nmAtrDtVigenciaFinalContrato, getData($voContrato->dtVigenciaFinal), constantes::$CD_CLASS_CAMPO_READONLY);
 		$retorno .= ", Prazo Contrato (meses): " . getInputText(voContratoInfo::$nmAtrNumPrazo, voContratoInfo::$nmAtrNumPrazo, 12, constantes::$CD_CLASS_CAMPO_READONLY);
 		$retorno .= "<br>Valor Mensal Atual: " . getInputText(vocontrato::$nmAtrVlMensalContrato, vocontrato::$nmAtrVlMensalContrato, $voContrato->vlMensal, constantes::$CD_CLASS_CAMPO_READONLY);
-		$retorno .= " Valor Mensal Referência A Modificar: " . getInputText(voContratoModificacao::$nmColVlMensalParaFinsDeModAtual, voContratoModificacao::$nmColVlMensalParaFinsDeModAtual, $vlMensalAtualizadoParaFinsMod, constantes::$CD_CLASS_CAMPO_READONLY);
+		$retorno .= " Valor Mensal Referência (%Acréscimos): " . getInputText(voContratoModificacao::$nmAtrVlMensalModAtual, voContratoModificacao::$nmAtrVlMensalModAtual, $vlMensalAtualizadoParaFinsMod, constantes::$CD_CLASS_CAMPO_READONLY);
 		$retorno .= "<br>Valor Global Atual: " . getInputText(vocontrato::$nmAtrVlGlobalContrato, vocontrato::$nmAtrVlGlobalContrato, $voContrato->vlGlobal, constantes::$CD_CLASS_CAMPO_READONLY);
-		$retorno .= " Valor Global Referência A Modificar: " . getInputText(voContratoModificacao::$nmColVlGlobalParaFinsDeModAtual, voContratoModificacao::$nmColVlGlobalParaFinsDeModAtual, $vlGlobalAtualizadoParaFinsMod, constantes::$CD_CLASS_CAMPO_READONLY);
+		$retorno .= " Valor Global Referência (%Acréscimos): " . getInputText(voContratoModificacao::$nmAtrVlGlobalModAtual, voContratoModificacao::$nmAtrVlGlobalModAtual, $vlGlobalAtualizadoParaFinsMod, constantes::$CD_CLASS_CAMPO_READONLY);
 
 	}
 
@@ -625,6 +684,51 @@ function getCamposContratoLicon($recordSet){
 	}
 
 	return $retorno;
+}
+
+
+function getValorNumPercentualAcrescimoContrato($vo){
+	return getArrayAcrescimoModContrato($vo)[2];
+}
+function getArrayAcrescimoModContrato($vo){	
+	$vo->cdEspecie = null;
+	$vo->sqEspecie = null;	
+	
+	$filtro = new filtroManterContratoModificacao(false);
+	$dbcontratomod = new dbContratoModificacao();
+	
+	$numPercentual = "0";	
+	$vlGlobalAtualizadoReajuste = 0;
+	$vlGlobalAtual = 0;
+	
+	$filtro->vocontrato = $vo;
+	//var_dump($filtro);
+	$filtro->cdAtrOrdenacao = voContratoModificacao::$nmAtrDhUltAlteracao;
+	$filtro->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
+	
+	$recordSet = $dbcontratomod->consultarTelaConsulta(new voContratoModificacao(), $filtro);
+	//var_dump($recordSet);
+	if(!isColecaoVazia($recordSet)){
+		$vlGlobalAtual = $recordSet[0][voContratoModificacao::$nmAtrVlGlobalAtualizado];
+		//o valor atualizado de reajuste inicialmente eh igual ao valor mater
+		$vlGlobalAtualizadoReajuste = $recordSet[0][filtroManterContratoModificacao::$NmColVlGlobalMater];
+	}
+	
+	$filtro->tipo = dominioTpContratoModificacao::$CD_TIPO_REAJUSTE;
+	$recordSet = $dbcontratomod->consultarTelaConsulta(new voContratoModificacao(), $filtro);
+	//busca agora o valor mater atualizado em caso de haver reajuste
+	if(!isColecaoVazia($recordSet)){
+		$vlGlobalAtualizadoReajuste = $recordSet[0][voContratoModificacao::$nmAtrVlGlobalAtualizado];
+	}	
+	
+	if($vlGlobalAtualizadoReajuste != 0){
+		$numPercentual = (($vlGlobalAtual-$vlGlobalAtualizadoReajuste)/$vlGlobalAtualizadoReajuste)*100;
+	}
+	
+	$array[0] = $vlGlobalAtual;
+	$array[1] = $vlGlobalAtualizadoReajuste;
+	$array[2] = $numPercentual;
+	return $array;
 }
 
 
