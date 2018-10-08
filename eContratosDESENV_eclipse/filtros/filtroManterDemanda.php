@@ -351,8 +351,8 @@ class filtroManterDemanda extends filtroManter{
 			if(is_array($this->vodemanda->situacao)){
 							
 				if(count($this->vodemanda->situacao) == 1 && $this->vodemanda->situacao[0] == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_A_FAZER){
-					$this->inContratoComDtPropostaVencida = constantes::$CD_SIM;
-					$this->vocontrato->dtProposta = getDataHoje();
+					//$this->inContratoComDtPropostaVencida = constantes::$CD_SIM;
+					//$this->vocontrato->dtProposta = getDataHoje();
 					//$this->sqlComplementoContratoComDtPropostaVencida = " AND $nmTabela." . voDemanda::$nmAtrTipo . " = " . dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO_PRORROGACAO;
 						
 					$comparar = " IN (" . getSQLStringFormatadaColecaoIN(array_keys(dominioSituacaoDemanda::getColecaoAFazer()), true) . ")";
