@@ -11,8 +11,8 @@ function getSequenciaAssunto($assunto, &$count = 0){
 	return $assunto;
 }
 
-function getMensagemEdital(&$count = 0){
-	$assunto = "EDITAL:";	
+function getMensagemAltaPrioridade(&$count = 0){
+	$assunto = "ALTA PRIORIDADE:";	
 	$assunto = getSequenciaAssunto($assunto, $count);
 	
 	try {
@@ -21,14 +21,18 @@ function getMensagemEdital(&$count = 0){
 	
 		$filtro = new filtroManterDemanda( false );
 		$filtro->isValidarConsulta = false;
+		$filtro->voPrincipal = $voDemanda;
 		// $filtro->voPrincipal = $voDemanda;
 		$filtro->setaFiltroConsultaSemLimiteRegistro ();
 		$filtro->vodemanda->situacao = array (
 				dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_ABERTA,
 				dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO
 		);
+		//$filtro->inDesativado = constantes::$CD_NAO;
 	
-		$filtro->vodemanda->tipo = array(dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL);
+		//$filtro->vodemanda->tipo = array(dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL);
+		$filtro->vodemanda->prioridade = dominioPrioridadeDemanda::$CD_PRIORI_ALTA;
+		$filtro->tipoExcludente = dominioTipoDemanda::$CD_TIPO_DEMANDA_PROCADM;
 		$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_ATJA;
 		$filtro->cdAtrOrdenacao = filtroManterDemanda::$NmColDtReferenciaSetorAtual;
 		

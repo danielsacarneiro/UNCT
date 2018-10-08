@@ -161,7 +161,7 @@ class filtroConsultarDemandaPAAP extends filtroManterDemanda{
 		$filtro = $filtro . $conector		
 		. " ($nmTabelaPA." . voPA::$nmAtrSituacao . " IN (" . getSQLStringFormatadaColecaoIN(array_keys(dominioSituacaoPA::getColecaoSituacaoPendentes()), false) . ") OR "
 		. " ($nmTabelaPA." .voPA::$nmAtrSituacao . "=" . dominioSituacaoPA::$CD_SITUACAO_PA_AGUARDANDO_NOTIFICACAO_ENVIADA . " AND "
-		. " $nmAtributoDataPrazoEncerrado IS NOT NULL AND $nmAtributoDataPrazoEncerrado <= $dtParam)) "
+		. " $nmAtributoDataPrazoEncerrado IS NOT NULL AND $nmAtributoDataPrazoEncerrado < DATE($dtParam))) "
 		;
 		
 		return $filtro; 

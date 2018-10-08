@@ -196,6 +196,7 @@ function alterar() {
 					<TH class="headertabeladados" width="1%" nowrap>Mensal.Anterior</TH>					
 					<TH class="headertabeladados" width="1%" nowrap>Global.Atual</TH>
 					<TH class="headertabeladados" width="1%" nowrap>Global.Anterior</TH>
+					<TH class="headertabeladados" width="1%" nowrap>Empenhar</TH>
 					<TH class="headertabeladados" width="1%" nowrap>Referência</TH>
 					<TH class="headertabeladados" width="1%" nowrap>%.Referência</TH>
 					<TH class="headertabeladados" width="1%" nowrap>Dt.Operação</TH>
@@ -208,7 +209,7 @@ function alterar() {
                         $tamanho = 0;
                 
                 //echoo($tamanho);                                
-                $colspan=15;
+                $colspan=16;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -251,6 +252,7 @@ function alterar() {
                         
                         $tipoModificacao = dominioTpContratoModificacao::getDescricaoStatic($voAtual->tpModificacao);
                         $vlMater = $registroBanco[filtroManterContratoModificacao::$NmColVlGlobalMater];
+                        $vlMensalAtual = floatval($voAtual->vlMensalAtual);
                         $vlGlobalAtual = floatval($voAtual->vlGlobalAtual);
                         $vlGlobaModAtual = floatval($voAtual->vlGlobalModAtual);
                         
@@ -264,6 +266,9 @@ function alterar() {
 	                        $percAcrescimo = getMoeda($percAcrescimo,2);
 	                        
                         }
+                        
+                        $numMeses = floatval($voAtual->numMesesParaOFimdoPeriodo);
+                        $vlAEmpenhar = $vlMensalAtual*$numMeses;
                    ?>
                 <TR class="dados">
                     <TD class="tabeladados">
@@ -286,8 +291,9 @@ function alterar() {
 					<TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlMensalAnterior)?></TD>                    
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlGlobalAtual)?></TD>
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlGlobalAnterior)?></TD>
-                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlGlobalModAtual)?></TD>
-                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo $percAcrescimo?></TD>                    
+                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($vlAEmpenhar)?></TD>                    
+                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlGlobalModAtual)?></TD>                    
+                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo $percAcrescimo?></TD>
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getData($voAtual->dtModificacao)?></TD>
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getData($voAtual->dhUltAlteracao)?></TD>                    
                 </TR>					

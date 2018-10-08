@@ -128,6 +128,21 @@ function tratarUnload() {
 	ocultarMensagemAguarde();
 }
 
+function isCampoEditavel(pCampo){
+	return pCampo != null && !(pCampo.disabled || pCampo.readonly);
+}
+
+function getElementByIdValido(pIdCampo){
+	var campo = null;
+	try{
+		campo = document.getElementById(pIdCampo);
+	}catch(ex){
+		;
+	}
+	
+	return campo;
+}
+
 function limparCampoFormularioEConti(element){
 	if(element.type == 'select-one'){
 		element[0].selected = true;

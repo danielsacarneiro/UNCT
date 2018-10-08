@@ -19,7 +19,7 @@ if (!($enviarEmail && email_sefaz::$FLAG_ENVIAR_EMAIL)) {
 $count = 0;
 
 //envia alertas dos editais
-$mensagem .= getMensagemEdital($count);
+$mensagem .= getMensagemAltaPrioridade($count);
 //demandas que seguem para a SAD
 $mensagem .= getMensagemDemandaSAD($count);
 //envia alertas dos PAAPs pendentes de abertura

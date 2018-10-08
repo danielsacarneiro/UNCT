@@ -147,8 +147,10 @@ function formataForm() {
 }
 
 function validaFormulario() {
+	arrayPrioridadeAlta = ['<?=voDemanda::$nmAtrPrioridade?>', <?=dominioPrioridadeDemanda::$CD_PRIORI_ALTA;?>];	
+
 	pColecaoNmObjetosFormEdital = ['<?=voProcLicitatorio::$nmAtrCd;?>', '<?=voProcLicitatorio::$nmAtrAno;?>'];
-	formataFormEditalPorTpDemanda('<?=voDemanda::$nmAtrTipo?>', pColecaoNmObjetosFormEdital, <?=dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL?>);	
+	formataFormEditalPorTpDemanda('<?=voDemanda::$nmAtrTipo?>', pColecaoNmObjetosFormEdital, <?=dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL?>, arrayPrioridadeAlta);	
 	formataFormTpDemandaContrato();
 }
 
