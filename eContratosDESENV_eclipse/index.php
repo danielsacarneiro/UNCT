@@ -33,7 +33,7 @@ setCabecalho($titulo);
 	f2.adicionarItem(new Link("Contratos-Informações Adicionais", "<?=caminho_funcoesHTML?>contrato_info", ""));
 	f2.adicionarItem(new Link("Contratos-Consolidação", "<?=caminho_funcoesHTML?>contrato_consolidacao", ""));
 	f2.adicionarItem(new Link("Controle Sistemas Externos (LICON)", "<?=caminho_funcoesHTML?>contrato_licon", ""));
-	f2.adicionarItem(new Link("Contrato Execução (Acréscimos, Supressões e Prorrogações)", '<?=caminho_funcoesHTML.voContratoModificacao::getNmTabela()?>', ""));
+	f2.adicionarItem(new Link("Contrato Execução (Acréscimos, Supressões e Reajustes)", '<?=caminho_funcoesHTML.voContratoModificacao::getNmTabela()?>', ""));
 	f.adicionarItem(f2);
 
 	f3 = new Tree('Serviço 03 (Demanda)');

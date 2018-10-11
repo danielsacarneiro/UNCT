@@ -616,7 +616,7 @@ class dbcontrato extends dbprocesso {
 			// echo "<br>$mystring X $paramEspecie";
 			
 			// verifica se eh o tipo da especie em questao
-			if (existeStr1NaStr2ComSeparador ( $paramEspecie, $mystring )) {
+			if (existeStr1NaStr2ComSeparador ( $paramEspecie, $mystring, false )) {
 				$retorno = $chave;
 				break;
 			}
@@ -737,6 +737,7 @@ class dbcontrato extends dbprocesso {
 		
 		$valor = str_replace ( ",", "", "$param" );
 		$valor = str_replace ( " ", "", "$valor" );
+		$valor = str_replace ( "-", "", "$valor" );
 		
 		// echo "<br>decimal apos conversao:" . $valor;
 		if (isNumero ( $valor )) {

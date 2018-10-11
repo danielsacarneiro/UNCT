@@ -94,9 +94,9 @@ function isFormularioValido() {
 }
 
 function cancelar() {
-	//history.back();
-	lupa = document.frm_principal.lupa.value;	
-	location.href="index.php?consultar=S&lupa="+ lupa;	
+	history.back();
+	/*lupa = document.frm_principal.lupa.value;	
+	location.href="index.php?consultar=S&lupa="+ lupa;*/	
 }
 
 function confirmar() {

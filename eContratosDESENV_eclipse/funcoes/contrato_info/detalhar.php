@@ -181,7 +181,9 @@ function confirmar() {
 				$filtroTramitacaoContrato->temDocumentoAnexo = constantes::$CD_SIM;
 				//agrupa por documentos
 				$filtroTramitacaoContrato->groupby = voDocumento::getAtributosChavePrimaria();
-				$filtroTramitacaoContrato->TemPaginacao = false;			
+				$filtroTramitacaoContrato->TemPaginacao = false;
+				$filtroTramitacaoContrato->cdAtrOrdenacao = voDemandaTramitacao::$nmAtrDhUltAlteracao;
+				$filtroTramitacaoContrato->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
 				
 				$colecaoTramitacao = $vo->dbprocesso->consultarDemandaTramitacaoContrato($filtroTramitacaoContrato);
 				mostrarGridDemandaContrato($colecaoTramitacao, true);

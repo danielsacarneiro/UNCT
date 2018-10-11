@@ -72,10 +72,10 @@ include_once(caminho_util. "dominio.class.php");
 		//deixa na ultima posicao as especies que podem se repetir		
 		return array(
         		self::$CD_ESPECIE_CONTRATO_RERRATIFICACAO => "Rerratificação*Rerratificacao",
-        		self::$CD_ESPECIE_CONTRATO_TERMOADITIVO => "T.A*TA*",
-        		self::$CD_ESPECIE_CONTRATO_TERMOAJUSTE => "Ajuste",
-        		self::$CD_ESPECIE_CONTRATO_CESSAO_USO => "Cessão",
-        		self::$CD_ESPECIE_CONTRATO_RESCISAO_AMIGAVEL => "Amigável*Amigavel",
+        		self::$CD_ESPECIE_CONTRATO_TERMOADITIVO => "T.A*TA*T.A.",
+        		self::$CD_ESPECIE_CONTRATO_TERMOAJUSTE => "Ajuste*contas",
+        		self::$CD_ESPECIE_CONTRATO_CESSAO_USO => "Cessão*cessao",
+        		self::$CD_ESPECIE_CONTRATO_RESCISAO_AMIGAVEL => "Rescisão*Amigável*Amigavel",
         		self::$CD_ESPECIE_CONTRATO_RESCISAO_UNILATERAL => "Unilateral",
         		self::$CD_ESPECIE_CONTRATO_RESCISAO_ENCERRAMENTO => "Encerramento",      
         		self::$CD_ESPECIE_CONTRATO_MATER => "Mater*Convênio*Cooperação*Convalidação",

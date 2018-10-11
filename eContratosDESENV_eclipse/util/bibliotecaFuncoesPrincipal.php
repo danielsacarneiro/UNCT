@@ -94,7 +94,13 @@ function existeItemNoArray($item, $array) {
 	
 	return $retorno;
 }
-function existeStr1NaStr2ComSeparador($str2, $str1comseparador) {
+function existeStr1NaStr2ComSeparador($str2, $str1comseparador, $casesensitive = true) {
+	
+	if(!$casesensitive){
+		$str1comseparador = strtoupper($str1comseparador);
+		$str2 = strtoupper($str2);
+	}
+	
 	$array = explode ( CAMPO_SEPARADOR, $str1comseparador );
 	$tamanho = count ( $array );
 	$retorno = false;
@@ -105,7 +111,7 @@ function existeStr1NaStr2ComSeparador($str2, $str1comseparador) {
 	for($i = 0; $i < $tamanho; $i ++) {
 		$especie = $array [$i];
 		// verifica se eh o tipo da especie em questao
-		if($especie != null && $especie != ""){
+		if($especie != null && $especie != ""){				
 			$existe = mb_stripos ( $str2, $especie );
 			// echo "<br>$str2 x $especie";
 			
@@ -208,7 +214,10 @@ function getMoedaMascaraImportacao($param) {
 	$tamanho = strlen ( $valor );
 	$valor = substr ( $valor, 0, $tamanho - $qtCasaDecimais ) . "." . substr ( $valor, $tamanho - $qtCasaDecimais, $qtCasaDecimais );
 	
-	return number_format ( $valor, $qtCasaDecimais, ',', '.' );
+	//echoo("valor: " . $valor); 
+	//return number_format ( floatval($valor), $qtCasaDecimais, ',', '.' );
+	//return number_format ( floatval($valor), $qtCasaDecimais);
+	return floatval($valor);
 }
 function isNumero($param) {
 	return isNumeroComDecimal ( $param, true );
