@@ -121,7 +121,7 @@ function getDataPrazo(){
 	pIDCampoData = "<?=voPA::$nmAtrDtUltNotificacaoParaManifestacao?>";
 	pIDCampoDataFim = "<?=voPA::$nmAtrDtUltNotificacaoPrazoEncerrado?>";
 	pIDCampoPrazo = "<?=voPA::$nmAtrNumDiasPrazoUltNotificacao?>";
-	pCampoInDiasUteis = document.frm_principal.<?=voPA::$nmAtrInDiasUteisPrazoUltNotificacao?>;
+	pCampoInDiasUteis = document.frm_principal.<?=voPA::$ID_REQ_InDiasUteisPrazoUltNotificacao?>;
 
 	inDiasUteis = "N";
 	if(pCampoInDiasUteis.checked){
@@ -270,7 +270,7 @@ function getDataPrazo(){
 				
 				?> 
 				
-				<INPUT type="checkbox" id="<?=voPA::$nmAtrInDiasUteisPrazoUltNotificacao?>" name="<?=voPA::$nmAtrInDiasUteisPrazoUltNotificacao?>"
+				<INPUT type="checkbox" id="<?=voPA::$ID_REQ_InDiasUteisPrazoUltNotificacao?>" name="<?=voPA::$ID_REQ_InDiasUteisPrazoUltNotificacao?>"
 				onClick ="getDataPrazo()" checked>				
 				(dias úteis?) *para fins de contagem de prazo
 	            <?php	            

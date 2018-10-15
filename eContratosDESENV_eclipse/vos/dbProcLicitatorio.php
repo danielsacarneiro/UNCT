@@ -11,8 +11,6 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
   Class dbProcLicitatorio extends dbprocesso{
   	static $FLAG_PRINTAR_SQL = false;
   	
-  	static $nmTabelaPublicacao = "nmTabelaPublicacao";
-  	
   	function consultarPorChaveTela($vo, $isHistorico) {  		
   		$retorno = "";
   		// para o caso de haver mais de uma demanda por proclic
@@ -131,7 +129,7 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
         return parent::consultarMontandoQueryTelaConsulta ( $vo, $filtro, $arrayColunasRetornadas, $queryJoin );        
     }
     
-    function consultarDemandaPAAP($filtro) {
+    /*function consultarDemandaPAAP($filtro) {
     	$isHistorico = $filtro->isHistorico;
     	$vo = new voDemanda();
     	$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
@@ -323,7 +321,7 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
     }
     
     function validarAlteracao($vo) {
-    	/*//$vo = new voPA();    	
+    	//$vo = new voPA();    	
     	//$retorno = true;    	
     	$vodemanda = $this->consultarVODemanda($vo);
     	//$vodemanda = new voDemanda();
@@ -349,13 +347,13 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
     			throw new excecaoGenerica("Só é permitido encerrar o processo que tenha sido publicado.");
     		}
     	}     	
-    	//return $retorno;*/;
+    	//return $retorno;
     }
     
     function alterar($vo) {
     	$this->validarAlteracao($vo);
     	return parent::alterar($vo);
-    }    
+    } */   
     
     function getSQLValuesInsert($vo){
     	if($vo->cd == null){

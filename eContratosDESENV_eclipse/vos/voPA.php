@@ -4,6 +4,7 @@ include_once (caminho_funcoes . "pa_penalidade/dominioTipoPenalidade.php");
 
 class voPA extends voentidade {
 	static $ID_REQ_DIV_PRAZO = "ID_REQ_DIV_PRAZO";
+	static $ID_REQ_InDiasUteisPrazoUltNotificacao = "pa_in_diasuteisprazo_ult_notificacao";	
 	
 	static $nmAtrCdPA = "pa_cd"; // processo administrativo cd
 	static $nmAtrAnoPA = "pa_ex"; // processo administrativo ano
@@ -16,7 +17,7 @@ class voPA extends voentidade {
 	static $nmAtrDtNotificacao = "pa_dt_notificacao";
 	static $nmAtrDtUltNotificacaoParaManifestacao = "pa_dt_ult_notmanifestacao";
 	static $nmAtrNumDiasPrazoUltNotificacao = "pa_prazodias_ult_notificacao";
-	static $nmAtrInDiasUteisPrazoUltNotificacao = "pa_in_diasuteisprazo_ult_notificacao";
+	
 	static $nmAtrDtUltNotificacaoPrazoEncerrado = "pa_dt_ultnotprazoencerrado";
 	static $nmAtrSituacao = "pa_si";
 	var $cdPA = "";
@@ -123,7 +124,7 @@ class voPA extends voentidade {
 		$this->dtUlNotificacaoPrazoEncerrado = $registrobanco [self::$nmAtrDtUltNotificacaoPrazoEncerrado];
 		$this->numDiasPrazoUltNotificacao = $registrobanco [self::$nmAtrNumDiasPrazoUltNotificacao];
 		$this->situacao = $registrobanco [self::$nmAtrSituacao];
-		$this->dtPublicacao = $registrobanco [voDemandaTramitacao::$nmAtrDtReferencia];
+		$this->dtPublicacao = $registrobanco [voPenalidadePA::$nmAtrDtAplicacao];
 
 	}
 	function getDadosFormulario() {
