@@ -334,13 +334,12 @@ function encaminhar() {
             ?>	                    
             <TR>
 				<TH class="campoformulario" nowrap width="1%">Doc.Anexo:</TH>
-				<TD class="campoformulario" colspan=3>
-				Tipo: <?php echo $comboTpDoc->getHtmlSelect(voDocumento::$nmAtrTp,voDocumento::$nmAtrTp, $filtro->tpDocumento, true, "camponaoobrigatorio", true);?>
+				<TD class="campoformulario" colspan=3>				
 				Ano: <?php echo $selectExercicio->getHtmlCombo(voDocumento::$nmAtrAno,voDocumento::$nmAtrAno, $filtro->anoDocumento, true, "camponaoobrigatorio", false, "");?>
 				Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voDocumento::$nmAtrSq?>" name="<?=voDocumento::$nmAtrSq?>"  value="<?php echo(complementarCharAEsquerda($filtro->sqDocumento, "0", TAMANHO_CODIGOS));?>"  class="camponaoobrigatorio" size="6" maxlength="5">
 				Setor: <?php 
-				echo $comboSetor->getHtmlCombo(voDocumento::$nmAtrCdSetor,voDocumento::$nmAtrCdSetor, $filtro->cdSetorDocumento, true, "camponaoobrigatorio", true, "");
-				
+				echo $comboSetor->getHtmlCombo(voDocumento::$nmAtrCdSetor,voDocumento::$nmAtrCdSetor, $filtro->cdSetorDocumento, true, "camponaoobrigatorio", true, "");				
+				echo "Tipo: ". $comboTpDoc->getHtmlSelect(voDocumento::$nmAtrTp,voDocumento::$nmAtrTp, $filtro->tpDocumento, true, "camponaoobrigatorio", true);
 				$nmCamposDoc = array(
 						voDocumento::$nmAtrTp,
 						voDocumento::$nmAtrAno,
