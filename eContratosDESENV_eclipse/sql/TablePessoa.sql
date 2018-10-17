@@ -87,6 +87,7 @@ ALTER TABLE pessoa_hist ADD COLUMN in_desativado CHAR(1) NOT NULL AFTER cd_usuar
 /** INCLUSAO DAS CONTRATADAS */
 DELIMITER $$
 DROP PROCEDURE IF EXISTS importarContratada $$
+-- CREATE PROCEDURE importarContratada(IN cdPessoa INT)
 CREATE PROCEDURE importarContratada()
 BEGIN
 
@@ -94,7 +95,7 @@ BEGIN
   DECLARE nome VARCHAR(150);
   DECLARE doc VARCHAR(30);
   -- cdPessoa deve conter o cdPessoa da ultima pessoa incluida
-  DECLARE cdPessoa INT DEFAULT 476;
+  DECLARE cdPessoa INT DEFAULT 490;
 
   DECLARE cTabela CURSOR FOR 
 	  select ct_contratada, ct_doc_contratada from contrato

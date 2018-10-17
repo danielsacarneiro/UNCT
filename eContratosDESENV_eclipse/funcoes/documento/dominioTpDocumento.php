@@ -57,7 +57,7 @@ class dominioTpDocumento extends dominio {
 	static $DS_TP_DOC_PLANILHA_CUSTOS = "Planilha de Custos";
 	static $DS_TP_DOC_PLANILHA_LICON = "Planilha Licon";
 	static $DS_TP_DOC_PROPOSTA_PRECOS = "Proposta de Preços";
-	static $DS_TP_DOC_PUBLICACAO_PAAP = "Publicação Penalidade";
+	static $DS_TP_DOC_PUBLICACAO_PAAP = "Publicação";
 	static $DS_TP_DOC_RELATORIO = "Relatório";
 	// static $DS_TP_DOC_RELATORIO_CONCLUSAO = "Relatório Com Alegações Finais";
 	static $DS_TP_DOC_MINUTA = "Minuta";

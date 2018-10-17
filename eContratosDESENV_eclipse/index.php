@@ -44,6 +44,7 @@ setCabecalho($titulo);
     f4.adicionarItem(new Link('P.A.s de Aplicação de Penalidade (PAAP)', '<?=caminho_funcoesHTML?>pa', ''));    
     f4.adicionarItem(new Link('Penalidades (PAAP)', '<?=caminho_funcoesHTML?>pa_penalidade', ''));
     f4.adicionarItem(new Link('EXTERNO: Penalidades e-Fisco', 'http://efisco.sefaz.pe.gov.br/sfi_fin_gbp/PREmitirFornecedorPenalidade', ''));
+    f4.adicionarItem(new Link('EXTERNO: Penalidades e-Fisco (Por empresa)', 'https://efisco.sefaz.pe.gov.br/sfi_fin_gbp/PRManterFornecedorOcorrencia', ''));
     f4.adicionarItem(new Link('EXTERNO: Penalidades Portal da Transparência', 'http://www.portaltransparencia.gov.br/sancoes/ceis?ordenarPor=nome&direcao=asc', ''));
 	f.adicionarItem(f4);
 
@@ -55,9 +56,12 @@ setCabecalho($titulo);
 	fmsg.adicionarItem(new Link("PAINEL (Atividades relevantes)", "agendamento.php?<?=constantes::$ID_REQ_IN_ENVIAR_EMAIL?>=N", ""));
 	fmsg.adicionarItem(new Link('Mensageria', '<?=caminho_funcoesHTML.voMensageria::getNmTabela()?>', ''));	
 	fmsg.adicionarItem(new Link('Mensageria Registro', '<?=caminho_funcoesHTML.voMensageriaRegistro::getNmTabela()?>', ''));
-
 	f.adicionarItem(fmsg);
 
+	f7 = new Tree('Serviço 07 (Legislação)');
+	f7.adicionarItem(new Link('EXTERNO: Decreto Estadual Penalidade', 'http://legis.alepe.pe.gov.br/texto.aspx?id=15904&tipo=', "", null,true));
+	f.adicionarItem(f7);
+	
 	/*flegislacao = new Tree('Serviço 05 (Legislação)');    
 	flegislacao.adicionarItem(new Link('Decreto 42.191 - Aplicação de penalidade(PAAP)', 'h:\\ASSESSORIA JURÍDICA\\ATJA\\LEGISLAÇÃO\\DECRETO Nº 42.191 DE 2015 - APLICAÇÃO DE PENALIDADES A LICITANTES.pdf', ''));
 	f.adicionarItem(flegislacao);*/
@@ -148,8 +152,8 @@ setCabecalho($titulo);
                         				</TD>
                     				</TR>                    				
                     				<?php 
-                    				$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_LEGISLACAO, 1));
-                    				echo imprimeBotaoDocumento($vodocumento, "Decreto Penalidade");
+                    				/*$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_LEGISLACAO, 1));
+                    				echo imprimeBotaoDocumento($vodocumento, "Decreto Penalidade");*/
                     				
                     				$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_PGE,dominioTpDocumento::$CD_TP_DOC_CHECKLIST, 1));
                     				echo imprimeBotaoDocumento($vodocumento, "Consulta boletins PGE");
