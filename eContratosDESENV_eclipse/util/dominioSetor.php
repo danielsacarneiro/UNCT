@@ -17,6 +17,7 @@ class dominioSetor extends dominio {
 	static $CD_SETOR_GOV = 14;
 	static $CD_SETOR_DAFE = 15;
 	static $CD_SETOR_UNEO = 16;
+	static $CD_SETOR_DISCON = 17;
 	
 	static $DS_SETOR_SAFI = "SAFI";
 	static $DS_SETOR_UNCT = "UNCT";
@@ -34,19 +35,17 @@ class dominioSetor extends dominio {
 	static $DS_SETOR_GOV = "GOV";
 	static $DS_SETOR_DAFE = "DAFE";
 	static $DS_SETOR_UNEO = "UNEO";
+	static $DS_SETOR_DISCON = "DISCON";
 	
 	// ...............................................................
 	// Construtor
-	function __construct() {
-		$this->colecao = self::getColecao ();
-		// ksort($this->colecao);
-	}
 	static function getColecao() {
 		$retorno = array (
 				self::$CD_SETOR_SAFI => self::$DS_SETOR_SAFI,
 				self::$CD_SETOR_DILC => self::$DS_SETOR_DILC,
 				self::$CD_SETOR_DIENG => self::$DS_SETOR_DIENG,
 				self::$CD_SETOR_DIFIN => self::$DS_SETOR_DIFIN,				
+				self::$CD_SETOR_DISCON => self::$DS_SETOR_DISCON,
 				self::$CD_SETOR_ATJA => self::$DS_SETOR_ATJA,
 				self::$CD_SETOR_CPL => self::$DS_SETOR_CPL,
 				self::$CD_SETOR_UNCP => self::$DS_SETOR_UNCP,

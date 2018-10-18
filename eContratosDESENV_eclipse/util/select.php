@@ -124,7 +124,6 @@ class select extends multiplosConstrutores {
 	}
 	function getHtmlComboMultiplo($pNmSelectOrigem, $pNmSelectDestino, $pColecaoSelecionada, $classDestino, $size, $javaScript) {
 		
-		$dominio = new dominio ();
 		$colecaoOrigem = $this->colecao;
 		if (! isColecaoVazia ( $pColecaoSelecionada )) {
 			$colecaoOrigem = dominio::getColecaoComElementosARemover ( $pColecaoSelecionada, $this->colecao );
