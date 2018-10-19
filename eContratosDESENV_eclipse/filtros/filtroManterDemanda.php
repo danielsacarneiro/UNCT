@@ -84,6 +84,9 @@ class filtroManterDemanda extends filtroManter{
 		
 		$vodemanda->cd  = @$_POST[voDemanda::$nmAtrCd];
 		$vodemanda->ano  = @$_POST[voDemanda::$nmAtrAno];
+		if(!isset($_POST[voDemanda::$nmAtrAno])){
+			$vodemanda->ano = getAnoHoje();
+		}		
 		$vodemanda->texto = @$_POST[voDemanda::$nmAtrTexto];
 		$vodemanda->cdSetor = @$_POST[voDemanda::$nmAtrCdSetor];
 		$vodemanda->cdSetorDestino = @$_POST[voDemandaTramitacao::$nmAtrCdSetorDestino];

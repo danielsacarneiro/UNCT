@@ -14,12 +14,16 @@ class filtroManterDocumento extends filtroManter{
     	var $link = "";
     // ...............................................................
 	// construtor	
-	function __construct() {
-        parent::__construct(true);
-        
+	//function __construct() {
+	function getFiltroFormulario(){
+        //parent::__construct(true);        
         $this->sq = @$_POST[voDocumento::$nmAtrSq];
         $this->cdSetor = @$_POST[voDocumento::$nmAtrCdSetor];
         $this->ano = @$_POST[voDocumento::$nmAtrAno];
+        if(!isset($_POST[voDocumento::$nmAtrAno])){
+        	$this->ano = getAnoHoje();
+        }
+        
         $this->tp= @$_POST[voDocumento::$nmAtrTp];
         $this->link= @$_POST[voDocumento::$nmAtrLink];
         
