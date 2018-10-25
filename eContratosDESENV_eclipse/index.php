@@ -97,15 +97,6 @@ setCabecalho($titulo);
 		f.adicionarItem(finter);	
 	<?php 
 	}?>
-	/*
-	exemplo
-    // SERVIÇO 4
-	f3 = new Tree('Diária');
-	f3.adicionarItem(new Link("Grupo de Diárias","/sfi_fin_gfu/PRManterGrupoDiaria", "25040"));
-	f3.adicionarItem(new Link("Faixa de Diária", "/sfi_fin_gfu/PRManterFaixaDiaria", "25041"));
-	f3.adicionarItem(new Link("Tabela de Diária", "/sfi_fin_gfu/PRManterTabelaDiaria", "25042"));
-	f.adicionarItem(f3);
-	*/
 
 
 </SCRIPT>

@@ -89,17 +89,24 @@ function alterar() {
 }
 
 
-function movimentacoes(){    
+function execucao(){
     if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta")){
             return;
     }
-
   	//marreta
 	chave = "hist*" + document.frm_principal.rdb_consulta.value + "CM*1";	
-    url = "../contrato/movimentacaoContrato.php?chave=" + chave;
-	
+    url = "../contrato/execucao.php?chave=" + chave;	
+    abrirJanelaAuxiliar(url, true, false, false);    
+}
+
+function movimentacoes(){
+    if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta")){
+            return;
+    }
+  	//marreta
+	chave = "hist*" + document.frm_principal.rdb_consulta.value + "CM*1";	
+    url = "../contrato/movimentacaoContrato.php?chave=" + chave;	
     abrirJanelaAuxiliar(url, true, false, false);
-    
 }
 
 </SCRIPT>
@@ -351,6 +358,7 @@ function movimentacoes(){
                             <?php                            
                             //echo getBotoesRodape();                            
                             ?>
+                            <!-- <TD class="botaofuncao"><?=getBotao("bttExecucao", "Execução", null, false, "onClick='javascript:execucao();' accesskey='e'")?></TD>-->
                             <TD class="botaofuncao"><?=getBotao("bttMovimentacao", "Movimentações", null, false, "onClick='javascript:movimentacoes();' accesskey='m'")?></TD>
                          </TR>
                          </TABLE>

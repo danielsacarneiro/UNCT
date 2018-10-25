@@ -237,18 +237,12 @@ class dbcontrato extends dbprocesso {
 		// echo $query;
 		return $this->consultarEntidade ( $query, true );
 	}
-	function consultarContratoMovimentacoes($voContrato) {
+	/*function consultarContratoMovimentacoes($voContrato) {
 		$nmTabela = $voContrato->getNmTabelaEntidade ( false );
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
 		// $atributos = $voContrato->getAtributosMovimentacoes();
 		// $atributos = getColecaoEntreSeparador($atributos, ",");
-		
-		$nmAtributosWhere = array (
-				vocontrato::$nmAtrAnoContrato => $voContrato->anoContrato,
-				vocontrato::$nmAtrCdContrato => $voContrato->cdContrato,
-				vocontrato::$nmAtrTipoContrato => "'$voContrato->tipo'" 
-		);
-		
+				
 		$query = "SELECT $nmTabela.* ";
 		// $query.= $atributos;
 		$query .= ", $nmTabelaContratoInfo." . voContratoInfo::$nmAtrDtProposta;
@@ -272,6 +266,36 @@ class dbcontrato extends dbprocesso {
 		
 		// echo $query;
 		return $this->consultarEntidade ( $query, false );
+	}*/
+	
+	function consultarContratoMovimentacoes($voContrato, $isHistorico=false) {
+		$nmTabela = $voContrato->getNmTabelaEntidade ( $isHistorico );
+		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( $isHistorico );
+		
+		$arrayColunasRetornadas = array (
+				$nmTabela . ".*",
+				"$nmTabelaContratoInfo." . voContratoInfo::$nmAtrDtProposta,
+		);
+						
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaContratoInfo;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrCdContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrCdContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrAnoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrAnoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrTipoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
+
+		$nmAtributosWhere = array (
+				"$nmTabela.".vocontrato::$nmAtrAnoContrato => $voContrato->anoContrato,
+				"$nmTabela.".vocontrato::$nmAtrCdContrato => $voContrato->cdContrato,
+				"$nmTabela.".vocontrato::$nmAtrTipoContrato => "'$voContrato->tipo'"
+		);
+		$queryWhere = "\n WHERE " . $voContrato->getValoresWhereSQL ( $voContrato, $nmAtributosWhere );
+
+		$orderby = "\n ORDER BY " . vocontrato::$nmAtrSqContrato . " " . constantes::$CD_ORDEM_CRESCENTE;
+	
+		$colecao = $this->consultarMontandoQuery($voContrato, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico, false, $orderby);
+		return $colecao;
 	}
 	function incluirSQL($voContrato) {
 		$atributosInsert = $voContrato->getTodosAtributos ();

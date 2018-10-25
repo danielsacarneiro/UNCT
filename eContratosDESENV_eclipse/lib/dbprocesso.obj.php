@@ -146,14 +146,20 @@ class dbprocesso {
 		
 		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, "", $isHistorico );
 	}
-	function consultarPorChaveMontandoQuery($vo, $arrayColunasRetornadas, $queryJoin, $isHistorico, $isConsultaPorChave = true) {
+	function consultarPorChaveMontandoQuery($vo, $arrayColunasRetornadas, $queryJoin, $isHistorico, $isConsultaPorChave = true, $nmMetodoAtributosWhere = null) {
 		$queryWhere = " WHERE ";
-		$queryWhere .= $vo->getValoresWhereSQLChave ( $isHistorico );
+		
+		$temp = $vo->getValoresWhereSQLChave ( $isHistorico );
+		if($nmMetodoAtributosWhere != null){
+			$temp = $vo->$nmMetodoAtributosWhere ( $isHistorico );
+		}
+		
+		$queryWhere .= $temp;
 		return $this->consultarMontandoQuery ( $vo, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico, $isConsultaPorChave );
 	}
-	function consultarMontandoQuery($vo, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico, $isConsultaPorChave) {
+	function consultarMontandoQuery($vo, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico, $isConsultaPorChave, $sqlComplemento=null) {
 		$nmTabelaACompararCdUsuario = $vo->getNmTabelaEntidade ( $isHistorico );
-		return $this->consultarMontandoQueryUsuario ( $vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico, $isConsultaPorChave );
+		return $this->consultarMontandoQueryUsuario ( $vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico, $isConsultaPorChave, $sqlComplemento);
 	}
 	function consultarMontandoQueryTelaConsulta($vo, $filtro, $arrayColunasRetornadas, $queryJoin) {
 		$nmTabelaACompararCdUsuario = $vo->getNmTabelaEntidade ( $filtro->isHistorico );
@@ -161,12 +167,13 @@ class dbprocesso {
 		$retorno = $this->consultarMontandoQueryUsuarioFiltro ( $vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $filtro, false );
 		return $retorno;
 	}
-	function consultarMontandoQueryUsuario($vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico, $isConsultaPorChave) {
+	function consultarMontandoQueryUsuario($vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico, $isConsultaPorChave, $sqlComplemento=null) {
 		$atributos = getSQLStringFormatadaColecaoIN ( $arrayColunasRetornadas, false );
 		$query = "SELECT " . $atributos;
 		$query .= $this->getQueryNmUsuarioTabelaAComparar ( $vo, $nmTabelaACompararCdUsuario, $queryJoin, $isHistorico );
 		
 		$query .= $queryWhere;
+		$query .= $sqlComplemento;
 		
 		/*if(!$isHistorico){
 			$conector = "\n AND ";			

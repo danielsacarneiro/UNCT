@@ -123,8 +123,7 @@ function confirmar() {
 	            	       id="<?=voContratoModificacao::$nmAtrDtModificacao?>" 
 	            	       name="<?=voContratoModificacao::$nmAtrDtModificacao?>" 
 	            			value="<?php echo(getData($vo->dtModificacao));?>"
-	            			onkeyup="formatarCampoData(this, event, false);"
-		            		onBlur="calcular();" 
+	            			onkeyup="formatarCampoData(this, event, false);" 
 	            			class="camporeadonly"	            			 
 	            			size="10" 
 	            			maxlength="10" readonly>
@@ -137,7 +136,7 @@ function confirmar() {
 			<TR>
 	            <TH class="campoformulario" nowrap>Valor Referencial:</TH>
 	            <TD class="campoformulario" ><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlModificacaoReferencial?>" name="<?=voContratoModificacao::$nmAtrVlModificacaoReferencial?>"  value="<?php echo(getMoeda($vo->vlModificacaoReferencial,4));?>"
-	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 4, event);" onBlur='calcular();' class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly></TD>
+	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 4, event);" class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly></TD>
 	            <TH class="campoformulario" nowrap>Valor Mensal Atualizado:</TH>
 	            <TD class="campoformulario"><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlMensalAtualizado?>" name="<?=voContratoModificacao::$nmAtrVlMensalAtualizado?>"  value="<?php echo(getMoeda($vo->vlMensalAtual));?>"
 	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly></TD>	            
@@ -163,7 +162,7 @@ function confirmar() {
 	            <TH class="campoformulario" nowrap>Percentual:</TH>
 	            <TD class="campoformulario" colspan="3">
 	            <INPUT type="text" id="<?=voContratoModificacao::$nmAtrNumPercentual?>" name="<?=voContratoModificacao::$nmAtrNumPercentual?>"  value="<?php echo(getMoeda($vo->numPercentual,4));?>"
-	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 4, event);" onBlur='calcular(false);' class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="10" readonly>%
+	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 4, event);" class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="10" readonly>%
 			</TD>
 	        </TR>
 			<TR>

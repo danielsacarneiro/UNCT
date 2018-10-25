@@ -52,6 +52,7 @@ class dominioSetor extends dominio {
 				self::$CD_SETOR_UNCT => self::$DS_SETOR_UNCT,
 				self::$CD_SETOR_UNSG => self::$DS_SETOR_UNSG,
 				self::$CD_SETOR_UNEO => self::$DS_SETOR_UNEO,
+				self::$CD_SETOR_GEBES => self::$DS_SETOR_GEBES,
 				self::$CD_SETOR_DAFE => self::$DS_SETOR_DAFE,
 				self::$CD_SETOR_SAD => self::$DS_SETOR_SAD,
 				self::$CD_SETOR_PGE => self::$DS_SETOR_PGE,
