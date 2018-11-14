@@ -634,7 +634,7 @@ function getCamposContratoMod($vo){
 
 	//consulta o periodo de vigencia do termo inserido apenas se ele nao for um TA
 	//quando nesse caso, sendo apostilamento ou qualquer outro, o periodo de vigencia sera determinado pelo TA vigente na data de assinatura
-	if($vo->cdEspecie != dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_TERMOADITIVO){
+	/*if($vo->cdEspecie != dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_TERMOADITIVO){
 		$registro = getContratoVigentePorData($vo)[0];		
 		$voContratoTemp = new vocontrato();
 		$voContratoTemp->getDadosBanco($registro);		
@@ -643,7 +643,7 @@ function getCamposContratoMod($vo){
 		$voContrato->dtVigenciaFinal = $voContratoTemp->dtVigenciaFinal;
 		
 		$retorno = "Vigência determinada pelo " . getTextoHTMLNegrito(getContratoDetalhamentoAvulso($voContratoTemp, true)) . "<br>";		
-	}
+	}*/
 		
 	if($voContrato != null){
 		$retorno .= " Data Assinatura: " . getInputText(vocontrato::$nmAtrDtAssinaturaContrato, vocontrato::$nmAtrDtAssinaturaContrato, getData($voContrato->dtAssinatura), constantes::$CD_CLASS_CAMPO_READONLY);
@@ -688,9 +688,20 @@ function getCamposContratoLicon($recordSet){
 
 
 function getValorNumPercentualAcrescimoContrato($vo){
-	return getArrayAcrescimoModContrato($vo)[2];
+	$voContratomod = getVOContratoModAcrescimo($vo);
+	$retorno = 0;
+	if($voContratomod != null){
+		$retorno = $voContratomod->getPercentualAcrescimoAtual();
+	}
+	return $retorno;
 }
-function getArrayAcrescimoModContrato($vo){	
+
+/**
+ * versao antiga
+ * @param unknown $vo
+ * @return number
+ */
+/*function getArrayAcrescimoModContrato($vo){	
 	$vo->cdEspecie = null;
 	$vo->sqEspecie = null;	
 	
@@ -710,7 +721,7 @@ function getArrayAcrescimoModContrato($vo){
 	//var_dump($recordSet);
 	if(!isColecaoVazia($recordSet)){
 		$vlGlobalAtual = $recordSet[0][voContratoModificacao::$nmAtrVlGlobalAtualizado];
-		//o valor atualizado de reajuste inicialmente eh igual ao valor mater
+		//o valor atualizado de reajuste inicialmente eh igual ao valor mater (ja que nao ha nenhum reajuste)
 		$vlGlobalAtualizadoReajuste = $recordSet[0][filtroManterContratoModificacao::$NmColVlGlobalMater];
 	}
 	
@@ -718,18 +729,43 @@ function getArrayAcrescimoModContrato($vo){
 	$recordSet = $dbcontratomod->consultarTelaConsulta(new voContratoModificacao(), $filtro);
 	//busca agora o valor mater atualizado em caso de haver reajuste
 	if(!isColecaoVazia($recordSet)){
-		$vlGlobalAtualizadoReajuste = $recordSet[0][voContratoModificacao::$nmAtrVlGlobalAtualizado];
+		//$vlGlobalAtualizadoReajuste = $recordSet[0][voContratoModificacao::$nmAtrVlGlobalAtualizado];
+		$vlGlobalAtualizadoReajuste = $recordSet[0][voContratoModificacao::$nmAtrVlGlobalModAtual];
 	}	
 	
 	if($vlGlobalAtualizadoReajuste != 0){
 		$numPercentual = (($vlGlobalAtual-$vlGlobalAtualizadoReajuste)/$vlGlobalAtualizadoReajuste)*100;
+		//echo "(($vlGlobalAtual-$vlGlobalAtualizadoReajuste)/$vlGlobalAtualizadoReajuste)*100";
 	}
 	
 	$array[0] = $vlGlobalAtual;
 	$array[1] = $vlGlobalAtualizadoReajuste;
 	$array[2] = $numPercentual;
 	return $array;
-}
+}*/
 
+function getVOContratoModAcrescimo($vo){
+	$vo->cdEspecie = null;
+	$vo->sqEspecie = null;
+
+	$filtro = new filtroManterContratoModificacao(false);
+	$dbcontratomod = new dbContratoModificacao();
+
+	$numPercentual = "0";
+	$filtro->vocontrato = $vo;
+	//var_dump($filtro);
+	$filtro->cdAtrOrdenacao = voContratoModificacao::$nmAtrDhUltAlteracao;
+	$filtro->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
+	$filtro->tipo = array(dominioTpContratoModificacao::$CD_TIPO_ACRESCIMO, dominioTpContratoModificacao::$CD_TIPO_SUPRESSAO);
+	$recordSet = $dbcontratomod->consultarTelaConsulta(new voContratoModificacao(), $filtro);
+	//var_dump($recordSet);
+	if(!isColecaoVazia($recordSet)){
+		$registrobanco = $recordSet[0];		
+		$voContratomod = new voContratoModificacao();
+		$voContratomod->getDadosBanco($registrobanco);		
+	}
+	
+	return $voContratomod;
+}
 
 ?>

@@ -454,8 +454,12 @@ include_once (caminho_util . "DocumentoPessoa.php");
 		return $link; 
 	}
 	
-	function getCodigoContratoFormatado() {
-		return static::getCodigoContratoFormatadoStatic($this->cdContrato, $this->anoContrato, $this->tipo);
+	function getCodigoContratoFormatado($chaveCompleta = false) {
+		if($chaveCompleta){
+			$complemento = $this->sqEspecie . "º " . dominioEspeciesContrato::getDescricaoStatic($this->cdEspecie) . "-"; 
+		}
+				
+		return $complemento . static::getCodigoContratoFormatadoStatic($this->cdContrato, $this->anoContrato, $this->tipo);
 	}
 	
 	static function getCodigoContratoFormatadoStatic($cd, $ano, $tipo) {

@@ -165,14 +165,14 @@ function carregaDadosContrato(){
 				</TD>
 	        </TR>
 	        <TR>	       
-	            <TH class="campoformulario" nowrap width="1%">Dt.Assinatura:</TH>
-	            <TD class="campoformulario" width="1%">
-	            <?php echo getDetalhamentoHTML("", "", $voContrato->dtAssinatura)?>
-				</TD>
 	            <TH class="campoformulario" nowrap width="1%">Dt.Publicação:</TH>
-	            <TD class="campoformulario">
+	            <TD class="campoformulario" width="1%">
 	            <?php echo getDetalhamentoHTML("", "", $voContrato->dtPublicacao)?>
 				</TD>				
+	            <TH class="campoformulario" nowrap width="1%">Dt.Assinatura:</TH>
+	            <TD class="campoformulario">
+	            <?php echo getDetalhamentoHTML("", "", $voContrato->dtAssinatura)?>
+				</TD>
 	        </TR>	        
 	        
 	        <?php
@@ -204,7 +204,7 @@ function carregaDadosContrato(){
 	            <TH class="campoformulario" nowrap width="1%">Situação:</TH>
 	            <TD class="campoformulario" colspan="3">
 				<?php                        
-				$comboSituacaoLicon = new select(dominioSituacaoContratoLicon::getColecao());                        
+				$comboSituacaoLicon = new select(dominioSituacaoContratoLicon::getColecaoManter());                        
 				//cria o combo
 				echo $comboSituacaoLicon->getHtmlCombo(voContratoLicon::$nmAtrSituacao, voContratoLicon::$nmAtrSituacao, $vo->situacao, true, "camponaoobrigatorio", false, " required");
 				?>

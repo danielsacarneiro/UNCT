@@ -1,5 +1,6 @@
 <?php
 include_once(caminho_lib. "dbprocesso.obj.php");
+//include_once(caminho_util."bibliotecaDataHora.php");
 include_once 'dbContratoModificacao.php';
 
   Class dbContratoModificacao extends dbprocesso{
@@ -55,6 +56,7 @@ include_once 'dbContratoModificacao.php';
   				$nmTabela . ".*",
   				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
   				$nmTabelaContrato . "." . vocontrato::$nmAtrDtPublicacaoContrato,
+  				$nmTabelaContrato . "." . vocontrato::$nmAtrDtAssinaturaContrato,
   				$nmTabContratoMATER . "." . vocontrato::$nmAtrVlMensalContrato . " AS " . filtroManterContratoModificacao::$NmColVlMensalMater,
   				$nmTabContratoMATER . "." . vocontrato::$nmAtrVlGlobalContrato . " AS " . filtroManterContratoModificacao::$NmColVlGlobalMater,
   				//$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
@@ -101,32 +103,46 @@ include_once 'dbContratoModificacao.php';
   		return parent::consultarMontandoQueryTelaConsulta ( $vo, $filtro, $arrayColunasRetornadas, $queryJoin );
   	}  	 
   	   	 
-  	/*function validarInclusao($vo){ 		
-  		$vodemanda = $vo->vodemandacontrato->getVODemandaChave();
-  		$dbdemanda = new dbDemanda();
-  		$vodemanda = $dbdemanda->consultarPorChaveVO($vodemanda, false);
-  		if($vodemanda->tipo != dominioTipoDemanda::existeItem($vodemanda->tipo, dominioTipoDemanda::getColecaoTipoDemandaSistemasExternos())){
-  			throw new excecaoGenerica("Demanda deve ser do tipo 'Sistemas Externos'");
-  		}  		
+  	function validarInclusao($vo){  		
+  		$registro = $this->getRegistroDataTermoComDataPosterior($vo);
+  		$termo = new voContratoModificacao();
+  		$termo->getDadosBanco($registro);  		
+  		$data = $termo->dtModificacao;
+  		
+  		$isOrdemIncorreta = $data != null;  		
+  		if($isOrdemIncorreta){  			
+  			$dtProducaoEfeito = $vo->dtModificacao;
+  			$detContrato = $termo->vocontrato->getCodigoContratoFormatado(true);
+  			throw new excecaoGenerica("A data de produção de efeitos do termo em questão ($dtProducaoEfeito) é anterior a do termo já existente ($detContrato): " . getData($data) . ". Verifique a ordem das modificações contratuais.");
+  		}
+  	}
+  	  	
+  	 function getRegistroDataTermoComDataPosterior($vo){
+  	 	$voContratoFiltro = clone $vo->vocontrato;
+  	 	$voContratoFiltro->cdEspecie = null;
+  	 	$voContratoFiltro->sqEspecie = null;
+  	 	$dtProducaoEfeito = $vo->dtModificacao;
+  	 	if($dtProducaoEfeito == null){
+  	 		throw new excecaoGenerica("A data do termo em questão não pode ser nula. Verifique o campo na tela de inclusão.");
+  	 	}  	 		
+  	 	$retorno = null;
+  	 	$filtro = new filtroManterContratoModificacao(false);
+  	 	$filtro->setaFiltroConsultaSemLimiteRegistro();
+  	 	$filtro->vocontrato = $voContratoFiltro;
+  	 	$filtro->dtProducaoEfeitoTermoPosterior = $dtProducaoEfeito;
+  	 	$recordSet = $this->consultarTelaConsulta($vo, $filtro);
+  	 	
+  	 	if(!isColecaoVazia($recordSet)){
+  	 		$retorno = $recordSet[0];
+  	 	}
+  	 	
+  		return $retorno;
   	}
   	 
   	 function incluir($vo){
   	 	$this->validarInclusao($vo);  	 	
   		return parent::incluir($vo);
-  	}*/
-
-/*function consultarTelaConsulta($vo, $filtro){
-  		$isHistorico = $filtro->isHistorico;
-  		$nmTabela = $vo->getNmTabelaEntidade($isHistorico);
-  			
-  		$atributosConsulta = "*";
-  		$querySelect = "SELECT ". $atributosConsulta;
-  		$queryFrom = "\n FROM ". $nmTabela;
-  	
-  		return $this->consultarComPaginacaoQuery($vo, $filtro, $querySelect, $queryFrom);
-  	}  	
-  	 
-	*/
+  	}
   	
   	function alterar($vo){
   		throw new excecaoGenerica("Operação não permitida.");

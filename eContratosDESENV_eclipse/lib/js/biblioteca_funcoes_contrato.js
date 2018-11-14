@@ -324,7 +324,7 @@ function calcularModificacaoNovo(pArrayCampos) {
 		
 		//o numero de meses ao fim nao pode ser maior que o prazo referencial do contrato
 		if(numMesesAoFinal > numPrazo > 0){
-			exibirMensagem("Prazo restante acima do valor permitido. Alterando o prazo restante.");
+			exibirMensagem("Prazo restante ("+numMesesAoFinal+") acima do prazo referencial do contrato("+numPrazo+"). Alterando o prazo restante.");
 			numMesesAoFinal = numPrazo;
 		}
 		

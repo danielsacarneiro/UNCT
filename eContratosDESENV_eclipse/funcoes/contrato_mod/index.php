@@ -141,12 +141,18 @@ function alterar() {
             </TR>
             <TR>
                 <TH class="campoformulario" nowrap width="1%">Tipo:</TH>
-                <TD class="campoformulario" width="1%" colspan=3>
+                <TD class="campoformulario" width="1%">
                 <?php
                 $comboTipo = new select(dominioTpContratoModificacao::getColecao());
                 echo $comboTipo->getHtmlCombo(voContratoModificacao::$nmAtrTpModificacao,voContratoModificacao::$nmAtrTpModificacao, $filtro->tipo, true, "camponaoobrigatorio", false, "");
                 ?>
 				</TD>
+                <TD class="campoformulario" width="1%" colspan=2>
+                Exceto: 
+                <?php
+                echo $comboTipo->getHtmlCombo(filtroManterContratoModificacao::$ID_REQ_TipoExceto, filtroManterContratoModificacao::$ID_REQ_TipoExceto."[]", $filtro->tipoExceto, true, "camponaoobrigatorio", false, " multiple ");
+                ?>
+				</TD>				
             </TR>
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Dt.Modificação:</TH>
@@ -188,18 +194,19 @@ function alterar() {
                   ?>
                     <TH class="headertabeladados" width="1%" nowrap>Contrato</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Espécie</TH>
-                    <TH class="headertabeladados" width="70%">Contratada</TH>                    
+					<TH class="headertabeladados" width="1%" nowrap>Dt.Assinatura</TH>
+                    <TH class="headertabeladados" width="50%">Contratada</TH>                    
 					<TH class="headertabeladados" width="1%" nowrap>Tipo</TH>
-					<TH class="headertabeladados" width="1%" nowrap>%</TH>
+					<TH class="headertabeladados" width="1%" nowrap>Índice</TH>
 					<TH class="headertabeladados" width="1%" nowrap>Valor</TH>
 					<TH class="headertabeladados" width="1%" nowrap>Mensal.Atual</TH>
 					<TH class="headertabeladados" width="1%" nowrap>Mensal.Anterior</TH>					
 					<TH class="headertabeladados" width="1%" nowrap>Global.Atual</TH>
-					<TH class="headertabeladados" width="1%" nowrap>Global.Anterior</TH>
-					<TH class="headertabeladados" width="1%" nowrap>Empenhar</TH>
-					<TH class="headertabeladados" width="1%" nowrap>Referência</TH>
-					<TH class="headertabeladados" width="1%" nowrap>%.Referência</TH>
-					<TH class="headertabeladados" width="1%" nowrap>Dt.Operação</TH>
+					<TH class="headertabeladados" width="1%" nowrap>Vl.Empenhar</TH>
+					<TH class="headertabeladados" width="1%" nowrap>Vl.Referência</TH>
+					<TH class="headertabeladados" width="1%" nowrap>%.Contrato</TH>
+					<TH class="headertabeladados" width="1%" nowrap>Dt.Início</TH>
+					<TH class="headertabeladados" width="1%" nowrap>Dt.Fim</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Dt.Registro</TH>                    
                 </TR>
                 <?php								
@@ -209,7 +216,7 @@ function alterar() {
                         $tamanho = 0;
                 
                 //echoo($tamanho);                                
-                $colspan=16;
+                $colspan=17;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -258,14 +265,14 @@ function alterar() {
                         
                         /*echoo($vlGlobalAtual);
                         echoo($vlGlobaModAtual);*/
-                        $percAcrescimo = "";
                         
-                        if($voAtual->tpModificacao != dominioTpContratoModificacao::$CD_TIPO_REAJUSTE
+                        /*if($voAtual->tpModificacao != dominioTpContratoModificacao::$CD_TIPO_REAJUSTE
                         		&& $voAtual->tpModificacao != dominioTpContratoModificacao::$CD_TIPO_PRORROGACAO){
 	                        $percAcrescimo = 100*(($vlGlobalAtual - $vlGlobaModAtual)/$vlGlobaModAtual);	                        
-	                        $percAcrescimo = getMoeda($percAcrescimo,2);
-	                        
-                        }
+	                        $percAcrescimo = getMoeda($percAcrescimo,2) . "%";	                        
+                        }*/
+                        $percAcrescimo = $voAtual->getPercentualAcrescimoAtual();
+                        $percAcrescimo = getMoeda($percAcrescimo,2)."%";
                         
                         $numMeses = floatval($voAtual->numMesesParaOFimdoPeriodo);
                         $vlAEmpenhar = $vlMensalAtual*$numMeses;
@@ -282,20 +289,21 @@ function alterar() {
                   }
                   ?>                    
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo $contrato;?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $complementoContrato?></TD>                    
+                    <TD class="tabeladados" nowrap><?php echo $complementoContrato?></TD>
+					<TD class="tabeladadosalinhadodireita" nowrap><?php echo getData($vocontrato->dtAssinatura)?></TD>
 					<TD class="tabeladados"><?php echo $dsPessoa?></TD>
                     <TD class="tabeladados" nowrap><?php echo $tipoModificacao?></TD>
-                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->numPercentual)?></TD>
-                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlModificacaoAoContrato,2)?></TD>
+                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->numPercentual)?>%</TD>
+                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlModificacaoAoContrato,2)?></TD>                    
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlMensalAtual)?></TD>
 					<TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlMensalAnterior)?></TD>                    
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlGlobalAtual)?></TD>
-                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlGlobalAnterior)?></TD>
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($vlAEmpenhar)?></TD>                    
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlGlobalModAtual)?></TD>                    
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo $percAcrescimo?></TD>
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getData($voAtual->dtModificacao)?></TD>
-                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo getData($voAtual->dhUltAlteracao)?></TD>                    
+                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo getData($voAtual->dtModificacaoFim)?></TD>
+                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo getDataHora($voAtual->dhUltAlteracao)?></TD>                    
                 </TR>					
                 <?php
 				}                

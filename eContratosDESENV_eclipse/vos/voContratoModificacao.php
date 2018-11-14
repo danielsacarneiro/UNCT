@@ -33,7 +33,7 @@ class voContratoModificacao extends voentidade {
 	
 	static $nmAtrNumPercentual = "ctmod_numpercentual";
 	static $nmAtrDtModificacao = "ctmod_dtreferencia";
-	static $nmAtrDtModificacaoFim = "ctmod_dtreferenciafim";
+	static $nmAtrDtModificacaoFim = "ctmod_dtreferenciaFim";
 
 	static $nmAtrNumMesesParaOFimPeriodo = "ctmod_nummesesfimperiodo";
 	static $nmAtrObs = "ctmod_obs";
@@ -238,5 +238,21 @@ class voContratoModificacao extends voentidade {
 	function getMensagemComplementarTelaSucesso() {
 		$retorno = "Contrato-Modificação: " . $this->toString();
 		return $retorno;
+	}
+	
+	function getPercentualAcrescimoAtual(){		
+		$percAcrescimo = "";
+		if($this->vlGlobalModAtual == null){
+			throw new excecaoGenerica("Valor Global Modificação Atual não pode ser nulo.");
+		}
+		
+		$vlGlobalAtual = floatval($this->vlGlobalAtual);
+		$vlGlobalModAtual = floatval($this->vlGlobalModAtual);
+		
+		if($this->tpModificacao != dominioTpContratoModificacao::$CD_TIPO_REAJUSTE
+				&& $this->tpModificacao != dominioTpContratoModificacao::$CD_TIPO_PRORROGACAO){
+					$percAcrescimo = 100*(($vlGlobalAtual - $vlGlobalModAtual)/$vlGlobalModAtual);										
+		}		
+		return $percAcrescimo;		
 	}
 }

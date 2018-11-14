@@ -136,14 +136,14 @@ function confirmar() {
 				</TD>
 	        </TR>
 	        <TR>	       
-	            <TH class="campoformulario" nowrap width="1%">Dt.Assinatura:</TH>
-	            <TD class="campoformulario" width="1%">
-	            <?php echo getDetalhamentoHTML("", "", $voContrato->dtAssinatura)?>
-				</TD>
 	            <TH class="campoformulario" nowrap width="1%">Dt.Publicação:</TH>
-	            <TD class="campoformulario">
+	            <TD class="campoformulario" width="1%">
 	            <?php echo getDetalhamentoHTML("", "", $voContrato->dtPublicacao)?>
 				</TD>				
+	            <TH class="campoformulario" nowrap width="1%">Dt.Assinatura:</TH>
+	            <TD class="campoformulario">
+	            <?php echo getDetalhamentoHTML("", "", $voContrato->dtAssinatura)?>
+				</TD>
 	        </TR>
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Observação:</TH>
