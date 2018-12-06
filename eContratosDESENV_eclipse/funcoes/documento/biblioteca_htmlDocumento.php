@@ -23,7 +23,7 @@ function imprimeBotaoDocumento($vodocumento, $descricao){
 	$html = 
 	"\n<TR>
 	\n <TD class='campoformulario'>
-	$descricao: ";	
+	$descricao: " . $vodocumento->formatarCodigo() . " ";	
 	
 	$html .= getBotaoAbrirDocumentoVO($vodocumento);
 	

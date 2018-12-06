@@ -432,6 +432,11 @@ function encaminhar() {
                         $setorDestinoAtual = $dominioSetor->getDescricao($setorDestinoAtual);
                         
                         $tipo = $dominioTipo->getDescricao($voAtual->tipo);
+                        $dsTpDemandaContrato = $voAtual->tpDemandaContrato;
+                        $dsTpDemandaContrato = dominioTipoDemandaContrato::getDescricaoColecaoChave($dsTpDemandaContrato);
+                        if($voAtual->tpDemandaContrato != null){
+                        	$tipo = $tipo . $dsTpDemandaContrato;
+                        }
                         $empresa = $colecao[$i][vopessoa::$nmAtrNome];
                         
                         $voDemandaContrato = new voDemandaContrato();
@@ -485,7 +490,7 @@ function encaminhar() {
                     <TD class="tabeladadosdestacadonegrito"><?php echo complementarCharAEsquerda($voAtual->cd, "0", TAMANHO_CODIGOS)?></TD>
 					<TD class="tabeladados" nowrap><?php echo $setor?></TD>
 					<TD class="tabeladados" nowrap><?php echo $setorDestinoAtual?></TD>
-					<TD class="tabeladados" nowrap><?php echo $tipo?></TD>
+					<TD class="tabeladados"><?php echo $tipo?></TD>
 					<TD class="tabeladados" ><?php echo $contrato?></TD>
                     <TD class="tabeladados" ><?php echo $voAtual->texto;?></TD>                    
                     <TD class="tabeladados" nowrap><?php echo $prioridade?></TD>

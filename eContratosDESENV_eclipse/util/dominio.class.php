@@ -18,7 +18,8 @@ class dominio extends multiplosConstrutores {
 	// ...............................................................
 	// Funcoes ( Propriedades e metodos da classe )
 	function getDescricao($chave) {
-		return self::getDescricaoStatic ( $chave, $this->colecao );
+		//return self::getDescricaoStatic ( $chave, $this->colecao );
+		return self::getDescricaoStatic ( $chave, static::getColecao ());
 	}
 	
 	/**
@@ -58,6 +59,29 @@ class dominio extends multiplosConstrutores {
 		
 		return $retorno;
 	}
+	/**
+	 * 
+	 * @param unknown $colecaochave
+	 * @param string $isDescricaoMaiuscula
+	 * @return string
+	 */
+	static function getDescricaoColecaoChave($colecaochave, $isDescricaoMaiuscula=false) {
+		
+		if(!is_array($colecaochave)){
+			$colecaochave = voentidade::getStringCampoSeparadorComoArray($colecaochave);
+		}		
+		
+		foreach ($colecaochave as $chave){
+			$retorno = $retorno . "." . static::getDescricao($chave);			
+		}
+	
+		if($isDescricaoMaiuscula){
+			$retorno = strtoupper($retorno);
+		}
+	
+		return $retorno;
+	}
+	
 	//$colecao tem que ser ou string separada por CAMPO_SEPARADOR
 	//ou colecao do tipo dominio
 	//NAO PODE SER COLECAO UNIDIMENSIONAL

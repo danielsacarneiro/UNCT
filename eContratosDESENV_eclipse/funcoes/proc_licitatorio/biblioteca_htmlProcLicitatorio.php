@@ -1,4 +1,5 @@
 <?php
+include_once (caminho_funcoes . "pessoa/biblioteca_htmlPessoa.php");
 
 function isProcLicitatorioValido($voProcLicitatorio) {
 	// so exibe contrato se tiver
@@ -24,9 +25,12 @@ function getProcLicitatorioDetalhamento($voProcLicitatorio,$temLupa=true) {
 	);
 	
 	echo getCampoDadosVOAnoCdDetalhamento($voProcLicitatorio,$arrayParametroXNmAtributo,$temLupa);
+	if($voProcLicitatorio->cdPregoeiro != null){
+		echo getComboPessoaPregoeiro(voProcLicitatorio::$nmAtrCdPregoeiro, voProcLicitatorio::$nmAtrCdPregoeiro, $voProcLicitatorio->cdPregoeiro, "camponaoobrigatorio", " disabled ");
+	}	
 	if($voProcLicitatorio->objeto != null){
 		echo "<br>" . getInputTextArea(voProcLicitatorio::$nmAtrObjeto, voProcLicitatorio::$nmAtrObjeto, $voProcLicitatorio->objeto, constantes::$CD_CLASS_CAMPO_READONLY);
-	}
+	}		
 	
 	?>
 	</TD>	
