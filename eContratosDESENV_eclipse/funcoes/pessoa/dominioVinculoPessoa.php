@@ -10,14 +10,16 @@ include_once(caminho_util."dominio.class.php");
 
 // ...............................................................
 // Construtor
-    function __construct () {        
-		$this->colecao = array(
+  	static function getColecao() {
+		$retorno = array(
 				self::$CD_VINCULO_RESPONSAVEL => "Responsável",
 				self::$CD_VINCULO_CONTRATADO => "Contratado",
 				self::$CD_VINCULO_USUARIO => "Usuário",
 				self::$CD_VINCULO_SERVIDOR => "Servidor",
 				self::$CD_VINCULO_CONTATO => "Contato",
 				);
+		
+		return $retorno;
 	}
 	
 }

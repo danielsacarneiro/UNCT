@@ -55,14 +55,16 @@ function getContratoDetalhamento($voContrato, $colecao,  $detalharContratoInfo =
 			if (! isArrayMultiDimensional ( $colecao )) {
 				$nmpessoa = $colecao [vopessoa::$nmAtrNome];
 				$docpessoa = $colecao [vopessoa::$nmAtrDoc];
-				$campoContratado = getCampoContratada ( $nmpessoa, $docpessoa, $voContrato->sq );
+				$complemento = $colecao [vopessoa::$nmAtrObservacao];
+				$campoContratado = getCampoContratada ( $nmpessoa, $docpessoa, $voContrato->sq,$complemento);
 			} else {
 				$campoContratado = "";
 				$tamanhoColecao = count ( $colecao );
 				for($i = 0; $i < $tamanhoColecao; $i ++) {
 					$nmpessoa = $colecao [$i] [vopessoa::$nmAtrNome];
 					$docpessoa = $colecao [$i] [vopessoa::$nmAtrDoc];
-					$campoContratado .= getCampoContratada ( $nmpessoa, $docpessoa, $voContrato->sq ) . "<br>";
+					$complemento = $colecao [$i] [vopessoa::$nmAtrObservacao];
+					$campoContratado .= getCampoContratada ( $nmpessoa, $docpessoa, $voContrato->sq,$complemento ) . "<br>";
 				}
 			}
 		}

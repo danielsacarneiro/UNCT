@@ -228,7 +228,7 @@ function consultarPessoasContrato($voContrato, $pIsChaveCompleta=false){
 	return $colecao;
 }
 
-function getCampoContratada($pNmContratada, $pDocContratada, $pChaveContrato){
+function getCampoContratada($pNmContratada, $pDocContratada, $pChaveContrato, $complemento=null){
 
 	$retorno = "Contratado: <INPUT type='text' class='camporeadonly' size=50 readonly value='NÃO ENCONTRADO - VERIFIQUE O CONTRATO'>\n";
 	if($pNmContratada != ""){
@@ -247,6 +247,10 @@ function getCampoContratada($pNmContratada, $pDocContratada, $pChaveContrato){
 			
 			$retorno .= "&nbsp;CNPJ/CNPF: <INPUT type='text' class='camporeadonlyalinhadodireita' size=".$sizeDoc. " readonly value='". $docComMascara."' ".$javaScript.">\n";
 			$retorno .= "<INPUT type='hidden' id='" . vopessoa::$ID_DOC_DADOS_CONTRATADA. "' name='".vopessoa::$ID_DOC_DADOS_CONTRATADA."' value='".$pDocContratada."' >\n";
+		}
+		
+		if($complemento != null && $complemento != ""){
+			$retorno .= "<br>". getTextoHTMLNegrito(getTextoHTMLFonteParametros($complemento,1))."\n";
 		}
 		
 	}

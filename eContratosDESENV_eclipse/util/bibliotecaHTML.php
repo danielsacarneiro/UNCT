@@ -1056,3 +1056,8 @@ function getTextoHTMLDestacado($texto){
 function getTextoHTMLNegrito($texto){
 	return "<b>$texto</b>";
 }
+function getTextoHTMLFonteParametros($texto, $size=12){
+	return "<font size='$size'>$texto</font>";
+}
+
+

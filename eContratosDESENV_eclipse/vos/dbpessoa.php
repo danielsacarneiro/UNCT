@@ -71,6 +71,7 @@ class dbpessoa extends dbprocesso {
 		//$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrNome;
 		$atributosConsulta .= "," . getSQLCOALESCE($colecaoAtributoCoalesceNmPessoa,vopessoa::$nmAtrNome);
 		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrDoc;
+		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrObservacao;
 		$atributosConsulta .= "," . $nmTabelaPessoaVinculo . "." . vopessoavinculo::$nmAtrCd;
 		//$atributosConsulta .= "," . $nmTabelaContrato . "." . vocontrato::$nmAtrCdAutorizacaoContrato;
 	
