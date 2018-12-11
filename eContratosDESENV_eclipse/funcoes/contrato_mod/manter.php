@@ -275,7 +275,7 @@ function iniciar(){
 	            			size="10" 
 	            			maxlength="10" required>
 				</TD>
-	            <TH class="campoformulario" width=1% nowrap>Prazo restante:</TH>
+	            <TH class="campoformulario" width=1% nowrap>Data Final(Prazo restante):</TH>
 	            <TD class="campoformulario" colspan="3">
 	            <INPUT type="text" 
 		            id="<?=voContratoModificacao::$nmAtrDtModificacaoFim?>" 

@@ -97,6 +97,7 @@ class db {
 		$msg = "<br>----ERROR------:<br>";
 		$msg .= $ex->getMessage (). "<br>";
 		$msg = $msg. "Query: $query";
+		$msg = $msg. ".<br>CODIGO:".$ex->getCode()."<br>";		
 		
 		if($ex != null){
 			throw new excecaoGenerica($msg, $ex->getCode(), $ex);

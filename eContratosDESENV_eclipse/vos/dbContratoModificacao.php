@@ -109,6 +109,16 @@ include_once 'dbContratoModificacao.php';
   		$termo->getDadosBanco($registro);  		
   		$data = $termo->dtModificacao;
   		
+  		//verifica se o contrato ja foi adicionado a planilha 
+  		$vocontratoTemp = new vocontrato();
+  		$vocontratoTemp = $vo->vocontrato;
+  		$dbcontrato = new dbcontrato();
+  		try{
+  			$vocontratoTemp = $dbcontrato->consultarPorChaveVO($vocontratoTemp, false);
+  		}catch(excecaoChaveRegistroInexistente $ex){
+  			throw new excecaoChaveRegistroInexistente("Contrato selecionado: " . $vocontratoTemp->getCodigoContratoFormatado(true) . " não existe na planilha.", $ex);
+  		}
+  		
   		$isOrdemIncorreta = $data != null;  		
   		if($isOrdemIncorreta){  			
   			$dtProducaoEfeito = $vo->dtModificacao;

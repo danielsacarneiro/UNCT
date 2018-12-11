@@ -250,11 +250,6 @@ function alterar() {
                         		 		$vocontrato->anoContrato,
                         				$dominioTipoContrato->getDescricao($vocontrato->tipo))
                         				;
-                        
-                        		if($empresa != null){
-                        			$contrato .= ": ".$empresa;
-
-                        	}
                         }
                         
                         $tipoModificacao = dominioTpContratoModificacao::getDescricaoStatic($voAtual->tpModificacao);

@@ -9,7 +9,9 @@ class excecaoGenerica extends Exception
 	static $CD_EXCECAO_CLASS_NAO_ENCONTRADA = 3;
 	static $CD_EXCECAO_NUM_PROC_LIC_INVALIDO = 4;
 	static $CD_EXCECAO_SISTEMA_MANUTENCAO = 5;
-	static $CD_EXCECAO_CHAVE_DUPLICADA = 1062;
+	static $CD_EXCECAO_CHAVE_INEXISTENTE = 6;
+	static $CD_EXCECAO_CHAVE_DUPLICADA = 1062;	
+	
     // Redefine a exceção de forma que a mensagem não seja opcional
     public function __construct($message, $code = 0, Exception $previous = null) {
     	if($message == null || $message == ""){
