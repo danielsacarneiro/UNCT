@@ -65,14 +65,14 @@ class dominio extends multiplosConstrutores {
 	 * @param string $isDescricaoMaiuscula
 	 * @return string
 	 */
-	static function getDescricaoColecaoChave($colecaochave, $isDescricaoMaiuscula=false) {
+	static function getDescricaoColecaoChave($colecaochave, $isDescricaoMaiuscula=false, $pColecaoDominioOpcional=null) {
 		
 		if(!is_array($colecaochave)){
 			$colecaochave = voentidade::getStringCampoSeparadorComoArray($colecaochave);
 		}		
 		
 		foreach ($colecaochave as $chave){
-			$retorno = $retorno . "." . static::getDescricao($chave);			
+			$retorno = $retorno . "." . static::getDescricaoStatic($chave, $pColecaoDominioOpcional, $isDescricaoMaiuscula);
 		}
 	
 		if($isDescricaoMaiuscula){

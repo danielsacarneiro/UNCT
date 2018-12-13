@@ -433,7 +433,7 @@ function encaminhar() {
                         
                         $tipo = $dominioTipo->getDescricao($voAtual->tipo);
                         $dsTpDemandaContrato = $voAtual->tpDemandaContrato;
-                        $dsTpDemandaContrato = dominioTipoDemandaContrato::getDescricaoColecaoChave($dsTpDemandaContrato);
+                        $dsTpDemandaContrato = dominioTipoDemandaContrato::getDescricaoColecaoChave($dsTpDemandaContrato, false, dominioTipoDemandaContrato::getColecaoAntiga());
                         if($voAtual->tpDemandaContrato != null){
                         	$tipo = $tipo . $dsTpDemandaContrato;
                         }
