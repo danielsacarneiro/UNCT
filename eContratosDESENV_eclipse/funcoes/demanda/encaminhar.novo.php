@@ -71,6 +71,15 @@ $nmCampoTpDemandaContrato = $nmCampoTpDemandaContratoSimples."[]";
 
 <SCRIPT language="JavaScript" type="text/javascript">
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
+function formataPrioridade() {
+	campoPrioridade = document.frm_principal.<?=voDemandaTramitacao::$nmAtrPrioridade?>;
+	campoTipoDemanda = document.frm_principal.<?=voDemandaTramitacao::$nmAtrTipo?>;
+
+	if(campoTipoDemanda.value == "<?=dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL?>"){
+		campoPrioridade.value = <?=dominioPrioridadeDemanda::$CD_PRIORI_ALTA?>;
+	}
+}	
+
 function isFormularioValido() {
 
 	campoSetorDestino = document.frm_principal.<?=voDemandaTramitacao::$nmAtrCdSetorDestino?>;
@@ -81,9 +90,11 @@ function isFormularioValido() {
 	if(campoSetorDestino.value != "" && !isCampoTextoValido(document.frm_principal.<?=voDemandaTramitacao::$nmAtrTexto?>, true))	
 		return false;		
 	
-	if(campoTipoDemanda.value == "<?=dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL?>" && campoPessoaContrato != null){
-		exibirMensagem("Tipo da Demanda não permite inclusão de contrato");	
-		return false;		
+	if(campoTipoDemanda.value == "<?=dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL?>"){		
+		if(campoPessoaContrato != null){		
+			exibirMensagem("Tipo da Demanda não permite inclusão de contrato");	
+			return false;		
+		}
 	}
 
 	campoDataReferencia = document.frm_principal.<?=voDemandaTramitacao::$nmAtrDtReferencia?>;
@@ -349,7 +360,7 @@ function iniciar(){
 	            <TD class="campoformulario" colspan=3>
 	            <?php 
 	            //o setor destino da ultima tramitacao sera o origem da nova
-	            echo $comboPrioridade->getHtmlCombo(voDemanda::$nmAtrPrioridade,voDemanda::$nmAtrPrioridade, $vo->prioridade, true, "campoobrigatorio", false, " required ");?>
+	            echo $comboPrioridade->getHtmlCombo(voDemanda::$nmAtrPrioridade,voDemanda::$nmAtrPrioridade, $vo->prioridade, true, "campoobrigatorio", false, " required onChange='formataPrioridade();' ");?>
 				</TD>
 	        </TR>	       	        
 	        <?php 

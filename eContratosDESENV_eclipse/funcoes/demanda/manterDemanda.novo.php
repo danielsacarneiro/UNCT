@@ -59,6 +59,7 @@ $nmCampoTpDemandaReajuste = voDemanda::$nmAtrInTpDemandaReajusteComMontanteA;
 function isFormularioValido() {
 
 	campoTipoDemanda = document.frm_principal.<?=voDemandaTramitacao::$nmAtrTipo?>;
+	campoPessoaContrato = document.getElementsByName("<?=vopessoa::getID_REQ_ColecaoContrato()?>")[0];
 	if(campoTipoDemanda.value == "<?=dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL?>" && campoPessoaContrato != null){
 		exibirMensagem("Tipo da Demanda não permite inclusão de contrato");	
 		return false;		
