@@ -1,43 +1,35 @@
 <?php
 include_once("../../config_lib.php");
 include(caminho_util."bibliotecaHTML.php");
-include(caminho_vos."dbcontrato.php");
 
+try{
 //inicia os parametros
 inicio();
 
-$voContrato = new voContrato();
+$voContrato = new vocontrato();
 $voContratoInfo = new voContratoInfo();
+$voContratoMod = new voContratoModificacao();
 
 $classChaves = "camporeadonly";
 $readonly = "readonly";
 
-$voContrato->getVOExplodeChave();
-$isHistorico = ($voContrato->sqHist != null && $voContrato->sqHist != "");
+$voContratoMod->getVOExplodeChave();
+$isHistorico = ($voContratoMod->sqHist != null && $voContratoMod->sqHist != "");
 
-	$dbprocesso = new dbcontrato(null);				
-	$colecao = $dbprocesso->limpaResultado();
-	$colecao = $dbprocesso->consultarContratoPorChave($voContrato, $isHistorico);	
-	$voContrato->getDadosBanco($colecao[0]);   
-	$voContratoInfo->getDadosBanco($colecao[0]);
+$dbcontrato = new dbcontrato();
+$dbContratoMod = new dbContratoModificacao();	
+$colecao = $dbContratoMod->consultarPorChaveTela($voContratoMod, $isHistorico);
+$voContratoMod->getDadosBanco($colecao);
+$voContrato->getDadosBanco($colecao);   
+$voContratoInfo->getDadosBanco($colecao);
 
-	$nmGestor  = $voContrato->gestor;
-	$nmGestorPessoa  = $voContrato->nmGestorPessoa;
+$nmGestor  = $voContrato->gestor;
+$nmGestorPessoa  = $voContrato->nmGestorPessoa;
 
 $funcao = @$_GET["funcao"];
 
-$titulo = "MOVIMENTAÇÕES";
+$titulo = "EXECUÇÃO";
 setCabecalho($titulo);
-
-$colecaoMov = $dbprocesso->consultarExecucao($voContrato, $isHistorico);
-if (is_array($colecaoMov))
-    $tamanho = sizeof($colecaoMov);
-else 
-    $tamanho = 0;
-
-//pega a ultima data, que seria a mais recente
-$dtFinalAConsiderar = $colecaoMov[$tamanho-1][vocontrato::$nmAtrDtVigenciaFinalContrato];
-
 ?>
 <!DOCTYPE html>
 <HTML lang="pt-BR">
@@ -92,51 +84,24 @@ function detalhar(isExcluir) {
         <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
             <TBODY>
         <?php                    
-        require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
-        getContratoDet($voContrato);
+        require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");        
+        //$voContrato = new vocontrato();
+        $voContrato->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
+        $voContrato->sqEspecie = 1;
+        $voContrato = $dbcontrato->consultarPorChaveVO($voContrato, false);        
+
+       	$complementoDet = " Valor MATER: Mensal " . getInputText("", "", $voContrato->vlMensal, constantes::$CD_CLASS_CAMPO_READONLY);       
+       	$complementoDet .= " Global: " . getInputText("", "", $voContrato->vlGlobal, constantes::$CD_CLASS_CAMPO_READONLY);
+        
+        $arrayParametro[0] = $voContrato;
+        $arrayParametro[1] = $colecao;
+        $arrayParametro[2] = false;
+        $arrayParametro[3] = false;        
+        $arrayParametro[4] = $complementoDet;        
+        
+        getContratoDetalhamentoParam($arrayParametro);
+                
         ?>
-		<TR>
-            <TH class="campoformulario" nowrap>Gestor:</TH>
-            <TD class="campoformulario" colspan="3"><INPUT type="text" id="nmGestor" name="nmGestor"  value="<?php echo($nmGestor);?>"  class="camporeadonly" size="50" <?=$readonly?>></TD>
-        </TR>
-		<TR>
-            <TH class="campoformulario" nowrap>Responsavel:</TH>
-            <TD class="campoformulario" colspan="3"><INPUT type="text" id="nmGestor" name="nmGestor"  value="<?php echo($nmGestorPessoa);?>"  class="camporeadonly" size="50" <?=$readonly?>></TD>
-        </TR>
-		<TR>
-            <TH class="campoformulario" nowrap>Data Proposta:</TH>
-            <TD class="campoformulario" colspan="3">
-            	<INPUT type="text" 
-            	       id="<?=vocontrato::$nmAtrDtProposta?>" 
-            	       name="<?=vocontrato::$nmAtrDtProposta?>" 
-            			value="<?php echo(getData($voContratoInfo->dtProposta));?>"
-            			onkeyup="formatarCampoData(this, event, false);" 
-            			class="camporeadonly" 
-            			size="10" 
-            			maxlength="10" <?=$readonly?>>
-			</TD>
-        </TR>
-		<!--  <TR>
-            <TH class="campoformulario" nowrap>Período de Movimentação:</TH>
-            <TD class="campoformulario" colspan="3">
-            	<INPUT type="text" 
-            	       id="<?=vocontrato::$nmAtrDtVigenciaInicialContrato?>" 
-            	       name="<?=vocontrato::$nmAtrDtVigenciaInicialContrato?>" 
-            			value="<?php echo($dtVigenciaInicial);?>"
-            			onkeyup="formatarCampoData(this, event, false);" 
-            			class="camporeadonly" 
-            			size="10" 
-            			maxlength="10" <?=$readonly?>> a
-            	<INPUT type="text" 
-            	       id="<?=vocontrato::$nmAtrDtVigenciaFinalContrato?>" 
-            	       name="<?=vocontrato::$nmAtrDtVigenciaFinalContrato?>" 
-            			value="<?php echo(getData($dtFinalAConsiderar));?>"
-            			onkeyup="formatarCampoData(this, event, false);" 
-            			class="camporeadonly" 
-            			size="10" 
-            			maxlength="10" <?=$readonly?>>
-			</TD>
-        </TR>-->
         </TBODY>
     </TABLE>
     </DIV>
@@ -144,7 +109,7 @@ function detalhar(isExcluir) {
     </TR>
     
     <TR>
-       <TD class="textoseparadorgrupocampos"> Movimentações</TD>
+       <TD class="textoseparadorgrupocampos">Execução</TD>
     </TR>
     
     <TR>
@@ -153,68 +118,69 @@ function detalhar(isExcluir) {
              <TABLE id='table_tabeladados' class='tabeladados' cellpadding='0' cellspacing='0'>						
                  <TBODY>
                     <TR>
-                      	<TH class='headertabeladados' width='1%'>&nbsp;&nbsp;X</TH>
-                        <TH class='headertabeladados' width='1%'>Espécie</TH>
-                        <TH class='headertabeladados' width='50%'>Objeto</TH>
-                        <TH class='headertabeladados' width='1%' nowrap>Dt.Assinatura</TH>
-                        <TH class='headertabeladados' width='1%' nowrap>Vl.Mensal</TH>
-                        <TH class='headertabeladados' width='1%' nowrap>Vl.Global</TH>
-                        <TH class='headertabeladados' width='1%' nowrap>Dt.Início</TH>
-                        <TH class='headertabeladados' width='1%' nowrap>Dt.Fim</TH>
-                        <TH class='headertabeladados' width='1%' nowrap>Arquivo</TH>
+                      	<TH class='headertabeladadosalinhadocentro' width='1%' rowspan=2>X</TH>
+                        <TH class='headertabeladados' rowspan=2 nowrap>Espécie</TH>
+                        <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Tipo</TH>
+                        <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Índice</TH>
+                        <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Data</TH>
+                        <TH class='headertabeladadosalinhadocentro' width='40%' nowrap colspan=2>Vl.Mensal</TH>
+                        <TH class='headertabeladadosalinhadocentro' width='40%' nowrap colspan=2>Vl.Global</TH>
+                    </TR>
+                    <TR>
+                        <TH class='headertabeladadosalinhadodireita'>Documentado</TH>
+                        <TH class='headertabeladadosalinhadodireita'>Realidade</TH>
+                        <TH class='headertabeladadosalinhadodireita'>Documentado</TH>
+                        <TH class='headertabeladadosalinhadodireita'>Realidade</TH>
                     </TR>
                     <?php
-                    $dominioTipoContrato = new dominioTipoContrato();                                
+                    
+                    $colecaoMov = $dbContratoMod->consultarExecucao($voContrato);
+                    if (is_array($colecaoMov))
+                    	$tamanho = sizeof($colecaoMov);
+                    	else
+                    		$tamanho = 0;
+                    
+                    $colspan=12;
+                    if($isHistorico){
+                    	$colspan++;
+                    }
                                                     
                     for ($i=0;$i<$tamanho;$i++) {
-                        $voAtual = new vocontrato();
-                        $voAtual->getDadosBanco($colecaoMov[$i]);
-                        $especie = getDsEspecie($voAtual);
+                    	$registro = $colecaoMov[$i];
+                        $voAtual = new voContratoModificacao();
+                        $voAtual->getDadosBanco($registro);
+
+                        $voContratoAtual = new vocontrato();
+                        $voContratoAtual->getDadosBanco($registro);
+                        $especie = getDsEspecie($voContratoAtual);
+						                            
+                        $tipo = dominioTpContratoModificacao::getDescricaoStatic($voAtual->tpModificacao);
+                        $percentual = getMoeda($voAtual->numPercentual,4) . "%";
                         
-                            $sq = $colecaoMov[$i][vocontrato::$nmAtrSqContrato];                    
-                            $chave = $sq
-                                    . "*"
-                                    . $colecaoMov[$i][vocontrato::$nmAtrAnoContrato]
-                                    . "*"
-                                    . $colecaoMov[$i][vocontrato::$nmAtrCdContrato]
-                                    ;
-                    
-                            $dtAssinatura = $colecaoMov[$i][vocontrato::$nmAtrDtAssinaturaContrato];
-                                                
-                            $classColuna = "tabeladados";
-                            
-                            $tipo = $dominioTipoContrato->getDescricao($colecaoMov[$i]["ct_tipo"]);                            
-                            
-                            //$especie = $especiesContrato->getDescricao($colecaoMov[$i]["ct_cd_especie"]);                        
+                        $voContratoModReajuste = $registro[filtroManterContratoModificacao::$NmColVOContratoModReajustado];
+                        
                     ?>
                     <TR class='dados'>
-                        <TD class='tabeladados'>
+                        <TD class='tabeladados' width=1%>
                         <?=getHTMLRadioButtonConsulta("rdb_consulta", "rdb_consulta", $voAtual, false);?>
                         </TD>                        
-                        <TD class='tabeladados'>                        
-                        <?php echo $especie?>                        
-                        </TD>
-                        <TD class='tabeladados'><?php echo $colecaoMov[$i]["ct_objeto"]?></TD>
-                        <TD class='tabeladados'><?php echo getData($dtAssinatura)?></TD>
-                        <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($colecaoMov[$i]["ct_valor_mensal"])?></TD>                    
-                        <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($colecaoMov[$i]["ct_valor_global"])?></TD>
-                        <TD class='tabeladados' nowrap><?php echo getData($colecaoMov[$i][vocontrato::$nmAtrDtVigenciaInicialContrato])?></TD>
-                        <TD class='tabeladados' nowrap><?php echo getData($colecaoMov[$i][vocontrato::$nmAtrDtVigenciaFinalContrato])?></TD>                        
-                        <TD class='tabeladados' nowrap>
-                        <?php
-				        $endereco = $voAtual->getLinkDocumento();
-				        $nmCampoEndereco = vocontrato::$nmAtrLinkDoc.$chave;
-				        if($endereco != null){
-				        	echo "<INPUT type='hidden' id='$nmCampoEndereco' name='$nmCampoEndereco' value='$endereco'>";
-				    		echo getBotaoAbrirDocumento($nmCampoEndereco);
-				        }
-				    	?>                        
+                        <TD class='tabeladados' nowrap><?php echo $especie?></TD>
+                        <TD class='tabeladados'><?php echo $tipo?></TD>
+                        <TD class='tabeladados'><?php echo $percentual?></TD>
+                        <TD class='tabeladados'><?php echo getData($voAtual->dtModificacao)?></TD>
+                        <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($voAtual->vlMensalAtual)?></TD>                    
+                        <TD class='tabeladadosalinhadodireita' ><?php echo getTextoHTMLNegrito(getMoeda($voContratoModReajuste->vlMensalAtual))?></TD>
+                        <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($voAtual->vlGlobalAtual)?></TD>                    
+                        <TD class='tabeladadosalinhadodireita' ><?php echo getTextoHTMLNegrito(getMoeda($voContratoModReajuste->vlGlobalAtual))?></TD>
                         </TD>
                     </TR>					
                     <?php
                     }		
-                    ?>    
-                    </TD>
+                    ?>
+	                <TR>
+	                    <TD class="totalizadortabeladadosalinhadodireita" colspan=<?=$colspan?>>Total de registro(s): <?=$i?></TD>
+	                </TR>
+	        </TD>
     </TR>  
 </TBODY>
 </TABLE>
@@ -230,7 +196,11 @@ function detalhar(isExcluir) {
 						<TD>
                     		<TABLE class="barraacoesaux" cellpadding="0" cellspacing="0">
 	                    	<TR>
-	                    		<?=getBotoesRodape();?>
+	                    		<?php
+	                    		//getBotoesRodape();
+	                    		$arrayBotoesARemover = array(constantes::$CD_FUNCAO_SELECIONAR);
+	                    		echo getBotoesRodapeComRestricao($arrayBotoesARemover, true);
+	                    		?>
 						    </TR>
 		                    </TABLE>
 	                    </TD>
@@ -245,3 +215,9 @@ function detalhar(isExcluir) {
 
 </BODY>
 </HTML>
+<?php 
+}catch(Exception $ex){
+	tratarExcecaoHTML($ex, $vo);
+}
+?>
+

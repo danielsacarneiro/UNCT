@@ -496,6 +496,13 @@ function removerUltimaString($stringARemover, $subject){
 	return $subject;
 }
 
+function atualizarValorPercentual($valor, $percentual){	
+	$fator = 1 + (floatval($percentual)/100);
+	$valor = floatval($valor);
+	$valor = $valor*$fator;	
+	return $valor;
+}
+
 /*function isArrayMultiDimensional($array){
 	return count($array) == count($array, COUNT_RECURSIVE);
 }*/

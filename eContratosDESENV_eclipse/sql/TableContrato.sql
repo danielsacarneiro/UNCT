@@ -289,6 +289,51 @@ CREATE TABLE contrato_mod (
     -- CONSTRAINT ck_demanda_licon_userinclusao CHECK(cd_usuario_incl > 0)            
 ); 
 
+drop table contrato_mod_hist;
+CREATE TABLE contrato_mod_hist (
+	hist INT NOT NULL AUTO_INCREMENT,	
+
+	ctmod_sq INT NOT NULL,
+    ct_exercicio INT NOT NULL,
+    ct_numero INT NOT NULL,
+    ct_tipo char(1) NOT NULL,
+    ct_cd_especie CHAR(2) NOT NULL, -- especie do registro (mater, apostilamento, aditivo)
+	ct_sq_especie INT DEFAULT 1 NOT NULL, -- indice do documento em questao (primeiro ou segundo apostilamento, por ex)    
+    
+    ctmod_tipo INT NOT NULL,
+    ctmod_dtreferencia DATE NOT NULL,
+	ctmod_dtreferenciaFim DATE NOT NULL,
+    
+    ctmod_vlreferencial DECIMAL (14,4) NOT NULL,
+    ctmod_vlreal DECIMAL (14,4) NOT NULL,
+	ctmod_vlaocontrato DECIMAL (14,4) NOT NULL,
+
+    ctmod_vlmensalatual DECIMAL (14,4) NOT NULL,
+    ctmod_vlglobalatual DECIMAL (14,4) NOT NULL,
+    ctmod_vlglobalreal DECIMAL (14,4) NOT NULL,
+
+    ctmod_vlmensalanterior DECIMAL (14,4) NOT NULL,
+    ctmod_vlglobalanterior DECIMAL (14,4) NOT NULL,
+	
+    ctmod_vlmensalmodatual DECIMAL (14,4) NOT NULL,
+    ctmod_vlglobalmodatual DECIMAL (14,4) NOT NULL,
+
+	ctmod_nummesesfimperiodo DECIMAL (4,2),
+    ctmod_numpercentual DECIMAL (6,4),
+    ctmod_obs MEDIUMTEXT NULL,
+    
+    dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
+    cd_usuario_incl INT,
+    cd_usuario_ultalt INT,
+    in_desativado CHAR(1) NOT NULL,
+    
+	dh_operacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    cd_usuario_operacao INT,    
+    
+	CONSTRAINT pk PRIMARY KEY (hist)
+); 
+
 SELECT count(*) FROM CONTRATO
 WHERE ct_tipo = 'C'
 

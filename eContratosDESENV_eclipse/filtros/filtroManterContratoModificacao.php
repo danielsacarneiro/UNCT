@@ -6,10 +6,24 @@ class filtroManterContratoModificacao extends filtroManter {
 
 	public $nmFiltro = "filtroManterContratoModificacao";
 	
+	static $NmTabContratoMATER = "TAB_CONTRATO_MATER";
+	static $NmTabReajustes = "TAB_CONTRATOMOD_REAJUSTE";
+	
 	static $ID_REQ_TipoExceto = "ID_REQ_TipoExceto";	
 	static $NmColNumPercentualDisponivel = "NmColNumPercentualDisponivel";
 	static $NmColVlGlobalMater = "NmColVlGlobalMater";
 	static $NmColVlMensalMater = "NmColVlMensalMater"; 
+	
+	static $NmColVlModReferencialReajuste = "NmColVlModReferencialReajuste";
+	static $NmColVlModAoContratoReajuste = "NmColVlModAoContratoReajuste";
+	static $NmColVlModRealReajuste = "NmColVlModRealReajuste";
+	static $NmColVlMensalAtualReajuste = "NmColVlMensalAtualReajuste";
+	static $NmColVlGlobalAtualReajuste = "NmColVlGlobalAtualReajuste";
+	static $NmColVlGlobalRealReajuste = "NmColVlGlobalRealReajuste";
+	static $NmColVlMensalModAtualReajuste = "NmColVlMensalModAtualReajuste";
+	static $NmColVlGlobalModAtualReajuste = "NmColVlGlobalModAtualReajuste";		
+		
+	static $NmColVOContratoModReajustado = "NmColVOContratoModReajustado";
 		
 	var $vocontrato;
 
@@ -116,7 +130,7 @@ class filtroManterContratoModificacao extends filtroManter {
 		}
 		
 		if ($this->dtProducaoEfeitoTermoPosterior != null) {
-			$filtro = $filtro . $conector . $nmTabela . "." . voContratoModificacao::$nmAtrDtModificacao . " > " . getVarComoData($this->dtProducaoEfeitoTermoPosterior);
+			$filtro = $filtro . $conector . $nmTabela . "." . voContratoModificacao::$nmAtrDtModificacao . " >= " . getVarComoData($this->dtProducaoEfeitoTermoPosterior);
 			$conector = "\n AND ";
 		}
 		

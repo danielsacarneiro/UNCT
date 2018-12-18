@@ -195,8 +195,12 @@ function getVarComoStringHTML($string) {
 }
 function getMoeda($valorSQL, $qtCasasDecimais=2) {
 	$retorno = "";
-	if ($valorSQL != null)
+
+	if ($valorSQL == 0){
+		$retorno = "0,".complementarCharAEsquerda("0", "0", $qtCasasDecimais);
+	}else if ($valorSQL != null){
 		$retorno = number_format ( $valorSQL, $qtCasasDecimais, ',', '.' );
+	}
 	return $retorno;
 }
 function getOrdemAtributos() {
@@ -443,6 +447,7 @@ function getBotoesRodapeComRestricao($arrayBotoesARemover, $restringeBotaoSemVal
 	$temIncluir = exibeBotao ( $arrayBotoesARemover, constantes::$CD_FUNCAO_INCLUIR, $usuarioLogadoTemPermissao, $restringeBotaoSemValidarPermissao );
 	$temAlterar = exibeBotao ( $arrayBotoesARemover, constantes::$CD_FUNCAO_ALTERAR, $usuarioLogadoTemPermissao, $restringeBotaoSemValidarPermissao );
 	$temExcluir = exibeBotao ( $arrayBotoesARemover, constantes::$CD_FUNCAO_EXCLUIR, $usuarioLogadoTemPermissao, $restringeBotaoSemValidarPermissao );
+	$temSelecionar = exibeBotao ( $arrayBotoesARemover, constantes::$CD_FUNCAO_SELECIONAR, $usuarioLogadoTemPermissao, $restringeBotaoSemValidarPermissao );
 	
 	$isManutencao = false;
 	$isDetalhamento = false;
@@ -465,7 +470,7 @@ function getBotoesRodapeComRestricao($arrayBotoesARemover, $restringeBotaoSemVal
 	if (! $isManutencao && ! $isDetalhamento && getBotaoDetalhar () != "")
 		$html .= "<TD class='botaofuncao'>" . getBotaoDetalhar () . "</TD>\n";
 	
-	if (! $isDetalhamento && getBotaoSelecionar () != "")
+	if (!$isDetalhamento && getBotaoSelecionar () != "" && $temSelecionar)
 		$html .= "<TD class='botaofuncao'>" . getBotaoSelecionar () . "</TD>\n";
 	
 	if (! $isManutencao) {

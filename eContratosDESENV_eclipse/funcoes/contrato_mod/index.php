@@ -85,6 +85,34 @@ function alterar() {
 
 }
 
+function abrirExecucao(){
+    if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta")){
+            return;
+    }
+  	//marreta
+	chave = document.frm_principal.rdb_consulta.value;	
+    url = "../contrato/execucao.php?chave=" + chave;	
+    abrirJanelaAuxiliar(url, true, false, false);
+}
+
+function movimentacoes(){
+    if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta")){
+            return;
+    }
+  	//marreta
+	chave = montarChaveContrato();
+	//alert(chave);	
+    url = "../contrato/movimentacaoContrato.php?chave=" + chave;	
+    abrirJanelaAuxiliar(url, true, false, false);
+}
+
+function montarChaveContrato(){
+	var chave = document.frm_principal.rdb_consulta.value;
+	var array = chave.split("*");
+	chave = "hist*" + array[0] + "*" + array[1] + "*" +  array[2] + "*CM*1";
+	return chave;
+}
+
 </SCRIPT>
 <?=setTituloPagina(voContratoModificacao::getTituloJSP())?>
 </HEAD>
@@ -192,13 +220,14 @@ function alterar() {
                   <?php 
                   }
                   ?>
+                    <TH class="headertabeladadosalinhadocentro" width="1%" nowrap>Sq.</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Contrato</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Espécie</TH>
 					<TH class="headertabeladados" width="1%" nowrap>Dt.Assinatura</TH>
                     <TH class="headertabeladados" width="50%">Contratada</TH>                    
 					<TH class="headertabeladados" width="1%" nowrap>Tipo</TH>
 					<TH class="headertabeladados" width="1%" nowrap>Índice</TH>
-					<TH class="headertabeladados" width="1%" nowrap>Valor</TH>
+					<TH class="headertabeladados" width="1%" nowrap>Valor.Ref</TH>
 					<TH class="headertabeladados" width="1%" nowrap>Mensal.Atual</TH>
 					<TH class="headertabeladados" width="1%" nowrap>Mensal.Anterior</TH>					
 					<TH class="headertabeladados" width="1%" nowrap>Global.Atual</TH>
@@ -216,7 +245,7 @@ function alterar() {
                         $tamanho = 0;
                 
                 //echoo($tamanho);                                
-                $colspan=17;
+                $colspan=18;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -282,14 +311,15 @@ function alterar() {
                   	<TD class="tabeladados"><?php echo complementarCharAEsquerda($colecao[$i][$voAtual::$nmAtrSqHist], "0", TAMANHO_CODIGOS);?></TD>
                   <?php 
                   }
-                  ?>                    
+                  ?>
+                    <TD class="tabeladados"><?php echo complementarCharAEsquerda($voAtual->sq, "0", TAMANHO_CODIGOS_SAFI);?></TD>                    
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo $contrato;?></TD>
                     <TD class="tabeladados" nowrap><?php echo $complementoContrato?></TD>
 					<TD class="tabeladadosalinhadodireita" nowrap><?php echo getData($vocontrato->dtAssinatura)?></TD>
 					<TD class="tabeladados"><?php echo $dsPessoa?></TD>
                     <TD class="tabeladados" nowrap><?php echo $tipoModificacao?></TD>
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->numPercentual)?>%</TD>
-                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlModificacaoAoContrato,2)?></TD>                    
+                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlModificacaoReferencial,2)?></TD>                    
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlMensalAtual)?></TD>
 					<TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlMensalAnterior)?></TD>                    
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlGlobalAtual)?></TD>
@@ -324,10 +354,12 @@ function alterar() {
                     <TR>
                        <TD>
                         <TABLE class="barraacoesaux" cellpadding="0" cellspacing="0">
-	                   	<TR> 
+	                   	<TR>
+	                   		<TD class="botaofuncao"><?=getBotao("bttExecucao", "Execução", null, false, "onClick='javascript:abrirExecucao();' accesskey='x'")?></TD>
+	                   		<TD class="botaofuncao"><?=getBotao("bttMovimentacao", "Movimentações", null, false, "onClick='javascript:movimentacoes();' accesskey='m'")?></TD> 
                             <?php
                             //$arrayBotoesARemover = array(constantes::$CD_FUNCAO_ALTERAR);
-                            echo getBotoesRodapeComRestricao($arrayBotoesARemover, true);                            
+                            echo getBotoesRodapeComRestricao($arrayBotoesARemover, true);
                             ?>
                          </TR>
                          </TABLE>

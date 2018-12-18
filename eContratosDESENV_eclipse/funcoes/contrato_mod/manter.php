@@ -107,8 +107,8 @@ function formataForm(pLimparCampos) {
 		"<?=voContratoModificacao::$nmAtrVlGlobalReal?>",
 		"<?=voContratoModificacao::$nmAtrNumPercentual?>",
 		"<?=voContratoModificacao::$ID_REQ_VL_BASE_PERCENTUAL?>",
-		"<?=voContratoModificacao::$ID_REQ_NUM_PERCENTUAL_GESTOR?>",
-		"<?=voContratoModificacao::$ID_REQ_VL_BASE_PERCENTUAL_GESTOR?>"
+		"<?=voContratoModificacao::$ID_REQ_NUM_PERCENTUAL_REAJUSTE?>",
+		"<?=voContratoModificacao::$ID_REQ_VL_BASE_REAJUSTE?>"
 		];
 	
 	if(pLimparCampos){
@@ -171,31 +171,30 @@ function calcular(eElement){
 	pArrayCampos[17] = document.frm_principal.<?=voContratoModificacao::$nmAtrVlMensalModAtual?>;
 	pArrayCampos[18] = document.frm_principal.<?=voContratoModificacao::$ID_REQ_VL_BASE_PERCENTUAL?>;
 
-	pArrayCampos[19] = document.frm_principal.<?=voContratoModificacao::$ID_REQ_NUM_PERCENTUAL_GESTOR?>;
-	pArrayCampos[20] = document.frm_principal.<?=voContratoModificacao::$ID_REQ_VL_BASE_PERCENTUAL_GESTOR?>;
-	
-	//ou um ou outro define o valor a ser utilizado
-	/*if(eElement.name == pCampoVlReferencial.name){
-		pCampoModContrato.value = "0,00";
-	}else if(eElement.name == pCampoModContrato.name){
-		pCampoVlReferencial.value = "0,00";
-	}else if(eElement.name == pCampoVlMensalAtualizado.name){
-		pCampoVlGlobalAtualizado.value = "0,00";
-	}else if(eElement.name == pCampoVlGlobalAtualizado.name){
-		pCampoVlMensalAtualizado.value = "0,00";
-	}*/
+	pArrayCampos[19] = document.frm_principal.<?=voContratoModificacao::$ID_REQ_NUM_PERCENTUAL_REAJUSTE?>;
+	pArrayCampos[20] = document.frm_principal.<?=voContratoModificacao::$ID_REQ_VL_BASE_REAJUSTE?>;
 			
 	calcularModificacaoNovo(pArrayCampos);
 }
 
-function carregaDadosContrato(){
-	str = "";
+function limpaFormTpModificacao(){
+	document.frm_principal.<?=voContratoModificacao::$nmAtrTpModificacao?>.value = "";
+	formataForm();
+	//calcular(this);
+}
 
-	cdContrato = document.frm_principal.<?=voContratoLicon::$nmAtrCdContrato?>.value;
-	anoContrato = document.frm_principal.<?=voContratoLicon::$nmAtrAnoContrato?>.value;
-	tipoContrato = document.frm_principal.<?=voContratoLicon::$nmAtrTipoContrato?>.value;
-	cdEspecie = document.frm_principal.<?=voContratoLicon::$nmAtrCdEspecieContrato?>.value;
-	sqEspecie = document.frm_principal.<?=voContratoLicon::$nmAtrSqEspecieContrato?>.value;
+function carregaDadosContrato(){
+
+	var str = "";
+
+	var cdContrato = document.frm_principal.<?=voContratoLicon::$nmAtrCdContrato?>.value;
+	var anoContrato = document.frm_principal.<?=voContratoLicon::$nmAtrAnoContrato?>.value;
+	var tipoContrato = document.frm_principal.<?=voContratoLicon::$nmAtrTipoContrato?>.value;
+	var cdEspecie = document.frm_principal.<?=voContratoLicon::$nmAtrCdEspecieContrato?>.value;
+	var sqEspecie = document.frm_principal.<?=voContratoLicon::$nmAtrSqEspecieContrato?>.value;
+
+	var inRetroativo = document.frm_principal.<?=voContratoModificacao::$ID_REQ_InRetroativo?>.value;
+	var dtEfeito = document.frm_principal.<?=voContratoModificacao::$nmAtrDtModificacao?>.value;
 	
 	if(cdContrato != "" && anoContrato != "" && tipoContrato !="" && cdEspecie !=""){
 
@@ -206,7 +205,10 @@ function carregaDadosContrato(){
 		if(sqEspecie != ""){		
 			str = "null"+ '<?=CAMPO_SEPARADOR?>' + anoContrato + '<?=CAMPO_SEPARADOR?>' + cdContrato + '<?=CAMPO_SEPARADOR?>' 
 			+ tipoContrato + '<?=CAMPO_SEPARADOR?>' + cdEspecie
-			+ '<?=CAMPO_SEPARADOR?>' + sqEspecie;
+			+ '<?=CAMPO_SEPARADOR?>' + sqEspecie
+			+ '<?=CAMPO_SEPARADOR?>' + inRetroativo
+			+ '<?=CAMPO_SEPARADOR?>' + dtEfeito
+			;
 			//vai no ajax
 			getDadosPorChaveGenerica(str, "../contrato_mod/campoDadosContratoMod.php", '<?=voContratoModificacao::$ID_REQ_DIV_DADOS_CONTRATO_MODIFICACAO?>');
 		}
@@ -246,22 +248,15 @@ function iniciar(){
 	            require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
 	            
 	            $pArray = array($voContrato,constantes::$CD_CLASS_CAMPO_OBRIGATORIO,true,true,false,true,"carregaDadosContrato();");
-	            getContratoEntradaArray($pArray);	             	            	 
-	            ?>
+	            getContratoEntradaArray($pArray);
+	            
+	            $comboSimNao = new select(dominioSimNao::getColecao());
+	            echo "É reajuste retroativo? ". $comboSimNao->getHtmlCombo(voContratoModificacao::$ID_REQ_InRetroativo, voContratoModificacao::$ID_REQ_InRetroativo, constantes::$CD_NAO, true, "campoobrigatorio", false, " onChange='carregaDadosContrato();limpaFormTpModificacao();' required");
+	            ?>	            
 				<div id="<?=voContratoModificacao::$ID_REQ_DIV_DADOS_CONTRATO_MODIFICACAO?>">
 				</div>	            
 	            </TD>
 	        </TR>	        	        
-			<TR>
-	            <TH class="campoformulario" nowrap width="1%">Tipo:</TH>
-	            <TD class="campoformulario" colspan="3">
-				<?php                        
-				$combo = new select(dominioTpContratoModificacao::getColecao());                        
-				//cria o combo
-				echo $combo->getHtmlCombo(voContratoModificacao::$nmAtrTpModificacao, voContratoModificacao::$nmAtrTpModificacao, $vo->tpModificacao, true, "camponaoobrigatorio", false, " onChange='formataForm();calcular(this);' required");
-				?>
-				</TD>
-	        </TR>
 			<TR>
 	            <TH class="campoformulario" nowrap>Data:</TH>
 	            <TD class="campoformulario" width=1%>
@@ -292,6 +287,16 @@ function iniciar(){
 	            </TD>				
         	</TR>
 			<TR>
+	            <TH class="campoformulario" nowrap width="1%">Tipo:</TH>
+	            <TD class="campoformulario" colspan="3">
+				<?php                        
+				$combo = new select(dominioTpContratoModificacao::getColecao());                        
+				//cria o combo
+				echo $combo->getHtmlCombo(voContratoModificacao::$nmAtrTpModificacao, voContratoModificacao::$nmAtrTpModificacao, $vo->tpModificacao, true, "camponaoobrigatorio", false, " onChange='formataForm();calcular(this);' required");
+				?>
+				</TD>
+	        </TR>
+			<TR>
 	            <TH class="campoformulario" nowrap>Valor Mensal Referencial:</TH>
 	            <TD class="campoformulario" ><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlModificacaoReferencial?>" name="<?=voContratoModificacao::$nmAtrVlModificacaoReferencial?>"  value="<?php echo(getMoeda($vo->vlModificacaoReferencial,4));?>"
 	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 4, event);" onBlur='calcular(this, false);' class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly></TD>
@@ -320,10 +325,10 @@ function iniciar(){
 	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" onBlur='calcular(this, false);' class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly></TD>	            
 	        </TR>	        
 			<TR>
-	            <TH class="campoformulario" nowrap>Valor Real:</TH>
+	            <TH class="campoformulario" nowrap>Valor Real alterado no período:</TH>
 	            <TD class="campoformulario" ><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlModificacaoReal?>" name="<?=voContratoModificacao::$nmAtrVlModificacaoReal?>"  value="<?php echo(getMoeda($vo->vlModificacaoReal));?>"
 	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly></TD>
-	            <TH class="campoformulario" nowrap>Valor Real Contrato:</TH>
+	            <TH class="campoformulario" nowrap>Valor Real do Contrato no período:</TH>
 	            <TD class="campoformulario"><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlGlobalReal?>" name="<?=voContratoModificacao::$nmAtrVlGlobalReal?>"  value="<?php echo(getMoeda($vo->vlGlobalReal));?>"
 	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly>
 	            <SCRIPT language="JavaScript" type="text/javascript">
@@ -339,9 +344,9 @@ function iniciar(){
 			<TR>
 	            <TH class="campoformulario" nowrap>Percentual:</TH>
 	            <TD class="campoformulario" colspan="3">
-	            <INPUT type="text" id="<?=voContratoModificacao::$ID_REQ_NUM_PERCENTUAL_GESTOR?>" name="<?=voContratoModificacao::$ID_REQ_NUM_PERCENTUAL_GESTOR?>"  value=""
+	            <INPUT type="text" id="<?=voContratoModificacao::$ID_REQ_NUM_PERCENTUAL_REAJUSTE?>" name="<?=voContratoModificacao::$ID_REQ_NUM_PERCENTUAL_REAJUSTE?>"  value=""
 	            class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="10" readonly>%
-				de <INPUT type="text" id="<?=voContratoModificacao::$ID_REQ_VL_BASE_PERCENTUAL_GESTOR?>" name="<?=voContratoModificacao::$ID_REQ_VL_BASE_PERCENTUAL_GESTOR?>"  value="<?php echo(getMoeda($vo->vlMensalAtual));?>"
+				de <INPUT type="text" id="<?=voContratoModificacao::$ID_REQ_VL_BASE_REAJUSTE?>" name="<?=voContratoModificacao::$ID_REQ_VL_BASE_REAJUSTE?>"  value="<?php echo(getMoeda($vo->vlMensalAtual));?>"
 	            class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly>
 	         	| <b>Valor para fins de Acréscimo: <INPUT type="text" id="<?=voContratoModificacao::$nmAtrNumPercentual?>" name="<?=voContratoModificacao::$nmAtrNumPercentual?>"  value="<?php echo(getMoeda($vo->numPercentual,4));?>"
 	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 4, event);" onBlur='calcular(false);' class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="10" readonly>%

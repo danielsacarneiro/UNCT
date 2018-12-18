@@ -52,6 +52,7 @@ include_once("dominio.class.php");
     	 
     	$arrayPermissao = array();
     	$arrayPermissao[] = constantes::$CD_FUNCAO_DETALHAR;
+    	$arrayPermissao[] = constantes::$CD_FUNCAO_SELECIONAR;
     	
     	$isUserAdmin = static::isAdministrador($pArrayPermissaoUsuario);
     	$isUserNivel1 = in_array(self::$cd_usuario_nivel1, $pArrayPermissaoUsuario);

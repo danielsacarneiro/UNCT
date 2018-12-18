@@ -333,8 +333,8 @@ function calcularModificacaoNovo(pArrayCampos) {
 		var vlMensalAtualizadoNovo = 0;
 		var vlGlobalAtualizadoNovo = 0;
 
-		var vlMensalBase = getValorCampoMoedaComoNumero(campoVlMensalBase);	
-		var vlGlobalBase = getValorCampoMoedaComoNumero(campoVlGlobalBase);
+		var vlMensalBase = getValorCampoMoedaComoNumeroValido(campoVlMensalBase);	
+		var vlGlobalBase = getValorCampoMoedaComoNumeroValido(campoVlGlobalBase);
 		
 		var vlReferencial = getValorCampoMoedaComoNumeroValido(campoVlReferencial);
 		var vlModAoContrato = getValorCampoMoedaComoNumeroValido(campoVlModAoContrato);
@@ -400,7 +400,10 @@ function calcularModificacaoNovo(pArrayCampos) {
 		
 		//atualiza o percentual 
 		//percentual = eval((vlMensalAtualizadoNovo-vlMensalBase)/vlMensalBase);
-		percentual = eval(vlReferencialNovo/vlMensalModAtual);		
+		percentual = 0;
+		if(!isReajuste){			
+			percentual = eval(vlReferencialNovo/vlMensalModAtual);
+		}
 		setValorCampoMoedaComSeparadorMilhar(campoNumPercentual, 100*percentual, 4);
 		setValorCampoMoedaComSeparadorMilhar(campoVlBasePercentual, vlMensalModAtual, 2);		
 		setValorCampoMoedaComSeparadorMilhar(campoNumPercentualGestor, 100*(vlReferencialNovo/vlBasePercentualGestor), 4);

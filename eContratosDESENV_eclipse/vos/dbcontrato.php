@@ -51,6 +51,8 @@ class dbcontrato extends dbprocesso {
 		$nmTabelaContratoInseridoTela= "NM_TAB_CONTRATO_INSERIDO_TELA";
 	
 		$arrayColunasRetornadas = array (
+				"$nmTabelaContratoInseridoTela.".vocontrato::$nmAtrVlMensalContrato . " AS " . voContratoModificacao::$ID_REQ_VlMensalContratoInseridoTela,
+				"$nmTabelaContratoInseridoTela.".vocontrato::$nmAtrVlGlobalContrato . " AS " . voContratoModificacao::$ID_REQ_VlGlobalContratoInseridoTela,
 				getSQLCOALESCE(
 						array(
 								"$nmTabelaContratoUltValorAtualizado.".voContratoModificacao::$nmAtrVlMensalAtualizado,
@@ -143,7 +145,9 @@ class dbcontrato extends dbprocesso {
 		. "," . vocontrato::$nmAtrCdContrato
 		. "," . vocontrato::$nmAtrDtAssinaturaContrato
 		. "," . vocontrato::$nmAtrDtVigenciaInicialContrato
-		. "," . vocontrato::$nmAtrDtVigenciaFinalContrato;
+		. "," . vocontrato::$nmAtrDtVigenciaFinalContrato
+		. "," . vocontrato::$nmAtrVlMensalContrato
+		. "," . vocontrato::$nmAtrVlGlobalContrato;
 				
 		//$vocontratoTemp = $vo;
 		$queryJoin .= "\n LEFT JOIN ";

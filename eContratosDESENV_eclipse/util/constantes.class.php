@@ -23,6 +23,7 @@
     static $CD_FUNCAO_INCLUIR = "I";
     static $CD_FUNCAO_ALTERAR = "A";
     static $CD_FUNCAO_DETALHAR = "D";
+    static $CD_FUNCAO_SELECIONAR = "S";
     static $CD_FUNCAO_TODAS = "T";
     
     static $DS_SIM  = "Sim";

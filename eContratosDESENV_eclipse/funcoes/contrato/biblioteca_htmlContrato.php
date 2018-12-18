@@ -36,7 +36,26 @@ function getContratoDetalhamentoAvulso($voContrato, $apenasComplemento=false){
 	}	
 	return $contrato;	
 }
+
 function getContratoDetalhamento($voContrato, $colecao,  $detalharContratoInfo = false, $isDetalharChaveCompleta=false) {
+	$arrayParametro[0] = $voContrato;
+	$arrayParametro[1] = $colecao;
+	$arrayParametro[2] = $detalharContratoInfo;
+	$arrayParametro[3] = $isDetalharChaveCompleta;
+	
+	getContratoDetalhamentoParam($arrayParametro);
+}
+function getContratoDetalhamentoParam($arrayParametro) {
+	$voContrato = $arrayParametro[0];
+	$colecao = $arrayParametro[1];
+	$detalharContratoInfo = $arrayParametro[2];
+	$isDetalharChaveCompleta=$arrayParametro[3];
+	$complementoDet=$arrayParametro[4];
+	
+	if($colecao == null){
+		$colecao = consultarPessoasContrato ( $voContrato );
+	}
+	
 	$vo = new vocontrato ();
 
 	// so exibe contrato se tiver
@@ -120,7 +139,13 @@ function getContratoDetalhamento($voContrato, $colecao,  $detalharContratoInfo =
 			echo getTextoHTMLNegrito(" Acréscimo utilizado: " . getMoeda($vlPercentualAcrescimo, 2) . " %");
 		}
 		?>							
-		<div id=""><?=$campoContratado?></div></TD>
+		<div id=""><?=$campoContratado?></div>
+		<?php 
+		if ($complementoDet!= null){
+			echo $complementoDet;
+		}
+		?>
+		</TD>
 </TR>
 <?php
 	}
@@ -555,9 +580,17 @@ function getDadosContratoMod($chave) {
 	if ($chave != null && $chave != "") {
 		$vo = new vocontrato ();
 		$vo->getChavePrimariaVOExplodeParam ( $chave );
+		
+		$array = explode ( CAMPO_SEPARADOR, $chave );
+		//definido em manter.php vocontratomod carregaDadosContrato();
+		$inRetroativo = $array[6];
+		$dtEfeitoModificacao = $array[7];
+		
+		$arrayParamComplemento = array($inRetroativo, $dtEfeitoModificacao);
+		//echo $inRetroativo;
 		//echo $chave;
 		try{
-			$retorno = getCamposContratoMod($vo);
+			$retorno = getCamposContratoMod($vo, $arrayParamComplemento);
 		}catch(excecaoChaveRegistroInexistente $ex){
 			$retorno = "Dados: <INPUT type='text' class='camporeadonly' size=50 readonly value='NÃO ENCONTRADO - VERIFIQUE O CONTRATO'>\n";		
 		}catch(excecaoMaisDeUmRegistroRetornado $ex){
@@ -592,7 +625,7 @@ function getCPLPorNomePregoeiro($recordSet){
 	return dominioComissaoProcLicitatorio::getCPLPorPregoeiro($recordSet[voProcLicitatorio::$NmColNomePregoeiro]);
 }
 
-function getContratoVigentePorData($vocontrato){
+function getContratoVigentePorData($vocontrato, $pData = null){
 	//$vocontrato = new vocontrato();	
 	$filtro = new filtroManterContrato();
 	$filtro->tipo = $vocontrato->tipo;
@@ -602,7 +635,10 @@ function getContratoVigentePorData($vocontrato){
 			dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER,
 			dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_TERMOADITIVO
 	);
-	$filtro->dtVigencia = $vocontrato->dtAssinatura;
+	if($pData == null){
+		$pData = $vocontrato->dtAssinatura;
+	}
+	$filtro->dtVigencia = $pData;
 	
 	$db = new dbcontrato();
 	$recordset = $db->consultarFiltroManter($filtro, false);
@@ -618,7 +654,13 @@ function getContratoVigentePorData($vocontrato){
 	//var_dump($recordset);	
 }
 
-function getCamposContratoMod($vo){
+function getCamposContratoMod($vo, $arrayParamComplemento = null){
+	
+	if($arrayParamComplemento != null){
+		$inRetroativo = $arrayParamComplemento[0];
+		$dtEfeitoModificacao = $arrayParamComplemento[1];
+	}
+		
 	$dbcontrato = new dbcontrato();
 	$recordSet = $dbcontrato->consultarContratoModificacao($vo, false);
 	
@@ -632,29 +674,39 @@ function getCamposContratoMod($vo){
 	$vlMensalAtualizadoParaFinsMod = getMoeda($registrobanco[voContratoModificacao::$nmAtrVlMensalModAtual]); 
 	$vlGlobalAtualizadoParaFinsMod = getMoeda($registrobanco[voContratoModificacao::$nmAtrVlGlobalModAtual]);
 	
+	$vlMensalTermoInseridoTela = getMoeda($registrobanco[voContratoModificacao::$ID_REQ_VlMensalContratoInseridoTela]);
+	$vlGlobalTermoInseridoTela = getMoeda($registrobanco[voContratoModificacao::$ID_REQ_VlGlobalContratoInseridoTela]);
+	
 	$vo->dtAssinatura = getData($recordSet[vocontrato::$nmAtrDtAssinaturaContrato]);
 
 	//consulta o periodo de vigencia do termo inserido apenas se ele nao for um TA
 	//quando nesse caso, sendo apostilamento ou qualquer outro, o periodo de vigencia sera determinado pelo TA vigente na data de assinatura
-	/*if($vo->cdEspecie != dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_TERMOADITIVO){
-		$registro = getContratoVigentePorData($vo)[0];		
+	//if($vo->cdEspecie != dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_TERMOADITIVO){
+	if($inRetroativo == constantes::$CD_SIM){
+		$registro = getContratoVigentePorData($vo, $dtEfeitoModificacao)[0];		
 		$voContratoTemp = new vocontrato();
 		$voContratoTemp->getDadosBanco($registro);		
 				
 		$voContrato->dtVigenciaInicial = $voContratoTemp->dtVigenciaInicial;
 		$voContrato->dtVigenciaFinal = $voContratoTemp->dtVigenciaFinal;
+		$voContrato->vlMensal = $voContratoTemp->vlMensal;
+		$voContrato->vlGlobal = $voContratoTemp->vlGlobal;
 		
 		$retorno = "Vigência determinada pelo " . getTextoHTMLNegrito(getContratoDetalhamentoAvulso($voContratoTemp, true)) . "<br>";		
-	}*/
+	}
 		
 	if($voContrato != null){
 		$retorno .= " Data Assinatura: " . getInputText(vocontrato::$nmAtrDtAssinaturaContrato, vocontrato::$nmAtrDtAssinaturaContrato, getData($voContrato->dtAssinatura), constantes::$CD_CLASS_CAMPO_READONLY);
 		$retorno .= ", Vigência de " . getInputText(vocontrato::$nmAtrDtVigenciaInicialContrato, vocontrato::$nmAtrDtVigenciaInicialContrato, getData($voContrato->dtVigenciaInicial), constantes::$CD_CLASS_CAMPO_READONLY);
 		$retorno .= " a " . getInputText(vocontrato::$nmAtrDtVigenciaFinalContrato, vocontrato::$nmAtrDtVigenciaFinalContrato, getData($voContrato->dtVigenciaFinal), constantes::$CD_CLASS_CAMPO_READONLY);
 		$retorno .= ", Prazo Contrato (meses): " . getInputText(voContratoInfo::$nmAtrNumPrazo, voContratoInfo::$nmAtrNumPrazo, 12, constantes::$CD_CLASS_CAMPO_READONLY);
-		$retorno .= "<br>Valor Mensal Atual: " . getInputText(vocontrato::$nmAtrVlMensalContrato, vocontrato::$nmAtrVlMensalContrato, $voContrato->vlMensal, constantes::$CD_CLASS_CAMPO_READONLY);
+		
+		$retorno .= "<br>Valor Mensal Referência: " . getInputText(vocontrato::$nmAtrVlMensalContrato, vocontrato::$nmAtrVlMensalContrato, $voContrato->vlMensal, constantes::$CD_CLASS_CAMPO_READONLY, null, null, " onkeyup='formatarCampoMoedaComSeparadorMilhar(this, 4, event);' ");
+		$retorno .= " Valor Mensal Termo: " . getInputText(voContratoModificacao::$ID_REQ_VlMensalContratoInseridoTela, voContratoModificacao::$ID_REQ_VlMensalContratoInseridoTela, $vlMensalTermoInseridoTela, constantes::$CD_CLASS_CAMPO_READONLY);
 		$retorno .= " Valor Mensal Referência (%Acréscimos): " . getInputText(voContratoModificacao::$nmAtrVlMensalModAtual, voContratoModificacao::$nmAtrVlMensalModAtual, $vlMensalAtualizadoParaFinsMod, constantes::$CD_CLASS_CAMPO_READONLY);
-		$retorno .= "<br>Valor Global Atual: " . getInputText(vocontrato::$nmAtrVlGlobalContrato, vocontrato::$nmAtrVlGlobalContrato, $voContrato->vlGlobal, constantes::$CD_CLASS_CAMPO_READONLY);
+
+		$retorno .= "<br>Valor Global Referência: " . getInputText(vocontrato::$nmAtrVlGlobalContrato, vocontrato::$nmAtrVlGlobalContrato, $voContrato->vlGlobal, constantes::$CD_CLASS_CAMPO_READONLY, null, null, " onkeyup='formatarCampoMoedaComSeparadorMilhar(this, 4, event);' ");
+		$retorno .= " Valor Global Termo: " . getInputText(voContratoModificacao::$ID_REQ_VlGlobalContratoInseridoTela, voContratoModificacao::$ID_REQ_VlGlobalContratoInseridoTela, $vlGlobalTermoInseridoTela, constantes::$CD_CLASS_CAMPO_READONLY);
 		$retorno .= " Valor Global Referência (%Acréscimos): " . getInputText(voContratoModificacao::$nmAtrVlGlobalModAtual, voContratoModificacao::$nmAtrVlGlobalModAtual, $vlGlobalAtualizadoParaFinsMod, constantes::$CD_CLASS_CAMPO_READONLY);
 
 	}
