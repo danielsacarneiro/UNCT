@@ -10,7 +10,7 @@ include_once (caminho_util . "bibliotecaFuncoesPrincipal.php");
 // Classe select
 // cria um combo select html
 class dbcontrato extends dbprocesso {
-	static $FLAG_PRINTAR_SQL = false;
+	static $FLAG_PRINTAR_SQL = FALSE;
 	
 	static $CD_CONSTANTE_FIM_IMPORTACAO = "FIM";
 	static $ID_REQ_INICIAR_TAB_CONTRATO= "ID_REQ_INICIAR_TAB_CONTRATO";

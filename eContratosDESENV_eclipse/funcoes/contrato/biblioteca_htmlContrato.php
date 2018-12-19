@@ -625,7 +625,7 @@ function getCPLPorNomePregoeiro($recordSet){
 	return dominioComissaoProcLicitatorio::getCPLPorPregoeiro($recordSet[voProcLicitatorio::$NmColNomePregoeiro]);
 }
 
-function getContratoVigentePorData($vocontrato, $pData = null){
+function getContratoVigentePorData($vocontrato, $pData = null, $isTpVigenciaMAxSq=false){
 	//$vocontrato = new vocontrato();	
 	$filtro = new filtroManterContrato();
 	$filtro->tipo = $vocontrato->tipo;
@@ -638,6 +638,7 @@ function getContratoVigentePorData($vocontrato, $pData = null){
 	if($pData == null){
 		$pData = $vocontrato->dtAssinatura;
 	}
+	$filtro->isTpVigenciaMAxSq = $isTpVigenciaMAxSq;
 	$filtro->dtVigencia = $pData;
 	
 	$db = new dbcontrato();
@@ -683,14 +684,22 @@ function getCamposContratoMod($vo, $arrayParamComplemento = null){
 	//quando nesse caso, sendo apostilamento ou qualquer outro, o periodo de vigencia sera determinado pelo TA vigente na data de assinatura
 	//if($vo->cdEspecie != dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_TERMOADITIVO){
 	if($inRetroativo == constantes::$CD_SIM){
-		$registro = getContratoVigentePorData($vo, $dtEfeitoModificacao)[0];		
+		$registro = getContratoVigentePorData($vo, $dtEfeitoModificacao, true)[0];
 		$voContratoTemp = new vocontrato();
-		$voContratoTemp->getDadosBanco($registro);		
-				
+		$voContratoTemp->getDadosBanco($registro);
+		
+		$dbcontratomod = new dbContratoModificacao();		 
+		$registroExecucao = $dbcontratomod->consultarExecucaoTermoEspecifico($voContratoTemp);
+		$voContratoModEspecificoReajustado = $registroExecucao[filtroManterContratoModificacao::$NmColVOContratoModReajustado];
+		//$voContratoModEspecificoReajustado = new voContratoModificacao();		
+		//var_dump($voContratoModEspecificoReajustado);
+						
 		$voContrato->dtVigenciaInicial = $voContratoTemp->dtVigenciaInicial;
 		$voContrato->dtVigenciaFinal = $voContratoTemp->dtVigenciaFinal;
-		$voContrato->vlMensal = $voContratoTemp->vlMensal;
-		$voContrato->vlGlobal = $voContratoTemp->vlGlobal;
+		/*$voContrato->vlMensal = $voContratoTemp->vlMensal;
+		$voContrato->vlGlobal = $voContratoTemp->vlGlobal;*/		
+		$voContrato->vlMensal = getMoeda($voContratoModEspecificoReajustado->vlMensalAtual, 2);
+		$voContrato->vlGlobal = getMoeda($voContratoModEspecificoReajustado->vlGlobalAtual,2);
 		
 		$retorno = "Vigência determinada pelo " . getTextoHTMLNegrito(getContratoDetalhamentoAvulso($voContratoTemp, true)) . "<br>";		
 	}

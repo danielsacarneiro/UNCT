@@ -264,11 +264,9 @@ class voentidade extends multiplosConstrutores {
 		}
 		
 		$chaveAComparar = $this->getValorChaveLogica ();
-		
-		/*
-		 * echo "chave a comparar:" . $chaveEntidade . "<br>";
-		 * echo "chave referencia:" . $chaveAComparar . "<br>";
-		 */
+				
+		 /*echo "chave a comparar:" . $chaveEntidade . "<br>";
+		 echo "chave referencia:" . $chaveAComparar . "<br>";*/		 
 		
 		return $chaveAComparar == $chaveEntidade;
 	}

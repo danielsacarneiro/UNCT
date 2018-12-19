@@ -207,7 +207,35 @@ class dbContratoModificacao extends dbprocesso {
 		// return parent::alterar($vo);
 	}
 	
-	function consultarExecucao($vo) {		
+	/**
+	 * pega o contratomod passado como parametro de uma colecao de valores execucao
+	 * retorna um vogenerico/registro
+	 * @param unknown $voContratoMod
+	 * @param unknown $recordSet
+	 * @return voContratoModificacao
+	 */
+	function getRegistroTermoEspecificoColecaoExecucao($voContrato, $recordSet) {
+		if(!isColecaoVazia($recordSet)){			
+			for($i=0; $i<sizeof($recordSet);$i++){
+				$registro = $recordSet[$i];
+				$voTemp = new vocontrato();
+				$voTemp->getDadosBanco($registro);
+								
+				if($voContrato->isIgualChavePrimaria($voTemp)){
+					$retorno = $registro;
+					break;
+				}
+			}			
+		}
+		return $retorno;
+	}
+	
+	function consultarExecucaoTermoEspecifico($voContratoComChaveCompleta) {
+		$recordSet = $this->consultarExecucao(clone $voContratoComChaveCompleta);
+		return $this->getRegistroTermoEspecificoColecaoExecucao(clone $voContratoComChaveCompleta, $recordSet);
+	}
+	
+	function consultarExecucao($vo) {
 		//consulta os regitros modificacao do contrato SEM REAJUSTE
 		$voContratoFiltro = clone $vo;
 		$voContratoFiltro->cdEspecie = null;
@@ -216,8 +244,11 @@ class dbContratoModificacao extends dbprocesso {
 		$filtro = new filtroManterContratoModificacao ( false );
 		//$filtro->tipoExceto = array(dominioTpContratoModificacao::$CD_TIPO_REAJUSTE);
 		$filtro->setaFiltroConsultaSemLimiteRegistro ();
-		$filtro->cdAtrOrdenacao = voContratoModificacao::$nmAtrDtModificacao;
-		$filtro->cdOrdenacao = constantes::$CD_ORDEM_CRESCENTE;
+		$atributoOrdenacao = voContratoModificacao::$nmAtrDtModificacao . " " . constantes::$CD_ORDEM_CRESCENTE;
+		$atributoOrdenacao .= "," . voContratoModificacao::$nmAtrTpModificacao . " " . constantes::$CD_ORDEM_CRESCENTE;
+		$filtro->cdAtrOrdenacao = $atributoOrdenacao;
+		/*$filtro->cdAtrOrdenacao = voContratoModificacao::$nmAtrDtModificacao;
+		$filtro->cdOrdenacao = constantes::$CD_ORDEM_CRESCENTE;*/
 		$filtro->vocontrato = $voContratoFiltro;
 		$recordSet = $this->consultarTelaConsulta ( new voContratoModificacao(), $filtro );
 		

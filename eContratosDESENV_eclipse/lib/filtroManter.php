@@ -33,6 +33,7 @@ class filtroManter extends multiplosConstrutores {
 	var $inDesativado;
 	var $groupby;
 	var $isConsultaTela;
+	var $isTpVigenciaMAxSq;
 	
 	private $inConsultaRealizada = false;
 	private $QUERY_SELECT;
@@ -82,6 +83,7 @@ class filtroManter extends multiplosConstrutores {
 		// para o caso de ser necessario setar um filtro default para nao trazer todos os registros
 		$this->temValorDefaultSetado = false;
 		$this->inDesativado = null;
+		$this->isTpVigenciaMAxSq = false;
 	}
 	function pegarFiltroDaTela() {
 		$this->cdAtrOrdenacao = @$_POST [self::$nmAtrCdAtrOrdenacao];

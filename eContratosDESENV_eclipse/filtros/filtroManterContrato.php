@@ -225,9 +225,34 @@ class filtroManterContrato extends filtroManter {
 		}
 		
 		if ($this->dtVigencia != null) {
-			$pChaveTuplaComparacaoSemSequencial = $nmTabela . "." . vocontrato::$nmAtrCdContrato . "," . $nmTabela . "." . vocontrato::$nmAtrAnoContrato;
+			//$pChaveTuplaComparacaoSemSequencial = $nmTabela . "." . vocontrato::$nmAtrCdContrato . "," . $nmTabela . "." . vocontrato::$nmAtrAnoContrato. "," . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
 			
-			$filtro = $filtro . $conector . getSQLDataVigente ( $nmTabela, vocontrato::$nmAtrSqContrato, $pChaveTuplaComparacaoSemSequencial, $pChaveTuplaComparacaoSemSequencial, $this->dtVigencia, vocontrato::$nmAtrDtVigenciaInicialContrato, vocontrato::$nmAtrDtVigenciaFinalContrato );
+			
+			$pChaveTuplaComparacaoSemSequencial = array(
+					vocontrato::$nmAtrCdContrato
+					,vocontrato::$nmAtrAnoContrato
+					, vocontrato::$nmAtrTipoContrato);
+			
+			$pArrayParam = array(
+					$nmTabela,
+					vocontrato::$nmAtrSqContrato,
+					$pChaveTuplaComparacaoSemSequencial,
+					$pChaveTuplaComparacaoSemSequencial,
+					$this->dtVigencia,
+					vocontrato::$nmAtrDtVigenciaInicialContrato,
+					vocontrato::$nmAtrDtVigenciaFinalContrato,
+					$this->isTpVigenciaMAxSq,
+					$filtro,
+					
+			);
+				
+						
+			/*$filtro = $filtro . $conector . getSQLDataVigente ( $nmTabela, vocontrato::$nmAtrSqContrato, $pChaveTuplaComparacaoSemSequencial, $pChaveTuplaComparacaoSemSequencial
+					, $this->dtVigencia, vocontrato::$nmAtrDtVigenciaInicialContrato, vocontrato::$nmAtrDtVigenciaFinalContrato, $this->isTpVigenciaMAxSq);*/
+			
+			$filtro = $filtro . $conector . getSQLDataVigenteArrayParam($pArrayParam);
+			
+			//echo $filtro;
 			
 			$conector = "\n AND ";
 		}

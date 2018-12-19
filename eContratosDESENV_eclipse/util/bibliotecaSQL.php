@@ -63,44 +63,86 @@ function getSQLDataNaoVigente($pNmTableEntidade, $pNmColSequencial, $pChaveTupla
 function getSQLDataVigenteSimplesPorData($pNmTableEntidade, $pDataComparacao, $pNmColDtInicioVigencia, $pNmColDtFimVigencia) {
 	return getSQLDataVigente ( $pNmTableEntidade, null, null, null, $pDataComparacao, $pNmColDtInicioVigencia, $pNmColDtFimVigencia );
 }
-function getSQLDataVigente($pNmTableEntidade, $pNmColSequencial, $pChaveTuplaComparacaoSemSequencial, $pChaveGroupBy, $pDataComparacao, $pNmColDtInicioVigencia, $pNmColDtFimVigencia) {
-	if ($pNmTableEntidade != null) {
+
+function getSQLDataVigente($pNmTableEntidade, $pNmColSequencial, $pChaveTuplaComparacaoSemSequencial, $pChaveGroupBy, $pDataComparacao, $pNmColDtInicioVigencia, $pNmColDtFimVigencia, $isTrazerMaiorSqVigente=false) {
+	$pArrayParam = array(
+			$pNmTableEntidade,
+			$pNmColSequencial,
+			$pChaveTuplaComparacaoSemSequencial,
+			$pChaveGroupBy,
+			$pDataComparacao,
+			$pNmColDtInicioVigencia,
+			$pNmColDtFimVigencia,
+			$isTrazerMaiorSqVigente);
+	
+	return getSQLDataVigenteArrayParam($pArrayParam);	
+}
+
+function getSQLDataVigenteArrayParam($pArrayParam) {	
+	$pNmTableEntidade = $pArrayParam[0];
+	$pNmColSequencial = $pArrayParam[1];
+	$pChaveTuplaComparacaoSemSequencial = $pArrayParam[2];
+	$pChaveGroupBy = $pArrayParam[3];
+	$pDataComparacao = $pArrayParam[4];
+	$pNmColDtInicioVigencia = $pArrayParam[5];
+	$pNmColDtFimVigencia = $pArrayParam[6];
+	$isTrazerMaiorSqVigente = $pArrayParam[7];	
+	$sqlFiltroInternoMaiorSq = $pArrayParam[8];
+
+	/*if ($pNmTableEntidade != null) {
 		$pNmTableEntidade = "$pNmTableEntidade.";
+	}*/
+	
+	if(is_array($pChaveTuplaComparacaoSemSequencial)){
+		for ($i=0; $i< sizeof($pChaveTuplaComparacaoSemSequencial); $i++){
+			$atributo = $pChaveTuplaComparacaoSemSequencial[$i];
+			if(strpos($atributo, ".") === false){
+				$atributo = "$pNmTableEntidade." . $atributo;
+				$pChaveTuplaComparacaoSemSequencial[$i]=$atributo;
+			}
+			
+		}
+		$pChaveTuplaComparacaoSemSequencial = getColecaoEntreSeparador($pChaveTuplaComparacaoSemSequencial, ",");
 	}
 	
-	$nmColDtInicioVigencia = $pNmTableEntidade . $pNmColDtInicioVigencia;
-	$nmColDtFimVigencia = $pNmTableEntidade . $pNmColDtFimVigencia;
 	
-	// $pDataComparacao = "'" . $pDataComparacao . "'";
+	$nmColDtInicioVigencia = "$pNmTableEntidade." . $pNmColDtInicioVigencia;
+	$nmColDtFimVigencia = "$pNmTableEntidade." . $pNmColDtFimVigencia;
 	
-	$sqlFinal = $sqlClausulaVigenciaAtual = "( ( " . getVarComoDataSQL ( $pDataComparacao ) . " BETWEEN " . $nmColDtInicioVigencia . "\n AND " . $nmColDtFimVigencia . "\n ) OR ( " . $nmColDtInicioVigencia . " <= " . getVarComoDataSQL ( $pDataComparacao ) . " " . "\n AND " . $nmColDtFimVigencia . " IS NULL" . ") )";
+	// $pDataComparacao = "'" . $pDataComparacao . "'";	
+	$sqlComparacaoDatas = "(( " . getVarComoDataSQL ( $pDataComparacao ) . " BETWEEN " . $nmColDtInicioVigencia . "\n AND " . $nmColDtFimVigencia . "\n ) OR ( " . $nmColDtInicioVigencia . " <= " . getVarComoDataSQL ( $pDataComparacao ) . " " . "\n AND " . $nmColDtFimVigencia . " IS NULL" . "))";
 	
-	// a query abaixo serah usada quando a consulta utilizar o MAIOR sq
-	/*
-	 * $sqlFinal =
-	 * "( ("
-	 * . $pChaveTuplaComparacaoSemSequencial
-	 * . ", "
-	 * . $pNmTableEntidade
-	 * . "."
-	 * . $pNmColSequencial
-	 * . ")\n IN \n( SELECT "
-	 * . $pChaveTuplaComparacaoSemSequencial
-	 * . ", MAX("
-	 * . $pNmTableEntidade
-	 * . "."
-	 * . $pNmColSequencial
-	 * . ")"
-	 * . "\n FROM "
-	 * . $pNmTableEntidade
-	 * . "\n WHERE "
-	 * . $sqlClausulaVigenciaAtual
-	 * . "\n GROUP BY "
-	 * . $pChaveGroupBy
-	 * . ")\n OR "
-	 * . $nmColDtInicioVigencia
-	 * . " IS NULL)";
-	 */
+	$sqlFinal = "($sqlComparacaoDatas";
+	
+	if($isTrazerMaiorSqVigente){
+		//$sqlFinal .= " AND (EXISTS SELECT MAX($pNmColSequencial) FROM $pNmTableEntidade WHERE )";
+		
+		if($sqlFiltroInternoMaiorSq != null){
+			$sqlFiltroInternoMaiorSq = " AND " . $sqlFiltroInternoMaiorSq;
+		}
+		$sqlFinal .=
+		" AND (("
+				. $pChaveTuplaComparacaoSemSequencial
+				. ", "
+				. $pNmTableEntidade
+				. "."
+				. $pNmColSequencial
+				. ")\n IN \n( SELECT "
+				. $pChaveTuplaComparacaoSemSequencial
+				. ", MAX($pNmTableEntidade.$pNmColSequencial)"
+				. "\n FROM "
+				. $pNmTableEntidade
+				. " WHERE $sqlComparacaoDatas"
+				. $sqlFiltroInternoMaiorSq
+				. "\n GROUP BY "
+				. $pChaveTuplaComparacaoSemSequencial
+				. "))";
+		
+	}	
+	
+	$sqlFinal .= ") ";
+	// a query abaixo serah usada quando a consulta utilizar o MAIOR sq	
+	 
 	
 	return $sqlFinal;
 }
