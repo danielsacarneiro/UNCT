@@ -235,59 +235,110 @@ class dbContratoModificacao extends dbprocesso {
 		return $this->getRegistroTermoEspecificoColecaoExecucao(clone $voContratoComChaveCompleta, $recordSet);
 	}
 	
-	function consultarExecucao($vo) {
-		//consulta os regitros modificacao do contrato SEM REAJUSTE
-		$voContratoFiltro = clone $vo;
+	function consultarExecucao($voContratoMater) {
+		// consulta os regitros modificacao do contrato SEM REAJUSTE
+		$voContratoFiltro = clone $voContratoMater;
 		$voContratoFiltro->cdEspecie = null;
 		$voContratoFiltro->sqEspecie = null;
 		$retorno = null;
 		$filtro = new filtroManterContratoModificacao ( false );
-		//$filtro->tipoExceto = array(dominioTpContratoModificacao::$CD_TIPO_REAJUSTE);
+		// $filtro->tipoExceto = array(dominioTpContratoModificacao::$CD_TIPO_REAJUSTE);
 		$filtro->setaFiltroConsultaSemLimiteRegistro ();
 		$atributoOrdenacao = voContratoModificacao::$nmAtrDtModificacao . " " . constantes::$CD_ORDEM_CRESCENTE;
 		$atributoOrdenacao .= "," . voContratoModificacao::$nmAtrTpModificacao . " " . constantes::$CD_ORDEM_CRESCENTE;
 		$filtro->cdAtrOrdenacao = $atributoOrdenacao;
-		/*$filtro->cdAtrOrdenacao = voContratoModificacao::$nmAtrDtModificacao;
-		$filtro->cdOrdenacao = constantes::$CD_ORDEM_CRESCENTE;*/
+		/*
+		 * $filtro->cdAtrOrdenacao = voContratoModificacao::$nmAtrDtModificacao;
+		 * $filtro->cdOrdenacao = constantes::$CD_ORDEM_CRESCENTE;
+		 */
 		$filtro->vocontrato = $voContratoFiltro;
-		$recordSet = $this->consultarTelaConsulta ( new voContratoModificacao(), $filtro );
+		$recordSet = $this->consultarTelaConsulta ( new voContratoModificacao (), $filtro );
 		
-		//agora consulta os reajustes para aplica-los aos registros necessarios
+		// agora consulta os reajustes para aplica-los aos registros necessarios
 		$filtro->tipoExceto = null;
 		$filtro->tipo = dominioTpContratoModificacao::$CD_TIPO_REAJUSTE;
-		$colecaoReajuste = $this->consultarTelaConsulta ( new voContratoModificacao(), $filtro );
+		$colecaoReajuste = $this->consultarTelaConsulta ( new voContratoModificacao (), $filtro );
 		
-		if(!isColecaoVazia($recordSet)){			
-			if(!isColecaoVazia($colecaoReajuste)){				
-				foreach ($colecaoReajuste as $registroReajuste){
-					$voTempReajuste = new voContratoModificacao();
-					$voTempReajuste->getDadosBanco($registroReajuste);
-					
-					for($i=0; $i<sizeof($recordSet);$i++){						
-						$registro = $recordSet[$i];
-						$voTemp = new voContratoModificacao();
-						$voTemp->getDadosBanco($registro);
-						if($voTemp->tpModificacao != dominioTpContratoModificacao::$CD_TIPO_REAJUSTE){							 
-							//seta o reajuste se a data permitir
-							if($voTemp->isReajusteAAplicar($voTempReajuste)){
-								//echo $voTemp->toString();
-								$voContratoModReajustado = clone $voTemp;
-								$voContratoModReajustado->setPercentualReajuste($voTempReajuste);							
-								$registro[filtroManterContratoModificacao::$NmColVOContratoModReajustado] = $voContratoModReajustado;
-								$recordSet[$i] = $registro;
-							}else{
-								break;
-							}
+		if (! isColecaoVazia ( $recordSet )) {
+			
+			// o primeiro contratomod ajustado eh ele mesmo
+			$registro = $recordSet [0];
+			$voContratoReajustadoAtual = new voContratoModificacao ();
+			$voContratoReajustadoAtual->getDadosBanco ( $registro );
+			$voContratoReajustadoAtual->vlMensalAtual = getVarComoDecimal($voContratoMater->vlMensal);
+			$voContratoReajustadoAtual->vlGlobalAtual = getVarComoDecimal($voContratoMater->vlGlobal);
+			$registro [filtroManterContratoModificacao::$NmColVOContratoModReajustado] = $voContratoReajustadoAtual;
+			$recordSet [0] = $registro;
+			echoo("valor inicial atualiazdo: " . $voContratoReajustadoAtual->vlMensalAtual);
+								
+			if (! isColecaoVazia ( $colecaoReajuste )) {
+				$j=0;
+				foreach ( $colecaoReajuste as $registroReajuste ) {
+					$voTempReajuste = new voContratoModificacao ();
+					$voTempReajuste->getDadosBanco ( $registroReajuste );
+					echoo("<br>PErcentual reajuste:" . $voTempReajuste->numPercentual);
+					// echoo("reajuste");
+					for($i = 0; $i < sizeof ( $recordSet ); $i++) {						
+						$registro = $recordSet [$i];
+						$voTemp = new voContratoModificacao ();
+						$voTemp->getDadosBanco ( $registro );
 						
+						echo("$i");
+						//considera-se que o primeiro registro está atualizado						
+						echoo( " " . dominioTpContratoModificacao::getDescricaoStatic ( $voTemp->tpModificacao ) );
+						//echoo($voTemp->vlMensalAtual);
+						$voContratoReajustadoAnterior = $voContratoReajustadoAtual;
+						if($i!=0){
+							$voContratoReajustadoAnterior = $recordSet [$i-1][filtroManterContratoModificacao::$NmColVOContratoModReajustado];
+						}						
+						if ($voTemp->tpModificacao == dominioTpContratoModificacao::$CD_TIPO_PRORROGACAO) {
+							$registro [filtroManterContratoModificacao::$NmColVOContratoModReajustado] = clone $voContratoReajustadoAtual;
+						} else if ($voTemp->tpModificacao == dominioTpContratoModificacao::$CD_TIPO_REAJUSTE) {
+							if ($voTemp->isReajusteAAplicar ( $voTempReajuste )) {
+								//pega o valor anterior registrado para reajustar
+								$voContratoModReajustado = clone $voContratoReajustadoAnterior;
+								echoo("ANTIGO:".$voContratoModReajustado->vlMensalAtual);
+								$voContratoModReajustado->setPercentualReajuste ( $voTempReajuste );
+								echoo("NOVO:".$voContratoModReajustado->vlMensalAtual);
+								$registro [filtroManterContratoModificacao::$NmColVOContratoModReajustado] = clone $voContratoModReajustado;							
+								$voContratoReajustadoAtual = clone $voContratoModReajustado;
+							}
+						} else {
+							// seta o reajuste se a data permitir
+							if ($voTemp->isReajusteAAplicar ( $voTempReajuste )) {
+								/*$voContratoModReajustadoAnterior = $registro [filtroManterContratoModificacao::$NmColVOContratoModReajustado];
+								if ($voContratoModReajustadoAnterior != null) {
+									// quer dizer que ja houve reajuste anterior calculado e este deve ser utilizado para acumular
+									$voTemp = $voContratoModReajustadoAnterior;
+								}*/
+								//echoo("aplicou reajuste");
+								// echo $voTemp->toString();
+								if($j==0){
+									//primeiro reajuste
+									$voContratoModReajustado = clone $voTemp;
+								}else{
+									//pega o atualizado
+									$voContratoModReajustado = clone $voContratoReajustadoAtual;
+								}
+								$voContratoModReajustado->setPercentualReajuste ( $voTempReajuste );
+								echoo($voContratoModReajustado->vlMensalAtual);
+								// se for prorrogacao, so repete o valor contrato mod anterior, sem reajustar nada
+								// se nao for, passou pelo if acima e a atualizacao do valor contrato mod deve ser registrada
+								$registro [filtroManterContratoModificacao::$NmColVOContratoModReajustado] = $voContratoModReajustado;
+								$voContratoReajustadoAtual = clone $voContratoModReajustado;
+							}
 						}
-					}					
-				}				
+						//inclui novamente com as alteracoes realizadas
+						$recordSet [$i] = $registro;
+					}
+					$j++;
+				}
 			}
 			$retorno = $recordSet;
-		}else{
-			//se nao tiver registro alem de reajuste, mostra apenas os reajustes
+		} else {
+			// se nao tiver registro alem de reajuste, mostra apenas os reajustes
 			$retorno = $colecaoReajuste;
-		}		
+		}
 		return $retorno;
 	}
 	
