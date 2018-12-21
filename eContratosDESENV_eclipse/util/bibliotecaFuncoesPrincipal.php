@@ -499,7 +499,9 @@ function removerUltimaString($stringARemover, $subject){
 function atualizarValorPercentual($valor, $percentual){	
 	$fator = 1 + (floatval($percentual)/100);
 	$valor = floatval($valor);
-	$valor = $valor*$fator;	
+	$valor = $valor*$fator;
+	
+	//echoo("valorMult $valor * $fator"); 
 	return $valor;
 }
 

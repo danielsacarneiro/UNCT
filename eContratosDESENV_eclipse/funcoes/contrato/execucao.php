@@ -128,9 +128,9 @@ function detalhar(isExcluir) {
                     </TR>
                     <TR>
                         <TH class='headertabeladadosalinhadodireita'>Documentado</TH>
-                        <TH class='headertabeladadosalinhadodireita'>Realidade</TH>
+                        <TH class='headertabeladadosalinhadodireita'>Execução</TH>
                         <TH class='headertabeladadosalinhadodireita'>Documentado</TH>
-                        <TH class='headertabeladadosalinhadodireita'>Realidade</TH>
+                        <TH class='headertabeladadosalinhadodireita'>Execução</TH>
                     </TR>
                     <?php
                     

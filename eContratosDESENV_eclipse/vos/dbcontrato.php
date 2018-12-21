@@ -74,6 +74,12 @@ class dbcontrato extends dbprocesso {
 								"$nmTabela.".vocontrato::$nmAtrVlGlobalContrato),
 						voContratoModificacao::$nmAtrVlGlobalModAtual),
 				
+				"$nmTabela." . vocontrato::$nmAtrAnoContrato,
+				"$nmTabela." . vocontrato::$nmAtrCdContrato,
+				"$nmTabela." . vocontrato::$nmAtrTipoContrato,
+				"$nmTabela." . vocontrato::$nmAtrCdEspecieContrato,
+				"$nmTabela." . vocontrato::$nmAtrSqEspecieContrato,
+				
 				"$nmTabelaContratoInseridoTela." . vocontrato::$nmAtrDtVigenciaInicialContrato,
 				"$nmTabelaContratoInseridoTela." . vocontrato::$nmAtrDtVigenciaFinalContrato,
 				"$nmTabelaContratoInseridoTela." . vocontrato::$nmAtrDtAssinaturaContrato,

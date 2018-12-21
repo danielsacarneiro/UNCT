@@ -265,7 +265,7 @@ function iniciar(){
 	            	       name="<?=voContratoModificacao::$nmAtrDtModificacao?>" 
 	            			value="<?php echo(getData($vo->dtModificacao));?>"
 	            			onkeyup="formatarCampoData(this, event, false);"
-		            		onBlur="calcular(this);" 
+		            		onBlur="carregaDadosContrato();calcular(this);" 
 	            			class="camponaoobrigatorio"	            			 
 	            			size="10" 
 	            			maxlength="10" required>

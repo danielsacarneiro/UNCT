@@ -663,9 +663,8 @@ function getCamposContratoMod($vo, $arrayParamComplemento = null){
 	}
 		
 	$dbcontrato = new dbcontrato();
-	$recordSet = $dbcontrato->consultarContratoModificacao($vo, false);
+	$registrobanco = $dbcontrato->consultarContratoModificacao($vo, false);
 	
-	$registrobanco = $recordSet;
 	$voContrato = new vocontrato();
 	$voContrato->getDadosBanco($registrobanco);
 
@@ -678,31 +677,30 @@ function getCamposContratoMod($vo, $arrayParamComplemento = null){
 	$vlMensalTermoInseridoTela = getMoeda($registrobanco[voContratoModificacao::$ID_REQ_VlMensalContratoInseridoTela]);
 	$vlGlobalTermoInseridoTela = getMoeda($registrobanco[voContratoModificacao::$ID_REQ_VlGlobalContratoInseridoTela]);
 	
-	$vo->dtAssinatura = getData($recordSet[vocontrato::$nmAtrDtAssinaturaContrato]);
+	$vo->dtAssinatura = getData($registrobanco[vocontrato::$nmAtrDtAssinaturaContrato]);
 
 	//consulta o periodo de vigencia do termo inserido apenas se ele nao for um TA
 	//quando nesse caso, sendo apostilamento ou qualquer outro, o periodo de vigencia sera determinado pelo TA vigente na data de assinatura
 	//if($vo->cdEspecie != dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_TERMOADITIVO){
-	if($inRetroativo == constantes::$CD_SIM){
+	$voContratoReferencia = clone $voContrato;
+	//if($inRetroativo == constantes::$CD_SIM){
 		$registro = getContratoVigentePorData($vo, $dtEfeitoModificacao, true)[0];
 		$voContratoTemp = new vocontrato();
 		$voContratoTemp->getDadosBanco($registro);
-		
-		$dbcontratomod = new dbContratoModificacao();		 
-		$registroExecucao = $dbcontratomod->consultarExecucaoTermoEspecifico($voContratoTemp);
-		$voContratoModEspecificoReajustado = $registroExecucao[filtroManterContratoModificacao::$NmColVOContratoModReajustado];
-		//$voContratoModEspecificoReajustado = new voContratoModificacao();		
-		//var_dump($voContratoModEspecificoReajustado);
-						
+					
 		$voContrato->dtVigenciaInicial = $voContratoTemp->dtVigenciaInicial;
 		$voContrato->dtVigenciaFinal = $voContratoTemp->dtVigenciaFinal;
 		/*$voContrato->vlMensal = $voContratoTemp->vlMensal;
-		$voContrato->vlGlobal = $voContratoTemp->vlGlobal;*/		
-		$voContrato->vlMensal = getMoeda($voContratoModEspecificoReajustado->vlMensalAtual, 2);
-		$voContrato->vlGlobal = getMoeda($voContratoModEspecificoReajustado->vlGlobalAtual,2);
-		
-		$retorno = "Vigência determinada pelo " . getTextoHTMLNegrito(getContratoDetalhamentoAvulso($voContratoTemp, true)) . "<br>";		
-	}
+		$voContrato->vlGlobal = $voContratoTemp->vlGlobal;*/
+		$retorno = "Vigência determinada pelo " . getTextoHTMLNegrito(getContratoDetalhamentoAvulso($voContratoTemp, true)) . "<br>";
+		$voContratoReferencia = clone $voContratoTemp;
+	//}	
+	//traz o valor atualizado do contrato segundo o e-conti
+	$dbcontratomod = new dbContratoModificacao();
+	$registroExecucao = $dbcontratomod->consultarExecucaoTermoEspecifico($voContratoReferencia);
+	$voContratoModEspecificoReajustado = $registroExecucao[filtroManterContratoModificacao::$NmColVOContratoModReajustado];	
+	$voContrato->vlMensal = getMoeda($voContratoModEspecificoReajustado->vlMensalAtual, 2);
+	$voContrato->vlGlobal = getMoeda($voContratoModEspecificoReajustado->vlGlobalAtual,2);
 		
 	if($voContrato != null){
 		$retorno .= " Data Assinatura: " . getInputText(vocontrato::$nmAtrDtAssinaturaContrato, vocontrato::$nmAtrDtAssinaturaContrato, getData($voContrato->dtAssinatura), constantes::$CD_CLASS_CAMPO_READONLY);
@@ -754,7 +752,8 @@ function getValorNumPercentualAcrescimoContrato($vo){
 	$voContratomod = getVOContratoModAcrescimo($vo);
 	$retorno = 0;
 	if($voContratomod != null){
-		$retorno = $voContratomod->getPercentualAcrescimoAtual();
+		//$retorno = $voContratomod->getPercentualAcrescimoAtual();
+		$retorno = $voContratomod->numPercentual;
 	}
 	return $retorno;
 }
@@ -819,13 +818,21 @@ function getVOContratoModAcrescimo($vo){
 	//var_dump($filtro);
 	$filtro->cdAtrOrdenacao = voContratoModificacao::$nmAtrDhUltAlteracao;
 	$filtro->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
-	$filtro->tipo = array(dominioTpContratoModificacao::$CD_TIPO_ACRESCIMO, dominioTpContratoModificacao::$CD_TIPO_SUPRESSAO);
+	//supressao nao compensa!!
+	$filtro->tipo = array(dominioTpContratoModificacao::$CD_TIPO_ACRESCIMO);
 	$recordSet = $dbcontratomod->consultarTelaConsulta(new voContratoModificacao(), $filtro);
 	//var_dump($recordSet);
 	if(!isColecaoVazia($recordSet)){
-		$registrobanco = $recordSet[0];		
-		$voContratomod = new voContratoModificacao();
-		$voContratomod->getDadosBanco($registrobanco);		
+		$numAcrescimo = 0;
+		foreach ($recordSet as $registro){
+			$voContratomod = new voContratoModificacao();
+			$voContratomod->getDadosBanco($registro);
+			
+			$numAcrescimo = floatval($voContratomod->numPercentual) + $numAcrescimo;
+			//echoo($numAcrescimo);
+		}
+		
+		$voContratomod->numPercentual = $numAcrescimo;
 	}
 	
 	return $voContratomod;

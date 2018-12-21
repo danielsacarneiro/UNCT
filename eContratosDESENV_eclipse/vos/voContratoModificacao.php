@@ -9,6 +9,9 @@ class voContratoModificacao extends voentidade {
 	static $ID_REQ_NUM_PERCENTUAL_REAJUSTE = "ID_REQ_NUM_PERCENTUAL_REAJUSTE";
 	static $ID_REQ_VL_BASE_REAJUSTE = "ID_REQ_VL_BASE_REAJUSTE";
 	static $ID_REQ_InRetroativo = "ID_REQ_InRetroativo";
+	
+	static $InReajusteAplicado = "InReajusteAplicado";
+	
 	static $ID_REQ_VlMensalContratoInseridoTela = "VlMensalContratoInseridoTela";
 	static $ID_REQ_VlGlobalContratoInseridoTela = "VlGlobalContratoInseridoTela";
 	
@@ -247,7 +250,7 @@ class voContratoModificacao extends voentidade {
 		return $retorno;
 	}
 	
-	function getPercentualAcrescimoAtual(){
+	/*function getPercentualAcrescimoAtual(){
 		$percAcrescimo = 0;
 		if($this->vlGlobalModAtual == null){
 			throw new excecaoGenerica("Valor Global Modificação Atual não pode ser nulo.");
@@ -261,7 +264,7 @@ class voContratoModificacao extends voentidade {
 					$percAcrescimo = 100*(($vlGlobalAtual - $vlGlobalModAtual)/$vlGlobalModAtual);										
 		}		
 		return $percAcrescimo;		
-	}
+	}*/
 	
 	function setPercentualReajuste($voContratoModReajuste){
 		//$voContratoModReajuste = new voContratoModificacao();		
@@ -283,10 +286,32 @@ class voContratoModificacao extends voentidade {
 		}
 	}
 	
+	function getValoresReajustadosAtuais($voContratoModReajuste){
+		$this->vlModificacaoReferencial = $voContratoModReajuste->vlModificacaoReferencial;
+		$this->vlModificacaoAoContrato = $voContratoModReajuste->vlModificacaoAoContrato;
+		$this->vlModificacaoReal = $voContratoModReajuste->vlModificacaoReal;
+			
+		$this->vlMensalAtual = $voContratoModReajuste->vlMensalAtual;
+		$this->vlGlobalAtual = $voContratoModReajuste->vlGlobalAtual;
+		$this->vlGlobalReal = $voContratoModReajuste->vlGlobalReal;
+			
+		$this->vlMensalAnterior = $voContratoModReajuste->vlMensalAnterior;
+		$this->vlGlobalAnterior = $voContratoModReajuste->vlGlobalAnterior;
+			
+		$this->vlMensalModAtual = $voContratoModReajuste->vlMensalModAtual;
+		$this->vlGlobalModAtual = $voContratoModReajuste->vlGlobalModAtual;
+	}
+	
 	function isReajusteAAplicar($voContratoModReajuste){
 		//$voContratoModReajuste = new voContratoModificacao();
 		$retorno = false;
-		if($voContratoModReajuste != null){			
+		if($voContratoModReajuste != null){
+			/*echoo("data mod vo:" . strtotime($this->dtModificacao));
+			echoo("data mod reajuste:" . strtotime($voContratoModReajuste->dtModificacao));
+			
+			echoo("dh mod vo:" . strtotime($this->dhUltAlteracao));
+			echoo("dh mod reajuste:" . strtotime($voContratoModReajuste->dhUltAlteracao));*/
+				
 			if(strtotime($this->dtModificacao) >= strtotime($voContratoModReajuste->dtModificacao)
 					&& strtotime($this->dhUltAlteracao) <= strtotime($voContratoModReajuste->dhUltAlteracao)){
 				$retorno = true;
