@@ -698,9 +698,11 @@ function getCamposContratoMod($vo, $arrayParamComplemento = null){
 	//traz o valor atualizado do contrato segundo o e-conti
 	$dbcontratomod = new dbContratoModificacao();
 	$registroExecucao = $dbcontratomod->consultarExecucaoTermoEspecifico($voContratoReferencia);
-	$voContratoModEspecificoReajustado = $registroExecucao[filtroManterContratoModificacao::$NmColVOContratoModReajustado];	
-	$voContrato->vlMensal = getMoeda($voContratoModEspecificoReajustado->vlMensalAtual, 2);
-	$voContrato->vlGlobal = getMoeda($voContratoModEspecificoReajustado->vlGlobalAtual,2);
+	$voContratoModEspecificoReajustado = $registroExecucao[filtroManterContratoModificacao::$NmColVOContratoModReajustado];
+	if($voContratoModEspecificoReajustado->vlMensalAtual != null){
+		$voContrato->vlMensal = getMoeda($voContratoModEspecificoReajustado->vlMensalAtual, 2);
+		$voContrato->vlGlobal = getMoeda($voContratoModEspecificoReajustado->vlGlobalAtual,2);
+	}
 		
 	if($voContrato != null){
 		$retorno .= " Data Assinatura: " . getInputText(vocontrato::$nmAtrDtAssinaturaContrato, vocontrato::$nmAtrDtAssinaturaContrato, getData($voContrato->dtAssinatura), constantes::$CD_CLASS_CAMPO_READONLY);

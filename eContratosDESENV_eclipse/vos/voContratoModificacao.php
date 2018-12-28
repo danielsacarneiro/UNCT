@@ -250,7 +250,7 @@ class voContratoModificacao extends voentidade {
 		return $retorno;
 	}
 	
-	/*function getPercentualAcrescimoAtual(){
+	function getPercentualAcrescimoAtual(){
 		$percAcrescimo = 0;
 		if($this->vlGlobalModAtual == null){
 			throw new excecaoGenerica("Valor Global Modificação Atual não pode ser nulo.");
@@ -264,7 +264,7 @@ class voContratoModificacao extends voentidade {
 					$percAcrescimo = 100*(($vlGlobalAtual - $vlGlobalModAtual)/$vlGlobalModAtual);										
 		}		
 		return $percAcrescimo;		
-	}*/
+	}
 	
 	function setPercentualReajuste($voContratoModReajuste){
 		//$voContratoModReajuste = new voContratoModificacao();		

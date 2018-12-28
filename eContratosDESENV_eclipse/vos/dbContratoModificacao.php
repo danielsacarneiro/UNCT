@@ -273,21 +273,24 @@ class dbContratoModificacao extends dbprocesso {
 		foreach ( $recordSet as $registro) {
 			$voTemp = new voContratoModificacao ();
 			$voTemp->getDadosBanco ( $registro );
-						
+			//echoo("teste1");
 			$voAConsiderar = $registro [filtroManterContratoModificacao::$NmColVOContratoModReajustado];
+			//var_dump($voAConsiderar);
 			if ($voAConsiderar == null){
 				
 				if($voTemp->tpModificacao != dominioTpContratoModificacao::$CD_TIPO_PRORROGACAO){
 					//para todos os outros nada deve ser feito, pois os calculos ja foram realizados antes
 					$voAConsiderar = clone $voTemp;
+					//echoo("teste2");
 				}else{
 					$voAConsiderar = clone $voAtualizadoAnterior;
+					//echoo("teste3");
 				}
 				$registro [filtroManterContratoModificacao::$NmColVOContratoModReajustado] = $voAConsiderar;
 				$recordSet [$i] = $registro;
 			}
 			/*echoo($voTemp->toString());
-			echoo($voAtualizadoAtual->vlMensal);*/				
+			echoo($voAConsiderar->vlMensal);*/				
 			$i++;			
 			$voAtualizadoAnterior = clone $voAConsiderar;
 		}		
@@ -317,20 +320,19 @@ class dbContratoModificacao extends dbprocesso {
 		$filtro->tipo = dominioTpContratoModificacao::$CD_TIPO_REAJUSTE;
 		$colecaoReajuste = $this->consultarTelaConsulta ( new voContratoModificacao (), $filtro );
 		
-		if (! isColecaoVazia ( $recordSet )) {
-			
-			$tamColecaoRecordSet = sizeof ( $recordSet );
-			// o primeiro contratomod ajustado eh ele mesmo
-			$registro = $recordSet [0];
-			$voContratoReajustadoAtual = new voContratoModificacao ();
-			$voContratoReajustadoAtual->getDadosBanco ( $registro );
-			$voContratoReajustadoAtual->vlMensalAtual = getVarComoDecimal($voContratoMater->vlMensal);
-			$voContratoReajustadoAtual->vlGlobalAtual = getVarComoDecimal($voContratoMater->vlGlobal);
-			$registro [filtroManterContratoModificacao::$NmColVOContratoModReajustado] = $voContratoReajustadoAtual;
-			$recordSet [0] = $registro;
-			//echoo("valor inicial atualizado: " . $voContratoReajustadoAtual->vlMensalAtual);
-								
+		if (! isColecaoVazia ( $recordSet )) {								
 			if (! isColecaoVazia ( $colecaoReajuste )) {
+				$tamColecaoRecordSet = sizeof ( $recordSet );
+				// o primeiro contratomod ajustado eh ele mesmo
+				$registro = $recordSet [0];
+				$voContratoReajustadoAtual = new voContratoModificacao ();
+				$voContratoReajustadoAtual->getDadosBanco ( $registro );
+				$voContratoReajustadoAtual->vlMensalAtual = getVarComoDecimal($voContratoMater->vlMensal);
+				$voContratoReajustadoAtual->vlGlobalAtual = getVarComoDecimal($voContratoMater->vlGlobal);
+				$registro [filtroManterContratoModificacao::$NmColVOContratoModReajustado] = $voContratoReajustadoAtual;
+				$recordSet [0] = $registro;
+				//echoo("valor inicial atualizado: " . $voContratoReajustadoAtual->vlMensalAtual);
+				
 				$j=0;
 				foreach ( $colecaoReajuste as $registroReajuste ) {
 					$voTempReajuste = new voContratoModificacao ();

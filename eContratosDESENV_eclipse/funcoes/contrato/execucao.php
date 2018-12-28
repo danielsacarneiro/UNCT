@@ -122,7 +122,9 @@ function detalhar(isExcluir) {
                         <TH class='headertabeladados' rowspan=2 nowrap>Espécie</TH>
                         <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Tipo</TH>
                         <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Índice</TH>
-                        <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Data</TH>
+                        <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Data.Ini.</TH>
+                        <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Data.Fim</TH>
+                        <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Vl.LICON</TH>
                         <TH class='headertabeladadosalinhadocentro' width='40%' nowrap colspan=2>Vl.Mensal</TH>
                         <TH class='headertabeladadosalinhadocentro' width='40%' nowrap colspan=2>Vl.Global</TH>
                     </TR>
@@ -168,6 +170,8 @@ function detalhar(isExcluir) {
                         <TD class='tabeladados'><?php echo $tipo?></TD>
                         <TD class='tabeladados'><?php echo $percentual?></TD>
                         <TD class='tabeladados'><?php echo getData($voAtual->dtModificacao)?></TD>
+                        <TD class='tabeladados'><?php echo getData($voAtual->dtModificacaoFim)?></TD>
+                        <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($voAtual->vlModificacaoReal)?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($voAtual->vlMensalAtual)?></TD>                    
                         <TD class='tabeladadosalinhadodireita' ><?php echo getTextoHTMLNegrito(getMoeda($voContratoModReajuste->vlMensalAtual))?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($voAtual->vlGlobalAtual)?></TD>                    

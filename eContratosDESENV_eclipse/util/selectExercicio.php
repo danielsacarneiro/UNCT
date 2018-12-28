@@ -12,7 +12,7 @@ require_once(caminho_util."bibliotecaDataHora.php");
 //recebe uma colecao Cd x Descricao	
 	function __construct () {
 		$colecaoExer = array();
-		for ($i=getAnoHoje();$i>1998;$i--){
+		for ($i=getAnoHoje()+1;$i>1998;$i--){
 			$colecaoExer[$i]=$i;
 		}		
 		

@@ -333,7 +333,7 @@ class dbcontrato extends dbprocesso {
 		$query .= $this->getSQLValuesInsert ( $voContrato );
 		$query .= ")";
 		
-		// echo $query;
+		//echoo($query);
 		
 		return $query;
 	}
@@ -369,14 +369,20 @@ class dbcontrato extends dbprocesso {
 		$retorno .= $this->getVarComoString ( $voContrato->licom ) . ",";
 		$retorno .= $this->getVarComoString ( $voContrato->importacao ) . ",";
 		$retorno .= $this->getVarComoString ( $voContrato->obs ) . ",";
-		$retorno .= $this->getDecimalSQL ( $voContrato->vlGlobal ) . ",";
-		$retorno .= $this->getDecimalSQL ( $voContrato->vlMensal ) . ",";
+		/*$retorno .= $this->getDecimalSQL ( $voContrato->vlGlobal ) . ",";
+		$retorno .= $this->getDecimalSQL ( $voContrato->vlMensal ) . ",";*/
+		//echoo("valor global:".$voContrato->vlGlobal);
+		$retorno .= $this->getVarComoDecimal($voContrato->vlGlobal ) . ",";
+		$retorno .= $this->getVarComoDecimal($voContrato->vlMensal ) . ",";		
+		
 		$retorno .= $this->getDataSQL ( $voContrato->dtProposta ) . ",";
 		$retorno .= $this->getVarComoNumero ( $voContrato->cdPessoaContratada ) . ",";
 		$retorno .= $this->getVarComoString ( $voContrato->linkDoc ) . ",";
 		$retorno .= $this->getVarComoString ( $voContrato->linkMinutaDoc );
 		
 		$retorno .= $voContrato->getSQLValuesInsertEntidade ();
+		
+		//echoo($retorno);  
 		
 		return $retorno;
 	}
@@ -572,7 +578,7 @@ class dbcontrato extends dbprocesso {
 			$query .= $this->getAtributosInsertImportacaoPlanilha ($voContrato );
 			$query .= ")";
 			
-			// echo $query;
+			//echo $query;
 					
 			// tenta incluir
 			$retorno = $this->cDb->atualizarImportacao ( $query );
@@ -808,8 +814,8 @@ class dbcontrato extends dbprocesso {
 		
 		//var_dump($arrayDocs);
 		
-		$query = "SELECT ";
-		$query .= vocontrato::getNmTabela () . "." . vocontrato::$nmAtrSqContrato;
+		$query = "SELECT * ";
+		/*$query .= vocontrato::getNmTabela () . "." . vocontrato::$nmAtrSqContrato;
 		$query .= "," . vocontrato::getNmTabela () . "." . vocontrato::$nmAtrAnoContrato;
 		$query .= "," . vocontrato::getNmTabela () . "." . vocontrato::$nmAtrCdContrato;
 		$query .= "," . vocontrato::getNmTabela () . "." . vocontrato::$nmAtrTipoContrato;
@@ -817,7 +823,7 @@ class dbcontrato extends dbprocesso {
 		$query .= "," . vocontrato::getNmTabela () . "." . vocontrato::$nmAtrSqEspecieContrato;
 		$query .= "," . vocontrato::getNmTabela () . "." . vocontrato::$nmAtrDocContratadaContrato;
 		$query .= "," . vocontrato::getNmTabela () . "." . vocontrato::$nmAtrCdPessoaContratada;
-		$query .= "," . vocontrato::getNmTabela () . "." . vocontrato::$nmAtrDhUltAlteracao;
+		$query .= "," . vocontrato::getNmTabela () . "." . vocontrato::$nmAtrDhUltAlteracao;*/
 		$query .= "\n FROM " . vocontrato::getNmTabela ();
 		$query .= "\n WHERE " . vocontrato::$nmAtrDocContratadaContrato . " IS NOT NULL";
 		$query .= "\n AND " . vocontrato::$nmAtrCdPessoaContratada . " IS NULL";
@@ -881,13 +887,14 @@ class dbcontrato extends dbprocesso {
 		// pra retirar os caracterees especiais
 		; // $retorno = $this->cDb->atualizar($query);
 	}
-	function getVOImportacaoPlanilha($tipo, $linha) {
-		$tpContrato = $linha ["A"];
-		echoo("|".$tpContrato."|");
-				
+	function getVOImportacaoPlanilha($tipo, $linha) {				
+		
 		if($tpContrato == trim(static::$CD_CONSTANTE_FIM_IMPORTACAO)){
 			throw new excecaoFimImportacaoContrato();
 		}
+		
+		$tpContrato = $linha ["A"];
+		echoo("|".$tpContrato."|");
 		
 		$numero = $linha ["B"];
 		$ano = $linha ["B"];
@@ -980,6 +987,7 @@ class dbcontrato extends dbprocesso {
 		$retorno->objeto = $objeto;
 		$retorno->nmGestorPessoa = $gestorPessoa;
 		$retorno->gestor = $gestor;
+		
 		$retorno->vlGlobal = $valorGlobal;
 		$retorno->vlMensal = $valorMensal;
 		if($processoLic != null){
@@ -1014,10 +1022,12 @@ class dbcontrato extends dbprocesso {
 		$retorno->anoContrato = $this->getAnoLinhaImportacao ( $retorno->anoContrato );
 		$retorno->cdContrato = $this->getNumeroLinhaImportacao ( $retorno->cdContrato );
 		$retorno->cdAutorizacao = $this->getCdAutorizacao ( $retorno->tpAutorizacao );
-		// echo "<br> VALOR GLOBAL: " . $retorno->vlGlobal;
+		//echoo("valor global:" . $valorGlobal);
+		//echo "<br> VALOR GLOBAL: " . $retorno->vlGlobal;
 		// echo "<br> VALOR vlMensal: " . $retorno->vlMensal;
 		$retorno->vlGlobal = $this->getDecimalLinhaImportacao ( $retorno->vlGlobal );
 		$retorno->vlMensal = $this->getDecimalLinhaImportacao ( $retorno->vlMensal );
+		//echo "<br> VALOR GLOBAL: " . $retorno->vlGlobal;
 		
 		$retorno->dtAssinatura = $this->getDataLinhaImportacao ( $retorno->dtAssinatura );
 		$retorno->dtPublicacao = $this->getDataPublicacaoImportacao ( $dataPublic );
