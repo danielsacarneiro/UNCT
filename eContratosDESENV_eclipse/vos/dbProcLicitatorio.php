@@ -386,7 +386,17 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
     function getSQLValuesUpdate($vo){        
         $retorno = "";
         $sqlConector = "";
-                
+                        
+        if($vo->cdModalidade != null){
+        	$retorno.= $sqlConector . voProcLicitatorio::$nmAtrCdModalidade . " = " . $this->getVarComoString($vo->cdModalidade);
+        	$sqlConector = ",";
+        }
+        
+        if($vo->numModalidade != null){
+        	$retorno.= $sqlConector . voProcLicitatorio::$nmAtrNumModalidade . " = " . $this->getVarComoNumero($vo->numModalidade);
+        	$sqlConector = ",";
+        }
+        
         if($vo->objeto != null){
             $retorno.= $sqlConector . voProcLicitatorio::$nmAtrObjeto . " = " . $this->getVarComoString($vo->objeto);
             $sqlConector = ",";

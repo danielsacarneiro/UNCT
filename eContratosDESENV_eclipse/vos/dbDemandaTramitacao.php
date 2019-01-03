@@ -211,11 +211,20 @@ class dbDemandaTramitacao extends dbprocesso {
 			$voDemanda->dbprocesso->cDb = $this->cDb;
 			
 			$dbUsuarioInfo = new dbUsuarioInfo();
-			$cdSetor = $vo->cdSetor;
+			$cdSetor = $vo->cdSetor;			
 			if (!$dbUsuarioInfo->isUsuarioPertenceAoSetor($cdSetor)) {
 				$msg = "Usuário não autorizado pelo Setor ". dominioSetor::getDescricaoStaticTeste($cdSetor)." para incluir demanda.";
 				throw new Exception ( $msg );
 			}				
+			
+			//apenas usuario avancado pode determinar prioridade alta
+			if (!isUsuarioAdmin()) {
+				//$vo = new voDemandaTramitacao();
+				if ($vo->prioridade == dominioPrioridadeDemanda::$CD_PRIORI_ALTA) {
+					$msg = "Usuário não autorizado para incluir demandas com prioridade ALTA.";
+					throw new Exception ( $msg );
+				}
+			}
 			
 			$voDemanda->dbprocesso->incluir ( $voDemanda );
 			$vo->cd = $voDemanda->cd;

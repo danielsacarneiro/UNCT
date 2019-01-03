@@ -238,7 +238,7 @@ CREATE TABLE contrato_licon (
     cd_usuario_ultalt INT NOT NULL,
     
     CONSTRAINT pk PRIMARY KEY (dem_ex, dem_cd, ct_exercicio, ct_numero, ct_tipo, ct_cd_especie, ct_sq_especie),
-    UNIQUE KEY uk_contrato_licon (ct_exercicio, ct_numero, ct_tipo, ct_cd_especie, ct_sq_especie),
+    -- UNIQUE KEY uk_contrato_licon (ct_exercicio, ct_numero, ct_tipo, ct_cd_especie, ct_sq_especie),
 	CONSTRAINT fk_demanda_licon FOREIGN KEY (dem_ex, dem_cd) 
 		REFERENCES demanda (dem_ex, dem_cd) 
 			ON DELETE RESTRICT
@@ -248,8 +248,9 @@ CREATE TABLE contrato_licon (
 ); 
 
 /*ALTER TABLE contrato_licon ADD UNIQUE KEY uk_contrato_licon (ct_exercicio, ct_numero, ct_tipo, ct_cd_especie, ct_sq_especie) 
-
 ALTER TABLE contrato_licon DROP FOREIGN KEY fk_contrato_licon;*/
+ALTER TABLE contrato_licon DROP INDEX uk_contrato_licon
+
 drop table contrato_mod;
 CREATE TABLE contrato_mod (
 	ctmod_sq INT NOT NULL,

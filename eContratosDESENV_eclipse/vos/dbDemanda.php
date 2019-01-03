@@ -490,7 +490,7 @@ class dbDemanda extends dbprocesso {
 		if (dominioTipoDemanda::isContratoObrigatorio($tipo) && ! $vo->temContratoParaIncluir ()) {
 			$msg = "Selecione ao menos um contrato.";
 			throw new excecaoGenerica ( $msg );
-		}		
+		}
 	}
 	
 	function validarAlteracao($vo) {

@@ -111,14 +111,6 @@ function confirmar() {
 					 <INPUT type="hidden" id="<?=voProcLicitatorio::$nmAtrCd?>" name="<?=voProcLicitatorio::$nmAtrCd?>" value="<?=$vo->cd?>">		         
 				</TD>
 	        </TR>
-			<TR>
-	            <TH class="campoformulario" nowrap width="1%">Modalidade:</TH>
-	            <TD class="campoformulario" width="1%" colspan=3>
-	            <?php echo(getDetalhamentoHTMLCodigoAno($vo->ano, $vo->numModalidade, TAMANHO_CODIGOS_SAFI)) 
-	            . " " 
-				. getInputText("", "", dominioModalidadeProcLicitatorio::getDescricaoStatic($vo->cdModalidade, null, true), constantes::$CD_CLASS_CAMPO_READONLY);?>
-				</TD>
-	        </TR>
 			<?php			
 			$comboSituacao = new select(dominioSituacaoPL::getColecao());
 	        ?>
@@ -143,26 +135,23 @@ function confirmar() {
 	            	colecaoIDCdNaoObrigatorio = ["<?=voProcLicitatorio::$nmAtrCd?>"];
 	            </SCRIPT>
 	            <INPUT type="checkbox" id="checkCdNaoObrigatorio" name="checkCdNaoObrigatorio" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCdNaoObrigatorio, true);"> *Incluir código automaticamente.			                                           
-	        </TR>
-			<?php 
-			$comboModalidade = new select(dominioModalidadeProcLicitatorio::getColecao());
-	        ?>	        
-			<TR>
-	            <TH class="campoformulario" nowrap width="1%">Modalidade:</TH>
-	            <TD class="campoformulario" colspan=3>
-	            <?php 
-	            echo $comboModalidade->getHtmlCombo(voProcLicitatorio::$nmAtrCdModalidade,voProcLicitatorio::$nmAtrCdModalidade, $vo->cdModalidade, true, "campoobrigatorio", false, " required ");
-	            echo " Número: "
-	            ?>
-	            <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voProcLicitatorio::$nmAtrNumModalidade?>" name="<?=voProcLicitatorio::$nmAtrNumModalidade?>"  value="<?php echo(complementarCharAEsquerda($vo->numModalidade, "0", 5));?>"  class="<?=$classChaves?>" size="6" maxlength="5" <?=$readonlyChaves?> required>
-	            </TD>
-	        </TR>
-	        			            
+	        </TR>	        			            
 	        <?php 
 	       }
-
+	       
+	       $comboModalidade = new select(dominioModalidadeProcLicitatorio::getColecao());
 	       $comboTipo = new select(dominioTipoProcLicitatorio::getColecao());
-	        ?>
+	       ?>
+			<TR>
+				<TH class="campoformulario" nowrap width="1%">Modalidade:</TH>
+				<TD class="campoformulario" colspan=3>
+				<?php 
+				echo $comboModalidade->getHtmlCombo(voProcLicitatorio::$nmAtrCdModalidade,voProcLicitatorio::$nmAtrCdModalidade, $vo->cdModalidade, true, "campoobrigatorio", false, " required ");
+				echo " Número: "
+				?>
+				<INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voProcLicitatorio::$nmAtrNumModalidade?>" name="<?=voProcLicitatorio::$nmAtrNumModalidade?>"  value="<?php echo(complementarCharAEsquerda($vo->numModalidade, "0", 5));?>"  class="campoobrigatorio" size="6" maxlength="5" required>
+				</TD>
+			</TR>
 			<TR>
 	            <TH class="campoformulario" nowrap>Tipo:</TH>
 	            <TD class="campoformulario" colspan=3><?php echo $comboTipo->getHtmlCombo(voProcLicitatorio::$nmAtrTipo,voProcLicitatorio::$nmAtrTipo, $vo->tipo, true, "campoobrigatorio", false, " required ");?>
