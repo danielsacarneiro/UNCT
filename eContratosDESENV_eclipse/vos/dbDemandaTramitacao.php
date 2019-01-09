@@ -220,7 +220,7 @@ class dbDemandaTramitacao extends dbprocesso {
 			//apenas usuario avancado pode determinar prioridade alta
 			if (!isUsuarioAdmin()) {
 				//$vo = new voDemandaTramitacao();
-				if ($vo->prioridade == dominioPrioridadeDemanda::$CD_PRIORI_ALTA) {
+				if ($vo->tipo != dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL && $vo->prioridade == dominioPrioridadeDemanda::$CD_PRIORI_ALTA) {
 					$msg = "Usuário não autorizado para incluir demandas com prioridade ALTA.";
 					throw new Exception ( $msg );
 				}

@@ -6,7 +6,7 @@
  * @return string
  */
 function getSequenciaAssunto($assunto, &$count = 0){
-	$count++;
+	$count++;		
 	$assunto = "$count - $assunto";
 	return $assunto;
 }

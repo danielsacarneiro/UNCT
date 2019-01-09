@@ -233,9 +233,12 @@ CREATE TABLE contrato_licon (
     ctl_situacao CHAR(1) DEFAULT 1 NOT NULL,
 
     ctl_obs MEDIUMTEXT NULL,
-        
-    dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    cd_usuario_ultalt INT NOT NULL,
+            
+    dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
+    cd_usuario_incl INT,
+    cd_usuario_ultalt INT,
+    in_desativado CHAR(1) NOT NULL DEFAULT 'N',
     
     CONSTRAINT pk PRIMARY KEY (dem_ex, dem_cd, ct_exercicio, ct_numero, ct_tipo, ct_cd_especie, ct_sq_especie),
     -- UNIQUE KEY uk_contrato_licon (ct_exercicio, ct_numero, ct_tipo, ct_cd_especie, ct_sq_especie),
@@ -246,10 +249,88 @@ CREATE TABLE contrato_licon (
             
     -- CONSTRAINT ck_demanda_licon_userinclusao CHECK(cd_usuario_incl > 0)            
 ); 
+ALTER TABLE contrato_licon DROP COLUMN dh_ultima_alt;
+ALTER TABLE contrato_licon DROP COLUMN cd_usuario_ultalt;
+
+ALTER TABLE contrato_licon ADD COLUMN dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL AFTER ctl_obs;
+ALTER TABLE contrato_licon ADD COLUMN dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL AFTER dh_inclusao;
+ALTER TABLE contrato_licon ADD COLUMN cd_usuario_incl INT DEFAULT 1 NOT NULL AFTER dh_ultima_alt;
+ALTER TABLE contrato_licon ADD COLUMN cd_usuario_ultalt INT DEFAULT 1 NULL AFTER cd_usuario_incl;
+ALTER TABLE contrato_licon ADD COLUMN in_desativado CHAR(1) NOT NULL DEFAULT 'N' AFTER cd_usuario_ultalt;
+
 
 /*ALTER TABLE contrato_licon ADD UNIQUE KEY uk_contrato_licon (ct_exercicio, ct_numero, ct_tipo, ct_cd_especie, ct_sq_especie) 
 ALTER TABLE contrato_licon DROP FOREIGN KEY fk_contrato_licon;*/
-ALTER TABLE contrato_licon DROP INDEX uk_contrato_licon
+-- ALTER TABLE contrato_licon DROP INDEX uk_contrato_licon
+
+drop table contrato_licon_hist;
+CREATE TABLE contrato_licon_hist (
+	hist INT NOT NULL AUTO_INCREMENT,	
+    
+	dem_ex INT NOT NULL,
+    dem_cd INT NOT NULL,    
+
+    ct_exercicio INT NOT NULL,
+    ct_numero INT NOT NULL,
+    ct_tipo char(1) NOT NULL,
+    ct_cd_especie CHAR(2) NOT NULL, -- especie do registro (mater, apostilamento, aditivo)
+	ct_sq_especie INT DEFAULT 1 NOT NULL, -- indice do documento em questao (primeiro ou segundo apostilamento, por ex)
+    
+    ctl_situacao CHAR(1) DEFAULT 1 NOT NULL,
+
+    ctl_obs MEDIUMTEXT NULL,
+        
+    dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
+    cd_usuario_incl INT,
+    cd_usuario_ultalt INT,
+    in_desativado CHAR(1) NOT NULL,
+    
+	dh_operacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    cd_usuario_operacao INT,    
+    
+	CONSTRAINT pk PRIMARY KEY (hist)
+); 
+
+DELIMITER $$
+DROP PROCEDURE IF EXISTS recuperarDatasContratoLicon $$
+CREATE PROCEDURE recuperarDatasContratoLicon()
+BEGIN
+
+  DECLARE done INTEGER DEFAULT 0;
+  DECLARE dem_ex INT;
+  DECLARE dem_cd INT;
+  DECLARE dh TIMESTAMP;
+
+  DECLARE cTabela CURSOR FOR 
+	  select contrato_licon.dem_ex,contrato_licon.dem_cd,MAX(demanda_tram.dh_inclusao) from contrato_licon
+      inner join demanda_tram
+      on demanda_tram.dem_ex = contrato_licon.dem_ex
+      and demanda_tram.dem_cd = contrato_licon.dem_cd      
+      group by demanda_tram.dem_ex, demanda_tram.dem_cd;
+        -- retira os pontos, barras e tracos para evitar duplicacoes
+	
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;  
+  
+  OPEN cTabela;  
+  REPEAT
+  -- read_loop: LOOP
+    #aqui você pega os valores do "select", para mais campos vocÇe pode fazer assim:
+    #cTabela INTO c1, c2, c3, ..., cn
+    FETCH cTabela INTO dem_ex,dem_cd,dh;
+		IF NOT done THEN		
+		
+        UPDATE contrato_licon SET dh_inclusao = dh, dh_ultima_alt = dh
+        where contrato_licon.dem_ex = dem_ex and contrato_licon.dem_cd = dem_cd;
+
+		END IF;
+  UNTIL done END REPEAT;
+  CLOSE cTabela;
+  
+END $$
+DELIMITER ;
+call recuperarDatasContratoLicon();
+
 
 drop table contrato_mod;
 CREATE TABLE contrato_mod (

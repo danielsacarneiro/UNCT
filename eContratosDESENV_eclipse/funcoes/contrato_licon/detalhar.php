@@ -65,7 +65,7 @@ function isFormularioValido() {
 
 function cancelar() {
 	//history.back();
-	location.href="index.php?consultar=S";	
+	location.href="index.php?consultar=S";
 }
 
 function confirmar() {
@@ -98,7 +98,7 @@ function confirmar() {
 			<TR>
                 <TH class="campoformulario" nowrap width=1%>Sq.Hist:</TH>
                 <TD class="campoformulario" colspan=3><INPUT type="text" value="<?php echo(complementarCharAEsquerda($vo->sqHist, "0", TAMANHO_CODIGOS));?>"  class="camporeadonlyalinhadodireita" size="5" readonly></TD>
-                <INPUT type="hidden" id="<?=voContratoInfo::$nmAtrSqHist?>" name="<?=voContratoInfo::$nmAtrSqHist?>" value="<?=$vo->sqHist?>">
+                <INPUT type="hidden" id="<?=voContratoLicon::$nmAtrSqHist?>" name="<?=voContratoLicon::$nmAtrSqHist?>" value="<?=$vo->sqHist?>">
             </TR>               
             <?php }	        	        	        
 	       	          
@@ -156,9 +156,7 @@ function confirmar() {
 	</TD>
 </TR>        	        	
 	        <?php
-	        if(!$isInclusao){
-	            echo "<TR>" . incluirUsuarioDataHoraDetalhamento($vo) .  "</TR>";
-	        }
+	        echo "<TR>" . incluirUsuarioDataHoraDetalhamento($vo) .  "</TR>";	        
 	        ?>
             </TBODY>
             </TABLE>

@@ -3,6 +3,8 @@ include_once(caminho_lib. "dbprocesso.obj.php");
 include_once 'voContratoLicon.php';
 
   Class dbContratoLicon extends dbprocesso{
+  	static $FLAG_PRINTAR_SQL = false;
+  	
   	function consultarPorChaveTela($vo, $isHistorico) {
   		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
   		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( false );
@@ -47,6 +49,7 @@ include_once 'voContratoLicon.php';
   	}
   	
   	function consultarTelaConsulta($vo, $filtro) {
+  		$isHistorico = $filtro->isHistorico();
   		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );  		
   		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( false );
   		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );

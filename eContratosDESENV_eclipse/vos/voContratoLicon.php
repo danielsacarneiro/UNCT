@@ -27,18 +27,15 @@ class voContratoLicon extends voentidade {
 	// Funcoes ( Propriedades e métodos da classe )
 	function __construct($arrayChave = null) {
 		parent::__construct1 ($arrayChave);
-		$this->temTabHistorico = false;
-		$this->dbprocesso = new dbContratoLicon();
-		
-		// retira os atributos padrao que nao possui
-		// remove tambem os que o banco deve incluir default
-		$arrayAtribRemover = array (
+		$this->temTabHistorico = true;
+		$class = self::getNmClassProcesso ();
+		$this->dbprocesso = new $class ();
+				
+		$arrayAtribInclusaoDBDefault = array (
 				self::$nmAtrDhInclusao,
-				self::$nmAtrDhUltAlteracao,
-				self::$nmAtrCdUsuarioInclusao,
+				self::$nmAtrDhUltAlteracao
 		);
-		$this->removeAtributos ( $arrayAtribRemover );
-		$this->varAtributosARemover = $arrayAtribRemover;
+		$this->setaAtributosRemocaoEInclusaoDBDefault($arrayAtribRemover, $arrayAtribInclusaoDBDefault);		
 		
 		$this->vodemandacontrato = new voDemandaContrato();
 	}
@@ -52,11 +49,16 @@ class voContratoLicon extends voentidade {
 		return "dbContratoLicon";
 	}
 	function getValoresWhereSQLChave($isHistorico) {
-		$nmTabela = $this->getNmTabelaEntidade ( $isHistorico );
-		$query = $this->vodemandacontrato->getValoresWhereSQLChaveComOutraTabela($isHistorico, $nmTabela);
+		$nmTabela = $this->getNmTabelaEntidade ( $isHistorico );		
 		
-		if ($isHistorico)
-			$query .= " AND " . $nmTabela . "." . self::$nmAtrSqHist . "=" . $this->sqHist;
+		/*if ($isHistorico)
+			$query .= " AND " . $nmTabela . "." . self::$nmAtrSqHist . "=" . $this->sqHist;*/	
+		
+		if ($isHistorico){
+			$this->vodemandacontrato->sqHist = $this->sqHist;
+		}
+					
+		$query = $this->vodemandacontrato->getValoresWhereSQLChaveComOutraTabela($isHistorico, $nmTabela);
 		
 		return $query;
 	}
@@ -124,10 +126,11 @@ class voContratoLicon extends voentidade {
 	function getValorChavePrimaria() {
 		$separador = CAMPO_SEPARADOR;
 		// $separador = "b";
-		return $this->vodemandacontrato->getValorChavePrimaria();
+		return $this->vodemandacontrato->getValorChavePrimaria() . $separador . $this->sqHist;
 	}
 	function getChavePrimariaVOExplode($array) {		
 		$this->vodemandacontrato->getChavePrimariaVOExplode($array);
+		$this->sqHist = $array [9];
 	}
 	function getMensagemComplementarTelaSucesso() {
 		$retorno = "Contrato-Sistema Externo: " . $this->toString();

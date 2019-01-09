@@ -434,9 +434,12 @@ include_once (caminho_util . "DocumentoPessoa.php");
 	static function getEnredeçoDocumento($link){
 		//para o caso de o link do doc vier em endereco relativo ("../")
 		$pastaUNCTPrincipalSubs = dominioTpDocumento::$ENDERECO_DRIVE . "\\" . dominioTpDocumento::$ENDERECO_PASTABASE_UNCT;
+		//echoo ($pastaUNCTPrincipalSubs);
 		//$link = str_ireplace("..", $pastaUNCTPrincipalSubs . "" , $link);
 		//echoo($link);
 		$link = str_ireplace("../", $pastaUNCTPrincipalSubs . "\\" , $link);
+		//echoo($link);
+		//$link = str_ireplace("..", $pastaUNCTPrincipalSubs . "\\" , $link);
 		//echoo($link);
 		$link = str_ireplace("..\\", $pastaUNCTPrincipalSubs . "\\" , $link);
 		//echoo($link);
