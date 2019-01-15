@@ -183,8 +183,19 @@ function getIndiceBarraOuPonto($param) {
 	return $retorno;
 }
 function getDocLinkMascaraImportacao($param) {
-	$linkDoc = str_replace ( "\\", "\\\\", $param );
+	$linkDoc = $param;
+	/*if($linkDoc != null && $linkDoc !=""){
+		echoo("link Doc: $linkDoc"); 
+	}*/
+	//$linkDoc = str_replace ( "\\", "\\\\", $param );
+			
+	//$linkDoc = addslashes($param );
+			
+	/*if($linkDoc != null && $linkDoc !=""){
+		echoo("link Doc: $linkDoc");
+	}*/
 	//$linkDoc = str_replace ( "&", "E", $linkDoc );
+	//$linkDoc = utf8_encode($linkDoc);
 	return $linkDoc;
 }
 function getMoedaMascaraImportacao($param) {

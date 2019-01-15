@@ -224,7 +224,7 @@ class dbprocesso {
 			$tamanho = sizeof ( $retorno );
 			
 			if ($retorno == "")
-				throw new excecaoChaveRegistroInexistente ("");
+				throw new excecaoChaveRegistroInexistente ("DbProcesso. Consulta Chave Primária");
 			
 			if ($tamanho > 1)
 				throw new excecaoMaisDeUmRegistroRetornado ();

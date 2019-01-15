@@ -494,10 +494,14 @@ class filtroManterDemanda extends filtroManter{
 		
 		if($this->nmContratada != null){
 			$filtro = $filtro . $conector
-			. $nmTabelaPessoaContrato. "." .vopessoa::$nmAtrNome
+			. "($nmTabelaPessoaContrato." .vopessoa::$nmAtrNome
 			. " LIKE '%"
 			. $this->nmContratada
 			. "%'"
+			. " OR $nmTabela." .voDemanda::$nmAtrTexto
+			. " LIKE '%"
+			. $this->nmContratada
+			. "%')"
 			;		
 			$conector  = "\n AND ";
 		

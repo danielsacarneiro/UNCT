@@ -83,10 +83,16 @@ ALTER TABLE contrato ADD CONSTRAINT fk_ct_pessoa_contratada FOREIGN KEY ( pe_cd_
 -- ALTER TABLE contrato DROP FOREIGN KEY fk_ct_gestor;
     
 UPDATE contrato SET
-ct_contratada = replace(replace(replace(ct_contratada,'“','"'),'”','"'),'–','-'),
-ct_objeto = replace(replace(replace(ct_objeto,'“','"'),'”','"'),'–','-'),
-ct_processo_lic = replace(replace(replace(ct_processo_lic,'“','"'),'”','"'),'–','-')
+ct_contratada = replace(replace(replace(replace(ct_contratada,'“','"'),'”','"'),'–','-'), '?','-'),
+ct_objeto = replace(replace(replace(replace(ct_objeto,'“','"'),'”','"'),'–','-'), '?','-'),
+ct_gestor = replace(replace(replace(replace(ct_gestor,'“','"'),'”','"'),'–','-'), '?','-'),
+ct_processo_lic = replace(replace(replace(replace(ct_processo_lic,'“','"'),'”','"'),'–','-'), '?','-')
 ;-- WHERE sq = 1751;-- ct_exercicio = 2016 and ct_numero = 13;
+
+UPDATE contrato SET
+ct_gestor = replace(replace(replace(replace(ct_gestor,'“','"'),'”','"'),'–','-'), '?','-')
+;
+
 
 
 drop table contrato_hist;

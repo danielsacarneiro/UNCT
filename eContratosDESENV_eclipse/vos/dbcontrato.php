@@ -10,7 +10,7 @@ include_once (caminho_util . "bibliotecaFuncoesPrincipal.php");
 // Classe select
 // cria um combo select html
 class dbcontrato extends dbprocesso {
-	static $FLAG_PRINTAR_SQL = FALSE;
+	static $FLAG_PRINTAR_SQL = false;
 	
 	static $CD_CONSTANTE_FIM_IMPORTACAO = "FIM";
 	static $ID_REQ_INICIAR_TAB_CONTRATO= "ID_REQ_INICIAR_TAB_CONTRATO";
@@ -870,15 +870,9 @@ class dbcontrato extends dbprocesso {
 				echoo("CONTRATO:: " . $voContrato->getCodigoContratoFormatado() . "|" .$voContrato->sqEspecie . " " . dominioEspeciesContrato::getDescricaoStatic($voContrato->cdEspecie));
 			}		
 		}
-		
-		/*$queryUpdate = "UPDATE contrato SET
-		ct_contratada = replace(replace(replace(ct_contratada,'“','\"'),'”','\"'),'–','-'),
-		ct_objeto = replace(replace(replace(ct_objeto,'“','\"'),'”','\"'),'–','-'),
-		ct_processo_lic = replace(replace(replace(ct_processo_lic,'“','\"'),'”','\"'),'–','-');";
-		
-		echoo("Removendo caracteres especiais...");
-		$this->atualizarEntidade($queryUpdate);*/
-		$this->removerCaracterEspecial();
+				
+		//echoo("Removendo caracteres especiais...");
+		//$this->removerCaracterEspecial();
 		
 		echo "<br>quantidade registros alterados:" . $qtdRegistros;
 	}
@@ -1118,9 +1112,10 @@ class dbcontrato extends dbprocesso {
 	static function getSQLRemoveCaracteresEspeciais(){
 		$sql = 
 		"UPDATE contrato SET
-			ct_contratada = replace(replace(replace(ct_contratada,'“','\"'),'”','\"'),'–','-'),
-			ct_objeto = replace(replace(replace(ct_objeto,'“','\"'),'”','\"'),'–','-'),
-			ct_processo_lic = replace(replace(replace(ct_processo_lic,'“','\"'),'”','\"'),'–','-')
+			ct_contratada = replace(replace(replace(replace(ct_contratada,'“','\"'),'”','\"'),'–','-'), '?','-'),
+			ct_objeto = replace(replace(replace(replace(ct_objeto,'“','\"'),'”','\"'),'–','-'), '?','-'),
+			ct_gestor = replace(replace(replace(replace(ct_gestor,'“','\"'),'”','\"'),'–','-'), '?','-'),
+			ct_processo_lic = replace(replace(replace(replace(ct_processo_lic,'“','\"'),'”','\"'),'–','-'), '?','-')
 			;"
 		;
 		

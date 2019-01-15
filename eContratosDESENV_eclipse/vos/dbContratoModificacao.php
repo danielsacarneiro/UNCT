@@ -278,6 +278,10 @@ class dbContratoModificacao extends dbprocesso {
 			//var_dump($voAConsiderar);
 			if ($voAConsiderar == null){
 				
+				if($voAtualizadoAnterior == null){
+					$voAtualizadoAnterior = clone $voTemp;
+				}
+				
 				if($voTemp->tpModificacao != dominioTpContratoModificacao::$CD_TIPO_PRORROGACAO){
 					//para todos os outros nada deve ser feito, pois os calculos ja foram realizados antes
 					$voAConsiderar = clone $voTemp;

@@ -137,6 +137,9 @@ setCabecalho($titulo);
                     				
                     				$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_CHECKLIST, 4));
                     				echo imprimeBotaoDocumento($vodocumento, "Quadro Resumo Competência e Autorização Prévia SAD");
+
+                    				$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_CHECKLIST, 7));
+                    				echo imprimeBotaoDocumento($vodocumento, "Procedimento para visto em Edital.");
                     				?>
                     				<TR>
                         				<TD class="tabeladadosdestacadonegrito">LEGISLAÇÃO:

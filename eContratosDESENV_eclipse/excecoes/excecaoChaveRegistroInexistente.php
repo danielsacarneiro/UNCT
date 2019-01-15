@@ -13,6 +13,8 @@ class excecaoChaveRegistroInexistente extends excecaoGenerica
     	if($message != null && $message != ""){
     		$str.= "<br>" . $message;
     	}
+    	
+    	$str = $this->getFile() . " $str";
     
         // garante que tudo está corretamente inicializado
         parent::__construct($str, $code, $previous);

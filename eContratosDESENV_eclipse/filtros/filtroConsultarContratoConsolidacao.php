@@ -124,7 +124,10 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		}
 		
 		if ($this->nmContratada != null) {
-			$filtro = $filtro . $conector . $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome . " LIKE '%" . $this->nmContratada . "%'";
+			$filtro = $filtro . $conector 
+			. "($nmTabelaPessoaContrato." . vopessoa::$nmAtrNome . " LIKE '%" . $this->nmContratada . "%'" 
+			. " OR $nmTabelaContrato ." . vocontrato::$nmAtrContratadaContrato . " LIKE '%" . $this->nmContratada . "%')"
+			;
 			$conector = "\n AND ";
 		}
 		

@@ -193,7 +193,7 @@ function carregaDadosContrato(){
 	var cdEspecie = document.frm_principal.<?=voContratoLicon::$nmAtrCdEspecieContrato?>.value;
 	var sqEspecie = document.frm_principal.<?=voContratoLicon::$nmAtrSqEspecieContrato?>.value;
 
-	var inRetroativo = document.frm_principal.<?=voContratoModificacao::$ID_REQ_InRetroativo?>.value;
+	//var inRetroativo = document.frm_principal.<?=voContratoModificacao::$ID_REQ_InRetroativo?>.value;
 	var dtEfeito = document.frm_principal.<?=voContratoModificacao::$nmAtrDtModificacao?>.value;
 	
 	if(cdContrato != "" && anoContrato != "" && tipoContrato !="" && cdEspecie !=""){
@@ -206,7 +206,7 @@ function carregaDadosContrato(){
 			str = "null"+ '<?=CAMPO_SEPARADOR?>' + anoContrato + '<?=CAMPO_SEPARADOR?>' + cdContrato + '<?=CAMPO_SEPARADOR?>' 
 			+ tipoContrato + '<?=CAMPO_SEPARADOR?>' + cdEspecie
 			+ '<?=CAMPO_SEPARADOR?>' + sqEspecie
-			+ '<?=CAMPO_SEPARADOR?>' + inRetroativo
+			//+ '<?=CAMPO_SEPARADOR?>' + inRetroativo
 			+ '<?=CAMPO_SEPARADOR?>' + dtEfeito
 			;
 			//vai no ajax
@@ -250,8 +250,8 @@ function iniciar(){
 	            $pArray = array($voContrato,constantes::$CD_CLASS_CAMPO_OBRIGATORIO,true,true,false,true,"carregaDadosContrato();");
 	            getContratoEntradaArray($pArray);
 	            
-	            $comboSimNao = new select(dominioSimNao::getColecao());
-	            echo "É reajuste retroativo? ". $comboSimNao->getHtmlCombo(voContratoModificacao::$ID_REQ_InRetroativo, voContratoModificacao::$ID_REQ_InRetroativo, constantes::$CD_NAO, true, "campoobrigatorio", false, " onChange='carregaDadosContrato();limpaFormTpModificacao();' required");
+	            //$comboSimNao = new select(dominioSimNao::getColecao());
+	            //echo "É reajuste retroativo? ". $comboSimNao->getHtmlCombo(voContratoModificacao::$ID_REQ_InRetroativo, voContratoModificacao::$ID_REQ_InRetroativo, constantes::$CD_NAO, true, "campoobrigatorio", false, " onChange='carregaDadosContrato();limpaFormTpModificacao();' required");
 	            ?>	            
 				<div id="<?=voContratoModificacao::$ID_REQ_DIV_DADOS_CONTRATO_MODIFICACAO?>">
 				</div>	            
@@ -322,10 +322,10 @@ function iniciar(){
 	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" onBlur='calcular(this, false);' class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly></TD>
 	            <TH class="campoformulario">Valor Global Atualizado:</TH>
 	            <TD class="campoformulario"><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlGlobalAtualizado?>" name="<?=voContratoModificacao::$nmAtrVlGlobalAtualizado?>"  value="<?php echo(getMoeda($vo->vlGlobalAtual));?>"
-	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" onBlur='calcular(this, false);' class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly></TD>	            
+	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" onBlur='' class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly></TD>	            
 	        </TR>	        
 			<TR>
-	            <TH class="campoformulario" nowrap>Valor Real alterado no período:</TH>
+	            <TH class="campoformulario" nowrap>Valor Real alterado no período (LICON):</TH>
 	            <TD class="campoformulario" ><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlModificacaoReal?>" name="<?=voContratoModificacao::$nmAtrVlModificacaoReal?>"  value="<?php echo(getMoeda($vo->vlModificacaoReal));?>"
 	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly></TD>
 	            <TH class="campoformulario" nowrap>Valor Real do Contrato no período:</TH>

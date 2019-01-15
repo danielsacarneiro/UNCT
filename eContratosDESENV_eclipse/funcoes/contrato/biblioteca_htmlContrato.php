@@ -583,12 +583,11 @@ function getDadosContratoMod($chave) {
 		
 		$array = explode ( CAMPO_SEPARADOR, $chave );
 		//definido em manter.php vocontratomod carregaDadosContrato();
-		$inRetroativo = $array[6];
-		$dtEfeitoModificacao = $array[7];
+		$dtEfeitoModificacao = $array[6];
 		
-		$arrayParamComplemento = array($inRetroativo, $dtEfeitoModificacao);
-		//echo $inRetroativo;
+		$arrayParamComplemento = array($dtEfeitoModificacao);
 		//echo $chave;
+		//var_dump($vo);
 		try{
 			$retorno = getCamposContratoMod($vo, $arrayParamComplemento);
 		}catch(excecaoChaveRegistroInexistente $ex){
@@ -635,16 +634,21 @@ function getContratoVigentePorData($vocontrato, $pData = null, $isTpVigenciaMAxS
 			dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER,
 			dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_TERMOADITIVO
 	);
-	if($pData == null){
+	/*if($pData == null){
 		$pData = $vocontrato->dtAssinatura;
-	}
+	}*/	
+	if($pData == null){
+		$filtro->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
+		//$filtro->sqEspecie = 1;
+	}	
+		
 	$filtro->isTpVigenciaMAxSq = $isTpVigenciaMAxSq;
 	$filtro->dtVigencia = $pData;
 	
 	$db = new dbcontrato();
 	$recordset = $db->consultarFiltroManter($filtro, false);
 	if(isColecaoVazia($recordset)){
-		throw new excecaoChaveRegistroInexistente();
+		throw new excecaoChaveRegistroInexistente("BiblioHtmlContrato. getContratoVigentePorData.");
 	}
 	
 	if(count($recordset) > 2){
@@ -658,8 +662,7 @@ function getContratoVigentePorData($vocontrato, $pData = null, $isTpVigenciaMAxS
 function getCamposContratoMod($vo, $arrayParamComplemento = null){
 	
 	if($arrayParamComplemento != null){
-		$inRetroativo = $arrayParamComplemento[0];
-		$dtEfeitoModificacao = $arrayParamComplemento[1];
+		$dtEfeitoModificacao = $arrayParamComplemento[0];
 	}
 		
 	$dbcontrato = new dbcontrato();
