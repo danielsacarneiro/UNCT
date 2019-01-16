@@ -578,7 +578,7 @@ class dbcontrato extends dbprocesso {
 			$query .= $this->getAtributosInsertImportacaoPlanilha ($voContrato );
 			$query .= ")";
 			
-			//echo $query;
+			//echoo("query inclusao contrato: $query");
 					
 			// tenta incluir
 			$retorno = $this->cDb->atualizarImportacao ( $query );
