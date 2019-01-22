@@ -455,6 +455,11 @@ function encaminhar() {
 	                        			$voDemandaContrato->voContrato->anoContrato,
 	                        			$dominioTipoContrato->getDescricao($voDemandaContrato->voContrato->tipo));
 	                        	
+	                        	$complementoContrato = getContratoDescricaoEspecie($voDemandaContrato->voContrato);
+	                        	if($complementoContrato != ""){
+	                        		$contrato .= "|$complementoContrato";
+	                        	}
+	                        	
 	                        	if($empresa != null){
 	                        		$contrato .= ": ".$empresa;
 	                        	}

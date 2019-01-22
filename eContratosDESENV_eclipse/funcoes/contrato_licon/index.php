@@ -234,11 +234,6 @@ function alterar() {
                         				$voDemandaContrato->voContrato->anoContrato,
                         				$dominioTipoContrato->getDescricao($voDemandaContrato->voContrato->tipo))
                         				;
-                        
-                        		if($empresa != null){
-                        			$contrato .= ": ".$empresa;
-
-                        	}
                         	
                         	$demanda = formatarCodigoAno($voDemandaContrato->cdDemanda, $voDemandaContrato->anoDemanda);                        	 
                         }
