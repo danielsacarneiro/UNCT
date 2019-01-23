@@ -63,6 +63,22 @@ include_once(caminho_util. "dominio.class.php");
 		);
 	}
 	
+	/**
+	 * traz a colecao dos termos permitidos na consulta de contrato consolidacao
+	 * @return string[]
+	 */
+	static function getColecaoFiltroContratoConsolidacao(){
+		return array(
+				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER,
+				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_TERMOADITIVO,
+				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_RERRATIFICACAO,
+				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_RESCISAO_AMIGAVEL,
+				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_RESCISAO_ENCERRAMENTO,
+				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_RESCISAO_UNILATERAL,
+		
+		);		
+	}	
+	
 	function getDominioImportacaoPlanilha() {            
             return self::getColecaoImportacaoPlanilha();
 	}

@@ -59,7 +59,8 @@ setCabecalho($titulo);
 	f.adicionarItem(fmsg);
 
 	f7 = new Tree('Serviço 07 (Legislação)');
-	f7.adicionarItem(new Link('EXTERNO: Decreto Estadual Penalidade', 'http://legis.alepe.pe.gov.br/texto.aspx?id=15904&tipo=', "", null,true));
+	f7.adicionarItem(new Link('EXTERNO: Decreto Estadual Penalidade (DECRETO Nº 42.191/2015)', 'http://legis.alepe.pe.gov.br/texto.aspx?id=15904&tipo=', "", null,true));
+	f7.adicionarItem(new Link('EXTERNO: Lei Execução Fiscal Multa (LEI Nº 13.178/2006)', 'http://legis.alepe.pe.gov.br/texto.aspx?id=2257&tipo=', "", null,true));
 	f.adicionarItem(f7);
 	
 	/*flegislacao = new Tree('Serviço 05 (Legislação)');    

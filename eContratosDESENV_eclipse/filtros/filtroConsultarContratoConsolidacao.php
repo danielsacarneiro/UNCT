@@ -25,7 +25,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		
 	function __construct1($pegarFiltrosDaTela) {
 		parent::__construct1($pegarFiltrosDaTela);
-		$this->cdEspecie = array(dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER, dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_TERMOADITIVO);		
+		$this->cdEspecie = dominioEspeciesContrato::getColecaoFiltroContratoConsolidacao();
 		//echo "chamou construtor ok";
 	}	
 	
