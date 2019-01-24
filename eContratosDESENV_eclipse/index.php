@@ -40,9 +40,9 @@ setCabecalho($titulo);
 	f3.adicionarItem(new Link("Demandas", "<?=caminho_funcoesHTML?>demanda", ""));
 	f.adicionarItem(f3);
 
-	f4 = new Tree('Serviço 04 (Proc.Admin.)');
-    f4.adicionarItem(new Link('P.A.s de Aplicação de Penalidade (PAAP)', '<?=caminho_funcoesHTML?>pa', ''));    
-    f4.adicionarItem(new Link('Penalidades (PAAP)', '<?=caminho_funcoesHTML?>pa_penalidade', ''));
+	f4 = new Tree('Serviço 04 (PAAP)');
+    f4.adicionarItem(new Link('Processo Administrativo de Aplicação de Penalidade (PAAP)', '<?=caminho_funcoesHTML?>pa', ''));    
+    f4.adicionarItem(new Link('Penalidades', '<?=caminho_funcoesHTML?>pa_penalidade', ''));
     f4.adicionarItem(new Link('EXTERNO: Penalidades e-Fisco', 'http://efisco.sefaz.pe.gov.br/sfi_fin_gbp/PREmitirFornecedorPenalidade', ''));
     f4.adicionarItem(new Link('EXTERNO: Penalidades e-Fisco (Por empresa)', 'https://efisco.sefaz.pe.gov.br/sfi_fin_gbp/PRManterFornecedorOcorrencia', ''));
     f4.adicionarItem(new Link('EXTERNO: Penalidades Portal da Transparência', 'http://www.portaltransparencia.gov.br/sancoes/ceis?ordenarPor=nome&direcao=asc', ''));
