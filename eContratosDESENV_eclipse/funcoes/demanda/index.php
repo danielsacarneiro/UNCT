@@ -47,6 +47,7 @@ $numTotalRegistros = $filtro->numTotalRegistros;
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_oficio.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_moeda.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_checkbox.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>tooltip.js"></SCRIPT>
 
 <SCRIPT language="JavaScript" type="text/javascript">
@@ -201,7 +202,7 @@ function encaminhar() {
 	                <TR>
 	                	<TD class="campoformulario" colspan=4>
 	                	<?php
-	                		echo dominioTipoDemandaContrato::getHtmlChecksBox($nmCampoTpDemandaContrato, $filtro->vodemanda->tpDemandaContrato, dominioTipoDemandaContrato::getColecaoConsulta(), 2, false, "", true);
+	                		echo dominioTipoDemandaContrato::getHtmlChecksBox($nmCampoTpDemandaContrato, $filtro->vodemanda->tpDemandaContrato, dominioTipoDemandaContrato::getColecaoConsulta(), 2, true, "", true);
 	                	?>
 	                	</TD>
 	                </TR>

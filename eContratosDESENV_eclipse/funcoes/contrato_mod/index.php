@@ -228,8 +228,8 @@ function montarChaveContrato(){
 					<TH class="headertabeladados" width="1%" nowrap>Tipo</TH>
 					<TH class="headertabeladados" width="1%" nowrap>Índice</TH>
 					<TH class="headertabeladados" width="1%" nowrap>Valor.Ref</TH>
+					<TH class="headertabeladados" width="1%" nowrap>Vl.LICON</TH>					
 					<TH class="headertabeladados" width="1%" nowrap>Mensal.Atual</TH>
-					<TH class="headertabeladados" width="1%" nowrap>Mensal.Anterior</TH>					
 					<TH class="headertabeladados" width="1%" nowrap>Global.Atual</TH>
 					<TH class="headertabeladados" width="1%" nowrap>Vl.Empenhar</TH>
 					<TH class="headertabeladados" width="1%" nowrap>Vl.Referência</TH>
@@ -252,6 +252,9 @@ function montarChaveContrato(){
                 
                 $dominioTipoContrato = new dominioTipoContrato();
                 $dominioAutorizacao = new dominioAutorizacao();
+                
+                $vlConsolidadoRef = 0;
+                $vlConsolidadoMod = 0;
                 
                for ($i=0;$i<$tamanho;$i++) {
                		$registroBanco = $colecao[$i];
@@ -300,6 +303,9 @@ function montarChaveContrato(){
                         
                         $numMeses = floatval($voAtual->numMesesParaOFimdoPeriodo);
                         $vlAEmpenhar = $vlMensalAtual*$numMeses;
+                        
+                        $vlConsolidadoRef = $vlConsolidadoRef + floatval($voAtual->vlModificacaoReferencial);
+                        $vlConsolidadoMod = $vlConsolidadoMod + floatval($voAtual->vlModificacaoReal);
                    ?>
                 <TR class="dados">
                     <TD class="tabeladados">
@@ -319,9 +325,9 @@ function montarChaveContrato(){
 					<TD class="tabeladados"><?php echo $dsPessoa?></TD>
                     <TD class="tabeladados" nowrap><?php echo $tipoModificacao?></TD>
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->numPercentual)?>%</TD>
-                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlModificacaoReferencial,2)?></TD>                    
-                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlMensalAtual)?></TD>
-					<TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlMensalAnterior)?></TD>                    
+                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlModificacaoReferencial,2)?></TD>
+					<TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlModificacaoReal)?></TD>
+                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlMensalAtual)?></TD>                    
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlGlobalAtual)?></TD>
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($vlAEmpenhar)?></TD>                    
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlGlobalModAtual)?></TD>                    
@@ -331,7 +337,17 @@ function montarChaveContrato(){
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getDataHora($voAtual->dhUltAlteracao)?></TD>                    
                 </TR>					
                 <?php
-				}                
+				}
+				
+				if (!isColecaoVazia($colecao)){
+				?>
+                </TR>				
+                    <TD class="tabeladadosalinhadodireita" colspan=8><b>Consolidado:</b></TD>
+                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($vlConsolidadoRef)?></TD>
+                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($vlConsolidadoMod)?></TD>                    
+                </TR>				
+				<?php					
+				}				
                 ?>
                 <TR>
                     <TD class="tabeladadosalinhadocentro" colspan=<?=$colspan?>><?=$paginacao->criarLinkPaginacaoGET()?></TD>
