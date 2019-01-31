@@ -14,6 +14,8 @@ class filtroManterContratoLicon extends filtroManter {
 	var $cdContrato = "";
 	var $anoContrato = "";
 	var $tipoContrato = "";
+	var $cdEspecieContrato = "";
+	var $sqEspecieContrato = "";
 	var $nmContratada = "";
 	var $docContratada = "";
 	
@@ -28,6 +30,8 @@ class filtroManterContratoLicon extends filtroManter {
 		$this->cdContrato = @$_POST [voContratoLicon::$nmAtrCdContrato];
 		$this->anoContrato = @$_POST [voContratoLicon::$nmAtrAnoContrato];
 		$this->tipoContrato = @$_POST [voContratoLicon::$nmAtrTipoContrato];
+		$this->cdEspecieContrato = @$_POST [voContratoLicon::$nmAtrCdEspecieContrato];
+		$this->sqEspecieContrato = @$_POST [voContratoLicon::$nmAtrSqEspecieContrato];
 		
 		$this->nmContratada = @$_POST [vopessoa::$nmAtrNome];
 		$this->docContratada = @$_POST [vopessoa::$nmAtrDoc];
@@ -87,6 +91,20 @@ class filtroManterContratoLicon extends filtroManter {
 				
 			$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrTipoContrato . " = " . getVarComoString ( $this->tipoContrato );
 				
+			$conector = "\n AND ";
+		}
+		
+		if ($this->cdEspecieContrato != null) {
+		
+			$filtro = $filtro . $conector . $nmTabela . "." . voContratoLicon::$nmAtrCdEspecieContrato . " = " . getVarComoString ( $this->cdEspecieContrato );
+		
+			$conector = "\n AND ";
+		}
+		
+		if ($this->sqEspecieContrato != null) {
+		
+			$filtro = $filtro . $conector . $nmTabela . "." . voContratoLicon::$nmAtrSqEspecieContrato . " = " . getVarComoNumero($this->sqEspecieContrato);
+		
 			$conector = "\n AND ";
 		}
 		

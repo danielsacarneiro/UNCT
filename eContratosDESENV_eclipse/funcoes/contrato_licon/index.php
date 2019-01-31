@@ -123,7 +123,28 @@ function alterar() {
 			</TR>
             <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" colspan="3"><?php getContratoEntradaDeDados($filtro->tipoContrato, $filtro->cdContrato, $filtro->anoContrato, $arrayCssClass, null, null);?></TD>
+	            <TD class="campoformulario" colspan="3">
+	            <?php 
+	            
+	            $voContratoFiltro = new vocontrato();
+	            $voContratoFiltro->tipo = $filtro->tipoContrato;
+	            $voContratoFiltro->cdContrato = $filtro->cdContrato;
+	            $voContratoFiltro->anoContrato = $filtro->anoContrato;
+	            $voContratoFiltro->cdEspecie = $filtro->cdEspecieContrato;
+	            $voContratoFiltro->sqEspecie = $filtro->sqEspecieContrato;
+	            
+	            $pArray = array($voContratoFiltro,
+	            		constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO,
+	            		false,
+	            		true,
+	            		false,
+	            		null,
+	            		null);
+	            
+	            getContratoEntradaArrayGenerico($pArray);
+	             
+	            //getContratoEntradaDeDados($filtro->tipoContrato, $filtro->cdContrato, $filtro->anoContrato, $arrayCssClass, null, null);
+	            ?></TD>
 			</TR>
 			<TR>
                 <TH class="campoformulario" nowrap>Nome Contratada:</TH>
