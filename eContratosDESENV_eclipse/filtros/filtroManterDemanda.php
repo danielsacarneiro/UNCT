@@ -469,6 +469,26 @@ class filtroManterDemanda extends filtroManter{
 					$conector  = "\n AND ";
 		}
 		
+		if($this->vocontrato->cdEspecie != null){
+			$filtro = $filtro . $conector
+			. $nmTabelaDemandaContrato. "." .voDemandaContrato::$nmAtrCdEspecieContrato
+			. " = "
+					. getVarComoString($this->vocontrato->cdEspecie)
+					;
+		
+					$conector  = "\n AND ";
+		}
+		
+		if($this->vocontrato->sqEspecie != null){
+			$filtro = $filtro . $conector
+			. $nmTabelaDemandaContrato. "." .voDemandaContrato::$nmAtrSqEspecieContrato
+			. " = "
+					. getVarComoNumero($this->vocontrato->sqEspecie)
+					;
+		
+					$conector  = "\n AND ";
+		}
+		
 		//echo $this->vocontrato->cdAutorizacao; 
 		if($this->vocontrato->cdAutorizacao != null){
 			$strComparacao = "COALESCE (" . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrCdAutorizacaoContrato 
