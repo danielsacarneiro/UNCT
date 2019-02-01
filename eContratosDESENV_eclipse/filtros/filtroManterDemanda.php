@@ -64,10 +64,10 @@ class filtroManterDemanda extends filtroManter{
 	function __construct1($pegarFiltrosDaTela) {
 		$this->vodemanda = new voDemandaTramitacao();
 		$this->vocontrato = new vocontrato();
+		$this->vocontrato->sqEspecie = null;
 		//$this->voPA = new voPA();
 		
 		parent::__construct1($pegarFiltrosDaTela);
-		
 		/*if($this->inDesativado == null){
 			$this->inDesativado = false;
 		}*/		

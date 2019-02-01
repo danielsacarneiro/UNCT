@@ -818,8 +818,12 @@ function tratarExcecaoHTML($ex, $vo = null, $paginaErro="../mensagemErro.php") {
 	$msg = $ex->getMessage ();
 	$msg = str_replace ( "\n", "", $msg );
 	$msg = str_replace ( "<br>", "", $msg );
-	//echo $msg;
+	echo $msg;
 	header ( "Location: $paginaErro?texto=" . $msg, TRUE, 307 );
+	
+	/*<script language="JavaScript">
+	window.location="pagina1.php";
+	</script>*/
 }
 function getStrComPuloLinhaHTML($str) {
 	return getStrComPuloLinhaGenerico ( $str, "<br>" );
