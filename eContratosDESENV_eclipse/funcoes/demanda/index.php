@@ -203,6 +203,8 @@ function encaminhar() {
 	                	<TD class="campoformulario" colspan=4>
 	                	<?php
 	                		echo dominioTipoDemandaContrato::getHtmlChecksBox($nmCampoTpDemandaContrato, $filtro->vodemanda->tpDemandaContrato, dominioTipoDemandaContrato::getColecaoConsulta(), 2, true, "", true);
+	                		$comboTpReajuste = new select(dominioTipoReajuste::getColecao());
+	                		echo "Reajuste: " . $comboTpReajuste->getHtmlComObrigatorio(voDemanda::$nmAtrInTpDemandaReajusteComMontanteA,voDemanda::$nmAtrInTpDemandaReajusteComMontanteA, $filtro->vodemanda->inTpDemandaReajusteComMontanteA, false,false);	                		 
 	                	?>
 	                	</TD>
 	                </TR>

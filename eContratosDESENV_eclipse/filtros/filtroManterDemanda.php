@@ -93,6 +93,7 @@ class filtroManterDemanda extends filtroManter{
 		$this->cdSetorPassagem = @$_POST[static::$NmAtrCdSetorPassagem];
 		$vodemanda->tipo = @$_POST[voDemanda::$nmAtrTipo];
 		$vodemanda->tpDemandaContrato = @$_POST[voDemanda::$nmAtrTpDemandaContrato];
+		$vodemanda->inTpDemandaReajusteComMontanteA = @$_POST[voDemanda::$nmAtrInTpDemandaReajusteComMontanteA];
 		//var_dump($vodemanda->tpDemandaContrato);
 		$vodemanda->situacao  = @$_POST[voDemanda::$nmAtrSituacao];		
 		$vodemanda->prioridade  = @$_POST[voDemanda::$nmAtrPrioridade];
@@ -268,6 +269,23 @@ class filtroManterDemanda extends filtroManter{
 				//echo $strFiltroTpDemanda;
 				$filtro = $filtro . $conector . $strFiltroTpDemanda;
 				$conector  = "\n AND ";
+		}
+		
+		if($this->vodemanda->inTpDemandaReajusteComMontanteA != null){
+			$reajuste = $this->vodemanda->inTpDemandaReajusteComMontanteA;
+			$clausulaReajuste = " $nmTabela." .voDemanda::$nmAtrInTpDemandaReajusteComMontanteA . " = " . getVarComoString($this->vodemanda->inTpDemandaReajusteComMontanteA);
+			
+			if($reajuste == dominioTipoReajuste::$CD_REAJUSTE_MONTANTE_A
+					|| $reajuste == dominioTipoReajuste::$CD_REAJUSTE_MONTANTE_B){
+				
+						$clausulaReajuste .= " OR $nmTabela." .voDemanda::$nmAtrInTpDemandaReajusteComMontanteA
+									. " = "
+									. getVarComoString(dominioTipoReajuste::$CD_REAJUSTE_AMBOS)
+						;				
+			}
+			$filtro = $filtro . $conector . "($clausulaReajuste)";
+					
+			$conector  = "\n AND ";
 		}
 		
 		if($this->vodemanda->cdSetor != null){

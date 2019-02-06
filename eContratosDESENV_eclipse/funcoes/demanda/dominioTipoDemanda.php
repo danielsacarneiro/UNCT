@@ -31,7 +31,7 @@ Class dominioTipoDemanda extends dominio{
 	static $DS_TIPO_DEMANDA_CONTRATO_PRORROGACAO = "Contrato Prorrogação";
 	static $DS_TIPO_DEMANDA_CONTRATO_APOSTILAMENTO= "Contrato Apostilamento";
 	static $DS_TIPO_DEMANDA_PARECER = "Parecer";
-	static $DS_TIPO_DEMANDA_CONTROLE_AQUISICAO= "Controle Aquisição";	
+	static $DS_TIPO_DEMANDA_CONTROLE_AQUISICAO= "Controle de ATA";	
 	static $DS_TIPO_DEMANDA_A_CLASSIFICAR = "A classificar";
 	
 	static $DS_TIPO_DEMANDA_LICON = "LICON";

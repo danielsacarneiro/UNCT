@@ -167,7 +167,10 @@ function formatarCampoPRT(pCampo, pEvento) {
 	while (vlCampo.indexOf('-') != -1) {
 		vlCampo = vlCampo.replace('-', '');
 	}
-	// Caso seja grande demais, trunca.
+	while (vlCampo.indexOf('/') != -1) {
+		vlCampo = vlCampo.replace('/', '');
+	}
+
 	var tamanho = vlCampo.length;
 
 	var filtro = /^([0-9])*$/;
@@ -185,10 +188,10 @@ function formatarCampoPRT(pCampo, pEvento) {
 		vlCampo = vlCampo.substr(0, 4) + '.' + vlCampo.substr(4, 5) + '.' + vlCampo.substr(9);
 	} else if (tamanho > 13 && tamanho <= 16) {
 		vlCampo = vlCampo.substr(0, 4) + '.' + vlCampo.substr(4, 5) + '.' + vlCampo.substr(9,4) + '.' + vlCampo.substr(13);
-	} else if (tamanho > 16 && tamanho <= 18) {
+	} else if (tamanho > 16 && tamanho <= 22) {
 		vlCampo = vlCampo.substr(0, 4) + '.' + vlCampo.substr(4, 5) + '.' + vlCampo.substr(9,4) + '.' + vlCampo.substr(13,3) + '-' + vlCampo.substr(16);
-	} else if (tamanho > 18) {
-		pCampo.value = vlCampo.substr(0, 18);
+	} else if (tamanho > 22) {
+		pCampo.value = vlCampo.substr(0, 22);
 		formatarCampoPRT(pCampo,pEvento);
 		
 		return;

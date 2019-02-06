@@ -242,28 +242,55 @@ include_once("voDemandaContrato.php");
 	static function formataPRTParaApenasNumero($numPRT) {
 		$formatado = str_replace(".", "", $numPRT);
 		$formatado = str_replace("-", "", $formatado);
+		$formatado = str_replace("/", "", $formatado);
 		return $formatado;
 	}
 	
 	static function isPRTValido($numPRT, $levantarExcecao=true) {
 		$isValido = true;
 		if($numPRT != null){
-			$formatado = static::formataPRTParaApenasNumero($numPRT);		
-			$isValido = strlen($formatado) == 18;		
+			$formatado = static::formataPRTParaApenasNumero($numPRT);
+			$tamanho = strlen($formatado);
+			$isValido = $tamanho == 18 || $tamanho == 22;		
 			if($levantarExcecao && !$isValido){
-				throw new excecaoGenerica("PRT Inválido.");			
+				throw new excecaoGenerica("PRT Inválido. Tamanho PRT: $tamanho");			
 			}			
 		}
 		return $isValido;
 	}
-		
+
+	/**
+	 * verifica se o prt inserido eh do SEI
+	 * @param unknown $numPRT
+	 * @return boolean
+	 */
+	static function isPRTSEI($numPRT) {
+		$retorno = false;
+		if($numPRT != null){
+			$formatado = static::formataPRTParaApenasNumero($numPRT);
+			$retorno = strlen($formatado) == 22;
+		}
+		return $retorno;
+	}
+	
 	static function getNumeroPRTComMascara($numPRT, $levantarExcecao=true){
-		if($numPRT != null && static::isPRTValido($numPRT, $levantarExcecao)){
-			$formatado  = substr( $numPRT, 0, 4 ) . '.';
-			$formatado .= substr( $numPRT, 4, 5 ) . '.';
-			$formatado .= substr( $numPRT, 9, 4 ) . '.';
-			$formatado .= substr( $numPRT, 13, 3 ) .'-';
-			$formatado .= substr( $numPRT, 16, 2 );
+		if($numPRT != null){
+			$formatado = static::formataPRTParaApenasNumero($numPRT);
+			$isSEI = static::isPRTSEI($numPRT);
+			if(static::isPRTValido($numPRT, $levantarExcecao)){
+				if($isSEI){
+					$formatado  = substr( $numPRT, 0, 10 ) . '.';
+					$formatado .= substr( $numPRT, 10, 6 ) . '/';
+					$formatado .= substr( $numPRT, 16, 4 ) . '-';
+					$formatado .= substr( $numPRT, 20, 2 );				
+				}else{
+					$formatado  = substr( $numPRT, 0, 4 ) . '.';
+					$formatado .= substr( $numPRT, 4, 5 ) . '.';
+					$formatado .= substr( $numPRT, 9, 4 ) . '.';
+					$formatado .= substr( $numPRT, 13, 3 ) .'-';
+					$formatado .= substr( $numPRT, 16, 2 );
+				}
+			}
 		}else{
 			$formatado = $numPRT;
 		}

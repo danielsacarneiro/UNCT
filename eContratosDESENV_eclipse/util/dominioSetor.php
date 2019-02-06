@@ -18,6 +18,7 @@ class dominioSetor extends dominio {
 	static $CD_SETOR_DAFE = 15;
 	static $CD_SETOR_UNEO = 16;
 	static $CD_SETOR_DISCON = 17;
+	static $CD_SETOR_EXTERNO = 99;
 	
 	static $DS_SETOR_SAFI = "SAFI";
 	static $DS_SETOR_UNCT = "UNCT";
@@ -36,6 +37,7 @@ class dominioSetor extends dominio {
 	static $DS_SETOR_DAFE = "DAFE";
 	static $DS_SETOR_UNEO = "UNEO";
 	static $DS_SETOR_DISCON = "DISCON";
+	static $DS_SETOR_EXTERNO = "Externo";
 	
 	// ...............................................................
 	// Construtor
@@ -57,6 +59,7 @@ class dominioSetor extends dominio {
 				self::$CD_SETOR_SAD => self::$DS_SETOR_SAD,
 				self::$CD_SETOR_PGE => self::$DS_SETOR_PGE,
 				self::$CD_SETOR_GOV => self::$DS_SETOR_GOV,
+				self::$CD_SETOR_EXTERNO => self::$DS_SETOR_EXTERNO,
 				//self::$CD_SETOR_GEBES => self::$DS_SETOR_GEBES,
 		);
 		
