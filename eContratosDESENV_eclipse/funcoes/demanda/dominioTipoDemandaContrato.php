@@ -16,6 +16,7 @@ class dominioTipoDemandaContrato extends dominio {
 	static $CD_TIPO_MODIFICACAO = "07";
 	static $CD_TIPO_PRORROGACAO = "08";
 	static $CD_TIPO_APOSTILAMENTO = "10";
+	static $CD_TIPO_REEQUILIBRIO = "11";
 	static $CD_TIPO_OUTROS = "99";
 	
 	static $DS_TIPO_ACRESCIMO = "Acréscimo";
@@ -25,6 +26,7 @@ class dominioTipoDemandaContrato extends dominio {
 	static $DS_TIPO_MATER = "Mater";
 	static $DS_TIPO_PRORROGACAO = "Prorrogação";
 	static $DS_TIPO_APOSTILAMENTO = "Apostilamento";
+	static $DS_TIPO_REEQUILIBRIO = "Reequilíbrio";
 	static $DS_TIPO_OUTROS = "Outros";
 
 	static function getColecaoConsulta() {
@@ -52,6 +54,7 @@ class dominioTipoDemandaContrato extends dominio {
 				static::$CD_TIPO_MATER=> self::$DS_TIPO_MATER,
 				static::$CD_TIPO_PRORROGACAO => self::$DS_TIPO_PRORROGACAO,
 				static::$CD_TIPO_REAJUSTE => self::$DS_TIPO_REAJUSTE,
+				static::$CD_TIPO_REEQUILIBRIO => self::$DS_TIPO_REEQUILIBRIO,
 				static::$CD_TIPO_ACRESCIMO => self::$DS_TIPO_ACRESCIMO,
 				static::$CD_TIPO_SUPRESSAO => self::$DS_TIPO_SUPRESSAO,
 				static::$CD_TIPO_MODIFICACAO => self::$DS_TIPO_MODIFICACAO,
