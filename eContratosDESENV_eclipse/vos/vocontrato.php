@@ -431,6 +431,10 @@ include_once (caminho_util . "DocumentoPessoa.php");
 	function getLinkDocumento(){
 		return static::getEnredeçoDocumento($this->linkDoc);
 	}
+	function getLinkMinutaDocumento(){
+		return static::getEnredeçoDocumento($this->linkMinutaDoc);
+	}
+	
 	static function getEnredeçoDocumento($link){
 		//para o caso de o link do doc vier em endereco relativo ("../")
 		$pastaUNCTPrincipalSubs = dominioTpDocumento::$ENDERECO_DRIVE . "\\" . dominioTpDocumento::$ENDERECO_PASTABASE_UNCT;

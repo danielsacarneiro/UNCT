@@ -224,8 +224,16 @@ function detalhar(isExcluir) {
 				        $nmCampoEndereco = vocontrato::$nmAtrLinkDoc.$chave;
 				        if($endereco != null){
 				        	echo "<INPUT type='hidden' id='$nmCampoEndereco' name='$nmCampoEndereco' value='$endereco'>";
-				    		echo getBotaoAbrirDocumento($nmCampoEndereco);
+				    		echo getBotaoAbrirDocumento($nmCampoEndereco, false, "PDF");
 				        }
+				        
+				        $endereco = $voAtual->getLinkMinutaDocumento();
+				        $nmCampoEndereco = vocontrato::$nmAtrLinkDoc.$chave."minuta";
+				        if($endereco != null){
+				        	echo "<INPUT type='hidden' id='$nmCampoEndereco' name='$nmCampoEndereco' value='$endereco'>";
+				        	echo getBotaoAbrirDocumento($nmCampoEndereco, false, "Minuta");
+				        }
+				        
 				    	?>                        
                         </TD>
                     </TR>					

@@ -55,24 +55,49 @@ function formatarCodigoDocumento($sq, $cdSetor, $ano, $tpDoc){
 	return $str;
 }
 
-function getBotaoAbrirDocumentoMais($pNmCampolink, $nmFuncaoJavaScript, $isMenuSistema=false){
+function getBotaoDocumentoArray($pArray){
+	$pNmCampolink = $pArray[0];
+	$nmFuncaoJavaScript = $pArray[1];	
+	$isMenuSistema=$pArray[2];
+	$nmBotao =$pArray[3];
 	
+	if($isMenuSistema == null){
+		$isMenuSistema = false;
+	}
+	
+	if($nmBotao == null){
+		$nmBotao = "Abrir";
+	}
+
 	$paramIsMenu = "false";
 	if($isMenuSistema){
 		$paramIsMenu = "true";
 	}
-	
+
 	$retorno = "";
 	$complementoJS = "onClick=javascript:".$nmFuncaoJavaScript."Cliente('" . $pNmCampolink. "',$paramIsMenu);";
 	if(isUsuarioAdmin()){
 		$complementoJS = "onClick=javascript:".$nmFuncaoJavaScript."('" . $pNmCampolink. "',$paramIsMenu);";
-	}		
-	$retorno = getBotaoValidacaoAcesso("bttabrirpasta", "Abrir", "botaofuncaop", false,true,true,true, "$complementoJS accesskey='m'");
+	}
+	$retorno = getBotaoValidacaoAcesso("bttabrirpasta", $nmBotao, "botaofuncaop", false,true,true,true, "$complementoJS accesskey='m'");
 	return $retorno;
 }
 
-function getBotaoAbrirDocumento($pNmCampolink, $isMenuSistema=false){	
-	return getBotaoAbrirDocumentoMais($pNmCampolink, "abrirArquivo", $isMenuSistema);
+function getBotaoAbrirDocumentoMais($pNmCampolink, $nmFuncaoJavaScript, $isMenuSistema=false){
+	$pArray[0] = $pNmCampolink;
+	$pArray[1] = $nmFuncaoJavaScript;
+	$pArray[2] = $isMenuSistema;
+	
+	return getBotaoDocumentoArray($pArray);
+}
+
+function getBotaoAbrirDocumento($pNmCampolink, $isMenuSistema=false, $nmBotao = "Abrir"){
+	$pArray[0] = $pNmCampolink;
+	$pArray[1] = "abrirArquivo";
+	$pArray[2] = $isMenuSistema;
+	$pArray[3] = $nmBotao;
+	
+	return getBotaoDocumentoArray($pArray);
 }
 
 function getBotaoAbrirDocumentoVO($vodoc, $isMenuSistema = true){

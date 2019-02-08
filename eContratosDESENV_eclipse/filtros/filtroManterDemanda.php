@@ -135,7 +135,7 @@ class filtroManterDemanda extends filtroManter{
 		}
 		
 		if($this->cdOrdenacao == null){
-			$this->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
+			$this->cdOrdenacao = constantes::$CD_ORDEM_CRESCENTE;
 		}		
 	}
 	 	
