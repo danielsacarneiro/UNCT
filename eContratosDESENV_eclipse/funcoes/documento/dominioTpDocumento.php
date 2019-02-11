@@ -62,7 +62,8 @@ class dominioTpDocumento extends dominio {
 	// static $DS_TP_DOC_RELATORIO_CONCLUSAO = "Relatório Com Alegações Finais";
 	static $DS_TP_DOC_MINUTA = "Minuta";
 	static $DS_TP_DOC_CERTIDAO_TRANSITO_JULGADO = "Certidão Transito Julgado";
-	static $DS_TP_DOC_TERMO_CONST_CREDITO = "Termo Const. Crédito";
+	//static $DS_TP_DOC_TERMO_CONST_CREDITO = "Termo Const. Crédito";
+	static $DS_TP_DOC_TERMO_CONST_CREDITO = "Termo.Const.Crédito";
 	
 	// ...............................................................
 	// Construtor
