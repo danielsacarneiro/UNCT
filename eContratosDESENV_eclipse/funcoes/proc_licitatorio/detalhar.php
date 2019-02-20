@@ -173,17 +173,19 @@ function confirmar() {
 				</TD>
 	        </TR>        	
 				<?php				
-				$filtroTramitacaoContrato = new filtroConsultarDemandaContrato(false);
-				$filtroTramitacaoContrato->vodemanda->cd = $voDemanda->cd;
-				$filtroTramitacaoContrato->vodemanda->ano = $voDemanda->ano;
-				//$filtroTramitacaoContrato->temDocumentoAnexo = constantes::$CD_SIM;
-				$filtroTramitacaoContrato->TemPaginacao = false;
-				$filtroTramitacaoContrato->cdAtrOrdenacao = voDemandaTramitacao::$nmAtrSq;
-				$filtroTramitacaoContrato->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
-				
-				$dbcontrato = new dbcontratoinfo();
-				$colecaoTramitacao = $dbcontrato->consultarDemandaTramitacaoContrato($filtroTramitacaoContrato);
-				mostrarGridDemandaContrato($colecaoTramitacao, true, false);
+				if($voDemanda->cd != null){
+					$filtroTramitacaoContrato = new filtroConsultarDemandaContrato(false);
+					$filtroTramitacaoContrato->vodemanda->cd = $voDemanda->cd;
+					$filtroTramitacaoContrato->vodemanda->ano = $voDemanda->ano;
+					//$filtroTramitacaoContrato->temDocumentoAnexo = constantes::$CD_SIM;
+					$filtroTramitacaoContrato->TemPaginacao = false;
+					$filtroTramitacaoContrato->cdAtrOrdenacao = voDemandaTramitacao::$nmAtrSq;
+					$filtroTramitacaoContrato->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
+					
+					$dbcontrato = new dbcontratoinfo();
+					$colecaoTramitacao = $dbcontrato->consultarDemandaTramitacaoContrato($filtroTramitacaoContrato);
+					mostrarGridDemandaContrato($colecaoTramitacao, true, false);
+				}
 				?>	 
 <TR>
 	<TD halign="left" colspan="4">

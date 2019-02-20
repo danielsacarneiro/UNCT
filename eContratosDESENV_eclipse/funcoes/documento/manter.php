@@ -329,7 +329,7 @@ function iniciar(){
 	            <TD class="campoformulario" colspan=3><?php getProcLicitatorioEntradaDados("", "", $arrayCssClass, $arrayComplementoHTML);?></TD>
 	        </TR>
 	        <TR>
-	            <TH class="campoformulario" nowrap width="1%">ARP:</TH>
+	            <TH class="campoformulario" nowrap width="1%">ARP (aquisição):</TH>
 	            <TD class="campoformulario" colspan=3><?php getEntradaDadosCdAno("", "", voDocumento::$nmAtrCdARP, voDocumento::$nmAtrAnoARP, $arrayCssClass, $arrayComplementoHTML);
 	            ?></TD>	            
 	        </TR>

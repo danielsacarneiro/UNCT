@@ -15,22 +15,24 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
   		$retorno = "";
   		// para o caso de haver mais de uma demanda por proclic
   		$retornoGeral = $this->consultarPorChaveTelaColecao ( $vo, $isHistorico, false);
-  		if(!isColecaoVazia($retornoGeral) && sizeof($retornoGeral)==1){
-  			$retorno = $retornoGeral[0];
-  		}else{
-  			//$temDemandaEdital = false;
-  			foreach ($retornoGeral as $registrobanco){
-  				$voDemanda = new voDemanda();
-  				$voDemanda->getDadosBanco($registrobanco);
-  				
-  				if($voDemanda->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL){
-  					//$temDemandaEdital = true;
-  					break;
-  				}
-  			}
-  			  			
-  			$retorno = $registrobanco;
-  			
+  		if(!isColecaoVazia($retornoGeral)){
+	  		if(sizeof($retornoGeral)==1){
+	  			$retorno = $retornoGeral[0];
+	  		}else{
+	  			//$temDemandaEdital = false;
+	  			foreach ($retornoGeral as $registrobanco){
+	  				$voDemanda = new voDemanda();
+	  				$voDemanda->getDadosBanco($registrobanco);
+	  				
+	  				if($voDemanda->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL){
+	  					//$temDemandaEdital = true;
+	  					break;
+	  				}
+	  			}
+	  			  			
+	  			$retorno = $registrobanco;
+	  			
+	  		}
   		}
   	
   		return $retorno;
@@ -63,7 +65,7 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
   		$queryFrom .= "\n ON $nmTabela." . voProcLicitatorio::$nmAtrCd . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrCdProcLic;
   		$queryFrom .= "\n AND $nmTabela." . voProcLicitatorio::$nmAtrAno . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrAnoProcLic;
   		
-  		$queryFrom .= "\n LEFT JOIN $nmTabelaDemanda";
+  		$queryFrom .= "\n LEFT JOIN (SELECT * FROM $nmTabelaDemanda WHERE ". voDemanda::$nmAtrTipo . "=" . dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL . ") $nmTabelaDemanda " ;
   		$queryFrom .= "\n ON $nmTabelaDemanda." . voDemanda::$nmAtrCd . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrCdDemanda;
   		$queryFrom .= "\n AND $nmTabelaDemanda." . voDemanda::$nmAtrAno . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrAnoDemanda;  		
   		
@@ -73,6 +75,8 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
   		
   		$queryWhere = " WHERE ";
   		$queryWhere .= $vo->getValoresWhereSQLChave ( $isHistorico );
+  		//traz apenas a demanda do tipo EDITAL
+  		//$queryWhere .= " AND $nmTabelaDemanda." . voDemanda::$nmAtrTipo . " = " . dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL;
   		/*if($isFiltrarPorDemandaEdital){
   			$queryWhere .= "\n AND $nmTabelaDemanda.". voDemanda::$nmAtrTipo . "=" . dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL;
   		}*/
@@ -119,7 +123,7 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
         $queryJoin .= $nmTabelaDemandaPL . "." . voDemandaPL::$nmAtrAnoDemanda . "=" . $nmTabelaDemanda . "." . voDemanda::$nmAtrAno;
         $queryJoin .= "\n AND " . $nmTabelaDemandaPL . "." . voDemandaPL::$nmAtrCdDemanda . "=" . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd;
         
-        $filtro->tpDemanda = dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL;
+        //$filtro->tpDemanda = dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL;
         $groupby = array("$nmTabela.". voProcLicitatorio::$nmAtrAno,
         		"$nmTabela.". voProcLicitatorio::$nmAtrCd);
         $filtro->groupby = $groupby; 
