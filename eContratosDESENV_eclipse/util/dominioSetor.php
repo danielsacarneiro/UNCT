@@ -18,6 +18,7 @@ class dominioSetor extends dominio {
 	static $CD_SETOR_DAFE = 15;
 	static $CD_SETOR_UNEO = 16;
 	static $CD_SETOR_DISCON = 17;
+	static $CD_SETOR_DILOG = 18;
 	static $CD_SETOR_EXTERNO = 99;
 	
 	static $DS_SETOR_SAFI = "SAFI";
@@ -36,8 +37,9 @@ class dominioSetor extends dominio {
 	static $DS_SETOR_GOV = "GOV";
 	static $DS_SETOR_DAFE = "DAFE";
 	static $DS_SETOR_UNEO = "UNEO";
-	static $DS_SETOR_DISCON = "DISCON";
+	static $DS_SETOR_DISCON = "DISCON";	
 	static $DS_SETOR_EXTERNO = "Externo";
+	static $DS_SETOR_DILOG = "DILOG";
 	
 	// ...............................................................
 	// Construtor
@@ -47,6 +49,7 @@ class dominioSetor extends dominio {
 				self::$CD_SETOR_DILC => self::$DS_SETOR_DILC,
 				self::$CD_SETOR_DIENG => self::$DS_SETOR_DIENG,
 				self::$CD_SETOR_DIFIN => self::$DS_SETOR_DIFIN,				
+				self::$CD_SETOR_DILOG => self::$DS_SETOR_DILOG,
 				self::$CD_SETOR_DISCON => self::$DS_SETOR_DISCON,
 				self::$CD_SETOR_ATJA => self::$DS_SETOR_ATJA,
 				self::$CD_SETOR_CPL => self::$DS_SETOR_CPL,
@@ -70,10 +73,18 @@ class dominioSetor extends dominio {
 	}
 	static function getColecaoProcLicitatorio() {
 		$retorno = array (
-				self::$CD_SETOR_SEFAZ => self::$DS_SETOR_SEFAZ 
+				self::$CD_SETOR_SEFAZ => self::$DS_SETOR_SEFAZ
 		);
-		
+	
 		//uksort ( $retorno, 'strnatcmp' );
+	
+		return $retorno;
+	}
+	static function getColecaoImplantacaoEcontiDemanda() {
+		$retorno = array (
+				self::$CD_SETOR_ATJA => self::$DS_SETOR_ATJA,
+				self::$CD_SETOR_UNCT => self::$DS_SETOR_UNCT
+		);
 		
 		return $retorno;
 	}	

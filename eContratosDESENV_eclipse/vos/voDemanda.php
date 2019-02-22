@@ -11,7 +11,7 @@ include_once (caminho_funcoes . "demanda/dominioTipoReajuste.php");
 class voDemanda extends voentidade {
 	static $ID_REQ_DIV_REAJUSTE_MONTANTE_A = "ID_REQ_DIV_REAJUSTE_MONTANTE_A";
 	static $ID_REQ_InTemContrato  = "InTemContrato";	
-	
+		
 	static $nmAtrCd = "dem_cd";
 	static $nmAtrAno = "dem_ex";
 	static $nmAtrCdSetor = "dem_cd_setor";

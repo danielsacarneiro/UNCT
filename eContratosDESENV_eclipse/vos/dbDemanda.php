@@ -500,9 +500,9 @@ class dbDemanda extends dbprocesso {
 		$this->validarGenerico($vo);
 		
 		if ($vo->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA) {
-
-			$this->isSetorDestinoIgualDemandante ( $vo, "fechamento" );
-			  
+			
+			//$this->isSetorDestinoIgualDemandante ( $vo, "fechamento" );
+			
 			// verifica se tem PAAP para encerrar
 			  // $vo = new voDemanda();
 			if ($vo->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_PROCADM) {

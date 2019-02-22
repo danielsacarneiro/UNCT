@@ -95,7 +95,7 @@ include_once(caminho_util. "dominio.class.php");
         		self::$CD_ESPECIE_CONTRATO_RESCISAO_UNILATERAL => "Unilateral",
         		self::$CD_ESPECIE_CONTRATO_RESCISAO_ENCERRAMENTO => "Encerramento",      
         		self::$CD_ESPECIE_CONTRATO_MATER => "Mater*Convênio*Cooperação*Convalidação",
-        		self::$CD_ESPECIE_CONTRATO_APOSTILAMENTO => "Apostilamento*Apostuilamento"
+        		self::$CD_ESPECIE_CONTRATO_APOSTILAMENTO => "Apostilamento*Apostuilamento*Apostilamneto"
 				);
 	}
 	

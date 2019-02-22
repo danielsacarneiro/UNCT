@@ -155,6 +155,7 @@ function encaminhar() {
 	        	$comboTipo = new select(dominioTipoDemanda::getColecao(false));
 	        	$comboSituacao = new select(dominioSituacaoDemanda::getColecaoHTMLConsulta());
 	        	$comboSetor = new select(dominioSetor::getColecao());
+	        	$comboSetorImplantacaoEconti = new select(dominioSetor::getColecaoImplantacaoEcontiDemanda());
 	        	$comboPrioridade = new select(dominioPrioridadeDemanda::getColecao());
 	            $selectExercicio = new selectExercicio();
 			  ?>			            
@@ -178,6 +179,7 @@ function encaminhar() {
                 Setor.Resp.: <?php echo $comboSetor->getHtmlCombo(voDemanda::$nmAtrCdSetor,voDemanda::$nmAtrCdSetor, $filtro->vodemanda->cdSetor, true, "camponaoobrigatorio", false, "");?>                
 				<font color=red><b>Setor.Atual</b>:</font> <?php echo $comboSetor->getHtmlCombo(voDemandaTramitacao::$nmAtrCdSetorDestino,voDemandaTramitacao::$nmAtrCdSetorDestino, $filtro->vodemanda->cdSetorDestino, true, "camponaoobrigatorio", false, "");?>
 				Passou.por: <?php echo $comboSetor->getHtmlCombo(filtroManterDemanda::$NmAtrCdSetorPassagem,filtroManterDemanda::$NmAtrCdSetorPassagem, $filtro->cdSetorPassagem, true, "camponaoobrigatorio", false, "");?>
+				A partir da implementação em: <?php echo $comboSetorImplantacaoEconti->getHtmlCombo(filtroManterDemanda::$NmAtrCdSetorImplementacaoEConti,filtroManterDemanda::$NmAtrCdSetorImplementacaoEConti, $filtro->cdSetorImplementacaoEconti, true, "camponaoobrigatorio", false, "");?>
 				</TD>				
             </TR>           
             <TR>
@@ -259,14 +261,23 @@ function encaminhar() {
 	            <TH class="campoformulario" nowrap width="1%">Data.Últ.Mov.:</TH>
 	            <TD class="campoformulario">
 	            	<INPUT type="text" 
-	            	       id="<?=voDemanda::$nmAtrDtReferencia?>" 
-	            	       name="<?=voDemanda::$nmAtrDtReferencia?>" 
-	            			value="<?php echo($filtro->dtUltMovimentacao);?>"
+	            	       id="<?=filtroManterDemanda::$NmAtrDtUltimaMovimentacaoInicial?>" 
+	            	       name="<?=filtroManterDemanda::$NmAtrDtUltimaMovimentacaoInicial?>" 
+	            			value="<?php echo($filtro->dtUltMovimentacaoInicial);?>"
 	            			onkeyup="formatarCampoData(this, event, false);" 
 	            			class="camponaoobrigatorio" 
 	            			size="10" 
-	            			maxlength="10">
-				</TD>	            	            
+	            			maxlength="10"> a 
+	            	<INPUT type="text" 
+	            	       id="<?=filtroManterDemanda::$NmAtrDtUltimaMovimentacaoFinal?>" 
+	            	       name="<?=filtroManterDemanda::$NmAtrDtUltimaMovimentacaoFinal?>" 
+	            			value="<?php echo($filtro->dtUltMovimentacaoFinal);?>"
+	            			onkeyup="formatarCampoData(this, event, false);" 
+	            			class="camponaoobrigatorio" 
+	            			size="10" 
+	            			maxlength="10">				
+				</TD>
+					            	            
 	        </TR>
 	        <?php	        
 	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");

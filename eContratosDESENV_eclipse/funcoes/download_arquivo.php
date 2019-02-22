@@ -1,12 +1,16 @@
 <?php
 $arquivo = $_GET["arquivo"];
+//echo "teste";
 if(isset($arquivo) && file_exists($arquivo)){ // faz o teste se a variavel não esta vazia e se o arquivo realmente existe
-	switch(strtolower(substr(strrchr(basename($arquivo),"."),1))){ // verifica a extensão do arquivo para pegar o tipo
+	$extensao = strtolower(substr(strrchr(basename($arquivo),"."),1));
+	//echo $extensao;
+	switch($extensao){ // verifica a extensão do arquivo para pegar o tipo
 		case "pdf": $tipo="application/pdf"; break;
 		case "exe": $tipo="application/octet-stream"; break;
 		case "zip": $tipo="application/zip"; break;
 		case "doc": $tipo="application/msword"; break;
-		case "xls": $tipo="application/vnd.ms-excel"; break;
+		//case "xls": $tipo="application/vnd.ms-excel"; break;
+		case "xls": $tipo="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"; break;		
 		case "ppt": $tipo="application/vnd.ms-powerpoint"; break;
 		case "gif": $tipo="image/gif"; break;
 		case "png": $tipo="image/png"; break;
@@ -23,6 +27,12 @@ if(isset($arquivo) && file_exists($arquivo)){ // faz o teste se a variavel não e
 	header("Content-Type: ".$tipo); // informa o tipo do arquivo ao navegador
 	header("Content-Length: ".filesize($arquivo)); // informa o tamanho do arquivo ao navegador
 	header("Content-Disposition: attachment; filename=".basename($arquivo)); // informa ao navegador que é tipo anexo e faz abrir a janela de download, tambem informa o nome do arquivo
+	
+	header('Content-Transfer-Encoding: binary');
+	//header('Cache-Control: must-revalidate');
+	ob_clean();
+	flush();	
+	ob_flush();
 	readfile($arquivo); // lê o arquivo
 	ob_flush();
 }

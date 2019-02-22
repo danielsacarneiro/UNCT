@@ -58,7 +58,12 @@ setCabecalho($titulo);
 	fmsg.adicionarItem(new Link('Mensageria Registro', '<?=caminho_funcoesHTML.voMensageriaRegistro::getNmTabela()?>', ''));
 	f.adicionarItem(fmsg);
 
+	<?php
+		//documento de designacao do SAFI
+		$vodocumento = new voDocumento(array(2019, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_LEGISLACAO, 1));
+	?>
 	f7 = new Tree('Serviço 07 (Legislação)');
+	//f7.adicionarItem(new Link('Designação SAFI','<?=caminho_funcoesHTML."exibir_pdf.php?chave=". $vodocumento->getValorChaveHTML()?>', "", null,true));
 	f7.adicionarItem(new Link('EXTERNO: Decreto Estadual Penalidade (DECRETO Nº 42.191/2015)', 'http://legis.alepe.pe.gov.br/texto.aspx?id=15904&tipo=', "", null,true));
 	f7.adicionarItem(new Link('EXTERNO: Lei Execução Fiscal Multa (LEI Nº 13.178/2006)', 'http://legis.alepe.pe.gov.br/texto.aspx?id=2257&tipo=', "", null,true));
 	f.adicionarItem(f7);
@@ -154,7 +159,11 @@ setCabecalho($titulo);
                     				echo imprimeBotaoDocumento($vodocumento, "Consulta boletins PGE");
                     				
                     				$vodocumento = new voDocumento(array(2015, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_LEGISLACAO, 1));
-                    				echo imprimeBotaoDocumento($vodocumento, "Centralização SAD");                    				
+                    				echo imprimeBotaoDocumento($vodocumento, "Centralização SAD");
+                    				
+                    				$vodocumento = new voDocumento(array(2019, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_LEGISLACAO, 1));
+                    				echo imprimeBotaoDocumento($vodocumento, "Designacao SAFI");
+                    				
                     				?>
                      				<!--<TR>
                                     	<TH  class="titulopassoapasso" ><B>Outros Sistemas</B></TH>

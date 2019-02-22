@@ -16,6 +16,7 @@ class filtroManterDemanda extends filtroManter{
 	static $NmAtrCdDemandaInicial = "NmAtrCdDemandaInicial";
 	static $NmAtrCdDemandaFinal = "NmAtrCdDemandaFinal";
 	static $NmAtrCdUsuarioTramitacao = "NmAtrCdUsuarioTramitacao";
+	static $NmAtrCdSetorImplementacaoEConti = "NmAtrCdSetorImplementacaoEConti";
 	
 	static $NmAtrVlGlobalInicial = "NmAtrVlGlobalInicial";
 	static $NmAtrVlGlobalFinal = "NmAtrVlGlobalFinal";
@@ -23,6 +24,8 @@ class filtroManterDemanda extends filtroManter{
 	static $NmAtrTipoExcludente = "NmAtrTipoExcludente";
 	static $NmAtrPrioridadeExcludente = "NmAtrPrioridadeExcludente";
 	static $NmAtrInComPAAPInstaurado = "NmAtrInComPAAPInstaurado";
+	static $NmAtrDtUltimaMovimentacaoInicial = "NmAtrDtUltimaMovimentacaoInicial";
+	static $NmAtrDtUltimaMovimentacaoFinal = "NmAtrDtUltimaMovimentacaoFinal";
 	
 	var $vodemanda;
 	var $vocontrato;
@@ -37,7 +40,8 @@ class filtroManterDemanda extends filtroManter{
 	var $sqDocumento;
 	var $anoDocumento;
 	
-	var $dtUltMovimentacao;
+	var $dtUltMovimentacaoInicial;
+	var $dtUltMovimentacaoFinal;
 	var $cdDemandaInicial;
 	var $cdDemandaFinal;	
 	var $cdUsuarioTramitacao;
@@ -52,6 +56,7 @@ class filtroManterDemanda extends filtroManter{
 	var $inMaoDeObra = "";
 	var $inContratoComDtPropostaVencida;
 	var $inComPAAPInstaurado;
+	var $cdSetorImplementacaoEconti;
 	private $sqlComplementoContratoComDtPropostaVencida;
 	var $inRetornarReajusteSeLocacaoImovel;
 	
@@ -114,7 +119,8 @@ class filtroManterDemanda extends filtroManter{
 
 		$this->nmContratada = @$_POST[vopessoa::$nmAtrNome];
 		$this->docContratada = @$_POST[vopessoa::$nmAtrDoc];
-		$this->dtUltMovimentacao = @$_POST[voDemanda::$nmAtrDtReferencia];
+		$this->dtUltMovimentacaoInicial = @$_POST[static::$NmAtrDtUltimaMovimentacaoInicial];
+		$this->dtUltMovimentacaoFinal= @$_POST[static::$NmAtrDtUltimaMovimentacaoFinal];
 		$this->cdSetorDocumento = @$_POST[voDocumento::$nmAtrCdSetor];
 		$this->tpDocumento = @$_POST[voDocumento::$nmAtrTp];
 		$this->sqDocumento = @$_POST[voDocumento::$nmAtrSq];
@@ -130,6 +136,7 @@ class filtroManterDemanda extends filtroManter{
 		$this->inMaoDeObra = @$_POST [voContratoInfo::$nmAtrInMaoDeObra];
 		$this->inOR_AND = @$_POST[self::$NmAtrInOR_AND];
 		$this->inComPAAPInstaurado = @$_POST[self::$NmAtrInComPAAPInstaurado];
+		$this->cdSetorImplementacaoEconti = @$_POST[self::$NmAtrCdSetorImplementacaoEConti];
 		if($this->inOR_AND == null){
 			$this->inOR_AND = constantes::$CD_OPCAO_OR;
 		}
@@ -423,23 +430,42 @@ class filtroManterDemanda extends filtroManter{
 			$conector = "\n AND ";
 		}
 		
-		if($this->dtUltMovimentacao != null){
-			$colDemandaTram = $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrDhInclusao;
+		if($this->dtUltMovimentacaoInicial != null){
+			/*$colDemandaTram = $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrDhInclusao;
 			$colDemanda = $nmTabela. "." .voDemanda::$nmAtrDhUltAlteracao;
+			$dtUltMovimentacao = getVarComoDataSQL($this->dtUltMovimentacaoInicial); 
 			
 			$filtro = $filtro . $conector
 			. " ((". $colDemandaTram 
 			. " IS NOT NULL AND DATE(". $colDemandaTram
-			. ") = "
-			. getVarComoDataSQL($this->dtUltMovimentacao)
+			. ") >= $dtUltMovimentacao "
 			. ") OR "
 			. "(". $colDemanda
 			. " IS NOT NULL AND DATE(". $colDemanda
-			. ") = "
-			. getVarComoDataSQL($this->dtUltMovimentacao)					
+			. ") >= "
+			. $dtUltMovimentacao					
 			. ")) "
-			;
+			;*/
+			
+			$filtro = $filtro . $conector . static::getSQLDataDemandaMovimentacao($this->dtUltMovimentacaoInicial, ">=");
 		
+			$conector  = "\n AND ";
+		}
+		
+		if($this->dtUltMovimentacaoFinal != null){
+			$filtro = $filtro . $conector . static::getSQLDataDemandaMovimentacao($this->dtUltMovimentacaoFinal, "<=");		
+			$conector  = "\n AND ";
+		}
+		
+		if($this->cdSetorImplementacaoEconti != null){
+			/*$filtro = $filtro . $conector
+			. " DATE($nmTabelaTramitacao." .voDemandaTramitacao::$nmAtrDhInclusao
+			. ") >= ";*/
+			
+			if($this->cdSetorImplementacaoEconti == dominioSetor::$CD_SETOR_UNCT){
+				$filtro = $filtro . $conector . static::getSQLDataDemandaMovimentacao("01/02/2019", ">=");
+			}
+			
 			$conector  = "\n AND ";
 		}
 		
@@ -722,6 +748,25 @@ class filtroManterDemanda extends filtroManter{
 
 		return $filtro;
 	}	
+	
+	static function getSQLDataDemandaMovimentacao($dataComparacao, $tipoOperacao){		
+			$colDemandaTram = voDemandaTramitacao::getNmTabela() . "." .voDemandaTramitacao::$nmAtrDhInclusao;
+			$colDemanda = voDemanda::getNmTabela(). "." .voDemanda::$nmAtrDhUltAlteracao;
+			$dtUltMovimentacao = getVarComoDataSQL($dataComparacao);
+			
+			$retorno = 
+			" ((". $colDemandaTram
+			. " IS NOT NULL AND DATE(". $colDemandaTram
+			. ") $tipoOperacao $dtUltMovimentacao "
+			. ") OR "
+				. "( $colDemandaTram IS NULL AND $colDemanda "
+				. " IS NOT NULL AND DATE(". $colDemanda
+				. ") $tipoOperacao "
+				. $dtUltMovimentacao
+			. ")) ";
+									
+		return $retorno;
+	}
 	
 	function isSetorAtualSelecionado(){
 		$cdSetorAtual = $this->vodemanda->cdSetorDestino;
