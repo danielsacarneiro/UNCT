@@ -107,7 +107,7 @@ function mostrarGridPenalidade($voPA) {
 	$html = "";
 	if ($tamanho > 0) {
 
-		$numColunas = 3;
+		$numColunas = 4;
 
 		$html .= "<TR>\n";
 		$html .= "<TH class='textoseparadorgrupocampos' halign='left' colspan='4'>\n";
@@ -123,6 +123,7 @@ function mostrarGridPenalidade($voPA) {
 		$html .= "<TH class='headertabeladados' width='1%'>Num</TH>   \n";
 		$html .= "<TH class='headertabeladados' width='10%' nowrap>Tipo</TH> \n";
 		$html .= "<TH class='headertabeladados' width='80%'>Fundamento</TH> \n";
+		$html .= "<TH class='headertabeladados' width='1%'>Data.Aplicação</TH> \n";
 		$html .= "</TR> \n";
 
 		for($i = 0; $i < $tamanho; $i ++) {
@@ -144,6 +145,7 @@ function mostrarGridPenalidade($voPA) {
 				$html .= "<TD class='tabeladados' nowrap>" . complementarCharAEsquerda ( $voAtual->sq, "0", TAMANHO_CODIGOS_SAFI ) . "</TD> \n";
 				$html .= "<TD class='tabeladados'>" . $tipoPenalidade . "</TD> \n";
 				$html .= "<TD class='tabeladados'>" . $voAtual->fundamento . "</TD> \n";
+				$html .= "<TD class='tabeladados'>" . getData($voAtual->dtAplicacao) . "</TD> \n";
 				$html .= "</TR> \n";
 			}							
 		}

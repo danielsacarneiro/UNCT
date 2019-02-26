@@ -20,14 +20,19 @@ if(isset($arquivo) && file_exists($arquivo)){ // faz o teste se a variavel não e
 		case "htm": // deixar vazio por seurança
 		case "html": // deixar vazio por seurança
 	}
-	$expires = 60 * 60 * 24 * 14;
-	header('Pragma: public');
-	header("Cache-Control: maxage=" . $expires);
-	header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');
+		
+	//$expires = 60 * 60 * 24 * 14;
+	//header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT');
+	/*header("Cache-Control: maxage=" . $expires);
+	header('Pragma: public');*/
+	//header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+	header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+	header("Cache-Control: post-check=0, pre-check=0", false);
+	header('Pragma: no-cache');
+	header('Expires: -1');
 	header("Content-Type: ".$tipo); // informa o tipo do arquivo ao navegador
 	header("Content-Length: ".filesize($arquivo)); // informa o tamanho do arquivo ao navegador
-	header("Content-Disposition: attachment; filename=".basename($arquivo)); // informa ao navegador que é tipo anexo e faz abrir a janela de download, tambem informa o nome do arquivo
-	
+	header("Content-Disposition: attachment; filename=".basename($arquivo)); // informa ao navegador que é tipo anexo e faz abrir a janela de download, tambem informa o nome do arquivo	
 	header('Content-Transfer-Encoding: binary');
 	//header('Cache-Control: must-revalidate');
 	ob_clean();

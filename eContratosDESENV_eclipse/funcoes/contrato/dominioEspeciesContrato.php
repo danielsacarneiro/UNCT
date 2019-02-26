@@ -85,15 +85,16 @@ include_once(caminho_util. "dominio.class.php");
 
 	static function getColecaoImportacaoPlanilha(){
 		//cooperacao e convalidacao seram considerados como MATER
-		//deixa na ultima posicao as especies que podem se repetir		
+		//deixa na ultima posicao as especies que podem se repetir
+		// A ORDEM EH IMPORTANTE, pq o item seguinte so sera selecionado se o anterior nao contiver nenhuma palavra em comum
 		return array(
         		self::$CD_ESPECIE_CONTRATO_RERRATIFICACAO => "Rerratificação*Rerratificacao",
         		self::$CD_ESPECIE_CONTRATO_TERMOADITIVO => "T.A*TA*T.A.",
         		self::$CD_ESPECIE_CONTRATO_TERMOAJUSTE => "Ajuste*contas",
         		self::$CD_ESPECIE_CONTRATO_CESSAO_USO => "Cessão*cessao",
-        		self::$CD_ESPECIE_CONTRATO_RESCISAO_AMIGAVEL => "Rescisão*Amigável*Amigavel",
-        		self::$CD_ESPECIE_CONTRATO_RESCISAO_UNILATERAL => "Unilateral",
-        		self::$CD_ESPECIE_CONTRATO_RESCISAO_ENCERRAMENTO => "Encerramento",      
+				self::$CD_ESPECIE_CONTRATO_RESCISAO_UNILATERAL => "Unilateral",
+				self::$CD_ESPECIE_CONTRATO_RESCISAO_ENCERRAMENTO => "Encerramento",
+        		self::$CD_ESPECIE_CONTRATO_RESCISAO_AMIGAVEL => "Rescisão*Amigável*Amigavel",      
         		self::$CD_ESPECIE_CONTRATO_MATER => "Mater*Convênio*Cooperação*Convalidação",
         		self::$CD_ESPECIE_CONTRATO_APOSTILAMENTO => "Apostilamento*Apostuilamento*Apostilamneto"
 				);
