@@ -16,7 +16,7 @@ function getSqDocumentoAtual($arrayParam) {
 	return $retorno;
 }
 
-function imprimeBotaoDocumento($vodocumento, $descricao){
+/*function imprimeBotaoDocumento($vodocumento, $descricao){
 	
 	$vodocumento = $vodocumento->dbprocesso->consultarPorChaveVO($vodocumento, false);
 	
@@ -25,14 +25,39 @@ function imprimeBotaoDocumento($vodocumento, $descricao){
 	\n <TD class='campoformulario'>
 	$descricao: " . $vodocumento->formatarCodigo() . " ";	
 	
-	$html .= getBotaoAbrirDocumentoVO($vodocumento);
+	$html .= getBotaoAbrirDocumentoVO($vodocumento);	
+	//$html .= getHtmlDocumento($vodocumento);
 	
 	$html .= 
 	"\n </TD>
 	\n</TR>";
 	
 	return $html; 
+}*/
+
+
+function imprimeBotaoDocumento($vodocumento, $descricao){
+	$voDoc = $vodocumento->dbprocesso->consultarPorChaveVO($vodocumento, false);
+	$html =
+	"\n<TR>
+	\n <TD class='campoformulario'>
+	$descricao: ";	
+
+	$endereco = $voDoc->getEnderecoTpDocumento ();
+	$chave = $voDoc->getValorChavePrimaria ();
+		
+	$html .= $voDoc->formatarCodigo ($comDescricaoPorExtenso) . " \n";
+	$html .= "<input type='hidden' name='" . $chave . "' id='" . $chave . "' value='" . $endereco . "'>" . " \n";
+	// $html .= getBotaoValidacaoAcesso("bttabrir_arq", "Abrir Anexo", "botaofuncaop", false,true,true,true, "onClick=\"javascript:abrirArquivo('".$chave."');\"");
+	$html .= getBotaoAbrirDocumento ( $chave, true);
+	
+	$html .=
+	"\n </TD>
+	\n</TR>";
+	
+	return $html; 
 }
+
 
 function formatarCodigoDocumento($sq, $cdSetor, $ano, $tpDoc){	
 	$dominioSetor = new dominioSetor();	
@@ -73,8 +98,9 @@ function getBotaoDocumentoArray($pArray){
 	if($isMenuSistema){
 		$paramIsMenu = "true";
 	}
-
+	
 	$retorno = "";
+	//$retorno = getBotaoAbrirDocumento ( $pNmCampolink );
 	$complementoJS = "onClick=javascript:".$nmFuncaoJavaScript."Cliente('" . $pNmCampolink. "',$paramIsMenu);";
 	if(isUsuarioAdmin()){
 		$complementoJS = "onClick=javascript:".$nmFuncaoJavaScript."('" . $pNmCampolink. "',$paramIsMenu);";

@@ -130,7 +130,7 @@ setCabecalho($titulo);
                     				</TR>
                     				<?php 
                     				$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_OUTROS, 47));
-                    				echo imprimeBotaoDocumento($vodocumento, "Documentação exigida pela SAD");
+                    				echo imprimeBotaoDocumento($vodocumento, "Documentação exigida pela SAD");  
                     				
                     				$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_OUTROS, 3));
                     				echo imprimeBotaoDocumento($vodocumento, "Visto Edital");

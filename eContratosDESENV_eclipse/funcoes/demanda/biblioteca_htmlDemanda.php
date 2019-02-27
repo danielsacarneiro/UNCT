@@ -107,7 +107,7 @@ function getHtmlDocumento($voAtual, $comDescricaoPorExtenso = false) {
 		// $html .= getBotaoValidacaoAcesso("bttabrir_arq", "Abrir Anexo", "botaofuncaop", false,true,true,true, "onClick=\"javascript:abrirArquivo('".$chave."');\"");
 		$html .= getBotaoAbrirDocumento ( $chave );
 	}
-	$html .= "</TD> \n";
+	$html .= "</TD>\n";
 	
 	return $html;	
 }
