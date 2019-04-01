@@ -84,6 +84,30 @@ function getQtdDiasEntreDatas($dataini, $datafim) {
 	return $retorno*$fator;
 }
 
+function getQtdMesesEntreDatas($dataini, $datafim) {
+	try{
+		$dataini = getDataSQL($dataini);
+		$datafim = getDataSQL($datafim);
+		//media determinada para facilitar o calculo, considerando que ha anos bissextos e meses que nao tem 30 dias
+		$numMediaDiasMes = 28;
+		
+		$date = new DateTime($dataini); 
+		$diferenca = $date->diff(new DateTime($datafim)); 
+		$diferenca_mostra_anos = $diferenca->format('%Y')*12;
+		$diferenca_mostra_meses = $diferenca->format('%m');	
+		$diferenca_mostra_dias = $diferenca->format('%d');
+		$total_dias = ($diferenca_mostra_anos+$diferenca_mostra_meses)*$numMediaDiasMes+$diferenca_mostra_dias;		
+		$total_meses = round(($total_dias/$numMediaDiasMes), 0, PHP_ROUND_HALF_UP); //funcao para arredondar para cima
+		
+		//$total_meses = $diferenca_mostra_anos+$diferenca_mostra_meses;
+	}catch (Exception $ex){
+		echo "Erro ao calcular período. Verifique as datas do período.";
+		$total_meses = 0;
+	}
+	
+	return $total_meses;
+}
+
 function getDataContagemPrazoFinal($dtinicio, $prazo, $isDiasUteis=true) {
 	//o prazo comeca a contar do primeiro dia util seguinte
 	$dtinicio = somarOuSubtrairDias($dtinicio, 1, "+", true);

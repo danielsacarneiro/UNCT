@@ -146,6 +146,9 @@ setCabecalho($titulo);
 
                     				$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_CHECKLIST, 7));
                     				echo imprimeBotaoDocumento($vodocumento, "Procedimento para visto em Edital.");
+                    				
+                    				$vodocumento = new voDocumento(array(2019, dominioSetor::$CD_SETOR_PGE,dominioTpDocumento::$CD_TP_DOC_CHECKLIST, 1));
+                    				echo imprimeBotaoDocumento($vodocumento, "Checklist PGE para inscrição em dívida ativa.");                    				
                     				?>
                     				<TR>
                         				<TD class="tabeladadosdestacadonegrito">LEGISLAÇÃO:

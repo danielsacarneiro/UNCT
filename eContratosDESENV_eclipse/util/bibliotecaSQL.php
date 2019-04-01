@@ -31,11 +31,11 @@ function getSQLCOALESCE($arrayAtributos, $nmAtributoRetornoClausulaAS = null) {
 function getSQLCASE($atributo, $valorCondicao, $valorTHEN, $valorELSE) {
 	return "CASE $atributo WHEN $valorCondicao THEN $valorTHEN ELSE $valorELSE END ";
 }
-function getDataSQL($dataSQL) {
+function getDataSQL($dataWeb) {
 	$retorno = "";
-	if ($dataSQL != null) {
+	if ($dataWeb != null) {
 		// $retorno = date("Y-m-d", strtotime($dataSQL));
-		$retorno = implode ( "-", array_reverse ( explode ( "/", $dataSQL ) ) );
+		$retorno = implode ( "-", array_reverse ( explode ( "/", $dataWeb ) ) );
 	}
 	return $retorno;
 }
