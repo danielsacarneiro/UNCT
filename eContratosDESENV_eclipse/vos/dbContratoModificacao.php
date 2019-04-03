@@ -55,6 +55,8 @@ class dbContratoModificacao extends dbprocesso {
 				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
 				$nmTabelaContrato . "." . vocontrato::$nmAtrDtPublicacaoContrato,
 				$nmTabelaContrato . "." . vocontrato::$nmAtrDtAssinaturaContrato,
+				$nmTabelaContrato . "." . vocontrato::$nmAtrVlMensalContrato,
+				$nmTabelaContrato . "." . vocontrato::$nmAtrVlGlobalContrato,
 				$nmTabContratoMATER . "." . vocontrato::$nmAtrVlMensalContrato . " AS " . filtroManterContratoModificacao::$NmColVlMensalMater,
 				$nmTabContratoMATER . "." . vocontrato::$nmAtrVlGlobalContrato . " AS " . filtroManterContratoModificacao::$NmColVlGlobalMater,
 				// $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,

@@ -82,5 +82,8 @@
     static $CD_MODELO = "MODELO";
     
     static $DS_RESPONSABILIDADE_NAO_INCLUSAO_CAMPOS = "*Assumo a responsabilidade de não incluir os campos obrigatórios";
+    
+    static $TAMANHO_CARACTERES_PRT = 18;
+    static $TAMANHO_CARACTERES_SEI = 22;
 }
 ?>

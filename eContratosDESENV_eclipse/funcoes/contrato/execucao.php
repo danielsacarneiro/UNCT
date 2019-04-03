@@ -152,7 +152,7 @@ function detalhar(isExcluir) {
                     	$registro = $colecaoMov[$i];
                         $voAtual = new voContratoModificacao();
                         $voAtual->getDadosBanco($registro);
-
+                        
                         $voContratoAtual = new vocontrato();
                         $voContratoAtual->getDadosBanco($registro);
                         $especie = getDsEspecie($voContratoAtual);
@@ -174,9 +174,9 @@ function detalhar(isExcluir) {
                         <TD class='tabeladados'><?php echo getData($voAtual->dtModificacaoFim)?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($voAtual->vlModificacaoReferencial)?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($voAtual->vlModificacaoReal)?></TD>
-                        <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($voAtual->vlMensalAtual)?></TD>                    
+                        <TD class='tabeladadosalinhadodireita' ><?php echo $voContratoAtual->vlMensal?></TD>                    
                         <TD class='tabeladadosalinhadodireita' ><?php echo getTextoHTMLNegrito(getMoeda($voContratoModReajuste->vlMensalAtual))?></TD>
-                        <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($voAtual->vlGlobalAtual)?></TD>                    
+                        <TD class='tabeladadosalinhadodireita' ><?php echo $voContratoAtual->vlGlobal?></TD>                    
                         <TD class='tabeladadosalinhadodireita' ><?php echo getTextoHTMLNegrito(getMoeda($voContratoModReajuste->vlGlobalAtual))?></TD>
                         </TD>
                     </TR>					

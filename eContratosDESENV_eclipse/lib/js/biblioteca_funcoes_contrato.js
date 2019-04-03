@@ -377,8 +377,8 @@ function calcularModificacaoNovo(pArrayCampos) {
 			if(atualizarValorMensal){
 				vlMensalAtualizadoNovo = eval(vlMensalBase + vlReferencialNovo);
 			}
-			vlGlobalAtualizadoNovo = eval(vlMensalAtualizadoNovo*numPrazo); 
-			
+			//vlGlobalAtualizadoNovo = eval(vlMensalAtualizadoNovo*numPrazo); 
+			vlGlobalAtualizadoNovo = vlGlobalBase + vlModAoContratoNovo;
 		}else{
 			//quando for reajuste, apenas o valor mensal ou global serao inseridos
 			if(eval(vlMensalAtualizado) != 0){

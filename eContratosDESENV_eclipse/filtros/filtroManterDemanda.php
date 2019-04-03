@@ -24,6 +24,7 @@ class filtroManterDemanda extends filtroManter{
 	static $NmAtrTipoExcludente = "NmAtrTipoExcludente";
 	static $NmAtrPrioridadeExcludente = "NmAtrPrioridadeExcludente";
 	static $NmAtrInComPAAPInstaurado = "NmAtrInComPAAPInstaurado";
+	static $NmAtrInSEI = "NmAtrInSEI";
 	static $NmAtrDtUltimaMovimentacaoInicial = "NmAtrDtUltimaMovimentacaoInicial";
 	static $NmAtrDtUltimaMovimentacaoFinal = "NmAtrDtUltimaMovimentacaoFinal";
 	
@@ -57,6 +58,7 @@ class filtroManterDemanda extends filtroManter{
 	var $inContratoComDtPropostaVencida;
 	var $inComPAAPInstaurado;
 	var $cdSetorImplementacaoEconti;
+	var $inSEI;
 	private $sqlComplementoContratoComDtPropostaVencida;
 	var $inRetornarReajusteSeLocacaoImovel;
 	
@@ -136,6 +138,8 @@ class filtroManterDemanda extends filtroManter{
 		$this->inMaoDeObra = @$_POST [voContratoInfo::$nmAtrInMaoDeObra];
 		$this->inOR_AND = @$_POST[self::$NmAtrInOR_AND];
 		$this->inComPAAPInstaurado = @$_POST[self::$NmAtrInComPAAPInstaurado];
+		$this->inSEI = @$_POST[self::$NmAtrInSEI];
+
 		$this->cdSetorImplementacaoEconti = @$_POST[self::$NmAtrCdSetorImplementacaoEConti];
 		if($this->inOR_AND == null){
 			$this->inOR_AND = constantes::$CD_OPCAO_OR;
@@ -418,6 +422,23 @@ class filtroManterDemanda extends filtroManter{
 		
 					$conector  = "\n AND ";
 		}		
+		
+		if($this->inSEI != null){			
+			$numCaracteres = constantes::$TAMANHO_CARACTERES_PRT;
+			if(getAtributoComoBooleano($this->inSEI)){
+				$numCaracteres = constantes::$TAMANHO_CARACTERES_SEI;
+			}
+				
+			$filtro = $filtro . $conector
+			. " EXISTS (SELECT 'X' FROM " . $nmTabelaTramitacao
+			. " WHERE "
+					. $nmTabela . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrAno
+					. " AND " . $nmTabela . "." . voDemanda::$nmAtrCd . "=" . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrCd
+					. " AND LENGTH($nmTabelaTramitacao." . voDemandaTramitacao::$nmAtrProtocolo
+					. ") =  $numCaracteres)\n";
+						
+			$conector  = "\n AND ";
+		}
 		
 		if ($this->prioridadeExcludente != null && !$this->isAtributoArrayVazio($this->prioridadeExcludente)) {
 			$comparar = " <> '" . $this->prioridadeExcludente. "'";

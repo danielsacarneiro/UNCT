@@ -256,6 +256,9 @@ function montarChaveContrato(){
                 $vlConsolidadoRef = 0;
                 $vlConsolidadoMod = 0;
                 
+                $percentualSupressao = 0;
+                $percentualAcrescimo = 0;
+                
                for ($i=0;$i<$tamanho;$i++) {
                		$registroBanco = $colecao[$i];
                         $voAtual = new voContratoModificacao();
@@ -299,6 +302,13 @@ function montarChaveContrato(){
 	                        $percAcrescimo = getMoeda($percAcrescimo,2) . "%";	                        
                         }*/
                         $percAcrescimo = $voAtual->getPercentualAcrescimoAtual();
+                        $percentual = $voAtual->numPercentual;
+                        if($percAcrescimo > 0){
+                        	$percentualAcrescimo = $percentualAcrescimo + $percentual;  
+                        }else{
+                        	$percentualSupressao = $percentualSupressao + $percentual;
+                        }
+                        
                         $percAcrescimo = getMoeda($percAcrescimo,2)."%";
                         
                         $numMeses = floatval($voAtual->numMesesParaOFimdoPeriodo);
@@ -342,7 +352,7 @@ function montarChaveContrato(){
 				if (!isColecaoVazia($colecao)){
 				?>
                 </TR>				
-                    <TD class="tabeladadosalinhadodireita" colspan=8><b>Consolidado:</b></TD>
+                    <TD class="tabeladadosalinhadodireita" colspan=8><b>Consolidado:<?php echo "Acres.(" . getMoeda($percentualAcrescimo) . "%) e Supr.(" . getMoeda($percentualSupressao) . "%)"?></b></TD>
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($vlConsolidadoRef)?></TD>
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($vlConsolidadoMod)?></TD>                    
                 </TR>				

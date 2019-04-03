@@ -45,6 +45,7 @@ $numTotalRegistros = $filtro->numTotalRegistros;
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_text.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_cnpfcnpj.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_oficio.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_demanda.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_moeda.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_checkbox.js"></SCRIPT>
@@ -238,7 +239,11 @@ function encaminhar() {
 	            </TD>
 	            <TH class="campoformulario" nowrap width="1%">PRT:</TH>
 	            <TD class="campoformulario">				
-	            <INPUT type="text" onkeyup="formatarCampoPRT(this, event);" id="<?=voDemandaTramitacao::$nmAtrProtocolo?>" name="<?=voDemandaTramitacao::$nmAtrProtocolo?>" value="<?php echo($filtro->vodemanda->prt);?>" class="camponaoobrigatorio" size="30">	            	                        	                        
+	            <INPUT type="text" onkeyup="formatarCampoPRT(this, event);" id="<?=voDemandaTramitacao::$nmAtrProtocolo?>" name="<?=voDemandaTramitacao::$nmAtrProtocolo?>" value="<?php echo($filtro->vodemanda->prt);?>" class="camponaoobrigatorio" size="30">
+	            <?php 
+	            echo " é SEI?: " . $comboSimNao->getHtmlCombo(filtroManterDemanda::$NmAtrInSEI,
+	            								filtroManterDemanda::$NmAtrInSEI, 
+	            								$filtro->inSEI, true, "camponaoobrigatorio", false,"");?>
 	            </TD>	            	                        	                        
 	        </TR>            
 			<TR>
