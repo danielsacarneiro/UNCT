@@ -119,6 +119,7 @@ class filtroManter extends multiplosConstrutores {
 		if ($consultar == null || $consultar == "") {
 			$consultar = @$_POST ["consultar"];
 		}
+		//echo "consultar == $consultar";
 		
 		return $consultar == "S"; 
 	}
