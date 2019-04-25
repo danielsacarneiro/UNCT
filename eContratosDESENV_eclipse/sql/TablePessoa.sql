@@ -95,7 +95,7 @@ BEGIN
   DECLARE nome VARCHAR(150);
   DECLARE doc VARCHAR(30);
   -- cdPessoa deve conter o cdPessoa da ultima pessoa incluida
-  DECLARE cdPessoa INT DEFAULT 490;
+  DECLARE cdPessoa INT DEFAULT 506;
 
   DECLARE cTabela CURSOR FOR 
 	  select ct_contratada, ct_doc_contratada from contrato

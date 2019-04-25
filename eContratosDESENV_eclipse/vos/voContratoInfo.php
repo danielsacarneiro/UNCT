@@ -14,6 +14,7 @@ Class voContratoInfo extends voentidade{
 	static $nmAtrCdAutorizacaoContrato =  	"ctinf_cd_autorizacao";
 	static $nmAtrObs = "ctinf_obs";	
 	static $nmAtrDtProposta = "ctinf_dt_proposta";
+	static $nmAtrDtBaseReajuste = "ctinf_dt_basereajuste";
 		
 	static $nmAtrInTemGarantia = "ctinf_in_garantia";
 	static $nmAtrTpGarantia = "ctinf_tp_garantia";
@@ -30,6 +31,7 @@ Class voContratoInfo extends voentidade{
 	var $cdAutorizacao = "";
 	var $obs = "";
 	var $dtProposta = "";
+	var $dtBaseReajuste = "";
 	
 	var $inTemGarantia = "";
 	var $tpGarantia = "";
@@ -97,6 +99,7 @@ Class voContratoInfo extends voentidade{
 				self::$nmAtrCdAutorizacaoContrato,
 				self::$nmAtrObs,
 				self::$nmAtrDtProposta,
+				self::$nmAtrDtBaseReajuste,
 				
 				self::$nmAtrInTemGarantia,
 				self::$nmAtrTpGarantia,
@@ -137,6 +140,7 @@ Class voContratoInfo extends voentidade{
 		$this->cdAutorizacao  = $registrobanco[self::$nmAtrCdAutorizacaoContrato];
 		$this->obs = $registrobanco[self::$nmAtrObs];
 		$this->dtProposta = $registrobanco[self::$nmAtrDtProposta];		 
+		$this->dtBaseReajuste = $registrobanco[self::$nmAtrDtBaseReajuste];
 		
 		$this->inTemGarantia = $registrobanco[self::$nmAtrInTemGarantia];
 		$this->tpGarantia = $registrobanco[self::$nmAtrTpGarantia];
@@ -153,6 +157,7 @@ Class voContratoInfo extends voentidade{
 		$this->cdAutorizacao  = @$_POST[self::$nmAtrCdAutorizacaoContrato];
 		$this->obs = @$_POST[self::$nmAtrObs];
 		$this->dtProposta = @$_POST[self::$nmAtrDtProposta];
+		$this->dtBaseReajuste = @$_POST[self::$nmAtrDtBaseReajuste];
 		
 		$this->inTemGarantia = $_POST[self::$nmAtrInTemGarantia];
 		$this->tpGarantia = $_POST[self::$nmAtrTpGarantia];

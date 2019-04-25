@@ -145,6 +145,7 @@ CREATE TABLE contrato_info (
     ct_tipo char(1) NOT NULL,
     ctinf_cd_autorizacao INT, 
     ctinf_dt_proposta DATE NULL,
+    ctinf_dt_basereajuste DATE NULL,
     ctinf_obs MEDIUMTEXT NULL,
     
     ctinf_in_garantia CHAR(1) NULL,
@@ -180,6 +181,8 @@ ALTER TABLE contrato_info ADD COLUMN in_desativado CHAR(1) NOT NULL DEFAULT 'N' 
     
 ALTER TABLE contrato_info DROP FOREIGN KEY fk_contrato_info;*/
 
+ALTER TABLE contrato_info ADD COLUMN ctinf_dt_basereajuste DATE NULL AFTER ctinf_dt_proposta;
+
 drop table contrato_info_hist;
 CREATE TABLE contrato_info_hist (
 	hist INT NOT NULL AUTO_INCREMENT,	
@@ -188,6 +191,7 @@ CREATE TABLE contrato_info_hist (
     ct_tipo char(1) NOT NULL,
     ctinf_cd_autorizacao INT, 
     ctinf_dt_proposta DATE NULL,
+    ctinf_dt_basereajuste DATE NULL,
     ctinf_obs MEDIUMTEXT NULL,
     
     ctinf_in_garantia CHAR(1) NULL,
@@ -219,6 +223,7 @@ ALTER TABLE contrato_info_hist ADD COLUMN ctinf_cd_classificacao INT NULL AFTER 
 ALTER TABLE contrato_info_hist ADD COLUMN in_desativado CHAR(1) NULL AFTER cd_usuario_ultalt;
 -- ALTER TABLE contrato_info_hist DROP FOREIGN KEY desativacao_demanda; 
 -- ALTER TABLE contrato_info_hist DROP COLUMN ctinf_in_prestacao_garantia;*/
+ALTER TABLE contrato_info_hist ADD COLUMN ctinf_dt_basereajuste DATE NULL AFTER ctinf_dt_proposta;
 
 drop table contrato_licon;
 CREATE TABLE contrato_licon (

@@ -311,6 +311,7 @@ class dbContratoInfo extends dbprocesso {
 		
 		$retorno .= $this->getVarComoString ( $vo->obs ) . ",";
 		$retorno .= $this->getVarComoData ( $vo->dtProposta ) . ",";
+		$retorno .= $this->getVarComoData ( $vo->dtBaseReajuste) . ",";
 		
 		$retorno .= $this->getVarComoString ( $vo->inTemGarantia ) . ",";
 		$retorno .= $this->getVarComoNumero ( $vo->tpGarantia ) . ",";
@@ -340,6 +341,11 @@ class dbContratoInfo extends dbprocesso {
 		
 		if ($vo->dtProposta != null) {
 			$retorno .= $sqlConector . voContratoInfo::$nmAtrDtProposta . " = " . $this->getVarComoData ( $vo->dtProposta );
+			$sqlConector = ",";
+		}
+		
+		if ($vo->dtBaseReajuste != null) {
+			$retorno .= $sqlConector . voContratoInfo::$nmAtrDtBaseReajuste . " = " . $this->getVarComoData ( $vo->dtBaseReajuste );
 			$sqlConector = ",";
 		}
 		

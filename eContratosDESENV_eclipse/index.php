@@ -50,6 +50,7 @@ setCabecalho($titulo);
 
 	fprocLic = new Tree('Serviço 05 (Proc.Licitatório)');
 	fprocLic.adicionarItem(new Link('Proc.Licitatório', '<?=caminho_funcoesHTML.voProcLicitatorio::getNmTabela()?>', ''));
+	fprocLic.adicionarItem(new Link('EXTERNO: Mural PEIntegrado', 'https://www.peintegrado.pe.gov.br/Portal/Mural.aspx', "", null,true));	
 	f.adicionarItem(fprocLic);	
 	
 	fmsg = new Tree('Serviço 06 (Administrativo)');
@@ -135,7 +136,7 @@ setCabecalho($titulo);
                     				$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_OUTROS, 4));
                     				echo imprimeBotaoDocumento($vodocumento, "Manual Visto Contratos");
                     				
-                    				$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_CHECKLIST, 7));
+                    				$vodocumento = new voDocumento(array(2019, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_CHECKLIST, 1));
                     				echo imprimeBotaoDocumento($vodocumento, "Procedimento ATJA/CPL para visto em Edital.");
                     				
                     				$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_CHECKLIST, 4));

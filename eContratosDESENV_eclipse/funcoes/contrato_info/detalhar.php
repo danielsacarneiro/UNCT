@@ -129,11 +129,23 @@ function confirmar() {
 	            Atual: <?php echo $combo->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato,voContratoInfo::$nmAtrCdAutorizacaoContrato, $vo->cdAutorizacao, true, "camporeadonly", true, " disabled ");?>	        </TR>
 	        <TR>	       
 	            <TH class="campoformulario" nowrap width="1%">Data.Proposta de preços:</TH>
-	            <TD class="campoformulario" colspan=3>
+	            <TD class="campoformulario" width="1%">
 	            	<INPUT type="text" 
 	            	       id="<?=voContratoInfo::$nmAtrDtProposta?>" 
 	            	       name="<?=voContratoInfo::$nmAtrDtProposta?>" 
 	            			value="<?php echo(getData($vo->dtProposta));?>"
+	            			onkeyup="formatarCampoData(this, event, false);" 
+	            			class="camporeadonly" 
+	            			size="10" 
+	            			maxlength="10"
+	            			readonly>
+				</TD>
+	            <TH class="campoformulario" nowrap width="1%">Data.Base Reajuste:</TH>
+	            <TD class="campoformulario">
+	            	<INPUT type="text" 
+	            	       id="<?=voContratoInfo::$nmAtrDtBaseReajuste?>" 
+	            	       name="<?=voContratoInfo::$nmAtrDtBaseReajuste?>" 
+	            			value="<?php echo(getData($vo->dtBaseReajuste));?>"
 	            			onkeyup="formatarCampoData(this, event, false);" 
 	            			class="camporeadonly" 
 	            			size="10" 

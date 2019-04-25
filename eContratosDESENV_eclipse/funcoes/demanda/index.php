@@ -35,6 +35,7 @@ if($filtro->temValorDefaultSetado){
 $qtdRegistrosPorPag = $filtro->qtdRegistrosPorPag;
 $numTotalRegistros = $filtro->numTotalRegistros;
 
+$inConsultaHTML = getInConsultarHTMLString();
 ?>
 
 <!DOCTYPE html>
@@ -60,28 +61,11 @@ function isFormularioValido() {
 	return true;
 }
 
-/*function detalhar(isExcluir) {    
-    if(isExcluir == null || !isExcluir)
-        funcao = "<?=constantes::$CD_FUNCAO_DETALHAR?>";
-    else
-        funcao = "<?=constantes::$CD_FUNCAO_EXCLUIR?>";
-    
-    if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta"))
-            return;
-    	
-	chave = document.frm_principal.rdb_consulta.value;	
-	lupa = document.frm_principal.lupa.value;
-	location.href="detalhar.php?funcao=" + funcao + "&chave=" + chave + "&lupa="+ lupa;
-}*/
 <?=getFuncaoJSDetalhar()?>
 
 function excluir() {
     detalhar(true);
 }
-
-/*function incluir() {
-	location.href="encaminhar.php?funcao=<?=constantes::$CD_FUNCAO_INCLUIR?>";
-}*/
 
 function incluir() {
 	location.href="encaminhar.novo.php?funcao=<?=constantes::$CD_FUNCAO_INCLUIR?>";
@@ -99,19 +83,17 @@ function alterar() {
 	location.href="manterDemanda.novo.php?funcao=<?=constantes::$CD_FUNCAO_ALTERAR?>&chave=" + chave;
 }
 
-/*function alterar() {
+function alertar() {
     if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta"))
-            return;
-        
+            return;        
     <?php
     if($isHistorico){
     	echo "exibirMensagem('Registro de historico nao permite alteracao.');return";
     }?>
     
 	chave = document.frm_principal.rdb_consulta.value;	
-	location.href="manterDemanda.php?funcao=<?=constantes::$CD_FUNCAO_ALTERAR?>&chave=" + chave;
-
-}*/
+	location.href="demandaAlerta.php?consultar=<?=$inConsultaHTML?>&chave=" + chave;	
+}
 
 function encaminhar() {
     if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta"))
@@ -555,10 +537,11 @@ function encaminhar() {
                             ?>
                             <TD class='botaofuncao'>
                             <?php 
-                            echo getBotaoValidacaoAcesso("bttEncaminhar", "Encaminhar", "botaofuncaop", false, false,true,false,"onClick='javascript:encaminhar();' accesskey='e'");
+                            echo getBotaoValidacaoAcesso("bttEncaminhar", "Encaminhar", "botaofuncaop", false, false,true,false,"onClick='javascript:encaminhar();' accesskey='e'");                            
                             /*if(isUsuarioAdmin()){
                             	echo getBotaoValidacaoAcesso("bttIncluirNovo", "IncluirNovo", "botaofuncaop", false, false,true,false,"onClick='javascript:incluirNovo();' accesskey='n'");
                             	echo getBotaoValidacaoAcesso("bttAlterarNovo", "AlterarNovo", "botaofuncaop", false, false,true,false,"onClick='javascript:alterarNovo();' accesskey='v'");
+                            	echo getBotaoValidacaoAcesso("bttAlertar", "Alertar", "botaofuncaop", false, false,true,false,"onClick='javascript:alertar();' accesskey='l'");
                             }*/
                             ?>
                             </TD>

@@ -175,9 +175,11 @@ function transferirDadosPessoa(cd, nm) {
 				$combo = new select(dominioAutorizacao::getColecao());				
 				?>
 	            <TH class="campoformulario" nowrap>Autorização:</TH>
-	            <TD class="campoformulario" width="1%"><?php echo $combo->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato,voContratoInfo::$nmAtrCdAutorizacaoContrato, $cdAutorizacao, true, "camponaoobrigatorio", true, " required ");?>
-	            <TH class="campoformulario" nowrap width="1%">Data.Proposta:</TH>
-	            <TD class="campoformulario">
+	            <TD class="campoformulario" width="1%" colspan=3><?php echo $combo->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato,voContratoInfo::$nmAtrCdAutorizacaoContrato, $cdAutorizacao, true, "camponaoobrigatorio", true, " required ");?>
+	        </TR>
+	        <TR>	       
+	            <TH class="campoformulario" nowrap width="1%">Data.Proposta de preços:</TH>
+	            <TD class="campoformulario" width="1%">
 	            	<INPUT type="text" 
 	            	       id="<?=voContratoInfo::$nmAtrDtProposta?>" 
 	            	       name="<?=voContratoInfo::$nmAtrDtProposta?>" 
@@ -185,9 +187,23 @@ function transferirDadosPessoa(cd, nm) {
 	            			onkeyup="formatarCampoData(this, event, false);" 
 	            			class="camponaoobrigatorio" 
 	            			size="10" 
-	            			maxlength="10" required>
+	            			maxlength="10"
+	            			required>
 				</TD>
-	        </TR>	       
+	            <TH class="campoformulario" nowrap width="1%">Data.Base Reajuste:</TH>
+	            <TD class="campoformulario">
+	            	<INPUT type="text" 
+	            	       id="<?=voContratoInfo::$nmAtrDtBaseReajuste?>" 
+	            	       name="<?=voContratoInfo::$nmAtrDtBaseReajuste?>" 
+	            			value="<?php echo(getData($vo->dtBaseReajuste));?>"
+	            			onkeyup="formatarCampoData(this, event, false);" 
+	            			class="camponaoobrigatorio" 
+	            			size="10" 
+	            			maxlength="10"
+	            			required>
+				</TD>
+	        </TR>
+	        
 	        <?php	        
 	        include_once(caminho_funcoes. "contrato/dominioTpGarantiaContrato.php");
 	        $comboGarantia = new select(dominioTpGarantiaContrato::getColecao());
@@ -225,7 +241,8 @@ function transferirDadosPessoa(cd, nm) {
 	            	colecaoIDCamposRequired = ["<?=voContratoInfo::$nmAtrCdAutorizacaoContrato?>",
 		            	"<?=voContratoInfo::$nmAtrCdClassificacao?>",
 		            	"<?=voContratoInfo::$nmAtrInMaoDeObra?>",
-		            	"<?=voContratoInfo::$nmAtrDtProposta?>",		            	
+		            	"<?=voContratoInfo::$nmAtrDtProposta?>",
+		            	"<?=voContratoInfo::$nmAtrDtBaseReajuste?>",
 	            		"<?=voContratoInfo::$nmAtrInTemGarantia?>",
 	            		"<?=voContratoInfo::$nmAtrTpGarantia?>"];
 	            </SCRIPT>

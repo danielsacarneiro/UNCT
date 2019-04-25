@@ -383,10 +383,6 @@ class filtroManterDemanda extends filtroManter{
 			if(is_array($this->vodemanda->situacao)){
 							
 				if(count($this->vodemanda->situacao) == 1 && $this->vodemanda->situacao[0] == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_A_FAZER){
-					//$this->inContratoComDtPropostaVencida = constantes::$CD_SIM;
-					//$this->vocontrato->dtProposta = getDataHoje();
-					//$this->sqlComplementoContratoComDtPropostaVencida = " AND $nmTabela." . voDemanda::$nmAtrTipo . " = " . dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO_PRORROGACAO;
-						
 					$comparar = " IN (" . getSQLStringFormatadaColecaoIN(array_keys(dominioSituacaoDemanda::getColecaoAFazer()), true) . ")";
 				}else{
 					$comparar = " IN (" . getSQLStringFormatadaColecaoIN($this->vodemanda->situacao, true) . ")";
@@ -655,24 +651,26 @@ class filtroManterDemanda extends filtroManter{
 			$conector = "\n AND ";
 		}
 		
-		if($this->inContratoComDtPropostaVencida != null){			
-			if($this->vocontrato->dtProposta == null){
+		if($this->inContratoComDtPropostaVencida != null){
+			/*if($this->vocontrato->dtProposta == null){
 				throw new excecaoGenerica("Consulta data proposta futura: campo obrigatório: vocontrato->dtproposta.");
-			}			
-			
-			$dtReferencia = getVarComoDataSQL($this->vocontrato->dtProposta);
-			$nmAtributoDataProposta = $nmTabelaContratoInfo . "." .voContratoInfo::$nmAtrDtProposta;
-			$dtPropostaPAram = $nmAtributoDataProposta;
-			//CONSIDERA 1 ANO ANTES DO ATUAL PARA FAZER A DIFERENCA DE 1 ANO PARA A CONCESSAO DE REAJUSTE
+			}*/
 
-			//CONSIDERA TAMBEM 1 MES ANTES DO ATUAL, pois a logica definida pela SAFI eh a de que o indice calculado vai do mes da proposta ate o mes-1 do ano seguinte
+			//a data da comparacao eh a data de hoje
+			$dtReferencia = getVarComoDataSQL(getDataHoje());
+			//$dtReferencia = getVarComoDataSQL($this->vocontrato->dtProposta);
+			$atributoDataReajuste = "COALESCE($nmTabelaContratoInfo" . "." .voContratoInfo::$nmAtrDtBaseReajuste 
+						. ",$nmTabelaContratoInfo." . voContratoInfo::$nmAtrDtProposta 
+						. ",$nmTabelaContrato ." . vocontrato::$nmAtrDtAssinaturaContrato
+						.")";
+			//$nmAtributoDataProposta = $nmTabelaContratoInfo . "." .voContratoInfo::$nmAtrDtProposta;
+			$dtPropostaPAram = $atributoDataReajuste;
+			//CONSIDERA 1 ANO ANTES DO ATUAL PARA FAZER A DIFERENCA DE 1 ANO PARA A CONCESSAO DE REAJUSTE
 			$ano = "YEAR($dtReferencia)-1";
-			//$mes = "MONTH($dtPropostaPAram)-1";
 			$mes = "MONTH($dtPropostaPAram)";			
-			
 			$dia = "DAY($dtPropostaPAram)";
-			$dtPropostaPAram = getDataSQLFormatada($ano,$mes, $dia);
-			
+			$dtPropostaPAram = getDataSQLFormatada($ano,$mes, $dia);			
+						
 			//se a diferenca de anos for zero, quer dizer que nao ha diferenca de 1 ano
 			//nesse caso, o vencimento da data da proposta nao ocorreu, nao podendo ser a demanda analisada para fins de reajuste
 			if(getAtributoComoBooleano($this->inContratoComDtPropostaVencida)){
@@ -687,21 +685,29 @@ class filtroManterDemanda extends filtroManter{
 			//ainda verifica se tem ou nao montanteA, caso tenha, traz a demanda pois ela sera analisada de imediato
 			//se nao tiver montanteA, trarah apenas em caso positivo de aniversario da data da proposta
 			$conjuntoSQLMontanteA = "'".dominioTipoReajuste::$CD_REAJUSTE_AMBOS."','" . dominioTipoReajuste::$CD_REAJUSTE_MONTANTE_A . "'"; 
-			$conjuntoSQLMontanteB = "'".dominioTipoReajuste::$CD_REAJUSTE_AMBOS."','" . dominioTipoReajuste::$CD_REAJUSTE_MONTANTE_B . "'";
+			$conjuntoSQLMontanteB = "'".dominioTipoReajuste::$CD_REAJUSTE_OUTROS 
+									."','" . dominioTipoReajuste::$CD_REAJUSTE_AMBOS
+									."','" . dominioTipoReajuste::$CD_REAJUSTE_MONTANTE_B 
+									. "'";
 			
 			$nmAtributoInTpDemandaReajusteComMontanteA = voDemanda::$nmAtrInTpDemandaReajusteComMontanteA; 
 			$sqlTrazerTipoReajusteComMontanteA =  " $nmAtributoInTpDemandaReajusteComMontanteA IN ($conjuntoSQLMontanteA) ";
 			$sqlTrazerTipoReajusteComMontanteB = " $nmAtributoInTpDemandaReajusteComMontanteA IN ($conjuntoSQLMontanteB) ";
+			
 			$filtro = $filtro . $conector
-			. " ($nmAtributoDataProposta IS NULL 
-				OR $nmAtributoInTpDemandaReajusteComMontanteA IS NULL
-				OR $nmAtributoInTpDemandaReajusteComMontanteA = " . getVarComoString(dominioTipoReajuste::$CD_REAJUSTE_OUTROS)
-				. " OR $sqlTrazerTipoReajusteComMontanteA 
+			. " ($atributoDataReajuste IS NULL 
 				OR 
-				($nmAtributoDataProposta IS NOT NULL AND $sqlTrazerTipoReajusteComMontanteB AND "
-			. getDataSQLDiferencaAnos($dtPropostaPAram, $dtReferencia)
-			. $operacao
-			. ")) ";
+				$nmAtributoInTpDemandaReajusteComMontanteA IS NULL 
+				OR 
+				$sqlTrazerTipoReajusteComMontanteA 
+				OR 
+				($sqlTrazerTipoReajusteComMontanteB AND "
+				//basta comparar se o mes da data de referencia (hoje) eh maior ou igual ao mes da data de comparacao
+				//se for, significa que o tempo necessario para se ter o calculo do indice, que eh de 1 ano, ja passou
+				. " MONTH($dtReferencia) >= MONTH($dtPropostaPAram) " 
+				/*. getDataSQLDiferencaAnos($dtPropostaPAram, $dtReferencia)
+				. $operacao*/
+				. ")) ";
 			
 			$conector  = "\n AND ";
 		}

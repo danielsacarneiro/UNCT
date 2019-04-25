@@ -438,6 +438,29 @@ function getBotoesRodape() {
 function exibeBotao($arrayBotoesARemover, $nmFuncaoBotao, $usuarioLogadoTemPermissao, $restringeBotaoSemValidarPermissao) {
 	return ! existeItemNoArray ( $nmFuncaoBotao, $arrayBotoesARemover ) || ($usuarioLogadoTemPermissao && ! $restringeBotaoSemValidarPermissao);
 }
+function getBotoesRodapeManter() {
+	// o administrador pode ver todos os botoes
+	//$usuarioLogadoTemPermissao = dominioPermissaoUsuario::isAdministrador ( getColecaoPermissaoUsuarioLogado () );
+	$usuarioLogadoTemPermissao = dominioPermissaoUsuario::isUsuarioPermissaoIntermediaria();
+	$isManutencao = true;
+	$isDetalhamento = false;
+	// considera que qq funcao chamado que nao sejam as funcoes basicas (alterar, excluir, incluir...) caira nessa opcao
+	// marreta: verifica pelo tamanho do nome da funcao
+	// um exemplo eh o metodo encaminhar chamado no encaminhamento de demanda (voDemandaTramitacao)
+	$isMetodoChamadoEspecifico = strlen ( $funcao ) > 2;
+
+	$html = "";
+	if (getBotaoConfirmar () != "")
+		$html .= "<TD class='botaofuncao'>" . getBotaoConfirmar () . "</TD>\n";	
+
+	 if (getBotaoCancelar () != "" && ($isDetalhamento || $isManutencao))
+	 	$html .= "<TD class='botaofuncao'>" . getBotaoCancelar () . "</TD>\n";
+
+	$html .= getRodape ();
+
+	return $html;
+}
+
 function getBotoesRodapeComRestricao($arrayBotoesARemover, $restringeBotaoSemValidarPermissao = false) {	
 	// o administrador pode ver todos os botoes
 	//$usuarioLogadoTemPermissao = dominioPermissaoUsuario::isAdministrador ( getColecaoPermissaoUsuarioLogado () );
@@ -982,7 +1005,7 @@ function getAtributoBooleanoComoString($param) {
 	$retorno = constantes::$CD_NAO;
 	if ($param != null && $param) {
 		$retorno = constantes::$CD_SIM;
-	}
+	}	
 	return $retorno;
 }
 

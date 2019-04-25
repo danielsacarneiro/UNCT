@@ -30,7 +30,7 @@ function getDemandaDetalhamentoComLupa($voDemanda, $temLupaDet, $exibeTipoDemand
 			}
 				
 			if(dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO == $voDemanda->tipo){				
-				echo getTpDemandaContratoDetalhamento("", "", "DIV_DETALHAR", $voDemanda->tpDemandaContrato, $voDemanda->inTpDemandaReajusteComMontanteA);				
+				echo getTpDemandaContratoDetalhamento("", "", "DIV_DETALHAR", $voDemanda);				
 			}			
 			echo "<INPUT type='hidden' id='" . voDemanda::$nmAtrTipo . "' name='" . voDemanda::$nmAtrTipo . "' value='$voDemanda->tipo'>";
 		}
@@ -77,15 +77,81 @@ function getTpDemandaContrato($nmCampoTpDemandaContrato, $nmCampoTpDemandaReajus
 	$html .= "</div>";	
 	return $html; 		
 }
+/**
+ * Gera um filtro predeterminado para a consulta de demandas com reajuste prontos para serem calculados (com data base vencida)
+ * @param unknown $filtro
+ * @return unknown
+ */
+function getFiltroManterDemandaDataBaseReajusteVencida(){
+		$filtro = new filtroManterDemanda ( false );
+		$voDemanda = new voDemanda ();
+		$dbprocesso = $voDemanda->dbprocesso;
+		$filtro->isValidarConsulta = false;
+		// $filtro->voPrincipal = $voDemanda;
+		$filtro->setaFiltroConsultaSemLimiteRegistro ();
+		$filtro->vodemanda->situacao = array (
+				dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_ABERTA,
+				dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO
+		);
+		$filtro->inContratoComDtPropostaVencida = constantes::$CD_SIM;
+		//$filtro->vocontrato->dtProposta = getDataHoje();
+		//$filtro->vodemanda->tipo = array_keys ( dominioTipoDemanda::getColecaoTipoDemandaSAD () );
+		$filtro->vodemanda->tipo = array(dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO);
+		$filtro->vodemanda->tpDemandaContrato = array(dominioTipoDemandaContrato::$CD_TIPO_REAJUSTE);
+		//$filtro->prioridadeExcludente = dominioPrioridadeDemanda::$CD_PRIORI_BAIXA;
+		//$filtro->vocontrato->dtProposta = "11/11/2017";
+		$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_ATJA;
+		$filtro->cdAtrOrdenacao = filtroManterDemanda::$NmColDtReferenciaSetorAtual;
+		
+		return $filtro;
+}
 
-function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpDemandaReajuste, $nmDivInformacoesComplementares, $pCdOpcaoSelecionadaTpDemandaContrato=null, $pCdOpcaoSelecionadaReajuste=null){
-	//$html = "<div id='$nmDivInformacoesComplementares'> <b>Informações complementares</b>";
-	//$html .= dominioTipoDemandaContrato::getHtmlChecksBox($nmCampoTpDemandaContrato, $pCdOpcaoSelecionadaTpDemandaContrato, dominioTipoDemandaContrato::getColecao(), 2, false, "formataFormTpDemandaContrato();", false, " disabled ");
+/**
+ * Consulta a demanda a partir de um filtro predeterminado
+ * @param unknown $filtro
+ * @return unknown
+ */
+function consultarFiltroManterDemandaDataBaseReajusteVencida($filtro){
+	$voDemanda = new voDemanda ();
+	$dbprocesso = $voDemanda->dbprocesso;
+	return $dbprocesso->consultarTelaConsulta ( $voDemanda, $filtro );
+}
+
+/**
+ * Verifica se uma demanda eh de reajuste pronto para ser calculado 
+ * @param unknown $voDemanda
+ * @return string
+ */
+function isSinalizarDemandaReajustePeriodoNaoTranscorrido ($voDemanda){
+	$filtro = getFiltroManterDemandaDataBaseReajusteVencida();
+	//$filtro = new filtroManterDemanda();
+	$filtro->vodemanda = $voDemanda;
+	$colecao = consultarFiltroManterDemandaDataBaseReajusteVencida($filtro );
+	
+	//$voDemanda = new voDemanda();	
+	//echo " setor atual " . $voDemanda->cdSetorAtual;
+	$cdSetorAtual = $voDemanda->cdSetorAtual;
+	
+	$retorno = $cdSetorAtual == dominioSetor::$CD_SETOR_ATJA && isColecaoVazia($colecao); 
+	
+	return $retorno;
+}
+
+function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpDemandaReajuste, $nmDivInformacoesComplementares, $voDemanda = null){
+
+	$pCdOpcaoSelecionadaTpDemandaContrato=$voDemanda->tpDemandaContrato;
+	$pCdOpcaoSelecionadaReajuste=$voDemanda->inTpDemandaReajusteComMontanteA;
+		
 	$html .= dominioTipoDemandaContrato::getHtmlChecksBoxDetalhamento($nmCampoTpDemandaContrato, $pCdOpcaoSelecionadaTpDemandaContrato, 2);
 	if(dominioTipoDemandaContrato::existeItemArrayOuStrCampoSeparador(dominioTipoDemandaContrato::$CD_TIPO_REAJUSTE, $pCdOpcaoSelecionadaTpDemandaContrato)){
+		//eh reajuste
 		$html .= "Reajuste: " . dominioTipoReajuste::getHtmlDetalhamento($nmCampoTpDemandaReajuste, $nmCampoTpDemandaReajuste, $pCdOpcaoSelecionadaReajuste, false);
+		
+		if(isSinalizarDemandaReajustePeriodoNaoTranscorrido($voDemanda)){
+			$html .= getTextoHTMLDestacado("ATENÇÃO: o período contratual necessário para o cálculo do reajuste(índice contratual) ainda não transcorreu. Verifique a Data Base de Reajuste do contrato.");
+		}
 	}
-	//$html .= "</div>";
+	
 	return $html;
 }
 

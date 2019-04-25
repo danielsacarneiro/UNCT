@@ -223,7 +223,6 @@ function montarChaveContrato(){
                     <TH class="headertabeladadosalinhadocentro" width="1%" nowrap>Sq.</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Contrato</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Espécie</TH>
-					<TH class="headertabeladados" width="1%" nowrap>Dt.Assinatura</TH>
                     <TH class="headertabeladados" width="50%">Contratada</TH>                    
 					<TH class="headertabeladados" width="1%" nowrap>Tipo</TH>
 					<TH class="headertabeladados" width="1%" nowrap>Índice</TH>
@@ -236,6 +235,7 @@ function montarChaveContrato(){
 					<TH class="headertabeladados" width="1%" nowrap>%.Contrato</TH>
 					<TH class="headertabeladados" width="1%" nowrap>Dt.Início</TH>
 					<TH class="headertabeladados" width="1%" nowrap>Dt.Fim</TH>
+					<TH class="headertabeladados" width="1%" nowrap>Dt.Assinatura</TH>					
                     <TH class="headertabeladados" width="1%" nowrap>Dt.Registro</TH>                    
                 </TR>
                 <?php								
@@ -330,8 +330,7 @@ function montarChaveContrato(){
                   ?>
                     <TD class="tabeladados"><?php echo complementarCharAEsquerda($voAtual->sq, "0", TAMANHO_CODIGOS_SAFI);?></TD>                    
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo $contrato;?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $complementoContrato?></TD>
-					<TD class="tabeladadosalinhadodireita" nowrap><?php echo getData($vocontrato->dtAssinatura)?></TD>
+                    <TD class="tabeladados" nowrap><?php echo $complementoContrato?></TD>					
 					<TD class="tabeladados"><?php echo $dsPessoa?></TD>
                     <TD class="tabeladados" nowrap><?php echo $tipoModificacao?></TD>
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->numPercentual)?>%</TD>
@@ -344,6 +343,7 @@ function montarChaveContrato(){
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo $percAcrescimo?></TD>
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getData($voAtual->dtModificacao)?></TD>
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getData($voAtual->dtModificacaoFim)?></TD>
+					<TD class="tabeladadosalinhadodireita" nowrap><?php echo getData($vocontrato->dtAssinatura)?></TD>                    
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getDataHora($voAtual->dhUltAlteracao)?></TD>                    
                 </TR>					
                 <?php
@@ -384,7 +384,7 @@ function montarChaveContrato(){
 	                   		<TD class="botaofuncao"><?=getBotao("bttExecucao", "Execução", null, false, "onClick='javascript:abrirExecucao();' accesskey='x'")?></TD>
 	                   		<TD class="botaofuncao"><?=getBotao("bttMovimentacao", "Movimentações", null, false, "onClick='javascript:movimentacoes();' accesskey='m'")?></TD> 
                             <?php
-                            //$arrayBotoesARemover = array(constantes::$CD_FUNCAO_ALTERAR);
+                            $arrayBotoesARemover = array(constantes::$CD_FUNCAO_ALTERAR);
                             echo getBotoesRodapeComRestricao($arrayBotoesARemover, true);
                             ?>
                          </TR>
