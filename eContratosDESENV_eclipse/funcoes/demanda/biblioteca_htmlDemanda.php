@@ -233,10 +233,13 @@ function mostrarGridDemanda($colecaoTramitacao, $isDetalhamento) {
 					$html .= "</TD> \n";
 				}
 				
+				
+				$textoTram = truncarStringHTML($voAtual->textoTram);
+				
 				$html .= "<TD class='tabeladados' nowrap>" . complementarCharAEsquerda ( $sq, "0", TAMANHO_CODIGOS ) . "</TD> \n";
 				$html .= "<TD class='tabeladados' nowrap>" . $dominioSetor->getDescricao ( $voAtual->cdSetorOrigem ) . "</TD> \n";
 				$html .= "<TD class='tabeladados' nowrap>" . $dominioSetor->getDescricao ( $voAtual->cdSetorDestino ) . "</TD> \n";
-				$html .= "<TD class='tabeladados' >" . $voAtual->textoTram . "</TD> \n";				
+				$html .= "<TD class='tabeladados' >" . $textoTram . "</TD> \n";				
 				$html .= getHtmlDocumento($voAtual);				
 				$html .= "<TD class='tabeladados' nowrap>" . $voAtual->prt . "</TD> \n";
 				$html .= "<TD class='tabeladados' nowrap>" . $voAtual->nmUsuarioInclusao . "</TD> \n";

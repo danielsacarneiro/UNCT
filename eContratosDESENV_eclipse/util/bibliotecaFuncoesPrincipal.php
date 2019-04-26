@@ -23,6 +23,25 @@ function getMultiPos($haystack, $needles, $sensitive=true, $offset=0){
 	return $result;
 }
 
+function truncarStringHTML($string, $tamMAximo = 100){
+	$separador = " ";
+	$array = explode($separador, $string);
+	
+	foreach($array as $needle) {
+		if(strlen($needle) > $tamMAximo){
+			$needle = substr($needle, 0, $tamMAximo);
+			$truncou = true;
+		}
+		
+		$retorno .= $needle . $separador;
+	}
+	
+	if($truncou)
+		$retorno .= getTextoHTMLNegrito("[TEXTO TRUNCADO]"); 
+	
+	return $retorno;
+}
+
 function getStringDoArrayComSeparador($array, $separador = CAMPO_SEPARADOR){
 	$result = "";
 	foreach($array as $needle) {
