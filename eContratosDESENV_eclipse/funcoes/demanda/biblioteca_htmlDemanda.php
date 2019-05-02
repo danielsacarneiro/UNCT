@@ -84,10 +84,9 @@ function getTpDemandaContrato($nmCampoTpDemandaContrato, $nmCampoTpDemandaReajus
  */
 function getFiltroManterDemandaDataBaseReajusteVencida(){
 		$filtro = new filtroManterDemanda ( false );
-		$voDemanda = new voDemanda ();
-		$dbprocesso = $voDemanda->dbprocesso;
+		//$voDemanda = new voDemanda ();
+		//$filtro->voPrincipal = $voDemanda;
 		$filtro->isValidarConsulta = false;
-		// $filtro->voPrincipal = $voDemanda;
 		$filtro->setaFiltroConsultaSemLimiteRegistro ();
 		$filtro->vodemanda->situacao = array (
 				dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_ABERTA,
@@ -123,16 +122,25 @@ function consultarFiltroManterDemandaDataBaseReajusteVencida($filtro){
  * @return string
  */
 function isSinalizarDemandaReajustePeriodoNaoTranscorrido ($voDemanda){
-	$filtro = getFiltroManterDemandaDataBaseReajusteVencida();
-	//$filtro = new filtroManterDemanda();
-	$filtro->vodemanda = $voDemanda;
-	$colecao = consultarFiltroManterDemandaDataBaseReajusteVencida($filtro );
-	
-	//$voDemanda = new voDemanda();	
-	//echo " setor atual " . $voDemanda->cdSetorAtual;
-	$cdSetorAtual = $voDemanda->cdSetorAtual;
-	
-	$retorno = $cdSetorAtual == dominioSetor::$CD_SETOR_ATJA && isColecaoVazia($colecao); 
+	$retorno = false;
+	if($voDemanda != null){
+		$filtro = getFiltroManterDemandaDataBaseReajusteVencida();
+		//$filtro = new filtroManterDemanda();
+		$vodemandatemp = new voDemanda();
+		$vodemandatemp->ano = $voDemanda->ano;
+		$vodemandatemp->cd = $voDemanda->cd;
+		$filtro->vodemanda = $vodemandatemp;
+		$colecao = consultarFiltroManterDemandaDataBaseReajusteVencida($filtro);
+		
+		//$voDemanda = new voDemanda();	
+		//echo " setor atual " . $voDemanda->cdSetorAtual;
+		$cdSetorAtual = $voDemanda->cdSetorAtual;
+		$isColecaoVazia = isColecaoVazia($colecao);
+		//var_dump($colecao);
+		//echo "colecao eh vazia: " . !$isColecaoVazia;
+		
+		$retorno = $cdSetorAtual == dominioSetor::$CD_SETOR_ATJA && $isColecaoVazia;
+	}
 	
 	return $retorno;
 }
