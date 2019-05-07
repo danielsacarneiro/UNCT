@@ -747,11 +747,14 @@ function getCamposContratoLicon($recordSet){
 			$portaria = getCPLPorNomePregoeiro($recordSet);
 			$nmPregoeiro = $recordSet[voProcLicitatorio::$NmColNomePregoeiro];
 			if($portaria != null && $portaria != ""){
-				$retorno .= "<br>CPL: " . $portaria;
+				$complemento .= "<br>CPL: " . $portaria;
 				if($nmPregoeiro != null){
-					$retorno .= "-" . $nmPregoeiro;
+					$complemento .= "-" . $nmPregoeiro;
 				}
-			}			
+				
+				$complemento = getTextoHTMLNegrito($complemento);
+			}
+			$retorno .= $complemento;
 			$retorno .= "<br><br>Todas Portarias:<br>" . dominioComissaoProcLicitatorio::getNumPortariaTodasCPL();
 		}		
 	}
