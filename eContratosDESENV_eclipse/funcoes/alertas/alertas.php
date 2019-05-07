@@ -159,42 +159,6 @@ function getMensagemFimPrazoPAAP(&$count = 0){
 	return $msg;
 }
 
-/*function getMensagemDemandaContratoPropostaVencida(&$count = 0){
-	$assunto = "REAJUSTES:";
-	$assunto = getSequenciaAssunto($assunto, $count);
-	try {
-		$filtro = new filtroManterDemanda ( false );
-		$voDemanda = new voDemanda ();
-		$dbprocesso = $voDemanda->dbprocesso;
-		
-		$filtro->isValidarConsulta = false;
-		// $filtro->voPrincipal = $voDemanda;
-		$filtro->setaFiltroConsultaSemLimiteRegistro ();
-		$filtro->vodemanda->situacao = array (
-				dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_ABERTA,
-				dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO
-		);
-		$filtro->inContratoComDtPropostaVencida = constantes::$CD_SIM;
-		//$filtro->vocontrato->dtProposta = getDataHoje();
-		//$filtro->vodemanda->tipo = array_keys ( dominioTipoDemanda::getColecaoTipoDemandaSAD () );
-		$filtro->vodemanda->tipo = array(dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO);
-		$filtro->vodemanda->tpDemandaContrato = array(dominioTipoDemandaContrato::$CD_TIPO_REAJUSTE);
-		//$filtro->prioridadeExcludente = dominioPrioridadeDemanda::$CD_PRIORI_BAIXA;
-		
-		//$filtro->vocontrato->dtProposta = "11/11/2017";
-		$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_ATJA;
-		$filtro->cdAtrOrdenacao = filtroManterDemanda::$NmColDtReferenciaSetorAtual;
-		$colecao = $dbprocesso->consultarTelaConsulta ( $voDemanda, $filtro );
-
-		$msg = getCorpoMensagemDemandaContratoColecao($assunto, $colecao, null);
-
-	} catch ( Exception $ex ) {
-		$msg = $ex->getMessage ();
-	}
-
-	return $msg;
-}*/
-
 function getMensagemDemandaContratoPropostaVencida(&$count = 0){
 	$assunto = "REAJUSTES:";
 	$assunto = getSequenciaAssunto($assunto, $count);

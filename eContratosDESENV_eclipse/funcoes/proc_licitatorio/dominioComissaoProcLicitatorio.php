@@ -26,6 +26,7 @@ class dominioComissaoProcLicitatorio extends dominio {
 		return $retorno;
 	}
 	static function getCPLPorPregoeiro($nmPregoeiro, $retornarDescricao = false) {
+		//echo "nome pregoeiro eh $nmPregoeiro";
 		$retorno = null;
 		if (existeStr1NaStr2ComSeparador ( $nmPregoeiro, "gorete" )) {
 			$retorno = static::$CD_CPL_II;
@@ -56,8 +57,7 @@ class dominioComissaoProcLicitatorio extends dominio {
 	}
 	
 	static function getNumPortariaTodasCPL() {
-		$ano = 2017;
-		
+		$ano = 2017;		
 		$retorno = "Ano $ano:<br>";
 		$retorno .= "<b>1173/$ano</b>(CPL-I)<br>";  
 		$retorno .= "<b>1248/$ano</b>(CPL-II)<br>";
@@ -68,7 +68,13 @@ class dominioComissaoProcLicitatorio extends dominio {
 		$retorno .= "<b>995/$ano</b>(CPL-I)<br>";
 		$retorno .= "<b>996/$ano</b>(CPL-II)<br>";
 		$retorno .= "<b>997/$ano</b>(CPL-III)<br>";
-						
+
+		$ano = 2019;
+		$retorno .= "<br>Ano $ano:<br>";
+		$retorno .= "<b>842/$ano</b>(CPL-I)<br>";
+		$retorno .= "<b>843/$ano</b>(CPL-II)<br>";
+		$retorno .= "<b>844/$ano</b>(CPL-III)<br>";
+		
 		return $retorno;
 	}
 	

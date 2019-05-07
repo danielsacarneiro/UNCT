@@ -667,8 +667,12 @@ class filtroManterDemanda extends filtroManter{
 			$dtPropostaPAram = $atributoDataReajuste;
 			//CONSIDERA 1 ANO ANTES DO ATUAL PARA FAZER A DIFERENCA DE 1 ANO PARA A CONCESSAO DE REAJUSTE
 			$ano = "YEAR($dtReferencia)-1";
-			$mes = "MONTH($dtPropostaPAram)";			
-			$dia = "DAY($dtPropostaPAram)";
+			$mes = "MONTH($dtPropostaPAram)";
+			//considera o dia 15 do mes como dia limite para obtencao do indice de reajuste exigido por lei
+			//ver data da liberacao dos indices em https://www.indiceseindicadores.com.br/inpc/
+			//dai que foi usado o dia 15 como media
+			$dia = "15";			
+			//$dia = "DAY($dtPropostaPAram)";
 			$dtPropostaPAram = getDataSQLFormatada($ano,$mes, $dia);			
 						
 			//se a diferenca de anos for zero, quer dizer que nao ha diferenca de 1 ano
@@ -694,8 +698,19 @@ class filtroManterDemanda extends filtroManter{
 			$sqlTrazerTipoReajusteComMontanteA =  " $nmAtributoInTpDemandaReajusteComMontanteA IN ($conjuntoSQLMontanteA) ";
 			$sqlTrazerTipoReajusteComMontanteB = " $nmAtributoInTpDemandaReajusteComMontanteA IN ($conjuntoSQLMontanteB) ";
 			
+			/*$sqlIsDemandaSAD =
+					"($nmTabela." . voDemanda::$nmAtrTpDemandaContrato . "=".dominioTipoDemandaContrato::$CD_TIPO_REAJUSTE
+					. " AND "
+					. "$nmTabelaContratoInfo." . voContratoInfo::$nmAtrCdClassificacao . "<>".dominioClassificacaoContrato::$CD_LOCACAO_IMOVEL
+					. " AND "
+					. $this->getSQLInternoIsDemandaSAD($nmTabelaContratoInfo, $nmTabelaContrato)
+					. ")";*/
+			
+			//para demandas SAD nao ha preocupacao de listar aqui
+			//pois elas aparecerao no lugar especifico de DEMANDAS SAD PRIORIZADAS
 			$filtro = $filtro . $conector
-			. " ($atributoDataReajuste IS NULL 
+			. " (
+				$atributoDataReajuste IS NULL 
 				OR 
 				$nmAtributoInTpDemandaReajusteComMontanteA IS NULL 
 				OR 
@@ -704,9 +719,10 @@ class filtroManterDemanda extends filtroManter{
 				($sqlTrazerTipoReajusteComMontanteB AND "
 				//basta comparar se o mes da data de referencia (hoje) eh maior ou igual ao mes da data de comparacao
 				//se for, significa que o tempo necessario para se ter o calculo do indice, que eh de 1 ano, ja passou
-				. " MONTH($dtReferencia) >= MONTH($dtPropostaPAram) " 
-				/*. getDataSQLDiferencaAnos($dtPropostaPAram, $dtReferencia)
-				. $operacao*/
+				//. " MONTH($dtReferencia) >= MONTH($dtPropostaPAram) "
+				// verifica se transcorreu 1 ano da data base de reajuste
+				. getDataSQLDiferencaAnos($dtPropostaPAram, $dtReferencia)
+				// . $operacao
 				. ")) ";
 			
 			$conector  = "\n AND ";
@@ -792,6 +808,15 @@ class filtroManterDemanda extends filtroManter{
 				. $dtUltMovimentacao
 			. ")) ";
 									
+		return $retorno;
+	}
+	
+	function getSQLInternoIsDemandaSAD($nmTabelaContratoInfo, $nmTabelaContrato){
+		$arrayAtributosCOALESCE = array($nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrCdAutorizacaoContrato, $nmTabelaContrato . "." . voContrato::$nmAtrCdAutorizacaoContrato); 
+		$strComparacao = getSQLCOALESCE($arrayAtributosCOALESCE);			
+		$colecaoAutoSAD = array(dominioAutorizacao::$CD_AUTORIZ_SAD);			
+		$retorno = $strComparacao . voContratoInfo::getOperacaoFiltroCdAutorizacaoOR_AND($colecaoAutoSAD, constantes::$CD_OPCAO_OR);
+			
 		return $retorno;
 	}
 	
