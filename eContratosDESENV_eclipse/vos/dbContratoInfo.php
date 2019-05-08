@@ -261,6 +261,8 @@ class dbContratoInfo extends dbprocesso {
 		
 		$querySelect = "SELECT ";
 		$querySelect .= $nmTabela . ".*,";
+		$querySelect .= $nmTabelaDemanda . "." . voDemanda::$nmAtrTipo . ",";
+		$querySelect .= $nmTabelaDemanda . "." . voDemanda::$nmAtrTpDemandaContrato . ",";
 		$querySelect .= $nmTabelaDemanda . "." . voDemanda::$nmAtrTexto . ",";
 		$querySelect .= $nmTabelaDocumento . ".*";
 		$querySelect .= "," . $nmTabelaUsuario . "." . vousuario::$nmAtrName;

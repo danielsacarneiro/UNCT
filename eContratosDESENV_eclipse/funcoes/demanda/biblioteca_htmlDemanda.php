@@ -309,8 +309,9 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDad
 		$html .= "<TH class='headertabeladados' width='1%'>Ano</TH>   \n";
 		$html .= "<TH class='headertabeladados' width='1%'>Dem.</TH> \n";
 		$html .= "<TH class='headertabeladados' width='1%'>Tram.</TH> \n";
-		$html .= "<TH class='headertabeladados' width='1%'>Origem</TH> \n";
-		$html .= "<TH class='headertabeladados' width='1%'>Destino</TH> \n";
+		// $html .= "<TH class='headertabeladados' width='1%'>Origem</TH> \n";
+		// $html .= "<TH class='headertabeladados' width='1%'>Destino</TH> \n";
+		$html .= "<TH class='headertabeladados' width='1%'>Tipo</TH> \n";		
 		if($comDadosDemanda){
 			$html .= "<TH class='headertabeladados' width='20%'>Título</TH> \n";
 		}
@@ -327,10 +328,16 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDad
 				
 			$voAtual = new voDemandaTramitacao ();
 			$voAtual->getDadosBanco ( $colecaoTramitacao [$i] );
-				
 			$sq = $voAtual->sq;
-				
+							
 			if ($voAtual != null) {
+				$tipo = dominioTipoDemanda::getDescricaoStatic($voAtual->tipo);
+				$dsTpDemandaContrato = $voAtual->tpDemandaContrato;
+				$dsTpDemandaContrato = dominioTipoDemandaContrato::getDescricaoColecaoChave($dsTpDemandaContrato, false, dominioTipoDemandaContrato::getColecaoAntiga());
+				if($voAtual->tpDemandaContrato != null){
+					$tipo = $tipo . $dsTpDemandaContrato;
+				}
+				
 				$html .= "<TR class='dados'> \n";
 
 				if (! $isDetalhamento) {
@@ -342,8 +349,9 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDad
 				$html .= "<TD class='tabeladados' nowrap>" . $voAtual->ano . "</TD> \n";
 				$html .= "<TD class='tabeladados' nowrap>" . complementarCharAEsquerda ( $voAtual->cd, "0", TAMANHO_CODIGOS ) . "</TD> \n";
 				$html .= "<TD class='tabeladados' nowrap>" . complementarCharAEsquerda ( $voAtual->sq, "0", TAMANHO_CODIGOS ) . "</TD> \n";
-				$html .= "<TD class='tabeladados' nowrap>" . $dominioSetor->getDescricao ( $voAtual->cdSetorOrigem ) . "</TD> \n";
-				$html .= "<TD class='tabeladados' nowrap>" . $dominioSetor->getDescricao ( $voAtual->cdSetorDestino ) . "</TD> \n";				
+				//$html .= "<TD class='tabeladados' nowrap>" . $dominioSetor->getDescricao ( $voAtual->cdSetorOrigem ) . "</TD> \n";
+				//$html .= "<TD class='tabeladados' nowrap>" . $dominioSetor->getDescricao ( $voAtual->cdSetorDestino ) . "</TD> \n";				
+				$html .= "<TD class='tabeladados'>$tipo</TD> \n";
 				if($comDadosDemanda){
 					$html .= "<TD class='tabeladados'>" .  $voAtual->texto . "</TD> \n";
 				}

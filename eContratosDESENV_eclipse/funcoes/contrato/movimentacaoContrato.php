@@ -230,7 +230,7 @@ function detalhar(isExcluir) {
 				        $endereco = $voAtual->getLinkMinutaDocumento();
 				        $nmCampoEndereco = vocontrato::$nmAtrLinkDoc.$chave."minuta";
 				        if($endereco != null){
-				        	echo "<INPUT type='hidden' id='$nmCampoEndereco' name='$nmCampoEndereco' value='$endereco'>";
+				        	echo "<br><INPUT type='hidden' id='$nmCampoEndereco' name='$nmCampoEndereco' value='$endereco'>";
 				        	echo getBotaoAbrirDocumento($nmCampoEndereco, false, "Minuta");
 				        }
 				        
