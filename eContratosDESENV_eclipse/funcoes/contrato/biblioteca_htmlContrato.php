@@ -744,7 +744,7 @@ function getCamposContratoLicon($recordSet){
 		$retorno .= "<br>Data Assinatura " . getInputText("", "", getData($voContrato->dtAssinatura), constantes::$CD_CLASS_CAMPO_READONLY);
 				
 		if($voContrato->cdEspecie == dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER){
-			$portaria = getCPLPorNomePregoeiro($recordSet);
+			/*$portaria = getCPLPorNomePregoeiro($recordSet);
 			$nmPregoeiro = $recordSet[voProcLicitatorio::$NmColNomePregoeiro];
 			if($portaria != null && $portaria != ""){
 				$complemento .= "<br>CPL: " . $portaria;
@@ -755,10 +755,44 @@ function getCamposContratoLicon($recordSet){
 				$complemento = getTextoHTMLNegrito($complemento);
 			}
 			$retorno .= $complemento;
-			$retorno .= "<br><br>Todas Portarias:<br>" . dominioComissaoProcLicitatorio::getNumPortariaTodasCPL();
+			$retorno .= "<br><br>Todas Portarias:<br>" . dominioComissaoProcLicitatorio::getNumPortariaTodasCPL();*/
+			
+			$retorno .= getInformacaoCPL($registrobanco);
 		}		
 	}
 
+	return $retorno;
+}
+
+function getInformacaoCPL($registroBanco, $mostrarTodasPortarias = true){
+	$voContrato = new vocontrato ();
+	$voContrato->getDadosBanco ( $registrobanco );
+	
+	if (! $mostrarTodasPortarias) {
+		$anoPortaria = $voContrato->anoContrato;
+	}
+	
+	$nmPregoeiro = $registroBanco [voProcLicitatorio::$NmColNomePregoeiro];
+	if ($nmPregoeiro == null) {
+		//var_dump($registroBanco);
+		$proclic = $registroBanco [vocontrato::$nmAtrProcessoLicContrato];
+		//echo $proclic;
+		$nmPregoeiro = dominioComissaoProcLicitatorio::getNmPregoeiroPorCPL ( $proclic );
+	} 
+	
+	$portaria = dominioComissaoProcLicitatorio::getCPLPorPregoeiro($nmPregoeiro);
+	
+	if ($portaria != null && $portaria != "") {
+		$complemento .= "<br>CPL: " . $portaria;
+		if ($nmPregoeiro != null) {
+			$complemento .= "-" . $nmPregoeiro;
+		}
+		
+		$complemento = getTextoHTMLNegrito ( $complemento );
+	}
+	$retorno .= $complemento;
+	$retorno .= "<br><br>Todas Portarias:<br>" . dominioComissaoProcLicitatorio::getNumPortariaTodasCPL ( $anoPortaria );
+	
 	return $retorno;
 }
 
@@ -852,5 +886,11 @@ function getVOContratoModAcrescimo($vo){
 	
 	return $voContratomod;
 }
+
+function getLinkPortarias() {
+	$link = "../proc_licitatorio/portarias.php";
+	return "Portarias " . getLinkPesquisa($link);
+}
+
 
 ?>

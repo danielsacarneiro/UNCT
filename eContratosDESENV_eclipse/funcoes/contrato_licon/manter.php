@@ -153,11 +153,13 @@ function carregaDadosContrato(){
 	            echo getLinkPesquisa ( "../".voDemanda::getNmTabela()."/detalhar.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $vodemandaTemp->getValorChaveHTML() );
 	             
 				echo "Tipo: " . dominioTipoDemanda::getHtmlDetalhamento("", "", $voDemanda->tipo, false);
-				?>	            
+				
+				echo getLinkPortarias();
+				?>
 	        </TR>
 	        <?php 
 	        getContratoDet($voContrato, false, true);
-	        ?>	        
+	        ?>
 	        <TR>	       
 	            <TH class="campoformulario" nowrap width="1%">Vigência:</TH>
 	            <TD class="campoformulario" colspan=3>
@@ -173,8 +175,7 @@ function carregaDadosContrato(){
 	            <TD class="campoformulario">
 	            <?php echo getDetalhamentoHTML("", "", $voContrato->dtAssinatura)?>
 				</TD>
-	        </TR>	        
-	        
+	        </TR>
 	        <?php
 	        }else{
 	        	//INCLUSAO
@@ -208,13 +209,13 @@ function carregaDadosContrato(){
 				//cria o combo
 				echo $comboSituacaoLicon->getHtmlCombo(voContratoLicon::$nmAtrSituacao, voContratoLicon::$nmAtrSituacao, $vo->situacao, true, "camponaoobrigatorio", false, " required");
 				?>
-				</TD>
+				</TD>				
 	        </TR>	        
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Observação:</TH>
 	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=voContratoLicon::$nmAtrObs?>" name="<?=voContratoLicon::$nmAtrObs?>" class="camponaoobrigatorio"><?=$vo->obs?></textarea>
 				</TD>
-	        </TR>	        
+	        </TR>
 <TR>
 	<TD halign="left" colspan="4">
 	<DIV class="textoseparadorgrupocampos">&nbsp;</DIV>

@@ -8,6 +8,9 @@ class dominioComissaoProcLicitatorio extends dominio {
 	static $DS_CPL_II = "CPL-II";
 	static $DS_CPL_III = "CPL-III";
 	
+	static $NM_PREGOEIRO_CPL_I = "ODACY WELLINGTON DA SILVA";
+	static $NM_PREGOEIRO_CPL_II = "Gorete";
+	static $NM_PREGOEIRO_CPL_III = "Patrícia";
 	// ...............................................................
 	// Construtor
 	function __construct() {
@@ -41,6 +44,21 @@ class dominioComissaoProcLicitatorio extends dominio {
 		}
 		return $retorno;
 	}
+	static function getNmPregoeiroPorCPL($proclic) {
+		$retorno = null;
+		/*echoo($proclic);
+		echoo(static::$DS_CPL_I);*/
+		$proclic = str_replace(" ", "", $proclic);
+		if (existeStr1NaStr2ComSeparador ( $proclic, static::$DS_CPL_I)) {
+			$retorno = static::$NM_PREGOEIRO_CPL_I;
+		}else if (existeStr1NaStr2ComSeparador ( $proclic, static::$DS_CPL_II )) {
+			$retorno = static::$NM_PREGOEIRO_CPL_II;
+		} else if (existeStr1NaStr2ComSeparador ( $proclic, static::$DS_CPL_III )) {
+			$retorno = static::$NM_PREGOEIRO_CPL_III;
+		}
+	
+		return $retorno;
+	}
 	static function getNumPortariaCPL($cdCPL) {
 		$retorno = "Portaria SAD nº ";
 		if (static::$CD_CPL_I == $cdCPL) {
@@ -56,24 +74,45 @@ class dominioComissaoProcLicitatorio extends dominio {
 		return $retorno;
 	}
 	
-	static function getNumPortariaTodasCPL() {
-		$ano = 2017;		
-		$retorno = "Ano $ano:<br>";
-		$retorno .= "<b>1173/$ano</b>(CPL-I)<br>";  
-		$retorno .= "<b>1248/$ano</b>(CPL-II)<br>";
-		$retorno .= "<b>1249/$ano</b>(CPL-III)<br>";
+	static function getNumPortariaTodasCPL($anoPortaria=null) {
+		
+		//ja que nao tem portarias
+		if($anoPortaria != null && $anoPortaria < 2017){
+			$anoPortaria = null;
+		}
+		
+		$numPortarias = 0;
+		$numPortariaMaximaAExibir = 2;
+						
+		$ano = 2019;
+		$pegarPortaria = $numPortarias < $numPortariaMaximaAExibir || $anoPortaria == null;
+		if($pegarPortaria || $anoPortaria == $ano){
+			$retorno .= "Ano $ano:<br>";
+			$retorno .= "<b>842/$ano</b>(CPL-I)<br>";
+			$retorno .= "<b>843/$ano</b>(CPL-II)<br>";
+			$retorno .= "<b>844/$ano</b>(CPL-III)<br>";
+			$numPortarias++;
+		}
 		
 		$ano = 2018;
-		$retorno .= "<br>Ano $ano:<br>";
-		$retorno .= "<b>995/$ano</b>(CPL-I)<br>";
-		$retorno .= "<b>996/$ano</b>(CPL-II)<br>";
-		$retorno .= "<b>997/$ano</b>(CPL-III)<br>";
-
-		$ano = 2019;
-		$retorno .= "<br>Ano $ano:<br>";
-		$retorno .= "<b>842/$ano</b>(CPL-I)<br>";
-		$retorno .= "<b>843/$ano</b>(CPL-II)<br>";
-		$retorno .= "<b>844/$ano</b>(CPL-III)<br>";
+		$pegarPortaria = $numPortarias < $numPortariaMaximaAExibir || $anoPortaria == null;
+		if($pegarPortaria || $anoPortaria == $ano){
+			$retorno .= "<br>Ano $ano:<br>";
+			$retorno .= "<b>995/$ano</b>(CPL-I)<br>";
+			$retorno .= "<b>996/$ano</b>(CPL-II)<br>";
+			$retorno .= "<b>997/$ano</b>(CPL-III)<br>";
+			$numPortarias++;
+		}
+		
+		$ano = 2017;
+		$pegarPortaria = $numPortarias < $numPortariaMaximaAExibir || $anoPortaria == null;		
+		if($pegarPortaria || $anoPortaria == $ano){
+			$retorno .= "<br>Ano $ano:<br>";
+			$retorno .= "<b>1173/$ano</b>(CPL-I)<br>";
+			$retorno .= "<b>1248/$ano</b>(CPL-II)<br>";
+			$retorno .= "<b>1249/$ano</b>(CPL-III)<br>";
+			$numPortarias++;
+		}
 		
 		return $retorno;
 	}
