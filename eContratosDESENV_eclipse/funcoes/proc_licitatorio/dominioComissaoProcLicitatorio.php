@@ -9,8 +9,8 @@ class dominioComissaoProcLicitatorio extends dominio {
 	static $DS_CPL_III = "CPL-III";
 	
 	static $NM_PREGOEIRO_CPL_I = "ODACY WELLINGTON DA SILVA";
-	static $NM_PREGOEIRO_CPL_II = "Gorete";
-	static $NM_PREGOEIRO_CPL_III = "Patrícia";
+	static $NM_PREGOEIRO_CPL_II = "MARIA GORETE BRANDT DE CARVALHO";
+	static $NM_PREGOEIRO_CPL_III = "PATRICIA DE LUCENA FARIAS";
 	// ...............................................................
 	// Construtor
 	function __construct() {
