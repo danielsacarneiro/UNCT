@@ -320,6 +320,11 @@ function calcularModificacaoNovo(pArrayCampos) {
 				numMeses = 0
 			}			
 			numMesesAoFinal = arredondarValorMoedaParaBaixo(Math.abs(numMeses), 0);
+			
+			//pelo menos 1 mes deve ser considerado
+			if(numMesesAoFinal == 0){
+				numMesesAoFinal = 1;
+			}
 		//}		
 		
 		//o numero de meses ao fim nao pode ser maior que o prazo referencial do contrato
