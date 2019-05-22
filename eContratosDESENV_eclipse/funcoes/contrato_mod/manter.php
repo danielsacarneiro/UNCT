@@ -195,6 +195,7 @@ function carregaDadosContrato(){
 
 	//var inRetroativo = document.frm_principal.<?=voContratoModificacao::$ID_REQ_InRetroativo?>.value;
 	var dtEfeito = document.frm_principal.<?=voContratoModificacao::$nmAtrDtModificacao?>.value;
+	var tipo = document.frm_principal.<?=voContratoModificacao::$nmAtrTpModificacao?>.value;
 	
 	if(cdContrato != "" && anoContrato != "" && tipoContrato !="" && cdEspecie !=""){
 
@@ -208,6 +209,7 @@ function carregaDadosContrato(){
 			+ '<?=CAMPO_SEPARADOR?>' + sqEspecie
 			//+ '<?=CAMPO_SEPARADOR?>' + inRetroativo
 			+ '<?=CAMPO_SEPARADOR?>' + dtEfeito
+			+ '<?=CAMPO_SEPARADOR?>' + tipo
 			;
 			//vai no ajax
 			getDadosPorChaveGenerica(str, "../contrato_mod/campoDadosContratoMod.php", '<?=voContratoModificacao::$ID_REQ_DIV_DADOS_CONTRATO_MODIFICACAO?>');
@@ -292,7 +294,7 @@ function iniciar(){
 				<?php                        
 				$combo = new select(dominioTpContratoModificacao::getColecao());                        
 				//cria o combo
-				echo $combo->getHtmlCombo(voContratoModificacao::$nmAtrTpModificacao, voContratoModificacao::$nmAtrTpModificacao, $vo->tpModificacao, true, "camponaoobrigatorio", false, " onChange='formataForm();calcular(this);' required");
+				echo $combo->getHtmlCombo(voContratoModificacao::$nmAtrTpModificacao, voContratoModificacao::$nmAtrTpModificacao, $vo->tpModificacao, true, "camponaoobrigatorio", false, " onChange='formataForm();carregaDadosContrato();calcular(this);' required");
 				?>
 				</TD>
 	        </TR>

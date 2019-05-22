@@ -584,8 +584,9 @@ function getDadosContratoMod($chave) {
 		$array = explode ( CAMPO_SEPARADOR, $chave );
 		//definido em manter.php vocontratomod carregaDadosContrato();
 		$dtEfeitoModificacao = $array[6];
+		$tipoModificacao = $array[7];
 		
-		$arrayParamComplemento = array($dtEfeitoModificacao);
+		$arrayParamComplemento = array($dtEfeitoModificacao, $tipoModificacao);
 		//echo $chave;
 		//var_dump($vo);
 		try{
@@ -663,6 +664,7 @@ function getCamposContratoMod($vo, $arrayParamComplemento = null){
 	
 	if($arrayParamComplemento != null){
 		$dtEfeitoModificacao = $arrayParamComplemento[0];
+		$tipoModificacao = $arrayParamComplemento[1];
 	}
 		
 	$dbcontrato = new dbcontrato();
@@ -697,14 +699,24 @@ function getCamposContratoMod($vo, $arrayParamComplemento = null){
 		$voContrato->vlGlobal = $voContratoTemp->vlGlobal;*/
 		$retorno = "Vigência determinada pelo " . getTextoHTMLNegrito(getContratoDetalhamentoAvulso($voContratoTemp, true)) . "<br>";
 		$voContratoReferencia = clone $voContratoTemp;
+		//var_dump($voContratoReferencia);
 	//}	
 	//traz o valor atualizado do contrato segundo o e-conti
 	$dbcontratomod = new dbContratoModificacao();
 	$registroExecucao = $dbcontratomod->consultarExecucaoTermoEspecifico($voContratoReferencia);
 	$voContratoModEspecificoReajustado = $registroExecucao[filtroManterContratoModificacao::$NmColVOContratoModReajustado];
-	if($voContratoModEspecificoReajustado->vlMensalAtual != null){
-		$voContrato->vlMensal = getMoeda($voContratoModEspecificoReajustado->vlMensalAtual, 2);
-		$voContrato->vlGlobal = getMoeda($voContratoModEspecificoReajustado->vlGlobalAtual,2);
+	//echoo ("tp.modificacao " . $tipoModificacao);	
+	if($tipoModificacao != dominioTpContratoModificacao::$CD_TIPO_REAJUSTE){
+		if($voContratoModEspecificoReajustado->vlMensalAtual != null){
+			$voContrato->vlMensal = getMoeda($voContratoModEspecificoReajustado->vlMensalAtual, 2);
+			//$voContrato->vlMensal = getMoeda("2000", 2);
+			$voContrato->vlGlobal = getMoeda($voContratoModEspecificoReajustado->vlGlobalAtual,2);
+		}
+	}else{
+		//se for reajuste, pega o valor mensal do contrato ao qual o reajuste se refere
+		//echoo("valor contrato: " . $voContratoReferencia->vlMensalAtual);
+		$voContrato->vlMensal = $voContratoReferencia->vlMensal;
+		$voContrato->vlGlobal = $voContratoReferencia->vlGlobal;
 	}
 		
 	if($voContrato != null){

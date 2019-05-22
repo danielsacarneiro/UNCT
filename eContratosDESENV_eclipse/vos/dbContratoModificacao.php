@@ -209,6 +209,13 @@ class dbContratoModificacao extends dbprocesso {
 		// return parent::alterar($vo);
 	}
 	
+	function excluirVarios($vo) {
+		$chaveVarios = @$_POST["rdb_consulta"];
+		echo $chaveVarios;
+		
+		// $this->validarInclusao($vo);
+		// return parent::alterar($vo);
+	}
 	/**
 	 * pega o contratomod passado como parametro de uma colecao de valores execucao
 	 * retorna um vogenerico/registro

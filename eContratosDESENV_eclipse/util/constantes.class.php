@@ -19,6 +19,7 @@
     static $DS_TIPO_PROFISCO  = "C-PROFISCO";
     
     static $CD_FUNCAO_EXCLUIR = "E";
+    static $CD_FUNCAO_EXCLUIR_VARIOS = "excluirVarios";
     static $CD_FUNCAO_HISTORICO = "H";
     static $CD_FUNCAO_INCLUIR = "I";
     static $CD_FUNCAO_ALTERAR = "A";

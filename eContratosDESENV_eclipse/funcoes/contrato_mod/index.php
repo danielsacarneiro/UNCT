@@ -38,6 +38,7 @@ $numTotalRegistros = $filtro->numTotalRegistros;
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_text.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_cnpfcnpj.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_checkbox.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>tooltip.js"></SCRIPT>
 
 <SCRIPT language="JavaScript" type="text/javascript">
@@ -49,22 +50,42 @@ function isFormularioValido() {
 	return true;
 }
 
-function detalhar(isExcluir) {    
+function excluirVarios() {
+
+	if(!isCheckBoxConsultaSelecionado("rdb_consulta"))
+		return;
+	
+	funcao = "<?=constantes::$CD_FUNCAO_EXCLUIR_VARIOS?>";
+	alert("Implementar Funcao.");
+	var chave = retornarValoresCheckBoxesSelecionadosComoString("rdb_consulta");
+	//location.href="confirmar.php?funcao=" + funcao + "&chave=" + chave;
+}
+
+function detalhar(isExcluir) {
+
+	if(!isApenasUmCheckBoxSelecionado("rdb_consulta"))
+		return;
+	
     if(isExcluir == null || !isExcluir)
         funcao = "<?=constantes::$CD_FUNCAO_DETALHAR?>";
     else
         funcao = "<?=constantes::$CD_FUNCAO_EXCLUIR?>";
-    
-    if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta"))
-            return;
+
+/*    if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta"))
+            return;*/
     	
-	chave = document.frm_principal.rdb_consulta.value;	
-	lupa = document.frm_principal.lupa.value;
+	//chave = document.frm_principal.rdb_consulta.value;
+    var chave = retornarValoresCheckBoxesSelecionadosComoArray("rdb_consulta")[0];	
+	var lupa = document.frm_principal.lupa.value;
 	location.href="detalhar.php?funcao=" + funcao + "&chave=" + chave + "&lupa="+ lupa;
 }
 
 function excluir() {
-    detalhar(true);
+	if(isApenasUmCheckBoxSelecionado("rdb_consulta", true)){
+		detalhar(true);
+	}else{
+		excluirVarios();
+	}
 }
 
 function incluir() {
@@ -72,8 +93,10 @@ function incluir() {
 }
 
 function alterar() {
-    if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta"))
-            return;
+    /*if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta"))
+            return;*/
+	if(!isApenasUmCheckBoxSelecionado("rdb_consulta"))
+        return;
         
     <?php
     if($isHistorico){
@@ -86,19 +109,26 @@ function alterar() {
 }
 
 function abrirExecucao(){
-    if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta")){
+	if(!isApenasUmCheckBoxSelecionado("rdb_consulta"))
+        return;
+
+	/*if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta")){
             return;
-    }
+    }*/
   	//marreta
-	chave = document.frm_principal.rdb_consulta.value;	
+	//chave = document.frm_principal.rdb_consulta.value;	
+    var chave = retornarValoresCheckBoxesSelecionadosComoArray("rdb_consulta")[0];
     url = "../contrato/execucao.php?chave=" + chave;	
     abrirJanelaAuxiliar(url, true, false, false);
 }
 
 function movimentacoes(){
-    if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta")){
+    /*if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta")){
             return;
-    }
+    }*/
+	if(!isApenasUmCheckBoxSelecionado("rdb_consulta"))
+        return;
+    
   	//marreta
 	chave = montarChaveContrato();
 	//alert(chave);	
@@ -107,9 +137,15 @@ function movimentacoes(){
 }
 
 function montarChaveContrato(){
-	var chave = document.frm_principal.rdb_consulta.value;
+	//var chave = document.frm_principal.rdb_consulta.value;
+	if(!isApenasUmCheckBoxSelecionado("rdb_consulta"))
+        return;
+    
+	var chave = retornarValoresCheckBoxesSelecionadosComoArray("rdb_consulta")[0];
+	
 	var array = chave.split("*");
 	chave = "hist*" + array[0] + "*" + array[1] + "*" +  array[2] + "*CM*1";
+	alert(chave);
 	return chave;
 }
 
@@ -212,7 +248,7 @@ function montarChaveContrato(){
          <TABLE id="table_tabeladados" class="tabeladados" cellpadding="0" cellspacing="0">						
              <TBODY>
                 <TR>
-                  <TH class="headertabeladados" width="1%">&nbsp;&nbsp;X</TH>
+                  <TH class="headertabeladados" width="1%"><?=getXGridConsulta("rdb_consulta", true)?></TH>
                   <?php 
                   if($isHistorico){					                  	
                   	?>
@@ -302,10 +338,16 @@ function montarChaveContrato(){
 	                        $percAcrescimo = getMoeda($percAcrescimo,2) . "%";	                        
                         }*/
                         $percAcrescimo = $voAtual->getPercentualAcrescimoAtual();
+                        $isAcrescimo = $voAtual->tpModificacao == dominioTpContratoModificacao::$CD_TIPO_ACRESCIMO;
+                        $isSupressao = $voAtual->tpModificacao == dominioTpContratoModificacao::$CD_TIPO_SUPRESSAO;
+                        
+                        //echoo($percentual);
                         $percentual = $voAtual->numPercentual;
-                        if($percAcrescimo > 0){
+                        if($isAcrescimo && $percentual > 0){
+                        	/*echoo($percentual);
+                        	echoo("acres: ".$percentualAcrescimo);*/
                         	$percentualAcrescimo = $percentualAcrescimo + $percentual;  
-                        }else{
+                        }else if($isSupressao && $percentual < 0){
                         	$percentualSupressao = $percentualSupressao + $percentual;
                         }
                         
@@ -318,8 +360,11 @@ function montarChaveContrato(){
                         $vlConsolidadoMod = $vlConsolidadoMod + floatval($voAtual->vlModificacaoReal);
                    ?>
                 <TR class="dados">
-                    <TD class="tabeladados">
-                    <?=getHTMLRadioButtonConsulta("rdb_consulta", "rdb_consulta", $voAtual);?>					
+                    <TD class="tabeladados">					
+                    <?php
+                    //echo getHTMLRadioButtonConsulta("rdb_consulta", "rdb_consulta", $voAtual);
+                    echo getHTMLCheckBoxConsulta("rdb_consulta", "rdb_consulta", $voAtual);                    
+                    ?>
                     </TD>
                   <?php                  
                   if($isHistorico){                  	
@@ -350,6 +395,7 @@ function montarChaveContrato(){
 				}
 				
 				if (!isColecaoVazia($colecao)){
+					//echoo("fim".$percentualAcrescimo);
 				?>
                 </TR>				
                     <TD class="tabeladadosalinhadodireita" colspan=8><b>Consolidado:<?php echo "Acres.(" . getMoeda($percentualAcrescimo) . "%) e Supr.(" . getMoeda($percentualSupressao) . "%)"?></b></TD>
