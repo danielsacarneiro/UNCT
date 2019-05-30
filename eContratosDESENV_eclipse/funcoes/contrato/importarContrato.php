@@ -8,6 +8,9 @@ set_time_limit(0);
 include_once(caminho_util."bibliotecaHTML.php");
 inicioComValidacaoUsuario(true);
 
+//define('WP_MEMORY_LIMIT', '1024M');
+//ini_set('memory_limit', '1024M');
+
 ?>
 <html>
 <head>
@@ -18,6 +21,9 @@ inicioComValidacaoUsuario(true);
 <body>
 
 <?php
+//libera memoria
+unset($objPHPExcel);
+unset($sheetData);
 
 header('Content-Type: text/html; charset=utf-8',true);
 
@@ -55,7 +61,7 @@ if(!$isLimparContrato){
 						
 				$linha = $sheetData[$k];
 		        
-		        if($linha["A"] == "FIM")
+		        if($linha["A"] == dbcontrato::$CD_CONSTANTE_FIM_IMPORTACAO)
 		            break;        
 		        
 		        try{
@@ -82,17 +88,17 @@ if(!$isLimparContrato){
 				}
 				
 				echo "linha registro" . $k . " <BR>";
-		}
-		
-		//libera memoria
-		unset($objPHPExcel);
-		unset($sheetData);
+		}				
+		//$objPHPExcel->disconnectCells();
+		$objPHPExcel->disconnectWorksheets();
+		$objPHPExcel->garbageCollect();
 		
 		//atualiza as contratadas
 		echo "<br><br>Atualizando CNPJ das contratadas.<br><br>";
 		$dbprocesso->atualizarPessoasContrato();
 		//$dbprocesso->removerCaracterEspecial();	
 		$dbprocesso->finalizar();
+		
 	}
 	
 }else{
@@ -102,6 +108,10 @@ if(!$isLimparContrato){
 }
     
 echo "FIM... <br><br>";
+
+//libera memoria
+unset($objPHPExcel);
+unset($sheetData);
 
 //importarConvenio("V");
 //importarConvenio("P");

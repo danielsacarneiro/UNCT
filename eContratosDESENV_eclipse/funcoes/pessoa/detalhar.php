@@ -48,7 +48,6 @@ setCabecalho($titulo);
 ?>
 <!DOCTYPE html>
 <HEAD>
-<?=setTituloPagina(null)?>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_cnpfcnpj.js"></SCRIPT>
 
@@ -70,7 +69,7 @@ function confirmar() {
 }
 
 </SCRIPT>
-
+<?=setTituloPagina($vo->getTituloJSP())?>
 </HEAD>
 <BODY class="paginadados" onload="">
 	  

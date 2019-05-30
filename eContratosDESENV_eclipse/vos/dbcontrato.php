@@ -916,7 +916,9 @@ class dbcontrato extends dbprocesso {
 			$dtVigenciaInicio = $linha ["Q"];
 			$dtVigenciaFim = $linha ["R"];
 			$sqEmpenho = $linha ["T"];
+			//$sqEmpenho = $linha ["S"];
 			$tpAutorizacao = $linha ["U"];
+			//$tpAutorizacao = $linha ["T"];
 			$inLicom = $linha ["V"];
 			$obs = $linha ["W"];
 		} else {

@@ -124,8 +124,8 @@ function existeStr1NaStr2ComSeparador($str2, $str1comseparador, $casesensitive =
 	$tamanho = count ( $array );
 	$retorno = false;
 	
-	// echo "<br> IMPRIMINDO OPCOES-----";
-	// var_dump($array) . "<br>";
+	 //echo "<br> IMPRIMINDO OPCOES-----";
+	 //var_dump($array) . "<br>";
 	
 	for($i = 0; $i < $tamanho; $i ++) {
 		$especie = $array [$i];

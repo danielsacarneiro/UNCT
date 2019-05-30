@@ -147,7 +147,7 @@ function abrirJanelaAuxiliarGestor(){
 }
 
 </SCRIPT>
-<?=setTituloPagina($titulo)?>
+<?=setTituloPagina($vo->getTituloJSP())?>
 </HEAD>
 <BODY class="paginadados" onload="iniciar();">
 	  

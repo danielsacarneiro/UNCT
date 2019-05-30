@@ -90,7 +90,7 @@ include_once(caminho_util. "dominio.class.php");
 		return array(
         		self::$CD_ESPECIE_CONTRATO_RERRATIFICACAO => "Rerratificação*Rerratificacao",
         		self::$CD_ESPECIE_CONTRATO_TERMOADITIVO => "T.A*TA*T.A.",
-        		self::$CD_ESPECIE_CONTRATO_TERMOAJUSTE => "Ajuste*contas",
+        		self::$CD_ESPECIE_CONTRATO_TERMOAJUSTE => "Ajuste*conta",
         		self::$CD_ESPECIE_CONTRATO_CESSAO_USO => "Cessão*cessao",
 				self::$CD_ESPECIE_CONTRATO_RESCISAO_UNILATERAL => "Unilateral",
 				self::$CD_ESPECIE_CONTRATO_RESCISAO_ENCERRAMENTO => "Encerramento",
