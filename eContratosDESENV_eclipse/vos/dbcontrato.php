@@ -46,9 +46,13 @@ class dbcontrato extends dbprocesso {
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
 		$nmTabelaContratoMod = voContratoModificacao::getNmTabelaStatic ( false );
 		$nmTabelaPessoa = vopessoa::getNmTabelaStatic ( false );
+		$nmTabelaContratoUltValorRepactuado = "NM_TAB_CONTRATO_VL_REPACTUADO";
 		$nmTabelaContratoUltValorReajustado = "NM_TAB_CONTRATO_VL_REAJUSTADO";
 		$nmTabelaContratoUltValorAtualizado= "NM_TAB_CONTRATO_VL_ATUALIZADO";
 		$nmTabelaContratoInseridoTela= "NM_TAB_CONTRATO_INSERIDO_TELA";
+		
+		$nmTabContratoModSqMAXReajuste = "TAB_MAX_MOD_CONTRATO_REAJUSTE";
+		$nmTabContratoModSqMAXRepactuacao = "TAB_MAX_MOD_CONTRATO_REPACTUACAO";
 	
 		$arrayColunasRetornadas = array (
 				"$nmTabelaContratoInseridoTela.".vocontrato::$nmAtrVlMensalContrato . " AS " . voContratoModificacao::$ID_REQ_VlMensalContratoInseridoTela,
@@ -63,16 +67,29 @@ class dbcontrato extends dbprocesso {
 								"$nmTabelaContratoUltValorAtualizado.".voContratoModificacao::$nmAtrVlGlobalAtualizado,
 								"$nmTabela.".vocontrato::$nmAtrVlGlobalContrato),
 						vocontrato::$nmAtrVlGlobalContrato),
+				//verifica se tem valor repactuado
+				" CASE WHEN $nmTabelaContratoUltValorRepactuado." . voContratoModificacao::$nmAtrSq 
+				. " > " 
+				. "$nmTabelaContratoUltValorReajustado ." . voContratoModificacao::$nmAtrSq 
+				." THEN "
+				. "$nmTabelaContratoUltValorRepactuado.".voContratoModificacao::$nmAtrVlMensalAtualizado
+				. " ELSE " .
 				getSQLCOALESCE(
-						array(
-								"$nmTabelaContratoUltValorReajustado.".voContratoModificacao::$nmAtrVlMensalModAtual,
-								"$nmTabela.".vocontrato::$nmAtrVlMensalContrato),
-						voContratoModificacao::$nmAtrVlMensalModAtual),
+						array("$nmTabelaContratoUltValorReajustado.".voContratoModificacao::$nmAtrVlMensalModAtual,
+							"$nmTabela.".vocontrato::$nmAtrVlMensalContrato)) 
+				. " END AS " . voContratoModificacao::$nmAtrVlMensalModAtual,
+				//verifica se tem valor repactuado
+				" CASE WHEN $nmTabelaContratoUltValorRepactuado." . voContratoModificacao::$nmAtrSq
+				. " > "
+				. "$nmTabelaContratoUltValorReajustado ." . voContratoModificacao::$nmAtrSq
+				." THEN "
+				. "$nmTabelaContratoUltValorRepactuado.".voContratoModificacao::$nmAtrVlGlobalAtualizado
+				. " ELSE " .
 				getSQLCOALESCE(
 						array(
 								"$nmTabelaContratoUltValorReajustado.".voContratoModificacao::$nmAtrVlGlobalModAtual,
-								"$nmTabela.".vocontrato::$nmAtrVlGlobalContrato),
-						voContratoModificacao::$nmAtrVlGlobalModAtual),
+								"$nmTabela.".vocontrato::$nmAtrVlGlobalContrato))
+				. " END AS " . voContratoModificacao::$nmAtrVlGlobalModAtual,
 				
 				"$nmTabela." . vocontrato::$nmAtrAnoContrato,
 				"$nmTabela." . vocontrato::$nmAtrCdContrato,
@@ -97,11 +114,13 @@ class dbcontrato extends dbprocesso {
 		$groupbyinterno = voContratoModificacao::$nmAtrAnoContrato . "," . voContratoModificacao::$nmAtrCdContrato . "," . voContratoModificacao::$nmAtrTipoContrato;
 		//relacao da tabela que pega o ultimo valor atualizado para fins de reajuste
 		//desconsiderando acrescimos e supressoes
-		$nmTabContratoModSqMAXReajuste = "TAB_MAX_MOD_CONTRATO_REAJUSTE";
 		$queryJoin .= "\n LEFT JOIN ";
 		$queryJoin .= "\n\n (SELECT " . $groupbyinterno . ", MAX(" . voContratoModificacao::$nmAtrSq . ") AS " . voContratoModificacao::$nmAtrSq;
 		$queryJoin .= " FROM " . $nmTabContratoInterna;
+		//repactuacao nao entra aqui porque o percentual da repactuacao nao eh considerado para fins de reajuste
 		$queryJoin .= " WHERE " . voContratoModificacao::$nmAtrTpModificacao . " = " . dominioTpContratoModificacao::$CD_TIPO_REAJUSTE;
+		//$queryJoin .= " WHERE " . voContratoModificacao::$nmAtrTpModificacao 
+		//		. " IN (" . getSQLStringFormatadaColecaoIN(array(dominioTpContratoModificacao::$CD_TIPO_REPACTUACAO, dominioTpContratoModificacao::$CD_TIPO_REAJUSTE), false) . ")";
 		$queryJoin .= " GROUP BY " . $groupbyinterno;
 		$queryJoin .= "\n) " . $nmTabContratoModSqMAXReajuste;
 		$queryJoin .= "\n ON ";
@@ -120,7 +139,33 @@ class dbcontrato extends dbprocesso {
 		$queryJoin .= $nmTabContratoModSqMAXReajuste . "." . voContratoModificacao::$nmAtrTipoContrato . "=" . $nmTabelaContratoUltValorReajustado . "." . voContratoModificacao::$nmAtrTipoContrato;
 		$queryJoin .= "\n AND ";
 		$queryJoin .= $nmTabContratoModSqMAXReajuste . "." . voContratoModificacao::$nmAtrSq . "=" . $nmTabelaContratoUltValorReajustado . "." . voContratoModificacao::$nmAtrSq;
-			
+		
+		//AGORA PARA REPACTUACAO
+		//se o contratoModMAx for repactuacoa, este sera o valor utilizado como valor referencia para acrescimo
+		//tendo em vista que a repactuacao tem efeito de nova contratacao
+		$queryJoin .= "\n LEFT JOIN ";
+		$queryJoin .= "\n\n (SELECT " . $groupbyinterno . ", MAX(" . voContratoModificacao::$nmAtrSq . ") AS " . voContratoModificacao::$nmAtrSq;
+		$queryJoin .= " FROM " . $nmTabContratoInterna;
+		$queryJoin .= " WHERE " . voContratoModificacao::$nmAtrTpModificacao . " = " . dominioTpContratoModificacao::$CD_TIPO_REPACTUACAO;
+		$queryJoin .= " GROUP BY " . $groupbyinterno;
+		$queryJoin .= "\n) " . $nmTabContratoModSqMAXRepactuacao;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabContratoModSqMAXRepactuacao . "." . voContratoModificacao::$nmAtrAnoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrCdContrato . "=" . $nmTabContratoModSqMAXRepactuacao . "." . voContratoModificacao::$nmAtrCdContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabContratoModSqMAXRepactuacao . "." . voContratoModificacao::$nmAtrTipoContrato;
+		
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaContratoMod . " $nmTabelaContratoUltValorRepactuado";
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabContratoModSqMAXRepactuacao . "." . voContratoModificacao::$nmAtrAnoContrato . "=" . $nmTabelaContratoUltValorRepactuado . "." . voContratoModificacao::$nmAtrAnoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabContratoModSqMAXRepactuacao . "." . voContratoModificacao::$nmAtrCdContrato . "=" . $nmTabelaContratoUltValorRepactuado . "." . voContratoModificacao::$nmAtrCdContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabContratoModSqMAXRepactuacao . "." . voContratoModificacao::$nmAtrTipoContrato . "=" . $nmTabelaContratoUltValorRepactuado . "." . voContratoModificacao::$nmAtrTipoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabContratoModSqMAXRepactuacao . "." . voContratoModificacao::$nmAtrSq . "=" . $nmTabelaContratoUltValorRepactuado . "." . voContratoModificacao::$nmAtrSq;
+		
 		//relacao da tabela que pega o ultimo valor atualizado geral		
 		$nmTabContratoModSqMAXAtualizado = "TAB_MAX_MOD_CONTRATO_ATUALIZADO";		
 		$queryJoin .= "\n LEFT JOIN ";

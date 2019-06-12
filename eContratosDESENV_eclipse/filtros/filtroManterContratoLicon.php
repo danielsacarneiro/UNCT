@@ -151,11 +151,11 @@ class filtroManterContratoLicon extends filtroManter {
 		
 		return $filtro;
 	}
-	function getAtributoOrdenacaoAnteriorDefault() {
+	/*function getAtributoOrdenacaoAnteriorDefault() {
 		$nmTabela = voContratoLicon::getNmTabelaStatic ( $this->isHistorico );
 		$retorno = $nmTabela . "." . voContratoLicon::$nmAtrDhUltAlteracao . " " . $this->cdOrdenacao;
 		return $retorno;
-	}
+	}*/
 	function getAtributoOrdenacaoDefault() {
 		return voContratoLicon::getNmTabelaStatic ( $this->isHistorico ) . "." . voContratoLicon::$nmAtrDhUltAlteracao . " " . constantes::$CD_ORDEM_DECRESCENTE;
 	}

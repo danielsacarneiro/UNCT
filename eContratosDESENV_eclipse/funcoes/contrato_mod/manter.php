@@ -118,7 +118,7 @@ function formataForm(pLimparCampos) {
 		
 	var campoTpModificacao = document.frm_principal.<?=voContratoModificacao::$nmAtrTpModificacao?>;	
 	var tpModificacao = campoTpModificacao.value;	
-	var isReajuste = tpModificacao == <?=dominioTpContratoModificacao::$CD_TIPO_REAJUSTE?>;
+	var isReajuste = tpModificacao == <?=dominioTpContratoModificacao::$CD_TIPO_REAJUSTE?> || tpModificacao == <?=dominioTpContratoModificacao::$CD_TIPO_REPACTUACAO?>;
 	var isProrrogação = tpModificacao == <?=dominioTpContratoModificacao::$CD_TIPO_PRORROGACAO?>;
 
 	var tornarReadOnlyReferenciais = isReajuste || isProrrogação; 

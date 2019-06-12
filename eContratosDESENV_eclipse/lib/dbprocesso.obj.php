@@ -283,6 +283,10 @@ class dbprocesso {
 		$retorno = "";
 		$isHistorico = ("S" == $filtro->cdHistorico);
 		
+		/*if(!isUsuarioAdmin()){
+			$limiteGenerico = " LIMIT 100 ";
+		}*/
+		
 		// flag que diz se pode consultar ou nao
 		$isConsultar = $filtro->isConsultarHTML(); 
 		

@@ -4,6 +4,7 @@ include_once (caminho_lib . "dbprocesso.obj.php");
 include_once 'dbContratoModificacao.php';
 class dbContratoModificacao extends dbprocesso {
 	static $FLAG_PRINTAR_SQL = false;
+	
 	function consultarPorChaveTela($vo, $isHistorico) {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
@@ -330,9 +331,17 @@ class dbContratoModificacao extends dbprocesso {
 		
 		// agora consulta os reajustes para aplica-los aos registros necessarios
 		$filtro->tipoExceto = null;
-		$filtro->tipo = dominioTpContratoModificacao::$CD_TIPO_REAJUSTE;
+		
+		//so serao consultados os reajustes porque, em caso de repactuacao, o valor nao se altera
+		//isto quer dizer que, a partir da repactuacao, o valor em contratoMOD permanece inalterado para os reajustes retroativos
+		//tendo em vista que, com a repactuacao, a empresa renuncia a outros valores 
+		$filtro->tipo = dominioTpContratoModificacao::$CD_TIPO_REAJUSTE;		
+		//$filtro->tipo = array(dominioTpContratoModificacao::$CD_TIPO_REAJUSTE, dominioTpContratoModificacao::$CD_TIPO_REPACTUACAO);
+		
 		$colecaoReajuste = $this->consultarTelaConsulta ( new voContratoModificacao (), $filtro );
 		
+		//para todos os registros incluidos em contrato Mod
+		//reajustar os valores de acordo com os percentuais dos reajustes retroativos
 		if (! isColecaoVazia ( $recordSet )) {								
 			if (! isColecaoVazia ( $colecaoReajuste )) {
 				$tamColecaoRecordSet = sizeof ( $recordSet );
@@ -347,14 +356,15 @@ class dbContratoModificacao extends dbprocesso {
 				//echoo("valor inicial atualizado: " . $voContratoReajustadoAtual->vlMensalAtual);
 				
 				$j=0;
+				//para cada registro em contratoMod, identificar quais reajustes retroativos serao aplicados
 				foreach ( $colecaoReajuste as $registroReajuste ) {
 					$voTempReajuste = new voContratoModificacao ();
 					$voTempReajuste->getDadosBanco ( $registroReajuste );
 					//echoo ( "<br>PErcentual reajuste:" . $voTempReajuste->numPercentual );
 					
-					$colecaoIndicesRegistrosAReajustar = $this->getColecaoIndicesRegistrosAAplicarReajuste ( $recordSet, $voTempReajuste );
-					
+					$colecaoIndicesRegistrosAReajustar = $this->getColecaoIndicesRegistrosAAplicarReajuste ( $recordSet, $voTempReajuste );					
 					$tamColecaoRegistrosAReajustar = sizeof ( $colecaoIndicesRegistrosAReajustar );
+					
 					for($i = 0; $i < $tamColecaoRegistrosAReajustar; $i++) {
 						//echoo($i);
 						$indice = $colecaoIndicesRegistrosAReajustar [$i];						
@@ -373,8 +383,10 @@ class dbContratoModificacao extends dbprocesso {
 							$voTemp->getValoresReajustadosAtuais($voContratoReajustadoAtual);
 						}						
 						
+						//var_dump($registro);
 						//echoo ("ANTIGO" . $voTemp->vlMensalAtual );
 						$reajusteJaAplicado = $registro[voContratoModificacao::$InReajusteAplicado];
+						//echoo (" reajuste aplicado $reajusteJaAplicado");
 						if(!$reajusteJaAplicado){
 							if($voTemp->tpModificacao != dominioTpContratoModificacao::$CD_TIPO_PRORROGACAO){
 								$voTemp->setPercentualReajuste ( $voTempReajuste );

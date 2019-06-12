@@ -204,7 +204,9 @@ class voContratoModificacao extends voentidade {
 		$this->vlMensalModAtual = @$_POST[self::$nmAtrVlMensalModAtual];
 		$this->vlGlobalModAtual = @$_POST[self::$nmAtrVlGlobalModAtual];
 		
-		if($this->tpModificacao == dominioTpContratoModificacao::$CD_TIPO_REAJUSTE){
+		$isReajuste = $this->tpModificacao == dominioTpContratoModificacao::$CD_TIPO_REAJUSTE
+				|| $this->tpModificacao == dominioTpContratoModificacao::$CD_TIPO_REPACTUACAO;
+		if($isReajuste){
 			$this->numPercentual = @$_POST[self::$ID_REQ_NUM_PERCENTUAL_REAJUSTE];
 			
 			$fator = 1 + (getDecimalSQL($this->numPercentual)/100);
@@ -259,9 +261,11 @@ class voContratoModificacao extends voentidade {
 		$vlGlobalAtual = floatval($this->vlGlobalAtual);
 		$vlGlobalModAtual = floatval($this->vlGlobalModAtual);
 		
-		if($this->tpModificacao != dominioTpContratoModificacao::$CD_TIPO_REAJUSTE
-				&& $this->tpModificacao != dominioTpContratoModificacao::$CD_TIPO_PRORROGACAO){
-					$percAcrescimo = 100*(($vlGlobalAtual - $vlGlobalModAtual)/$vlGlobalModAtual);										
+		$isPercentualAConsiderar = $this->tpModificacao == dominioTpContratoModificacao::$CD_TIPO_ACRESCIMO
+				|| $this->tpModificacao == dominioTpContratoModificacao::$CD_TIPO_SUPRESSAO; 
+		
+		if($isPercentualAConsiderar){
+				$percAcrescimo = 100*(($vlGlobalAtual - $vlGlobalModAtual)/$vlGlobalModAtual);										
 		}		
 		return $percAcrescimo;		
 	}

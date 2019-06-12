@@ -8,11 +8,13 @@ Class dominioTpContratoModificacao extends dominio{
 	static $CD_TIPO_ACRESCIMO = 2;
 	static $CD_TIPO_SUPRESSAO = 3;
 	static $CD_TIPO_PRORROGACAO = 4;
+	static $CD_TIPO_REPACTUACAO = 5;
 	
 	static $DS_TIPO_ACRESCIMO = "Acréscimo";
 	static $DS_TIPO_SUPRESSAO = "Supressão";
 	static $DS_TIPO_REAJUSTE = "Reajuste";
 	static $DS_TIPO_PRORROGACAO = "Prorrogação";
+	static $DS_TIPO_REPACTUACAO = "Repactuação";
 	// ...............................................................
 
 	static function getColecao(){
@@ -21,6 +23,7 @@ Class dominioTpContratoModificacao extends dominio{
 				self::$CD_TIPO_SUPRESSAO=> self::$DS_TIPO_SUPRESSAO,
 				self::$CD_TIPO_REAJUSTE=> self::$DS_TIPO_REAJUSTE,
 				self::$CD_TIPO_PRORROGACAO => self::$DS_TIPO_PRORROGACAO,
+				self::$CD_TIPO_REPACTUACAO => self::$DS_TIPO_REPACTUACAO,
 		);
 	}	
 }
