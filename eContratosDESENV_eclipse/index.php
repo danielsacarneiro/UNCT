@@ -50,6 +50,7 @@ setCabecalho($titulo);
 
 	fprocLic = new Tree('Serviço 05 (Proc.Licitatório)');
 	fprocLic.adicionarItem(new Link('Proc.Licitatório', '<?=caminho_funcoesHTML.voProcLicitatorio::getNmTabela()?>', ''));
+	fprocLic.adicionarItem(new Link('Portarias das CPL´s', '<?=caminho_funcoesHTML.voProcLicitatorio::getNmTabela()?>/portarias.php', "", null,true));
 	fprocLic.adicionarItem(new Link('EXTERNO: Mural PEIntegrado', 'https://www.peintegrado.pe.gov.br/Portal/Mural.aspx', "", null,true));	
 	f.adicionarItem(fprocLic);	
 	

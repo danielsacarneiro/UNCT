@@ -117,6 +117,7 @@ class voDemanda extends voentidade {
 	 */
 	function temContratoParaIncluir() {
 		$retorno = $this->colecaoContrato != null && $this->colecaoContrato != "" && (count ( $this->colecaoContrato ) > 0);
+		//var_dump($this->colecaoContrato);
 		return $retorno;
 	}
 	
@@ -200,21 +201,18 @@ class voDemanda extends voentidade {
 		// echo "chave contrato:" . $chaveContrato;
 		
 		$isEncaminharNovo = $this->tpDemandaContrato != null;
-		if (!$isEncaminharNovo  && $chaveContrato != null) {
+		if (!$isEncaminharNovo  && $chaveContrato != null) {			
 			//quando vem do encaminhar.php
 			$this->setColecaoContratoFormulario ( $chaveContrato );
 			//echo "enaminharvelho";
-		}else if ($isEncaminharNovo){
+		}else if ($isEncaminharNovo){			
 			//quando vem do encaminhar.novo.php
-			//echo "enaminharnova";
-			/*$voDemandaContrato = new voDemandaContrato();
-			$voDemandaContrato->getDadosFormulario();*/
-			
 			$voContratoAvulso = new vocontrato();
-			$voContratoAvulso->getDadosFormulario();
-			//$voDemandaContrato->voContrato = $voContratoAvulso; 
-				
-			$this->colecaoContrato = array($voContratoAvulso);
+			//garante que o contrato so sera recuperado se pelo menos a chave logica (tipo, numero e exercicio) esteja preenchida
+			if($voContratoAvulso->isChaveLogicaValida()){
+				$voContratoAvulso->getDadosFormulario();
+				$this->colecaoContrato = array($voContratoAvulso);
+			}
 		}
 		
 		$this->getProcLicitatorioFormulario();
@@ -243,6 +241,7 @@ class voDemanda extends voentidade {
 	function setColecaoContratoFormulario($colecao) {
 		$retorno = null;
 		if ($colecao != null) {
+			//var_dump($colecao);
 			$retorno = array ();
 			//inclui o primeiro contrato
 			$voContrato = $this->getContratoColecaoFormulario($colecao[0]);

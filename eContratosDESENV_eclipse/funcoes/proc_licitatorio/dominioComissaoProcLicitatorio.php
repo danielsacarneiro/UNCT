@@ -88,9 +88,9 @@ class dominioComissaoProcLicitatorio extends dominio {
 		$pegarPortaria = $numPortarias < $numPortariaMaximaAExibir || $anoPortaria == null;
 		if($pegarPortaria || $anoPortaria == $ano){
 			$retorno .= "Ano $ano:<br>";
-			$retorno .= "<b>842/$ano</b>(CPL-I)<br>";
-			$retorno .= "<b>843/$ano</b>(CPL-II)<br>";
-			$retorno .= "<b>844/$ano</b>(CPL-III)<br>";
+			$retorno .= "<b>842/$ano</b>(CPL-I), publicada no DOE de 07.05.2019.<br>";
+			$retorno .= "<b>843/$ano</b>(CPL-II), publicada no DOE de 07.05.2019<br>";
+			$retorno .= "<b>844/$ano</b>(CPL-III), publicada no DOE de 07.05.2019<br>";
 			$numPortarias++;
 		}
 		

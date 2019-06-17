@@ -145,7 +145,7 @@ function montarChaveContrato(){
 	
 	var array = chave.split("*");
 	chave = "hist*" + array[0] + "*" + array[1] + "*" +  array[2] + "*CM*1";
-	alert(chave);
+	//alert(chave);
 	return chave;
 }
 
