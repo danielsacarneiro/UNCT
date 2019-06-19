@@ -201,6 +201,8 @@ class voDemanda extends voentidade {
 		// echo "chave contrato:" . $chaveContrato;
 		
 		$isEncaminharNovo = $this->tpDemandaContrato != null;
+		/*echo "vai entrar manter. Chavecontrato: "; 
+		var_dump($chaveContrato);*/
 		if (!$isEncaminharNovo  && $chaveContrato != null) {			
 			//quando vem do encaminhar.php
 			$this->setColecaoContratoFormulario ( $chaveContrato );
@@ -208,8 +210,10 @@ class voDemanda extends voentidade {
 		}else if ($isEncaminharNovo){			
 			//quando vem do encaminhar.novo.php
 			$voContratoAvulso = new vocontrato();
+			$voContratoAvulso->getDadosFormulario();
 			//garante que o contrato so sera recuperado se pelo menos a chave logica (tipo, numero e exercicio) esteja preenchida
 			if($voContratoAvulso->isChaveLogicaValida()){
+				//echo "funciona!";
 				$voContratoAvulso->getDadosFormulario();
 				$this->colecaoContrato = array($voContratoAvulso);
 			}
