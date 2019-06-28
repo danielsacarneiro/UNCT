@@ -188,12 +188,12 @@ function validaFormulario() {
 						<center>P.A.</center>
 						</TH>
 	                    <TH class="headertabeladados" rowspan="2" nowrap width="1%">Penalidade</TH>
-	                    <TH class="headertabeladados" rowspan="2"  width="1%" nowrap>Data</TH>
 						<TH class="headertabeladados" colspan="3">
 						<center>Contrato</center>
 						</TH>
 	                    <TH class="headertabeladados" rowspan="2" width="1%" nowrap >Doc.Contratada</TH>
 	                    <TH class="headertabeladados" rowspan="2" width="90%">Contratada</TH>
+						<TH class="headertabeladados" rowspan="2"  width="1%" nowrap>Data</TH>
                     </TR>
                     <TR>
 	                    <TH class="headertabeladados" width="1%" nowrap>Ano</TH>
@@ -242,12 +242,12 @@ function validaFormulario() {
                     <TD class="tabeladados" nowrap><?php echo $voAtual->anoPA;?></TD>
                     <TD class="tabeladados" nowrap><?php echo complementarCharAEsquerda($voAtual->cdPA, "0", TAMANHO_CODIGOS_SAFI);?></TD>
                     <TD class="tabeladados" nowrap><?php echo $tipoPenalidade;?></TD>
-                    <TD class="tabeladados" nowrap><?php echo getData($voAtual->dtAplicacao);?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $voContratoAtual->anoContrato;?></TD>
+                    <TD class="tabeladados" nowrap><?php echo $voContratoAtual->anoContrato;?></TD>                    
                     <TD class="tabeladados" nowrap><?php echo complementarCharAEsquerda($voContratoAtual->cdContrato, "0", TAMANHO_CODIGOS_SAFI);?></TD>
                     <TD class="tabeladados" nowrap><?php echo $tipoContrato;?></TD>
                     <TD class="tabeladados" nowrap><?php echo documentoPessoa::getNumeroDocFormatado($colecao[$i][vopessoa::$nmAtrDoc]);?></TD>
                     <TD class="tabeladados"><?php echo $colecao[$i][$filtro->nmColNomePessoaContrato];?></TD>
+					<TD class="tabeladados" nowrap><?php echo getData($voAtual->dtAplicacao);?></TD>
                 </TR>					
                 <?php
 				}				
