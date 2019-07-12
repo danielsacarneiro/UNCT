@@ -89,7 +89,7 @@ include_once(caminho_util. "dominio.class.php");
 		// A ORDEM EH IMPORTANTE, pq o item seguinte so sera selecionado se o anterior nao contiver nenhuma palavra em comum
 		return array(
         		self::$CD_ESPECIE_CONTRATO_RERRATIFICACAO => "Rerratificação*Rerratificacao",
-        		self::$CD_ESPECIE_CONTRATO_TERMOADITIVO => "T.A*TA*T.A.",
+        		self::$CD_ESPECIE_CONTRATO_TERMOADITIVO => "T.A*TA*T.A.*aditivo",
         		self::$CD_ESPECIE_CONTRATO_TERMOAJUSTE => "Ajuste*conta",
         		self::$CD_ESPECIE_CONTRATO_CESSAO_USO => "Cessão*cessao",
 				self::$CD_ESPECIE_CONTRATO_RESCISAO_UNILATERAL => "Unilateral",

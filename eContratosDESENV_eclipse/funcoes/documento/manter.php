@@ -153,10 +153,14 @@ function criarNomeDocumento(campoChamada){
 		//se nao eh parecer, eh contrato
 		//pega o contrato
 		complemento = formatarCodigoDocumento(cdContrato, "", anoContrato, tpContrato, colecaoSetor);		
-	}else if(isEdital){
-		nome = "_Edital_PL-" + formatarCodigoDocumento(cdProcLic, null, anoProcLic, null, colecaoSetor);
-	}else if(isARP){
-		nome = "_AQUISICAO_ARP-" + formatarCodigoDocumento(cdARP, null, anoARP, null, colecaoSetor);
+	}else{ 
+		if(isARP){
+			nome = nome + "_AQUISICAO_ARP-" + formatarCodigoDocumento(cdARP, null, anoARP, null, colecaoSetor);
+		}
+
+		if(isEdital){
+			nome = nome + "_Edital_PL-" + formatarCodigoDocumento(cdProcLic, null, anoProcLic, null, colecaoSetor);
+		}
 	}	
 	
 	textoComplemento = "";
