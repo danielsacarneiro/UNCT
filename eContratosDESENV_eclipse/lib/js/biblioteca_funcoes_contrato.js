@@ -268,6 +268,9 @@ function calcularModificacaoNovo(pArrayCampos) {
 	var campoVlBasePercentual = pArrayCampos[18];
 	var campoNumPercentualGestor = pArrayCampos[19];
 	var campoVlBasePercentualGestor = pArrayCampos[20];
+	var campoNumPrazoMater = pArrayCampos[21];
+	var campoVlGlobalModAtual = pArrayCampos[22];
+	var campoInEscopo = pArrayCampos[23];
 
 	var tpModificacao = campoTpModificacao.value
 	var isSupressao = tpModificacao == cdTpSupressao; 
@@ -276,6 +279,12 @@ function calcularModificacaoNovo(pArrayCampos) {
 	var fator = 1;
 	var percentual = 0;
 	var numPrazo = null;
+	var numPrazoMater = null;
+	var inEscopo = null;
+	if(campoInEscopo != null){
+		inEscopo = campoInEscopo.value;
+		//alert("tem escopo == " + inEscopo);
+	}
 	
 	if(isSupressao){
 		fator = -1;
@@ -305,12 +314,12 @@ function calcularModificacaoNovo(pArrayCampos) {
 	){	
 		
 		var vlMensalModAtual = 0;
-		var vlBasePercentualGestor = 0;
-		campoVlBasePercentualGestor.value = campoVlMensalBase.value;		
+		var vlGlobalModAtual = 0;
 		vlMensalModAtual = getValorCampoMoedaComoNumeroValido(campoVlMensalModAtual);
-		vlBasePercentualGestor = getValorCampoMoedaComoNumeroValido(campoVlBasePercentualGestor);
+		vlGlobalModAtual = getValorCampoMoedaComoNumeroValido(campoVlGlobalModAtual);
 		
 		numPrazo = getValorCampoMoedaComoNumeroValido(campoNumPrazo, 0);
+		numPrazoMater = getValorCampoMoedaComoNumeroValido(campoNumPrazoMater, 0);
 	
 		/*var numMesesAoFinal = getValorCampoMoedaComoNumeroValido(campoNumMesesAoFim,0);	
 		if(numMesesAoFinal == 0){*/
@@ -363,13 +372,6 @@ function calcularModificacaoNovo(pArrayCampos) {
 				vlModAoContratoNovo = vlModAoContratoNovo*fator;								
 				
 				vlReferencialNovo = eval(vlModAoContratoNovo/numPrazo);
-				/*vlReferencialNovo = eval(vlMensalModAtual - vlModAoContratoNovo);
-				vlMensalAtualizadoNovo = eval(vlModAoContratoNovo/numPrazo);
-				vlReferencialNovo = Math.abs(vlReferencialNovo)*fator;
-				alert("vlModAoContratoNovo:" + vlModAoContratoNovo);
-				alert("vlMensalAtualizadoNovo:" + vlMensalAtualizadoNovo);
-				alert("vlReferencialNovo:" + vlReferencialNovo);
-				atualizarValorMensal = false;*/
 			}else{
 				//alert(3);
 				atualizarValorMensal = false;
@@ -413,14 +415,46 @@ function calcularModificacaoNovo(pArrayCampos) {
 		
 		//atualiza o percentual 
 		//percentual = eval((vlMensalAtualizadoNovo-vlMensalBase)/vlMensalBase);
-		percentual = 0;
-		if(!isReajuste){			
-			percentual = eval(vlReferencialNovo/vlMensalModAtual);
+		var isContratoPorEscopo = inEscopo == 'S';
+		var vlBasePercentualGestor = 0;		
+		campoVlBasePercentualGestor.value = campoVlMensalBase.value;		
+		if(isContratoPorEscopo){
+			campoVlBasePercentualGestor.value = campoVlGlobalBase.value;
 		}
-		setValorCampoMoedaComSeparadorMilhar(campoNumPercentual, 100*percentual, 4);
+		vlBasePercentualGestor = getValorCampoMoedaComoNumeroValido(campoVlBasePercentualGestor);
+		 
+		percentual = 0;
+		var vlBasePercentual = vlMensalModAtual;
+		var vlReferencialCalculadoPeloGestor = vlReferencialNovo;
+		var vlBaseCalculadoPeloGestor = vlBasePercentualGestor;
+
+		//verifica o percentual
+		if(!isReajuste){		
+			if(isContratoPorEscopo){
+				//contrato por escopo nao tem referencial mensal
+				percentual = eval(vlModAoContratoNovo/vlGlobalModAtual);
+				vlBasePercentual = vlGlobalModAtual;
+				vlReferencialCalculadoPeloGestor = vlModAoContratoNovo;
+				vlBaseCalculadoPeloGestor = vlGlobalBase;
+				//vlglobal ta vindo 167 ERRADO
+				//campoVlGlobalBase EH O QUE TA CERTO
+				//alert("vl blog mod base/vl contrato:" + vlGlobalBase);
+
+			}else{
+				//quando nao for por escopo, segue o referencial mensal
+				percentual = eval(vlReferencialNovo/vlMensalModAtual);
+			}
+		}
+
+		/*setValorCampoMoedaComSeparadorMilhar(campoNumPercentual, 100*percentual, 4);
 		setValorCampoMoedaComSeparadorMilhar(campoVlBasePercentual, vlMensalModAtual, 2);		
-		setValorCampoMoedaComSeparadorMilhar(campoNumPercentualGestor, 100*(vlReferencialNovo/vlBasePercentualGestor), 4);
+		setValorCampoMoedaComSeparadorMilhar(campoNumPercentualGestor, 100*(vlReferencialNovo/vlBasePercentualGestor), 4);*/
 	
+		setValorCampoMoedaComSeparadorMilhar(campoNumPercentual, 100*percentual, 4);
+		setValorCampoMoedaComSeparadorMilhar(campoVlBasePercentual, vlBasePercentual, 2);		
+		//alert("vlreferencia:" + vlReferencialCalculadoPeloGestor + " valor base gestor:" + vlBaseCalculadoPeloGestor);
+		setValorCampoMoedaComSeparadorMilhar(campoNumPercentualGestor, 100*(vlReferencialCalculadoPeloGestor/vlBaseCalculadoPeloGestor), 4);
+
 		var arrayCampos = new Array();
 		arrayCampos[0] = campoVlReferencial;
 		arrayCampos[1] = campoVlModAoContrato;

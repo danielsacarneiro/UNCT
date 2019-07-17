@@ -263,6 +263,7 @@ class dbcontrato extends dbprocesso {
 		$query = "SELECT " . $nmTabela;
 		$query .= ".*";
 		$query .= ", $nmTabelaContratoInfo." . voContratoInfo::$nmAtrDtProposta;
+		$query .= ", $nmTabelaContratoInfo." . voContratoInfo::$nmAtrInEscopo;
 		$query .= ", TAB2." . vousuario::$nmAtrName . " AS " . voentidade::$nmAtrNmUsuarioUltAlteracao;
 		$query .= " FROM " . $nmTabela;
 		

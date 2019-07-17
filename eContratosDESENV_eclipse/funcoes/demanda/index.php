@@ -219,7 +219,7 @@ function encaminhar() {
 	            <TD class="campoformulario" nowrap width="1%">				
 	            <INPUT type="text" id="<?=voDemanda::$nmAtrTexto?>" name="<?=voDemanda::$nmAtrTexto?>" value="<?=$filtro->vodemanda->texto?>"  class="camponaoobrigatorio" size="50">
 	            </TD>
-	            <TH class="campoformulario" nowrap width="1%">PRT:</TH>
+	            <TH class="campoformulario" nowrap width="1%">PRT/SEI:</TH>
 	            <TD class="campoformulario">				
 	            <INPUT type="text" onkeyup="formatarCampoPRT(this, event);" id="<?=voDemandaTramitacao::$nmAtrProtocolo?>" name="<?=voDemandaTramitacao::$nmAtrProtocolo?>" value="<?php echo($filtro->vodemanda->prt);?>" class="camponaoobrigatorio" size="30">
 	            <?php 

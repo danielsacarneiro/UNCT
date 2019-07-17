@@ -173,6 +173,9 @@ function calcular(eElement){
 
 	pArrayCampos[19] = document.frm_principal.<?=voContratoModificacao::$ID_REQ_NUM_PERCENTUAL_REAJUSTE?>;
 	pArrayCampos[20] = document.frm_principal.<?=voContratoModificacao::$ID_REQ_VL_BASE_REAJUSTE?>;
+	pArrayCampos[21] = document.frm_principal.<?=voContratoInfo::$nmAtrNumPrazoMater?>;
+	pArrayCampos[22] = document.frm_principal.<?=voContratoModificacao::$nmAtrVlGlobalModAtual?>;
+	pArrayCampos[23] = document.frm_principal.<?=voContratoInfo::$nmAtrInEscopo?>;
 			
 	calcularModificacaoNovo(pArrayCampos);
 }

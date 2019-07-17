@@ -98,7 +98,11 @@ function confirmar() {
  	        require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
  	        //getContratoDetalhamento($voContrato, $colecao);
  	        getContratoDet($voContrato);
- 	        //getColecaoContratoDet($vo->colecaoContrato); 	         	        
+ 	        //getColecaoContratoDet($vo->colecaoContrato);
+ 	        
+ 	        include_once(caminho_util. "dominioSimNao.php");
+ 	        $comboSimNao = new select(dominioSimNao::getColecao());
+ 	        
 			?>
 			<TR>
 				<?php
@@ -126,7 +130,16 @@ function confirmar() {
 	            <TH class="campoformulario" width="1%" nowrap>Autorização:</TH>
 	            <TD class="campoformulario" colspan=3>
 	            Planilha: <?php echo $combo->getHtmlCombo("","", $cdAutorizacaoPlanilha, true, "camporeadonly", true, " disabled ");?>	            
-	            Atual: <?php echo $combo->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato,voContratoInfo::$nmAtrCdAutorizacaoContrato, $vo->cdAutorizacao, true, "camporeadonly", true, " disabled ");?>	        </TR>
+	            Atual: <?php echo $combo->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato,voContratoInfo::$nmAtrCdAutorizacaoContrato, $vo->cdAutorizacao, true, "camporeadonly", true, " disabled ");?>	        
+	        </TR>
+			<TR>
+	            <TH class="campoformulario" nowrap width="1%">Contrato por escopo?:</TH>
+	            <TD class="campoformulario" colspan="3">
+	            <?php 
+	            echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInEscopo,voContratoInfo::$nmAtrInEscopo, $vo->inEscopo, true, "camporeadonly", false, " disabled ");
+	            ?>
+	            </TD>
+	        </TR>	        
 	        <TR>	       
 	            <TH class="campoformulario" nowrap width="1%">Data.Proposta de preços:</TH>
 	            <TD class="campoformulario" width="1%">
@@ -153,10 +166,7 @@ function confirmar() {
 	            			readonly>
 				</TD>
 	        </TR>
-	        <?php 
-	        include_once(caminho_util. "dominioSimNao.php");
-	        $comboSimNao = new select(dominioSimNao::getColecao());
-	        
+	        <?php	        
 	        include_once(caminho_funcoes. "contrato/dominioTpGarantiaContrato.php");
 	        $comboGarantia = new select(dominioTpGarantiaContrato::getColecao());
 	        $jsGarantia = "formataFormTpGarantia('".voContratoInfo::$nmAtrInTemGarantia."', '".voContratoInfo::$nmAtrTpGarantia."');"

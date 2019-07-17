@@ -175,7 +175,9 @@ function transferirDadosPessoa(cd, nm) {
 				$combo = new select(dominioAutorizacao::getColecao());				
 				?>
 	            <TH class="campoformulario" nowrap>Autorização:</TH>
-	            <TD class="campoformulario" width="1%" colspan=3><?php echo $combo->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato,voContratoInfo::$nmAtrCdAutorizacaoContrato, $cdAutorizacao, true, "camponaoobrigatorio", true, " required ");?>
+	            <TD class="campoformulario" nowrap width="1%"><?php echo $combo->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato,voContratoInfo::$nmAtrCdAutorizacaoContrato, $cdAutorizacao, true, "camponaoobrigatorio", true, " required ");?>
+	            <TH class="campoformulario" nowrap width="1%">Contrato por escopo (sem valor referencial mensal)?:</TH>
+	            <TD class="campoformulario" ><?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInEscopo,voContratoInfo::$nmAtrInEscopo, $vo->inEscopo, true, "camponaoobrigatorio", true, " required ");?>
 	        </TR>
 	        <TR>	       
 	            <TH class="campoformulario" nowrap width="1%">Data.Proposta de preços:</TH>
@@ -239,6 +241,7 @@ function transferirDadosPessoa(cd, nm) {
 	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=voContratoInfo::$nmAtrObs?>" name="<?=voContratoInfo::$nmAtrObs?>" class="camponaoobrigatorio"><?=$vo->obs?></textarea>
 	            <SCRIPT language="JavaScript" type="text/javascript">
 	            	colecaoIDCamposRequired = ["<?=voContratoInfo::$nmAtrCdAutorizacaoContrato?>",
+	            		"<?=voContratoInfo::$nmAtrInEscopo?>",
 		            	"<?=voContratoInfo::$nmAtrCdClassificacao?>",
 		            	"<?=voContratoInfo::$nmAtrInMaoDeObra?>",
 		            	"<?=voContratoInfo::$nmAtrDtProposta?>",
