@@ -19,6 +19,7 @@ class filtroManterPenalidade extends filtroManter{
     var $nmTabelaPessoaContrato = "TAB_PESSOA_CONTRATO";    
     var $nmColNomePessoaContrato = "NmColPessoaContrato";
     var $tipoPenalidade;
+    var $fundamento;
     
     // ...............................................................
 	// construtor
@@ -37,6 +38,7 @@ class filtroManterPenalidade extends filtroManter{
         $this->anoContrato = @$_POST[vocontrato::$nmAtrAnoContrato];
         $this->tipoContrato = @$_POST[vocontrato::$nmAtrTipoContrato];
         $this->tipoPenalidade = @$_POST[voPenalidadePA::$nmAtrTipo];
+        $this->fundamento = @$_POST[voPenalidadePA::$nmAtrFundamento];
     }
     	
 	function getFiltroConsultaSQL(){	
@@ -112,6 +114,16 @@ class filtroManterPenalidade extends filtroManter{
 					;
 		
 					$conector  = "\n AND ";
+		}
+		
+		if($this->fundamento != null){
+			$filtro = $filtro . $conector
+			. $nmTabelaPenalidade. "." .voPenalidadePA::$nmAtrFundamento 
+			. " LIKE "
+			. getVarComoString("%".$this->fundamento. "%")
+			;
+		
+			$conector  = "\n AND ";
 		}
 		
 		if($this->cdPA != null){

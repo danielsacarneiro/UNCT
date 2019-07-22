@@ -162,6 +162,14 @@ function validaFormulario() {
 				  <?php echo $comboTipo->getHtmlCombo(voPenalidadePA::$nmAtrTipo, voPenalidadePA::$nmAtrTipo, $filtro->tipoPenalidade, true, "camponaoobrigatorio", true, "");?>
 			  </TD>			  
 			</TR>
+	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">Fundamento:</TH>
+	            <TD class="campoformulario" colspan=3>				
+	            <INPUT type="text" id="<?=voPenalidadePA::$nmAtrFundamento?>" name="<?=voPenalidadePA::$nmAtrFundamento?>" value="<?=$filtro->fundamento?>"  class="camponaoobrigatorio" size="50">
+	            </TD>
+	            </TD>	            	                        	                        
+	        </TR>            
+			
        <?php
         /*$comboOrdenacao = new select(voPenalidadePA::getAtributosOrdenacao($cdHistorico));
         $cdAtrOrdenacao = $filtro->cdAtrOrdenacao;
@@ -191,8 +199,8 @@ function validaFormulario() {
 						<TH class="headertabeladados" colspan="3">
 						<center>Contrato</center>
 						</TH>
-	                    <TH class="headertabeladados" rowspan="2" width="1%" nowrap >Doc.Contratada</TH>
-	                    <TH class="headertabeladados" rowspan="2" width="90%">Contratada</TH>
+	                    <TH class="headertabeladados" rowspan="2" width="40%">Contratada</TH>
+						<TH class="headertabeladados" rowspan="2"  width="60%">Fundamento</TH>
 						<TH class="headertabeladados" rowspan="2"  width="1%" nowrap>Data</TH>
                     </TR>
                     <TR>
@@ -226,6 +234,9 @@ function validaFormulario() {
                                                 
                         $tipoContrato = $dominioTipoContrato->getDescricao($voContratoAtual->tipo);                        
                         $tipoPenalidade = dominioTipoPenalidade::getDescricaoStatic($voAtual->tipo);
+                        
+                        $contratada = $colecao[$i][$filtro->nmColNomePessoaContrato];
+                        //$doccontratada = documentoPessoa::getNumeroDocFormatado($colecao[$i][vopessoa::$nmAtrDoc]);                        
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados">
@@ -245,8 +256,8 @@ function validaFormulario() {
                     <TD class="tabeladados" nowrap><?php echo $voContratoAtual->anoContrato;?></TD>                    
                     <TD class="tabeladados" nowrap><?php echo complementarCharAEsquerda($voContratoAtual->cdContrato, "0", TAMANHO_CODIGOS_SAFI);?></TD>
                     <TD class="tabeladados" nowrap><?php echo $tipoContrato;?></TD>
-                    <TD class="tabeladados" nowrap><?php echo documentoPessoa::getNumeroDocFormatado($colecao[$i][vopessoa::$nmAtrDoc]);?></TD>
                     <TD class="tabeladados"><?php echo $colecao[$i][$filtro->nmColNomePessoaContrato];?></TD>
+                    <TD class="tabeladados"><?php echo $voAtual->fundamento;?></TD>
 					<TD class="tabeladados" nowrap><?php echo getData($voAtual->dtAplicacao);?></TD>
                 </TR>					
                 <?php

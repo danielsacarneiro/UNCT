@@ -85,9 +85,12 @@ class dominioTipoPenalidade extends dominio {
 		return $retorno;
 	}
 	
-	static function getDescricaoStatic($chave) {
+	static function getDescricaoStatic($chave, $penalidadeComReferenciaLegal = false) {
 		$retorno = parent::getDescricaoStatic($chave);
-		$retorno = $retorno.static::getTextoReferenciaLegal($chave);
+		
+		if($penalidadeComReferenciaLegal){
+			$retorno = $retorno.static::getTextoReferenciaLegal($chave);
+		}
 		
 		return $retorno;
 	}
