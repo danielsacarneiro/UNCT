@@ -138,6 +138,8 @@ function getMensagemFimPrazoPAAP(&$count = 0){
 		$filtro->vodemanda->tipo = array(dominioTipoDemanda::$CD_TIPO_DEMANDA_PROCADM);
 		$filtro->voPA->situacao = array_keys(dominioSituacaoPA::getColecaoSituacaoAtivosFaseInstrucao());
 		$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_ATJA;
+		//ignora do alerta os processos com prioridade BAIXA
+		$filtro->prioridadeExcludente = dominioPrioridadeDemanda::$CD_PRIORI_BAIXA;
 	
 		//art. 25, inciso II, do Decreto n42.191/2015
 		//$filtro->qtdDiasPrazo = 10;

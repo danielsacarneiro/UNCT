@@ -19,7 +19,7 @@ class filtroConsultarDemandaPAAP extends filtroManterDemanda{
 	var $vodemanda;
 	var $qtdDiasPrazo;
 	var $InVerificarPrazo;
-	
+		
 	// ...............................................................
 	// construtor	
 	function __construct1($pegarFiltrosDaTela) {
@@ -36,7 +36,7 @@ class filtroConsultarDemandaPAAP extends filtroManterDemanda{
 		parent::getFiltroFormulario();
 		
 		$voPA = new voPA();		
-		$vodemanda->cd  = @$_POST[voDemanda::$nmAtrCd];		
+		$vodemanda->cd  = @$_POST[voDemanda::$nmAtrCd];
 	}
 	 	
 	function getFiltroConsultaSQL($comAtributoOrdenacao = null){
@@ -133,6 +133,17 @@ class filtroConsultarDemandaPAAP extends filtroManterDemanda{
 		
 			$conector  = "\n AND ";
 		}
+		
+		if ($this->prioridadeExcludente != null && !$this->isAtributoArrayVazio($this->prioridadeExcludente)) {
+			$comparar = " <> '" . $this->prioridadeExcludente. "'";
+			if(is_array($this->prioridadeExcludente)){
+				$comparar = " NOT IN (" . getSQLStringFormatadaColecaoIN($this->prioridadeExcludente, true) . ")";
+			}
+		
+			$filtro = $filtro . $conector . $nmTabela . "." . voDemanda::$nmAtrPrioridade . $comparar;
+		
+			$conector = "\n AND ";
+		}
 			
 		//verifica prazo encerrado da notificacao
 		if(getAtributoComoBooleano($this->InVerificarPrazo)){
@@ -159,8 +170,9 @@ class filtroConsultarDemandaPAAP extends filtroManterDemanda{
 		
 		//. " ($nmTabelaPA." .voPA::$nmAtrSituacao . "=" . dominioSituacaoPA::$CD_SITUACAO_PA_AGUARDANDO_ACAO . " OR "
 		$filtro = $filtro . $conector		
-		. " ($nmTabelaPA." . voPA::$nmAtrSituacao . " IN (" . getSQLStringFormatadaColecaoIN(array_keys(dominioSituacaoPA::getColecaoSituacaoPendentes()), false) . ") OR "
-		. " ($nmTabelaPA." .voPA::$nmAtrSituacao . "=" . dominioSituacaoPA::$CD_SITUACAO_PA_AGUARDANDO_NOTIFICACAO_ENVIADA . " AND "
+		. " ($nmTabelaPA." . voPA::$nmAtrSituacao . " IN (" . getSQLStringFormatadaColecaoIN(array_keys(dominioSituacaoPA::getColecaoSituacaoPendentes()), false) . ")"
+		//. " OR ($nmTabelaPA." .voPA::$nmAtrSituacao . "=" . dominioSituacaoPA::$CD_SITUACAO_PA_AGUARDANDO_NOTIFICACAO_ENVIADA . " AND "
+		. " OR ("
 		. " $nmAtributoDataPrazoEncerrado IS NOT NULL AND $nmAtributoDataPrazoEncerrado < DATE($dtParam))) "
 		;
 		
