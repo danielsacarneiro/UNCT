@@ -18,6 +18,7 @@ Class dominioTipoDemanda extends dominio{
 	static $CD_TIPO_DEMANDA_LICON = 12;
 	static $CD_TIPO_DEMANDA_PORTALTRANSPARENCIA = 13;
 	static $CD_TIPO_DEMANDA_FERIAS = 14;
+	static $CD_TIPO_DEMANDA_TAC = 15;
 	//static $CD_TIPO_DEMANDA_LICON = 12;
 	
 	static $CD_TIPO_DEMANDA_A_CLASSIFICAR = 99;
@@ -38,6 +39,7 @@ Class dominioTipoDemanda extends dominio{
 	static $DS_TIPO_DEMANDA_LICON = "LICON";
 	static $DS_TIPO_DEMANDA_PORTALTRANSPARENCIA = "Portal Transparência";
 	static $DS_TIPO_DEMANDA_FERIAS = "Férias";
+	static $DS_TIPO_DEMANDA_TAC = "TAC";
 	
 	// ...............................................................
 	// Construtor
@@ -107,6 +109,7 @@ Class dominioTipoDemanda extends dominio{
 				self::$CD_TIPO_DEMANDA_EDITAL => self::$DS_TIPO_DEMANDA_EDITAL,
 				self::$CD_TIPO_DEMANDA_PARECER => self::$DS_TIPO_DEMANDA_PARECER,
 				self::$CD_TIPO_DEMANDA_JUDICIAL => self::$DS_TIPO_DEMANDA_JUDICIAL,
+				self::$CD_TIPO_DEMANDA_TAC => self::$DS_TIPO_DEMANDA_TAC,
 				
 				self::$CD_TIPO_DEMANDA_LICON => self::$DS_TIPO_DEMANDA_LICON,
 				self::$CD_TIPO_DEMANDA_PORTALTRANSPARENCIA => self::$DS_TIPO_DEMANDA_PORTALTRANSPARENCIA,

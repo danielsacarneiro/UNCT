@@ -776,7 +776,7 @@ function getCamposContratoMod($vo, $arrayParamComplemento = null){
 		$retorno .= " Valor Global Referência (%Acréscimos): " . getInputText(voContratoModificacao::$nmAtrVlGlobalModAtual, voContratoModificacao::$nmAtrVlGlobalModAtual, $vlGlobalAtualizadoParaFinsMod, constantes::$CD_CLASS_CAMPO_READONLY);
 		
 		if($isContratoPorEscopo){
-			$retorno .= "<br>". getTextoHTMLNegrito("Contrato por Escopo");
+			$retorno .= "<br>". getTextoHTMLNegrito("Contrato por Escopo (incluir valor adicional/suprimido em 'Valor Modificação ao Contrato')");
 			$retorno .= getInputHidden(voContratoInfo::$nmAtrInEscopo, voContratoInfo::$nmAtrInEscopo, $inEscopo);
 		}
 	}

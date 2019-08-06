@@ -140,8 +140,8 @@ setCabecalho($titulo);
                     				$vodocumento = new voDocumento(array(2019, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_CHECKLIST, 1));
                     				echo imprimeBotaoDocumento($vodocumento, "Procedimento ATJA/CPL para visto em Edital.");
                     				
-                    				$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_CHECKLIST, 4));
-                    				echo imprimeBotaoDocumento($vodocumento, "Quadro Resumo Competência e Autorização Prévia SAD");
+                    				/*$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_CHECKLIST, 4));
+                    				echo imprimeBotaoDocumento($vodocumento, "Quadro Resumo Competência e Autorização Prévia SAD");*/
                     				
                     				$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_OUTROS, 47));
                     				echo imprimeBotaoDocumento($vodocumento, "Documentação exigida pela SAD");
@@ -149,12 +149,17 @@ setCabecalho($titulo);
                     				$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_CHECKLIST, 3));
                     				echo imprimeBotaoDocumento($vodocumento, "Compilação Decreto 42.191/15 - PAAP");
                     				                    				
-                    				$vodocumento = new voDocumento(array(2019, dominioSetor::$CD_SETOR_PGE,dominioTpDocumento::$CD_TP_DOC_CHECKLIST, 1));
-                    				echo imprimeBotaoDocumento($vodocumento, "Checklist PGE para inscrição em dívida ativa.");
+                    				/*$vodocumento = new voDocumento(array(2019, dominioSetor::$CD_SETOR_PGE,dominioTpDocumento::$CD_TP_DOC_CHECKLIST, 1));
+                    				echo imprimeBotaoDocumento($vodocumento, "Checklist PGE para inscrição em dívida ativa.");*/
                     				
                     				$vodocumento = new voDocumento(array(2019, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_CHECKLIST, 2));
                     				echo imprimeBotaoDocumento($vodocumento, "Manual Publicação CEPE.DOE.");
                     				
+                    				$vodocumento = new voDocumento(array(2019, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_OUTROS, 192));
+                    				echo imprimeBotaoDocumento($vodocumento, "Orientações publicação CONTRATOS PORTAL DA TRANSPARÊNCIA.");
+                    				
+                    				$vodocumento = new voDocumento(array(2019, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_OUTROS, 21));
+                    				echo imprimeBotaoDocumento($vodocumento, "Orientações publicação CONVÊNIOS PORTAL DA TRANSPARÊNCIA.");
                     				?>
                     				<TR>
                         				<TD class="tabeladadosdestacadonegrito">LEGISLAÇÃO:
