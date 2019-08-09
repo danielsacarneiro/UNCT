@@ -180,6 +180,10 @@ function alterar() {
 	            echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInMaoDeObra,voContratoInfo::$nmAtrInMaoDeObra, $filtro->inMaoDeObra, true, "camponaoobrigatorio", false,"");
 	            ?>
 	        </TR>
+			<TR>
+                <TH class="campoformulario" nowrap>Observação:</TH>
+                <TD class="campoformulario" colspan=3><INPUT type="text" id="<?=voContratoInfo::$nmAtrObs?>" name="<?=voContratoInfo::$nmAtrObs?>"  value="<?php echo($filtro->obs);?>"  class="camponaoobrigatorio" size="50"></TD>
+            </TR>
 	        
        <?php
        echo getComponenteConsultaFiltro($vo->temTabHistorico, $filtro);

@@ -12,12 +12,14 @@
                     <TH class="headertabeladados" width="20%">Contratada</TH>
                     <TH class="headertabeladados" width="1%">CNPJ/CNPF</TH>
                     <TH class="headertabeladados" width="50%">Objeto</TH>						
+                    <TH class="headertabeladados" width="1%" nowrap>Dt.Assinatura</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Dt.Início</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Dt.Fim</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Vl.Mensal</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Vl.Global</TH>
                 </TR>
-                <?php								
+                <?php
+                $colspan = 13;
                 if (is_array($colecao))
                         $tamanho = sizeof($colecao);
                 else 
@@ -92,6 +94,7 @@
                     <TD class="tabeladados"><?php echo $colecao[$i]["ct_contratada"]?></TD>
                     <TD class="tabeladados" nowrap><?php echo documentoPessoa::getNumeroDocFormatado($colecao[$i]["ct_doc_contratada"])?></TD>
                     <TD class="tabeladados"><?php echo $colecao[$i]["ct_objeto"]?></TD>
+                    <TD class="tabeladados"><?php echo getData($voAtual->dtAssinatura)?></TD>
                     <TD class="tabeladados"><?php echo getData($datainiSQL)?></TD>
                     <TD <?=$tagCelula?>>                    <?php echo $dataFinal?></TD>
                     <TD class="tabeladadosalinhadodireita" ><?php echo getMoeda($colecao[$i]["ct_valor_mensal"])?></TD>                    
@@ -101,13 +104,13 @@
 				}				
                 ?>
                 <TR>
-                    <TD class="tabeladadosalinhadocentro" colspan=12><?=$filtro->paginacao->criarLinkPaginacaoGET()?></TD>
+                    <TD class="tabeladadosalinhadocentro" colspan=<?=$colspan?>><?=$filtro->paginacao->criarLinkPaginacaoGET()?></TD>
                 </TR>				
                 <TR>
-                    <TD class="totalizadortabeladadosalinhadodireita" colspan=12>Total de registro(s) na página: <?=$i?></TD>
+                    <TD class="totalizadortabeladadosalinhadodireita" colspan=<?=$colspan?>>Total de registro(s) na página: <?=$i?></TD>
                 </TR>
                 <TR>
-                    <TD class="totalizadortabeladadosalinhadodireita" colspan=12>Total de registro(s): <?=$numTotalRegistros?></TD>
+                    <TD class="totalizadortabeladadosalinhadodireita" colspan=<?=$colspan?>>Total de registro(s): <?=$numTotalRegistros?></TD>
                 </TR>				
             </TBODY>
         </TABLE>
