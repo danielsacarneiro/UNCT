@@ -131,11 +131,11 @@ setCabecalho($titulo);
                         				</TD>
                     				</TR>
                     				<?php                   				
-                    				$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_OUTROS, 3));
-                    				echo imprimeBotaoDocumento($vodocumento, "Manual Visto Edital");
+                    				/*$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_OUTROS, 3));
+                    				echo imprimeBotaoDocumento($vodocumento, "Manual Visto Edital");*/
                     				
                     				$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_OUTROS, 4));
-                    				echo imprimeBotaoDocumento($vodocumento, "Manual Visto Contratos");
+                    				echo imprimeBotaoDocumento($vodocumento, "Manual Visto Editais/Contratos");
                     				
                     				$vodocumento = new voDocumento(array(2019, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_CHECKLIST, 1));
                     				echo imprimeBotaoDocumento($vodocumento, "Procedimento ATJA/CPL para visto em Edital.");

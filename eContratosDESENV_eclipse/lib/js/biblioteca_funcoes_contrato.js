@@ -452,8 +452,10 @@ function calcularModificacaoNovo(pArrayCampos) {
 	
 		setValorCampoMoedaComSeparadorMilhar(campoNumPercentual, 100*percentual, 4);
 		setValorCampoMoedaComSeparadorMilhar(campoVlBasePercentual, vlBasePercentual, 2);		
-		//alert("vlreferencia:" + vlReferencialCalculadoPeloGestor + " valor base gestor:" + vlBaseCalculadoPeloGestor);
+		//alert("vlreferencia:" + vlReferencialCalculadoPeloGestor + " valor base gestor:" + vlBaseCalculadoPeloGestor);		
 		setValorCampoMoedaComSeparadorMilhar(campoNumPercentualGestor, 100*(vlReferencialCalculadoPeloGestor/vlBaseCalculadoPeloGestor), 4);
+		
+		//alert("vlcampogestor:" + campoNumPercentualGestor.value + " valor base gestor:" + vlBaseCalculadoPeloGestor + " valor referencia gestor:" + vlReferencialCalculadoPeloGestor);
 
 		var arrayCampos = new Array();
 		arrayCampos[0] = campoVlReferencial;

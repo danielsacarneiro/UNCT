@@ -225,8 +225,10 @@ class dbContratoModificacao extends dbprocesso {
 	 * @return voContratoModificacao
 	 */
 	function getRegistroTermoEspecificoColecaoExecucao($voContrato, $recordSet) {
-		if(!isColecaoVazia($recordSet)){			
-			for($i=0; $i<sizeof($recordSet);$i++){
+		if(!isColecaoVazia($recordSet)){
+			//a busca eh decrescente porque o recordset esta na ordem crescente da execucao do contrato
+			//dai a funcao pega o mais recente
+			for($i=sizeof($recordSet)-1; $i>=0;$i--){
 				$registro = $recordSet[$i];
 				$voTemp = new vocontrato();
 				$voTemp->getDadosBanco($registro);
