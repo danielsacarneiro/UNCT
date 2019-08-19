@@ -33,6 +33,7 @@ if($filtro->temValorDefaultSetado){
 $qtdRegistrosPorPag = $filtro->qtdRegistrosPorPag;
 $numTotalRegistros = $filtro->numTotalRegistros;
 
+$selectExercicio = new selectExercicio();
 ?>
 
 <!DOCTYPE html>
@@ -114,21 +115,28 @@ function alterar() {
     <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
         <TBODY>
 	        <TR>
-	            <TH class="campoformulario" nowrap width="1%">Proc.Licitatório:</TH>
-	            <TD class="campoformulario" nowrap width="1%" colspan="3">
-	            <?php
-	            $selectExercicio = new selectExercicio();
-	            echo "Ano: " . $selectExercicio->getHtmlCombo(voProcLicitatorio::$nmAtrAno,voProcLicitatorio::$nmAtrAno, $filtro->anoProc, true, "camponaoobrigatorio", false, "");?>
-			  Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voProcLicitatorio::$nmAtrCd?>" name="<?=voProcLicitatorio::$nmAtrCd?>"  value="<?php echo(complementarCharAEsquerda($filtro->cdProc, "0", TAMANHO_CODIGOS_SAFI));?>"  class="camponaoobrigatorio" size="6" maxlength="5">
-			  </TD>			  
-			</TR>			            
-	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Demanda:</TH>
 	            <TD class="campoformulario" nowrap width="1%" colspan="3">
 	            <?php
 
 	            echo "Ano: " . $selectExercicio->getHtmlCombo(voDemandaPL::$nmAtrAnoDemanda,voDemandaPL::$nmAtrAnoDemanda, $filtro->anoDemanda, true, "camponaoobrigatorio", false, "");?>
 			  Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voDemandaPL::$nmAtrCdDemanda?>" name="<?=voDemandaPL::$nmAtrCdDemanda?>"  value="<?php echo(complementarCharAEsquerda($filtro->cdDemanda, "0", TAMANHO_CODIGOS));?>"  class="camponaoobrigatorio" size="6" maxlength="5">
+			  </TD>			  
+			</TR>			            
+	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">Proc.Licitatório:</TH>
+	            <TD class="campoformulario" nowrap width="1%">
+	            <?php
+	            echo "Ano: " . $selectExercicio->getHtmlCombo(voProcLicitatorio::$nmAtrAno,voProcLicitatorio::$nmAtrAno, $filtro->anoProc, true, "camponaoobrigatorio", false, "");?>
+			  Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voProcLicitatorio::$nmAtrCd?>" name="<?=voProcLicitatorio::$nmAtrCd?>"  value="<?php echo(complementarCharAEsquerda($filtro->cdProc, "0", TAMANHO_CODIGOS_SAFI));?>"  class="camponaoobrigatorio" size="6" maxlength="5">
+			  	</TD>
+				<TH class="campoformulario" nowrap width="1%">Modalidade:</TH>
+	            <TD class="campoformulario">
+	            <?php
+	            $selectModalidade = new select(dominioModalidadeProcLicitatorio::getColecao());
+	            echo $selectModalidade->getHtmlCombo(voProcLicitatorio::$nmAtrCdModalidade,voProcLicitatorio::$nmAtrCdModalidade, $filtro->cdModalidade, true, "camponaoobrigatorio", false, "");
+	            ?>
+			  	Número <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voProcLicitatorio::$nmAtrNumModalidade?>" name="<?=voProcLicitatorio::$nmAtrNumModalidade?>"  value="<?php echo(complementarCharAEsquerda($filtro->numModalidade, "0", TAMANHO_CODIGOS_SAFI));?>"  class="camponaoobrigatorio" size="6" maxlength="5">
 			  </TD>			  
 			</TR>			            
 	        <?php	        

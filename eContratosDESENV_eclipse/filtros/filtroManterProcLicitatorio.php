@@ -13,6 +13,8 @@ class filtroManterProcLicitatorio extends filtroManter{
     var $doc;
     var $nome;
     var $cdProc;
+    var $cdModalidade;
+    var $numModalidade;
     var $anoProc;
     var $situacao;
 
@@ -49,6 +51,9 @@ class filtroManterProcLicitatorio extends filtroManter{
     	$this->anoDemanda = @$_POST[voDemandaPL::$nmAtrAnoDemanda];
     	$this->tpDemanda = @$_POST[voDemanda::$nmAtrTipo];
     	$this->tpDocumento = @$_POST[voDocumento::$nmAtrTp];
+    	
+    	$this->cdModalidade = @$_POST[voProcLicitatorio::$nmAtrCdModalidade];
+    	$this->numModalidade = @$_POST[voProcLicitatorio::$nmAtrNumModalidade];
     	
     	//isso tudo pq o filtro pode ser usado por mais de um metodo
     	//e precisa saber qual voprincipal considera,
@@ -274,6 +279,24 @@ class filtroManterProcLicitatorio extends filtroManter{
 		
 					$conector  = "\n AND ";
 		}
+		
+		if($this->cdModalidade != null){
+			$filtro = $filtro . $conector
+			. $nmTabela. "." .voProcLicitatorio::$nmAtrCdModalidade
+			. " = "
+					. getVarComoString($this->cdModalidade);
+		
+					$conector  = "\n AND ";
+		}		
+		
+		if($this->numModalidade != null){
+			$filtro = $filtro . $conector
+			. $nmTabela. "." .voProcLicitatorio::$nmAtrNumModalidade
+			. " = "
+					. $this->numModalidade;
+		
+					$conector  = "\n AND ";
+		}		
 		
 		/*if($this->isHistorico() && $this->sqHistProcLic != null){
 			$filtro = $filtro . $conector
