@@ -176,6 +176,12 @@ function carregaDadosContrato(){
 	            <?php echo getDetalhamentoHTML("", "", $voContrato->dtAssinatura)?>
 				</TD>
 	        </TR>
+	        <TR>	       
+	            <TH class="campoformulario" nowrap width="1%">PL:</TH>
+	            <TD class="campoformulario" colspan=3>
+	            <?php echo getDetalhamentoHTML("", "", $voContrato->procLic)?>
+				</TD>				
+	        </TR>
 	        <?php
 	        }else{
 	        	//INCLUSAO

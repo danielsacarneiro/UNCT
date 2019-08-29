@@ -68,6 +68,10 @@ setCabecalho($titulo);
 	//f7.adicionarItem(new Link('Designação SAFI','<?=caminho_funcoesHTML."exibir_pdf.php?chave=". $vodocumento->getValorChaveHTML()?>', "", null,true));
 	f7.adicionarItem(new Link('EXTERNO: Decreto Estadual Penalidade (DECRETO Nº 42.191/2015)', 'http://legis.alepe.pe.gov.br/texto.aspx?id=15904&tipo=', "", null,true));
 	f7.adicionarItem(new Link('EXTERNO: Lei Execução Fiscal Multa (LEI Nº 13.178/2006)', 'http://legis.alepe.pe.gov.br/texto.aspx?id=2257&tipo=', "", null,true));
+	f7.adicionarItem(new Link('EXTERNO: Boletins SCGE', 'http://www.scge.pe.gov.br/?page_id=781', "", null,true));
+	f7.adicionarItem(new Link('EXTERNO: SCGEOrienta', 'https://www.scgeorienta.pe.gov.br/scgeorienta/login.jsf', "", null,true));
+
+	
 	f.adicionarItem(f7);
 	
 	/*flegislacao = new Tree('Serviço 05 (Legislação)');    
@@ -160,6 +164,14 @@ setCabecalho($titulo);
                     				
                     				$vodocumento = new voDocumento(array(2019, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_OUTROS, 21));
                     				echo imprimeBotaoDocumento($vodocumento, "Orientações publicação CONVÊNIOS PORTAL DA TRANSPARÊNCIA.");
+                    				?>
+                    				<TR>
+                        				<TD class="tabeladadosdestacadonegrito">PROCESSOS:
+                        				</TD>
+                    				</TR>
+                    				<?php 
+                    				$vodocumento = new voDocumento(array(2019, dominioSetor::$CD_SETOR_DILC,dominioTpDocumento::$CD_TP_DOC_OUTROS, 2));
+                    				echo imprimeBotaoDocumento($vodocumento, "MACROPROCESSO LICITAÇÃO");
                     				?>
                     				<TR>
                         				<TD class="tabeladadosdestacadonegrito">LEGISLAÇÃO:
