@@ -285,6 +285,8 @@ function getVarComoNumero($param) {
 	if ($isNum) {
 		$retorno = trim ( $param );
 		// echo "EH NUMERO";
+	}else{
+		throw new excecaoGenerica("Parâmetro incluído não é um número.");
 	}
 	return $retorno;
 }
@@ -312,7 +314,10 @@ function getDecimalSQL($param) {
 	if (isNumero ( $valor )) {
 		$retorno = $valor;
 		// echo "$valor É NÚMERO! <BR>";
+	}else{
+		throw new excecaoGenerica("Parâmetro incluído não é um decimal.");
 	}
+	
 	/*else
 	 echo " $valor NÃO É NÚMERO! <BR>";*/
 	

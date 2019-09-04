@@ -24,7 +24,7 @@ function getProcLicitatorioDetalhamento($voProcLicitatorio,$temLupa=true) {
 			"ano" => voProcLicitatorio::$nmAtrAno
 	);	
 	echo getCampoDadosVOAnoCdDetalhamento($voProcLicitatorio,$arrayParametroXNmAtributo,$temLupa);
-	echo "-" . dominioModalidadeProcLicitatorio::getDescricaoStatic($voProcLicitatorio->cdModalidade);
+	echo dominioModalidadeProcLicitatorio::getDescricaoStatic($voProcLicitatorio->cdModalidade);
 	
 	if($voProcLicitatorio->cdPregoeiro != null){
 		echo getComboPessoaPregoeiro(voProcLicitatorio::$nmAtrCdPregoeiro, voProcLicitatorio::$nmAtrCdPregoeiro, $voProcLicitatorio->cdPregoeiro, "camponaoobrigatorio", " disabled ");
@@ -52,6 +52,6 @@ function getCampoDadosProcLicitatorio($voProcLicitatorio, $nmClass = "camponaoob
 	$comboModalidade = new select(dominioModalidadeProcLicitatorio::getColecao());
 	$pIDCampoCdModalidade = $pNmCampoCdModalidade = voProcLicitatorio::$nmAtrCdModalidade;
 	$htmlModalidade = $complementoHTML [2];
-	echo " Modalidade : " . $comboModalidade->getHtmlCombo ( $pIDCampoCdModalidade , $pNmCampoCdModalidade , $voProcLicitatorio->cdModalidade , true, $nmClass , false, $htmlCdModalidade);
+	echo " Mod.: " . $comboModalidade->getHtmlCombo ( $pIDCampoCdModalidade , $pNmCampoCdModalidade , $voProcLicitatorio->cdModalidade , true, $nmClass , false, $htmlCdModalidade);
 	
 }
