@@ -469,7 +469,7 @@ function encaminhar() {
                         }else if($voDemandaPL->cdProcLic != null){                        	
 	                        	$contrato = formatarCodigoAnoComplemento($voDemandaPL->cdProcLic,
 	                        			$voDemandaPL->anoProcLic,
-	                        			"");
+	                        			$voDemandaPL->cdModProcLic);
                         }
                         	
                         $prioridade = $dominioPrioridade->getDescricao($voAtual->prioridade);
