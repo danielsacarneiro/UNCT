@@ -6,11 +6,13 @@ class voDemandaPL extends voentidade {
 	static $nmAtrCdDemanda = "dem_cd";
 	static $nmAtrAnoProcLic = "pl_ex";
 	static $nmAtrCdProcLic = "pl_cd";
+	static $nmAtrCdModalidadeProcLic = "pl_mod_cd";
 	
 	var $anoDemanda = "";
 	var $cdDemanda = "";
 	var $anoProcLic = "";
 	var $cdProcLic = "";
+	var $cdModProcLic = "";
 	// ...............................................................
 	// Funcoes ( Propriedades e métodos da classe )
 	function __construct() {
@@ -41,6 +43,7 @@ class voDemandaPL extends voentidade {
 		$query .= " AND " . $nmTabela . "." . self::$nmAtrCdDemanda . "=" . $this->cdDemanda;
 		$query .= " AND " . $nmTabela . "." . voProcLicitatorio::$nmAtrAno . "=" . $this->anoProcLic;
 		$query .= " AND " . $nmTabela . "." . voProcLicitatorio::$nmAtrCd . "=" . $this->cdProcLic;
+		$query .= " AND " . $nmTabela . "." . static::$nmAtrCdModalidadeProcLic . "=" . $this->cdModProcLic;
 		
 		if ($isHistorico)
 			$query .= " AND " . $nmTabela . "." . self::$nmAtrSqHist . "=" . $this->sqHist;
@@ -52,7 +55,8 @@ class voDemandaPL extends voentidade {
 				self::$nmAtrAnoDemanda,
 				self::$nmAtrCdDemanda,
 				voProcLicitatorio::$nmAtrAno,
-				voProcLicitatorio::$nmAtrCd 
+				voProcLicitatorio::$nmAtrCd, 
+				self::$nmAtrCdModalidadeProcLic,
 		);
 		
 		return $retorno;
@@ -67,6 +71,7 @@ class voDemandaPL extends voentidade {
 		
 		$this->cdProcLic = $registrobanco [self::$nmAtrCdProcLic];
 		$this->anoProcLic = $registrobanco [self::$nmAtrAnoProcLic];
+		$this->cdModProcLic = $registrobanco [self::$nmAtrCdModalidadeProcLic];
 	}
 	function getDadosFormulario() {
 		$this->cdDemanda = @$_POST [self::$nmAtrCdDemanda];
@@ -74,16 +79,18 @@ class voDemandaPL extends voentidade {
 		
 		$this->cdProcLic = @$_POST [voProcLicitatorio::$nmAtrCd];
 		$this->anoProcLic = @$_POST [voProcLicitatorio::$nmAtrAno];
+		$this->cdModProcLic = @$_POST [self::$nmAtrCdModalidadeProcLic];
 	}
 	function toString() {
 		$retorno .= $this->anoDemanda;
 		$retorno .= "," . $this->cdDemanda;
 		$retorno .= $this->anoProcLic;
 		$retorno .= "," . $this->cdProcLic;
+		$retorno .= "," . $this->cdModProcLic;
 		return $retorno;
 	}
 	function getValorChavePrimaria() {
-		return $this->anoDemanda . CAMPO_SEPARADOR . $this->cdDemanda . CAMPO_SEPARADOR . $this->anoProcLic . CAMPO_SEPARADOR . $this->cdProcLic . CAMPO_SEPARADOR;
+		return $this->anoDemanda . CAMPO_SEPARADOR . $this->cdDemanda . CAMPO_SEPARADOR . $this->anoProcLic . CAMPO_SEPARADOR . $this->cdProcLic . CAMPO_SEPARADOR . $this->cdModProcLic . CAMPO_SEPARADOR;
 	}
 	function getChavePrimariaVOExplode($array) {
 		$this->anoDemanda = $array [0];
@@ -91,6 +98,7 @@ class voDemandaPL extends voentidade {
 		
 		$this->anoProcLic = $array [2];
 		$this->cdProcLic = $array [3];
+		$this->cdModProcLic = $array [4];
 	}
 }
 ?>

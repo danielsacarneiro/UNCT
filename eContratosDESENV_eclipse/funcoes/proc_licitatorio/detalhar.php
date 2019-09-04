@@ -10,7 +10,7 @@ inicio();
 
 $vo = new voProcLicitatorio();
 $vo->getVOExplodeChave();
-//var_dump($vo->varAtributos);
+//var_dump($vo);
 $isHistorico = ($vo->sqHist != null && $vo->sqHist != "");
 
 $readonly = "";
@@ -75,6 +75,7 @@ function confirmar() {
 
 <INPUT type="hidden" id="<?=voProcLicitatorio::$nmAtrCd?>" name="<?=voProcLicitatorio::$nmAtrCd?>" value="<?=$vo->cd?>">
 <INPUT type="hidden" id="<?=voProcLicitatorio::$nmAtrAno?>" name="<?=voProcLicitatorio::$nmAtrAno?>" value="<?=$vo->ano?>">
+<INPUT type="hidden" id="<?=voProcLicitatorio::$nmAtrCdModalidade?>" name="<?=voProcLicitatorio::$nmAtrCdModalidade?>" value="<?=$vo->cdModalidade?>">
  
 <TABLE id="table_conteiner" class="conteiner" cellpadding="0" cellspacing="0">
     <TBODY>

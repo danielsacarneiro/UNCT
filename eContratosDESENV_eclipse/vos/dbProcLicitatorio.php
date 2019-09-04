@@ -64,6 +64,7 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
   		$queryFrom .= "\n LEFT JOIN ". $nmTabelaDemandaPL;
   		$queryFrom .= "\n ON $nmTabela." . voProcLicitatorio::$nmAtrCd . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrCdProcLic;
   		$queryFrom .= "\n AND $nmTabela." . voProcLicitatorio::$nmAtrAno . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrAnoProcLic;
+  		$queryFrom .= "\n AND $nmTabela." . voProcLicitatorio::$nmAtrCdModalidade . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrCdModalidadeProcLic;
   		
   		$queryFrom .= "\n LEFT JOIN (SELECT * FROM $nmTabelaDemanda WHERE ". voDemanda::$nmAtrTipo . "=" . dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL . ") $nmTabelaDemanda " ;
   		$queryFrom .= "\n ON $nmTabelaDemanda." . voDemanda::$nmAtrCd . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrCdDemanda;
@@ -117,6 +118,7 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
         $queryJoin .= "\n ON ";
         $queryJoin .= $nmTabela . "." . voProcLicitatorio::$nmAtrAno . "=" . $nmTabelaDemandaPL . "." . voDemandaPL::$nmAtrAnoProcLic;
         $queryJoin .= "\n AND " . $nmTabela . "." . voProcLicitatorio::$nmAtrCd . "=" . $nmTabelaDemandaPL . "." . voDemandaPL::$nmAtrCdProcLic;
+        $queryJoin .= "\n AND " . $nmTabela . "." . voProcLicitatorio::$nmAtrCdModalidade . "=" . $nmTabelaDemandaPL . "." . voDemandaPL::$nmAtrCdModalidadeProcLic;
                 
         $queryJoin .= "\n LEFT JOIN " . $nmTabelaDemanda;
         $queryJoin .= "\n ON ";
@@ -125,7 +127,8 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
         
         //$filtro->tpDemanda = dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL;
         $groupby = array("$nmTabela.". voProcLicitatorio::$nmAtrAno,
-        		"$nmTabela.". voProcLicitatorio::$nmAtrCd);
+        		"$nmTabela.". voProcLicitatorio::$nmAtrCd,
+        		"$nmTabela.". voProcLicitatorio::$nmAtrCdModalidade);
         $filtro->groupby = $groupby; 
         
         //$filtro->cdEspecieContrato = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;

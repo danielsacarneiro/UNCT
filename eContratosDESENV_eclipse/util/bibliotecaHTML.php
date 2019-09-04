@@ -539,7 +539,7 @@ function getImagemLink($href, $nmImagem) {
 	// $pasta = pasta_imagens . "//";
 	$pasta = getPastaImagens () . "//";
 	
-	$html = "<A id='lnkFramework' name='lnkFramework' " . "href=\"" . $href . "\"" . " class='linkNormal' >" . "<img src='" . $pasta . $nmImagem . "'  width='22' height='22' border='0'></A>";
+	$html = "<A id='lnkFramework' name='lnkFramework' " . "href=\"" . $href . "\"" . " class='linkNormal'>" . "<img src='" . $pasta . $nmImagem . "'  width='22' height='22' border='0'></A>";
 	
 	// echo $pasta;
 	
@@ -918,7 +918,7 @@ function getCampoDadosVOAnoCd($vo, $arrayParametroXNmAtributo, $nmClass = "campo
 		);
 		$arrayComplementoHTML = array (
 				" $required $arrayComplementoHTML[0] ",
-				" $required $arrayComplementoHTML[1] "
+				" $required $arrayComplementoHTML[1] ",
 		);
 
 		$chaves = array_keys($arrayParametroXNmAtributo);
@@ -942,7 +942,6 @@ function getCampoDadosVOAnoCd($vo, $arrayParametroXNmAtributo, $nmClass = "campo
 
 		$pIDCampoCd = $pNmCampoCd;
 		$pIDCampoAno = $pNmCampoAno;
-
 		//$strCamposALimparSeparador = $pIDCampoCd . "*" . $pIDCampoAno;
 		?>
 	Núm:
@@ -951,8 +950,7 @@ function getCampoDadosVOAnoCd($vo, $arrayParametroXNmAtributo, $nmClass = "campo
 	value="<?php echo(complementarCharAEsquerda($cd, "0", TAMANHO_CODIGOS_SAFI));?>"
 	class="<?=$cssCd?>" size="4" maxlength="3" <?=$htmlCd?>>
 <?php
-	echo "Ano: " . $selectExercicio->getHtmlCombo ( $pIDCampoAno, $pNmCampoAno, $ano, true, $cssAno, false, $htmlAno );
-	
+	echo "Ano: " . $selectExercicio->getHtmlCombo ( $pIDCampoAno, $pNmCampoAno, $ano, true, $cssAno, false, $htmlAno );	
 }
 
 function getCampoDadosVOAnoCdDetalhamento($vo,$arrayParametroXNmAtributo,$temLupa=true) {

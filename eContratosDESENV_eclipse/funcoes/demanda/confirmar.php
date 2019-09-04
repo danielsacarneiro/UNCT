@@ -7,6 +7,8 @@ inicioComValidacaoUsuario(true);
 $vo = new voDemandaTramitacao();
 $vo->getDadosFormulario();
 
+//echo "modalidade: " . $vo->voProcLicitatorio->cdModalidade;
+
 //var_dump($vo->colecaoContrato);
 
 /*$voDemandaCont = new voDemandaContrato();

@@ -82,6 +82,7 @@ class voProcLicitatorio extends voentidade {
 	function getValoresWhereSQLChaveLogicaSemSQ($isHistorico) {
 		$nmTabela = $this->getNmTabelaEntidade ( $isHistorico );
 		$query = $nmTabela . "." . self::$nmAtrAno . "=" . $this->ano;
+		$query .= " AND " . $nmTabela . "." . self::$nmAtrCdModalidade . "=" . getVarComoString($this->cdModalidade);
 		
 		return $query;
 	}
@@ -108,7 +109,8 @@ class voProcLicitatorio extends voentidade {
 	function getAtributosChavePrimaria() {
 		$retorno = array (
 				self::$nmAtrAno,
-				self::$nmAtrCd 
+				self::$nmAtrCd,
+				self::$nmAtrCdModalidade
 		);
 		
 		return $retorno;
@@ -160,18 +162,21 @@ class voProcLicitatorio extends voentidade {
 	function toString() {
 		$retorno .= $this->ano;
 		$retorno .= "," . $this->cd;
+		$retorno .= "," . $this->cdModalidade;
 		return $retorno;
 	}
 	function getValorChavePrimaria() {
-		return $this->ano . CAMPO_SEPARADOR . $this->cd . CAMPO_SEPARADOR . $this->sqHist;
+		return $this->ano . CAMPO_SEPARADOR . $this->cd . CAMPO_SEPARADOR . $this->cdModalidade . CAMPO_SEPARADOR . $this->sqHist;
 	}
 	function getChavePrimariaVOExplode($array) {
 		$this->ano = $array [0];
 		$this->cd = $array [1];
-		$this->sqHist = $array [2];
+		$this->cdModalidade = $array [2];
+		$this->sqHist = $array [3];
 	}
 	function getMensagemComplementarTelaSucesso() {
 		$retorno = static::getTituloJSP() . " (Número - Ano): " . formatarCodigoAnoComplementoArgs ( $this->cd, $this->ano, TAMANHO_CODIGOS, null );
+		$retorno .= " - ".dominioModalidadeProcLicitatorio::getDescricaoStatic($this->cdModalidade);
 		if ($this->sqHist != null) {
 			$retorno .= "<br>Núm. Histórico: " . complementarCharAEsquerda ( $this->sqHist, "0", TAMANHO_CODIGOS );
 		}

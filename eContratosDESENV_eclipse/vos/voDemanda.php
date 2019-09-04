@@ -144,11 +144,13 @@ class voDemanda extends voentidade {
 		return $voDemanda;
 	}
 	function getVODemandaProcLicitatorio($voProcLic) {
+		//$voProcLic = new voProcLicitatorio();
 		$voDemanda = new voDemandaPL();
 		$voDemanda->anoDemanda = $this->ano;
 		$voDemanda->cdDemanda = $this->cd;
 		$voDemanda->anoProcLic = $voProcLic->ano;
 		$voDemanda->cdProcLic = $voProcLic->cd;
+		$voDemanda->cdModProcLic = $voProcLic->cdModalidade;
 		return $voDemanda;
 	}
 	function getDadosRegistroBanco($registrobanco) {

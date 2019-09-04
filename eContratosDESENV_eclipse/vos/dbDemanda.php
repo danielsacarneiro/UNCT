@@ -60,6 +60,7 @@ class dbDemanda extends dbprocesso {
 				$nmTabelaPessoa . "." . vopessoa::$nmAtrDoc,
 				$nmTabelaDemandaProcLic . "." . voProcLicitatorio::$nmAtrCd,
 				$nmTabelaDemandaProcLic . "." . voProcLicitatorio::$nmAtrAno,
+				$nmTabelaDemandaProcLic . "." . voProcLicitatorio::$nmAtrCdModalidade,
 				$nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrObjeto,
 				$nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrCdPregoeiro,
 				// $nmTabelaPessoa . "." . vopessoa::$nmAtrNome,
@@ -107,6 +108,7 @@ class dbDemanda extends dbprocesso {
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrAnoProcLic . "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrAno;
 		$queryJoin .= "\n AND " . $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdProcLic . "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrCd;
+		$queryJoin .= "\n AND " . $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdModalidadeProcLic . "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrCdModalidade;
 		
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPA;
 		$queryJoin .= "\n ON ";
@@ -167,6 +169,7 @@ class dbDemanda extends dbprocesso {
 				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato,
 				$nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdProcLic,
 				$nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrAnoProcLic,
+				$nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdModalidadeProcLic,
 				getSQLNmContratada (),
 				// $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . " AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,
 				"COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . "," . $nmTabela . "." . voDemanda::$nmAtrCdSetor . ") AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,

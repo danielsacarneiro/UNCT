@@ -25,7 +25,7 @@ CREATE TABLE proc_licitatorio (
     cd_usuario_ultalt INT,    
     in_desativado CHAR(1) NOT NULL DEFAULT 'N',
     
-    CONSTRAINT pk PRIMARY KEY (pl_ex, pl_cd),
+    CONSTRAINT pk PRIMARY KEY (pl_ex, pl_cd, pl_mod_cd),
 
    	CONSTRAINT fk_pl_pregoeiro FOREIGN KEY (pl_cd_pregoeiro) REFERENCES pessoa (pe_cd) 
 	ON DELETE RESTRICT
@@ -33,6 +33,9 @@ CREATE TABLE proc_licitatorio (
 
 );
 ALTER TABLE proc_licitatorio ADD COLUMN pl_valor DECIMAL (14,4) AFTER pl_si;
+-- ALTER TABLE proc_licitatorio DROP PRIMARY KEY;
+-- ALTER TABLE proc_licitatorio ADD PRIMARY KEY pk (pl_ex, pl_cd, pl_mod_cd);
+-- describe demanda_pl
 
 drop table if exists proc_licitatorio_hist;
 CREATE TABLE proc_licitatorio_hist (

@@ -14,7 +14,8 @@ Class dbDemandaPL extends dbprocesso{
 		$retorno.= $this-> getVarComoNumero($vo->cdDemanda) . ",";
 		
 		$retorno.= $this-> getVarComoNumero($vo->anoProcLic) . ",";
-		$retorno.= $this-> getVarComoNumero($vo->cdProcLic);
+		$retorno.= $this-> getVarComoNumero($vo->cdProcLic) . ",";
+		$retorno.= $this-> getVarComoString($vo->cdModProcLic);
 				
 		$retorno.= $vo->getSQLValuesInsertEntidade();
 
