@@ -763,6 +763,16 @@ class filtroManterDemanda extends filtroManter{
 					$conector  = "\n AND ";
 		}
 		
+		if($this->voproclic->cdModalidade != null){
+			$filtro = $filtro . $conector
+			. $nmTabelaDemandaPL . "." .voDemandaPL::$nmAtrCdModalidadeProcLic
+			. " = "
+					. getVarComoString($this->voproclic->cdModalidade)
+					;
+		
+					$conector  = "\n AND ";
+		}
+		
 		if($this->voPA->cdPA != null){
 			$filtro = $filtro . $conector
 			. $nmTabelaPA . "." .voPA::$nmAtrCdPA
