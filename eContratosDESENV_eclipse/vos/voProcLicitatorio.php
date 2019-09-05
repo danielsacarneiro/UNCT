@@ -7,6 +7,7 @@ include_once (caminho_funcoes . "proc_licitatorio/dominioModalidadeProcLicitator
 include_once (caminho_funcoes . "proc_licitatorio/dominioTipoProcLicitatorio.php");
 include_once (caminho_funcoes . "proc_licitatorio/dominioSituacaoPL.php");
 include_once (caminho_funcoes . "proc_licitatorio/dominioComissaoProcLicitatorio.php");
+include_once (caminho_funcoes . "proc_licitatorio/biblioteca_htmlProcLicitatorio.php");
 
 class voProcLicitatorio extends voentidade {
 	static $NmColNomePregoeiro = "NmColNomePregoeiro";

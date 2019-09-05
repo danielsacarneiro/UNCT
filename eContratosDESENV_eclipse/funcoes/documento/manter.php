@@ -135,6 +135,7 @@ function criarNomeDocumento(campoChamada){
 
 	anoProcLic = document.frm_principal.<?=voProcLicitatorio::$nmAtrAno?>.value;
 	cdProcLic = document.frm_principal.<?=voProcLicitatorio::$nmAtrCd?>.value;	
+	cdModProcLic = document.frm_principal.<?=voProcLicitatorio::$nmAtrCdModalidade?>.value;
 	
 	anoARP = document.frm_principal.<?=voDocumento::$nmAtrAnoARP?>.value;
 	cdARP = document.frm_principal.<?=voDocumento::$nmAtrCdARP?>.value;	
@@ -159,7 +160,12 @@ function criarNomeDocumento(campoChamada){
 		}
 
 		if(isEdital){
-			nome = nome + "_Edital_PL-" + formatarCodigoDocumento(cdProcLic, null, anoProcLic, null, colecaoSetor);
+			var cdModDs = ""; 
+			if(cdModProcLic != null){
+				cdModDs = cdModProcLic;
+			}
+
+			nome = nome + "_Edital_PL-" + formatarCodigoDocumento(cdProcLic, cdModDs, anoProcLic, null, colecaoSetor);
 		}
 	}	
 	
@@ -289,10 +295,10 @@ function iniciar(){
 	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
 	        
 	        
-	        $nmClass = constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO;	        
-	        $arrayCssClass = array($nmClass,$nmClass);
+	        $nmClass = constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO;
+	        
 	        $js_procLic = " onChange='criarNomeDocumento();' ";
-	        $arrayComplementoHTML = array($js_procLic, $js_procLic);
+	        $arrayComplementoHTML = array($js_procLic, $js_procLic, $js_procLic);
 	        ?>
 	        <!--  <TR>
 	            <TH class="campoformulario" nowrap width="1%">Demanda:</TH>
@@ -318,6 +324,7 @@ function iniciar(){
 	            		vocontrato::$nmAtrTipoContrato,
 	            		voProcLicitatorio::$nmAtrAno,
 	            		voProcLicitatorio::$nmAtrCd,
+	            		voProcLicitatorio::$nmAtrCdModalidade,
 	            		voDocumento::$nmAtrAnoARP,
 	            		voDocumento::$nmAtrCdARP,
 	            		voPA::$nmAtrAnoPA,
@@ -330,7 +337,14 @@ function iniciar(){
 	        </TR>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Proc.Licitatório:</TH>
-	            <TD class="campoformulario" colspan=3><?php getProcLicitatorioEntradaDados("", "", $arrayCssClass, $arrayComplementoHTML);?></TD>
+	            <TD class="campoformulario" colspan=3>
+	            <?php 
+	            $arrayCssClass = array($nmClass,$nmClass);
+	            //getProcLicitatorioEntradaDados("", "", $arrayCssClass, $arrayComplementoHTML);
+	            $voProcLicitatorio = new voProcLicitatorio();
+	            getCampoDadosProcLicitatorio($voProcLicitatorio, "camponaoobrigatorio", $arrayComplementoHTML);
+	            ?>
+	            </TD>
 	        </TR>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">ARP (aquisição):</TH>

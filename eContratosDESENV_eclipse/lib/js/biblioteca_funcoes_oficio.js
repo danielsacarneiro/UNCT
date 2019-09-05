@@ -78,9 +78,12 @@ function getDescricaoSetor(cdSetor){
  * Esse metodo diferencia do metodo acima porque aceita uma colecao de setores
  * geralmente determinada pelo servidor PHP, que pode sofrer constantes atualizacoes
  */
-function getDescricaoChaveDS(cd, colecaoCdDS){
-	return colecaoCdDS[cd];
-	
+function getDescricaoChaveDS(cd, colecaoCdDS){	
+	var retorno = cd;	
+	if(colecaoCdDS[cd] != null){
+		retorno = colecaoCdDS[cd];
+	}
+	return retorno;	
 }
 
 function formatarCodigoDocumento(sq, cdSetor, ano, tpDoc, colecaoSetor, separador){

@@ -2,6 +2,7 @@
 include_once(caminho_vos."vopessoavinculo.php");
 include_once(caminho_vos."vogestor.php");
 include_once(caminho_util."DocumentoPessoa.php");
+include_once (caminho_funcoes . "pessoa/dominioVinculoPessoa.php");
 
   Class vopessoa extends voentidade{
         //var $nmTable = "contrato_import";

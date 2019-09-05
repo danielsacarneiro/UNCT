@@ -545,6 +545,13 @@ function getCampoDadosContratoVOPorIndice($vocontrato, $indice, $isExibirContrat
 	$html = getContratoEntradaDeDadosVO ( $vocontrato, $arrayCssClass, $arrayComplementoHTML, $indice, $isExibirContratadaSePreenchido, $comChaveCompletaSeNulo,$pIsAlterarDemanda);
 	return $html;
 }
+/**
+ * @deprecated
+ * @param unknown $cdProcLic
+ * @param unknown $anoProcLic
+ * @param unknown $arrayCssClass
+ * @param unknown $arrayComplementoHTML
+ */
 function getProcLicitatorioEntradaDados($cdProcLic, $anoProcLic, $arrayCssClass, $arrayComplementoHTML) {
 	$selectExercicio = new selectExercicio ();
 	$cssCdProcLic = $arrayCssClass [0];

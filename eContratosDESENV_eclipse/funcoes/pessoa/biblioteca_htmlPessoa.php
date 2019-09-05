@@ -1,6 +1,5 @@
 <?php
-include_once("../../config_lib.php");
-include_once("dominioVinculoPessoa.php");
+//include_once("../../config_lib.php");
 include_once(caminho_vos . "dbpessoa.php");
 include_once(caminho_vos . "vogestor.php");
 include_once(caminho_filtros. "filtroManterPessoa.php");

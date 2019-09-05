@@ -879,7 +879,7 @@ function getEntradaDadosCdAno($cd, $ano, $pNmCampoCd, $pNmCampoAno, $arrayCssCla
 	$htmlCd = $arrayComplementoHTML [0];
 	$htmlAno = $arrayComplementoHTML [1];
 
-	echo "Número: <INPUT type='text' onkeyup='validarCampoNumericoPositivo(this)' id='" . $pNmCampoCd . "' name='" . $pNmCampoCd . "'  value='" . complementarCharAEsquerda ( $cd, "0", TAMANHO_CODIGOS_SAFI ) . "'  class='" . $cssCd . "' size='5' maxlength='5'  " . $htmlCd . ">";
+	echo "Núm: <INPUT type='text' onkeyup='validarCampoNumericoPositivo(this)' id='" . $pNmCampoCd . "' name='" . $pNmCampoCd . "'  value='" . complementarCharAEsquerda ( $cd, "0", TAMANHO_CODIGOS_SAFI ) . "'  class='" . $cssCd . "' size='5' maxlength='5'  " . $htmlCd . ">";
 	echo "&nbsp;Ano: " . $selectExercicio->getHtmlCombo ( $pNmCampoAno, $pNmCampoAno, $ano, true, $cssAno, false, $htmlAno );
 }
 
