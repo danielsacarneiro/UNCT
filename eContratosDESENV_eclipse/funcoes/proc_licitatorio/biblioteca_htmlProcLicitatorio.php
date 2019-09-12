@@ -7,8 +7,8 @@ function isProcLicitatorioValido($voProcLicitatorio) {
 }
 
 function getProcLicitatorioDetalhamento($voProcLicitatorio,$temLupa=true) {
+	//$voProcLicitatorio = new voProcLicitatorio();
 	if(isProcLicitatorioValido($voProcLicitatorio)){
-
 	?>
 <TR>
 	<INPUT type="hidden" id="<?=voProcLicitatorio::$nmAtrCd?>"
@@ -24,7 +24,12 @@ function getProcLicitatorioDetalhamento($voProcLicitatorio,$temLupa=true) {
 			"ano" => voProcLicitatorio::$nmAtrAno
 	);	
 	echo getCampoDadosVOAnoCdDetalhamento($voProcLicitatorio,$arrayParametroXNmAtributo,$temLupa);
-	echo getTextoHTMLNegrito(dominioModalidadeProcLicitatorio::getDescricaoStatic($voProcLicitatorio->cdModalidade));
+	//echo getTextoHTMLNegrito(dominioModalidadeProcLicitatorio::getDescricaoStatic($voProcLicitatorio->cdModalidade));
+	$detModalidade = dominioModalidadeProcLicitatorio::getDescricaoStatic($voProcLicitatorio->cdModalidade);
+	if($voProcLicitatorio->numModalidade != null){
+		$detModalidade.="." . complementarCharAEsquerda($voProcLicitatorio->numModalidade, "0", 3);
+	}
+	echo getTextoHTMLNegrito($detModalidade);
 	
 	if($voProcLicitatorio->cdPregoeiro != null){
 		echo getComboPessoaPregoeiro(voProcLicitatorio::$nmAtrCdPregoeiro, voProcLicitatorio::$nmAtrCdPregoeiro, $voProcLicitatorio->cdPregoeiro, "camponaoobrigatorio", " disabled ");

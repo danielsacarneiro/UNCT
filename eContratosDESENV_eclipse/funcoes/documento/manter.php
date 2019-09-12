@@ -165,7 +165,8 @@ function criarNomeDocumento(campoChamada){
 				cdModDs = cdModProcLic;
 			}
 
-			nome = nome + "_Edital_PL-" + formatarCodigoDocumento(cdProcLic, cdModDs, anoProcLic, null, colecaoSetor);
+			//alert(cdModDs);
+			nome = nome + "_PL-" + formatarCodigoDocumento(cdProcLic, cdModDs, anoProcLic, null, colecaoSetor);
 		}
 	}	
 	

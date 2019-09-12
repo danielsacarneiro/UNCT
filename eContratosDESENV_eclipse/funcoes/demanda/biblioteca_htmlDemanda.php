@@ -13,7 +13,7 @@ function getDemandaDetalhamentoComLupa($voDemanda, $temLupaDet, $exibeTipoDemand
 	}
 	?>
 	<TR>
-	<TH class="campoformulario" nowrap width="1%">Demanda Original:</TH>
+	<TH class="campoformulario" nowrap width="1%">Demanda:</TH>
 	<TD class="campoformulario" colspan=<?=$colspan?>>
 	<?php	
 	echo getDetalhamentoHTMLCodigoAno($voDemanda->ano, $voDemanda->cd);

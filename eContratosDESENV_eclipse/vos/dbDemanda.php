@@ -61,6 +61,7 @@ class dbDemanda extends dbprocesso {
 				$nmTabelaDemandaProcLic . "." . voProcLicitatorio::$nmAtrCd,
 				$nmTabelaDemandaProcLic . "." . voProcLicitatorio::$nmAtrAno,
 				$nmTabelaDemandaProcLic . "." . voProcLicitatorio::$nmAtrCdModalidade,
+				$nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrNumModalidade,
 				$nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrObjeto,
 				$nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrCdPregoeiro,
 				// $nmTabelaPessoa . "." . vopessoa::$nmAtrNome,
