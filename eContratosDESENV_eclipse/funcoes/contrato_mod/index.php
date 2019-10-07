@@ -380,7 +380,12 @@ function montarChaveContrato(){
                     <TD class="tabeladados" nowrap><?php echo $tipoModificacao?></TD>
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->numPercentual)?>%</TD>
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlModificacaoReferencial,2)?></TD>
-					<TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlModificacaoReal)?></TD>
+					<TD class="tabeladadosalinhadodireita" nowrap>
+					<?php 
+					//echo getMoeda($voAtual->vlModificacaoReal);					
+					echo getMoeda($voAtual->vlModificacaoReal);
+					?>
+					</TD>
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlMensalAtual)?></TD>                    
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlGlobalAtual)?></TD>
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($vlAEmpenhar)?></TD>                    

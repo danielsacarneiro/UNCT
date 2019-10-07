@@ -9,6 +9,7 @@ class dbContratoModificacao extends dbprocesso {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
+		$nmTabContratoMATER = filtroManterContratoModificacao::$NmTabContratoMATER;
 		
 		$colecaoAtributoCoalesceNmPessoa = array (
 				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
@@ -21,6 +22,8 @@ class dbContratoModificacao extends dbprocesso {
 				$nmTabelaContrato . "." . vocontrato::$nmAtrDtPublicacaoContrato,
 				$nmTabelaContrato . "." . vocontrato::$nmAtrDtVigenciaInicialContrato,
 				$nmTabelaContrato . "." . vocontrato::$nmAtrDtVigenciaFinalContrato,
+				$nmTabContratoMATER . "." . vocontrato::$nmAtrDtVigenciaInicialContrato,
+				$nmTabContratoMATER . "." . vocontrato::$nmAtrDtVigenciaFinalContrato,				
 				getSQLCOALESCE ( $colecaoAtributoCoalesceNmPessoa, vopessoa::$nmAtrNome ) 
 		);
 		
@@ -35,6 +38,24 @@ class dbContratoModificacao extends dbprocesso {
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoaContrato;
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
+		
+		// SERVE PARA PEGAR O VALOR INICIAL DO CONTRATO
+		$nmTabContratoInterna = vocontrato::getNmTabelaStatic ( false );
+		$groupbyinterno = vocontrato::$nmAtrAnoContrato . "," . vocontrato::$nmAtrCdContrato . "," . vocontrato::$nmAtrTipoContrato . "," . vocontrato::$nmAtrCdEspecieContrato . "," . vocontrato::$nmAtrSqEspecieContrato . "," . vocontrato::$nmAtrDtVigenciaInicialContrato . "," . vocontrato::$nmAtrDtVigenciaFinalContrato;
+		
+		$queryJoin .= "\n LEFT JOIN ";
+		$queryJoin .= "\n\n (SELECT $groupbyinterno ";
+		$queryJoin .= " FROM " . $nmTabContratoInterna;
+		$queryJoin .= " WHERE ";
+		$queryJoin .= vocontrato::$nmAtrCdEspecieContrato . "=" . getVarComoString ( dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER );
+		$queryJoin .= "\n) " . $nmTabContratoMATER;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabContratoMATER . "." . voContratoModificacao::$nmAtrAnoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrCdContrato . "=" . $nmTabContratoMATER . "." . voContratoModificacao::$nmAtrCdContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabContratoMATER . "." . voContratoModificacao::$nmAtrTipoContrato;
+		
 		
 		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryJoin, $isHistorico );
 	}
@@ -228,17 +249,27 @@ class dbContratoModificacao extends dbprocesso {
 		if(!isColecaoVazia($recordSet)){
 			//a busca eh decrescente porque o recordset esta na ordem crescente da execucao do contrato
 			//dai a funcao pega o mais recente
-			for($i=sizeof($recordSet)-1; $i>=0;$i--){
+			$existe = false;
+			$indiceinicial = sizeof($recordSet)-1; 
+			for($i=$indiceinicial; $i>=0;$i--){
 				$registro = $recordSet[$i];
 				$voTemp = new vocontrato();
 				$voTemp->getDadosBanco($registro);
-								
-				if($voContrato->isIgualChavePrimaria($voTemp)){
-					//$retorno = $registro;
+				
+				/*echoo ($voTemp->vlMensal);
+				echoo($voContrato->getValorChaveLogica());
+				echoo($voTemp->getValorChaveLogica());*/
+				if($voContrato->isIgualChavePrimaria($voTemp)){					
+					//echoo ($voTemp->vlMensal);
+					$existe = true;
 					break;
 				}
 			}
-			//se nao encontrou nenhum eh pq o valor atualizado eh o ultimo registro
+			//se nao encontrou nenhum eh pq o valor atualizado eh o primeiro registro (mais recente)
+			if(!$existe){
+				$registro = $recordSet[$indiceinicial];
+			}
+			
 			$retorno = $registro;
 		}
 		return $retorno;

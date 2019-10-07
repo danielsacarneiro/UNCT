@@ -251,7 +251,7 @@ include_once("voDemandaContrato.php");
 		if($numPRT != null){
 			$formatado = static::formataPRTParaApenasNumero($numPRT);
 			$tamanho = strlen($formatado);
-			$isValido = $tamanho == 18 || $tamanho == 22;		
+			$isValido = ($tamanho == 18 || $tamanho == 22) && isNumero($formatado);		
 			if($levantarExcecao && !$isValido){
 				throw new excecaoGenerica("PRT Inválido. Tamanho PRT: $tamanho");			
 			}			
@@ -274,10 +274,12 @@ include_once("voDemandaContrato.php");
 	}
 	
 	static function getNumeroPRTComMascara($numPRT, $levantarExcecao=true){
+		$formatadoRetorno = $numPRT;
 		if($numPRT != null){
 			$formatado = static::formataPRTParaApenasNumero($numPRT);
 			$isSEI = static::isPRTSEI($numPRT);
 			if(static::isPRTValido($numPRT, $levantarExcecao)){
+				//echo "valido";
 				if($isSEI){
 					$formatado  = substr( $numPRT, 0, 10 ) . '.';
 					$formatado .= substr( $numPRT, 10, 6 ) . '/';
@@ -290,16 +292,16 @@ include_once("voDemandaContrato.php");
 					$formatado .= substr( $numPRT, 13, 3 ) .'-';
 					$formatado .= substr( $numPRT, 16, 2 );
 				}
+				
+				$formatadoRetorno = $formatado;
 			}
-		}else{
-			$formatado = $numPRT;
 		}
 		
-		return $formatado;
+		return $formatadoRetorno;
 	}
 	
 	static function getNumeroPRTSemMascara($numPRT, $levantarExcecao=true){
-		static::isPRTValido($numPRT, $levantarExcecao);
+		//static::isPRTValido($numPRT, $levantarExcecao);
 		$retorno = static::formataPRTParaApenasNumero($numPRT);				
 		return $retorno;
 	}

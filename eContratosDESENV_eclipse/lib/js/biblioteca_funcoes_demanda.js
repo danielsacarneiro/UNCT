@@ -136,44 +136,46 @@ function formatarCampoPRT(pCampo, pEvento) {
 		return;
 	}
 
-	// Tira os '.'
-	while (vlCampo.indexOf('.') != -1) {
-		vlCampo = vlCampo.replace('.', '');
-	}
-	// Tira os '-'
-	while (vlCampo.indexOf('-') != -1) {
-		vlCampo = vlCampo.replace('-', '');
-	}
-	while (vlCampo.indexOf('/') != -1) {
-		vlCampo = vlCampo.replace('/', '');
-	}
-
-	var tamanho = vlCampo.length;
-
 	var filtro = /^([0-9])*$/;
-	if (!filtro.test(vlCampo)) {
+	/*if (!filtro.test(vlCampo)) {
 		pCampo.select();
 		exibirMensagem(mensagemGlobal(43));
 		pCampo.value = pCampo.value.substr(0, tam - 1);
 		focarCampo(pCampo);
 		return;
-	}
+	}*/
+	//se for inserido caracter especial, o prt ficara sem mascara
+	if (filtro.test(vlCampo)) {
+		// Tira os '.'
+		while (vlCampo.indexOf('.') != -1) {
+			vlCampo = vlCampo.replace('.', '');
+		}
+		// Tira os '-'
+		while (vlCampo.indexOf('-') != -1) {
+			vlCampo = vlCampo.replace('-', '');
+		}
+		while (vlCampo.indexOf('/') != -1) {
+			vlCampo = vlCampo.replace('/', '');
+		}
 
-	if (tamanho > 4 && tamanho <= 9) {
-		vlCampo = vlCampo.substr(0, 4) + '.' + vlCampo.substr(4);
-	} else if (tamanho > 9 && tamanho <= 13) {
-		vlCampo = vlCampo.substr(0, 4) + '.' + vlCampo.substr(4, 5) + '.' + vlCampo.substr(9);
-	} else if (tamanho > 13 && tamanho <= 16) {
-		vlCampo = vlCampo.substr(0, 4) + '.' + vlCampo.substr(4, 5) + '.' + vlCampo.substr(9,4) + '.' + vlCampo.substr(13);
-	} else if (tamanho > 16 && tamanho <= 22) {
-		vlCampo = vlCampo.substr(0, 4) + '.' + vlCampo.substr(4, 5) + '.' + vlCampo.substr(9,4) + '.' + vlCampo.substr(13,3) + '-' + vlCampo.substr(16);
-	} else if (tamanho > 22) {
-		pCampo.value = vlCampo.substr(0, 22);
-		formatarCampoPRT(pCampo,pEvento);
+		var tamanho = vlCampo.length;
 		
-		return;
+		if (tamanho > 4 && tamanho <= 9) {
+			vlCampo = vlCampo.substr(0, 4) + '.' + vlCampo.substr(4);
+		} else if (tamanho > 9 && tamanho <= 13) {
+			vlCampo = vlCampo.substr(0, 4) + '.' + vlCampo.substr(4, 5) + '.' + vlCampo.substr(9);
+		} else if (tamanho > 13 && tamanho <= 16) {
+			vlCampo = vlCampo.substr(0, 4) + '.' + vlCampo.substr(4, 5) + '.' + vlCampo.substr(9,4) + '.' + vlCampo.substr(13);
+		} else if (tamanho > 16 && tamanho <= 22) {
+			vlCampo = vlCampo.substr(0, 4) + '.' + vlCampo.substr(4, 5) + '.' + vlCampo.substr(9,4) + '.' + vlCampo.substr(13,3) + '-' + vlCampo.substr(16);
+		} else if (tamanho > 22) {
+			pCampo.value = vlCampo.substr(0, 22);
+			formatarCampoPRT(pCampo,pEvento);
+			
+			return;
+		}
 	}
-
+	
 	pCampo.value = vlCampo;
 
 }

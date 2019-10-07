@@ -54,7 +54,7 @@ class dominioTpDocumento extends dominio {
 	static $DS_TP_DOC_OFICIO = "Ofício";
 	static $DS_TP_DOC_OUTROS = "Outros";
 	static $DS_TP_DOC_PARECER = "Parecer";
-	static $DS_TP_DOC_PLANILHA_CUSTOS = "Planilha de Custos";
+	static $DS_TP_DOC_PLANILHA_CUSTOS = "Planilha";
 	static $DS_TP_DOC_PLANILHA_LICON = "Planilha Licon";
 	static $DS_TP_DOC_PROPOSTA_PRECOS = "Proposta de Preços";
 	static $DS_TP_DOC_PUBLICACAO_PAAP = "Publicação";
@@ -100,7 +100,7 @@ class dominioTpDocumento extends dominio {
 				self::$CD_TP_DOC_PARECER => self::$DS_TP_DOC_PARECER,
 				self::$CD_TP_DOC_PLANILHA_CUSTOS => self::$DS_TP_DOC_PLANILHA_CUSTOS,
 				self::$CD_TP_DOC_PROPOSTA_PRECOS => self::$DS_TP_DOC_PROPOSTA_PRECOS,
-				self::$CD_TP_DOC_PLANILHA_LICON => self::$DS_TP_DOC_PLANILHA_LICON,
+				//self::$CD_TP_DOC_PLANILHA_LICON => self::$DS_TP_DOC_PLANILHA_LICON,
 		);
 		
 		$retorno = putElementoArray2NoArray1ComChaves ( $retorno, static::getColecaoDocsPAAP());

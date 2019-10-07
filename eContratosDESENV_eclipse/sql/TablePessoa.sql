@@ -83,6 +83,8 @@ ALTER TABLE pessoa_hist ADD COLUMN pe_in_pat CHAR(1) NULL AFTER pe_obs;
 ALTER TABLE pessoa_hist ADD COLUMN in_desativado CHAR(1) NOT NULL AFTER cd_usuario_ultalt;    
     
  show create table pessoa; 
+ 
+ select max(pe_cd) from pessoa
     
 /** INCLUSAO DAS CONTRATADAS */
 DELIMITER $$
@@ -95,7 +97,7 @@ BEGIN
   DECLARE nome VARCHAR(150);
   DECLARE doc VARCHAR(30);
   -- cdPessoa deve conter o cdPessoa da ultima pessoa incluida
-  DECLARE cdPessoa INT DEFAULT 517;
+  DECLARE cdPessoa INT DEFAULT (select max(pe_cd) from pessoa);  
 
   DECLARE cTabela CURSOR FOR 
 	  select ct_contratada, ct_doc_contratada from contrato

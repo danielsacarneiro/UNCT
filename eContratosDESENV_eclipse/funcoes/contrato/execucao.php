@@ -125,15 +125,15 @@ function detalhar(isExcluir) {
                         <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Data.Ini.</TH>
                         <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Data.Fim</TH>
 						<TH class='headertabeladados' width='1%' rowspan=2 nowrap>Vl.Referencial</TH>
-                        <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Vl.LICON</TH>
+                        <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Vl.Execução</TH>
                         <TH class='headertabeladadosalinhadocentro' width='40%' nowrap colspan=2>Vl.Mensal</TH>
                         <TH class='headertabeladadosalinhadocentro' width='40%' nowrap colspan=3>Vl.Global</TH>
                     </TR>
                     <TR>
                         <TH class='headertabeladadosalinhadodireita'>Documentado</TH>
-                        <TH class='headertabeladadosalinhadodireita'>LICON</TH>
+                        <TH class='headertabeladadosalinhadodireita'>Execução</TH>
                         <TH class='headertabeladadosalinhadodireita'>Documentado</TH>
-                        <TH class='headertabeladadosalinhadodireita'>LICON</TH>
+                        <TH class='headertabeladadosalinhadodireita'>Execução</TH>
                         <TH class='headertabeladadosalinhadodireita'>Prorrogação</TH>
                     </TR>
                     <?php

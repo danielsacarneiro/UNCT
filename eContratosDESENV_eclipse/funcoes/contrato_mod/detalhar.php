@@ -165,6 +165,23 @@ function confirmar() {
 	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 4, event);" class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="10" readonly>%
 			</TD>
 	        </TR>
+	        <?php
+	        //a orientacao atual eh incluir no LICON tendo como referencia o valor total do contrato considerado no periodo inicial
+	        //ignorando o prazo que falta para encerrar
+	        //ou seja, trata-se do valor alterado ao contrato considerando que este serah prorrogado
+	        $numMesesPeriodoMater = getQtdMesesEntreDatas($voContrato->dtVigenciaInicial, $voContrato->dtVigenciaFinal);
+	        //$numMesesPeriodoMater = getQtdDiasEntreDatas(getData($voContrato->dtVigenciaInicial), getData($voContrato->dtVigenciaFinal));
+	        
+	        $vlAIncluirSistemaLicon = $numMesesPeriodoMater*$vo->vlModificacaoReferencial;	        
+	        ?>
+			<TR>
+	            <TH class="campoformulario">Valor LICON (dependerá do prazo inicial do contrato MATER):</TH>
+	            <TD class="campoformulario" colspan="3"> 
+	            <INPUT type="text" id="" name=""  value="<?php echo(getMoeda($vlAIncluirSistemaLicon,2));?>"
+	            onkeyup="" class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="10" readonly>
+	            , considerando o Prazo Contrato MATER: <?=getTextoHTMLNegrito("$numMesesPeriodoMater meses")?>
+			</TD>
+	        </TR>
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Observação:</TH>
 	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=voContratoModificacao::$nmAtrObs?>" name="<?=voContratoModificacao::$nmAtrObs?>" class="camporeadonly" readonly><?=$vo->obs?></textarea>
