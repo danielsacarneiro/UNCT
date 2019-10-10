@@ -505,7 +505,7 @@ class dbDemanda extends dbprocesso {
 		
 		if ($vo->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA) {
 			
-			//$this->isSetorDestinoIgualDemandante ( $vo, "fechamento" );
+			$this->isSetorDestinoIgualDemandante ( $vo, "fechamento" );
 			
 			// verifica se tem PAAP para encerrar
 			  // $vo = new voDemanda();
