@@ -29,7 +29,7 @@ setCabecalho($titulo);
 	f.adicionarItem(f1);
 	
 	f2 = new Tree('Serviço 02 (Contratos)');
-	f2.adicionarItem(new Link("Contratos-Planilha", "<?=caminho_funcoesHTML?>contrato", ""));
+	f2.adicionarItem(new Link("Contratos", "<?=caminho_funcoesHTML?>contrato", ""));
 	f2.adicionarItem(new Link("Contratos-Informações Adicionais", "<?=caminho_funcoesHTML?>contrato_info", ""));
 	f2.adicionarItem(new Link("Contratos-Consolidação", "<?=caminho_funcoesHTML?>contrato_consolidacao", ""));
 	f2.adicionarItem(new Link("Controle Sistemas Externos (LICON)", "<?=caminho_funcoesHTML?>contrato_licon", ""));

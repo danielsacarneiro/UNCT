@@ -38,7 +38,7 @@ AND TABELA_MAX_TRAM.dem_cd = TABELA_MAX.dem_cd
 AND TABELA_MAX_TRAM.dtm_sq = TABELA_MAX.dtm_sq 
 
 WHERE DEMANDA_TRAM.DTM_PRT IS NOT NULL
-AND TABELA_MAX_TRAM.dtm_cd_setor_destino in (3,99) -- atja OU EXTERNO
+AND (TABELA_MAX_TRAM.dtm_cd_setor_destino in (3) OR demanda.dem_tipo = 2) -- destino 3 eh atja, demanda tipo 2 eh PAAP
 and demanda.dem_situacao <> 2
 and demanda.in_desativado = 'N'
 
