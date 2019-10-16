@@ -556,12 +556,22 @@ function getColecaoPermissaoUsuarioLogado() {
 	
 	return $permissao_user;
 }
+function getEmailUsuarioLogado() {
+	$current_user = wp_get_current_user ();
+	$retorno = $current_user->user_email;
+
+	return $retorno;
+}
 function temPermissao($cdFuncaoBotao) {
 	return temPermissaoPorFuncao ( $cdFuncaoBotao, false );
 }
 function isUsuarioAdmin() {
 	return dominioPermissaoUsuario::isAdministrador ( getColecaoPermissaoUsuarioLogado () );
 }
+function isUsuarioRodaImportacao() {
+	return isUsuarioAdmin() || getEmailUsuarioLogado() == 'eduardo.s-goncalves@sefaz.pe.gov.br';
+}
+
 function isUsuarioPermissaoIntermediaria() {
 	return dominioPermissaoUsuario::isUsuarioPermissaoIntermediaria();
 }
