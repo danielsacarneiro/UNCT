@@ -203,7 +203,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		
 		
 		//retira os contratos CANCELADOS
-		$filtro = $filtro . $conector . $nmTabelaContrato . "." . vocontrato::$nmAtrEspecieContrato . " NOT LIKE '%CANCELADO%'";
+		//$filtro = $filtro . $conector . $nmTabelaContrato . "." . vocontrato::$nmAtrEspecieContrato . " NOT LIKE '%CANCELADO%'";
 		
 		$this->formataCampoOrdenacao ( new voContratoInfo () );
 		// finaliza o filtro
