@@ -13,15 +13,20 @@ setCabecalho($titulo);
 $vocontrato = new vocontrato();
 
 
-$str1comseparador = "ajuste*conta";
-$str2 = "Termo de Ajustes de Contas ";
-$condicao = existeStr1NaStr2ComSeparador($str2, $str1comseparador, false);
+$str1comseparador = "Termo de ajuste de contas";
+$str2 = "Ajuste*conta";
+$condicao = existeStr1NaStr2ComSeparador($str1comseparador, $str2);
+
+echo $cdEspecie = $vocontrato->dbprocesso->getCdEspecieContrato ( $str1comseparador );
 echo "<BR>";
 if($condicao){
 	echoo ("achou");	
 }else{
 	echoo  ("NAO achou");
 }
+
+
+
 
 ?>
 

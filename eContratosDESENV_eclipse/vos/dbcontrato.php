@@ -681,7 +681,7 @@ class dbcontrato extends dbprocesso {
 	
 	// recebe tambem o objeto porque as vezes a informacao esta nele
 	// quando a informacao nao estiver na especie, ele tenta no objeto
-	function getCdEspecieContrato($paramEspecie, $objeto) {
+	function getCdEspecieContrato($paramEspecie, $objeto=null) {
 		$retorno = null;
 		$dominioEspecies = new dominioEspeciesContrato ();
 		$colecao = $dominioEspecies->getDominioImportacaoPlanilha ();
@@ -939,6 +939,10 @@ class dbcontrato extends dbprocesso {
 		$numero = $linha ["B"];
 		$ano = $linha ["B"];
 		$especie = $linha ["D"];
+		
+		if(existeStr1NaStr2("CANCELADO", $especie))
+			throw new excecaoGenerica("Contrato CANCELADO.");
+		
 		$dtAlteracao = $linha ["E"];
 		
 		$objeto = $linha ["F"];
