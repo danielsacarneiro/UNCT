@@ -142,14 +142,17 @@ function getContratoDetalhamentoParam($arrayParametro) {
 			echo getTextoHTMLNegrito(" |Supressão: " . getMoeda($vlPercentualSupressao, 2) . "%");
 		//}
 		
-		$chaveContratoExecucao = $voContrato->anoContrato
-		. constantes::$CD_CAMPO_SEPARADOR
-		. $voContrato->cdContrato
-		. constantes::$CD_CAMPO_SEPARADOR
-		. $voContrato->tipo
-		. constantes::$CD_CAMPO_SEPARADOR
-		. "1";
-		echo getTextoLink("Execução", "../contrato/execucao.php?chave=$chaveContratoExecucao", null, true);
+		$nmPaginaChamada = $_SERVER['PHP_SELF'];
+		if(!existeStr1NaStr2("execucao.php", $nmPaginaChamada)){
+			$chaveContratoExecucao = $voContrato->anoContrato
+			. constantes::$CD_CAMPO_SEPARADOR
+			. $voContrato->cdContrato
+			. constantes::$CD_CAMPO_SEPARADOR
+			. $voContrato->tipo
+			. constantes::$CD_CAMPO_SEPARADOR
+			. "1";
+			echo getTextoLink("Execução", "../contrato/execucao.php?chave=$chaveContratoExecucao", null, true);
+		}
 		
 		?>							
 		<div id=""><?=$campoContratado?></div>
