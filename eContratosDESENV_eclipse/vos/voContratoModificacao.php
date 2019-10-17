@@ -222,10 +222,12 @@ class voContratoModificacao extends voentidade {
 		$this->getDadosFormularioEntidade();
 	}
 
-	function toString() {
+	function toString($completo = false) {
 		$retorno .= "Sq:" . $this->sq;
 		$retorno .= "|Contrato:" . formatarCodigoContrato($this->vocontrato->cdContrato, $this->vocontrato->anoContrato, $this->vocontrato->tipo);
-		//$retorno .= " => " . $this->vocontrato->toString();
+		if($completo){
+			$retorno .= " => " . $this->vocontrato->toString();
+		}
 
 		return $retorno;
 	}

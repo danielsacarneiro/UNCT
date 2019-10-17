@@ -399,7 +399,8 @@ function montarChaveContrato(){
                 <?php
 				}
 				
-				if (!isColecaoVazia($colecao)){
+				//if (!isColecaoVazia($colecao)){
+				if (false){
 					//echoo("fim".$percentualAcrescimo);
 				?>
                 </TR>				

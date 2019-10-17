@@ -143,6 +143,8 @@ function detalhar(isExcluir) {
                     	$tamanho = sizeof($colecaoMov);
                     	else
                     		$tamanho = 0;
+                    	
+                    //var_dump($colecaoMov);
                     
                     $colspan=13;
                     if($isHistorico){
@@ -166,8 +168,9 @@ function detalhar(isExcluir) {
                         
                         $voContratoModReajuste = $registro[filtroManterContratoModificacao::$NmColVOContratoModReajustado];
                         $vlMensalAtual = $voContratoModReajuste->vlMensalAtual;
+                        $vlGlobalAtual = $voContratoModReajuste->vlGlobalAtual;
                         if($numMesesPeriodoMater != null){
-                    		$vlGlobalSeProrrogado = $numMesesPeriodoMater*$voContratoModReajuste->vlMensalAtual;
+                    		$vlGlobalSeProrrogado = $numMesesPeriodoMater*$vlMensalAtual;
                     	}
                         
                     ?>
@@ -185,7 +188,7 @@ function detalhar(isExcluir) {
                         <TD class='tabeladadosalinhadodireita' ><?php echo $voContratoAtual->vlMensal?></TD>                    
                         <TD class='tabeladadosalinhadodireita' ><?php echo getTextoHTMLNegrito(getMoeda($vlMensalAtual))?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo $voContratoAtual->vlGlobal?></TD>                    
-                        <TD class='tabeladadosalinhadodireita' ><?php echo getTextoHTMLNegrito(getMoeda($voContratoModReajuste->vlGlobalAtual))?></TD>
+                        <TD class='tabeladadosalinhadodireita' ><?php echo getTextoHTMLNegrito(getMoeda($vlGlobalAtual))?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo getTextoHTMLNegrito(getMoeda($vlGlobalSeProrrogado))?></TD>
                         </TD>
                     </TR>					

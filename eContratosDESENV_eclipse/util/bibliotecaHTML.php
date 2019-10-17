@@ -545,7 +545,10 @@ function getImagemLink($href, $nmImagem) {
 	
 	return $html;
 }
-function getTextoLink($texto, $href, $javascript=null) {
+function getTextoLink($texto, $href, $javascript=null, $isJanelaAuxiliar=false) {
+	if($isJanelaAuxiliar){
+		$href = "javascript:abrirJanelaAuxiliar('" . $href . "',true, false, false);\" ";
+	}
 	$html = "<A id='lnkFramework$texto' name='lnkFramework$texto' " . "href=\"" . $href . "\"" . " class='linkNormal' $javascript>$texto</A>";
 	return $html;
 }

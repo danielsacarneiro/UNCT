@@ -132,12 +132,25 @@ function getContratoDetalhamentoParam($arrayParametro) {
 			}else{
 				echo getLinkPesquisa ( "../contrato/detalharContrato.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $chaveContrato );
 			}
+			
 		}
 		
 		$vlPercentualAcrescimo = getValorNumPercentualAcrescimoContrato(clone $voContrato);
-		if($vlPercentualAcrescimo != 0){
-			echo getTextoHTMLNegrito(" Acréscimo utilizado: " . getMoeda($vlPercentualAcrescimo, 2) . " %");
-		}
+		$vlPercentualSupressao = getValorNumPercentualAcrescimoContrato(clone $voContrato, true);
+		//if($vlPercentualAcrescimo != 0){
+			echo getTextoHTMLNegrito(" Acréscimo: " . getMoeda($vlPercentualAcrescimo, 2) . "%");
+			echo getTextoHTMLNegrito(" |Supressão: " . getMoeda($vlPercentualSupressao, 2) . "%");
+		//}
+		
+		$chaveContratoExecucao = $voContrato->anoContrato
+		. constantes::$CD_CAMPO_SEPARADOR
+		. $voContrato->cdContrato
+		. constantes::$CD_CAMPO_SEPARADOR
+		. $voContrato->tipo
+		. constantes::$CD_CAMPO_SEPARADOR
+		. "1";
+		echo getTextoLink("Execução", "../contrato/execucao.php?chave=$chaveContratoExecucao", null, true);
+		
 		?>							
 		<div id=""><?=$campoContratado?></div>
 		<?php 
@@ -867,8 +880,8 @@ function getInformacaoCPL($registroBanco, $mostrarTodasPortarias = true){
 }
 
 
-function getValorNumPercentualAcrescimoContrato($vo){
-	$voContratomod = getVOContratoModAcrescimo($vo);
+function getValorNumPercentualAcrescimoContrato($vo, $isSupressao = false){
+	$voContratomod = getVOContratoModAcrescimo($vo,$isSupressao);
 	$retorno = 0;
 	if($voContratomod != null){
 		//$retorno = $voContratomod->getPercentualAcrescimoAtual();
@@ -925,7 +938,7 @@ function getValorNumPercentualAcrescimoContrato($vo){
 	return $array;
 }*/
 
-function getVOContratoModAcrescimo($vo){
+function getVOContratoModAcrescimo($vo, $isSupressao = false){
 	$vo->cdEspecie = null;
 	$vo->sqEspecie = null;
 
@@ -938,7 +951,11 @@ function getVOContratoModAcrescimo($vo){
 	$filtro->cdAtrOrdenacao = voContratoModificacao::$nmAtrDhUltAlteracao;
 	$filtro->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
 	//supressao nao compensa!!
-	$filtro->tipo = array(dominioTpContratoModificacao::$CD_TIPO_ACRESCIMO);
+	if(!$isSupressao){
+		$filtro->tipo = array(dominioTpContratoModificacao::$CD_TIPO_ACRESCIMO);
+	}else{
+		$filtro->tipo = array(dominioTpContratoModificacao::$CD_TIPO_SUPRESSAO);
+	}
 	$recordSet = $dbcontratomod->consultarTelaConsulta(new voContratoModificacao(), $filtro);
 	//var_dump($recordSet);
 	if(!isColecaoVazia($recordSet)){

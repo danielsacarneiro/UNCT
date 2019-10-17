@@ -149,10 +149,10 @@ class filtroManterContrato extends filtroManter {
 			
 			$conector = "\n AND ";
 		}
-		
+				
 		if ($this->modalidade != null) {
 			$filtro = $filtro . $conector . $nmTabela . "." . vocontrato::$nmAtrModalidadeContrato . " LIKE '%" . utf8_encode ( $this->modalidade ) . "%'";
-			
+				
 			$conector = "\n AND ";
 		}
 		

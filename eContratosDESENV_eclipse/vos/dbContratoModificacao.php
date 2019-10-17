@@ -10,12 +10,12 @@ class dbContratoModificacao extends dbprocesso {
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
 		$nmTabContratoMATER = filtroManterContratoModificacao::$NmTabContratoMATER;
-		
+	
 		$colecaoAtributoCoalesceNmPessoa = array (
 				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
-				$nmTabelaContrato . "." . vocontrato::$nmAtrContratadaContrato 
+				$nmTabelaContrato . "." . vocontrato::$nmAtrContratadaContrato
 		);
-		
+	
 		$arrayColunasRetornadas = array (
 				$nmTabela . ".*",
 				$nmTabelaContrato . "." . vocontrato::$nmAtrDtAssinaturaContrato,
@@ -23,10 +23,10 @@ class dbContratoModificacao extends dbprocesso {
 				$nmTabelaContrato . "." . vocontrato::$nmAtrDtVigenciaInicialContrato,
 				$nmTabelaContrato . "." . vocontrato::$nmAtrDtVigenciaFinalContrato,
 				$nmTabContratoMATER . "." . vocontrato::$nmAtrDtVigenciaInicialContrato,
-				$nmTabContratoMATER . "." . vocontrato::$nmAtrDtVigenciaFinalContrato,				
-				getSQLCOALESCE ( $colecaoAtributoCoalesceNmPessoa, vopessoa::$nmAtrNome ) 
+				$nmTabContratoMATER . "." . vocontrato::$nmAtrDtVigenciaFinalContrato,
+				getSQLCOALESCE ( $colecaoAtributoCoalesceNmPessoa, vopessoa::$nmAtrNome )
 		);
-		
+	
 		$queryJoin .= "\n left JOIN " . $nmTabelaContrato;
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabela . "." . voContratoLicon::$nmAtrAnoContrato;
@@ -34,15 +34,15 @@ class dbContratoModificacao extends dbprocesso {
 		$queryJoin .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabela . "." . voContratoLicon::$nmAtrTipoContrato;
 		$queryJoin .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrCdEspecieContrato . "=" . $nmTabela . "." . voContratoLicon::$nmAtrCdEspecieContrato;
 		$queryJoin .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato . "=" . $nmTabela . "." . voContratoLicon::$nmAtrSqEspecieContrato;
-		
+	
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoaContrato;
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
-		
+	
 		// SERVE PARA PEGAR O VALOR INICIAL DO CONTRATO
 		$nmTabContratoInterna = vocontrato::getNmTabelaStatic ( false );
 		$groupbyinterno = vocontrato::$nmAtrAnoContrato . "," . vocontrato::$nmAtrCdContrato . "," . vocontrato::$nmAtrTipoContrato . "," . vocontrato::$nmAtrCdEspecieContrato . "," . vocontrato::$nmAtrSqEspecieContrato . "," . vocontrato::$nmAtrDtVigenciaInicialContrato . "," . vocontrato::$nmAtrDtVigenciaFinalContrato;
-		
+	
 		$queryJoin .= "\n LEFT JOIN ";
 		$queryJoin .= "\n\n (SELECT $groupbyinterno ";
 		$queryJoin .= " FROM " . $nmTabContratoInterna;
@@ -55,10 +55,11 @@ class dbContratoModificacao extends dbprocesso {
 		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrCdContrato . "=" . $nmTabContratoMATER . "." . voContratoModificacao::$nmAtrCdContrato;
 		$queryJoin .= "\n AND ";
 		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabContratoMATER . "." . voContratoModificacao::$nmAtrTipoContrato;
-		
-		
+	
+	
 		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryJoin, $isHistorico );
 	}
+	
 	function consultarTelaConsulta($vo, $filtro) {
 		$isHistorico = $filtro->isHistorico;
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
@@ -378,12 +379,17 @@ class dbContratoModificacao extends dbprocesso {
 		if (! isColecaoVazia ( $recordSet )) {								
 			if (! isColecaoVazia ( $colecaoReajuste )) {
 				$tamColecaoRecordSet = sizeof ( $recordSet );
-				// o primeiro contratomod ajustado eh ele mesmo
+
 				$registro = $recordSet [0];
 				$voContratoReajustadoAtual = new voContratoModificacao ();
 				$voContratoReajustadoAtual->getDadosBanco ( $registro );
-				$voContratoReajustadoAtual->vlMensalAtual = getVarComoDecimal($voContratoMater->vlMensal);
-				$voContratoReajustadoAtual->vlGlobalAtual = getVarComoDecimal($voContratoMater->vlGlobal);
+				//MARRETA??? verificar o contrato csafi040-18 como exemplo
+				if($voContratoReajustadoAtual->tpModificacao == dominioTpContratoModificacao::$CD_TIPO_REAJUSTE){
+					//so pra quando o primeiro registro contratomod eh de reajuste, pq o percentual de reajuste serah aplicado no contrato mater
+					$voContratoReajustadoAtual->vlMensalAtual = getVarComoDecimal($voContratoMater->vlMensal);
+					$voContratoReajustadoAtual->vlGlobalAtual = getVarComoDecimal($voContratoMater->vlGlobal);
+				}
+				// o primeiro contratomod ajustado eh ele mesmo
 				$registro [filtroManterContratoModificacao::$NmColVOContratoModReajustado] = $voContratoReajustadoAtual;
 				$recordSet [0] = $registro;
 				//echoo("valor inicial atualizado: " . $voContratoReajustadoAtual->vlMensalAtual);
@@ -395,17 +401,19 @@ class dbContratoModificacao extends dbprocesso {
 					$voTempReajuste->getDadosBanco ( $registroReajuste );
 					//echoo ( "<br>PErcentual reajuste:" . $voTempReajuste->numPercentual );
 					
-					$colecaoIndicesRegistrosAReajustar = $this->getColecaoIndicesRegistrosAAplicarReajuste ( $recordSet, $voTempReajuste );					
+					$colecaoIndicesRegistrosAReajustar = $this->getColecaoIndicesRegistrosAAplicarReajuste ( $recordSet, $voTempReajuste );
+					//var_dump($colecaoIndicesRegistrosAReajustar);
 					$tamColecaoRegistrosAReajustar = sizeof ( $colecaoIndicesRegistrosAReajustar );
 					
 					for($i = 0; $i < $tamColecaoRegistrosAReajustar; $i++) {
+						//echoo("valor a reajustar: " . $voContratoReajustadoAtual->vlMensalAtual);
 						//echoo($i);
-						$indice = $colecaoIndicesRegistrosAReajustar [$i];						
+						$indice = $colecaoIndicesRegistrosAReajustar [$i];
 						$registro = $recordSet [$indice];
 						
 						$voTemp = new voContratoModificacao ();
 						$voTemp->getDadosBanco ( $registro );
-						//echoo($voTemp->toString()); 
+						//echoo($voTemp->toString(true)); 
 						//echoo("indice" . $indice . " " . dominioTpContratoModificacao::getDescricaoStatic($voTemp->tpModificacao));
 											
 						if(!$registro[voContratoModificacao::$InReajusteAplicado] &&
