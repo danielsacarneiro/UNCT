@@ -143,6 +143,8 @@ function getContratoDetalhamentoParam($arrayParametro) {
 		//}
 		
 		$nmPaginaChamada = $_SERVER['PHP_SELF'];
+		//$temExecucaoPraMostrar = $vlPercentualAcrescimo != 0 || $vlPercentualSupressao != 0;
+		//if($temExecucaoPraMostrar && !existeStr1NaStr2("execucao.php", $nmPaginaChamada)){
 		if(!existeStr1NaStr2("execucao.php", $nmPaginaChamada)){
 			$chaveContratoExecucao = $voContrato->anoContrato
 			. constantes::$CD_CAMPO_SEPARADOR

@@ -86,5 +86,8 @@
     
     static $TAMANHO_CARACTERES_PRT = 18;
     static $TAMANHO_CARACTERES_SEI = 22;
+    
+    static $TAMANHO_CAMPO_VALOR = 15;
+    static $TAMANHO_CAMPO_DATA = 10;
 }
 ?>

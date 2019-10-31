@@ -41,6 +41,7 @@ $numTotalRegistros = $filtro->numTotalRegistros;
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_text.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_cnpfcnpj.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_moeda.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>tooltip.js"></SCRIPT>
 
 <SCRIPT language="JavaScript" type="text/javascript">
@@ -215,7 +216,7 @@ function movimentacoes(){
 			</TR>
 			<TR>
                <TH class="campoformulario" nowrap>Intervalo.Fim.Vigência:</TH>
-               <TD class="campoformulario" colspan=3>
+               <TD class="campoformulario">
                
                				<INPUT type="text" 
                         	       id="<?=filtroConsultarContratoConsolidacao::$ID_REQ_DtFimVigenciaInicial?>" 
@@ -234,6 +235,25 @@ function movimentacoes(){
                         			size="10" 
                         			maxlength="10" >                        			                	 
                 </TD>
+               <TH class="campoformulario" nowrap>Valor(em 12 meses):</TH>
+               <TD class="campoformulario">               
+               				<INPUT type="text" 
+                        	       id="<?=filtroConsultarContratoConsolidacao::$ID_REQ_ValorInicial?>" 
+                        	       name="<?=filtroConsultarContratoConsolidacao::$ID_REQ_ValorInicial?>" 
+                        			value="<?php echo($filtro->valorInicial);?>" 
+                        			onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" 
+                        			class="camponaoobrigatorio" 
+                        			size="<?=CONSTANTES::$TAMANHO_CAMPO_VALOR?>"
+                        			> a               
+                        	<INPUT type="text" 
+                        	       id="<?=filtroConsultarContratoConsolidacao::$ID_REQ_ValorFinal?>" 
+                        	       name="<?=filtroConsultarContratoConsolidacao::$ID_REQ_ValorFinal?>" 
+                        			value="<?php echo($filtro->valorFinal);?>" 
+                        			onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" 
+                        			class="camponaoobrigatorio" 
+                        			size="<?=CONSTANTES::$TAMANHO_CAMPO_VALOR?>"
+                        			>                        			                	 
+                </TD>                
             </TR>
 			
 			<TR>

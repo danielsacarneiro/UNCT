@@ -17,11 +17,17 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	static $ID_REQ_DtFimVigenciaInicial = "ID_REQ_DtFimVigenciaInicial";
 	static $ID_REQ_DtFimVigenciaFinal = "ID_REQ_DtFimVigenciaFinal";
 	
+	static $ID_REQ_ValorInicial = "ID_REQ_ValorInicial";
+	static $ID_REQ_ValorFinal = "ID_REQ_ValorFinal";
+	
 	var $cdEspecie = "";
 	var $qtdDiasParaVencimento = "";
 	var $inIMProrrogavel = "";
 	var $dtFimVigenciaInicial = "";
 	var $dtFimVigenciaFinal = "";
+	
+	var $valorInicial = "";
+	var $valorFinal = "";
 		
 	function __construct1($pegarFiltrosDaTela) {
 		parent::__construct1($pegarFiltrosDaTela);
@@ -36,6 +42,9 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		$this->inIMProrrogavel = @$_POST [static::$nmAtrInIMProrrogavel];
 		$this->dtFimVigenciaFinal = @$_POST [static::$ID_REQ_DtFimVigenciaFinal];
 		$this->dtFimVigenciaInicial = @$_POST [static::$ID_REQ_DtFimVigenciaInicial];
+		
+		$this->valorInicial = @$_POST [static::$ID_REQ_ValorInicial];
+		$this->valorFinal = @$_POST [static::$ID_REQ_ValorFinal];
 	}
 	function getSQFiltroCdEspecie($nmTabelaContrato) {
 		if ($this->cdEspecie != null && ! $this->isAtributoArrayVazio ( $this->cdEspecie )) {
@@ -56,7 +65,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		$nmTabela = voContratoInfo::getNmTabelaStatic ( $this->isHistorico );
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
-		
+				
 		if($this->qtdDiasParaVencimento != null){			
 			/*$nmAtributoDataNotificacao = static::$NmTabContratoATUAL . "." .vocontrato::$nmAtrDtVigenciaFinalContrato;
 			$dtNotificacaoPAram = getVarComoDataSQL(somarOuSubtrairDiasNaData(getDataHoje(), $this->qtdDiasParaVencimento));
@@ -201,7 +210,18 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 			$conector = "\n AND ";
 		}
 		
+		$fatorMensal = "*12";
+		if ($this->valorInicial != null) {
+			$filtro = $filtro . $conector . static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrVlMensalContrato . "$fatorMensal >= " . getVarComoDecimal($this->valorInicial);
 		
+			$conector = "\n AND ";
+		}
+		
+		if ($this->valorFinal != null) {
+			$filtro = $filtro . $conector . static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrVlMensalContrato . "$fatorMensal <= " . getVarComoDecimal($this->valorFinal);
+		
+			$conector = "\n AND ";
+		}
 		//retira os contratos CANCELADOS
 		//$filtro = $filtro . $conector . $nmTabelaContrato . "." . vocontrato::$nmAtrEspecieContrato . " NOT LIKE '%CANCELADO%'";
 		

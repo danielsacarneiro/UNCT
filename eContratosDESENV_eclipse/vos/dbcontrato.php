@@ -1163,13 +1163,13 @@ class dbcontrato extends dbprocesso {
 	
 	static function getSQLRemoveCaracteresEspeciais(){
 		$sql = 
-		"quotestr(
-			UPDATE contrato SET
+		//"quotestr(
+		"UPDATE contrato SET
 			ct_contratada = replace(replace(replace(replace(ct_contratada,'“','\"'),'”','\"'),'–','-'), '?','-'),
 			ct_objeto = replace(replace(replace(replace(ct_objeto,'“','\"'),'”','\"'),'–','-'), '?','-'),
 			ct_gestor = replace(replace(replace(replace(ct_gestor,'“','\"'),'”','\"'),'–','-'), '?','-'),
 			ct_processo_lic = replace(replace(replace(replace(ct_processo_lic,'“','\"'),'”','\"'),'–','-'), '?','-')
-			);"
+			"
 		;
 		
 		return $sql;
