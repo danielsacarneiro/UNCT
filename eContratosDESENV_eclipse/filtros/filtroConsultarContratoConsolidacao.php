@@ -225,7 +225,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		//retira os contratos CANCELADOS
 		//$filtro = $filtro . $conector . $nmTabelaContrato . "." . vocontrato::$nmAtrEspecieContrato . " NOT LIKE '%CANCELADO%'";
 		
-		$this->formataCampoOrdenacao ( new voContratoInfo () );
+		$this->formataCampoOrdenacao ( new voContratoInfo());
 		// finaliza o filtro
 		$filtro = parent::getFiltroSQL ( $filtro, $comAtributoOrdenacao );
 		
@@ -242,7 +242,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	}
 	
 	function getAtributoOrdenacaoDefault() {
-		$nmTabela = voContrato::getNmTabelaStatic ( $this->isHistorico );
+		$nmTabela = (new vocontrato())->getNmTabelaEntidade($this->isHistorico );
 		$retorno = $nmTabela . "." . voContrato::$nmAtrTipoContrato . " " . $this->cdOrdenacao 
 		. "," . $nmTabela . "." . voContrato::$nmAtrAnoContrato . " " . $this->cdOrdenacao
 		. "," . $nmTabela . "." . voContrato::$nmAtrCdContrato . " " . $this->cdOrdenacao;

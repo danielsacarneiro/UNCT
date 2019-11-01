@@ -19,6 +19,10 @@ class voentidade extends multiplosConstrutores {
 	static $nmAtrNmUsuarioUltAlteracao = "nm_usuario_ultalt";
 	static $nmAtrNmUsuarioOperacao = "nm_usuario_operacao";
 	static $nmAtrInDesativado = "in_desativado";
+	
+	//implementar a constante abaixo quando retirar o temTabHistorico das instancias
+	//static $existeTabHistorico = false;
+	
 	var $NM_METODO_RETORNO_CONFIRMAR;
 	var $varChaves;
 	var $varAtributos;
@@ -237,6 +241,10 @@ class voentidade extends multiplosConstrutores {
 		 * $nmTabela = self::getNmTabelaHistorico();
 		 * return $nmTabela;
 		 */
+		 if(!$this->temTabHistorico()){
+		 	$isHistorico = false;
+		 }
+		 
 		return self::getNmTabelaStatic ( $isHistorico );
 	}
 	static function getNmTabelaStatic($isHistorico) {

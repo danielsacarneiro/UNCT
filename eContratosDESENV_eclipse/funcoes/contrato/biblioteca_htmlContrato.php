@@ -135,6 +135,11 @@ function getContratoDetalhamentoParam($arrayParametro) {
 			
 		}
 		
+		$voContratoInfoPK = voContratoInfo::getVOContratoInfoDeUmVoContrato($voContrato);
+		$colecao = $voContratoInfoPK->dbprocesso->consultarPorChaveTela($voContratoInfoPK, false);
+		$voContratoInfoPK->getDadosBanco($colecao);
+		echo getTextoHTMLNegrito("Autorização:" . dominioAutorizacao::getHtmlDetalhamento("", "", $voContratoInfoPK->cdAutorizacao, false));
+		
 		$vlPercentualAcrescimo = getValorNumPercentualAcrescimoContrato(clone $voContrato);
 		$vlPercentualSupressao = getValorNumPercentualAcrescimoContrato(clone $voContrato, true);
 		//if($vlPercentualAcrescimo != 0){

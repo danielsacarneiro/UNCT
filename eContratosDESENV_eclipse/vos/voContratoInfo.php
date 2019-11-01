@@ -125,6 +125,18 @@ Class voContratoInfo extends voentidade{
 
 		return $retorno;
 	}
+	
+	static function getVOContratoInfoDeUmVoContrato($vocontrato){
+		$retorno = new voContratoInfo();
+		$retorno->cdContrato = $vocontrato->cdContrato;
+		$retorno->anoContrato = $vocontrato->anoContrato;
+		$retorno->tipo = $vocontrato->tipo;
+		$retorno->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
+		$retorno->sqEspecie = 1;
+	
+		return $retorno;
+	}
+	
 
 	function getVOContrato(){
 		$retorno = new vocontrato();

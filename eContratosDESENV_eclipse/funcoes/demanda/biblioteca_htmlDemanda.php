@@ -157,7 +157,7 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 		
 		if(isSinalizarDemandaReajustePeriodoNaoTranscorrido($voDemanda)){
 			$html .= getTextoHTMLDestacado("ATENÇÃO: o período contratual necessário para o cálculo do reajuste(índice contratual) ainda não transcorreu. Verifique a Data Base de Reajuste do contrato.");
-		}
+		}		
 	}
 	
 	return $html;

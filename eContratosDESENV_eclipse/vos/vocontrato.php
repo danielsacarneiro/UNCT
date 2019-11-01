@@ -108,7 +108,7 @@ include_once (caminho_util . "DocumentoPessoa.php");
 // Construtor
    function __construct() {   	
        parent::__construct();
-       $this->temTabHistorico = true;
+       $this->temTabHistorico = false;
        $this->sqEspecie = 1;
        $this->importacao = "N";
    }

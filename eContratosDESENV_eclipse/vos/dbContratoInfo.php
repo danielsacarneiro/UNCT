@@ -143,12 +143,14 @@ class dbContratoInfo extends dbprocesso {
 	function consultarTelaConsultaConsolidacao($filtro) {		
 		
 		$vo = new vocontrato();		
-		//$isHistorico = $filtro->isHistorico;
-		$isHistorico = false;
-		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
-		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
+		$isHistorico = $filtro->isHistorico;
+		//$isHistorico = false;
+		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );			
+		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( $isHistorico );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
 	
+		//echo "tabela vo: $nmTabela | tabela contrato_info: $nmTabelaContratoInfo";
+		
 		$nmTabContratoMater = filtroConsultarContratoConsolidacao::$NmTabContratoMater;
 		$nmTabContratoATUAL = filtroConsultarContratoConsolidacao::$NmTabContratoATUAL;
 		
@@ -178,10 +180,18 @@ class dbContratoInfo extends dbprocesso {
 				getSQLNmContratada(),
 				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
 		);
-	
+		
+		if ($isHistorico) {		
+			$arrayColunasHistorico = array (
+					"$nmTabelaContratoInfo.". voContratoInfo::$nmAtrSqHist,
+			);				
+			$arrayColunasRetornadas = array_merge($arrayColunasRetornadas, $arrayColunasHistorico);
+		}
+			
 		$groupbyinterno = $nmTabela . "." . vocontrato::$nmAtrAnoContrato . "," . $nmTabela . "." . vocontrato::$nmAtrCdContrato . "," . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;	
 		
-		$nmTabContratoInterna = vocontrato::getNmTabelaStatic ( false );
+		//$nmTabContratoInterna = vocontrato::getNmTabelaStatic ( false );
+		$nmTabContratoInterna = $nmTabela;		
 		$nmTabContratoMINSq = "TAB_CONTRATO_MIN_SQ";
 		$nmTabContratoMAXSq = "TAB_CONTRATO_MAX_SQ";
 		

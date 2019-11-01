@@ -103,6 +103,7 @@ class dbprocesso {
 	}
 	function getQueryFrom_NmUsuarioTabelaAComparar($vo, $nmTabelaACompararCdUsuario, $queryJoin, $isHistorico) {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
+		//echo $nmTabela;
 		// $temUsuInclusao = false;
 		$temUsuInclusao = existeItemNoArray ( voentidade::$nmAtrCdUsuarioInclusao, $vo->getTodosAtributos () );
 		$temUsuUltAlteracao = existeItemNoArray ( voentidade::$nmAtrCdUsuarioUltAlteracao, $vo->getTodosAtributos () );
@@ -197,6 +198,9 @@ class dbprocesso {
 		$querySelect = "SELECT " . $atributos;
 		
 		$queryFrom = $this->getQueryFrom_NmUsuarioTabelaAComparar ( $vo, $nmTabelaACompararCdUsuario, $queryJoin, $isHistorico );
+		
+		//echo $queryFrom;
+		//echo $queryJoin;
 		
 		//echo $querySelect;
 		$retorno = $this->consultarFiltro ( $filtro, $querySelect, $queryFrom, $filtro->isValidarConsulta );
@@ -335,6 +339,8 @@ class dbprocesso {
 			$query = $querySelect . $queryFrom . " $filtroSQL ";
 			$query = $query . " $limite";
 			
+			//echo $queryFrom;
+			
 			// echo $filtroSQL;
 			// echo "$queryCount<br>";
 			//if(static::$FLAG_PRINTAR_SQL){
@@ -342,13 +348,9 @@ class dbprocesso {
 				echo "<br> ".$filtro->getNmFiltro()." $query<br>";
 			}
 			
-			//echo $query;
-			// removeObjetoSessao($voentidade->getNmTabela());
-			
+			//echo $query;			
 			$retorno = $this->cDb->consultar ( $query );
-			$filtro->setConsultaRealizada();
-			
-			//putObjetoSessao($filtro->getNmFiltro(), $filtro);
+			$filtro->setConsultaRealizada();			
 		}
 		
 		// echo $filtro->toString();
@@ -357,7 +359,7 @@ class dbprocesso {
 	}
 	function getNumTotalRegistrosQuery($query) {
 		$queryCount = $query;
-		// echo $queryCount;
+		//echo $queryCount;
 		$retorno = $this->cDb->consultar ( $queryCount );
 		$numTotalRegistros = 0;
 		
