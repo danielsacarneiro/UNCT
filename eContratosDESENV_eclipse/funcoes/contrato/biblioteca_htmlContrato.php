@@ -148,9 +148,9 @@ function getContratoDetalhamentoParam($arrayParametro) {
 		//}
 		
 		$nmPaginaChamada = $_SERVER['PHP_SELF'];
-		//$temExecucaoPraMostrar = $vlPercentualAcrescimo != 0 || $vlPercentualSupressao != 0;
-		//if($temExecucaoPraMostrar && !existeStr1NaStr2("execucao.php", $nmPaginaChamada)){
-		if(!existeStr1NaStr2("execucao.php", $nmPaginaChamada)){
+		$temExecucaoPraMostrar = existeContratoMod($voContrato);
+		if($temExecucaoPraMostrar && !existeStr1NaStr2("execucao.php", $nmPaginaChamada)){
+		//if(!existeStr1NaStr2("execucao.php", $nmPaginaChamada)){
 			$chaveContratoExecucao = $voContrato->anoContrato
 			. constantes::$CD_CAMPO_SEPARADOR
 			. $voContrato->cdContrato
@@ -901,53 +901,30 @@ function getValorNumPercentualAcrescimoContrato($vo, $isSupressao = false){
 }
 
 /**
- * versao antiga
+ * Verifica se existe alguma modificacao registrada ao contrato
  * @param unknown $vo
- * @return number
+ * @return voContratoModificacao
  */
-/*function getArrayAcrescimoModContrato($vo){	
+function existeContratoMod($vo){
 	$vo->cdEspecie = null;
-	$vo->sqEspecie = null;	
-	
+	$vo->sqEspecie = null;
 	$filtro = new filtroManterContratoModificacao(false);
 	$dbcontratomod = new dbContratoModificacao();
-	
-	$numPercentual = "0";	
-	$vlGlobalAtualizadoReajuste = 0;
-	$vlGlobalAtual = 0;
-	
+
 	$filtro->vocontrato = $vo;
-	//var_dump($filtro);
 	$filtro->cdAtrOrdenacao = voContratoModificacao::$nmAtrDhUltAlteracao;
 	$filtro->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
-	
 	$recordSet = $dbcontratomod->consultarTelaConsulta(new voContratoModificacao(), $filtro);
-	//var_dump($recordSet);
-	if(!isColecaoVazia($recordSet)){
-		$vlGlobalAtual = $recordSet[0][voContratoModificacao::$nmAtrVlGlobalAtualizado];
-		//o valor atualizado de reajuste inicialmente eh igual ao valor mater (ja que nao ha nenhum reajuste)
-		$vlGlobalAtualizadoReajuste = $recordSet[0][filtroManterContratoModificacao::$NmColVlGlobalMater];
-	}
-	
-	$filtro->tipo = dominioTpContratoModificacao::$CD_TIPO_REAJUSTE;
-	$recordSet = $dbcontratomod->consultarTelaConsulta(new voContratoModificacao(), $filtro);
-	//busca agora o valor mater atualizado em caso de haver reajuste
-	if(!isColecaoVazia($recordSet)){
-		//$vlGlobalAtualizadoReajuste = $recordSet[0][voContratoModificacao::$nmAtrVlGlobalAtualizado];
-		$vlGlobalAtualizadoReajuste = $recordSet[0][voContratoModificacao::$nmAtrVlGlobalModAtual];
-	}	
-	
-	if($vlGlobalAtualizadoReajuste != 0){
-		$numPercentual = (($vlGlobalAtual-$vlGlobalAtualizadoReajuste)/$vlGlobalAtualizadoReajuste)*100;
-		//echo "(($vlGlobalAtual-$vlGlobalAtualizadoReajuste)/$vlGlobalAtualizadoReajuste)*100";
-	}
-	
-	$array[0] = $vlGlobalAtual;
-	$array[1] = $vlGlobalAtualizadoReajuste;
-	$array[2] = $numPercentual;
-	return $array;
-}*/
 
+	return !isColecaoVazia($recordSet);
+}
+
+/**
+ * Retorna o percentual de acrescimo ou supressao registrado ao contrato
+ * @param unknown $vo
+ * @param string $isSupressao
+ * @return voContratoModificacao
+ */
 function getVOContratoModAcrescimo($vo, $isSupressao = false){
 	$vo->cdEspecie = null;
 	$vo->sqEspecie = null;
@@ -955,7 +932,6 @@ function getVOContratoModAcrescimo($vo, $isSupressao = false){
 	$filtro = new filtroManterContratoModificacao(false);
 	$dbcontratomod = new dbContratoModificacao();
 
-	$numPercentual = "0";
 	$filtro->vocontrato = $vo;
 	//var_dump($filtro);
 	$filtro->cdAtrOrdenacao = voContratoModificacao::$nmAtrDhUltAlteracao;
