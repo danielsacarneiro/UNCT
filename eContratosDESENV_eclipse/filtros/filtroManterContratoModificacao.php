@@ -39,7 +39,7 @@ class filtroManterContratoModificacao extends filtroManter {
 		$this->vocontrato = new vocontrato();		
 		$this->vocontrato->cdContrato = @$_POST [voContratoModificacao::$nmAtrCdContrato];
 		$this->vocontrato->anoContrato = @$_POST [voContratoModificacao::$nmAtrAnoContrato];
-		$this->vocontrato->tipoContrato = @$_POST [voContratoModificacao::$nmAtrTipoContrato];
+		$this->vocontrato->tipo = @$_POST [voContratoModificacao::$nmAtrTipoContrato];
 		$this->vocontrato->cdEspecie = @$_POST [voContratoModificacao::$nmAtrCdEspecieContrato];
 		$this->vocontrato->sqEspecie = @$_POST [voContratoModificacao::$nmAtrSqEspecieContrato];
 		

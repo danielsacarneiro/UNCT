@@ -181,6 +181,7 @@ function montarChaveContrato(){
 
 	            $voContratoFiltro = new vocontrato();	            
 	            $voContratoFiltro->tipo = $filtro->vocontrato->tipo;
+	            //echo $filtro->vocontrato->tipo;
 	            $voContratoFiltro->cdContrato = $filtro->vocontrato->cdContrato;
 	            $voContratoFiltro->anoContrato = $filtro->vocontrato->anoContrato;
 	            $voContratoFiltro->cdEspecie = $filtro->vocontrato->cdEspecie;

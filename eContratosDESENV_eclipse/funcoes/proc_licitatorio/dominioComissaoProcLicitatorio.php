@@ -26,7 +26,7 @@ class dominioComissaoProcLicitatorio extends dominio {
 		return $retorno;
 	}
 	static function getColecaoConsulta() {
-		return $retorno;
+		return static::getColecao();
 	}
 	static function getCPLPorPregoeiro($nmPregoeiro, $retornarDescricao = false) {
 		//echo "nome pregoeiro eh $nmPregoeiro";
@@ -46,10 +46,17 @@ class dominioComissaoProcLicitatorio extends dominio {
 	}
 	static function getNmPregoeiroPorCPL($proclic) {
 		$retorno = null;
-		/*echoo($proclic);
-		echoo(static::$DS_CPL_I);*/
+		
+		//echoo(static::$DS_CPL_I);
 		$proclic = str_replace(" ", "", $proclic);
-		if (existeStr1NaStr2ComSeparador ( $proclic, static::$DS_CPL_I)) {
+
+		if ($proclic == static::$CD_CPL_I) {
+			$retorno = static::$NM_PREGOEIRO_CPL_I;
+		}else if ($proclic == static::$CD_CPL_II) {
+			$retorno = static::$NM_PREGOEIRO_CPL_II;
+		} else if ($proclic == static::$CD_CPL_III) {
+			$retorno = static::$NM_PREGOEIRO_CPL_III;
+		} else if (existeStr1NaStr2ComSeparador ( $proclic, static::$DS_CPL_I)) {
 			$retorno = static::$NM_PREGOEIRO_CPL_I;
 		}else if (existeStr1NaStr2ComSeparador ( $proclic, static::$DS_CPL_II )) {
 			$retorno = static::$NM_PREGOEIRO_CPL_II;

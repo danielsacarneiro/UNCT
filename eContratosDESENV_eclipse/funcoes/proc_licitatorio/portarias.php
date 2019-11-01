@@ -48,7 +48,18 @@ function confirmar() {
 		</TR>
             <TR>
 		         <TD class="campoformulario" colspan=3>
-		         <?php echo "Todas Portarias:<br>" . dominioComissaoProcLicitatorio::getNumPortariaTodasCPL($anoPortaria);?>
+		         <?php
+		         $colecao = dominioComissaoProcLicitatorio::getColecaoConsulta();
+		         $chaves = array_keys($colecao);
+		         
+		         for ($i=0; $i < sizeof($chaves); $i++){
+		         	$chave = $chaves[$i];
+		         	$numCpl = dominioComissaoProcLicitatorio::getDescricaoStatic($chave);
+		         	$nmPregoeiro = dominioComissaoProcLicitatorio::getNmPregoeiroPorCPL($chave);
+		         	echoo(getTextoHTMLDestacado( "$numCpl - $nmPregoeiro"));
+		         }
+		         echo "<br>Todas Portarias:<br>" . dominioComissaoProcLicitatorio::getNumPortariaTodasCPL($anoPortaria);
+		         ?>
 				 </TD>
 	        </TR>
     </TBODY>
