@@ -152,7 +152,7 @@ function getContratoDetalhamentoParam($arrayParametro) {
 		//}
 		
 		$nmPaginaChamada = $_SERVER['PHP_SELF'];
-		$temExecucaoPraMostrar = existeContratoMod($voContrato);
+		$temExecucaoPraMostrar = existeContratoMod(clone($voContrato));
 		if($temExecucaoPraMostrar && !existeStr1NaStr2("execucao.php", $nmPaginaChamada)){
 		//if(!existeStr1NaStr2("execucao.php", $nmPaginaChamada)){
 			$chaveContratoExecucao = $voContrato->anoContrato
@@ -909,7 +909,10 @@ function getValorNumPercentualAcrescimoContrato($vo, $isSupressao = false){
  * @param unknown $vo
  * @return voContratoModificacao
  */
-function existeContratoMod($vo){
+function existeContratoMod($voParam){
+	//usando o clone aqui para nao alterar a variagem voParam fora do escodo da funcao
+	//tendo em vista que se esta suprimindo informacoes do voParam
+	$vo = clone ($voParam);
 	$vo->cdEspecie = null;
 	$vo->sqEspecie = null;
 	$filtro = new filtroManterContratoModificacao(false);

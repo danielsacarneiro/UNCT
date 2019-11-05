@@ -17,7 +17,9 @@ $readonly = "readonly";
         
 	$dbprocesso = new dbcontrato();				
 	$colecao = $dbprocesso->limpaResultado();
-	$msgComplementar = null;	
+	$msgComplementar = null;
+	
+	//echo $voContrato->getValorChaveHTML();
 	try{
 		$colecao = $dbprocesso->consultarContratoPorChave($voContrato, $isHistorico);
 	}catch (excecaoChaveRegistroInexistente $excecao){
@@ -26,6 +28,7 @@ $readonly = "readonly";
 		$voContrato->sqEspecie = 1;
 		$colecao = $dbprocesso->consultarContratoPorChave($voContrato, $isHistorico);
 		$msgComplementar = "TERMO BUSCADO INEXISTENTE - EXIBINDO O CONTRATO MATER.";
+		
 	}catch (excecaoChaveRegistroInexistente $excecao){
 		//nao existindo direciona para a pagina de erro;
 		tratarExcecaoHTML($excecao);
@@ -143,7 +146,7 @@ function confirmar() {
         <TR>
             <TH class="campoformulario" nowrap>Espécie/Ordem:</TH>
             <TD class="campoformulario" colspan="3">
-                    <?php                        
+                    <?php                    
                     $dsEspecie = getDsEspecie($voContrato);
                     ?>
                      <INPUT type="text" value="<?php echo(strtoupper($dsEspecie));?>"  class="camporeadonlydestacado" size="30" <?=$readonly?>>
