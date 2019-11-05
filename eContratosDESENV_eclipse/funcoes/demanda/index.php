@@ -436,7 +436,7 @@ function encaminhar() {
                         $dsTpDemandaContrato = $voAtual->tpDemandaContrato;
                         $dsTpDemandaContrato = dominioTipoDemandaContrato::getDescricaoColecaoChave($dsTpDemandaContrato, false, dominioTipoDemandaContrato::getColecaoAntiga());
                         if($voAtual->tpDemandaContrato != null){
-                        	$tipo = $tipo . $dsTpDemandaContrato;
+                        	$tipo = "$tipo<br>$dsTpDemandaContrato";
                         }
                         $empresa = $colecao[$i][vopessoa::$nmAtrNome];
                         
