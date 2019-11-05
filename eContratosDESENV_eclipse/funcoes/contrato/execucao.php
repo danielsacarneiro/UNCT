@@ -169,7 +169,7 @@ function detalhar(isExcluir) {
                         $voContratoModReajuste = $registro[filtroManterContratoModificacao::$NmColVOContratoModReajustado];
                         $vlMensalAtual = $voContratoModReajuste->vlMensalAtual;
                         $vlGlobalAtual = $voContratoModReajuste->vlGlobalAtual;
-                        $vlGlobalReal = $voContratoModReajuste->vlGlobalReal;
+                        $vlGlobalReal = $voAtual->vlGlobalReal;
                         
                         if($numMesesPeriodoMater != null){
                     		$vlGlobalSeProrrogado = $numMesesPeriodoMater*$vlMensalAtual;

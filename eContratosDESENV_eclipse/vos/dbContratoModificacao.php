@@ -331,9 +331,8 @@ class dbContratoModificacao extends dbprocesso {
 					$voAConsiderar = clone $voTemp;
 					//echoo("teste2");
 				}else{
-					//a prorrogacao eh a copia do vomod anterior, com excecao do valorReal
+					//a prorrogacao eh a copia do vomod anterior
 					$voAConsiderar = clone $voAtualizadoAnterior;
-					$voAConsiderar->vlGlobalReal = $voTemp->vlGlobalReal;
 					//echoo("teste3");
 				}
 				$registro [filtroManterContratoModificacao::$NmColVOContratoModReajustado] = $voAConsiderar;
