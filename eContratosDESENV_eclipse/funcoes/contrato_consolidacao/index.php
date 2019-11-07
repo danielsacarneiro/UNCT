@@ -134,7 +134,6 @@ function movimentacoes(){
     <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
         <TBODY>
 	        <?php	        	
-            $selectExercicio = new selectExercicio();
 	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
 	        $arrayCssClass = array("camponaoobrigatorio","camponaoobrigatorio", "camponaoobrigatorio");
 	        ?>        
@@ -212,29 +211,7 @@ function movimentacoes(){
 			</TR>
 			<TR>
 				<TH class="campoformulario" nowrap>Objeto:</TH>
-				<TD class="campoformulario" width="1%" colspan=3><INPUT type="text" id="<?=vocontrato::$nmAtrObjetoContrato?>" name="<?=vocontrato::$nmAtrObjetoContrato?>"  value="<?php echo($filtro->objeto);?>"  class="camponaoobrigatorio" size="50" ></TD>
-			</TR>
-			<TR>
-               <TH class="campoformulario" nowrap>Intervalo.Fim.Vigência:</TH>
-               <TD class="campoformulario">
-               
-               				<INPUT type="text" 
-                        	       id="<?=filtroConsultarContratoConsolidacao::$ID_REQ_DtFimVigenciaInicial?>" 
-                        	       name="<?=filtroConsultarContratoConsolidacao::$ID_REQ_DtFimVigenciaInicial?>" 
-                        			value="<?php echo($filtro->dtFimVigenciaInicial);?>" 
-                        			onkeyup="formatarCampoData(this, event, false);" 
-                        			class="camponaoobrigatorio" 
-                        			size="10" 
-                        			maxlength="10" > a               
-                        	<INPUT type="text" 
-                        	       id="<?=filtroConsultarContratoConsolidacao::$ID_REQ_DtFimVigenciaFinal?>" 
-                        	       name="<?=filtroConsultarContratoConsolidacao::$ID_REQ_DtFimVigenciaFinal?>" 
-                        			value="<?php echo($filtro->dtFimVigenciaFinal);?>" 
-                        			onkeyup="formatarCampoData(this, event, false);" 
-                        			class="camponaoobrigatorio" 
-                        			size="10" 
-                        			maxlength="10" >                        			                	 
-                </TD>
+				<TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vocontrato::$nmAtrObjetoContrato?>" name="<?=vocontrato::$nmAtrObjetoContrato?>"  value="<?php echo($filtro->objeto);?>"  class="camponaoobrigatorio" size="50" ></TD>
                <TH class="campoformulario" nowrap>Valor(em 12 meses):</TH>
                <TD class="campoformulario">               
                				<INPUT type="text" 
@@ -252,8 +229,58 @@ function movimentacoes(){
                         			onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" 
                         			class="camponaoobrigatorio" 
                         			size="<?=CONSTANTES::$TAMANHO_CAMPO_VALOR?>"
-                        			>                        			                	 
-                </TD>                
+                        			>
+                </TD>				
+			</TR>
+			<TR>
+               <TH class="campoformulario" nowrap>Fim.Vigência:</TH>
+               <TD class="campoformulario" colspan=3> Encerram em:
+                        	<?php
+                        	$comboMeses = new select(dominioMeses::getColecao());
+                        	echo "Mês " . $comboMeses->getHtmlCombo(filtroConsultarContratoConsolidacao::$ID_REQ_MesIntervaloFimVigencia
+                        			,filtroConsultarContratoConsolidacao::$ID_REQ_MesIntervaloFimVigencia, 
+                        			$filtro->mesIntervaloFimVigencia
+                        			, true
+                        			, "camponaoobrigatorio"
+                        			, true
+                        			, "");
+                        	$selectExercicio = new selectExercicio ();
+                        	echo " Ano ". $selectExercicio->getHtmlCombo ( filtroConsultarContratoConsolidacao::$ID_REQ_AnoIntervaloFimVigencia, 
+                        			filtroConsultarContratoConsolidacao::$ID_REQ_AnoIntervaloFimVigencia, 
+                        			$filtro->anoIntervaloFimVigencia, 
+                        			true
+                        			, "camponaoobrigatorio"
+                        			, false
+                        			, "");
+                        	?>               
+               				ou
+               				Período: 
+               				<INPUT type="text" 
+                        	       id="<?=filtroConsultarContratoConsolidacao::$ID_REQ_DtFimVigenciaInicial?>" 
+                        	       name="<?=filtroConsultarContratoConsolidacao::$ID_REQ_DtFimVigenciaInicial?>" 
+                        			value="<?php echo($filtro->dtFimVigenciaInicial);?>" 
+                        			onkeyup="formatarCampoData(this, event, false);" 
+                        			class="camponaoobrigatorio" 
+                        			size="10" 
+                        			maxlength="10" > a               
+                        	<INPUT type="text" 
+                        	       id="<?=filtroConsultarContratoConsolidacao::$ID_REQ_DtFimVigenciaFinal?>" 
+                        	       name="<?=filtroConsultarContratoConsolidacao::$ID_REQ_DtFimVigenciaFinal?>" 
+                        			value="<?php echo($filtro->dtFimVigenciaFinal);?>" 
+                        			onkeyup="formatarCampoData(this, event, false);" 
+                        			class="camponaoobrigatorio" 
+                        			size="10" 
+                        			maxlength="10" >
+                        <?php 
+                        $nmCamposDtFimVigencia = array(
+                        		filtroConsultarContratoConsolidacao::$ID_REQ_MesIntervaloFimVigencia,
+                        		filtroConsultarContratoConsolidacao::$ID_REQ_AnoIntervaloFimVigencia,
+                        		filtroConsultarContratoConsolidacao::$ID_REQ_DtFimVigenciaInicial,
+                        		filtroConsultarContratoConsolidacao::$ID_REQ_DtFimVigenciaFinal,
+                        );
+                        echo getBorracha($nmCamposDtFimVigencia, "");
+                        ?>                        			                        			                	 
+                </TD>
             </TR>
 			
 			<TR>

@@ -20,6 +20,9 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	static $ID_REQ_ValorInicial = "ID_REQ_ValorInicial";
 	static $ID_REQ_ValorFinal = "ID_REQ_ValorFinal";
 	
+	static $ID_REQ_MesIntervaloFimVigencia = "ID_REQ_MesIntervaloFimVigencia";
+	static $ID_REQ_AnoIntervaloFimVigencia = "ID_REQ_AnoIntervaloFimVigencia";
+	
 	var $cdEspecie = "";
 	var $qtdDiasParaVencimento = "";
 	var $inIMProrrogavel = "";
@@ -29,6 +32,9 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	var $valorInicial = "";
 	var $valorFinal = "";
 		
+	var $mesIntervaloFimVigencia= "";
+	var $anoIntervaloFimVigencia= "";
+	
 	function __construct1($pegarFiltrosDaTela) {
 		parent::__construct1($pegarFiltrosDaTela);
 		$this->cdEspecie = dominioEspeciesContrato::getColecaoFiltroContratoConsolidacao();
@@ -45,6 +51,9 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		
 		$this->valorInicial = @$_POST [static::$ID_REQ_ValorInicial];
 		$this->valorFinal = @$_POST [static::$ID_REQ_ValorFinal];
+		
+		$this->mesIntervaloFimVigencia = @$_POST [static::$ID_REQ_MesIntervaloFimVigencia];
+		$this->anoIntervaloFimVigencia = @$_POST [static::$ID_REQ_AnoIntervaloFimVigencia];
 	}
 	function getSQFiltroCdEspecie($nmTabelaContrato) {
 		if ($this->cdEspecie != null && ! $this->isAtributoArrayVazio ( $this->cdEspecie )) {
@@ -196,6 +205,16 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 			$conector = "\n AND ";
 		}
 		
+		if ($this->mesIntervaloFimVigencia != null) {
+			if($this->anoIntervaloFimVigencia == null){
+				$this->anoIntervaloFimVigencia = getAnoHoje();
+			}
+			$anoTemp = $this->anoIntervaloFimVigencia;
+			
+			$this->dtFimVigenciaFinal = getDataUltimoDiaMesHtml($this->mesIntervaloFimVigencia, $anoTemp);
+			$this->dtFimVigenciaInicial = getDataMesHtml("01", $this->mesIntervaloFimVigencia, $anoTemp);
+		}		
+		
 		if ($this->dtFimVigenciaInicial != null) {
 			$colunaAComparar = static::getComparacaoWhereDataVigencia(static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato);				
 			$filtro = $filtro . $conector . "($colunaAComparar IS NOT NULL AND $colunaAComparar >= " . getVarComoData($this->dtFimVigenciaInicial) . ") ";
@@ -208,7 +227,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 			$filtro = $filtro . $conector . "($colunaAComparar IS NOT NULL AND $colunaAComparar <= " . getVarComoData($this->dtFimVigenciaFinal) . ") ";
 		
 			$conector = "\n AND ";
-		}
+		}		
 		
 		$fatorMensal = "*12";
 		if ($this->valorInicial != null) {

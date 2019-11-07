@@ -2,6 +2,8 @@
 include_once("mensagens.class.php");
 include_once("dominioFeriados.php");
 include_once("bibliotecaSQL.php");
+include_once("selectExercicio.php");
+include_once("dominioMeses.php");
 
 function getDataHora($dataSQL) {
 	return getDataHoraParam($dataSQL, true);
@@ -199,6 +201,29 @@ function isFeriado($data){
 
 function getAnoHoje(){
 	return date ( 'Y' );
+}
+
+function getUltimoDiaMes($mes, $ano=null){
+	if($ano == null){
+		$ano = date("Y"); // Ano atual
+	}
+	$mes = complementarCharAEsquerda($mes, "0", 2);
+	$ultimo_dia = date("t", mktime(0,0,0,$mes,'01',$ano));
+	return $ultimo_dia;
+}
+
+function getDataMesHtml($dia, $mes, $ano=null){
+	if($ano == null){
+		$ano = date("Y"); // Ano atual
+	}
+	$dia = complementarCharAEsquerda($dia, "0", 2);
+	$mes = complementarCharAEsquerda($mes, "0", 2);
+	$date = "$dia/$mes/$ano";	
+	return $date;
+}
+
+function getDataUltimoDiaMesHtml($mes, $ano=null){
+	return getDataMesHtml(getUltimoDiaMes($mes, $ano), $mes, $ano);
 }
 
 ?>

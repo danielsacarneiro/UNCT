@@ -10,8 +10,7 @@ inicio();
 $titulo = "TESTE de Funções UNCT";
 setCabecalho($titulo);
 
-$vocontrato = new vocontrato();
-
+/*$vocontrato = new vocontrato();
 
 $str1comseparador = "Termo de ajuste de contas";
 $str2 = "Ajuste*conta";
@@ -23,9 +22,12 @@ if($condicao){
 	echoo ("achou");	
 }else{
 	echoo  ("NAO achou");
-}
+}*/
 
+$ano = 2018;
+$mes = "02";
 
+echo getDataUltimoDiaMesHtml($mes,$ano);
 
 
 ?>
