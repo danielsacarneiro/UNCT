@@ -105,7 +105,7 @@ class filtroManterDemanda extends filtroManter{
 		$vodemanda->situacao  = @$_POST[voDemanda::$nmAtrSituacao];		
 		$vodemanda->prioridade  = @$_POST[voDemanda::$nmAtrPrioridade];
 		$this->prioridadeExcludente = @$_POST[static::$NmAtrPrioridadeExcludente];
-		$vodemanda->prt = @$_POST[voDemandaTramitacao::$nmAtrProtocolo];
+		$vodemanda->prt = trim(@$_POST[voDemandaTramitacao::$nmAtrProtocolo]);
 		
 		$vocontrato->anoContrato = @$_POST[vocontrato::$nmAtrAnoContrato];
 		$vocontrato->cdContrato = @$_POST[vocontrato::$nmAtrCdContrato];
