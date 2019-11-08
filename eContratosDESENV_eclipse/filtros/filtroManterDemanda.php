@@ -575,7 +575,8 @@ class filtroManterDemanda extends filtroManter{
 		
 		if($this->nmContratada != null){
 			$filtro = $filtro . $conector
-			. "($nmTabelaPessoaContrato." .vopessoa::$nmAtrNome
+			//. "($nmTabelaPessoaContrato." .vopessoa::$nmAtrNome
+			. "(". getSQLNmContratada(false)
 			. " LIKE '%"
 			. $this->nmContratada
 			. "%'"

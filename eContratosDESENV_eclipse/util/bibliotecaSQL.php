@@ -3,7 +3,7 @@ include_once ("constantes.class.php");
 include_once ("bibliotecaFuncoesPrincipal.php");
 
 // bibliotecaSQL
-function getSQLNmContratada() {
+function getSQLNmContratada($comAliasNoAtributo = true) {
 	$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 	$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
 	
@@ -11,7 +11,11 @@ function getSQLNmContratada() {
 			$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
 			$nmTabelaContrato . "." . vocontrato::$nmAtrContratadaContrato 
 	);
-	return getSQLCOALESCE ( $colecaoAtributoCoalesceNmPessoa, vopessoa::$nmAtrNome );
+	$alias = vopessoa::$nmAtrNome;
+	if(!$comAliasNoAtributo){
+		$alias = null;		
+	}
+	return getSQLCOALESCE ( $colecaoAtributoCoalesceNmPessoa,  $alias);
 }
 function getSQLCOALESCE($arrayAtributos, $nmAtributoRetornoClausulaAS = null) {
 	$retorno = "COALESCE (";

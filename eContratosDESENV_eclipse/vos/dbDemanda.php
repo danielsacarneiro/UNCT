@@ -210,7 +210,7 @@ class dbDemanda extends dbprocesso {
 		$queryJoin .= "\n LEFT JOIN (";
 		$queryJoin .= " \n\nSELECT MAX(" . vocontrato::$nmAtrSqContrato . ") AS " . vocontrato::$nmAtrSqContrato . "," . $atributosGroupContrato 
 				. " FROM " . $nmTabelaContrato 
-				. " WHERE " . vocontrato::$nmAtrCdPessoaContratada . " IS NOT NULL "
+				. " WHERE " . vocontrato::$nmAtrContratadaContrato . " IS NOT NULL "
 				. " GROUP BY " . $atributosGroupContrato;
 		$queryJoin .= ") $nmTabelaMAXContrato";
 		$queryJoin .= "\n ON ";
