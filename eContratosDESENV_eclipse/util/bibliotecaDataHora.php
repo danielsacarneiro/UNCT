@@ -99,10 +99,12 @@ function getQtdMesesEntreDatas($dataini, $datafim) {
 		$diferenca_mostra_meses = $diferenca->format('%m');	
 		$diferenca_mostra_dias = $diferenca->format('%d');
 		$total_dias = ($diferenca_mostra_anos+$diferenca_mostra_meses)*$numMediaDiasMes+$diferenca_mostra_dias;
-		/*echoo($total_dias);
-		echo "data inicial $dataini e data final $datafim";*/
+		//echoo($total_dias);
+		
 		$total_meses = round(($total_dias/$numMediaDiasMes), 0, PHP_ROUND_HALF_UP); //funcao para arredondar para cima
 		
+		/*echo "data inicial $dataini e data final $datafim";
+		echo "|total meses: $total_meses <br>";*/
 		//$total_meses = $diferenca_mostra_anos+$diferenca_mostra_meses;
 	}catch (Exception $ex){
 		echo "Erro ao calcular. Verifique as datas do período.";

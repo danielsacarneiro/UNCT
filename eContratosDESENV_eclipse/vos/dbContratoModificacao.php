@@ -306,6 +306,29 @@ class dbContratoModificacao extends dbprocesso {
 	}
 	
 	/**
+	 * Funcao que atualiza os valores globais do contrato ajustado tendo como
+	 * referencia o valor mensal calculado, multiplicado pelo prazo de efeitos de cada periodo
+	 * @param unknown $recordSet
+	 */
+	function atualizaValorGlobalPorPeriodo(&$recordSet) {
+		$i = 0;
+		foreach ( $recordSet as $registro) {
+			$voTemp = new voContratoModificacao ();
+			$voTemp->getDadosBanco ( $registro );
+
+			$voContratoModExecucao = $registro [filtroManterContratoModificacao::$NmColVOContratoModReajustado];
+
+			$numMeses = $voTemp->numMesesParaOFimdoPeriodo;			 			
+			$voContratoModExecucao->vlGlobalAtual = ($voContratoModExecucao->vlMensalAtual)*$numMeses;
+			
+			//echoo("meses:$numMeses, valor mensal:" . $voContratoModExecucao->vlMensalAtual);
+			$registro [filtroManterContratoModificacao::$NmColVOContratoModReajustado] = $voContratoModExecucao;
+			$recordSet [$i] = $registro;				
+			$i++;
+		}
+	}
+	
+	/**
 	 * verifica a lista apos os calculos do reajuste para replicar nos itens que nao sofreram reajuste
 	 * @param unknown $recordSet
 	 * @param unknown $voContratoModReajuste
@@ -339,10 +362,17 @@ class dbContratoModificacao extends dbprocesso {
 				$recordSet [$i] = $registro;
 			}
 			/*echoo($voTemp->toString());
-			echoo($voAConsiderar->vlMensal);*/				
+			echoo($voAConsiderar->vlMensal);*/
+			
 			$i++;			
 			$voAtualizadoAnterior = clone $voAConsiderar;
 		}		
+	}
+	
+	function consultarExecucaoValorGlobalReferencial($voContratoMater) {
+		$recordset = $this->consultarExecucao($voContratoMater);		
+		$this->atualizaValorGlobalPorPeriodo($recordset);
+		return  $recordset;
 	}
 	
 	function consultarExecucao($voContratoMater) {

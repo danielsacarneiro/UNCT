@@ -769,29 +769,20 @@ function getCamposContratoMod($vo, $arrayParamComplemento = null){
 	$voContratoReferencia = clone $voContratoTemp;
 		//var_dump($voContratoReferencia);
 	
+	/*
 	//traz o valor atualizado do contrato segundo o e-conti
 	$dbcontratomod = new dbContratoModificacao();
 	$registroExecucao = $dbcontratomod->consultarExecucaoTermoEspecifico($voContratoReferencia);
-	//var_dump($registroExecucao);
 	$voContratoModEspecificoReajustado = $registroExecucao[filtroManterContratoModificacao::$NmColVOContratoModReajustado];
-	//echoo ("tp.modificacao " . $tipoModificacao);
-	$isReajuste = $tipoModificacao == dominioTpContratoModificacao::$CD_TIPO_REAJUSTE || $tipoModificacao == dominioTpContratoModificacao::$CD_TIPO_REPACTUACAO;
-	//if(!$isReajuste){
-		if($voContratoModEspecificoReajustado->vlMensalAtual != null){
-			//serve para buscar os valores de execucao atual
-			//echo "entrou";
-			$voContrato->vlMensal = getMoeda($voContratoModEspecificoReajustado->vlMensalAtual, 2);
-			//$voContrato->vlMensal = getMoeda("2000", 2);
-			$voContrato->vlGlobal = getMoeda($voContratoModEspecificoReajustado->vlGlobalAtual,2);
-		}		
-		//echo "NAO EH REAJUSTE";
-	/*}else{
-		//echo "EH REAJUSTE";
-		//se for reajuste, pega o valor mensal do contrato ao qual o reajuste se refere
-		//echoo("valor contrato: " . $voContratoReferencia->vlMensalAtual);
-		$voContrato->vlMensal = $voContratoReferencia->vlMensal;
-		$voContrato->vlGlobal = $voContratoReferencia->vlGlobal;		
-	}*/
+	//$isReajuste = $tipoModificacao == dominioTpContratoModificacao::$CD_TIPO_REAJUSTE || $tipoModificacao == dominioTpContratoModificacao::$CD_TIPO_REPACTUACAO;	
+	if($voContratoModEspecificoReajustado->vlMensalAtual != null){
+		//serve para buscar os valores de execucao atual
+		//echo "entrou";
+		$voContrato->vlMensal = getMoeda($voContratoModEspecificoReajustado->vlMensalAtual, 2);
+		//$voContrato->vlMensal = getMoeda("2000", 2);
+		$voContrato->vlGlobal = getMoeda($voContratoModEspecificoReajustado->vlGlobalAtual,2);
+	}*/	
+
 		
 	if($voContrato != null){
 		$numMesesPeriodoTermo = 12;

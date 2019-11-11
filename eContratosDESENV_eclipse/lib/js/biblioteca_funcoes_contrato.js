@@ -89,7 +89,7 @@ function getValorCampoMoedaComoNumeroValido(pCampo, pValorDefault){
 	}
 	//alert(pCampo.name);
 	var retorno = pValorDefault;
-	if(pCampo.value != null && pCampo.value != ""){
+	if(pCampo != null && pCampo.value != null && pCampo.value != ""){
 		try{
 			retorno = getValorCampoMoedaComoNumero(pCampo);
 		}catch(ex){
@@ -195,9 +195,9 @@ function calcularModificacaoNovo(pArrayCampos) {
 		//}		
 		
 		//o numero de meses ao fim nao pode ser maior que o prazo referencial do contrato
-		if(numMesesAoFinal > numPrazo > 0){
-			exibirMensagem("Prazo restante ("+numMesesAoFinal+" meses) acima do prazo referencial do contrato("+numPrazo+" meses). Alterando o prazo restante.");
-			numMesesAoFinal = numPrazo;
+		if(numMesesAoFinal > numPrazoMater > 0){
+			exibirMensagem("Prazo restante ("+numMesesAoFinal+" meses) acima do prazo referencial do contrato("+numPrazoMater+" meses). Alterando o prazo restante.");
+			numMesesAoFinal = numPrazoMater;
 		}
 		
 		var vlReferencialNovo = 0;

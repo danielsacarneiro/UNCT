@@ -124,6 +124,7 @@ function detalhar(isExcluir) {
                         <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Índice</TH>
                         <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Data.Ini.</TH>
                         <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Data.Fim</TH>
+                        <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Meses</TH>
 						<TH class='headertabeladados' width='1%' rowspan=2 nowrap>Vl.Referencial</TH>
                         <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Vl.Execução</TH>
                         <TH class='headertabeladadosalinhadocentro' width='40%' nowrap colspan=2>Vl.Mensal</TH>
@@ -138,7 +139,8 @@ function detalhar(isExcluir) {
                     </TR>
                     <?php
                     
-                    $colecaoMov = $dbContratoMod->consultarExecucao($voContrato);
+                    //$colecaoMov = $dbContratoMod->consultarExecucao($voContrato);
+                    $colecaoMov = $dbContratoMod->consultarExecucaoValorGlobalReferencial($voContrato);
                     if (is_array($colecaoMov))
                     	$tamanho = sizeof($colecaoMov);
                     	else
@@ -146,7 +148,7 @@ function detalhar(isExcluir) {
                     	
                     //var_dump($colecaoMov);
                     
-                    $colspan=13;
+                    $colspan=14;
                     if($isHistorico){
                     	$colspan++;
                     }
@@ -169,7 +171,8 @@ function detalhar(isExcluir) {
                         $voContratoModReajuste = $registro[filtroManterContratoModificacao::$NmColVOContratoModReajustado];
                         $vlMensalAtual = $voContratoModReajuste->vlMensalAtual;
                         $vlGlobalAtual = $voContratoModReajuste->vlGlobalAtual;
-                        $vlGlobalReal = $voAtual->vlGlobalReal;
+                        //$vlGlobalReal = $voAtual->vlGlobalReal;
+                        $vlGlobalReal = $vlGlobalAtual;
                         
                         if($numMesesPeriodoMater != null){
                     		$vlGlobalSeProrrogado = $numMesesPeriodoMater*$vlMensalAtual;
@@ -185,6 +188,7 @@ function detalhar(isExcluir) {
                         <TD class='tabeladados'><?php echo $percentual?></TD>
                         <TD class='tabeladados'><?php echo getData($voAtual->dtModificacao)?></TD>
                         <TD class='tabeladados'><?php echo getData($voAtual->dtModificacaoFim)?></TD>
+                        <TD class='tabeladadosalinhadodireita'><?php echo $voAtual->numMesesParaOFimdoPeriodo?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($voAtual->vlModificacaoReferencial)?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($voAtual->vlModificacaoReal)?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo $voContratoAtual->vlMensal?></TD>                    
