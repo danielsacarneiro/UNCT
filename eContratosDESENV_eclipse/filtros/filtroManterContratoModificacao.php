@@ -32,6 +32,7 @@ class filtroManterContratoModificacao extends filtroManter {
 	
 	var $tipo = "";	
 	var $dtModificacao = "";
+	var $dtVigencia = "";
 	var $dtProducaoEfeitoTermoPosterior = "";
 	var $tipoExceto = "";
 	
@@ -124,8 +125,13 @@ class filtroManterContratoModificacao extends filtroManter {
 			$conector = "\n AND ";
 		}
 		
-		if ($this->dtModificacao != null) {		
-			$filtro = $filtro . $conector . $nmTabela . "." . voContratoModificacao::$nmAtrDtModificacao . " = " . getVarComoData($this->dtModificacao);		
+		if ($this->dtVigencia != null) {		
+			$filtro = $filtro . $conector . $nmTabela . "." . voContratoModificacao::$nmAtrDtModificacao . " <= " . getVarComoData($this->dtVigencia);		
+			$conector = "\n AND ";
+		}
+		
+		if ($this->dtModificacao != null) {
+			$filtro = $filtro . $conector . $nmTabela . "." . voContratoModificacao::$nmAtrDtModificacao . " = " . getVarComoData($this->dtModificacao);
 			$conector = "\n AND ";
 		}
 		

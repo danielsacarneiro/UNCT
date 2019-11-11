@@ -246,7 +246,7 @@ class dbContratoModificacao extends dbprocesso {
 	 * @param unknown $recordSet
 	 * @return voContratoModificacao
 	 */
-	function getRegistroTermoEspecificoColecaoExecucao($voContrato, $recordSet) {
+	/*function getRegistroTermoEspecificoColecaoExecucao($voContrato, $recordSet) {
 		if(!isColecaoVazia($recordSet)){
 			//a busca eh decrescente porque o recordset esta na ordem crescente da execucao do contrato
 			//dai a funcao pega o mais recente
@@ -257,9 +257,8 @@ class dbContratoModificacao extends dbprocesso {
 				$voTemp = new vocontrato();
 				$voTemp->getDadosBanco($registro);
 				
-				/*echoo ($voTemp->vlMensal);
-				echoo($voContrato->getValorChaveLogica());
-				echoo($voTemp->getValorChaveLogica());*/
+				$voContratoMod = $registro[filtroManterContratoModificacao::$NmColVOContratoModReajustado];
+							
 				if($voContrato->isIgualChavePrimaria($voTemp)){					
 					//echoo ($voTemp->vlMensal);
 					$existe = true;
@@ -274,14 +273,25 @@ class dbContratoModificacao extends dbprocesso {
 			$retorno = $registro;
 		}
 		return $retorno;
+	}*/
+	
+	function getRegistroAtualColecaoExecucao($recordSet) {
+		if(!isColecaoVazia($recordSet)){
+			$indiceinicial = sizeof($recordSet)-1;
+			$retorno = $recordSet[$indiceinicial];
+		}
+		return $retorno;
 	}
 	
-	function consultarExecucaoTermoEspecifico($voContratoComChaveCompleta) {
+	
+	function consultarExecucaoTermoEspecifico($voContratoComChaveCompleta, $dataVigencia=null) {
 		$voContratoMater = clone $voContratoComChaveCompleta;
 		$voContratoMater->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
 		$voContratoMater->sqEspecie = 1;
-		$recordSet = $this->consultarExecucao(clone $voContratoMater);
-		return $this->getRegistroTermoEspecificoColecaoExecucao(clone $voContratoComChaveCompleta, $recordSet);
+		//echo ($dataVigencia);
+		$recordSet = $this->consultarExecucao(clone $voContratoMater, $dataVigencia);
+		return $this->getRegistroAtualColecaoExecucao($recordSet);		
+		//return $this->getRegistroTermoEspecificoColecaoExecucao(clone $voContratoComChaveCompleta, $recordSet);		
 	}
 	
 	/**
@@ -375,7 +385,7 @@ class dbContratoModificacao extends dbprocesso {
 		return  $recordset;
 	}
 	
-	function consultarExecucao($voContratoMater) {
+	function consultarExecucao($voContratoMater, $dataVigencia=null) {
 		// consulta os regitros modificacao do contrato SEM REAJUSTE
 		$voContratoFiltro = clone $voContratoMater;
 		$voContratoFiltro->cdEspecie = null;
@@ -392,6 +402,7 @@ class dbContratoModificacao extends dbprocesso {
 		 * $filtro->cdOrdenacao = constantes::$CD_ORDEM_CRESCENTE;
 		 */
 		$filtro->vocontrato = $voContratoFiltro;
+		$filtro->dtVigencia = $dataVigencia;
 		$recordSet = $this->consultarTelaConsulta ( new voContratoModificacao (), $filtro );
 		
 		// agora consulta os reajustes para aplica-los aos registros necessarios

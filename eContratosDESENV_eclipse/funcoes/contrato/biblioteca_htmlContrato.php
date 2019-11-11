@@ -747,8 +747,8 @@ function getCamposContratoMod($vo, $arrayParamComplemento = null){
 	$vlMensalAtualizadoParaFinsMod = getMoeda($registrobanco[voContratoModificacao::$nmAtrVlMensalModAtual]); 
 	$vlGlobalAtualizadoParaFinsMod = getMoeda($registrobanco[voContratoModificacao::$nmAtrVlGlobalModAtual]);
 	
-	$vlMensalTermoInseridoTela = getMoeda($registrobanco[voContratoModificacao::$ID_REQ_VlMensalContratoInseridoTela]);
-	$vlGlobalTermoInseridoTela = getMoeda($registrobanco[voContratoModificacao::$ID_REQ_VlGlobalContratoInseridoTela]);
+	/*$vlMensalTermoInseridoTela = getMoeda($registrobanco[voContratoModificacao::$ID_REQ_VlMensalContratoInseridoTela]);
+	$vlGlobalTermoInseridoTela = getMoeda($registrobanco[voContratoModificacao::$ID_REQ_VlGlobalContratoInseridoTela]);*/
 	
 	$vo->dtAssinatura = getData($registrobanco[vocontrato::$nmAtrDtAssinaturaContrato]);
 
@@ -760,28 +760,31 @@ function getCamposContratoMod($vo, $arrayParamComplemento = null){
 	$registro = getContratoVigentePorData($vo, $dtEfeitoModificacao, true)[0];
 	$voContratoTemp = new vocontrato();
 	$voContratoTemp->getDadosBanco($registro);
-				
+	
+	$vlMensalTermoInseridoTela = $voContratoTemp->vlMensal;
+	$vlGlobalTermoInseridoTela = $voContratoTemp->vlGlobal;
+					
 	$voContrato->dtVigenciaInicial = $voContratoTemp->dtVigenciaInicial;
 	$voContrato->dtVigenciaFinal = $voContratoTemp->dtVigenciaFinal;
 	/*$voContrato->vlMensal = $voContratoTemp->vlMensal;
 	$voContrato->vlGlobal = $voContratoTemp->vlGlobal;*/
-	$retorno = "Vigência determinada pelo " . getTextoHTMLNegrito(getContratoDetalhamentoAvulso($voContratoTemp, true)) . "<br>";
+	$retorno = getTextoHTMLNegrito("Vigência"). " determinada pelo " . getTextoHTMLNegrito(getContratoDetalhamentoAvulso($voContratoTemp, true)) . "<br>";
 	$voContratoReferencia = clone $voContratoTemp;
 		//var_dump($voContratoReferencia);
-	
-	/*
+		
 	//traz o valor atualizado do contrato segundo o e-conti
 	$dbcontratomod = new dbContratoModificacao();
-	$registroExecucao = $dbcontratomod->consultarExecucaoTermoEspecifico($voContratoReferencia);
+	$registroExecucao = $dbcontratomod->consultarExecucaoTermoEspecifico($voContratoReferencia, $dtEfeitoModificacao);
 	$voContratoModEspecificoReajustado = $registroExecucao[filtroManterContratoModificacao::$NmColVOContratoModReajustado];
 	//$isReajuste = $tipoModificacao == dominioTpContratoModificacao::$CD_TIPO_REAJUSTE || $tipoModificacao == dominioTpContratoModificacao::$CD_TIPO_REPACTUACAO;	
 	if($voContratoModEspecificoReajustado->vlMensalAtual != null){
+		$retorno .= getTextoHTMLNegrito("Execução"). " determinada pelo ". getTextoHTMLNegrito(getContratoDetalhamentoAvulso($voContratoModEspecificoReajustado->vocontrato, true)) . "<br>";
 		//serve para buscar os valores de execucao atual
 		//echo "entrou";
 		$voContrato->vlMensal = getMoeda($voContratoModEspecificoReajustado->vlMensalAtual, 2);
 		//$voContrato->vlMensal = getMoeda("2000", 2);
 		$voContrato->vlGlobal = getMoeda($voContratoModEspecificoReajustado->vlGlobalAtual,2);
-	}*/	
+	}	
 
 		
 	if($voContrato != null){
