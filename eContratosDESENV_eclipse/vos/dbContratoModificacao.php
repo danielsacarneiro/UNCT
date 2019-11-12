@@ -320,16 +320,36 @@ class dbContratoModificacao extends dbprocesso {
 	 * referencia o valor mensal calculado, multiplicado pelo prazo de efeitos de cada periodo
 	 * @param unknown $recordSet
 	 */
-	function atualizaValorGlobalPorPeriodo(&$recordSet) {
+	function atualizaValorGlobalPorPeriodo(&$recordSet, $voContratoMater = null) {
 		$i = 0;
+		$vlMensalAnterior = getVarComoDecimal($voContratoMater->vlMensal);
+		//$numMesContrato = 12;		
+		$numMesContrato = getQtdMesesEntreDatas($voContratoMater->dtVigenciaInicial, $voContratoMater->dtVigenciaFinal);
+		//echo $numMesContrato;
 		foreach ( $recordSet as $registro) {
 			$voTemp = new voContratoModificacao ();
 			$voTemp->getDadosBanco ( $registro );
+			
+			$tpMod = $voTemp->tpModificacao;			
+			if($tpMod == dominioTpContratoModificacao::$CD_TIPO_PRORROGACAO){
+				//pega o periodo da ultima prorrogacao;
+				$numMesContrato = $voTemp->numMesesParaOFimdoPeriodo; 
+			}			
 
 			$voContratoModExecucao = $registro [filtroManterContratoModificacao::$NmColVOContratoModReajustado];
 
 			$numMeses = $voTemp->numMesesParaOFimdoPeriodo;			 			
-			$voContratoModExecucao->vlGlobalAtual = ($voContratoModExecucao->vlMensalAtual)*$numMeses;
+			$vlGlobalAtual = ($voContratoModExecucao->vlMensalAtual)*$numMeses;
+			$numMesesSobra = $numMesContrato-$numMeses;
+			
+			if($numMesesSobra>0){
+				//echoo ($vlMensalAnterior);
+				$vlGlobalAtual = $vlGlobalAtual + ($numMesesSobra*$vlMensalAnterior);
+				//echo $vlGlobalAtual;
+			}			
+			$vlMensalAnterior = $voContratoModExecucao->vlMensalAtual;
+			
+			$voContratoModExecucao->vlGlobalAtual = $vlGlobalAtual;
 			
 			//echoo("meses:$numMeses, valor mensal:" . $voContratoModExecucao->vlMensalAtual);
 			$registro [filtroManterContratoModificacao::$NmColVOContratoModReajustado] = $voContratoModExecucao;
@@ -381,7 +401,7 @@ class dbContratoModificacao extends dbprocesso {
 	
 	function consultarExecucaoValorGlobalReferencial($voContratoMater) {
 		$recordset = $this->consultarExecucao($voContratoMater);		
-		$this->atualizaValorGlobalPorPeriodo($recordset);
+		$this->atualizaValorGlobalPorPeriodo($recordset, $voContratoMater);
 		return  $recordset;
 	}
 	
