@@ -89,10 +89,13 @@ function detalhar(isExcluir) {
         $voContrato->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
         $voContrato->sqEspecie = 1;
         $voContrato = $dbcontrato->consultarPorChaveVO($voContrato, false);        
-
-       	$complementoDet = " Valor MATER: Mensal " . getInputText("", "", $voContrato->vlMensal, constantes::$CD_CLASS_CAMPO_READONLY);       
-       	$complementoDet .= " Global: " . getInputText("", "", $voContrato->vlGlobal, constantes::$CD_CLASS_CAMPO_READONLY);
         
+       	$complementoDet .= "Período: " . getInputText("", "", $voContrato->dtVigenciaInicial, constantes::$CD_CLASS_CAMPO_READONLY);
+       	$complementoDet .= " a " . getInputText("", "", $voContrato->dtVigenciaFinal, constantes::$CD_CLASS_CAMPO_READONLY);
+       	$complementoDet .= ", " . getTextoHTMLNegrito(getQtdMesesEntreDatas($voContrato->dtVigenciaInicial, $voContrato->dtVigenciaFinal)) . " meses";
+       	$complementoDet .= "<br>Valor MATER: Mensal " . getInputText("", "", $voContrato->vlMensal, constantes::$CD_CLASS_CAMPO_READONLY);
+       	$complementoDet .= " Global: " . getInputText("", "", $voContrato->vlGlobal, constantes::$CD_CLASS_CAMPO_READONLY);
+       	
         $arrayParametro[0] = $voContrato;
         $arrayParametro[1] = $colecao;
         $arrayParametro[2] = false;
