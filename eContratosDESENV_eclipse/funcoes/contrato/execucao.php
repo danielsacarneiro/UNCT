@@ -130,6 +130,7 @@ function detalhar(isExcluir) {
                         <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Meses</TH>
 						<TH class='headertabeladados' width='1%' rowspan=2 nowrap>Vl.Referencial</TH>
                         <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Vl.Execução</TH>
+                        <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Vl.Licon</TH>
                         <TH class='headertabeladadosalinhadocentro' width='40%' nowrap colspan=2>Vl.Mensal</TH>
                         <TH class='headertabeladadosalinhadocentro' width='40%' nowrap colspan=3>Vl.Global</TH>
                     </TR>
@@ -151,14 +152,13 @@ function detalhar(isExcluir) {
                     	
                     //var_dump($colecaoMov);
                     
-                    $colspan=14;
+                    $colspan=15;
                     if($isHistorico){
                     	$colspan++;
                     }
                     
                     $numMesesPeriodoMater = getQtdMesesEntreDatas($voContrato->dtVigenciaInicial, $voContrato->dtVigenciaFinal);
-                    $vlGlobalSeProrrogado = "Verifique o prazo do contrato mater.";
-                                                    
+                    $vlGlobalSeProrrogado = "Verifique o prazo do contrato mater.";                              
                     for ($i=0;$i<$tamanho;$i++) {
                     	$registro = $colecaoMov[$i];
                         $voAtual = new voContratoModificacao();
@@ -177,10 +177,19 @@ function detalhar(isExcluir) {
                         //$vlGlobalReal = $voAtual->vlGlobalReal;
                         $vlGlobalReal = $vlGlobalAtual;
                         
-                        if($numMesesPeriodoMater != null){
-                    		$vlGlobalSeProrrogado = $numMesesPeriodoMater*$vlMensalAtual;
+                        if($numMesesPeriodoMater != null){                        	
+                    		$vlGlobalSeProrrogado = $numMesesPeriodoMater*$vlMensalAtual;                    		
                     	}
-                        
+
+                    	//reajuste NAO muda o valor global referencia para fins de valores no licon
+                    	$isReajuste = $voAtual->tpModificacao == dominioTpContratoModificacao::$CD_TIPO_REAJUSTE
+                    	|| $voAtual->tpModificacao == dominioTpContratoModificacao::$CD_TIPO_REPACTUACAO;
+                    	if(!$isReajuste){
+                    		$vlLicon = $voAtual->vlModificacaoReferencial*$numMesesPeriodoMater;
+                    	}else{
+                    		$vlLicon = 0;
+                    	}
+                    	                         
                     ?>
                     <TR class='dados'>
                         <TD class='tabeladados' width=1%>
@@ -194,6 +203,7 @@ function detalhar(isExcluir) {
                         <TD class='tabeladadosalinhadodireita'><?php echo $voAtual->numMesesParaOFimdoPeriodo?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($voAtual->vlModificacaoReferencial)?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($voAtual->vlModificacaoReal)?></TD>
+                        <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($vlLicon)?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo $voContratoAtual->vlMensal?></TD>                    
                         <TD class='tabeladadosalinhadodireita' ><?php echo getTextoHTMLNegrito(getMoeda($vlMensalAtual))?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo $voContratoAtual->vlGlobal?></TD>                    
