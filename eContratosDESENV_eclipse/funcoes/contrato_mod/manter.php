@@ -261,7 +261,17 @@ function iniciar(){
 				<div id="<?=voContratoModificacao::$ID_REQ_DIV_DADOS_CONTRATO_MODIFICACAO?>">
 				</div>	            
 	            </TD>
-	        </TR>	        	        
+	        </TR>
+	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">Tipo:</TH>
+	            <TD class="campoformulario" colspan="3">
+				<?php                        
+				$combo = new select(dominioTpContratoModificacao::getColecao());                        
+				//cria o combo
+				echo $combo->getHtmlCombo(voContratoModificacao::$nmAtrTpModificacao, voContratoModificacao::$nmAtrTpModificacao, $vo->tpModificacao, true, "camponaoobrigatorio", false, " onChange='formataForm();carregaDadosContrato();calcular(this);' required");
+				?>
+				</TD>
+	        </TR>	        	        	        
 			<TR>
 	            <TH class="campoformulario" nowrap>Data:</TH>
 	            <TD class="campoformulario" width=1%>
@@ -291,16 +301,6 @@ function iniciar(){
 	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="<?=constantes::$CD_CLASS_CAMPO_READONLY?>" size="5" readonly>(meses)
 	            </TD>				
         	</TR>
-			<TR>
-	            <TH class="campoformulario" nowrap width="1%">Tipo:</TH>
-	            <TD class="campoformulario" colspan="3">
-				<?php                        
-				$combo = new select(dominioTpContratoModificacao::getColecao());                        
-				//cria o combo
-				echo $combo->getHtmlCombo(voContratoModificacao::$nmAtrTpModificacao, voContratoModificacao::$nmAtrTpModificacao, $vo->tpModificacao, true, "camponaoobrigatorio", false, " onChange='formataForm();carregaDadosContrato();calcular(this);' required");
-				?>
-				</TD>
-	        </TR>
 			<TR>
 	            <TH class="campoformulario" nowrap>Valor Mensal Referencial:</TH>
 	            <TD class="campoformulario" ><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlModificacaoReferencial?>" name="<?=voContratoModificacao::$nmAtrVlModificacaoReferencial?>"  value="<?php echo(getMoeda($vo->vlModificacaoReferencial,4));?>"
