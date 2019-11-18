@@ -1093,8 +1093,16 @@ function getFuncaoJSDetalhar($caminhoPagina=null, $isNovaGuia=false){
 	return $retorno;	
 }
 
-function getTextoHTMLDestacado($texto, $cor="red"){
-	return "<font color='$cor'><b><u>$texto</u></b></font>";
+function getTextoHTMLDestacado($texto, $cor="red", $sublinhado = true){
+	$retorno = $texto;
+	if($sublinhado){
+		$retorno = "<u>$retorno</u>";
+	}
+	$retorno = "<font color='$cor'>".getTextoHTMLNegrito($retorno)."</font>"; 
+	return $retorno;
+}
+function getTextoHTMLSublinhado($texto){
+	return "<u>$texto</u>";
 }
 function getTextoHTMLNegrito($texto){
 	return "<b>$texto</b>";

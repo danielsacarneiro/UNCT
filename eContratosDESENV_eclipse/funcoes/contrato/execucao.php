@@ -197,7 +197,7 @@ function detalhar(isExcluir) {
                     		$numMesesPeriodoAtual = getQtdMesesEntreDatas($voContratoAtual->dtVigenciaInicial, $voContratoAtual->dtVigenciaFinal);
                     	}
                     	
-                    	$tipo = getTextoHTMLDestacado($tipo, dominioTpContratoModificacao::getCorTpModificacao($voAtual->tpModificacao));
+                    	$tipo = getTextoHTMLDestacado($tipo, dominioTpContratoModificacao::getCorTpModificacao($voAtual->tpModificacao), false);
                     	                         
                     ?>
                     <TR class='dados'>
