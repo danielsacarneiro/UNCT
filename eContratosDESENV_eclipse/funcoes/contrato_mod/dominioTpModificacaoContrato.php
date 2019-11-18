@@ -25,6 +25,27 @@ Class dominioTpContratoModificacao extends dominio{
 				self::$CD_TIPO_PRORROGACAO => self::$DS_TIPO_PRORROGACAO,
 				self::$CD_TIPO_REPACTUACAO => self::$DS_TIPO_REPACTUACAO,
 		);
-	}	
+	}
+	/**
+	 * tabela de cores html https://celke.com.br/artigo/tabela-de-cores-html-nome-hexadecimal-rgb
+	 * @param unknown $tipo
+	 * @return string
+	 */
+	static function getCorTpModificacao($tipo) {
+		$cor = "";
+		if ($tipo == static::$CD_TIPO_REAJUSTE) {
+			$cor = "green";
+		} else if ($tipo == static::$CD_TIPO_ACRESCIMO) {
+			$cor = "blue";
+		} else if ($tipo == static::$CD_TIPO_SUPRESSAO) {
+			$cor = "red";
+		} else if ($tipo == static::$CD_TIPO_PRORROGACAO) {
+			$cor = "Chocolate";
+		} else if ($tipo == static::$CD_TIPO_REPACTUACAO) {
+			$cor = "Olive";
+		}
+		
+		return $cor;
+	}
 }
 ?>

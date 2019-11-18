@@ -196,6 +196,8 @@ function detalhar(isExcluir) {
                     	if($isProrrogacao){
                     		$numMesesPeriodoAtual = getQtdMesesEntreDatas($voContratoAtual->dtVigenciaInicial, $voContratoAtual->dtVigenciaFinal);
                     	}
+                    	
+                    	$tipo = getTextoHTMLDestacado($tipo, dominioTpContratoModificacao::getCorTpModificacao($voAtual->tpModificacao));
                     	                         
                     ?>
                     <TR class='dados'>
@@ -204,13 +206,13 @@ function detalhar(isExcluir) {
                         </TD>                        
                         <TD class='tabeladados' nowrap><?php echo $especie?></TD>
                         <TD class='tabeladados'><?php echo $tipo?></TD>
-                        <TD class='tabeladados'><?php echo $percentual?></TD>
+                        <TD class='tabeladados'><?php echo getTextoHTMLNegrito($percentual)?></TD>
                         <TD class='tabeladados'><?php echo getData($voAtual->dtModificacao)?></TD>
                         <TD class='tabeladados'><?php echo getData($voAtual->dtModificacaoFim)?></TD>
                         <TD class='tabeladadosalinhadodireita'><?php echo $voAtual->numMesesParaOFimdoPeriodo?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($voAtual->vlModificacaoReferencial)?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($voAtual->vlModificacaoReal)?></TD>
-                        <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($vlLicon)?></TD>
+                        <TD class='tabeladadosalinhadodireita' ><?php echo getTextoHTMLNegrito(getMoeda($vlLicon))?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo $voContratoAtual->vlMensal?></TD>                    
                         <TD class='tabeladadosalinhadodireita' ><?php echo getTextoHTMLNegrito(getMoeda($vlMensalAtual))?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo $voContratoAtual->vlGlobal?></TD>                    
