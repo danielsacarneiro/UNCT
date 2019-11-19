@@ -318,8 +318,9 @@ function movimentacoes(){
                     <TH class="headertabeladados" width="1%" nowrap>Ano</TH>
                     <TH class="headertabeladados" width="1%">Num.</TH>
                     <TH class="headertabeladados" width="1%">Tipo</TH>
-                    <TH class="headertabeladados" width="80%">Contratada</TH>
+                    <TH class="headertabeladados" width="60%">Contratada</TH>
                     <TH class="headertabeladados" width="1%">CNPJ/CNPF</TH>
+                    <TH class="headertabeladados" width="20%">Gestor</TH>
                     <TH class="headertabeladados" width="1%">Proposta</TH>                    
                     <TH class="headertabeladados" width="1%">Dt.Início</TH>
                     <TH class="headertabeladados" width="1%">Dt.Fim</TH>
@@ -331,7 +332,7 @@ function movimentacoes(){
                 else 
                         $tamanho = 0;                                
                                 
-                $colspan=10;
+                $colspan=11;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -355,6 +356,8 @@ function movimentacoes(){
                         if($dsPessoa == null){
                         	$dsPessoa = "<B>CONTRATO NÃO INCLUÍDO NA PLANILHA</B>";
                         }
+                        
+                        $gestor = $colecao[$i][vocontrato::$nmAtrGestorContrato];
                    ?>
                 <TR class="dados">
                     <TD class="tabeladados">
@@ -370,8 +373,9 @@ function movimentacoes(){
                     <TD class="tabeladadosalinhadodireita"><?php echo $voAtual->anoContrato;?></TD>
                     <TD class="tabeladadosalinhadodireita" ><?php echo complementarCharAEsquerda($voAtual->cdContrato, "0", TAMANHO_CODIGOS_SAFI)?></TD>
                     <TD class="tabeladados" nowrap><?php echo $tipo?></TD>
-					<TD class="tabeladados" nowrap><?php echo $dsPessoa?></TD>
+					<TD class="tabeladados" ><?php echo $dsPessoa?></TD>
 					<TD class="tabeladados" nowrap><?php echo documentoPessoa::getNumeroDocFormatado($voPessoa->doc)?></TD>
+					<TD class="tabeladados" ><?php echo $gestor?></TD>
 					<TD class="tabeladados" nowrap><?php echo getData($voAtual->dtProposta)?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($colecao[$i][filtroConsultarContratoConsolidacao::$NmColDtInicioVigencia])?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($colecao[$i][filtroConsultarContratoConsolidacao::$NmColDtFimVigencia])?></TD>

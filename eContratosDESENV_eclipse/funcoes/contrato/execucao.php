@@ -147,8 +147,8 @@ function detalhar(isExcluir) {
                     $colecaoMov = $dbContratoMod->consultarExecucaoValorGlobalReferencial($voContrato);
                     if (is_array($colecaoMov))
                     	$tamanho = sizeof($colecaoMov);
-                    	else
-                    		$tamanho = 0;
+                    else
+                    	$tamanho = 0;
                     	
                     //var_dump($colecaoMov);
                     
@@ -179,7 +179,8 @@ function detalhar(isExcluir) {
                         $vlGlobalReal = $vlGlobalAtual;                      
                         
                         if($numMesesPeriodoAtual != null){                        	
-                    		$vlGlobalSeProrrogado = $numMesesPeriodoAtual*$vlMensalAtual;                    		
+                    		$vlGlobalSeProrrogado = $numMesesPeriodoAtual*$vlMensalAtual;
+                    		//echo "$especie $vlGlobalSeProrrogado| $vlMensalAtual <br>";
                     	}
 
                     	//reajuste NAO muda o valor global referencia para fins de valores no licon
@@ -193,8 +194,12 @@ function detalhar(isExcluir) {
                     	}
                     	                    	
                     	$isProrrogacao = $voAtual->tpModificacao == dominioTpContratoModificacao::$CD_TIPO_PRORROGACAO;
-                    	if($isProrrogacao){
+                    	if($isProrrogacao){                   		
+                    		//$numMesesPeriodoAtual = getQtdMesesEntreDatas($voAtual->dtModificacao, $voAtual->dtModificacaoFim);
                     		$numMesesPeriodoAtual = getQtdMesesEntreDatas($voContratoAtual->dtVigenciaInicial, $voContratoAtual->dtVigenciaFinal);
+                    		//$numMesesPeriodoAtual = $voAtual->numMesesParaOFimdoPeriodo;
+                    		/*echo "$especie $voContratoAtual->dtVigenciaInicial | $voContratoAtual->dtVigenciaFinal<br>";
+                    		echo "numMEs $numMesesPeriodoAtual <br>";*/
                     	}
                     	
                     	$tipo = getTextoHTMLDestacado($tipo, dominioTpContratoModificacao::getCorTpModificacao($voAtual->tpModificacao), false);

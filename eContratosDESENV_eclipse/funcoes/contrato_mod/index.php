@@ -263,11 +263,9 @@ function montarChaveContrato(){
                     <TH class="headertabeladados" width="50%">Contratada</TH>                    
 					<TH class="headertabeladados" width="1%" nowrap>Tipo</TH>
 					<TH class="headertabeladados" width="1%" nowrap>Índice</TH>
-					<TH class="headertabeladados" width="1%" nowrap>Valor.Ref</TH>
-					<TH class="headertabeladados" width="1%" nowrap>Vl.LICON</TH>					
+					<TH class="headertabeladados" width="1%" nowrap>Valor.Ref</TH>					
 					<TH class="headertabeladados" width="1%" nowrap>Mensal.Atual</TH>
 					<TH class="headertabeladados" width="1%" nowrap>Global.Atual</TH>
-					<TH class="headertabeladados" width="1%" nowrap>Vl.Empenhar</TH>
 					<TH class="headertabeladados" width="1%" nowrap>Vl.Referência</TH>
 					<TH class="headertabeladados" width="1%" nowrap>%.Contrato</TH>
 					<TH class="headertabeladados" width="1%" nowrap>Dt.Início</TH>
@@ -282,7 +280,7 @@ function montarChaveContrato(){
                         $tamanho = 0;
                 
                 //echoo($tamanho);                                
-                $colspan=18;
+                $colspan=17;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -381,15 +379,8 @@ function montarChaveContrato(){
                     <TD class="tabeladados" nowrap><?php echo $tipoModificacao?></TD>
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->numPercentual)?>%</TD>
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlModificacaoReferencial,2)?></TD>
-					<TD class="tabeladadosalinhadodireita" nowrap>
-					<?php 
-					//echo getMoeda($voAtual->vlModificacaoReal);					
-					echo getMoeda($voAtual->vlModificacaoReal);
-					?>
-					</TD>
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlMensalAtual)?></TD>                    
-                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlGlobalAtual)?></TD>
-                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($vlAEmpenhar)?></TD>                    
+                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlGlobalAtual)?></TD>                    
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlGlobalModAtual)?></TD>                    
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo $percAcrescimo?></TD>
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getData($voAtual->dtModificacao)?></TD>
