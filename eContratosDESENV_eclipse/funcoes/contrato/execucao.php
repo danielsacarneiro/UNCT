@@ -97,7 +97,7 @@ function detalhar(isExcluir) {
        	$complementoDet .= " Global: " . getInputText("", "", $voContrato->vlGlobal, constantes::$CD_CLASS_CAMPO_READONLY);
        	$isEscopo = $voContratoInfo->inEscopo;
        	if($isEscopo == "S"){
-       		$complementoDet .= getTextoHTMLNegrito(" Contrato por escopo!");
+       		$complementoDet .= " ".getTextoHTMLDestacado("Contrato por escopo!", "red", false);
        	}
        	
         $arrayParametro[0] = $voContrato;
