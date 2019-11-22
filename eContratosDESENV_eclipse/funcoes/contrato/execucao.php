@@ -192,7 +192,12 @@ function detalhar(isExcluir) {
                     		|| $voAtual->tpModificacao == dominioTpContratoModificacao::$CD_TIPO_REPACTUACAO;
                     	
                     	if(!$isReajuste){
-                    		$vlLicon = $voAtual->vlModificacaoReferencial*$numMesesPeriodoAtual;
+                    		$vlLicon = $voAtual->vlModificacaoReferencial*$numMesesPeriodoAtual;                    		
+                    		if($isEscopo){
+                    			//se por escopo, valor licon eh igual ao valor por "prazo restante"
+                    			$vlLicon = $voAtual->vlModificacaoReal;
+                    		}
+                    		
                     	}else{
                     		$vlLicon = 0;
                     	}
