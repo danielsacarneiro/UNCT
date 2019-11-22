@@ -8,6 +8,7 @@ class dbContratoModificacao extends dbprocesso {
 	function consultarPorChaveTela($vo, $isHistorico) {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
+		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
 		$nmTabContratoMATER = filtroManterContratoModificacao::$NmTabContratoMATER;
 	
@@ -22,6 +23,7 @@ class dbContratoModificacao extends dbprocesso {
 				$nmTabelaContrato . "." . vocontrato::$nmAtrDtPublicacaoContrato,
 				$nmTabelaContrato . "." . vocontrato::$nmAtrDtVigenciaInicialContrato,
 				$nmTabelaContrato . "." . vocontrato::$nmAtrDtVigenciaFinalContrato,
+				$nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrInEscopo,
 				$nmTabContratoMATER . "." . vocontrato::$nmAtrDtVigenciaInicialContrato,
 				$nmTabContratoMATER . "." . vocontrato::$nmAtrDtVigenciaFinalContrato,
 				getSQLCOALESCE ( $colecaoAtributoCoalesceNmPessoa, vopessoa::$nmAtrNome )
@@ -34,6 +36,14 @@ class dbContratoModificacao extends dbprocesso {
 		$queryJoin .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabela . "." . voContratoLicon::$nmAtrTipoContrato;
 		$queryJoin .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrCdEspecieContrato . "=" . $nmTabela . "." . voContratoLicon::$nmAtrCdEspecieContrato;
 		$queryJoin .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato . "=" . $nmTabela . "." . voContratoLicon::$nmAtrSqEspecieContrato;
+		
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaContratoInfo;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrCdContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrAnoContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrTipoContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato;		
 	
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoaContrato;
 		$queryJoin .= "\n ON ";

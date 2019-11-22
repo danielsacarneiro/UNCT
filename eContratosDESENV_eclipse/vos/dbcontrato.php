@@ -225,6 +225,7 @@ class dbcontrato extends dbprocesso {
 		$arrayColunasRetornadas = array (
 				$nmTabela . ".*",
 				"$nmTabelaContratoInfo." . voContratoInfo::$nmAtrDtProposta,
+				"$nmTabelaContratoInfo." . voContratoInfo::$nmAtrInEscopo,
 				"$nmTabelaPregoeiro." . vopessoa::$nmAtrNome . " AS " . voProcLicitatorio::$NmColNomePregoeiro,
 				"TAB2." . vousuario::$nmAtrName . " AS " . voentidade::$nmAtrNmUsuarioUltAlteracao,
 		);		

@@ -95,6 +95,10 @@ function detalhar(isExcluir) {
        	$complementoDet .= ", " . getTextoHTMLNegrito(getQtdMesesEntreDatas($voContrato->dtVigenciaInicial, $voContrato->dtVigenciaFinal)) . " meses";
        	$complementoDet .= "<br>Valor MATER: Mensal " . getInputText("", "", $voContrato->vlMensal, constantes::$CD_CLASS_CAMPO_READONLY);
        	$complementoDet .= " Global: " . getInputText("", "", $voContrato->vlGlobal, constantes::$CD_CLASS_CAMPO_READONLY);
+       	$isEscopo = $voContratoInfo->inEscopo;
+       	if($isEscopo == "S"){
+       		$complementoDet .= getTextoHTMLNegrito(" Contrato por escopo!");
+       	}
        	
         $arrayParametro[0] = $voContrato;
         $arrayParametro[1] = $colecao;

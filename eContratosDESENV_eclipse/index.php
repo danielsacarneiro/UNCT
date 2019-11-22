@@ -165,10 +165,10 @@ setCabecalho($titulo);
                     				echo imprimeBotaoDocumento($vodocumento, "Manual Publicação CEPE.DOE.");
                     				
                     				$vodocumento = new voDocumento(array(2019, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_OUTROS, 192));
-                    				echo imprimeBotaoDocumento($vodocumento, "Orientações publicação CONTRATOS PORTAL DA TRANSPARÊNCIA.");
+                    				echo imprimeBotaoDocumento($vodocumento, "Publicação CONTRATOS PORTAL DA TRANSPARÊNCIA.");
                     				
                     				$vodocumento = new voDocumento(array(2019, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_OUTROS, 21));
-                    				echo imprimeBotaoDocumento($vodocumento, "Orientações publicação CONVÊNIOS PORTAL DA TRANSPARÊNCIA.");
+                    				echo imprimeBotaoDocumento($vodocumento, "Publicação CONVÊNIOS PORTAL DA TRANSPARÊNCIA.");
                     				?>
                     				<TR>
                         				<TD class="tabeladadosdestacadonegrito">PROCESSOS:
