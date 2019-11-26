@@ -212,6 +212,8 @@ function detalhar(isExcluir) {
                     	}
                     	
                     	$tipo = getTextoHTMLDestacado($tipo, dominioTpContratoModificacao::getCorTpModificacao($voAtual->tpModificacao), false);
+                    	$numMesesTela = $voAtual->numMesesParaOFimdoPeriodo;                    	
+                    	$numMesesTela = getTextoHTMLDestacado($numMesesTela, dominioTpContratoModificacao::getCorTpModificacao($voAtual->tpModificacao), false);
                     	                         
                     ?>
                     <TR class='dados'>
@@ -223,7 +225,7 @@ function detalhar(isExcluir) {
                         <TD class='tabeladados'><?php echo getTextoHTMLNegrito($percentual)?></TD>
                         <TD class='tabeladados'><?php echo getData($voAtual->dtModificacao)?></TD>
                         <TD class='tabeladados'><?php echo getData($voAtual->dtModificacaoFim)?></TD>
-                        <TD class='tabeladadosalinhadodireita'><?php echo $voAtual->numMesesParaOFimdoPeriodo?></TD>
+                        <TD class='tabeladadosalinhadodireita'><?php echo $numMesesTela?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($voAtual->vlModificacaoReferencial)?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($voAtual->vlModificacaoReal)?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo getTextoHTMLNegrito(getMoeda($vlLicon))?></TD>
