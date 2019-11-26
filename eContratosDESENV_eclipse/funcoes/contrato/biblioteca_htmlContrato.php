@@ -144,26 +144,28 @@ function getContratoDetalhamentoParam($arrayParametro) {
 			;			
 		}
 		
-		$vlPercentualAcrescimo = getValorNumPercentualAcrescimoContrato(clone $voContrato);
-		$vlPercentualSupressao = getValorNumPercentualAcrescimoContrato(clone $voContrato, true);
-		//if($vlPercentualAcrescimo != 0){
-			echo getTextoHTMLNegrito(" Acréscimo: " . getMoeda($vlPercentualAcrescimo, 2) . "%");
-			echo getTextoHTMLNegrito(" |Supressão: " . getMoeda($vlPercentualSupressao, 2) . "%");
-		//}
-		
 		$nmPaginaChamada = $_SERVER['PHP_SELF'];
 		$temExecucaoPraMostrar = existeContratoMod(clone($voContrato));
-		if($temExecucaoPraMostrar && !existeStr1NaStr2("execucao.php", $nmPaginaChamada)){
-		//if(!existeStr1NaStr2("execucao.php", $nmPaginaChamada)){
-			$chaveContratoExecucao = $voContrato->anoContrato
-			. constantes::$CD_CAMPO_SEPARADOR
-			. $voContrato->cdContrato
-			. constantes::$CD_CAMPO_SEPARADOR
-			. $voContrato->tipo
-			. constantes::$CD_CAMPO_SEPARADOR
-			. "1";
-			echo getTextoLink("Execução", "../contrato/execucao.php?chave=$chaveContratoExecucao", null, true);
+		if($temExecucaoPraMostrar){
+			$vlPercentualAcrescimo = getValorNumPercentualAcrescimoContrato(clone $voContrato);
+			$vlPercentualSupressao = getValorNumPercentualAcrescimoContrato(clone $voContrato, true);
+
+			echo getTextoHTMLNegrito(" Acréscimo: " . getMoeda($vlPercentualAcrescimo, 2) . "%");
+			echo getTextoHTMLNegrito(" |Supressão: " . getMoeda(abs($vlPercentualSupressao), 2) . "%");
+			
+			if(!existeStr1NaStr2("execucao.php", $nmPaginaChamada)){
+				//if(!existeStr1NaStr2("execucao.php", $nmPaginaChamada)){
+				$chaveContratoExecucao = $voContrato->anoContrato
+				. constantes::$CD_CAMPO_SEPARADOR
+				. $voContrato->cdContrato
+				. constantes::$CD_CAMPO_SEPARADOR
+				. $voContrato->tipo
+				. constantes::$CD_CAMPO_SEPARADOR
+				. "1";
+				echo getTextoLink("Execução", "../contrato/execucao.php?chave=$chaveContratoExecucao", null, true);
+			}
 		}
+		
 		
 		?>							
 		<div id=""><?=$campoContratado?></div>
