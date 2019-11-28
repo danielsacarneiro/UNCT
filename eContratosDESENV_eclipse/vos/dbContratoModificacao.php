@@ -109,7 +109,8 @@ class dbContratoModificacao extends dbprocesso {
 				$nmTabContratoMATER . "." . vocontrato::$nmAtrVlMensalContrato . " AS " . filtroManterContratoModificacao::$NmColVlMensalMater,
 				$nmTabContratoMATER . "." . vocontrato::$nmAtrVlGlobalContrato . " AS " . filtroManterContratoModificacao::$NmColVlGlobalMater,
 				// $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
-				getSQLCOALESCE ( $colecaoAtributoCoalesceNmPessoa, vopessoa::$nmAtrNome ) 
+				getSQLCOALESCE ( $colecaoAtributoCoalesceNmPessoa, vopessoa::$nmAtrNome ),
+				vousuario::$nmAtrName
 		);
 		
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaContrato;

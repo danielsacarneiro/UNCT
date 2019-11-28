@@ -117,18 +117,24 @@ class dbprocesso {
 			$queryFrom .= "\n LEFT JOIN " . vousuario::$nmEntidade;
 			$queryFrom .= "\n " . self::$nmTabelaUsuarioInclusao . " ON ";
 			$queryFrom .= self::$nmTabelaUsuarioInclusao . "." . vousuario::$nmAtrID . "=" . $nmTabelaACompararCdUsuario . "." . voentidade::$nmAtrCdUsuarioInclusao;
+			
+			//echoo("temusuinclusao");
 		}
 		
 		if ($temUsuUltAlteracao) {
 			$queryFrom .= "\n LEFT JOIN " . vousuario::$nmEntidade;
 			$queryFrom .= "\n " . self::$nmTabelaUsuarioUltAlteracao . " ON ";
 			$queryFrom .= self::$nmTabelaUsuarioUltAlteracao . "." . vousuario::$nmAtrID . "=" . $nmTabelaACompararCdUsuario . "." . voentidade::$nmAtrCdUsuarioUltAlteracao;
+			
+			//echoo("temusualteracao");
 		}
 		
 		if ($temUsuHistorico) {
 			$queryFrom .= "\n LEFT JOIN " . vousuario::$nmEntidade;
 			$queryFrom .= "\n " . self::$nmTabelaUsuarioOperacao . " ON ";
 			$queryFrom .= self::$nmTabelaUsuarioOperacao . "." . vousuario::$nmAtrID . "=" . $nmTabelaACompararCdUsuario . "." . voentidade::$nmAtrCdUsuarioOperacao;
+			
+			//echoo("temusuHistorico");
 		}
 		
 		return $queryFrom;

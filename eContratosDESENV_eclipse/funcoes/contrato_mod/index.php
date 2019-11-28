@@ -271,7 +271,8 @@ function montarChaveContrato(){
 					<TH class="headertabeladados" width="1%" nowrap>Dt.Início</TH>
 					<TH class="headertabeladados" width="1%" nowrap>Dt.Fim</TH>
 					<TH class="headertabeladados" width="1%" nowrap>Dt.Assinatura</TH>					
-                    <TH class="headertabeladados" width="1%" nowrap>Dt.Registro</TH>                    
+                    <TH class="headertabeladados" width="1%" nowrap>Dt.Registro</TH>
+                    <TH class="headertabeladados" width="1%" nowrap>Usu.Registro</TH>
                 </TR>
                 <?php								
                 if (is_array($colecao))
@@ -280,7 +281,7 @@ function montarChaveContrato(){
                         $tamanho = 0;
                 
                 //echoo($tamanho);                                
-                $colspan=17;
+                $colspan=18;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -357,6 +358,8 @@ function montarChaveContrato(){
                         
                         $vlConsolidadoRef = $vlConsolidadoRef + floatval($voAtual->vlModificacaoReferencial);
                         $vlConsolidadoMod = $vlConsolidadoMod + floatval($voAtual->vlModificacaoReal);
+                        
+                        $nmUsuario = $registroBanco[vousuario::$nmAtrName];
                    ?>
                 <TR class="dados">
                     <TD class="tabeladados">					
@@ -387,6 +390,7 @@ function montarChaveContrato(){
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getData($voAtual->dtModificacaoFim)?></TD>
 					<TD class="tabeladadosalinhadodireita" nowrap><?php echo getData($vocontrato->dtAssinatura)?></TD>                    
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getDataHora($voAtual->dhUltAlteracao)?></TD>                    
+                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo $nmUsuario?></TD>
                 </TR>					
                 <?php
 				}
