@@ -148,16 +148,23 @@ class dbContratoModificacao extends dbprocesso {
 	}
 	
 	function validarInclusao($vo) {
-		// verifica se o contrato ja foi adicionado a planilha
-		$vocontratoTemp = new vocontrato ();
 		$vocontratoTemp = $vo->vocontrato;
+		/*
+		// verifica se o contrato ja foi adicionado a planilha		
 		$dbcontrato = new dbcontrato ();
 		try {
 			$vocontratoTemp = $dbcontrato->consultarPorChaveVO ( $vocontratoTemp, false );
 		} catch ( excecaoChaveRegistroInexistente $ex ) {
 			throw new excecaoChaveRegistroInexistente ( "Contrato selecionado: " . $vocontratoTemp->getCodigoContratoFormatado ( true ) . " não existe na planilha.", $ex );
-		}
-		
+		}*/
+				
+		$vocontratoinfo = voContratoInfo::getVOContratoInfoDeUmVoContrato($vocontratoTemp);
+		$vocontratoinfo = $vocontratoinfo->dbprocesso->consultarPorChaveVO($vocontratoinfo);
+		//$vocontratoinfo = new voContratoInfo();
+		if($vocontratoinfo->inEscopo == null){
+			throw new excecaoGenerica("Informação 'contrato por escopo' inexistente. Requer seja informada no cadastro do contrato em 'Informações Adicionais'.");
+		}		
+	
 		/*
 		 * $registro = $this->getRegistroDataTermoComDataPosterior($vo);
 		 * $termo = new voContratoModificacao();
@@ -236,7 +243,7 @@ class dbContratoModificacao extends dbprocesso {
 	 * }
 	 */
 	function incluir($vo) {
-		$this->validarInclusao ( $vo );		
+		$this->validarInclusao ( $vo );
 		$this->cDb->retiraAutoCommit ();		
 		$retorno = $vo;
 		try {

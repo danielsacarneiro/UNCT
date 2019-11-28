@@ -812,10 +812,17 @@ function getCamposContratoMod($vo, $arrayParamComplemento = null){
 		$retorno .= " Valor Global Termo: " . getInputText(voContratoModificacao::$ID_REQ_VlGlobalContratoInseridoTela, voContratoModificacao::$ID_REQ_VlGlobalContratoInseridoTela, $vlGlobalTermoInseridoTela, constantes::$CD_CLASS_CAMPO_READONLY);
 		$retorno .= " Valor Global Referência (%Acréscimos): " . getInputText(voContratoModificacao::$nmAtrVlGlobalModAtual, voContratoModificacao::$nmAtrVlGlobalModAtual, $vlGlobalAtualizadoParaFinsMod, constantes::$CD_CLASS_CAMPO_READONLY);
 		
-		if($isContratoPorEscopo){
-			$retorno .= "<br>". getTextoHTMLNegrito("Contrato por Escopo (incluir valor adicional/suprimido em 'Valor Modificação ao Contrato')");
+		$textoContratoEscopo = "Informação 'Contrato por Escopo' inexistente";
+		if($inEscopo != null){
+			if($isContratoPorEscopo){
+				$textoContratoEscopo = "Contrato por Escopo (incluir valor adicional/suprimido em 'Valor Modificação ao Contrato')";				
+			}else{
+				$textoContratoEscopo = "NÃO É Contrato por Escopo";
+			}
 			$retorno .= getInputHidden(voContratoInfo::$nmAtrInEscopo, voContratoInfo::$nmAtrInEscopo, $inEscopo);
 		}
+		
+		$retorno .= "<br>". getTextoHTMLDestacado($textoContratoEscopo, "red");
 	}
 
 	return $retorno;
