@@ -742,8 +742,6 @@ function getCamposContratoMod($vo, $arrayParamComplemento = null){
 	$registroMater = getContratoMater($vo)[0];
 	$voContratoMater = new vocontrato();
 	$voContratoMater->getDadosBanco($registroMater);
-	$inEscopo = $registroMater[voContratoInfo::$nmAtrInEscopo];
-	$isContratoPorEscopo =  $inEscopo == constantes::$CD_SIM; 
 	//var_dump($registrobanco);
 	
 	$vlMensalAtualizadoParaFinsMod = getMoeda($registrobanco[voContratoModificacao::$nmAtrVlMensalModAtual]); 
@@ -812,20 +810,32 @@ function getCamposContratoMod($vo, $arrayParamComplemento = null){
 		$retorno .= " Valor Global Termo: " . getInputText(voContratoModificacao::$ID_REQ_VlGlobalContratoInseridoTela, voContratoModificacao::$ID_REQ_VlGlobalContratoInseridoTela, $vlGlobalTermoInseridoTela, constantes::$CD_CLASS_CAMPO_READONLY);
 		$retorno .= " Valor Global Referência (%Acréscimos): " . getInputText(voContratoModificacao::$nmAtrVlGlobalModAtual, voContratoModificacao::$nmAtrVlGlobalModAtual, $vlGlobalAtualizadoParaFinsMod, constantes::$CD_CLASS_CAMPO_READONLY);
 		
-		$textoContratoEscopo = "Informação 'Contrato por Escopo' inexistente";
-		if($inEscopo != null){
-			if($isContratoPorEscopo){
-				$textoContratoEscopo = "Contrato por Escopo (incluir valor adicional/suprimido em 'Valor Modificação ao Contrato')";				
-			}else{
-				$textoContratoEscopo = "NÃO É Contrato por Escopo";
-			}
-			$retorno .= getInputHidden(voContratoInfo::$nmAtrInEscopo, voContratoInfo::$nmAtrInEscopo, $inEscopo);
-		}
 		
-		$retorno .= "<br>". getTextoHTMLDestacado($textoContratoEscopo, "red");
+		//coloca informacao sobre escopo
+		$voContratoInfoTemp = new voContratoInfo(); 
+		$voContratoInfoTemp->getDadosBanco($registroMater);
+		$retorno .= getHTMLContratoPorEscopo($voContratoInfoTemp);
 	}
 
 	return $retorno;
+}
+
+function getHTMLContratoPorEscopo($vocontratoinfo){
+	$inEscopo = $vocontratoinfo->inEscopo;
+	$isContratoPorEscopo =  $inEscopo == constantes::$CD_SIM;
+	
+	$textoContratoEscopo = "Informação 'Contrato por Escopo' inexistente";
+	if($inEscopo != null){
+		if($isContratoPorEscopo){
+			$textoContratoEscopo = "Contrato por Escopo (incluir valor adicional/suprimido em 'Valor Modificação ao Contrato')";
+		}else{
+			$textoContratoEscopo = "NÃO É Contrato por Escopo";
+		}
+		$retorno .= getInputHidden(voContratoInfo::$nmAtrInEscopo, voContratoInfo::$nmAtrInEscopo, $inEscopo);
+	}
+	
+	$retorno .= "<br>". getTextoHTMLDestacado($textoContratoEscopo, "red");
+	return $retorno;	
 }
 
 function getCamposContratoLicon($recordSet){
