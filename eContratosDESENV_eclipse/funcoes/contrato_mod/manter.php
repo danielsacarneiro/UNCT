@@ -273,7 +273,7 @@ function iniciar(){
 				</TD>
 	        </TR>	        	        	        
 			<TR>
-	            <TH class="campoformulario" nowrap>Data:</TH>
+	            <TH class="campoformulario" nowrap>Data início dos efeitos:</TH>
 	            <TD class="campoformulario" width=1%>
 	            	<INPUT type="text" 
 	            	       id="<?=voContratoModificacao::$nmAtrDtModificacao?>" 
