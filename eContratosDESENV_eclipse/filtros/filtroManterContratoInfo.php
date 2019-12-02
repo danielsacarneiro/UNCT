@@ -179,11 +179,13 @@ class filtroManterContratoInfo extends filtroManter {
 	}
 	 
 	function getAtributosOrdenacao() {
+		$nmTabela = voContratoInfo::getNmTabelaStatic($this->isHistorico);
+		
 		$varAtributos = array (
 				voContratoInfo::$nmAtrAnoContrato => "Ano",
 				voContratoInfo::$nmAtrCdContrato => "Número",
 				voContratoInfo::$nmAtrTipoContrato => "Tipo",
-				voContratoInfo::$nmAtrDhUltAlteracao => "Data Alteração"
+				"$nmTabela." . voContratoInfo::$nmAtrDhUltAlteracao => "Data Alteração"
 		);
 		return $varAtributos;
 	}
