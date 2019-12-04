@@ -204,8 +204,15 @@ function transferirDadosPessoa(cd, nm) {
 	            			maxlength="10"
 	            			required>
 				</TD>
+	        </TR>	        
+	        <?php 	        
+	        $comboProrrogacao = new select(dominioProrrogacaoContrato::getColecao());
+	        ?>
+			<TR>
+	            <TH class="campoformulario" nowrap width="1%">Prorrogacação:</TH>
+	            <TD class="campoformulario" colspan="3"><?php echo $comboProrrogacao->getHtmlCombo(voContratoInfo::$nmAtrInPrazoProrrogacao,voContratoInfo::$nmAtrInPrazoProrrogacao, $vo->inPrazoProrrogacao, true, "campoobrigatorio", false,"");?>
+	            </TD>
 	        </TR>
-	        
 	        <?php	        
 	        include_once(caminho_funcoes. "contrato/dominioTpGarantiaContrato.php");
 	        $comboGarantia = new select(dominioTpGarantiaContrato::getColecao());
@@ -246,6 +253,7 @@ function transferirDadosPessoa(cd, nm) {
 		            	"<?=voContratoInfo::$nmAtrInMaoDeObra?>",
 		            	"<?=voContratoInfo::$nmAtrDtProposta?>",
 		            	"<?=voContratoInfo::$nmAtrDtBaseReajuste?>",
+		            	"<?=voContratoInfo::$nmAtrInPrazoProrrogacao?>",
 	            		"<?=voContratoInfo::$nmAtrInTemGarantia?>",
 	            		"<?=voContratoInfo::$nmAtrTpGarantia?>"];
 	            </SCRIPT>

@@ -688,6 +688,30 @@ function getContratoMater($vocontrato){
 	
 }
 
+/**
+ * retorna a consulta de consolidacao de um contrato especifico
+ * @param unknown $vocontrato
+ * @throws excecaoChaveRegistroInexistente
+ * @return unknown|string
+ */
+function getContratoConsolidacao($vocontrato){
+	//$vocontrato = new vocontrato();
+	$filtro = new filtroConsultarContratoConsolidacao();
+	$filtro->tipo = $vocontrato->tipo;
+	$filtro->cdContrato = $vocontrato->cdContrato;
+	$filtro->anoContrato = $vocontrato->anoContrato;
+
+	$db = new dbContratoInfo();
+	$recordset = $db->consultarTelaConsultaConsolidacao($filtro);
+	if(isColecaoVazia($recordset)){
+		throw new excecaoChaveRegistroInexistente("BiblioHtmlContrato. getContratoConsolidacao.");
+		throw new excecaoChaveRegistroInexistente("BiblioHtmlContrato. " . __FUNCTION__);		
+	}
+
+	return $recordset;
+	//var_dump($recordset);
+}
+
 function getContratoVigentePorData($vocontrato, $pData = null, $isTpVigenciaMAxSq=false){
 	//$vocontrato = new vocontrato();	
 	$filtro = new filtroManterContrato();

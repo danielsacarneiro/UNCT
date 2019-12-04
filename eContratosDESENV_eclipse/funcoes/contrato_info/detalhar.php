@@ -166,6 +166,11 @@ function confirmar() {
 	            			readonly>
 				</TD>
 	        </TR>
+			<TR>
+	            <TH class="campoformulario" nowrap width="1%">Prorrogacação:</TH>
+	            <TD class="campoformulario" colspan="3"><?php echo dominioProrrogacaoContrato::getHtmlDetalhamento(voContratoInfo::$nmAtrInPrazoProrrogacao,voContratoInfo::$nmAtrInPrazoProrrogacao, $vo->inPrazoProrrogacao);?>
+	            </TD>
+	        </TR>
 	        <?php	        
 	        include_once(caminho_funcoes. "contrato/dominioTpGarantiaContrato.php");
 	        $comboGarantia = new select(dominioTpGarantiaContrato::getColecao());

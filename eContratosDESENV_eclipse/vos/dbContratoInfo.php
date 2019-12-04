@@ -175,6 +175,14 @@ class dbContratoInfo extends dbprocesso {
 				. " AS " . vocontrato::$nmAtrDtVigenciaFinalContrato,				
 								
 				getDataSQLDiferencaDias(getVarComoDataSQL(getDataHoje()), $nmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato) . " AS " . filtroConsultarContratoConsolidacao::$NmColQtdDiasParaVencimento,
+				filtroConsultarContratoConsolidacao::getSQLQtdAnosVigenciaContrato() . " AS " . filtroConsultarContratoConsolidacao::$NmColPeriodoEmAnos,
+				
+				/*getSQLCASE("$nmTabelaContratoInfo." . voContratoInfo::$nmAtrInPrazoProrrogacao
+						, " NOT NULL "
+						, filtroConsultarContratoConsolidacao::getSQLComparacaoPrazoProrrogacao(dominioProrrogacaoFiltroConsolidacao::$CD_PRORROGAVEL) 
+						, "NULL") . " AS " . filtroConsultarContratoConsolidacao::$NmColInProrrogavel,*/
+				filtroConsultarContratoConsolidacao::getSQLComparacaoPrazoProrrogacao(dominioProrrogacaoFiltroConsolidacao::$CD_PRORROGAVEL) . " AS " . filtroConsultarContratoConsolidacao::$NmColInProrrogavel, 
+				filtroConsultarContratoConsolidacao::getSQLComparacaoPrazoProrrogacao(dominioProrrogacaoFiltroConsolidacao::$CD_PERMITE_EXCEPCIONAL) . " AS " . filtroConsultarContratoConsolidacao::$NmColInProrrogacaoExcepcional,
 				
 				$nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrDtProposta,
 				$filtro->getSqlAtributoCoalesceAutorizacao() . " AS " . filtroManterContratoInfo::$NmColAutorizacao,
@@ -332,7 +340,8 @@ class dbContratoInfo extends dbprocesso {
 		$retorno .= $this->getVarComoNumero($vo->cdClassificacao) . ",";
 		$retorno .= $this->getVarComoString( $vo->inMaoDeObra ) . ",";
 		$retorno .= $this->getVarComoNumero($vo->cdPessoaGestor) . ",";
-		$retorno .= $this->getVarComoString($vo->inEscopo);
+		$retorno .= $this->getVarComoString($vo->inEscopo) . ",";
+		$retorno .= $this->getVarComoNumero($vo->inPrazoProrrogacao);
 		
 		$retorno .= $vo->getSQLValuesInsertEntidade ();
 		
@@ -403,6 +412,14 @@ class dbContratoInfo extends dbprocesso {
 			$retorno .= $sqlConector . voContratoInfo::$nmAtrInEscopo . " = null ";
 			$sqlConector = ",";
 		}
+		
+		if ($vo->inPrazoProrrogacao != null) {
+			$retorno .= $sqlConector . voContratoInfo::$nmAtrInPrazoProrrogacao . " = " . $this->getVarComoNumero($vo->inPrazoProrrogacao);
+			$sqlConector = ",";
+		}else{
+			$retorno .= $sqlConector . voContratoInfo::$nmAtrInPrazoProrrogacao . " = null ";
+			$sqlConector = ",";
+		}		
 		
 		$retorno = $retorno . $vo->getSQLValuesEntidadeUpdate ();
 		

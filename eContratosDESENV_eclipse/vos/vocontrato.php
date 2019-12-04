@@ -10,6 +10,8 @@ include_once (caminho_util."bibliotecaFuncoesPrincipal.php");
 include_once(caminho_funcoes. "contrato/dominioAutorizacao.php");
 include_once(caminho_funcoes. "contrato/dominioEspeciesContrato.php");
 include_once(caminho_funcoes. "contrato/dominioClassificacaoContrato.php");
+include_once(caminho_funcoes. "contrato/dominioProrrogacaoContrato.php");
+include_once(caminho_funcoes. "contrato/dominioProrrogacaoFiltroConsolidacao.php");
 include_once (caminho_util . "biblioteca_htmlArquivo.php");
 include_once (caminho_util . "DocumentoPessoa.php");
 

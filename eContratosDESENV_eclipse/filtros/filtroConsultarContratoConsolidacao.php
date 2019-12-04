@@ -3,8 +3,13 @@ include_once (caminho_util . "bibliotecaSQL.php");
 class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	public $nmFiltro = "filtroConsultarContratoConsolidacao";
 	
+	static $NmColInProrrogavel = "NmColInProrrogavel";
+	static $NmColInProrrogacaoExcepcional = "InProrrogacaoExcepcional";
+	
 	static $NmColDtInicioVigencia = "NmColDtInicioVigencia";
 	static $NmColQtdDiasParaVencimento = "NmColQtdDiasParaVencimento";
+	static $NmColPeriodoEmAnos = "NmColPeriodoEmAnos";
+	
 	static $NmColDtFimVigencia = "NmColDtFimVigencia";
 	static $NmColSqContratoMater = "NmColSqContratoMater";
 	static $NmColSqContratoAtual = "NmColSqContratoAtual";
@@ -12,7 +17,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	static $NmTabContratoATUAL = "TAB_CONTRATO_ATUAL";
 	
 	static $nmAtrQtdDiasParaVencimento = "nmAtrQtdDiasParaVencimento";
-	static $nmAtrInIMProrrogavel = "nmAtrInIMProrrogavel";
+	static $nmAtrInProrrogacao = "nmAtrInProrrogacao";
 	
 	static $ID_REQ_DtFimVigenciaInicial = "ID_REQ_DtFimVigenciaInicial";
 	static $ID_REQ_DtFimVigenciaFinal = "ID_REQ_DtFimVigenciaFinal";
@@ -25,7 +30,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	
 	var $cdEspecie = "";
 	var $qtdDiasParaVencimento = "";
-	var $inIMProrrogavel = "";
+	var $inProrrogacao = "";
 	var $dtFimVigenciaInicial = "";
 	var $dtFimVigenciaFinal = "";
 	
@@ -45,7 +50,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		parent::getFiltroFormulario ();
 		$this->cdEspecie = @$_POST [vocontrato::$nmAtrCdEspecieContrato];
 		$this->qtdDiasParaVencimento = @$_POST [static::$nmAtrQtdDiasParaVencimento];
-		$this->inIMProrrogavel = @$_POST [static::$nmAtrInIMProrrogavel];
+		$this->inProrrogacao = @$_POST [static::$nmAtrInProrrogacao];
 		$this->dtFimVigenciaFinal = @$_POST [static::$ID_REQ_DtFimVigenciaFinal];
 		$this->dtFimVigenciaInicial = @$_POST [static::$ID_REQ_DtFimVigenciaInicial];
 		
@@ -89,15 +94,10 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 			$conector  = "\n AND ";
 		}
 		
-		if ($this->inIMProrrogavel != null && $this->inIMProrrogavel != "") {
-			$nmAtributoDataNotificacao = getDataSQLDiferencaAnos(static::$NmTabContratoMater . "." . vocontrato::$nmAtrDtVigenciaInicialContrato, static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato);
+		if ($this->inProrrogacao != null && $this->inProrrogacao != "") {			
+			$filtro = $filtro . $conector . static::getSQLComparacaoPrazoProrrogacao($this->inProrrogacao);
 			
-			if(constantes::$CD_NAO == $this->inIMProrrogavel){
-				$filtro = $filtro . $conector . "$nmAtributoDataNotificacao >=0 AND $nmAtributoDataNotificacao < 4";
-			}else{			
-				$filtro = $filtro . $conector . "$nmAtributoDataNotificacao >=0 AND $nmAtributoDataNotificacao >= 4";
-			}
-				
+			//echo static::getSQLComparacaoPrazoProrrogacao($this->inProrrogacao);
 			$conector = "\n AND ";
 		}
 		
@@ -251,6 +251,47 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		// echo "Filtro:$filtro<br>";
 		
 		return $filtro;
+	}
+	
+	/**
+	 * Traz  o sql que permite calcular o periodo de vigencia total de um contrato
+	 * @return string
+	 */
+	static function getSQLQtdAnosVigenciaContrato(){
+		return getDataSQLDiferencaAnos(static::$NmTabContratoMater . "." . vocontrato::$nmAtrDtVigenciaInicialContrato, static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato);
+	}
+	
+	static function getSQLComparacaoPrazoProrrogacao($filtroPorrogacao){
+		if($filtroPorrogacao == dominioProrrogacaoFiltroConsolidacao::$CD_PRORROGAVEL){
+			$sinal = "<";
+		}elseif($filtroPorrogacao == dominioProrrogacaoFiltroConsolidacao::$CD_NAOPRORROGAVEL){
+			$sinal = ">=";
+		}elseif($filtroPorrogacao == dominioProrrogacaoFiltroConsolidacao::$CD_PERMITE_EXCEPCIONAL){
+				$sinal = "=";
+		}elseif($filtroPorrogacao == dominioProrrogacaoFiltroConsolidacao::$CD_NAOPERMITE_EXCEPCIONAL){
+				$sinal = ">=1+";
+		}								
+		
+		$STR_SUBSTITUIR_IND_PROR = constantes::$CD_CAMPO_SUBSTITUICAO . "IND_PROR";
+		$STR_SUBSTITUIR_VALOR_PRAZO = constantes::$CD_CAMPO_SUBSTITUICAO . "VALOR_PRAZO";
+		//$nmAtributoAcomparar = getDataSQLDiferencaAnos(static::$NmTabContratoMater . "." . vocontrato::$nmAtrDtVigenciaInicialContrato, static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato);
+		$nmAtributoAcomparar = static::getSQLQtdAnosVigenciaContrato();		
+		$filtroTemp = voContratoInfo::$nmAtrInPrazoProrrogacao . " = $STR_SUBSTITUIR_IND_PROR AND $nmAtributoAcomparar >=0 AND $nmAtributoAcomparar $sinal " . $STR_SUBSTITUIR_VALOR_PRAZO;		
+		$operadorSQL = " OR ";
+		
+		foreach (array_keys(dominioProrrogacaoContrato::getColecao()) as $chave){
+			$temp = str_replace($STR_SUBSTITUIR_IND_PROR, $chave, $filtroTemp);
+			$temp = str_replace($STR_SUBSTITUIR_VALOR_PRAZO, dominioProrrogacaoContrato::getPrazoProrrogacao($chave), $temp);
+								
+			$retorno .= "($temp)$operadorSQL";
+		}
+		// tamanho da string retirada do fim do retorno
+		$qtdCharFim = strlen ( $retorno ) - strlen ( $operadorSQL );
+		// echo $qtdCharFim;
+		$retorno = substr ( $retorno, 0, $qtdCharFim );
+		$retorno = "($retorno)";
+		
+		return $retorno;
 	}
 	
 	static function getComparacaoWhereDataVigencia($nmAtributoTabela){

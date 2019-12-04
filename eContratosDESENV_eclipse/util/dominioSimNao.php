@@ -15,7 +15,16 @@ Class dominioSimNao extends dominio{
 		);
 	}
 	
-// ...............................................................
+	static function getDescricao($chave){		
+		if($chave == 1)
+			$chave = constantes::$CD_SIM;
+		else if($chave == 0)
+			$chave = constantes::$CD_NAO;		
+		
+		return parent::getDescricao($chave);
+	}
+	
+	// ...............................................................
 // Funções( Propriedades e metodos da classe )
 	
 }

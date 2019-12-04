@@ -17,7 +17,7 @@ class dominio extends multiplosConstrutores {
 	
 	// ...............................................................
 	// Funcoes ( Propriedades e metodos da classe )
-	function getDescricao($chave) {
+	static function getDescricao($chave) {
 		//return self::getDescricaoStatic ( $chave, $this->colecao );
 		return self::getDescricaoStatic ( $chave, static::getColecao ());
 	}

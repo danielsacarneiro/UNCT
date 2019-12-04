@@ -31,6 +31,7 @@
     static $DS_NAO  = "Não";
     static $DS_OPCAO_TODOS = "Todos";
     static $DS_OPCAO_NENHUM = "Nenhum";
+    static $DS_OPCAO_NAO_INFORMADO = "Não informado";
      
     static $CD_SIM  = "S";
     static $CD_NAO  = "N"; 
