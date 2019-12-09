@@ -167,7 +167,7 @@ function confirmar() {
 				</TD>
 	        </TR>
 			<TR>
-	            <TH class="campoformulario" nowrap width="1%">Prorrogacação:</TH>
+	            <TH class="campoformulario" nowrap width="1%">Prorrogação:</TH>
 	            <TD class="campoformulario" colspan="3"><?php echo dominioProrrogacaoContrato::getHtmlDetalhamento(voContratoInfo::$nmAtrInPrazoProrrogacao,voContratoInfo::$nmAtrInPrazoProrrogacao, $vo->inPrazoProrrogacao);?>
 	            </TD>
 	        </TR>

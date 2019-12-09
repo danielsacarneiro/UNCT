@@ -50,13 +50,42 @@ class select extends multiplosConstrutores {
 	function getHtmlSelect($idSelect, $nmSelect, $opcaoSelecionada, $comOpcaoSelecione, $class, $isTrazerValuenoOption) {
 		return $this->getHtmlCombo ( $idSelect, $nmSelect, $opcaoSelecionada, $comOpcaoSelecione, $class, $isTrazerValuenoOption, "" );
 	}
+	
 	function getHtmlCombo($idSelect, $nmSelect, $opcaoSelecionada, $comOpcaoSelecione, $class, $isTrazerValuenoOption, $TagEJavaScript) {
+		$array = array(
+			$idSelect,
+			$nmSelect,
+			$opcaoSelecionada,				
+			$comOpcaoSelecione,
+			null,
+			$class,				
+			$isTrazerValuenoOption,
+			$TagEJavaScript,				
+		);
+		
+		return $this->getHtmlComboArray($array);
+	}
+	
+	function getHtmlComboArray($array){
+		$idSelect = $array[0];
+		$nmSelect  = $array[1];
+		$opcaoSelecionada  = $array[2];
+		$comOpcaoSelecione  = $array[3];
+		$comOpcaoNenhum = $array[4];
+		$class = $array[5];
+		$isTrazerValuenoOption = $array[6];
+		$TagEJavaScript = $array[7];		
+		
 		$html = "";
 		$html = "<select id='$idSelect' name='$nmSelect' class='$class' $TagEJavaScript>\n";
 		
 		// inclui opcao vazio
 		if ($comOpcaoSelecione) {
 			$html .= $this->getOpcao ( "", "-- Selecione --", null );
+			// $html .= $this->getOpcao(constantes::$CD_OPCAO_VAZIO, "-- Selecione --", null);
+		}
+		if ($comOpcaoNenhum) {
+			$html .= $this->getOpcao ( constantes::$CD_OPCAO_NENHUM, constantes::$DS_OPCAO_NENHUM, $opcaoSelecionada );
 			// $html .= $this->getOpcao(constantes::$CD_OPCAO_VAZIO, "-- Selecione --", null);
 		}
 		

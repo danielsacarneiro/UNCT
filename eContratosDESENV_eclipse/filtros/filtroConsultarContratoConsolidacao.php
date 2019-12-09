@@ -25,11 +25,15 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	static $ID_REQ_ValorInicial = "ID_REQ_ValorInicial";
 	static $ID_REQ_ValorFinal = "ID_REQ_ValorFinal";
 	
+	static $ID_REQ_NumPeriodoEmAnosInicial = "ID_REQ_NumPeriodoEmAnosInicial";
+	static $ID_REQ_NumPeriodoEmAnosFinal = "ID_REQ_NumPeriodoEmAnosFinal";
+	
 	static $ID_REQ_MesIntervaloFimVigencia = "ID_REQ_MesIntervaloFimVigencia";
 	static $ID_REQ_AnoIntervaloFimVigencia = "ID_REQ_AnoIntervaloFimVigencia";
 	
 	var $cdEspecie = "";
 	var $qtdDiasParaVencimento = "";
+	
 	var $inProrrogacao = "";
 	var $dtFimVigenciaInicial = "";
 	var $dtFimVigenciaFinal = "";
@@ -37,6 +41,9 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	var $valorInicial = "";
 	var $valorFinal = "";
 		
+	var $numPeriodoEmAnosInicial = "";
+	var $numPeriodoEmAnosFinal = "";
+	
 	var $mesIntervaloFimVigencia= "";
 	var $anoIntervaloFimVigencia= "";
 	
@@ -50,6 +57,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		parent::getFiltroFormulario ();
 		$this->cdEspecie = @$_POST [vocontrato::$nmAtrCdEspecieContrato];
 		$this->qtdDiasParaVencimento = @$_POST [static::$nmAtrQtdDiasParaVencimento];
+		
 		$this->inProrrogacao = @$_POST [static::$nmAtrInProrrogacao];
 		$this->dtFimVigenciaFinal = @$_POST [static::$ID_REQ_DtFimVigenciaFinal];
 		$this->dtFimVigenciaInicial = @$_POST [static::$ID_REQ_DtFimVigenciaInicial];
@@ -57,8 +65,12 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		$this->valorInicial = @$_POST [static::$ID_REQ_ValorInicial];
 		$this->valorFinal = @$_POST [static::$ID_REQ_ValorFinal];
 		
+		$this->numPeriodoEmAnosInicial = @$_POST [static::$ID_REQ_NumPeriodoEmAnosInicial];
+		$this->numPeriodoEmAnosFinal = @$_POST [static::$ID_REQ_NumPeriodoEmAnosFinal];
+		
 		$this->mesIntervaloFimVigencia = @$_POST [static::$ID_REQ_MesIntervaloFimVigencia];
 		$this->anoIntervaloFimVigencia = @$_POST [static::$ID_REQ_AnoIntervaloFimVigencia];
+		
 	}
 	function getSQFiltroCdEspecie($nmTabelaContrato) {
 		if ($this->cdEspecie != null && ! $this->isAtributoArrayVazio ( $this->cdEspecie )) {
@@ -79,7 +91,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		$nmTabela = voContratoInfo::getNmTabelaStatic ( $this->isHistorico );
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
-				
+
 		if($this->qtdDiasParaVencimento != null){			
 			/*$nmAtributoDataNotificacao = static::$NmTabContratoATUAL . "." .vocontrato::$nmAtrDtVigenciaFinalContrato;
 			$dtNotificacaoPAram = getVarComoDataSQL(somarOuSubtrairDiasNaData(getDataHoje(), $this->qtdDiasParaVencimento));
@@ -93,7 +105,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 				
 			$conector  = "\n AND ";
 		}
-		
+				
 		if ($this->inProrrogacao != null && $this->inProrrogacao != "") {			
 			$filtro = $filtro . $conector . static::getSQLComparacaoPrazoProrrogacao($this->inProrrogacao);
 			
@@ -241,6 +253,28 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		
 			$conector = "\n AND ";
 		}
+
+		if ($this->numPeriodoEmAnosInicial != null) {
+			$filtro = $filtro . $conector . filtroConsultarContratoConsolidacao::getSQLQtdAnosVigenciaContrato() . " >= " . getVarComoNumero($this->numPeriodoEmAnosInicial);
+		
+			$conector = "\n AND ";
+		}
+		
+		if ($this->numPeriodoEmAnosFinal != null) {
+			$filtro = $filtro . $conector . filtroConsultarContratoConsolidacao::getSQLQtdAnosVigenciaContrato() . " <= " . getVarComoNumero($this->numPeriodoEmAnosFinal);
+		
+			$conector = "\n AND ";
+		}
+		
+		if ($this->inPrazoProrrogacao != null) {
+			if($this->inPrazoProrrogacao == constantes::$CD_OPCAO_NENHUM){
+				$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrInPrazoProrrogacao . " IS NULL ";
+			}else{
+				$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrInPrazoProrrogacao . " = " . getVarComoNumero($this->inPrazoProrrogacao);
+			}
+			$conector = "\n AND ";
+		}
+		
 		//retira os contratos CANCELADOS
 		//$filtro = $filtro . $conector . $nmTabelaContrato . "." . vocontrato::$nmAtrEspecieContrato . " NOT LIKE '%CANCELADO%'";
 		

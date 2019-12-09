@@ -22,6 +22,8 @@ class filtroManterContratoInfo extends filtroManter {
 	var $inMaoDeObra = "";
 	var $objeto = "";
 	var $obs = "";
+	
+	var $inPrazoProrrogacao = "";
 		
 	// ...............................................................
 	function getFiltroFormulario() {
@@ -40,6 +42,7 @@ class filtroManterContratoInfo extends filtroManter {
 		$this->inMaoDeObra = @$_POST [voContratoInfo::$nmAtrInMaoDeObra];
 		$this->objeto = @$_POST [vocontrato::$nmAtrObjetoContrato];
 		$this->obs = @$_POST [voContratoInfo::$nmAtrObs];
+		$this->inPrazoProrrogacao = @$_POST [voContratoInfo::$nmAtrInPrazoProrrogacao];
 		
 		$this->InOR_AND = @$_POST[self::$NmAtrInOR_AND];
 		if($this->InOR_AND == null){
@@ -156,6 +159,11 @@ class filtroManterContratoInfo extends filtroManter {
 		if ($this->obs != null) {
 			$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrObs . " LIKE '%" . utf8_encode ( $this->obs ) . "%'";
 		
+			$conector = "\n AND ";
+		}
+		
+		if ($this->inPrazoProrrogacao != null) {
+			$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrInPrazoProrrogacao . " = " . getVarComoNumero($this->inPrazoProrrogacao);		
 			$conector = "\n AND ";
 		}
 		

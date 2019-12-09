@@ -202,15 +202,6 @@ function movimentacoes(){
 	            $comboProrrogacaoContrato = new select(dominioProrrogacaoFiltroConsolidacao::getColecao());
 	            ?>
 	        </TR>
-            <TR>
-	            <TH class="campoformulario" width="1%">Dias.Vencimento:</TH>
-	            <TD class="campoformulario" colspan=3>
-					<INPUT type="text" id="<?=filtroConsultarContratoConsolidacao::$nmAtrQtdDiasParaVencimento?>" name="<?=filtroConsultarContratoConsolidacao::$nmAtrQtdDiasParaVencimento?>"  
-								value="<?php echo($filtro->qtdDiasParaVencimento);?>"  class="camponaoobrigatorio" size="3">
-					Prorrogação: <?php echo $comboProrrogacaoContrato->getHtmlCombo(filtroConsultarContratoConsolidacao::$nmAtrInProrrogacao,filtroConsultarContratoConsolidacao::$nmAtrInProrrogacao, $filtro->inProrrogacao, true, "camponaoobrigatorio", false,
-	            		"");?>
-				</TD>
-			</TR>
 			<TR>
 				<TH class="campoformulario" nowrap>Objeto:</TH>
 				<TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vocontrato::$nmAtrObjetoContrato?>" name="<?=vocontrato::$nmAtrObjetoContrato?>"  value="<?php echo($filtro->objeto);?>"  class="camponaoobrigatorio" size="50" ></TD>
@@ -234,7 +225,57 @@ function movimentacoes(){
                         			>
                 </TD>				
 			</TR>
+	            <?php 
+	            $comboProrrogacaoContrato = new select(dominioProrrogacaoContrato::getColecao());
+	            $comboFiltroProrrogacaoConsolidacao= new select(dominioProrrogacaoFiltroConsolidacao::getColecao());
+	            ?>
+			
 			<TR>
+               <TH class="campoformulario" nowrap>Período Vigência:</TH>
+               <TD class="campoformulario" colspan=3>
+	            Prorrogação:
+				<?php 
+				$arrayTemp = array(
+						voContratoInfo::$nmAtrInPrazoProrrogacao,
+						voContratoInfo::$nmAtrInPrazoProrrogacao,
+						$filtro->inPrazoProrrogacao,
+						true,
+						true,
+						"camponaoobrigatorio",
+						false,
+						"",
+				);
+				
+				//echo $comboProrrogacaoContrato->getHtmlCombo(voContratoInfo::$nmAtrInPrazoProrrogacao,voContratoInfo::$nmAtrInPrazoProrrogacao, $filtro->inPrazoProrrogacao, true, "camponaoobrigatorio", false,"");
+				echo $comboProrrogacaoContrato->getHtmlComboArray($arrayTemp);
+				echo $comboFiltroProrrogacaoConsolidacao->getHtmlCombo(filtroConsultarContratoConsolidacao::$nmAtrInProrrogacao,filtroConsultarContratoConsolidacao::$nmAtrInProrrogacao, $filtro->inProrrogacao, true, "camponaoobrigatorio", false,"");
+				?>
+               				
+				| Período (anos):
+               				<INPUT type="text" 
+                        	       id="<?=filtroConsultarContratoConsolidacao::$ID_REQ_NumPeriodoEmAnosInicial?>" 
+                        	       name="<?=filtroConsultarContratoConsolidacao::$ID_REQ_NumPeriodoEmAnosInicial?>" 
+                        			value="<?php echo($filtro->numPeriodoEmAnosInicial);?>" 
+                        			onkeyup="validarCampoNumericoPositivo(this, event);" 
+                        			class="camponaoobrigatorio" 
+                        			size="3" 
+                        			maxlength="3" > a               
+                        	<INPUT type="text" 
+                        	       id="<?=filtroConsultarContratoConsolidacao::$ID_REQ_NumPeriodoEmAnosFinal?>" 
+                        	       name="<?=filtroConsultarContratoConsolidacao::$ID_REQ_NumPeriodoEmAnosFinal?>" 
+                        			value="<?php echo($filtro->numPeriodoEmAnosFinal);?>" 
+                        			onkeyup="validarCampoNumericoPositivo(this, event);" 
+                        			class="camponaoobrigatorio" 
+                        			size="3" 
+                        			maxlength="3" >
+               | Dias.Vencimento:
+	            <INPUT type="text" id="<?=filtroConsultarContratoConsolidacao::$nmAtrQtdDiasParaVencimento?>" name="<?=filtroConsultarContratoConsolidacao::$nmAtrQtdDiasParaVencimento?>"  
+								value="<?php echo($filtro->qtdDiasParaVencimento);?>"  class="camponaoobrigatorio" size="3">
+                        			
+                </TD>
+            </TR>
+            
+            <TR>
                <TH class="campoformulario" nowrap>Fim.Vigência:</TH>
                <TD class="campoformulario" colspan=3> Encerram em:
                         	<?php
@@ -363,9 +404,11 @@ function movimentacoes(){
                         }
                         
                         $gestor = $colecao[$i][vocontrato::$nmAtrGestorContrato];
+                        
+                        $inPrazoProrrogacao = $colecao[$i][voContratoInfo::$nmAtrInPrazoProrrogacao];
                         $inprorrogavel = $colecao[$i][filtroConsultarContratoConsolidacao::$NmColInProrrogavel];
                         $inprorrogacaoExcepcional = $colecao[$i][filtroConsultarContratoConsolidacao::$NmColInProrrogacaoExcepcional];
-                        if($inprorrogavel == null){
+                        if($inPrazoProrrogacao == null){
                         	$inprorrogavel = $inprorrogacaoExcepcional= getTextoHTMLDestacado(constantes::$DS_OPCAO_NAO_INFORMADO, "red", false);
                         }else{
                         	$inprorrogavel = dominioSimNao::getDescricao($inprorrogavel);
