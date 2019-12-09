@@ -27,7 +27,7 @@ setCabecalho($titulo);
 	
 	f1 = new Tree('Serviço 01 (Tabelas)');	
     f1.adicionarItem(new Link('Documentos', '<?=caminho_funcoesHTML?>documento', ''));
-    f1.adicionarItem(new Link('Unidades Administrativas', '<?=caminho_funcoesHTML?>gestor', ''));
+    f1.adicionarItem(new Link('Orgãos gestores', '<?=caminho_funcoesHTML?>gestor', ''));
     f1.adicionarItem(new Link('Pessoas', '<?=caminho_funcoesHTML?>pessoa', ''));
 	f.adicionarItem(f1);
 	

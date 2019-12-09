@@ -6,17 +6,15 @@ include_once(caminho_vos ."vogestor.php");
 class filtroManterGestor extends filtroManter{
     
     public static $nmFiltro = "filtroManterGestor";
-    
-    // ...............................................................
-	// construtor
-	function __construct() {
-        parent::__construct(true);
-        
-        $this->descricao = @$_POST[vogestor::$nmAtrDescricao];
-        
+   
+	var $descricao = "";
+	
+	// ...............................................................
+	function getFiltroFormulario() {
+		$this->descricao = @$_POST[vogestor::$nmAtrDescricao];
 	}
-    	
-	function getFiltroConsultaSQL(){
+	
+	function getFiltroConsultaSQL($comAtributoOrdenacao = null) {
         $voGestor= new vogestor();
 		$filtro = "";
 		$conector  = "";
@@ -43,7 +41,7 @@ class filtroManterGestor extends filtroManter{
 		}		
 
 		//finaliza o filtro
-		$filtro = parent::getFiltroConsulta($filtro);
+		$filtro = parent::getFiltroSQL ( $filtro, $comAtributoOrdenacao );
 		
 		//echo "Filtro:$filtro<br>";
 

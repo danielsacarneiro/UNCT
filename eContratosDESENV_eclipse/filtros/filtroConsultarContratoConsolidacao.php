@@ -319,10 +319,13 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 								
 			$retorno .= "($temp)$operadorSQL";
 		}
-		// tamanho da string retirada do fim do retorno
+        /*
+        // tamanho da string retirada do fim do retorno
 		$qtdCharFim = strlen ( $retorno ) - strlen ( $operadorSQL );
-		// echo $qtdCharFim;
-		$retorno = substr ( $retorno, 0, $qtdCharFim );
+		$retorno = substr ( $retorno, 0, $qtdCharFim );*/
+		
+		//para o caso de permitir sempre prorrogacao
+		$retorno .= "(". voContratoInfo::$nmAtrInPrazoProrrogacao ." = ". dominioProrrogacaoContrato::$CD_NAO_SEAPLICA .")";
 		$retorno = "($retorno)";
 		
 		return $retorno;

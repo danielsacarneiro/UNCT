@@ -18,6 +18,10 @@ include_once(caminho_lib."voentidade.php");
        $this->temTabHistorico = false;
    }
    
+   public static function getTituloJSP(){
+   	return  "ORGÃOS GESTORES/Unidades Administrativas";
+   }
+    
     public static function getNmTabela(){
         return  "gestor";
     }  

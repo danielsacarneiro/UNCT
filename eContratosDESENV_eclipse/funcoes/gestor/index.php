@@ -36,7 +36,7 @@ $numTotalRegistros = $filtro->numTotalRegistros;
 <!DOCTYPE html>
 <HTML>
 <HEAD>
-<?=setTituloPagina(null)?>
+
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>tooltip.js"></SCRIPT>
@@ -109,7 +109,7 @@ function alterar() {
 }
 
 </SCRIPT>
-
+<?=setTituloPagina(vogestor::getTituloJSP())?>
 </HEAD>
 <BODY class="paginadados" onload="">
 	  
