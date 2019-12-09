@@ -279,7 +279,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		$filtroTemp = voContratoInfo::$nmAtrInPrazoProrrogacao . " = $STR_SUBSTITUIR_IND_PROR AND $nmAtributoAcomparar >=0 AND $nmAtributoAcomparar $sinal " . $STR_SUBSTITUIR_VALOR_PRAZO;		
 		$operadorSQL = " OR ";
 		
-		foreach (array_keys(dominioProrrogacaoContrato::getColecao()) as $chave){
+		foreach (array_keys(dominioProrrogacaoContrato::getColecaoValidacaoSQL()) as $chave){
 			$temp = str_replace($STR_SUBSTITUIR_IND_PROR, $chave, $filtroTemp);
 			$temp = str_replace($STR_SUBSTITUIR_VALOR_PRAZO, dominioProrrogacaoContrato::getPrazoProrrogacao($chave), $temp);
 								
