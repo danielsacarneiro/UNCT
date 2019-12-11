@@ -680,18 +680,35 @@ class dbcontrato extends dbprocesso {
 		return $retorno;
 	}
 	
+	/**
+	 * pega excepcionalmente a informacao do tipo do contrato na especie
+	 * alguns contratos foram inseridos incorretamente ate 2019. CAso daqueles que tem Cessao de Uso na especie, quando deveriam estar no tipo
+	 * 
+	 * @param unknown $paramEspecie
+	 * @param unknown $objeto
+	 * @return NULL|mixed
+	 */
+	function getTpContratoNaEspecie($paramEspecie, $objeto=null) {
+		return $this->getCdEspecieContrato($paramEspecie, $objeto, true);
+	}
 	// recebe tambem o objeto porque as vezes a informacao esta nele
 	// quando a informacao nao estiver na especie, ele tenta no objeto
-	function getCdEspecieContrato($paramEspecie, $objeto=null) {
+	function getCdEspecieContrato($paramEspecie, $objeto=null, $isTpContrato = false) {
 		$retorno = null;
-		$dominioEspecies = new dominioEspeciesContrato ();
-		$colecao = $dominioEspecies->getDominioImportacaoPlanilha ();
+		//se for true, a consulta da especie vai ser usada para determinar o tpcontrato
+		//pq alguns contratos foram inseridos incorretamente ate 2019. CAso daqueles que tem Cessao de Uso na especie, quando deveriam estar no tipo
+		if(!$isTpContrato){
+			/*$dominioEspecies = new dominioEspeciesContrato ();
+			$colecao = $dominioEspecies->getDominioImportacaoPlanilha ();*/
+			$colecao = dominioEspeciesContrato::getColecaoImportacaoPlanilha();
+		}else{
+			$colecao = dominioTipoContrato::getColecaoImportacaoPlanilhaExcecao();
+		}
 		
 		$tamanho = count ( $colecao );
 		// echo $tamanho . "<br>";
 		// var_dump($colecao) . "<br>";
-		$chaves = array_keys ( $colecao );
-		
+		$chaves = array_keys ( $colecao );		
 		// echo "<br>especie:$paramEspecie";
 		
 		for($i = 0; $i < $tamanho; $i ++) {
@@ -714,7 +731,7 @@ class dbcontrato extends dbprocesso {
 		} else {
 			// se nao conseguiu na especie, tenta no objeto
 			if ($objeto != null) {
-				$retorno = $this->getCdEspecieContrato ( $objeto, null );
+				$retorno = $this->getCdEspecieContrato ( $objeto, null,$isTpContrato);
 			} else {
 				echo "<br>NAO EXISTE $paramEspecie <br>";
 			}
@@ -928,13 +945,57 @@ class dbcontrato extends dbprocesso {
 		// pra retirar os caracterees especiais
 		; // $retorno = $this->cDb->atualizar($query);
 	}
+	/**
+	 * monta a matriz de sequencial para o contrato especie passado como parametro 
+	 * para tanto eh necessario que os registros sejam listados por ordem de contrato
+	 * @param unknown $matriz
+	 * @param unknown $vocontrato
+	 * @return number[]
+	 */
+	static function manterMatrizTpDocContratoSqEspecie($matriz, $vocontrato) {
+		$vocontratoTempMater = clone $vocontrato;
+		/*$vocontratoTempMater->anoContrato = $vocontrato->anoContrato ;
+		$vocontratoTempMater->cdContrato = $vocontrato->cdContrato ;
+		$vocontratoTempMater->tipo = $vocontrato->tipo ;*/
+		$vocontratoTempMater->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
+		$vocontratoTempMater->sqEspecie = 1;
+		// se o contrato for valido, mas nao tiver sequencial, vamos dar um sequencial
+		//echoo("contrato eh nulo? " . $vocontrato->anoContrato . " a especie do contrato eh " . $vocontrato->sqEspecie);
+		
+		if ($vocontrato != null && $vocontrato->sqEspecie == null) {
+			
+			$chaveContratoEspecie = $vocontrato->getValorChaveLogica ();
+			$chaveContratoEspecieMater = $vocontrato->getValorChaveMater ();
+			$chaveContratoMater = $vocontratoTempMater->getValorChaveMater ();
+			$isMesmoContrato = $chaveContratoEspecieMater == $chaveContratoMater;
+			//verifica se eh do mesmo contrato, se nao, zera
+			if ($matriz != null && $isMesmoContrato) {				
+				//$arrayChaves = array_keys ( $matriz );									
+				if (array_key_exists ( $chaveContratoEspecie, $matriz )) {					
+					$sqEspecie = $matriz [$chaveContratoEspecie];
+					$matriz [$chaveContratoEspecie] = $sqEspecie + 1;
+					//echoo("alterou o sequencial $chaveContratoEspecie para " . $matriz [$chaveContratoEspecie]);					
+				}else{
+					//para o caso da especie nao existir na matriz
+					$matriz[$chaveContratoEspecie] = 1;
+					//echoo("incluiu para $chaveContratoEspecie sq 1");
+				}
+			} else {
+				$matriz = array($chaveContratoEspecie => 1);
+				//echoo("criou nova matriz para $chaveContratoEspecie");
+			}
+		}
+		
+		return $matriz;
+	}
+	
 	function getVOImportacaoPlanilha($tipo, $linha) {				
 		
 		if($tpContrato == trim(static::$CD_CONSTANTE_FIM_IMPORTACAO)){
 			throw new excecaoFimImportacaoContrato();
 		}
 		
-		$tpContrato = $linha ["A"];
+		$tpContrato = $linha ["A"];		
 		echoo("|".$tpContrato."|");
 		
 		$numero = $linha ["B"];
@@ -1005,6 +1066,14 @@ class dbcontrato extends dbprocesso {
 		// recuperar a especie propriamente dita
 		$cdEspecie = $this->getCdEspecieContrato ( $especie, $objeto );
 		
+		//pega tp contrato que esteja na especie apenas excepcionalmente
+		//casos de contratos que foram cadastrados incorretamente. Em 2020 isso nao deve mais ocorrer
+		$tpContratoEspecie = $this->getTpContratoNaEspecie($especie);
+		//se tpContratoEspecie nao for nulo, quer dizer que o tipo esta na especie e ele deve prevalecer
+		if($tpContratoEspecie != null){
+			$tipo = $tpContratoEspecie;
+		}
+		
 		$situacao = "null";
 		$dtProposta = "null";
 		$cdGestor = "null";
@@ -1019,18 +1088,30 @@ class dbcontrato extends dbprocesso {
 			$inLicom = "N";
 		
 		$retorno = new vocontrato ();
-		$retorno->cdContrato = $numero;
-		$retorno->anoContrato = $ano;
+		/*$retorno->cdContrato = $numero;
+		$retorno->anoContrato = $ano;*/
+		// corrige os tipos de dados
+		$retorno->anoContrato = $this->getAnoLinhaImportacao ( $ano );
+		$retorno->cdContrato = $this->getNumeroLinhaImportacao ( $numero );		
 		$retorno->tipo = $tipo;
 		$retorno->especie = $especie;
+		$retorno->cdEspecie = $cdEspecie;
 		$retorno->linkDoc = getDocLinkMascaraImportacao ( $linkDoc );
 		$retorno->linkMinutaDoc = getDocLinkMascaraImportacao ( $linkMinutaDoc);
 		
 		if ($sqEspecie != null) {
 			$retorno->sqEspecie = $sqEspecie;
-		}
+			//echoo("Encontrou sqEspecie $sqEspecie");
+		}else{
+			$retorno->sqEspecie = null;
+			
+			$matrizContratoEspecie = vocontrato::$matrizImportacao; 
+			vocontrato::$matrizImportacao = $matrizContratoEspecie = static::manterMatrizTpDocContratoSqEspecie($matrizContratoEspecie, $retorno);
+			  
+			$retorno->sqEspecie = $matrizContratoEspecie[$retorno->getValorChaveLogica()];
+			//echoo("Incluindo sequencial " . $retorno->sqEspecie . " para a especie " . dominioEspeciesContrato::getDescricao($cdEspecie));
+		}		
 		
-		$retorno->cdEspecie = $cdEspecie;
 		$retorno->objeto = $objeto;
 		$retorno->nmGestorPessoa = $gestorPessoa;
 		$retorno->gestor = $gestor;
@@ -1066,8 +1147,6 @@ class dbcontrato extends dbprocesso {
 		$retorno->importacao = $importacao;
 		
 		// corrige os tipos de dados
-		$retorno->anoContrato = $this->getAnoLinhaImportacao ( $retorno->anoContrato );
-		$retorno->cdContrato = $this->getNumeroLinhaImportacao ( $retorno->cdContrato );
 		$retorno->cdAutorizacao = $this->getCdAutorizacao ( $retorno->tpAutorizacao );
 		//echoo("valor global:" . $valorGlobal);
 		//echo "<br> VALOR GLOBAL: " . $retorno->vlGlobal;
