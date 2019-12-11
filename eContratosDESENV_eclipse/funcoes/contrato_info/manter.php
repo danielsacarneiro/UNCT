@@ -209,7 +209,7 @@ function transferirDadosPessoa(cd, nm) {
 	        $comboProrrogacao = new select(dominioProrrogacaoContrato::getColecao());
 	        ?>
 			<TR>
-	            <TH class="campoformulario" nowrap width="1%">Prorrogacação:</TH>
+	            <TH class="campoformulario" nowrap width="1%">Prorrogação:</TH>
 	            <TD class="campoformulario" colspan="3"><?php echo $comboProrrogacao->getHtmlCombo(voContratoInfo::$nmAtrInPrazoProrrogacao,voContratoInfo::$nmAtrInPrazoProrrogacao, $vo->inPrazoProrrogacao, true, "campoobrigatorio", false,"");?>
 	            </TD>
 	        </TR>
