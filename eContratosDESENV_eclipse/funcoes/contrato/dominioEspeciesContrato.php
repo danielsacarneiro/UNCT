@@ -7,7 +7,7 @@ include_once(caminho_util. "dominio.class.php");
   	static $CD_ESPECIE_CONTRATO_TERMOADITIVO = "TA";
   	static $CD_ESPECIE_CONTRATO_APOSTILAMENTO = "AP";
   	static $CD_ESPECIE_CONTRATO_TERMOAJUSTE = "AJ";
-  	static $CD_ESPECIE_CONTRATO_CESSAO_USO = "CS";
+  	//static $CD_ESPECIE_CONTRATO_CESSAO_USO = "CS";
   	
   	static $CD_ESPECIE_CONTRATO_RERRATIFICACAO = "RR";
   	static $CD_ESPECIE_CONTRATO_COOPERACAO = "CO";
@@ -19,6 +19,14 @@ include_once(caminho_util. "dominio.class.php");
   	static $DS_ESPECIE_CONTRATO_MATER = "Mater";
   	static $DS_ESPECIE_CONTRATO_TERMOADITIVO = "Termo Aditivo";
   	static $DS_ESPECIE_CONTRATO_APOSTILAMENTO = "Apostilamento";
+  	
+  	static $DS_ESPECIE_CONTRATO_TERMOAJUSTE = "Termo Ajuste";
+  	static $DS_ESPECIE_CONTRATO_RERRATIFICACAO = "Termo Rerratificação";
+  	static $DS_ESPECIE_CONTRATO_COOPERACAO = "Termo Cooperação";
+  	static $DS_ESPECIE_CONTRATO_CONVALIDACAO = "Termo Convalidação";
+  	static $DS_ESPECIE_CONTRATO_RESCISAO_AMIGAVEL = "Termo Rescisão Amigável";
+  	static $DS_ESPECIE_CONTRATO_RESCISAO_UNILATERAL = "Termo Rescisão Unilateral";
+  	static $DS_ESPECIE_CONTRATO_RESCISAO_ENCERRAMENTO = "Termo Rescisão Encerramento";  	 
   	 
   	 /*
   	 * ANTES ERA ASSIM:
@@ -45,14 +53,14 @@ include_once(caminho_util. "dominio.class.php");
         				self::$CD_ESPECIE_CONTRATO_MATER => self::$DS_ESPECIE_CONTRATO_MATER,
         				self::$CD_ESPECIE_CONTRATO_APOSTILAMENTO => self::$DS_ESPECIE_CONTRATO_APOSTILAMENTO,
         				self::$CD_ESPECIE_CONTRATO_TERMOADITIVO => self::$DS_ESPECIE_CONTRATO_TERMOADITIVO,
-        				self::$CD_ESPECIE_CONTRATO_TERMOAJUSTE => "Termo de Ajuste",
-        				self::$CD_ESPECIE_CONTRATO_CESSAO_USO => "Termo de Cessão de Uso",
-        				self::$CD_ESPECIE_CONTRATO_RERRATIFICACAO => "Termo de Rerratificação",
-        				self::$CD_ESPECIE_CONTRATO_COOPERACAO => "Termo de Cooperação",
-        				self::$CD_ESPECIE_CONTRATO_CONVALIDACAO => "Termo de Convalidação",
-        				self::$CD_ESPECIE_CONTRATO_RESCISAO_AMIGAVEL => "Termo de Rescisão Amigável",
-        				self::$CD_ESPECIE_CONTRATO_RESCISAO_UNILATERAL => "Termo de Rescisão Unilateral",
-        				self::$CD_ESPECIE_CONTRATO_RESCISAO_ENCERRAMENTO => "Termo de Rescisão Encerramento",
+        				self::$CD_ESPECIE_CONTRATO_TERMOAJUSTE => self::$DS_ESPECIE_CONTRATO_TERMOAJUSTE,
+        				//self::$CD_ESPECIE_CONTRATO_CESSAO_USO => "Termo de Cessão de Uso",
+        				self::$CD_ESPECIE_CONTRATO_RERRATIFICACAO => self::$DS_ESPECIE_CONTRATO_RERRATIFICACAO,
+        				self::$CD_ESPECIE_CONTRATO_COOPERACAO => self::$DS_ESPECIE_CONTRATO_COOPERACAO,
+        				self::$CD_ESPECIE_CONTRATO_CONVALIDACAO => self::$DS_ESPECIE_CONTRATO_CONVALIDACAO,
+        				self::$CD_ESPECIE_CONTRATO_RESCISAO_AMIGAVEL => self::$DS_ESPECIE_CONTRATO_RESCISAO_AMIGAVEL,
+        				self::$CD_ESPECIE_CONTRATO_RESCISAO_UNILATERAL => self::$DS_ESPECIE_CONTRATO_RESCISAO_UNILATERAL,
+        				self::$CD_ESPECIE_CONTRATO_RESCISAO_ENCERRAMENTO => self::$DS_ESPECIE_CONTRATO_RESCISAO_ENCERRAMENTO,
 				);
 	}	
     
@@ -79,10 +87,6 @@ include_once(caminho_util. "dominio.class.php");
 		);		
 	}	
 	
-	function getDominioImportacaoPlanilha() {            
-            return self::getColecaoImportacaoPlanilha();
-	}
-
 	static function getColecaoImportacaoPlanilha(){
 		//cooperacao e convalidacao seram considerados como MATER
 		//deixa na ultima posicao as especies que podem se repetir
@@ -91,11 +95,12 @@ include_once(caminho_util. "dominio.class.php");
         		self::$CD_ESPECIE_CONTRATO_RERRATIFICACAO => "Rerratificação*Rerratificacao",
 				self::$CD_ESPECIE_CONTRATO_TERMOAJUSTE => "Ajuste*conta",
         		self::$CD_ESPECIE_CONTRATO_TERMOADITIVO => "T.A*TA*T.A.*aditivo",        		
-        		self::$CD_ESPECIE_CONTRATO_CESSAO_USO => "Cessão*cessao",
+        		//self::$CD_ESPECIE_CONTRATO_CESSAO_USO => "Cessão*cessao",
 				self::$CD_ESPECIE_CONTRATO_RESCISAO_UNILATERAL => "Unilateral",
 				self::$CD_ESPECIE_CONTRATO_RESCISAO_ENCERRAMENTO => "Encerramento",
         		self::$CD_ESPECIE_CONTRATO_RESCISAO_AMIGAVEL => "Rescisão*Amigável*Amigavel",      
-        		self::$CD_ESPECIE_CONTRATO_MATER => "Mater*Convênio*Cooperação*Convalidação",
+        		//self::$CD_ESPECIE_CONTRATO_MATER => "Mater*Convênio*Cooperação*Convalidação",
+				self::$CD_ESPECIE_CONTRATO_MATER => "Mater*Convênio*Cooperação*Convalidação*Cessão*cessao",
         		self::$CD_ESPECIE_CONTRATO_APOSTILAMENTO => "Apostilamento*Apostuilamento*Apostilamneto"
 				);
 	}

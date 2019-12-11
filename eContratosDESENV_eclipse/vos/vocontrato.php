@@ -30,6 +30,7 @@ include_once (caminho_util . "DocumentoPessoa.php");
         var $nmTabela = "contrato";
 		static $nmEntidadeStatic = "contrato";*/
   		static $ID_REQ_CAMPO_CONTRATO = "ID_REQ_CAMPO_CONTRATO";
+  		static $matrizImportacao;
   		//static $ID_REQ_QTD_CONTRATOS = "ID_REQ_QTD_CONTRATOS";
 		
   		static $nmAtrSqContrato  = "sq";
@@ -366,6 +367,10 @@ include_once (caminho_util . "DocumentoPessoa.php");
      * */
     function getValorChaveLogica(){    	
     	return $this->anoContrato . CAMPO_SEPARADOR . $this->cdContrato . CAMPO_SEPARADOR . $this->tipo . CAMPO_SEPARADOR . $this->cdEspecie . CAMPO_SEPARADOR . $this->sqEspecie;
+    }
+    
+    function getValorChaveMater(){
+    	return $this->anoContrato . CAMPO_SEPARADOR . $this->cdContrato . CAMPO_SEPARADOR . $this->tipo . CAMPO_SEPARADOR . dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER . CAMPO_SEPARADOR . 1;
     }
     
     function toString(){

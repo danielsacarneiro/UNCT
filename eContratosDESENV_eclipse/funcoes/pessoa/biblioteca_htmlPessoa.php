@@ -46,6 +46,7 @@ function getDadosContratada($chave, $voentidade = null) {
 		if ($isConsultaPorContrato) {				
 			$vo = new vocontrato ();
 			$vo->getChavePrimariaVOExplodeParam ( $chave );
+			//echo $chave;
 			$recordSet = consultarPessoasContrato ( $vo, $vo->sqEspecie != null);
 				
 			$retorno = getCampoContratada ( "", "", $chave );
@@ -213,6 +214,7 @@ function consultarPessoasContrato($voContrato, $pIsChaveCompleta=false){
 	if($pIsChaveCompleta){
 		$filtro->cdEspecieContrato = $voContrato->cdEspecie;
 		$filtro->sqEspecieContrato = $voContrato->sqEspecie;
+		//echo $filtro->cdEspecieContrato ;
 	}
 	
 	$filtro->setaFiltroConsultaSemLimiteRegistro();

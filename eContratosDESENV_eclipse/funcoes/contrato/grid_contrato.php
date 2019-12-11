@@ -11,7 +11,7 @@
                     <TH class="headertabeladados" width="1%">Espécie</TH>
                     <TH class="headertabeladados" width="20%">Contratada</TH>
                     <TH class="headertabeladados" width="1%">CNPJ/CNPF</TH>
-                    <TH class="headertabeladados" width="50%">Objeto</TH>						
+                    <TH class="headertabeladados" width="70%">Objeto</TH>						
                     <TH class="headertabeladados" width="1%" nowrap>Dt.Assinatura</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Dt.Início</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Dt.Fim</TH>

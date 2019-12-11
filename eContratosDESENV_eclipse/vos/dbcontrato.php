@@ -952,7 +952,7 @@ class dbcontrato extends dbprocesso {
 	 * @param unknown $vocontrato
 	 * @return number[]
 	 */
-	static function manterMatrizTpDocContratoSqEspecie($matriz, $vocontrato) {
+	static function manterMatrizTpDocContratoSqEspecie($vocontrato) {
 		$vocontratoTempMater = clone $vocontrato;
 		/*$vocontratoTempMater->anoContrato = $vocontrato->anoContrato ;
 		$vocontratoTempMater->cdContrato = $vocontrato->cdContrato ;
@@ -969,24 +969,24 @@ class dbcontrato extends dbprocesso {
 			$chaveContratoMater = $vocontratoTempMater->getValorChaveMater ();
 			$isMesmoContrato = $chaveContratoEspecieMater == $chaveContratoMater;
 			//verifica se eh do mesmo contrato, se nao, zera
-			if ($matriz != null && $isMesmoContrato) {				
-				//$arrayChaves = array_keys ( $matriz );									
-				if (array_key_exists ( $chaveContratoEspecie, $matriz )) {					
-					$sqEspecie = $matriz [$chaveContratoEspecie];
-					$matriz [$chaveContratoEspecie] = $sqEspecie + 1;
-					//echoo("alterou o sequencial $chaveContratoEspecie para " . $matriz [$chaveContratoEspecie]);					
+			if (vocontrato::$matrizImportacao != null && $isMesmoContrato) {				
+				//$arrayChaves = array_keys ( vocontrato::$matrizImportacao );									
+				if (array_key_exists ( $chaveContratoEspecie, vocontrato::$matrizImportacao )) {					
+					$sqEspecie = vocontrato::$matrizImportacao [$chaveContratoEspecie];
+					vocontrato::$matrizImportacao [$chaveContratoEspecie] = $sqEspecie + 1;
+					//echoo("alterou o sequencial $chaveContratoEspecie para " . vocontrato::$matrizImportacao [$chaveContratoEspecie]);					
 				}else{
 					//para o caso da especie nao existir na matriz
-					$matriz[$chaveContratoEspecie] = 1;
+					vocontrato::$matrizImportacao[$chaveContratoEspecie] = 1;
 					//echoo("incluiu para $chaveContratoEspecie sq 1");
 				}
 			} else {
-				$matriz = array($chaveContratoEspecie => 1);
+				vocontrato::$matrizImportacao = array($chaveContratoEspecie => 1);
 				//echoo("criou nova matriz para $chaveContratoEspecie");
 			}
 		}
 		
-		return $matriz;
+		//return $matriz;
 	}
 	
 	function getVOImportacaoPlanilha($tipo, $linha) {				
@@ -1104,11 +1104,8 @@ class dbcontrato extends dbprocesso {
 			//echoo("Encontrou sqEspecie $sqEspecie");
 		}else{
 			$retorno->sqEspecie = null;
-			
-			$matrizContratoEspecie = vocontrato::$matrizImportacao; 
-			vocontrato::$matrizImportacao = $matrizContratoEspecie = static::manterMatrizTpDocContratoSqEspecie($matrizContratoEspecie, $retorno);
-			  
-			$retorno->sqEspecie = $matrizContratoEspecie[$retorno->getValorChaveLogica()];
+			static::manterMatrizTpDocContratoSqEspecie($retorno);
+			$retorno->sqEspecie = vocontrato::$matrizImportacao[$retorno->getValorChaveLogica()];
 			//echoo("Incluindo sequencial " . $retorno->sqEspecie . " para a especie " . dominioEspeciesContrato::getDescricao($cdEspecie));
 		}		
 		

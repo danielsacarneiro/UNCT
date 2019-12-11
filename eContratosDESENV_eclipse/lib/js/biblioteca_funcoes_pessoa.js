@@ -21,6 +21,7 @@ function carregaDadosContratada(pNmCampoAnoContrato, pNmCampoTipoContrato, pNmCa
 		var campoSqEspecieContrato = document.getElementById(pNmCampoSqEspecieContrato);
 		
 		cdEspecieContrato = document.getElementById(pNmCampoCdEspecieContrato).value;
+		//alert(cdEspecieContrato);
 		sqEspecieContrato = campoSqEspecieContrato.value;
 		isChaveCompleta = true;
 		

@@ -335,7 +335,7 @@ function getContratoEntradaDeDadosVOGenerico($vocontrato, $arrayCssClass, $array
 		$cdEspecie = $vocontrato->cdEspecie;
 		$sqEspecie = $vocontrato->sqEspecie;		
 	}
-	
+				
 	$isOpcaoMultiplos = $indiceContrato != null;
 	
 	$combo = new select ( dominioTipoContrato::getColecao () );
@@ -413,7 +413,7 @@ function getContratoEntradaDeDadosVOGenerico($vocontrato, $arrayCssClass, $array
 		echo "&nbsp;" . getImagemLink ( "javascript:carregaNovoCampoContrato('$nmCampoDivNovoContrato', $indiceContrato);\" ", "sinal_mais.gif" );
 		echo "&nbsp;" . getImagemLink ( "javascript:limparCampoContrato('$nmCampoDivContratoAnterior', $indiceContrato, '$nmCampoDivPessoaContratada', '$strCamposALimparSeparador',$paramAlterarDemanda);\" ", "sinal_menos.gif" );
 	}
-	
+		
 	if($pcomChaveCompleta){
 	?>
 		<br>
@@ -422,7 +422,13 @@ function getContratoEntradaDeDadosVOGenerico($vocontrato, $arrayCssClass, $array
 		//cria o combo
 		$combo = new select(dominioEspeciesContrato::getColecao());
 		echo $combo->getHtmlCombo(vocontrato::$nmAtrCdEspecieContrato, vocontrato::$nmAtrCdEspecieContrato, $cdEspecie, true, $cssCdEspecieContrato, false, $htmlCdEspecieContrato);
+		
 	}else if ($comChaveCompletaSeNulo) {
+		
+		/*$dbcontrato = new dbContratoInfo();
+		$vocontratochave = new vocontrato();
+		$vocontratochave = $dbcontrato->consultarPorChaveVO($vocontrato);*/		
+		
 	?>
 		<INPUT type="hidden"
 			id="<?=$pNmCampoCdEspecieContrato.$indiceContrato?>"
@@ -438,6 +444,7 @@ function getContratoEntradaDeDadosVOGenerico($vocontrato, $arrayCssClass, $array
 <div id="<?=$nmCampoDivPessoaContratada?>">
 <?php
 	if ($isExibirContratadaSePreenchido && $vocontrato != null && $vocontrato->anoContrato != null) {
+		
 		if($vocontrato->cdEspecie == null){
 			$vocontrato->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;			
 		}

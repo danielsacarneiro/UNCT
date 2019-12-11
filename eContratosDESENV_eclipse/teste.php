@@ -10,6 +10,9 @@ inicio();
 $titulo = "TESTE de Funções UNCT";
 setCabecalho($titulo);
 
+echoo("matrix contrato ");
+var_dump(vocontrato::$matrizImportacao);
+
 /*$vocontrato = new vocontrato();
 
 $str1comseparador = "Termo de ajuste de contas";
