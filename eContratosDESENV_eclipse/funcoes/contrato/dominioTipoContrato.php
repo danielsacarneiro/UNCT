@@ -30,8 +30,8 @@ include_once(caminho_util."dominio.class.php");
 		return array(
 				static::$CD_TIPO_CONTRATO => static::$DS_TIPO_CONTRATO,
 				static::$CD_TIPO_CONVENIO => static::$DS_TIPO_CONVENIO,
-				static::$CD_TIPO_PROFISCO => static::$DS_TIPO_PROFISCO,
 				static::$CD_TIPO_CESSAO_USO => static::$DS_TIPO_CESSAO_USO,
+				static::$CD_TIPO_PROFISCO => static::$DS_TIPO_PROFISCO,
 				//static::$CD_TIPO_TERMOAJUSTE => static::$DS_TIPO_TERMOAJUSTE,
 		);
 	}
