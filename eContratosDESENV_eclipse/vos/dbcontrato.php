@@ -260,12 +260,16 @@ class dbcontrato extends dbprocesso {
 	function consultarContratoPorChave($voContrato, $isHistorico) {
 		$nmTabela = $voContrato->getNmTabelaEntidade ( $isHistorico );
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
+		$nmTabelaContratoLicon = voContratoLicon::getNmTabelaStatic ( false );
 		
 		$query = "SELECT " . $nmTabela;
 		$query .= ".*";
 		$query .= ", $nmTabelaContratoInfo." . voContratoInfo::$nmAtrDtProposta;
 		$query .= ", $nmTabelaContratoInfo." . voContratoInfo::$nmAtrInEscopo;
+		$query .= ", $nmTabelaContratoLicon." . voContratoLicon::$nmAtrSituacao;
 		$query .= ", TAB2." . vousuario::$nmAtrName . " AS " . voentidade::$nmAtrNmUsuarioUltAlteracao;
+			
+		
 		$query .= " FROM " . $nmTabela;
 		
 		$query .= "\n LEFT JOIN " . $nmTabelaContratoInfo;
@@ -275,6 +279,18 @@ class dbcontrato extends dbprocesso {
 		$query .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrAnoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrAnoContrato;
 		$query .= "\n AND ";
 		$query .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrTipoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
+		
+		$query .= "\n LEFT JOIN " . $nmTabelaContratoLicon;
+		$query .= "\n ON ";
+		$query .= $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrCdContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrCdContrato;
+		$query .= "\n AND ";
+		$query .= $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrAnoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrAnoContrato;
+		$query .= "\n AND ";
+		$query .= $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrTipoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
+		$query .= "\n AND ";
+		$query .= $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrCdEspecieContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrCdEspecieContrato;
+		$query .= "\n AND ";
+		$query .= $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrSqEspecieContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrSqEspecieContrato;		
 		
 		$query .= "\n LEFT JOIN " . vousuario::$nmEntidade;
 		$query .= "\n TAB1 ON ";
@@ -294,36 +310,6 @@ class dbcontrato extends dbprocesso {
 		// echo $query;
 		return $this->consultarEntidade ( $query, true );
 	}
-	/*function consultarContratoMovimentacoes($voContrato) {
-		$nmTabela = $voContrato->getNmTabelaEntidade ( false );
-		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
-		// $atributos = $voContrato->getAtributosMovimentacoes();
-		// $atributos = getColecaoEntreSeparador($atributos, ",");
-				
-		$query = "SELECT $nmTabela.* ";
-		// $query.= $atributos;
-		$query .= ", $nmTabelaContratoInfo." . voContratoInfo::$nmAtrDtProposta;
-		$query .= "\n FROM " . $nmTabela;
-		
-		$query .= "\n LEFT JOIN " . $nmTabelaContratoInfo;
-		$query .= "\n ON ";
-		$query .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrCdContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrCdContrato;
-		$query .= "\n AND ";
-		$query .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrAnoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrAnoContrato;
-		$query .= "\n AND ";
-		$query .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrTipoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
-		
-		$query .= "\n WHERE ";
-		// $query.= $voContrato->getValoresWhereSQL($voContrato, $nmAtributosWhere);
-		// $voContrato = new vocontrato();
-		$query .= "$nmTabela." . vocontrato::$nmAtrAnoContrato . " = " . $voContrato->anoContrato;
-		$query .= "\n AND $nmTabela." . vocontrato::$nmAtrCdContrato . " = " . $voContrato->cdContrato;
-		$query .= "\n AND $nmTabela." . vocontrato::$nmAtrTipoContrato . " = " . getVarComoString ( $voContrato->tipo );
-		$query .= "\n ORDER BY " . vocontrato::$nmAtrSqContrato . " " . constantes::$CD_ORDEM_CRESCENTE;
-		
-		// echo $query;
-		return $this->consultarEntidade ( $query, false );
-	}*/
 	
 	function consultarContratoMovimentacoes($voContrato, $isHistorico=false) {
 		$nmTabela = $voContrato->getNmTabelaEntidade ( $isHistorico );
@@ -799,15 +785,6 @@ class dbcontrato extends dbprocesso {
 		return $retorno;
 	}	
 	
-	/*
-	 * function getDataLinhaImportacao($param){
-	 * $retorno = "null";
-	 *
-	 * if($param != null)
-	 * $retorno = "'" . (substr($param,6,4) + 2000) . "-" . substr($param,0,2) . "-" . substr($param,3,2). "'";
-	 * return $retorno;
-	 * }
-	 */
 	function getDataLinhaImportacao($param) {
 		$retorno = "null";
 		$isDataExcel = getPosicaoPalavraNaString ( $param, " " ) === false;
@@ -1012,8 +989,8 @@ class dbcontrato extends dbprocesso {
 		$linkDoc = $linha [vocontrato::$nmAtrLinkDoc];
 		$linkMinutaDoc = $linha [vocontrato::$nmAtrLinkMinutaDoc];
 		
-		if ($tipo == "C") {
-			// contrato			
+		if ($tipo != "V") {
+			// contrato/profisco
 			$gestor = $linha ["H"];
 			
 			$valorGlobal = $linha ["J"];
@@ -1031,8 +1008,8 @@ class dbcontrato extends dbprocesso {
 			//$sqEmpenho = $linha ["S"];
 			$tpAutorizacao = $linha ["U"];
 			//$tpAutorizacao = $linha ["T"];
-			$inLicom = $linha ["V"];
-			$obs = $linha ["W"];
+			//$inLicom = $linha ["V"];
+			$obs = $linha ["V"];
 		} else {
 			// convenio			
 			$gestor = null;
@@ -1055,8 +1032,8 @@ class dbcontrato extends dbprocesso {
 				$sqEmpenho = $linha ["Q"];
 			
 			$tpAutorizacao = null;
-			$inLicom = $linha ["S"];
-			$obs = $linha ["T"];
+			//$inLicom = $linha ["S"];
+			$obs = $linha ["S"];
 		}
 		
 		// recupera o sequencial da especie (aditivo, apostilamento) quando existir
@@ -1082,10 +1059,10 @@ class dbcontrato extends dbprocesso {
 		
 		$importacao = "S";
 		// trata o valor do inlicom
-		if ($inLicom == "OK")
+		/*if ($inLicom == "OK")
 			$inLicom = "S";
 		else
-			$inLicom = "N";
+			$inLicom = "N";*/
 		
 		$retorno = new vocontrato ();
 		/*$retorno->cdContrato = $numero;

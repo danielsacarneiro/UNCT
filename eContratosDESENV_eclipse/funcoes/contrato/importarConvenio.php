@@ -45,7 +45,7 @@ $isBuscarPlanilhaPorNome = true;
 //echoo("tipo contrato: " . $tipoContrato);
 if($tipoContrato != "V"){
 	$tipoContrato = "P";
-	$inputFileName = caminho.'planilha/UNCT_profisco.xls';
+	$inputFileName = caminho.'planilha/CONTRATOS-PROFISCO.xls';
 	$isBuscarPlanilhaPorNome = false;
 	echoo("IMPORTAÇÃO DE CONTRATOS PROFISCO INICIADA.");
 }else{

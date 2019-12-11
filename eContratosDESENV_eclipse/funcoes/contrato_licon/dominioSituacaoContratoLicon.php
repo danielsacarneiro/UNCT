@@ -39,5 +39,14 @@ Class dominioSituacaoContratoLicon extends dominio{
 		return $retorno;
 	}
 	
+	static function getColecaoIncluidoSucesso(){
+		return array(
+				self::$CD_SITUACAO_INCLUIDO => self::$DS_SITUACAO_INCLUIDO,
+				self::$CD_SITUACAO_INCLUIDO_COM_OBS => self::$DS_SITUACAO_INCLUIDO_COM_OBS,
+				self::$CD_SITUACAO_EXISTENTE => self::$DS_SITUACAO_EXISTENTE,
+		);
+	}
+	
+	
 }
 ?>
