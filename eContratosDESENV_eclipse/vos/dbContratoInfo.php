@@ -8,17 +8,24 @@ class dbContratoInfo extends dbprocesso {
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
 		$nmTabelaPessoaGestor = "NM_TAB_PESSOA_GESTOR";
+		$nmTabContratoSqMAX = "TAB_MAXCONTRATO";
 		
 		$colecaoAtributoCoalesceNmPessoa = array(
 				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
 				$nmTabelaContrato . "." . vocontrato::$nmAtrContratadaContrato,
 		);
 		
+		$colecaoAtributoAutorizacaoCoalesce = array(				
+				$nmTabela . "." . voContratoInfo::$nmAtrCdAutorizacaoContrato,
+				$nmTabelaContrato . "." . vocontrato::$nmAtrCdAutorizacaoContrato,
+		);
+		
 		$arrayColunasRetornadas = array (
 				$nmTabela . ".*",
+				getSQLCOALESCE($colecaoAtributoAutorizacaoCoalesce,voContratoInfo::$nmAtrCdAutorizacaoContrato),
 				$nmTabelaContrato . "." . vocontrato::$nmAtrCdAutorizacaoContrato,
 				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
-				//$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
+				//$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,				
 				getSQLCOALESCE($colecaoAtributoCoalesceNmPessoa,vopessoa::$nmAtrNome),
 				$nmTabelaPessoaGestor . "." . vopessoa::$nmAtrCd . " AS " . voContratoInfo::$nmAtrCdPessoaGestor,
 				$nmTabelaPessoaGestor . "." . vopessoa::$nmAtrNome . " AS " . voContratoInfo::$IDREQNmPessoaGestor,
@@ -27,7 +34,6 @@ class dbContratoInfo extends dbprocesso {
 		$groupbyinterno = $nmTabela . "." . vocontrato::$nmAtrAnoContrato . "," . $nmTabela . "." . vocontrato::$nmAtrCdContrato . "," . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
 		
 		$nmTabContratoInterna = vocontrato::getNmTabelaStatic ( false );
-		$nmTabContratoSqMAX = "TAB_MAXCONTRATO";
 		$queryJoin .= "\n left JOIN ";
 		$queryJoin .= " (SELECT " . $groupbyinterno . ", MAX(" . vocontrato::$nmAtrSqContrato . ") AS " . vocontrato::$nmAtrSqContrato . " FROM " . $nmTabContratoInterna;
 		$queryJoin .= " INNER JOIN " . $nmTabela;
