@@ -414,6 +414,29 @@ function movimentacoes(){
                         	$inprorrogavel = dominioSimNao::getDescricao($inprorrogavel);
                         	$inprorrogacaoExcepcional = dominioSimNao::getDescricao($inprorrogacaoExcepcional);
                         }
+                        
+                        $datafimSQL = $colecao[$i][filtroConsultarContratoConsolidacao::$NmColDtFimVigencia];
+                        $dataFinal = getData($datafimSQL);
+                        $validaAlerta = true;                        
+                        try{
+                        	$qtDiasFimVigencia = getQtdDiasEntreDatas(dtHojeSQL, $datafimSQL);
+                        }catch (Exception $e){
+                        	$validaAlerta = false;
+                        }
+                        
+                        $classColuna = "tabeladados";
+                        $mensagemAlerta = "";
+                        
+                         if($validaAlerta){
+                         	if($qtDiasFimVigencia <= constantes::$qts_dias_ALERTA_VERMELHO)
+                         		$classColuna = "tabeladadosdestacadovermelho";
+                         	else if($qtDiasFimVigencia <= constantes::$qts_dias_ALERTA_AMARELO)
+                         			$classColuna = "tabeladadosdestacadoamarelo";
+                        
+                         	$mensagemAlerta = "onMouseOver=toolTip('".$qtDiasFimVigencia."dias') onMouseOut=toolTip()";
+                         }
+                         
+                         $tagCelula = "class='$classColuna' " . $mensagemAlerta;
                                                 
                    ?>
                 <TR class="dados">
@@ -437,7 +460,7 @@ function movimentacoes(){
                     <TD class="tabeladados" nowrap><?php echo $inprorrogavel?></TD>					
 					<TD class="tabeladados" nowrap><?php echo $inprorrogacaoExcepcional?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($colecao[$i][filtroConsultarContratoConsolidacao::$NmColDtInicioVigencia])?></TD>
-                    <TD class="tabeladados" nowrap><?php echo getData($colecao[$i][filtroConsultarContratoConsolidacao::$NmColDtFimVigencia])?></TD>
+                    <TD <?=$tagCelula?>><?php echo getData($dataFinal)?></TD>
                     <TD class="tabeladados" nowrap><?php echo $colecao[$i][filtroConsultarContratoConsolidacao::$NmColPeriodoEmAnos]?></TD>
                     <TD class="tabeladados" nowrap><?php echo $dominioAutorizacao->getDescricao($autorizacaoAtual)?></TD>
                 </TR>					
