@@ -95,10 +95,6 @@ function detalhar(isExcluir) {
        	$complementoDet .= ", " . getTextoHTMLNegrito(getQtdMesesEntreDatas($voContrato->dtVigenciaInicial, $voContrato->dtVigenciaFinal)) . " meses";
        	$complementoDet .= "<br>Valor MATER: Mensal " . getInputText("", "", $voContrato->vlMensal, constantes::$CD_CLASS_CAMPO_READONLY);
        	$complementoDet .= " Global: " . getInputText("", "", $voContrato->vlGlobal, constantes::$CD_CLASS_CAMPO_READONLY);
-       	/*$isEscopo = $voContratoInfo->inEscopo;
-       	if($isEscopo == "S"){
-       		$complementoDet .= " ".getTextoHTMLDestacado("Contrato por escopo!", "red", false);
-       	}*/
        	
        	$complementoDet .= getHTMLContratoPorEscopo($voContratoInfo);
        	
@@ -166,6 +162,9 @@ function detalhar(isExcluir) {
                     $numMesesPeriodoMater = getQtdMesesEntreDatas($voContrato->dtVigenciaInicial, $voContrato->dtVigenciaFinal);
                     $vlGlobalSeProrrogado = "Verifique o prazo do contrato mater.";
                     $numMesesPeriodoAtual = $numMesesPeriodoMater;
+                    
+                    $isEscopo = $voContratoInfo->inEscopo;
+                    
                     for ($i=0;$i<$tamanho;$i++) {
                     	$registro = $colecaoMov[$i];
                         $voAtual = new voContratoModificacao();
@@ -247,7 +246,15 @@ function detalhar(isExcluir) {
 	                <TR>
 	                    <TD class="totalizadortabeladadosalinhadoesquerda" colspan=<?=$colspan?>>
 	                    <?php 
-		                    $complementoDet = " Valor ATUAL(havendo prorrogação): Mensal " . getInputText("", "", getMoeda($vlMensalAtual), constantes::$CD_CLASS_CAMPO_READONLY);
+		                    $complementoDet = "Valor ATUAL Executado: Global " . getInputText("", "", getMoeda($vlGlobalAtual), constantes::$CD_CLASS_CAMPO_READONLY);		                    
+		                    echo getTextoHTMLNegrito($complementoDet);
+	                    ?>
+	                    </TD>
+	                </TR>
+	                <TR>
+	                    <TD class="totalizadortabeladadosalinhadoesquerda" colspan=<?=$colspan?>>
+	                    <?php 
+		                    $complementoDet = " Valor ATUAL (havendo prorrogação): Mensal " . getInputText("", "", getMoeda($vlMensalAtual), constantes::$CD_CLASS_CAMPO_READONLY);
 		                    $complementoDet .= " Global: " . getInputText("", "", getMoeda($vlGlobalSeProrrogado), constantes::$CD_CLASS_CAMPO_READONLY);
 		                    
 		                    echo getTextoHTMLNegrito($complementoDet);
