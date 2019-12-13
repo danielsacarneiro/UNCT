@@ -273,46 +273,11 @@ class dbContratoModificacao extends dbprocesso {
 		// $this->validarInclusao($vo);
 		// return parent::alterar($vo);
 	}
-	/**
-	 * pega o contratomod passado como parametro de uma colecao de valores execucao
-	 * retorna um vogenerico/registro
-	 * @param unknown $voContratoMod
-	 * @param unknown $recordSet
-	 * @return voContratoModificacao
-	 */
-	/*function getRegistroTermoEspecificoColecaoExecucao($voContrato, $recordSet) {
-		if(!isColecaoVazia($recordSet)){
-			//a busca eh decrescente porque o recordset esta na ordem crescente da execucao do contrato
-			//dai a funcao pega o mais recente
-			$existe = false;
-			$indiceinicial = sizeof($recordSet)-1; 
-			for($i=$indiceinicial; $i>=0;$i--){
-				$registro = $recordSet[$i];
-				$voTemp = new vocontrato();
-				$voTemp->getDadosBanco($registro);
-				
-				$voContratoMod = $registro[filtroManterContratoModificacao::$NmColVOContratoModReajustado];
-							
-				if($voContrato->isIgualChavePrimaria($voTemp)){					
-					//echoo ($voTemp->vlMensal);
-					$existe = true;
-					break;
-				}
-			}
-			//se nao encontrou nenhum eh pq o valor atualizado eh o primeiro registro (mais recente)
-			if(!$existe){
-				$registro = $recordSet[$indiceinicial];
-			}
-			
-			$retorno = $registro;
-		}
-		return $retorno;
-	}*/
 	
 	function getRegistroAtualColecaoExecucao($recordSet) {
 		if(!isColecaoVazia($recordSet)){
-			$indiceinicial = sizeof($recordSet)-1;
-			$retorno = $recordSet[$indiceinicial];
+			$indice = sizeof($recordSet)-1;
+			$retorno = $recordSet[$indice];
 		}
 		return $retorno;
 	}
@@ -324,7 +289,18 @@ class dbContratoModificacao extends dbprocesso {
 		$voContratoMater->sqEspecie = 1;
 		//echo ($dataVigencia);
 		$recordSet = $this->consultarExecucao(clone $voContratoMater, $dataVigencia);
-		return $this->getRegistroAtualColecaoExecucao($recordSet);		
+		$retorno = $this->getRegistroAtualColecaoExecucao($recordSet);
+		//se for vazio, eh pq nao tem nenhuma execucao determinada, dai o valor da execucao vai ser o do proprio voContratoComChaveCompleta
+		if(isColecaoVazia($recordSet)){
+			$vocontratomod = new voContratoModificacao();
+			$vocontratomod->vocontrato = $voContratoComChaveCompleta;
+			$vocontratomod->vlMensalAtual = getVarComoDecimal($voContratoComChaveCompleta->vlMensal);
+			$vocontratomod->vlGlobalAtual = getVarComoDecimal($voContratoComChaveCompleta->vlGlobal);
+						
+			$retorno = array(filtroManterContratoModificacao::$NmColVOContratoModReajustado => $vocontratomod);
+		}
+		
+		return $retorno;		
 		//return $this->getRegistroTermoEspecificoColecaoExecucao(clone $voContratoComChaveCompleta, $recordSet);		
 	}
 	
@@ -372,7 +348,8 @@ class dbContratoModificacao extends dbprocesso {
 
 			$voContratoModExecucao = $registro [filtroManterContratoModificacao::$NmColVOContratoModReajustado];
 
-			$numMeses = $voTemp->numMesesParaOFimdoPeriodo;			 			
+			$numMeses = $voTemp->numMesesParaOFimdoPeriodo;
+			//echoo($voContratoModExecucao->vlMensalAtual);
 			$vlGlobalAtual = ($voContratoModExecucao->vlMensalAtual)*$numMeses;
 			$numMesesSobra = $numMesContrato-$numMeses;
 			
@@ -381,8 +358,7 @@ class dbContratoModificacao extends dbprocesso {
 				$vlGlobalAtual = $vlGlobalAtual + ($numMesesSobra*$vlMensalAnterior);
 				//echo $vlGlobalAtual;
 			}			
-			$vlMensalAnterior = $voContratoModExecucao->vlMensalAtual;
-			
+			$vlMensalAnterior = $voContratoModExecucao->vlMensalAtual;			
 			$voContratoModExecucao->vlGlobalAtual = $vlGlobalAtual;
 			
 			//echoo("meses:$numMeses, valor mensal:" . $voContratoModExecucao->vlMensalAtual);
@@ -433,9 +409,30 @@ class dbContratoModificacao extends dbprocesso {
 		}		
 	}
 	
-	function consultarExecucaoValorGlobalReferencial($voContratoMater) {
-		$recordset = $this->consultarExecucao($voContratoMater);		
-		$this->atualizaValorGlobalPorPeriodo($recordset, $voContratoMater);
+	/**
+	 * atualiza o valor global da execucao do contrato baseado nos valores mensais (que podem sofrer alteracao)
+	 * @param unknown $registroGenerico
+	 * @return unknown
+	 */
+	function consultarExecucaoValorGlobalReferencial($registroGenerico) {
+		$voContratoMater = new vocontrato();
+		$voContratoMater->getDadosBanco($registroGenerico);
+		$voContratoMater->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
+		$voContratoMater->sqEspecie = 1;
+		$voContratoMater = $voContratoMater->dbprocesso->consultarPorChaveVO($voContratoMater, false);		
+		
+		$voContratoInfo = new voContratoInfo();
+		$voContratoInfo->getDadosBanco($registroGenerico);
+		
+		$recordset = $this->consultarExecucao($voContratoMater);
+		//o contrato por escopo nao tem variacao de preco mensal, pois o preco mensal eh unico para toda execucao
+		//ainda que sofra acrescimo, o preco mensal de todos os meses tambem sofrem
+		$isEscopo = $voContratoInfo->inEscopo == "S";
+		//echo ($voContratoMaterInfo->inEscopo);
+		if(!$isEscopo){
+			//echoo("nao eh por escopo. atualzia global.");
+			$this->atualizaValorGlobalPorPeriodo($recordset, $voContratoMater);
+		}
 		return  $recordset;
 	}
 	

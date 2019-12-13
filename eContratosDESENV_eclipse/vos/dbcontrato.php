@@ -261,54 +261,100 @@ class dbcontrato extends dbprocesso {
 		$nmTabela = $voContrato->getNmTabelaEntidade ( $isHistorico );
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
 		$nmTabelaContratoLicon = voContratoLicon::getNmTabelaStatic ( false );
+		$nmTabContratoLiconSqMAX = "TAB_MAX_LICON_CONTRATO";
 		
-		$query = "SELECT " . $nmTabela;
-		$query .= ".*";
-		$query .= ", $nmTabelaContratoInfo." . voContratoInfo::$nmAtrDtProposta;
-		$query .= ", $nmTabelaContratoInfo." . voContratoInfo::$nmAtrInEscopo;
-		$query .= ", $nmTabelaContratoLicon." . voContratoLicon::$nmAtrSituacao;
-		$query .= ", TAB2." . vousuario::$nmAtrName . " AS " . voentidade::$nmAtrNmUsuarioUltAlteracao;
+		$queryJoin = "SELECT " . $nmTabela;
+		$queryJoin .= ".*";
+		$queryJoin .= ", $nmTabelaContratoInfo." . voContratoInfo::$nmAtrDtProposta;
+		$queryJoin .= ", $nmTabelaContratoInfo." . voContratoInfo::$nmAtrInEscopo;
+		$queryJoin .= ", $nmTabelaContratoLicon." . voContratoLicon::$nmAtrSituacao;
+		
+		$queryJoin .= ", TAB2." . vousuario::$nmAtrName . " AS " . voentidade::$nmAtrNmUsuarioUltAlteracao;
 			
 		
-		$query .= " FROM " . $nmTabela;
+		$queryJoin .= " FROM " . $nmTabela;
 		
-		$query .= "\n LEFT JOIN " . $nmTabelaContratoInfo;
-		$query .= "\n ON ";
-		$query .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrCdContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrCdContrato;
-		$query .= "\n AND ";
-		$query .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrAnoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrAnoContrato;
-		$query .= "\n AND ";
-		$query .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrTipoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaContratoInfo;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrCdContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrCdContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrAnoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrAnoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrTipoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
 		
-		$query .= "\n LEFT JOIN " . $nmTabelaContratoLicon;
-		$query .= "\n ON ";
-		$query .= $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrCdContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrCdContrato;
-		$query .= "\n AND ";
-		$query .= $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrAnoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrAnoContrato;
-		$query .= "\n AND ";
-		$query .= $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrTipoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
-		$query .= "\n AND ";
-		$query .= $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrCdEspecieContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrCdEspecieContrato;
-		$query .= "\n AND ";
-		$query .= $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrSqEspecieContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrSqEspecieContrato;		
+		$groupbyinterno = $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrAnoContrato
+				. "," . $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrCdContrato
+				. "," . $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrTipoContrato
+				. "," . $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrCdEspecieContrato
+				. "," . $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrSqEspecieContrato
+				;
 		
-		$query .= "\n LEFT JOIN " . vousuario::$nmEntidade;
-		$query .= "\n TAB1 ON ";
-		$query .= "TAB1." . vousuario::$nmAtrID . "=$nmTabela." . vocontrato::$nmAtrCdUsuarioInclusao;
-		$query .= "\n LEFT JOIN " . vousuario::$nmEntidade;
-		$query .= "\n TAB2 ON ";
-		$query .= "TAB2." . vousuario::$nmAtrID . "=$nmTabela." . vocontrato::$nmAtrCdUsuarioUltAlteracao;
-		$query .= " WHERE ";
-		$query .= $voContrato->getValoresWhereSQLChave ( $isHistorico );
 		
+		//a query abaixo eh p pegar a ultima situacao incluida em contratolicon que definirah se o contrato foi incluido no licon
+		$nmTabContratoInterna = $nmTabelaContratoLicon;
+		$queryJoin .= "\n left JOIN ";
+		
+		$queryJoin .= " (SELECT " . voContratoLicon::$nmAtrAnoDemanda . "," . voContratoLicon::$nmAtrCdDemanda . ", $groupbyinterno, MAX($nmTabContratoInterna." . voContratoLicon::$nmAtrDhInclusao . ") FROM " . $nmTabContratoInterna;
+		$queryJoin .= " INNER JOIN " . $nmTabela;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabContratoInterna . "." . voContratoLicon::$nmAtrAnoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabContratoInterna . "." . voContratoLicon::$nmAtrTipoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrCdContrato . "=" . $nmTabContratoInterna . "." . voContratoLicon::$nmAtrCdContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrCdEspecieContrato . "=" . $nmTabContratoInterna . "." . voContratoLicon::$nmAtrCdEspecieContrato;		
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrSqEspecieContrato . "=" . $nmTabContratoInterna . "." . voContratoLicon::$nmAtrSqEspecieContrato;		
+		$queryJoin .= " WHERE " . voContratoLicon::$nmAtrSituacao . " IN (" . getSQLStringFormatadaColecaoIN(array_keys(dominioSituacaoContratoLicon::getColecaoIncluidoSucesso()), false) . ")";
+		$queryJoin .= " AND " . $voContrato->getValoresWhereSQLChave ( $isHistorico );
+		$queryJoin .= " GROUP BY " . $groupbyinterno;
+		$queryJoin .= "\n) " . $nmTabContratoLiconSqMAX;
+		
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabContratoLiconSqMAX . "." . vocontrato::$nmAtrAnoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrCdContrato . "=" . $nmTabContratoLiconSqMAX . "." . vocontrato::$nmAtrCdContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabContratoLiconSqMAX . "." . vocontrato::$nmAtrTipoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrCdEspecieContrato. "=" . $nmTabContratoLiconSqMAX . "." . vocontrato::$nmAtrCdEspecieContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrSqEspecieContrato . "=" . $nmTabContratoLiconSqMAX . "." . vocontrato::$nmAtrSqEspecieContrato;
+					
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaContratoLicon;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrCdContrato . "=" . $nmTabContratoLiconSqMAX . "." . voContratoLicon::$nmAtrCdContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrAnoContrato . "=" . $nmTabContratoLiconSqMAX . "." . voContratoLicon::$nmAtrAnoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrTipoContrato . "=" . $nmTabContratoLiconSqMAX . "." . voContratoLicon::$nmAtrTipoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrCdEspecieContrato . "=" . $nmTabContratoLiconSqMAX . "." . voContratoLicon::$nmAtrCdEspecieContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrSqEspecieContrato . "=" . $nmTabContratoLiconSqMAX . "." . voContratoLicon::$nmAtrSqEspecieContrato;		
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrAnoDemanda . "=" . $nmTabContratoLiconSqMAX . "." . voContratoLicon::$nmAtrAnoDemanda;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrCdDemanda . "=" . $nmTabContratoLiconSqMAX . "." . voContratoLicon::$nmAtrCdDemanda;
+		
+		$queryJoin .= "\n LEFT JOIN " . vousuario::$nmEntidade;
+		$queryJoin .= "\n TAB1 ON ";
+		$queryJoin .= "TAB1." . vousuario::$nmAtrID . "=$nmTabela." . vocontrato::$nmAtrCdUsuarioInclusao;
+		$queryJoin .= "\n LEFT JOIN " . vousuario::$nmEntidade;
+		$queryJoin .= "\n TAB2 ON ";
+		$queryJoin .= "TAB2." . vousuario::$nmAtrID . "=$nmTabela." . vocontrato::$nmAtrCdUsuarioUltAlteracao;
+		$queryJoin .= " WHERE ";		
+		$queryJoin .= $voContrato->getValoresWhereSQLChave ( $isHistorico );
+		//$queryJoin .= " AND $nmTabelaContratoInfo." . voContratoInfo::$nmAtrInDesativado . "= 'N' ";		
 		/*
-		 * $query.= $nmTabela . "." . vocontrato::$nmAtrCdContrato . "=" . $voContrato->cdContrato;
-		 * $query.= " AND " . $nmTabela . "." . vocontrato::$nmAtrAnoContrato . "=" . $voContrato->anoContrato;
-		 * $query.= " AND ". $nmTabela . "." . vocontrato::$nmAtrSqContrato . "=" . $voContrato->sq;
+		 * $queryJoin.= $nmTabela . "." . vocontrato::$nmAtrCdContrato . "=" . $voContrato->cdContrato;
+		 * $queryJoin.= " AND " . $nmTabela . "." . vocontrato::$nmAtrAnoContrato . "=" . $voContrato->anoContrato;
+		 * $queryJoin.= " AND ". $nmTabela . "." . vocontrato::$nmAtrSqContrato . "=" . $voContrato->sq;
 		 */
 		
-		// echo $query;
-		return $this->consultarEntidade ( $query, true );
+		// echo $queryJoin;
+		return $this->consultarEntidade ( $queryJoin, true );
 	}
 	
 	function consultarContratoMovimentacoes($voContrato, $isHistorico=false) {

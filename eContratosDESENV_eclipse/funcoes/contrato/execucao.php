@@ -146,7 +146,9 @@ function detalhar(isExcluir) {
                     <?php
                     
                     //$colecaoMov = $dbContratoMod->consultarExecucao($voContrato);
-                    $colecaoMov = $dbContratoMod->consultarExecucaoValorGlobalReferencial($voContrato);
+                    //$colecaoMov = $dbContratoMod->consultarExecucaoValorGlobalReferencial($voContrato);
+                    $colecaoMov = $dbContratoMod->consultarExecucaoValorGlobalReferencial($colecao);
+                    
                     if (is_array($colecaoMov))
                     	$tamanho = sizeof($colecaoMov);
                     else
@@ -163,7 +165,9 @@ function detalhar(isExcluir) {
                     $vlGlobalSeProrrogado = "Verifique o prazo do contrato mater.";
                     $numMesesPeriodoAtual = $numMesesPeriodoMater;
                     
-                    $isEscopo = $voContratoInfo->inEscopo;
+                    $isEscopo = $voContratoInfo->inEscopo == "S";
+                    //echoo("execucao contrato por escopo? $voContratoInfo->inEscopo");
+                    
                     
                     for ($i=0;$i<$tamanho;$i++) {
                     	$registro = $colecaoMov[$i];
@@ -197,6 +201,8 @@ function detalhar(isExcluir) {
                     		if($isEscopo){
                     			//se por escopo, valor licon eh igual ao valor por "prazo restante"
                     			$vlLicon = $voAtual->vlModificacaoReal;
+                    			$vlMensalAtual = $vlGlobalReal/$numMesesPeriodoAtual;
+                    			$vlGlobalSeProrrogado = $vlGlobalReal;
                     		}
                     		
                     	}else{
@@ -242,14 +248,6 @@ function detalhar(isExcluir) {
                     ?>
 	                <TR>
 	                    <TD class="totalizadortabeladadosalinhadodireita" colspan=<?=$colspan?>>Total de registro(s): <?=$i?></TD>
-	                </TR>
-	                <TR>
-	                    <TD class="totalizadortabeladadosalinhadoesquerda" colspan=<?=$colspan?>>
-	                    <?php 
-		                    $complementoDet = "Valor ATUAL Executado: Global " . getInputText("", "", getMoeda($vlGlobalAtual), constantes::$CD_CLASS_CAMPO_READONLY);		                    
-		                    echo getTextoHTMLNegrito($complementoDet);
-	                    ?>
-	                    </TD>
 	                </TR>
 	                <TR>
 	                    <TD class="totalizadortabeladadosalinhadoesquerda" colspan=<?=$colspan?>>

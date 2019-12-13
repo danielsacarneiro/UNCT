@@ -4,11 +4,11 @@ include_once (caminho_lib . "voentidade.php");
 class voMensageria extends voentidade {	
 	
 	//ativa o envio da mensageria para a UNCT
-	static $ATIVADO = false;
+	static $ATIVADO = true;
 	//ativa o envio do email do relatorio diario
 	static $ENVIAR_EMAIL_RELATORIO_DIARIO = true;
 	//ativa o envio do email da mensageria ao gestor
-	static $ENVIAR_EMAIL_GESTOR = false;
+	static $ENVIAR_EMAIL_GESTOR = true;
 	//ativa o envio do email para teste permitindo o envio de mais de um email por dia
 	static $IN_VERIFICAR_FREQUENCIA = "S";
 	static $IMPRIMIR_MENSAGEM_SE_CONSULTA_VAZIA = true;
@@ -43,13 +43,28 @@ class voMensageria extends voentidade {
 		
 		// retira os atributos padrao que nao possui
 		// remove tambem os que o banco deve incluir default
-		$arrayAtribRemover = array (
+		/*$arrayAtribRemover = array (
 				self::$nmAtrSq,
 				self::$nmAtrDhInclusao,
 				self::$nmAtrDhUltAlteracao,
 		);
 		$this->removeAtributos ( $arrayAtribRemover );
-		$this->varAtributosARemover = $arrayAtribRemover;
+		$this->varAtributosARemover = $arrayAtribRemover;*/
+		
+		
+		$arrayAtribRemover = array (
+				self::$nmAtrDhInclusao,
+				self::$nmAtrDhUltAlteracao,
+		);
+		
+		$arrayAtribInclusaoDBDefault = array (
+				self::$nmAtrSq,
+				self::$nmAtrDhInclusao,
+				self::$nmAtrDhUltAlteracao,
+				
+		);
+		$this->setaAtributosRemocaoEInclusaoDBDefault($arrayAtribRemover, $arrayAtribInclusaoDBDefault);
+		
 		
 		$this->vocontratoinfo = new voContratoInfo();
 	}

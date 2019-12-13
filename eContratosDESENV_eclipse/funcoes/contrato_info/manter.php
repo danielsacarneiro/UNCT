@@ -72,6 +72,25 @@ function confirmar() {
 	return confirm("Confirmar Alteracoes?");    
 }
 
+function formataFormEscopo() {
+	campoInEscopo = document.frm_principal.<?=voContratoInfo::$nmAtrInEscopo?>;
+	campoProrrogacao = document.frm_principal.<?=voContratoInfo::$nmAtrInPrazoProrrogacao?>;
+
+	var isEscopo =  false;
+	try{
+		isEscopo =  campoInEscopo.value == "S";
+	}catch(ex){
+	}
+
+	if(isEscopo && campoProrrogacao.value != ""
+		&& campoProrrogacao.value != "<?=dominioProrrogacaoContrato::$CD_NAO_SEAPLICA?>"){
+		exibirMensagem("A prorrogação do contrato por escopo fundamenta-se no art.57, §º1, lei 8666/93.");
+		campoProrrogacao.focus();
+		campoProrrogacao.value = "";
+	}
+}
+
+
 function formataFormClassificacao(pCampoChamada) {
 	campoClassificacao = document.frm_principal.<?=voContratoInfo::$nmAtrCdClassificacao?>;
 	campoMaodeObra = document.frm_principal.<?=voContratoInfo::$nmAtrInMaoDeObra?>;
@@ -177,7 +196,7 @@ function transferirDadosPessoa(cd, nm) {
 	            <TH class="campoformulario" nowrap>Autorização:</TH>
 	            <TD class="campoformulario" nowrap width="1%"><?php echo $combo->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato,voContratoInfo::$nmAtrCdAutorizacaoContrato, $cdAutorizacao, true, "camponaoobrigatorio", true, " required ");?>
 	            <TH class="campoformulario" nowrap width="1%">Contrato por escopo (sem valor referencial mensal)?:</TH>
-	            <TD class="campoformulario" ><?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInEscopo,voContratoInfo::$nmAtrInEscopo, $vo->inEscopo, true, "camponaoobrigatorio", true, " required ");?>
+	            <TD class="campoformulario" ><?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInEscopo,voContratoInfo::$nmAtrInEscopo, $vo->inEscopo, true, "camponaoobrigatorio", true, " onChange='formataFormEscopo();' required ");?>
 	        </TR>
 	        <TR>	       
 	            <TH class="campoformulario" nowrap width="1%">Data.Proposta de preços:</TH>
@@ -210,7 +229,7 @@ function transferirDadosPessoa(cd, nm) {
 	        ?>
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Prorrogação:</TH>
-	            <TD class="campoformulario" colspan="3"><?php echo $comboProrrogacao->getHtmlCombo(voContratoInfo::$nmAtrInPrazoProrrogacao,voContratoInfo::$nmAtrInPrazoProrrogacao, $vo->inPrazoProrrogacao, true, "campoobrigatorio", false,"");?>
+	            <TD class="campoformulario" colspan="3"><?php echo $comboProrrogacao->getHtmlCombo(voContratoInfo::$nmAtrInPrazoProrrogacao,voContratoInfo::$nmAtrInPrazoProrrogacao, $vo->inPrazoProrrogacao, true, "campoobrigatorio", false," onChange='formataFormEscopo();' ");?>
 	            </TD>
 	        </TR>
 	        <?php	        

@@ -121,6 +121,7 @@ function getContratoDetalhamentoParam($arrayParametro) {
 		}		
 		
 		if ($temLupa) {
+			
 			if($detalharContratoInfo){
 				$voContratoInfo = new voContratoInfo();
 //				$vocontratoasdsa = new vocontrato();
@@ -130,6 +131,7 @@ function getContratoDetalhamentoParam($arrayParametro) {
 				
 				echo getLinkPesquisa ( "../".voContratoInfo::getNmTabela()."/detalhar.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $voContratoInfo->getValorChaveHTML() );
 			}else{
+				
 				echo getLinkPesquisa ( "../contrato/detalharContrato.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $chaveContrato );
 			}
 			
@@ -453,7 +455,7 @@ function getContratoEntradaDeDadosVOGenerico($vocontrato, $arrayCssClass, $array
 		}
 		
 		$chaveContrato = $vocontrato->getValorChaveHTML ();		
-		echo getDadosContratada ( $chaveContrato );
+		echo getDadosContratada ( $chaveContrato );		
 	}	
 	//echo getLinkPesquisa ( "../contrato/detalharContrato.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $chaveContrato );
 	?>
@@ -799,7 +801,7 @@ function getCamposContratoMod($vo, $arrayParamComplemento = null){
 	$voContrato->dtVigenciaFinal = $voContratoTemp->dtVigenciaFinal;
 	/*$voContrato->vlMensal = $voContratoTemp->vlMensal;
 	$voContrato->vlGlobal = $voContratoTemp->vlGlobal;*/
-	$retorno = getTextoHTMLNegrito("Vigência"). " determinada pelo " . getTextoHTMLNegrito(getContratoDetalhamentoAvulso($voContratoTemp, true)) . "<br>";
+	$retorno = getTextoHTMLNegrito("VIGÊNCIA"). " determinada pelo " . getTextoHTMLNegrito(getContratoDetalhamentoAvulso($voContratoTemp, true)) . "<br>";
 	$voContratoReferencia = clone $voContratoTemp;
 		//var_dump($voContratoReferencia);
 		
@@ -809,7 +811,7 @@ function getCamposContratoMod($vo, $arrayParamComplemento = null){
 	$voContratoModEspecificoReajustado = $registroExecucao[filtroManterContratoModificacao::$NmColVOContratoModReajustado];
 	//$isReajuste = $tipoModificacao == dominioTpContratoModificacao::$CD_TIPO_REAJUSTE || $tipoModificacao == dominioTpContratoModificacao::$CD_TIPO_REPACTUACAO;	
 	if($voContratoModEspecificoReajustado->vlMensalAtual != null){
-		$retorno .= getTextoHTMLNegrito("Execução"). " determinada pelo ". getTextoHTMLNegrito(getContratoDetalhamentoAvulso($voContratoModEspecificoReajustado->vocontrato, true)) . "<br>";
+		$retorno .= getTextoHTMLNegrito("EXECUÇÃO"). " determinada pelo ". getTextoHTMLNegrito(getContratoDetalhamentoAvulso($voContratoModEspecificoReajustado->vocontrato, true)) . "<br>";
 		//serve para buscar os valores de execucao atual
 		//echo "entrou";
 		$voContrato->vlMensal = getMoeda($voContratoModEspecificoReajustado->vlMensalAtual, 2);
@@ -817,7 +819,7 @@ function getCamposContratoMod($vo, $arrayParamComplemento = null){
 		$voContrato->vlGlobal = getMoeda($voContratoModEspecificoReajustado->vlGlobalAtual,2);
 	}	
 
-		
+	$vlMensalExecucao = $voContrato->vlMensal;
 	if($voContrato != null){
 		$numMesesPeriodoTermo = 12;
 		$numMesesPeriodoTermo = getQtdMesesEntreDatas($voContrato->dtVigenciaInicial, $voContrato->dtVigenciaFinal);
@@ -832,7 +834,7 @@ function getCamposContratoMod($vo, $arrayParamComplemento = null){
 		$jsCopiaVlMensalReajuste = "document.frm_principal." . voContratoModificacao::$ID_REQ_VL_BASE_REAJUSTE . ".value = this.value;";
 		$javaScriptOnKeyUpMoeda = " onkeyup='formatarCampoMoedaComSeparadorMilhar(this, 2, event);$jsCopiaVlMensalReajuste;' ";
 		//$retorno .= "<br>Valor Mensal Referência: " . getInputText(vocontrato::$nmAtrVlMensalContrato, vocontrato::$nmAtrVlMensalContrato, $voContrato->vlMensal, constantes::$CD_CLASS_CAMPO_READONLY, null, null, " onkeyup='formatarCampoMoedaComSeparadorMilhar(this, 4, event);' ");
-		$retorno .= "<br>Valor Mensal Execução: " . getInputText(vocontrato::$nmAtrVlMensalContrato, vocontrato::$nmAtrVlMensalContrato, $voContrato->vlMensal, constantes::$CD_CLASS_CAMPO_OBRIGATORIO, null, null, $javaScriptOnKeyUpMoeda);
+		$retorno .= "<br>Valor Mensal Execução: " . getInputText(vocontrato::$nmAtrVlMensalContrato, vocontrato::$nmAtrVlMensalContrato, $vlMensalExecucao, constantes::$CD_CLASS_CAMPO_OBRIGATORIO, null, null, $javaScriptOnKeyUpMoeda);
 		$retorno .= " Valor Mensal Termo: " . getInputText(voContratoModificacao::$ID_REQ_VlMensalContratoInseridoTela, voContratoModificacao::$ID_REQ_VlMensalContratoInseridoTela, $vlMensalTermoInseridoTela, constantes::$CD_CLASS_CAMPO_READONLY);
 		//$retorno .= " Valor Mensal Referência (%Acréscimos): " . getInputText(voContratoModificacao::$nmAtrVlMensalModAtual, voContratoModificacao::$nmAtrVlMensalModAtual, $vlMensalAtualizadoParaFinsMod, constantes::$CD_CLASS_CAMPO_READONLY);
 		$retorno .= " Valor Mensal Referência (%Acréscimos): " . getInputText(voContratoModificacao::$nmAtrVlMensalModAtual, voContratoModificacao::$nmAtrVlMensalModAtual, $vlMensalAtualizadoParaFinsMod, constantes::$CD_CLASS_CAMPO_OBRIGATORIO, null, null, $javaScriptOnKeyUpMoeda);

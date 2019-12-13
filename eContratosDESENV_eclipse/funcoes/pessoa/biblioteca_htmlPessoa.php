@@ -100,6 +100,7 @@ function getLupaContratoMaterPorChaveHTML($chave){
 	/*$voContTemp->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
 	$voContTemp->sqEspecie = 1;*/
 	$chaveTemp = $voContTemp->getValorChaveHTML();
+	//echo $chaveTemp;
 	return getLinkPesquisa ( "../contrato/detalharContrato.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $chaveTemp );	
 }
 function converteRecordSetEmColecaoVOsContrato($colecao) {

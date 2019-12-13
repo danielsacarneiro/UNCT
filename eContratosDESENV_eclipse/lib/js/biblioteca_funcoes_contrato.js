@@ -131,7 +131,7 @@ function calcularModificacaoNovo(pArrayCampos) {
 	var campoInEscopo = pArrayCampos[23];
 
 	var tpModificacao = campoTpModificacao.value
-	var isSupressao = tpModificacao == cdTpSupressao; 
+	var isSupressao = tpModificacao == cdTpSupressao;
 	var isReajuste = tpModificacao == cdTpReajuste;
 	var isProrrogacao = tpModificacao == cdTpProrrogacao;
 	var fator = 1;
@@ -213,6 +213,8 @@ function calcularModificacaoNovo(pArrayCampos) {
 		var vlMensalAtualizado = getValorCampoMoedaComoNumeroValido(campoVlMensalAtualizado);
 		var vlGlobalAtualizado = getValorCampoMoedaComoNumeroValido(campoVlGlobalAtualizado);
 
+		var isContratoPorEscopo = inEscopo == 'S';
+		
 		if(isProrrogacao){
 			vlMensalAtualizadoNovo = vlMensalBase;
 			vlGlobalAtualizadoNovo = vlGlobalBase;
@@ -242,6 +244,16 @@ function calcularModificacaoNovo(pArrayCampos) {
 			if(atualizarValorMensal){
 				vlMensalAtualizadoNovo = eval(vlMensalBase + vlReferencialNovo);
 			} 
+			
+			//acrescimo e supressao do escopo funciona diferente
+			if(isContratoPorEscopo){
+				vlGlobalAtualizadoNovo = vlGlobalBase + vlModAoContratoNovo;
+				vlMensalAtualizadoNovo = eval(vlGlobalAtualizadoNovo/numPrazoMater);				
+				vlReferencialNovo = eval(vlModAoContratoNovo/numPrazo);
+				
+				//alert("global " + vlGlobalAtualizado + ", vlmensal " + vlMensalAtualizadoNovo + " vlReferencialNovo " + vlReferencialNovo);
+			}
+			
 			//vlGlobalAtualizadoNovo = vlGlobalBase + vlModAoContratoNovo;
 			vlGlobalAtualizadoNovo = vlMensalAtualizadoNovo*numPrazoMater;
 		}else{
@@ -265,15 +277,16 @@ function calcularModificacaoNovo(pArrayCampos) {
 		setValorCampoMoedaComSeparadorMilhar(campoVlMensalAtualizado, vlMensalAtualizadoNovo, 4);
 		setValorCampoMoedaComSeparadorMilhar(campoVlGlobalAtualizado, vlGlobalAtualizadoNovo, 4);
 					
-		var vlModReal = 0;		
-		vlModReal = eval(vlReferencialNovo*numMesesAoFinal);
+		var vlModReal = eval(vlReferencialNovo*numMesesAoFinal);
+		if(isContratoPorEscopo){
+			vlModReal = vlModAoContratoNovo;
+		}
 
 		setValorCampoMoedaComSeparadorMilhar(campoVlRealAoContrato, vlModReal, 2);
 		setValorCampoMoedaComSeparadorMilhar(campoNumMesesAoFim, numMesesAoFinal, 2);
 		
 		//atualiza o percentual 
 		//percentual = eval((vlMensalAtualizadoNovo-vlMensalBase)/vlMensalBase);
-		var isContratoPorEscopo = inEscopo == 'S';
 		var vlBasePercentualGestor = 0;		
 		campoVlBasePercentualGestor.value = campoVlMensalBase.value;		
 		if(isContratoPorEscopo){

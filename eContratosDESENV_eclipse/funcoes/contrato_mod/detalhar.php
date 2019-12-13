@@ -172,7 +172,14 @@ function confirmar() {
 	        $numMesesPeriodoMater = getQtdMesesEntreDatas($voContrato->dtVigenciaInicial, $voContrato->dtVigenciaFinal);
 	        //$numMesesPeriodoMater = getQtdDiasEntreDatas(getData($voContrato->dtVigenciaInicial), getData($voContrato->dtVigenciaFinal));
 	        
-	        $vlAIncluirSistemaLicon = $numMesesPeriodoMater*$vo->vlModificacaoReferencial;	        
+	        $vlAIncluirSistemaLicon = $numMesesPeriodoMater*$vo->vlModificacaoReferencial;
+	        $voContratoInfo = new voContratoInfo();
+	        $voContratoInfo->getDadosBanco($colecao);
+	        $isEscopo = $voContratoInfo->inEscopo == 'S'; 
+	         
+	        if($isEscopo){
+	        	$vlAIncluirSistemaLicon = $vo->vlModificacaoReal;
+	        }
 	        ?>
 			<TR>
 	            <TH class="campoformulario">Valor LICON (dependerá do prazo inicial do contrato MATER):</TH>
