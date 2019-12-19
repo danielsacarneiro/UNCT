@@ -14,7 +14,7 @@ Class dominioTpContratoModificacao extends dominio{
 	static $DS_TIPO_SUPRESSAO = "Supressão";
 	static $DS_TIPO_REAJUSTE = "Reajuste";
 	static $DS_TIPO_PRORROGACAO = "Prorrogação";
-	static $DS_TIPO_REPACTUACAO = "Repactuação";
+	static $DS_TIPO_REPACTUACAO = "Revisão";
 	// ...............................................................
 
 	static function getColecao(){

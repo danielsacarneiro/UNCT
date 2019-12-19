@@ -66,6 +66,7 @@ function getMensagemPAAPAbertoNaoEncaminhado(&$count = 0){
 		$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_ATJA;
 		$filtro->inComPAAPInstaurado = constantes::$CD_NAO;
 		$filtro->InVerificarPrazo = constantes::$CD_NAO;
+		$filtro->inDesativado = constantes::$CD_NAO;
 
 		//art. 25, inciso II, do Decreto n42.191/2015
 		//$filtro->qtdDiasPrazo = 10;

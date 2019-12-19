@@ -55,6 +55,7 @@ class email_sefaz extends multiplosConstrutores{
 	static function getListaEmailAvisoGestorContrato(){
 		return array(
 				"unct@sefaz.pe.gov.br",
+				"eduardo.s-goncalves@sefaz.pe.gov.br",
 				"daniel.ribeiro@sefaz.pe.gov.br",
 				//"rogerio.f-carvalho@sefaz.pe.gov.br",
 				//"margarida.vasconcelos@sefaz.pe.gov.br"

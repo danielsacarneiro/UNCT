@@ -85,7 +85,30 @@ function confirmar() {
 	if(!isFormularioValido())
 		return false;
 
+	alertarValorAtualizadoComValordoTermo();
+
 	return confirm("Confirmar Alteracoes?");    
+}
+
+function alertarValorAtualizadoComValordoTermo() {	
+	var campoValorAtualizado = document.frm_principal.<?=voContratoModificacao::$nmAtrVlGlobalAtualizado?>;
+	var campoValorTermo = document.frm_principal.<?=voContratoModificacao::$ID_REQ_VlGlobalContratoInseridoTela?>;
+
+	/*if(!isCampoMoedaValido(campoValorAtualizado, 2, true, 0.1)){
+		return false;
+	}	
+
+	if(!isCampoMoedaValido(campoValorTermo, 2, true, 0.1)){
+		return false;
+	}*/	
+
+	vlAtualizado = getValorCampoMoedaComoNumeroValido(campoValorAtualizado);
+	vlTermo = getValorCampoMoedaComoNumeroValido(campoValorTermo);
+	
+	if(vlAtualizado != vlTermo){
+		exbirMensagem("[INFORMAÇÃO: o valor atualizado do contrato difere do valor registrado no termo.]");
+		retorno = false;
+	}	    
 }
 
 function formataForm(pLimparCampos) {

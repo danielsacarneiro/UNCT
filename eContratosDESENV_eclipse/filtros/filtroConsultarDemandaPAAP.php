@@ -145,6 +145,12 @@ class filtroConsultarDemandaPAAP extends filtroManterDemanda{
 			$conector = "\n AND ";
 		}
 			
+		if ($this->inDesativado != null) {	
+			$filtro = $filtro . $conector . $nmTabela . "." . voDemanda::$nmAtrInDesativado . " = " . getVarComoString($this->inDesativado);
+		
+			$conector = "\n AND ";
+		}
+		
 		//verifica prazo encerrado da notificacao
 		if(getAtributoComoBooleano($this->InVerificarPrazo)){
 			$filtro = $this->getDataComparacaoPrazoEncerrado($filtro, $nmTabelaPA, $conector);

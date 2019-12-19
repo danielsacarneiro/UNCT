@@ -124,24 +124,25 @@ function detalhar(isExcluir) {
                  <TBODY>
                     <TR>
                       	<TH class='headertabeladadosalinhadocentro' width='1%' rowspan=2>X</TH>
-                        <TH class='headertabeladados' rowspan=2 nowrap>Espécie</TH>
+                        <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Espécie</TH>
                         <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Tipo</TH>
                         <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Índice</TH>
                         <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Data.Ini.</TH>
                         <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Data.Fim</TH>
-                        <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Meses</TH>
-						<TH class='headertabeladados' width='1%' rowspan=2 nowrap>Vl.Referencial</TH>
+                        <TH class='headertabeladadosalinhadocentro' width='1%' rowspan=2 nowrap>Meses<br>Restantes</TH>
+                        <TH class='headertabeladadosalinhadocentro' width='1%' rowspan=2 nowrap>Meses<br>Contrato</TH>
+						<TH class='headertabeladados' width='1%' rowspan=2 nowrap>Vl.Refer.</TH>
                         <TH class='headertabeladadosalinhadocentro' width='1%' rowspan=2 nowrap>Vl.Licon<br>(Prazo.Restante)</TH>
                         <TH class='headertabeladadosalinhadocentro' width='1%' rowspan=2 nowrap>Vl.Licon<br>Prazo.Cheio<br>(entend.ATUAL)</TH>
                         <TH class='headertabeladadosalinhadocentro' width='40%' nowrap colspan=2>Vl.Mensal</TH>
                         <TH class='headertabeladadosalinhadocentro' width='40%' nowrap colspan=3>Vl.Global</TH>
                     </TR>
                     <TR>
-                        <TH class='headertabeladadosalinhadodireita'>Documentado</TH>
-                        <TH class='headertabeladadosalinhadodireita'>Execução</TH>
-                        <TH class='headertabeladadosalinhadodireita'>Documentado</TH>
-                        <TH class='headertabeladadosalinhadodireita'>Execução</TH>
-                        <TH class='headertabeladadosalinhadodireita'>Prorrogação</TH>
+                        <TH class='headertabeladadosalinhadodireita' width='1%'>Doc.</TH>
+                        <TH class='headertabeladadosalinhadodireita' width='1%'>Execução</TH>
+                        <TH class='headertabeladadosalinhadodireita' width='1%'>Doc.</TH>
+                        <TH class='headertabeladadosalinhadodireita' width='1%'>Execução</TH>
+                        <TH class='headertabeladadosalinhadodireita' width='1%'>Prorrogação</TH>
                     </TR>
                     <?php
                     
@@ -156,7 +157,7 @@ function detalhar(isExcluir) {
                     	
                     //var_dump($colecaoMov);
                     
-                    $colspan=15;
+                    $colspan=16;
                     if($isHistorico){
                     	$colspan++;
                     }
@@ -168,60 +169,82 @@ function detalhar(isExcluir) {
                     $isEscopo = $voContratoInfo->inEscopo == "S";
                     //echoo("execucao contrato por escopo? $voContratoInfo->inEscopo");
                     
-                    
-                    for ($i=0;$i<$tamanho;$i++) {
-                    	$registro = $colecaoMov[$i];
-                        $voAtual = new voContratoModificacao();
-                        $voAtual->getDadosBanco($registro);
-                        
-                        $voContratoAtual = new vocontrato();
-                        $voContratoAtual->getDadosBanco($registro);
-                        $especie = getDsEspecie($voContratoAtual);
-						                            
-                        $tipo = dominioTpContratoModificacao::getDescricaoStatic($voAtual->tpModificacao);
-                        $percentual = getMoeda($voAtual->numPercentual,4) . "%";
-                        
-                        $voContratoModReajuste = $registro[filtroManterContratoModificacao::$NmColVOContratoModReajustado];
-                        $vlMensalAtual = $voContratoModReajuste->vlMensalAtual;
-                        $vlGlobalAtual = $voContratoModReajuste->vlGlobalAtual;
-                        //$vlGlobalReal = $voAtual->vlGlobalReal;
-                        $vlGlobalReal = $vlGlobalAtual;                      
-                        
-                        if($numMesesPeriodoAtual != null){                        	
-                    		$vlGlobalSeProrrogado = $numMesesPeriodoAtual*$vlMensalAtual;
-                    		//echo "$especie $vlGlobalSeProrrogado| $vlMensalAtual <br>";
-                    	}
-
-                    	//reajuste NAO muda o valor global referencia para fins de valores no licon
-                    	$isReajuste = $voAtual->tpModificacao == dominioTpContratoModificacao::$CD_TIPO_REAJUSTE
-                    		|| $voAtual->tpModificacao == dominioTpContratoModificacao::$CD_TIPO_REPACTUACAO;
+                    if($tamanho > 0){
+                    	$registro = $colecaoMov[0];
+                    	$voAtual = new voContratoModificacao();
+                    	$voAtual->getDadosBanco($registro); 
+                    	//serve para comparar as execucoes de um termo especifico
+                    	$chaveTermoAnterior = $voAtual->getValorChavePrimariaTermo();
                     	
-                    	if(!$isReajuste){
-                    		$vlLicon = $voAtual->vlModificacaoReferencial*$numMesesPeriodoAtual;                    		
-                    		if($isEscopo){
-                    			//se por escopo, valor licon eh igual ao valor por "prazo restante"
-                    			$vlLicon = $voAtual->vlModificacaoReal;
-                    			$vlMensalAtual = $vlGlobalReal/$numMesesPeriodoAtual;
-                    			$vlGlobalSeProrrogado = $vlGlobalReal;
-                    		}
-                    		
-                    	}else{
-                    		$vlLicon = 0;
-                    	}
-                    	                    	
-                    	$isProrrogacao = $voAtual->tpModificacao == dominioTpContratoModificacao::$CD_TIPO_PRORROGACAO;
-                    	if($isProrrogacao){                   		
-                    		//$numMesesPeriodoAtual = getQtdMesesEntreDatas($voAtual->dtModificacao, $voAtual->dtModificacaoFim);
-                    		$numMesesPeriodoAtual = getQtdMesesEntreDatas($voContratoAtual->dtVigenciaInicial, $voContratoAtual->dtVigenciaFinal);
-                    		//$numMesesPeriodoAtual = $voAtual->numMesesParaOFimdoPeriodo;
-                    		/*echo "$especie $voContratoAtual->dtVigenciaInicial | $voContratoAtual->dtVigenciaFinal<br>";
-                    		echo "numMEs $numMesesPeriodoAtual <br>";*/
-                    	}
-                    	
-                    	$tipo = getTextoHTMLDestacado($tipo, dominioTpContratoModificacao::getCorTpModificacao($voAtual->tpModificacao), false);
-                    	$numMesesTela = $voAtual->numMesesParaOFimdoPeriodo;                    	
-                    	$numMesesTela = getTextoHTMLDestacado($numMesesTela, dominioTpContratoModificacao::getCorTpModificacao($voAtual->tpModificacao), false);
-                    	                         
+	                    for ($i=0;$i<$tamanho;$i++) {
+	                    	$registro = $colecaoMov[$i];
+	                        $voAtual = new voContratoModificacao();
+	                        $voAtual->getDadosBanco($registro);
+	                        $chaveTermoAtual = $voAtual->getValorChavePrimariaTermo();
+	                        
+	                        $voContratoAtual = new vocontrato();
+	                        $voContratoAtual->getDadosBanco($registro);
+	                        $especie = getDsEspecie($voContratoAtual);							                            
+	                        $tipo = dominioTpContratoModificacao::getDescricaoStatic($voAtual->tpModificacao);
+	                        $percentual = getMoeda($voAtual->numPercentual,4) . "%";
+	                        
+	                        $isProrrogacao = $voAtual->tpModificacao == dominioTpContratoModificacao::$CD_TIPO_PRORROGACAO;
+	                        $vlModReferencial = $voAtual->vlModificacaoReferencial;
+	                        if($isProrrogacao){
+	                        	$numMesesPeriodoAtual = getQtdMesesEntreDatas($voContratoAtual->dtVigenciaInicial, $voContratoAtual->dtVigenciaFinal);
+	                        	//o valor referencial da prorrogacao sera o valor licon usado como referencial
+	                        	//$vlModReferencial = $vlLiconReferencial;
+	                        }	                         
+	                        
+	                        $voContratoModReajuste = $registro[filtroManterContratoModificacao::$NmColVOContratoModReajustado];
+	                        $vlMensalAtual = $voContratoModReajuste->vlMensalAtual;
+	                        $vlGlobalAtual = $voContratoModReajuste->vlGlobalAtual;
+	                        //$vlGlobalReal = $voAtual->vlGlobalReal;
+	                        $vlGlobalReal = $vlGlobalAtual;                      
+	                        
+	                        if($numMesesPeriodoAtual != null){                        	
+	                    		$vlGlobalSeProrrogado = $numMesesPeriodoAtual*$vlMensalAtual;
+	                    		//echo "$especie $vlGlobalSeProrrogado| $vlMensalAtual <br>";
+	                    	}
+	
+	                    	/*//reajuste NAO muda o valor global referencia para fins de valores no licon
+	                    	$isReajuste = $voAtual->tpModificacao == dominioTpContratoModificacao::$CD_TIPO_REAJUSTE
+	                    		|| $voAtual->tpModificacao == dominioTpContratoModificacao::$CD_TIPO_REPACTUACAO;*/
+	                    	
+	                    		                    	 
+	                    	//verifica se eh o mesmo termo
+	                    	if($chaveTermoAtual == $chaveTermoAnterior){
+	                    		$vlLiconReferencial = $vlLiconReferencial + $vlModReferencial;
+	                    	}else{
+	                    		$vlLiconReferencial = $vlModReferencial;
+	                    	}	                    	
+	                    	/*echoo("$chaveTermoAtual == $chaveTermoAnterior & periodoAtual = $numMesesPeriodoAtual");
+	                    	echoo("$chaveTermoAtual & $tipo & periodoAtual = $numMesesPeriodoAtual");
+	                    	echoo("liconreferencial = $vlLiconReferencial");*/
+	                    	                    	                    		                    	
+	                    	$tipo = getTextoHTMLDestacado($tipo, dominioTpContratoModificacao::getCorTpModificacao($voAtual->tpModificacao), false);
+	                    	$numMesesPrazoRestante = $voAtual->numMesesParaOFimdoPeriodo;                    	
+	                    	
+	                    	//o valor licon eh acumulado pelos valores referenciais do MESMO termo
+	                    	//$vlLicon = $vlModReferencial*$numMesesPeriodoAtual;
+	                    	$vlLiconPrazoRestante = ($vlLiconReferencial)*$numMesesPrazoRestante;
+	                    	$vlLicon = ($vlLiconReferencial)*$numMesesPeriodoAtual;
+	                    	
+	                    	if($isEscopo){
+	                    		//se por escopo, valor licon eh igual ao valor por "prazo restante"
+	                    		//$vlLicon = $voAtual->vlModificacaoReal;
+	                    		$vlLicon = $vlLiconPrazoRestante;
+	                    		$vlMensalAtual = $vlGlobalReal/$numMesesPeriodoAtual;
+	                    		$vlGlobalSeProrrogado = $vlGlobalReal;
+	                    	}
+	                    	
+	                    	$numMesesTela = getTextoHTMLDestacado(intval($numMesesPrazoRestante), dominioTpContratoModificacao::getCorTpModificacao($voAtual->tpModificacao), false);
+	                    	if($isProrrogacao){
+	                    		$numMesesPrazoContrato = getTextoHTMLDestacado($numMesesPeriodoAtual , dominioTpContratoModificacao::getCorTpModificacao($voAtual->tpModificacao), false);
+	                    	}else{
+	                    		$numMesesPrazoContrato = "-";
+	                    	}
+	                    	
                     ?>
                     <TR class='dados'>
                         <TD class='tabeladados' width=1%>
@@ -233,9 +256,10 @@ function detalhar(isExcluir) {
                         <TD class='tabeladados'><?php echo getData($voAtual->dtModificacao)?></TD>
                         <TD class='tabeladados'><?php echo getData($voAtual->dtModificacaoFim)?></TD>
                         <TD class='tabeladadosalinhadodireita'><?php echo $numMesesTela?></TD>
-                        <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($voAtual->vlModificacaoReferencial)?></TD>
-                        <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($voAtual->vlModificacaoReal)?></TD>
-                        <TD class='tabeladadosalinhadodireita' ><?php echo getTextoHTMLNegrito(getMoeda($vlLicon))?></TD>
+                        <TD class='tabeladadosalinhadodireita'><?php echo $numMesesPrazoContrato?></TD>
+                        <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($vlLiconReferencial)?></TD>
+                        <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($vlLiconPrazoRestante)?></TD>
+                        <TD class='tabeladadosalinhadodireita' nowrap><?php echo getTextoHTMLNegrito(getMoeda($vlLicon)) . " ($numMesesPeriodoAtual meses)"?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo $voContratoAtual->vlMensal?></TD>                    
                         <TD class='tabeladadosalinhadodireita' ><?php echo getTextoHTMLNegrito(getMoeda($vlMensalAtual))?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo $voContratoAtual->vlGlobal?></TD>                    
@@ -244,7 +268,8 @@ function detalhar(isExcluir) {
                         </TD>
                     </TR>					
                     <?php
-                    }		
+                    		$chaveTermoAnterior = $chaveTermoAtual;
+                   		}                    
                     ?>
 	                <TR>
 	                    <TD class="totalizadortabeladadosalinhadodireita" colspan=<?=$colspan?>>Total de registro(s): <?=$i?></TD>
@@ -256,7 +281,8 @@ function detalhar(isExcluir) {
 		                    $complementoDet .= " Global: " . getInputText("", "", getMoeda($vlGlobalSeProrrogado), constantes::$CD_CLASS_CAMPO_READONLY);
 		                    
 		                    echo getTextoHTMLNegrito($complementoDet);
-	                    ?>
+                    }
+	                ?>
 	                    </TD>
 	                </TR>
 	                	                

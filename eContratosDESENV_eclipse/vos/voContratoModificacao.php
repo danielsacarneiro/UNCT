@@ -242,6 +242,18 @@ class voContratoModificacao extends voentidade {
 		. $this->sq;
 	}
 
+	function getValorChavePrimariaTermo(){
+		return $this->vocontrato->anoContrato
+		. CAMPO_SEPARADOR
+		. $this->vocontrato->cdContrato
+		. CAMPO_SEPARADOR
+		. $this->vocontrato->tipo
+		. CAMPO_SEPARADOR
+		. $this->vocontrato->cdEspecie
+		. CAMPO_SEPARADOR
+		. $this->vocontrato->sqEspecie;
+	}
+	
 	function getChavePrimariaVOExplode($array){
 		$this->vocontrato->anoContrato = $array[0];
 		$this->vocontrato->cdContrato = $array[1];

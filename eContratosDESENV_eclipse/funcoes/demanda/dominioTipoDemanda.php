@@ -38,7 +38,7 @@ Class dominioTipoDemanda extends dominio{
 	
 	static $DS_TIPO_DEMANDA_LICON = "LICON";
 	static $DS_TIPO_DEMANDA_PORTALTRANSPARENCIA = "Portal Transparência";
-	static $DS_TIPO_DEMANDA_FERIAS = "Férias";
+	static $DS_TIPO_DEMANDA_FERIAS = "Gestao de Pessoas";
 	static $DS_TIPO_DEMANDA_TAC = "TAC";
 	
 	// ...............................................................
