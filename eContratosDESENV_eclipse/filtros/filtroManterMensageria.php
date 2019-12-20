@@ -18,6 +18,7 @@ class filtroManterMensageria extends filtroManter {
 	var $dtFim = "";
 	var $inVerificarPeriodoVigente = null;	
 	var $inVerificarFrequencia = null;
+	//var $cdTpVigencia = null;
 	
 	function getFiltroFormulario() {
 		
@@ -30,6 +31,7 @@ class filtroManterMensageria extends filtroManter {
 		$this->inHabilitado = @$_POST [voMensageria::$nmAtrInHabilitado];
 		$this->dtInicio = @$_POST [voMensageria::$nmAtrDtInicio];
 		$this->dtFim = @$_POST [voMensageria::$nmAtrDtFim];
+		$this->tpVigencia = @$_POST [static::$nmAtrTpVigencia];
 		
 		if ($this->cdOrdenacao == null) {
 			$this->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
@@ -95,6 +97,21 @@ class filtroManterMensageria extends filtroManter {
 			$conector = "\n AND ";
 			$atributoComparar = "$nmTabela." . voMensageria::$nmAtrDtFim;
 			$filtro = $filtro . $conector . "($atributoComparar IS NULL OR $atributoComparar >= " . getVarComoData($dataHoje) . ") ";
+			$conector = "\n AND ";
+		}
+		
+		if ($this->tpVigencia != null && $this->tpVigencia != constantes::$CD_OPCAO_TODOS) {
+			if ($this->tpVigencia == dominioTpVigencia::$CD_OPCAO_VIGENTES) {
+				/*$dataHoje = getDataHoje();
+				$filtro = $filtro . $conector . $nmTabela . "." . voMensageria::$nmAtrDtInicio . " <= " . getVarComoData($dataHoje);
+				$conector = "\n AND ";
+				$atributoComparar = "$nmTabela." . voMensageria::$nmAtrDtFim;
+				$filtro = $filtro . $conector . "($atributoComparar IS NULL OR $atributoComparar >= " . getVarComoData($dataHoje) . ") ";*/
+				
+				$filtro = $filtro . $conector . getSQLDataVigenteSqSimples($nmTabela, voMensageria::$nmAtrDtInicio, voMensageria::$nmAtrDtFim);				
+			}else{
+				$filtro = $filtro . $conector . getSQLDataNaoVigenteSqSimples($nmTabela, voMensageria::$nmAtrDtInicio, voMensageria::$nmAtrDtFim);
+			}			
 			$conector = "\n AND ";
 		}
 		

@@ -130,7 +130,15 @@ function alterar() {
                 echo $comboSituacao->getHtmlCombo(voMensageria::$nmAtrInHabilitado,voMensageria::$nmAtrInHabilitado, $filtro->inHabilitado, true, "camponaoobrigatorio", false, "");
                 ?>
 				</TD>				
-            </TR>	        
+            </TR>
+			<TR>
+				<TH class="campoformulario" nowrap>Tp.Vigência:</TH>
+				<?php
+				include_once(caminho_util."dominioTpVigencia.php");
+				$comboVigencia = new select(dominioTpVigencia::getColecao());						
+				?>
+	            <TD class="campoformulario" nowrap colspan=3><?php echo $comboVigencia->getHtmlOpcao(filtroManterMensageria::$nmAtrTpVigencia,filtroManterMensageria::$nmAtrTpVigencia, $filtro->tpVigencia, false);?></TD>
+		    </TR>            	        
        <?php
        echo getComponenteConsultaFiltro($vo->temTabHistorico, $filtro);
         ?>

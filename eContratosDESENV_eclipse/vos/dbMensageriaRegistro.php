@@ -78,6 +78,11 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		$assunto = "COMUNICAÇÃO:";  	
   		$emailGestor = $registro[vopessoa::$nmAtrEmail];
   		$isEmailGestorValido = $emailGestor != null && $emailGestor != "";
+  		
+  		//para o caso de ser mais de um email cadastrado
+  		$arrayEmailGestor = explode(";", $emailGestor);
+  		
+  		$listaEmailTemp = array();
   		$listaEmailTemp = email_sefaz::getListaEmailAvisoGestorContrato();  		
   		
   		if(isColecaoVazia($listaEmailTemp)){
@@ -94,7 +99,8 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		}else{
   			//se o alerta for valido, acrescenta o e-mail do gestor
   			if(voMensageria::$ENVIAR_EMAIL_GESTOR){
-	  			$array2 = array($emailGestor);
+	  			//$array2 = array($emailGestor);
+	  			$array2 = $arrayEmailGestor;	  			
 	  			$listaEmailTemp = array_merge($listaEmailTemp, $array2);
   			}else{
   				$msg .= "<br><br><u><b>Encaminhamento ao gestor desativado. Entre em contato com o administrador do mensageria</b></u>.";
@@ -114,15 +120,14 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		
   		$retorno = "<br>Prezado gestor,
   		
-  		<br><br><br>Esta Unidade de Contratos solicita informações referentes à prorrogação do contrato <b>$codigoContrato</b>, que em breve se encerrará.
-  		<br>Havendo interesse da SEFAZ pela prorrogação, favor enviar com a maior brevidade possível CI (se for o caso, via sistema SEI) à SAFI.
-  		<br><br>Vale salientar que toda prorrogação deverá ser solicitada com, no mínimo, <b>60 (sessenta) dias DE ANTECEDÊNCIA ao vencimento do contrato em questão<b>.
-  		<br><br><b>Se o contrato não comportar mais prorrogação e persistindo a necessidade da contratação, o gestor deverá solicitar novo processo licitatório com, no mínimo 5 (cinco) meses de antecedência, juntamente com o termo de referência, sob pena de ficar sem a prestação do serviço.
+  		<br><br><br>A Unidade de Contratos/SAFI solicita informações referentes à <b>prorrogação</b> do contrato <b>$codigoContrato</b>, que em breve se encerrará.
+  		<br>Havendo interesse da SEFAZ pela prorrogação, favor enviar com a maior brevidade possível CI, via SEI à SAFI, junto com as cotações de preços e a anuência da Contratada.  		
+
+  		<br><br><b>Se o contrato não comportar mais prorrogação e persistindo a necessidade da contratação, o gestor deverá solicitar novo processo licitatório, juntamente com o termo de referência, sob pena de encerramento da prestação do serviço.
   		
-  		<br><br>Informamos ainda que o envio da garantia contratual atualizada da empresa contratada é necessária à instrução da renovação contratual.</b>  		
-  		<br><br>Caso já tenha enviado o pedido de prorrogação, favor desconsiderar esta solicitação informando o nº e data da C.I.
+  		<br><br>Informamos ainda que o envio da garantia contratual atualizada, sendo este o caso, é necessária à instrução da renovação contratual.</b>  		
+  		<br><br>Caso já tenha enviado o pedido de prorrogação, favor desconsiderar esta solicitação.
   		
-  		<br><br>Aguardamos as providências cabíveis, com a urgência requerida.
   		<br><br>Este e-mail é reenviado a cada <b>$numFrequencia dias</b>.";  		 		
   		
   		return $retorno;

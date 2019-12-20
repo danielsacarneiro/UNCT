@@ -6,8 +6,9 @@ require_once (caminho_util . "bibliotecaFuncoesPrincipal.php");
 
 $ativado = voMensageria::$ATIVADO;
 $enviarEmail = @$_GET [constantes::$ID_REQ_IN_ENVIAR_EMAIL];
-//$isEnvioEmailGestor = getAtributoComoBooleano($enviarEmail);
-$isEnvioEmailGestor = voMensageria::$ENVIAR_EMAIL_GESTOR;
+//se for nulo, eh pq veio do disparo automatico
+$isEnvioEmailGestor = $isEnvioEmailGestor == null || getAtributoComoBooleano($enviarEmail);
+$isEnvioEmailGestor = $isEnvioEmailGestor && voMensageria::$ENVIAR_EMAIL_GESTOR;
 
 if(!$ativado){
 	echoo ("Mensageria Desativado.");

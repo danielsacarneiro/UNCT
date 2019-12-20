@@ -10,27 +10,32 @@ inicio();
 $titulo = "TESTE de Funções UNCT";
 setCabecalho($titulo);
 
-echoo("matrix contrato ");
-var_dump(vocontrato::$matrizImportacao);
+echoo("___________________________");
 
-/*$vocontrato = new vocontrato();
+$vocontrato = new voContratoInfo();
+$vomsgregistro = new voMensageriaRegistro();
 
-$str1comseparador = "Termo de ajuste de contas";
-$str2 = "Ajuste*conta";
-$condicao = existeStr1NaStr2ComSeparador($str1comseparador, $str2);
+$registro = array(
+		voMensageria::$nmAtrSq = 2,
+		voContratoInfo::$nmAtrAnoContrato = 2000,
+		voContratoInfo::$nmAtrCdContrato = 2,
+		voContratoInfo::$nmAtrTipoContrato = dominioTipoContrato::$CD_TIPO_PROFISCO,
+		vopessoa::$nmAtrEmail => "daniel.ribeiro@sefaz.pe.gov.br ; eduardo.s-goncalves@sefaz.pe.gov.br"
+		//vopessoa::$nmAtrEmail => "daniel.ribeiro@sefaz.pe.gov.br"
+);
 
-echo $cdEspecie = $vocontrato->dbprocesso->getCdEspecieContrato ( $str1comseparador );
-echo "<BR>";
-if($condicao){
-	echoo ("achou");	
-}else{
-	echoo  ("NAO achou");
-}*/
+$dbMensageriaRegistro = new dbMensageriaRegistro ();
+try {
+	$dbMensageriaRegistro->incluirComEnvioEmail ( $registro );
+} catch ( Exception $e ) {
+	echoo ( $e->getMessage () );
+}
 
-$ano = 2018;
+
+/*$ano = 2018;
 $mes = "02";
 
-echo getDataUltimoDiaMesHtml($mes,$ano);
+echo getDataUltimoDiaMesHtml($mes,$ano);*/
 
 
 ?>
