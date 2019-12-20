@@ -1014,11 +1014,12 @@ class dbcontrato extends dbprocesso {
 	
 	function getVOImportacaoPlanilha($tipo, $linha) {				
 		
+		$tpContrato = $linha ["A"];
+		
 		if($tpContrato == trim(static::$CD_CONSTANTE_FIM_IMPORTACAO)){
 			throw new excecaoFimImportacaoContrato();
-		}
+		}		
 		
-		$tpContrato = $linha ["A"];		
 		echoo("|".$tpContrato."|");
 		
 		$numero = $linha ["B"];

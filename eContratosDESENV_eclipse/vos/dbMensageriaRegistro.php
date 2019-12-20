@@ -52,15 +52,19 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   	function incluirComEnvioEmail($registroMensageria) {  		
   			$this->cDb->retiraAutoCommit ();  			
   			try {
-  				$vomensageria = new voMensageria();
-  				$vomensageria->getDadosBanco($registroMensageria);
+ 				
+  				if(voMensageria::$ENVIAR_EMAIL_GESTOR_CONTRATO){
+	  				$vomensageria = new voMensageria();
+	  				$vomensageria->getDadosBanco($registroMensageria);
+	  				
+	  				$vomensagemregistro = new voMensageriaRegistro();
+	  				$vomensagemregistro->sqMensageria = $vomensageria->sq;
+	  				$this->incluir ( $vomensagemregistro );
+	  				// End transaction
+	  				$this->cDb->commit ();	  					
+  				}
   				
-  				$vomensagemregistro = new voMensageriaRegistro();
-  				$vomensagemregistro->sqMensageria = $vomensageria->sq;
-  				$this->incluir ( $vomensagemregistro );
   				$this->enviarEmailGestor($registroMensageria);
-  				// End transaction
-  				$this->cDb->commit ();
   				
   			} catch ( Exception $e ) {
   				$this->cDb->rollback ();
@@ -98,7 +102,7 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   			$msg = "<br><br><u><b>Contrato SEM E-MAIL VÁLIDO para o Gestor. Mensageria:</b></u> $vomensageria->toString().";  			  				
   		}else{
   			//se o alerta for valido, acrescenta o e-mail do gestor
-  			if(voMensageria::$ENVIAR_EMAIL_GESTOR){
+  			if(voMensageria::$ENVIAR_EMAIL_GESTOR_CONTRATO){
 	  			//$array2 = array($emailGestor);
 	  			$array2 = $arrayEmailGestor;	  			
 	  			$listaEmailTemp = array_merge($listaEmailTemp, $array2);

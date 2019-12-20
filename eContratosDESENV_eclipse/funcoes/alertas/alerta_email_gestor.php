@@ -6,19 +6,20 @@ require_once (caminho_util . "bibliotecaFuncoesPrincipal.php");
 
 $ativado = voMensageria::$ATIVADO;
 $enviarEmail = @$_GET [constantes::$ID_REQ_IN_ENVIAR_EMAIL];
+
 //se for nulo, eh pq veio do disparo automatico
-$isEnvioEmailGestor = $isEnvioEmailGestor == null || getAtributoComoBooleano($enviarEmail);
-$isEnvioEmailGestor = $isEnvioEmailGestor && voMensageria::$ENVIAR_EMAIL_GESTOR;
+$isEnvioEmail = $enviarEmail == null || getAtributoComoBooleano($enviarEmail);
+$isEnvioEmail = $isEnvioEmail && voMensageria::$ENVIAR_EMAIL_GESTOR_UNCT;
 
 if(!$ativado){
 	echoo ("Mensageria Desativado.");
 }else{
-	if(!$isEnvioEmailGestor){
+	if(!$isEnvioEmail){
 		echoo ("Mensageria: Seleção NÃO ENVIAR email para os contratos cadastrados.");
 	}
 }
 
-$enviarEmailAlerta = $ativado && $isEnvioEmailGestor;
+$enviarEmailAlerta = $ativado && $isEnvioEmail;
 if ($enviarEmailAlerta) {	
 	$filtro = new filtroManterMensageria ( false );
 	$filtro->isValidarConsulta = false;
@@ -48,7 +49,7 @@ if ($enviarEmailAlerta) {
 			}
 		}
 	}else{
-		echoo("Mensageria: não existem contratos cadastrados.");
+		echoo("Mensageria: não existem alertas para o dia de hoje.");
 	}
 }
 
