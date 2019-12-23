@@ -8,7 +8,6 @@ inicio();
 
 $vo = new voMensageria();
 $vo->getVOExplodeChave();
-//var_dump($vo);
 
 //var_dump($vo->varAtributos);
 $isHistorico = ($vo->sqHist != null && $vo->sqHist != "");

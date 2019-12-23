@@ -82,6 +82,7 @@ class voMensageria extends voentidade {
 	function getValoresWhereSQLChave($isHistorico) {
 		$nmTabela = $this->getNmTabelaEntidade ( $isHistorico );
 		$query = $this->getValoresWhereSQLChaveLogicaSemSQ($isHistorico);
+		$query .= $nmTabela . "." . self::$nmAtrSq . "=" . $this->sq;
 		
 		if ($isHistorico)
 			$query .= " AND " . $nmTabela . "." . self::$nmAtrSqHist . "=" . $this->sqHist;
@@ -89,8 +90,9 @@ class voMensageria extends voentidade {
 		return $query;
 	}
 	function getValoresWhereSQLChaveLogicaSemSQ($isHistorico) {
-		$nmTabela = $this->getNmTabelaEntidade ( $isHistorico );
+		/*$nmTabela = $this->getNmTabelaEntidade ( $isHistorico );
 		$query = $nmTabela . "." . self::$nmAtrSq . "=" . $this->sq;
+		$query .= " AND " . $nmTabela . "." . self::$nmAtrSq . "=" . $this->sq;*/
 		
 		return $query;
 	}

@@ -16,6 +16,8 @@ class dbprocesso {
 	static $nmTabelaUsuarioUltAlteracao = "TAB_USU_ULT_ALTERACAO";
 	static $nmTabelaUsuarioOperacao = "TAB_USU_OPERACAO";
 	
+	static $NM_FUNCAO_EXCLUIR_MULTIPLOS = "excluirMultiplos";
+	
 	// ...............................................................
 	// construtor
 	function __construct() {

@@ -38,6 +38,7 @@ $numTotalRegistros = $filtro->numTotalRegistros;
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_text.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_cnpfcnpj.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_checkbox.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>tooltip.js"></SCRIPT>
 
 <SCRIPT language="JavaScript" type="text/javascript">
@@ -49,16 +50,33 @@ function isFormularioValido() {
 	return true;
 }
 
-function detalhar(isExcluir) {    
-    if(isExcluir == null || !isExcluir)
+function detalhar(isExcluir) {
+    if(isExcluir == null || !isExcluir){
         funcao = "<?=constantes::$CD_FUNCAO_DETALHAR?>";
-    else
-        funcao = "<?=constantes::$CD_FUNCAO_EXCLUIR?>";
-    
-    if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta"))
+        if (!isApenasUmCheckBoxSelecionado("document.frm_principal.rdb_consulta")){
             return;
-    	
-	chave = document.frm_principal.rdb_consulta.value;	
+        }                    
+    }else{
+        funcao = "<?=constantes::$CD_FUNCAO_EXCLUIR?>";
+
+        if (!isCheckBoxConsultaSelecionado("rdb_consulta"))
+    		return;        
+
+        if (!isApenasUmCheckBoxSelecionado("document.frm_principal.rdb_consulta", true)){
+        	if(confirm("Confirmar Múltiplas Exclusões?")){
+        		excluirMultiplos();
+        		return;
+    		}else{
+    	        if (!isApenasUmCheckBoxSelecionado("document.frm_principal.rdb_consulta")){
+    	            return;
+    	        }                           		
+        	}
+        }
+            
+    }   
+
+    var array = retornarValoresCheckBoxesSelecionadosComoArray("rdb_consulta");
+	chave = array[0];	
 	lupa = document.frm_principal.lupa.value;
 	location.href="detalhar.php?funcao=" + funcao + "&chave=" + chave + "&lupa="+ lupa;
 }
@@ -67,20 +85,34 @@ function excluir() {
     detalhar(true);
 }
 
+function excluirMultiplos() {
+    
+    if (!isCheckBoxConsultaSelecionado("rdb_consulta"))
+            return;
+   
+	var chave = retornarValoresCheckBoxesSelecionadosComoString("rdb_consulta");
+	var lupa = document.frm_principal.lupa.value;
+
+	alert("Nem pense nisso eduardo!");
+		
+	//location.href="detalhar.php?funcao=<?=dbMensageria::$NM_FUNCAO_EXCLUIR_MULTIPLOS?>" + "&chave=" + chave + "&lupa="+ lupa;
+}
+
 function incluir() {
 	location.href="manter.php?funcao=<?=constantes::$CD_FUNCAO_INCLUIR?>";
 }
 
 function alterar() {
-    if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta"))
-            return;
+    if (!isApenasUmCheckBoxSelecionado("document.frm_principal.rdb_consulta"))
+        return;
         
     <?php
     if($isHistorico){
     	echo "exibirMensagem('Registro de historico nao permite alteracao.');return";
     }?>
-    
-	chave = document.frm_principal.rdb_consulta.value;	
+
+	var array = retornarValoresCheckBoxesSelecionadosComoArray("rdb_consulta");
+	chave = array[0];		
 	location.href="manter.php?funcao=<?=constantes::$CD_FUNCAO_ALTERAR?>&chave=" + chave;
 
 }
@@ -116,6 +148,14 @@ function alterar() {
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
 	            <TD class="campoformulario" colspan="3"><?php getContratoEntradaDeDados($filtro->tipoContrato, $filtro->cdContrato, $filtro->anoContrato, $arrayCssClass, null, null);?></TD>
 			</TR>
+			<TR>
+	            <TH class="campoformulario" nowrap width="1%">Sq.Mensageria:</TH>
+	            <TD class="campoformulario" colspan="3">
+				<?php				                        
+				echo getInputText(voMensageria::$nmAtrSq, voMensageria::$nmAtrSq, $filtro->sq, constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO, 3, 3, " onkeyup='validarCampoNumerico(this, event, false);'");
+				?>
+				</TD>
+	        </TR>			
 			<TR>
                 <TH class="campoformulario" nowrap>Nome Contratada:</TH>
                 <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>"  value="<?php echo($filtro->nmContratada);?>"  class="camponaoobrigatorio" size="50"></TD>
@@ -154,7 +194,7 @@ function alterar() {
          <TABLE id="table_tabeladados" class="tabeladados" cellpadding="0" cellspacing="0">						
              <TBODY>
                 <TR>
-                  <TH class="headertabeladados" width="1%">&nbsp;&nbsp;X</TH>
+                  <TH class="headertabeladados" width="1%"><?=getXGridConsulta("rdb_consulta", true)?></TH>
                   <?php 
                   if($isHistorico){					                  	
                   	?>
@@ -221,7 +261,7 @@ function alterar() {
                    ?>
                 <TR class="dados">
                     <TD class="tabeladados">
-                    <?=getHTMLRadioButtonConsulta("rdb_consulta", "rdb_consulta", $voAtual);?>					
+                    <?=getHTMLCheckBoxConsulta("rdb_consulta", "rdb_consulta", $voAtual);?>					
                     </TD>
                   <?php                  
                   if($isHistorico){                  	

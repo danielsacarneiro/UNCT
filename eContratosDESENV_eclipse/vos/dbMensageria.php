@@ -135,6 +135,32 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		return parent::alterar($vo);
   	}  	 
   	 
+  	function excluir($vo) {
+  		// Start transaction
+  		$this->cDb->retiraAutoCommit ();
+  		try {
+			$this->excluirMensageriaRegistro ( $vo );
+  			$vo = parent::excluir ( $vo );
+  			// End transaction
+  			$this->cDb->commit ();
+  		} catch ( Exception $e ) {
+  			$this->cDb->rollback ();
+  			throw new Exception ( $e->getMessage () );
+  		}
+  	
+  		return $vo;
+  	}
+  	function excluirMensageriaRegistro($voMensageria) {
+  		
+  		$voMesgRegistroTemp = new voMensageriaRegistro();
+  		$nmTabela = $voMesgRegistroTemp->getNmTabelaEntidade ( false );  		
+  		$query = "DELETE FROM " . $nmTabela;
+  		$query .= "\n WHERE " . voMensageriaRegistro::$nmAtrSqMensageria . " = " . $voMensageria->sq;
+
+  		// echo $query;
+  		return $this->atualizarEntidade ( $query );
+  	}
+  	 
   	function getSQLValuesInsert($vo){
   		  		
 		$retorno = "";

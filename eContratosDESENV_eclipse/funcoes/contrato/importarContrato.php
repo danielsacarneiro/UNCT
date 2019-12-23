@@ -83,19 +83,26 @@ if(!$isLimparContrato){
 		        }
 		        
 				if(!$result){
-					echo "<br> --- REGISTRO $k: ---";		
-					imprimeLinha($linha);
+					if(dbcontrato::$FLAG_PRINTAR_LOG_IMPORTACAO){		
+						imprimeLinha($linha);
+					}
 				}
 				
-				echo "linha registro" . $k . " <BR>";
+				if(dbcontrato::$FLAG_PRINTAR_LOG_IMPORTACAO_NUM_LINHA){
+					echo "<br>--- linha registro" . $k . " <BR>";
+				}
 		}				
 		//$objPHPExcel->disconnectCells();
 		$objPHPExcel->disconnectWorksheets();
 		$objPHPExcel->garbageCollect();
+
+		//libera memoria
+		unset($objPHPExcel);
+		unset($sheetData);		
 		
 		//atualiza as contratadas
-		echo "<br><br>Atualizando CNPJ das contratadas.<br><br>";
-		$dbprocesso->atualizarPessoasContrato();
+		/*echo "<br><br>Atualizando CNPJ das contratadas.<br><br>";
+		$dbprocesso->atualizarPessoasContrato();*/
 		//$dbprocesso->removerCaracterEspecial();	
 		$dbprocesso->finalizar();
 		
@@ -108,10 +115,6 @@ if(!$isLimparContrato){
 }
     
 echo "FIM... <br><br>";
-
-//libera memoria
-unset($objPHPExcel);
-unset($sheetData);
 
 //importarConvenio("V");
 //importarConvenio("P");

@@ -18,13 +18,14 @@ class filtroManterMensageria extends filtroManter {
 	var $dtFim = "";
 	var $inVerificarPeriodoVigente = null;	
 	var $inVerificarFrequencia = null;
-	//var $cdTpVigencia = null;
+	var $sq = "";
 	
 	function getFiltroFormulario() {
 		
 		$this->cdContrato = @$_POST [voMensageria::$nmAtrCdContrato];
 		$this->anoContrato = @$_POST [voMensageria::$nmAtrAnoContrato];
 		$this->tipoContrato = @$_POST [voMensageria::$nmAtrTipoContrato];
+		$this->sq = @$_POST [voMensageria::$nmAtrSq];
 		
 		$this->nmContratada = @$_POST [vopessoa::$nmAtrNome];
 		$this->docContratada = @$_POST [vopessoa::$nmAtrDoc];
@@ -53,6 +54,13 @@ class filtroManterMensageria extends filtroManter {
 			;
 		}
 				
+		if ($this->sq != null) {
+		
+			$filtro = $filtro . $conector . $nmTabela . "." . voMensageria::$nmAtrSq . " = " . $this->sq;
+		
+			$conector = "\n AND ";
+		}
+		
 		if ($this->anoContrato != null) {
 				
 			$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrAnoContrato . " = " . $this->anoContrato;

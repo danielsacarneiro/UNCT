@@ -116,6 +116,15 @@ function alterar() {
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
 	            <TD class="campoformulario" colspan="3"><?php getContratoEntradaDeDados($filtro->tipoContrato, $filtro->cdContrato, $filtro->anoContrato, $arrayCssClass, null, null);?></TD>
 			</TR>
+			<TR>
+	            <TH class="campoformulario" nowrap width="1%">Sq.Mensageria:</TH>
+	            <TD class="campoformulario" colspan="3">
+				<?php				                        
+				echo getInputText(voMensageria::$nmAtrSq, voMensageria::$nmAtrSq, $filtro->sq, constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO, 3, 3, " onkeyup='validarCampoNumerico(this, event, false);'");
+				?>
+				</TD>
+	        </TR>	        
+			
        <?php
        echo getComponenteConsultaFiltro($vo->temTabHistorico, $filtro);
         ?>

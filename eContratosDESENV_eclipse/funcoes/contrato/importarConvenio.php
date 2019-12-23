@@ -98,7 +98,7 @@ if($totalResultado <= 0){
 			
 			if(!$result){
 				echo "<br> --- REGISTRO $k: ---";		
-				imprimeLinha($linha);
+				//imprimeLinha($linha);
 			}
 					
 			echo "linha registro" . $k . " <BR>";
