@@ -107,13 +107,16 @@ setCabecalho($titulo);
 		f5.adicionarItem(new Link("ATUALIZAR CONTRATADA", "<?=caminho_funcoesHTML?>contrato/atualizarContratada.php", "", null,true));
 		f5.adicionarItem(new Link("REMOVER CARACTERES ESPECIAIS", "<?=caminho_funcoesHTML."contrato/atualizarContratada.php?". dbcontrato::$ID_REQ_REMOVER_CARACTER_ESPECIAL?>=S", "", null,true));
 		f.adicionarItem(f5);	
-	<?php 
-	} else if(isUsuarioPermissaoIntermediaria()){?>
-		finter = new Tree('AVANÇADO');    
+	<?php
+	}
+	//} else if(isUsuarioPermissaoIntermediaria()){
+	?>
+		/*finter = new Tree('AVANÇADO');    
 		finter.adicionarItem(new Link("Tramitação Demanda", "<?=caminho_funcoesHTML?>demanda_tram", ""));
-		f.adicionarItem(finter);	
+		f.adicionarItem(finter);*/	
 	<?php 
-	}?>
+	//}
+	?>
 
 
 </SCRIPT>

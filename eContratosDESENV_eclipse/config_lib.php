@@ -75,6 +75,16 @@ spl_autoload_register(function ($class_name) {
 	
 });
 
+	function getPastaRootEconti(){
+		$path = $_SERVER['DOCUMENT_ROOT'];
+		$pathWordpress = "C:/xampp/htdocs/wordpress/";
+		define('caminho_wordpress', $pathWordpress);
+	
+		define('url_sistema', 'http://econti.localhost/');
+		return $path;		
+	}
+	
+
 function getPastaRoot(){
     $aplicacao = "UNCT/eContratos";
     $ambiente = "";
@@ -88,7 +98,8 @@ function getPastaRoot(){
     define('caminho_wordpress', $path);
     
     $path .= $aplicacao;
-    //include_once($path);
+    
+    define('url_sistema', 'http://sf300451/wordpress/UNCT/eContratosDesenv_eclipse/');
     
     return $path;
 }
@@ -96,6 +107,7 @@ function getPastaRoot(){
 header ('Content-type: text/html; charset=ISO-8859-1');
 
 $base = getPastaRoot();
+//echo $base; 
 define('caminho', $base."/");
 define('caminho_lib', "$base/lib/");
 define('caminho_util', "$base/util/");
@@ -104,9 +116,10 @@ define('caminho_filtros', "$base/filtros/");
 define('caminho_excecoes', "$base/excecoes/");
 define('caminho_funcoesHTML', "funcoes/");
 define('caminho_funcoes', "$base/funcoes/");
-define('url_sistema', 'http://sf300451/wordpress/UNCT/eContratosDesenv_eclipse/');
+
 
 include_once(caminho_util. "bibliotecaFuncoesPrincipal.php");
+//echo caminho_util;
 
 $isPastaRaiz  = isPastaRaiz();
 

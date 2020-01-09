@@ -129,6 +129,7 @@ function calcularModificacaoNovo(pArrayCampos) {
 	var campoNumPrazoMater = pArrayCampos[21];
 	var campoVlGlobalModAtual = pArrayCampos[22];
 	var campoInEscopo = pArrayCampos[23];
+	var campoNumPrazoUltimaProrrogacao = pArrayCampos[24];
 
 	var tpModificacao = campoTpModificacao.value
 	var isSupressao = tpModificacao == cdTpSupressao;
@@ -178,6 +179,8 @@ function calcularModificacaoNovo(pArrayCampos) {
 		
 		numPrazo = getValorCampoMoedaComoNumeroValido(campoNumPrazo, 0);
 		numPrazoMater = getValorCampoMoedaComoNumeroValido(campoNumPrazoMater, 0);
+		var numPrazoUltimaProrrogacao = getValorCampoMoedaComoNumeroValido(campoNumPrazoUltimaProrrogacao, 0);
+		//alert(numPrazoUltimaProrrogacao);
 	
 		/*var numMesesAoFinal = getValorCampoMoedaComoNumeroValido(campoNumMesesAoFim,0);	
 		if(numMesesAoFinal == 0){*/
@@ -225,20 +228,26 @@ function calcularModificacaoNovo(pArrayCampos) {
 				//alert(1);
 				vlReferencialNovo = Math.abs(vlReferencial);
 				vlReferencialNovo = vlReferencialNovo*fator;
-				vlModAoContratoNovo = eval(vlReferencialNovo*numPrazo); 
+				
+				//vlModAoContratoNovo = eval(vlReferencialNovo*numPrazo);
+				//o valor eh calculado considerando a ultima prorrogacao do contrato
+				vlModAoContratoNovo = eval(vlReferencialNovo*numPrazoUltimaProrrogacao);			
+				
 			}else if(eval(vlModAoContrato) != 0){
 				//alert(2);
 				vlModAoContratoNovo = Math.abs(vlModAoContrato);
 				vlModAoContratoNovo = vlModAoContratoNovo*fator;								
 				
-				vlReferencialNovo = eval(vlModAoContratoNovo/numPrazo);
+				//vlReferencialNovo = eval(vlModAoContratoNovo/numPrazo);
+				vlReferencialNovo = eval(vlModAoContratoNovo/numPrazoUltimaProrrogacao);
 			}else{
 				//alert(3);
 				atualizarValorMensal = false;
 				//mensal
 				vlMensalAtualizadoNovo = vlMensalAtualizado;
 				vlReferencialNovo = eval(vlMensalAtualizadoNovo-vlMensalBase);
-				vlModAoContratoNovo = eval(vlReferencialNovo*numPrazo);
+				//vlModAoContratoNovo = eval(vlReferencialNovo*numPrazo);
+				vlModAoContratoNovo = eval(vlReferencialNovo*numPrazoUltimaProrrogacao);
 			}
 			
 			if(atualizarValorMensal){
@@ -248,28 +257,32 @@ function calcularModificacaoNovo(pArrayCampos) {
 			//acrescimo e supressao do escopo funciona diferente
 			if(isContratoPorEscopo){
 				vlGlobalAtualizadoNovo = vlGlobalBase + vlModAoContratoNovo;
-				vlMensalAtualizadoNovo = eval(vlGlobalAtualizadoNovo/numPrazoMater);				
+				vlMensalAtualizadoNovo = eval(vlGlobalAtualizadoNovo/numPrazoMater);
+				//aqui o contrato por escopo nao leva em consideracao a prorrogacao e sim o que falta para terminar
 				vlReferencialNovo = eval(vlModAoContratoNovo/numPrazo);
 				
 				//alert("global " + vlGlobalAtualizado + ", vlmensal " + vlMensalAtualizadoNovo + " vlReferencialNovo " + vlReferencialNovo);
 			}
 			
-			//vlGlobalAtualizadoNovo = vlGlobalBase + vlModAoContratoNovo;
-			vlGlobalAtualizadoNovo = vlMensalAtualizadoNovo*numPrazoMater;
+			//vlGlobalAtualizadoNovo = vlMensalAtualizadoNovo*numPrazoMater;
+			vlGlobalAtualizadoNovo = vlMensalAtualizadoNovo*numPrazoUltimaProrrogacao;
 		}else{
 			//quando for reajuste, apenas o valor mensal ou global serao inseridos
 			if(eval(vlMensalAtualizado) != 0){
 				//alert("vlmensal");
 				vlMensalAtualizadoNovo = vlMensalAtualizado;
-				vlGlobalAtualizadoNovo = eval(vlMensalAtualizadoNovo*numPrazo);
+				//vlGlobalAtualizadoNovo = eval(vlMensalAtualizadoNovo*numPrazo);
+				vlGlobalAtualizadoNovo = eval(vlMensalAtualizadoNovo*numPrazoUltimaProrrogacao);
 			}else if(eval(vlGlobalAtualizado) != 0){
 				//alert("vlglobal");
 				vlGlobalAtualizadoNovo = vlGlobalAtualizado;				
-				vlMensalAtualizadoNovo = eval(vlGlobalAtualizadoNovo/numPrazo);
+				//vlMensalAtualizadoNovo = eval(vlGlobalAtualizadoNovo/numPrazo);
+				vlMensalAtualizadoNovo = eval(vlGlobalAtualizadoNovo/numPrazoUltimaProrrogacao);
 			}
 			
 			vlReferencialNovo = (vlMensalAtualizadoNovo - vlMensalBase);
-			vlModAoContratoNovo = eval(vlReferencialNovo*numPrazo);
+			//vlModAoContratoNovo = eval(vlReferencialNovo*numPrazo);
+			vlModAoContratoNovo = eval(vlReferencialNovo*numPrazoUltimaProrrogacao);
 		}			
 		
 		setValorCampoMoedaComSeparadorMilhar(campoVlReferencial, vlReferencialNovo, 4);

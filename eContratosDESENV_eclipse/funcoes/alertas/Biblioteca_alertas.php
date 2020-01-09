@@ -257,7 +257,7 @@ function getPadraoHTMLMensagem($corpoMensagem, &$mail){
 
 }
 
-function enviarEmail($assuntoParam, $mensagemParam, $enviarEmail=true, $listaEmail=null) {
+function enviarEmail($assuntoParam, $mensagemParam, $enviarEmail=true, $listaEmail=null,$remetente = null) {
 	
 	if($listaEmail == null){
 		$listaEmail = email_sefaz::getListaEmailJuridico ();
@@ -266,6 +266,9 @@ function enviarEmail($assuntoParam, $mensagemParam, $enviarEmail=true, $listaEma
 	try {
 		if ($enviarEmail && email_sefaz::$FLAG_ENVIAR_EMAIL) {
 			$mail = new email_sefaz ($assuntoParam, $listaEmail);
+			if($remetente != null){
+				$mail->setEmailRemetente($remetente);
+			}
 			$mensagemParam = getPadraoHTMLMensagem($mensagemParam, $mail);
 			
 			$enviado = $mail->enviarMensagem ($mensagemParam, $assuntoParam );

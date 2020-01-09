@@ -291,14 +291,15 @@ class dbContratoModificacao extends dbprocesso {
 		$recordSet = $this->consultarExecucao(clone $voContratoMater, $dataVigencia);
 		$retorno = $this->getRegistroAtualColecaoExecucao($recordSet);
 		//se for vazio, eh pq nao tem nenhuma execucao determinada, dai o valor da execucao vai ser o do proprio voContratoComChaveCompleta
-		if(isColecaoVazia($recordSet)){
+		//ATENCAO, PARTE COMENTADA PARA CORRIGIR ERRO EM CONTRATO POR ESCOPO => VERIFICAR IMPACTO, pois, em caso de vazio, a execucao deveria se dar pelo MATER
+		/*if(isColecaoVazia($recordSet)){
 			$vocontratomod = new voContratoModificacao();
 			$vocontratomod->vocontrato = $voContratoComChaveCompleta;
 			$vocontratomod->vlMensalAtual = getVarComoDecimal($voContratoComChaveCompleta->vlMensal);
 			$vocontratomod->vlGlobalAtual = getVarComoDecimal($voContratoComChaveCompleta->vlGlobal);
 						
 			$retorno = array(filtroManterContratoModificacao::$NmColVOContratoModReajustado => $vocontratomod);
-		}
+		}*/
 		
 		return $retorno;		
 		//return $this->getRegistroTermoEspecificoColecaoExecucao(clone $voContratoComChaveCompleta, $recordSet);		

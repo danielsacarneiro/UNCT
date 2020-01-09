@@ -9,6 +9,7 @@ class voContratoModificacao extends voentidade {
 	static $ID_REQ_NUM_PERCENTUAL_REAJUSTE = "ID_REQ_NUM_PERCENTUAL_REAJUSTE";
 	static $ID_REQ_VL_BASE_REAJUSTE = "ID_REQ_VL_BASE_REAJUSTE";
 	static $ID_REQ_InRetroativo = "ID_REQ_InRetroativo";
+	static $ID_REQ_NumPrazoUltimaProrrogacao = "NumPrazoUltimaProrrogacao";
 	
 	static $InReajusteAplicado = "InReajusteAplicado";
 	

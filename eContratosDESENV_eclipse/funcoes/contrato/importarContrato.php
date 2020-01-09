@@ -89,7 +89,7 @@ if(!$isLimparContrato){
 				}
 				
 				if(dbcontrato::$FLAG_PRINTAR_LOG_IMPORTACAO_NUM_LINHA){
-					echo "<br>--- linha registro" . $k . " <BR>";
+					echo "linha registro" . $k . ",";
 				}
 		}				
 		//$objPHPExcel->disconnectCells();

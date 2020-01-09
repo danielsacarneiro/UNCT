@@ -113,7 +113,8 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		
   		$msg .= "<br><br>Atenciosamente, <br><br>UNCT-SAFI";
   	
-		enviarEmail($assunto, $msg, $enviarEmail, $listaEmailTemp);
+  		$remetente = voMensageriaRegistro::$REMETENTE_PRINCIPAL;
+		enviarEmail($assunto, $msg, $enviarEmail, $listaEmailTemp, $remetente);
 		echoo($vomensageria->toString());
   	}
   	
@@ -131,6 +132,8 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		
   		<br><br>Informamos ainda que o envio da garantia contratual atualizada, sendo este o caso, é necessária à instrução da renovação contratual.</b>  		
   		<br><br>Caso já tenha enviado o pedido de prorrogação, favor desconsiderar esta solicitação.
+  		
+  		<br><br>A resposta deve ser enviada para o seguinte correio eletrônico: <b>Unidade de Contratos da SAFI-SEFAZ (UNCT): <u>".voMensageriaRegistro::$REMETENTE_PRINCIPAL."</u></b>.
   		
   		<br><br>Este e-mail é reenviado a cada <b>$numFrequencia dias</b>.";  		 		
   		

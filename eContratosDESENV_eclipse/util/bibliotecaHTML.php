@@ -39,6 +39,7 @@ function inicioComValidacaoUsuario($validarPermissaoAcesso, $validarRedirecionam
 		$current_user = wp_get_current_user ();
 		$nomeUsuario = $current_user->display_name;
 		$idUsuario = get_current_user_id ();
+		//wp_redirect('econti.localhost');
 	} else {
 		if ($validarPermissaoAcesso) {
 			auth_redirect ();

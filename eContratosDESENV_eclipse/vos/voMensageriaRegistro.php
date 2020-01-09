@@ -6,6 +6,8 @@ class voMensageriaRegistro extends voentidade {
 	
 	static $nmAtrSq = "sq";
 	static $nmAtrSqMensageria = "msg_sq";
+	
+	static $REMETENTE_PRINCIPAL = "unct@sefaz.pe.gov.br";	
 			
 	var $sq;
 	var $sqMensageria;

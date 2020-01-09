@@ -807,12 +807,15 @@ class dbcontrato extends dbprocesso {
 				
 			$mes = substr ( $param, $indiceSeparadorAno - 2, 2 );
 			$dia = substr ( $param, $indiceSeparadorAno - 5, 2 );
-				
-			$res = checkdate ( $mes, $dia, $ano );
-			if ($res == 1) {
-				// $retorno = $ano . "-" . "$mes" . "-". $dia;
-				$retorno = $dia . "/" . "$mes" . "/" . $ano;
+			
+			if(is_numeric(trim($dia)) && is_numeric(trim($mes)) && is_numeric(trim($ano))){
+				$res = checkdate ( $mes, $dia, $ano );
+				if ($res == 1) {
+					// $retorno = $ano . "-" . "$mes" . "-". $dia;
+					$retorno = $dia . "/" . "$mes" . "/" . $ano;
+				}				
 			}
+				
 			/*
 			 * try{
 			 * $ano = substr($param,$indiceSeparadorAno,4);

@@ -176,17 +176,18 @@ function confirmar() {
 	        $voContratoInfo = new voContratoInfo();
 	        $voContratoInfo->getDadosBanco($colecao);
 	        $isEscopo = $voContratoInfo->inEscopo == 'S'; 
-	         
+	        
+	        $descricaoVlLicon = ", considerando o Prazo Contrato MATER: ". getTextoHTMLNegrito("$numMesesPeriodoMater meses"); 
 	        if($isEscopo){
 	        	$vlAIncluirSistemaLicon = $vo->vlModificacaoReal;
+	        	$descricaoVlLicon = ", considerando o Prazo Restante do termo.";
 	        }
 	        ?>
 			<TR>
 	            <TH class="campoformulario">Valor LICON (dependerá do prazo inicial do contrato MATER):</TH>
 	            <TD class="campoformulario" colspan="3"> 
 	            <INPUT type="text" id="" name=""  value="<?php echo(getMoeda($vlAIncluirSistemaLicon,2));?>"
-	            onkeyup="" class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="10" readonly>
-	            , considerando o Prazo Contrato MATER: <?=getTextoHTMLNegrito("$numMesesPeriodoMater meses")?>
+	            onkeyup="" class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="10" readonly> <?=$descricaoVlLicon?>
 			</TD>
 	        </TR>
 			<TR>

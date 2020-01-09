@@ -104,10 +104,10 @@ function alertarValorAtualizadoComValordoTermo() {
 
 	vlAtualizado = getValorCampoMoedaComoNumeroValido(campoValorAtualizado);
 	vlTermo = getValorCampoMoedaComoNumeroValido(campoValorTermo);
+	//alert("vltermo=" + vlTermo + " vl atualziado=" + vlAtualizado);
 	
 	if(vlAtualizado != vlTermo){
-		exbirMensagem("[INFORMAÇÃO: o valor atualizado do contrato difere do valor registrado no termo.]");
-		retorno = false;
+		exibirMensagem("[INFORMAÇÃO: o valor atualizado do contrato difere do valor registrado no termo.]");
 	}	    
 }
 
@@ -199,6 +199,7 @@ function calcular(eElement){
 	pArrayCampos[21] = document.frm_principal.<?=voContratoInfo::$nmAtrNumPrazoMater?>;
 	pArrayCampos[22] = document.frm_principal.<?=voContratoModificacao::$nmAtrVlGlobalModAtual?>;
 	pArrayCampos[23] = document.frm_principal.<?=voContratoInfo::$nmAtrInEscopo?>;
+	pArrayCampos[24] = document.frm_principal.<?=voContratoModificacao::$ID_REQ_NumPrazoUltimaProrrogacao?>;
 			
 	calcularModificacaoNovo(pArrayCampos);
 }
