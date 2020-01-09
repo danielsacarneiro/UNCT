@@ -44,6 +44,10 @@ class email_sefaz extends multiplosConstrutores{
 		$this->FromName = $remetente;
 	}
 	
+	function setEmailRemetente($user) {
+		$this->Username = $user;
+	}
+	
 	static function getListaEmailJuridico(){
 		return array("atja@sefaz.pe.gov.br",
 				//"patricia.farias@sefaz.pe.gov.br",
