@@ -288,6 +288,28 @@ class dbprocesso {
 	function consultarTelaConsulta($filtro, $querySelect, $queryFrom) {
 		return $this->consultarFiltro ( $filtro, $querySelect, $queryFrom, true );
 	}
+	
+	/**
+	 * serve para executar qualquer operacao antes de chamar a consulta na tela
+	 * inclusive permite passagem com facilidade de novos parametros
+	 * @param unknown $arrayParam
+	 * @return string
+	 */
+	function consultarTelaConsultaParam($arrayParam) {
+		$filtro=$arrayParam[0];
+		//determina se deve consultar ou nao
+		$isConsultar =filtroManter::isConsultarHTML();
+		
+		$retorno = "";		
+		if($isConsultar){
+			$retorno = $this->consultarTelaConsulta ($arrayParam);
+		}else{
+			//ou remover da sessao
+			$filtro = null;
+		}
+		return $retorno;
+	}
+	
 	function consultarFiltroManter($filtro, $validaConsulta) {
 		return $this->consultarFiltro ( $filtro, $filtro->getQuerySelect (), $filtro->getQueryFromJoin (), $validaConsulta );
 	}
@@ -358,6 +380,12 @@ class dbprocesso {
 			
 			//echo $query;			
 			$retorno = $this->cDb->consultar ( $query );
+			
+			if($filtro->isIncluirFiltroNaSessao){
+				 //echoo ("incluir $filtro->nmFiltro dbprocesso na sessao");
+				 putObjetoSessao ( $filtro->nmFiltro, $filtro );
+			 }
+					
 			$filtro->setConsultaRealizada();			
 		}
 		

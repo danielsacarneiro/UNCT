@@ -238,6 +238,13 @@ class dbDemandaTramitacao extends dbprocesso {
 				$voProcLic = $voDemanda->voProcLicitatorio;
 				$voDemandaProcLic = $voDemanda->getVODemandaProcLicitatorio($voProcLic);
 				$voDemanda->dbprocesso->incluirDemandaProcLicitatorio($voDemandaProcLic);
+			}							
+
+			//$voDemanda = new voDemandaTramitacao();
+			if ($voDemanda->temSolicCompraParaIncluir()) {				
+				$voSolicCompra = $voDemanda->voSolicCompra;				
+				$voDemandaSolicCompra = $voDemanda->getVODemandaSolicCompra($voSolicCompra);
+				$voDemanda->dbprocesso->incluirDemandaSolicCompra($voDemandaSolicCompra);				
 			}
 				
 			// a transacao ja eh controlada acima

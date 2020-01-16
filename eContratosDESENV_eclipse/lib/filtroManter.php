@@ -35,6 +35,8 @@ class filtroManter extends multiplosConstrutores {
 	var $isConsultaTela;
 	var $isTpVigenciaMAxSq;
 	
+	var $isIncluirFiltroNaSessao = false;
+	
 	private $inConsultaRealizada = false;
 	private $QUERY_SELECT;
 	private $QUERY_FROM;
@@ -94,6 +96,9 @@ class filtroManter extends multiplosConstrutores {
 		$this->qtdRegistrosPorPag = @$_POST [self::$nmAtrQtdRegistrosPorPag];
 		$this->numTotalRegistros = @$_POST [self::$nmAtrNumTotalRegistros];
 		$this->cdConsultarArquivo = @$_POST [self::$nmAtrCdConsultarArquivo];
+		
+		//se o filtro vem da tela, deve por na sessao
+		$this->isIncluirFiltroNaSessao = true;
 	}
 	function setQueryFromJoin($query) {
 		$this->QUERY_FROM = $query;
@@ -114,36 +119,54 @@ class filtroManter extends multiplosConstrutores {
 		$retorno = false;
 	}
 	
+	/**
+	 * VErifica se a flag de consultar esta ativada
+	 * @return boolean
+	 */
 	static function isConsultarHTML() {
 		$consultar = @$_GET ["consultar"];
 		if ($consultar == null || $consultar == "") {
 			$consultar = @$_POST ["consultar"];
 		}
 		//echo "consultar == $consultar";
-		
-		return $consultar == "S"; 
+	
+		return $consultar == "S";
 	}
-	static function verificaFiltroSessao($filtro) {		
-		//echoo("FILTRO: " . $filtro->nmFiltro);
-		session_start ();
+	
+	/**
+	 * VErifica se tem filtro na sessao
+	 * @return boolean
+	 */
+	static function isPegarFiltroSessaoHTML($filtro) {
 		$utilizarSessao = @$_POST ["utilizarSessao"];
 		$isUtilizarSessao = $utilizarSessao != "N";
-		
 		$isConsultar = static::isConsultarHTML();		
+		$existeFiltroSessao = existeObjetoSessao ( $filtro->nmFiltro );
 		
-		$pegarFiltroSessao = $isUtilizarSessao && $isConsultar;
+		//$cliqueBotaoConsulta = existeStr1NaStr2("index.php", $_SERVER['REQUEST_URI']);
+		
+		/*echoo ("$filtro->nmFiltro|isUtilizarSessao: " . dominioSimNao::getDescricao($isUtilizarSessao) 
+		. " isConsultar: " . dominioSimNao::getDescricao($isConsultar)
+		. " existeFiltroSessao: " . dominioSimNao::getDescricao($existeFiltroSessao));*/
+		
+		return ($isConsultar && $isUtilizarSessao  && $existeFiltroSessao); 
+	}
+	
+	static function verificaFiltroSessao($filtro) {		
+		//echoo("FILTRO: " . $filtro->nmFiltro);
+		//session_start ();
 		// echo "nome filtro". $filtro->nmFiltro;
-		if (existeObjetoSessao ( $filtro->nmFiltro ) && $pegarFiltroSessao) {
-			// echo "pegou filtro sessao";
+		if (static::isPegarFiltroSessaoHTML($filtro)) {
+			//echoo("pegou filtro sessao");
 			$filtro = getObjetoSessao ( $filtro->nmFiltro );
 			$paginaAtual = @$_GET ['paginaAtual'];
 			
 			if ($paginaAtual != null)
 				$filtro->paginacao->paginaAtual = $paginaAtual;
-		} else {
-			// echo "incluiu filtro sessao";
+		} /*else {
+			//echoo("incluiu filtro sessao");
 			putObjetoSessao ( $filtro->nmFiltro, $filtro );
-		}		 
+		}	*/	 
 		
 		return $filtro;
 	}

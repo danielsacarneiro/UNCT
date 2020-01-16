@@ -19,7 +19,7 @@ Class dominioTipoDemanda extends dominio{
 	static $CD_TIPO_DEMANDA_PORTALTRANSPARENCIA = 13;
 	static $CD_TIPO_DEMANDA_FERIAS = 14;
 	static $CD_TIPO_DEMANDA_TAC = 15;
-	//static $CD_TIPO_DEMANDA_LICON = 12;
+	static $CD_TIPO_DEMANDA_SOLIC_COMPRA = 16;
 	
 	static $CD_TIPO_DEMANDA_A_CLASSIFICAR = 99;
 	
@@ -40,6 +40,7 @@ Class dominioTipoDemanda extends dominio{
 	static $DS_TIPO_DEMANDA_PORTALTRANSPARENCIA = "Portal Transparência";
 	static $DS_TIPO_DEMANDA_FERIAS = "Gestao de Pessoas";
 	static $DS_TIPO_DEMANDA_TAC = "TAC";
+	static $DS_TIPO_DEMANDA_SOLIC_COMPRA = 'Solic.Compra';
 	
 	// ...............................................................
 	// Construtor
@@ -55,7 +56,7 @@ Class dominioTipoDemanda extends dominio{
 		$retorno = static::getColecaoTipoDemandaContratoValidacaoEncaminhar($comDetalhamentoContrato);
 		return $retorno;		
 	}
-
+	
 	static function getColecaoTipoDemanda(){
 		/*$retorno = 	array(
 				self::$CD_TIPO_DEMANDA_CONTRATO => self::$DS_TIPO_DEMANDA_CONTRATO,
@@ -113,6 +114,7 @@ Class dominioTipoDemanda extends dominio{
 				
 				self::$CD_TIPO_DEMANDA_LICON => self::$DS_TIPO_DEMANDA_LICON,
 				self::$CD_TIPO_DEMANDA_PORTALTRANSPARENCIA => self::$DS_TIPO_DEMANDA_PORTALTRANSPARENCIA,
+				self::$CD_TIPO_DEMANDA_SOLIC_COMPRA => self::$DS_TIPO_DEMANDA_SOLIC_COMPRA,
 				
 				self::$CD_TIPO_DEMANDA_FERIAS => self::$DS_TIPO_DEMANDA_FERIAS,
 				self::$CD_TIPO_DEMANDA_A_CLASSIFICAR => self::$DS_TIPO_DEMANDA_A_CLASSIFICAR,				

@@ -16,6 +16,7 @@ $titulo = "CONSULTAR " . $vo::getTituloJSP();
 setCabecalho($titulo);
 
 $filtro  = new filtroManterDocumento();
+$filtro->voPrincipal = $vo;
 $filtro = filtroManter::verificaFiltroSessao($filtro);
 	
 $cdHistorico = $filtro->cdHistorico;
@@ -23,6 +24,9 @@ $cdOrdenacao = $filtro->cdOrdenacao;
 $isHistorico = "S" == $cdHistorico; 
 
 $dbprocesso = $vo->dbprocesso;
+/*$arrayParamConsulta = array ($filtro, filtroManter::isConsultarFiltroSessaoHTML($filtro) || existeStr1NaStr2("index.php", $_SERVER['REQUEST_URI']));
+$colecao = $dbprocesso->consultarTelaConsultaParam($arrayParamConsulta);*/
+
 $colecao = $dbprocesso->consultarDocumento($vo, $filtro);
 
 

@@ -181,7 +181,7 @@ function getSQLIntervaloDatas($tableEntidade, $pNmColDataAComparar, $data1, $dat
 	
 	return $retorno;
 }
-function getSQLStringFormatadaColecaoIN($colecaoValores, $isString) {
+function getSQLStringFormatadaColecaoIN($colecaoValores, $isString=false) {
 	$separador = ",";
 	
 	return getColecaoEntreSeparadorAspas ( $colecaoValores, $separador, $isString );

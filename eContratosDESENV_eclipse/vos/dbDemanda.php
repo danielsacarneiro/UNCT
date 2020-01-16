@@ -11,6 +11,10 @@ class dbDemanda extends dbprocesso {
 			$voContrato = new vocontrato ();
 			$voContrato->getDadosBanco ( $colecao );
 			
+			$voSolicCompra = new voSolicCompra();
+			$voSolicCompra->getDadosBanco ( $colecao );
+			$vo->voSolicCompra = $voSolicCompra;
+				
 			$voProcLic = new voProcLicitatorio ();
 			$voProcLic->getDadosBanco ( $colecao );
 			$vo->voProcLicitatorio = $voProcLic;
@@ -43,6 +47,8 @@ class dbDemanda extends dbprocesso {
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );
 		$nmTabelaDemandaProcLic = voDemandaPL::getNmTabelaStatic ( false );
+		$nmTabelaDemandaSolicCompra = voDemandaSolicCompra::getNmTabelaStatic ( false );
+		$nmTabelaSolicCompra = voSolicCompra::getNmTabelaStatic ( false );
 		$nmTabelaProcLic = voProcLicitatorio::getNmTabelaStatic ( false );
 		$nmTabelaPA = voPA::getNmTabelaStatic ( false );
 		$nmTabelaPessoa = vopessoa::getNmTabelaStatic ( false );
@@ -58,6 +64,12 @@ class dbDemanda extends dbprocesso {
 				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato,
 				$nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato,
 				$nmTabelaPessoa . "." . vopessoa::$nmAtrDoc,
+				
+				$nmTabelaSolicCompra . "." . voSolicCompra::$nmAtrCd,
+				$nmTabelaSolicCompra . "." . voSolicCompra::$nmAtrAno,
+				$nmTabelaSolicCompra . "." . voSolicCompra::$nmAtrUG,
+				$nmTabelaSolicCompra . "." . voSolicCompra::$nmAtrObjeto,				
+
 				$nmTabelaDemandaProcLic . "." . voProcLicitatorio::$nmAtrCd,
 				$nmTabelaDemandaProcLic . "." . voProcLicitatorio::$nmAtrAno,
 				$nmTabelaDemandaProcLic . "." . voProcLicitatorio::$nmAtrCdModalidade,
@@ -104,12 +116,24 @@ class dbDemanda extends dbprocesso {
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrAnoDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrAno;
 		$queryJoin .= "\n AND " . $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrCd;
-		
+				
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaProcLic;
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrAnoProcLic . "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrAno;
 		$queryJoin .= "\n AND " . $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdProcLic . "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrCd;
 		$queryJoin .= "\n AND " . $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdModalidadeProcLic . "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrCdModalidade;
+		
+		//SOLIC COMPRA
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaDemandaSolicCompra;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaDemandaSolicCompra . "." . voDemandaSolicCompra::$nmAtrAnoDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrAno;
+		$queryJoin .= "\n AND " . $nmTabelaDemandaSolicCompra . "." . voDemandaSolicCompra::$nmAtrCdDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrCd;
+		
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaSolicCompra;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaDemandaSolicCompra . "." . voDemandaSolicCompra::$nmAtrAnoSolicCompra . "=" . $nmTabelaSolicCompra . "." . voSolicCompra::$nmAtrAno;
+		$queryJoin .= "\n AND " . $nmTabelaDemandaSolicCompra . "." . voDemandaSolicCompra::$nmAtrCdSolicCompra . "=" . $nmTabelaSolicCompra . "." . voSolicCompra::$nmAtrCd;
+		$queryJoin .= "\n AND " . $nmTabelaDemandaSolicCompra . "." . voDemandaSolicCompra::$nmAtrUG . "=" . $nmTabelaSolicCompra . "." . voSolicCompra::$nmAtrUG;
 		
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPA;
 		$queryJoin .= "\n ON ";
@@ -544,6 +568,14 @@ class dbDemanda extends dbprocesso {
 						$voProcLic = $vo->voProcLicitatorio;
 						$this->incluirDemandaProcLicitatorio ( $vo->getVODemandaProcLicitatorio ( $voProcLic ) );
 					}
+					
+					//$vo=new voDemanda();
+					$this->excluirDemandaSolicCompra($vo );
+					if ($vo->temSolicCompraParaIncluir()) {
+						$voSolicCompra = $vo->voSolicCompra;
+						$this->incluirDemandaSolicCompra($vo->getVODemandaSolicCompra( $voSolicCompra ) );
+					}
+						
 				}
 				
 				parent::alterar ( $vo );
@@ -595,6 +627,7 @@ class dbDemanda extends dbprocesso {
 					$this->excluirDemandaTramitacao ( $vo );
 					$this->excluirDemandaContrato ( $vo );
 					$this->excluirDemandaProcLicitatorio ( $vo );
+					$this->excluirDemandaSolicCompra( $vo );
 				}
 				$vo = parent::excluir ( $vo );
 				// End transaction
@@ -647,6 +680,16 @@ class dbDemanda extends dbprocesso {
 		// echo $query;
 		return $this->atualizarEntidade ( $query );
 	}
+	function excluirDemandaSolicCompra($voDemanda) {
+		$vo = new voDemandaSolicCompra();
+	
+		$nmTabela = $vo->getNmTabelaEntidade ( false );
+		$query = "DELETE FROM " . $nmTabela;
+		$query .= "\n WHERE " . voDemandaSolicCompra::$nmAtrAnoDemanda . " = " . $voDemanda->ano;
+		$query .= "\n AND " . voDemandaSolicCompra::$nmAtrCdDemanda . " = " . $voDemanda->cd;
+		// echo $query;
+		return $this->atualizarEntidade ( $query );
+	}
 	function incluirColecaoDemandaContrato($voDemanda) {
 		$colecao = $voDemanda->colecaoContrato;
 		foreach ( $colecao as $voContrato ) {
@@ -662,6 +705,10 @@ class dbDemanda extends dbprocesso {
 	function incluirDemandaProcLicitatorio($voDemandaProcLic) {
 		$voDemandaProcLic->dbprocesso->cDb = $this->cDb;
 		$voDemandaProcLic->dbprocesso->incluir ( $voDemandaProcLic );
+	}
+	function incluirDemandaSolicCompra($voDemandaSolicCompra) {
+		$voDemandaSolicCompra->dbprocesso->cDb = $this->cDb;
+		$voDemandaSolicCompra->dbprocesso->incluir ( $voDemandaSolicCompra );
 	}
 	function incluirSQL($vo) {
 		if ($vo->cd == null || $vo->cd == "") {

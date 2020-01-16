@@ -163,6 +163,12 @@ function validaFormulario() {
 
 	pColecaoNmObjetosFormEdital = ['<?=voProcLicitatorio::$nmAtrCd;?>', '<?=voProcLicitatorio::$nmAtrAno;?>', '<?=voProcLicitatorio::$nmAtrCdModalidade;?>'];
 	formataFormEditalPorTpDemanda('<?=voDemanda::$nmAtrTipo?>', pColecaoNmObjetosFormEdital, <?=dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL?>, arrayPrioridadeAlta);	
+
+
+	pColecaoNmObjetosFormSolicCompra = ['<?=voSolicCompra::$nmAtrCd;?>', '<?=voSolicCompra::$nmAtrAno;?>', '<?=voSolicCompra::$nmAtrUG;?>'];
+	formataFormPorTpDemanda('<?=voDemanda::$nmAtrTipo?>', <?=dominioTipoDemanda::$CD_TIPO_DEMANDA_SOLIC_COMPRA?>, pColecaoNmObjetosFormSolicCompra);
+	
+	//formataFormEditalPorTpDemanda('<?=voDemanda::$nmAtrTipo?>', pColecaoNmObjetosFormSolicCompra, <?=dominioTipoDemanda::$CD_TIPO_DEMANDA_SOLIC_COMPRA?>, null);
 	formataFormTpDemandaContrato();
 }
 
@@ -304,6 +310,14 @@ function iniciar(){
 	            echo "Tipo: " . $comboTipoEditado->getHtmlCombo(voDemanda::$nmAtrTipo,voDemanda::$nmAtrTipo, "", true, "campoobrigatorio", false, " required onChange='validaFormulario();'");
 	            ?>			  
 	        </TR>
+	        <?php	        
+	        require_once (caminho_funcoes . voSolicCompra::getNmTabela() . "/biblioteca_htmlSolicCompra.php"); asdas
+	        ?>
+	        <TR>
+	            <TH class="campoformulario" nowrap width="1%"><?=voSolicCompra::getNomeObjetoJSP()?>:</TH>
+	            <TD class="campoformulario" colspan=3><?php getCampoDadosSolicCompra($voSolicCompra);?>
+	            </TD>
+	        </TR>	        
 	        <?php	        
 	        require_once (caminho_funcoes . voProcLicitatorio::getNmTabela() . "/biblioteca_htmlProcLicitatorio.php");
 	        ?>

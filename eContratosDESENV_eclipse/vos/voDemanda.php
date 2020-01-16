@@ -38,8 +38,10 @@ class voDemanda extends voentidade {
 	var $dtReferencia = "";
 	var $inLegado = "";
 	var $dbprocesso = null;
+	
 	var $colecaoContrato = null;
 	var $voProcLicitatorio = null;
+	var $voSolicCompra = null;
 	// ...............................................................
 	// Funcoes ( Propriedades e métodos da classe )
 	function __construct($arrayChave = null) {
@@ -125,6 +127,10 @@ class voDemanda extends voentidade {
 		$retorno = $this->voProcLicitatorio != null && $this->voProcLicitatorio->cd != null;
 		return $retorno;
 	}
+	function temSolicCompraParaIncluir() {
+		$retorno = $this->voSolicCompra != null && $this->voSolicCompra->cd != null;
+		return $retorno;
+	}
 	/*
 	 * function getVODemandaContrato(){
 	 * $voDemanda = new voDemandaContrato();
@@ -153,6 +159,15 @@ class voDemanda extends voentidade {
 		$voDemanda->cdModProcLic = $voProcLic->cdModalidade;
 		return $voDemanda;
 	}
+	function getVODemandaSolicCompra($voSolicCompra) {		
+		$voDemandaSolic = new voDemandaSolicCompra();
+		$voDemandaSolic->anoDemanda = $this->ano;
+		$voDemandaSolic->cdDemanda = $this->cd;
+		$voDemandaSolic->anoSolicCompra = $voSolicCompra->ano;
+		$voDemandaSolic->cdSolicCompra = $voSolicCompra->cd;
+		$voDemandaSolic->ug = $voSolicCompra->ug;
+		return $voDemandaSolic;
+	}
 	function getDadosRegistroBanco($registrobanco) {
 		// as colunas default de voentidade sao incluidas pelo metodo getDadosBanco do voentidade
 		$this->cd = $registrobanco [self::$nmAtrCd];
@@ -169,6 +184,7 @@ class voDemanda extends voentidade {
 		$this->inLegado = $registrobanco [self::$nmAtrInLegado];
 		
 		$this->getProcLicitatorioRegistroBanco($registrobanco);
+		$this->getSolicCompraRegistroBanco($registrobanco);
 		
 		/*
 		 * $chaveContrato = $registrobanco[vocontrato::$nmAtrCdContrato];
@@ -222,9 +238,23 @@ class voDemanda extends voentidade {
 		}
 		
 		$this->getProcLicitatorioFormulario();
+		$this->getSolicCompraFormulario();
 		
 		// completa com os dados da entidade
 		$this->getDadosFormularioEntidade ();
+	}
+	function getSolicCompraFormulario() {
+		$voSolicCompra = new voSolicCompra();
+		$voSolicCompra->getDadosFormulario();
+	
+		if($voSolicCompra->isChavePrimariaPreenchida()){
+			$this->voSolicCompra = $voSolicCompra;
+		}
+	}
+	function getSolicCompraRegistroBanco($registrobanco) {
+		$voSolicCompra = new voSolicCompra();
+		$voSolicCompra->getDadosBanco($registrobanco);
+		$this->voSolicCompra = $voSolicCompra;
 	}
 	function getProcLicitatorioFormulario() {
 		$voProcLic = new voProcLicitatorio();

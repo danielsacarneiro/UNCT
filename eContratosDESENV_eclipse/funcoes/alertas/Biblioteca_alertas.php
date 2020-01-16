@@ -257,18 +257,29 @@ function getPadraoHTMLMensagem($corpoMensagem, &$mail){
 
 }
 
+/**
+ * 
+ * @param unknown $assuntoParam
+ * @param unknown $mensagemParam
+ * @param string $enviarEmail
+ * @param unknown $listaEmail
+ * @param unknown $remetente
+ */
 function enviarEmail($assuntoParam, $mensagemParam, $enviarEmail=true, $listaEmail=null,$remetente = null) {
 	
 	if($listaEmail == null){
 		$listaEmail = email_sefaz::getListaEmailJuridico ();
 	}
 	
+	if($remetente == null){
+		$remetente = email_sefaz::$REMETENTE_ATJA;
+	}
+	
 	try {
 		if ($enviarEmail && email_sefaz::$FLAG_ENVIAR_EMAIL) {
-			$mail = new email_sefaz ($assuntoParam, $listaEmail);
-			if($remetente != null){
-				$mail->setEmailRemetente($remetente);
-			}
+			$mail = new email_sefaz ($assuntoParam, $remetente);			 
+			$mail->criarEmail($listaEmail);
+			
 			$mensagemParam = getPadraoHTMLMensagem($mensagemParam, $mail);
 			
 			$enviado = $mail->enviarMensagem ($mensagemParam, $assuntoParam );

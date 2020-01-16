@@ -9,6 +9,7 @@ class email_sefaz extends multiplosConstrutores{
 	
 	static $FLAG_ENVIAR_EMAIL = true;
 	static $CD_IMAGEM_SEFAZLOGO = "SEFAZ_LOGO";
+	static $REMETENTE_ATJA = "atja@sefaz.pe.gov.br";
 	
 	private $Host;
 	private $Port;
@@ -23,25 +24,36 @@ class email_sefaz extends multiplosConstrutores{
 		$this->__construct1("");
 		//$this->getConfigEmailSefaz("correio.sefaz.pe.gov.br", "25", 'daniel.ribeiro@sefaz.pe.gov.br', 'C@rbeiro03', constantes::$nomeSistema);
 	}
+		
 	function __construct1($texto) {
+		$str = $this->getNomeAExibir($texto);
+		//$this->getConfigEmailSefaz("correio.sefaz.pe.gov.br", "25", 'daniel.ribeiro@sefaz.pe.gov.br', 'C@rbeiro03', $str);
+		$this->getConfigEmailSefaz("correio.sefaz.pe.gov.br", "25", static::$REMETENTE_ATJA, '', $str);
+	}
+	function __construct2($texto, $remetente) {
+		$str = $this->getNomeAExibir($texto);
+		$this->getConfigEmailSefaz("correio.sefaz.pe.gov.br", "25", $remetente, '', $str);
+	}
+	
+	/**
+	 * 
+	 * @param unknown $texto
+	 */
+	function getNomeAExibir($texto) {
 		$str = constantes::$nomeSistema;
 		if($texto != ""){
 			$str .= " - $texto";
 		}
 		
-		//$this->getConfigEmailSefaz("correio.sefaz.pe.gov.br", "25", 'daniel.ribeiro@sefaz.pe.gov.br', 'C@rbeiro03', $str);
-		$this->getConfigEmailSefaz("correio.sefaz.pe.gov.br", "25", 'atja@sefaz.pe.gov.br', '', $str);
+		return $str;
 	}
-	function __construct2($texto, $listaDestinatarios) {
-		$this->__construct1($texto);
-		$this->mail = $this->criarEmail($listaDestinatarios);
-	}
-	private function getConfigEmailSefaz($host, $port, $user, $pwd, $remetente) {
+	
+	private function getConfigEmailSefaz($host, $port, $user, $pwd, $nomeAExibir) {
 		$this->Host = $host;
 		$this->Port = $port;
 		$this->Username = $user;		
 		$this->Password = $pwd;
-		$this->FromName = $remetente;
+		$this->FromName = $nomeAExibir;
 	}
 	
 	function setEmailRemetente($user) {
@@ -49,7 +61,7 @@ class email_sefaz extends multiplosConstrutores{
 	}
 	
 	static function getListaEmailJuridico(){
-		return array("atja@sefaz.pe.gov.br",
+		return array(static::$REMETENTE_ATJA,
 				//"patricia.farias@sefaz.pe.gov.br",
 				//"alfredo.carvalho@sefaz.pe.gov.br",
 				"rogerio.f-carvalho@sefaz.pe.gov.br"
@@ -74,7 +86,7 @@ class email_sefaz extends multiplosConstrutores{
 		}
 	}
 	
-	protected function criarEmail($listaDestinatarios){
+	function criarEmail($listaDestinatarios){
 		$mail = new PHPMailer();
 		// Define os dados do servidor e tipo de conexão
 		// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -97,7 +109,7 @@ class email_sefaz extends multiplosConstrutores{
 		$mail->IsHTML(true); // Define que o e-mail será enviado como HTML
 		$mail->CharSet = 'iso-8859-1'; // Charset da mensagem (opcional)
 		
-		return $mail; 
+		$this->mail = $mail; 
 	}
 	
 	function addImagem($imagem, $cid){

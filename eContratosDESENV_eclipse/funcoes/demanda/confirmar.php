@@ -9,7 +9,7 @@ $vo->getDadosFormulario();
 
 //echo "modalidade: " . $vo->voProcLicitatorio->cdModalidade;
 
-//var_dump($vo->colecaoContrato);
+//var_dump($vo->voSolicCompra);
 
 /*$voDemandaCont = new voDemandaContrato();
 $voDemandaCont->getDadosFormulario();

@@ -288,6 +288,9 @@ class dominio extends multiplosConstrutores {
 		return $array1;
 	}
 	
+	static function getColecaoConsulta() {	
+		return static::getColecao();
+	}	
 	
 	/*
 	 * function ordenaSetor( $a, $b ) {

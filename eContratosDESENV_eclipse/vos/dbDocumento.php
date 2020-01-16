@@ -13,6 +13,20 @@ include_once 'voDocumento.php';
   		return $this->getProximoSequencialChaveComposta(voDocumento::$nmAtrSq, $voentidade);
   	}
   	 
+  	function consultarTelaConsulta($arrayParamConsulta){
+  		$filtro = $arrayParamConsulta[0];
+  		$voentidade = $filtro->voPrincipal;
+  		
+  		$isHistorico = ("S" == $filtro->cdHistorico);
+  		$nmTabela = $voentidade->getNmTabelaEntidade($isHistorico);
+  			
+  		$atributosConsulta = "*";
+  		$querySelect = "SELECT ". $atributosConsulta;
+  		$queryFrom = "\n FROM ". $nmTabela;
+  		 
+  		return $this->consultarComPaginacaoQuery($voentidade, $filtro, $querySelect, $queryFrom);  		
+  	}  	
+  	
   	function consultarDocumento($voentidade, $filtro){
   		$isHistorico = ("S" == $filtro->cdHistorico);
   		$nmTabela = $voentidade->getNmTabelaEntidade($isHistorico);

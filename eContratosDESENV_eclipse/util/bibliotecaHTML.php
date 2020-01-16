@@ -19,6 +19,7 @@ function inicio($validarRedirecionamentoEmCasoDeErro = true) {
 }
 
 function inicioComValidacaoUsuario($validarPermissaoAcesso, $validarRedirecionamentoEmCasoDeErro = true) {
+	session_start ();
 	
 	if($validarRedirecionamentoEmCasoDeErro 
 			&& !isUsuarioAdmin() 

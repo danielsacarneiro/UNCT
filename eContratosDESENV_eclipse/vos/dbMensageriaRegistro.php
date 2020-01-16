@@ -94,6 +94,11 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		}  		
   		
   		$codigo = formatarCodigoContrato($vocontratoinfo->cdContrato, $vocontratoinfo->anoContrato, $vocontratoinfo->tipo);
+  		$dsPessoa = $registro[vopessoa::$nmAtrNome];
+  		if($dsPessoa != null && $dsPessoa != ""){
+  			$codigo = "$codigo - $dsPessoa"; 
+  		}
+  		
   		$msg .= static::getMensagemGestor($codigo,$numFrequencia);
   		
   		//$msg .= "<br>O contrato vencerá em dias.";

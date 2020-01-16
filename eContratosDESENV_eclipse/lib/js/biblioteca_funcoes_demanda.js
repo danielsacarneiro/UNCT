@@ -6,7 +6,39 @@
  - biblioteca_funcoes_principal.js
 */
 
+function formataFormPorTpDemanda(pNmCampoTpDemanda, pCdTpDemandaAValidar, pColecaoNmObjetosForm) {
+	//biblioprincipal
+	var campoTpDemanda = document.getElementById(pNmCampoTpDemanda);
+	var cdTpDemanda = campoTpDemanda.value;
+	var isDemandaAValidar = cdTpDemanda == pCdTpDemandaAValidar;
+	habilitarCamposPorNome(pColecaoNmObjetosForm, isDemandaAValidar);	
+}
+
 function formataFormEditalPorTpDemanda(pNmCampoTpDemanda, pColecaoNmObjetosForm, pCdTpDemandaEdital, pArrayComplemento) {
+	var pNmCampoPrioridadeDemanda = null;
+	var pCdPrioridadeAlta = null;
+	if(pArrayComplemento != null){
+		pNmCampoPrioridadeDemanda = pArrayComplemento[0]; 
+		pCdPrioridadeAlta = pArrayComplemento[1];
+	}
+
+	//biblioprincipal
+	var campoPrioridadeDemanda = getElementByIdValido(pNmCampoPrioridadeDemanda);
+	var campoTpDemanda = document.getElementById(pNmCampoTpDemanda);
+	var cdTpDemanda = campoTpDemanda.value;
+	var isDemandaEdital = cdTpDemanda == pCdTpDemandaEdital;
+	
+	if(isDemandaEdital && isCampoEditavel(campoPrioridadeDemanda) && pCdPrioridadeAlta != null){
+		campoPrioridadeDemanda.value = pCdPrioridadeAlta;
+	}else{
+		campoPrioridadeDemanda.value = "";
+	}
+	
+	formataFormPorTpDemanda(pNmCampoTpDemanda, pCdTpDemandaEdital, pColecaoNmObjetosForm);	
+}
+
+
+/*function formataFormEditalPorTpDemanda(pNmCampoTpDemanda, pColecaoNmObjetosForm, pCdTpDemandaEdital, pArrayComplemento) {
 	var pNmCampoPrioridadeDemanda = null;
 	var pCdPrioridadeAlta = null;
 	if(pArrayComplemento != null){
@@ -20,13 +52,15 @@ function formataFormEditalPorTpDemanda(pNmCampoTpDemanda, pColecaoNmObjetosForm,
 	var cdTpDemanda = campoTpDemanda.value;
 	
 	var isDemandaEdital = cdTpDemanda == pCdTpDemandaEdital;
-	if(isDemandaEdital && isCampoEditavel(campoPrioridadeDemanda) && pCdPrioridadeAlta != null){
-		campoPrioridadeDemanda.value = pCdPrioridadeAlta;
-	}else{
-		campoPrioridadeDemanda.value = "";
+	if(campoPrioridadeDemanda != null){
+		if(isDemandaEdital && isCampoEditavel(campoPrioridadeDemanda) && pCdPrioridadeAlta != null){
+			campoPrioridadeDemanda.value = pCdPrioridadeAlta;
+		}else{
+			campoPrioridadeDemanda.value = "";
+		}
 	}
 	habilitarCamposPorNome(pColecaoNmObjetosForm, isDemandaEdital);	
-}
+}*/
 
 function formataFormTpDemanda(pNmCampoTpDemanda, pNmCampoAtributos) {
 	//precisa da bibliotecafuncoesprincipal.js

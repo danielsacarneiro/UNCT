@@ -134,6 +134,10 @@ function removeObjetoSessao($ID) {
 	$sessao = Session::getInstance();
 	$sessao->__unset($ID);
 }
+function removeSessao() {
+	$sessao = Session::getInstance();
+	$sessao->destroy();
+}
 function getObjetoSessao($ID, $levantarExcecaoSeObjetoInexistente = false) {
 	$sessao = Session::getInstance();
 	$objeto = null;

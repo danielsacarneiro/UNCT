@@ -381,6 +381,7 @@ class voentidade extends multiplosConstrutores {
 		$array = explode ( CAMPO_SEPARADOR, $chave );
 		return $array;
 	}
+	
 	/*
 	 * function validaExclusaoRelacionamentoHistorico(){
 	 * $retorno = false;

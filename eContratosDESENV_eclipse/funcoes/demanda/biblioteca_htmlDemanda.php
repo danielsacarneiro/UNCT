@@ -6,7 +6,7 @@ function getDemandaDetalhamento($voDemanda, $exibeTipoDemanda = true, $colspan=n
 }
 function getDemandaDetalhamentoComLupa($voDemanda, $temLupaDet, $exibeTipoDemanda = true, $colspan=null, $isAlteracaoDemanda = false){
 	
-	$comProcLici = $comContrato = !$isAlteracaoDemanda;
+	$comComplementos = !$isAlteracaoDemanda;
 	
 	if($colspan==null){
 		$colspan=3;
@@ -56,13 +56,15 @@ function getDemandaDetalhamentoComLupa($voDemanda, $temLupaDet, $exibeTipoDemand
 		getPAAPDetalhamento($voPAAP);
 	}
 		
-	if($comProcLici){
+	if($comComplementos){
+		require_once (caminho_funcoes . voSolicCompra::getNmTabela() . "/biblioteca_htmlSolicCompra.php");
+		//var_dump($voDemanda->voSolicCompra);
+		getSolicCompraDetalhamento($voDemanda->voSolicCompra);
+		
 		require_once (caminho_funcoes . voProcLicitatorio::getNmTabela() . "/biblioteca_htmlProcLicitatorio.php");
 		getProcLicitatorioDetalhamento($voDemanda->voProcLicitatorio);
-	}
-	
-	if($comContrato){
-	require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
+
+		require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
 		getColecaoContratoDet($voDemanda->colecaoContrato, true);
 		//var_dump($voDemanda->colecaoContrato);
 	}

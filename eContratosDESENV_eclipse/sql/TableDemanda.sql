@@ -182,7 +182,24 @@ CREATE TABLE demanda_doc (
 ALTER TABLE demanda_doc ADD CONSTRAINT fk_demanda_doc FOREIGN KEY (doc_ex, doc_cd_setor, doc_tp, doc_sq) REFERENCES documento (doc_ex, doc_cd_setor, doc_tp, sq) 
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;
+
+drop table if exists demanda_solic_compra;
+CREATE TABLE demanda_solic_compra(	
+    dem_ex INT NOT NULL,
+    dem_cd INT NOT NULL,
+
+    solic_ex INT NOT NULL,     	    
+    solic_cd INT NOT NULL,
+    solic_ug INT NOT NULL,
+
+    dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    cd_usuario_incl INT,
     
+    CONSTRAINT pk PRIMARY KEY (dem_ex, dem_cd, solic_ex, solic_cd, solic_ug)/*,
+    CONSTRAINT fk_demanda_pl_pl FOREIGN KEY (pl_ex, pl_cd) REFERENCES proc_licitatorio (pl_ex, pl_cd) 
+	ON DELETE RESTRICT
+	ON UPDATE RESTRICT*/
+);
 
 
 /** INCLUSAO DEMANDAS */

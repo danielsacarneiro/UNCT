@@ -57,7 +57,11 @@ setCabecalho($titulo);
 	fprocLic.adicionarItem(new Link('EXTERNO: Mural PEIntegrado', 'https://www.peintegrado.pe.gov.br/Portal/Mural.aspx', "", null,true));	
 	f.adicionarItem(fprocLic);	
 	
-	fmsg = new Tree('Serviço 06 (Administrativo)');
+	fSolicCompra = new Tree('Serviço 06 (Solic.Compra)');
+	fSolicCompra.adicionarItem(new Link('Solic.Compra', '<?=caminho_funcoesHTML.voSolicCompra::getNmTabela()?>', ''));
+	f.adicionarItem(fSolicCompra);	
+
+	fmsg = new Tree('ADMINISTRATIVO');
 	fmsg.adicionarItem(new Link("PAINEL (Atividades relevantes)", "agendamento.php?<?=constantes::$ID_REQ_IN_ENVIAR_EMAIL?>=N", ""));
 	fmsg.adicionarItem(new Link('Mensageria', '<?=caminho_funcoesHTML.voMensageria::getNmTabela()?>', ''));	
 	fmsg.adicionarItem(new Link('Mensageria Registro', '<?=caminho_funcoesHTML.voMensageriaRegistro::getNmTabela()?>', ''));
@@ -67,7 +71,7 @@ setCabecalho($titulo);
 		//documento de designacao do SAFI
 		$vodocumento = new voDocumento(array(2019, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_LEGISLACAO, 1));
 	?>
-	f7 = new Tree('Serviço 07 (Legislação)');
+	f7 = new Tree('LEGISLAÇÃO)');
 	//f7.adicionarItem(new Link('Designação SAFI','<?=caminho_funcoesHTML."exibir_pdf.php?chave=". $vodocumento->getValorChaveHTML()?>', "", null,true));
 	f7.adicionarItem(new Link('EXTERNO: Decreto Estadual Penalidade (DECRETO Nº 42.191/2015)', 'http://legis.alepe.pe.gov.br/texto.aspx?id=15904&tipo=', "", null,true));
 	f7.adicionarItem(new Link('EXTERNO: Lei Execução Fiscal Multa (LEI Nº 13.178/2006)', 'http://legis.alepe.pe.gov.br/texto.aspx?id=2257&tipo=', "", null,true));
