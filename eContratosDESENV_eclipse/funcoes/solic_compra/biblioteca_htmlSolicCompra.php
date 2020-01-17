@@ -2,7 +2,7 @@
 
 function getSolicCompraDetalhamento($voSolicCompra,$temLupa=true) {
 	//$voSolicCompra = new voSolicCompra();
-	if($voSolicCompra != null){
+	if($voSolicCompra != null && $voSolicCompra->cd != null){
 	?>
 <TR>
 	<TH class="campoformulario" nowrap width=1%><?=voSolicCompra::getNomeObjetoJSP()?>:</TH>
