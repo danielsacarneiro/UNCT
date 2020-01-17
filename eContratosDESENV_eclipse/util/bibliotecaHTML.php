@@ -823,7 +823,7 @@ function formatarCodigoContrato($cd, $ano, $tipo) {
 function formatarCodigoAnoComplemento($cd, $ano, $complemento) {
 	return formatarCodigoAnoComplementoArgs ( $cd, $ano, null, $complemento );
 }
-function formatarCodigoAnoComplementoArgs($cd, $ano, $pTamanhoCodigo, $complemento) {
+function formatarCodigoAnoComplementoArgs($cd, $ano, $pTamanhoCodigo, $complemento, $comEspacoEmBranco=true) {
 	$retorno = "";
 	if ($complemento != null && $complemento != "") {
 		$retorno .= $complemento . " ";
@@ -835,6 +835,9 @@ function formatarCodigoAnoComplementoArgs($cd, $ano, $pTamanhoCodigo, $complemen
 	}
 	
 	$retorno .= complementarCharAEsquerda ( $cd, "0", $tamanhoCodigo ) . "/" . substr ( $ano, 2, 2 );
+	if(!$comEspacoEmBranco){
+		$retorno = str_replace(" ", "", $retorno);
+	}
 	
 	return $retorno;
 }
@@ -966,6 +969,54 @@ function getCampoDadosVOAnoCd($vo, $arrayParametroXNmAtributo, $nmClass = "campo
 	class="<?=$cssCd?>" size="4" maxlength="3" <?=$htmlCd?>>
 <?php
 	echo "Ano: " . $selectExercicio->getHtmlCombo ( $pIDCampoAno, $pNmCampoAno, $ano, true, $cssAno, false, $htmlAno );	
+}
+
+/**
+ * exibe detalhamento das informacoes relevantes do VO e grava a chave no hidden
+ * Recebe o array no seguinte formato 
+ * 	$arrayParametroXNmAtributo = 
+    array ("cd" => VO::$nmAtrCd,
+			"ano" => VO::$nmAtrAno
+			...
+	);
+ * @param unknown $vo
+ * @param unknown $arrayParametroXNmAtributo
+ * @param string $temLupa
+ * @throws excecaoGenerica
+ */
+function getCampoDetalhamentoVOChave($vo,$arrayParametroXNmAtributo,$temLupa=true) {
+	if($arrayParametroXNmAtributo == null)
+		throw new excecaoGenerica("Atributo de parâmetros de códigos vazio.");
+				
+		$arrayAtributosChave = array_keys($arrayParametroXNmAtributo);
+		for ($i=0;$i<sizeof($arrayParametroXNmAtributo);$i++){
+			$item = $arrayParametroXNmAtributo[$i];
+			
+			$nmAtributoVO = $arrayAtributosChave[$i];
+			$nmAtributoStaticVO = $arrayParametroXNmAtributo[$nmAtributoVO];
+			
+			echo getInputHidden($nmAtributoStaticVO, $nmAtributoStaticVO, $vo->$nmAtributoVO);
+			
+			//considera que o codigo eh o primeiro da lista e ano o segundo
+			if($i == 0){
+				$codigo = $nmAtributoVO;
+			}else if($i == 1){
+				$ano = $nmAtributoVO;
+			}else{
+				$complemento.= $vo->$nmAtributoVO.".";
+			}				
+		}
+		//$complemento = removerUltimaString(".", $complemento);
+		$cdStr = formatarCodigoAnoComplementoArgs ( $vo->$codigo,$vo->$ano, TAMANHO_CODIGOS, $complemento, false);
+	?>
+		
+	<INPUT type="text" value="<?php echo($cdStr);?>" class="camporeadonlyalinhadodireita" size="<?=strlen($cdStr)+1?>" readonly>	
+	<?php	
+	if ($temLupa) {
+		$chave = $vo->getValorChaveHTML();
+		echo getLinkPesquisa ( "../".$vo::getNmTabela()."/detalhar.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $chave );
+	}
+	
 }
 
 function getCampoDadosVOAnoCdDetalhamento($vo,$arrayParametroXNmAtributo,$temLupa=true) {

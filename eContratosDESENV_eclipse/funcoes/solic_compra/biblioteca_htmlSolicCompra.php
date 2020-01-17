@@ -5,30 +5,17 @@ function getSolicCompraDetalhamento($voSolicCompra,$temLupa=true) {
 	if($voSolicCompra != null){
 	?>
 <TR>
-	<INPUT type="hidden" id="<?=voSolicCompra::$nmAtrCd?>"
-		name="<?=voSolicCompra::$nmAtrCd?>"
-		value="<?=$voSolicCompra->cd?>">
-	<INPUT type="hidden" id="<?=voSolicCompra::$nmAtrAno?>"
-		name="<?=voSolicCompra::$nmAtrAno?>"
-		value="<?=$voSolicCompra->ano?>">
-	<INPUT type="hidden" id="<?=voSolicCompra::$nmAtrUG?>"
-		name="<?=voSolicCompra::$nmAtrUG?>"
-		value="<?=$voSolicCompra->ug?>">
 	<TH class="campoformulario" nowrap width=1%><?=voSolicCompra::getNomeObjetoJSP()?>:</TH>
 	<TD class="campoformulario" colspan=3>
 	<?php
 	$arrayParametroXNmAtributo = array ("cd" => voSolicCompra::$nmAtrCd,
 			"ano" => voSolicCompra::$nmAtrAno,
+			"ug" => voSolicCompra::$nmAtrUG,
 	);	
-	echo getCampoDadosVOAnoCdDetalhamento($voSolicCompra,$arrayParametroXNmAtributo,$temLupa);
-	//echo getTextoHTMLNegrito(dominioModalidadeSolicCompra::getDescricaoStatic($voSolicCompra->cdModalidade));
-	$complemento = $voSolicCompra->ug;
-	echo getTextoHTMLNegrito($complemento);
-	
+	echo getCampoDetalhamentoVOChave($voSolicCompra,$arrayParametroXNmAtributo,$temLupa);	
 	if($voSolicCompra->objeto != null){
 		echo "<br>" . getInputTextArea(voSolicCompra::$nmAtrObjeto, voSolicCompra::$nmAtrObjeto, $voSolicCompra->objeto, constantes::$CD_CLASS_CAMPO_READONLY);
-	}		
-	
+	}
 	?>
 	</TD>	
 </TR>
@@ -47,6 +34,5 @@ function getCampoDadosSolicCompra($voSolicCompra, $nmClass = "camponaoobrigatori
 	$comboUG = new select(dominioUGSolicCompra::getColecao());
 	$pIDCampoCdUG = $pNmCampoCdUG = voSolicCompra::$nmAtrUG;
 	$htmlCdUG = $complementoHTML [2];
-	echo " UG: " . $comboUG->getHtmlCombo ( $pIDCampoCdUG , $pNmCampoCdUG , $voSolicCompra->ug , true, $nmClass , false, $htmlCdUG);
-	
+	echo " UG: " . $comboUG->getHtmlCombo ( $pIDCampoCdUG , $pNmCampoCdUG , $voSolicCompra->ug , true, $nmClass , false, $htmlCdUG);	
 }

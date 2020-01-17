@@ -200,7 +200,7 @@ CREATE TABLE demanda_solic_compra(
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT*/
 );
-
+select * from demanda_solic_compra
 
 /** INCLUSAO DEMANDAS */
 DELIMITER $$

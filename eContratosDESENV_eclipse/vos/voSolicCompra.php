@@ -5,6 +5,7 @@ include_once (caminho_util . "bibliotecaFuncoesPrincipal.php");
 include_once (caminho_funcoes . "solic_compra/dominioTipoSolicCompra.php");
 include_once (caminho_funcoes . "solic_compra/dominioSituacaoSolicCompra.php");
 include_once (caminho_funcoes . "solic_compra/dominioUGSolicCompra.php");
+include_once (caminho_funcoes . "solic_compra/biblioteca_htmlSolicCompra.php");
 
 class voSolicCompra extends voentidade {
 	

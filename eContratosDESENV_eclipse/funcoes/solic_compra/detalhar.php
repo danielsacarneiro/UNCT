@@ -95,12 +95,13 @@ function confirmar() {
 	            $voDemanda = new voDemanda(array($vo->anoDemanda, $vo->cdDemanda));
 	            $voDemanda->tipo = dominioTipoDemanda::$CD_TIPO_DEMANDA_SOLIC_COMPRA;
 	            getDemandaDetalhamento($voDemanda, true);
-            }
+            }         
+            
             ?>
             <TR>
 		         <TH class="campoformulario" nowrap width="1%">Solic.Compra:</TH>
 		         <TD class="campoformulario" colspan=3>
-		         <?php echo(getDetalhamentoHTML("", "", formatarCodigoAnoComplementoArgs ( $vo->cd, $vo->ano, TAMANHO_CODIGOS, $vo->ug.".")));?>
+		         <?php echo(getDetalhamentoHTML("", "", formatarCodigoAnoComplementoArgs ( $vo->cd, $vo->ano, TAMANHO_CODIGOS, $vo->ug.".", false)));?>
 				 </TD>
 	        </TR>                         
 	        <?php	       			
