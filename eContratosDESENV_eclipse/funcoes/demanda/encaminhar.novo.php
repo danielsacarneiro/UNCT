@@ -400,10 +400,10 @@ function iniciar(){
 				</TD>
 	        </TR>
 	        <TR>
-	            <TH class="campoformulario" nowrap width="1%">PRT/S.E.I.:</TH>
+	            <TH class="campoformulario" nowrap width="1%">PRT/SEI:</TH>
 	            <TD class="campoformulario" colspan=3>				
 	            <INPUT type="text" onkeyup="formatarCampoPRT(this, event);" id="<?=voDemandaTramitacao::$nmAtrProtocolo?>" name="<?=voDemandaTramitacao::$nmAtrProtocolo?>" value=""  class="camponaoobrigatorio" size="30" <?=$complementoHTML?>>
-	            <INPUT type="checkbox" id="<?=voDemandaTramitacao::$nmAtrInResponsabilidadePRT?>" name="<?=voDemandaTramitacao::$nmAtrInResponsabilidadePRT?>" value="" onClick="checkResponsabilidade();"> *Assumo a responsabilidade de não incluir PRT.	            	                        	                        
+	            <INPUT type="checkbox" id="<?=voDemandaTramitacao::$nmAtrInResponsabilidadePRT?>" name="<?=voDemandaTramitacao::$nmAtrInResponsabilidadePRT?>" value="" onClick="checkResponsabilidade();"> *Assumo a responsabilidade de não incluir PRT/SEI.	            	                        	                        
 	        </TR>
 	        <TR>
 		        <TH class="campoformulario" width="1%" nowrap>Documento:</TH>

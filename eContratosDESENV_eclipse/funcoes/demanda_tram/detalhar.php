@@ -148,7 +148,7 @@ function confirmar() {
 				</TD>
 	        </TR>
 	        <TR>
-	            <TH class="campoformulario" nowrap width="1%">PRT:</TH>
+	            <TH class="campoformulario" nowrap width="1%">PRT/SEI:</TH>
 	            <TD class="campoformulario" colspan=3>				
 	            <INPUT type="text" onkeyup="formatarCampoPRT(this, event);" id="<?=voDemandaTramitacao::$nmAtrProtocolo?>" name="<?=voDemandaTramitacao::$nmAtrProtocolo?>" value="<?php echo($vo->prt);?>"  class="camporeadonly" size="30" readonly>	            	                        	                        
 	        </TR>

@@ -218,7 +218,7 @@ function mostrarGridDemanda($colecaoTramitacao, $isDetalhamento) {
 		$html .= "<TH class='headertabeladados' width='1%'>Destino</TH> \n";
 		$html .= "<TH class='headertabeladados' width='90%'>Texto</TH> \n";
 		$html .= "<TH class='headertabeladados' width='1%' nowrap>Anexo</TH> \n";
-		$html .= "<TH class='headertabeladados' width='1%' nowrap>PRT</TH> \n";
+		$html .= "<TH class='headertabeladados' width='1%' nowrap>PRT/SEI</TH> \n";
 		$html .= "<TH class='headertabeladados' width='1%' nowrap>Usuário</TH> \n";
 		$html .= "<TH class='headertabeladados' width='1%' nowrap>Dt.Referência</TH> \n";
 		$html .= "<TH class='headertabeladados' width='1%' nowrap>Ult.Mov.</TH> \n";
