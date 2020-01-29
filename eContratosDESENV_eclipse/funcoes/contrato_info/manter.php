@@ -183,7 +183,7 @@ function transferirDadosPessoa(cd, nm) {
 	            
 	            include_once(caminho_util. "dominioSimNao.php");
 	            $comboSimNao = new select(dominioSimNao::getColecao());	             
-	            echo "&nbsp;&nbsp;Mão de obra incluída (planilha de custos)?: ";
+	            echo "&nbsp;&nbsp;Planilha de custos/formação de preço?: ";
 	            echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInMaoDeObra,voContratoInfo::$nmAtrInMaoDeObra, $vo->inMaoDeObra, true, "camponaoobrigatorio", false,
 	            		" onChange='formataFormClassificacao(this);' required ");
 	            ?>

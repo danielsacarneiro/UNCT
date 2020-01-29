@@ -113,7 +113,7 @@ function confirmar() {
 	            <TD class="campoformulario" colspan=3>
 	            <?php echo $comboClassificacao->getHtmlCombo(voContratoInfo::$nmAtrCdClassificacao,voContratoInfo::$nmAtrCdClassificacao, $vo->cdClassificacao, true, "camporeadonly", true, " disabled ");
 	            $radioMaodeObra = new radiobutton ( dominioSimNao::getColecao());
-	            echo "&nbsp;&nbsp;Mão de obra incluída?: " . $radioMaodeObra->getHtmlRadioButton ( voContratoInfo::$nmAtrInMaoDeObra, voContratoInfo::$nmAtrInMaoDeObra, $vo->inMaoDeObra, false, " disabled " );	             
+	            echo "&nbsp;&nbsp;Planilha de custos/formação de preço?: " . $radioMaodeObra->getHtmlRadioButton ( voContratoInfo::$nmAtrInMaoDeObra, voContratoInfo::$nmAtrInMaoDeObra, $vo->inMaoDeObra, false, " disabled " );	             
 	            ?>
 	        </TR>			
 			<TR>
