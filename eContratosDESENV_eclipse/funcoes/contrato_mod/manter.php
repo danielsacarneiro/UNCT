@@ -107,7 +107,7 @@ function alertarValorAtualizadoComValordoTermo() {
 	//alert("vltermo=" + vlTermo + " vl atualziado=" + vlAtualizado);
 	
 	if(vlAtualizado != vlTermo){
-		exibirMensagem("[INFORMAÇÃO: o valor atualizado do contrato difere do valor registrado no termo.]");
+		exibirMensagem("[INFORMAÇÃO: o valor global atualizado do contrato difere do valor registrado no termo.]");
 	}	    
 }
 

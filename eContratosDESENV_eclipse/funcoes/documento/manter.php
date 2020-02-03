@@ -166,7 +166,7 @@ function criarNomeDocumento(campoChamada){
 			}
 
 			//alert(cdModDs);
-			nome = nome + "_PL-" + formatarCodigoDocumento(cdProcLic, cdModDs, anoProcLic, null, colecaoSetor);
+			nome = nome + "_PL-" + formatarCodigoDocumento(cdProcLic, null, anoProcLic, null, colecaoSetor) + "." + cdModDs;
 		}
 	}	
 	
@@ -283,7 +283,7 @@ function iniciar(){
             <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
             <TBODY>           
 	        <?php
-	        $selectExercicio = new selectExercicio();
+	        $selectExercicio = selectExercicio::getSelectColecaoAnoInicio();
 	        $domSetor = new dominioSetor();
 	        $domTp = new dominioTpDocumento();
 	        $comboTipoDocMinuta = new select(dominioEspeciesContrato::getColecao());

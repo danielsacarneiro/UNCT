@@ -757,6 +757,7 @@ function getContratoVigentePorData($vocontrato, $pData = null, $isTpVigenciaMAxS
 }
 
 function getCamposContratoMod($vo, $arrayParamComplemento = null){
+	$voTermoInseridoTela = clone $vo;
 	
 	if($arrayParamComplemento != null){
 		$dtEfeitoModificacao = $arrayParamComplemento[0];
@@ -779,10 +780,7 @@ function getCamposContratoMod($vo, $arrayParamComplemento = null){
 	
 	$vlMensalAtualizadoParaFinsMod = getMoeda($registrobanco[voContratoModificacao::$nmAtrVlMensalModAtual]); 
 	$vlGlobalAtualizadoParaFinsMod = getMoeda($registrobanco[voContratoModificacao::$nmAtrVlGlobalModAtual]);
-	
-	/*$vlMensalTermoInseridoTela = getMoeda($registrobanco[voContratoModificacao::$ID_REQ_VlMensalContratoInseridoTela]);
-	$vlGlobalTermoInseridoTela = getMoeda($registrobanco[voContratoModificacao::$ID_REQ_VlGlobalContratoInseridoTela]);*/
-	
+		
 	$vo->dtAssinatura = getData($registrobanco[vocontrato::$nmAtrDtAssinaturaContrato]);
 
 	//consulta o periodo de vigencia do termo inserido apenas se ele nao for um TA
@@ -791,11 +789,16 @@ function getCamposContratoMod($vo, $arrayParamComplemento = null){
 	$voContratoReferencia = clone $voContrato;
 
 	$registro = getContratoVigentePorData($vo, $dtEfeitoModificacao, true)[0];
+
+	//aqui eh o termo inserido na tela
+	$voTermoInseridoTela = $dbcontrato->consultarPorChaveVO($voTermoInseridoTela, false);
+	//echo $vo->toString();
+	$vlMensalTermoInseridoTela = $voTermoInseridoTela->vlMensal;
+	$vlGlobalTermoInseridoTela = $voTermoInseridoTela->vlGlobal;
+		
+	//aqui determina a vigencia do termo inserido na tela
 	$voContratoTemp = new vocontrato();
-	$voContratoTemp->getDadosBanco($registro);
-	
-	$vlMensalTermoInseridoTela = $voContratoTemp->vlMensal;
-	$vlGlobalTermoInseridoTela = $voContratoTemp->vlGlobal;
+	$voContratoTemp->getDadosBanco($registro);	
 					
 	$voContrato->dtVigenciaInicial = $voContratoTemp->dtVigenciaInicial;
 	$voContrato->dtVigenciaFinal = $voContratoTemp->dtVigenciaFinal;
@@ -807,7 +810,9 @@ function getCamposContratoMod($vo, $arrayParamComplemento = null){
 		
 	//traz o valor atualizado do contrato segundo o e-conti
 	$dbcontratomod = new dbContratoModificacao();
-	$registroExecucao = $dbcontratomod->consultarExecucaoTermoEspecifico($voContratoReferencia, $dtEfeitoModificacao);
+	//$registroExecucao = $dbcontratomod->consultarExecucaoTermoEspecifico($voContratoReferencia, $dtEfeitoModificacao);
+	$registroExecucao = $dbcontratomod->consultarExecucaoTermoEspecifico($voContratoMater, $dtEfeitoModificacao);
+	
 	$voContratoModEspecificoReajustado = $registroExecucao[filtroManterContratoModificacao::$NmColVOContratoModReajustado];
 	//$isReajuste = $tipoModificacao == dominioTpContratoModificacao::$CD_TIPO_REAJUSTE || $tipoModificacao == dominioTpContratoModificacao::$CD_TIPO_REPACTUACAO;	
 	if($voContratoModEspecificoReajustado->vlMensalAtual != null){

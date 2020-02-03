@@ -666,15 +666,19 @@ class filtroManterDemanda extends filtroManter{
 						.")";
 			//$nmAtributoDataProposta = $nmTabelaContratoInfo . "." .voContratoInfo::$nmAtrDtProposta;
 			$dtPropostaPAram = $atributoDataReajuste;
-			//CONSIDERA 1 ANO ANTES DO ATUAL PARA FAZER A DIFERENCA DE 1 ANO PARA A CONCESSAO DE REAJUSTE
-			$ano = "YEAR($dtReferencia)-1";
+			/*CONSIDERAVA 1 ANO ANTES DO ATUAL PARA FAZER A DIFERENCA DE 1 ANO PARA A CONCESSAO DE REAJUSTE
+			$ano = "YEAR($dtReferencia)-1";*/			
+			//ANTES ERA ANO-1, agora ficou somente ANO... nao lembro o motivo da subtracao de 1
+			$ano = "YEAR($dtReferencia)";
 			$mes = "MONTH($dtPropostaPAram)";
 			//considera o dia 15 do mes como dia limite para obtencao do indice de reajuste exigido por lei
 			//ver data da liberacao dos indices em https://www.indiceseindicadores.com.br/inpc/
 			//dai que foi usado o dia 15 como media
 			$dia = "15";			
 			//$dia = "DAY($dtPropostaPAram)";
-			$dtPropostaPAram = getDataSQLFormatada($ano,$mes, $dia);			
+			$dtPropostaPAram = getDataSQLFormatada($ano,$mes, $dia);
+			
+			//echo "$dtReferencia";
 						
 			//se a diferenca de anos for zero, quer dizer que nao ha diferenca de 1 ano
 			//nesse caso, o vencimento da data da proposta nao ocorreu, nao podendo ser a demanda analisada para fins de reajuste

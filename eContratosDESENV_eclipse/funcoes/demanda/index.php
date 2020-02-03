@@ -140,7 +140,7 @@ function encaminhar() {
 	        	$comboSetor = new select(dominioSetor::getColecao());
 	        	$comboSetorImplantacaoEconti = new select(dominioSetor::getColecaoImplantacaoEcontiDemanda());
 	        	$comboPrioridade = new select(dominioPrioridadeDemanda::getColecao());
-	            $selectExercicio = new selectExercicio();
+	            $selectExercicio = new selectExercicio(constantes::$ANO_INICIO);
 			  ?>			            
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Demanda:</TH>

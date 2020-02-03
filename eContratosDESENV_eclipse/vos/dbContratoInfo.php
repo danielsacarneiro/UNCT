@@ -348,7 +348,8 @@ class dbContratoInfo extends dbprocesso {
 		$retorno .= $this->getVarComoString( $vo->inMaoDeObra ) . ",";
 		$retorno .= $this->getVarComoNumero($vo->cdPessoaGestor) . ",";
 		$retorno .= $this->getVarComoString($vo->inEscopo) . ",";
-		$retorno .= $this->getVarComoNumero($vo->inPrazoProrrogacao);
+		$retorno .= $this->getVarComoNumero($vo->inPrazoProrrogacao). ",";
+		$retorno .= $this->getVarComoNumero($vo->inEstudoTecnicoSAD);
 		
 		$retorno .= $vo->getSQLValuesInsertEntidade ();
 		
@@ -427,6 +428,14 @@ class dbContratoInfo extends dbprocesso {
 			$retorno .= $sqlConector . voContratoInfo::$nmAtrInPrazoProrrogacao . " = null ";
 			$sqlConector = ",";
 		}		
+		
+		if ($vo->inEstudoTecnicoSAD != null) {
+			$retorno .= $sqlConector . voContratoInfo::$nmAtrInEstudoTecnicoSAD . " = " . $this->getVarComoNumero($vo->inEstudoTecnicoSAD);
+			$sqlConector = ",";
+		}else{
+			$retorno .= $sqlConector . voContratoInfo::$nmAtrInEstudoTecnicoSAD . " = null ";
+			$sqlConector = ",";
+		}
 		
 		$retorno = $retorno . $vo->getSQLValuesEntidadeUpdate ();
 		

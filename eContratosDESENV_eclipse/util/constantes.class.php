@@ -4,6 +4,7 @@
   Class constantes {	
 	
 	static $nomeSistema = "e@CONTi";
+	static $ANO_INICIO = "2016";
 	static $DATA_INICIO = "01/01/1900";
 	static $DATA_FIM = "01/01/2099";
 	

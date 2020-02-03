@@ -322,7 +322,7 @@ class dbContratoModificacao extends dbprocesso {
 			}			
 			$i++;
 		}
-		
+				
 		return $retorno; 
 	}
 	
@@ -464,8 +464,7 @@ class dbContratoModificacao extends dbprocesso {
 		//isto quer dizer que, a partir da repactuacao, o valor em contratoMOD permanece inalterado para os reajustes retroativos
 		//tendo em vista que, com a repactuacao, a empresa renuncia a outros valores 
 		$filtro->tipo = dominioTpContratoModificacao::$CD_TIPO_REAJUSTE;		
-		//$filtro->tipo = array(dominioTpContratoModificacao::$CD_TIPO_REAJUSTE, dominioTpContratoModificacao::$CD_TIPO_REPACTUACAO);
-		
+		//$filtro->tipo = array(dominioTpContratoModificacao::$CD_TIPO_REAJUSTE, dominioTpContratoModificacao::$CD_TIPO_REPACTUACAO);		
 		$colecaoReajuste = $this->consultarTelaConsulta ( new voContratoModificacao (), $filtro );
 		
 		//para todos os registros incluidos em contrato Mod
@@ -477,8 +476,10 @@ class dbContratoModificacao extends dbprocesso {
 				$registro = $recordSet [0];
 				$voContratoReajustadoAtual = new voContratoModificacao ();
 				$voContratoReajustadoAtual->getDadosBanco ( $registro );
+				//var_dump($voContratoReajustadoAtual);
 				//MARRETA??? verificar o contrato csafi040-18 como exemplo
 				if($voContratoReajustadoAtual->tpModificacao == dominioTpContratoModificacao::$CD_TIPO_REAJUSTE){
+					//echo $voContratoMater->vlMensal;
 					//so pra quando o primeiro registro contratomod eh de reajuste, pq o percentual de reajuste serah aplicado no contrato mater
 					$voContratoReajustadoAtual->vlMensalAtual = getVarComoDecimal($voContratoMater->vlMensal);
 					$voContratoReajustadoAtual->vlGlobalAtual = getVarComoDecimal($voContratoMater->vlGlobal);
@@ -490,7 +491,7 @@ class dbContratoModificacao extends dbprocesso {
 				
 				$j=0;
 				//para cada registro em contratoMod, identificar quais reajustes retroativos serao aplicados
-				foreach ( $colecaoReajuste as $registroReajuste ) {
+				foreach ( $colecaoReajuste as $registroReajuste ) {					
 					$voTempReajuste = new voContratoModificacao ();
 					$voTempReajuste->getDadosBanco ( $registroReajuste );
 					//echoo ( "<br>PErcentual reajuste:" . $voTempReajuste->numPercentual );

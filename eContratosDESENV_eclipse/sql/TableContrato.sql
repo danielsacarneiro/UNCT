@@ -157,6 +157,7 @@ CREATE TABLE contrato_info (
     ctinf_cd_pegestor INT, 
     ctinf_in_escopo CHAR(1) NULL,
     ctinf_in_prazoprorrogacao INT NULL,
+    ctinf_in_sad_estudotec INT NULL,
     
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
@@ -168,6 +169,7 @@ CREATE TABLE contrato_info (
 );
 ALTER TABLE contrato_info ADD COLUMN ctinf_in_escopo CHAR(1) NULL AFTER ctinf_cd_pegestor;
 ALTER TABLE contrato_info ADD COLUMN ctinf_in_prazoprorrogacao INT NULL AFTER ctinf_in_escopo;
+ALTER TABLE contrato_info ADD COLUMN ctinf_in_sad_estudotec INT NULL AFTER ctinf_in_prazoprorrogacao;
 
 /*ALTER TABLE contrato_info ADD CONSTRAINT fk_contrato_info FOREIGN KEY (ct_exercicio, ct_numero, ct_tipo) REFERENCES contrato (ct_exercicio, ct_numero, ct_tipo)
 	ON DELETE RESTRICT
@@ -206,6 +208,7 @@ CREATE TABLE contrato_info_hist (
     ctinf_cd_pegestor INT, 
     ctinf_in_escopo CHAR(1) NULL,
     ctinf_in_prazoprorrogacao INT NULL,
+    ctinf_in_sad_estudotec INT NULL,
     
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
@@ -221,6 +224,7 @@ CREATE TABLE contrato_info_hist (
 
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_escopo CHAR(1) NULL AFTER ctinf_cd_pegestor;
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_prazoprorrogacao INT NULL AFTER ctinf_in_escopo;
+ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_sad_estudotec INT NULL AFTER ctinf_in_prazoprorrogacao;
 /*ALTER TABLE contrato_info_hist DROP COLUMN ctinf_email_gestor;
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_garantia CHAR(1) NULL AFTER ctinf_obs;
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_tp_garantia INT NULL AFTER ctinf_in_garantia;

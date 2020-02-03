@@ -141,7 +141,8 @@ function transferirDadosPessoa(cd, nm) {
             <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
             <TBODY>
 	        <?php	        
-	        $selectExercicio = new selectExercicio();	        
+	        $selectExercicio = new selectExercicio();
+	        $comboEstudoTecnico = new select(dominioEstudoTecnicoSAD::getColecao());
 	        $complementoHTML = "";
 
 	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
@@ -164,11 +165,15 @@ function transferirDadosPessoa(cd, nm) {
 	        ?>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" colspan=3><?php getCampoDadosContratoSimples();//getContratoEntradaDeDados($tipoContrato, $anoContrato, $cdContrato, $arrayCssClass, $arrayComplementoHTML, $nmCampoDiv);?></TD>
+	            <TD class="campoformulario" nowrap colspan=3><?php getCampoDadosContratoSimples();//getContratoEntradaDeDados($tipoContrato, $anoContrato, $cdContrato, $arrayCssClass, $arrayComplementoHTML, $nmCampoDiv);?></TD>
 	        </TR>	        
 	        <?php 
 	       }	       
 	       ?>
+	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">Estudo Técnico:</TH>
+	            <TD class="campoformulario" colspan=3><?php echo $comboEstudoTecnico->getHtmlCombo(voContratoInfo::$nmAtrInEstudoTecnicoSAD,voContratoInfo::$nmAtrInEstudoTecnicoSAD, $vo->inEstudoTecnicoSAD, true, "camponaoobrigatorio", false, " onChange='' required ");?>	            
+	        </TR>	       
 			<TR>
 				<?php
 				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioClassificacaoContrato.php");
@@ -267,6 +272,7 @@ function transferirDadosPessoa(cd, nm) {
 	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=voContratoInfo::$nmAtrObs?>" name="<?=voContratoInfo::$nmAtrObs?>" class="camponaoobrigatorio"><?=$vo->obs?></textarea>
 	            <SCRIPT language="JavaScript" type="text/javascript">
 	            	colecaoIDCamposRequired = ["<?=voContratoInfo::$nmAtrCdAutorizacaoContrato?>",
+	            		"<?=voContratoInfo::$nmAtrInEstudoTecnicoSAD?>",
 	            		"<?=voContratoInfo::$nmAtrInEscopo?>",
 		            	"<?=voContratoInfo::$nmAtrCdClassificacao?>",
 		            	"<?=voContratoInfo::$nmAtrInMaoDeObra?>",

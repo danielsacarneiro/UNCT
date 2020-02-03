@@ -104,6 +104,10 @@ function confirmar() {
  	        $comboSimNao = new select(dominioSimNao::getColecao());
  	        
 			?>
+	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">Estudo Técnico:</TH>
+	            <TD class="campoformulario" colspan=3><?php echo dominioEstudoTecnicoSAD::getHtmlDetalhamento(voContratoInfo::$nmAtrInEstudoTecnicoSAD,voContratoInfo::$nmAtrInEstudoTecnicoSAD, $vo->inEstudoTecnicoSAD);?>	            
+	        </TR>			
 			<TR>
 				<?php
 				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioClassificacaoContrato.php");

@@ -250,7 +250,7 @@ function iniciar(){
 	        $comboSetor = new select(dominioSetor::getColecao());
 	        $comboSituacao = new select(dominioSituacaoDemanda::getColecao());
 	        $comboPrioridade = new select(dominioPrioridadeDemanda::getColecao());
-	        $selectExercicio = new selectExercicio();
+	        $selectExercicio = selectExercicio::getSelectColecaoAnoInicio();
 	        
 	        $votram->dtReferencia = dtHoje;
 	        

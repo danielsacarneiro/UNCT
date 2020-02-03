@@ -126,7 +126,7 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   	static function getMensagemGestor($codigoContrato, $numFrequencia){  		
   		//$retorno = "<br><br>Caro Gestor, favor verificar o vencimento do contrato $codigo.";
   		
-  		$numFrequencia = complementarCharAEsquerda($numFrequencia, "0", 3);
+  		//$numFrequencia = complementarCharAEsquerda($numFrequencia, "0", 3);
   		
   		$retorno = "<br>Prezado gestor,
   		
@@ -140,7 +140,7 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		
   		<br><br>A resposta deve ser enviada para o seguinte correio eletrônico: <b>Unidade de Contratos da SAFI-SEFAZ (UNCT): <u>".voMensageriaRegistro::$REMETENTE_PRINCIPAL."</u></b>.
   		
-  		<br><br>Este e-mail é reenviado a cada <b>$numFrequencia dias</b>.";  		 		
+  		<br><br>Este e-mail é reenviado a cada <b>$numFrequencia dia(s)</b>.";  		 		
   		
   		return $retorno;
   	}
