@@ -199,8 +199,9 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 	
 	if(dominioTipoDemandaContrato::existeItemArrayOuStrCampoSeparador(dominioTipoDemandaContrato::$CD_TIPO_PRORROGACAO, $pCdOpcaoSelecionadaTpDemandaContrato)){
 		//var_dump($voDemanda->getContrato());
-		if(!isContratoPermiteProrrogacao($voDemanda->getContrato())){
-			$html .= $conectorAlerta . getTextoHTMLDestacado("ATENÇÃO: verifique se o contrato comporta prorrogação em 'Contratos-Consolidação'.");
+		$exibirInfoProrrog = $voDemanda->situacao != dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA; 
+		if($exibirInfoProrrog && !isContratoPermiteProrrogacao($voDemanda->getContrato())){
+			$html .= $conectorAlerta . getTextoHTMLDestacado("ATENÇÃO: verifique se o contrato comporta prorrogação em 'Contratos-Consolidação'");
 			$conectorAlerta = "<BR>";
 		}	
 	}
