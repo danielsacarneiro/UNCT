@@ -42,6 +42,7 @@ class voDemanda extends voentidade {
 	var $colecaoContrato = null;
 	var $voProcLicitatorio = null;
 	var $voSolicCompra = null;
+	
 	// ...............................................................
 	// Funcoes ( Propriedades e métodos da classe )
 	function __construct($arrayChave = null) {
@@ -306,6 +307,13 @@ class voDemanda extends voentidade {
 		
 		$this->colecaoContrato = $retorno;
 	}
+	function getContrato() {
+		$retorno = null;
+		if($this->colecaoContrato != null){
+			$retorno = $this->colecaoContrato[0]; 
+		}
+		return $retorno;
+	}	
 	function toString() {
 		$retorno .= $this->ano;
 		$retorno .= "," . $this->cd;

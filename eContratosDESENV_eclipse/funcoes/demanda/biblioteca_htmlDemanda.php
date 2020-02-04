@@ -112,7 +112,7 @@ function getFiltroManterDemandaDataBaseReajusteVencida(){
  * @param unknown $filtro
  * @return unknown
  */
-function consultarFiltroManterDemandaDataBaseReajusteVencida($filtro){
+function consultarFiltroManterDemandaTelaConsulta($filtro){
 	$voDemanda = new voDemanda ();
 	$dbprocesso = $voDemanda->dbprocesso;
 	return $dbprocesso->consultarTelaConsulta ( $voDemanda, $filtro );
@@ -132,7 +132,7 @@ function isSinalizarDemandaReajustePeriodoNaoTranscorrido ($voDemanda){
 		$vodemandatemp->ano = $voDemanda->ano;
 		$vodemandatemp->cd = $voDemanda->cd;
 		$filtro->vodemanda = $vodemandatemp;
-		$colecao = consultarFiltroManterDemandaDataBaseReajusteVencida($filtro);
+		$colecao = consultarFiltroManterDemandaTelaConsulta($filtro);
 		
 		//$voDemanda = new voDemanda();	
 		//echo " setor atual " . $voDemanda->cdSetorAtual;
@@ -144,6 +144,40 @@ function isSinalizarDemandaReajustePeriodoNaoTranscorrido ($voDemanda){
 		$retorno = $cdSetorAtual == dominioSetor::$CD_SETOR_ATJA && $isColecaoVazia;
 	}
 	
+	return $retorno;
+}
+
+/**
+ * verifica se o contrato da demanda permite prorrogacao
+ * @param unknown $voDemanda
+ * @return boolean
+ */
+function isContratoPermiteProrrogacao($voContrato){
+	$retorno = false;
+	//$vocontrato = new vocontrato();
+	if($voContrato != null){
+
+		$filtro = new filtroConsultarContratoConsolidacao(false);
+		$filtro->isValidarConsulta = false;
+		$filtro->setaFiltroConsultaSemLimiteRegistro ();
+		
+		$filtro->anoContrato = $voContrato->anoContrato;
+		$filtro->cdContrato = $voContrato->cdContrato;
+		$filtro->tipoContrato = $voContrato->tipo;
+		$db = new dbContratoInfo();
+		$colecao = $db->consultarTelaConsultaConsolidacao($filtro);
+		if(!isColecaoVazia($colecao)){
+			
+			$registro = $colecao[0];
+			$prorrogavel = $registro[filtroConsultarContratoConsolidacao::$NmColInProrrogavel];
+			$prorrExcepcional = $registro[filtroConsultarContratoConsolidacao::$NmColInProrrogacaoExcepcional];			
+			//echo "$prorrogavel $prorrExcepcional";			
+			//verifica se o contrato permite prorrogacao
+			$retorno = getAtributoComoBooleano($prorrogavel) || getAtributoComoBooleano($prorrExcepcional); 
+		}		
+		
+	}
+
 	return $retorno;
 }
 
@@ -160,13 +194,15 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 		if(isSinalizarDemandaReajustePeriodoNaoTranscorrido($voDemanda)){
 			$html .= getTextoHTMLDestacado("ATENÇÃO: o período contratual necessário para o cálculo do reajuste(índice contratual) ainda não transcorreu. Verifique a Data Base de Reajuste do contrato.");
 			$conectorAlerta = "<BR>";
-		}
-		
-		if(false){
-			$html .= $conectorAlerta . getTextoHTMLDestacado("ATENÇÃO: verifique se o contrato comporta prorrogação.");
+		}				
+	}
+	
+	if(dominioTipoDemandaContrato::existeItemArrayOuStrCampoSeparador(dominioTipoDemandaContrato::$CD_TIPO_PRORROGACAO, $pCdOpcaoSelecionadaTpDemandaContrato)){
+		//var_dump($voDemanda->getContrato());
+		if(!isContratoPermiteProrrogacao($voDemanda->getContrato())){
+			$html .= $conectorAlerta . getTextoHTMLDestacado("ATENÇÃO: verifique se o contrato comporta prorrogação em 'Contratos-Consolidação'.");
 			$conectorAlerta = "<BR>";
-		}
-		
+		}	
 	}
 	
 	return $html;

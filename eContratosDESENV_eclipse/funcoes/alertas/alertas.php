@@ -167,7 +167,7 @@ function getMensagemDemandaContratoPropostaVencida(&$count = 0){
 	$assunto = getSequenciaAssunto($assunto, $count);
 	try {
 		$filtro = getFiltroManterDemandaDataBaseReajusteVencida();
-		$colecao = consultarFiltroManterDemandaDataBaseReajusteVencida($filtro);
+		$colecao = consultarFiltroManterDemandaTelaConsulta($filtro);
 		
 		$msg = getCorpoMensagemDemandaContratoColecao($assunto, $colecao, null);
 
