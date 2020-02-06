@@ -173,7 +173,8 @@ function isContratoPermiteProrrogacao($voContrato){
 			$prorrExcepcional = $registro[filtroConsultarContratoConsolidacao::$NmColInProrrogacaoExcepcional];			
 			//echo "$prorrogavel $prorrExcepcional";			
 			//verifica se o contrato permite prorrogacao
-			$retorno = getAtributoComoBooleano($prorrogavel) || getAtributoComoBooleano($prorrExcepcional); 
+			//$retorno = getAtributoComoBooleano($prorrogavel) || getAtributoComoBooleano($prorrExcepcional); 
+			$retorno = getAtributoComoBooleano($prorrogavel);
 		}		
 		
 	}
