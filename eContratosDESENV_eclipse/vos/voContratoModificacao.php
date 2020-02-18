@@ -10,6 +10,7 @@ class voContratoModificacao extends voentidade {
 	static $ID_REQ_VL_BASE_REAJUSTE = "ID_REQ_VL_BASE_REAJUSTE";
 	static $ID_REQ_InRetroativo = "ID_REQ_InRetroativo";
 	static $ID_REQ_NumPrazoUltimaProrrogacao = "NumPrazoUltimaProrrogacao";
+	static $ColecaoReajustesAplicados = array();
 	
 	static $InReajusteAplicado = "InReajusteAplicado";
 	
@@ -227,7 +228,8 @@ class voContratoModificacao extends voentidade {
 		$retorno .= "Sq:" . $this->sq;
 		$retorno .= "|Contrato:" . formatarCodigoContrato($this->vocontrato->cdContrato, $this->vocontrato->anoContrato, $this->vocontrato->tipo);
 		if($completo){
-			$retorno .= " => " . $this->vocontrato->toString();
+			//$retorno .= " => " . $this->vocontrato->toString();
+			$retorno .= " - " . $this->vocontrato->cdEspecie . "," . $this->vocontrato->sqEspecie; 
 		}
 
 		return $retorno;
@@ -253,6 +255,25 @@ class voContratoModificacao extends voentidade {
 		. $this->vocontrato->cdEspecie
 		. CAMPO_SEPARADOR
 		. $this->vocontrato->sqEspecie;
+	}
+	
+	/**
+	 * Serve para identificar a chave do contrato modificacao
+	 * que envolve o termo contratual + o sequencial do contrato modificacao
+	 * @return string
+	 */
+	function getValorChavePrimariaContratoModCompleto(){
+		return $this->vocontrato->anoContrato
+		. CAMPO_SEPARADOR
+		. $this->vocontrato->cdContrato
+		. CAMPO_SEPARADOR
+		. $this->vocontrato->tipo
+		. CAMPO_SEPARADOR
+		. $this->vocontrato->cdEspecie
+		. CAMPO_SEPARADOR
+		. $this->vocontrato->sqEspecie
+		. CAMPO_SEPARADOR
+		. $this->sq;
 	}
 	
 	function getChavePrimariaVOExplode($array){
@@ -320,23 +341,5 @@ class voContratoModificacao extends voentidade {
 		$this->vlMensalModAtual = $voContratoModReajuste->vlMensalModAtual;
 		$this->vlGlobalModAtual = $voContratoModReajuste->vlGlobalModAtual;
 	}
-	
-	function isReajusteAAplicar($voContratoModReajuste){
-		//$voContratoModReajuste = new voContratoModificacao();
-		$retorno = false;
-		if($voContratoModReajuste != null){
-			/*echoo("data mod vo:" . strtotime($this->dtModificacao));
-			echoo("data mod reajuste:" . strtotime($voContratoModReajuste->dtModificacao));
 			
-			echoo("dh mod vo:" . strtotime($this->dhUltAlteracao));
-			echoo("dh mod reajuste:" . strtotime($voContratoModReajuste->dhUltAlteracao));*/
-				
-			if(strtotime($this->dtModificacao) >= strtotime($voContratoModReajuste->dtModificacao)
-					&& strtotime($this->dhUltAlteracao) <= strtotime($voContratoModReajuste->dhUltAlteracao)){
-				$retorno = true;
-			}			
-		}
-		return $retorno;
-	}
-		
 }

@@ -9,6 +9,7 @@ class filtroManterUsuario extends filtroManter{
     var $id;
     var $name;
     var $cdSetor;
+    var $inHabilitados;
     
     // ...............................................................
 	// construtor
@@ -24,6 +25,7 @@ class filtroManterUsuario extends filtroManter{
 		$conector  = "";
 		
         $nmTabela = vousuario::getNmTabelaStatic($this->isHistorico());
+        //$nmTabelaComplementar = vousuario::getNmTabelaDadosComplementares();
         if($this->nmEntidadePrincipal != null){
         	$nmTabela = $this->nmEntidadePrincipal; 
         }
@@ -67,10 +69,36 @@ class filtroManterUsuario extends filtroManter{
 		
 		}
 		
+		if($this->inHabilitados != null){
+			$nmTabelaWPUsersMeta = vousuarioMeta::getNmTabela ();
+			$queryJoin .= "\n LEFT JOIN " . $nmTabelaWPUsersMeta;
+			$queryJoin .= "\n ON ";
+			$queryJoin .= $nmTabelaWPUsers . "." . vousuario::$nmAtrID . "=" . $nmTabelaUsuSetor . "." . voUsuarioSetor::$nmAtrID;
+				
+			$filtro = $filtro . $conector
+			. $nmTabelaComplementar. "." .voUsuarioSetor::$nmAtrCdSetor
+			. " = "
+					. $this->cdSetor
+					;
+		
+					$conector  = "\n AND ";
+		
+		}
+		
 		//finaliza o filtro
 		$filtro = parent::getFiltroSQL($filtro, $comAtributoOrdenacao);	
 
 		return $filtro;
+	}
+	
+	/**
+	 * verifica se houve filtro que exigisse substituicao do campo substituicao
+	 *	que permitiria join com outras tabelas no filtro
+	 *	se nao tem, eh porque tem que apagar o campo substituicao
+	 * @return boolean
+	 */
+	function temJoinFiltroASubstituir(){
+		return $this->inHabilitados != null;
 	}
 	
 	/*function getAtributoOrdenacaoDefault(){

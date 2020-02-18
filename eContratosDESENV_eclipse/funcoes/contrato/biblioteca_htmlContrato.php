@@ -810,13 +810,13 @@ function getCamposContratoMod($vo, $arrayParamComplemento = null){
 		
 	//traz o valor atualizado do contrato segundo o e-conti
 	$dbcontratomod = new dbContratoModificacao();
-	//$registroExecucao = $dbcontratomod->consultarExecucaoTermoEspecifico($voContratoReferencia, $dtEfeitoModificacao);
-	$registroExecucao = $dbcontratomod->consultarExecucaoTermoEspecifico($voContratoMater, $dtEfeitoModificacao);
-	
+	$registroExecucao = $dbcontratomod->consultarExecucaoTermoEspecifico($voContratoMater, $dtEfeitoModificacao);	
 	$voContratoModEspecificoReajustado = $registroExecucao[filtroManterContratoModificacao::$NmColVOContratoModReajustado];
 	//$isReajuste = $tipoModificacao == dominioTpContratoModificacao::$CD_TIPO_REAJUSTE || $tipoModificacao == dominioTpContratoModificacao::$CD_TIPO_REPACTUACAO;	
 	if($voContratoModEspecificoReajustado->vlMensalAtual != null){
-		$retorno .= getTextoHTMLNegrito("EXECUÇÃO"). " determinada pelo ". getTextoHTMLNegrito(getContratoDetalhamentoAvulso($voContratoModEspecificoReajustado->vocontrato, true)) . "<br>";
+		$retorno .= getTextoHTMLNegrito("EXECUÇÃO"). " determinada pelo "
+			. getTextoHTMLNegrito(getContratoDetalhamentoAvulso($voContratoModEspecificoReajustado->vocontrato, true)) 
+			. " SeqMod.nº. ".$voContratoModEspecificoReajustado->sq."<br>";
 		//serve para buscar os valores de execucao atual
 		//echo "entrou";
 		$voContrato->vlMensal = getMoeda($voContratoModEspecificoReajustado->vlMensalAtual, 2);
@@ -1019,6 +1019,93 @@ function getVOContratoModAcrescimo($vo, $isSupressao = false){
 	
 	return $voContratomod;
 }
+
+/**
+ * retorna os eventuais termos que podem alterar a vigencia do contrato
+ * servirao como base para a verificacao dos reajustes
+ * @param unknown $recordSetContratoMod
+ * @return unknown[]
+ */
+function getColecaoContratosModVigencia($recordSetContratoMod) {
+	$retornoTemp = array();
+	foreach ( $recordSetContratoMod as $registro) {
+		$voContrato = new vocontrato();
+		$voContrato->getDadosBanco($registro);
+		
+		if (existeItemNoArray($voContrato->cdEspecie, dominioEspeciesContrato::getColecaoTermosQuePodemAlterarVigencia())) {
+			$retornoTemp[] = $registro;
+		}
+	}
+
+	return $retornoTemp;
+}
+
+/**
+ * identifica os reajustes a serem aplicados ao registro atraves da analise da data
+ * @param unknown $recordSet
+ * @param unknown $voContratoModReajuste
+ */
+function getColecaoReajustesAAplicarContratoMod($voContrato, $recordSetReajuste) {
+	$retornoTemp = array();
+	$i = 0;
+	//var_dump(voContratoModificacao::$ColecaoReajustesAplicados);
+	foreach ( $recordSetReajuste as $registro) {
+						
+		if (isReajusteAAplicarContratoMod($voContrato, $registro)) {
+			$retornoTemp[] = $registro;
+		}
+		$i++;
+	}
+
+	return $retornoTemp;
+}
+
+/**
+ * verifica se o reajuste deve ser aplicado ao contrato
+ * @param unknown $voContratoModReajuste
+ * @return boolean
+ */
+function isReajusteAAplicarContratoMod($voContratoAModificar, $registroModificacao){
+	$voContratoModReajuste = new voContratoModificacao ();
+	$voContratoModReajuste->getDadosBanco ( $registroModificacao );
+	
+	$voContratoModificacao = new vocontrato();
+	$voContratoModificacao->getDadosBanco ( $registroModificacao );
+	
+	//$voContratoAModificar = new vocontrato();
+	$retorno = false;
+	if($voContratoModReajuste != null){
+		$dtAssinaturaContratoAModificar = getDataSQL($voContratoAModificar->dtAssinatura);
+		$dtAssinaturaReajuste = getDataSQL($voContratoModificacao->dtAssinatura);
+		
+		$dtEfeitosContratoAModificar = getDataSQL($voContratoAModificar->dtVigenciaInicial);
+		$dtEfeitosContratoAModificarFinal = getDataSQL($voContratoAModificar->dtVigenciaFinal);
+		$dtEfeitosReajuste = $voContratoModReajuste->dtModificacao;		
+		
+		/*echoo($voContratoModReajuste->toString(true));
+		echoo("data assinatura a modificar vo:" . getData($dtAssinaturaContratoAModificar));
+		echoo("data vigencia a modificar vo:" . getData($dtEfeitosContratoAModificar));
+		
+		echoo("data assinatura reajuste:" . getData($dtAssinaturaReajuste));
+		echoo("data efeitos reajuste:" . getData($dtEfeitosReajuste));*/
+			
+		//para aplicar o reajuste precisa
+		//o reajuste ter sido incluido depois
+		//se referir a uma data anterior a data do contratomod a verificar
+		$chave = $voContratoModReajuste->getValorChavePrimariaContratoModCompleto();
+		if(!existeItemNoArray($chave, voContratoModificacao::$ColecaoReajustesAplicados)
+				&& strtotime($dtAssinaturaContratoAModificar) <= strtotime($dtAssinaturaReajuste) //o reajuste veio depois
+				&& strtotime($dtEfeitosContratoAModificarFinal) >= strtotime($dtEfeitosReajuste) //antes da data final de vigencia do termo a modificar
+					//|| (strtotime($dtEfeitosContratoAModificar) >= strtotime($dtEfeitosReajuste) && strtotime($dtEfeitosReajuste) <= strtotime($dtEfeitosContratoAModificarFinal))) //o reajuste tem efeito retroativo								
+				){
+					//echoo("reajuste ao ".$voContratoAModificar->toString(true) . " aplicado pelo: ". $voContratoModReajuste->getValorChavePrimariaContratoModCompleto());
+					voContratoModificacao::$ColecaoReajustesAplicados[] = $chave;
+					$retorno = true;
+		}
+	}
+	return $retorno;
+}
+
 
 function getLinkPortarias() {
 	$link = "../proc_licitatorio/portarias.php";

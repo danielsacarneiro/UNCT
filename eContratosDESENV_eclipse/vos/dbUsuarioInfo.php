@@ -52,7 +52,12 @@ class dbUsuarioInfo extends dbprocesso {
 		$queryJoin .= $nmTabelaWPUsers . "." . vousuario::$nmAtrID . "=" . $nmTabela . "." . voUsuarioInfo::$nmAtrID;
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaUsuSetor;
 		$queryJoin .= "\n ON ";
-		$queryJoin .= $nmTabelaWPUsers . "." . vousuario::$nmAtrID . "=" . $nmTabelaUsuSetor . "." . voUsuarioSetor::$nmAtrID;				
+		$queryJoin .= $nmTabelaWPUsers . "." . vousuario::$nmAtrID . "=" . $nmTabelaUsuSetor . "." . voUsuarioSetor::$nmAtrID;
+		$queryJoin .= constantes::$CD_CAMPO_SUBSTITUICAO;
+		
+		if(!$filtro->temJoinFiltroASubstituir()){
+			$queryJoin = str_replace(constantes::$CD_CAMPO_SUBSTITUICAO, "", $queryJoin);
+		}
 		
 		$vouserwp = new vousuario();
 		$nmTabelaACompararCdUsuario = $nmTabelaUsuSetor;

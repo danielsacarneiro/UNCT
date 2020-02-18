@@ -328,6 +328,7 @@ function encaminhar() {
 
             $voUsuario = new voUsuarioInfo();
             $filtroUsu = new filtroManterUsuario(false);
+            $filtroUsu->cdAtrOrdenacao = voUsuarioInfo::$nmAtrName;
             $colecaoUsu = $voUsuario->dbprocesso->consultarTelaConsulta($voUsuario, $filtroUsu);
             
             $comboUsuTramitacao = new select($colecaoUsu, voUsuarioInfo::$nmAtrID, voUsuarioInfo::$nmAtrName);
@@ -353,7 +354,7 @@ function encaminhar() {
 			</TR>
             <TR>
 	            <TH class="campoformulario" nowrap width="1%">Usuário:</TH>
-				<TD class="campoformulario" colspan=3><?php echo $comboUsuTramitacao->getHtmlSelect(filtroManterDemanda::$NmAtrCdUsuarioTramitacao,filtroManterDemanda::$NmAtrCdUsuarioTramitacao, $filtro->cdUsuarioTramitacao, true, "camponaoobrigatorio", true);?>
+				<TD class="campoformulario" colspan=3><?php echo $comboUsuTramitacao->getHtmlSelect(filtroManterDemanda::$NmAtrCdUsuarioTramitacao,filtroManterDemanda::$NmAtrCdUsuarioTramitacao, $filtro->cdUsuarioTramitacao, true, "camponaoobrigatorio", false);?>
 			</TR>
        <?php
         /*$comboOrdenacao = new select(voPA::getAtributosOrdenacao($cdHistorico));

@@ -6,7 +6,7 @@ Class vousuario extends voentidade{
         static $nmAtrID  = "ID";
         static $nmAtrLogin  = "user_login";
         static $nmAtrName  = "display_name";
-		
+        		
 		var $id;
 		var $login;
 		var $name;
@@ -50,7 +50,7 @@ Class vousuario extends voentidade{
 	public static function getNmTabela(){
 		return  "wp_users";
 	}
-	
+		
 	/*public static function getNmClassProcesso(){
 		return  "dbusuario";
 	}*/

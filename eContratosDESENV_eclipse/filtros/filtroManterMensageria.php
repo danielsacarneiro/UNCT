@@ -161,10 +161,11 @@ class filtroManterMensageria extends filtroManter {
 		$nmColunaFrequencia = "$nmTabela." . voMensageria::$nmAtrNumDiasFrequencia;
 		$dtParam = " NOW() ";
 		$diferencaEntreDatas = getDataSQLDiferencaDias($nmColunaDataAComparar, $dtParam);
-		$restoDaDivisaoSQL = "(($diferencaEntreDatas) % $nmColunaFrequencia)=0" ;
+		//$fatorFrequencia = $restoDaDivisaoSQL = "(($diferencaEntreDatas) % $nmColunaFrequencia)=0" ;
+		$fatorFrequencia = "($diferencaEntreDatas >= $nmColunaFrequencia)" ;
 		
 		//so trara as mensagerias cuja frequencia seja satisfeita a partir da diferenca entre a data inicio e a data atual			
-		$filtro = $filtro . $conector . "($nmColunaDataAComparar IS NULL OR (DATE($nmColunaDataAComparar) <> DATE(NOW()) AND $restoDaDivisaoSQL))";	
+		$filtro = $filtro . $conector . "($nmColunaDataAComparar IS NULL OR (DATE($nmColunaDataAComparar) <> DATE(NOW()) AND $fatorFrequencia))";	
 		return $filtro;
 	}
 	

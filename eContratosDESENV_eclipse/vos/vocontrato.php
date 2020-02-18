@@ -469,5 +469,36 @@ include_once (caminho_util . "DocumentoPessoa.php");
 		return formatarCodigoAnoComplemento ( $cd, $ano, $complemento );
 	}
 	
+	/**
+	 * retorna atributos necessarios para o consulta de execucao do contrato mod
+	 * @return NULL[]|number[]|unknown[]|string[]
+	 */
+	function getRegistroGenerico(){
+		$retorno = array();
+		
+		$retorno[self::$nmAtrSqContrato]=$this->sq;		
+		$retorno[self::$nmAtrCdContrato]=$this->cdContrato;
+		$retorno[self::$nmAtrAnoContrato]=$this->anoContrato;
+		$retorno[self::$nmAtrTipoContrato]=$this->tipo;
+		$retorno[self::$nmAtrSqEspecieContrato]=$this->sqEspecie;
+		$retorno[self::$nmAtrCdEspecieContrato]=$this->cdEspecie;
+		$retorno[self::$nmAtrDtVigenciaInicialContrato]=$this->dtVigenciaInicial;		
+		$retorno[self::$nmAtrDtVigenciaFinalContrato]=$this->dtVigenciaFinal;
+		
+		$vlMensal = getDecimalSQL($this->vlMensal);
+		$vlGlobal = getDecimalSQL($this->vlGlobal);
+		
+		$retorno[self::$nmAtrVlMensalContrato]=$vlMensal;
+		$retorno[self::$nmAtrVlGlobalContrato]=$vlGlobal;
+		$retorno[self::$nmAtrDtAssinaturaContrato]=$this->dtAssinatura;
+		
+					
+		$retorno[voContratoModificacao::$nmAtrVlMensalAtualizado]=$vlMensal;
+		$retorno[voContratoModificacao::$nmAtrVlGlobalAtualizado]=$vlGlobal;			
+		
+		
+		return $retorno; 
+	}
+	
 }
 ?>

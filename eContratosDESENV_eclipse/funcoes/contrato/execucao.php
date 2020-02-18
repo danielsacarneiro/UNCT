@@ -124,6 +124,7 @@ function detalhar(isExcluir) {
                  <TBODY>
                     <TR>
                       	<TH class='headertabeladadosalinhadocentro' width='1%' rowspan=2>X</TH>
+                        <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Sq</TH>
                         <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Espécie</TH>
                         <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Tipo</TH>
                         <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Índice</TH>
@@ -157,7 +158,7 @@ function detalhar(isExcluir) {
                     	
                     //var_dump($colecaoMov);
                     
-                    $colspan=16;
+                    $colspan=17;
                     if($isHistorico){
                     	$colspan++;
                     }
@@ -250,6 +251,7 @@ function detalhar(isExcluir) {
                         <TD class='tabeladados' width=1%>
                         <?=getHTMLRadioButtonConsulta("rdb_consulta", "rdb_consulta", $voAtual, false);?>
                         </TD>                        
+                        <TD class='tabeladados' nowrap><?php echo complementarCharAEsquerda($voAtual->sq, "0", constantes::$TAMANHO_CODIGOS_SAFI)?></TD>
                         <TD class='tabeladados' nowrap><?php echo $especie?></TD>
                         <TD class='tabeladados'><?php echo $tipo?></TD>
                         <TD class='tabeladados'><?php echo getTextoHTMLNegrito($percentual)?></TD>
