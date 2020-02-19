@@ -307,39 +307,56 @@ class voContratoModificacao extends voentidade {
 	}
 	
 	function setPercentualReajuste($voContratoModReajuste){
-		//$voContratoModReajuste = new voContratoModificacao();		
+		//$voContratoModReajuste = new voContratoModificacao();
+		
 		$percentual = $voContratoModReajuste->numPercentual;
+		//echoo($voContratoModReajuste->getValorChaveHTML() . ":" . $voContratoModReajuste->vlMensalAnterior);
+	
+		//se for acrescimo ou supressao, o percentual a aplicar para corrigir o valor reajustado eh somente o aritmetico	
+		if(in_array($voContratoModReajuste->tpModificacao, dominioTpContratoModificacao::getColecaoChavesPercentuaisMatematicos())){
+			$percentual = $voContratoModReajuste->vlModificacaoReferencial/$voContratoModReajuste->vlMensalAnterior*100;
+		}
+		
 		if($percentual != null){
-			$this->vlModificacaoReferencial = atualizarValorPercentual($this->vlModificacaoReferencial, $percentual);
+			/*$this->vlModificacaoReferencial = atualizarValorPercentual($this->vlModificacaoReferencial, $percentual);
 			$this->vlModificacaoAoContrato = atualizarValorPercentual($this->vlModificacaoAoContrato, $percentual);
-			$this->vlModificacaoReal = atualizarValorPercentual($this->vlModificacaoReal, $percentual);
+			$this->vlModificacaoReal = atualizarValorPercentual($this->vlModificacaoReal, $percentual);*/
 			
 			$this->vlMensalAtual = atualizarValorPercentual($this->vlMensalAtual, $percentual);
-			$this->vlGlobalAtual = atualizarValorPercentual($this->vlGlobalAtual, $percentual);
+			/*$this->vlGlobalAtual = atualizarValorPercentual($this->vlGlobalAtual, $percentual);
 			$this->vlGlobalReal = atualizarValorPercentual($this->vlGlobalReal, $percentual);
 			
 			$this->vlMensalAnterior = atualizarValorPercentual($this->vlMensalAnterior, $percentual);
 			$this->vlGlobalAnterior = atualizarValorPercentual($this->vlGlobalAnterior, $percentual);
 			
 			$this->vlMensalModAtual = atualizarValorPercentual($this->vlMensalModAtual, $percentual);
-			$this->vlGlobalModAtual = atualizarValorPercentual($this->vlGlobalModAtual, $percentual);			
+			$this->vlGlobalModAtual = atualizarValorPercentual($this->vlGlobalModAtual, $percentual);*/			
 		}
 	}
 	
-	function getValoresReajustadosAtuais($voContratoModReajuste){
-		$this->vlModificacaoReferencial = $voContratoModReajuste->vlModificacaoReferencial;
+	/**
+	 * por enquanto atualiza somente o valor mensal pois eh o unico usado como referencia para os valores corrigidos
+	 * @param unknown $voContratoModReajuste
+	 */
+	function getValorMensalReajustadoAtual($voContratoModReajuste){
+		
+		/*$this->vlModificacaoReferencial = $voContratoModReajuste->vlModificacaoReferencial;		
 		$this->vlModificacaoAoContrato = $voContratoModReajuste->vlModificacaoAoContrato;
-		$this->vlModificacaoReal = $voContratoModReajuste->vlModificacaoReal;
+		$this->vlModificacaoReal = $voContratoModReajuste->vlModificacaoReal;*/
 			
 		$this->vlMensalAtual = $voContratoModReajuste->vlMensalAtual;
-		$this->vlGlobalAtual = $voContratoModReajuste->vlGlobalAtual;
+		/*$this->vlGlobalAtual = $voContratoModReajuste->vlGlobalAtual;
 		$this->vlGlobalReal = $voContratoModReajuste->vlGlobalReal;
-			
-		$this->vlMensalAnterior = $voContratoModReajuste->vlMensalAnterior;
-		$this->vlGlobalAnterior = $voContratoModReajuste->vlGlobalAnterior;
+		
+		if($voContratoModReajuste->vlMensalAnterior != null){
+			$this->vlMensalAnterior = $voContratoModReajuste->vlMensalAnterior;
+		}
+		if($voContratoModReajuste->vlGlobalAnterior != null){
+			$this->vlGlobalAnterior = $voContratoModReajuste->vlGlobalAnterior;
+		}
 			
 		$this->vlMensalModAtual = $voContratoModReajuste->vlMensalModAtual;
-		$this->vlGlobalModAtual = $voContratoModReajuste->vlGlobalModAtual;
+		$this->vlGlobalModAtual = $voContratoModReajuste->vlGlobalModAtual;*/
 	}
 			
 }

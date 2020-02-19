@@ -127,7 +127,8 @@ function detalhar(isExcluir) {
                         <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Sq</TH>
                         <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Espécie</TH>
                         <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Tipo</TH>
-                        <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Índice</TH>
+                        <TH class='headertabeladados' width='1%' rowspan=2 >Índice Legal</TH>
+                        <TH class='headertabeladados' width='1%' rowspan=2 >Índice Simples</TH>
                         <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Data.Ini.</TH>
                         <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Data.Fim</TH>
                         <TH class='headertabeladadosalinhadocentro' width='1%' rowspan=2 nowrap>Meses<br>Restantes</TH>
@@ -158,7 +159,7 @@ function detalhar(isExcluir) {
                     	
                     //var_dump($colecaoMov);
                     
-                    $colspan=17;
+                    $colspan=18;
                     if($isHistorico){
                     	$colspan++;
                     }
@@ -187,8 +188,7 @@ function detalhar(isExcluir) {
 	                        $voContratoAtual->getDadosBanco($registro);
 	                        $especie = getDsEspecie($voContratoAtual);							                            
 	                        $tipo = dominioTpContratoModificacao::getDescricaoStatic($voAtual->tpModificacao);
-	                        $percentual = getMoeda($voAtual->numPercentual,4) . "%";
-	                        
+	                        	                        
 	                        $isProrrogacao = $voAtual->tpModificacao == dominioTpContratoModificacao::$CD_TIPO_PRORROGACAO;
 	                        $vlModReferencial = $voAtual->vlModificacaoReferencial;
 	                        if($isProrrogacao){
@@ -246,6 +246,8 @@ function detalhar(isExcluir) {
 	                    		$numMesesPrazoContrato = "-";
 	                    	}
 	                    	
+	                    	$percentual = getMoeda($voAtual->numPercentual,4) . "%";
+	                    	$percentualSimples = getMoeda($voAtual->vlModificacaoReferencial/$voAtual->vlMensalAnterior*100,4). "%";	                    	
                     ?>
                     <TR class='dados'>
                         <TD class='tabeladados' width=1%>
@@ -255,6 +257,7 @@ function detalhar(isExcluir) {
                         <TD class='tabeladados' nowrap><?php echo $especie?></TD>
                         <TD class='tabeladados'><?php echo $tipo?></TD>
                         <TD class='tabeladados'><?php echo getTextoHTMLNegrito($percentual)?></TD>
+                        <TD class='tabeladados'><?php echo $percentualSimples?></TD>
                         <TD class='tabeladados'><?php echo getData($voAtual->dtModificacao)?></TD>
                         <TD class='tabeladados'><?php echo getData($voAtual->dtModificacaoFim)?></TD>
                         <TD class='tabeladadosalinhadodireita'><?php echo $numMesesTela?></TD>

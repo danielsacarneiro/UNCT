@@ -27,9 +27,16 @@ Class dominioTpContratoModificacao extends dominio{
 		);
 	}
 		
-	static function getColecaoQueNaoAlteramValorContrato(){
+	static function getColecaoChavesQueNaoAlteramValorContrato(){
 		return array(
-				self::$CD_TIPO_PRORROGACAO => self::$DS_TIPO_PRORROGACAO,
+				self::$CD_TIPO_PRORROGACAO,
+		);
+	}
+		
+	static function getColecaoChavesPercentuaisMatematicos(){
+		return array(
+				self::$CD_TIPO_ACRESCIMO,
+				self::$CD_TIPO_SUPRESSAO,
 		);
 	}
 	

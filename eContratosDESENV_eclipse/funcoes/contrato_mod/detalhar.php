@@ -159,11 +159,16 @@ function confirmar() {
 	            </TD>
 	        </TR>	        
 			<TR>
-	            <TH class="campoformulario" nowrap>Percentual:</TH>
-	            <TD class="campoformulario" colspan="3">
+	            <TH class="campoformulario" nowrap><b>Percentual legal</b>:</TH>
+	            <TD class="campoformulario">
 	            <INPUT type="text" id="<?=voContratoModificacao::$nmAtrNumPercentual?>" name="<?=voContratoModificacao::$nmAtrNumPercentual?>"  value="<?php echo(getMoeda($vo->numPercentual,4));?>"
 	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 4, event);" class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="10" readonly>%
-			</TD>
+				</TD>
+	            <TH class="campoformulario" nowrap>Percentual matemático:</TH>
+	            <TD class="campoformulario">
+	            <INPUT type="text" id="<?=voContratoModificacao::$nmAtrNumPercentual?>" name="<?=voContratoModificacao::$nmAtrNumPercentual?>"  value="<?php echo(getMoeda($vo->vlModificacaoReferencial/$vo->vlMensalAnterior*100,4));?>"
+	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 4, event);" class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="10" readonly>%
+				</TD>				
 	        </TR>
 	        <?php
 	        //a orientacao atual eh incluir no LICON tendo como referencia o valor total do contrato considerado no periodo inicial

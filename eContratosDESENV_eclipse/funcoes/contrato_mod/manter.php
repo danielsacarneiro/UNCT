@@ -50,6 +50,7 @@ try{
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_text.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_select.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_checkbox.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_datahora.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_ajax.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_pessoa.js"></SCRIPT>
@@ -85,7 +86,12 @@ function confirmar() {
 	if(!isFormularioValido())
 		return false;
 
-	alertarValorAtualizadoComValordoTermo();
+	var isChekedAlerta = isCheckBoxConsultaSelecionado("checkAlerta", true);
+	
+	if(!isChekedAlerta){
+		alertarValorAtualizadoComValordoTermo();
+		exibirInformacao("Verifique se o campo 'Valor Mensal Execução' está corretamente informado.");
+	}
 
 	return confirm("Confirmar Alteracoes?");    
 }
@@ -107,7 +113,7 @@ function alertarValorAtualizadoComValordoTermo() {
 	//alert("vltermo=" + vlTermo + " vl atualziado=" + vlAtualizado);
 	
 	if(vlAtualizado != vlTermo){
-		exibirMensagem("[INFORMAÇÃO: o valor global atualizado do contrato difere do valor registrado no termo.]");
+		exibirInformacao("O valor global atualizado do contrato difere do valor registrado no termo.");
 	}	    
 }
 
@@ -387,6 +393,7 @@ function iniciar(){
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Observação:</TH>
 	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=voContratoModificacao::$nmAtrObs?>" name="<?=voContratoModificacao::$nmAtrObs?>" class="camponaoobrigatorio"><?=$vo->obs?></textarea>
+				<INPUT type="checkbox" id="checkAlerta" name="checkAlerta" value=""> *Desabilitar alertas.	            
 				</TD>
 	        </TR>	        
 <TR>

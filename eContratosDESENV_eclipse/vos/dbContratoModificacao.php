@@ -361,13 +361,13 @@ class dbContratoModificacao extends dbprocesso {
 		$recordSet = $this->consultarTelaConsulta ( new voContratoModificacao (), $filtro );		
 
 		//agora consulta apenas os registros que alteram o valor do contrato		
-		$filtro->tipoExceto = dominioTpContratoModificacao::getColecaoQueNaoAlteramValorContrato();
+		$filtro->tipoExceto = dominioTpContratoModificacao::getColecaoChavesQueNaoAlteramValorContrato();
 		$colecaoReajuste = $this->consultarTelaConsulta ( new voContratoModificacao (), $filtro );
-		
+				
 		//para todos os registros incluidos em contrato Mod
 		//reajustar os valores de acordo com os percentuais dos reajustes retroativos
 		if (! isColecaoVazia ( $recordSet )) {								
-			if (! isColecaoVazia ( $colecaoReajuste )) {								
+			if (! isColecaoVazia ( $colecaoReajuste )) {
 			
 				//recupera os termos que podem alterar vigencia ao contrato que servirao de base para a aplicacao dos reajustes encontrados
 				$colecaoTermosQueAlteramVigencia = getColecaoContratosModVigencia($recordSet);
@@ -400,15 +400,14 @@ class dbContratoModificacao extends dbprocesso {
 						
 						$registroReajuste = $colecaoReajustesAplicar[$indiceReajuste];
 						$voTempReajuste = new voContratoModificacao ();
-						$voTempReajuste->getDadosBanco ( $registroReajuste );						
-						
-						//echoo("valor a reajustar: " . getMoeda($voContratoReajustadoAtual->vlMensalAtual));						
-						//recupera os valores atuais
-						$voTempReajuste->getValoresReajustadosAtuais($voContratoReajustadoAtual);
-						//aplica o percentual
+						$voTempReajuste->getDadosBanco ( $registroReajuste );	
+																								
+						//recupera o valor mensal atualizado (pois eh o unico usado como referencia)						
+						$voTempReajuste->getValorMensalReajustadoAtual($voContratoReajustadoAtual);
+						//aplica o percentual						
 						$voTempReajuste->setPercentualReajuste ( $voTempReajuste );
-						//echoo("valor reajustado: " . getMoeda($voTempReajuste->vlMensalAtual));
-												 
+						
+						//echoo("valor reajustado: " . getMoeda($voTempReajuste->vlMensalAtual));												 
 						$voContratoReajustadoAtual = $registroReajuste [filtroManterContratoModificacao::$NmColVOContratoModReajustado] = CLONE $voTempReajuste;						
 						$retorno[] = $registroReajuste;						
 					}						

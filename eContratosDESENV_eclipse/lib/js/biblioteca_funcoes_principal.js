@@ -89,6 +89,10 @@ function dummy() {
 	return;
 }
 
+function exibirInformacao(pMensagem, pFuncaoCallBack) {
+	pMensagem = "[INFORMAÇÃO] " + pMensagem;
+	exibirMensagem(pMensagem, pFuncaoCallBack);	
+}
 // Exibe uma mensagem pop-up no browser
 function exibirMensagem(pMensagem, pFuncaoCallBack) {
 	if (pFuncaoCallBack == null) {
