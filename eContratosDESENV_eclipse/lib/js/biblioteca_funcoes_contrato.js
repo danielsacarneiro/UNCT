@@ -300,8 +300,14 @@ function calcularModificacaoNovo(pArrayCampos) {
 		
 		//atualiza o percentual 
 		//percentual = eval((vlMensalAtualizadoNovo-vlMensalBase)/vlMensalBase);
-		var vlBasePercentualGestor = 0;		
-		campoVlBasePercentualGestor.value = campoVlMensalBase.value;		
+		var vlBasePercentualGestor = 0;
+		/*alert(campoVlBasePercentualGestor);
+		alert(campoVlMensalBase);*/
+		campoVlBasePercentualGestor.value = campoVlMensalBase.value;
+		/*var vlTemp = getValorCampoMoedaComoNumeroValido(campoVlMensalBase);
+		campoVlBasePercentualGestor.value = vlTemp;
+		setValorCampoMoedaComSeparadorMilhar(campoVlBasePercentualGestor, vlTemp , 2);*/		
+		
 		if(isContratoPorEscopo){
 			campoVlBasePercentualGestor.value = campoVlGlobalBase.value;
 		}

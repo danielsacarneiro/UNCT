@@ -257,8 +257,8 @@ function detalhar(isExcluir) {
                         <TD class='tabeladados' nowrap><?php echo complementarCharAEsquerda($voAtual->sq, "0", constantes::$TAMANHO_CODIGOS_SAFI)?></TD>
                         <TD class='tabeladados' nowrap><?php echo $especie?></TD>
                         <TD class='tabeladados'><?php echo $tipo?></TD>
-                        <TD class='tabeladados'><?php echo getTextoHTMLNegrito($percentual)?></TD>
-                        <TD class='tabeladados'><?php echo $percentualSimples?></TD>
+                        <TD class='tabeladadosalinhadodireita'><?php echo getTextoHTMLNegrito($percentual)?></TD>
+                        <TD class='tabeladadosalinhadodireita'><?php echo $percentualSimples?></TD>
                         <TD class='tabeladados'><?php echo getData($voAtual->dtModificacao)?></TD>
                         <TD class='tabeladados'><?php echo getData($voAtual->dtModificacaoFim)?></TD>
                         <TD class='tabeladadosalinhadodireita'><?php echo $numMesesTela?></TD>
