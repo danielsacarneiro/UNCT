@@ -812,16 +812,21 @@ function getCamposContratoMod($vo, $arrayParamComplemento = null){
 	$dbcontratomod = new dbContratoModificacao();
 	$registroExecucao = $dbcontratomod->consultarExecucaoTermoEspecifico($voContratoMater, $dtEfeitoModificacao);	
 	$voContratoModEspecificoReajustado = $registroExecucao[filtroManterContratoModificacao::$NmColVOContratoModReajustado];
-	//$isReajuste = $tipoModificacao == dominioTpContratoModificacao::$CD_TIPO_REAJUSTE || $tipoModificacao == dominioTpContratoModificacao::$CD_TIPO_REPACTUACAO;	
-	if($voContratoModEspecificoReajustado->vlMensalAtual != null){
+	
+	if($voContratoModEspecificoReajustado->vlMensalAtual != null){		
 		$retorno .= getTextoHTMLNegrito("EXECUÇÃO"). " determinada pelo "
-			. getTextoHTMLNegrito(getContratoDetalhamentoAvulso($voContratoModEspecificoReajustado->vocontrato, true)) 
-			. " SeqMod.nº. ".$voContratoModEspecificoReajustado->sq."<br>";
+			. getTextoHTMLNegrito(getContratoDetalhamentoAvulso($voContratoModEspecificoReajustado->vocontrato, true));
+		if($voContratoModEspecificoReajustado->sq != null){
+			$retorno.= " SeqMod.nº. ".$voContratoModEspecificoReajustado->sq;
+		}
+		$retorno.= "<br>";
 		//serve para buscar os valores de execucao atual
 		//echo "entrou";
 		$voContrato->vlMensal = getMoeda($voContratoModEspecificoReajustado->vlMensalAtual, 2);
 		//$voContrato->vlMensal = getMoeda("2000", 2);
 		$voContrato->vlGlobal = getMoeda($voContratoModEspecificoReajustado->vlGlobalAtual,2);
+	}else{	
+		$voContrato = $voContratoReferencia;
 	}	
 
 	$vlMensalExecucao = $voContrato->vlMensal;
@@ -1048,11 +1053,11 @@ function getColecaoContratosModVigencia($recordSetContratoMod) {
 function getColecaoReajustesAAplicarContratoMod($voContrato, $recordSetReajuste) {
 	$retornoTemp = array();
 	$i = 0;
-	//var_dump(voContratoModificacao::$ColecaoReajustesAplicados);
+	//var_dump(voContratoModificacao::$ColecaoReajustesAplicados);echoo("");
 	foreach ( $recordSetReajuste as $registro) {
 						
 		if (isReajusteAAplicarContratoMod($voContrato, $registro)) {
-			$retornoTemp[] = $registro;
+				$retornoTemp[] = $registro;
 		}
 		$i++;
 	}
@@ -1073,6 +1078,7 @@ function isReajusteAAplicarContratoMod($voContratoAModificar, $registroModificac
 	$voContratoModificacao->getDadosBanco ( $registroModificacao );
 	
 	//$voContratoAModificar = new vocontrato();
+	//echoo("Analisando se o reajuste  ".$voContratoModReajuste->getValorChavePrimariaContratoModCompleto()." sera aplicado ao ".$voContratoAModificar->toString(true));
 	$retorno = false;
 	if($voContratoModReajuste != null){
 		$dtAssinaturaContratoAModificar = getDataSQL($voContratoAModificar->dtAssinatura);
@@ -1099,6 +1105,7 @@ function isReajusteAAplicarContratoMod($voContratoAModificar, $registroModificac
 					//|| (strtotime($dtEfeitosContratoAModificar) >= strtotime($dtEfeitosReajuste) && strtotime($dtEfeitosReajuste) <= strtotime($dtEfeitosContratoAModificarFinal))) //o reajuste tem efeito retroativo								
 				){
 					//echoo("reajuste ao ".$voContratoAModificar->toString(true) . " aplicado pelo: ". $voContratoModReajuste->getValorChavePrimariaContratoModCompleto());
+					//echoo("APLICADO");
 					voContratoModificacao::$ColecaoReajustesAplicados[] = $chave;
 					$retorno = true;
 		}
@@ -1106,6 +1113,25 @@ function isReajusteAAplicarContratoMod($voContratoAModificar, $registroModificac
 	return $retorno;
 }
 
+/**
+ * registra a prorrogacao para que seja exibida na execucao
+ * @param unknown $voContratoModificacao
+ * @return boolean
+ */
+function isProrrogacaoNaoRegistrada($voContratoModificacao){
+	$retorno = false;
+	//$voContratoModificacao = new voContratoModificacao();
+	$chave = $voContratoModificacao->getValorChavePrimariaContratoModCompleto();
+	if($voContratoModificacao->tpModificacao == dominioTpContratoModificacao::$CD_TIPO_PRORROGACAO
+			&& !in_array($chave, voContratoModificacao::$ColecaoProrrogacoesRegistradas)
+			){	
+		//registra a prorrogacao
+		voContratoModificacao::$ColecaoProrrogacoesRegistradas[] = $chave;
+		$retorno = true;
+	}
+	
+	return $retorno;
+}
 
 function getLinkPortarias() {
 	$link = "../proc_licitatorio/portarias.php";

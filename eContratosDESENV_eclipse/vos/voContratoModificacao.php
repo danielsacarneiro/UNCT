@@ -4,13 +4,16 @@ include_once ("dbContratoModificacao.php");
 include_once (caminho_funcoes . "contrato_mod/dominioTpModificacaoContrato.php");
 
 class voContratoModificacao extends voentidade {
+	
+	static $ColecaoReajustesAplicados = array();
+	static $ColecaoProrrogacoesRegistradas = array();	
+	
 	static $ID_REQ_DIV_DADOS_CONTRATO_MODIFICACAO = "ID_REQ_DIV_DADOS_CONTRATO_MODIFICACAO"; 
 	static $ID_REQ_VL_BASE_PERCENTUAL = "ID_REQ_VL_BASE_PERCENTUAL";
 	static $ID_REQ_NUM_PERCENTUAL_REAJUSTE = "ID_REQ_NUM_PERCENTUAL_REAJUSTE";
 	static $ID_REQ_VL_BASE_REAJUSTE = "ID_REQ_VL_BASE_REAJUSTE";
 	static $ID_REQ_InRetroativo = "ID_REQ_InRetroativo";
 	static $ID_REQ_NumPrazoUltimaProrrogacao = "NumPrazoUltimaProrrogacao";
-	static $ColecaoReajustesAplicados = array();
 	
 	static $InReajusteAplicado = "InReajusteAplicado";
 	

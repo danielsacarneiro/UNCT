@@ -6,6 +6,7 @@ class filtroManterContratoModificacao extends filtroManter {
 
 	public $nmFiltro = "filtroManterContratoModificacao";
 	
+	static $NmTABELAGERAL = "NmTABELAGERAL";
 	static $NmTabContratoMATER = "TAB_CONTRATO_MATER";
 	static $NmTabReajustes = "TAB_CONTRATOMOD_REAJUSTE";
 	
@@ -35,6 +36,7 @@ class filtroManterContratoModificacao extends filtroManter {
 	var $dtVigencia = "";
 	var $dtProducaoEfeitoTermoPosterior = "";
 	var $tipoExceto = "";
+	var $inTrazerMater = false;
 	
 	function getFiltroFormulario() {
 		$this->vocontrato = new vocontrato();		
@@ -61,9 +63,11 @@ class filtroManterContratoModificacao extends filtroManter {
 		$filtro = "";
 		$conector = "";
 		
-		$nmTabela = voContratoModificacao::getNmTabelaStatic ( $this->isHistorico () );
+		/*$nmTabela = voContratoModificacao::getNmTabelaStatic ( $this->isHistorico () );
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
-		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
+		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );*/
+		
+		$nmTabela = $nmTabelaContrato = $nmTabelaPessoaContrato = static::$NmTABELAGERAL;
 		
 		// seta os filtros obrigatorios
 		if ($this->isSetaValorDefault ()) {
@@ -161,9 +165,11 @@ class filtroManterContratoModificacao extends filtroManter {
 			$conector = "\n AND ";
 		}		
 						
-		// finaliza o filtro
-		$filtro = parent::getFiltroSQLCompleto($filtro, new voContratoModificacao(), $comAtributoOrdenacao);		
-		// echo "Filtro:$filtro<br>";
+		// finaliza o filtro		
+		//o voprincipal vai nulo para que os atributos de ordenacao nao sejam substituidos pela tabela do voprincipal
+		//ja que a tabela dessa consulta especifica eh um UNION e nao pertence a um voprincipal
+		//MARRETA
+		$filtro = parent::getFiltroSQLCompleto($filtro, null, $comAtributoOrdenacao);
 		
 		return $filtro;
 	}
@@ -173,7 +179,7 @@ class filtroManterContratoModificacao extends filtroManter {
 		return $retorno;
 	}*/
 	function getAtributoOrdenacaoDefault() {
-		return voContratoModificacao::getNmTabelaStatic ( $this->isHistorico ) . "." . voContratoModificacao::$nmAtrDhUltAlteracao . " " . constantes::$CD_ORDEM_DECRESCENTE;
+		return voContratoModificacao::$nmAtrDhUltAlteracao . " " . constantes::$CD_ORDEM_DECRESCENTE;
 	}
 	function getAtributosOrdenacao() {
 		$varAtributos = array (

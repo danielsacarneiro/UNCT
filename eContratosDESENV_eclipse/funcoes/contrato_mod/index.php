@@ -3,6 +3,7 @@ include_once("../../config_lib.php");
 include_once(caminho_util."bibliotecaHTML.php");
 include_once(caminho_util."constantes.class.php");
 
+try{
 //inicia os parametros
 inicio();
 
@@ -11,7 +12,8 @@ $vo = new voContratoModificacao();
 $titulo = "CONSULTAR " . voContratoModificacao::getTituloJSP();
 setCabecalho($titulo);
 
-$filtro  = new filtroManterContratoModificacao();
+$filtro  = new filtroManterContratoModificacao(FALSE, TRUE);
+ 
 $filtro->voPrincipal = $vo;
 $filtro = filtroManter::verificaFiltroSessao($filtro);
 
@@ -260,7 +262,7 @@ function montarChaveContrato(){
                     <TH class="headertabeladadosalinhadocentro" width="1%" nowrap>Sq.</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Contrato</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Espécie</TH>
-                    <TH class="headertabeladados" width="50%">Contratada</TH>                    
+                    <TH class="headertabeladados" width="20%">Contratada</TH>                    
 					<TH class="headertabeladados" width="1%" nowrap>Tipo</TH>
 					<TH class="headertabeladados" width="1%" nowrap>Índice</TH>
 					<TH class="headertabeladados" width="1%" nowrap>Valor.Ref</TH>					
@@ -274,11 +276,13 @@ function montarChaveContrato(){
                     <TH class="headertabeladados" width="1%" nowrap>Dt.Registro</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Usu.Registro</TH>
                 </TR>
-                <?php								
+                <?php				
+                                
                 if (is_array($colecao))
-                        $tamanho = sizeof($colecao);
+                	$tamanho = sizeof($colecao);
                 else 
-                        $tamanho = 0;
+                    $tamanho = 0;
+                $numTotalRegistros = $tamanho;
                 
                 //echoo($tamanho);                                
                 $colspan=18;
@@ -297,9 +301,9 @@ function montarChaveContrato(){
                 
                for ($i=0;$i<$tamanho;$i++) {
                		$registroBanco = $colecao[$i];
-                        $voAtual = new voContratoModificacao();
-                        $voAtual->getDadosBanco($registroBanco);
-
+               		$voAtual = new voContratoModificacao();
+               		$voAtual->getDadosBanco($registroBanco);
+               		 
                         $voPessoa = new voPessoa();
                         $voPessoa->getDadosBanco($registroBanco);                        
                                                                    
@@ -329,29 +333,20 @@ function montarChaveContrato(){
                         $vlGlobalAtual = floatval($voAtual->vlGlobalAtual);
                         $vlGlobaModAtual = floatval($voAtual->vlGlobalModAtual);
                         
-                        /*echoo($vlGlobalAtual);
-                        echoo($vlGlobaModAtual);*/
-                        
-                        /*if($voAtual->tpModificacao != dominioTpContratoModificacao::$CD_TIPO_REAJUSTE
-                        		&& $voAtual->tpModificacao != dominioTpContratoModificacao::$CD_TIPO_PRORROGACAO){
-	                        $percAcrescimo = 100*(($vlGlobalAtual - $vlGlobaModAtual)/$vlGlobaModAtual);	                        
-	                        $percAcrescimo = getMoeda($percAcrescimo,2) . "%";	                        
-                        }*/
-                        $percAcrescimo = $voAtual->getPercentualAcrescimoAtual();
+                        $percAcrescimo = $voAtual->getPercentualAcrescimoAtual();                        
                         $isAcrescimo = $voAtual->tpModificacao == dominioTpContratoModificacao::$CD_TIPO_ACRESCIMO;
                         $isSupressao = $voAtual->tpModificacao == dominioTpContratoModificacao::$CD_TIPO_SUPRESSAO;
                         
                         //echoo($percentual);
                         $percentual = $voAtual->numPercentual;
+                        
                         if($isAcrescimo && $percentual > 0){
-                        	/*echoo($percentual);
-                        	echoo("acres: ".$percentualAcrescimo);*/
                         	$percentualAcrescimo = $percentualAcrescimo + $percentual;  
                         }else if($isSupressao && $percentual < 0){
                         	$percentualSupressao = $percentualSupressao + $percentual;
                         }
                         
-                        $percAcrescimo = getMoeda($percAcrescimo,2)."%";
+                        $percAcrescimo = getMoeda($percAcrescimo,2)."%";                        
                         
                         $numMeses = floatval($voAtual->numMesesParaOFimdoPeriodo);
                         $vlAEmpenhar = $vlMensalAtual*$numMeses;
@@ -393,26 +388,8 @@ function montarChaveContrato(){
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo $nmUsuario?></TD>
                 </TR>					
                 <?php
-				}
-				
-				//if (!isColecaoVazia($colecao)){
-				if (false){
-					//echoo("fim".$percentualAcrescimo);
-				?>
-                </TR>				
-                    <TD class="tabeladadosalinhadodireita" colspan=8><b>Consolidado:<?php echo "Acres.(" . getMoeda($percentualAcrescimo) . "%) e Supr.(" . getMoeda($percentualSupressao) . "%)"?></b></TD>
-                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($vlConsolidadoRef)?></TD>
-                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($vlConsolidadoMod)?></TD>                    
-                </TR>				
-				<?php					
 				}				
                 ?>
-                <TR>
-                    <TD class="tabeladadosalinhadocentro" colspan=<?=$colspan?>><?=$paginacao->criarLinkPaginacaoGET()?></TD>
-                </TR>				
-                <TR>
-                    <TD class="totalizadortabeladadosalinhadodireita" colspan=<?=$colspan?>>Total de registro(s) na página: <?=$i?></TD>
-                </TR>
                 <TR>
                     <TD class="totalizadortabeladadosalinhadodireita" colspan=<?=$colspan?>>Total de registro(s): <?=$numTotalRegistros?></TD>
                 </TR>				
@@ -450,3 +427,8 @@ function montarChaveContrato(){
 
 </BODY>
 </HTML>
+<?php 
+}catch(Exception $ex){
+	tratarExcecaoHTML($ex, $vo);
+}
+?>

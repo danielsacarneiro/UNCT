@@ -103,41 +103,65 @@ class dbprocesso {
 		
 		return $query;
 	}
-	function getQueryFrom_NmUsuarioTabelaAComparar($vo, $nmTabelaACompararCdUsuario, $queryJoin, $isHistorico) {
+	
+	/**
+	 * retorna os joins necessarios para recuperar os dados do usuario
+	 * @param unknown $vo
+	 * @param unknown $nmTabelaACompararCdUsuario
+	 * @param unknown $isHistorico
+	 * @return string
+	 */
+	function getQueryJoinUsuarioTabelaAComparar($vo, $nmTabelaACompararCdUsuario, $isHistorico) {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
 		//echo $nmTabela;
 		// $temUsuInclusao = false;
 		$temUsuInclusao = existeItemNoArray ( voentidade::$nmAtrCdUsuarioInclusao, $vo->getTodosAtributos () );
 		$temUsuUltAlteracao = existeItemNoArray ( voentidade::$nmAtrCdUsuarioUltAlteracao, $vo->getTodosAtributos () );
 		$temUsuHistorico = $vo->temTabHistorico && $isHistorico;
-		
+			
+		$retorno = "";
+	
+		if ($temUsuInclusao) {
+			$retorno .= "\n LEFT JOIN " . vousuario::$nmEntidade;
+			$retorno .= "\n " . self::$nmTabelaUsuarioInclusao . " ON ";
+			$retorno .= self::$nmTabelaUsuarioInclusao . "." . vousuario::$nmAtrID . "=" . $nmTabelaACompararCdUsuario . "." . voentidade::$nmAtrCdUsuarioInclusao;
+				
+			//echoo("temusuinclusao");
+		}
+	
+		if ($temUsuUltAlteracao) {
+			$retorno .= "\n LEFT JOIN " . vousuario::$nmEntidade;
+			$retorno .= "\n " . self::$nmTabelaUsuarioUltAlteracao . " ON ";
+			$retorno .= self::$nmTabelaUsuarioUltAlteracao . "." . vousuario::$nmAtrID . "=" . $nmTabelaACompararCdUsuario . "." . voentidade::$nmAtrCdUsuarioUltAlteracao;
+				
+			//echoo("temusualteracao");
+		}
+	
+		if ($temUsuHistorico) {
+			$retorno .= "\n LEFT JOIN " . vousuario::$nmEntidade;
+			$retorno .= "\n " . self::$nmTabelaUsuarioOperacao . " ON ";
+			$retorno .= self::$nmTabelaUsuarioOperacao . "." . vousuario::$nmAtrID . "=" . $nmTabelaACompararCdUsuario . "." . voentidade::$nmAtrCdUsuarioOperacao;
+				
+			//echoo("temusuHistorico");
+		}
+	
+		return $retorno;
+	}
+	
+	/**
+	 * monta o select from para o metodo generico
+	 * @param unknown $vo
+	 * @param unknown $nmTabelaACompararCdUsuario
+	 * @param unknown $queryJoin
+	 * @param unknown $isHistorico
+	 * @return string
+	 */
+	function getQueryFrom_NmUsuarioTabelaAComparar($vo, $nmTabelaACompararCdUsuario, $queryJoin, $isHistorico) {
+		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );		
 		$queryFrom = "";
 		$queryFrom .= "\n FROM " . $nmTabela;
 		$queryFrom .= $queryJoin;
-		
-		if ($temUsuInclusao) {
-			$queryFrom .= "\n LEFT JOIN " . vousuario::$nmEntidade;
-			$queryFrom .= "\n " . self::$nmTabelaUsuarioInclusao . " ON ";
-			$queryFrom .= self::$nmTabelaUsuarioInclusao . "." . vousuario::$nmAtrID . "=" . $nmTabelaACompararCdUsuario . "." . voentidade::$nmAtrCdUsuarioInclusao;
-			
-			//echoo("temusuinclusao");
-		}
-		
-		if ($temUsuUltAlteracao) {
-			$queryFrom .= "\n LEFT JOIN " . vousuario::$nmEntidade;
-			$queryFrom .= "\n " . self::$nmTabelaUsuarioUltAlteracao . " ON ";
-			$queryFrom .= self::$nmTabelaUsuarioUltAlteracao . "." . vousuario::$nmAtrID . "=" . $nmTabelaACompararCdUsuario . "." . voentidade::$nmAtrCdUsuarioUltAlteracao;
-			
-			//echoo("temusualteracao");
-		}
-		
-		if ($temUsuHistorico) {
-			$queryFrom .= "\n LEFT JOIN " . vousuario::$nmEntidade;
-			$queryFrom .= "\n " . self::$nmTabelaUsuarioOperacao . " ON ";
-			$queryFrom .= self::$nmTabelaUsuarioOperacao . "." . vousuario::$nmAtrID . "=" . $nmTabelaACompararCdUsuario . "." . voentidade::$nmAtrCdUsuarioOperacao;
-			
-			//echoo("temusuHistorico");
-		}
+		$queryFrom .= $this->getQueryJoinUsuarioTabelaAComparar($vo, $nmTabelaACompararCdUsuario, $isHistorico);
 		
 		return $queryFrom;
 	}
@@ -195,11 +219,7 @@ class dbprocesso {
 		}
 		return $retorno;
 	}
-	
-	/**
-	 * removido ultimo parametro
-	 */
-	// function consultarMontandoQueryUsuarioFiltro($vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $filtro, $isConsultaPorChave, $validaConsulta) {
+		
 	function consultarMontandoQueryUsuarioFiltro($vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $filtro, $isConsultaPorChave) {
 		$isHistorico = $filtro->isHistorico;
 		$atributos = getSQLStringFormatadaColecaoIN ( $arrayColunasRetornadas, false );
@@ -316,83 +336,116 @@ class dbprocesso {
 	function consultarFiltro(&$filtro, $querySelect, $queryFrom, $validaConsulta) {
 		$retorno = "";
 		$isHistorico = ("S" == $filtro->cdHistorico);
-		
+	
 		/*if(!isUsuarioAdmin()){
-			$limiteGenerico = " LIMIT 100 ";
-		}*/
-		
+		 $limiteGenerico = " LIMIT 100 ";
+			}*/
+	
 		// flag que diz se pode consultar ou nao
-		$isConsultar = $filtro->isConsultarHTML(); 
-		
+		$isConsultar = $filtro->isConsultarHTML();
+	
 		//echoo("valida consulta " . $filtro->nmFiltro);
 		if ($isConsultar || ! $validaConsulta) {
 			//echoo("valida consulta " . $filtro->nmFiltro);
-			
+				
 			// removeObjetoSessao($filtro->nmFiltro);
-			
+				
 			$filtroSQL = $filtro->getSQLWhere ( true );
 			// echo $filtroSQL. "<br>";
-			
-			// para os casos em que o filtro passa conter o sql de consulta internamente
+				
+			// para os casos em que o filtro possa conter o sql de consulta internamente
 			if ($filtro->temQueryPadrao ()) {
 				$queryFrom = $filtro->getQueryFromJoin ();
 			}
-			
+				
 			// verifica se tem paginacao
 			$limite = "";
 			if ($filtro->TemPaginacao) {
 				// ECHO "TEM PAGINACAO";
 				$pagina = $filtro->paginacao->getPaginaAtual ();
-				
+	
 				$filtroSQLPaginacao = $filtro->getSQLWhere ( false );
 				// echo $filtroSQLPaginacao. "<br>";
 				$queryCount = "SELECT count(*) as " . dbprocesso::$nmCampoCount;
 				$queryCount .= "\n FROM (SELECT 'X' " . $queryFrom . $filtroSQLPaginacao . ") ALIAS_COUNT";
-				
+	
 				// guarda o numero total de registros para nao ter que executar a consulta TODOS novamente
 				$numTotalRegistros = $filtro->numTotalRegistros = $this->getNumTotalRegistrosQuery ( $queryCount );
-				
+	
 				$qtdRegistrosPorPag = $filtro->qtdRegistrosPorPag;
-				
+	
 				// echo $qtdRegistrosPorPag;
 				if ($qtdRegistrosPorPag != null && $qtdRegistrosPorPag != constantes::$CD_OPCAO_TODOS) {
 					// calcula o número de páginas arredondando o resultado para cima
 					$numPaginas = ceil ( $numTotalRegistros / $qtdRegistrosPorPag );
 					$filtro->paginacao->setNumTotalPaginas ( $numPaginas );
-					
+						
 					$inicio = ($qtdRegistrosPorPag * $pagina) - $qtdRegistrosPorPag;
 					$limite = " LIMIT $inicio,$qtdRegistrosPorPag";
 				}
 			}
-			
+				
 			// aqui eh onde faz realmente a consulta a retornar
 			$query = $querySelect . $queryFrom . " $filtroSQL ";
 			$query = $query . " $limite";
-			
+				
 			//echo $queryFrom;
-			
+				
 			// echo $filtroSQL;
 			// echo "$queryCount<br>";
 			//if(static::$FLAG_PRINTAR_SQL){
 			if(static::isPrintarSQL()){
 				echo "<br> ".$filtro->getNmFiltro()." $query<br>";
 			}
+				
+			//echo $query;
+			$retorno = $this->cDb->consultar ( $query );
+				
+			if($filtro->isIncluirFiltroNaSessao){
+				//echoo ("incluir $filtro->nmFiltro dbprocesso na sessao");
+				putObjetoSessao ( $filtro->nmFiltro, $filtro );
+			}
+				
+			$filtro->setConsultaRealizada();
+		}
+	
+		// echo $filtro->toString();
+	
+		return $retorno;
+	}
+	
+	function consultarFiltroSemPaginacao(&$filtro, $querySelect, $incluirWhereFiltro=true) {
+		$retorno = "";
+		$validaConsulta = $filtro->isValidarConsulta;
+		$isHistorico = ("S" == $filtro->cdHistorico);
+		// flag que diz se pode consultar ou nao
+		$isConsultar = $filtro->isConsultarHTML();
+		//echoo("valida consulta " . $filtro->nmFiltro);
+		if ($isConsultar || ! $validaConsulta) {			
+			$filtroSQL = $filtro->getSQLWhere ( true );
+			// echo $filtroSQL. "<br>";			
+			
+			// aqui eh onde faz realmente a consulta a retornar
+			//echoo("FILTRO SQL: $filtroSQL");
+			$query = $querySelect . " $filtroSQL ";
+			//$query = str_replace(constantes::$CD_CAMPO_SEPARADOR_FILTRO, " $filtroSQL ", $querySelect);
+			
+			if(static::isPrintarSQL()){
+				echo "<br> ".$filtro->getNmFiltro()." $query<br>";
+			}
 			
 			//echo $query;			
-			$retorno = $this->cDb->consultar ( $query );
-			
+			$retorno = $this->cDb->consultar ( $query );			
 			if($filtro->isIncluirFiltroNaSessao){
 				 //echoo ("incluir $filtro->nmFiltro dbprocesso na sessao");
 				 putObjetoSessao ( $filtro->nmFiltro, $filtro );
-			 }
-					
+			 }					
 			$filtro->setConsultaRealizada();			
-		}
-		
-		// echo $filtro->toString();
-		
+		}		
 		return $retorno;
 	}
+	
+	
 	function getNumTotalRegistrosQuery($query) {
 		$queryCount = $query;
 		//echo $queryCount;

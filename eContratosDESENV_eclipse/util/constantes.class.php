@@ -60,6 +60,7 @@
     static $TAMANHO_CODIGOS = 5;
     static $TAMANHO_CODIGOS_SAFI = 3;
     static $CD_CAMPO_SEPARADOR = "*";
+    static $CD_CAMPO_SEPARADOR_FILTRO = "SEPARADOR*FILTRO*SEPARADOR";
     static $CD_CAMPO_SUBSTITUICAO = "[[*]]";
     static $DS_CAMPO_NAO_ENCONTRADO= "NAO.ENCONTRADO";
     static $CD_CAMPO_NULO = "null";

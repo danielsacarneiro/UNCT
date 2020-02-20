@@ -114,7 +114,7 @@ function detalhar(isExcluir) {
     </TR>
     
     <TR>
-       <TD class="textoseparadorgrupocampos">Execução</TD>
+       <TD class="textoseparadorgrupocampos">EXECUÇÃO - a diferença entre os valores documentados e executados é resultado dos reajustes retroativos</TD>
     </TR>
     
     <TR>
@@ -240,6 +240,7 @@ function detalhar(isExcluir) {
 	                    	}
 	                    	
 	                    	$numMesesTela = getTextoHTMLDestacado(intval($numMesesPrazoRestante), dominioTpContratoModificacao::getCorTpModificacao($voAtual->tpModificacao), false);
+	                    	
 	                    	if($isProrrogacao){
 	                    		$numMesesPrazoContrato = getTextoHTMLDestacado($numMesesPeriodoAtual , dominioTpContratoModificacao::getCorTpModificacao($voAtual->tpModificacao), false);
 	                    	}else{

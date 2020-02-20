@@ -84,21 +84,171 @@ class dbContratoModificacao extends dbprocesso {
 		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryJoin, $isHistorico );
 	}
 	
+	/**
+	 * metodo tem formato distinto porque exige um UNION com a tabela de contrato para trazer, no minimo, o contrato mater
+	 * ainda que nao tenha nenhuma modificacao, o valor do contrato mater serah o valor atual da execucao
+	 * {@inheritDoc}
+	 * @see dbprocesso::consultarTelaConsulta()
+	 */
 	function consultarTelaConsulta($vo, $filtro) {
+		//mudando o vo para vocontrato porque esta passarah a ser a tabela base da consulta
+		$vo = new vocontrato();
+		$isHistorico = $filtro->isHistorico;
+		$isConsultaPorChave = false;
+		$nmTabelaACompararCdUsuario = $vo->getNmTabelaEntidade ($isHistorico);
+		
+		//define as tabelas
+		$nmTabelaMod = voContratoModificacao::getNmTabelaStatic ( false );
+		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
+		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
+		$nmTabContratoMATER = filtroManterContratoModificacao::$NmTabContratoMATER;
+		$nmTabReajustes = filtroManterContratoModificacao::$NmTabReajustes;
+		
+		//define os atributos
+		$colecaoAtributoCoalesceNmPessoa = array (
+				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
+				$nmTabelaContrato . "." . vocontrato::$nmAtrContratadaContrato
+		);
+		
+		$arrayColunasRetornadasComum = array (		
+				$nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato,
+				$nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato,
+				$nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato,
+				$nmTabelaContrato . "." . vocontrato::$nmAtrCdEspecieContrato,
+				$nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato,
+				$nmTabelaContrato . "." . vocontrato::$nmAtrDtAssinaturaContrato,
+				$nmTabelaContrato . "." . vocontrato::$nmAtrDtVigenciaFinalContrato,
+				$nmTabelaContrato . "." . vocontrato::$nmAtrDtVigenciaInicialContrato,
+				$nmTabelaContrato . "." . vocontrato::$nmAtrVlMensalContrato,
+				$nmTabelaContrato . "." . vocontrato::$nmAtrVlGlobalContrato,
+
+				/*$nmTabelaMod . "." . voContratoModificacao::$nmAtrAnoContrato,
+				$nmTabelaMod . "." . voContratoModificacao::$nmAtrTipoContrato,
+				$nmTabelaMod . "." . voContratoModificacao::$nmAtrCdContrato,*/
+				
+				$nmTabelaMod . "." . voContratoModificacao::$nmAtrSq,
+				$nmTabelaMod . "." . voContratoModificacao::$nmAtrTpModificacao,
+				$nmTabelaMod . "." . voContratoModificacao::$nmAtrNumPercentual,
+				$nmTabelaMod . "." . voContratoModificacao::$nmAtrNumMesesParaOFimPeriodo,
+				$nmTabelaMod . "." . voContratoModificacao::$nmAtrVlModificacaoReferencial,
+				$nmTabelaMod . "." . voContratoModificacao::$nmAtrVlMensalModAtual,
+				$nmTabelaMod . "." . voContratoModificacao::$nmAtrVlMensalAtualizado,
+				$nmTabelaMod . "." . voContratoModificacao::$nmAtrVlMensalAnterior,
+				$nmTabelaMod . "." . voContratoModificacao::$nmAtrVlGlobalModAtual,
+				$nmTabelaMod . "." . voContratoModificacao::$nmAtrVlGlobalAtualizado,
+				$nmTabelaMod . "." . voContratoModificacao::$nmAtrDhUltAlteracao,
+				$nmTabelaMod . "." . voContratoModificacao::$nmAtrCdUsuarioUltAlteracao,
+				
+				getSQLCOALESCE ( $colecaoAtributoCoalesceNmPessoa, vopessoa::$nmAtrNome ),
+		);		
+
+		$querySelect .= " SELECT * FROM ";
+		
+		if($filtro->inTrazerMater){			
+			$sqlParentesesFinal = ")";
+			
+			$arrayColunasRetornadasMater = array (
+					$nmTabelaContrato . "." . vocontrato::$nmAtrDtVigenciaInicialContrato . " AS " . voContratoModificacao::$nmAtrDtModificacao,
+					$nmTabelaContrato . "." . vocontrato::$nmAtrDtVigenciaFinalContrato . " AS " . voContratoModificacao::$nmAtrDtModificacaoFim,					
+						
+					$nmTabelaContrato . "." . vocontrato::$nmAtrVlMensalContrato . " AS " . filtroManterContratoModificacao::$NmColVlMensalMater,
+					$nmTabelaContrato . "." . vocontrato::$nmAtrVlGlobalContrato . " AS " . filtroManterContratoModificacao::$NmColVlGlobalMater,
+			);
+			
+			$arrayColunasRetornadasMater = array_merge($arrayColunasRetornadasComum,$arrayColunasRetornadasMater);
+			
+			//pega somente os dados do contrato mater
+			$atributos = getSQLStringFormatadaColecaoIN ( $arrayColunasRetornadasMater, false );
+
+			$querySelect .= "((SELECT " . $atributos . " FROM $nmTabelaContrato ";
+			$querySelect .= "\n LEFT JOIN " . $nmTabelaMod;
+			$querySelect .= "\n ON ";
+			$querySelect .= $nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabelaMod . "." . voContratoModificacao::$nmAtrAnoContrato;
+			$querySelect .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato . "=" . $nmTabelaMod . "." . voContratoModificacao::$nmAtrCdContrato;
+			$querySelect .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabelaMod . "." . voContratoModificacao::$nmAtrTipoContrato;
+			$querySelect .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrCdEspecieContrato . "=" . $nmTabelaMod . "." . voContratoModificacao::$nmAtrCdEspecieContrato;
+			$querySelect .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato . "=" . $nmTabelaMod . "." . voContratoModificacao::$nmAtrSqEspecieContrato;
+			
+			$querySelect .= "\n LEFT JOIN " . $nmTabelaPessoaContrato;
+			$querySelect .= "\n ON ";
+			$querySelect .= $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;		
+			
+			$querySelect .= "\n WHERE ";
+			$querySelect .= "$nmTabelaContrato." . vocontrato::$nmAtrCdEspecieContrato . " = " . getVarComoString(dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER);
+			$querySelect .= "\n AND $nmTabelaContrato." . vocontrato::$nmAtrSqEspecieContrato . " = 1) ";
+			//$querySelect .= "\n AND " . CONSTANTES::$CD_CAMPO_SEPARADOR_FILTRO . ")";
+			
+			
+			$querySelect .= "\n\n UNION \n\n";		
+		}
+		
+		//CONSULTA DE FATO DAS MODIFICACOES
+		$arrayColunasRetornadasMod = array (
+				$nmTabelaMod . "." . voContratoModificacao::$nmAtrDtModificacao,
+				$nmTabelaMod . "." . voContratoModificacao::$nmAtrDtModificacaoFim,
+				
+				$nmTabContratoMATER . "." . vocontrato::$nmAtrVlMensalContrato . " AS " . filtroManterContratoModificacao::$NmColVlMensalMater,
+				$nmTabContratoMATER . "." . vocontrato::$nmAtrVlGlobalContrato . " AS " . filtroManterContratoModificacao::$NmColVlGlobalMater,
+		);
+		$arrayColunasRetornadasMod = array_merge($arrayColunasRetornadasComum,$arrayColunasRetornadasMod);
+				
+		$atributos = getSQLStringFormatadaColecaoIN ( $arrayColunasRetornadasMod, false );	
+		$querySelect .= "(SELECT " . $atributos . " FROM $nmTabelaMod ";
+		
+		$querySelect .= "\n LEFT JOIN " . $nmTabelaContrato;
+		$querySelect .= "\n ON ";
+		$querySelect .= $nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabelaMod . "." . voContratoModificacao::$nmAtrAnoContrato;
+		$querySelect .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato . "=" . $nmTabelaMod . "." . voContratoModificacao::$nmAtrCdContrato;
+		$querySelect .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabelaMod . "." . voContratoModificacao::$nmAtrTipoContrato;
+		$querySelect .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrCdEspecieContrato . "=" . $nmTabelaMod . "." . voContratoModificacao::$nmAtrCdEspecieContrato;
+		$querySelect .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato . "=" . $nmTabelaMod . "." . voContratoModificacao::$nmAtrSqEspecieContrato;
+		
+		$querySelect .= "\n LEFT JOIN " . $nmTabelaPessoaContrato;
+		$querySelect .= "\n ON ";
+		$querySelect .= $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
+		
+		// SERVE PARA PEGAR O VALOR INICIAL DO CONTRATO
+		$nmTabContratoInterna = vocontrato::getNmTabelaStatic ( false );
+		$groupbyinterno = vocontrato::$nmAtrAnoContrato . "," . vocontrato::$nmAtrCdContrato . "," . vocontrato::$nmAtrTipoContrato . "," . vocontrato::$nmAtrCdEspecieContrato . "," . vocontrato::$nmAtrSqEspecieContrato . "," . vocontrato::$nmAtrVlMensalContrato . "," . vocontrato::$nmAtrVlGlobalContrato;
+		
+		$querySelect .= "\n LEFT JOIN ";
+		$querySelect .= "\n\n (SELECT $groupbyinterno ";
+		$querySelect .= " FROM " . $nmTabContratoInterna;
+		$querySelect .= " WHERE ";
+		$querySelect .= vocontrato::$nmAtrCdEspecieContrato . "=" . getVarComoString ( dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER );
+		$querySelect .= "\n) " . $nmTabContratoMATER;
+		$querySelect .= "\n ON ";
+		$querySelect .= $nmTabelaMod . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabContratoMATER . "." . voContratoModificacao::$nmAtrAnoContrato;
+		$querySelect .= "\n AND ";
+		$querySelect .= $nmTabelaMod . "." . vocontrato::$nmAtrCdContrato . "=" . $nmTabContratoMATER . "." . voContratoModificacao::$nmAtrCdContrato;
+		$querySelect .= "\n AND ";
+		$querySelect .= $nmTabelaMod . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabContratoMATER . "." . voContratoModificacao::$nmAtrTipoContrato;
+		$querySelect .= ")$sqlParentesesFinal " . filtroManterContratoModificacao::$NmTABELAGERAL;
+		//$querySelect .= " " . CONSTANTES::$CD_CAMPO_SEPARADOR_FILTRO . ")";
+		
+		$voContratoModUsu = new voContratoModificacao();
+		$nmTabelaACompararCdUsuario = filtroManterContratoModificacao::$NmTABELAGERAL;
+		$querySelect.= $this->getQueryJoinUsuarioTabelaAComparar($voContratoModUsu, $nmTabelaACompararCdUsuario, $isHistorico);
+		
+		$retorno = $this->consultarFiltroSemPaginacao( $filtro, $querySelect);
+		return $retorno;
+	}
+	
+	/*function consultarTelaConsulta($vo, $filtro) {
 		$isHistorico = $filtro->isHistorico;
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
 		$nmTabContratoMATER = filtroManterContratoModificacao::$NmTabContratoMATER;
 		$nmTabReajustes = filtroManterContratoModificacao::$NmTabReajustes;
-		
+	
 		$colecaoAtributoCoalesceNmPessoa = array (
 				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
-				$nmTabelaContrato . "." . vocontrato::$nmAtrContratadaContrato 
+				$nmTabelaContrato . "." . vocontrato::$nmAtrContratadaContrato
 		);
-		
+	
 		$arrayColunasRetornadas = array (
-				$nmTabela . ".*",		
+				$nmTabela . ".*",
 				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
 				$nmTabelaContrato . "." . vocontrato::$nmAtrDtPublicacaoContrato,
 				$nmTabelaContrato . "." . vocontrato::$nmAtrDtAssinaturaContrato,
@@ -108,11 +258,10 @@ class dbContratoModificacao extends dbprocesso {
 				$nmTabelaContrato . "." . vocontrato::$nmAtrVlGlobalContrato,
 				$nmTabContratoMATER . "." . vocontrato::$nmAtrVlMensalContrato . " AS " . filtroManterContratoModificacao::$NmColVlMensalMater,
 				$nmTabContratoMATER . "." . vocontrato::$nmAtrVlGlobalContrato . " AS " . filtroManterContratoModificacao::$NmColVlGlobalMater,
-				// $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
 				getSQLCOALESCE ( $colecaoAtributoCoalesceNmPessoa, vopessoa::$nmAtrNome ),
 				vousuario::$nmAtrName
 		);
-		
+	
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaContrato;
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabela . "." . voContratoModificacao::$nmAtrAnoContrato;
@@ -120,20 +269,20 @@ class dbContratoModificacao extends dbprocesso {
 		$queryJoin .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabela . "." . voContratoModificacao::$nmAtrTipoContrato;
 		$queryJoin .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrCdEspecieContrato . "=" . $nmTabela . "." . voContratoModificacao::$nmAtrCdEspecieContrato;
 		$queryJoin .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato . "=" . $nmTabela . "." . voContratoModificacao::$nmAtrSqEspecieContrato;
-		
+	
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoaContrato;
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
-		
+	
 		// SERVE PARA PEGAR O VALOR INICIAL DO CONTRATO
 		$nmTabContratoInterna = vocontrato::getNmTabelaStatic ( false );
 		$groupbyinterno = vocontrato::$nmAtrAnoContrato . "," . vocontrato::$nmAtrCdContrato . "," . vocontrato::$nmAtrTipoContrato . "," . vocontrato::$nmAtrCdEspecieContrato . "," . vocontrato::$nmAtrSqEspecieContrato . "," . vocontrato::$nmAtrVlMensalContrato . "," . vocontrato::$nmAtrVlGlobalContrato;
-		
+	
 		$queryJoin .= "\n LEFT JOIN ";
 		$queryJoin .= "\n\n (SELECT $groupbyinterno ";
 		$queryJoin .= " FROM " . $nmTabContratoInterna;
 		$queryJoin .= " WHERE ";
-		$queryJoin .= vocontrato::$nmAtrCdEspecieContrato . "=" . getVarComoString ( dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER );		
+		$queryJoin .= vocontrato::$nmAtrCdEspecieContrato . "=" . getVarComoString ( dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER );
 		$queryJoin .= "\n) " . $nmTabContratoMATER;
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabContratoMATER . "." . voContratoModificacao::$nmAtrAnoContrato;
@@ -141,11 +290,9 @@ class dbContratoModificacao extends dbprocesso {
 		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrCdContrato . "=" . $nmTabContratoMATER . "." . voContratoModificacao::$nmAtrCdContrato;
 		$queryJoin .= "\n AND ";
 		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabContratoMATER . "." . voContratoModificacao::$nmAtrTipoContrato;
-				
-		// echo "aqui";
-		
+	
 		return parent::consultarMontandoQueryTelaConsulta ( $vo, $filtro, $arrayColunasRetornadas, $queryJoin );
-	}
+	}*/
 	
 	function validarInclusao($vo) {
 		$vocontratoTemp = $vo->vocontrato;
@@ -226,7 +373,7 @@ class dbContratoModificacao extends dbprocesso {
 		$voContratoMater->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
 		$voContratoMater->sqEspecie = 1;
 		
-		$recordSet = $this->consultarExecucao(clone $voContratoMater, $dataVigencia);
+		$recordSet = $this->consultarExecucao(clone $voContratoMater, $dataVigencia);		
 		$retorno = $this->getRegistroAtualColecaoExecucao($recordSet);
 		
 		return $retorno;
@@ -351,6 +498,7 @@ class dbContratoModificacao extends dbprocesso {
 		$retorno = null;
 		
 		$filtro = new filtroManterContratoModificacao ( false );
+		$filtro->inTrazerMater = true;
 		$filtro->setaFiltroConsultaSemLimiteRegistro ();
 		$atributoOrdenacao = voContratoModificacao::$nmAtrDtModificacao . " " . constantes::$CD_ORDEM_CRESCENTE;
 		$filtro->cdAtrOrdenacao = $atributoOrdenacao;
@@ -360,60 +508,75 @@ class dbContratoModificacao extends dbprocesso {
 		//consulta todos os contratos mods para exibir
 		$recordSet = $this->consultarTelaConsulta ( new voContratoModificacao (), $filtro );		
 
-		//agora consulta apenas os registros que alteram o valor do contrato		
+		//agora consulta apenas os registros que alteram o valor do contrato
+		$filtro->inTrazerMater = false;
 		$filtro->tipoExceto = dominioTpContratoModificacao::getColecaoChavesQueNaoAlteramValorContrato();
 		$colecaoReajuste = $this->consultarTelaConsulta ( new voContratoModificacao (), $filtro );
 				
 		//para todos os registros incluidos em contrato Mod
 		//reajustar os valores de acordo com os percentuais dos reajustes retroativos
-		if (! isColecaoVazia ( $recordSet )) {								
-			if (! isColecaoVazia ( $colecaoReajuste )) {
+		if (! isColecaoVazia ( $recordSet )) {
+
+			//recupera o registromodificacao do contrato mater para que seu valor seja considerado na validacao dos reajustes
+			$registroMater = $voContratoMater->getRegistroGenerico();
+			$voContratoModAtual = new voContratoModificacao ();
+			$voContratoModAtual->getDadosBanco ( $registroMater );
+			$voContratoModAtual->vocontrato = clone $voContratoMater;
+			$voContratoReajustadoAtual = $registroMater [filtroManterContratoModificacao::$NmColVOContratoModReajustado] =  $voContratoModAtual;
 			
-				//recupera os termos que podem alterar vigencia ao contrato que servirao de base para a aplicacao dos reajustes encontrados
-				$colecaoTermosQueAlteramVigencia = getColecaoContratosModVigencia($recordSet);
-				//recupera o registro do contrato mater para ser considerado na consulta
-				$registroMater = $voContratoMater->getRegistroGenerico();
-				$voContratoModAtual = new voContratoModificacao ();
-				$voContratoModAtual->getDadosBanco ( $registroMater );
-				$voContratoModAtual->vocontrato = clone $voContratoMater;				
-				$voContratoReajustadoAtual = $registroMater [filtroManterContratoModificacao::$NmColVOContratoModReajustado] =  $voContratoModAtual;				
-
-				//inclui o contrato mater que servira de valor base para os reajustes que seguirao
-				$colecaoTermosQueAlteramVigencia = array_merge(array($registroMater), $colecaoTermosQueAlteramVigencia);
-				//var_dump($colecaoTermosQueAlteramVigencia);
-				
-				for($indice=0; $indice < sizeof($colecaoTermosQueAlteramVigencia); $indice++){
+			//verifica se so tem o contrato mater
+			if(sizeof($recordSet) == 1){
+				$retorno[] = $registroMater;
+			}else{
+				//verifica se eh caso de reajustes
+				if (! isColecaoVazia ( $colecaoReajuste )) {								
+					//recupera os termos que podem alterar vigencia ao contrato que servirao de base para a aplicacao dos reajustes encontrados
+					$colecaoTermosQueAlteramVigencia = getColecaoContratosModVigencia($recordSet);	
+					//inclui o contrato mater que servira de valor base para os reajustes que seguirao
+					$colecaoTermosQueAlteramVigencia = array_merge(array($registroMater), $colecaoTermosQueAlteramVigencia);
+					//var_dump($colecaoTermosQueAlteramVigencia);
 					
-					$registro = $colecaoTermosQueAlteramVigencia[$indice];
-					
-					$voContratoAtual = new vocontrato();
-					$voContratoAtual->getDadosBanco($registro);
-					
-					$voContratoModAtual = new voContratoModificacao();
-					$voContratoModAtual->getDadosBanco($registro);					
-					//echoo($voContratoAtual->toString());
-					
-					//recupera os reajustes a serem aplicados pra cada termo base da vigencia do contrato
-					$colecaoReajustesAplicar = getColecaoReajustesAAplicarContratoMod($voContratoAtual, $colecaoReajuste);
-					
-					for($indiceReajuste=0; $indiceReajuste < sizeof($colecaoReajustesAplicar); $indiceReajuste++){
+					for($indice=0; $indice < sizeof($colecaoTermosQueAlteramVigencia); $indice++){
 						
-						$registroReajuste = $colecaoReajustesAplicar[$indiceReajuste];
-						$voTempReajuste = new voContratoModificacao ();
-						$voTempReajuste->getDadosBanco ( $registroReajuste );	
-																								
-						//recupera o valor mensal atualizado (pois eh o unico usado como referencia)						
-						$voTempReajuste->getValorMensalReajustadoAtual($voContratoReajustadoAtual);
-						//aplica o percentual						
-						$voTempReajuste->setPercentualReajuste ( $voTempReajuste );
+						$registro = $colecaoTermosQueAlteramVigencia[$indice];
 						
-						//echoo("valor reajustado: " . getMoeda($voTempReajuste->vlMensalAtual));												 
-						$voContratoReajustadoAtual = $registroReajuste [filtroManterContratoModificacao::$NmColVOContratoModReajustado] = CLONE $voTempReajuste;						
-						$retorno[] = $registroReajuste;						
-					}						
-					
-				}				
-
+						$voContratoAtual = new vocontrato();
+						$voContratoAtual->getDadosBanco($registro);
+						//echoo("contrato vigencia". $voContratoAtual->toString());
+						
+						$voContratoModAtual = new voContratoModificacao();
+						$voContratoModAtual->getDadosBanco($registro);	
+						
+						//serve apenas para registrar a prorrogacao
+						if(isProrrogacaoNaoRegistrada($voContratoModAtual)){
+							$registro[filtroManterContratoModificacao::$NmColVOContratoModReajustado] = $voContratoReajustadoAtual;
+							$retorno[] = $registro;
+						}
+						
+						//recupera os reajustes a serem aplicados pra cada termo base da vigencia do contrato
+						$colecaoReajustesAplicar = getColecaoReajustesAAplicarContratoMod($voContratoAtual, $colecaoReajuste);
+						
+						for($indiceReajuste=0; $indiceReajuste < sizeof($colecaoReajustesAplicar); $indiceReajuste++){
+							
+							$registroReajuste = $colecaoReajustesAplicar[$indiceReajuste];
+							$voTempReajuste = new voContratoModificacao ();
+							$voTempReajuste->getDadosBanco ( $registroReajuste );
+							
+							//echoo($voTempReajuste->getValorChaveHTML());
+																									
+							//recupera o valor mensal atualizado (pois eh o unico usado como referencia)						
+							$voTempReajuste->getValorMensalReajustadoAtual($voContratoReajustadoAtual);
+							//aplica o percentual						
+							$voTempReajuste->setPercentualReajuste ( $voTempReajuste );
+							
+							//echoo("valor reajustado: " . getMoeda($voTempReajuste->vlMensalAtual));												 
+							$voContratoReajustadoAtual = $registroReajuste [filtroManterContratoModificacao::$NmColVOContratoModReajustado] = CLONE $voTempReajuste;						
+							$retorno[] = $registroReajuste;
+						}						
+						
+					}				
+	
+				}
 			}
 			
 			//$this->atualizaColecaoRegistros($recordSet);		

@@ -201,7 +201,6 @@ class filtroManter extends multiplosConstrutores {
 			$this->formataCampoOrdenacao($voEntidadePrincipal);
 		}
 		
-		// ECHO "TESTE";
 		$conector = "";
 		
 		// seta o conector
