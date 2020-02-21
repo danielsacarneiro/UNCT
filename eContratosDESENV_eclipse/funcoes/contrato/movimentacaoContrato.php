@@ -127,8 +127,7 @@ function detalhar(isExcluir) {
             	<INPUT type="text" 
             	       id="<?=vocontrato::$nmAtrDtProposta?>" 
             	       name="<?=vocontrato::$nmAtrDtProposta?>" 
-            			value="<?php echo(getData($voContratoInfo->dtProposta));?>"
-            			onkeyup="formatarCampoData(this, event, false);" 
+            			value="<?php echo(getData($voContratoInfo->dtProposta));?>"            			 
             			class="camporeadonly" 
             			size="10" 
             			maxlength="10" <?=$readonly?>>

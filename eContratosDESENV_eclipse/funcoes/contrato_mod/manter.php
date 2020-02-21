@@ -379,15 +379,18 @@ function iniciar(){
 			<TR>
 	            <TH class="campoformulario" nowrap>Percentual:</TH>
 	            <TD class="campoformulario" colspan="3">
-	            <INPUT type="text" id="<?=voContratoModificacao::$ID_REQ_NUM_PERCENTUAL_REAJUSTE?>" name="<?=voContratoModificacao::$ID_REQ_NUM_PERCENTUAL_REAJUSTE?>"  value=""
-	            class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="10" readonly>%
-				de <INPUT type="text" id="<?=voContratoModificacao::$ID_REQ_VL_BASE_REAJUSTE?>" name="<?=voContratoModificacao::$ID_REQ_VL_BASE_REAJUSTE?>"  value="<?php echo(getMoeda($vo->vlMensalAtual));?>"
-	            class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly>
-	         	| <b>Valor para fins de Acréscimo: <INPUT type="text" id="<?=voContratoModificacao::$nmAtrNumPercentual?>" name="<?=voContratoModificacao::$nmAtrNumPercentual?>"  value="<?php echo(getMoeda($vo->numPercentual,4));?>"
+	            <b>Acréscimo legal:
+	         	<INPUT type="text" id="<?=voContratoModificacao::$nmAtrNumPercentual?>" name="<?=voContratoModificacao::$nmAtrNumPercentual?>"  value="<?php echo(getMoeda($vo->numPercentual,4));?>"
 	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 4, event);" onBlur='calcular(false);' class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="10" readonly>%
 				de <INPUT type="text" id="<?=voContratoModificacao::$ID_REQ_VL_BASE_PERCENTUAL?>" name="<?=voContratoModificacao::$ID_REQ_VL_BASE_PERCENTUAL?>"  value="<?php echo(getMoeda($vo->vlModificacaoReferencial));?>"
 	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 4, event);" class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly>
-	            </b>	            	            
+	            </b>
+	            
+				| Simples:<INPUT type="text" id="<?=voContratoModificacao::$ID_REQ_NUM_PERCENTUAL_REAJUSTE?>" name="<?=voContratoModificacao::$ID_REQ_NUM_PERCENTUAL_REAJUSTE?>"  value=""
+	            class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="10" readonly>%
+				de <INPUT type="text" id="<?=voContratoModificacao::$ID_REQ_VL_BASE_REAJUSTE?>" name="<?=voContratoModificacao::$ID_REQ_VL_BASE_REAJUSTE?>"  value="<?php echo(getMoeda($vo->vlMensalAtual));?>"
+	            class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly>
+	            	            	            
 	            </TD>
 	        </TR>
 			<TR>
