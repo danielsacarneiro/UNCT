@@ -204,25 +204,27 @@ function confirmar() {
 				</TD>
 	        </TR>
 				<?php 
-				include_once '../demanda/biblioteca_htmlDemanda.php';
-				$nmTabelaDemandaTramDoc = voDemandaTramDoc::getNmTabela();
-				$filtroTramitacaoContrato = new filtroConsultarDemandaContrato(false);
-				$filtroTramitacaoContrato->vocontrato->cdContrato = $vo->cdContrato;
-				$filtroTramitacaoContrato->vocontrato->anoContrato = $vo->anoContrato;
-				$filtroTramitacaoContrato->vocontrato->tipo = $vo->tipo;				
-				$filtroTramitacaoContrato->temDocumentoAnexo = constantes::$CD_SIM;
-				//agrupa por documentos
-				$filtroTramitacaoContrato->groupby = voDocumento::getAtributosChavePrimaria();
-				$filtroTramitacaoContrato->TemPaginacao = false;
-				/*$filtroTramitacaoContrato->cdAtrOrdenacao = voDemandaTramitacao::$nmAtrDhUltAlteracao;
-				$filtroTramitacaoContrato->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;*/
-
-				$filtroTramitacaoContrato->cdAtrOrdenacao = 
-				" $nmTabelaDemandaTramDoc.".voDemandaTramDoc::$nmAtrAnoDoc . " " . constantes::$CD_ORDEM_DECRESCENTE
-				. ", $nmTabelaDemandaTramDoc.".voDemandaTramDoc::$nmAtrDhInclusao . " " . constantes::$CD_ORDEM_DECRESCENTE;
-				
-				$colecaoTramitacao = $vo->dbprocesso->consultarDemandaTramitacaoContrato($filtroTramitacaoContrato);
-				mostrarGridDemandaContrato($colecaoTramitacao, true);
+				if(!$isHistorico){
+					include_once '../demanda/biblioteca_htmlDemanda.php';
+					$nmTabelaDemandaTramDoc = voDemandaTramDoc::getNmTabela();
+					$filtroTramitacaoContrato = new filtroConsultarDemandaContrato(false);
+					$filtroTramitacaoContrato->vocontrato->cdContrato = $vo->cdContrato;
+					$filtroTramitacaoContrato->vocontrato->anoContrato = $vo->anoContrato;
+					$filtroTramitacaoContrato->vocontrato->tipo = $vo->tipo;				
+					$filtroTramitacaoContrato->temDocumentoAnexo = constantes::$CD_SIM;
+					//agrupa por documentos
+					$filtroTramitacaoContrato->groupby = voDocumento::getAtributosChavePrimaria();
+					$filtroTramitacaoContrato->TemPaginacao = false;
+					/*$filtroTramitacaoContrato->cdAtrOrdenacao = voDemandaTramitacao::$nmAtrDhUltAlteracao;
+					$filtroTramitacaoContrato->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;*/
+	
+					$filtroTramitacaoContrato->cdAtrOrdenacao = 
+					" $nmTabelaDemandaTramDoc.".voDemandaTramDoc::$nmAtrAnoDoc . " " . constantes::$CD_ORDEM_DECRESCENTE
+					. ", $nmTabelaDemandaTramDoc.".voDemandaTramDoc::$nmAtrDhInclusao . " " . constantes::$CD_ORDEM_DECRESCENTE;
+					
+					$colecaoTramitacao = $vo->dbprocesso->consultarDemandaTramitacaoContrato($filtroTramitacaoContrato);
+					mostrarGridDemandaContrato($colecaoTramitacao, true);
+				}
 				?>	        
 	        
 <TR>
