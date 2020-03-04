@@ -417,7 +417,16 @@ function encaminhar() {
                 for ($i=0;$i<$tamanho;$i++) {
                 		$contrato = "";
                         $voAtual = new voDemanda();
-                        $voAtual->getDadosBanco($colecao[$i]);     
+                        $voAtual->getDadosBanco($colecao[$i]);    
+                        
+                        $voDemandaContrato = new voDemandaContrato();
+                        $voDemandaContrato->getDadosBanco($colecao[$i]);
+                        
+                        $voDemandaPL = new voDemandaPL();
+                        $voDemandaPL->getDadosBanco($colecao[$i]);
+                        
+                        $qtContratos = $colecao[$i][filtroManterDemanda::$NmColQtdContratos];
+                        
                                                 
                         //$especie = getDsEspecie($voAtual);
                         $cdSituacao = $voAtual->situacao;
@@ -438,18 +447,19 @@ function encaminhar() {
                         $tipo = $dominioTipo->getDescricao($voAtual->tipo);
                         $dsTpDemandaContrato = $voAtual->tpDemandaContrato;
                         $dsTpDemandaContrato = dominioTipoDemandaContrato::getDescricaoColecaoChave($dsTpDemandaContrato, false, dominioTipoDemandaContrato::getColecaoAntiga());
-                        if($voAtual->tpDemandaContrato != null){
+
+                        /*if($voAtual->tpDemandaContrato != null){
+                         $tipo = "$tipo<br>$dsTpDemandaContrato";
+                         }*/
+                        
+                        if($voAtual->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO){
+                        	$tpTempContrato = dominioTipoContrato::getDescricaoStatic($voDemandaContrato->voContrato->tipo, dominioTipoContrato::getColecaoInstrumentos());
+                        	$tipo = "$tpTempContrato<br>$dsTpDemandaContrato";
+                        }else if($voAtual->tpDemandaContrato != null){
                         	$tipo = "$tipo<br>$dsTpDemandaContrato";
                         }
-                        $empresa = $colecao[$i][vopessoa::$nmAtrNome];
                         
-                        $voDemandaContrato = new voDemandaContrato();
-                        $voDemandaContrato->getDadosBanco($colecao[$i]);
-                        
-                        $voDemandaPL = new voDemandaPL();
-                        $voDemandaPL->getDadosBanco($colecao[$i]);
-                        
-                        $qtContratos = $colecao[$i][filtroManterDemanda::$NmColQtdContratos];                        
+                        $empresa = $colecao[$i][vopessoa::$nmAtrNome];                        
                         if($voDemandaContrato->voContrato->cdContrato != null){
                         	
                         	if($qtContratos > 1){
