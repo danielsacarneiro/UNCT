@@ -242,7 +242,13 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		}		
 		
 		$fatorMensal = "*12";
-		if ($this->valorInicial != null) {
+		if ($this->valorInicial != null || $this->valorFinal != null) {
+			$filtro = $filtro . $conector . static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrVlMensalContrato . " > '0' ";
+			
+			$conector = "\n AND ";
+				
+		}
+		if ($this->valorInicial != null) {			
 			$filtro = $filtro . $conector . static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrVlMensalContrato . "$fatorMensal >= " . getVarComoDecimal($this->valorInicial);
 		
 			$conector = "\n AND ";
