@@ -106,7 +106,13 @@ function confirmar() {
 			?>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Estudo Técnico:</TH>
-	            <TD class="campoformulario" colspan=3><?php echo dominioEstudoTecnicoSAD::getHtmlDetalhamento(voContratoInfo::$nmAtrInEstudoTecnicoSAD,voContratoInfo::$nmAtrInEstudoTecnicoSAD, $vo->inEstudoTecnicoSAD);?>	            
+	            <TD class="campoformulario" colspan=3><?php echo dominioEstudoTecnicoSAD::getHtmlDetalhamento(
+	            		voContratoInfo::$nmAtrInEstudoTecnicoSAD,
+	            		voContratoInfo::$nmAtrInEstudoTecnicoSAD, 
+	            		$vo->inEstudoTecnicoSAD,
+	            		false,
+	            		dominioEstudoTecnicoSAD::getColecaoFormatada()
+	            		);?>	            
 	        </TR>			
 			<TR>
 				<?php

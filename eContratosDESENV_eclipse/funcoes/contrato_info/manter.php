@@ -142,7 +142,7 @@ function transferirDadosPessoa(cd, nm) {
             <TBODY>
 	        <?php	        
 	        $selectExercicio = new selectExercicio();
-	        $comboEstudoTecnico = new select(dominioEstudoTecnicoSAD::getColecao());
+	        $comboEstudoTecnico = new select(dominioEstudoTecnicoSAD::getColecaoFormatada());
 	        $complementoHTML = "";
 
 	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");

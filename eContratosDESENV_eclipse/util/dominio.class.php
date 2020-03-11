@@ -193,9 +193,9 @@ class dominio extends multiplosConstrutores {
 		return $retorno;
 	}
 	
-	static function getHtmlDetalhamento($id, $nm, $opcaoSelecionada, $isTrazerValuenoOption=false) {
+	static function getHtmlDetalhamento($id, $nm, $opcaoSelecionada, $isTrazerValuenoOption=false, $colecaoAlternativa=null) {
 		$html = "";
-		$value = self::getDescricaoStatic($opcaoSelecionada);
+		$value = self::getDescricaoStatic($opcaoSelecionada, $colecaoAlternativa);
 		if($isTrazerValuenoOption){
 			$value = select::getDescricaoComValueNoOption($opcaoSelecionada, $value);
 		}

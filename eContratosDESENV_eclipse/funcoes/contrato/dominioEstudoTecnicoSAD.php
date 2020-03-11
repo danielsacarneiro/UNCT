@@ -20,6 +20,8 @@ Class dominioEstudoTecnicoSAD extends dominio{
 	static $DS_APOIO_ADM = "Apoio administrativo";	
 	static $DS_NAO_SEAPLICA = "Não se aplica";
 	
+	static $DS_OBJ_PADRONIZADO = "OBJ-PADRON.";
+	
 	// ...............................................................
 	// Construtor
 	// ...............................................................
@@ -36,6 +38,39 @@ Class dominioEstudoTecnicoSAD extends dominio{
 				self::$CD_APOIO_ADM => self::$DS_APOIO_ADM,
 		);
 	}
+	
+	/**
+	 * retorna colecao formatada com indicacao de ser objeto padronizado
+	 * @return string[]|unknown[]
+	 */
+	static function getColecaoFormatada(){
+		$retorno = array();
+		$chaves = array_keys(static::getColecao());
+		for($i=0; $i < sizeof(static::getColecao()); $i++){
+			
+			$chave = $chaves[$i];			
+			if(static::isObjetoPadronizado($chave)){
+				$retorno[$chave] = static::$DS_OBJ_PADRONIZADO . "-" . static::getDescricao($chave);
+			}else{
+				$retorno[$chave] = static::getDescricao($chave);
+			}
+			
+		}
+		
+		return $retorno;
+	}
+	
+	static function getColecaoChavesObjetoPadronizado(){
+		return array(
+				self::$CD_LIMPEZA_PREDIAL => self::$DS_LIMPEZA_PREDIAL,
+		);
+	}
+	
+	static function isObjetoPadronizado($chave){
+		return array_key_exists($chave, static::getColecaoChavesObjetoPadronizado());
+	}
+	
+	
 	
 }
 ?>
