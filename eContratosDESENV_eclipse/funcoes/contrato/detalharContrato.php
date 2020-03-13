@@ -194,9 +194,20 @@ function confirmar() {
             <TH class="campoformulario" nowrap>Proc.Licitatorio:</TH>
             <TD class="campoformulario" colspan="3">
             <INPUT type="text" id="<?=vocontrato::$nmAtrProcessoLicContrato?>" name="<?=vocontrato::$nmAtrProcessoLicContrato?>"  value="<?php echo($procLic);?>"  class="camporeadonly" size="50" <?=$readonly?>>
-            <?php
+            <?php            
             if($voContrato->cdProcLic != null){
-            	echo "Resultado importação e-Conti: ".formatarCodigoAno($voContrato->cdProcLic, $voContrato->anoProcLic);
+            	$exemploFimFormatoNumProcLic = "PE.0028.SEFAZ-PE";
+            	$start = strlen($procLic) - strlen($exemploFimFormatoNumProcLic);
+            	$cdModalidade = substr($procLic, $start,2);
+            	//echoo($cdModalidade);
+            	echo "Resultado importação e-Conti: ".formatarCodigoAno($voContrato->cdProcLic, $voContrato->anoProcLic) . "-" . dominioModalidadeProcLicitatorio::getDescricao($cdModalidade);
+            	
+            	$voproclictemp = new voProcLicitatorio();
+            	$voproclictemp->cd = $voContrato->cdProcLic;
+            	$voproclictemp->ano = $voContrato->anoProcLic;
+            	$voproclictemp->cdModalidade = $cdModalidade;
+            	 
+            	echo getLinkPesquisa ( "../proc_licitatorio/detalhar.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $voproclictemp->getValorChaveHTML() );
             }
             ?>
             </TD>
