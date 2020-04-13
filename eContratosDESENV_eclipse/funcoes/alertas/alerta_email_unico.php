@@ -11,7 +11,7 @@ if($enviarEmail != null){
 }else{
 	$enviarEmail = true;
 }
-$enviarEmail = $enviarEmail && voMensageria::$ENVIAR_EMAIL_RELATORIO_DIARIO;
+$enviarEmail = $enviarEmail && voMensageria::$ATIVADO && voMensageria::$ENVIAR_EMAIL_RELATORIO_DIARIO;
 
 if (!($enviarEmail && email_sefaz::$FLAG_ENVIAR_EMAIL)) {
 	echoo("<font color='red'><b>RELATÓRIO DIÁRIO: <u>SEM email</u>.</b></font></br>");

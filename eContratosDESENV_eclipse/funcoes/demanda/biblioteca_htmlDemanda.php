@@ -186,8 +186,10 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 
 	$pCdOpcaoSelecionadaTpDemandaContrato=$voDemanda->tpDemandaContrato;
 	$pCdOpcaoSelecionadaReajuste=$voDemanda->inTpDemandaReajusteComMontanteA;
+	$voContratoDemanda = $voDemanda->getContrato();
 		
 	$html .= dominioTipoDemandaContrato::getHtmlChecksBoxDetalhamento($nmCampoTpDemandaContrato, $pCdOpcaoSelecionadaTpDemandaContrato, 2);
+	
 	if(dominioTipoDemandaContrato::existeItemArrayOuStrCampoSeparador(dominioTipoDemandaContrato::$CD_TIPO_REAJUSTE, $pCdOpcaoSelecionadaTpDemandaContrato)){
 		//eh reajuste
 		$html .= "Reajuste: " . dominioTipoReajuste::getHtmlDetalhamento($nmCampoTpDemandaReajuste, $nmCampoTpDemandaReajuste, $pCdOpcaoSelecionadaReajuste, false);
@@ -200,13 +202,23 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 	
 	if(dominioTipoDemandaContrato::existeItemArrayOuStrCampoSeparador(dominioTipoDemandaContrato::$CD_TIPO_PRORROGACAO, $pCdOpcaoSelecionadaTpDemandaContrato)){
 		//var_dump($voDemanda->getContrato());
-		$exibirInfoProrrog = $voDemanda->situacao != dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA; 
-		if($exibirInfoProrrog && !isContratoPermiteProrrogacao($voDemanda->getContrato())){
+		$exibirInfoProrrog = $voDemanda->situacao != dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA;		
+		if($exibirInfoProrrog && !isContratoPermiteProrrogacao($voContratoDemanda)){
 			$html .= $conectorAlerta . getTextoHTMLDestacado("ATENÇÃO: verifique se o contrato comporta prorrogação em 'Contratos-Consolidação'");
 			$conectorAlerta = "<BR>";
 		}	
 	}
 	
+	$dtinicioContrato = $voContratoDemanda->dtVigenciaInicial;
+	if($dtinicioContrato >= normativos::$DATA_PUBLICACAO_RESOLUCAOCPF0012020){
+		//var_dump($voDemanda->getContrato());
+		$exibirInfoProrrog = $voDemanda->situacao != dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA;
+		if($exibirInfoProrrog){
+			$html .= $conectorAlerta . getTextoHTMLDestacado("ATENÇÃO: verifique se o contrato não está suspenso pela RESOLUÇÃO CPF 001.2020 ou 002.2020(CORONAVIRUS)");
+			$conectorAlerta = "<BR>";
+		}
+	}
+		
 	return $html;
 }
 

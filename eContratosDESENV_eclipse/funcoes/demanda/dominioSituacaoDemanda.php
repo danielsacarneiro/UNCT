@@ -5,13 +5,15 @@ include_once(caminho_util."constantes.class.php");
 Class dominioSituacaoDemanda extends dominio{	
 	static $CD_SITUACAO_DEMANDA_ABERTA = 1;
 	static $CD_SITUACAO_DEMANDA_FECHADA = 2;
-	static $CD_SITUACAO_DEMANDA_EM_ANDAMENTO = 3;		
+	static $CD_SITUACAO_DEMANDA_EM_ANDAMENTO = 3;
+	static $CD_SITUACAO_DEMANDA_SUSPENSA = 4;
 	static $CD_SITUACAO_DEMANDA_A_FAZER = 99;
 	
 	
 	static $DS_SITUACAO_DEMANDA_ABERTA = "Aberta";
 	static $DS_SITUACAO_DEMANDA_FECHADA = "Fechada";
 	static $DS_SITUACAO_DEMANDA_EM_ANDAMENTO = "Em andamento";
+	static $DS_SITUACAO_DEMANDA_SUSPENSA = "Suspensa";
 	static $DS_SITUACAO_DEMANDA_A_FAZER = "A Fazer";
 	
 	// ...............................................................
@@ -24,7 +26,8 @@ Class dominioSituacaoDemanda extends dominio{
 		return array(				
 				self::$CD_SITUACAO_DEMANDA_ABERTA => self::$DS_SITUACAO_DEMANDA_ABERTA,
 				self::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO => self::$DS_SITUACAO_DEMANDA_EM_ANDAMENTO,
-				self::$CD_SITUACAO_DEMANDA_FECHADA => self::$DS_SITUACAO_DEMANDA_FECHADA
+				self::$CD_SITUACAO_DEMANDA_FECHADA => self::$DS_SITUACAO_DEMANDA_FECHADA,
+				self::$CD_SITUACAO_DEMANDA_SUSPENSA => self::$DS_SITUACAO_DEMANDA_SUSPENSA,
 		);
 	}
 

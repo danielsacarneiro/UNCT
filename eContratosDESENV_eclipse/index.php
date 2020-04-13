@@ -193,6 +193,9 @@ setCabecalho($titulo);
                     				/*$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_LEGISLACAO, 1));
                     				echo imprimeBotaoDocumento($vodocumento, "Decreto Penalidade");*/
                     				
+                    				$vodocumento = new voDocumento(array(2020, dominioSetor::$CD_SETOR_GOV,dominioTpDocumento::$CD_TP_DOC_LEGISLACAO, 1));
+                    				echo imprimeBotaoDocumento($vodocumento, "Resolucao CPF 001/20 - suspensao contratacoes CORONAVIRUS");
+                    				
                     				$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_PGE,dominioTpDocumento::$CD_TP_DOC_CHECKLIST, 1));
                     				echo imprimeBotaoDocumento($vodocumento, "Consulta boletins PGE");
                     				

@@ -4,7 +4,7 @@ include_once (caminho_lib . "voentidade.php");
 class voMensageria extends voentidade {	
 	
 	//ativa o envio da mensageria para a UNCT
-	static $ATIVADO = true;
+	static $ATIVADO = false;
 	//ativa o envio do email do relatorio diario
 	static $ENVIAR_EMAIL_RELATORIO_DIARIO = true;
 	//ativa o envio do email da mensageria ao gestor apenas para a UNCT

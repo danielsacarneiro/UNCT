@@ -1,5 +1,6 @@
 <?php
 //header ('Content-type: text/html; charset=ISO-8859-1');
+include_once 'normativos.php';
 
   Class constantes {	
 	

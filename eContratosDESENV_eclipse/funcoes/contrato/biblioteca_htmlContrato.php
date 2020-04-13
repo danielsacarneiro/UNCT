@@ -153,6 +153,9 @@ function getContratoDetalhamentoParam($arrayParametro) {
 			$vlPercentualSupressao = getValorNumPercentualAcrescimoContrato(clone $voContrato, true);
 
 			echo getTextoHTMLNegrito(" Acréscimo: " . getMoeda($vlPercentualAcrescimo, 2) . "%");
+			if($vlPercentualAcrescimo > normativos::$LIMITE_ACRESCIMO){
+				echo getTextoHTMLDestacado("(ATENÇÃO: LIMITE EXCEDIDO)", "red", true);
+			}
 			echo getTextoHTMLNegrito(" |Supressão: " . getMoeda(abs($vlPercentualSupressao), 2) . "%");
 			
 			if(!existeStr1NaStr2("execucao.php", $nmPaginaChamada)){
