@@ -324,7 +324,7 @@ function encaminhar() {
 	            ?>
 	        </TR>
             <?php            
-            $comboTpDoc = new select(dominioTpDocumento::getColecao());
+            $comboTpDoc = new select(dominioTpDocumento::getColecaoConsulta());
 
             $voUsuario = new voUsuarioInfo();
             $filtroUsu = new filtroManterUsuario(false);

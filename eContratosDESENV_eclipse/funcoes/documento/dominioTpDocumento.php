@@ -71,6 +71,22 @@ class dominioTpDocumento extends dominio {
 		$this->colecao = self::getColecao ();
 	}
 	
+	static function getColecaoConsulta() {
+		$retorno = static::getColecaoComum();
+		$retorno = putElementoArray2NoArray1ComChaves ( $retorno, static::getColecaoATJA(false));
+		$retorno = putElementoArray2NoArray1ComChaves ( $retorno, static::getColecaoUNCT(false));
+		
+		//o complemento existe para os docs que foram excluidos, mas devem permanecer como consulta
+		$complemento = array (
+				self::$CD_TP_DOC_PARECER => self::$DS_TP_DOC_PARECER,
+		);
+		
+		$retorno = putElementoArray2NoArray1ComChaves ( $retorno, $complemento);
+		
+		ksort ( $retorno );
+		return $retorno;
+	}
+	
 	static function getColecao() {
 		$retorno = static::getColecaoComum();
 		$retorno = putElementoArray2NoArray1ComChaves ( $retorno, static::getColecaoATJA(false));
@@ -97,7 +113,7 @@ class dominioTpDocumento extends dominio {
 		$retorno = array (
 				self::$CD_TP_DOC_CONTROLE_AQUISICAO => self::$DS_TP_DOC_CONTROLE_AQUISICAO,
 				self::$CD_TP_DOC_LEGISLACAO => self::$DS_TP_DOC_LEGISLACAO,
-				self::$CD_TP_DOC_PARECER => self::$DS_TP_DOC_PARECER,
+				//self::$CD_TP_DOC_PARECER => self::$DS_TP_DOC_PARECER,
 				self::$CD_TP_DOC_PLANILHA_CUSTOS => self::$DS_TP_DOC_PLANILHA_CUSTOS,
 				self::$CD_TP_DOC_PROPOSTA_PRECOS => self::$DS_TP_DOC_PROPOSTA_PRECOS,
 				//self::$CD_TP_DOC_PLANILHA_LICON => self::$DS_TP_DOC_PLANILHA_LICON,

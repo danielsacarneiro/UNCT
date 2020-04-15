@@ -158,8 +158,7 @@ function selecionar() {
 	            $selectExercicio = new selectExercicio();
 	            $domSetor = new dominioSetor();
 	            $comboSetor = new select($domSetor->colecao);
-	            $domTp = new dominioTpDocumento();
-	            $comboTp= new select($domTp->colecao);
+	            $comboTp= new select(dominioTpDocumento::getColecaoConsulta());
 			  ?>			            
 			<TR>
                 <TH class="campoformulario" nowrap width="1%">Ano:</TH>
@@ -227,7 +226,7 @@ function selecionar() {
                         $setor = $domSetor->getDescricao($setor);
                         
                         $tp= $colecao[$i][voDocumento::$nmAtrTp];
-                        $tp = $domTp->getDescricao($tp);
+                        $tp = dominioTpDocumento::getDescricao($tp);
                         
                         $chave = $voAtual->getValorChaveHTML();
                         $chave =  voDocumento::$nmAtrLink.$chave;
