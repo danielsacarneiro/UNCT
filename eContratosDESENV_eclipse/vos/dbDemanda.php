@@ -156,6 +156,12 @@ class dbDemanda extends dbprocesso {
 		$colecao = $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryJoin, $isHistorico, $isConsultaPorChave );
 		return $colecao;
 	}
+	
+/**
+ * consulta da tela de demanda
+ * {@inheritDoc}
+ * @see dbprocesso::consultarTelaConsulta()
+ */
 	function consultarTelaConsulta($vo, $filtro) {
 		$isHistorico = $filtro->isHistorico;
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
@@ -303,6 +309,169 @@ class dbDemanda extends dbprocesso {
 		
 		return parent::consultarMontandoQueryTelaConsulta ( $vo, $filtro, $arrayColunasRetornadas, $queryJoin );
 	}
+	
+	/**
+	 * consulta da tela de gestao de demanda
+	 * {@inheritDoc}
+	 * @see dbprocesso::consultarTelaConsulta()
+	 */
+	function consultarTelaConsultaGestaoDemanda($vo, $filtro) {
+		$isHistorico = $filtro->isHistorico;
+		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
+		$nmTabelaTramitacao = voDemandaTramitacao::getNmTabela ();
+		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabela ();
+		$nmTabelaDemandaProcLic = voDemandaPL::getNmTabelaStatic ( false );
+		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
+		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
+		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
+		$nmTabelaPA = voPA::getNmTabelaStatic ( false );
+	
+		$cdSetorAtual = $filtro->vodemanda->cdSetorDestino;
+		$isSetorAtualSelecionado = $filtro->isSetorAtualSelecionado ();
+		$nmTabelaMINDestinoTramitacao = "TABELA_MIN_TRAMDESTINO";
+		$nmTabelaDestinoTramitacao = "TABELA_DESTINO_TRAM";
+	
+		$colunaUsuHistorico = "";
+	
+		if ($isHistorico) {
+			$colunaUsuHistorico = static::$nmTabelaUsuarioOperacao . "." . vousuario::$nmAtrName . "  AS " . voDemanda::$nmAtrNmUsuarioOperacao;
+		}
+	
+		// para nao dar pau caso seja des-selecionado
+		if ($isSetorAtualSelecionado) {
+			$colunaDtReferenciaSetorAtual = "$nmTabelaDestinoTramitacao." . voDemandaTramitacao::$nmAtrDtReferencia . "  AS " . filtroManterDemanda::$NmColDtReferenciaSetorAtual;
+		} else if ($filtro->cdAtrOrdenacao == filtroManterDemanda::$NmColDtReferenciaSetorAtual) {
+			$filtro->cdAtrOrdenacao = "";
+		}
+		$dhUltimaMov = filtroConsultarDemandaGestao::getSQLDataUltimaMovimentacao($nmTabelaTramitacao, $nmTabela);//"COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrDhInclusao . "," . $nmTabela . "." . voDemanda::$nmAtrDhUltAlteracao . ")";
+		$dtreferencia = filtroConsultarDemandaGestao::getSQLDataBaseTempoVida($nmTabela); //"$nmTabela." . voDemanda::$nmAtrDtReferencia;
+		$arrayColunasRetornadas = array (
+				$nmTabela . ".*",
+				"COUNT(*)  AS " . filtroManterDemanda::$NmColQtdContratos,
+				static::$nmTabelaUsuarioInclusao . "." . vousuario::$nmAtrName . "  AS " . voDemanda::$nmAtrNmUsuarioInclusao,
+				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato,
+				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato,
+				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato,
+				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdEspecieContrato,
+				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato,
+				$nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdProcLic,
+				$nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrAnoProcLic,
+				$nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdModalidadeProcLic,
+				getSQLNmContratada (),
+				// $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . " AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,
+				"COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . "," . $nmTabela . "." . voDemanda::$nmAtrCdSetor . ") AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,
+				" $dhUltimaMov AS " . filtroManterDemanda::$NmColDhUltimaMovimentacao,
+				$colunaUsuHistorico,
+				$colunaDtReferenciaSetorAtual,
+				filtroConsultarDemandaGestao::getSQLNuTempoUltimaTram($nmTabelaTramitacao, $nmTabela) . " AS " . filtroConsultarDemandaGestao::$NmColNuTempoUltimaTram,
+				filtroConsultarDemandaGestao::getSQLNuTempoVida($nmTabelaTramitacao, $nmTabela) . " AS " . filtroConsultarDemandaGestao::$NmColNuTempoVida,				
+		);
+	
+		$atributosGroup = voDemandaTramitacao::$nmAtrCd . "," . voDemandaTramitacao::$nmAtrAno;
+	
+		// o proximo join eh p pegar a ultima tramitacao apenas, se houver
+		$nmTabelaMAXTramitacao = "TABELA_MAX";
+		$queryJoin = "";
+		$queryJoin .= "\n LEFT JOIN (";
+		$queryJoin .= " SELECT MAX(" . voDemandaTramitacao::$nmAtrSq . ") AS " . voDemandaTramitacao::$nmAtrSq . "," . $atributosGroup . " FROM " . $nmTabelaTramitacao . " GROUP BY " . $atributosGroup;
+		$queryJoin .= ") $nmTabelaMAXTramitacao";
+		$queryJoin .= "\n ON " . $nmTabela . "." . voDemandaTramitacao::$nmAtrAno . " = $nmTabelaMAXTramitacao." . voDemandaTramitacao::$nmAtrAno;
+		$queryJoin .= "\n AND " . $nmTabela . "." . voDemandaTramitacao::$nmAtrCd . " = $nmTabelaMAXTramitacao." . voDemandaTramitacao::$nmAtrCd;
+	
+		// agora pega dos dados da ultima tramitacao, se houver
+		$queryJoin .= "\n LEFT JOIN ";
+		$queryJoin .= $nmTabelaTramitacao;
+		$queryJoin .= "\n ON " . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrAno . " = $nmTabelaMAXTramitacao." . voDemandaTramitacao::$nmAtrAno;
+		$queryJoin .= "\n AND " . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCd . " = $nmTabelaMAXTramitacao." . voDemandaTramitacao::$nmAtrCd;
+		$queryJoin .= "\n AND " . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrSq . " = $nmTabelaMAXTramitacao." . voDemandaTramitacao::$nmAtrSq;
+	
+		$queryJoin .= "\n LEFT JOIN ";
+		$queryJoin .= $nmTabelaDemandaContrato;
+		$queryJoin .= "\n ON " . $nmTabela . "." . voDemanda::$nmAtrAno . " = " . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoDemanda;
+		$queryJoin .= "\n AND " . $nmTabela . "." . voDemanda::$nmAtrCd . " = " . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdDemanda;
+	
+		// o proximo join eh p pegar o registro de contrato mais atual na planilha
+		// faz o join apenas com os contratos de maximo sequencial (mais atual)
+		// e com pessoa contratada diferente de nulo
+		$nmTabelaMAXContrato = "TABELA_MAX_CONTRATO";
+		$atributosGroupContrato = vocontrato::$nmAtrAnoContrato . "," . vocontrato::$nmAtrTipoContrato . "," . vocontrato::$nmAtrCdContrato;
+		$queryJoin .= "\n LEFT JOIN (";
+		$queryJoin .= " \n\nSELECT MAX(" . vocontrato::$nmAtrSqContrato . ") AS " . vocontrato::$nmAtrSqContrato . "," . $atributosGroupContrato
+		. " FROM " . $nmTabelaContrato
+		. " WHERE " . vocontrato::$nmAtrContratadaContrato . " IS NOT NULL "
+				. " GROUP BY " . $atributosGroupContrato;
+				$queryJoin .= ") $nmTabelaMAXContrato";
+				$queryJoin .= "\n ON ";
+				$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato . "=" . $nmTabelaMAXContrato . "." . vocontrato::$nmAtrAnoContrato;
+				$queryJoin .= "\n AND ";
+				$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato . "=" . $nmTabelaMAXContrato . "." . vocontrato::$nmAtrTipoContrato;
+				$queryJoin .= "\n AND ";
+				$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato . "=" . $nmTabelaMAXContrato . "." . vocontrato::$nmAtrCdContrato;
+	
+				// agora pega dos dados da ultima tramitacao, se houver
+				$queryJoin .= "\n LEFT JOIN ";
+				$queryJoin .= $nmTabelaContrato;
+				$queryJoin .= "\n ON " . $nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato . " = $nmTabelaMAXContrato." . vocontrato::$nmAtrSqContrato;
+	
+				$queryJoin .= "\n LEFT JOIN " . $nmTabelaContratoInfo;
+				$queryJoin .= "\n ON ";
+				$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato . "=" . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrAnoContrato;
+				$queryJoin .= "\n AND ";
+				$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato . "=" . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrTipoContrato;
+				$queryJoin .= "\n AND ";
+				$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato . "=" . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrCdContrato;
+	
+				$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoaContrato;
+				$queryJoin .= "\n ON ";
+				$queryJoin .= $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
+	
+				$queryJoin .= "\n LEFT JOIN " . $nmTabelaDemandaProcLic;
+				$queryJoin .= "\n ON ";
+				$queryJoin .= $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrAnoDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrAno;
+				$queryJoin .= "\n AND " . $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrCd;
+	
+				$queryJoin .= "\n LEFT JOIN " . $nmTabelaPA;
+				$queryJoin .= "\n ON ";
+				$queryJoin .= $nmTabelaPA . "." . voPA::$nmAtrAnoDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrAno;
+				$queryJoin .= "\n AND " . $nmTabelaPA . "." . voPA::$nmAtrCdDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrCd;
+	
+				// Para o caso de se desejar ordenar pela primeira vez que foi encaminhada ao setor atual selecionado pelo usuario
+	
+				if ($isSetorAtualSelecionado) {
+					// echo "tem";
+					$queryJoin .= "\n LEFT JOIN (";
+					$queryJoin .= " SELECT MIN(" . voDemandaTramitacao::$nmAtrSq . ") AS " . voDemandaTramitacao::$nmAtrSq . "," . $atributosGroup . " FROM " . $nmTabelaTramitacao . " WHERE " . voDemandaTramitacao::$nmAtrCdSetorDestino . " = " . $cdSetorAtual . " GROUP BY " . $atributosGroup;
+					$queryJoin .= ") $nmTabelaMINDestinoTramitacao ";
+					$queryJoin .= "\n ON " . $nmTabela . "." . voDemandaTramitacao::$nmAtrAno . " = $nmTabelaMINDestinoTramitacao." . voDemandaTramitacao::$nmAtrAno;
+					$queryJoin .= "\n AND " . $nmTabela . "." . voDemandaTramitacao::$nmAtrCd . " = $nmTabelaMINDestinoTramitacao." . voDemandaTramitacao::$nmAtrCd;
+						
+					// agora pega dos dados da ultima tramitacao, se houver
+					$queryJoin .= "\n LEFT JOIN ";
+					$queryJoin .= "$nmTabelaTramitacao $nmTabelaDestinoTramitacao";
+					$queryJoin .= "\n ON " . $nmTabelaDestinoTramitacao . "." . voDemandaTramitacao::$nmAtrAno . " = $nmTabelaMINDestinoTramitacao." . voDemandaTramitacao::$nmAtrAno;
+					$queryJoin .= "\n AND " . $nmTabelaDestinoTramitacao . "." . voDemandaTramitacao::$nmAtrCd . " = $nmTabelaMINDestinoTramitacao." . voDemandaTramitacao::$nmAtrCd;
+					$queryJoin .= "\n AND " . $nmTabelaDestinoTramitacao . "." . voDemandaTramitacao::$nmAtrSq . " = $nmTabelaMINDestinoTramitacao." . voDemandaTramitacao::$nmAtrSq;
+				}
+	
+				$arrayGroupby = array (
+						$nmTabela . "." . voDemanda::$nmAtrAno,
+						$nmTabela . "." . voDemanda::$nmAtrCd
+				);
+	
+				if ($isHistorico) {
+					$arrayGroupby [] = voentidade::$nmAtrSqHist;
+				}
+	
+				$filtro->groupby = $arrayGroupby;
+	
+				return parent::consultarMontandoQueryTelaConsulta ( $vo, $filtro, $arrayColunasRetornadas, $queryJoin );
+	}
+	
+	/**
+	 * consulta demanda tramitacao simples
+	 * @param unknown $vo
+	 * @return string
+	 */
 	function consultarDemandaTramitacao($vo) {
 		$nmTabela = voDemandaTramitacao::getNmTabelaStatic ( false );
 		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( false );
@@ -355,6 +524,65 @@ class dbDemanda extends dbprocesso {
 		
 		return parent::consultarFiltro ( $filtro, $querySelect, $queryFrom, false );
 	}
+
+	/**
+	 * consulta demanda tramitacao gestao
+	 * @param unknown $vo
+	 * @return string
+	 */
+	function consultarDemandaGestaoTramitacao($vo) {
+		$nmTabela = voDemandaTramitacao::getNmTabelaStatic ( false );
+		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( false );
+		$nmTabelaDemandaSaida = filtroConsultarDemandaGestao::$NmTabelaDemandaTramSaida;
+	
+		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );
+	
+		$nmTabelaUsuario = vousuario::getNmTabela ();
+		
+		//a data de saida sera igual a data de referencia da tramitacao seguinte à atual
+		//para tanto usa-se o subselect abaixo com a opcao do LIMIT 1 (pega o proximo registro maior que o atual)
+		$subSelectTramSaida = "(SELECT ".voDemandaTramitacao::$nmAtrDtReferencia." FROM $nmTabela $nmTabelaDemandaSaida ";
+		$subSelectTramSaida .= " WHERE ";
+		$subSelectTramSaida .= " $nmTabela." . voDemandaTramitacao::$nmAtrAno . " = $nmTabelaDemandaSaida." . voDemandaTramitacao::$nmAtrAno;
+		$subSelectTramSaida .= " AND $nmTabela." . voDemandaTramitacao::$nmAtrCd . " = $nmTabelaDemandaSaida." . voDemandaTramitacao::$nmAtrCd;
+		$subSelectTramSaida .= " AND $nmTabela." . voDemandaTramitacao::$nmAtrSq . " < $nmTabelaDemandaSaida." . voDemandaTramitacao::$nmAtrSq ;
+		$subSelectTramSaida .= " order by ".voDemandaTramitacao::$nmAtrSq." LIMIT 1 " ;		
+		$subSelectTramSaida .= ")" ;
+		
+		$dtDemandaTramSaida = " COALESCE($subSelectTramSaida,DATE(NOW())) ";
+		$dtDemandaTramEntrada = "$nmTabela." . voDemandaTramitacao::$nmAtrDtReferencia;
+	
+		$querySelect = "SELECT ";
+		$querySelect .= $nmTabela . ".*";
+		$querySelect .= ", $dtDemandaTramSaida AS " . filtroConsultarDemandaGestao::$NmColDtReferenciaSaida;
+		$querySelect .= ", ". getDataSQLDiferencaDias($dtDemandaTramEntrada, $dtDemandaTramSaida) . " AS " . filtroConsultarDemandaGestao::$NmColNuTempoVida;
+		$querySelect .= "," . $nmTabelaUsuario . "." . vousuario::$nmAtrName;
+		$querySelect .= "  AS " . voDemanda::$nmAtrNmUsuarioInclusao;
+		$queryFrom = " FROM " . $nmTabela;
+	
+		$queryFrom .= "\n INNER JOIN " . $nmTabelaDemanda;
+		$queryFrom .= "\n ON ";
+		$queryFrom .= $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $nmTabela . "." . voDemandaTramitacao::$nmAtrAno;
+		$queryFrom .= "\n AND " . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd . "=" . $nmTabela . "." . voDemandaTramitacao::$nmAtrCd;
+	
+		$queryFrom .= "\n INNER JOIN " . $nmTabelaUsuario;
+		$queryFrom .= "\n ON ";
+		$queryFrom .= $nmTabelaUsuario . "." . vousuario::$nmAtrID . "=" . $nmTabela . "." . voDemanda::$nmAtrCdUsuarioInclusao;
+		
+		$filtro = new filtroConsultarDemandaGestao(false );
+		// $vo = new voContratoInfo();
+		// vo eh vodemanda
+		$filtro->vodemanda->cd = $vo->cd;
+		$filtro->vodemanda->ano = $vo->ano;
+	
+		$filtro->TemPaginacao = false;
+		$filtro->cdAtrOrdenacao = voDemandaTramitacao::$nmAtrDhInclusao;
+		$filtro->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
+		// echo $vo->texto;
+	
+		return parent::consultarFiltro ( $filtro, $querySelect, $queryFrom, false );
+	}
+	
 	function consultarDadosDemanda($vo) {
 		$isHistorico = $vo->isHistorico ();
 		
