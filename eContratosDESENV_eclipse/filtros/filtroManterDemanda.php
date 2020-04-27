@@ -5,7 +5,7 @@ include_once(caminho_vos ."voDemandaTramitacao.php");
 require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioAutorizacao.php");
 
 class filtroManterDemanda extends filtroManter{
-	
+		
 	public $nmFiltro = "filtroManterDemanda";
 	static $NmAtrCdSetorPassagem = "NmAtrCdSetorPassagem";
 	static $NmColQtdDiasDataDtReferencia = "NmColQtdDiasDataDtReferencia";
@@ -27,6 +27,13 @@ class filtroManterDemanda extends filtroManter{
 	static $NmAtrInSEI = "NmAtrInSEI";
 	static $NmAtrDtUltimaMovimentacaoInicial = "NmAtrDtUltimaMovimentacaoInicial";
 	static $NmAtrDtUltimaMovimentacaoFinal = "NmAtrDtUltimaMovimentacaoFinal";
+	
+	static $ID_REQ_NuTempoVidaMinimo = "ID_REQ_NuTempoVidaMinimo";
+	static $ID_REQ_NuTempoVidaMinimoUltimaTram = "ID_REQ_NuTempoVidaMinimoUltimaTram";
+	
+	static $NmColNuTempoVida = "NmColNuTempoVida";
+	static $NmColNuTempoUltimaTram= "NmColNuTempoUltimaTram";
+	
 	
 	var $vodemanda;
 	var $vocontrato;
@@ -61,6 +68,9 @@ class filtroManterDemanda extends filtroManter{
 	var $inSEI;
 	private $sqlComplementoContratoComDtPropostaVencida;
 	var $inRetornarReajusteSeLocacaoImovel;
+	
+	var $nuTempoVidaMinimo;
+	var $nuTempoVidaMinimoUltimaTram;
 	
 	// ...............................................................
 	// construtor
@@ -98,7 +108,10 @@ class filtroManterDemanda extends filtroManter{
 		$vodemanda->cdSetor = @$_POST[voDemanda::$nmAtrCdSetor];
 		$vodemanda->cdSetorDestino = @$_POST[voDemandaTramitacao::$nmAtrCdSetorDestino];
 		$this->cdSetorPassagem = @$_POST[static::$NmAtrCdSetorPassagem];
+		
 		$vodemanda->tipo = @$_POST[voDemanda::$nmAtrTipo];
+		//echoo("recuperando atributo filtro TIPO." . $this->nmFiltro . " " . $vodemanda->tipo);
+		
 		$vodemanda->tpDemandaContrato = @$_POST[voDemanda::$nmAtrTpDemandaContrato];
 		$vodemanda->inTpDemandaReajusteComMontanteA = @$_POST[voDemanda::$nmAtrInTpDemandaReajusteComMontanteA];
 		//var_dump($vodemanda->tpDemandaContrato);
@@ -147,7 +160,10 @@ class filtroManterDemanda extends filtroManter{
 		
 		if($this->cdOrdenacao == null){
 			$this->cdOrdenacao = constantes::$CD_ORDEM_CRESCENTE;
-		}		
+		}
+		
+		$this->nuTempoVidaMinimo = @$_POST[static::$ID_REQ_NuTempoVidaMinimo];
+		$this->nuTempoVidaMinimoUltimaTram = @$_POST[static::$ID_REQ_NuTempoVidaMinimoUltimaTram];
 	}
 	 	
 	function getFiltroConsultaSQL($comAtributoOrdenacao = null){
@@ -257,9 +273,9 @@ class filtroManterDemanda extends filtroManter{
 			
 			$tipoDem = $this->vodemanda->tipo;
 			
-			if($tipoDem == dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO){			
-				$tipoDem = array_keys(dominioTipoDemanda::getColecaoTipoDemandaContrato());
-			}
+			/*if($tipoDem == dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO){			
+				$tipoDem = array_keys(dominioTipoDemanda::getColecaoTipoDemandaContrato(false));
+			}*/
 			
 			if(is_array($tipoDem)){
 				$filtro .= 	" IN (" . getSQLStringFormatadaColecaoIN($tipoDem, false) . ") ";
@@ -342,17 +358,32 @@ class filtroManterDemanda extends filtroManter{
 		}
 		
 		if($this->cdSetorPassagem != null){
-			$filtro = $filtro . $conector
-			. " EXISTS (SELECT 'X' FROM " . $nmTabelaTramitacao
-			. " WHERE "
-					. $nmTabela . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrAno
-					. " AND " . $nmTabela . "." . voDemanda::$nmAtrCd . "=" . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrCd
-					. " AND (" . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrCdSetorOrigem. "=" . $this->cdSetorPassagem
-					. " OR "
-					. $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrCdSetorDestino . "=" . $this->cdSetorPassagem							
-					. "))\n ";
-		
-							$conector  = "\n AND ";
+			$setorPassagem = $this->cdSetorPassagem;
+			if(!is_array($setorPassagem)){
+				$filtro = $filtro . $conector
+				. static::getSQLSetorPassagem($nmTabela, $nmTabelaTramitacao, $this->cdSetorPassagem);
+			}else{
+				$conectorTemp  = " AND ";
+				$filtroTemp =  "(";
+				
+				$temPeloMenosUm = false;
+				foreach ($setorPassagem as $setor){
+					if($setor != ""){
+					//	echoo($setor);
+						$filtroTemp .= static::getSQLSetorPassagem($nmTabela, $nmTabelaTramitacao, $setor) . $conectorTemp;
+						$temPeloMenosUm = true;
+					}
+				}
+				$filtroTemp = removerUltimaString($conectorTemp, $filtroTemp);
+				$filtroTemp .= ") ";
+				
+				if($temPeloMenosUm){
+					$filtro = $filtro . $conector . $filtroTemp;
+					$conector  = "\n AND ";
+				}
+				
+			}
+			
 		}
 		
 		
@@ -447,23 +478,7 @@ class filtroManterDemanda extends filtroManter{
 			$conector = "\n AND ";
 		}
 		
-		if($this->dtUltMovimentacaoInicial != null){
-			/*$colDemandaTram = $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrDhInclusao;
-			$colDemanda = $nmTabela. "." .voDemanda::$nmAtrDhUltAlteracao;
-			$dtUltMovimentacao = getVarComoDataSQL($this->dtUltMovimentacaoInicial); 
-			
-			$filtro = $filtro . $conector
-			. " ((". $colDemandaTram 
-			. " IS NOT NULL AND DATE(". $colDemandaTram
-			. ") >= $dtUltMovimentacao "
-			. ") OR "
-			. "(". $colDemanda
-			. " IS NOT NULL AND DATE(". $colDemanda
-			. ") >= "
-			. $dtUltMovimentacao					
-			. ")) "
-			;*/
-			
+		if($this->dtUltMovimentacaoInicial != null){			
 			$filtro = $filtro . $conector . static::getSQLDataDemandaMovimentacao($this->dtUltMovimentacaoInicial, ">=");
 		
 			$conector  = "\n AND ";
@@ -475,10 +490,6 @@ class filtroManterDemanda extends filtroManter{
 		}
 		
 		if($this->cdSetorImplementacaoEconti != null){
-			/*$filtro = $filtro . $conector
-			. " DATE($nmTabelaTramitacao." .voDemandaTramitacao::$nmAtrDhInclusao
-			. ") >= ";*/
-			
 			if($this->cdSetorImplementacaoEconti == dominioSetor::$CD_SETOR_UNCT){
 				$filtro = $filtro . $conector . static::getSQLDataDemandaMovimentacao("01/02/2019", ">=");
 			}
@@ -798,6 +809,27 @@ class filtroManterDemanda extends filtroManter{
 					$conector  = "\n AND ";
 		}
 		
+		if($this->nuTempoVidaMinimo != null){
+			$filtro = $filtro . $conector
+			. filtroConsultarDemandaGestao::getSQLNuTempoVida($nmTabela)
+			. " >= "
+					. $this->nuTempoVidaMinimo
+					;
+		
+					$conector  = "\n AND ";
+		}
+		
+		if($this->nuTempoVidaMinimoUltimaTram != null){
+			//if($this->vodemanda->cdSetorDestino != null){
+			$filtro = $filtro . $conector
+			. filtroConsultarDemandaGestao::getSQLNuTempoUltimaTram($nmTabelaTramitacao, $nmTabela)
+			. " >= "
+					. $this->nuTempoVidaMinimoUltimaTram
+					;
+		
+					$conector  = "\n AND ";
+		}
+		
 		$this->formataCampoOrdenacao(new voDemanda());
 		//finaliza o filtro
 		$filtro = parent::getFiltroSQL($filtro, $comAtributoOrdenacao);
@@ -806,6 +838,29 @@ class filtroManterDemanda extends filtroManter{
 
 		return $filtro;
 	}	
+	
+	/**
+	 * retorna o SQL que permite verificar se uma demanda passou por um setor
+	 * @param unknown $nmTabela
+	 * @param unknown $nmTabelaTramitacao
+	 * @param unknown $cdSetorPassagem
+	 * @return string
+	 */
+	static function getSQLSetorPassagem($nmTabela, $nmTabelaTramitacao, $cdSetorPassagem){
+		if($cdSetorPassagem != null){
+			$retorno =
+			" EXISTS (SELECT 'X' FROM " . $nmTabelaTramitacao
+			. " WHERE "
+					. $nmTabela . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrAno
+					. " AND " . $nmTabela . "." . voDemanda::$nmAtrCd . "=" . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrCd
+					. " AND (" . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrCdSetorOrigem. "=" . $cdSetorPassagem
+					. " OR "
+							. $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrCdSetorDestino . "=" . $cdSetorPassagem
+							. "))\n ";
+		}
+		return $retorno;
+		
+	}
 	
 	static function getSQLDataDemandaMovimentacao($dataComparacao, $tipoOperacao){		
 			$colDemandaTram = voDemandaTramitacao::getNmTabela() . "." .voDemandaTramitacao::$nmAtrDhInclusao;
@@ -849,11 +904,16 @@ class filtroManterDemanda extends filtroManter{
 	function getAtributoOrdenacaoDefault(){
 		$nmTabelaDemanda = voDemanda::getNmTabelaStatic($this->isHistorico);
 		$retorno = $nmTabelaDemanda . "." . voDemanda::$nmAtrPrioridade . " " . constantes::$CD_ORDEM_CRESCENTE
-		. "," . $nmTabelaDemanda . "." . voDemanda::$nmAtrDhInclusao . " " . constantes::$CD_ORDEM_CRESCENTE;
+		//. "," . $nmTabelaDemanda . "." . voDemanda::$nmAtrDhInclusao . " " . constantes::$CD_ORDEM_CRESCENTE;
+		. "," . filtroConsultarDemandaGestao::$NmColNuTempoUltimaTram . " " . constantes::$CD_ORDEM_DECRESCENTE;
 		return $retorno;
 	}
 	
 	function getAtributosOrdenacao(){
+		if($this->isSetorAtualSelecionado()){
+			$atributoDtReferenciaSetorAtual = array(static::$NmColDtReferenciaSetorAtual => "Dt.Chegada.SetorAtual");
+		}
+		
 		$varAtributos = array(
 				filtroManterDemanda::$NmColDhUltimaMovimentacao => "Data.Movimentação",
 				voDemanda::$nmAtrAno => "Ano",
@@ -861,13 +921,12 @@ class filtroManterDemanda extends filtroManter{
 				voDemanda::$nmAtrDtReferencia => "Data.Referência",				
 				voDemanda::$nmAtrPrioridade => "Prioridade",				
 				voDemanda::$nmAtrTipo => "Tipo",
+				filtroConsultarDemandaGestao::$NmColNuTempoUltimaTram => "Prazo",
 		);
 		
-		if($this->isSetorAtualSelecionado()){
-			$atributoDtReferenciaSetorAtual = static::$NmColDtReferenciaSetorAtual;				
-			$varAtributos = putElementoArray2NoArray1ComChaves ( $varAtributos, array($atributoDtReferenciaSetorAtual => "Dt.Chegada.SetorAtual"));		
-		}
-		
+		if($atributoDtReferenciaSetorAtual != null)
+			$varAtributos = putElementoArray2NoArray1ComChaves ($atributoDtReferenciaSetorAtual, $varAtributos);
+				
 		return $varAtributos;
 	}	
 

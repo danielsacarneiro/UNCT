@@ -113,8 +113,12 @@ function existeItemNoArray($item, $array) {
 	
 	return $retorno;
 }
-function existeStr1NaStr2($str1, $str2){
+function existeStr1NaStr2($str1, $str2, $doinicio=false){
 	$existe = mb_stripos ( $str2, $str1 );
+	
+	if($doinicio){
+		$existe = strpos ( $str2, $str1 );
+	}
 	// echo "<br>$str2 x $especie";
 	return $existe !== false;	
 }

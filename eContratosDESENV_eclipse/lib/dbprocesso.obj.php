@@ -231,6 +231,7 @@ class dbprocesso {
 		//echo $queryJoin;
 		
 		//echo $querySelect;
+		//echo " testando $filtro->isValidarConsulta";
 		$retorno = $this->consultarFiltro ( $filtro, $querySelect, $queryFrom, $filtro->isValidarConsulta );
 		if ($retorno != "" && $isConsultaPorChave) {
 			$retorno = $retorno [0];
@@ -403,6 +404,7 @@ class dbprocesso {
 				
 			if($filtro->isIncluirFiltroNaSessao){
 				//echoo ("incluir $filtro->nmFiltro dbprocesso na sessao");
+				$filtro->setNomeFiltroControleSessao();
 				putObjetoSessao ( $filtro->nmFiltro, $filtro );
 			}
 				

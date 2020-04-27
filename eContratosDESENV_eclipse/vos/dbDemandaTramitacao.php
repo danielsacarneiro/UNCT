@@ -226,7 +226,7 @@ class dbDemandaTramitacao extends dbprocesso {
 				}
 			}
 			
-			$voDemanda->dbprocesso->incluir ( $voDemanda );
+			$voDemanda->dbprocesso->incluir ( $voDemanda );			
 			$vo->cd = $voDemanda->cd;
 			
 			if ($voDemanda->temContratoParaIncluir ()) {
@@ -326,7 +326,8 @@ class dbDemandaTramitacao extends dbprocesso {
 				$vo->sq = $this->getProximoSequencialChaveComposta ( voDemandaTramitacao::$nmAtrSq, $vo );
 			}
 			
-			parent::incluir ( $vo );
+			parent::incluir ( $vo );			
+			
 			// verifica se tem voDoc pra incluir
 			if ($vo->temDocParaIncluir ()) {
 				$voDemandaTramDoc = new voDemandaTramDoc ();

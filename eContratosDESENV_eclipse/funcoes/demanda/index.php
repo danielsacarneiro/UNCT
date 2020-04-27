@@ -108,6 +108,16 @@ function encaminhar() {
 	location.href="encaminhar.novo.php?funcao=<?=dbDemandaTramitacao::$NM_FUNCAO_ENCAMINHAR?>&chave=" + chave;
 }
 
+function detalharDemandaGestao(){
+	funcao = "<?=constantes::$CD_FUNCAO_DETALHAR?>";
+    if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta")){
+            return;
+    }
+	chave = document.frm_principal.rdb_consulta.value;
+    url = "../demanda_gestao/detalharDemandaGestao.php?funcao=" + funcao + "&chave=" + chave + "&lupa=S";	
+    abrirJanelaAuxiliar(url, true, false, false);
+}
+
 </SCRIPT>
 <?=setTituloPagina($vo->getTituloJSP())?>
 </HEAD>
@@ -161,7 +171,7 @@ function encaminhar() {
                 <TD class="campoformulario" width="1%" colspan=3>
                 Setor.Resp.: <?php echo $comboSetor->getHtmlCombo(voDemanda::$nmAtrCdSetor,voDemanda::$nmAtrCdSetor, $filtro->vodemanda->cdSetor, true, "camponaoobrigatorio", false, "");?>                
 				<font color=red><b>Setor.Atual</b>:</font> <?php echo $comboSetor->getHtmlCombo(voDemandaTramitacao::$nmAtrCdSetorDestino,voDemandaTramitacao::$nmAtrCdSetorDestino, $filtro->vodemanda->cdSetorDestino, true, "camponaoobrigatorio", false, "");?>
-				Passou.por: <?php echo $comboSetor->getHtmlCombo(filtroManterDemanda::$NmAtrCdSetorPassagem,filtroManterDemanda::$NmAtrCdSetorPassagem, $filtro->cdSetorPassagem, true, "camponaoobrigatorio", false, "");?>
+				Passou.por: <?php echo $comboSetor->getHtmlCombo(filtroManterDemanda::$NmAtrCdSetorPassagem,filtroManterDemanda::$NmAtrCdSetorPassagem."[]", $filtro->cdSetorPassagem, true, "camponaoobrigatorio", false, " multiple ");?>
 				A partir da implementação em: <?php echo $comboSetorImplantacaoEconti->getHtmlCombo(filtroManterDemanda::$NmAtrCdSetorImplementacaoEConti,filtroManterDemanda::$NmAtrCdSetorImplementacaoEConti, $filtro->cdSetorImplementacaoEconti, true, "camponaoobrigatorio", false, "");?>
 				</TD>				
             </TR>           
@@ -356,10 +366,20 @@ function encaminhar() {
 	            <TH class="campoformulario" nowrap width="1%">Usuário:</TH>
 				<TD class="campoformulario" colspan=3><?php echo $comboUsuTramitacao->getHtmlSelect(filtroManterDemanda::$NmAtrCdUsuarioTramitacao,filtroManterDemanda::$NmAtrCdUsuarioTramitacao, $filtro->cdUsuarioTramitacao, true, "camponaoobrigatorio", false);?>
 			</TR>
+            <TR>
+				<TH class="campoformulario" nowrap width="1%">Tempo.Vida.Mínimo:</TH>
+				<TD class="campoformulario" colspan=3>				
+Última Tramitação: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=filtroManterDemanda::$ID_REQ_NuTempoVidaMinimoUltimaTram?>" name="<?=filtroManterDemanda::$ID_REQ_NuTempoVidaMinimoUltimaTram?>"  value="<?php echo(complementarCharAEsquerda($filtro->nuTempoVidaMinimoUltimaTram, "0", TAMANHO_CODIGOS_SAFI));?>"  class="camponaoobrigatorio" size="3" maxlength="3"> (dias)|				
+				Total: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=filtroManterDemanda::$ID_REQ_NuTempoVidaMinimo?>" name="<?=filtroManterDemanda::$ID_REQ_NuTempoVidaMinimo?>"  value="<?php echo(complementarCharAEsquerda($filtro->nuTempoVidaMinimo, "0", TAMANHO_CODIGOS_SAFI));?>"  class="camponaoobrigatorio" size="3" maxlength="3"> (dias)
+				<?php 
+				$nmCamposDoc = array(
+						filtroManterDemanda::$ID_REQ_NuTempoVidaMinimo,
+						filtroManterDemanda::$ID_REQ_NuTempoVidaMinimoUltimaTram,
+				);
+				echo getBorracha($nmCamposDoc, "");
+				?>
+			</TR>			
        <?php
-        /*$comboOrdenacao = new select(voPA::getAtributosOrdenacao($cdHistorico));
-        $cdAtrOrdenacao = $filtro->cdAtrOrdenacao;
-        echo getComponenteConsulta($comboOrdenacao, $cdAtrOrdenacao, $cdOrdenacao, $qtdRegistrosPorPag, true, $cdHistorico)*/
        echo getComponenteConsultaFiltro($vo->temTabHistorico, $filtro);
         ?>
        </TBODY>
@@ -374,26 +394,31 @@ function encaminhar() {
          <TABLE id="table_tabeladados" class="tabeladados" cellpadding="0" cellspacing="0">						
              <TBODY>
                 <TR>
-                  <TH class="headertabeladados" width="1%">&nbsp;&nbsp;X</TH>
+                  <TH class="headertabeladados" width="1%" rowspan=2>&nbsp;&nbsp;X</TH>
                   <?php 
                   if($isHistorico){					                  	
                   	?>
-                  	<TH class="headertabeladados" width="1%">Sq.Hist</TH>
+                  	<TH class="headertabeladados" width="1%" rowspan=2>Sq.Hist</TH>
                   <?php 
                   }
                   ?>
-                    <TH class="headertabeladados" width="1%" nowrap>Ano</TH>
-                    <TH class="headertabeladados" width="1%">Núm.</TH>
-                    <TH class="headertabeladados" width="1%">Origem</TH>
-                    <TH class="headertabeladados" width="1%">Atual</TH>
-                    <TH class="headertabeladados" width="1%">Tipo</TH>
-                    <TH class="headertabeladados" width="40%">Contrato/PL</TH>
-                    <TH class="headertabeladados"width="50%" nowrap >Título</TH>                    
-                    <TH class="headertabeladados" width="1%">Prior.</TH>
-                    <TH class="headertabeladados"width="1%" nowrap >Usuário</TH>
-                    <TH class="headertabeladados"width="1%" nowrap >Dt.Abertura</TH>
-                    <TH class="headertabeladados"width="1%" nowrap >Últ.Movim.</TH>
-                    <TH class="headertabeladados" width="1%">Situação</TH>                    
+                    <TH class="headertabeladados" width="1%" nowrap rowspan=2>Ano</TH>
+                    <TH class="headertabeladados" width="1%" rowspan=2>Núm.</TH>
+                    <TH class="headertabeladados" width="1%" rowspan=2>Origem</TH>
+                    <TH class="headertabeladados" width="1%" rowspan=2>Atual</TH>
+                    <TH class="headertabeladados" width="1%" rowspan=2>Tipo</TH>
+                    <TH class="headertabeladados" width="40%" rowspan=2>Contrato/PL</TH>
+                    <TH class="headertabeladados"width="50%" nowrap rowspan=2>Título</TH>                    
+                    <TH class="headertabeladados" width="1%" rowspan=2>Prior.</TH>
+                    <TH class="headertabeladados"width="1%" nowrap rowspan=2>Usuário</TH>
+                    <TH class="headertabeladados"width="1%" nowrap rowspan=2>Dt.Abertura</TH>
+                    <TH class="headertabeladados"width="1%" nowrap rowspan=2>Últ.Movim</TH>
+                    <TH class="headertabeladadosalinhadocentro"width="1%" nowrap colspan="2">Prazo</TH>
+                    <TH class="headertabeladados" width="1%" rowspan=2>Situação</TH>                    
+                </TR>
+                <TR>
+                    <TH class="headertabeladados"width="1%">Últ.Tram</TH>
+                    <TH class="headertabeladados" width="1%">Total</TH>                    
                 </TR>
                 <?php								
                 if (is_array($colecao))
@@ -407,7 +432,7 @@ function encaminhar() {
                 $dominioTipo = new dominioTipoDemanda();
                 $dominioPrioridade = new dominioPrioridadeDemanda();
                                 
-                $colspan=13;
+                $colspan=15;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -415,6 +440,7 @@ function encaminhar() {
                 $dominioTipoContrato = new dominioTipoContrato();
                 
                 for ($i=0;$i<$tamanho;$i++) {
+                	$registro = $colecao[$i];
                 		$contrato = "";
                         $voAtual = new voDemanda();
                         $voAtual->getDadosBanco($colecao[$i]);    
@@ -491,8 +517,10 @@ function encaminhar() {
                         if($isHistorico){
                         	$nmUsuario = $voAtual->nmUsuarioOperacao;
                         }
-                        
-                        $dataUltimaMovimentacao = $colecao[$i][filtroManterDemanda::$NmColDhUltimaMovimentacao];
+                                                
+                        $dataUltimaMovimentacao = $registro[filtroManterDemanda::$NmColDhUltimaMovimentacao];
+                        $tempovida = $registro[filtroManterDemanda::$NmColNuTempoVida];
+                        $tempoUltTram = $registro[filtroManterDemanda::$NmColNuTempoUltimaTram];
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados">
@@ -516,6 +544,8 @@ function encaminhar() {
                     <TD class="tabeladados" nowrap><?php echo $nmUsuario;?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($voAtual->dtReferencia);?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($dataUltimaMovimentacao);?></TD>
+					<TD class="tabeladadosalinhadodireita" nowrap><?php echo complementarCharAEsquerda($tempoUltTram, "0", 3);?></TD>
+					<TD class="tabeladadosalinhadodireita" nowrap><?php echo complementarCharAEsquerda($tempovida, "0", 3);?></TD>                    
                     <TD class="<?=$classColunaSituacao;?>" nowrap><?php echo $situacao?></TD>                    
                 </TR>					
                 <?php
@@ -543,6 +573,11 @@ function encaminhar() {
                        <TD>
                         <TABLE class="barraacoesaux" cellpadding="0" cellspacing="0">
 	                   	<TR> 
+                            <TD class='botaofuncao'>
+                            <?php 
+                            echo getBotaoValidacaoAcesso("bttDetalharDemandaGestao", "Gestao.Prazo", "botaofuncaop", false, false,true,false,"onClick='javascript:detalharDemandaGestao();' accesskey='g'");
+                            ?>                                                        
+                            </TD>	                   	
                             <?php
                             $arrayBotoesARemover = array(constantes::$CD_FUNCAO_EXCLUIR);
                             echo getBotoesRodapeComRestricao($arrayBotoesARemover);
@@ -550,14 +585,14 @@ function encaminhar() {
                             ?>
                             <TD class='botaofuncao'>
                             <?php 
-                            echo getBotaoValidacaoAcesso("bttEncaminhar", "Encaminhar", "botaofuncaop", false, false,true,false,"onClick='javascript:encaminhar();' accesskey='e'");                            
+                            echo getBotaoValidacaoAcesso("bttEncaminhar", "Encaminhar", "botaofuncaop", false, false,true,false,"onClick='javascript:encaminhar();' accesskey='e'");
                             /*if(isUsuarioAdmin()){
                             	echo getBotaoValidacaoAcesso("bttIncluirNovo", "IncluirNovo", "botaofuncaop", false, false,true,false,"onClick='javascript:incluirNovo();' accesskey='n'");
                             	echo getBotaoValidacaoAcesso("bttAlterarNovo", "AlterarNovo", "botaofuncaop", false, false,true,false,"onClick='javascript:alterarNovo();' accesskey='v'");
                             	echo getBotaoValidacaoAcesso("bttAlertar", "Alertar", "botaofuncaop", false, false,true,false,"onClick='javascript:alertar();' accesskey='l'");
                             }*/
-                            ?>
-                            </TD>
+                            ?>                                                        
+                            </TD>                            
                          </TR>
                          </TABLE>
 	                   </TD>

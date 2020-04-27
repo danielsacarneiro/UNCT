@@ -14,8 +14,21 @@ require_once (caminho_funcoes . "contrato/dominioTipoContrato.php");
 // .................................................................................................................
 
 // Class bibliotecaHTML {
-function inicio($validarRedirecionamentoEmCasoDeErro = true) {
-	inicioComValidacaoUsuario ( false, $validarRedirecionamentoEmCasoDeErro);
+function listarObjetoSessaoPorString($param) {
+	$arraychave = array_keys($_SESSION);
+	$tam = sizeof($_SESSION);
+	
+	for($i=0; $i<$tam;$i++){
+		$chave = $arraychave[$i];
+		
+		if(existeStr1NaStr2($param, $chave, true)){
+			echoo($chave);
+		}
+	}	
+}
+
+function inicio($validarRedirecionamentoEmCasoDeErro = true) {		
+	inicioComValidacaoUsuario ( false, $validarRedirecionamentoEmCasoDeErro);		
 }
 
 function inicioComValidacaoUsuario($validarPermissaoAcesso, $validarRedirecionamentoEmCasoDeErro = true) {
@@ -53,7 +66,7 @@ function inicioComValidacaoUsuario($validarPermissaoAcesso, $validarRedirecionam
 	
 	define ( 'anoDefault', date ( 'Y' ) );
 	define ( 'dtHoje', getDataHoje () );
-	define ( 'dtHojeSQL', date ( 'Y/m/d' ) );
+	define ( 'dtHojeSQL', date ( 'Y/m/d' ) );	
 }
 function setTituloPagina($titulo) {
 	return setTituloPaginaPorNivel ( $titulo, null );
@@ -523,7 +536,7 @@ function getBotoesRodapeComRestricao($arrayBotoesARemover, $restringeBotaoSemVal
 	else
 	echo "NAO eh de consulta";*/
 		
-	if (getBotaoCancelar () != "" && ($isDetalhamento || $isManutencao))
+	if (getBotaoCancelar () != "" && !isLupa()  && ($isDetalhamento || $isManutencao))
 		$html .= "<TD class='botaofuncao'>" . getBotaoCancelar () . "</TD>\n";
 	
 	if (getBotaoFechar () != "")
@@ -601,9 +614,11 @@ function getComboColecaoGenerico($colecao, $idCampo, $nmCampo, $cdOpcaoSeleciona
 	
 	return $retorno;
 }
-function getComponenteConsultaFiltro($temHistorico, $filtro) {
+function getComponenteConsultaFiltro($temHistorico, $filtro, $comComboOrdenacao=true) {
 	// $comboOrdenacao = $filtro->getAtributosOrdenacao();
-	$comboOrdenacao = $filtro->getComboOrdenacao ();
+	if($comComboOrdenacao){
+		$comboOrdenacao = $filtro->getComboOrdenacao ();
+	}
 	
 	return getComponenteConsultaPaginacao ( $comboOrdenacao, $filtro->cdAtrOrdenacao, $filtro->cdOrdenacao, $filtro->TemPaginacao, $filtro->qtdRegistrosPorPag, $temHistorico, $filtro->cdHistorico );
 }

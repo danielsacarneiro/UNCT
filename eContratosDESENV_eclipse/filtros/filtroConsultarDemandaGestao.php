@@ -7,23 +7,58 @@ class filtroConsultarDemandaGestao extends filtroManterDemanda{
 	
 	public $nmFiltro = "filtroConsultarDemandaGestao";
 	static $NmTabelaDemandaTramSaida = "NmTabelaDemandaTramSaida";
-	static $ID_REQ_NuTempoVidaMinimo = "ID_REQ_NuTempoVidaMinimo";
-	static $ID_REQ_NuTempoVidaMinimoUltimaTram = "ID_REQ_NuTempoVidaMinimoUltimaTram";
-
-	static $NmColNuTempoVida = "NmColNuTempoVida";
-	static $NmColNuTempoUltimaTram= "NmColNuTempoUltimaTram";
-	static $NmColDtReferenciaSaida = "NmColDtReferenciaSaida";
 	
-	var $nuTempoVidaMinimo;
-	var $nuTempoVidaMinimoUltimaTram;
-			
-	function getFiltroFormulario(){
-		parent::getFiltroFormulario();	
-		
-		$this->nuTempoVidaMinimo = @$_POST[static::$ID_REQ_NuTempoVidaMinimo];
-		$this->nuTempoVidaMinimoUltimaTram = @$_POST[static::$ID_REQ_NuTempoVidaMinimoUltimaTram];
-				
+	//colunas
+	static $NmColDtReferenciaSaida = "NmColDtReferenciaSaida";
+	static $NmColNumTotalDemandas = "NmColNumTotalDemandas";
+	static $NmColNumTempoVidaMedio = "NmColNumTempoVidaMedio";
+	
+	private $nmFiltroAnterior = "";
+	/*function getFiltroFormulario(){
+		parent::getFiltroFormulario();		
+	}*/
+	
+	/**
+	 * serve para identificar o filtro na consulta anterior encadeada para manter os mesmos atributos consultados
+	 */
+	function setNmFiltroAnteriorSessao(){
+		$nmFiltroAnterior = @$_GET["nmFiltroAnterior"];
+		$this->nmFiltroAnterior = $nmFiltroAnterior;
 	}
+	function getNmFiltroAnteriorSessao(){
+		if($this->nmFiltroAnterior == null){
+			$this->setNmFiltroAnteriorSessao();
+		}
+		return $this->nmFiltroAnterior;
+	}
+	function getFILTROAnteriorSessao(){
+		$nmFiltroAnterior = @$_GET["nmFiltroAnterior"];
+		$this->nmFiltroAnterior = $nmFiltroAnterior;
+		/*echoo($this->nmFiltro);
+		echo $nmFiltroAnterior;*/
+		$filtroAnterior = getObjetoSessao($nmFiltroAnterior);
+		return $filtroAnterior;
+	}
+	function getNovoFiltroComAtributosAnterior(){
+		$filtroAnterior = clone $this->getFILTROAnteriorSessao();
+		$filtroAnterior->nmFiltro = $this->nmFiltro;
+		$filtroAnterior->nmFiltroAnterior = $this->nmFiltroAnterior;
+
+		//retira o validar consulta ja que sera realizada automaticamente sem clicar no botao 'consultar'
+		$filtroAnterior->isValidarConsulta = false;
+		return $filtroAnterior;
+	}
+	
+	function setFiltroFormularioEncadeadoTipoDemanda(){
+		$chave = @$_GET["chave"];	
+		//echo "testando $chave"; 
+		$this->vodemanda->tipo = $chave;		
+	}
+	
+	function setFiltroFormularioEncadeadoSetorDemanda(){
+		$chave = @$_GET["chave"];
+		$this->vodemanda->cdSetorDestino = $chave;
+	}	
 	
 	/**
 	 * retorna o sql da coluna data ultima movimentacao da demanda
@@ -33,7 +68,7 @@ class filtroConsultarDemandaGestao extends filtroManterDemanda{
 	 */
 	
 	static function getSQLDataUltimaMovimentacao($nmTabelaTramitacao, $nmTabelaDemanda){		
-		return "COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrDhInclusao . "," . $nmTabelaDemanda . "." . voDemanda::$nmAtrDhUltAlteracao . ")";		
+		return "COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrDtReferencia . "," . $nmTabelaDemanda . "." . voDemanda::$nmAtrDhUltAlteracao . ")";		
 	}
 	
 	/**
@@ -52,7 +87,7 @@ class filtroConsultarDemandaGestao extends filtroManterDemanda{
 	 * @param unknown $nmTabelaDemanda
 	 * @return string
 	 */
-	static function getSQLNuTempoVida($nmTabelaTramitacao, $nmTabelaDemanda){
+	static function getSQLNuTempoVida($nmTabelaDemanda){
 		//return getDataSQLDiferencaDias(static::getSQLDataBaseTempoVida($nmTabelaDemanda), "DATE(".static::getSQLDataUltimaMovimentacao($nmTabelaTramitacao, $nmTabelaDemanda).")");
 		return getDataSQLDiferencaDias(static::getSQLDataBaseTempoVida($nmTabelaDemanda), "DATE(now())");
 	}
@@ -60,6 +95,29 @@ class filtroConsultarDemandaGestao extends filtroManterDemanda{
 	static function getSQLNuTempoUltimaTram($nmTabelaTramitacao, $nmTabelaDemanda){
 		return getDataSQLDiferencaDias(static::getSQLDataUltimaMovimentacao($nmTabelaTramitacao, $nmTabelaDemanda), "DATE(now())");
 	}
+	
+	/**
+	 * retorna o subselect que deve ir como coluna nas consultas que querem retornar a data de saida de uma demanda tramitada
+	 * @param unknown $nmTabela
+	 * @param unknown $nmTabelaDemandaSaida
+	 * @return string
+	 */
+	static function getSQLDtDemandaTramitacaoSaida($nmTabela){
+		$nmTabelaDemandaSaida = static::$NmTabelaDemandaTramSaida;
+		//a data de saida sera igual a data de referencia da tramitacao seguinte à atual
+		//para tanto usa-se o subselect abaixo com a opcao do LIMIT 1 (pega o proximo registro maior que o atual)
+		$subSelectTramSaida = "(SELECT ".voDemandaTramitacao::$nmAtrDtReferencia." FROM $nmTabela $nmTabelaDemandaSaida ";
+		$subSelectTramSaida .= " WHERE ";
+		$subSelectTramSaida .= " $nmTabela." . voDemandaTramitacao::$nmAtrAno . " = $nmTabelaDemandaSaida." . voDemandaTramitacao::$nmAtrAno;
+		$subSelectTramSaida .= " AND $nmTabela." . voDemandaTramitacao::$nmAtrCd . " = $nmTabelaDemandaSaida." . voDemandaTramitacao::$nmAtrCd;
+		$subSelectTramSaida .= " AND $nmTabela." . voDemandaTramitacao::$nmAtrSq . " < $nmTabelaDemandaSaida." . voDemandaTramitacao::$nmAtrSq ;
+		$subSelectTramSaida .= " order by ".voDemandaTramitacao::$nmAtrSq." LIMIT 1 " ;
+		$subSelectTramSaida .= ")" ;
+		
+		$dtDemandaTramSaida = " COALESCE($subSelectTramSaida,DATE(NOW())) ";
+		
+		return $dtDemandaTramSaida;
+	}	
 	
 	function getFiltroConsultaSQL($comAtributoOrdenacao = null){
 		$filtro = "";
@@ -168,9 +226,9 @@ class filtroConsultarDemandaGestao extends filtroManterDemanda{
 			
 			$tipoDem = $this->vodemanda->tipo;
 			
-			if($tipoDem == dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO){			
+			/*if($tipoDem == dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO){			
 				$tipoDem = array_keys(dominioTipoDemanda::getColecaoTipoDemandaContrato());
-			}
+			}*/
 			
 			if(is_array($tipoDem)){
 				$filtro .= 	" IN (" . getSQLStringFormatadaColecaoIN($tipoDem, false) . ") ";
@@ -711,7 +769,7 @@ class filtroConsultarDemandaGestao extends filtroManterDemanda{
 		
 		if($this->nuTempoVidaMinimo != null){
 			$filtro = $filtro . $conector
-			. static::getSQLNuTempoVida($nmTabelaTramitacao, $nmTabela)
+			. static::getSQLNuTempoVida($nmTabela)
 			. " >= "
 					. $this->nuTempoVidaMinimo
 					;
@@ -738,7 +796,27 @@ class filtroConsultarDemandaGestao extends filtroManterDemanda{
 		//echo "Filtro:$filtro<br>";
 
 		return $filtro;
-	}		
+	}
+	
+	function getAtributoOrdenacaoAnteriorDefault(){
+		//$nmTabelaDemanda = voDemanda::getNmTabelaStatic($this->isHistorico);
+		//$retorno = $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . " " . $this->cdOrdenacao;
+		return $retorno;
+	}
+	
+	function getAtributoOrdenacaoDefault(){
+		$retorno = filtroConsultarDemandaGestao::$NmColNumTotalDemandas . " " . constantes::$CD_ORDEM_DECRESCENTE;
+		return $retorno;
+	}
+	
+	function getAtributosOrdenacao(){
+		$varAtributos = array(
+				filtroConsultarDemandaGestao::$NmColNumTotalDemandas => "Num.Demandas",
+				voDemanda::$nmAtrTipo => "Tipo",
+		);
+		
+		return $varAtributos;
+	}	
 
 }
 

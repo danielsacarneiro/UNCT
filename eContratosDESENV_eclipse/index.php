@@ -41,6 +41,13 @@ setCabecalho($titulo);
 
 	f3 = new Tree('Serviço 03 (Demanda)');
 	f3.adicionarItem(new Link("Demandas", "<?=caminho_funcoesHTML?>demanda", ""));
+	f3.adicionarItem(new Link("Gestão Demanda", "<?=caminho_funcoesHTML?>demanda_gestao", ""));
+	<?php
+	if(isUsuarioRodaImportacao()){
+	?>	    
+		f3.adicionarItem(new Link("ATENÇÃO: Tramitação Demanda", "<?=caminho_funcoesHTML?>demanda_tram", ""));
+	<?php }?>
+	
 	f.adicionarItem(f3);
 
 	f4 = new Tree('Serviço 04 (PAAP)');
@@ -61,11 +68,14 @@ setCabecalho($titulo);
 	fSolicCompra.adicionarItem(new Link('Solic.Compra', '<?=caminho_funcoesHTML.voSolicCompra::getNmTabela()?>', ''));
 	f.adicionarItem(fSolicCompra);	
 
-	fmsg = new Tree('ADMINISTRATIVO');
-	fmsg.adicionarItem(new Link("PAINEL (Atividades relevantes)", "agendamento.php?<?=constantes::$ID_REQ_IN_ENVIAR_EMAIL?>=N", ""));
-	fmsg.adicionarItem(new Link('Mensageria', '<?=caminho_funcoesHTML.voMensageria::getNmTabela()?>', ''));	
-	fmsg.adicionarItem(new Link('Mensageria Registro', '<?=caminho_funcoesHTML.voMensageriaRegistro::getNmTabela()?>', ''));
-	f.adicionarItem(fmsg);
+	fMensageria = new Tree('Servico 07 (Mensageria)');
+	fMensageria.adicionarItem(new Link('Mensageria', '<?=caminho_funcoesHTML.voMensageria::getNmTabela()?>', ''));	
+	fMensageria.adicionarItem(new Link('Mensageria Registro', '<?=caminho_funcoesHTML.voMensageriaRegistro::getNmTabela()?>', ''));
+	f.adicionarItem(fMensageria);
+
+	fADM = new Tree('ADMINISTRATIVO');
+	fADM.adicionarItem(new Link("PAINEL (Atividades relevantes)", "agendamento.php?<?=constantes::$ID_REQ_IN_ENVIAR_EMAIL?>=N", ""));
+	f.adicionarItem(fADM);
 
 	<?php
 		//documento de designacao do SAFI
@@ -90,7 +100,6 @@ setCabecalho($titulo);
 		f5 = new Tree('ADMINISTRADOR');
 		<?php if(isUsuarioAdmin()){?>
 		    f5.adicionarItem(new Link('Usuários', '<?=caminho_funcoesHTML?>usuario_info', ''));    
-			f5.adicionarItem(new Link("Tramitação Demanda", "<?=caminho_funcoesHTML?>demanda_tram", ""));
 			f5.adicionarItem(new Link("Agendamento de alertas (COM EMAIL)", "agendamento.php?<?=constantes::$ID_REQ_IN_ENVIAR_EMAIL?>=S", ""));
 			f5.adicionarItem(new Link("Pagina TESTE", "teste.php", "", null,true));
 		<?php }?>

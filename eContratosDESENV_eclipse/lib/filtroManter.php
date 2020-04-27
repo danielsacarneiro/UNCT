@@ -4,8 +4,9 @@ include_once (caminho_util . "multiplosConstrutores.php");
 include_once (caminho_util . "dominioTpVigencia.php");
 class filtroManter extends multiplosConstrutores {
 	
+	static $ID_SESSAO_COUNT_FILTRO_SESSAO = "ID_SESSAO_COUNT_FILTRO_SESSAO";
 	// ...............................................................
-	// construtor
+
 	static $nmAtrCdConsultarArquivo = "cdConsultarArquivo";
 	static $nmAtrCdAtrOrdenacao = "cdAtrOrdenacao";
 	static $nmAtrCdOrdenacao = "cdOrdenacao";
@@ -36,12 +37,17 @@ class filtroManter extends multiplosConstrutores {
 	var $isTpVigenciaMAxSq;
 	
 	var $isIncluirFiltroNaSessao = false;
+	var $isFazerControleSessao = false;
 	
 	private $inConsultaRealizada = false;
 	private $QUERY_SELECT;
 	private $QUERY_FROM;
 	
+	private $QUERY_FILTRO;
+	
 	var $voPrincipal;
+
+	// construtor
 	function __construct0() {
 		// echo "teste0";
 		$this->__construct1 ( true );
@@ -52,6 +58,14 @@ class filtroManter extends multiplosConstrutores {
 		$this->__construct2 ( $pegarFiltrosDaTela, $pegarFiltrosDaTela );
 	}
 	function __construct2($temPaginacao, $pegarFiltrosDaTela) {
+		$this->__construct3 ( $pegarFiltrosDaTela, $pegarFiltrosDaTela );
+	}
+	function __construct3($temPaginacao, $pegarFiltrosDaTela, $isFazerControleSessao=false) {
+		//o isFazerControleSessao serve para setar o nome do filtro na sessao com sequenciais
+		//para que permita mais de um mesmo filtro na sessao
+		//ver metodo: setNomeFiltroControleSessao
+		$this->isFazerControleSessao = $isFazerControleSessao;
+		
 		$this->cdConsultarArquivo = constantes::$CD_NAO;
 		$this->tpVigencia = constantes::$CD_OPCAO_TODOS;
 		
@@ -87,6 +101,43 @@ class filtroManter extends multiplosConstrutores {
 		$this->inDesativado = null;
 		$this->isTpVigenciaMAxSq = false;
 	}
+	
+	/**
+	 * funcao que dá um identificador para que o filtro nao seja sobrescrito na sessao
+	 */
+	function setNomeFiltroControleSessao(){		
+		$count = null;
+
+		if($this->isFazerControleSessao){
+			if(existeObjetoSessao(static::$ID_SESSAO_COUNT_FILTRO_SESSAO)){
+				//o controle de sessao de filtro eh feito por filtro
+				$arraySessaoFiltro = getObjetoSessao(filtroManter::$ID_SESSAO_COUNT_FILTRO_SESSAO);
+				$count = $arraySessaoFiltro[get_class($this)];			
+			}
+			
+			$count = $count + 1;
+			$arraySessaoFiltro[get_class($this)] = $count;
+			putObjetoSessao(static::$ID_SESSAO_COUNT_FILTRO_SESSAO, $arraySessaoFiltro);		
+		}
+		
+		$this->nmFiltroOriginal = $this->nmFiltro = get_class($this) . $count ;
+		
+		//echo "DEU IDENTIFICADOR " . $count ;
+	}
+	
+	function zerarFiltroControleSessao(){
+		if(existeObjetoSessao(static::$ID_SESSAO_COUNT_FILTRO_SESSAO)){
+			//o controle de sessao de filtro eh feito por filtro
+			$arraySessaoFiltro = getObjetoSessao(filtroManter::$ID_SESSAO_COUNT_FILTRO_SESSAO);
+			$arraySessaoFiltro[get_class($this)] = null;
+			putObjetoSessao(static::$ID_SESSAO_COUNT_FILTRO_SESSAO, $arraySessaoFiltro);
+		}
+	}
+	
+	function getNmFiltroOriginal(){
+		return $this->nmFiltroOriginal;
+	}
+	
 	function pegarFiltroDaTela() {
 		$this->cdAtrOrdenacao = @$_POST [self::$nmAtrCdAtrOrdenacao];
 		$this->cdOrdenacao = @$_POST [self::$nmAtrCdOrdenacao];
@@ -192,6 +243,11 @@ class filtroManter extends multiplosConstrutores {
 	
 	
 	function getFiltroSQL($strFiltro, $comAtributoOrdenacao = true) {
+		//GUARDA O FILTRO USADO NA CONSULTA
+		$this->setSQLFiltro($strFiltro);
+		
+		//providencia o complemento do filtro para possibilitar a consulta final
+		//incluindo validacao de registros desativados ou n
 		return $this->getFiltroSQLCompleto($strFiltro, null, $comAtributoOrdenacao);		
 	}
 	
@@ -406,6 +462,20 @@ class filtroManter extends multiplosConstrutores {
 	function setConsultaRealizada(){
 		return $this->inConsultaRealizada = true;
 	}	
+	
+	/**
+	 * serve para guardar o filtro usado na consulta: sem WHERE ou ORDER BY
+	 * @param unknown $strFiltro
+	 * @return boolean
+	 */
+	function setSQLFiltro($strFiltro){
+		$this->QUERY_FILTRO = $strFiltro;
+	}
+	
+	function getSQLFiltro(){
+		return $this->QUERY_FILTRO;
+	}
+	
 }
 
 /*

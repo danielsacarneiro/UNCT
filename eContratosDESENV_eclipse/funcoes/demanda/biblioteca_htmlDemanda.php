@@ -245,6 +245,12 @@ function getHtmlDocumento($voAtual, $comDescricaoPorExtenso = false) {
 	return $html;	
 }
 
+/**
+ * monta a grid da tela de detalhamento demanda
+ * @param unknown $colecaoTramitacao
+ * @param unknown $isDetalhamento
+ */
+
 function mostrarGridDemanda($colecaoTramitacao, $isDetalhamento) {
 	// var_dump($colecaoTramitacao);
 	
@@ -335,6 +341,117 @@ function mostrarGridDemanda($colecaoTramitacao, $isDetalhamento) {
 		
 	}
 	
+	echo $html;
+}
+
+/**
+ * monta a grid da tela de detalhamento demanda gestao
+ * @param unknown $colecaoTramitacao
+ * @param unknown $isDetalhamento
+ */
+
+function mostrarGridDemandaGestao($colecaoTramitacao, $isDetalhamento) {
+	// var_dump($colecaoTramitacao);
+
+	if (is_array ( $colecaoTramitacao )) {
+		$tamanho = sizeof ( $colecaoTramitacao );
+	} else {
+		$tamanho = 0;
+	}
+
+	$html = "";
+	$numregistros = 0;
+	if ($tamanho > 0) {
+
+		$numColunas = 8;
+
+		$html .= "<TR>\n";
+		$html .= "<TH class='textoseparadorgrupocampos' halign='left' colspan='4'>\n";
+		$html .= "<DIV class='campoformulario' id='div_tramitacao'>&nbsp;&nbsp;Prazos\n";
+
+		$html .= "<TABLE id='table_tabeladados' class='tabeladados' cellpadding='0' cellspacing='0'> \n";
+		$html .= " <TBODY>  \n";
+		$html .= "        <TR>    \n";
+		if (! $isDetalhamento) {
+			$numColunas ++;
+			$html .= "<TH class='headertabeladados' width='1%'>&nbsp;&nbsp;X</TH>  \n";
+		}
+		$html .= "<TH class='headertabeladados' width='1%' nowrap>Número</TH>   \n";
+		$html .= "<TH class='headertabeladados' width='1%'>Destino</TH> \n";
+		$html .= "<TH class='headertabeladados' width='90%'>Texto</TH> \n";
+		$html .= "<TH class='headertabeladados' width='1%' nowrap>PRT/SEI</TH> \n";
+		$html .= "<TH class='headertabeladados' width='1%' nowrap>Usuário</TH> \n";
+		$html .= "<TH class='headertabeladados' width='1%' nowrap>Dt.Início</TH> \n";
+		$html .= "<TH class='headertabeladados' width='1%' nowrap>Dt.Fim</TH> \n";
+		$html .= "<TH class='headertabeladados' width='1%' nowrap>Prazo</TH> \n";
+		$html .= "</TR> \n";
+
+		$sq = 1;
+
+		$dominioSetor = new dominioSetor ();
+		for($i = 0; $i < $tamanho; $i ++) {
+				
+			$voAtual = new voDemandaTramitacao ();
+			$voAtual->getDadosBanco ( $colecaoTramitacao [$i] );
+				
+			$sq = $voAtual->sq;
+			$prazo = $colecaoTramitacao [$i][filtroConsultarDemandaGestao::$NmColNuTempoVida];
+			$prazototal += $prazo;
+			//exibe apenas as tramitacoes com prazo acima de zero
+			//if ($voAtual != null && $prazo > 0) {
+			if ($voAtual != null) {
+				$numregistros = $numregistros + 1;
+				$html .= "<TR class='dados'> \n";
+
+				if (! $isDetalhamento) {
+					$html .= "<TD class='tabeladados'> \n";
+					$html .= getHTMLRadioButtonConsulta ( "rdb_tramitacao", "rdb_tramitacao", $i );
+					$html .= "</TD> \n";
+				}
+
+
+				$textoTram = truncarStringHTML($voAtual->textoTram);
+				$dataSaida = $colecaoTramitacao [$i][filtroConsultarDemandaGestao::$NmColDtReferenciaSaida];
+				
+				$html .= "<TD class='tabeladados' nowrap>" . complementarCharAEsquerda ( $sq, "0", TAMANHO_CODIGOS ) . "</TD> \n";
+				$html .= "<TD class='tabeladados' nowrap>" . $dominioSetor->getDescricao ( $voAtual->cdSetorDestino ) . "</TD> \n";
+				$html .= "<TD class='tabeladados' >" . $textoTram . "</TD> \n";
+				$html .= "<TD class='tabeladados' nowrap>" . $voAtual->prt . "</TD> \n";
+				$html .= "<TD class='tabeladados' nowrap>" . $voAtual->nmUsuarioInclusao . "</TD> \n";
+				$html .= "<TD class='tabeladados' nowrap>" . getData ( $voAtual->dtReferencia ) . "</TD> \n";
+				$html .= "<TD class='tabeladados' nowrap>" . getData ( $dataSaida ) . "</TD> \n";
+				$html .= "<TD class='tabeladadosalinhadodireita' nowrap>" . complementarCharAEsquerda($prazo, "0", constantes::$TAMANHO_CODIGOS_SAFI) . "</TD> \n";
+
+				$html .= "</TR> \n";
+
+				$sq ++;
+
+				$isSetorAtual = $i == 0;
+				// o setor origem vai ser o setor destino da ultima tramitacao
+				//ATENCAo a ordenacao da consulta. O setor atual/origem serah o da ultima tramitacao em caso de ordenacao crescente. Caso contrario, sera o da primeira tramitacao.
+				if($isSetorAtual){
+					//echo "setor atual é $voAtual->cdSetorDestino";
+					$html .= "<INPUT type='hidden' id='" . voDemandaTramitacao::$nmAtrCdSetorOrigem . "' name='" . voDemandaTramitacao::$nmAtrCdSetorOrigem . "' value='" . $voAtual->cdSetorDestino . "'> \n";
+				}
+			}
+		}
+		$html .= "<TR> \n";
+		$html .= "<TD class='totalizadortabeladadosalinhadodireita' colspan=";
+		$html .= $numColunas - 1 . ">Prazo Total</TD> \n";
+		$html .= "<TD class='totalizadortabeladadosalinhadodireita' >". complementarCharAEsquerda($prazototal, "0", constantes::$TAMANHO_CODIGOS_SAFI). " </TD> \n";
+		$html .= "</TR>\n";
+		$html .= "<TR> \n";
+		$html .= "<TD class='totalizadortabeladadosalinhadodireita' colspan=$numColunas>Total de registro(s) na página: $numregistros</TD> \n";
+		$html .= "</TR>\n";
+		
+		$html .= "</TBODY> \n";
+		$html .= "</TABLE> \n";
+		$html .= "</DIV> \n";
+		$html .= "</TH>\n";
+		$html .= "</TR>\n";
+
+	}
+
 	echo $html;
 }
 

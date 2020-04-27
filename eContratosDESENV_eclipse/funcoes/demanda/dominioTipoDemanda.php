@@ -70,7 +70,7 @@ Class dominioTipoDemanda extends dominio{
 	
 	static function getColecaoTipoDemandaContrato($comDetalhamentoContrato = true){
 		$retorno = static::getColecaoTipoDemandaContratoSemProcAdmin($comDetalhamentoContrato);
-		$retorno = putElementoArray2NoArray1ComChaves ( $retorno, array(self::$CD_TIPO_DEMANDA_PROCADM => self::$DS_TIPO_DEMANDA_PROCADM));
+		//$retorno = putElementoArray2NoArray1ComChaves ( $retorno, array(self::$CD_TIPO_DEMANDA_PROCADM => self::$DS_TIPO_DEMANDA_PROCADM));
 
 		return $retorno;
 	}
@@ -106,6 +106,7 @@ Class dominioTipoDemanda extends dominio{
 	
 	static function getColecaoTipoDemandaComplementar(){
 		return array(
+				self::$CD_TIPO_DEMANDA_PROCADM => self::$DS_TIPO_DEMANDA_PROCADM,
 				self::$CD_TIPO_DEMANDA_CONTROLE_AQUISICAO => self::$DS_TIPO_DEMANDA_CONTROLE_AQUISICAO,
 				self::$CD_TIPO_DEMANDA_EDITAL => self::$DS_TIPO_DEMANDA_EDITAL,
 				self::$CD_TIPO_DEMANDA_PARECER => self::$DS_TIPO_DEMANDA_PARECER,

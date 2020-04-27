@@ -61,6 +61,12 @@ class voDemanda extends voentidade {
 		$this->removeAtributos ( $arrayAtribRemover );
 		$this->varAtributosARemover = $arrayAtribRemover;
 	}
+	public static function getTituloDemandaGestaoPorSetor() {
+		return "DEMANDA GESTÃO POR SETOR";
+	}
+	public static function getTituloDemandaGestaoJSP() {
+		return "DEMANDA GESTÃO";
+	}
 	public static function getTituloJSP() {
 		return "DEMANDA";
 	}
