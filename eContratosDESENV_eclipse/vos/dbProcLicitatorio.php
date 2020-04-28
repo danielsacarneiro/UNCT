@@ -75,6 +75,7 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
   		$queryFrom .= "\n AND $nmTabelaDemandaPL." . voDemandaPL::$nmAtrAnoDemanda . "=$nmTabelaDemanda." . voDemanda::$nmAtrAno;*/
   		
   		$queryWhere = " WHERE ";
+  		$queryWhere .= "$nmTabelaDemanda." . voDemanda::$nmAtrInDesativado . "='N' AND ";
   		$queryWhere .= $vo->getValoresWhereSQLChave ( $isHistorico );
   		//traz apenas a demanda do tipo EDITAL
   		//$queryWhere .= " AND $nmTabelaDemanda." . voDemanda::$nmAtrTipo . " = " . dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL;
