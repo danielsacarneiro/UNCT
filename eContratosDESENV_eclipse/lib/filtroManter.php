@@ -5,6 +5,7 @@ include_once (caminho_util . "dominioTpVigencia.php");
 class filtroManter extends multiplosConstrutores {
 	
 	static $ID_SESSAO_COUNT_FILTRO_SESSAO = "ID_SESSAO_COUNT_FILTRO_SESSAO";
+	static $CD_CAMPO_SUBSTITUICAO = "[[[[QEEWER_CD_CAMPO_SUBSTITUICAO_EREWFDSFS]]]]";
 	// ...............................................................
 
 	static $nmAtrCdConsultarArquivo = "cdConsultarArquivo";
@@ -39,6 +40,7 @@ class filtroManter extends multiplosConstrutores {
 	var $isIncluirFiltroNaSessao = false;
 	var $isFazerControleSessao = false;
 	
+	var $sqlFiltrosASubstituir;
 	private $inConsultaRealizada = false;
 	private $QUERY_SELECT;
 	private $QUERY_FROM;
@@ -58,7 +60,7 @@ class filtroManter extends multiplosConstrutores {
 		$this->__construct2 ( $pegarFiltrosDaTela, $pegarFiltrosDaTela );
 	}
 	function __construct2($temPaginacao, $pegarFiltrosDaTela) {
-		$this->__construct3 ( $pegarFiltrosDaTela, $pegarFiltrosDaTela );
+		$this->__construct3 ( $temPaginacao, $pegarFiltrosDaTela );
 	}
 	function __construct3($temPaginacao, $pegarFiltrosDaTela, $isFazerControleSessao=false) {
 		//o isFazerControleSessao serve para setar o nome do filtro na sessao com sequenciais
@@ -223,6 +225,68 @@ class filtroManter extends multiplosConstrutores {
 	}
 	function getSQLWhere($comAtributoOrdenacao) {
 		return $this->getFiltroConsultaSQL ( $comAtributoOrdenacao );
+	}
+
+	/**
+	 * retorna o filtro preenchido pelo usuario
+	 * @param unknown $comAtributoOrdenacao
+	 * @return unknown
+	 */
+	function getSQLFiltroPreenchido($comAtributoOrdenacao=true) {
+		$this->getFiltroConsultaSQL ( $comAtributoOrdenacao );
+		return $this->getSQLFiltro();
+	}
+	
+	/**
+	 * substitui os campos de substituicao pelo filtro consultado
+	 * @return unknown
+	 */
+	function getSQLQueryComFiltroSubstituicao($query, $sqlFiltro, $comClausulaWHERE = true) {
+		
+		$substituirPorVazio = false;
+		if($sqlFiltro == null || $sqlFiltro == ""){
+			$substituirPorVazio = true;
+		}
+		
+		$complemento = "";		
+		if($comClausulaWHERE){
+			$complemento = " WHERE";
+		}
+				
+		if(!is_array($sqlFiltro)){
+			$substituicao = "$complemento $sqlFiltro";
+			if($substituirPorVazio){
+				$substituicao = "";
+			}
+			$retorno = str_replace(STATIC::$CD_CAMPO_SUBSTITUICAO, $substituicao, $query);
+			
+		}else{
+			//echo "aqui";
+			$chaves = array_keys($sqlFiltro);
+			$retorno = $query;
+			for ($i=0; $i < sizeof($sqlFiltro); $i++){
+				$subst = $chaves[$i];
+				$conteudo = $sqlFiltro[$subst];
+				
+				if($conteudo == null || $conteudo == ""){
+					$substituirPorVazio = true;
+					//echoo("vazio");
+				}else{
+					$substituirPorVazio = false;
+					//echoo("vazio nao");
+				}				
+				
+				$substituicao = "$complemento $conteudo";
+				if($substituirPorVazio){
+					$substituicao = "";
+					//echo "vazio";
+				}
+				
+				$retorno = str_replace( $subst, $substituicao, $retorno);
+			}
+		}
+		
+		return $retorno;
 	}
 	
 	/**

@@ -60,10 +60,29 @@ class select extends multiplosConstrutores {
 			null,
 			$class,				
 			$isTrazerValuenoOption,
-			$TagEJavaScript,				
+			$TagEJavaScript,
+			$isDetalhamento,
 		);
 		
-		return $this->getHtmlComboArray($array);
+		$retorno = $this->getHtmlComboArray($array);
+		/*if($isDetalhamento){
+			//var_dump($this->colecao);
+			//echoo ("teste".$opcaoSelecionada);
+			if(!is_array($opcaoSelecionada)){
+				$descricao = $this->colecao[$opcaoSelecionada];
+			}else{
+				foreach ($opcaoSelecionada as $opcao){
+					$descricao .= $this->colecao[$opcao] . ",";
+				}
+				
+			}
+			if($descricao != null && $descricao != ""){
+				$retorno = getDetalhamentoHTML($idSelect, $nmSelect, $descricao);
+			}
+			
+		}*/
+	
+		return $retorno;
 	}
 	
 	function getHtmlComboArray($array){

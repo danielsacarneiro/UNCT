@@ -62,7 +62,8 @@ function isFormularioValido() {
 function cancelar() {
 	//history.back();
 	lupa = document.frm_principal.lupa.value;	
-	location.href="index.php?consultar=<?=$inConsultaHTML?>&lupa="+ lupa;
+	//location.href="index.php?consultar=<?=$inConsultaHTML?>&lupa="+ lupa;
+	location.href = document.referrer;
 }
 
 function confirmar() {

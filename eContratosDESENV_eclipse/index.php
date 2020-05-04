@@ -41,6 +41,7 @@ setCabecalho($titulo);
 
 	f3 = new Tree('Serviço 03 (Demanda)');
 	f3.adicionarItem(new Link("Demandas", "<?=caminho_funcoesHTML?>demanda", ""));
+	f3.adicionarItem(new Link("Rendimento Demanda", "<?=caminho_funcoesHTML?>demanda_gestao/indexRendimento.php", ""));
 	f3.adicionarItem(new Link("Gestão Demanda", "<?=caminho_funcoesHTML?>demanda_gestao", ""));
 	<?php
 	if(isUsuarioRodaImportacao()){

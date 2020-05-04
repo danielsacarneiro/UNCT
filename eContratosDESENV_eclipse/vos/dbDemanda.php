@@ -158,6 +158,82 @@ class dbDemanda extends dbprocesso {
 	}
 	
 /**
+ * consulta da tela de demanda rendimento
+ * {@inheritDoc}
+ * @see dbprocesso::consultarTelaConsulta()
+ */
+	function consultarTelaConsultaRendimentoDemanda($filtro) {
+		$voPrincipal = new voDemandaTramitacao();		
+		$nmTabela = $voPrincipal->getNmTabela();
+		if($filtro->groupby == null){
+			$filtro->groupby = voDemandaTramitacao::$nmAtrCdSetor;
+		}
+		
+		$mes = "MONTH(".voDemandaTramitacao::$nmAtrDtReferencia.")";
+		$mesColuna = $mes . " AS " . voDemanda::$nmAtrDtReferencia;
+		$arrayColunasRetornadasEntrada = array (
+				voDemandaTramitacao::$nmAtrCdSetorDestino . " AS " . vodemanda::$nmAtrCdSetor,
+				$mesColuna,
+				"1 AS " . filtroConsultarDemandaRendimento::$NmColNuEntradas,
+				"0 AS " . filtroConsultarDemandaRendimento::$NmColNuSaidas,
+	    );
+		
+		$arrayColunasRetornadasSaida = array (
+				voDemandaTramitacao::$nmAtrCdSetorOrigem . " AS " . vodemanda::$nmAtrCdSetor,
+				$mesColuna,
+				"0 AS " . filtroConsultarDemandaRendimento::$NmColNuEntradas,
+				"1 AS " . filtroConsultarDemandaRendimento::$NmColNuSaidas,
+		);
+		
+		$queryEntrada = "SELECT ";
+		$queryEntrada .= getSQLStringFormatadaColecaoIN($arrayColunasRetornadasEntrada);
+		$queryEntrada .= " FROM $nmTabela ";
+		$queryEntrada .= filtroManter::$CD_CAMPO_SUBSTITUICAO;
+		
+		$querySaida = "SELECT ";
+		$querySaida .= getSQLStringFormatadaColecaoIN($arrayColunasRetornadasSaida);
+		$querySaida .= " FROM $nmTabela ";
+		$querySaida .= filtroManter::$CD_CAMPO_SUBSTITUICAO;
+		
+		$numSaidas = "SUM(".filtroConsultarDemandaRendimento::$NmTabelaRendimento . ".". filtroConsultarDemandaRendimento::$NmColNuSaidas .") AS ";
+		$numSaidas .= filtroConsultarDemandaRendimento::$NmColNuSaidas;
+		$numEntradas = "SUM(".filtroConsultarDemandaRendimento::$NmTabelaRendimento . ".".filtroConsultarDemandaRendimento::$NmColNuEntradas.") AS ";
+		$numEntradas .= filtroConsultarDemandaRendimento::$NmColNuEntradas;
+		$arrayColunasRetornadas = array (
+				vodemanda::$nmAtrCdSetor,
+				vodemanda::$nmAtrDtReferencia,
+				$numEntradas,
+				$numSaidas,
+		);
+		
+		$query = " SELECT ";
+		$query .= getSQLStringFormatadaColecaoIN($arrayColunasRetornadas);
+		$query .= " FROM ($queryEntrada UNION ALL $querySaida) " . filtroConsultarDemandaRendimento::$NmTabelaRendimento;
+		$query .= filtroConsultarDemandaRendimento::$CD_CAMPO_SUBSTITUICAO_PRINCIPAL;
+		$query .= " GROUP BY " . $filtro->groupby;
+		
+		$filtroPrincipal = "";
+		if($filtro->vodemanda->cdSetor != null){
+			$filtroPrincipal = voDemanda::$nmAtrCdSetor . "=" . $filtro->vodemanda->cdSetor;
+		}
+		$arraySubstituicao = array(
+				filtroManter::$CD_CAMPO_SUBSTITUICAO => $filtro->getSQLFiltroPreenchido(),
+				filtroConsultarDemandaRendimento::$CD_CAMPO_SUBSTITUICAO_PRINCIPAL => $filtroPrincipal,
+				
+		);
+				
+		$filtro->sqlFiltrosASubstituir = $arraySubstituicao;
+				
+		if($filtro->cdAtrOrdenacao != null){
+			$query .= " ORDER BY " . $filtro->cdAtrOrdenacao . " " . $filtro->cdOrdenacao;
+		}		
+		
+		$retorno = parent::consultarFiltroPorSubstituicao($filtro, $query);
+		
+		return $retorno;
+	}
+	
+	/**
  * consulta da tela de demanda gestao
  * {@inheritDoc}
  * @see dbprocesso::consultarTelaConsulta()

@@ -9,22 +9,21 @@ try{
 inicio();
 
 $vo = new voDemanda();
-$filtroSetor  = new filtroConsultarDemandaGestao(false, true,true);
+$filtroSetor  = new filtroConsultarDemandaGestao(false, false,true);
 $filtroSetor->voPrincipal = $vo;
 //$filtroSetor = filtroManter::verificaFiltroSessao($filtroSetor);
-
 $filtroSetor = $filtroSetor->getNovoFiltroComAtributosAnterior();
-echoo ("filtro atual " . $filtroSetor->nmFiltro . "tipo:");
-echoo ("filtro anterior " . $filtroSetor->getNmFiltroAnteriorSessao());
-var_dump($filtroSetor->vodemanda->tipo);
 
+/*echoo ("filtro atual " . $filtroSetor->nmFiltro . "tipo:");
+echoo ("filtro anterior " . $filtroSetor->getNmFiltroAnteriorSessao());
+var_dump($filtroSetor->vodemanda->tipo);*/
 $filtroSetor->setFiltroFormularioEncadeadoTipoDemanda();
 
 $readonly = "";
 $nmFuncao = "";
 $readonly = "readonly";
 $dbprocesso = new dbDemanda();
-echoo($filtroSetor->nmFiltro);
+//echoo($filtroSetor->nmFiltro);
 $colecao = $dbprocesso->consultarTelaGestaoDemandaDetalhePorTipo($filtroSetor);
 
 $nmFuncao = "DETALHAR ";
@@ -55,6 +54,9 @@ $inConsultaHTML = getInConsultarHTMLString();
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_oficio.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_ajax.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_pessoa.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_checkbox.js"></SCRIPT>
+
 
 <SCRIPT language="JavaScript" type="text/javascript">
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
@@ -64,12 +66,26 @@ function isFormularioValido() {
 	return true;
 }
 
-function cancelar() {
-	//history.back();
-	lupa = document.frm_principal.lupa.value;	
-	var nmFiltroAnterior= "<?=$filtroSetor->getNmFiltroAnteriorSessao()?>";
-	location.href="index.php?consultar=<?=$inConsultaHTML?>&chave=" + <?=@$_GET["chave"]?> + "&nmFiltroAnterior="+ nmFiltroAnterior + "&lupa="+ lupa;
+function detalhar() {
+
+	funcao = "<?=constantes::$CD_FUNCAO_DETALHAR?>";
+    if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta"))
+            return;
+
+    var chave = document.frm_principal.rdb_consulta.value;	
+	var lupa = "N";
+	try{
+		lupa = document.frm_principal.lupa.value;
+	}catch(ex){
+	}
+
+	var nmFiltroAnterior = "<?=$filtroSetor->getNmFiltroAnteriorSessao()?>";
+	var linkNovo ="listarDemandas.php?funcao=" + funcao + "&chave=" + chave + "&nmFiltroAnterior="+ nmFiltroAnterior + "&lupa="+ lupa;
+	linkNovo = linkNovo + "&consultar=S";
+    abrirJanelaAuxiliar(linkNovo, true, false, false);
+	
 }
+
 
 function confirmar() {
 	return confirm("Confirmar Alteracoes?");    
@@ -137,7 +153,7 @@ function confirmar() {
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados">
-                    <?=getHTMLRadioButtonConsulta("rdb_consulta", "rdb_consulta", $tipo);?>					
+                    <?=getHTMLRadioButtonConsulta("rdb_consulta", "rdb_consulta", $setor);?>					
                     </TD>
                                        
                     <TD class="tabeladados"><?php echo $setorDesc?></TD>
@@ -163,7 +179,19 @@ function confirmar() {
 						<TD>
                     		<TABLE class="barraacoesaux" cellpadding="0" cellspacing="0">
 	                    	<TR>
-	                    	<?=getBotoesRodape();?>
+	                    	<TD class='botaofuncao'>
+                            <?php 
+                            //echo getBotaoDetalhar();
+                            ?>                                                        
+                            </TD>
+	                    	<TD class='botaofuncao'>
+                            <?php 
+                            echo getBotaoFechar();
+                            ?>                                                        
+                            </TD>
+	                    	<?php
+                            //getBotoesRodape();
+                			?>
 						    </TR>
 		                    </TABLE>
 	                    </TD>

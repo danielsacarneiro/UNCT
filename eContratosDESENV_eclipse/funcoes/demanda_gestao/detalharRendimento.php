@@ -7,26 +7,18 @@ include_once(caminho_util."selectExercicio.php");
 try{
 //inicia os parametros
 inicio();
-
-$titulo = "CONSULTAR " . voDemanda::getTituloDemandaGestaoJSP();
+$chave = @$_GET["chave"];
+$titulo = "DETALHAR " . voDemanda::getTituloDemandaRendimentoJSP();
 setCabecalho($titulo);
 
 $vo = new voDemanda();
-$filtro  = new filtroConsultarDemandaGestao(false, true,true);
-$filtro->zerarFiltroControleSessao();
+$filtro  = new filtroConsultarDemandaRendimento(false, true);
 $filtro->voPrincipal = $vo;
-//$filtro = filtroManter::verificaFiltroSessao($filtro);
-
-//$filtro->setNmFiltroAnteriorSessao();
-$nmFiltroSessao = $filtro->getNmFiltroAnteriorSessao();
-
-/*if($nmFiltroSessao != null){
-	$filtro = getObjetoSessao($nmFiltroSessao, true);	
-	echoo ("BUSCOU NA SESSAO " . $nmFiltroSessao);
-	echoo ("PEGOU DA SESSAO FILTRO ATUAL" . $filtro->nmFiltro);
-}
-
-listarObjetoSessaoPorString("filtro");*/
+$filtro = filtroManter::verificaFiltroSessao($filtro);
+$filtro->vodemanda->cdSetor = $chave;
+$filtro->groupby = voDemanda::$nmAtrDtReferencia;
+//$filtro = new filtroManter();
+$filtro->isValidarConsulta = false;
 	
 $nome = $filtro->nome;
 $doc = $filtro->doc;
@@ -35,10 +27,7 @@ $cdOrdenacao = $filtro->cdOrdenacao;
 $isHistorico = "S" == $cdHistorico; 
 
 $dbprocesso = $vo->dbprocesso;
-/*echoo("nome filtro da consulta:".$filtro->nmFiltroOriginal);
-echoo("TIPO:");
-var_dump($filtro->vodemanda->tipo);*/
-$colecao = $dbprocesso->consultarTelaConsultaGestaoDemanda($filtro);
+$colecao = $dbprocesso->consultarTelaConsultaRendimentoDemanda($filtro);
 
 $paginacao = $filtro->paginacao;
 if($filtro->temValorDefaultSetado){
@@ -78,33 +67,22 @@ function isFormularioValido() {
 //getFuncaoJSDetalhar()
 ?>
 
-function detalhar() {
-
+function detalharDemandaRendimento(){
 	funcao = "<?=constantes::$CD_FUNCAO_DETALHAR?>";
-    if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta"))
+    if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta")){
             return;
-
-    var chave = document.frm_principal.rdb_consulta.value;	
-	var lupa = "N";
-	try{
-		lupa = document.frm_principal.lupa.value;
-	}catch(ex){
-	}
-
-	var nmFiltroAnterior = "<?=$filtro->nmFiltro?>";
-	var linkNovo ="detalhar.php?funcao=" + funcao + "&chave=" + chave + "&nmFiltroAnterior="+ nmFiltroAnterior + "&lupa="+ lupa;
-	linkNovo = linkNovo + "&consultar=S";
-    abrirJanelaAuxiliar(linkNovo, true, false, false);
-	
+    }
+	chave = document.frm_principal.rdb_consulta.value;
+    url = "../demanda_gestao/detalharDemandaRendimento.php?funcao=" + funcao + "&chave=" + chave + "&lupa=S";	
+    abrirJanelaAuxiliar(url, true, false, false);
 }
 
-
 </SCRIPT>
-<?=setTituloPagina($vo->getTituloDemandaGestaoJSP())?>
+<?=setTituloPagina($vo->getTituloDemandaRendimentoJSP())?>
 </HEAD>
 <BODY class="paginadados" onload="">
 	  
-<FORM name="frm_principal" method="post" action="index.php?consultar=S">
+<FORM name="frm_principal" method="post" action="indexRendimento.php?consultar=S">
 
 <INPUT type="hidden" name="utilizarSessao" value="N">
 <INPUT type="hidden" id="numTotalRegistros" value="<?=$numTotalRegistros?>">
@@ -122,10 +100,19 @@ function detalhar() {
     <DIV id="div_filtro" class="div_filtro">
     <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
         <TBODY>
-	   <?php	        	
-	   include_once("telaFiltro.php");
-       echo getComponenteConsultaFiltro(false, $filtro);
-        ?>
+	        <?php	        	
+	        	include_once(caminho_util. "dominioSimNao.php");
+	        	$comboSimNao = new select(dominioSimNao::getColecao());	         
+	            $selectExercicio = new selectExercicio(constantes::$ANO_INICIO);
+			  ?>
+			<TR>
+                <TH class="campoformulario" nowrap width="1%">Ano:</TH>
+                <TD class="campoformulario" nowrap colspan=3><?php echo $selectExercicio->getHtmlCombo(voDemanda::$nmAtrAno,voDemanda::$nmAtrAno, $filtro->vodemanda->ano, true, "camponaoobrigatorio", false, " disabled ");?></TD>
+            </TR>
+			<TR>
+                <TH class="campoformulario" nowrap width="1%">Setor:</TH>
+                <TD class="campoformulario" nowrap colspan=3><?php echo getTextoHTMLNegrito(dominioSetor::getDescricao($chave));?></TD>
+            </TR>
        </TBODY>
   </TABLE>
 		</DIV>
@@ -138,10 +125,9 @@ function detalhar() {
          <TABLE id="table_tabeladados" class="tabeladados" cellpadding="0" cellspacing="0">						
              <TBODY>
                 <TR>
-                  <TH class="headertabeladados" width="1%">&nbsp;&nbsp;X</TH>
-                    <TH class="headertabeladados" width="90%">Tipo</TH>
-                    <TH class="headertabeladados"width="1%" nowrap >Tempo.Médio(dias)</TH>
-                    <TH class="headertabeladados"width="1%" nowrap >Num.Demandas</TH>                    
+                    <TH class="headertabeladados" width="90%">Mês</TH>
+                    <TH class="headertabeladados"width="1%" nowrap >Entradas</TH>
+                    <TH class="headertabeladados"width="1%" nowrap >Saídas</TH>                    
                 </TR>
                 <?php								
                 if (is_array($colecao))
@@ -149,34 +135,54 @@ function detalhar() {
                 else 
                         $tamanho = 0;
                                 
-                $colspan=4;                
+                $colspan=3;
+                //laco para calcular o total
                 
-                $numTotalDeDemandas = 0;
+                $numTotalEntradas = 0;
+                $numTotalSaidas = 0;
                 for ($i=0;$i<$tamanho;$i++) {
                 	$registro = $colecao[$i];
-                	$tipo = $colecao[$i][voDemanda::$nmAtrTipo];
-                	$tipoDesc = dominioTipoDemanda::getDescricao($tipo);
+                	$numSaidas = $colecao[$i][filtroConsultarDemandaRendimento::$NmColNuSaidas];
+                	$numEntradas = $colecao[$i][filtroConsultarDemandaRendimento::$NmColNuEntradas];
                 	
-                	$numTotal = $colecao[$i][filtroConsultarDemandaGestao::$NmColNumTotalDemandas];
-                    $tempoMedioVida = $registro[filtroConsultarDemandaGestao::$NmColNumTempoVidaMedio];
+                	$numTotalEntradas = $numTotalEntradas + $numEntradas;
+                	$numTotalSaidas = $numTotalSaidas + $numSaidas;                	 
+                }
+                
+                for ($i=0;$i<$tamanho;$i++) {
+                	$registro = $colecao[$i];
+                	$mes = $colecao[$i][voDemanda::$nmAtrDtReferencia];
+                	$mes = dominioMeses::getDescricao($mes);
+                	
+                	$numSaidas = $colecao[$i][filtroConsultarDemandaRendimento::$NmColNuSaidas];
+                	$numEntradas = $colecao[$i][filtroConsultarDemandaRendimento::$NmColNuEntradas];                  
                     
-                    $numTotalDeDemandas = $numTotalDeDemandas + $numTotal;
                 ?>
                 <TR class="dados">
-                    <TD class="tabeladados">
-                    <?=getHTMLRadioButtonConsulta("rdb_consulta", "rdb_consulta", $tipo);?>					
+                    <TD class="tabeladados"><?php echo $mes?></TD>
+                    <TD class="tabeladadosalinhadodireita" nowrap>
+                    <?php 
+                    $str = complementarCharAEsquerda(getMoeda($numEntradas,0), "0", constantes::$TAMANHO_CODIGOS_SAFI) 
+                    		. " (" . complementarCharAEsquerda(getMoeda(100*$numEntradas/$numTotalEntradas,2), "0", constantes::$TAMANHO_CODIGOS_SAFI) . "%)";
+                    echo $str;
+                    ?>
                     </TD>
-                                       
-                    <TD class="tabeladados"><?php echo $tipoDesc?></TD>
-                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo complementarCharAEsquerda(getMoeda($tempoMedioVida,2), "0", constantes::$TAMANHO_CODIGOS_SAFI);?></TD>
-                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo complementarCharAEsquerda(getMoeda($numTotal,0), "0", constantes::$TAMANHO_CODIGOS_SAFI);?></TD>                    
+                    <TD class="tabeladadosalinhadodireita" nowrap>
+                    <?php 
+                    $str = complementarCharAEsquerda(getMoeda($numSaidas,0), "0", constantes::$TAMANHO_CODIGOS_SAFI)
+                    . " (" . complementarCharAEsquerda(getMoeda(100*$numSaidas/$numTotalSaidas,2), "0", constantes::$TAMANHO_CODIGOS_SAFI) . "%)";
+                    echo $str;
+                    ?>
+                    </TD>                    
                 </TR>					
                 <?php
 				}				
                 ?>
                 <TR>
-                    <TD class="totalizadortabeladadosalinhadodireita" colspan=<?=$colspan?>>Total: <?=complementarCharAEsquerda(getMoeda($numTotalDeDemandas,0), "0", constantes::$TAMANHO_CODIGOS_SAFI)?></TD>
-                </TR>				
+                    <TD class="totalizadortabeladadosalinhadodireita" colspan=<?=$colspan-2?>>Total:</TD>
+                    <TD class="totalizadortabeladadosalinhadodireita"><?=complementarCharAEsquerda(getMoeda($numTotalEntradas,0), "0", constantes::$TAMANHO_CODIGOS_SAFI)?></TD>
+					<TD class="totalizadortabeladadosalinhadodireita"><?=complementarCharAEsquerda(getMoeda($numTotalSaidas,0), "0", constantes::$TAMANHO_CODIGOS_SAFI)?></TD>
+                </TR>				                
             </TBODY>
         </TABLE>
         </DIV>
@@ -192,7 +198,7 @@ function detalhar() {
 	                   	<TR> 
                             <TD class='botaofuncao'>
                             <?php 
-                            echo getBotaoValidacaoAcesso("bttDetalharTipo", "Detalhar", "botaofuncaop", false, false,true,false,"onClick='javascript:detalhar();' accesskey='d'");
+                            echo getBotaoFechar();
                             ?>                                                        
                             </TD>                            
                          </TR>

@@ -3,136 +3,21 @@ include_once(caminho_util."bibliotecaSQL.php");
 include_once(caminho_lib ."filtroManter.php");
 require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioAutorizacao.php");
 
-class filtroConsultarDemandaGestao extends filtroManterDemanda{
+class filtroConsultarDemandaRendimento extends filtroConsultarDemandaGestao {
 	
-	public $nmFiltro = "filtroConsultarDemandaGestao";
-	static $NmTabelaDemandaTramSaida = "NmTabelaDemandaTramSaida";
+	public $nmFiltro = "filtroConsultarDemandaRendimento";
+	static $NmTabelaRendimento= "NmTabelaRendimento";
+	static $CD_CAMPO_SUBSTITUICAO_PRINCIPAL = "CD_CAMPO_SUBSTITUICAO_PRINCIPAL";
 	
 	//colunas
-	static $NmColDtReferenciaSaida = "NmColDtReferenciaSaida";
-	static $NmColNumTotalDemandas = "NmColNumTotalDemandas";
-	static $NmColNumTempoVidaMedio = "NmColNumTempoVidaMedio";
-	
-	private $nmFiltroAnterior = "";
-	/*function getFiltroFormulario(){
-		parent::getFiltroFormulario();		
-	}*/
-	
-	/**
-	 * serve para identificar o filtro na consulta anterior encadeada para manter os mesmos atributos consultados
-	 */
-	function setNmFiltroAnteriorSessao(){
-		$nmFiltroAnterior = @$_GET["nmFiltroAnterior"];
-		$this->nmFiltroAnterior = $nmFiltroAnterior;
-	}
-	function getNmFiltroAnteriorSessao(){
-		if($this->nmFiltroAnterior == null){
-			$this->setNmFiltroAnteriorSessao();
-		}
-		return $this->nmFiltroAnterior;
-	}
-	function getFILTROAnteriorSessao(){
-		$nmFiltroAnterior = @$_GET["nmFiltroAnterior"];
-		$this->nmFiltroAnterior = $nmFiltroAnterior;
-		/*echoo($this->nmFiltro);
-		echo $nmFiltroAnterior;*/
-		$filtroAnterior = getObjetoSessao($nmFiltroAnterior);
-		return $filtroAnterior;
-	}
-	function getNovoFiltroComAtributosAnterior(){
-		$filtroAnterior = clone $this->getFILTROAnteriorSessao();
-		$filtroAnterior->nmFiltro = $this->nmFiltro;
-		$filtroAnterior->nmFiltroAnterior = $this->nmFiltroAnterior;
-		$filtroAnterior->isIncluirFiltroNaSessao = $this->isIncluirFiltroNaSessao;		
-
-		//retira o validar consulta ja que sera realizada automaticamente sem clicar no botao 'consultar'
-		$filtroAnterior->isValidarConsulta = false;
-		return $filtroAnterior;
-	}
-	
-	function setFiltroFormularioEncadeadoTipoDemanda(){
-		$chave = @$_GET["chave"];	
-		//echo "testando $chave"; 
-		$this->vodemanda->tipo = $chave;		
-	}
-	
-	function setFiltroFormularioEncadeadoSetorDemanda(){
-		$chave = @$_GET["chave"];
-		$this->vodemanda->cdSetorDestino = $chave;
-	}	
-	
-	/**
-	 * retorna o sql da coluna data ultima movimentacao da demanda
-	 * @param unknown $nmTabelaTramitacao
-	 * @param unknown $nmTabelaDemanda
-	 * @return string
-	 */
-	
-	static function getSQLDataUltimaMovimentacao($nmTabelaTramitacao, $nmTabelaDemanda){		
-		return "COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrDtReferencia . "," . $nmTabelaDemanda . "." . voDemanda::$nmAtrDhUltAlteracao . ")";		
-	}
-	
-	/**
-	 * retorna o sql da coluna data de inicio da demanda
-	 * @param unknown $nmTabelaDemanda
-	 * @return string
-	 */
-	static function getSQLDataBaseTempoVida($nmTabelaDemanda){
-		return "$nmTabelaDemanda." . voDemanda::$nmAtrDtReferencia;
-	}
-	
-	/**
-	 * retorna sql que traz o tempo de vida da demanda
-	 * usada para possibilitar a consulta no filtro
-	 * @param unknown $nmTabelaTramitacao
-	 * @param unknown $nmTabelaDemanda
-	 * @return string
-	 */
-	static function getSQLNuTempoVida($nmTabelaDemanda){
-		//return getDataSQLDiferencaDias(static::getSQLDataBaseTempoVida($nmTabelaDemanda), "DATE(".static::getSQLDataUltimaMovimentacao($nmTabelaTramitacao, $nmTabelaDemanda).")");
-		return getDataSQLDiferencaDias(static::getSQLDataBaseTempoVida($nmTabelaDemanda), "DATE(now())");
-	}
-	 	
-	static function getSQLNuTempoUltimaTram($nmTabelaTramitacao, $nmTabelaDemanda){
-		return getDataSQLDiferencaDias(static::getSQLDataUltimaMovimentacao($nmTabelaTramitacao, $nmTabelaDemanda), "DATE(now())");
-	}
-	
-	/**
-	 * retorna o subselect que deve ir como coluna nas consultas que querem retornar a data de saida de uma demanda tramitada
-	 * @param unknown $nmTabela
-	 * @param unknown $nmTabelaDemandaSaida
-	 * @return string
-	 */
-	static function getSQLDtDemandaTramitacaoSaida($nmTabela){
-		$nmTabelaDemandaSaida = static::$NmTabelaDemandaTramSaida;
-		//a data de saida sera igual a data de referencia da tramitacao seguinte à atual
-		//para tanto usa-se o subselect abaixo com a opcao do LIMIT 1 (pega o proximo registro maior que o atual)
-		$subSelectTramSaida = "(SELECT ".voDemandaTramitacao::$nmAtrDtReferencia." FROM $nmTabela $nmTabelaDemandaSaida ";
-		$subSelectTramSaida .= " WHERE ";
-		$subSelectTramSaida .= " $nmTabela." . voDemandaTramitacao::$nmAtrAno . " = $nmTabelaDemandaSaida." . voDemandaTramitacao::$nmAtrAno;
-		$subSelectTramSaida .= " AND $nmTabela." . voDemandaTramitacao::$nmAtrCd . " = $nmTabelaDemandaSaida." . voDemandaTramitacao::$nmAtrCd;
-		$subSelectTramSaida .= " AND $nmTabela." . voDemandaTramitacao::$nmAtrSq . " < $nmTabelaDemandaSaida." . voDemandaTramitacao::$nmAtrSq ;
-		$subSelectTramSaida .= " order by ".voDemandaTramitacao::$nmAtrSq." LIMIT 1 " ;
-		$subSelectTramSaida .= ")" ;
-		
-		$dtDemandaTramSaida = " COALESCE($subSelectTramSaida,DATE(NOW())) ";
-		
-		return $dtDemandaTramSaida;
-	}	
+	static $NmColNuEntradas = "NmColNuEntradas";
+	static $NmColNuSaidas = "NmColNuSaidas";
 	
 	function getFiltroConsultaSQL($comAtributoOrdenacao = null){
 		$filtro = "";
 		$conector  = "";
 
-		$nmTabela = voDemanda::getNmTabelaStatic($this->isHistorico());
-		$nmTabelaTramitacao = voDemandaTramitacao::getNmTabelaStatic(false);
-		$nmTabelaTramitacaoDoc = voDemandaTramDoc::getNmTabelaStatic(false);
-		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic(false);
-		$nmTabelaDemandaPL = voDemandaPL::getNmTabelaStatic(false);
-		$nmTabelaPA = voPA::getNmTabelaStatic(false);
-		$nmTabelaContrato = vocontrato::getNmTabelaStatic(false);
-		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic(false);
-		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic(false);
+		$nmTabela = voDemandaTramitacao::getNmTabelaStatic(false);
 					
 		//seta os filtros obrigatorios
 		if($this->isSetaValorDefault()){
@@ -140,66 +25,11 @@ class filtroConsultarDemandaGestao extends filtroManterDemanda{
 			//echo "setou o ano defaul";
 			;
 		}
-		 
-		if($this->cdUsuarioTramitacao != null){
-			$filtro = $filtro . $conector
-			. " EXISTS (SELECT 'X' FROM " . $nmTabelaTramitacao
-			. " WHERE "
-					. $nmTabela . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrAno
-					. " AND " . $nmTabela . "." . voDemanda::$nmAtrCd . "=" . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrCd
-					. " AND " . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrCdUsuarioInclusao . "="
-					. getVarComoNumero($this->cdUsuarioTramitacao)
-					. ")\n";
-			
-			$conector  = "\n AND ";
-		}
-		
-		$consultaDocumento = $this->temDocumentoAnexo == constantes::$CD_SIM || $this->tpDocumento != null || $this->cdSetorDocumento != null || $this->sqDocumento != null || $this->anoDocumento != null;
-		if($consultaDocumento){
-			$filtro = $filtro . $conector
-			. " EXISTS (SELECT 'X' FROM " . $nmTabelaTramitacaoDoc
-			. " WHERE "
-					. $nmTabela . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaTramitacaoDoc. "." . voDemandaTramDoc::$nmAtrAnoDemanda
-					. " AND " . $nmTabela . "." . voDemanda::$nmAtrCd . "=" . $nmTabelaTramitacaoDoc. "." . voDemandaTramDoc::$nmAtrCdDemanda;
-					
-			if($this->tpDocumento != null){
-				$filtro .= " AND " . $nmTabelaTramitacaoDoc. "." . voDemandaTramDoc::$nmAtrTpDoc. "="
-							. getVarComoString($this->tpDocumento);
-			}
-
-			if($this->cdSetorDocumento != null){
-				$filtro .= " AND " . $nmTabelaTramitacaoDoc. "." . voDemandaTramDoc::$nmAtrCdSetorDoc . "="
-						. getVarComoNumero($this->cdSetorDocumento);
-			}
-				
-			if($this->sqDocumento != null){
-				$filtro .= " AND " . $nmTabelaTramitacaoDoc. "." . voDemandaTramDoc::$nmAtrSqDoc . "="
-						. getVarComoNumero($this->sqDocumento);						
-			}
-			
-			if($this->anoDocumento != null){
-				$filtro .= " AND " . $nmTabelaTramitacaoDoc. "." . voDemandaTramDoc::$nmAtrAnoDoc . "="
-						. getVarComoNumero($this->anoDocumento);
-			}
-				
-			$filtro .= ")\n";
-				
-			$conector  = "\n AND ";
-		}
-		
-		if($this->isHistorico() && $this->vodemanda->sqHist != null){			
-			$filtro = $filtro . $conector
-				. $nmTabela. "." .voDemanda::$nmAtrSqHist
-				. " = "
-				. $this->vodemanda->sqHist
-				;						
-			$conector  = "\n AND ";
-		}
 
 		if($this->vodemanda->ano != null){
 				
 			$filtro = $filtro . $conector
-			. $nmTabela. "." .voDemanda::$nmAtrAno
+			. $nmTabela. "." .voDemandaTramitacao::$nmAtrAno
 			. " = "
 					. $this->vodemanda->ano
 					;
@@ -210,7 +40,7 @@ class filtroConsultarDemandaGestao extends filtroManterDemanda{
 		
 		if($this->vodemanda->cd != null){
 			$filtro = $filtro . $conector
-			. $nmTabela. "." .voDemanda::$nmAtrCd
+			. $nmTabela. "." .voDemandaTramitacao::$nmAtrCd
 			. " = "
 					. $this->vodemanda->cd
 					;
@@ -269,28 +99,15 @@ class filtroConsultarDemandaGestao extends filtroManterDemanda{
 			$conector  = "\n AND ";
 		}
 		
-		if($this->vodemanda->cdSetor != null){
+		/*if($this->vodemanda->cdSetor != null){
 			$filtro = $filtro . $conector
-			. $nmTabela. "." .voDemanda::$nmAtrCdSetor
+			. voDemanda::$nmAtrCdSetor
 			. " = "
 					. $this->vodemanda->cdSetor
 					;
 		
 					$conector  = "\n AND ";
-		}
-		
-		if($this->vodemanda->texto != null){
-			//echo "tem texto";
-			$filtro = $filtro . $conector
-			. $nmTabela. "." .voDemanda::$nmAtrTexto
-			/*. " LIKE '"
-			. substituirCaracterSQLLike($this->vodemanda->texto)*/
-			. " LIKE '%"
-			. $this->vodemanda->texto
-			. "%'";
-		
-			$conector  = "\n AND ";
-		}
+		}*/
 		
 		if($this->vodemanda->cdSetorDestino != null){
 			$filtro = $filtro . $conector
@@ -806,14 +623,14 @@ class filtroConsultarDemandaGestao extends filtroManterDemanda{
 	}
 	
 	function getAtributoOrdenacaoDefault(){
-		$retorno = filtroConsultarDemandaGestao::$NmColNumTotalDemandas . " " . constantes::$CD_ORDEM_DECRESCENTE;
+		//$retorno = filtroConsultarDemandaGestao::$NmColNumTotalDemandas . " " . constantes::$CD_ORDEM_DECRESCENTE;
 		return $retorno;
 	}
 	
 	function getAtributosOrdenacao(){
 		$varAtributos = array(
-				filtroConsultarDemandaGestao::$NmColNumTotalDemandas => "Num.Demandas",
-				voDemanda::$nmAtrTipo => "Tipo",
+				filtroConsultarDemandaRendimento::$NmColNuSaidas => "Saídas",
+				filtroConsultarDemandaRendimento::$NmColNuEntradas => "Entradas",				
 		);
 		
 		return $varAtributos;

@@ -334,6 +334,76 @@ class dbprocesso {
 	function consultarFiltroManter($filtro, $validaConsulta) {
 		return $this->consultarFiltro ( $filtro, $filtro->getQuerySelect (), $filtro->getQueryFromJoin (), $validaConsulta );
 	}
+	function incluirFiltroNaSessao($filtro){
+		if($filtro->isIncluirFiltroNaSessao){
+			//echoo ("incluir $filtro->nmFiltro dbprocesso na sessao");
+			$filtro->setNomeFiltroControleSessao();
+			putObjetoSessao ( $filtro->nmFiltro, $filtro );
+			
+			//echoo("DBPROCESSO pos na sessao " .  $filtro->nmFiltro);
+		}
+		
+	}
+	
+	/**
+	 * permite usar o substituir uma chave para incluir o filtro em qualquer lugar da query
+	 * @param unknown $filtro
+	 * @param unknown $querySelect
+	 * @param unknown $queryFrom
+	 * @param unknown $validaConsulta
+	 * @return string
+	 */
+	function consultarFiltroPorSubstituicao(&$filtro, $query) {
+		$retorno = "";
+		$isHistorico = ("S" == $filtro->cdHistorico);
+		$isConsultar = $filtro->isConsultarHTML();
+		$validaConsulta = $filtro->isValidarConsulta;
+		
+		//aqui
+		$queryfinal = $filtro->getSQLQueryComFiltroSubstituicao($query, $filtro->sqlFiltrosASubstituir);
+	
+		if ($isConsultar || ! $validaConsulta) {
+			// verifica se tem paginacao
+			$limite = "";
+			if ($filtro->TemPaginacao) {
+				// ECHO "TEM PAGINACAO";
+				$pagina = $filtro->paginacao->getPaginaAtual ();
+	
+				// echo $filtroSQLPaginacao. "<br>";
+				$queryCount = "SELECT count(*) as " . dbprocesso::$nmCampoCount;
+				$queryCount .= "\n FROM ($queryfinal) ALIAS_COUNT";
+	
+				// guarda o numero total de registros para nao ter que executar a consulta TODOS novamente
+				$numTotalRegistros = $filtro->numTotalRegistros = $this->getNumTotalRegistrosQuery ( $queryCount );	
+				$qtdRegistrosPorPag = $filtro->qtdRegistrosPorPag;
+	
+				// echo $qtdRegistrosPorPag;
+				if ($qtdRegistrosPorPag != null && $qtdRegistrosPorPag != constantes::$CD_OPCAO_TODOS) {
+					// calcula o número de páginas arredondando o resultado para cima
+					$numPaginas = ceil ( $numTotalRegistros / $qtdRegistrosPorPag );
+					$filtro->paginacao->setNumTotalPaginas ( $numPaginas );
+	
+					$inicio = ($qtdRegistrosPorPag * $pagina) - $qtdRegistrosPorPag;
+					$limite = " LIMIT $inicio,$qtdRegistrosPorPag";
+				}
+			}
+	
+			// aqui eh onde faz realmente a consulta a retornar
+			$queryfinal = $queryfinal . " $limite";
+	
+			if(static::isPrintarSQL()){
+				echo "<br> ".$filtro->getNmFiltro()." $queryfinal<br>";
+			}
+	
+			//echo $query;
+			$retorno = $this->cDb->consultar ( $queryfinal );
+			$this->incluirFiltroNaSessao($filtro);	
+			$filtro->setConsultaRealizada();
+		}
+	
+		return $retorno;
+	}
+	
 	function consultarFiltro(&$filtro, $querySelect, $queryFrom, $validaConsulta) {
 		$retorno = "";
 		$isHistorico = ("S" == $filtro->cdHistorico);
@@ -401,12 +471,13 @@ class dbprocesso {
 				
 			//echo $query;
 			$retorno = $this->cDb->consultar ( $query );
+			$this->incluirFiltroNaSessao($filtro);
 				
-			if($filtro->isIncluirFiltroNaSessao){
+			/*if($filtro->isIncluirFiltroNaSessao){
 				//echoo ("incluir $filtro->nmFiltro dbprocesso na sessao");
 				$filtro->setNomeFiltroControleSessao();
 				putObjetoSessao ( $filtro->nmFiltro, $filtro );
-			}
+			}*/
 				
 			$filtro->setConsultaRealizada();
 		}
@@ -437,11 +508,13 @@ class dbprocesso {
 			}
 			
 			//echo $query;			
-			$retorno = $this->cDb->consultar ( $query );			
-			if($filtro->isIncluirFiltroNaSessao){
+			$retorno = $this->cDb->consultar ( $query );	
+			$this->incluirFiltroNaSessao($filtro);
+			/*if($filtro->isIncluirFiltroNaSessao){
 				 //echoo ("incluir $filtro->nmFiltro dbprocesso na sessao");
+				$filtro->setNomeFiltroControleSessao();
 				 putObjetoSessao ( $filtro->nmFiltro, $filtro );
-			 }					
+			 }*/
 			$filtro->setConsultaRealizada();			
 		}		
 		return $retorno;

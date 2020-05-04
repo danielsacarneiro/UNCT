@@ -31,7 +31,7 @@ $selectExercicio = new selectExercicio(constantes::$ANO_INICIO);
             </TR>           
             <TR>
                 <TH class="campoformulario" nowrap width="1%">Situação:</TH>
-                <TD class="campoformulario" width="1%"><?php echo $comboSituacao->getHtmlCombo(voDemanda::$nmAtrSituacao,voDemanda::$nmAtrSituacao."[]", $filtro->vodemanda->situacao, true, "camponaoobrigatorio", false, " multiple ");?></TD>
+                <TD class="campoformulario" width="1%"><?php echo $comboSituacao->getHtmlCombo(voDemanda::$nmAtrSituacao,voDemanda::$nmAtrSituacao."[]", $filtro->vodemanda->situacao, true, "camponaoobrigatorio", false, " multiple ", true);?></TD>
                 <TH class="campoformulario" nowrap width="1%" rowspan=3>Tipo:</TH>
                 <TD class="campoformulario" rowspan=3>
 	                <TABLE class="filtro" cellpadding="0" cellspacing="0">
