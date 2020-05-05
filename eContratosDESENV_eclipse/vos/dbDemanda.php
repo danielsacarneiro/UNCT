@@ -558,7 +558,7 @@ class dbDemanda extends dbprocesso {
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );	
 		$nmTabelaUsuario = vousuario::getNmTabela ();
 				
-		$dtDemandaTramSaida = filtroConsultarDemandaGestao::getSQLDtDemandaTramitacaoSaida($nmTabela);
+		$dtDemandaTramSaida = filtroConsultarDemandaGestao::getSQLDtDemandaTramitacaoSaida($nmTabela, $nmTabelaDemanda);
 		$dtDemandaTramEntrada = "$nmTabela." . voDemandaTramitacao::$nmAtrDtReferencia;
 	
 		$querySelect = "SELECT ";

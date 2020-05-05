@@ -81,6 +81,9 @@ class filtroConsultarDemandaGestao extends filtroManterDemanda{
 		return "$nmTabelaDemanda." . voDemanda::$nmAtrDtReferencia;
 	}
 	
+	static function getSQLDataUltimoSuspiro($nmTabelaDemanda){
+		return getSQLCASE("$nmTabelaDemanda.".voDemanda::$nmAtrSituacao, dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA, "DATE($nmTabelaDemanda.".voDemanda::$nmAtrDhUltAlteracao.")", "DATE(now())");
+	}
 	/**
 	 * retorna sql que traz o tempo de vida da demanda
 	 * usada para possibilitar a consulta no filtro
@@ -90,11 +93,15 @@ class filtroConsultarDemandaGestao extends filtroManterDemanda{
 	 */
 	static function getSQLNuTempoVida($nmTabelaDemanda){
 		//return getDataSQLDiferencaDias(static::getSQLDataBaseTempoVida($nmTabelaDemanda), "DATE(".static::getSQLDataUltimaMovimentacao($nmTabelaTramitacao, $nmTabelaDemanda).")");
-		return getDataSQLDiferencaDias(static::getSQLDataBaseTempoVida($nmTabelaDemanda), "DATE(now())");
+		//return getDataSQLDiferencaDias(static::getSQLDataBaseTempoVida($nmTabelaDemanda), "DATE(now())");
+		return getDataSQLDiferencaDias(static::getSQLDataBaseTempoVida($nmTabelaDemanda), static::getSQLDataUltimoSuspiro($nmTabelaDemanda));
+		
+		
 	}
 	 	
 	static function getSQLNuTempoUltimaTram($nmTabelaTramitacao, $nmTabelaDemanda){
-		return getDataSQLDiferencaDias(static::getSQLDataUltimaMovimentacao($nmTabelaTramitacao, $nmTabelaDemanda), "DATE(now())");
+		//return getDataSQLDiferencaDias(static::getSQLDataUltimaMovimentacao($nmTabelaTramitacao, $nmTabelaDemanda), "DATE(now())");
+		return getDataSQLDiferencaDias(static::getSQLDataUltimaMovimentacao($nmTabelaTramitacao, $nmTabelaDemanda), static::getSQLDataUltimoSuspiro($nmTabelaDemanda));		
 	}
 	
 	/**
@@ -103,19 +110,21 @@ class filtroConsultarDemandaGestao extends filtroManterDemanda{
 	 * @param unknown $nmTabelaDemandaSaida
 	 * @return string
 	 */
-	static function getSQLDtDemandaTramitacaoSaida($nmTabela){
+	static function getSQLDtDemandaTramitacaoSaida($nmTabelaTramitacao, $nmTabelaDemanda){
+		
 		$nmTabelaDemandaSaida = static::$NmTabelaDemandaTramSaida;
 		//a data de saida sera igual a data de referencia da tramitacao seguinte à atual
 		//para tanto usa-se o subselect abaixo com a opcao do LIMIT 1 (pega o proximo registro maior que o atual)
-		$subSelectTramSaida = "(SELECT ".voDemandaTramitacao::$nmAtrDtReferencia." FROM $nmTabela $nmTabelaDemandaSaida ";
+		$subSelectTramSaida = "(SELECT ".voDemandaTramitacao::$nmAtrDtReferencia." FROM $nmTabelaTramitacao $nmTabelaDemandaSaida ";
 		$subSelectTramSaida .= " WHERE ";
-		$subSelectTramSaida .= " $nmTabela." . voDemandaTramitacao::$nmAtrAno . " = $nmTabelaDemandaSaida." . voDemandaTramitacao::$nmAtrAno;
-		$subSelectTramSaida .= " AND $nmTabela." . voDemandaTramitacao::$nmAtrCd . " = $nmTabelaDemandaSaida." . voDemandaTramitacao::$nmAtrCd;
-		$subSelectTramSaida .= " AND $nmTabela." . voDemandaTramitacao::$nmAtrSq . " < $nmTabelaDemandaSaida." . voDemandaTramitacao::$nmAtrSq ;
+		$subSelectTramSaida .= " $nmTabelaTramitacao." . voDemandaTramitacao::$nmAtrAno . " = $nmTabelaDemandaSaida." . voDemandaTramitacao::$nmAtrAno;
+		$subSelectTramSaida .= " AND $nmTabelaTramitacao." . voDemandaTramitacao::$nmAtrCd . " = $nmTabelaDemandaSaida." . voDemandaTramitacao::$nmAtrCd;
+		$subSelectTramSaida .= " AND $nmTabelaTramitacao." . voDemandaTramitacao::$nmAtrSq . " < $nmTabelaDemandaSaida." . voDemandaTramitacao::$nmAtrSq ;
 		$subSelectTramSaida .= " order by ".voDemandaTramitacao::$nmAtrSq." LIMIT 1 " ;
 		$subSelectTramSaida .= ")" ;
 		
-		$dtDemandaTramSaida = " COALESCE($subSelectTramSaida,DATE(NOW())) ";
+		//$dtDemandaTramSaida = " COALESCE($subSelectTramSaida,DATE(NOW())) ";
+		$dtDemandaTramSaida = " COALESCE($subSelectTramSaida,". static::getSQLDataUltimoSuspiro($nmTabelaDemanda). ") ";
 		
 		return $dtDemandaTramSaida;
 	}	
