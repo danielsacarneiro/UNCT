@@ -47,6 +47,19 @@ Class dominioSituacaoDemanda extends dominio{
 		);
 	}
 	
+	static function getCorColuna($cdSituacao){
+		$classColunaSituacao = "tabeladadosdestacadoverde";
+		if($cdSituacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA){
+			$classColunaSituacao = "tabeladadosdestacadoazulclaro";
+		} else if($cdSituacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_ABERTA){
+			$classColunaSituacao = "tabeladadosdestacado";
+		} else if($cdSituacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_SUSPENSA){
+			$classColunaSituacao = "tabeladadosdestacadovermelho";
+		}
+		
+		return $classColunaSituacao;		
+	}
+	
 	
 }
 ?>

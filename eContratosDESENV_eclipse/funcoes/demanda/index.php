@@ -456,14 +456,8 @@ function detalharDemandaGestao(){
                                                 
                         //$especie = getDsEspecie($voAtual);
                         $cdSituacao = $voAtual->situacao;
-                        $situacao = $dominioSituacao->getDescricao($cdSituacao);
-                        
-                        $classColunaSituacao = "tabeladadosdestacadoverde";
-                        if($cdSituacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA){
-                        	$classColunaSituacao = "tabeladadosdestacadoazulclaro";
-                        } else if($cdSituacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_ABERTA){
-                        	$classColunaSituacao = "tabeladadosdestacado";
-                        }
+                        $situacao = $dominioSituacao->getDescricao($cdSituacao);                        
+                        $classColunaSituacao = dominioSituacaoDemanda::getCorColuna($cdSituacao);
                         
                         $setor = $dominioSetor->getDescricao($voAtual->cdSetor);
                         

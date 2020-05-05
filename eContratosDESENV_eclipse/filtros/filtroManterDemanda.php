@@ -411,13 +411,15 @@ class filtroManterDemanda extends filtroManter{
 				&& (!is_array($this->vodemanda->situacao) || (is_array($this->vodemanda->situacao) && !$this->isAtributoArrayVazio($this->vodemanda->situacao)))) {
 						
 			$comparar = " = '" . $this->vodemanda->situacao . "'";
-			if(is_array($this->vodemanda->situacao)){
-							
-				if(count($this->vodemanda->situacao) == 1 && $this->vodemanda->situacao[0] == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_A_FAZER){
-					$comparar = " IN (" . getSQLStringFormatadaColecaoIN(array_keys(dominioSituacaoDemanda::getColecaoAFazer()), true) . ")";
-				}else{
-					$comparar = " IN (" . getSQLStringFormatadaColecaoIN($this->vodemanda->situacao, true) . ")";
-				}
+			$colecaoAComparar = $this->vodemanda->situacao;
+			
+			if(is_array($colecaoAComparar)){
+				//acrescenta os itens que compoem o A FAZER
+				if(in_array(dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_A_FAZER, $colecaoAComparar)){					
+					$colecaoAComparar = array_merge($colecaoAComparar, array_keys(dominioSituacaoDemanda::getColecaoAFazer()));					
+					$colecaoAComparar = removeElementoArray($colecaoAComparar, dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_A_FAZER);					
+				}									
+				$comparar = " IN (" . getSQLStringFormatadaColecaoIN($colecaoAComparar, true) . ")";
 			}
 				
 			$filtro = $filtro . $conector . $nmTabela . "." . voDemanda::$nmAtrSituacao . $comparar;
