@@ -682,10 +682,12 @@ function getJanelaAuxiliar(pUrlJanela, pNmJanela, pInComToolBar) {
 		altura = screen.availHeight - 198; //98 fica igual a !pInComToolBar 
 		//altura = screen.availHeight - 300; 
 	}
-	largura = 850;
+	//largura = 850;
+	largura = 1000;
 	altura = 500;
 	
-	var janelaAuxiliar = window.open(pUrlJanela, pNmJanela, "width=" + largura + ", height=" + altura +", menubar=no, scrollbars=yes, toolbar=" + inComToolBar +", status=yes, resizable=yes, left=0, top=0, screenX=0, screenY=0");
+	//var janelaAuxiliar = window.open(pUrlJanela, pNmJanela, "width=" + largura + ", height=" + altura +", menubar=no, scrollbars=yes, toolbar=" + inComToolBar +", status=yes, resizable=yes, left=0, top=0, screenX=0, screenY=0");
+	var janelaAuxiliar = window.open(pUrlJanela, "_blank", "width=" + largura + ", height=" + altura +", menubar=no, scrollbars=yes, toolbar=" + inComToolBar +", status=yes, resizable=yes, left=0, top=0, screenX=0, screenY=0 name=" + pNmJanela);	
 
 	return janelaAuxiliar;
 }
