@@ -195,7 +195,11 @@ function calcular(eElement){
 	pArrayCampos[12] = document.frm_principal.<?=voContratoModificacao::$nmAtrNumPercentual?>;
 	pArrayCampos[13] = document.frm_principal.<?=voContratoInfo::$nmAtrNumPrazo?>;
 	pArrayCampos[14] = <?=dominioTpContratoModificacao::$CD_TIPO_SUPRESSAO?>;	
-	pArrayCampos[15] = <?=dominioTpContratoModificacao::$CD_TIPO_REAJUSTE?>;
+	//pArrayCampos[15] = <?=dominioTpContratoModificacao::$CD_TIPO_REAJUSTE?>;
+	<?php
+	echo getColecaoComoVariavelJS(array_keys(dominioTpContratoModificacao::getColecaoAjustamentos()), "arrayAjustamento");
+	?>	
+	pArrayCampos[15] = arrayAjustamento;
 	pArrayCampos[16] = <?=dominioTpContratoModificacao::$CD_TIPO_PRORROGACAO?>;
 	pArrayCampos[17] = document.frm_principal.<?=voContratoModificacao::$nmAtrVlMensalModAtual?>;
 	pArrayCampos[18] = document.frm_principal.<?=voContratoModificacao::$ID_REQ_VL_BASE_PERCENTUAL?>;
@@ -357,7 +361,7 @@ function iniciar(){
 	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" onBlur='calcular(this, false);' class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly></TD>
 	            <TH class="campoformulario">Valor Global Atualizado:</TH>
 	            <TD class="campoformulario"><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlGlobalAtualizado?>" name="<?=voContratoModificacao::$nmAtrVlGlobalAtualizado?>"  value="<?php echo(getMoeda($vo->vlGlobalAtual));?>"
-	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" onBlur='' class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly></TD>	            
+	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" onBlur='calcular(this, false);' class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly></TD>	            
 	        </TR>	        
 			<TR>
 	            <TH class="campoformulario" nowrap>Valor Real alterado no período (LICON):</TH>

@@ -171,13 +171,23 @@ function detalharDemandaGestao(){
                 <TD class="campoformulario" width="1%" colspan=3>
                 Setor.Resp.: <?php echo $comboSetor->getHtmlCombo(voDemanda::$nmAtrCdSetor,voDemanda::$nmAtrCdSetor, $filtro->vodemanda->cdSetor, true, "camponaoobrigatorio", false, "");?>                
 				<font color=red><b>Setor.Atual</b>:</font> <?php echo $comboSetor->getHtmlCombo(voDemandaTramitacao::$nmAtrCdSetorDestino,voDemandaTramitacao::$nmAtrCdSetorDestino, $filtro->vodemanda->cdSetorDestino, true, "camponaoobrigatorio", false, "");?>
-				Passou.por: <?php echo $comboSetor->getHtmlCombo(filtroManterDemanda::$NmAtrCdSetorPassagem,filtroManterDemanda::$NmAtrCdSetorPassagem."[]", $filtro->cdSetorPassagem, true, "camponaoobrigatorio", false, " multiple ");?>
 				A partir da implementação em: <?php echo $comboSetorImplantacaoEconti->getHtmlCombo(filtroManterDemanda::$NmAtrCdSetorImplementacaoEConti,filtroManterDemanda::$NmAtrCdSetorImplementacaoEConti, $filtro->cdSetorImplementacaoEconti, true, "camponaoobrigatorio", false, "");?>
 				</TD>				
             </TR>           
             <TR>
                 <TH class="campoformulario" nowrap width="1%">Situação:</TH>
-                <TD class="campoformulario" width="1%"><?php echo $comboSituacao->getHtmlCombo(voDemanda::$nmAtrSituacao,voDemanda::$nmAtrSituacao."[]", $filtro->vodemanda->situacao, true, "camponaoobrigatorio", false, " multiple ");?></TD>
+                <TD class="campoformularioalinhadomeio" width="1%">
+	                <TABLE class="filtro" cellpadding="0" cellspacing="0">
+	                <TR>
+	                	<TD class="campoformulario" width="1%">
+						<?php echo $comboSituacao->getHtmlCombo(voDemanda::$nmAtrSituacao,voDemanda::$nmAtrSituacao."[]", $filtro->vodemanda->situacao, true, "camponaoobrigatorio", false, " multiple ");?>
+	                	<TD class="campoformulario" width="1%">Passou.por</TD>
+	                	<TD class="campoformulario" >
+						<?php echo $comboSetor->getHtmlCombo(filtroManterDemanda::$NmAtrCdSetorPassagem,filtroManterDemanda::$NmAtrCdSetorPassagem."[]", $filtro->cdSetorPassagem, true, "camponaoobrigatorio", false, " multiple ");?>	                	
+						</TD>
+	                </TR>
+	                </TABLE>
+                </TD>
                 <TH class="campoformulario" nowrap width="1%" rowspan=3>Tipo:</TH>
                 <TD class="campoformulario" rowspan=3>
 	                <TABLE class="filtro" cellpadding="0" cellspacing="0">

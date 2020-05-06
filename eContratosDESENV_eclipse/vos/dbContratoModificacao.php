@@ -424,28 +424,37 @@ class dbContratoModificacao extends dbprocesso {
 	
 	/**
 	 * verifica a lista apos os calculos do reajuste para replicar nos itens que nao sofreram reajuste
+	 * METODO USADO APENAS PARA AJUSTAR OS VALORES QUANDO APENAS HA PRORROGACOES CADASTRADAS - que nao exigem calculos extras
 	 * @param unknown $recordSet
 	 * @param unknown $voContratoModReajuste
 	 * @return number[]
 	 */
-	function atualizaColecaoRegistros(&$recordSet) {
+	function atualizaColecaoRegistros($recordSet) {
 		$i = 0;
+		$retorno = null;
 		$voAtualizadoAnterior = $recordSet [filtroManterContratoModificacao::$NmColVOContratoModReajustado][0];
 		foreach ( $recordSet as $registro) {
-			$voTemp = new voContratoModificacao ();
+			$voTemp = new voContratoModificacao();
 			$voTemp->getDadosBanco ( $registro );
+
+			$voContratoTemp = new vocontrato();
+			$voContratoTemp->getDadosBanco ( $registro );
+			
 			//echoo("teste1");
 			$voAConsiderar = $registro [filtroManterContratoModificacao::$NmColVOContratoModReajustado];
 			//var_dump($voAConsiderar);
 			if ($voAConsiderar == null){
 				
 				if($voAtualizadoAnterior == null){
+					//MARRETA
+					$voTemp->vlMensalAtual = getDecimalSQL($voContratoTemp->vlMensal);
 					$voAtualizadoAnterior = clone $voTemp;
 				}
 				
-				if($voTemp->tpModificacao != dominioTpContratoModificacao::$CD_TIPO_PRORROGACAO){
+				if($voTemp->tpModificacao != null && $voTemp->tpModificacao != dominioTpContratoModificacao::$CD_TIPO_PRORROGACAO){
 					//para todos os outros nada deve ser feito, pois os calculos ja foram realizados antes
 					$voAConsiderar = clone $voTemp;
+					throw new excecaoGenerica("Operacao Invalida para registro diferente de prorrogacao: $voTemp->tpModificacao . ");
 					//echoo("teste2");
 				}else{
 					//a prorrogacao eh a copia do vomod anterior
@@ -454,13 +463,20 @@ class dbContratoModificacao extends dbprocesso {
 				}
 				$registro [filtroManterContratoModificacao::$NmColVOContratoModReajustado] = $voAConsiderar;
 				$recordSet [$i] = $registro;
+
+				//nao inclui o mater
+				if($i != 0){
+					$retorno[] = $registro;
+				}
 			}
 			/*echoo($voTemp->toString());
 			echoo($voAConsiderar->vlMensal);*/
 			
 			$i++;			
 			$voAtualizadoAnterior = clone $voAConsiderar;
-		}		
+		}	
+		
+		return $retorno;
 	}
 	
 	/**
@@ -481,6 +497,7 @@ class dbContratoModificacao extends dbprocesso {
 		$recordset = $this->consultarExecucao($voContratoMater);
 		//o contrato por escopo nao tem variacao de preco mensal, pois o preco mensal eh unico para toda execucao
 		//ainda que sofra acrescimo, o preco mensal de todos os meses tambem sofrem
+		//var_dump($recordset);
 		$isEscopo = $voContratoInfo->inEscopo == "S";
 		//echo ($voContratoMaterInfo->inEscopo);
 		if(!$isEscopo){
@@ -516,7 +533,7 @@ class dbContratoModificacao extends dbprocesso {
 		//para todos os registros incluidos em contrato Mod
 		//reajustar os valores de acordo com os percentuais dos reajustes retroativos
 		if (! isColecaoVazia ( $recordSet )) {
-
+			//echo "nao vazia";
 			//recupera o registromodificacao do contrato mater para que seu valor seja considerado na validacao dos reajustes
 			$registroMater = $voContratoMater->getRegistroGenerico();
 			$voContratoModAtual = new voContratoModificacao ();
@@ -576,6 +593,9 @@ class dbContratoModificacao extends dbprocesso {
 						
 					}				
 	
+				}else{
+					$retorno = $recordSet;
+					$retorno = $this->atualizaColecaoRegistros($retorno);
 				}
 			}
 			

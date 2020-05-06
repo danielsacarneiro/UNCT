@@ -26,7 +26,18 @@ Class dominioTpContratoModificacao extends dominio{
 				self::$CD_TIPO_REPACTUACAO => self::$DS_TIPO_REPACTUACAO,
 		);
 	}
-		
+	
+	/**
+	 * usado para o calculo de contrato modificacao
+	 * @return string[]
+	 */
+	static function getColecaoAjustamentos(){
+		return array(
+				self::$CD_TIPO_REAJUSTE=> self::$DS_TIPO_REAJUSTE,
+				self::$CD_TIPO_REPACTUACAO => self::$DS_TIPO_REPACTUACAO,
+		);
+	}
+	
 	static function getColecaoChavesQueNaoAlteramValorContrato(){
 		return array(
 				self::$CD_TIPO_PRORROGACAO,

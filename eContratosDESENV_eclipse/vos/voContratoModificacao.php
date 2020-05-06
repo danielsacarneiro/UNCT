@@ -1,7 +1,7 @@
 <?php
 include_once (caminho_lib . "voentidade.php");
 include_once ("dbContratoModificacao.php");
-include_once (caminho_funcoes . "contrato_mod/dominioTpModificacaoContrato.php");
+include_once (caminho_funcoes . "contrato_mod/dominioTpContratoModificacao.php");
 
 class voContratoModificacao extends voentidade {
 	

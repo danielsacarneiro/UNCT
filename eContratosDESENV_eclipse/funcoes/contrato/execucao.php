@@ -180,12 +180,14 @@ function detalhar(isExcluir) {
                     	
 	                    for ($i=0;$i<$tamanho;$i++) {
 	                    	$registro = $colecaoMov[$i];
-	                        $voAtual = new voContratoModificacao();
+	                    	
+	                        $voAtual = new voContratoModificacao();	                        	
 	                        $voAtual->getDadosBanco($registro);
 	                        $chaveTermoAtual = $voAtual->getValorChavePrimariaTermo();
 	                        
 	                        $voContratoAtual = new vocontrato();
 	                        $voContratoAtual->getDadosBanco($registro);
+	                        //if($voContratoAtual->cdEspecie != dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER){
 	                        $especie = getDsEspecie($voContratoAtual);							                            
 	                        $tipo = dominioTpContratoModificacao::getDescricaoStatic($voAtual->tpModificacao);
 	                        	                        
@@ -275,6 +277,7 @@ function detalhar(isExcluir) {
                     </TR>					
                     <?php
                     		$chaveTermoAnterior = $chaveTermoAtual;
+	                        //}
                    		}                    
                     ?>
 	                <TR>

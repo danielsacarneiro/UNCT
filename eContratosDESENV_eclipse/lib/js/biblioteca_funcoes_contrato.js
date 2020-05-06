@@ -134,6 +134,11 @@ function calcularModificacaoNovo(pArrayCampos) {
 	var tpModificacao = campoTpModificacao.value
 	var isSupressao = tpModificacao == cdTpSupressao;
 	var isReajuste = tpModificacao == cdTpReajuste;
+	//se porque o cdTpReajuste for um array
+	if(Array.isArray(cdTpReajuste)){
+		isReajuste = (cdTpReajuste.indexOf(tpModificacao) != -1);
+	}
+	
 	var isProrrogacao = tpModificacao == cdTpProrrogacao;
 	var fator = 1;
 	var percentual = 0;
@@ -198,6 +203,8 @@ function calcularModificacaoNovo(pArrayCampos) {
 		//}		
 		
 		//o numero de meses ao fim nao pode ser maior que o prazo referencial do contrato
+		//alert(numMesesAoFinal + " meses ao final");
+		//alert(numPrazoMater + " meses mater");
 		if(numMesesAoFinal > numPrazoMater > 0){
 			exibirMensagem("Prazo restante ("+numMesesAoFinal+" meses) acima do prazo referencial do contrato("+numPrazoMater+" meses). Alterando o prazo restante.");
 			numMesesAoFinal = numPrazoMater;

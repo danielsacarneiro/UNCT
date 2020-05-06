@@ -1181,6 +1181,9 @@ TD.campoformularioalinhadocima{
 	vertical-align: top;
 }
 
+TD.campoformularioalinhadomeio{
+	vertical-align: middle;
+}
 
 /*  Representa uma célula de um campo de formulário, inclusive filtros, alinhados ao centro*/
 TD.campoformularioalinhadocentro {
