@@ -44,6 +44,7 @@ Class dominioProrrogacaoContrato extends dominio{
 	}
 	
 	static function getPrazoProrrogacao($cd){
+		//de acordo com o art 57, lei 8666
 		if($cd == static::$CD_ART57_II)
 			$retorno = 5;
 		else if($cd == static::$CD_ART57_IV)

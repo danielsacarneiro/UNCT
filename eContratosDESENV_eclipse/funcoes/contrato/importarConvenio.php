@@ -87,7 +87,7 @@ if($totalResultado <= 0){
 	        	$linha[vocontrato::$nmAtrLinkMinutaDoc] = $linkMinutaDoc;        	
 	
 	        	//echo $linha[vocontrato::$nmAtrLinkDoc];        	
-	            $result = $dbprocesso->incluirContratoImport($tipoContrato, $linha);
+	            $result = $dbprocesso->incluirContratoImport($tipoContrato, $linha, $k);
 	        }catch(excecaoFimImportacaoContrato $ex){
 	           	//encerra a busca
 	           	break;            

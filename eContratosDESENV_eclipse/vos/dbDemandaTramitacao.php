@@ -225,7 +225,7 @@ class dbDemandaTramitacao extends dbprocesso {
 					throw new Exception ( $msg );
 				}
 			}
-			
+						
 			$voDemanda->dbprocesso->incluir ( $voDemanda );			
 			$vo->cd = $voDemanda->cd;
 			
@@ -268,7 +268,7 @@ class dbDemandaTramitacao extends dbprocesso {
 			$msg = "Encaminhamento não permitido para demanda FECHADA.";
 			throw new Exception ( $msg );
 		}
-		
+				
 		$dbUsuarioInfo = new dbUsuarioInfo();
 		$cdSetor = $vo->cdSetorAtual;
 		//var_dump("Setor atual:" . $cdSetor);

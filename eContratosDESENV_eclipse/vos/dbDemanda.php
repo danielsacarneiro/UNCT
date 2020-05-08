@@ -734,8 +734,27 @@ class dbDemanda extends dbprocesso {
 		} // else echo "COLECAO VAZIA";
 	
 		return $retorno;
-	}	
+	}
 	
+ /**
+ * valida inclusao de demanda licon
+ * MARRETA CORRIGIR DEPOIS incluindo no dbdemanda 
+ * @param unknown $vo
+ * @throws Exception
+ */
+	static function validarDemandaLicon($vo){
+		if ($vo->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_LICON) {
+			$strAbuscar = "publica";			
+			//if(existeStr1NaStr2ComSeparador($vo->textoTram, $strAbuscar, false))
+			if(!existeStr1NaStr2($strAbuscar, $vo->texto)){
+				$msg = "É necessário informar a data de publicação no TÍTULO, no seguinte formato: 'Data de publicação: DD/MM/AAAA'.";
+				
+				//var_dump($vo);
+				throw new excecaoGenerica( $msg );
+			}
+		}
+	}	
+		
 	static function validarGenerico(&$vo) {
 		$tipo = $vo->tipo;
 		$tpDemandaContrato = $vo->tpDemandaContrato;
@@ -753,7 +772,9 @@ class dbDemanda extends dbprocesso {
 					&& ($tpReajuste == null || $tpReajuste == "")){
 				throw new excecaoGenerica ( "O campo tipo de reajuste é obrigatório." );
 			}*/
-		}		
+		}
+		
+		static::validarDemandaLicon($vo);
 		
 		if (dominioTipoDemanda::isContratoObrigatorio($tipo) && ! $vo->temContratoParaIncluir ()) {
 			$msg = "Selecione ao menos um contrato.";

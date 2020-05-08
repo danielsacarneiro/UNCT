@@ -625,7 +625,7 @@ class dbcontrato extends dbprocesso {
 	/**
 	 * FUNCOES DE IMPORTACAO EXCLUSIVA
 	 */
-	function incluirContratoImport($tipo, $linha) {
+	function incluirContratoImport($tipo, $linha, $numLinhaPlanilha=null) {
 		$voContrato = new vocontrato ();
 
 		$atributosInsert = $voContrato->getTodosAtributos ();
@@ -674,7 +674,7 @@ class dbcontrato extends dbprocesso {
 		} catch ( Exception $e ) {
 			
 			if(dbcontrato::$FLAG_PRINTAR_LOG_IMPORTACAO_ERRO){
-				echo "<BR> ERRO INCLUSAO. <BR>";
+				echo "<BR> ERRO INCLUSAO. LINHA $numLinhaPlanilha <BR>";
 				$msgErro = "CONTRATO:: "
 						. $voContrato->getCodigoContratoFormatado()
 						. "|" .$voContrato->sqEspecie

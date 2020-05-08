@@ -302,33 +302,50 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	}
 	
 	static function getSQLComparacaoPrazoProrrogacao($filtroPorrogacao){
-		if($filtroPorrogacao == dominioProrrogacaoFiltroConsolidacao::$CD_PRORROGAVEL){
-			$sinal = "<";
-		}elseif($filtroPorrogacao == dominioProrrogacaoFiltroConsolidacao::$CD_NAOPRORROGAVEL){
-			$sinal = ">=";
-		}elseif($filtroPorrogacao == dominioProrrogacaoFiltroConsolidacao::$CD_PERMITE_EXCEPCIONAL){
+		//um formato para o filtro que nao tenha a ver com prorrogacao excepcional, cabivel apenas para o art 57,II, conforme art 57, par 4, lei 8666
+		//se nada tiver a ver com excepcional, o formato do filtro deve ser no modo loop abaixo porque deve levar em consideracao todos os tipos de prorrogacao
+		//caso contrario, basta verificar para o art 57, II, que eh o unico que admite prorrogacao excepcional
+		if(!array_key_exists($filtroPorrogacao, dominioProrrogacaoFiltroConsolidacao::getColecaoExcepcional())){
+			if($filtroPorrogacao == dominioProrrogacaoFiltroConsolidacao::$CD_PRORROGAVEL){
+				$sinal = "<";
+			}else{
+				$sinal = ">=";
+			}							
+			
+			$STR_SUBSTITUIR_IND_PROR = constantes::$CD_CAMPO_SUBSTITUICAO . "IND_PROR";
+			$STR_SUBSTITUIR_VALOR_PRAZO = constantes::$CD_CAMPO_SUBSTITUICAO . "VALOR_PRAZO";
+			//$nmAtributoAcomparar = getDataSQLDiferencaAnos(static::$NmTabContratoMater . "." . vocontrato::$nmAtrDtVigenciaInicialContrato, static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato);
+			$nmAtributoAcomparar = static::getSQLQtdAnosVigenciaContrato();		
+			$filtroTemp = voContratoInfo::$nmAtrInPrazoProrrogacao . " = $STR_SUBSTITUIR_IND_PROR AND $nmAtributoAcomparar >=0 AND $nmAtributoAcomparar $sinal " . $STR_SUBSTITUIR_VALOR_PRAZO;		
+			$operadorSQL = " OR ";
+			
+			foreach (array_keys(dominioProrrogacaoContrato::getColecaoValidacaoSQL()) as $chave){
+				$temp = str_replace($STR_SUBSTITUIR_IND_PROR, $chave, $filtroTemp);
+				$temp = str_replace($STR_SUBSTITUIR_VALOR_PRAZO, dominioProrrogacaoContrato::getPrazoProrrogacao($chave), $temp);
+									
+				$retorno .= "($temp)$operadorSQL";
+			}			
+			/*
+			 // tamanho da string retirada do fim do retorno
+			 $qtdCharFim = strlen ( $retorno ) - strlen ( $operadorSQL );
+			 $retorno = substr ( $retorno, 0, $qtdCharFim );*/
+					
+		}else{
+			//apenas para os filtros de prorrogacao excepcional
+			if($filtroPorrogacao == dominioProrrogacaoFiltroConsolidacao::$CD_PERMITE_EXCEPCIONAL){
 				$sinal = "=";
-		}elseif($filtroPorrogacao == dominioProrrogacaoFiltroConsolidacao::$CD_NAOPERMITE_EXCEPCIONAL){
+			}else{
 				$sinal = ">=1+";
-		}								
-		
-		$STR_SUBSTITUIR_IND_PROR = constantes::$CD_CAMPO_SUBSTITUICAO . "IND_PROR";
-		$STR_SUBSTITUIR_VALOR_PRAZO = constantes::$CD_CAMPO_SUBSTITUICAO . "VALOR_PRAZO";
-		//$nmAtributoAcomparar = getDataSQLDiferencaAnos(static::$NmTabContratoMater . "." . vocontrato::$nmAtrDtVigenciaInicialContrato, static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato);
-		$nmAtributoAcomparar = static::getSQLQtdAnosVigenciaContrato();		
-		$filtroTemp = voContratoInfo::$nmAtrInPrazoProrrogacao . " = $STR_SUBSTITUIR_IND_PROR AND $nmAtributoAcomparar >=0 AND $nmAtributoAcomparar $sinal " . $STR_SUBSTITUIR_VALOR_PRAZO;		
-		$operadorSQL = " OR ";
-		
-		foreach (array_keys(dominioProrrogacaoContrato::getColecaoValidacaoSQL()) as $chave){
-			$temp = str_replace($STR_SUBSTITUIR_IND_PROR, $chave, $filtroTemp);
-			$temp = str_replace($STR_SUBSTITUIR_VALOR_PRAZO, dominioProrrogacaoContrato::getPrazoProrrogacao($chave), $temp);
-								
-			$retorno .= "($temp)$operadorSQL";
-		}
-        /*
-        // tamanho da string retirada do fim do retorno
-		$qtdCharFim = strlen ( $retorno ) - strlen ( $operadorSQL );
-		$retorno = substr ( $retorno, 0, $qtdCharFim );*/
+			}
+				
+			$chave = $STR_SUBSTITUIR_IND_PROR = dominioProrrogacaoContrato::$CD_ART57_II;
+			$STR_SUBSTITUIR_VALOR_PRAZO = dominioProrrogacaoContrato::getPrazoProrrogacao($chave);
+			//$nmAtributoAcomparar = getDataSQLDiferencaAnos(static::$NmTabContratoMater . "." . vocontrato::$nmAtrDtVigenciaInicialContrato, static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato);
+			$nmAtributoAcomparar = static::getSQLQtdAnosVigenciaContrato();
+			$temp = voContratoInfo::$nmAtrInPrazoProrrogacao . " = $STR_SUBSTITUIR_IND_PROR AND $nmAtributoAcomparar >=0 AND $nmAtributoAcomparar $sinal " . $STR_SUBSTITUIR_VALOR_PRAZO;
+			$operadorSQL = " OR ";
+			$retorno .= "($temp)$operadorSQL";			
+		}		
 		
 		//para o caso de permitir sempre prorrogacao
 		$retorno .= "(". voContratoInfo::$nmAtrInPrazoProrrogacao ." = ". dominioProrrogacaoContrato::$CD_NAO_SEAPLICA .")";

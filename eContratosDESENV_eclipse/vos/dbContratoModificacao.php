@@ -448,6 +448,7 @@ class dbContratoModificacao extends dbprocesso {
 				if($voAtualizadoAnterior == null){
 					//MARRETA
 					$voTemp->vlMensalAtual = getDecimalSQL($voContratoTemp->vlMensal);
+					$voTemp->vlGlobalAtual = getDecimalSQL($voContratoTemp->vlGlobal);
 					$voAtualizadoAnterior = clone $voTemp;
 				}
 				

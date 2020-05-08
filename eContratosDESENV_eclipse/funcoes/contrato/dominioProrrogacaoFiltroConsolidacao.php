@@ -25,6 +25,14 @@ Class dominioProrrogacaoFiltroConsolidacao extends dominio{
 				self::$CD_NAOPERMITE_EXCEPCIONAL => self::$DS_NAOPERMITE_EXCEPCIONAL,
 		);
 	}
+	
+	static function getColecaoExcepcional(){
+		return array(
+				self::$CD_PERMITE_EXCEPCIONAL => self::$DS_PERMITE_EXCEPCIONAL,
+				self::$CD_NAOPERMITE_EXCEPCIONAL => self::$DS_NAOPERMITE_EXCEPCIONAL,
+		);
+	}
+	
 
 }
 ?>

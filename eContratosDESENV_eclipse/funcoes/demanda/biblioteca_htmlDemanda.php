@@ -558,4 +558,5 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDad
 
 	echo $html;
 }
+
 ?>

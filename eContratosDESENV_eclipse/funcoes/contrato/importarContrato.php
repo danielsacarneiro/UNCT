@@ -73,7 +73,7 @@ if(!$isLimparContrato){
 		        	$linha[vocontrato::$nmAtrLinkMinutaDoc] = $linkMinutaDoc;
 		        	
 		        	//echo $linha[vocontrato::$nmAtrDocLink];        	     
-		            $result = $dbprocesso->incluirContratoImport($tipoContrato, $linha);
+		            $result = $dbprocesso->incluirContratoImport($tipoContrato, $linha, $k);
 		        }catch(excecaoFimImportacaoContrato $ex){
 		        	//encerra a busca
 		            break;                    
