@@ -292,6 +292,73 @@ class dominio extends multiplosConstrutores {
 		return static::getColecao();
 	}	
 	
+	/**
+	 * busca encontrar uma chave em $string (com separador ou nao), determinada pela ordem em que aparece em $colecao 
+	 * @param unknown $string
+	 * @param unknown $colecao
+	 * @return mixed
+	 */
+	static function getChaveDeUmaStringPorExtenso($string, $colecao) {
+		$tamanho = count ( $colecao );
+		// echo $tamanho . "<br>";
+		// var_dump($colecao) . "<br>";
+		$chaves = array_keys ( $colecao );
+		// echo "<br>especie:$string";
+	
+		for($i = 0; $i < $tamanho; $i ++) {
+			$chave = $chaves [$i];
+			$especie = $colecao [$chave];	
+			$mystring = utf8_encode ( $especie );
+			// $mystring = $especie;
+			// echo "<br>$mystring X $string";
+	
+			// verifica se eh o tipo da especie em questao
+			if (existeStr1NaStr2ComSeparador ( $string, $mystring, false )) {
+				$retorno = $chave;
+				break;
+			}
+		}
+	
+		if ($retorno != null) {
+			if(dbcontrato::$FLAG_PRINTAR_LOG_IMPORTACAO){
+				echo "<br>EXISTE $string<br>";
+			}
+		} else {
+			if(dbcontrato::$FLAG_PRINTAR_LOG_IMPORTACAO){
+				echo "<br>NAO EXISTE $string <br>";
+			}
+		}
+		return $retorno;
+	}
+	
+	static function getChaveDeUmaStringPorColecaoSimples($string, $colecao) {
+		$tamanho = count ( $colecao );
+	
+		for($i = 0; $i < $tamanho; $i ++) {
+			$especie = $colecao [$i];
+			$mystring = utf8_encode ( $especie );
+			// $mystring = $especie;
+			// echo "<br>$mystring X $string";
+	
+			// verifica se eh o tipo da especie em questao
+			if (existeStr1NaStr2($mystring, $string)) {
+				$retorno = $especie;
+				break;
+			}
+		}
+	
+		if ($retorno != null) {
+			if(dbcontrato::$FLAG_PRINTAR_LOG_IMPORTACAO){
+				echo "<br>EXISTE $string SIMPLES <br>";
+			}
+		} else {
+			if(dbcontrato::$FLAG_PRINTAR_LOG_IMPORTACAO){
+				echo "<br>NAO EXISTE $string SIMPLES <br>";
+			}
+		}
+		return $retorno;
+	}
+	
 	/*
 	 * function ordenaSetor( $a, $b ) {
 	 * if ( $a['pontos'] == $b['pontos'] ) {

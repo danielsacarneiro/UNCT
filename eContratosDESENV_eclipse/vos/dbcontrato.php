@@ -246,7 +246,9 @@ class dbcontrato extends dbprocesso {
 		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrAnoProcessoLicContrato . "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrAno;
 		$queryJoin .= "\n AND ";
 		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrCdProcessoLicContrato . "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrCd;
-
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrCdModalidadeProcessoLicContrato . "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrCdModalidade;
+		
 		$queryJoin .= "\n LEFT JOIN $nmTabelaPessoa $nmTabelaPregoeiro" ;
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaPregoeiro . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrCdPregoeiro;
@@ -436,6 +438,7 @@ class dbcontrato extends dbprocesso {
 		$retorno .= $this->getVarComoString ( $voContrato->procLic ) . ",";
 		$retorno .= $this->getVarComoNumero($voContrato->cdProcLic ) . ",";
 		$retorno .= $this->getVarComoNumero($voContrato->anoProcLic ) . ",";
+		$retorno .= $this->getVarComoString ( $voContrato->cdModalidadeLic ) . ",";
 		$retorno .= $this->getVarComoString ( $voContrato->modalidade ) . ",";
 
 		$retorno .= $this->getVarComoString ( $voContrato->dataPublicacao ) . ",";
@@ -1164,11 +1167,22 @@ class dbcontrato extends dbprocesso {
 			 		$arrayProcLic = getArrayFormatadoLinhaImportacaoPorSeparador($processoLic);
 			 		$retorno->cdProcLic = $arrayProcLic[0];
 			 		$retorno->anoProcLic = $arrayProcLic[1];
+			 		
+			 		//pega o cdmodalidade no campo modalidade da planilha
+			 		$retorno->cdModalidadeLic = dominioModalidadeProcLicitatorio::getChaveDeUmaStringPorExtenso($modalidadeLic, dominioModalidadeProcLicitatorio::getColecaoImportacaoPlanilha());
+			 		if($retorno->cdModalidadeLic == null){
+			 			//se nao achar, busca no campo proclic
+			 			$retorno->cdModalidadeLic = dominioModalidadeProcLicitatorio::getChaveDeUmaStringPorColecaoSimples($processoLic, dominioModalidadeProcLicitatorio::getColecaoImportacaoPlanilhaPorCodigoSimples());
+			 		}
 			 	}catch(excecaoNumProcLicImportacaoInvalido $exProcLic){
 			 		if(static::$FLAG_PRINTAR_LOG_IMPORTACAO){
 			 			echoo($exProcLic->getMessage());
 			 		}
-			 	}
+			 	}catch(Exception $ex){
+			 		if(static::$FLAG_PRINTAR_LOG_IMPORTACAO){
+						echoo($ex->getMessage());
+		 			}
+		 		}
 			 }
 
 			 $retorno->modalidade = $modalidadeLic;
@@ -1242,7 +1256,8 @@ class dbcontrato extends dbprocesso {
 			ct_processo_lic VARCHAR(300),
 		    ct_cd_processo_lic INT,
 		    ct_ano_processo_lic INT,
-		    ct_modalidade_lic VARCHAR(300),
+		    ct_cdmod_processo_lic CHAR(2),
+			ct_modalidade_lic VARCHAR(300),
 			ct_data_public VARCHAR(300),
 		    ct_dt_public DATE,
 		    ct_dt_assinatura DATE,

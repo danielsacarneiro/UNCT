@@ -50,6 +50,7 @@ include_once (caminho_util . "DocumentoPessoa.php");
 		static $nmAtrProcessoLicContrato =  "ct_processo_lic";
 		static $nmAtrCdProcessoLicContrato =  "ct_cd_processo_lic";
 		static $nmAtrAnoProcessoLicContrato =  "ct_ano_processo_lic";
+		static $nmAtrCdModalidadeProcessoLicContrato =  "ct_cdmod_processo_lic";
 		static $nmAtrModalidadeContrato =  "ct_modalidade_lic";
 		static $nmAtrDataPublicacaoContrato =  "ct_data_public";
         static $nmAtrDtPublicacaoContrato =  "ct_dt_public";
@@ -90,7 +91,8 @@ include_once (caminho_util . "DocumentoPessoa.php");
 		var $procLic ;			
 		var $cdProcLic ;
 		var $anoProcLic ;
-		var $modalidade	;
+		var $cdModalidadeLic;
+		var $modalidade	;		
         var $especie;
         var $sqEspecie;
         var $cdEspecie;
@@ -170,6 +172,7 @@ include_once (caminho_util . "DocumentoPessoa.php");
             self::$nmAtrProcessoLicContrato,
         	self::$nmAtrCdProcessoLicContrato,
         	self::$nmAtrAnoProcessoLicContrato,
+        	self::$nmAtrCdModalidadeProcessoLicContrato,
             self::$nmAtrModalidadeContrato,
             self::$nmAtrDataPublicacaoContrato,
             self::$nmAtrDtPublicacaoContrato,
@@ -233,6 +236,7 @@ include_once (caminho_util . "DocumentoPessoa.php");
         $this->cdEspecie	 = $registrobanco[self::$nmAtrCdEspecieContrato];
         $this->situacao	 = $registrobanco[self::$nmAtrCdSituacaoContrato];
         $this->modalidade	 = $registrobanco[self::$nmAtrModalidadeContrato];
+        $this->cdModalidadeLic	 = $registrobanco[self::$nmAtrCdModalidadeProcessoLicContrato];
 		$this->cdPessoaContratada= $registrobanco[self::$nmAtrCdPessoaContratada];
 		$this->contratada = $registrobanco[self::$nmAtrContratadaContrato];
 		$this->docContratada = $registrobanco[self::$nmAtrDocContratadaContrato];
@@ -285,6 +289,7 @@ include_once (caminho_util . "DocumentoPessoa.php");
         $this->sqEspecie = @$_POST[self::$nmAtrSqEspecieContrato];        
         $this->cdEspecie = @$_POST[self::$nmAtrCdEspecieContrato]; 
         $this->modalidade = @$_POST[self::$nmAtrModalidadeContrato];
+        $this->cdModalidadeLic = @$_POST[self::$nmAtrCdModalidadeProcessoLicContrato];
         
         //garante o sqEspecie == 1 para o contrato MATER
         if($this->cdEspecie == dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER){
