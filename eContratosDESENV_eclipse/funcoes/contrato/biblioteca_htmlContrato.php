@@ -947,6 +947,8 @@ function getInformacaoCPL($registroBanco, $mostrarTodasPortarias = true){
 		}
 		
 		$complemento = getTextoHTMLNegrito ( $complemento );
+	}else if(existeStr1NaStr2("CCD", $proclic)){
+		$complemento = getTextoHTMLNegrito ( " => CCD-Comissão de Compra Direta, criada pelo PEIntegrado. Incluir como Processo Administrativo!" );
 	}
 	$retorno .= $complemento;
 	$retorno .= "<br><br>Todas Portarias:<br>" . dominioComissaoProcLicitatorio::getNumPortariaTodasCPL ( $anoPortaria );

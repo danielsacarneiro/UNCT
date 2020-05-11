@@ -22,6 +22,7 @@ class filtroManterContrato extends filtroManter {
 	var $sqEspecie;
 	var $colecaoCdEspecie;
 	var $modalidade;
+	var $cdModalidade;
 	
 	var $contratada;
 	var $docContratada;
@@ -75,6 +76,7 @@ class filtroManterContrato extends filtroManter {
 		$this->sqEspecie = @$_POST [vocontrato::$nmAtrSqEspecieContrato];
 		
 		$this->modalidade = @$_POST [vocontrato::$nmAtrModalidadeContrato];
+		$this->cdModalidade = @$_POST [vocontrato::$nmAtrCdModalidadeProcessoLicContrato];
 		
 		$this->contratada = @$_POST [vocontrato::$nmAtrContratadaContrato];
 		$this->docContratada = @$_POST [vocontrato::$nmAtrDocContratadaContrato];
@@ -150,8 +152,14 @@ class filtroManterContrato extends filtroManter {
 			$conector = "\n AND ";
 		}
 				
+		if ($this->cdModalidade != null) {
+			$filtro = $filtro . $conector . $nmTabela . "." . vocontrato::$nmAtrCdModalidadeProcessoLicContrato . "='" . $this->cdModalidade . "'";
+				
+			$conector = "\n AND ";
+		}
+		
 		if ($this->modalidade != null) {
-			$filtro = $filtro . $conector . $nmTabela . "." . vocontrato::$nmAtrModalidadeContrato . " LIKE '%" . utf8_encode ( $this->modalidade ) . "%'";
+			$filtro = $filtro . $conector . $nmTabela . "." . vocontrato::$nmAtrProcessoLicContrato . " LIKE '%" . utf8_encode ( $this->modalidade ) . "%'";
 				
 			$conector = "\n AND ";
 		}

@@ -265,8 +265,8 @@ function confirmar() {
 				$modalidades = new dominioModalidadeProcLicitatorio();
 				$combo = new select($modalidades->colecao);						
 				?>
-                 <TD class="campoformulario" nowrap><?php echo $combo->getHtml("cdModalidade","cdModalidade", $modalidade);?>
-                    <INPUT type="text" id="<?=vocontrato::$nmAtrModalidadeContrato?>" name="<?=vocontrato::$nmAtrModalidadeContrato?>"  value="<?php echo($modalidade);?>"  class="camponaoobrigatorio" size="30" >
+                 <TD class="campoformulario" nowrap><?php echo $combo->getHtml(vocontrato::$nmAtrCdModalidadeProcessoLicContrato,vocontrato::$nmAtrCdModalidadeProcessoLicContrato, $filtro->cdModalidade);?>
+                    <INPUT type="text" id="<?=vocontrato::$nmAtrModalidadeContrato?>" name="<?=vocontrato::$nmAtrModalidadeContrato?>"  value="<?php echo($filtro->modalidade);?>"  class="camponaoobrigatorio" size="30" >
                  </TD>                                
             </TR>
 			<TR>
