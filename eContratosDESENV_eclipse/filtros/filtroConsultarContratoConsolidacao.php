@@ -17,6 +17,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	static $NmTabContratoATUAL = "TAB_CONTRATO_ATUAL";
 	
 	static $nmAtrQtdDiasParaVencimento = "nmAtrQtdDiasParaVencimento";
+	static $nmAtrQtdDiasParaVencimentoProposta = "nmAtrQtdDiasParaVencimentoProposta";
 	static $nmAtrInProrrogacao = "nmAtrInProrrogacao";
 	
 	static $ID_REQ_DtFimVigenciaInicial = "ID_REQ_DtFimVigenciaInicial";
@@ -33,6 +34,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	
 	var $cdEspecie = "";
 	var $qtdDiasParaVencimento = "";
+	var $qtdDiasParaVencimentoProposta = "";
 	
 	var $inProrrogacao = "";
 	var $dtFimVigenciaInicial = "";
@@ -57,6 +59,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		parent::getFiltroFormulario ();
 		$this->cdEspecie = @$_POST [vocontrato::$nmAtrCdEspecieContrato];
 		$this->qtdDiasParaVencimento = @$_POST [static::$nmAtrQtdDiasParaVencimento];
+		$this->qtdDiasParaVencimentoProposta = @$_POST [static::$nmAtrQtdDiasParaVencimentoProposta];
 		
 		$this->inProrrogacao = @$_POST [static::$nmAtrInProrrogacao];
 		$this->dtFimVigenciaFinal = @$_POST [static::$ID_REQ_DtFimVigenciaFinal];
@@ -70,6 +73,16 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		
 		$this->mesIntervaloFimVigencia = @$_POST [static::$ID_REQ_MesIntervaloFimVigencia];
 		$this->anoIntervaloFimVigencia = @$_POST [static::$ID_REQ_AnoIntervaloFimVigencia];
+		
+	}
+	
+	static function getDataBaseReajuste($nmTabelaContratoInfo, $nmTabelaContrato){
+		$atributoDataReajuste = "COALESCE($nmTabelaContratoInfo" . "." .voContratoInfo::$nmAtrDtBaseReajuste
+		. ",$nmTabelaContratoInfo." . voContratoInfo::$nmAtrDtProposta
+		. ",$nmTabelaContrato ." . vocontrato::$nmAtrDtAssinaturaContrato
+		.")";
+		
+		return $atributoDataReajuste;
 		
 	}
 	function getSQFiltroCdEspecie($nmTabelaContrato) {
@@ -87,12 +100,32 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	function getFiltroConsultaSQL($comAtributoOrdenacao = null) {
 		$filtro = "";
 		$conector = "";
+		$isHistorico = $this->isHistorico;
 		
 		$nmTabela = voContratoInfo::getNmTabelaStatic ( $this->isHistorico );
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
+		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( $isHistorico );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
 
-		if($this->qtdDiasParaVencimento != null){			
+		if($this->qtdDiasParaVencimentoProposta != null){	
+			$dtReferencia = getVarComoDataSQL(getDataHoje());
+			$atributoDataReajuste = static::getDataBaseReajuste($nmTabelaContratoInfo, $nmTabelaContrato);
+			
+			$ano = "YEAR($dtReferencia)";
+			$mes = "MONTH($atributoDataReajuste)";
+			$dia = "DAY($atributoDataReajuste)";
+			
+			//$dia = "15";
+			$dtPropostaPAram = getDataSQLFormatada($ano,$mes, $dia);
+			//echo $dtPropostaPAram;
+			
+			$nmAtributoDataNotificacao = getDataSQLDiferencaDias($dtReferencia, $dtPropostaPAram);			
+			$filtro = $filtro . $conector . "$nmAtributoDataNotificacao >=0 AND $nmAtributoDataNotificacao <= $this->qtdDiasParaVencimentoProposta";
+		
+			$conector  = "\n AND ";
+		}
+		
+		if($this->qtdDiasParaVencimento != null){
 			/*$nmAtributoDataNotificacao = static::$NmTabContratoATUAL . "." .vocontrato::$nmAtrDtVigenciaFinalContrato;
 			$dtNotificacaoPAram = getVarComoDataSQL(somarOuSubtrairDiasNaData(getDataHoje(), $this->qtdDiasParaVencimento));
 				

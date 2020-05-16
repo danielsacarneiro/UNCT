@@ -839,8 +839,8 @@ class filtroManterDemanda extends filtroManter{
 		//echo "Filtro:$filtro<br>";
 
 		return $filtro;
-	}	
-	
+	}
+		
 	/**
 	 * retorna o SQL que permite verificar se uma demanda passou por um setor
 	 * @param unknown $nmTabela

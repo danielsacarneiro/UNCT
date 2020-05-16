@@ -225,6 +225,15 @@ function movimentacoes(){
                         			>
                 </TD>				
 			</TR>
+			<TR>
+               <TH class="campoformulario" nowrap>Proposta:</TH>
+               <TD class="campoformulario" colspan=3>
+               Dias.Vencimento:
+	            <INPUT type="text" id="<?=filtroConsultarContratoConsolidacao::$nmAtrQtdDiasParaVencimentoProposta?>" name="<?=filtroConsultarContratoConsolidacao::$nmAtrQtdDiasParaVencimentoProposta?>"  
+								value="<?php echo($filtro->qtdDiasParaVencimentoProposta);?>"  class="camponaoobrigatorio" size="3">
+                        			
+                </TD>
+            </TR>			
 	            <?php 
 	            $comboProrrogacaoContrato = new select(dominioProrrogacaoContrato::getColecao());
 	            $comboFiltroProrrogacaoConsolidacao= new select(dominioProrrogacaoFiltroConsolidacao::getColecao());
@@ -359,7 +368,7 @@ function movimentacoes(){
                   }
                   ?>
                     <TH class="headertabeladados" width="1%">Contrato</TH>
-                    <TH class="headertabeladados" width="20%">Contratada</TH>
+                    <TH class="headertabeladados" width="30%">Contratada</TH>
                     <TH class="headertabeladados" width="1%">CNPJ/CNPF</TH>
                     <TH class="headertabeladados" width="40%">Gestor</TH>
                     <TH class="headertabeladados" width="1%">Proposta</TH>                    
@@ -453,7 +462,7 @@ function movimentacoes(){
                   }
                   ?>                    
                     <TD class="tabeladados" nowrap><?php echo $contrato?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $dsPessoa?></TD>
+                    <TD class="tabeladados"><?php echo $dsPessoa?></TD>
 					<TD class="tabeladados" nowrap><?php echo documentoPessoa::getNumeroDocFormatado($voPessoa->doc)?></TD>
 					<TD class="tabeladados" ><?php echo $gestor?></TD>
 					<TD class="tabeladados" nowrap><?php echo getData($voAtual->dtProposta)?></TD>

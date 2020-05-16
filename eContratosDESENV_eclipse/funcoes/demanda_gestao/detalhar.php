@@ -129,8 +129,10 @@ function confirmar() {
                 <TR>
                   <TH class="headertabeladados" width="1%">&nbsp;&nbsp;X</TH>
                     <TH class="headertabeladados" width="90%">Setor</TH>
-                    <TH class="headertabeladados"width="1%" nowrap >Tempo.Médio(dias)</TH>
-                    <TH class="headertabeladados"width="1%" nowrap >Num.Demandas</TH>                    
+                    <TH class="headertabeladados"width="1%" nowrap >Total.Dias</TH>
+                    <TH class="headertabeladados"width="1%" nowrap >Num.Demandas(Passou)</TH>
+					<TH class="headertabeladados"width="1%" nowrap >Tempo.Médio(dias)</TH>
+                    <TH class="headertabeladados"width="1%" nowrap >Num.Demandas(No.Setor)</TH>                    
                 </TR>
                 <?php								
                 if (is_array($colecao))
@@ -138,7 +140,7 @@ function confirmar() {
                 else 
                         $tamanho = 0;
                                 
-                $colspan=4;                
+                $colspan=6;                
                 
                 $numTotalDeDemandas = 0;
                 for ($i=0;$i<$tamanho;$i++) {
@@ -146,10 +148,12 @@ function confirmar() {
                 	$setor = $registro[voDemandaTramitacao::$nmAtrCdSetorDestino];
                 	$setorDesc = dominioSetor::getDescricao($setor);
                 	
-                	$numTotal = $registro[filtroConsultarDemandaGestao::$NmColNumTotalDemandas];
-                    $tempoMedioVida = $registro[filtroConsultarDemandaGestao::$NmColNumTempoVidaMedio];
+                	$numTotalDemandasQuePassou = $registro[filtroConsultarDemandaGestao::$NmColNumTotalDemandas];
+                	$tempoVida = $registro[filtroConsultarDemandaGestao::$NmColNuTempoVida];
+                	$tempoMedioVida = $registro[filtroConsultarDemandaGestao::$NmColNumTempoVidaMedio];
+                	$numTotalDemandasNoSetor = $registro[filtroConsultarDemandaGestao::$NmColNumTotalDemandasNoSetor];                     
                     
-                    $numTotalDeDemandas = $numTotalDeDemandas + $numTotal;
+                    $numTotalDeDemandas = $numTotalDemandasNoSetor + $numTotalDeDemandas;
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados">
@@ -157,8 +161,10 @@ function confirmar() {
                     </TD>
                                        
                     <TD class="tabeladados"><?php echo $setorDesc?></TD>
+                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo complementarCharAEsquerda($tempoVida, "0", constantes::$TAMANHO_CODIGOS_SAFI);?></TD>
+                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo complementarCharAEsquerda($numTotalDemandasQuePassou, "0", constantes::$TAMANHO_CODIGOS_SAFI);?></TD>                    
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo complementarCharAEsquerda(getMoeda($tempoMedioVida,2), "0", constantes::$TAMANHO_CODIGOS_SAFI);?></TD>
-                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo complementarCharAEsquerda(getMoeda($numTotal,0), "0", constantes::$TAMANHO_CODIGOS_SAFI);?></TD>                    
+                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo complementarCharAEsquerda($numTotalDemandasNoSetor, "0", constantes::$TAMANHO_CODIGOS_SAFI);?></TD>                    
                 </TR>					
                 <?php
 				}				

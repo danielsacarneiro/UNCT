@@ -7,11 +7,14 @@ class filtroConsultarDemandaGestao extends filtroManterDemanda{
 	
 	public $nmFiltro = "filtroConsultarDemandaGestao";
 	static $NmTabelaDemandaTramSaida = "NmTabelaDemandaTramSaida";
+	static $NmTabelaDemandaPrazoPorSetor = "NmTabelaDemandaPrazoPorSetor";
 	
 	//colunas
 	static $NmColDtReferenciaSaida = "NmColDtReferenciaSaida";
 	static $NmColNumTotalDemandas = "NmColNumTotalDemandas";
 	static $NmColNumTempoVidaMedio = "NmColNumTempoVidaMedio";
+	static $NmColInSetorAtualDemanda= "NmColInSetorAtualDemanda";
+	static $NmColNumTotalDemandasNoSetor = "NmColNumTotalDemandasNoSetor";
 	
 	private $nmFiltroAnterior = "";
 	/*function getFiltroFormulario(){
@@ -798,6 +801,16 @@ class filtroConsultarDemandaGestao extends filtroManterDemanda{
 					$conector  = "\n AND ";
 		}
 		
+		if($this->inDesativado != null){
+			//if($this->vodemanda->cdSetorDestino != null){
+			$filtro = $filtro . $conector
+			. voentidade::$nmAtrInDesativado
+			. " = "
+					. getVarComoString($this->inDesativado)
+					;
+		
+					$conector  = "\n AND ";
+		}
 		
 		$this->formataCampoOrdenacao(new voDemanda());
 		//finaliza o filtro

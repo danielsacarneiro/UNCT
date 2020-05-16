@@ -1,7 +1,7 @@
 <?php
 include_once (caminho_lib . "dbprocesso.obj.php");
 class dbDemanda extends dbprocesso {
-	static $FLAG_PRINTAR_SQL = false;
+	static $FLAG_PRINTAR_SQL = FALSE;
 	
 	function consultarPorChaveTelaColecaoContrato($vo, $isHistorico) {
 		try {
@@ -284,49 +284,103 @@ class dbDemanda extends dbprocesso {
  * @see dbprocesso::consultarTelaConsulta()
  */
 	function consultarTelaGestaoDemandaDetalhePorTipo($filtro) {		
+		
 		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( false );
 		$nmTabelaTramitacao = voDemandaTramitacao::getNmTabelaStatic ( false );
-
-		$dtDemandaTramEntrada = "$nmTabelaDemanda." . voDemanda::$nmAtrDtReferencia;
-		$numDemandas = "COUNT(*)";
+		$nmTabelaPrazoPorSetor = filtroConsultarDemandaGestao::$NmTabelaDemandaPrazoPorSetor;
+	
 		$arrayAtributosSetorDestino = array(
 				"$nmTabelaTramitacao." . voDemandaTramitacao::$nmAtrCdSetorDestino,
 				"$nmTabelaDemanda." . voDemanda::$nmAtrCdSetor,
 		);
 		$cdSetorDestino = getSQLCOALESCE($arrayAtributosSetorDestino);
+		$somaTotalDemandas = "SUM(".filtroConsultarDemandaGestao::$NmColNumTotalDemandas.")";
 		
-		$arrayColunasRetornadas = array (
-				"$cdSetorDestino AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,
-				$dtDemandaTramEntrada,
-				"$numDemandas  AS " . filtroConsultarDemandaGestao::$NmColNumTotalDemandas,
-				"SUM(".filtroConsultarDemandaGestao::getSQLNuTempoVida($nmTabelaDemanda). ")/$numDemandas AS ". filtroConsultarDemandaGestao::$NmColNumTempoVidaMedio,
-	    );
+				
+		$queryJoin .= "SELECT " . voDemandaTramitacao::$nmAtrCdSetorDestino;
+		$queryJoin .= ",$somaTotalDemandas AS " . filtroConsultarDemandaGestao::$NmColNumTotalDemandas;
+		$queryJoin .= ",SUM(".filtroConsultarDemandaGestao::$NmColNuTempoVida.") AS " . filtroConsultarDemandaGestao::$NmColNuTempoVida;
+		$queryJoin .= ",SUM(".filtroConsultarDemandaGestao::$NmColNuTempoVida.")/$somaTotalDemandas AS " . filtroConsultarDemandaGestao::$NmColNumTempoVidaMedio;
+		$queryJoin .= ",SUM(".filtroConsultarDemandaGestao::$NmColInSetorAtualDemanda .") AS " . filtroConsultarDemandaGestao::$NmColNumTotalDemandasNoSetor;
+		$queryJoin .= " FROM ";				
 		
-		$atributosGroup = voDemandaTramitacao::$nmAtrCd . "," . voDemandaTramitacao::$nmAtrAno;
-		// o proximo join eh p pegar a ultima tramitacao apenas, se houver
-		$nmTabelaMAXTramitacao = "TABELA_MAX";
-		$queryJoin = "";
-		$queryJoin .= "\n LEFT JOIN (";
-		$queryJoin .= " SELECT MAX(" . voDemandaTramitacao::$nmAtrSq . ") AS " . voDemandaTramitacao::$nmAtrSq . "," . $atributosGroup . " FROM " . $nmTabelaTramitacao . " GROUP BY " . $atributosGroup;
-		$queryJoin .= ") $nmTabelaMAXTramitacao";
-		$queryJoin .= "\n ON " . $nmTabelaDemanda . "." . voDemandaTramitacao::$nmAtrAno . " = $nmTabelaMAXTramitacao." . voDemandaTramitacao::$nmAtrAno;
-		$queryJoin .= "\n AND " . $nmTabelaDemanda . "." . voDemandaTramitacao::$nmAtrCd . " = $nmTabelaMAXTramitacao." . voDemandaTramitacao::$nmAtrCd;
-		
+		$queryJoin .= "(SELECT ";
+		$queryJoin .= "$cdSetorDestino AS " . voDemandaTramitacao::$nmAtrCdSetorDestino;
+		$queryJoin .= "," . getSQLCASE($cdSetorDestino, "TAB_TEMP." . voDemandaTramitacao::$nmAtrCdSetorDestino, "1", "0") . " AS " . filtroConsultarDemandaGestao::$NmColInSetorAtualDemanda;
+		$queryJoin .= ",1  AS " . filtroConsultarDemandaGestao::$NmColNumTotalDemandas; //cada linha representa uma demanda, dai o numero 1 para contar ao final o total de demandas por setor
+		//$queryJoin .= ",SUM($nmTabelaPrazoPorSetor.".filtroConsultarDemandaGestao::$NmColNuTempoVida. ") AS ". filtroConsultarDemandaGestao::$NmColNuTempoVida;
+		$queryJoin .= ",$nmTabelaPrazoPorSetor.".filtroConsultarDemandaGestao::$NmColNuTempoVida;
+		$queryJoin .= " FROM $nmTabelaDemanda ";
 		// agora pega dos dados da ultima tramitacao, se houver
 		$queryJoin .= "\n LEFT JOIN ";
 		$queryJoin .= $nmTabelaTramitacao;
-		$queryJoin .= "\n ON " . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrAno . " = $nmTabelaMAXTramitacao." . voDemandaTramitacao::$nmAtrAno;
-		$queryJoin .= "\n AND " . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCd . " = $nmTabelaMAXTramitacao." . voDemandaTramitacao::$nmAtrCd;
-		$queryJoin .= "\n AND " . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrSq . " = $nmTabelaMAXTramitacao." . voDemandaTramitacao::$nmAtrSq;
+		$queryJoin .= "\n ON " . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrAno . " = $nmTabelaDemanda." . voDemandaTramitacao::$nmAtrAno;
+		$queryJoin .= "\n AND " . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCd . " = $nmTabelaDemanda." . voDemandaTramitacao::$nmAtrCd;
 		
-
-		$arrayGroupby = array (
-				$cdSetorDestino, 
+		$atributosGroup = voDemandaTramitacao::$nmAtrCd . "," . voDemandaTramitacao::$nmAtrAno;
+		// o proximo join eh p pegar a ultima tramitacao apenas, se houver, PARA SABER EM QUE SETOR ESTA A DEMANDA
+		$queryJoin .= "\n LEFT JOIN (";
+		$queryJoin .= " SELECT MAX(" . voDemandaTramitacao::$nmAtrSq . ") AS " . voDemandaTramitacao::$nmAtrSq . "," . $atributosGroup . " FROM " . $nmTabelaTramitacao . " GROUP BY " . $atributosGroup;
+		$queryJoin .= ") TABELA_MAX";
+		$queryJoin .= "\n ON " . $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . " = TABELA_MAX." . voDemandaTramitacao::$nmAtrAno;
+		$queryJoin .= "\n AND " . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd . " = TABELA_MAX." . voDemandaTramitacao::$nmAtrCd;		
+		$queryJoin .= "\n LEFT JOIN  $nmTabelaTramitacao TAB_TEMP";
+		$queryJoin .= "\n ON TABELA_MAX." . voDemandaTramitacao::$nmAtrAno . " = TAB_TEMP." . voDemandaTramitacao::$nmAtrAno;
+		$queryJoin .= "\n AND TABELA_MAX." . voDemandaTramitacao::$nmAtrCd . " = TAB_TEMP." . voDemandaTramitacao::$nmAtrCd;
+		$queryJoin .= "\n AND TABELA_MAX." . voDemandaTramitacao::$nmAtrSq . " = TAB_TEMP." . voDemandaTramitacao::$nmAtrSq;		
+		
+		//para recuperar os dias por setor
+		$dtDemandaTramSaida = filtroConsultarDemandaGestao::getSQLDtDemandaTramitacaoSaida($nmTabelaTramitacao, $nmTabelaDemanda);
+		$dtDemandaTramEntrada = "$nmTabelaTramitacao." . voDemandaTramitacao::$nmAtrDtReferencia;		
+				
+		$arrayGroupbyAliasTemp = array (
+				voDemandaTramitacao::$nmAtrCdSetorDestino,
+				voDemanda::$nmAtrAno,
+				voDemanda::$nmAtrCd,
 		);
+		$nmAtributosGroupByAliasTemp =  getSQLStringFormatadaColecaoIN($arrayGroupbyAliasTemp);
 		
-		$filtro->groupby = $arrayGroupby;
+		$queryJoin .= " LEFT JOIN (";
+		$queryJoin .= " SELECT $nmAtributosGroupByAliasTemp, SUM(".filtroConsultarDemandaGestao::$NmColNuTempoVida.") AS ".filtroConsultarDemandaGestao::$NmColNuTempoVida." FROM ";
+		$queryJoin .= "(SELECT ";
+		$queryJoin .= $nmTabelaTramitacao . ".*";
+		$queryJoin .= ", ". getDataSQLDiferencaDias($dtDemandaTramEntrada, $dtDemandaTramSaida) . " AS " . filtroConsultarDemandaGestao::$NmColNuTempoVida;
+		$queryJoin .= " FROM " . $nmTabelaTramitacao;		
+		$queryJoin .= "\n INNER JOIN " . $nmTabelaDemanda;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrAno;
+		$queryJoin .= "\n AND " . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd . "=" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCd;
 		
-		$retorno = parent::consultarMontandoQueryTelaConsulta ( new voDemanda(), $filtro, $arrayColunasRetornadas, $queryJoin );
+		$queryJoin .= filtroManter::$CD_CAMPO_SUBSTITUICAO;
+		
+		$queryJoin .= ") ALIAS_TEMP GROUP BY " . $nmAtributosGroupByAliasTemp;
+		$queryJoin .= ") $nmTabelaPrazoPorSetor " ;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaPrazoPorSetor . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . "=" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaPrazoPorSetor . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaDemanda . "." . voDemanda::$nmAtrAno;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaPrazoPorSetor . "." . voDemanda::$nmAtrCd . "=" . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd;
+		
+		$queryJoin .= filtroManter::$CD_CAMPO_SUBSTITUICAO;
+		
+		$queryJoin .= " GROUP BY $cdSetorDestino" . ",$nmTabelaDemanda." . vodemanda::$nmAtrAno . ",$nmTabelaDemanda." . vodemanda::$nmAtrCd; 
+		$queryJoin .= ") ALIAS_TEMP_2 ";
+		
+		$queryJoin .= " GROUP BY " . voDemandaTramitacao::$nmAtrCdSetorDestino;
+			
+		$queryJoin .= " ORDER BY " . filtroConsultarDemandaGestao::$NmColNumTotalDemandas . " DESC";
+		
+		$arraySubstituicao = array(
+				filtroManter::$CD_CAMPO_SUBSTITUICAO => $filtro->getSQLFiltroPreenchido(),		
+		);		
+		
+		$filtro->inDesativado = constantes::$CD_NAO;
+		$filtro->sqlFiltrosASubstituir = $arraySubstituicao;
+		
+		$retorno = parent::consultarFiltroPorSubstituicao($filtro, $queryJoin);
+		
+		//$retorno = parent::consultarMontandoQueryTelaConsulta ( new voDemanda(), $filtro, $arrayColunasRetornadas, $queryJoin );
 				
 		return $retorno;
 	}
