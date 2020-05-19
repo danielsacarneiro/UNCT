@@ -261,20 +261,20 @@ function montarChaveContrato(){
                   ?>
                     <TH class="headertabeladadosalinhadocentro" width="1%" nowrap>Sq.</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Contrato</TH>
-                    <TH class="headertabeladados" width="1%" nowrap>Espécie</TH>
+                    <TH class="headertabeladados" width="1%">Espécie</TH>
                     <TH class="headertabeladados" width="20%">Contratada</TH>                    
-					<TH class="headertabeladados" width="1%" nowrap>Tipo</TH>
+					<TH class="headertabeladados" width="1%">Tipo</TH>
 					<TH class="headertabeladados" width="1%" nowrap>Índice</TH>
 					<TH class="headertabeladados" width="1%" nowrap>Valor.Ref</TH>					
-					<TH class="headertabeladados" width="1%" nowrap>Mensal.Atual</TH>
-					<TH class="headertabeladados" width="1%" nowrap>Global.Atual</TH>
-					<TH class="headertabeladados" width="1%" nowrap>Vl.Referência</TH>
+					<TH class="headertabeladados" width="1%">Mensal.Atual</TH>
+					<TH class="headertabeladados" width="1%" >Global.Atual</TH>
+					<TH class="headertabeladados" width="1%">Vl.Referência</TH>
 					<TH class="headertabeladados" width="1%" nowrap>%.Contrato</TH>
 					<TH class="headertabeladados" width="1%" nowrap>Dt.Início</TH>
 					<TH class="headertabeladados" width="1%" nowrap>Dt.Fim</TH>
-					<TH class="headertabeladados" width="1%" nowrap>Dt.Assinatura</TH>					
-                    <TH class="headertabeladados" width="1%" nowrap>Dt.Registro</TH>
-                    <TH class="headertabeladados" width="1%" nowrap>Usu.Registro</TH>
+					<TH class="headertabeladados" width="1%">Dt.Assinatura</TH>					
+                    <TH class="headertabeladados" width="1%" >Dt.Registro</TH>
+                    <TH class="headertabeladados" width="1%">Usu.Registro</TH>
                 </TR>
                 <?php				
                                 
@@ -371,10 +371,10 @@ function montarChaveContrato(){
                   }
                   ?>
                     <TD class="tabeladados"><?php echo complementarCharAEsquerda($voAtual->sq, "0", TAMANHO_CODIGOS_SAFI);?></TD>                    
-                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo $contrato;?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $complementoContrato?></TD>					
+                    <TD class="tabeladadosalinhadodireita"><?php echo $contrato;?></TD>
+                    <TD class="tabeladados"><?php echo $complementoContrato?></TD>					
 					<TD class="tabeladados"><?php echo $dsPessoa?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $tipoModificacao?></TD>
+                    <TD class="tabeladados"><?php echo $tipoModificacao?></TD>
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->numPercentual)?>%</TD>
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlModificacaoReferencial,2)?></TD>
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getMoeda($voAtual->vlMensalAtual)?></TD>                    
@@ -385,7 +385,7 @@ function montarChaveContrato(){
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getData($voAtual->dtModificacaoFim)?></TD>
 					<TD class="tabeladadosalinhadodireita" nowrap><?php echo getData($vocontrato->dtAssinatura)?></TD>                    
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo getDataHora($voAtual->dhUltAlteracao)?></TD>                    
-                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo $nmUsuario?></TD>
+                    <TD class="tabeladadosalinhadodireita"><?php echo $nmUsuario?></TD>
                 </TR>					
                 <?php
 				}				

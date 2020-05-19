@@ -679,10 +679,9 @@ class filtroManterDemanda extends filtroManter{
 						.")";
 			//$nmAtributoDataProposta = $nmTabelaContratoInfo . "." .voContratoInfo::$nmAtrDtProposta;
 			$dtPropostaPAram = $atributoDataReajuste;
-			/*CONSIDERAVA 1 ANO ANTES DO ATUAL PARA FAZER A DIFERENCA DE 1 ANO PARA A CONCESSAO DE REAJUSTE
-			$ano = "YEAR($dtReferencia)-1";*/			
-			//ANTES ERA ANO-1, agora ficou somente ANO... nao lembro o motivo da subtracao de 1
-			$ano = "YEAR($dtReferencia)";
+			//CONSIDERA 1 ANO ANTES DO ATUAL: isto porque quando houver diferenca de um ano, o DATEDIFF usado no metodo getDataSQLDiferencaAnos abaixo, trara
+			//mais que 365 dias...dai tem-se que a operacao datediff/365 será maior que 1!!! e o valor da 'operacao' serah maior que zero, na validacao abaixo
+			$ano = "YEAR($dtReferencia)-1";
 			$mes = "MONTH($dtPropostaPAram)";
 			//considera o dia 15 do mes como dia limite para obtencao do indice de reajuste exigido por lei
 			//ver data da liberacao dos indices em https://www.indiceseindicadores.com.br/inpc/
@@ -691,8 +690,7 @@ class filtroManterDemanda extends filtroManter{
 			//$dia = "DAY($dtPropostaPAram)";
 			$dtPropostaPAram = getDataSQLFormatada($ano,$mes, $dia);
 			
-			//echo "$dtReferencia";
-						
+			//echo "$dtReferencia";						
 			//se a diferenca de anos for zero, quer dizer que nao ha diferenca de 1 ano
 			//nesse caso, o vencimento da data da proposta nao ocorreu, nao podendo ser a demanda analisada para fins de reajuste
 			if(getAtributoComoBooleano($this->inContratoComDtPropostaVencida)){

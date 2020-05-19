@@ -92,7 +92,8 @@ function getFiltroManterDemandaDataBaseReajusteVencida(){
 		$filtro->setaFiltroConsultaSemLimiteRegistro ();
 		$filtro->vodemanda->situacao = array (
 				dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_ABERTA,
-				dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO
+				dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO,
+				//dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_SUSPENSA,
 		);
 		$filtro->inContratoComDtPropostaVencida = constantes::$CD_SIM;
 		//$filtro->vocontrato->dtProposta = getDataHoje();

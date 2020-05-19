@@ -1,7 +1,7 @@
 <?php
 include_once (caminho_lib . "dbprocesso.obj.php");
 class dbDemanda extends dbprocesso {
-	static $FLAG_PRINTAR_SQL = FALSE;
+	static $FLAG_PRINTAR_SQL = false;
 	
 	function consultarPorChaveTelaColecaoContrato($vo, $isHistorico) {
 		try {
