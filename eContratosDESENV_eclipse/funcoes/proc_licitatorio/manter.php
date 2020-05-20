@@ -58,6 +58,12 @@ setCabecalho($titulo);
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_ajax.js"></script>
 
 <SCRIPT language="JavaScript" type="text/javascript">
+<?php
+		//guarda os setores do econti
+		$varColecaoCdPregoeiroPorCPL = "_globalCdPregoeiroPorCPL";
+		echo getColecaoComoVariavelJS(dominioComissaoProcLicitatorio::getColecaoCdPregoeiroPorCPL(), $varColecaoCdPregoeiroPorCPL);
+?>
+
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
 function isFormularioValido() {
 	/*if (!validarPublicacao())
@@ -76,6 +82,12 @@ function confirmar() {
 	}
 	
 	return confirm("Confirmar Alteracoes?");    
+}
+
+function setCdPregoeiro(){
+	var colecao=<?=$varColecaoCdPregoeiroPorCPL?>;
+	var cpl = document.frm_principal.<?=voProcLicitatorio::$nmAtrCdCPL?>.value;
+	document.frm_principal.<?=voProcLicitatorio::$nmAtrCdPregoeiro?>.value = colecao[cpl];	
 }
 
 </SCRIPT>
@@ -159,16 +171,16 @@ function confirmar() {
 				</TD>
 	        </TR>
 			<TR>
-				<TH class="campoformulario" width="1%" nowrap>Pregoeiro:</TH>
+				<TH class="campoformulario" width="1%" nowrap>CPL:</TH>
                 <TD class="campoformulario" width="1%">
+                <?php echo $comboCPL->getHtmlCombo(voProcLicitatorio::$nmAtrCdCPL,voProcLicitatorio::$nmAtrCdCPL, $vo->cdCPL, true, "campoobrigatorio", false, " onChange='setCdPregoeiro();' required ");?>
+				</TD>
+				<TH class="campoformulario" width="1%" nowrap>Pregoeiro:</TH>
+                <TD class="campoformulario" >
                      <?php
                     include_once(caminho_funcoes."pessoa/biblioteca_htmlPessoa.php");
                     echo getComboPessoaPregoeiro(voProcLicitatorio::$nmAtrCdPregoeiro, voProcLicitatorio::$nmAtrCdPregoeiro, $vo->cdPregoeiro, "camponaoobrigatorio", "required");                                        
                     ?>
-				</TD>
-				<TH class="campoformulario" width="1%" nowrap>CPL:</TH>
-                <TD class="campoformulario">
-                <?php echo $comboCPL->getHtmlCombo(voProcLicitatorio::$nmAtrCdCPL,voProcLicitatorio::$nmAtrCdCPL, $vo->cdCPL, true, "campoobrigatorio", false, " required ");?>
 				</TD>
 	        </TR>
 			<TR>

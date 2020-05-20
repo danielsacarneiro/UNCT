@@ -13,6 +13,11 @@ class dominioComissaoProcLicitatorio extends dominio {
 	static $NM_PREGOEIRO_CPL_I = "ODACY WELLINGTON DA SILVA";
 	static $NM_PREGOEIRO_CPL_II = "MARIA GORETE BRANDT DE CARVALHO";
 	static $NM_PREGOEIRO_CPL_III = "PATRICIA DE LUCENA FARIAS";
+
+	static $CD_PESSOA_ODACY  = 474;
+	static $CD_PESSOA_GORETE = 473;
+	static $CD_PESSOA_PATRICIA = 451;
+	
 	// ...............................................................
 	// Construtor
 	function __construct() {
@@ -30,6 +35,16 @@ class dominioComissaoProcLicitatorio extends dominio {
 	}
 	static function getColecaoConsulta() {
 		return static::getColecao();
+	}
+	static function getColecaoCdPregoeiroPorCPL() {
+		$retorno = array (
+				self::$CD_CPL_I => self::$CD_PESSOA_ODACY,
+				self::$CD_CPL_II => self::$CD_PESSOA_GORETE,
+				self::$CD_CPL_III => self::$CD_PESSOA_PATRICIA,
+				self::$CD_CPL_CEL => self::$CD_PESSOA_PATRICIA,
+		);
+	
+		return $retorno;
 	}
 	/*static function getCPLPorPregoeiro($nmPregoeiro, $retornarDescricao = false) {
 		//echo "nome pregoeiro eh $nmPregoeiro";
