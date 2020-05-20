@@ -33,6 +33,7 @@ function getProcLicitatorioDetalhamento($voProcLicitatorio,$temLupa=true) {
 	
 	if($voProcLicitatorio->cdPregoeiro != null){
 		echo getComboPessoaPregoeiro(voProcLicitatorio::$nmAtrCdPregoeiro, voProcLicitatorio::$nmAtrCdPregoeiro, $voProcLicitatorio->cdPregoeiro, "camponaoobrigatorio", " disabled ");
+		echo "-" . dominioComissaoProcLicitatorio::getDescricao($voProcLicitatorio->cdCPL);
 	}	
 	if($voProcLicitatorio->objeto != null){
 		echo "<br>" . getInputTextArea(voProcLicitatorio::$nmAtrObjeto, voProcLicitatorio::$nmAtrObjeto, $voProcLicitatorio->objeto, constantes::$CD_CLASS_CAMPO_READONLY);

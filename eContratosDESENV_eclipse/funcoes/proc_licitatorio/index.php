@@ -272,7 +272,7 @@ function alterar() {
                     <TD class="tabeladados"><?php echo $voAtual->objeto;?></TD>
                     <TD class="tabeladados" nowrap><?php echo $tipo;?></TD>
 					<TD class="tabeladados" nowrap><?php echo $pregoeiro;?></TD>
-					<TD class="tabeladados" nowrap><?php echo dominioComissaoProcLicitatorio::getCPLPorPregoeiro($pregoeiro, true);?></TD>
+					<TD class="tabeladados" nowrap><?php echo dominioComissaoProcLicitatorio::getDescricao($voAtual->cdCPL);?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($voAtual->dtAbertura);?></TD>
                     <TD class="<?=$classColunaSituacao?>" nowrap><?php echo $situacao;?></TD>
                 </TR>					

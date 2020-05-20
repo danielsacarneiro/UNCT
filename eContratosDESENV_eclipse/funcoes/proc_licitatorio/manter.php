@@ -141,6 +141,7 @@ function confirmar() {
 	       
 	       $comboModalidade = new select(dominioModalidadeProcLicitatorio::getColecao());
 	       $comboTipo = new select(dominioTipoProcLicitatorio::getColecao());
+	       $comboCPL = new select(dominioComissaoProcLicitatorio::getColecao());
 	       ?>
 			<TR>
 				<TH class="campoformulario" nowrap width="1%">Modalidade:</TH>
@@ -159,11 +160,15 @@ function confirmar() {
 	        </TR>
 			<TR>
 				<TH class="campoformulario" width="1%" nowrap>Pregoeiro:</TH>
-                <TD class="campoformulario" colspan=3>
+                <TD class="campoformulario" width="1%">
                      <?php
                     include_once(caminho_funcoes."pessoa/biblioteca_htmlPessoa.php");
                     echo getComboPessoaPregoeiro(voProcLicitatorio::$nmAtrCdPregoeiro, voProcLicitatorio::$nmAtrCdPregoeiro, $vo->cdPregoeiro, "camponaoobrigatorio", "required");                                        
                     ?>
+				</TD>
+				<TH class="campoformulario" width="1%" nowrap>CPL:</TH>
+                <TD class="campoformulario">
+                <?php echo $comboCPL->getHtmlCombo(voProcLicitatorio::$nmAtrCdCPL,voProcLicitatorio::$nmAtrCdCPL, $vo->cdCPL, true, "campoobrigatorio", false, " required ");?>
 				</TD>
 	        </TR>
 			<TR>

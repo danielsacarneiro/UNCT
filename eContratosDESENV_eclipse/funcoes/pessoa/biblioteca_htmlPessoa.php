@@ -141,12 +141,13 @@ function getComboPessoaPregoeiro($idCampo, $nmCampo, $cdOpcaoSelecionada, $class
 	$recordset = $dbprocesso->consultarPessoaManter($filtro, false);
 
 	$select = new select(array());
-	$select->getRecordSetComoColecaoSelect(vopessoa::$nmAtrCd, vopessoa::$nmAtrNome, acrescentarCdCPLNomePregoeiro($recordset));
+	//$select->getRecordSetComoColecaoSelect(vopessoa::$nmAtrCd, vopessoa::$nmAtrNome, acrescentarCdCPLNomePregoeiro($recordset));
+	$select->getRecordSetComoColecaoSelect(vopessoa::$nmAtrCd, vopessoa::$nmAtrNome, $recordset);
 
 	return getComboColecaoGenerico($select->colecao, $idCampo, $nmCampo, $cdOpcaoSelecionada, $classCampo, $tagHtml);
 }
 
-function acrescentarCdCPLNomePregoeiro($recordset){
+/*function acrescentarCdCPLNomePregoeiro($recordset){
 	for($i =0 ; $i<sizeof($recordset);$i++){
 		$registro = $recordset[$i];
 		$nmpessoa = $registro[vopessoa::$nmAtrNome];
@@ -155,7 +156,7 @@ function acrescentarCdCPLNomePregoeiro($recordset){
 	}	
 	
 	return $recordset;
-}
+}*/
 
 
 function getComboPessoaVinculo($idCampo, $nmCampo, $cdOpcaoSelecionada, $classCampo, $tagHtml){

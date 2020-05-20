@@ -4,9 +4,11 @@ class dominioComissaoProcLicitatorio extends dominio {
 	static $CD_CPL_I = 1;
 	static $CD_CPL_II = 2;
 	static $CD_CPL_III = 3;
+	static $CD_CPL_CEL = 4;
 	static $DS_CPL_I = "CPL-I";
 	static $DS_CPL_II = "CPL-II";
 	static $DS_CPL_III = "CPL-III";
+	static $DS_CPL_CEL = "CL-PROFISC";
 	
 	static $NM_PREGOEIRO_CPL_I = "ODACY WELLINGTON DA SILVA";
 	static $NM_PREGOEIRO_CPL_II = "MARIA GORETE BRANDT DE CARVALHO";
@@ -20,7 +22,8 @@ class dominioComissaoProcLicitatorio extends dominio {
 		$retorno = array (
 				self::$CD_CPL_I => self::$DS_CPL_I,
 				self::$CD_CPL_II => self::$DS_CPL_II,
-				self::$CD_CPL_III => self::$DS_CPL_III 
+				self::$CD_CPL_III => self::$DS_CPL_III,
+				self::$CD_CPL_CEL => self::$DS_CPL_CEL
 		);
 		
 		return $retorno;
@@ -28,7 +31,7 @@ class dominioComissaoProcLicitatorio extends dominio {
 	static function getColecaoConsulta() {
 		return static::getColecao();
 	}
-	static function getCPLPorPregoeiro($nmPregoeiro, $retornarDescricao = false) {
+	/*static function getCPLPorPregoeiro($nmPregoeiro, $retornarDescricao = false) {
 		//echo "nome pregoeiro eh $nmPregoeiro";
 		$retorno = null;
 		if (existeStr1NaStr2ComSeparador ( $nmPregoeiro, "gorete" )) {
@@ -36,14 +39,20 @@ class dominioComissaoProcLicitatorio extends dominio {
 		} else if (existeStr1NaStr2ComSeparador ( $nmPregoeiro, "odacy" )) {
 			$retorno = static::$CD_CPL_I;
 		} else if (existeStr1NaStr2ComSeparador ( $nmPregoeiro, "patricia" . CAMPO_SEPARADOR . "patrícia" )) {
-			$retorno = static::$CD_CPL_III;
+			$retorno = array(static::$CD_CPL_III, static::$CD_CPL_CEL);
 		}
 		
 		if ($retornarDescricao) {
-			$retorno = static::getDescricaoStatic ( $retorno );
+			if(!is_array($retorno)){
+				$retorno = static::getDescricaoStatic ( $retorno );
+			}else{
+				for ($i=0; $i<sizeof($retorno);$i++){
+					$retorno[$i] = static::getDescricaoStatic ( $retorno[$i] );					
+				}
+			}
 		}
 		return $retorno;
-	}
+	}*/
 	static function getNmPregoeiroPorCPL($proclic) {
 		$retorno = null;
 		
@@ -60,7 +69,8 @@ class dominioComissaoProcLicitatorio extends dominio {
 			$retorno = static::$NM_PREGOEIRO_CPL_I;
 		}else if (existeStr1NaStr2ComSeparador ( $proclic, static::$DS_CPL_II )) {
 			$retorno = static::$NM_PREGOEIRO_CPL_II;
-		} else if (existeStr1NaStr2ComSeparador ( $proclic, static::$DS_CPL_III )) {
+		} else if (existeStr1NaStr2ComSeparador ( $proclic, static::$DS_CPL_III ) 
+				|| existeStr1NaStr2ComSeparador ( $proclic, static::$DS_CPL_CEL)) {
 			$retorno = static::$NM_PREGOEIRO_CPL_III;
 		}
 	
@@ -74,7 +84,9 @@ class dominioComissaoProcLicitatorio extends dominio {
 			$retorno .= "996, do dia 26/04/2018, publicada no DOE edição de 27/04/2018";
 		} else if (static::$CD_CPL_III == $cdCPL) {
 			$retorno .= "997, do dia 26/04/2018, publicada no DOE edição de 27/04/2018";
-		}
+		} else if (static::$CD_CPL_CEL == $cdCPL) {
+				$retorno .= "2476, do dia 10/10/2019, publicada no DOE edição de 11/10/2019";
+		}				
 		else
 			$retorno = null;
 
@@ -98,6 +110,7 @@ class dominioComissaoProcLicitatorio extends dominio {
 			$retorno .= "<b>842/$ano</b>(CPL-I), publicada no DOE de 07.05.2019.<br>";
 			$retorno .= "<b>843/$ano</b>(CPL-II), publicada no DOE de 07.05.2019<br>";
 			$retorno .= "<b>844/$ano</b>(CPL-III), publicada no DOE de 07.05.2019<br>";
+			$retorno .= "<b>2476/$ano</b>(".static::$CD_CPL_CEL."), publicada no DOE de 11.10.2019<br>";
 			$numPortarias++;
 		}
 		

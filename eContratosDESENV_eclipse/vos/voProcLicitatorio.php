@@ -16,11 +16,11 @@ class voProcLicitatorio extends voentidade {
 	static $nmAtrAno = "pl_ex";	
 
 	static $nmAtrCdOrgaoResponsavel = "pl_orgao_responsavel";
-	static $nmAtrCdComissao = "pl_comissao_cd";	
 	static $nmAtrCdModalidade = "pl_mod_cd";
 	static $nmAtrNumModalidade = "pl_mod_num";
 	static $nmAtrTipo = "pl_tp";
 	static $nmAtrCdPregoeiro = "pl_cd_pregoeiro";
+	static $nmAtrCdCPL = "pl_cd_cpl";	
 	
 	static $nmAtrDtAbertura = "pl_dt_abertura";
 	static $nmAtrDtPublicacao = "pl_dt_publicacao";
@@ -35,11 +35,11 @@ class voProcLicitatorio extends voentidade {
 	var $anoDemanda = "";
 	
 	var $cdOrgaoResponsavel = "";
-	var $cdComissao = "";
 	var $cdModalidade = "";
 	var $numModalidade = "";
 	var $tipo = "";
 	var $cdPregoeiro = "";
+	var $cdCPL = "";
 	
 	var $dtAbertura = "";
 	var $dtPublicacao = "";
@@ -92,11 +92,11 @@ class voProcLicitatorio extends voentidade {
 				self::$nmAtrAno,
 				self::$nmAtrCd,
 				self::$nmAtrCdOrgaoResponsavel,
-				self::$nmAtrCdComissao,
 				self::$nmAtrCdModalidade,
 				self::$nmAtrNumModalidade,
 				self::$nmAtrTipo,
 				self::$nmAtrCdPregoeiro,
+				self::$nmAtrCdCPL,
 				self::$nmAtrDtAbertura,
 				self::$nmAtrDtPublicacao,				
 				self::$nmAtrObjeto,
@@ -125,11 +125,11 @@ class voProcLicitatorio extends voentidade {
 		$this->anoDemanda = $registrobanco [voDemanda::$nmAtrAno];
 		
 		$this->cdOrgaoResponsavel = $registrobanco [self::$nmAtrCdOrgaoResponsavel];
-		$this->cdComissao = $registrobanco [self::$nmAtrCdComissao];		
 		$this->cdModalidade = $registrobanco [self::$nmAtrCdModalidade];
 		$this->numModalidade = $registrobanco [self::$nmAtrNumModalidade];
 		$this->tipo = $registrobanco [self::$nmAtrTipo];
 		$this->cdPregoeiro = $registrobanco [self::$nmAtrCdPregoeiro];
+		$this->cdCPL = $registrobanco [self::$nmAtrCdCPL];
 		$this->dtAbertura = $registrobanco [self::$nmAtrDtAbertura];
 		$this->dtPublicacao = $registrobanco [self::$nmAtrDtPublicacao];
 		$this->objeto = $registrobanco [self::$nmAtrObjeto];
@@ -144,11 +144,11 @@ class voProcLicitatorio extends voentidade {
 		
 		$this->cdOrgaoResponsavel = dominioSetor::$CD_SETOR_SEFAZ;
 		//$this->cdOrgaoResponsavel = @$_POST [self::$nmAtrCdOrgaoResponsavel];
-		$this->cdComissao = @$_POST [self::$nmAtrCdComissao];
 		$this->cdModalidade = @$_POST [self::$nmAtrCdModalidade];
 		$this->numModalidade = @$_POST [self::$nmAtrNumModalidade];
 		$this->tipo = @$_POST [self::$nmAtrTipo];
 		$this->cdPregoeiro = @$_POST [self::$nmAtrCdPregoeiro];
+		$this->cdCPL = @$_POST [self::$nmAtrCdCPL];
 		$this->dtAbertura = @$_POST [self::$nmAtrDtAbertura];
 		$this->dtPublicacao = @$_POST [self::$nmAtrDtPublicacao];
 		$this->objeto = @$_POST [self::$nmAtrObjeto];

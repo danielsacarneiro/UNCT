@@ -77,6 +77,7 @@ class dbDemanda extends dbprocesso {
 				$nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrNumModalidade,
 				$nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrObjeto,
 				$nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrCdPregoeiro,
+				$nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrCdCPL,
 				// $nmTabelaPessoa . "." . vopessoa::$nmAtrNome,
 				getSQLNmContratada (),
 				"COALESCE (" . " . $nmTabelaTramitacao." . voDemandaTramitacao::$nmAtrCdSetorDestino . "," . $nmTabela . "." . voDemanda::$nmAtrCdSetor . ") AS " . voDemanda::$nmAtrCdSetorAtual 

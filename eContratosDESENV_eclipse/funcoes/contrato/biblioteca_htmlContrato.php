@@ -669,10 +669,6 @@ function getDadosContratoLicon($chave) {
 	return $retorno;
 }
 
-function getCPLPorNomePregoeiro($recordSet){
-	return dominioComissaoProcLicitatorio::getCPLPorPregoeiro($recordSet[voProcLicitatorio::$NmColNomePregoeiro]);
-}
-
 function getContratoMater($vocontrato){
 	$db = new dbcontrato();
 	//$vocontrato = new vocontrato();
@@ -938,7 +934,7 @@ function getInformacaoCPL($registroBanco, $mostrarTodasPortarias = true){
 		$nmPregoeiro = dominioComissaoProcLicitatorio::getNmPregoeiroPorCPL ( $proclic );
 	} 
 	
-	$portaria = dominioComissaoProcLicitatorio::getCPLPorPregoeiro($nmPregoeiro);
+	$portaria = dominioComissaoProcLicitatorio::getDescricao($registroBanco [voProcLicitatorio::$nmAtrCdCPL]);
 	
 	if ($portaria != null && $portaria != "") {
 		$complemento .= "<br>CPL: " . $portaria;

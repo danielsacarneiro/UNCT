@@ -125,12 +125,16 @@ function confirmar() {
 	        </TR>
 			<TR>
 				<TH class="campoformulario" width="1%" nowrap>Pregoeiro:</TH>
-                <TD class="campoformulario" colspan=3>
+                <TD class="campoformulario" >
                      <?php
                     include_once(caminho_funcoes."pessoa/biblioteca_htmlPessoa.php");                    
                     echo getComboPessoaPregoeiro(voProcLicitatorio::$nmAtrCdPregoeiro, voProcLicitatorio::$nmAtrCdPregoeiro, $vo->cdPregoeiro, "camponaoobrigatorio", " disabled ");                                        
                     ?>
 				</TD>
+				<TH class="campoformulario" width="1%" nowrap>CPL:</TH>
+                <TD class="campoformulario">
+                <?php echo dominioComissaoProcLicitatorio::getHtmlDetalhamento("", "", $vo->cdCPL);?>
+				</TD>				
 	        </TR>
 			<TR>
 	            <TH class="campoformulario" nowrap>Data Abertura:</TH>
