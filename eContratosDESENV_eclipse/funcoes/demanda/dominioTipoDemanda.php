@@ -24,7 +24,7 @@ Class dominioTipoDemanda extends dominio{
 	static $CD_TIPO_DEMANDA_A_CLASSIFICAR = 99;
 	
 	static $DS_TIPO_DEMANDA_CONTRATO = "Contrato/Convênio";
-	static $DS_TIPO_DEMANDA_PROCADM = "Proc.Admin(PAAP)";
+	static $DS_TIPO_DEMANDA_PROCADM = "PAAP";
 	static $DS_TIPO_DEMANDA_EDITAL = "Edital";
 	static $DS_TIPO_DEMANDA_JUDICIAL = "Judicial/PGE";
 	static $DS_TIPO_DEMANDA_CONTRATO_REAJUSTE = "Contrato Reajuste";

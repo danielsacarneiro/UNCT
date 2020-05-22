@@ -927,25 +927,28 @@ function getInformacaoCPL($registroBanco, $mostrarTodasPortarias = true){
 	}
 	
 	$nmPregoeiro = $registroBanco [voProcLicitatorio::$NmColNomePregoeiro];
+	$proclic = $registroBanco [vocontrato::$nmAtrProcessoLicContrato];
+	//echo " pregoeiro $nmPregoeiro";
 	if ($nmPregoeiro == null) {
-		//var_dump($registroBanco);
-		$proclic = $registroBanco [vocontrato::$nmAtrProcessoLicContrato];
+		//var_dump($registroBanco);		
 		//echo $proclic;
-		$nmPregoeiro = dominioComissaoProcLicitatorio::getNmPregoeiroPorCPL ( $proclic );
+		$nmPregoeiro = dominioComissaoProcLicitatorio::getNmPregoeiroPorCPL ( $proclic );		
 	} 
-	
-	$portaria = dominioComissaoProcLicitatorio::getDescricao($registroBanco [voProcLicitatorio::$nmAtrCdCPL]);
-	
-	if ($portaria != null && $portaria != "") {
-		$complemento .= "<br>CPL: " . $portaria;
-		if ($nmPregoeiro != null) {
-			$complemento .= "-" . $nmPregoeiro;
-		}
 		
-		$complemento = getTextoHTMLNegrito ( $complemento );
-	}else if(existeStr1NaStr2("CCD", $proclic)){
-		$complemento = getTextoHTMLNegrito ( " => CCD-Comissão de Compra Direta, criada pelo PEIntegrado. Incluir como Processo Administrativo!" );
+	$cpl = dominioComissaoProcLicitatorio::getDescricao($registroBanco [voProcLicitatorio::$nmAtrCdCPL]);
+	if ($cpl == null || $cpl == "") {
+		$cpl = dominioComissaoProcLicitatorio::getChaveDeUmaStringPorColecaoSimples($proclic, dominioComissaoProcLicitatorio::getColecaoSimplesApenasDescricao());
 	}
+	
+	if ($cpl != null && $cpl != "") {
+		$complemento .= "<br>CPL: " . $cpl;		
+	}else if(existeStr1NaStr2("CCD", $proclic)){
+		$complemento = "<br>CCD-Comissão de Compra Direta, criada pelo PEIntegrado. Incluir como Processo Administrativo!";
+	}
+	if ($nmPregoeiro != null) {
+		$complemento .= "-" . $nmPregoeiro;
+	}	
+	$complemento = getTextoHTMLNegrito ( $complemento );
 	$retorno .= $complemento;
 	$retorno .= "<br><br>Todas Portarias:<br>" . dominioComissaoProcLicitatorio::getNumPortariaTodasCPL ( $anoPortaria );
 	

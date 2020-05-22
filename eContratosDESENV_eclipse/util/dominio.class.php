@@ -292,6 +292,19 @@ class dominio extends multiplosConstrutores {
 		return static::getColecao();
 	}	
 	
+	static function getColecaoSimplesApenasDescricao($colecao=null) {
+		if($colecao == null){
+			$colecao = static::getColecaoConsulta();
+		}
+		
+		$chaves = array_keys($colecao);
+		foreach ($chaves as $chave){
+			$retorno[] = self::getDescricao($chave);
+		}
+	
+		return $retorno;
+	}
+	
 	/**
 	 * busca encontrar uma chave em $string (com separador ou nao), determinada pela ordem em que aparece em $colecao 
 	 * @param unknown $string

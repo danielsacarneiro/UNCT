@@ -379,7 +379,7 @@ function detalharDemandaGestao(){
             <TR>
 				<TH class="campoformulario" nowrap width="1%">Tempo.Vida.Mínimo:</TH>
 				<TD class="campoformulario" colspan=3>				
-Última Tramitação: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=filtroManterDemanda::$ID_REQ_NuTempoVidaMinimoUltimaTram?>" name="<?=filtroManterDemanda::$ID_REQ_NuTempoVidaMinimoUltimaTram?>"  value="<?php echo(complementarCharAEsquerda($filtro->nuTempoVidaMinimoUltimaTram, "0", TAMANHO_CODIGOS_SAFI));?>"  class="camponaoobrigatorio" size="3" maxlength="3"> (dias)|				
+				Última Tramitação: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=filtroManterDemanda::$ID_REQ_NuTempoVidaMinimoUltimaTram?>" name="<?=filtroManterDemanda::$ID_REQ_NuTempoVidaMinimoUltimaTram?>"  value="<?php echo(complementarCharAEsquerda($filtro->nuTempoVidaMinimoUltimaTram, "0", TAMANHO_CODIGOS_SAFI));?>"  class="camponaoobrigatorio" size="3" maxlength="3"> (dias)|				
 				Total: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=filtroManterDemanda::$ID_REQ_NuTempoVidaMinimo?>" name="<?=filtroManterDemanda::$ID_REQ_NuTempoVidaMinimo?>"  value="<?php echo(complementarCharAEsquerda($filtro->nuTempoVidaMinimo, "0", TAMANHO_CODIGOS_SAFI));?>"  class="camponaoobrigatorio" size="3" maxlength="3"> (dias)
 				<?php 
 				$nmCamposDoc = array(
@@ -414,14 +414,14 @@ function detalharDemandaGestao(){
                   ?>
                     <TH class="headertabeladados" width="1%" nowrap rowspan=2>Ano</TH>
                     <TH class="headertabeladados" width="1%" rowspan=2>Núm.</TH>
-                    <TH class="headertabeladados" width="1%" rowspan=2>Origem</TH>
+                    <TH class="headertabeladados" width="1%" rowspan=2>Orig</TH>
                     <TH class="headertabeladados" width="1%" rowspan=2>Atual</TH>
                     <TH class="headertabeladados" width="1%" rowspan=2>Tipo</TH>
                     <TH class="headertabeladados" width="40%" rowspan=2>Contrato/PL</TH>
-                    <TH class="headertabeladados"width="50%" nowrap rowspan=2>Título</TH>                    
+                    <TH class="headertabeladados"width="50%"  rowspan=2>Título</TH>                    
                     <TH class="headertabeladados" width="1%" rowspan=2>Prior.</TH>
                     <TH class="headertabeladados"width="1%" nowrap rowspan=2>Usuário</TH>
-                    <TH class="headertabeladados"width="1%" nowrap rowspan=2>Dt.Abertura</TH>
+                    <TH class="headertabeladados"width="1%" nowrap rowspan=2>Abertura</TH>
                     <TH class="headertabeladados"width="1%" nowrap rowspan=2>Últ.Movim</TH>
                     <TH class="headertabeladadosalinhadocentro"width="1%" nowrap colspan="2">Prazo</TH>
                     <TH class="headertabeladados" width="1%" rowspan=2>Situação</TH>                    
@@ -542,15 +542,15 @@ function detalharDemandaGestao(){
 					<TD class="tabeladados" nowrap><?php echo $setor?></TD>
 					<TD class="tabeladados" nowrap><?php echo $setorDestinoAtual?></TD>
 					<TD class="tabeladados"><?php echo $tipo?></TD>
-					<TD class="tabeladados" ><?php echo $contrato?></TD>
-                    <TD class="tabeladados" ><?php echo $voAtual->texto;?></TD>                    
+					<TD class="tabeladados" ><?php echo truncarStringHTML($contrato, 60, true)?></TD>
+                    <TD class="tabeladados" ><?php echo truncarStringHTML($voAtual->texto, 100, true);?></TD>                    
                     <TD class="tabeladados" nowrap><?php echo $prioridade?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $nmUsuario;?></TD>
+                    <TD class="tabeladados" ><?php echo $nmUsuario;?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($voAtual->dtReferencia);?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($dataUltimaMovimentacao);?></TD>
 					<TD class="tabeladadosalinhadodireita" nowrap><?php echo complementarCharAEsquerda($tempoUltTram, "0", 3);?></TD>
 					<TD class="tabeladadosalinhadodireita" nowrap><?php echo complementarCharAEsquerda($tempovida, "0", 3);?></TD>                    
-                    <TD class="<?=$classColunaSituacao;?>" nowrap><?php echo $situacao?></TD>                    
+                    <TD class="<?=$classColunaSituacao;?>" ><?php echo $situacao?></TD>                    
                 </TR>					
                 <?php
 				}				

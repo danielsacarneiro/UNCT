@@ -23,8 +23,8 @@ function getMultiPos($haystack, $needles, $sensitive=true, $offset=0){
 	return $result;
 }
 
-function truncarStringHTML($string, $tamMAximo = 100){
-	$separador = " ";
+function truncarStringHTML($string, $tamMAximo = 100, $usarReticencia = false){
+	/*$separador = " ";
 	$array = explode($separador, $string);
 	
 	foreach($array as $needle) {
@@ -34,10 +34,18 @@ function truncarStringHTML($string, $tamMAximo = 100){
 		}
 		
 		$retorno .= $needle . $separador;
-	}
+	}*/
 	
-	if($truncou)
-		$retorno .= getTextoHTMLNegrito("[TEXTO TRUNCADO]"); 
+	$retorno = substr($string, 0, $tamMAximo);
+	$truncou = strlen($retorno) < strlen($string);
+	
+	if($truncou){
+		$complem = getTextoHTMLNegrito("[TEXTO TRUNCADO]");
+		if($usarReticencia){
+			$complem = "...";
+		}
+		$retorno .= $complem;
+	}
 	
 	return $retorno;
 }

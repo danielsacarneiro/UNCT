@@ -68,6 +68,7 @@ class dominioComissaoProcLicitatorio extends dominio {
 		}
 		return $retorno;
 	}*/
+		 
 	static function getNmPregoeiroPorCPL($proclic) {
 		$retorno = null;
 		
@@ -91,22 +92,6 @@ class dominioComissaoProcLicitatorio extends dominio {
 	
 		return $retorno;
 	}
-	static function getNumPortariaCPL($cdCPL) {
-		$retorno = "Portaria SAD nº ";
-		if (static::$CD_CPL_I == $cdCPL) {
-			$retorno .= "995, do dia 26/04/2018, publicada no DOE edição de 27/04/2018";
-		} else if (static::$CD_CPL_II == $cdCPL) {
-			$retorno .= "996, do dia 26/04/2018, publicada no DOE edição de 27/04/2018";
-		} else if (static::$CD_CPL_III == $cdCPL) {
-			$retorno .= "997, do dia 26/04/2018, publicada no DOE edição de 27/04/2018";
-		} else if (static::$CD_CPL_CEL == $cdCPL) {
-				$retorno .= "2476, do dia 10/10/2019, publicada no DOE edição de 11/10/2019";
-		}				
-		else
-			$retorno = null;
-
-		return $retorno;
-	}
 	
 	static function getNumPortariaTodasCPL($anoPortaria=null) {
 		
@@ -125,7 +110,7 @@ class dominioComissaoProcLicitatorio extends dominio {
 			$retorno .= "<b>842/$ano</b>(CPL-I), publicada no DOE de 07.05.2019.<br>";
 			$retorno .= "<b>843/$ano</b>(CPL-II), publicada no DOE de 07.05.2019<br>";
 			$retorno .= "<b>844/$ano</b>(CPL-III), publicada no DOE de 07.05.2019<br>";
-			$retorno .= "<b>2476/$ano</b>(".static::$CD_CPL_CEL."), publicada no DOE de 11.10.2019<br>";
+			$retorno .= "<b>2476/$ano</b>(".static::getDescricao(static::$CD_CPL_CEL) ."), publicada no DOE de 11.10.2019<br>";
 			$numPortarias++;
 		}
 		
