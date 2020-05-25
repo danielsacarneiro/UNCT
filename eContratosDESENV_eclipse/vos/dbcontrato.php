@@ -387,7 +387,8 @@ class dbcontrato extends dbprocesso {
 		);
 		$queryWhere = "\n WHERE " . $voContrato->getValoresWhereSQL ( $voContrato, $nmAtributosWhere );
 
-		$orderby = "\n ORDER BY " . vocontrato::$nmAtrSqContrato . " " . constantes::$CD_ORDEM_CRESCENTE;
+		//$orderby = "\n ORDER BY " . vocontrato::$nmAtrSqContrato . " " . constantes::$CD_ORDEM_CRESCENTE;
+		$orderby = "\n ORDER BY " . vocontrato::$nmAtrDtAssinaturaContrato . " " . constantes::$CD_ORDEM_CRESCENTE;
 
 		$colecao = $this->consultarMontandoQuery($voContrato, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico, false, $orderby);
 		return $colecao;

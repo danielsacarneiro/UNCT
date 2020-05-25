@@ -844,8 +844,10 @@ function getCamposContratoMod($vo, $arrayParamComplemento = null){
 		
 		$jsCopiaVlMensalReajuste = "document.frm_principal." . voContratoModificacao::$ID_REQ_VL_BASE_REAJUSTE . ".value = this.value;";
 		$javaScriptOnKeyUpMoeda = " onkeyup='formatarCampoMoedaComSeparadorMilhar(this, 2, event);$jsCopiaVlMensalReajuste;' ";
+		$javaScriptOnBlurVlMensalExecucao= " onBlur='getValorGlobalDoMensal(this, document.frm_principal.".vocontrato::$nmAtrVlGlobalContrato.");' ";
+		
 		//$retorno .= "<br>Valor Mensal Referência: " . getInputText(vocontrato::$nmAtrVlMensalContrato, vocontrato::$nmAtrVlMensalContrato, $voContrato->vlMensal, constantes::$CD_CLASS_CAMPO_READONLY, null, null, " onkeyup='formatarCampoMoedaComSeparadorMilhar(this, 4, event);' ");
-		$retorno .= "<br>Valor Mensal Execução: " . getInputText(vocontrato::$nmAtrVlMensalContrato, vocontrato::$nmAtrVlMensalContrato, $vlMensalExecucao, constantes::$CD_CLASS_CAMPO_OBRIGATORIO, null, null, $javaScriptOnKeyUpMoeda);
+		$retorno .= "<br>Valor Mensal Execução: " . getInputText(vocontrato::$nmAtrVlMensalContrato, vocontrato::$nmAtrVlMensalContrato, $vlMensalExecucao, constantes::$CD_CLASS_CAMPO_OBRIGATORIO, null, null, "$javaScriptOnKeyUpMoeda $javaScriptOnBlurVlMensalExecucao");
 		$retorno .= " Valor Mensal Termo: " . getInputText(voContratoModificacao::$ID_REQ_VlMensalContratoInseridoTela, voContratoModificacao::$ID_REQ_VlMensalContratoInseridoTela, $vlMensalTermoInseridoTela, constantes::$CD_CLASS_CAMPO_READONLY);
 		//$retorno .= " Valor Mensal Referência (%Acréscimos): " . getInputText(voContratoModificacao::$nmAtrVlMensalModAtual, voContratoModificacao::$nmAtrVlMensalModAtual, $vlMensalAtualizadoParaFinsMod, constantes::$CD_CLASS_CAMPO_READONLY);
 		$retorno .= " Valor Mensal Referência (%Acréscimos): " . getInputText(voContratoModificacao::$nmAtrVlMensalModAtual, voContratoModificacao::$nmAtrVlMensalModAtual, $vlMensalAtualizadoParaFinsMod, constantes::$CD_CLASS_CAMPO_OBRIGATORIO, null, null, $javaScriptOnKeyUpMoeda);

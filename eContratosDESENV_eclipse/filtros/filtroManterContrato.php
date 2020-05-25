@@ -417,9 +417,9 @@ class filtroManterContrato extends filtroManter {
 				"ct_tipo" => "Tipo",
 				vocontrato::$nmAtrCdEspecieContrato => "Especie",
 				"ct_contratada" => "Contratada",
-				"ct_dt_vigencia_inicio" => "Dt.Inicio",
-				"ct_dt_vigencia_fim" => "Dt.Fim",
-				"ct_valor_global" => "Vl.Global" 
+				vocontrato::$nmAtrDtAssinaturaContrato => "Dt.Assinatura",
+				"ct_valor_global" => "Vl.Global",
+				vocontrato::$nmAtrSqContrato => "Sq.",
 		);
 		return $varAtributos;
 	}

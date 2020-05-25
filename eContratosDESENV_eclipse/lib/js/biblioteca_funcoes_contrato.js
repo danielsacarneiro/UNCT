@@ -393,6 +393,19 @@ function calcularValorModificacaoAtualizado(pArrayCampos) {
 	//alert("vl mensal base:" + vlMensalBase +  "vl referencial: " + vlReferencial);
 	//setValorCampoMoedaComSeparadorMilhar(campoVlMensalAtual, vlMensalBase + vlReferencial, 2);	
 	//setValorCampoMoedaComSeparadorMilhar(campoVlGlobalAtual, vlGlobalBase + vlModAoContrato, 2);
-	setValorCampoMoedaComSeparadorMilhar(campoVlGlobalReal, vlGlobalBase + vlRealAoContrato, 2);
+	setValorCampoMoedaComSeparadorMilhar(campoVlGlobalReal, vlGlobalBase + vlRealAoContrato, 2);	
+}
+
+function getValorGlobalDoMensal(pCampoValorMensal, pCampoValorGlobal, pQtCasasDecimais, pNumMesesContrato){
+	if(pQtCasasDecimais == null){
+		pQtCasasDecimais = 2;
+	}
 	
+	if(pNumMesesContrato == null){
+		pNumMesesContrato = 12;
+	}
+	
+	var vlMensal = getValorCampoMoedaComoNumeroValido(pCampoValorMensal);
+	var vlGlobal = eval(pNumMesesContrato*vlMensal);
+	setValorCampoMoedaComSeparadorMilhar(pCampoValorGlobal, vlGlobal, pQtCasasDecimais);
 }

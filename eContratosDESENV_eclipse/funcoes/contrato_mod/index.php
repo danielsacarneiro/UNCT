@@ -272,8 +272,8 @@ function montarChaveContrato(){
 					<TH class="headertabeladados" width="1%" nowrap>%.Contrato</TH>
 					<TH class="headertabeladados" width="1%" nowrap>Dt.Início</TH>
 					<TH class="headertabeladados" width="1%" nowrap>Dt.Fim</TH>
-					<TH class="headertabeladados" width="1%">Dt.Assinatura</TH>					
-                    <TH class="headertabeladados" width="1%" >Dt.Registro</TH>
+					<TH class="headertabeladados" width="1%">Assinatura</TH>					
+                    <TH class="headertabeladados" width="1%" >Registro</TH>
                     <TH class="headertabeladados" width="1%">Usu.Registro</TH>
                 </TR>
                 <?php				
