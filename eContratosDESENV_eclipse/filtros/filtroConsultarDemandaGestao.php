@@ -451,6 +451,21 @@ class filtroConsultarDemandaGestao extends filtroManterDemanda{
 			$conector  = "\n AND ";
 		}
 		
+		if($this->dtReferenciaInicial != null){
+			$filtro = $filtro . $conector
+			. "$nmTabela." . voDemanda::$nmAtrDtReferencia . " >= " . getVarComoDataSQL($this->dtReferenciaInicial);
+		
+			$conector  = "\n AND ";
+		}
+		
+		if($this->dtReferenciaFinal != null){
+			$filtro = $filtro . $conector
+			. "$nmTabela." . voDemanda::$nmAtrDtReferencia . " <= " . getVarComoDataSQL($this->dtReferenciaFinal);
+		
+			$conector  = "\n AND ";
+		}
+		
+		
 		if($this->dtUltMovimentacaoFinal != null){
 			$filtro = $filtro . $conector . static::getSQLDataDemandaMovimentacao($this->dtUltMovimentacaoFinal, "<=");		
 			$conector  = "\n AND ";

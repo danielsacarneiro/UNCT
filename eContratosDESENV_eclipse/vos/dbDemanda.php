@@ -166,6 +166,8 @@ class dbDemanda extends dbprocesso {
 	function consultarTelaConsultaRendimentoDemanda($filtro) {
 		$voPrincipal = new voDemandaTramitacao();		
 		$nmTabela = $voPrincipal->getNmTabela();
+		$nmTabelaDemanda = voDemanda::getNmTabelaStatic(false);
+		
 		if($filtro->groupby == null){
 			$filtro->groupby = voDemandaTramitacao::$nmAtrCdSetor;
 		}
@@ -173,6 +175,7 @@ class dbDemanda extends dbprocesso {
 		$mes = "MONTH(".voDemandaTramitacao::$nmAtrDtReferencia.")";
 		$mesColuna = $mes . " AS " . voDemanda::$nmAtrDtReferencia;
 		$arrayColunasRetornadasEntrada = array (
+				voDemanda::$nmAtrTipo,
 				voDemandaTramitacao::$nmAtrCdSetorDestino . " AS " . vodemanda::$nmAtrCdSetor,
 				$mesColuna,
 				"1 AS " . filtroConsultarDemandaRendimento::$NmColNuEntradas,
@@ -180,20 +183,28 @@ class dbDemanda extends dbprocesso {
 	    );
 		
 		$arrayColunasRetornadasSaida = array (
+				voDemanda::$nmAtrTipo,
 				voDemandaTramitacao::$nmAtrCdSetorOrigem . " AS " . vodemanda::$nmAtrCdSetor,
 				$mesColuna,
 				"0 AS " . filtroConsultarDemandaRendimento::$NmColNuEntradas,
 				"1 AS " . filtroConsultarDemandaRendimento::$NmColNuSaidas,
 		);
 		
+		$joinComum .= "\n INNER JOIN " . $nmTabelaDemanda;
+		$joinComum .= "\n ON ";
+		$joinComum .= $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $nmTabela . "." . voDemandaTramitacao::$nmAtrAno;
+		$joinComum .= "\n AND " . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd . "=" . $nmTabela . "." . voDemandaTramitacao::$nmAtrCd;
+				
 		$queryEntrada = "SELECT ";
 		$queryEntrada .= getSQLStringFormatadaColecaoIN($arrayColunasRetornadasEntrada);
 		$queryEntrada .= " FROM $nmTabela ";
+		$queryEntrada .= $joinComum;
 		$queryEntrada .= filtroManter::$CD_CAMPO_SUBSTITUICAO;
 		
 		$querySaida = "SELECT ";
 		$querySaida .= getSQLStringFormatadaColecaoIN($arrayColunasRetornadasSaida);
 		$querySaida .= " FROM $nmTabela ";
+		$querySaida .= $joinComum;
 		$querySaida .= filtroManter::$CD_CAMPO_SUBSTITUICAO;
 		
 		$numSaidas = "SUM(".filtroConsultarDemandaRendimento::$NmTabelaRendimento . ".". filtroConsultarDemandaRendimento::$NmColNuSaidas .") AS ";
@@ -227,8 +238,9 @@ class dbDemanda extends dbprocesso {
 				
 		if($filtro->cdAtrOrdenacao != null){
 			$query .= " ORDER BY " . $filtro->cdAtrOrdenacao . " " . $filtro->cdOrdenacao;
-		}		
-		
+		}
+		//$query .= " ORDER BY " . voDemanda::$nmAtrDtReferencia;
+				
 		$retorno = parent::consultarFiltroPorSubstituicao($filtro, $query);
 		
 		return $retorno;

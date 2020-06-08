@@ -69,7 +69,8 @@ function detalharDemandaRendimento(){
             return;
     }
 	chave = document.frm_principal.rdb_consulta.value;
-    url = "../demanda_gestao/detalharRendimento.php?funcao=" + funcao + "&chave=" + chave + "&lupa=S";	
+	var strAno = "<?=voDemanda::$nmAtrAno."=".$filtro->vodemanda->ano?>";
+    url = "../demanda_gestao/detalharRendimento.php?funcao=" + funcao + "&chave=" + chave + "&lupa=S&"+strAno;	
     abrirJanelaAuxiliar(url, true, false, false);
 }
 
@@ -98,13 +99,44 @@ function detalharDemandaRendimento(){
         <TBODY>
 	        <?php	        	
 	        	include_once(caminho_util. "dominioSimNao.php");
-	        	$comboSimNao = new select(dominioSimNao::getColecao());	         
+	        	$comboSimNao = new select(dominioSimNao::getColecao());	        
+	        	$comboTipo = new select(dominioTipoDemanda::getColecao(false));
 	            $selectExercicio = new selectExercicio(constantes::$ANO_INICIO);
 			  ?>
 			<TR>
                 <TH class="campoformulario" nowrap width="1%">Ano:</TH>
                 <TD class="campoformulario" nowrap width="1%" colspan=3><?php echo $selectExercicio->getHtmlCombo(voDemanda::$nmAtrAno,voDemanda::$nmAtrAno, $filtro->vodemanda->ano, true, "camponaoobrigatorio", false, "");?></TD>
             </TR>
+            <TR>
+                <TH class="campoformulario" nowrap width="1%">Tipo:</TH>
+                <TD class="campoformulario" colspan=3>
+	                <TABLE class="filtro" cellpadding="0" cellspacing="0">
+	                <TR>
+	                	<TD class="campoformulario" width="1%">Incluindo:</TD>
+	                	<TD class="campoformulario" width="1%">
+		                <?php //echo $comboTipo->getHtmlCombo(voDemanda::$nmAtrTipo, voDemanda::$nmAtrTipo, $filtro->vodemanda->tipo, true, "camponaoobrigatorio", false, "") . "<br>";
+	                	  echo $comboTipo->getHtmlCombo(voDemanda::$nmAtrTipo, voDemanda::$nmAtrTipo."[]", $filtro->vodemanda->tipo, true, "camponaoobrigatorio", false, " multiple ");
+	                	  $nmCampoTpDemandaContrato = voDemanda::$nmAtrTpDemandaContrato."[]";
+	                	  //echo dominioTipoDemandaContrato::getHtmlChecksBox($nmCampoTpDemandaContrato, $filtro->vodemanda->tpDemandaContrato, dominioTipoDemandaContrato::getColecaoConsulta(), 2, false, "", true);
+		               	?>
+	                	<TD class="campoformulario" width="1%">Excluindo</TD>
+	                	<TD class="campoformulario" >
+						<?php echo $comboTipo->getHtmlCombo(filtroManterDemanda::$NmAtrTipoExcludente, filtroManterDemanda::$NmAtrTipoExcludente."[]", $filtro->tipoExcludente, true, "camponaoobrigatorio", false, " multiple ");?>	                	
+						</TD>
+	                </TR>
+	                <TR>
+	                	<TD class="campoformulario" colspan=4>
+	                	<?php
+	                		echo dominioTipoDemandaContrato::getHtmlChecksBox($nmCampoTpDemandaContrato, $filtro->vodemanda->tpDemandaContrato, dominioTipoDemandaContrato::getColecaoConsulta(), 2, true, "", true);
+	                		$comboTpReajuste = new select(dominioTipoReajuste::getColecao());
+	                		echo "Reajuste: " . $comboTpReajuste->getHtmlComObrigatorio(voDemanda::$nmAtrInTpDemandaReajusteComMontanteA,voDemanda::$nmAtrInTpDemandaReajusteComMontanteA, $filtro->vodemanda->inTpDemandaReajusteComMontanteA, false,false);	                		 
+	                	?>
+	                	</TD>
+	                </TR>
+	                </TABLE>
+                </TD>                                
+            </TR>
+            
 	   <?php	        	
        echo getComponenteConsultaFiltro(false, $filtro);
         ?>

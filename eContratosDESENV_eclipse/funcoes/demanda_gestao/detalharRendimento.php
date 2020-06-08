@@ -12,11 +12,16 @@ $titulo = "DETALHAR " . voDemanda::getTituloDemandaRendimentoJSP();
 setCabecalho($titulo);
 
 $vo = new voDemanda();
-$filtro  = new filtroConsultarDemandaRendimento(false, true);
+$filtro  = new filtroConsultarDemandaRendimento(false, true); 
 $filtro->voPrincipal = $vo;
-$filtro = filtroManter::verificaFiltroSessao($filtro);
+//$filtro = filtroManter::verificaFiltroSessao($filtro);
+$filtro = getObjetoSessao($filtro->nmFiltro, true);
+//$ano = @$_GET[voDemanda::$nmAtrAno];
+//$filtro->vodemanda->ano = $ano;
 $filtro->vodemanda->cdSetor = $chave;
 $filtro->groupby = voDemanda::$nmAtrDtReferencia;
+$filtro->cdAtrOrdenacao = voDemanda::$nmAtrDtReferencia;
+
 //$filtro = new filtroManter();
 $filtro->isValidarConsulta = false;
 	

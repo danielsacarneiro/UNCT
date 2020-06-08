@@ -79,7 +79,8 @@ class dominioComissaoProcLicitatorio extends dominio {
 			$retorno = static::$NM_PREGOEIRO_CPL_I;
 		}else if ($proclic == static::$CD_CPL_II) {
 			$retorno = static::$NM_PREGOEIRO_CPL_II;
-		} else if ($proclic == static::$CD_CPL_III) {
+		} else if ($proclic == static::$CD_CPL_III
+				|| $proclic == static::$CD_CPL_CEL) {
 			$retorno = static::$NM_PREGOEIRO_CPL_III;
 		} else if (existeStr1NaStr2ComSeparador ( $proclic, static::$DS_CPL_I)) {
 			$retorno = static::$NM_PREGOEIRO_CPL_I;
@@ -101,12 +102,23 @@ class dominioComissaoProcLicitatorio extends dominio {
 		}
 		
 		$numPortarias = 0;
-		$numPortariaMaximaAExibir = 2;
-						
+		$numPortariaMaximaAExibir = 2;		
+		
+		$ano = 2020;
+		$pegarPortaria = $numPortarias < $numPortariaMaximaAExibir || $anoPortaria == null;
+		if($pegarPortaria || $anoPortaria == $ano){
+			$retorno .= "<br>Ano $ano:<br>";
+			$retorno .= "<b>1065/$ano</b>(".static::getDescricao(static::$CD_CPL_I) ."), publicada no DOE de 27.05.$ano.<br>";
+			$retorno .= "<b>1066/$ano</b>(".static::getDescricao(static::$CD_CPL_II) ."), publicada no DOE de 27.05.$ano<br>";
+			$retorno .= "<b>XXX/$ano</b>(".static::getDescricao(static::$CD_CPL_III) ."), publicada no DOE de 27.05.$ano<br>";
+			$retorno .= "<b>1067/$ano</b>(".static::getDescricao(static::$CD_CPL_CEL) ."), publicada no DOE de 27.05.$ano<br>";
+			$numPortarias++;
+		}
+		
 		$ano = 2019;
 		$pegarPortaria = $numPortarias < $numPortariaMaximaAExibir || $anoPortaria == null;
 		if($pegarPortaria || $anoPortaria == $ano){
-			$retorno .= "Ano $ano:<br>";
+			$retorno .= "<br>Ano $ano:<br>";
 			$retorno .= "<b>842/$ano</b>(CPL-I), publicada no DOE de 07.05.2019.<br>";
 			$retorno .= "<b>843/$ano</b>(CPL-II), publicada no DOE de 07.05.2019<br>";
 			$retorno .= "<b>844/$ano</b>(CPL-III), publicada no DOE de 07.05.2019<br>";

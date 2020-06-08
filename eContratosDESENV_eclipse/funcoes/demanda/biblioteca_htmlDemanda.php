@@ -308,7 +308,7 @@ function mostrarGridDemanda($colecaoTramitacao, $isDetalhamento) {
 				}
 				
 				
-				$textoTram = truncarStringHTML($voAtual->textoTram);
+				$textoTram = truncarStringHTML($voAtual->textoTram,300);
 				
 				$html .= "<TD class='tabeladados' nowrap>" . complementarCharAEsquerda ( $sq, "0", TAMANHO_CODIGOS ) . "</TD> \n";
 				$html .= "<TD class='tabeladados' nowrap>" . $dominioSetor->getDescricao ( $voAtual->cdSetorOrigem ) . "</TD> \n";
@@ -411,7 +411,7 @@ function mostrarGridDemandaGestao($colecaoTramitacao, $isDetalhamento) {
 				}
 
 
-				$textoTram = truncarStringHTML($voAtual->textoTram);
+				$textoTram = truncarStringHTML($voAtual->textoTram, 300);
 				$dataSaida = $colecaoTramitacao [$i][filtroConsultarDemandaGestao::$NmColDtReferenciaSaida];
 				
 				$html .= "<TD class='tabeladados' nowrap>" . complementarCharAEsquerda ( $sq, "0", TAMANHO_CODIGOS ) . "</TD> \n";

@@ -28,6 +28,9 @@ class filtroManterDemanda extends filtroManter{
 	static $NmAtrDtUltimaMovimentacaoInicial = "NmAtrDtUltimaMovimentacaoInicial";
 	static $NmAtrDtUltimaMovimentacaoFinal = "NmAtrDtUltimaMovimentacaoFinal";
 	
+	static $NmAtrDtReferenciaInicial = "NmAtrDtReferenciaInicial";
+	static $NmAtrDtReferenciaFinal = "NmAtrDtReferenciaFinal";
+	
 	static $ID_REQ_NuTempoVidaMinimo = "ID_REQ_NuTempoVidaMinimo";
 	static $ID_REQ_NuTempoVidaMinimoUltimaTram = "ID_REQ_NuTempoVidaMinimoUltimaTram";
 	
@@ -50,6 +53,10 @@ class filtroManterDemanda extends filtroManter{
 	
 	var $dtUltMovimentacaoInicial;
 	var $dtUltMovimentacaoFinal;
+
+	var $dtReferenciaInicial;
+	var $dtReferenciaFinal;
+	
 	var $cdDemandaInicial;
 	var $cdDemandaFinal;	
 	var $cdUsuarioTramitacao;
@@ -80,6 +87,7 @@ class filtroManterDemanda extends filtroManter{
 	
 	function __construct1($pegarFiltrosDaTela) {
 		$this->vodemanda = new voDemandaTramitacao();
+		//echo "ano vodemanda " . $this->vodemanda->ano;
 		$this->vocontrato = new vocontrato();
 		$this->vocontrato->sqEspecie = null;
 		//$this->voPA = new voPA();
@@ -136,6 +144,10 @@ class filtroManterDemanda extends filtroManter{
 		$this->docContratada = @$_POST[vopessoa::$nmAtrDoc];
 		$this->dtUltMovimentacaoInicial = @$_POST[static::$NmAtrDtUltimaMovimentacaoInicial];
 		$this->dtUltMovimentacaoFinal= @$_POST[static::$NmAtrDtUltimaMovimentacaoFinal];
+
+		$this->dtReferenciaInicial = @$_POST[static::$NmAtrDtReferenciaInicial];
+		$this->dtReferenciaFinal= @$_POST[static::$NmAtrDtReferenciaFinal];
+		
 		$this->cdSetorDocumento = @$_POST[voDocumento::$nmAtrCdSetor];
 		$this->tpDocumento = @$_POST[voDocumento::$nmAtrTp];
 		$this->sqDocumento = @$_POST[voDocumento::$nmAtrSq];
@@ -488,6 +500,20 @@ class filtroManterDemanda extends filtroManter{
 		
 		if($this->dtUltMovimentacaoFinal != null){
 			$filtro = $filtro . $conector . static::getSQLDataDemandaMovimentacao($this->dtUltMovimentacaoFinal, "<=");		
+			$conector  = "\n AND ";
+		}
+		
+		if($this->dtReferenciaInicial != null){
+			$filtro = $filtro . $conector 
+			. "$nmTabela." . voDemanda::$nmAtrDtReferencia . " >= " . getVarComoDataSQL($this->dtReferenciaInicial);
+		
+			$conector  = "\n AND ";
+		}
+		
+		if($this->dtReferenciaFinal != null){
+			$filtro = $filtro . $conector
+			. "$nmTabela." . voDemanda::$nmAtrDtReferencia . " <= " . getVarComoDataSQL($this->dtReferenciaFinal);
+		
 			$conector  = "\n AND ";
 		}
 		

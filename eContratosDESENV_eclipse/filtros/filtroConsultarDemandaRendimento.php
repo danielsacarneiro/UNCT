@@ -18,6 +18,7 @@ class filtroConsultarDemandaRendimento extends filtroConsultarDemandaGestao {
 		$conector  = "";
 
 		$nmTabela = voDemandaTramitacao::getNmTabelaStatic(false);
+		$nmTabelaDemanda = voDemanda::getNmTabelaStatic(false);
 					
 		//seta os filtros obrigatorios
 		if($this->isSetaValorDefault()){
@@ -53,7 +54,7 @@ class filtroConsultarDemandaRendimento extends filtroConsultarDemandaGestao {
 				&& !$this->isAtributoArrayVazio($this->vodemanda->tipo)) {
 					
 			$filtro = $filtro . $conector
-			. $nmTabela. "." .voDemanda::$nmAtrTipo;
+			. $nmTabelaDemanda. "." .voDemanda::$nmAtrTipo;
 			
 			$tipoDem = $this->vodemanda->tipo;
 			
@@ -84,12 +85,12 @@ class filtroConsultarDemandaRendimento extends filtroConsultarDemandaGestao {
 		
 		if($this->vodemanda->inTpDemandaReajusteComMontanteA != null){
 			$reajuste = $this->vodemanda->inTpDemandaReajusteComMontanteA;
-			$clausulaReajuste = " $nmTabela." .voDemanda::$nmAtrInTpDemandaReajusteComMontanteA . " = " . getVarComoString($this->vodemanda->inTpDemandaReajusteComMontanteA);
+			$clausulaReajuste = " $nmTabelaDemanda." .voDemanda::$nmAtrInTpDemandaReajusteComMontanteA . " = " . getVarComoString($this->vodemanda->inTpDemandaReajusteComMontanteA);
 			
 			if($reajuste == dominioTipoReajuste::$CD_REAJUSTE_MONTANTE_A
 					|| $reajuste == dominioTipoReajuste::$CD_REAJUSTE_MONTANTE_B){
 				
-						$clausulaReajuste .= " OR $nmTabela." .voDemanda::$nmAtrInTpDemandaReajusteComMontanteA
+						$clausulaReajuste .= " OR $nmTabelaDemanda." .voDemanda::$nmAtrInTpDemandaReajusteComMontanteA
 									. " = "
 									. getVarComoString(dominioTipoReajuste::$CD_REAJUSTE_AMBOS)
 						;				

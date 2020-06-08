@@ -78,24 +78,41 @@ $selectExercicio = new selectExercicio(constantes::$ANO_INICIO);
 	            								$filtro->inComPAAPInstaurado, true, "camponaoobrigatorio", false,"");?>
 	            </TD>
 	        </TR>	                    
+	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">Título:</TH>
+	            <TD class="campoformulario" nowrap width="1%">				
+	            <INPUT type="text" id="<?=voDemanda::$nmAtrTexto?>" name="<?=voDemanda::$nmAtrTexto?>" value="<?=$filtro->vodemanda->texto?>"  class="camponaoobrigatorio" size="50">
+	            </TD>
+	            <TH class="campoformulario" nowrap width="1%">PRT/SEI:</TH>
+	            <TD class="campoformulario">				
+	            <INPUT type="text" onkeyup="formatarCampoPRT(this, event);" id="<?=voDemandaTramitacao::$nmAtrProtocolo?>" name="<?=voDemandaTramitacao::$nmAtrProtocolo?>" value="<?php echo($filtro->vodemanda->prt);?>" class="camponaoobrigatorio" size="30">
+	            <?php 
+	            echo " é SEI?: " . $comboSimNao->getHtmlCombo(filtroManterDemanda::$NmAtrInSEI,
+	            								filtroManterDemanda::$NmAtrInSEI, 
+	            								$filtro->inSEI, true, "camponaoobrigatorio", false,"");?>
+	            </TD>	            	                        	                        
+	        </TR>            
 			<TR>
-				<?php
-				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioAutorizacao.php");
-				//$combo = new select(dominioAutorizacao::getColecao());				
-				$nmCheckAutorizacaoArray = vocontrato::$nmAtrCdAutorizacaoContrato . "[]";
-				$colecaoAutorizacao = $filtro->vocontrato->cdAutorizacao;
-								
-				require_once (caminho_util . "/selectOR_AND.php");
-				$comboOuE = new selectOR_AND();
-				?>
-	            <TH class="campoformulario" nowrap>Autorização:</TH>
+	            <TH class="campoformulario" nowrap>Dt.Referência:</TH>
 	            <TD class="campoformulario" width="1%">
-	            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_SAD?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_SAD?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_SAD, $colecaoAutorizacao)?> >SAD
-	            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_PGE?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_PGE?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_PGE, $colecaoAutorizacao)?>>PGE
-	            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_GOV?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_GOV?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_GOV, $colecaoAutorizacao)?>>GOV
-	            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_NENHUM?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_NENHUM?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_NENHUM, $colecaoAutorizacao)?>>Nenhum
-	            <?php echo $comboOuE->getHtmlSelect(filtroManterDemanda::$NmAtrInOR_AND,filtroManterDemanda::$NmAtrInOR_AND, $filtro->InOR_AND, false, "camponaoobrigatorio", false);?>
-	            <TH class="campoformulario" nowrap width="1%">Data.Últ.Mov.:</TH>
+	            	<INPUT type="text" 
+	            	       id="<?=filtroManterDemanda::$NmAtrDtReferenciaInicial?>" 
+	            	       name="<?=filtroManterDemanda::$NmAtrDtReferenciaInicial?>" 
+	            			value="<?php echo($filtro->dtReferenciaInicial);?>"
+	            			onkeyup="formatarCampoData(this, event, false);" 
+	            			class="camponaoobrigatorio" 
+	            			size="10" 
+	            			maxlength="10"> a 
+	            	<INPUT type="text" 
+	            	       id="<?=filtroManterDemanda::$NmAtrDtReferenciaFinal?>" 
+	            	       name="<?=filtroManterDemanda::$NmAtrDtReferenciaFinal?>" 
+	            			value="<?php echo($filtro->dtReferenciaFinal);?>"
+	            			onkeyup="formatarCampoData(this, event, false);" 
+	            			class="camponaoobrigatorio" 
+	            			size="10" 
+	            			maxlength="10">					            
+	            </TD>
+	            <TH class="campoformulario" nowrap width="1%">Dt.Últ.Mov.:</TH>
 	            <TD class="campoformulario">
 	            	<INPUT type="text" 
 	            	       id="<?=filtroManterDemanda::$NmAtrDtUltimaMovimentacaoInicial?>" 
@@ -113,16 +130,15 @@ $selectExercicio = new selectExercicio(constantes::$ANO_INICIO);
 	            			class="camponaoobrigatorio" 
 	            			size="10" 
 	            			maxlength="10">				
-				</TD>
-					            	            
+				</TD>					            	            
 	        </TR>
 	        <?php	        
 	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
 	        $arrayCssClass = array("camponaoobrigatorio","camponaoobrigatorio", "camponaoobrigatorio");
 	        ?>        
             <TR>
-	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" ><?php
+	            <TH class="campoformulario" nowrap width="1%" ROWSPAN=2>Contrato:</TH>
+	            <TD class="campoformulario" ROWSPAN=2><?php
 
 	            $voContratoFiltro = new vocontrato();
 	            $voContratoFiltro->tipo = $filtro->vocontrato->tipo;
@@ -151,6 +167,24 @@ $selectExercicio = new selectExercicio(constantes::$ANO_INICIO);
 	            							onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="camponaoobrigatorioalinhadodireita" size="15" >
 	            							</TD>        	            
 			</TR>
+			<TR>
+				<?php
+				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioAutorizacao.php");
+				//$combo = new select(dominioAutorizacao::getColecao());				
+				$nmCheckAutorizacaoArray = vocontrato::$nmAtrCdAutorizacaoContrato . "[]";
+				$colecaoAutorizacao = $filtro->vocontrato->cdAutorizacao;
+								
+				require_once (caminho_util . "/selectOR_AND.php");
+				$comboOuE = new selectOR_AND();
+				?>
+	            <TH class="campoformulario" nowrap>Autorização:</TH>
+	            <TD class="campoformulario">
+	            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_SAD?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_SAD?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_SAD, $colecaoAutorizacao)?> >SAD
+	            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_PGE?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_PGE?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_PGE, $colecaoAutorizacao)?>>PGE
+	            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_GOV?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_GOV?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_GOV, $colecaoAutorizacao)?>>GOV
+	            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_NENHUM?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_NENHUM?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_NENHUM, $colecaoAutorizacao)?>>Nenhum
+	            <?php echo $comboOuE->getHtmlSelect(filtroManterDemanda::$NmAtrInOR_AND,filtroManterDemanda::$NmAtrInOR_AND, $filtro->InOR_AND, false, "camponaoobrigatorio", false);?>					            	            
+	        </TR>			
 			<TR>
                 <TH class="campoformulario" nowrap>Nome Contratada:</TH>
                 <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>"  value="<?php echo($filtro->nmContratada);?>"  class="camponaoobrigatorio" size="50"></TD>
@@ -209,12 +243,12 @@ $selectExercicio = new selectExercicio(constantes::$ANO_INICIO);
             <TR>
 				<TH class="campoformulario" nowrap width="1%">Tempo.Vida.Mínimo:</TH>
 				<TD class="campoformulario" colspan=3>				
-				<INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=filtroConsultarDemandaGestao::$ID_REQ_NuTempoVidaMinimo?>" name="<?=filtroConsultarDemandaGestao::$ID_REQ_NuTempoVidaMinimo?>"  value="<?php echo(complementarCharAEsquerda($filtro->nuTempoVidaMinimo, "0", TAMANHO_CODIGOS_SAFI));?>"  class="camponaoobrigatorio" size="3" maxlength="3"> (dias)|
-				Última Tramitação: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=filtroConsultarDemandaGestao::$ID_REQ_NuTempoVidaMinimoUltimaTram?>" name="<?=filtroConsultarDemandaGestao::$ID_REQ_NuTempoVidaMinimoUltimaTram?>"  value="<?php echo(complementarCharAEsquerda($filtro->nuTempoVidaMinimoUltimaTram, "0", TAMANHO_CODIGOS_SAFI));?>"  class="camponaoobrigatorio" size="3" maxlength="3"> (dias)
+				Última Tramitação: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=filtroManterDemanda::$ID_REQ_NuTempoVidaMinimoUltimaTram?>" name="<?=filtroManterDemanda::$ID_REQ_NuTempoVidaMinimoUltimaTram?>"  value="<?php echo(complementarCharAEsquerda($filtro->nuTempoVidaMinimoUltimaTram, "0", TAMANHO_CODIGOS_SAFI));?>"  class="camponaoobrigatorio" size="3" maxlength="3"> (dias)|				
+				Total: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=filtroManterDemanda::$ID_REQ_NuTempoVidaMinimo?>" name="<?=filtroManterDemanda::$ID_REQ_NuTempoVidaMinimo?>"  value="<?php echo(complementarCharAEsquerda($filtro->nuTempoVidaMinimo, "0", TAMANHO_CODIGOS_SAFI));?>"  class="camponaoobrigatorio" size="3" maxlength="3"> (dias)
 				<?php 
 				$nmCamposDoc = array(
-						filtroConsultarDemandaGestao::$ID_REQ_NuTempoVidaMinimo,
-						filtroConsultarDemandaGestao::$ID_REQ_NuTempoVidaMinimoUltimaTram,
+						filtroManterDemanda::$ID_REQ_NuTempoVidaMinimo,
+						filtroManterDemanda::$ID_REQ_NuTempoVidaMinimoUltimaTram,
 				);
 				echo getBorracha($nmCamposDoc, "");
 				?>

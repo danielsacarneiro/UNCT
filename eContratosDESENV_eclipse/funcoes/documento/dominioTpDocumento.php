@@ -77,11 +77,11 @@ class dominioTpDocumento extends dominio {
 		$retorno = putElementoArray2NoArray1ComChaves ( $retorno, static::getColecaoUNCT(false));
 		
 		//o complemento existe para os docs que foram excluidos, mas devem permanecer como consulta
-		$complemento = array (
+		/*$complemento = array (
 				self::$CD_TP_DOC_PARECER => self::$DS_TP_DOC_PARECER,
 		);
 		
-		$retorno = putElementoArray2NoArray1ComChaves ( $retorno, $complemento);
+		$retorno = putElementoArray2NoArray1ComChaves ( $retorno, $complemento);*/
 		
 		ksort ( $retorno );
 		return $retorno;
@@ -133,7 +133,8 @@ class dominioTpDocumento extends dominio {
 				self::$CD_TP_DOC_CI => self::$DS_TP_DOC_CI,
 				self::$CD_TP_DOC_OFICIO => self::$DS_TP_DOC_OFICIO,
 				self::$CD_TP_DOC_OUTROS => self::$DS_TP_DOC_OUTROS,
-				self::$CD_TP_DOC_NOTA_TECNICA => "Nota Técnica" 
+				self::$CD_TP_DOC_NOTA_TECNICA => "Nota Técnica",
+				self::$CD_TP_DOC_PARECER => self::$DS_TP_DOC_PARECER,
 		);
 		
 		ksort ( $retorno );
