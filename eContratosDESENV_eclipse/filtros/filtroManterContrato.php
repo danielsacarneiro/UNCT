@@ -4,7 +4,8 @@ include_once (caminho_lib . "voentidade.php");
 include_once (caminho_lib . "filtroManter.php");
 include_once (caminho_util . "bibliotecaHTML.php");
 class filtroManterContrato extends filtroManter {
-	public static $nmFiltro = "filtroManterContrato";
+	public $nmFiltro = "filtroManterContrato";
+	
 	public static $nmAtrInTrazerConsolidadoPorVigencia = "nmAtrInTrazerConsolidadoPorVigencia";	
 	public static $nmAtrAnoArquivo = "nmAtrAnoArquivo";
 	public static $nmAtrTpDemanda = "nmAtrTpDemanda";
