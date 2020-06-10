@@ -944,10 +944,10 @@ class filtroManterDemanda extends filtroManter{
 				filtroManterDemanda::$NmColDhUltimaMovimentacao => "Data.Movimentação",
 				voDemanda::$nmAtrAno => "Ano",
 				voDemanda::$nmAtrCd => "Número",
-				voDemanda::$nmAtrDtReferencia => "Data.Referência",				
+				voDemanda::$nmAtrDtReferencia => "Data.Abertura",				
 				voDemanda::$nmAtrPrioridade => "Prioridade",				
 				voDemanda::$nmAtrTipo => "Tipo",
-				filtroConsultarDemandaGestao::$NmColNuTempoUltimaTram => "Prazo",
+				filtroConsultarDemandaGestao::$NmColNuTempoUltimaTram => "Prazo Atual",
 		);
 		
 		if($atributoDtReferenciaSetorAtual != null)
