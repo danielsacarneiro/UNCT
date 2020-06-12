@@ -168,6 +168,7 @@ function detalharDemandaRendimento(){
                 
                 $numTotalEntradas = 0;
                 $numTotalSaidas = 0;
+                $numTotalRegistros=0;
                 for ($i=0;$i<$tamanho;$i++) {
                 	$registro = $colecao[$i];
                 	$numSaidas = $colecao[$i][filtroConsultarDemandaRendimento::$NmColNuSaidas];
@@ -208,13 +209,18 @@ function detalharDemandaRendimento(){
                     </TD>                    
                 </TR>					
                 <?php
+                	$numTotalRegistros++;
 				}				
                 ?>
                 <TR>
                     <TD class="totalizadortabeladadosalinhadodireita" colspan=<?=$colspan-2?>>Total:</TD>
                     <TD class="totalizadortabeladadosalinhadodireita"><?=complementarCharAEsquerda(getMoeda($numTotalEntradas,0), "0", constantes::$TAMANHO_CODIGOS_SAFI)?></TD>
 					<TD class="totalizadortabeladadosalinhadodireita"><?=complementarCharAEsquerda(getMoeda($numTotalSaidas,0), "0", constantes::$TAMANHO_CODIGOS_SAFI)?></TD>
-                </TR>				                
+                </TR>
+				<TR>
+                    <TD class="totalizadortabeladadosalinhadodireita" colspan=<?=$colspan?>>Total de registro(s): <?=$numTotalRegistros?></TD>
+                </TR>				
+                				                
             </TBODY>
         </TABLE>
         </DIV>

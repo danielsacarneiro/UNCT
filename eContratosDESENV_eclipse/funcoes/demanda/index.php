@@ -392,13 +392,12 @@ function detalharDemandaGestao(){
 				echo getBorracha($nmCamposDoc, "");
 				?>
 			</TR>
-            <TR>
+            <TR>            
 	            <TH class="campoformulario" nowrap width="1%">Usuário:</TH>
-				<TD class="campoformulario" colspan=3><?php echo $comboUsuTramitacao->getHtmlSelect(filtroManterDemanda::$NmAtrCdUsuarioTramitacao,filtroManterDemanda::$NmAtrCdUsuarioTramitacao, $filtro->cdUsuarioTramitacao, true, "camponaoobrigatorio", false);?>
-			</TR>
-            <TR>
-				<TH class="campoformulario" nowrap width="1%">Tempo.Vida.Mínimo:</TH>
-				<TD class="campoformulario" colspan=3>				
+				<TD class="campoformulario" width="1%"><?php echo $comboUsuTramitacao->getHtmlSelect(filtroManterDemanda::$NmAtrCdUsuarioTramitacao,filtroManterDemanda::$NmAtrCdUsuarioTramitacao, $filtro->cdUsuarioTramitacao, true, "camponaoobrigatorio", false);?>
+				</TD>
+				<TH class="campoformulario" width="1%">Tempo.Vida.Mínimo:</TH>
+				<TD class="campoformulario" >				
 				Última Tramitação: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=filtroManterDemanda::$ID_REQ_NuTempoVidaMinimoUltimaTram?>" name="<?=filtroManterDemanda::$ID_REQ_NuTempoVidaMinimoUltimaTram?>"  value="<?php echo(complementarCharAEsquerda($filtro->nuTempoVidaMinimoUltimaTram, "0", TAMANHO_CODIGOS_SAFI));?>"  class="camponaoobrigatorio" size="3" maxlength="3"> (dias)|				
 				Total: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=filtroManterDemanda::$ID_REQ_NuTempoVidaMinimo?>" name="<?=filtroManterDemanda::$ID_REQ_NuTempoVidaMinimo?>"  value="<?php echo(complementarCharAEsquerda($filtro->nuTempoVidaMinimo, "0", TAMANHO_CODIGOS_SAFI));?>"  class="camponaoobrigatorio" size="3" maxlength="3"> (dias)
 				<?php 
@@ -408,7 +407,8 @@ function detalharDemandaGestao(){
 				);
 				echo getBorracha($nmCamposDoc, "");
 				?>
-			</TR>			
+				</TD>				
+			</TR>
        <?php
        echo getComponenteConsultaFiltro($vo->temTabHistorico, $filtro);
         ?>

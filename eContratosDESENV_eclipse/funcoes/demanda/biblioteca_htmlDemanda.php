@@ -308,7 +308,8 @@ function mostrarGridDemanda($colecaoTramitacao, $isDetalhamento) {
 				}
 				
 				
-				$textoTram = truncarStringHTML($voAtual->textoTram,300);
+				//$textoTram = truncarStringHTML($voAtual->textoTram,300, false);
+				$textoTram = truncarStringHTMLComDivExpansivel($voAtual->getValorChaveHTML(),$voAtual->textoTram,220, false);
 				
 				$html .= "<TD class='tabeladados' nowrap>" . complementarCharAEsquerda ( $sq, "0", TAMANHO_CODIGOS ) . "</TD> \n";
 				$html .= "<TD class='tabeladados' nowrap>" . $dominioSetor->getDescricao ( $voAtual->cdSetorOrigem ) . "</TD> \n";

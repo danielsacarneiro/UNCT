@@ -23,31 +23,39 @@ function getMultiPos($haystack, $needles, $sensitive=true, $offset=0){
 	return $result;
 }
 
-function truncarStringHTML($string, $tamMAximo = 100, $usarReticencia = false){
+function truncarStringHTMLComDivExpansivel($nmDiv, $string, $tamMAximo = 100, $usarReticencia = false, $comDivExpansivel=true){
 	/*$separador = " ";
-	$array = explode($separador, $string);
+	 $array = explode($separador, $string);
 	
-	foreach($array as $needle) {
-		if(strlen($needle) > $tamMAximo){
-			$needle = substr($needle, 0, $tamMAximo);
-			$truncou = true;
-		}
-		
-		$retorno .= $needle . $separador;
-	}*/
+	 foreach($array as $needle) {
+	 if(strlen($needle) > $tamMAximo){
+	 $needle = substr($needle, 0, $tamMAximo);
+	 $truncou = true;
+	 }
+	
+	 $retorno .= $needle . $separador;
+	 }*/
 	
 	$retorno = substr($string, 0, $tamMAximo);
 	$truncou = strlen($retorno) < strlen($string);
-	
+
 	if($truncou){
 		$complem = getTextoHTMLNegrito("[TEXTO TRUNCADO]");
 		if($usarReticencia){
 			$complem = "...";
 		}
 		$retorno .= $complem;
+
+		if($comDivExpansivel){
+			$retorno .= getDivHtmlExpansivel($nmDiv, $string);
+		}
 	}
-	
+
 	return $retorno;
+}
+
+function truncarStringHTML($string, $tamMAximo = 100, $usarReticencia = false, $comDivExpansivel=false){
+	return truncarStringHTMLComDivExpansivel("", $string, $tamMAximo, $usarReticencia, $comDivExpansivel);	
 }
 
 function getStringDoArrayComSeparador($array, $separador = CAMPO_SEPARADOR){

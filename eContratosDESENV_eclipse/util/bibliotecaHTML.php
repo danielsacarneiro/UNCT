@@ -1109,6 +1109,10 @@ function getTagHTMLFechaJavaScript(){
 	return "</SCRIPT>";
 }
 
+function getTagHtmlJavaScript($script){
+	return getTagHTMLAbreJavaScript() . $script . getTagHTMLFechaJavaScript();
+}
+
 function getTagHTMLAbreFormulario($inConsulta=null){
 	return "\n<FORM name='frm_principal' method='post' action='index.php?consultar=$inConsulta'>\n";
 }
@@ -1177,6 +1181,17 @@ function getTextoHTMLNegrito($texto){
 }
 function getTextoHTMLFonteParametros($texto, $size=12){
 	return "<font size='$size'>$texto</font>";
+}
+function getDivHtmlExpansivel($nmDiv, $conteudoDiv=null, $visivel=false, $class = 'campoformulario'){	
+	//biblioteca_funcoes_principal.js
+	$scriptOnLoad = "esconderDiv(document.getElementById('$nmDiv'), null, true);";
+	$scriptOnClick = "esconderDiv(document.getElementById('$nmDiv'), null, document.getElementById('$nmDiv').style.display=='');";
+	$imagem = "<img  title='Entrar' src='" . pasta_imagens . "sinal_mais.gif' width='15' height='15'>";	
+	$link = "<a href=\"javascript:$scriptOnClick\" >$imagem</a>";
+	//$html = "$imagem<DIV class='$class' id='$nmDiv' name='$nmDiv' onLoad='ocultarElemento('$nmDiv')'>$conteudoDiv</DIV>";
+	$html = "$link<DIV class='$class' id='$nmDiv' name='$nmDiv'>". getTextoHTMLDestacado($conteudoDiv, "red", false)  . "</DIV>";
+	$html .= getTagHtmlJavaScript($scriptOnLoad);
+	return $html;
 }
 
 
