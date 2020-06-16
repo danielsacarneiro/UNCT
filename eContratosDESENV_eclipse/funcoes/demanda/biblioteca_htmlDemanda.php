@@ -412,7 +412,8 @@ function mostrarGridDemandaGestao($colecaoTramitacao, $isDetalhamento) {
 				}
 
 
-				$textoTram = truncarStringHTML($voAtual->textoTram, 300);
+				//$textoTram = truncarStringHTML($voAtual->textoTram, 300);
+				$textoTram = truncarStringHTMLComDivExpansivel($voAtual->getValorChaveHTML(),$voAtual->textoTram,220, false);
 				$dataSaida = $colecaoTramitacao [$i][filtroConsultarDemandaGestao::$NmColDtReferenciaSaida];
 				
 				$html .= "<TD class='tabeladados' nowrap>" . complementarCharAEsquerda ( $sq, "0", TAMANHO_CODIGOS ) . "</TD> \n";

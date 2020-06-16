@@ -133,7 +133,7 @@ function detalharDemandaRendimento(){
              <TBODY>
                 <TR>
                     <TH class="headertabeladados" width="90%">Mês</TH>
-                    <TH class="headertabeladados"width="1%" nowrap >Excedente</TH>   
+                    <TH class="headertabeladados"width="1%" nowrap >Rendimento</TH>   
                     <TH class="headertabeladados"width="1%" nowrap >Demandas</TH>
                     <TH class="headertabeladados"width="1%" nowrap >Entradas</TH>
                     <TH class="headertabeladados"width="1%" nowrap >Saídas</TH>                                       
@@ -173,7 +173,7 @@ function detalharDemandaRendimento(){
                 	$numDemandas = $colecao[$i][filtroConsultarDemandaRendimento::$NmColNumTotalDemandas];
                 	
                 	$numRendimento = intval($numSaidas-$numDemandas);                	                	
-                	$percentRendimento=$numDemandas?100*$numRendimento/$numDemandas:0;
+                	$percentRendimento=$numDemandas?100*($numRendimento/$numDemandas):0;
                     
                 ?>
                 <TR class="dados">

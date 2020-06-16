@@ -170,6 +170,7 @@ class dbDemanda extends dbprocesso {
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic(false);
 		$nmTabelaDemandaPL = voDemandaPL::getNmTabelaStatic(false);
 		$nmTabelaPL = voProcLicitatorio::getNmTabelaStatic(false);
+		$nmTabelaContrato = vocontrato::getNmTabelaStatic(false);
 				
 		if($filtro->groupby == null){
 			$filtro->groupby = voDemandaTramitacao::$nmAtrCdSetor;
@@ -206,23 +207,46 @@ class dbDemanda extends dbprocesso {
 		
 		$isTpContratoSelecionado = $filtro->vocontrato->tipo != null && $filtro->vocontrato->tipo != "";
 		$iscdCPLSelecionado = $filtro->voproclic->cdCPL != null && $filtro->voproclic->cdCPL != "";
-		if($isTpContratoSelecionado){
+		$isInORAND_AND = $filtro->inOR_AND == constantes::$CD_OPCAO_AND;
+		//echo "andor $isInORAND_AND" . $filtro->inOR_AND;
+		
+		//se o AND foi acionado, toda a consulta vai ser dar pela tabela de contrato
+		if($isInORAND_AND && ($isTpContratoSelecionado||$iscdCPLSelecionado)){
 			$joinDemandaContrato .= "\n LEFT JOIN " . $nmTabelaDemandaContrato;
 			$joinDemandaContrato .= "\n ON ";
 			$joinDemandaContrato .= "$nmTabelaDemanda." . voDemanda::$nmAtrAno . "=$nmTabelaDemandaContrato." . voDemandaContrato::$nmAtrAnoDemanda;
-			$joinDemandaContrato .= "\n AND $nmTabelaDemanda." . voDemanda::$nmAtrCd . "=$nmTabelaDemandaContrato." . voDemandaContrato::$nmAtrCdDemanda;				
-		}
-		
-		if($iscdCPLSelecionado){
-			$joinDemandaPL .= "\n LEFT JOIN " . $nmTabelaDemandaPL;
-			$joinDemandaPL .= "\n ON ";
-			$joinDemandaPL .= "$nmTabelaDemanda." . voDemanda::$nmAtrAno . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrAnoDemanda;
-			$joinDemandaPL .= "\n AND $nmTabelaDemanda." . voDemanda::$nmAtrCd . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrCdDemanda;
-			$joinDemandaPL .= "\n LEFT JOIN " . $nmTabelaPL;
-			$joinDemandaPL .= "\n ON ";
-			$joinDemandaPL .= "$nmTabelaPL." . voProcLicitatorio::$nmAtrAno . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrAnoProcLic;
-			$joinDemandaPL .= "\n AND $nmTabelaPL." . voProcLicitatorio::$nmAtrCd . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrCdProcLic;
-			$joinDemandaPL .= "\n AND $nmTabelaPL." . voProcLicitatorio::$nmAtrCdModalidade . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrCdModalidadeProcLic;
+			$joinDemandaContrato .= "\n AND $nmTabelaDemanda." . voDemanda::$nmAtrCd . "=$nmTabelaDemandaContrato." . voDemandaContrato::$nmAtrCdDemanda;		
+			$joinDemandaContrato .= "\n LEFT JOIN " . $nmTabelaContrato;
+			$joinDemandaContrato .= "\n ON ";
+			$joinDemandaContrato .= "$nmTabelaDemandaContrato." . voDemandaContrato::$nmAtrAnoContrato . "=$nmTabelaContrato." . vocontrato::$nmAtrAnoContrato;
+			$joinDemandaContrato .= "\n AND ";
+			$joinDemandaContrato .= "$nmTabelaDemandaContrato." . voDemandaContrato::$nmAtrCdContrato . "=$nmTabelaContrato." . vocontrato::$nmAtrCdContrato;
+			$joinDemandaContrato .= "\n AND ";
+			$joinDemandaContrato .= "$nmTabelaDemandaContrato." . voDemandaContrato::$nmAtrTipoContrato . "=$nmTabelaContrato." . vocontrato::$nmAtrTipoContrato;
+			$joinDemandaContrato .= "\n AND ";
+			$joinDemandaContrato .= "$nmTabelaDemandaContrato." . voDemandaContrato::$nmAtrCdEspecieContrato . "=$nmTabelaContrato." . vocontrato::$nmAtrCdEspecieContrato;
+			$joinDemandaContrato .= "\n AND ";
+			$joinDemandaContrato .= "$nmTabelaDemandaContrato." . voDemandaContrato::$nmAtrSqEspecieContrato . "=$nmTabelaContrato." . vocontrato::$nmAtrSqEspecieContrato;		
+		}else{
+			if($isTpContratoSelecionado){
+				$joinDemandaContrato .= "\n LEFT JOIN " . $nmTabelaDemandaContrato;
+				$joinDemandaContrato .= "\n ON ";
+				$joinDemandaContrato .= "$nmTabelaDemanda." . voDemanda::$nmAtrAno . "=$nmTabelaDemandaContrato." . voDemandaContrato::$nmAtrAnoDemanda;
+				$joinDemandaContrato .= "\n AND $nmTabelaDemanda." . voDemanda::$nmAtrCd . "=$nmTabelaDemandaContrato." . voDemandaContrato::$nmAtrCdDemanda;
+			}
+			
+			if($iscdCPLSelecionado){
+				$joinDemandaPL .= "\n LEFT JOIN " . $nmTabelaDemandaPL;
+				$joinDemandaPL .= "\n ON ";
+				$joinDemandaPL .= "$nmTabelaDemanda." . voDemanda::$nmAtrAno . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrAnoDemanda;
+				$joinDemandaPL .= "\n AND $nmTabelaDemanda." . voDemanda::$nmAtrCd . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrCdDemanda;
+				$joinDemandaPL .= "\n LEFT JOIN " . $nmTabelaPL;
+				$joinDemandaPL .= "\n ON ";
+				$joinDemandaPL .= "$nmTabelaPL." . voProcLicitatorio::$nmAtrAno . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrAnoProcLic;
+				$joinDemandaPL .= "\n AND $nmTabelaPL." . voProcLicitatorio::$nmAtrCd . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrCdProcLic;
+				$joinDemandaPL .= "\n AND $nmTabelaPL." . voProcLicitatorio::$nmAtrCdModalidade . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrCdModalidadeProcLic;
+			}
+				
 		}		
 		
 		$joinComum .= "\n INNER JOIN " . $nmTabelaDemanda;
