@@ -14,6 +14,11 @@ class filtroConsultarDemandaRendimento extends filtroConsultarDemandaGestao {
 	static $NmColNuEntradas = "NmColNuEntradas";
 	static $NmColNuSaidas = "NmColNuSaidas";
 	
+	function getFiltroFormulario(){
+		parent::getFiltroFormulario();
+		//tudo isso porque o filtromanter usa um default para os campos abaixo diferente do que deve ser usado para essa funcao
+		$this->inOR_AND = @$_POST[self::$NmAtrInOR_AND];
+	}
 	function getFiltroConsultaSQL($comAtributoOrdenacao = null){
 		$filtro = "";
 		$conector  = "";
