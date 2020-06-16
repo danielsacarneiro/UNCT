@@ -167,7 +167,10 @@ class dbDemanda extends dbprocesso {
 		$voPrincipal = new voDemandaTramitacao();		
 		$nmTabela = $voPrincipal->getNmTabela();
 		$nmTabelaDemanda = voDemanda::getNmTabelaStatic(false);
-		
+		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic(false);
+		$nmTabelaDemandaPL = voDemandaPL::getNmTabelaStatic(false);
+		$nmTabelaPL = voProcLicitatorio::getNmTabelaStatic(false);
+				
 		if($filtro->groupby == null){
 			$filtro->groupby = voDemandaTramitacao::$nmAtrCdSetor;
 		}
@@ -180,6 +183,7 @@ class dbDemanda extends dbprocesso {
 				$mesColuna,
 				"1 AS " . filtroConsultarDemandaRendimento::$NmColNuEntradas,
 				"0 AS " . filtroConsultarDemandaRendimento::$NmColNuSaidas,
+				"0 AS " . filtroConsultarDemandaRendimento::$NmColNumTotalDemandas,
 	    );
 		
 		$arrayColunasRetornadasSaida = array (
@@ -188,12 +192,45 @@ class dbDemanda extends dbprocesso {
 				$mesColuna,
 				"0 AS " . filtroConsultarDemandaRendimento::$NmColNuEntradas,
 				"1 AS " . filtroConsultarDemandaRendimento::$NmColNuSaidas,
+				"0 AS " . filtroConsultarDemandaRendimento::$NmColNumTotalDemandas,
 		);
+		
+		$arrayColunasRetornadasNuDemandas = array (
+				voDemanda::$nmAtrTipo,
+				"$nmTabela.".voDemandaTramitacao::$nmAtrCdSetorDestino . " AS " . vodemanda::$nmAtrCdSetor,
+				$mesColuna,
+				"0 AS " . filtroConsultarDemandaRendimento::$NmColNuEntradas,
+				"0 AS " . filtroConsultarDemandaRendimento::$NmColNuSaidas,
+				"1 AS " . filtroConsultarDemandaRendimento::$NmColNumTotalDemandas,
+		);
+		
+		$isTpContratoSelecionado = $filtro->vocontrato->tipo != null && $filtro->vocontrato->tipo != "";
+		$iscdCPLSelecionado = $filtro->voproclic->cdCPL != null && $filtro->voproclic->cdCPL != "";
+		if($isTpContratoSelecionado){
+			$joinDemandaContrato .= "\n LEFT JOIN " . $nmTabelaDemandaContrato;
+			$joinDemandaContrato .= "\n ON ";
+			$joinDemandaContrato .= "$nmTabelaDemanda." . voDemanda::$nmAtrAno . "=$nmTabelaDemandaContrato." . voDemandaContrato::$nmAtrAnoDemanda;
+			$joinDemandaContrato .= "\n AND $nmTabelaDemanda." . voDemanda::$nmAtrCd . "=$nmTabelaDemandaContrato." . voDemandaContrato::$nmAtrCdDemanda;				
+		}
+		
+		if($iscdCPLSelecionado){
+			$joinDemandaPL .= "\n LEFT JOIN " . $nmTabelaDemandaPL;
+			$joinDemandaPL .= "\n ON ";
+			$joinDemandaPL .= "$nmTabelaDemanda." . voDemanda::$nmAtrAno . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrAnoDemanda;
+			$joinDemandaPL .= "\n AND $nmTabelaDemanda." . voDemanda::$nmAtrCd . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrCdDemanda;
+			$joinDemandaPL .= "\n LEFT JOIN " . $nmTabelaPL;
+			$joinDemandaPL .= "\n ON ";
+			$joinDemandaPL .= "$nmTabelaPL." . voProcLicitatorio::$nmAtrAno . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrAnoProcLic;
+			$joinDemandaPL .= "\n AND $nmTabelaPL." . voProcLicitatorio::$nmAtrCd . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrCdProcLic;
+			$joinDemandaPL .= "\n AND $nmTabelaPL." . voProcLicitatorio::$nmAtrCdModalidade . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrCdModalidadeProcLic;
+		}		
 		
 		$joinComum .= "\n INNER JOIN " . $nmTabelaDemanda;
 		$joinComum .= "\n ON ";
 		$joinComum .= $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $nmTabela . "." . voDemandaTramitacao::$nmAtrAno;
 		$joinComum .= "\n AND " . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd . "=" . $nmTabela . "." . voDemandaTramitacao::$nmAtrCd;
+		$joinComum .= $joinDemandaContrato;
+		$joinComum .= $joinDemandaPL;
 				
 		$queryEntrada = "SELECT ";
 		$queryEntrada .= getSQLStringFormatadaColecaoIN($arrayColunasRetornadasEntrada);
@@ -207,20 +244,44 @@ class dbDemanda extends dbprocesso {
 		$querySaida .= $joinComum;
 		$querySaida .= filtroManter::$CD_CAMPO_SUBSTITUICAO;
 		
+		$atributosGroup = voDemandaTramitacao::$nmAtrCd . "," . voDemandaTramitacao::$nmAtrAno . "," . voDemandaTramitacao::$nmAtrCdSetorDestino;
+		$nmatrsqtram = voDemandaTramitacao::$nmAtrSq;
+		$nmTabDemandaMinPorSetor = filtroConsultarDemandaRendimento::$NmTabelaTramitacaoMininaPorSetor;
+		$queryNumDemandas = "SELECT ";
+		$queryNumDemandas .= getSQLStringFormatadaColecaoIN($arrayColunasRetornadasNuDemandas);
+		$queryNumDemandas .= " FROM $nmTabelaDemanda ";		
+		$queryNumDemandas .= $joinDemandaContrato;
+		$queryNumDemandas .= $joinDemandaPL;
+		$queryNumDemandas .= "\n INNER JOIN (SELECT MIN($nmatrsqtram) AS $nmatrsqtram,$atributosGroup FROM $nmTabela group by $atributosGroup) $nmTabDemandaMinPorSetor";
+		$queryNumDemandas .= "\n ON ";
+		$queryNumDemandas .= "$nmTabelaDemanda." . voDemanda::$nmAtrAno . "=$nmTabDemandaMinPorSetor." . voDemandaTramitacao::$nmAtrAno;
+		$queryNumDemandas .= "\n AND $nmTabelaDemanda." . voDemanda::$nmAtrCd . "=$nmTabDemandaMinPorSetor." . voDemandaTramitacao::$nmAtrCd;		
+		$queryNumDemandas .= "\n INNER JOIN " . $nmTabela;
+		$queryNumDemandas .= "\n ON ";
+		$queryNumDemandas .= "$nmTabela." . voDemandaTramitacao::$nmAtrAno . "=$nmTabDemandaMinPorSetor." . voDemandaTramitacao::$nmAtrAno;
+		$queryNumDemandas .= "\n AND $nmTabela." . voDemandaTramitacao::$nmAtrCd . "=$nmTabDemandaMinPorSetor." . voDemandaTramitacao::$nmAtrCd;
+		$queryNumDemandas .= "\n AND $nmTabela." . voDemandaTramitacao::$nmAtrSq . "=$nmTabDemandaMinPorSetor." . voDemandaTramitacao::$nmAtrSq;
+		
+		$queryNumDemandas .= filtroManter::$CD_CAMPO_SUBSTITUICAO;
+		
 		$numSaidas = "SUM(".filtroConsultarDemandaRendimento::$NmTabelaRendimento . ".". filtroConsultarDemandaRendimento::$NmColNuSaidas .") AS ";
 		$numSaidas .= filtroConsultarDemandaRendimento::$NmColNuSaidas;
 		$numEntradas = "SUM(".filtroConsultarDemandaRendimento::$NmTabelaRendimento . ".".filtroConsultarDemandaRendimento::$NmColNuEntradas.") AS ";
 		$numEntradas .= filtroConsultarDemandaRendimento::$NmColNuEntradas;
+		$numDemandas = "SUM(".filtroConsultarDemandaRendimento::$NmTabelaRendimento . ".".filtroConsultarDemandaRendimento::$NmColNumTotalDemandas .") AS ";
+		$numDemandas .= filtroConsultarDemandaRendimento::$NmColNumTotalDemandas;
+		
 		$arrayColunasRetornadas = array (
 				vodemanda::$nmAtrCdSetor,
 				vodemanda::$nmAtrDtReferencia,
 				$numEntradas,
 				$numSaidas,
+				$numDemandas,
 		);
 		
 		$query = " SELECT ";
 		$query .= getSQLStringFormatadaColecaoIN($arrayColunasRetornadas);
-		$query .= " FROM ($queryEntrada UNION ALL $querySaida) " . filtroConsultarDemandaRendimento::$NmTabelaRendimento;
+		$query .= " FROM ($queryEntrada UNION ALL $querySaida UNION ALL $queryNumDemandas) " . filtroConsultarDemandaRendimento::$NmTabelaRendimento;
 		$query .= filtroConsultarDemandaRendimento::$CD_CAMPO_SUBSTITUICAO_PRINCIPAL;
 		$query .= " GROUP BY " . $filtro->groupby;
 		

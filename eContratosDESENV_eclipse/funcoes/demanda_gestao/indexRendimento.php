@@ -15,6 +15,7 @@ $vo = new voDemanda();
 $filtro  = new filtroConsultarDemandaRendimento(false, true);
 $filtro->voPrincipal = $vo;
 $filtro = filtroManter::verificaFiltroSessao($filtro);
+$filtro->inDesativado = constantes::$CD_NAO;
 	
 $nome = $filtro->nome;
 $doc = $filtro->doc;
@@ -102,10 +103,19 @@ function detalharDemandaRendimento(){
 	        	$comboSimNao = new select(dominioSimNao::getColecao());	        
 	        	$comboTipo = new select(dominioTipoDemanda::getColecao(false));
 	            $selectExercicio = new selectExercicio(constantes::$ANO_INICIO);
+	            $comboTipoContrato = new select(dominioTipoContrato::getColecao());
+	            $comboCPL = new select(dominioComissaoProcLicitatorio::getColecao());
+	            $comboOR_AND = new selectOR_AND();
+	            
 			  ?>
 			<TR>
-                <TH class="campoformulario" nowrap width="1%">Ano:</TH>
-                <TD class="campoformulario" nowrap width="1%" colspan=3><?php echo $selectExercicio->getHtmlCombo(voDemanda::$nmAtrAno,voDemanda::$nmAtrAno, $filtro->vodemanda->ano, true, "camponaoobrigatorio", false, "");?></TD>
+                <TH class="campoformulario" nowrap width="1%">Demanda:</TH>
+                <TD class="campoformulario" nowrap width="1%" colspan=3>
+                Ano <?php echo $selectExercicio->getHtmlCombo(voDemanda::$nmAtrAno,voDemanda::$nmAtrAno, $filtro->vodemanda->ano, true, "camponaoobrigatorio", false, "");?>
+                | Tp. <?php echo $comboTipoContrato->getHtmlCombo(voDemandaContrato::$nmAtrTipoContrato,voDemandaContrato::$nmAtrTipoContrato, $filtro->vocontrato->tipo, true, "camponaoobrigatorio", false, "");?>
+                &nbsp;<?php echo $comboOR_AND->getHtmlCombo(filtroManterDemanda::$NmAtrInOR_AND,filtroManterDemanda::$NmAtrInOR_AND, $filtro->inOR_AND, false, "camponaoobrigatorio", false, "");?>  
+                &nbsp;CPL <?php echo $comboCPL->getHtmlCombo(voProcLicitatorio::$nmAtrCdCPL,voProcLicitatorio::$nmAtrCdCPL, $filtro->voproclic->cdCPL, true, "camponaoobrigatorio", false, "");?>
+                </TD>
             </TR>
             <TR>
                 <TH class="campoformulario" nowrap width="1%">Tipo:</TH>
@@ -154,6 +164,7 @@ function detalharDemandaRendimento(){
                 <TR>
                   <TH class="headertabeladados" width="1%">&nbsp;&nbsp;X</TH>
                     <TH class="headertabeladados" width="90%">Setor</TH>
+                    <TH class="headertabeladados"width="1%" nowrap >Demandas</TH>
                     <TH class="headertabeladados"width="1%" nowrap >Entradas</TH>
                     <TH class="headertabeladados"width="1%" nowrap >Saídas</TH>                    
                 </TR>
@@ -163,7 +174,7 @@ function detalharDemandaRendimento(){
                 else 
                         $tamanho = 0;
                                 
-                $colspan=4;
+                $colspan=5;
                 //laco para calcular o total
                 
                 $numTotalEntradas = 0;
@@ -184,7 +195,8 @@ function detalharDemandaRendimento(){
                 	$setor = dominioSetor::getDescricao($cdSetor);
                 	
                 	$numSaidas = $colecao[$i][filtroConsultarDemandaRendimento::$NmColNuSaidas];
-                	$numEntradas = $colecao[$i][filtroConsultarDemandaRendimento::$NmColNuEntradas];                  
+                	$numEntradas = $colecao[$i][filtroConsultarDemandaRendimento::$NmColNuEntradas];
+                	$numDemandas = $colecao[$i][filtroConsultarDemandaRendimento::$NmColNumTotalDemandas];
                     
                 ?>
                 <TR class="dados">
@@ -193,6 +205,11 @@ function detalharDemandaRendimento(){
                     </TD>
                                        
                     <TD class="tabeladados"><?php echo $setor?></TD>
+                    <TD class="tabeladadosalinhadodireita" nowrap>
+                    <?php 
+                    $str = complementarCharAEsquerda(getMoeda($numDemandas,0), "0", constantes::$TAMANHO_CODIGOS_SAFI);
+                    echo $str;
+                    ?>
                     <TD class="tabeladadosalinhadodireita" nowrap>
                     <?php 
                     $str = complementarCharAEsquerda(getMoeda($numEntradas,0), "0", constantes::$TAMANHO_CODIGOS_SAFI) 
@@ -218,7 +235,7 @@ function detalharDemandaRendimento(){
 					<TD class="totalizadortabeladadosalinhadodireita"><?=complementarCharAEsquerda(getMoeda($numTotalSaidas,0), "0", constantes::$TAMANHO_CODIGOS_SAFI)?></TD>
                 </TR>
 				<TR>
-                    <TD class="totalizadortabeladadosalinhadodireita" colspan=<?=$colspan?>>Total de registro(s): <?=$numTotalRegistros?></TD>
+                    <TD class="totalizadortabeladados" colspan=<?=$colspan?>>Total de registro(s): <?=$numTotalRegistros?></TD>
                 </TR>				
                 				                
             </TBODY>

@@ -2,6 +2,7 @@
 include_once (caminho_util . "paginacao.php");
 include_once (caminho_util . "multiplosConstrutores.php");
 include_once (caminho_util . "dominioTpVigencia.php");
+require_once (caminho_util . "/selectOR_AND.php");
 class filtroManter extends multiplosConstrutores {
 	
 	static $ID_SESSAO_COUNT_FILTRO_SESSAO = "ID_SESSAO_COUNT_FILTRO_SESSAO";

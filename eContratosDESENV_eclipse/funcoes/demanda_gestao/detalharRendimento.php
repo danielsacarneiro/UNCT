@@ -111,12 +111,9 @@ function detalharDemandaRendimento(){
 	            $selectExercicio = new selectExercicio(constantes::$ANO_INICIO);
 			  ?>
 			<TR>
-                <TH class="campoformulario" nowrap width="1%">Ano:</TH>
+                <TH class="campoformulario" nowrap width="1%">Demanda:</TH>
                 <TD class="campoformulario" nowrap colspan=3>
-                <?php echo 
-                //$selectExercicio->getHtmlCombo(voDemanda::$nmAtrAno,voDemanda::$nmAtrAno, $filtro->vodemanda->ano, true, "camponaoobrigatorio", false, " disabled ");
-                getTextoHTMLNegrito($filtro->vodemanda->ano);
-                ?>
+                Ano <?php echo getTextoHTMLNegrito($filtro->vodemanda->ano);?>
                 </TD>
             </TR>
 			<TR>
@@ -136,8 +133,10 @@ function detalharDemandaRendimento(){
              <TBODY>
                 <TR>
                     <TH class="headertabeladados" width="90%">Mês</TH>
+                    <TH class="headertabeladados"width="1%" nowrap >Excedente</TH>   
+                    <TH class="headertabeladados"width="1%" nowrap >Demandas</TH>
                     <TH class="headertabeladados"width="1%" nowrap >Entradas</TH>
-                    <TH class="headertabeladados"width="1%" nowrap >Saídas</TH>                    
+                    <TH class="headertabeladados"width="1%" nowrap >Saídas</TH>                                       
                 </TR>
                 <?php								
                 if (is_array($colecao))
@@ -145,19 +144,23 @@ function detalharDemandaRendimento(){
                 else 
                         $tamanho = 0;
                                 
-                $colspan=3;
+                $colspan=5;
                 //laco para calcular o total
                 
                 $numTotalEntradas = 0;
                 $numTotalSaidas = 0;
+                $numTotalDemandas = 0;
                 $numTotalRegistros=0;
                 for ($i=0;$i<$tamanho;$i++) {
                 	$registro = $colecao[$i];
                 	$numSaidas = $colecao[$i][filtroConsultarDemandaRendimento::$NmColNuSaidas];
                 	$numEntradas = $colecao[$i][filtroConsultarDemandaRendimento::$NmColNuEntradas];
+                	$numDemandas = $colecao[$i][filtroConsultarDemandaRendimento::$NmColNumTotalDemandas];
                 	
                 	$numTotalEntradas = $numTotalEntradas + $numEntradas;
-                	$numTotalSaidas = $numTotalSaidas + $numSaidas;                	 
+                	$numTotalSaidas = $numTotalSaidas + $numSaidas;     
+                	$numTotalDemandas = $numTotalDemandas + $numDemandas;
+                	
                 }
                 
                 for ($i=0;$i<$tamanho;$i++) {
@@ -166,11 +169,28 @@ function detalharDemandaRendimento(){
                 	$mes = dominioMeses::getDescricao($mes);
                 	
                 	$numSaidas = $colecao[$i][filtroConsultarDemandaRendimento::$NmColNuSaidas];
-                	$numEntradas = $colecao[$i][filtroConsultarDemandaRendimento::$NmColNuEntradas];                  
+                	$numEntradas = $colecao[$i][filtroConsultarDemandaRendimento::$NmColNuEntradas];
+                	$numDemandas = $colecao[$i][filtroConsultarDemandaRendimento::$NmColNumTotalDemandas];
+                	
+                	$numRendimento = intval($numSaidas-$numDemandas);                	                	
+                	$percentRendimento=$numDemandas?100*$numRendimento/$numDemandas:0;
                     
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados"><?php echo $mes?></TD>
+                    <TD class="tabeladadosalinhadodireita" nowrap>
+                    <?php 
+                    $str = $numRendimento>=0?complementarCharAEsquerda($numRendimento, "0", constantes::$TAMANHO_CODIGOS_SAFI):$numRendimento;
+                    $str .= " (" . complementarCharAEsquerda(getMoeda($percentRendimento,2), "0", constantes::$TAMANHO_CODIGOS_SAFI) . "%)";
+                    echo $numRendimento>=0?getTextoHTMLDestacado($str, "blue", false):getTextoHTMLDestacado($str, "red", false);
+                    
+                    ?>
+                    </TD>                                        
+                    <TD class="tabeladadosalinhadodireita" nowrap>
+                    <?php 
+                    $str = complementarCharAEsquerda(getMoeda($numDemandas,0), "0", constantes::$TAMANHO_CODIGOS_SAFI);
+                    echo $str;
+                    ?>                    
                     <TD class="tabeladadosalinhadodireita" nowrap>
                     <?php 
                     $str = complementarCharAEsquerda(getMoeda($numEntradas,0), "0", constantes::$TAMANHO_CODIGOS_SAFI) 
@@ -191,12 +211,13 @@ function detalharDemandaRendimento(){
 				}				
                 ?>
                 <TR>
-                    <TD class="totalizadortabeladadosalinhadodireita" colspan=<?=$colspan-2?>>Total:</TD>
+                    <TD class="totalizadortabeladadosalinhadodireita" colspan=<?=$colspan-3?>>Total:</TD>
+					<TD class="totalizadortabeladadosalinhadodireita"><?=complementarCharAEsquerda(getMoeda($numTotalDemandas,0), "0", constantes::$TAMANHO_CODIGOS_SAFI)?></TD>                    
                     <TD class="totalizadortabeladadosalinhadodireita"><?=complementarCharAEsquerda(getMoeda($numTotalEntradas,0), "0", constantes::$TAMANHO_CODIGOS_SAFI)?></TD>
 					<TD class="totalizadortabeladadosalinhadodireita"><?=complementarCharAEsquerda(getMoeda($numTotalSaidas,0), "0", constantes::$TAMANHO_CODIGOS_SAFI)?></TD>
                 </TR>
 				<TR>
-                    <TD class="totalizadortabeladadosalinhadodireita" colspan=<?=$colspan?>>Total de registros(s): <?=$numTotalRegistros?></TD>
+                    <TD class="totalizadortabeladados" colspan=<?=$colspan?>>Total de registros(s): <?=$numTotalRegistros?></TD>
                 </TR>				
                 				                
             </TBODY>

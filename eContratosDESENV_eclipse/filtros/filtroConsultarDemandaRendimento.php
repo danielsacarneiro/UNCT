@@ -7,6 +7,7 @@ class filtroConsultarDemandaRendimento extends filtroConsultarDemandaGestao {
 	
 	public $nmFiltro = "filtroConsultarDemandaRendimento";
 	static $NmTabelaRendimento= "NmTabelaRendimento";
+	static $NmTabelaTramitacaoMininaPorSetor = "NmTabelaTramitacaoMininaPorSetor";
 	static $CD_CAMPO_SUBSTITUICAO_PRINCIPAL = "CD_CAMPO_SUBSTITUICAO_PRINCIPAL";
 	
 	//colunas
@@ -19,6 +20,9 @@ class filtroConsultarDemandaRendimento extends filtroConsultarDemandaGestao {
 
 		$nmTabela = voDemandaTramitacao::getNmTabelaStatic(false);
 		$nmTabelaDemanda = voDemanda::getNmTabelaStatic(false);
+		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic(false);	
+		$nmTabelaDemandaPL = voDemandaPL::getNmTabelaStatic(false);
+		$nmTabelaPL = voProcLicitatorio::getNmTabelaStatic(false);
 					
 		//seta os filtros obrigatorios
 		if($this->isSetaValorDefault()){
@@ -39,7 +43,7 @@ class filtroConsultarDemandaRendimento extends filtroConsultarDemandaGestao {
 		
 		}
 		
-		if($this->vodemanda->cd != null){
+		/*if($this->vodemanda->cd != null){
 			$filtro = $filtro . $conector
 			. $nmTabela. "." .voDemandaTramitacao::$nmAtrCd
 			. " = "
@@ -47,7 +51,7 @@ class filtroConsultarDemandaRendimento extends filtroConsultarDemandaGestao {
 					;
 		
 					$conector  = "\n AND ";		
-		}
+		}*/
 				
 		if ($this->vodemanda->tipo != null 
 				&& $this->vodemanda->tipo != "" 
@@ -108,7 +112,7 @@ class filtroConsultarDemandaRendimento extends filtroConsultarDemandaGestao {
 					;
 		
 					$conector  = "\n AND ";
-		}*/
+		}
 		
 		if($this->vodemanda->cdSetorDestino != null){
 			$filtro = $filtro . $conector
@@ -154,7 +158,7 @@ class filtroConsultarDemandaRendimento extends filtroConsultarDemandaGestao {
 					$conector  = "\n AND ";
 		}
 		
-		/*if($this->vodemanda->situacao != null){
+		if($this->vodemanda->situacao != null){
 			$filtro = $filtro . $conector
 			. $nmTabela. "." .voDemanda::$nmAtrSituacao
 			. " = "
@@ -162,7 +166,7 @@ class filtroConsultarDemandaRendimento extends filtroConsultarDemandaGestao {
 					;
 		
 					$conector  = "\n AND ";
-		}*/
+		}
 		
 		if ($this->vodemanda->situacao != null 
 				&& (!is_array($this->vodemanda->situacao) || (is_array($this->vodemanda->situacao) && !$this->isAtributoArrayVazio($this->vodemanda->situacao)))) {
@@ -180,7 +184,7 @@ class filtroConsultarDemandaRendimento extends filtroConsultarDemandaGestao {
 			$filtro = $filtro . $conector . $nmTabela . "." . voDemanda::$nmAtrSituacao . $comparar;
 				
 			$conector = "\n AND ";
-		}		
+		}*/		
 		
 		if ($this->tipoExcludente != null && $this->tipoExcludente != "" && !$this->isAtributoArrayVazio($this->tipoExcludente)) {
 			$comparar = " <> '" . $this->tipoExcludente. "'";
@@ -193,7 +197,7 @@ class filtroConsultarDemandaRendimento extends filtroConsultarDemandaGestao {
 			$conector = "\n AND ";
 		}
 		
-		if($this->inComPAAPInstaurado != null){
+		/*if($this->inComPAAPInstaurado != null){
 			$comparacao = " IS NOT NULL ";
 			if(!getAtributoComoBooleano($this->inComPAAPInstaurado)){
 				$comparacao = " IS NULL ";
@@ -235,23 +239,7 @@ class filtroConsultarDemandaRendimento extends filtroConsultarDemandaGestao {
 			$conector = "\n AND ";
 		}
 		
-		if($this->dtUltMovimentacaoInicial != null){
-			/*$colDemandaTram = $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrDhInclusao;
-			$colDemanda = $nmTabela. "." .voDemanda::$nmAtrDhUltAlteracao;
-			$dtUltMovimentacao = getVarComoDataSQL($this->dtUltMovimentacaoInicial); 
-			
-			$filtro = $filtro . $conector
-			. " ((". $colDemandaTram 
-			. " IS NOT NULL AND DATE(". $colDemandaTram
-			. ") >= $dtUltMovimentacao "
-			. ") OR "
-			. "(". $colDemanda
-			. " IS NOT NULL AND DATE(". $colDemanda
-			. ") >= "
-			. $dtUltMovimentacao					
-			. ")) "
-			;*/
-			
+		if($this->dtUltMovimentacaoInicial != null){			
 			$filtro = $filtro . $conector . static::getSQLDataDemandaMovimentacao($this->dtUltMovimentacaoInicial, ">=");
 		
 			$conector  = "\n AND ";
@@ -263,10 +251,6 @@ class filtroConsultarDemandaRendimento extends filtroConsultarDemandaGestao {
 		}
 		
 		if($this->cdSetorImplementacaoEconti != null){
-			/*$filtro = $filtro . $conector
-			. " DATE($nmTabelaTramitacao." .voDemandaTramitacao::$nmAtrDhInclusao
-			. ") >= ";*/
-			
 			if($this->cdSetorImplementacaoEconti == dominioSetor::$CD_SETOR_UNCT){
 				$filtro = $filtro . $conector . static::getSQLDataDemandaMovimentacao("01/02/2019", ">=");
 			}
@@ -306,19 +290,34 @@ class filtroConsultarDemandaRendimento extends filtroConsultarDemandaGestao {
 					;
 		
 					$conector  = "\n AND ";
-		}
-		
-		if($this->vocontrato->tipo != null){
-			$filtro = $filtro . $conector
-			. $nmTabelaDemandaContrato. "." .voDemandaContrato::$nmAtrTipoContrato
-			. " = "
+		}*/
+				
+		$isTpContratoSelecionado = $this->vocontrato->tipo != null && $this->vocontrato->tipo != "";
+		$iscdCPLSelecionado = $this->voproclic->cdCPL != null && $this->voproclic->cdCPL != "";
+		$isInOR_ANDSelecionado = $this->inOR_AND != null && $this->inOR_AND != "";
+		if($isTpContratoSelecionado ||  $iscdCPLSelecionado){
+			$conectorInterno  = $isInOR_ANDSelecionado?" ". $this->inOR_AND . " ":"\n OR ";
+			$filtro = $filtro . $conector . "(";
+			if($isTpContratoSelecionado){
+				$filtro .= $nmTabelaDemandaContrato. "." .voDemandaContrato::$nmAtrTipoContrato
+					. " = "
 					. getVarComoString($this->vocontrato->tipo)
-					;
-		
-					$conector  = "\n AND ";
+					;				
+			}	
+					
+			if($iscdCPLSelecionado){
+				$filtro = $filtro . $conectorInterno
+				. $nmTabelaPL . "." .voProcLicitatorio::$nmAtrCdCPL
+				. " = "
+				. getVarComoNumero($this->voproclic->cdCPL);
+			}
+					
+			$filtro .= ") ";
+			$conector  = "\n AND ";
+									
 		}
 		
-		if($this->vocontrato->cdEspecie != null){
+		/*if($this->vocontrato->cdEspecie != null){
 			$filtro = $filtro . $conector
 			. $nmTabelaDemandaContrato. "." .voDemandaContrato::$nmAtrCdEspecieContrato
 			. " = "
@@ -439,123 +438,7 @@ class filtroConsultarDemandaRendimento extends filtroConsultarDemandaGestao {
 		
 			$conector = "\n AND ";
 		}
-		
-		if($this->inContratoComDtPropostaVencida != null){
-			/*if($this->vocontrato->dtProposta == null){
-				throw new excecaoGenerica("Consulta data proposta futura: campo obrigatório: vocontrato->dtproposta.");
-			}*/
-
-			//a data da comparacao eh a data de hoje
-			$dtReferencia = getVarComoDataSQL(getDataHoje());
-			//$dtReferencia = getVarComoDataSQL($this->vocontrato->dtProposta);
-			$atributoDataReajuste = "COALESCE($nmTabelaContratoInfo" . "." .voContratoInfo::$nmAtrDtBaseReajuste 
-						. ",$nmTabelaContratoInfo." . voContratoInfo::$nmAtrDtProposta 
-						. ",$nmTabelaContrato ." . vocontrato::$nmAtrDtAssinaturaContrato
-						.")";
-			//$nmAtributoDataProposta = $nmTabelaContratoInfo . "." .voContratoInfo::$nmAtrDtProposta;
-			$dtPropostaPAram = $atributoDataReajuste;
-			/*CONSIDERAVA 1 ANO ANTES DO ATUAL PARA FAZER A DIFERENCA DE 1 ANO PARA A CONCESSAO DE REAJUSTE
-			$ano = "YEAR($dtReferencia)-1";*/			
-			//ANTES ERA ANO-1, agora ficou somente ANO... nao lembro o motivo da subtracao de 1
-			$ano = "YEAR($dtReferencia)";
-			$mes = "MONTH($dtPropostaPAram)";
-			//considera o dia 15 do mes como dia limite para obtencao do indice de reajuste exigido por lei
-			//ver data da liberacao dos indices em https://www.indiceseindicadores.com.br/inpc/
-			//dai que foi usado o dia 15 como media
-			$dia = "15";			
-			//$dia = "DAY($dtPropostaPAram)";
-			$dtPropostaPAram = getDataSQLFormatada($ano,$mes, $dia);
-			
-			//echo "$dtReferencia";
-						
-			//se a diferenca de anos for zero, quer dizer que nao ha diferenca de 1 ano
-			//nesse caso, o vencimento da data da proposta nao ocorreu, nao podendo ser a demanda analisada para fins de reajuste
-			if(getAtributoComoBooleano($this->inContratoComDtPropostaVencida)){
-				//desejam-se as demandas com propostas vencidas
-				$operacao = " > 0 ";
-			}else{
-				//desejam-se as demandas com propostas a vencer
-				$operacao = " = 0 ";
-			}			
-			
-			//se a data da proposta for nula, exibe o alerta de todo o jeito, ate que ela seja preenchida
-			//ainda verifica se tem ou nao montanteA, caso tenha, traz a demanda pois ela sera analisada de imediato
-			//se nao tiver montanteA, trarah apenas em caso positivo de aniversario da data da proposta
-			$conjuntoSQLMontanteA = "'".dominioTipoReajuste::$CD_REAJUSTE_AMBOS."','" . dominioTipoReajuste::$CD_REAJUSTE_MONTANTE_A . "'"; 
-			$conjuntoSQLMontanteB = "'".dominioTipoReajuste::$CD_REAJUSTE_OUTROS 
-									."','" . dominioTipoReajuste::$CD_REAJUSTE_AMBOS
-									."','" . dominioTipoReajuste::$CD_REAJUSTE_MONTANTE_B 
-									. "'";
-			
-			$nmAtributoInTpDemandaReajusteComMontanteA = voDemanda::$nmAtrInTpDemandaReajusteComMontanteA; 
-			$sqlTrazerTipoReajusteComMontanteA =  " $nmAtributoInTpDemandaReajusteComMontanteA IN ($conjuntoSQLMontanteA) ";
-			$sqlTrazerTipoReajusteComMontanteB = " $nmAtributoInTpDemandaReajusteComMontanteA IN ($conjuntoSQLMontanteB) ";
-			
-			/*$sqlIsDemandaSAD =
-					"($nmTabela." . voDemanda::$nmAtrTpDemandaContrato . "=".dominioTipoDemandaContrato::$CD_TIPO_REAJUSTE
-					. " AND "
-					. "$nmTabelaContratoInfo." . voContratoInfo::$nmAtrCdClassificacao . "<>".dominioClassificacaoContrato::$CD_LOCACAO_IMOVEL
-					. " AND "
-					. $this->getSQLInternoIsDemandaSAD($nmTabelaContratoInfo, $nmTabelaContrato)
-					. ")";*/
-			
-			//para demandas SAD nao ha preocupacao de listar aqui
-			//pois elas aparecerao no lugar especifico de DEMANDAS SAD PRIORIZADAS
-			$filtro = $filtro . $conector
-			. " (
-				$atributoDataReajuste IS NULL 
-				OR 
-				$nmAtributoInTpDemandaReajusteComMontanteA IS NULL 
-				OR 
-				$sqlTrazerTipoReajusteComMontanteA 
-				OR 
-				($sqlTrazerTipoReajusteComMontanteB AND "
-				//basta comparar se o mes da data de referencia (hoje) eh maior ou igual ao mes da data de comparacao
-				//se for, significa que o tempo necessario para se ter o calculo do indice, que eh de 1 ano, ja passou
-				//. " MONTH($dtReferencia) >= MONTH($dtPropostaPAram) "
-				// verifica se transcorreu 1 ano da data base de reajuste
-				. getDataSQLDiferencaAnos($dtPropostaPAram, $dtReferencia)
-				// . $operacao
-				. ")) ";
-			
-			$conector  = "\n AND ";
-		}
-						
-		if($this->inRetornarReajusteSeLocacaoImovel != null && !getAtributoComoBooleano($this->inRetornarReajusteSeLocacaoImovel)){
-			$filtro = $filtro . $conector
-			. " NOT ($nmTabela." .voDemanda::$nmAtrTipo 
-			. " = "
-			. dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO_REAJUSTE
-			. " AND $nmTabelaContratoInfo." .voContratoInfo::$nmAtrCdClassificacao
-			. " IS NOT NULL "
-			. " AND $nmTabelaContratoInfo." .voContratoInfo::$nmAtrCdClassificacao
-			. " = "
-			. dominioClassificacaoContrato::$CD_LOCACAO_IMOVEL
-			. ")";
-					$conector  = "\n AND ";
-		
-		}
-		
-		if($this->voproclic->cd != null){
-			$filtro = $filtro . $conector
-			. $nmTabelaDemandaPL . "." .voDemandaPL::$nmAtrCdProcLic
-			. " = "
-					. $this->voproclic->cd
-					;
-		
-					$conector  = "\n AND ";
-		}
-		
-		if($this->voproclic->ano != null){
-			$filtro = $filtro . $conector
-			. $nmTabelaDemandaPL . "." .voDemandaPL::$nmAtrAnoProcLic
-			. " = "
-					. $this->voproclic->ano
-					;
-		
-					$conector  = "\n AND ";
-		}
-		
+										
 		if($this->voproclic->cdModalidade != null){
 			$filtro = $filtro . $conector
 			. $nmTabelaDemandaPL . "." .voDemandaPL::$nmAtrCdModalidadeProcLic
@@ -564,49 +447,33 @@ class filtroConsultarDemandaRendimento extends filtroConsultarDemandaGestao {
 					;
 		
 					$conector  = "\n AND ";
-		}
+		}*/
+				
 		
-		if($this->voPA->cdPA != null){
+		if($this->inDesativado != null){
+			//if($this->vodemanda->cdSetorDestino != null){
 			$filtro = $filtro . $conector
-			. $nmTabelaPA . "." .voPA::$nmAtrCdPA
+			. "$nmTabelaDemanda." . voentidade::$nmAtrInDesativado
 			. " = "
-					. $this->voPA->cdPA
+					. getVarComoString($this->inDesativado)
 					;
 		
 					$conector  = "\n AND ";
-		}
-		
-		if($this->voPA->anoPA != null){
-			$filtro = $filtro . $conector
-			. $nmTabelaPA . "." .voPA::$nmAtrAnoPA
-			. " = "
-					. $this->voPA->anoPA
-					;
-		
-					$conector  = "\n AND ";
-		}
-		
-		if($this->nuTempoVidaMinimo != null){
-			$filtro = $filtro . $conector
-			. static::getSQLNuTempoVida($nmTabela)
-			. " >= "
-					. $this->nuTempoVidaMinimo
-					;
-		
-					$conector  = "\n AND ";
-		}
-		
-		if($this->nuTempoVidaMinimoUltimaTram != null){
-		//if($this->vodemanda->cdSetorDestino != null){
-			$filtro = $filtro . $conector
-			. static::getSQLNuTempoUltimaTram($nmTabelaTramitacao, $nmTabela)
-			. " >= "
-					. $this->nuTempoVidaMinimoUltimaTram
-					;
-						
-					$conector  = "\n AND ";
-		}
-		
+					
+			if($iscdCPLSelecionado){
+				//como eh feito um join com proclicitatorio, havera demandas que nao tem pl
+				//assim deve ser checado se a demanda tem pl para so assim verificar o indesativado
+				$filtro = $filtro . $conector
+				. "("
+				. "($nmTabelaPL." . voentidade::$nmAtrInDesativado
+				. " = " . getVarComoString($this->inDesativado)
+				. " AND $nmTabelaPL." . voentidade::$nmAtrInDesativado . " IS NOT NULL)"
+				. " OR $nmTabelaPL." . voentidade::$nmAtrInDesativado . " IS NULL"
+				. ")";
+				
+				$conector  = "\n AND ";				
+			}
+		}		
 		
 		$this->formataCampoOrdenacao(new voDemanda());
 		//finaliza o filtro
