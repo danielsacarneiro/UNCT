@@ -368,6 +368,7 @@ function movimentacoes(){
                   }
                   ?>
                     <TH class="headertabeladados" width="1%">Contrato</TH>
+                    <TH class="headertabeladados" width="1%">Atual</TH>
                     <TH class="headertabeladados" width="30%">Contratada</TH>
                     <TH class="headertabeladados" width="1%">CNPJ/CNPF</TH>
                     <TH class="headertabeladados" width="40%">Gestor</TH>
@@ -385,7 +386,7 @@ function movimentacoes(){
                 else 
                         $tamanho = 0;                                
                                 
-                $colspan=12;
+                $colspan=13;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -410,6 +411,9 @@ function movimentacoes(){
                         	$dsPessoa = "<B>CONTRATO NÃO INCLUÍDO NA PLANILHA</B>";
                         }
                         
+                        $cdEspeciaAtual = $colecao[$i][filtroConsultarContratoConsolidacao::$NmColCdEspecieContratoAtual];
+                        $sqEspeciaAtual = $colecao[$i][filtroConsultarContratoConsolidacao::$NmColSqEspecieContratoAtual];
+                        $termoAtual = $sqEspeciaAtual ."o $cdEspeciaAtual";
                         $gestor = $colecao[$i][vocontrato::$nmAtrGestorContrato];
                         
                         $inPrazoProrrogacao = $colecao[$i][voContratoInfo::$nmAtrInPrazoProrrogacao];
@@ -462,6 +466,7 @@ function movimentacoes(){
                   }
                   ?>                    
                     <TD class="tabeladados" nowrap><?php echo $contrato?></TD>
+                    <TD class="tabeladados" nowrap><?php echo $termoAtual?></TD>
                     <TD class="tabeladados"><?php echo $dsPessoa?></TD>
 					<TD class="tabeladados" nowrap><?php echo documentoPessoa::getNumeroDocFormatado($voPessoa->doc)?></TD>
 					<TD class="tabeladados" ><?php echo $gestor?></TD>

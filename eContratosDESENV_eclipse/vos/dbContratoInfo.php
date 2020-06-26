@@ -166,6 +166,8 @@ class dbContratoInfo extends dbprocesso {
 				$nmTabela . "." . vocontrato::$nmAtrTipoContrato,
 				$nmTabContratoMater . "." . vocontrato::$nmAtrSqContrato . " AS " . filtroConsultarContratoConsolidacao::$NmColSqContratoMater,
 				$nmTabContratoATUAL . "." . vocontrato::$nmAtrSqContrato . " AS " . filtroConsultarContratoConsolidacao::$NmColSqContratoAtual,
+				$nmTabContratoATUAL . "." . vocontrato::$nmAtrCdEspecieContrato . " AS " . filtroConsultarContratoConsolidacao::$NmColCdEspecieContratoAtual,
+				$nmTabContratoATUAL . "." . vocontrato::$nmAtrSqEspecieContrato . " AS " . filtroConsultarContratoConsolidacao::$NmColSqEspecieContratoAtual,
 				$nmTabContratoATUAL . "." . vocontrato::$nmAtrGestorContrato,
 				
 				filtroConsultarContratoConsolidacao::getComparacaoWhereDataVigencia($nmTabContratoMater . "." . vocontrato::$nmAtrDtVigenciaInicialContrato)

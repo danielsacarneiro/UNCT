@@ -13,6 +13,8 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	static $NmColDtFimVigencia = "NmColDtFimVigencia";
 	static $NmColSqContratoMater = "NmColSqContratoMater";
 	static $NmColSqContratoAtual = "NmColSqContratoAtual";
+	static $NmColCdEspecieContratoAtual = "NmColCdEspecieContratoAtual";
+	static $NmColSqEspecieContratoAtual = "NmColSqEspecieContratoAtual";
 	static $NmTabContratoMater = "TAB_CONTRATO_MATER";
 	static $NmTabContratoATUAL = "TAB_CONTRATO_ATUAL";
 	
