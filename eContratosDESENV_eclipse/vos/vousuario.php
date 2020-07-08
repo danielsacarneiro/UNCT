@@ -1,5 +1,6 @@
 <?php
 include_once(caminho_lib."voentidade.php");
+include_once(caminho_funcoes."usuario_info/biblioteca_htmlUsuario.php");
 
 Class vousuario extends voentidade{
         static $nmEntidade = "wp_users";	

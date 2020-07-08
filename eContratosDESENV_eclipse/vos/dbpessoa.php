@@ -114,6 +114,7 @@ class dbpessoa extends dbprocesso {
 		
 		$queryFrom .= "\n LEFT JOIN " . $nmTabelaContrato;
 		$queryFrom .= "\n ON " . $nmTabela . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
+		
 		// echo $querySelect."<br>";
 		// echo $queryFrom;
 		// $filtro = new filtroManterPessoa();
@@ -121,6 +122,60 @@ class dbpessoa extends dbprocesso {
 		
 		return $this->consultarFiltro ( $filtro, $querySelect, $queryFrom, $validarConsulta );
 	}
+	
+	function consultarPessoaManterConsultaPAAP() {
+		$voPrincipal = new vopessoa();
+		$filtro = new filtroManterPessoa(false);
+		//$filtro->cdvinculo = dominioVinculoPessoa::$CD_VINCULO_SERVIDOR;		
+		
+		$nmTabela = $nmTabelaOriginal = $voPrincipal->getNmTabela();
+		$nmTabelaGeral = $voPrincipal->getNmTabelaGeralComHistorico();
+		
+		//$nmTabJoin = getSQLTabelaTrazendoHistorico($voPrincipal);
+		//traz TODAS pessoas que ja instruiram PAAP
+		$nmTabPAAP = voPA::getNmTabela();
+		$nmAtrCdPessoaPAAP = voPA::$nmAtrCdResponsavel;
+		$nmTabJoin = "(SELECT * FROM $nmTabela WHERE ". vopessoa::$nmAtrCd." IN (SELECT $nmAtrCdPessoaPAAP FROM $nmTabPAAP GROUP BY $nmAtrCdPessoaPAAP)) $nmTabelaGeral ";
+		$nmTabela = $nmTabelaGeral;		
+		
+		$atributosConsulta = $nmTabela . "." . vopessoa::$nmAtrCd;
+		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrNome;
+		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrDoc;
+		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrEmail;
+		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrTel;
+		$atributosConsulta .= "," . vopessoavinculo::getNmTabela () . "." . vopessoavinculo::$nmAtrCd;
+		$atributosConsulta .= "," . vopessoavinculo::getNmTabela () . "." . vopessoavinculo::$nmAtrInAtribuicaoPAAP;
+		$atributosConsulta .= "," . vopessoavinculo::getNmTabela () . "." . vopessoavinculo::$nmAtrInAtribuicaoPregoeiro;
+		
+		if($filtro->isHistorico()){
+			$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrSqHist;
+		}
+		
+		$nmTabelaContrato = vocontrato::getNmTabela ();
+		
+		$query = "SELECT " . $atributosConsulta;		
+		$query .= "\n FROM " . $nmTabJoin;
+		$query .= "\n INNER JOIN " . vopessoavinculo::getNmTabela ();
+		$query .= "\n ON " . $nmTabela . "." . vopessoa::$nmAtrCd . "=" . vopessoavinculo::getNmTabela () . "." . vopessoavinculo::$nmAtrCdPessoa;		
+		$query .= "\n LEFT JOIN " . $nmTabelaContrato;
+		$query .= "\n ON " . $nmTabela . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
+		$query .= filtroManter::$CD_CAMPO_SUBSTITUICAO;
+		$query .= " GROUP BY " . $atributosConsulta;
+			
+		$arraySubstituicao = array(
+				filtroManter::$CD_CAMPO_SUBSTITUICAO => $filtro->getSQLFiltroPreenchido(),	
+		);	
+		$filtro->sqlFiltrosASubstituir = $arraySubstituicao;
+	
+		if($filtro->cdAtrOrdenacao != null){
+			$query .= " ORDER BY " . $filtro->cdAtrOrdenacao . " " . $filtro->cdOrdenacao;
+		}
+	
+		$retorno = parent::consultarFiltroPorSubstituicao($filtro, $query);
+	
+		return $retorno;
+	}
+	
 	function consultarPessoaPorContrato($filtro) {
 		$atributosConsulta = vopessoa::getNmTabela () . "." . vopessoa::$nmAtrCd;
 		$atributosConsulta .= "," . vopessoa::getNmTabela () . "." . vopessoa::$nmAtrNome;

@@ -47,8 +47,12 @@ class filtroManterPessoa extends filtroManter{
 
 		$isHistorico = $this->isHistorico();
         $nmTabela = $voPessoa->getNmTabelaEntidade($isHistorico);
-        $nmTabelaPessoaVinculo = $voPessoaVinculo->getNmTabela();
+        $isTrazerComHistorico = $filtro->inTrazerComHistorico;
+        if($isTrazerComHistorico){
+        	$nmTabela = vopessoa::getNmTabelaGeralComHistorico();
+        }
         
+        $nmTabelaPessoaVinculo = $voPessoaVinculo->getNmTabela();        
         $nmTabelaDemanda = voDemanda::getNmTabelaStatic($isHistorico);
         
 		//seta os filtros obrigatorios        

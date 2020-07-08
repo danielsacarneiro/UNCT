@@ -117,6 +117,15 @@ function converteRecordSetEmColecaoVOsContrato($colecao) {
 	return $retorno;
 }
 
+function getComboPessoaRespPAConsulta($idCampo, $nmCampo, $cdOpcaoSelecionada, $classCampo, $tagHtml){
+	$dbprocesso = new dbpessoa();
+	$recordset = $dbprocesso->consultarPessoaManterConsultaPAAP();
+	$select = new select(array());
+	$select->getRecordSetComoColecaoSelect(vopessoa::$nmAtrCd, vopessoa::$nmAtrNome, $recordset);
+	return getComboColecaoGenerico($select->colecao, $idCampo, $nmCampo, $cdOpcaoSelecionada, $classCampo, $tagHtml);
+
+}
+
 function getComboPessoaRespPA($idCampo, $nmCampo, $cdOpcaoSelecionada, $classCampo, $tagHtml){	
 	$dbprocesso = new dbpessoa();
 	$filtro = new filtroManterPessoa(false);

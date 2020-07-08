@@ -3,6 +3,26 @@ include_once ("constantes.class.php");
 include_once ("bibliotecaFuncoesPrincipal.php");
 
 // bibliotecaSQL
+
+/**
+ * traz tabela atual + historico para ser usado no join
+ * @param unknown $vo
+ * @return string
+ */
+function getSQLTabelaTrazendoHistorico($vo){
+	$nmTabelaOriginal = $vo->getNmTabelaEntidade(false);
+	$nmTabelaHist = $vo->getNmTabelaEntidade(true);
+	$atributosHist = $atributos = $vo->getAtributosFilho();
+	//o sqhist vem com valor apenas na tabela de historico
+	$atributosHist[]=voentidade::$nmAtrSqHist;
+	$atributos[] = "0";
+	$atributos = getSQLStringFormatadaColecaoIN($atributos);
+	$atributosHist = getSQLStringFormatadaColecaoIN($atributosHist);
+	$nmTabelaGeral = $vo::getNmTabelaGeralComHistorico();
+	
+	return "(SELECT $atributos FROM $nmTabelaOriginal UNION SELECT $atributosHist FROM $nmTabelaHist) $nmTabelaGeral ";	
+}
+
 function getSQLNmContratada($comAliasNoAtributo = true) {
 	$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 	$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );

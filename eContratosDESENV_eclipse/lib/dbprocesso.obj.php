@@ -25,6 +25,7 @@ class dbprocesso {
 		$this->cDb = new db ();
 		$this->cDb->abrirConexao ( $this->cConfig->db, $this->cConfig->login, $this->cConfig->senha, $this->cConfig->odbc, $this->cConfig->driver, $this->cConfig->servidor );
 	}
+		
 	function incluirHistorico($voEntidade) {
 		// par ao historico funcionar, a tabela de historico deve estar adequada a estrutura da query abaixo
 		/*
@@ -459,7 +460,7 @@ class dbprocesso {
 			// aqui eh onde faz realmente a consulta a retornar
 			$query = $querySelect . $queryFrom . " $filtroSQL ";
 			$query = $query . " $limite";
-				
+			
 			//echo $queryFrom;
 				
 			// echo $filtroSQL;

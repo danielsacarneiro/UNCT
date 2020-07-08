@@ -245,7 +245,6 @@ function iniciar(){
             <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
             <TBODY>
 	        <?php	         
-	        
 	        $comboTipo = new select(dominioTipoDemanda::getColecaoTipoDemanda(false));
 	        $comboSetor = new select(dominioSetor::getColecao());
 	        $comboSituacao = new select(dominioSituacaoDemanda::getColecao());

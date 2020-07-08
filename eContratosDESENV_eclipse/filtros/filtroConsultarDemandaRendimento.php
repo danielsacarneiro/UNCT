@@ -109,7 +109,8 @@ class filtroConsultarDemandaRendimento extends filtroConsultarDemandaGestao {
 		$isTpContratoSelecionado = $this->vocontrato->tipo != null && $this->vocontrato->tipo != "";
 		$iscdCPLSelecionado = $this->voproclic->cdCPL != null && $this->voproclic->cdCPL != "";
 		$isInORAND_AND = $this->inOR_AND == constantes::$CD_OPCAO_AND;		
-		if($isInORAND_AND){			
+		if($isInORAND_AND){	
+			//quando eh "E" ele pega todas as informacoes em contrato
 			if($isTpContratoSelecionado){
 				$filtro = $filtro . $conector
 				. $nmTabelaDemandaContrato. "." .voDemandaContrato::$nmAtrTipoContrato
@@ -121,13 +122,19 @@ class filtroConsultarDemandaRendimento extends filtroConsultarDemandaGestao {
 			
 			if($iscdCPLSelecionado){
 				$filtro = $filtro . $conector
+				. $nmTabelaPL . "." .voProcLicitatorio::$nmAtrCdCPL
+				. " = "
+						. getVarComoNumero($this->voproclic->cdCPL);
+				
+				/*$filtro = $filtro . $conector
 				. $nmTabelaContrato . "." .vocontrato::$nmAtrProcessoLicContrato
 				. " LIKE "
-				. getVarComoString("%".dominioComissaoProcLicitatorio::getDescricao($this->voproclic->cdCPL)."%");
+				. getVarComoString("%".dominioComissaoProcLicitatorio::getDescricao($this->voproclic->cdCPL)."%");*/
 				
 				$conector  = "\n AND ";
 			}	
 		}else if($isTpContratoSelecionado||$iscdCPLSelecionado){
+			//quando eh "OU" ele pega as informacoes em contrato e em proc licitatorio
 				$conectorInterno  = $isInOR_ANDSelecionado?" ". $this->inOR_AND . " ":"\n OR ";
 				$filtro = $filtro . $conector . "(";
 				if($isTpContratoSelecionado){
@@ -135,6 +142,8 @@ class filtroConsultarDemandaRendimento extends filtroConsultarDemandaGestao {
 						. " = "
 						. getVarComoString($this->vocontrato->tipo)
 						;				
+				}else{
+					$conectorInterno = "";
 				}	
 						
 				if($iscdCPLSelecionado){

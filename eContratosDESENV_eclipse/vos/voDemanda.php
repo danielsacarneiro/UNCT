@@ -24,6 +24,7 @@ class voDemanda extends voentidade {
 	static $nmAtrPrioridade = "dem_prioridade";
 	static $nmAtrDtReferencia = "dem_dtreferencia";
 	static $nmAtrInLegado = "dem_inlegado";
+	static $nmAtrCdPessoaRespATJA = "dem_cdpessoaresp_atja";
 	
 	var $cd = "";
 	var $ano = "";
@@ -37,6 +38,8 @@ class voDemanda extends voentidade {
 	var $prioridade = "";
 	var $dtReferencia = "";
 	var $inLegado = "";
+	
+	var $cdPessoaRespATJA = "";
 	var $dbprocesso = null;
 	
 	var $colecaoContrato = null;

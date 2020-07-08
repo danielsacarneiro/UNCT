@@ -25,6 +25,7 @@ class filtroManterUsuario extends filtroManter{
 		$conector  = "";
 		
         $nmTabela = vousuario::getNmTabelaStatic($this->isHistorico());
+        $nmTabelaUsuSetor = voUsuarioSetor::getNmTabela ();
         //$nmTabelaComplementar = vousuario::getNmTabelaDadosComplementares();
         if($this->nmEntidadePrincipal != null){
         	$nmTabela = $this->nmEntidadePrincipal; 
@@ -60,7 +61,7 @@ class filtroManterUsuario extends filtroManter{
 		
 		if($this->cdSetor != null){
 			$filtro = $filtro . $conector
-			. $nmTabela. "." .voUsuarioSetor::$nmAtrCdSetor
+			. $nmTabelaUsuSetor. "." .voUsuarioSetor::$nmAtrCdSetor
 			. " = "
 			. $this->cdSetor
 			;

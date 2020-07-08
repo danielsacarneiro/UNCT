@@ -20,10 +20,12 @@ class select extends multiplosConstrutores {
 	function __construct3($recordSet, $nmColCD, $nmColDS) {
 		$colecao = array();
 		
-		for ($i=0; $i<count($recordSet);$i++){			
-			$cd = $recordSet[$i][$nmColCD];
-			$ds = $recordSet[$i][$nmColDS];			
-			$colecao[$cd]=$ds;
+		if(!isColecaoVazia($recordSet)){
+			for ($i=0; $i<count($recordSet);$i++){			
+				$cd = $recordSet[$i][$nmColCD];
+				$ds = $recordSet[$i][$nmColDS];			
+				$colecao[$cd]=$ds;
+			}
 		}
 
 		self::__construct1($colecao);	

@@ -211,7 +211,7 @@ class dbDemanda extends dbprocesso {
 		//echo "andor $isInORAND_AND" . $filtro->inOR_AND;
 		
 		//se o AND foi acionado, toda a consulta vai ser dar pela tabela de contrato
-		if($isInORAND_AND && ($isTpContratoSelecionado||$iscdCPLSelecionado)){
+		/*if($isInORAND_AND && ($isTpContratoSelecionado||$iscdCPLSelecionado)){
 			$joinDemandaContrato .= "\n LEFT JOIN " . $nmTabelaDemandaContrato;
 			$joinDemandaContrato .= "\n ON ";
 			$joinDemandaContrato .= "$nmTabelaDemanda." . voDemanda::$nmAtrAno . "=$nmTabelaDemandaContrato." . voDemandaContrato::$nmAtrAnoDemanda;
@@ -227,7 +227,7 @@ class dbDemanda extends dbprocesso {
 			$joinDemandaContrato .= "$nmTabelaDemandaContrato." . voDemandaContrato::$nmAtrCdEspecieContrato . "=$nmTabelaContrato." . vocontrato::$nmAtrCdEspecieContrato;
 			$joinDemandaContrato .= "\n AND ";
 			$joinDemandaContrato .= "$nmTabelaDemandaContrato." . voDemandaContrato::$nmAtrSqEspecieContrato . "=$nmTabelaContrato." . vocontrato::$nmAtrSqEspecieContrato;		
-		}else{
+		}else{*/
 			if($isTpContratoSelecionado){
 				$joinDemandaContrato .= "\n LEFT JOIN " . $nmTabelaDemandaContrato;
 				$joinDemandaContrato .= "\n ON ";
@@ -247,7 +247,7 @@ class dbDemanda extends dbprocesso {
 				$joinDemandaPL .= "\n AND $nmTabelaPL." . voProcLicitatorio::$nmAtrCdModalidade . "=$nmTabelaDemandaPL." . voDemandaPL::$nmAtrCdModalidadeProcLic;
 			}
 				
-		}		
+		//}		
 		
 		$joinComum .= "\n INNER JOIN " . $nmTabelaDemanda;
 		$joinComum .= "\n ON ";
@@ -494,6 +494,7 @@ class dbDemanda extends dbprocesso {
 		$nmTabelaTramitacao = voDemandaTramitacao::getNmTabela ();
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabela ();
 		$nmTabelaDemandaProcLic = voDemandaPL::getNmTabelaStatic ( false );
+		$nmTabelaProcLic = voProcLicitatorio::getNmTabelaStatic ( false );
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
@@ -530,6 +531,7 @@ class dbDemanda extends dbprocesso {
 				$nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdProcLic,
 				$nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrAnoProcLic,
 				$nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdModalidadeProcLic,
+				$nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrCdCPL,
 				getSQLNmContratada (),
 				// $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . " AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,
 				"COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . "," . $nmTabela . "." . voDemanda::$nmAtrCdSetor . ") AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,
@@ -604,6 +606,12 @@ class dbDemanda extends dbprocesso {
 				$queryJoin .= $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrAnoDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrAno;
 				$queryJoin .= "\n AND " . $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrCd;
 	
+				$queryJoin .= "\n LEFT JOIN " . $nmTabelaProcLic;
+				$queryJoin .= "\n ON ";
+				$queryJoin .= $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrAnoProcLic . "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrAno;
+				$queryJoin .= "\n AND " . $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdProcLic . "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrCd;
+				$queryJoin .= "\n AND " . $nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdModalidadeProcLic . "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrCdModalidade;
+				
 				$queryJoin .= "\n LEFT JOIN " . $nmTabelaPA;
 				$queryJoin .= "\n ON ";
 				$queryJoin .= $nmTabelaPA . "." . voPA::$nmAtrAnoDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrAno;

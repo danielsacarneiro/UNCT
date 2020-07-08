@@ -187,6 +187,7 @@ class filtroManterDemanda extends filtroManter{
 		$nmTabelaTramitacaoDoc = voDemandaTramDoc::getNmTabelaStatic(false);
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic(false);
 		$nmTabelaDemandaPL = voDemandaPL::getNmTabelaStatic(false);
+		$nmTabelaProcLic = voProcLicitatorio::getNmTabelaStatic(false);
 		$nmTabelaPA = voPA::getNmTabelaStatic(false);
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic(false);
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic(false);
@@ -810,6 +811,16 @@ class filtroManterDemanda extends filtroManter{
 			. $nmTabelaDemandaPL . "." .voDemandaPL::$nmAtrCdModalidadeProcLic
 			. " = "
 					. getVarComoString($this->voproclic->cdModalidade)
+					;
+		
+					$conector  = "\n AND ";
+		}
+		
+		if($this->voproclic->cdCPL != null){
+			$filtro = $filtro . $conector
+			. $nmTabelaProcLic . "." .voProcLicitatorio::$nmAtrCdCPL
+			. " = "
+					. getVarComoNumero($this->voproclic->cdCPL)
 					;
 		
 					$conector  = "\n AND ";

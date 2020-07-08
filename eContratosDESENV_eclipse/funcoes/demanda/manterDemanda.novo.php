@@ -217,16 +217,26 @@ function iniciar(){
 	        </TR>	        
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Situação:</TH>
-	            <TD class="campoformulario" colspan=3>
+	            <TD class="campoformulario" width="1%">
 	            <?php 
-	            echo $comboSituacao->getHtmlCombo(voDemanda::$nmAtrSituacao,voDemanda::$nmAtrSituacao, $vo->situacao, true, "campoobrigatorio", false, " required ");?>
+	            echo $comboSituacao->getHtmlCombo(voDemanda::$nmAtrSituacao,voDemanda::$nmAtrSituacao, $vo->situacao, true, "campoobrigatorio", false, " required ");
+	            ?>
+				</TD>
+	            <TH class="campoformulario" width="1%">ATJA.Resp.:</TH>
+	            <TD class="campoformulario" >
+	            <?php
+	            echo getComboPessoaRespPA(voDemanda::$nmAtrCdPessoaRespATJA, voDemanda::$nmAtrCdPessoaRespATJA, $vo->cdResponsavel, "camponaoobrigatorio", "required");
+	          	?>
 				</TD>
 	        </TR>
 			<TR>
 				<TD halign="left" colspan="4">
 				<DIV class="textoseparadorgrupocamposalinhadodireita">
 							<SCRIPT language="JavaScript" type="text/javascript">
-				            	colecaoIDCdNaoObrigatorio = ["<?=$nmCampoTpDemandaReajuste?>"];
+				            	colecaoIDCdNaoObrigatorio = 
+					            	["<?=$nmCampoTpDemandaReajuste?>",
+					            	"<?=voDemanda::$nmAtrCdPessoaRespATJA?>"
+					            	];
 				            </SCRIPT>
 				            <INPUT type="checkbox" id="checkCdNaoObrigatorio" name="checkCdNaoObrigatorio" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCdNaoObrigatorio, true);"> <?=constantes::$DS_RESPONSABILIDADE_NAO_INCLUSAO_CAMPOS?>
 				

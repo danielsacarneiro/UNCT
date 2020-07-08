@@ -182,7 +182,7 @@ function validaFormulario() {
                 <TD class="campoformulario" colspan="3">
                      <?php
                     include_once(caminho_funcoes."pessoa/biblioteca_htmlPessoa.php");                    
-                    echo getComboPessoaRespPA(voPA::$nmAtrCdResponsavel, voPA::$nmAtrCdResponsavel, $filtro->cdResponsavel, "camponaoobrigatorio", "");                                        
+                    echo getComboPessoaRespPAConsulta(voPA::$nmAtrCdResponsavel, voPA::$nmAtrCdResponsavel, $filtro->cdResponsavel, "camponaoobrigatorio", "");                                        
                     ?>
             </TR>
 	        <?php	        

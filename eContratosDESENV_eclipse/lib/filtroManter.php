@@ -37,6 +37,8 @@ class filtroManter extends multiplosConstrutores {
 	var $groupby;
 	var $isConsultaTela;
 	var $isTpVigenciaMAxSq;
+	//implementar quando trouxer uma solucao para exibicao de registros considerando o historico
+	//var $inTrazerComHistorico = false;
 	
 	var $isIncluirFiltroNaSessao = false;
 	var $isFazerControleSessao = false;
@@ -103,6 +105,7 @@ class filtroManter extends multiplosConstrutores {
 		$this->temValorDefaultSetado = false;
 		$this->inDesativado = null;
 		$this->isTpVigenciaMAxSq = false;
+		//$this->inTrazerComHistorico = false;
 	}
 	
 	/**

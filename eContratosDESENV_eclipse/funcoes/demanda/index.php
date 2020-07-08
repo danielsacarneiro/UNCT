@@ -222,7 +222,7 @@ function detalharDemandaGestao(){
 	        ?>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Proc.Licitatório:</TH>
-	            <TD class="campoformulario"><?php getCampoDadosProcLicitatorio($filtro->voproclic);?>
+	            <TD class="campoformulario"><?php getCampoDadosProcLicitatorioComCPL($filtro->voproclic);?>
 	            </TD>
 	        </TR>	                    
 	        <TR>

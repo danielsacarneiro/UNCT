@@ -258,6 +258,14 @@ class voentidade extends multiplosConstrutores {
 		return static::getNmTabela () . voentidade::$nmTabelaSufixoHistorico;
 	}
 	
+	/**
+	 * nome generico para a tabela que traz os registros atuais + historico
+	 * @return string
+	 */
+	static function getNmTabelaGeralComHistorico() {
+		return static::getNmTabela () . "_GERAL";
+	}
+	
 	/*
 	 * static function getNmTabelaSequencial(){
 	 * return static::getNmTabela() . voentidade::$nmTabelaSufixoSequencial;
