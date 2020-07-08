@@ -117,6 +117,16 @@ function converteRecordSetEmColecaoVOsContrato($colecao) {
 	return $retorno;
 }
 
+/**
+ * metodo criado para exibir os servidores que instruiram PAAP, mesmo para aqueles que ja perderam essa funcao
+ * eh uma marreta para o nao funcionamento correto de vigencia
+ * @param unknown $idCampo
+ * @param unknown $nmCampo
+ * @param unknown $cdOpcaoSelecionada
+ * @param unknown $classCampo
+ * @param unknown $tagHtml
+ * @return string
+ */
 function getComboPessoaRespPAConsulta($idCampo, $nmCampo, $cdOpcaoSelecionada, $classCampo, $tagHtml){
 	$dbprocesso = new dbpessoa();
 	$recordset = $dbprocesso->consultarPessoaManterConsultaPAAP();
