@@ -192,6 +192,7 @@ include_once("voDemandaContrato.php");
 		$voDemanda->texto  = $this->texto;
 		$voDemanda->prioridade  = $this->prioridade;
 		$voDemanda->dtReferencia  = $this->dtReferencia;
+		$voDemanda->cdPessoaRespATJA  = $this->cdPessoaRespATJA;
 		$voDemanda->voSolicCompra = $this->voSolicCompra;
 		$voDemanda->voProcLicitatorio  = $this->voProcLicitatorio;
 		$voDemanda->tpDemandaContrato = $this->tpDemandaContrato;

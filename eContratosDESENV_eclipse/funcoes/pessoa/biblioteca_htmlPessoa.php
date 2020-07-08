@@ -132,7 +132,7 @@ function getComboPessoaRespPAConsulta($idCampo, $nmCampo, $cdOpcaoSelecionada, $
 	$recordset = $dbprocesso->consultarPessoaManterConsultaPAAP();
 	$select = new select(array());
 	$select->getRecordSetComoColecaoSelect(vopessoa::$nmAtrCd, vopessoa::$nmAtrNome, $recordset);
-	return getComboColecaoGenerico($select->colecao, $idCampo, $nmCampo, $cdOpcaoSelecionada, $classCampo, $tagHtml);
+	return $select->getHtmlCombo ( $idCampo, $nmCampo, $cdOpcaoSelecionada, true, $classCampo, false, $tagHtml );
 
 }
 

@@ -127,6 +127,7 @@ class filtroManterDemanda extends filtroManter{
 		$vodemanda->prioridade  = @$_POST[voDemanda::$nmAtrPrioridade];
 		$this->prioridadeExcludente = @$_POST[static::$NmAtrPrioridadeExcludente];
 		$vodemanda->prt = trim(@$_POST[voDemandaTramitacao::$nmAtrProtocolo]);
+		$vodemanda->cdPessoaRespATJA  = @$_POST[voDemanda::$nmAtrCdPessoaRespATJA];
 		
 		$vocontrato->anoContrato = @$_POST[vocontrato::$nmAtrAnoContrato];
 		$vocontrato->cdContrato = @$_POST[vocontrato::$nmAtrCdContrato];
@@ -539,6 +540,16 @@ class filtroManterDemanda extends filtroManter{
 		
 			$conector  = "\n AND ";
 		}
+		
+		if($this->vodemanda->cdPessoaRespATJA != null){
+			$filtro = $filtro . $conector
+			. $nmTabela. "." .voDemanda::$nmAtrCdPessoaRespATJA
+			. " = "
+					. $this->vodemanda->cdPessoaRespATJA
+					;
+		
+					$conector  = "\n AND ";
+		}		
 		
 		if($this->vocontrato->anoContrato != null){
 			$filtro = $filtro . $conector

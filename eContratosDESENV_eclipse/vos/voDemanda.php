@@ -110,6 +110,7 @@ class voDemanda extends voentidade {
 				self::$nmAtrTexto,
 				self::$nmAtrPrioridade,
 				self::$nmAtrDtReferencia, 
+				self::$nmAtrCdPessoaRespATJA,
 				self::$nmAtrInLegado
 		);
 		
@@ -194,6 +195,7 @@ class voDemanda extends voentidade {
 		$this->texto = $registrobanco [self::$nmAtrTexto];
 		$this->prioridade = $registrobanco [self::$nmAtrPrioridade];
 		$this->dtReferencia = $registrobanco [self::$nmAtrDtReferencia];
+		$this->cdPessoaRespATJA = $registrobanco [self::$nmAtrCdPessoaRespATJA];
 		$this->inLegado = $registrobanco [self::$nmAtrInLegado];
 		
 		$this->getProcLicitatorioRegistroBanco($registrobanco);
@@ -225,6 +227,7 @@ class voDemanda extends voentidade {
 		$this->texto = @$_POST [self::$nmAtrTexto];
 		$this->prioridade = @$_POST [self::$nmAtrPrioridade];
 		$this->dtReferencia = @$_POST [self::$nmAtrDtReferencia];
+		$this->cdPessoaRespATJA = @$_POST [self::$nmAtrCdPessoaRespATJA];
 		$this->inLegado = @$_POST [self::$nmAtrInLegado];
 		// quando existir
 		// recupera quando da consulta da contratada, ao inserir o contrato na tela

@@ -1175,6 +1175,8 @@ class dbDemanda extends dbprocesso {
 		$retorno .= $this->getVarComoString ( strtoupper ( $vo->texto ) ) . ",";
 		$retorno .= $this->getVarComoNumero ( $vo->prioridade ) . ",";
 		$retorno .= $this->getVarComoData ( $vo->dtReferencia ). ",";
+		$retorno .= $this->getVarComoNumero ( $vo->cdPessoaRespATJA ). ",";
+		
 		$retorno .= $this->getVarComoString($vo->inLegado);
 		
 		$retorno .= $vo->getSQLValuesInsertEntidade ();
@@ -1211,6 +1213,9 @@ class dbDemanda extends dbprocesso {
 		
 		$retorno .= $sqlConector . voDemanda::$nmAtrInTpDemandaReajusteComMontanteA . " = " . $this->getVarComoString ( $vo->inTpDemandaReajusteComMontanteA );
 		$sqlConector = ",";		
+		
+		$retorno .= $sqlConector . voDemanda::$nmAtrCdPessoaRespATJA . " = " . $this->getVarComoNumero ( $vo->cdPessoaRespATJA );
+		$sqlConector = ",";
 		
 		$retorno = $retorno . $sqlConector . $vo->getSQLValuesUpdate ();
 		

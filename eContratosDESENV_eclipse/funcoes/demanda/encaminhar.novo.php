@@ -291,8 +291,13 @@ function iniciar(){
 	            <TH class="campoformulario" nowrap width="1%">Situação:</TH>
 	            <TD class="campoformulario" colspan=3>
 	            <?php 
-	            echo $comboSituacao->getHtmlCombo("","", $vo->situacao, true, "camporeadonly", false, " disabled ");?>
-				</TD>				
+	            echo $comboSituacao->getHtmlCombo("","", $vo->situacao, true, "camporeadonly", false, " disabled ");
+	            
+	            if($vo->cdPessoaRespATJA != null){
+	            	echo "&nbsp;ATJA.Resp.:".getComboPessoaRespPAConsulta(voDemanda::$nmAtrCdPessoaRespATJA, voDemanda::$nmAtrCdPessoaRespATJA, $vo->cdPessoaRespATJA, "camponaoobrigatorio", "disabled");
+	            }
+	            ?>
+	            </TD>				
 	        </TR>
 	        <?php
 	        }else{

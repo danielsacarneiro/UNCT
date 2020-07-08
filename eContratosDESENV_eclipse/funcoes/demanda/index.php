@@ -394,7 +394,12 @@ function detalharDemandaGestao(){
 			</TR>
             <TR>            
 	            <TH class="campoformulario" nowrap width="1%">Usuário:</TH>
-				<TD class="campoformulario" width="1%"><?php echo $comboUsuTramitacao->getHtmlSelect(filtroManterDemanda::$NmAtrCdUsuarioTramitacao,filtroManterDemanda::$NmAtrCdUsuarioTramitacao, $filtro->cdUsuarioTramitacao, true, "camponaoobrigatorio", false);?>
+				<TD class="campoformulario" width="1%">
+				Tram.:<?php echo $comboUsuTramitacao->getHtmlSelect(filtroManterDemanda::$NmAtrCdUsuarioTramitacao,filtroManterDemanda::$NmAtrCdUsuarioTramitacao, $filtro->cdUsuarioTramitacao, true, "camponaoobrigatorio", false);?>
+				<br>ATJA:
+				<?php 
+				echo getComboPessoaRespPAConsulta(voDemanda::$nmAtrCdPessoaRespATJA, voDemanda::$nmAtrCdPessoaRespATJA, $filtro->vodemanda->cdPessoaRespATJA, "camponaoobrigatorio", "");
+				?>				
 				</TD>
 				<TH class="campoformulario" width="1%">Tempo.Vida.Mínimo:</TH>
 				<TD class="campoformulario" >				

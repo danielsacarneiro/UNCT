@@ -124,10 +124,16 @@ function confirmar() {
             </TR>
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Situação:</TH>
-	            <TD class="campoformulario" colspan=3>
+	            <TD class="campoformulario">
 	            <?php 
 	            echo $comboSituacao->getHtmlCombo("","", $vo->situacao, true, "camporeadonly", false, " disabled ");?>
 				</TD>
+	            <TH class="campoformulario" width="1%">ATJA.Resp.:</TH>
+	            <TD class="campoformulario" >
+	            <?php
+	            echo getComboPessoaRespPAConsulta(voDemanda::$nmAtrCdPessoaRespATJA, voDemanda::$nmAtrCdPessoaRespATJA, $vo->cdPessoaRespATJA, "camponaoobrigatorio", "disabled");
+	          	?>
+				</TD>				
 	        </TR>
 				<?php
 				$colecaoTramitacao = $vo->dbprocesso->consultarDemandaGestaoTramitacao($vo);

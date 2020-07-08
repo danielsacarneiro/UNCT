@@ -225,7 +225,7 @@ function iniciar(){
 	            <TH class="campoformulario" width="1%">ATJA.Resp.:</TH>
 	            <TD class="campoformulario" >
 	            <?php
-	            echo getComboPessoaRespPA(voDemanda::$nmAtrCdPessoaRespATJA, voDemanda::$nmAtrCdPessoaRespATJA, $vo->cdResponsavel, "camponaoobrigatorio", "required");
+	            echo getComboPessoaRespPA(voDemanda::$nmAtrCdPessoaRespATJA, voDemanda::$nmAtrCdPessoaRespATJA, $vo->cdPessoaRespATJA, "camponaoobrigatorio", "required");
 	          	?>
 				</TD>
 	        </TR>
