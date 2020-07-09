@@ -445,14 +445,13 @@ function detalharDemandaGestao(){
                     <TH class="headertabeladados" width="40%" rowspan=2>Contrato/PL</TH>
                     <TH class="headertabeladados"width="50%"  rowspan=2>Título</TH>                    
                     <TH class="headertabeladados" width="1%" rowspan=2>Prior.</TH>
-                    <TH class="headertabeladados"width="1%" nowrap rowspan=2>Usuário</TH>
                     <TH class="headertabeladados"width="1%" nowrap rowspan=2>Abertura</TH>
                     <TH class="headertabeladados"width="1%" nowrap rowspan=2>Últ.Movim</TH>
                     <TH class="headertabeladadosalinhadocentro"width="1%" nowrap colspan="2">Prazo</TH>
                     <TH class="headertabeladados" width="1%" rowspan=2>Situação</TH>                    
                 </TR>
                 <TR>
-                    <TH class="headertabeladados"width="1%">Últ.Tram</TH>
+                    <TH class="headertabeladados"width="1%">Últ.</TH>
                     <TH class="headertabeladados" width="1%">Total</TH>                    
                 </TR>
                 <?php								
@@ -467,7 +466,7 @@ function detalharDemandaGestao(){
                 $dominioTipo = new dominioTipoDemanda();
                 $dominioPrioridade = new dominioPrioridadeDemanda();
                                 
-                $colspan=15;
+                $colspan=14;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -542,10 +541,10 @@ function detalharDemandaGestao(){
                         	
                         $prioridade = $dominioPrioridade->getDescricao($voAtual->prioridade);
                         
-                        $nmUsuario = $voAtual->nmUsuarioInclusao;
+                        /*$nmUsuario = $voAtual->nmUsuarioInclusao;
                         if($isHistorico){
                         	$nmUsuario = $voAtual->nmUsuarioOperacao;
-                        }
+                        }*/
                                                 
                         $dataUltimaMovimentacao = $registro[filtroManterDemanda::$NmColDhUltimaMovimentacao];
                         $tempovida = $registro[filtroManterDemanda::$NmColNuTempoVida];
@@ -568,9 +567,8 @@ function detalharDemandaGestao(){
 					<TD class="tabeladados" nowrap><?php echo $setorDestinoAtual?></TD>
 					<TD class="tabeladados"><?php echo $tipo?></TD>
 					<TD class="tabeladados" ><?php echo truncarStringHTML($contrato, 60, true)?></TD>
-                    <TD class="tabeladados" ><?php echo truncarStringHTML($voAtual->texto, 100, true);?></TD>                    
+                    <TD class="tabeladados" ><?php echo truncarStringHTML(strtolower($voAtual->texto), 100, true);?></TD>                    
                     <TD class="tabeladados" nowrap><?php echo $prioridade?></TD>
-                    <TD class="tabeladados" ><?php echo $nmUsuario;?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($voAtual->dtReferencia);?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($dataUltimaMovimentacao);?></TD>
 					<TD class="tabeladadosalinhadodireita" nowrap><?php echo complementarCharAEsquerda($tempoUltTram, "0", 3);?></TD>
