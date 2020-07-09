@@ -19,11 +19,24 @@ class dominioModalidadeProcLicitatorio extends dominio {
 	static $DS_MODALIDADE_DISPENSA = "Dispensa";
 	static $DS_MODALIDADE_INEXIGIBILIDADE = "Inexigibilidade";
 	
+	//PROFISCO
+	static $CD_MODALIDADE_LPI = "LPI";
+	static $DS_MODALIDADE_LPI = "Licitação Pública Internacional";
+	static $DS_PROFISCO = "PROFISCO";
+	
 	// ...............................................................
 	// Construtor
 	function __construct() {
 		$this->colecao = self::getColecao();
 	}
+	static function getColecaoPROFISCO() {
+		$retorno = array (
+				self::$CD_MODALIDADE_LPI => SELF::$DS_PROFISCO . "-" . self::$CD_MODALIDADE_LPI,	
+		);
+	
+		return $retorno;
+	}
+	
 	static function getColecao() {
 		$retorno = array (
 				self::$CD_MODALIDADE_PREGAO_ELETRONICO => self::$DS_MODALIDADE_PREGAO_ELETRONICO,
@@ -35,6 +48,8 @@ class dominioModalidadeProcLicitatorio extends dominio {
 				self::$CD_MODALIDADE_INEXIGIBILIDADE => self::$DS_MODALIDADE_INEXIGIBILIDADE,
 				
 		);
+		
+		$retorno = array_merge_keys($retorno, self::getColecaoPROFISCO());
 		
 		return $retorno;
 	}

@@ -131,7 +131,20 @@ function confirmar() {
 	            <TH class="campoformulario" width="1%">ATJA.Resp.:</TH>
 	            <TD class="campoformulario" >
 	            <?php
-	            echo getComboPessoaRespPAConsulta(voDemanda::$nmAtrCdPessoaRespATJA, voDemanda::$nmAtrCdPessoaRespATJA, $vo->cdPessoaRespATJA, "camponaoobrigatorio", "disabled");
+	            $assessorResp = $vo->cdPessoaRespATJA==null?constantes::$CD_OPCAO_NENHUM:$vo->cdPessoaRespATJA;
+	            $arrayATJAResp = array(
+	            		voDemanda::$nmAtrCdPessoaRespATJA,
+	            		voDemanda::$nmAtrCdPessoaRespATJA,
+	            		$assessorResp,
+	            		true,
+	            		true,
+	            		"camponaoobrigatorio",
+	            		false,
+	            		"disabled",
+	            );
+	             
+	            echo getComboPessoaRespATJAConsulta($arrayATJAResp);	             
+	            //echo getComboPessoaRespATJAConsulta(voDemanda::$nmAtrCdPessoaRespATJA, voDemanda::$nmAtrCdPessoaRespATJA, $vo->cdPessoaRespATJA, "camponaoobrigatorio", "disabled");
 	          	?>
 				</TD>				
 	        </TR>

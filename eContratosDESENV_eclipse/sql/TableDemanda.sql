@@ -143,7 +143,7 @@ drop table demanda_pl;
 CREATE TABLE demanda_pl(	
     dem_ex INT NOT NULL,
     dem_cd INT NOT NULL,
-	pl_mod_cd char(2) NOT NULL, -- Modalidade/identificacao do certame
+	pl_mod_cd varchar(4) NOT NULL, -- Modalidade/identificacao do certame
     
     pl_ex INT NOT NULL, 
     pl_cd INT NOT NULL,     
@@ -159,6 +159,7 @@ CREATE TABLE demanda_pl(
 ALTER TABLE demanda_pl ADD CONSTRAINT fk_demanda_pl_pl FOREIGN KEY (pl_ex, pl_cd) REFERENCES proc_licitatorio (pl_ex, pl_cd) 
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;
+ALTER TABLE demanda_pl MODIFY pl_mod_cd varchar(4) NOT NULL;    
 -- ALTER TABLE demanda_pl ADD COLUMN pl_mod_cd char(2) NOT NULL DEFAULT 'PE' AFTER dem_cd;
 -- ALTER TABLE demanda_pl DROP PRIMARY KEY;
 -- ALTER TABLE demanda_pl ADD PRIMARY KEY pk (dem_ex, dem_cd, pl_ex, pl_cd, pl_mod_cd);

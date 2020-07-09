@@ -22,7 +22,7 @@ CREATE TABLE proc_licitatorio (
     pl_cd INT NOT NULL,     
     		
 	pl_orgao_responsavel INT NOT NULL, -- orgao responsavel pelo PL (SAD ou SEFAZ)
-	pl_mod_cd char(2) NOT NULL, -- Modalidade/identificacao do certame
+	pl_mod_cd varchar(4) NOT NULL, -- Modalidade/identificacao do certame
 	pl_mod_num INT NOT NULL, -- NUMERO DA modalidade/identificacao do certame
     pl_tp char(2) NOT NULL, -- menor preço...
 	pl_cd_pregoeiro INT NULL,
@@ -50,6 +50,7 @@ CREATE TABLE proc_licitatorio (
 );
 ALTER TABLE proc_licitatorio ADD COLUMN pl_cd_cpl INT NULL AFTER pl_cd_pregoeiro;
 ALTER TABLE proc_licitatorio DROP pl_comissao_cd;
+ALTER TABLE proc_licitatorio MODIFY pl_mod_cd varchar(4) NOT NULL;
 -- ALTER TABLE proc_licitatorio ADD PRIMARY KEY pk (pl_ex, pl_cd, pl_mod_cd);
 -- describe demanda_pl
 
@@ -61,7 +62,7 @@ CREATE TABLE proc_licitatorio_hist (
     pl_cd INT NOT NULL,     
     		
 	pl_orgao_responsavel INT NOT NULL, -- orgao responsavel pelo PL (SAD ou SEFAZ)
-	pl_mod_cd char(2) NOT NULL, -- Modalidade/identificacao do certame
+	pl_mod_cd varchar(4) NOT NULL, -- Modalidade/identificacao do certame
 	pl_mod_num INT NOT NULL, -- NUMERO DA modalidade/identificacao do certame
     pl_tp char(2) NOT NULL, -- menor preço...
 	pl_cd_pregoeiro INT NULL, 
@@ -89,6 +90,7 @@ CREATE TABLE proc_licitatorio_hist (
 ALTER TABLE proc_licitatorio_hist ADD COLUMN pl_cd_cpl INT NULL AFTER pl_cd_pregoeiro;
 ALTER TABLE proc_licitatorio_hist ADD COLUMN pl_valor DECIMAL (14,4) AFTER pl_si;
 ALTER TABLE proc_licitatorio_hist DROP pl_comissao_cd;
+ALTER TABLE proc_licitatorio_hist MODIFY pl_mod_cd varchar(4) NOT NULL;
 
 show create table pa_hist;
 
