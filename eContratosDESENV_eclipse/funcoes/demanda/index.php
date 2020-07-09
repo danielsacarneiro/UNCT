@@ -398,7 +398,18 @@ function detalharDemandaGestao(){
 				Tram.:<?php echo $comboUsuTramitacao->getHtmlSelect(filtroManterDemanda::$NmAtrCdUsuarioTramitacao,filtroManterDemanda::$NmAtrCdUsuarioTramitacao, $filtro->cdUsuarioTramitacao, true, "camponaoobrigatorio", false);?>
 				<br>ATJA:
 				<?php 
-				echo getComboPessoaRespPAConsulta(voDemanda::$nmAtrCdPessoaRespATJA, voDemanda::$nmAtrCdPessoaRespATJA, $filtro->vodemanda->cdPessoaRespATJA, "camponaoobrigatorio", "");
+				$arrayATJAResp = array(
+						voDemanda::$nmAtrCdPessoaRespATJA,
+						voDemanda::$nmAtrCdPessoaRespATJA,
+						$filtro->vodemanda->cdPessoaRespATJA,
+						true,
+						true,
+						"camponaoobrigatorio",
+						false,
+						"",
+				);
+				
+				echo getComboPessoaRespATJAConsulta($arrayATJAResp);
 				?>				
 				</TD>
 				<TH class="campoformulario" width="1%">Tempo.Vida.Mínimo:</TH>

@@ -136,6 +136,15 @@ function getComboPessoaRespPAConsulta($idCampo, $nmCampo, $cdOpcaoSelecionada, $
 
 }
 
+function getComboPessoaRespATJAConsulta($arrayParam){
+	$dbprocesso = new dbpessoa();
+	$recordset = $dbprocesso->consultarPessoaManterConsultaPAAP();
+	$select = new select(array());
+	$select->getRecordSetComoColecaoSelect(vopessoa::$nmAtrCd, vopessoa::$nmAtrNome, $recordset);
+			
+	return $select->getHtmlComboArray ( $arrayParam );
+}
+
 function getComboPessoaRespPA($idCampo, $nmCampo, $cdOpcaoSelecionada, $classCampo, $tagHtml){	
 	$dbprocesso = new dbpessoa();
 	$filtro = new filtroManterPessoa(false);

@@ -126,6 +126,7 @@ class dbpessoa extends dbprocesso {
 	function consultarPessoaManterConsultaPAAP() {
 		$voPrincipal = new vopessoa();
 		$filtro = new filtroManterPessoa(false);
+		$filtro->cdAtrOrdenacao = vopessoa::$nmAtrNome;
 		//$filtro->cdvinculo = dominioVinculoPessoa::$CD_VINCULO_SERVIDOR;		
 		
 		$nmTabela = $nmTabelaOriginal = $voPrincipal->getNmTabela();

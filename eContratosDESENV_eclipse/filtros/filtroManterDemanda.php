@@ -543,12 +543,13 @@ class filtroManterDemanda extends filtroManter{
 		
 		if($this->vodemanda->cdPessoaRespATJA != null){
 			$filtro = $filtro . $conector
-			. $nmTabela. "." .voDemanda::$nmAtrCdPessoaRespATJA
-			. " = "
-					. $this->vodemanda->cdPessoaRespATJA
-					;
+			. $nmTabela. "." .voDemanda::$nmAtrCdPessoaRespATJA;
+			
+			$temp = " = " . $this->vodemanda->cdPessoaRespATJA;			
+			$temp = $this->vodemanda->cdPessoaRespATJA == constantes::$CD_OPCAO_NENHUM?" IS NULL ":$temp;
+			$filtro .= $temp;
 		
-					$conector  = "\n AND ";
+			$conector  = "\n AND ";
 		}		
 		
 		if($this->vocontrato->anoContrato != null){
