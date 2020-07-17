@@ -885,11 +885,26 @@ class dbDemanda extends dbprocesso {
 		$retorno = true;
 		if ($colecao != "") {
 			$setorAtual = $colecao [0] [voDemandaTramitacao::$nmAtrCdSetorDestino];
+			$usuInclusaoDemanda = $colecao [0] [voDemanda::$nmAtrCdUsuarioInclusao];
 			// echo "setor atual:" . $setorAtual;
-			if ($setorAtual != null && $vo->cdSetor != $setorAtual && !$naoValidar) {
-				$retorno = false;
-				$msg = "A demanda deve estar encaminhada ao setor responsável para $textoFuncao.";
-				throw new Exception ( $msg );
+			if(!$naoValidar){
+				if ($setorAtual != null && $vo->cdSetor != $setorAtual) {
+					$retorno = false;
+					$msg .= "A demanda deve estar encaminhada ao setor responsável para '$textoFuncao'";
+					$conector = " ou ";					
+				}
+				
+				if ($usuInclusaoDemanda != null && getIdUsuarioLogado() != $usuInclusaoDemanda) {
+					//valida tambem se o usuario logado for o mesmo que incluiu a demanda, permite excluir
+					$retorno = false;
+					$msg .= $conector . "'$textoFuncao' permitida para o usuário que incluiu a demanda.";					
+				}
+				
+				$msg .= ".";
+				
+				if(!$retorno){
+					throw new Exception ( $msg );
+				}
 			}
 		} // else echo "COLECAO VAZIA";
 	

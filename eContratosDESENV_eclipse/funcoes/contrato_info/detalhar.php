@@ -143,13 +143,11 @@ function confirmar() {
 	            Atual: <?php echo $combo->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato,voContratoInfo::$nmAtrCdAutorizacaoContrato, $vo->cdAutorizacao, true, "camporeadonly", true, " disabled ");?>	        
 	        </TR>
 			<TR>
-	            <TH class="campoformulario" nowrap width="1%">Contrato por escopo?:</TH>
-	            <TD class="campoformulario" colspan="3">
-	            <?php 
-	            echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInEscopo,voContratoInfo::$nmAtrInEscopo, $vo->inEscopo, true, "camporeadonly", false, " disabled ");
-	            ?>
-	            </TD>
-	        </TR>	        
+	            <TH class="campoformulario" nowrap width="1%"><abbr title="Sem valor referencial mensal?">É por escopo?:</abbr></TH>
+	            <TD class="campoformulario" width="1%"><?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInEscopo,voContratoInfo::$nmAtrInEscopo, $vo->inEscopo, true, "camporeadonly", false, " disabled ");?>
+	            <TH class="campoformulario" >É credenciamento?:</TH>
+	            <TD class="campoformulario" colspan=3><?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInCredenciamento,voContratoInfo::$nmAtrInCredenciamento, $vo->inCredenciamento, true, "camporeadonly", false, " disabled ");?>
+	        </TR>
 	        <TR>	       
 	            <TH class="campoformulario" nowrap width="1%">Data.Proposta de preços:</TH>
 	            <TD class="campoformulario" width="1%">

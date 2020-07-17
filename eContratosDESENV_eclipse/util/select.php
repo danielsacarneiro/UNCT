@@ -106,7 +106,7 @@ class select extends multiplosConstrutores {
 			// $html .= $this->getOpcao(constantes::$CD_OPCAO_VAZIO, "-- Selecione --", null);
 		}
 		if ($comOpcaoNenhum) {
-			$html .= $this->getOpcao ( constantes::$CD_OPCAO_NENHUM, constantes::$DS_OPCAO_NENHUM, $opcaoSelecionada );
+			$html .= $this->getOpcao ( constantes::$CD_OPCAO_NENHUM, "* ".constantes::$DS_OPCAO_NENHUM . " *", $opcaoSelecionada );
 			// $html .= $this->getOpcao(constantes::$CD_OPCAO_VAZIO, "-- Selecione --", null);
 		}
 		

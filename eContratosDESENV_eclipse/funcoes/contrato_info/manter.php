@@ -52,6 +52,7 @@ try{
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_ajax.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_pessoa.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_contrato.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>tooltip.js"></SCRIPT>
 
 <SCRIPT language="JavaScript" type="text/javascript">
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
@@ -199,9 +200,16 @@ function transferirDadosPessoa(cd, nm) {
 				$combo = new select(dominioAutorizacao::getColecao());				
 				?>
 	            <TH class="campoformulario" nowrap>Autorização:</TH>
-	            <TD class="campoformulario" nowrap width="1%"><?php echo $combo->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato,voContratoInfo::$nmAtrCdAutorizacaoContrato, $cdAutorizacao, true, "camponaoobrigatorio", true, " required ");?>
-	            <TH class="campoformulario" nowrap width="1%">Contrato por escopo (sem valor referencial mensal)?:</TH>
-	            <TD class="campoformulario" ><?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInEscopo,voContratoInfo::$nmAtrInEscopo, $vo->inEscopo, true, "camponaoobrigatorio", true, " onChange='formataFormEscopo();' required ");?>
+	            <TD class="campoformulario" nowrap colspan=3><?php echo $combo->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato,voContratoInfo::$nmAtrCdAutorizacaoContrato, $cdAutorizacao, true, "camponaoobrigatorio", true, " required ");?>
+	        </TR>
+			<TR>
+			<?php 
+			//$mouseover = " onMouseOver=\"toolTip('sem valor referencial mensal?')\" onMouseOut='toolTip()' ";
+			?>
+	            <TH class="campoformulario" nowrap width="1%"><abbr title="Sem valor referencial mensal?">É por escopo?:</abbr></TH>
+	            <TD class="campoformulario" width="1%"><?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInEscopo,voContratoInfo::$nmAtrInEscopo, $vo->inEscopo, true, "camponaoobrigatorio", true, " onChange='formataFormEscopo();' required ");?>
+	            <TH class="campoformulario" >É credenciamento?:</TH>
+	            <TD class="campoformulario" colspan=3><?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInCredenciamento,voContratoInfo::$nmAtrInCredenciamento, $vo->inCredenciamento, true, "camponaoobrigatorio", true, " required ");?>
 	        </TR>
 	        <TR>	       
 	            <TH class="campoformulario" nowrap width="1%">Data.Proposta de preços:</TH>

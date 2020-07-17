@@ -88,7 +88,8 @@ ct_contratada = replace(replace(replace(replace(ct_contratada,'“','"'),'”','
 ct_objeto = replace(replace(replace(replace(ct_objeto,'“','"'),'”','"'),'–','-'), '?','-'),
 ct_gestor = replace(replace(replace(replace(ct_gestor,'“','"'),'”','"'),'–','-'), '?','-'),
 ct_processo_lic = replace(replace(replace(replace(ct_processo_lic,'“','"'),'”','"'),'–','-'), '?','-')
-;-- WHERE sq = 1751;-- ct_exercicio = 2016 and ct_numero = 13;
+;
+-- WHERE sq = 1751;-- ct_exercicio = 2016 and ct_numero = 13;
 
 
 drop table contrato_hist;
@@ -155,6 +156,7 @@ CREATE TABLE contrato_info (
     
     ctinf_in_mao_obra CHAR(1) NULL,
     ctinf_cd_classificacao INT,
+	ctinf_in_credenciamento CHAR(1) NULL,    
     
     ctinf_cd_pegestor INT, 
     ctinf_in_escopo CHAR(1) NULL,
@@ -172,6 +174,8 @@ CREATE TABLE contrato_info (
 ALTER TABLE contrato_info ADD COLUMN ctinf_in_escopo CHAR(1) NULL AFTER ctinf_cd_pegestor;
 ALTER TABLE contrato_info ADD COLUMN ctinf_in_prazoprorrogacao INT NULL AFTER ctinf_in_escopo;
 ALTER TABLE contrato_info ADD COLUMN ctinf_in_sad_estudotec INT NULL AFTER ctinf_in_prazoprorrogacao;
+ALTER TABLE contrato_info ADD COLUMN ctinf_in_credenciamento CHAR(1) NULL AFTER ctinf_cd_classificacao;
+
 
 /*ALTER TABLE contrato_info ADD CONSTRAINT fk_contrato_info FOREIGN KEY (ct_exercicio, ct_numero, ct_tipo) REFERENCES contrato (ct_exercicio, ct_numero, ct_tipo)
 	ON DELETE RESTRICT
@@ -206,6 +210,7 @@ CREATE TABLE contrato_info_hist (
     
     ctinf_in_mao_obra CHAR(1) NULL,
     ctinf_cd_classificacao INT,
+    ctinf_in_credenciamento CHAR(1) NULL,
     
     ctinf_cd_pegestor INT, 
     ctinf_in_escopo CHAR(1) NULL,
@@ -227,6 +232,7 @@ CREATE TABLE contrato_info_hist (
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_escopo CHAR(1) NULL AFTER ctinf_cd_pegestor;
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_prazoprorrogacao INT NULL AFTER ctinf_in_escopo;
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_sad_estudotec INT NULL AFTER ctinf_in_prazoprorrogacao;
+ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_credenciamento CHAR(1) NULL AFTER ctinf_cd_classificacao;
 /*ALTER TABLE contrato_info_hist DROP COLUMN ctinf_email_gestor;
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_garantia CHAR(1) NULL AFTER ctinf_obs;
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_tp_garantia INT NULL AFTER ctinf_in_garantia;

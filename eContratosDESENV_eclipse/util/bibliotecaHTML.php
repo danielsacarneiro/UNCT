@@ -580,6 +580,10 @@ function getEmailUsuarioLogado() {
 
 	return $retorno;
 }
+function getIdUsuarioLogado() {
+	return get_current_user_id ();
+}
+
 function temPermissao($cdFuncaoBotao) {
 	return temPermissaoPorFuncao ( $cdFuncaoBotao, false );
 }
