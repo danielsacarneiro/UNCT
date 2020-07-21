@@ -250,7 +250,9 @@ function detalhar(isExcluir) {
 	                    	}
 	                    	
 	                    	$percentual = getMoeda($voAtual->numPercentual,4) . "%";
-	                    	$percentualSimples = getMoeda($voAtual->vlModificacaoReferencial/$voAtual->vlMensalAnterior*100,4). "%";	                    	
+	                    	$percentualSimples = getMoeda($voAtual->vlModificacaoReferencial/$voAtual->vlMensalAnterior*100,4). "%";
+	                    	$vlMensalAtualStrCelula = !$isEscopo?getTextoHTMLNegrito(getMoeda($vlMensalAtual)):getTextoHTMLDestacado(constantes::$DS_OPCAO_NAO_SEAPLICA, "red", false);
+	                    	$vlMensalAtualStrInput = !$isEscopo?getMoeda($vlMensalAtual):constantes::$DS_OPCAO_NAO_SEAPLICA;
                     ?>
                     <TR class='dados'>
                         <TD class='tabeladados' width=1%>
@@ -260,7 +262,7 @@ function detalhar(isExcluir) {
                         <TD class='tabeladados' nowrap><?php echo $especie?></TD>
                         <TD class='tabeladados'><?php echo $tipo?></TD>
                         <TD class='tabeladadosalinhadodireita'><?php echo getTextoHTMLNegrito($percentual)?></TD>
-                        <TD class='tabeladadosalinhadodireita'><?php echo $percentualSimples?></TD>
+						<TD class='tabeladadosalinhadodireita' ><?php echo !$isEscopo?$percentualSimples:"a corrigir"?></TD>
                         <TD class='tabeladados'><?php echo getData($voAtual->dtModificacao)?></TD>
                         <TD class='tabeladados'><?php echo getData($voAtual->dtModificacaoFim)?></TD>
                         <TD class='tabeladadosalinhadodireita'><?php echo $numMesesTela?></TD>
@@ -269,7 +271,7 @@ function detalhar(isExcluir) {
                         <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($vlLiconPrazoRestante)?></TD>
                         <TD class='tabeladadosalinhadodireita' nowrap><?php echo getTextoHTMLNegrito(getMoeda($vlLicon)) . " ($numMesesPeriodoAtual meses)"?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo $voContratoAtual->vlMensal?></TD>                    
-                        <TD class='tabeladadosalinhadodireita' ><?php echo getTextoHTMLNegrito(getMoeda($vlMensalAtual))?></TD>
+                        <TD class='tabeladadosalinhadodireita' ><?php echo $vlMensalAtualStrCelula?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo $voContratoAtual->vlGlobal?></TD>                    
                         <TD class='tabeladadosalinhadodireita' ><?php echo getTextoHTMLNegrito(getMoeda($vlGlobalReal))?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo getTextoHTMLNegrito(getMoeda($vlGlobalSeProrrogado))?></TD>
@@ -286,7 +288,7 @@ function detalhar(isExcluir) {
 	                <TR>
 	                    <TD class="totalizadortabeladadosalinhadoesquerda" colspan=<?=$colspan?>>
 	                    <?php 
-		                    $complementoDet = " Valor ATUAL (havendo prorrogação): Mensal " . getInputText("", "", getMoeda($vlMensalAtual), constantes::$CD_CLASS_CAMPO_READONLY);
+		                    $complementoDet = " Valor ATUAL (havendo prorrogação): Mensal " . getInputText("", "", $vlMensalAtualStrInput, constantes::$CD_CLASS_CAMPO_READONLY);
 		                    $complementoDet .= " Global: " . getInputText("", "", getMoeda($vlGlobalSeProrrogado), constantes::$CD_CLASS_CAMPO_READONLY);
 		                    
 		                    echo getTextoHTMLNegrito($complementoDet);
