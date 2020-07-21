@@ -491,7 +491,7 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDad
 		// $html .= "<TH class='headertabeladados' width='1%'>Origem</TH> \n";
 		// $html .= "<TH class='headertabeladados' width='1%'>Destino</TH> \n";
 		$html .= "<TH class='headertabeladados' width='1%'>Tipo</TH> \n";		
-		if($comDadosDemanda){
+		if($comDadosDemanda){			
 			$html .= "<TH class='headertabeladados' width='20%'>Título</TH> \n";
 		}
 		$html .= "<TH class='headertabeladados' width='30%'>Texto</TH> \n";

@@ -131,6 +131,7 @@ class dominioTpDocumento extends dominio {
 		$retorno = array (
 				self::$CD_TP_DOC_CHECKLIST => self::$DS_TP_DOC_CHECKLIST,
 				self::$CD_TP_DOC_CI => self::$DS_TP_DOC_CI,
+				self::$CD_TP_DOC_DESPACHO => self::$DS_TP_DOC_DESPACHO,
 				self::$CD_TP_DOC_OFICIO => self::$DS_TP_DOC_OFICIO,
 				self::$CD_TP_DOC_OUTROS => self::$DS_TP_DOC_OUTROS,
 				self::$CD_TP_DOC_NOTA_TECNICA => "Nota Técnica",
@@ -156,7 +157,7 @@ class dominioTpDocumento extends dominio {
 		$retorno = array (
 				self::$CD_TP_DOC_DECISAO => self::$DS_TP_DOC_DECISAO,
 				self::$CD_TP_DOC_DEFESA => self::$DS_TP_DOC_DEFESA,
-				self::$CD_TP_DOC_DESPACHO => self::$DS_TP_DOC_DESPACHO,
+				//self::$CD_TP_DOC_DESPACHO => self::$DS_TP_DOC_DESPACHO,
 				// self::$CD_TP_DOC_INTIMACAO => self::$DS_TP_DOC_INTIMACAO,
 				self::$CD_TP_DOC_NOTA_IMPUTACAO => self::$DS_TP_DOC_NOTA_IMPUTACAO,
 				self::$CD_TP_DOC_PUBLICACAO_PAAP => self::$DS_TP_DOC_PUBLICACAO_PAAP,
