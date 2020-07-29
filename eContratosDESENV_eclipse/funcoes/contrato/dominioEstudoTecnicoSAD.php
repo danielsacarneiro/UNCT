@@ -18,7 +18,7 @@ Class dominioEstudoTecnicoSAD extends dominio{
 	static $DS_PORTARIA = "Portaria";
 	static $DS_VIGILANCIA = "Vigilância";
 	static $DS_APOIO_ADM = "Apoio administrativo";	
-	static $DS_NAO_SEAPLICA = "Não se aplica";
+	//static $DS_NAO_SEAPLICA = "*Não se aplica*";
 	
 	static $DS_OBJ_PADRONIZADO = "OBJ-PADRON.";
 	
@@ -29,7 +29,7 @@ Class dominioEstudoTecnicoSAD extends dominio{
 
 	static function getColecao(){
 		return array(				
-				self::$CD_NAO_SEAPLICA  => self::$DS_NAO_SEAPLICA,
+				self::$CD_NAO_SEAPLICA  => "*".constantes::$DS_OPCAO_NAO_SEAPLICA . "*",
 				self::$CD_LIMPEZA_PREDIAL => self::$DS_LIMPEZA_PREDIAL,
 				self::$CD_LIMPEZA_HOSPITALAR => self::$DS_LIMPEZA_HOSPITALAR,
 				self::$CD_LIMPEZA_ESCOLAR => self::$DS_LIMPEZA_ESCOLAR,
