@@ -229,13 +229,19 @@ function iniciar(){
 	          	?>
 				</TD>
 	        </TR>
+	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">PRT/SEI(principal):</TH>
+	            <TD class="campoformulario" colspan=3>				
+	            <INPUT type="text" onkeyup="formatarCampoPRT(this, event);" id="<?=voDemanda::$nmAtrProtocolo?>" name="<?=voDemanda::$nmAtrProtocolo?>" value="<?=$vo->prt?>"  class="camponaoobrigatorio" size="30" required>
+	        </TR>	        
 			<TR>
 				<TD halign="left" colspan="4">
 				<DIV class="textoseparadorgrupocamposalinhadodireita">
 							<SCRIPT language="JavaScript" type="text/javascript">
 				            	colecaoIDCdNaoObrigatorio = 
 					            	["<?=$nmCampoTpDemandaReajuste?>",
-					            	"<?=voDemanda::$nmAtrCdPessoaRespATJA?>"
+					            	"<?=voDemanda::$nmAtrCdPessoaRespATJA?>",
+					            	"<?=voDemanda::$nmAtrProtocolo?>"
 					            	];
 				            </SCRIPT>
 				            <INPUT type="checkbox" id="checkCdNaoObrigatorio" name="checkCdNaoObrigatorio" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCdNaoObrigatorio, true);"> <?=constantes::$DS_RESPONSABILIDADE_NAO_INCLUSAO_CAMPOS?>

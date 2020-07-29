@@ -13,6 +13,7 @@ CREATE TABLE demanda (
     dem_prioridade INT DEFAULT 3 NOT NULL,
     dem_dtreferencia DATE,
     dem_cdpessoaresp_atja INT,
+    dtm_prt VARCHAR(25),
     -- dem_prt VARCHAR(25),
     dem_inlegado CHAR(1) NOT NULL DEFAULT 'N',
     	
@@ -32,6 +33,7 @@ ALTER TABLE demanda ADD COLUMN dem_tp_contrato VARCHAR(100) AFTER dem_tipo;
 ALTER TABLE demanda ADD COLUMN dem_tp_temreajustemontanteA CHAR(1) AFTER dem_tp_contrato;
 ALTER TABLE demanda ADD COLUMN in_desativado CHAR(1) NOT NULL DEFAULT 'N' AFTER cd_usuario_ultalt;
 ALTER TABLE demanda ADD COLUMN dem_cdpessoaresp_atja INT AFTER dem_dtreferencia;
+ALTER TABLE demanda ADD COLUMN dtm_prt VARCHAR(25) AFTER dem_cdpessoaresp_atja;
 
 select dem_tipo from demanda where dem_tp_contrato is null group by dem_tipo;
 
@@ -43,6 +45,14 @@ where  dem_tipo in (1,5,6,7,8);
 
 UPDATE demanda SET dem_tipo = 1
 where  dem_tipo in (1,5,6,7,8,10);
+
+UPDATE demanda SET dtm_prt = 
+(select dtm_prt from demanda_tram
+where 
+demanda.dem_cd = demanda_tram.dem_cd
+and demanda.dem_ex = demanda_tram.dem_ex
+and dtm_prt is not null LIMIT 1)
+
 
 -- ALTER TABLE demanda CHANGE dem_cd dem_cd INT AUTO_INCREMENT;
 -- ALTER TABLE demanda AUTO_INCREMENT=100;
@@ -63,6 +73,7 @@ CREATE TABLE demanda_hist (
     dem_prioridade INT DEFAULT 3 NOT NULL,
     dem_dtreferencia DATE,
     dem_cdpessoaresp_atja INT,
+    dtm_prt VARCHAR(25),
     -- dem_prt VARCHAR(25),
     dem_inlegado CHAR(1) NOT NULL DEFAULT 'N',
 	    
@@ -85,6 +96,7 @@ ALTER TABLE demanda_hist ADD COLUMN dem_tp_temreajustemontanteA CHAR(1) AFTER de
 ALTER TABLE demanda_hist ADD COLUMN in_desativado CHAR(1) NOT NULL AFTER cd_usuario_ultalt;
 ALTER TABLE demanda_hist ADD CONSTRAINT desativacao_demanda CHECK (in_desativado NOT IN ('S'))
 ALTER TABLE demanda_hist ADD COLUMN dem_cdpessoaresp_atja INT AFTER dem_dtreferencia;
+ALTER TABLE demanda_hist ADD COLUMN dtm_prt VARCHAR(25) AFTER dem_cdpessoaresp_atja;
 
 drop table demanda_tram;
 CREATE TABLE demanda_tram (

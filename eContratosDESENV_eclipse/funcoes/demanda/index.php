@@ -455,7 +455,7 @@ function detalharDemandaGestao(){
                     <TH class="headertabeladados" width="1%" rowspan=2>Tipo</TH>
                     <TH class="headertabeladados" width="40%" rowspan=2>Contrato/PL</TH>
                     <TH class="headertabeladados"width="50%"  rowspan=2>Título</TH>                    
-                    <TH class="headertabeladados" width="1%" rowspan=2>Prior.</TH>
+                    <TH class="headertabeladados" width="1%" rowspan=2>PRT/SEI</TH>
                     <TH class="headertabeladados"width="1%" nowrap rowspan=2>Abertura</TH>
                     <TH class="headertabeladados"width="1%" nowrap rowspan=2>Últ.Movim</TH>
                     <TH class="headertabeladadosalinhadocentro"width="1%" nowrap colspan="2">Prazo</TH>
@@ -475,7 +475,7 @@ function detalharDemandaGestao(){
                 $dominioSituacao = new dominioSituacaoDemanda();
                 $dominioSetor = new dominioSetor();
                 $dominioTipo = new dominioTipoDemanda();
-                $dominioPrioridade = new dominioPrioridadeDemanda();
+                //$dominioPrioridade = new dominioPrioridadeDemanda();
                                 
                 $colspan=14;
                 if($isHistorico){
@@ -550,7 +550,9 @@ function detalharDemandaGestao(){
 	                        			$voDemandaPL->cdModProcLic);
                         }
                         	
-                        $prioridade = $dominioPrioridade->getDescricao($voAtual->prioridade);
+                        //$prioridade = $dominioPrioridade->getDescricao($voAtual->prioridade);
+                        //$prt = voDemanda::getNumeroPRTComMascara($voAtual->prt);
+                        $prt = $voAtual->prt;
                         
                         /*$nmUsuario = $voAtual->nmUsuarioInclusao;
                         if($isHistorico){
@@ -579,7 +581,7 @@ function detalharDemandaGestao(){
 					<TD class="tabeladados"><?php echo $tipo?></TD>
 					<TD class="tabeladados" ><?php echo truncarStringHTML($contrato, 60, true)?></TD>
                     <TD class="tabeladados" ><?php echo truncarStringHTML(strtolower($voAtual->texto), 100, true);?></TD>                    
-                    <TD class="tabeladados" nowrap><?php echo $prioridade?></TD>
+                    <TD class="tabeladados" nowrap><?php echo $prt?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($voAtual->dtReferencia);?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($dataUltimaMovimentacao);?></TD>
 					<TD class="tabeladadosalinhadodireita" nowrap><?php echo complementarCharAEsquerda($tempoUltTram, "0", 3);?></TD>

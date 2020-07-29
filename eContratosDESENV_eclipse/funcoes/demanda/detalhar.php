@@ -135,6 +135,12 @@ function confirmar() {
 	          	?>
 				</TD>								
 	        </TR>
+	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">PRT/SEI(principal):</TH>
+	            <TD class="campoformulario" colspan=3>				
+	            <INPUT type="text" id="<?=voDemanda::$nmAtrProtocolo?>" name="<?=voDemanda::$nmAtrProtocolo?>" value="<?=$vo->prt?>"  class="<?=constantes::$CD_CLASS_CAMPO_READONLY?>" size="30" readonly>
+	        </TR>	        
+	        
 				<?php
 				include_once 'biblioteca_htmlDemanda.php';
 				$colecaoTramitacao = $vo->dbprocesso->consultarDemandaTramitacao($vo);

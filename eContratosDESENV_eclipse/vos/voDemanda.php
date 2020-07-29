@@ -25,6 +25,8 @@ class voDemanda extends voentidade {
 	static $nmAtrDtReferencia = "dem_dtreferencia";
 	static $nmAtrInLegado = "dem_inlegado";
 	static $nmAtrCdPessoaRespATJA = "dem_cdpessoaresp_atja";
+	//lembrar que o PRT foi migrado do demandatramitacao para ca
+	static $nmAtrProtocolo = "dtm_prt";
 	
 	var $cd = "";
 	var $ano = "";
@@ -40,6 +42,7 @@ class voDemanda extends voentidade {
 	var $inLegado = "";
 	
 	var $cdPessoaRespATJA = "";
+	var $prt = "";
 	var $dbprocesso = null;
 	
 	var $colecaoContrato = null;
@@ -111,6 +114,7 @@ class voDemanda extends voentidade {
 				self::$nmAtrPrioridade,
 				self::$nmAtrDtReferencia, 
 				self::$nmAtrCdPessoaRespATJA,
+				self::$nmAtrProtocolo,
 				self::$nmAtrInLegado
 		);
 		
@@ -196,6 +200,9 @@ class voDemanda extends voentidade {
 		$this->prioridade = $registrobanco [self::$nmAtrPrioridade];
 		$this->dtReferencia = $registrobanco [self::$nmAtrDtReferencia];
 		$this->cdPessoaRespATJA = $registrobanco [self::$nmAtrCdPessoaRespATJA];
+		$this->prt = $registrobanco[self::$nmAtrProtocolo];
+		$this->prt = voDemandaTramitacao::getNumeroPRTComMascara($this->prt, false);
+		
 		$this->inLegado = $registrobanco [self::$nmAtrInLegado];
 		
 		$this->getProcLicitatorioRegistroBanco($registrobanco);
@@ -228,6 +235,7 @@ class voDemanda extends voentidade {
 		$this->prioridade = @$_POST [self::$nmAtrPrioridade];
 		$this->dtReferencia = @$_POST [self::$nmAtrDtReferencia];
 		$this->cdPessoaRespATJA = @$_POST [self::$nmAtrCdPessoaRespATJA];
+		$this->prt = @$_POST[self::$nmAtrProtocolo];
 		$this->inLegado = @$_POST [self::$nmAtrInLegado];
 		// quando existir
 		// recupera quando da consulta da contratada, ao inserir o contrato na tela
@@ -342,6 +350,74 @@ class voDemanda extends voentidade {
 		$this->cd = $array [1];
 		$this->sqHist = $array [2];
 	}
+	
+	static function formataPRTParaApenasNumero($numPRT) {
+		$formatado = str_replace(".", "", $numPRT);
+		$formatado = str_replace("-", "", $formatado);
+		$formatado = str_replace("/", "", $formatado);
+		return $formatado;
+	}
+	
+	static function isPRTValido($numPRT, $levantarExcecao=true) {
+		$isValido = true;
+		if($numPRT != null){
+			$formatado = static::formataPRTParaApenasNumero($numPRT);
+			$tamanho = strlen($formatado);
+			$isValido = ($tamanho == 18 || $tamanho == 22) && isNumero($formatado);
+			if($levantarExcecao && !$isValido){
+				throw new excecaoGenerica("PRT Inválido. Tamanho PRT: $tamanho");
+			}
+		}
+		return $isValido;
+	}
+	
+	/**
+	 * verifica se o prt inserido eh do SEI
+	 * @param unknown $numPRT
+	 * @return boolean
+	 */
+	static function isPRTSEI($numPRT) {
+		$retorno = false;
+		if($numPRT != null){
+			$formatado = static::formataPRTParaApenasNumero($numPRT);
+			$retorno = strlen($formatado) == 22;
+		}
+		return $retorno;
+	}
+	
+	static function getNumeroPRTComMascara($numPRT, $levantarExcecao=true){
+		$formatadoRetorno = $numPRT;
+		if($numPRT != null){
+			$formatado = static::formataPRTParaApenasNumero($numPRT);
+			$isSEI = static::isPRTSEI($numPRT);
+			if(static::isPRTValido($numPRT, $levantarExcecao)){
+				//echo "valido";
+				if($isSEI){
+					$formatado  = substr( $numPRT, 0, 10 ) . '.';
+					$formatado .= substr( $numPRT, 10, 6 ) . '/';
+					$formatado .= substr( $numPRT, 16, 4 ) . '-';
+					$formatado .= substr( $numPRT, 20, 2 );
+				}else{
+					$formatado  = substr( $numPRT, 0, 4 ) . '.';
+					$formatado .= substr( $numPRT, 4, 5 ) . '.';
+					$formatado .= substr( $numPRT, 9, 4 ) . '.';
+					$formatado .= substr( $numPRT, 13, 3 ) .'-';
+					$formatado .= substr( $numPRT, 16, 2 );
+				}
+	
+				$formatadoRetorno = $formatado;
+			}
+		}
+	
+		return $formatadoRetorno;
+	}
+	
+	static function getNumeroPRTSemMascara($numPRT, $levantarExcecao=true){
+		//static::isPRTValido($numPRT, $levantarExcecao);
+		$retorno = static::formataPRTParaApenasNumero($numPRT);
+		return $retorno;
+	}
+	
 	function getMensagemComplementarTelaSucesso() {
 		$retorno = "Demanda (Número - Ano): " . formatarCodigoAnoComplementoArgs ( $this->cd, $this->ano, TAMANHO_CODIGOS, null );
 		if ($this->sqHist != null) {
@@ -349,5 +425,6 @@ class voDemanda extends voentidade {
 		}
 		return $retorno;
 	}
+
 }
 ?>
