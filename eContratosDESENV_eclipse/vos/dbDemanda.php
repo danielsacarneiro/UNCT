@@ -874,32 +874,36 @@ class dbDemanda extends dbprocesso {
 		
 		return $voPA;
 	}
-	function isSetorDestinoIgualDemandante($vo, $textoFuncao, $naoValidar = false) {
+	function isExclusaoPermitida($vo, $textoFuncao, $naoValidar = false) {
 		// verifica se o setor atual eh igual ao setor de origem
 		$filtro = new filtroManterDemanda ( false );
 		$filtro->vodemanda = new voDemanda ();
 		$filtro->vodemanda->cd = $vo->cd;
 		$filtro->vodemanda->ano = $vo->ano;
-		// echo "SITUACAO FECHADA";
+		
 		$colecao = $this->consultarTelaConsulta ( $vo, $filtro );
-		$retorno = true;
+		$retorno = false;
 		if ($colecao != "") {
 			$setorAtual = $colecao [0] [voDemandaTramitacao::$nmAtrCdSetorDestino];
 			$usuInclusaoDemanda = $colecao [0] [voDemanda::$nmAtrCdUsuarioInclusao];
 			// echo "setor atual:" . $setorAtual;
 			if(!$naoValidar){
-				if ($setorAtual != null && $vo->cdSetor != $setorAtual) {
-					$retorno = false;
+				//a ordem das opcoes eh da mais ampla pra mais restrita
+				if ($setorAtual == null || $vo->cdSetor == $setorAtual) {
+					$retorno = true;
+				}else{
 					$msg .= "A demanda deve estar encaminhada ao setor responsável para '$textoFuncao'";
-					$conector = " ou ";					
-				}
+					$conector = " ou ";
+				}	
 				
-				if ($usuInclusaoDemanda != null && getIdUsuarioLogado() != $usuInclusaoDemanda) {
+				if(!$retorno && $usuInclusaoDemanda != null && getIdUsuarioLogado() == $usuInclusaoDemanda) {
 					//valida tambem se o usuario logado for o mesmo que incluiu a demanda, permite excluir
-					$retorno = false;
-					$msg .= $conector . "'$textoFuncao' permitida para o usuário que incluiu a demanda.";					
+					$retorno = true;					
+				}else{
+					$msg .= $conector . "'$textoFuncao' permitida para o usuário que incluiu a demanda";
+					$conector = " ou ";
 				}
-				
+										
 				$msg .= ".";
 				
 				if(!$retorno){
@@ -963,7 +967,7 @@ class dbDemanda extends dbprocesso {
 		
 		if ($vo->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA) {
 			
-			$this->isSetorDestinoIgualDemandante ( $vo, "fechamento" );
+			$this->isExclusaoPermitida ( $vo, "fechamento" );
 			
 			// verifica se tem PAAP para encerrar
 			  // $vo = new voDemanda();
@@ -1042,7 +1046,7 @@ class dbDemanda extends dbprocesso {
 	}
 	function validarExclusao($vo) {
 		$textoFuncao = "Exclusão";
-		return $this->isSetorDestinoIgualDemandante ( $vo, $textoFuncao ) && $this->isDemandaPAAPInativo ( $vo, $textoFuncao );
+		return $this->isExclusaoPermitida ( $vo, $textoFuncao ) && $this->isDemandaPAAPInativo ( $vo, $textoFuncao );
 	}
 	
 	// o excluir eh implementado para nao usar da voentidade

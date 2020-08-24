@@ -34,7 +34,14 @@ include_once (caminho_filtros."filtroManterPA.php");
   				$nmTabelaDemanda . "." . voDemanda::$nmAtrTexto,
   				$nmTabelaDemanda . "." . voDemanda::$nmAtrTipo,  				
   				$nmTabelaDemandaProcLic . "." . voProcLicitatorio::$nmAtrCd,
-  				$nmTabelaDemandaProcLic . "." . voProcLicitatorio::$nmAtrAno,  				
+  				$nmTabelaDemandaProcLic . "." . voProcLicitatorio::$nmAtrAno,
+  				$nmTabelaDemandaProcLic . "." . voProcLicitatorio::$nmAtrCdModalidade,
+  				
+  				$nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrNumModalidade,
+  				$nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrObjeto,
+  				$nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrCdPregoeiro,
+  				$nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrCdCPL,
+  				
 //  				$nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato,  
   		);
   	
