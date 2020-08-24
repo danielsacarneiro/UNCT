@@ -955,6 +955,8 @@ class filtroManterDemanda extends filtroManter{
 		$retorno = $nmTabelaDemanda . "." . voDemanda::$nmAtrPrioridade . " " . constantes::$CD_ORDEM_CRESCENTE
 		//. "," . $nmTabelaDemanda . "." . voDemanda::$nmAtrDhInclusao . " " . constantes::$CD_ORDEM_CRESCENTE;
 		. "," . filtroConsultarDemandaGestao::$NmColNuTempoUltimaTram . " " . constantes::$CD_ORDEM_DECRESCENTE;
+		/*$retorno .= ", $nmTabelaDemanda." . voDemanda::$nmAtrAno . " " . constantes::$CD_ORDEM_CRESCENTE;
+		$retorno .= ", $nmTabelaDemanda." . voDemanda::$nmAtrCd . " " . constantes::$CD_ORDEM_CRESCENTE;*/
 		return $retorno;
 	}
 	
