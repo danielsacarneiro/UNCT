@@ -213,14 +213,20 @@ function getContratoEntradaDeDadosVOSimples($vocontrato, $nmClass = "camponaoobr
 	return getContratoEntradaArray($pArray);
 }
 
+/**
+ * Mais novo: recomendavel o uso se comparado ao "getContratoEntradaArray" 
+ * @param unknown $pArray
+ * @return unknown
+ */
 function getContratoEntradaArrayGenerico($pArray) {
 	$vocontrato = $pArray[0];	
 	$nmClass = $pArray[1];
 	$isExibirContratadaSePreenchido = $pArray[2];
 	$pcomChaveCompleta = $pArray[3];
 	$pTemInformacoesComplementares= $pArray[4];
-	$complementoHTML = $pArray[5];
+	$funcaoJS = $pArray[5];
 	$arrayNmCamposFormularioContrato = $pArray[6];
+	$complementoHTML = $pArray[7];
 	
 	$pIsAlterarDemanda= false;
 
@@ -240,7 +246,7 @@ function getContratoEntradaArrayGenerico($pArray) {
 		$nmCampoDivPessoaContratada = $arrayNmCamposContrato[5];
 	}
 
-	$chamadaFuncaoJS = "\"$complementoHTML\"";
+	$chamadaFuncaoJS = "\"$funcaoJS\"";
 
 	$required = "";
 
@@ -265,26 +271,55 @@ function getContratoEntradaArrayGenerico($pArray) {
 	}
 	
 	//se nao for o array, todos os componentes terao o mesmo javascript
-	if($complementoHTML != null){
-		if (!is_array($complementoHTML)) {
-			$arrayComplementoHTML = array (
-					" $required onChange=$chamadaFuncaoJS ",
-					" $required onBlur=$chamadaFuncaoJS ",
-					" $required onChange=$chamadaFuncaoJS ",
-					" $required onChange=$chamadaFuncaoJS ",
-					" $required onBlur=$chamadaFuncaoJS ",
+	if($funcaoJS != null){
+		if (!is_array($funcaoJS)) {
+			$arrayfuncaoJS = array (
+					" onChange=$chamadaFuncaoJS ",
+					" onBlur=$chamadaFuncaoJS ",
+					" onChange=$chamadaFuncaoJS ",
+					" onChange=$chamadaFuncaoJS ",
+					" onBlur=$chamadaFuncaoJS ",
 					);
 		}else{
-			$arrayComplementoHTML = $complementoHTML;
-			for ($i=0; $i < count($arrayComplementoHTML);$i++){
-				$htmlAtual = $arrayComplementoHTML[$i];
+			$arrayfuncaoJS = $funcaoJS;
+			for ($i=0; $i < count($arrayfuncaoJS);$i++){
+				$htmlAtual = $arrayfuncaoJS[$i];
 				$htmlAtual = "$htmlAtual $required ";
-				$arrayComplementoHTML[$i] = $htmlAtual ;			
+				$arrayfuncaoJS[$i] = $htmlAtual ;			
 			}
 		}
 	}
 	
-	return 	getContratoEntradaDeDadosVOGenerico($vocontrato, $arrayCssClass, $arrayComplementoHTML, null, $isExibirContratadaSePreenchido, $pcomChaveCompleta, $pIsAlterarDemanda,$pcomChaveCompleta);
+	//se nao for o array, todos os componentes terao o mesmo complemento
+	if($complementoHTML != null){
+		if (!is_array($complementoHTML)) {
+			$arraycomplementoHTML = array (
+					" $required $complementoHTML ",
+					" $required $complementoHTML ",
+					" $required $complementoHTML ",
+					" $required $complementoHTML ",
+					" $required $complementoHTML ",
+			);
+		}else{
+			$arraycomplementoHTML = $complementoHTML;
+			for ($i=0; $i < count($arraycomplementoHTML);$i++){
+				$htmlAtual = $arraycomplementoHTML[$i];
+				$htmlAtual = "$htmlAtual $required ";
+				$arraycomplementoHTML[$i] = $htmlAtual ;
+			}
+		}
+	}
+	
+	return 	getContratoEntradaDeDadosVOGenerico(
+			$vocontrato, 
+			$arrayCssClass, 
+			$arrayfuncaoJS, 
+			null, 
+			$isExibirContratadaSePreenchido, 
+			$pcomChaveCompleta, 
+			$pIsAlterarDemanda,
+			$pcomChaveCompleta,
+			$arraycomplementoHTML);
 }
 
 function getContratoEntradaArray($pArray) {
@@ -331,7 +366,17 @@ function getContratoEntradaArray($pArray) {
 	
 	return 	getContratoEntradaDeDadosVOGenerico($vocontrato, $arrayCssClass, $arrayComplementoHTML, null, $isExibirContratadaSePreenchido, $pcomChaveCompleta, $pIsAlterarDemanda,$pcomChaveCompleta);
 }
-function getContratoEntradaDeDadosVOGenerico($vocontrato, $arrayCssClass, $arrayComplementoHTML, $indiceContrato, $isExibirContratadaSePreenchido, $comChaveCompletaSeNulo = true, $pIsAlterarDemanda=false, $pcomChaveCompleta=false) {	
+
+function getContratoEntradaDeDadosVOGenerico(
+		$vocontrato, 
+		$arrayCssClass, 
+		$arrayJavaScript, 
+		$indiceContrato, 
+		$isExibirContratadaSePreenchido, 
+		$comChaveCompletaSeNulo = true, 
+		$pIsAlterarDemanda=false, 
+		$pcomChaveCompleta=false, 
+		$arrayComplementoHTML=null) {	
 	//$vocontrato = new vocontrato();
 	if ($vocontrato != null) {
 		$tipoContrato = $vocontrato->tipo;
@@ -353,11 +398,21 @@ function getContratoEntradaDeDadosVOGenerico($vocontrato, $arrayCssClass, $array
 	$cssCdEspecieContrato = $arrayCssClass [3];
 	$cssSqEspecieContrato = $arrayCssClass [4];
 	
-	$htmlTipoContrato = $arrayComplementoHTML [0];
-	$htmlCdContrato = $arrayComplementoHTML [1];
-	$htmlAnoContrato = $arrayComplementoHTML [2];
-	$htmlCdEspecieContrato = $arrayComplementoHTML [3];
-	$htmlSqEspecieContrato = $arrayComplementoHTML [4];
+	if($arrayJavaScript != null){
+		$htmlTipoContrato = $arrayJavaScript [0];
+		$htmlCdContrato = $arrayJavaScript [1];
+		$htmlAnoContrato = $arrayJavaScript [2];
+		$htmlCdEspecieContrato = $arrayJavaScript [3];
+		$htmlSqEspecieContrato = $arrayJavaScript [4];
+	}
+	
+	if($arrayComplementoHTML != null){
+		$htmlTipoContrato .= $arrayComplementoHTML [0];
+		$htmlCdContrato .= $arrayComplementoHTML [1];
+		$htmlAnoContrato .= $arrayComplementoHTML [2];
+		$htmlCdEspecieContrato .= $arrayComplementoHTML [3];
+		$htmlSqEspecieContrato .= $arrayComplementoHTML [4];
+	}
 	
 	// parametros para a recuperacao de dados
 	$nmCampoDivPessoaContratada = vopessoa::$nmAtrNome;
@@ -405,9 +460,7 @@ function getContratoEntradaDeDadosVOGenerico($vocontrato, $arrayCssClass, $array
 			vocontrato::$nmAtrTipoContrato.$indiceContrato,
 			vocontrato::$nmAtrCdEspecieContrato.$indiceContrato,
 			vocontrato::$nmAtrSqEspecieContrato.$indiceContrato,
-	);
-	$jsComplementarBorracha = "document.getElementById('$nmCampoDivPessoaContratada').innerHTML='';";
-	echo getBorracha($nmCamposContrato, $jsComplementarBorracha);
+	);	
 	
 	if($pIsAlterarDemanda)
 		$paramAlterarDemanda = "true";
@@ -444,7 +497,8 @@ function getContratoEntradaDeDadosVOGenerico($vocontrato, $arrayCssClass, $array
 			name="<?=$pNmCampoSqEspecieContrato?>" value="1">
 	<?php
 	}
-	
+	$jsComplementarBorracha = "document.getElementById('$nmCampoDivPessoaContratada').innerHTML='';";
+	echo getBorracha($nmCamposContrato, $jsComplementarBorracha);	
 ?>		
 <div id="<?=$nmCampoDivPessoaContratada?>">
 <?php

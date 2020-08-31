@@ -141,24 +141,11 @@ function carregaDadosContrato(){
 	        	//ALTERACAO
 	        	$complementoHTML = " required ";
 	        	$readonlyChaves = " readonly ";
-	        ?>
-	        <TR>
-	            <TH class="campoformulario" nowrap width="1%">Demanda:</TH>
-	            <TD class="campoformulario" colspan=3>
-	            <?php	            
-	            echo getDetalhamentoHTMLCodigoAno($vo->vodemandacontrato->anoDemanda, $vo->vodemandacontrato->cdDemanda);
-	            echo getInputHidden(voDemandaContrato::$nmAtrAnoDemanda, voDemandaContrato::$nmAtrAnoDemanda, $vo->vodemandacontrato->anoDemanda);
-	            echo getInputHidden(voDemandaContrato::$nmAtrCdDemanda, voDemandaContrato::$nmAtrCdDemanda, $vo->vodemandacontrato->cdDemanda);
-	            $vodemandaTemp = new voDemanda(array($vo->vodemandacontrato->anoDemanda, $vo->vodemandacontrato->cdDemanda));
-	            echo getLinkPesquisa ( "../".voDemanda::getNmTabela()."/detalhar.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $vodemandaTemp->getValorChaveHTML() );
-	             
-				echo "Tipo: " . dominioTipoDemanda::getHtmlDetalhamento("", "", $voDemanda->tipo, false);
-				
-				echo getLinkPortarias();
-				?>
-	        </TR>
-	        <?php 
-	        getContratoDet($voContrato, false, true);
+	        	
+	        	getDemandaDetalhamentoComLupa($voDemanda, true);
+	        	echo getLinkPortarias();
+	
+	        	getContratoDet($voContrato, false, true);
 	        ?>
 	        <TR>	       
 	            <TH class="campoformulario" nowrap width="1%">Vigência:</TH>

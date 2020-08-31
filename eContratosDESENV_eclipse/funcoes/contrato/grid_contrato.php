@@ -12,14 +12,15 @@
                     <TH class="headertabeladados" width="20%">Contratada</TH>
                     <TH class="headertabeladados" width="1%">CNPJ/CNPF</TH>
                     <TH class="headertabeladados" width="70%">Objeto</TH>						
-                    <TH class="headertabeladados" width="1%" nowrap>Dt.Assinatura</TH>
-                    <TH class="headertabeladados" width="1%" nowrap>Dt.Início</TH>
-                    <TH class="headertabeladados" width="1%" nowrap>Dt.Fim</TH>
-                    <TH class="headertabeladados" width="1%" nowrap>Vl.Mensal</TH>
-                    <TH class="headertabeladados" width="1%" nowrap>Vl.Global</TH>
+                    <TH class="headertabeladados" width="1%" nowrap>Assinatura</TH>
+                    <TH class="headertabeladados" width="1%" nowrap>Publicação</TH>
+                    <TH class="headertabeladados" width="1%" nowrap>Início</TH>
+                    <TH class="headertabeladados" width="1%" nowrap>Fim</TH>
+                    <TH class="headertabeladados" width="1%" nowrap>Mensal</TH>
+                    <TH class="headertabeladados" width="1%" nowrap>Global</TH>
                 </TR>
                 <?php
-                $colspan = 13;
+                $colspan = 14;
                 if (is_array($colecao))
                         $tamanho = sizeof($colecao);
                 else 
@@ -95,6 +96,7 @@
                     <TD class="tabeladados" nowrap><?php echo documentoPessoa::getNumeroDocFormatado($colecao[$i]["ct_doc_contratada"])?></TD>
                     <TD class="tabeladados"><?php echo $colecao[$i]["ct_objeto"]?></TD>
                     <TD class="tabeladados"><?php echo getData($voAtual->dtAssinatura)?></TD>
+                    <TD class="tabeladados"><?php echo getData($voAtual->dtPublicacao)?></TD>
                     <TD class="tabeladados"><?php echo getData($datainiSQL)?></TD>
                     <TD <?=$tagCelula?>>                    <?php echo $dataFinal?></TD>
                     <TD class="tabeladadosalinhadodireita" ><?php echo getMoeda($colecao[$i]["ct_valor_mensal"])?></TD>                    

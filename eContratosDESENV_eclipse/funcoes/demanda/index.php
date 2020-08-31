@@ -474,7 +474,6 @@ function detalharDemandaGestao(){
                 //require_once ("dominioSituacaoPA.php");
                 $dominioSituacao = new dominioSituacaoDemanda();
                 $dominioSetor = new dominioSetor();
-                $dominioTipo = new dominioTipoDemanda();
                 //$dominioPrioridade = new dominioPrioridadeDemanda();
                                 
                 $colspan=14;
@@ -509,7 +508,7 @@ function detalharDemandaGestao(){
                         $setorDestinoAtual = $colecao[$i][voDemandaTramitacao::$nmAtrCdSetorDestino];
                         $setorDestinoAtual = $dominioSetor->getDescricao($setorDestinoAtual);
                         
-                        $tipo = $dominioTipo->getDescricao($voAtual->tipo);
+                        $tipo = dominioTipoDemanda::getDescricaoStatic($voAtual->tipo);
                         $dsTpDemandaContrato = $voAtual->tpDemandaContrato;
                         $dsTpDemandaContrato = dominioTipoDemandaContrato::getDescricaoColecaoChave($dsTpDemandaContrato, false, dominioTipoDemandaContrato::getColecaoAntiga());
 

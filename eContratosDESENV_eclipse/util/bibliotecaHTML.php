@@ -321,9 +321,9 @@ function incluirUsuarioDataHoraDetalhamento($voEntidade) {
 	// return utf8_decode($retorno);
 	return $retorno;
 }
-function getDsEspecie($voContrato) {
+function getDsEspecie($voContrato, $porExtenso = true) {
 	$retorno = null;
-	$especiesContrato = new dominioEspeciesContrato ();
+	
 	$cdEspecie = $voContrato->cdEspecie;
 	$especie = $voContrato->especie;
 	if ($cdEspecie != dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER) {
@@ -336,7 +336,8 @@ function getDsEspecie($voContrato) {
 			$sqEspecie = $sqEspecie . "º";
 		
 		if ($cdEspecie != null) {
-			$retorno = $sqEspecie . " " . $especiesContrato->getDescricao ( $cdEspecie );
+			$dsEspecie = !$porExtenso?$cdEspecie:dominioEspeciesContrato::getDescricao ( $cdEspecie );
+			$retorno = $sqEspecie . $dsEspecie;
 		} else
 			$retorno = $especie;
 	}

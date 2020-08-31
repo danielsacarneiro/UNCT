@@ -19,6 +19,7 @@ include_once 'voContratoLicon.php';
   		$arrayColunasRetornadas = array (
   				$nmTabela . ".*",
   				$nmTabelaDemanda . "." . voDemanda::$nmAtrTipo,
+  				$nmTabelaDemanda . "." . voDemanda::$nmAtrTexto,
   				$nmTabelaContrato . "." . vocontrato::$nmAtrDtAssinaturaContrato,
   				$nmTabelaContrato . "." . vocontrato::$nmAtrDtPublicacaoContrato,
   				$nmTabelaContrato . "." . vocontrato::$nmAtrDtVigenciaInicialContrato,

@@ -125,8 +125,7 @@ function detalhar(isExcluir) {
                     <TR>
                       	<TH class='headertabeladadosalinhadocentro' width='1%' rowspan=2>X</TH>
                         <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Sq</TH>
-                        <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Espécie</TH>
-                        <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Tipo</TH>
+                        <TH class='headertabeladadosalinhadocentro' width='1%' rowspan=2 nowrap>Tipo</TH>
                         <TH class='headertabeladados' width='1%' rowspan=2 >Índice Legal</TH>
                         <TH class='headertabeladados' width='1%' rowspan=2 >Índice Simples</TH>
                         <TH class='headertabeladados' width='1%' rowspan=2 nowrap>Data.Ini.</TH>
@@ -134,17 +133,17 @@ function detalhar(isExcluir) {
                         <TH class='headertabeladadosalinhadocentro' width='1%' rowspan=2 nowrap>Meses<br>Restantes</TH>
                         <TH class='headertabeladadosalinhadocentro' width='1%' rowspan=2 nowrap>Meses<br>Contrato</TH>
 						<TH class='headertabeladados' width='1%' rowspan=2 nowrap>Vl.Refer.</TH>
-                        <TH class='headertabeladadosalinhadocentro' width='1%' rowspan=2 nowrap>Vl.Licon<br>(Prazo.Restante)</TH>
-                        <TH class='headertabeladadosalinhadocentro' width='1%' rowspan=2 nowrap>Vl.Licon<br>Prazo.Cheio<br>(entend.ATUAL)</TH>
+                        <TH class='headertabeladadosalinhadocentro' width='1%' rowspan=2 nowrap>Vl.Licon<br>(Prazo<br>Restante)</TH>
+                        <TH class='headertabeladadosalinhadocentro' width='1%' rowspan=2 nowrap>Vl.Licon<br>(Prazo<br>Cheio)</TH>
                         <TH class='headertabeladadosalinhadocentro' width='40%' nowrap colspan=2>Vl.Mensal</TH>
                         <TH class='headertabeladadosalinhadocentro' width='40%' nowrap colspan=3>Vl.Global</TH>
                     </TR>
                     <TR>
-                        <TH class='headertabeladadosalinhadodireita' width='1%'>Doc.</TH>
-                        <TH class='headertabeladadosalinhadodireita' width='1%'>Execução</TH>
-                        <TH class='headertabeladadosalinhadodireita' width='1%'>Doc.</TH>
-                        <TH class='headertabeladadosalinhadodireita' width='1%'>Execução</TH>
-                        <TH class='headertabeladadosalinhadodireita' width='1%'>Prorrogação</TH>
+                        <TH class='headertabeladadosalinhadocentro' width='1%'>Doc</TH>
+                        <TH class='headertabeladadosalinhadocentro' width='1%'>Exec</TH>
+                        <TH class='headertabeladadosalinhadocentro' width='1%'>Doc</TH>
+                        <TH class='headertabeladadosalinhadocentro' width='1%'>Exec</TH>
+                        <TH class='headertabeladadosalinhadocentro' width='1%'>Prorr</TH>
                     </TR>
                     <?php
                     
@@ -159,7 +158,7 @@ function detalhar(isExcluir) {
                     	
                     //var_dump($colecaoMov);
                     
-                    $colspan=18;
+                    $colspan=17;
                     if($isHistorico){
                     	$colspan++;
                     }
@@ -188,7 +187,7 @@ function detalhar(isExcluir) {
 	                        $voContratoAtual = new vocontrato();
 	                        $voContratoAtual->getDadosBanco($registro);
 	                        //if($voContratoAtual->cdEspecie != dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER){
-	                        $especie = getDsEspecie($voContratoAtual);							                            
+	                        $especie = getDsEspecie($voContratoAtual, false);
 	                        $tipo = dominioTpContratoModificacao::getDescricaoStatic($voAtual->tpModificacao);
 	                        	                        
 	                        $isProrrogacao = $voAtual->tpModificacao == dominioTpContratoModificacao::$CD_TIPO_PRORROGACAO;
@@ -259,8 +258,7 @@ function detalhar(isExcluir) {
                         <?=getHTMLRadioButtonConsulta("rdb_consulta", "rdb_consulta", $voAtual, false);?>
                         </TD>                        
                         <TD class='tabeladados' nowrap><?php echo complementarCharAEsquerda($voAtual->sq, "0", constantes::$TAMANHO_CODIGOS_SAFI)?></TD>
-                        <TD class='tabeladados' nowrap><?php echo $especie?></TD>
-                        <TD class='tabeladados'><?php echo $tipo?></TD>
+                        <TD class='tabeladados'><?php echo "$especie<br>$tipo"?></TD>
                         <TD class='tabeladadosalinhadodireita'><?php echo getTextoHTMLNegrito($percentual)?></TD>
 						<TD class='tabeladadosalinhadodireita' ><?php echo !$isEscopo?$percentualSimples:"a corrigir"?></TD>
                         <TD class='tabeladados'><?php echo getData($voAtual->dtModificacao)?></TD>
@@ -269,7 +267,7 @@ function detalhar(isExcluir) {
                         <TD class='tabeladadosalinhadodireita'><?php echo $numMesesPrazoContrato?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($vlLiconReferencial)?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($vlLiconPrazoRestante)?></TD>
-                        <TD class='tabeladadosalinhadodireita' nowrap><?php echo getTextoHTMLNegrito(getMoeda($vlLicon)) . " ($numMesesPeriodoAtual meses)"?></TD>
+                        <TD class='tabeladadosalinhadodireita'><?php echo getTextoHTMLNegrito(getMoeda($vlLicon)) . "<br>($numMesesPeriodoAtual meses)"?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo $voContratoAtual->vlMensal?></TD>                    
                         <TD class='tabeladadosalinhadodireita' ><?php echo $vlMensalAtualStrCelula?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo $voContratoAtual->vlGlobal?></TD>                    

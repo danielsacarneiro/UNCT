@@ -213,3 +213,21 @@ function isApenasUmCheckBoxSelecionado(pNmCheckBox, pSemMensagem) {
 
 	return false;
 }
+
+function validaFormRequiredCheckBox(campoCheckBoxValidacao, colecaoIDCampos, pSetarVazio){
+	pIsRequired = !campoCheckBoxValidacao.checked;
+	tornarRequiredCamposColecaoFormulario(colecaoIDCampos, pIsRequired);
+	
+	if(pSetarVazio != null && pSetarVazio){
+		limparCamposColecaoFormulario(colecaoIDCampos);
+	}
+}
+
+function validaFormReadOnlyCheckBox(campoCheckBoxValidacao, colecaoIDCampos, pSetarVazio, pIsCampoObrigatorio, pIsAlinhadoDireita){
+	pIsReadOnly = !campoCheckBoxValidacao.checked;
+	tornarReadOnlyCamposColecaoFormulario(colecaoIDCampos, pIsReadOnly, pIsCampoObrigatorio, pIsAlinhadoDireita);
+	
+	if(pSetarVazio != null && pSetarVazio){
+		limparCamposColecaoFormulario(colecaoIDCampos);
+	}
+}

@@ -68,13 +68,12 @@ $numTotalRegistros = $filtro->numTotalRegistros;
 <!DOCTYPE html>
 <HTML>
 <HEAD>
-<?=setTituloPagina(vocontrato::getTituloJSP().$complementoTitulo)?>
-<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>mensagens_globais.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_principal.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_datahora.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_text.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_cnpfcnpj.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
-<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_text.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_checkbox.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>tooltip.js"></SCRIPT>
 
 <SCRIPT language="JavaScript" type="text/javascript">
@@ -144,7 +143,7 @@ function detalhar(isExcluir) {
 function movimentacoes(){    
     if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta")){
             return;
-    }
+    }    
   	
 	var array = retornarValorRadioButtonSelecionadoComoArray("document.frm_principal.rdb_consulta", "*", false);
 	especie = array[4];
@@ -192,7 +191,7 @@ function confirmar() {
 }
 
 </SCRIPT>
-
+<?=setTituloPagina(vocontrato::getTituloJSP().$complementoTitulo)?>
 </HEAD>
 <BODY class="paginadados" onload="formataForm();">	  
 <FORM name="frm_principal" method="post" action="index.php?consultar=S" onSubmit="return confirmar();">
@@ -217,14 +216,57 @@ function confirmar() {
 	        <?php	        
 	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
 	        $arrayCssClass = array("camponaoobrigatorio","camponaoobrigatorio", "camponaoobrigatorio");
-	        ?>        
+	        
+	        ?>
             <TR>
+	            <TH class="campoformulario" nowrap width="1%" ROWSPAN=2>Contrato:</TH>
+	            <TD class="campoformulario" ROWSPAN=2>
+	            <?php
+	            
+	            $voContratoFiltro = new vocontrato();
+	            $voContratoFiltro->tipo = $tipo;
+	            $voContratoFiltro->cdContrato = $cdContrato;
+	            $voContratoFiltro->anoContrato = $anoContrato;
+	            $voContratoFiltro->cdEspecie = $filtro->cdEspecie;
+	            $voContratoFiltro->sqEspecie = $filtro->sqEspecie;
+	            
+	            $arrayComplementoHTML = null;
+	            $arrayComplementoHTML = array (
+	            		" ",
+	            		" ",
+	            		" ",
+	            		" multiple ",
+	            		" ",
+	            );
+	             
+	            
+	            $pArray = array($voContratoFiltro,
+	            		constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO,
+	            		false,
+	            		true,
+	            		false,
+	            		null,
+	            		null,
+	            		$arrayComplementoHTML
+	            );
+	            
+	            getContratoEntradaArrayGenerico($pArray);
+	            
+	            $comboConsultaArquivo = new select(dominioConsultaArquivoContrato::getColecao());
+	            $selectExercicio = new selectExercicio();
+	            ?>
+	            </TD>
+    			<TH class="campoformulario" nowrap>Procurar em arquivos:</TH>
+               	<TD class="campoformulario" nowrap> 
+               	<?php 
+               	echo $comboConsultaArquivo->getHtmlCombo("cdConsultarArquivo","cdConsultarArquivo", $filtro->cdConsultarArquivo, false, "camponaoobrigatorio", false, " onChange='formataForm();' ");              	               	
+               	echo "Ano Arquivo: " . $selectExercicio->getHtmlCombo(filtroManterContrato::$nmAtrAnoArquivo,filtroManterContrato::$nmAtrAnoArquivo, $filtro->anoArquivo, true, "camponaoobrigatorio", false, "");
+               	?>
+				</TD>	            
+	        </TR>	             
+            <!--  <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
 	            <TD class="campoformulario" width="1%" nowrap><?php getContratoEntradaDeDados($tipo, $cdContrato, $anoContrato, $arrayCssClass, null, null, false);?></TD>
-				<?php 
-				$comboConsultaArquivo = new select(dominioConsultaArquivoContrato::getColecao());
-				$selectExercicio = new selectExercicio();
-				?>									
     			<TH class="campoformulario" nowrap>Procurar em arquivos:</TH>
                	<TD class="campoformulario" nowrap> 
                	<?php 
@@ -232,17 +274,14 @@ function confirmar() {
                	echo "Ano Arquivo: " . $selectExercicio->getHtmlCombo(filtroManterContrato::$nmAtrAnoArquivo,filtroManterContrato::$nmAtrAnoArquivo, $filtro->anoArquivo, true, "camponaoobrigatorio", false, "");
                	?>
 				</TD>
-            </TR>
+            </TR>  -->
 			<?php
             $dominioTipoContrato = new dominioTipoContrato();            
 			$tiposContrato = new select($dominioTipoContrato->colecao);            
 			
-			$comboEspecies = new select(dominioEspeciesContrato::getColecao());
+			//$comboEspecies = new select(dominioEspeciesContrato::getColecao());
 			$comboTpDemanda = new select(dominioTipoDemanda::getColecaoTipoDemandaContrato());				
 			?>
-    			<TH class="campoformulario" nowrap>Espécies:</TH>
-                <TD class="campoformulario"><?php echo $comboEspecies->getHtmlCombo(vocontrato::$nmAtrCdEspecieContrato, vocontrato::$nmAtrCdEspecieContrato."[]", $filtro->cdEspecie, true, "camponaoobrigatorio", false, " multiple ")?>
-                </TD>
                 <TH class="campoformulario" nowrap>Demandas:</TH>
                 <TD class="campoformulario"><?php echo $comboTpDemanda->getHtmlCombo(filtroManterContrato::$nmAtrTpDemanda, filtroManterContrato::$nmAtrTpDemanda."[]", $filtro->tpDemanda, true, "camponaoobrigatorio", false, " multiple ")?>
                 </TD>                												                

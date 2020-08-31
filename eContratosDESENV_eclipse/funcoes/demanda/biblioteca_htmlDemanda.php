@@ -492,12 +492,12 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDad
 		// $html .= "<TH class='headertabeladados' width='1%'>Destino</TH> \n";
 		$html .= "<TH class='headertabeladados' width='1%'>Tipo</TH> \n";		
 		if($comDadosDemanda){			
-			$html .= "<TH class='headertabeladados' width='20%'>Título</TH> \n";
+			$html .= "<TH class='headertabeladados' width='90%'>Título</TH> \n";
 		}
-		$html .= "<TH class='headertabeladados' width='30%'>Texto</TH> \n";
-		$html .= "<TH class='headertabeladados' width='1%' nowrap>Anexo</TH> \n";
-		$html .= "<TH class='headertabeladados' width='1%' nowrap>Usuário</TH> \n";
-		$html .= "<TH class='headertabeladados' width='1%' nowrap>Referência</TH> \n";
+		$html .= "<TH class='headertabeladados' width='90%'>Texto</TH> \n";
+		$html .= "<TH class='headertabeladados' width='1%' >Anexo</TH> \n";
+		$html .= "<TH class='headertabeladados' width='1%' >Usuário</TH> \n";
+		$html .= "<TH class='headertabeladados' width='1%' >Referência</TH> \n";
 		$html .= "</TR> \n";
 
 		$sq = 1;
@@ -514,7 +514,7 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDad
 				$dsTpDemandaContrato = $voAtual->tpDemandaContrato;
 				$dsTpDemandaContrato = dominioTipoDemandaContrato::getDescricaoColecaoChave($dsTpDemandaContrato, false, dominioTipoDemandaContrato::getColecaoAntiga());
 				if($voAtual->tpDemandaContrato != null){
-					$tipo = $tipo . $dsTpDemandaContrato;
+					$tipo = $tipo ."<br>". $dsTpDemandaContrato;
 				}
 				
 				$html .= "<TR class='dados'> \n";
@@ -532,14 +532,14 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDad
 				//$html .= "<TD class='tabeladados' nowrap>" . $dominioSetor->getDescricao ( $voAtual->cdSetorDestino ) . "</TD> \n";				
 				$html .= "<TD class='tabeladados'>$tipo</TD> \n";
 				if($comDadosDemanda){
-					$html .= "<TD class='tabeladados'>" .  $voAtual->texto . "</TD> \n";
+					$html .= "<TD class='tabeladados'>" .  strtolower($voAtual->texto) . "</TD> \n";
 				}
-				$html .= "<TD class='tabeladados' >" . $voAtual->textoTram . "</TD> \n";
+				$html .= "<TD class='tabeladados' >" . strtolower($voAtual->textoTram) . "</TD> \n";
 				
 				$html .= getHtmlDocumento($voAtual, false);				
 
-				$html .= "<TD class='tabeladados' nowrap>" . $voAtual->nmUsuarioInclusao . "</TD> \n";
-				$html .= "<TD class='tabeladados' nowrap>" . getData ( $voAtual->dtReferencia) . "</TD> \n";
+				$html .= "<TD class='tabeladados'>" . $voAtual->nmUsuarioInclusao . "</TD> \n";
+				$html .= "<TD class='tabeladados'>" . getData ( $voAtual->dtReferencia) . "</TD> \n";
 
 				$html .= "</TR> \n";
 

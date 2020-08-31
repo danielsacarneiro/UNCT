@@ -2,7 +2,6 @@
 include_once("../../config_lib.php");
 include_once(caminho_util."bibliotecaHTML.php");
 include_once(caminho_util."selectExercicio.php");
-include_once (caminho_funcoes . "demanda/biblioteca_htmlDemanda.php");
 
 try{
 //inicia os parametros
