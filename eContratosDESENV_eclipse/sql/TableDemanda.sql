@@ -13,6 +13,8 @@ CREATE TABLE demanda (
     dem_prioridade INT DEFAULT 3 NOT NULL,
     dem_dtreferencia DATE,
     dem_cdpessoaresp_atja INT,
+    dem_cdpessoaresp_unct INT,
+    dem_fase VARCHAR(100),
     dtm_prt VARCHAR(25),
     -- dem_prt VARCHAR(25),
     dem_inlegado CHAR(1) NOT NULL DEFAULT 'N',
@@ -34,6 +36,9 @@ ALTER TABLE demanda ADD COLUMN dem_tp_temreajustemontanteA CHAR(1) AFTER dem_tp_
 ALTER TABLE demanda ADD COLUMN in_desativado CHAR(1) NOT NULL DEFAULT 'N' AFTER cd_usuario_ultalt;
 ALTER TABLE demanda ADD COLUMN dem_cdpessoaresp_atja INT AFTER dem_dtreferencia;
 ALTER TABLE demanda ADD COLUMN dtm_prt VARCHAR(25) AFTER dem_cdpessoaresp_atja;
+ALTER TABLE demanda ADD COLUMN dem_cdpessoaresp_unct INT AFTER dem_cdpessoaresp_atja;
+ALTER TABLE demanda ADD COLUMN dem_fase VARCHAR(100) AFTER dem_cdpessoaresp_unct;
+
 
 select dem_tipo from demanda where dem_tp_contrato is null group by dem_tipo;
 
@@ -73,6 +78,8 @@ CREATE TABLE demanda_hist (
     dem_prioridade INT DEFAULT 3 NOT NULL,
     dem_dtreferencia DATE,
     dem_cdpessoaresp_atja INT,
+	dem_cdpessoaresp_unct INT,   
+    dem_fase VARCHAR(100),
     dtm_prt VARCHAR(25),
     -- dem_prt VARCHAR(25),
     dem_inlegado CHAR(1) NOT NULL DEFAULT 'N',
@@ -97,6 +104,8 @@ ALTER TABLE demanda_hist ADD COLUMN in_desativado CHAR(1) NOT NULL AFTER cd_usua
 ALTER TABLE demanda_hist ADD CONSTRAINT desativacao_demanda CHECK (in_desativado NOT IN ('S'))
 ALTER TABLE demanda_hist ADD COLUMN dem_cdpessoaresp_atja INT AFTER dem_dtreferencia;
 ALTER TABLE demanda_hist ADD COLUMN dtm_prt VARCHAR(25) AFTER dem_cdpessoaresp_atja;
+ALTER TABLE demanda_hist ADD COLUMN dem_cdpessoaresp_unct INT AFTER dem_cdpessoaresp_atja;
+ALTER TABLE demanda_hist ADD COLUMN dem_fase VARCHAR(100) AFTER dem_cdpessoaresp_unct;
 
 drop table demanda_tram;
 CREATE TABLE demanda_tram (

@@ -222,7 +222,35 @@ class dominio extends multiplosConstrutores {
 		return static::getHtmlChecksBox($nm, $opcaoSelecionada, $colecao, $qtdItensPorColuna, false, null, false, " disabled ");
 		
 	}
-	static function getHtmlChecksBox($nm, $opcaoSelecionada, $colecao=null, $qtdItensPorColuna=4, $comOpcaoMarcarTodos=false, $javascriptadicional=null, $comBorracha = false, $htmlAdicional = null) {
+
+	static function getHtmlChecksBox($nm, $opcaoSelecionada, $colecao=null, $qtdItensPorColuna=4, 
+			$comOpcaoMarcarTodos=false, $javascriptadicional=null, $comBorracha = false, $htmlAdicional = null) {
+				$pArray = array(
+				$nm,
+				$opcaoSelecionada,
+				$colecao,
+				$qtdItensPorColuna,
+				$comOpcaoMarcarTodos,
+				$javascriptadicional,
+				$comBorracha,
+				$htmlAdicional,				
+		);
+		
+		return static::getHtmlChecksBoxArray($pArray);
+	}
+	static function getHtmlChecksBoxArray($pArray) {
+		$nm = $pArray[0];
+		$opcaoSelecionada = $pArray[1]; 
+		$colecao = $pArray[2];
+		$qtdItensPorColuna = $pArray[3];
+		$comOpcaoMarcarTodos = $pArray[4];
+		$javascriptadicional = $pArray[5];
+		$comBorracha = $pArray[6];
+		$htmlAdicional = $pArray[7];
+		$comComboOR_And = $pArray[8]==null?false:$pArray[8];
+		$nmComboOr_And = $pArray[9];
+		$cdOpcaoSelecionadaComboOr_And = $pArray[10];
+		
 		if($colecao==null){
 			$colecao = static::getColecao ();
 		}
@@ -274,7 +302,18 @@ class dominio extends multiplosConstrutores {
 			$borracha = getBorracha($nmCamposDoc, "");
 		}
 		
-		$html.="$borracha\n</TD>";
+		$comComboOR_And = $pArray[8]==null?false:$pArray[8];
+		$nmComboOr_And = $pArray[9];
+		$cdOpcaoSelecionadaComboOr_And = $pArray[10];
+		
+		
+		if($comComboOR_And){
+			require_once (caminho_util . "/selectOR_AND.php");
+			$comboOuE = new selectOR_AND();			
+			$comboOR_AND = $comboOuE->getHtmlSelect($nmComboOr_And,$nmComboOr_And, $cdOpcaoSelecionadaComboOr_And, false, "camponaoobrigatorio", false);
+		}
+		
+		$html.="$borracha $comboOR_AND\n</TD>";
 		$html.="\n</TR>";
 		$html.="\n</TBODY>";
 		$html.="\n</TABLE>";		

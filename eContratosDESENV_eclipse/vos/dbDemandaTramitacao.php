@@ -270,16 +270,47 @@ class dbDemandaTramitacao extends dbprocesso {
 		}
 				
 		$dbUsuarioInfo = new dbUsuarioInfo();
-		$cdSetor = $vo->cdSetorAtual;
+		$cdSetor = $vo->cdSetorOrigem;
+		$cdSetorDestino = $vo->cdSetorDestino;
 		//var_dump("Setor atual:" . $cdSetor);
-		
-		if (!$dbUsuarioInfo->isUsuarioPertenceAoSetor($cdSetor)) {
+				
+		//o usuario NAO pode retirar a demanda do setor ao qual nao pertence, mas pode tramitar deixando no mesmo setor
+		if (!$dbUsuarioInfo->isUsuarioPertenceAoSetor($cdSetor) && $cdSetor != $cdSetorDestino) {
 			$msg = "Usuário não autorizado pelo Setor ". dominioSetor::getDescricaoStaticTeste($cdSetor)." para encaminhamento.";
 			throw new Exception ( $msg );
 		}		
 				
 		return true;
 	}
+	
+	/**
+	 * verifica se a fase da demanda foi alterada na tela
+	 * usada para saber se eh necessario alterar a demanda na tela de encaminhamento
+	 * @param unknown $vo
+	 * @throws excecaoGenerica
+	 * @return boolean
+	 */
+	function isFaseTelaAlterada($vo){
+		$faseTela = $vo->fase;
+		$faseBanco = $_POST[voDemandaTramitacao::$nmAtrFaseRegistroBanco];
+		if(is_array($faseBanco)){
+			$faseBanco = voDemanda::getArrayComoStringCampoSeparador($faseBanco);
+		}
+		if(is_array($faseTela)){
+			$faseTela = voDemanda::getArrayComoStringCampoSeparador($faseTela);
+		}
+		
+		$isFaseAlterada = $faseTela != $faseBanco;
+		/*echo "banco $faseBanco - tela $faseTela";		
+		if($isFaseAlterada){
+		 	throw new excecaoGenerica("fases DIFERENTES da demanda");
+		}else{
+			throw new excecaoGenerica("fases IGUAIS da demanda");
+		}*/
+		
+		return $isFaseAlterada;		
+	}
+	
 	function encaminharDemanda($vo) {
 		// Start transaction
 		$this->cDb->retiraAutoCommit ();
@@ -287,27 +318,22 @@ class dbDemandaTramitacao extends dbprocesso {
 			$this->incluirDemandaTramitacaoSEMControleTransacao ( $vo );			
 			//sempre que uma demanda for encaminhada, ela estara em andamento ate que seja fechada
 			$voDemanda = new voDemanda ();
-			$voDemanda = $vo->getVOPai ();			
+			$voDemanda = $vo->getVOPai ();
+			
 			/*$registrobanco = $voDemanda->dbprocesso->consultarPorChave($voDemanda, false);
 			$voDemanda->getDadosBanco($registrobanco);*/
 			
-			$voDemanda = $voDemanda->dbprocesso->consultarPorChaveVO($voDemanda, false);				
+			$voDemanda = $voDemanda->dbprocesso->consultarPorChaveVO($voDemanda, false);
+			$isFaseAlterada = $this->isFaseTelaAlterada($vo);
 			
-			if($voDemanda->situacao != dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO){
+			//para alterar o voDemandaPAI eh necessario atribuir os novos valores expressamente
+			//considerando que a busca pela chave eh feita antes, e sobrescreve os valores recuperados na tela
+			if($voDemanda->situacao != dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO || $isFaseAlterada){
 				$voDemanda->dbprocesso->cDb = $this->cDb;
-				$voDemanda->situacao = dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO;				
+				$voDemanda->situacao = dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO;
+				$voDemanda->fase = $vo->fase;
 				$voDemanda->dbprocesso->alterarApenasVODemanda($voDemanda);
-				//parent::alterarPorCima($voDemanda);
 			}			
-			/*
-			 * $voDemanda = new voDemanda();
-			 * $voDemanda = $vo->getVOPaiChave();
-			 * $registro = $voDemanda->dbprocesso->consultarPorChave($voDemanda, false);
-			 * $voDemanda->getDadosBanco($registro);
-			 * $voDemanda->dbprocesso->cDb = $this->cDb;
-			 * $voDemanda->situacao = dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_ABERTA;
-			 * $voDemanda->dbprocesso->alterar($voDemanda);
-			 */
 			
 			// End transaction
 			$this->cDb->commit ();

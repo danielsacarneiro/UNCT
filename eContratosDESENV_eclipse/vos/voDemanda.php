@@ -5,6 +5,7 @@ include_once (caminho_util . "bibliotecaFuncoesPrincipal.php");
 include_once (caminho_util . "dominioSetor.php");
 include_once (caminho_funcoes . "demanda/dominioSituacaoDemanda.php");
 include_once (caminho_funcoes . "demanda/dominioTipoDemanda.php");
+include_once (caminho_funcoes . "demanda/dominioFaseDemanda.php");
 include_once (caminho_funcoes . "demanda/dominioTipoDemandaContrato.php");
 include_once (caminho_funcoes . "demanda/dominioPrioridadeDemanda.php");
 include_once (caminho_funcoes . "demanda/dominioTipoReajuste.php");
@@ -18,7 +19,7 @@ class voDemanda extends voentidade {
 	static $nmAtrAno = "dem_ex";
 	static $nmAtrCdSetor = "dem_cd_setor";
 	static $nmAtrCdSetorAtual = "NM_COL_SETOR_ATUAL";
-	static $nmAtrTipo = "dem_tipo";
+	static $nmAtrTipo = "dem_tipo";	
 	static $nmAtrTpDemandaContrato =  "dem_tp_contrato";
 	static $nmAtrInTpDemandaReajusteComMontanteA = "dem_tp_temreajustemontanteA";
 	static $nmAtrSituacao = "dem_situacao";
@@ -27,6 +28,8 @@ class voDemanda extends voentidade {
 	static $nmAtrDtReferencia = "dem_dtreferencia";
 	static $nmAtrInLegado = "dem_inlegado";
 	static $nmAtrCdPessoaRespATJA = "dem_cdpessoaresp_atja";
+	static $nmAtrCdPessoaRespUNCT = "dem_cdpessoaresp_unct";
+	static $nmAtrFase =  "dem_fase";
 	//lembrar que o PRT foi migrado do demandatramitacao para ca
 	static $nmAtrProtocolo = "dtm_prt";
 	
@@ -35,6 +38,7 @@ class voDemanda extends voentidade {
 	var $cdSetor = "";
 	var $cdSetorAtual = "";
 	var $tipo = "";
+	
 	var $tpDemandaContrato = "";
 	var $inTpDemandaReajusteComMontanteA = "";
 	var $situacao = "";
@@ -44,6 +48,9 @@ class voDemanda extends voentidade {
 	var $inLegado = "";
 	
 	var $cdPessoaRespATJA = "";
+	var $cdPessoaRespUNCT = "";
+	var $fase = "";
+	
 	var $prt = "";
 	var $dbprocesso = null;
 	
@@ -116,6 +123,8 @@ class voDemanda extends voentidade {
 				self::$nmAtrPrioridade,
 				self::$nmAtrDtReferencia, 
 				self::$nmAtrCdPessoaRespATJA,
+				self::$nmAtrCdPessoaRespUNCT,
+				self::$nmAtrFase,
 				self::$nmAtrProtocolo,
 				self::$nmAtrInLegado
 		);
@@ -195,6 +204,7 @@ class voDemanda extends voentidade {
 		$this->cdSetor = $registrobanco [self::$nmAtrCdSetor];
 		$this->cdSetorAtual = $registrobanco [self::$nmAtrCdSetorAtual];
 		$this->tipo = $registrobanco [self::$nmAtrTipo];
+		
 		$this->tpDemandaContrato = $registrobanco [self::$nmAtrTpDemandaContrato];
 		$this->inTpDemandaReajusteComMontanteA = $registrobanco [self::$nmAtrInTpDemandaReajusteComMontanteA];
 		$this->situacao = $registrobanco [self::$nmAtrSituacao];
@@ -202,6 +212,9 @@ class voDemanda extends voentidade {
 		$this->prioridade = $registrobanco [self::$nmAtrPrioridade];
 		$this->dtReferencia = $registrobanco [self::$nmAtrDtReferencia];
 		$this->cdPessoaRespATJA = $registrobanco [self::$nmAtrCdPessoaRespATJA];
+		$this->cdPessoaRespUNCT = $registrobanco [self::$nmAtrCdPessoaRespUNCT];
+		$this->fase = $registrobanco [self::$nmAtrFase];
+		
 		$this->prt = $registrobanco[self::$nmAtrProtocolo];
 		$this->prt = voDemandaTramitacao::getNumeroPRTComMascara($this->prt, false);
 		
@@ -230,6 +243,7 @@ class voDemanda extends voentidade {
 		$this->ano = @$_POST [self::$nmAtrAno];
 		$this->cdSetor = @$_POST [self::$nmAtrCdSetor];
 		$this->tipo = @$_POST [self::$nmAtrTipo];
+		
 		$this->tpDemandaContrato = @$_POST [voDemanda::$nmAtrTpDemandaContrato];
 		$this->inTpDemandaReajusteComMontanteA = @$_POST [self::$nmAtrInTpDemandaReajusteComMontanteA];
 		$this->situacao = @$_POST [self::$nmAtrSituacao];
@@ -237,6 +251,9 @@ class voDemanda extends voentidade {
 		$this->prioridade = @$_POST [self::$nmAtrPrioridade];
 		$this->dtReferencia = @$_POST [self::$nmAtrDtReferencia];
 		$this->cdPessoaRespATJA = @$_POST [self::$nmAtrCdPessoaRespATJA];
+		$this->cdPessoaRespUNCT = @$_POST [self::$nmAtrCdPessoaRespUNCT];
+		$this->fase = @$_POST [voDemanda::$nmAtrFase];
+		
 		$this->prt = @$_POST[self::$nmAtrProtocolo];
 		$this->inLegado = @$_POST [self::$nmAtrInLegado];
 		// quando existir

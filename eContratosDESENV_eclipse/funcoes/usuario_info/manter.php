@@ -44,7 +44,7 @@ try{
 	
 	$ID_REQ_CDSETOR_ORIGEM = "cdSetorOrigem";
 	//colecao
-	$ID_REQ_CDSETOR_DESTINO = voUsuarioSetor::$nmAtrCdSetor;
+	$ID_REQ_CDSETOR_DESTINO = voUsuarioInfo::$nmAtrSetor;
 	?>
 <!DOCTYPE html>
 <HEAD>
@@ -126,9 +126,9 @@ function confirmar() {
 	</TD>
 </TR>        	        	
 	        <?php
-	        if(!$isInclusao){
+	        //if(!$isInclusao){
 	            echo "<TR>" . incluirUsuarioDataHoraDetalhamento($vo) .  "</TR>";
-	        }
+	        //}
 	        ?>
             </TBODY>
             </TABLE>

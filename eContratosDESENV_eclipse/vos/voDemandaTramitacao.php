@@ -4,6 +4,7 @@ include_once("voDemandaContrato.php");
 
   Class voDemandaTramitacao extends voDemanda{  	
   	static $nmAtrInResponsabilidadePRT = "nmAtrInResponsabilidadePRT";
+  	static $nmAtrFaseRegistroBanco = "nmAtrFaseRegistroBanco";
   	
   	static $nmAtrSq = "dtm_sq";
   	static $nmAtrTexto = "dtm_texto";
@@ -190,6 +191,9 @@ include_once("voDemandaContrato.php");
 		$voDemanda->prioridade  = $this->prioridade;
 		$voDemanda->dtReferencia  = $this->dtReferencia;
 		$voDemanda->cdPessoaRespATJA  = $this->cdPessoaRespATJA;
+		$voDemanda->cdPessoaRespUNCT  = $this->cdPessoaRespUNCT;
+		$voDemanda->fase  = $this->fase;
+		
 		$voDemanda->prt  = $this->prt;
 		$voDemanda->voSolicCompra = $this->voSolicCompra;
 		$voDemanda->voProcLicitatorio  = $this->voProcLicitatorio;

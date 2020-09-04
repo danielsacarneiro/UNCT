@@ -550,6 +550,26 @@ function atualizarValorPercentual($valor, $percentual){
 	return $valor;
 }
 
+/**
+ * Formata os itens do array para o tamanho desejado
+ * @param unknown $array
+ * @param number $qtdfinal
+ * @param string $char
+ * @throws excecaoGenerica
+ * @return string|unknown
+ */
+function getArrayComItemTamanhoFormatado($array, $qtdfinal = 2, $char = "0") {
+	if($array == null){
+		throw new excecaoGenerica("getArrayComItemTamanhoFormatado não deve receber valor nulo.");
+	}
+	for ($i = 0; $i<sizeof($array); $i++){
+		$item = $array[$i];
+		$array[$i] = complementarCharAEsquerda($item, $char, $qtdfinal);
+	}
+	return $array;
+}
+
+
 /*function isArrayMultiDimensional($array){
 	return count($array) == count($array, COUNT_RECURSIVE);
 }*/

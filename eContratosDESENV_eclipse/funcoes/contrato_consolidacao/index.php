@@ -411,9 +411,15 @@ function movimentacoes(){
                         	$dsPessoa = "<B>CONTRATO NÃO INCLUÍDO NA PLANILHA</B>";
                         }
                         
-                        $cdEspeciaAtual = $colecao[$i][filtroConsultarContratoConsolidacao::$NmColCdEspecieContratoAtual];
-                        $sqEspeciaAtual = $colecao[$i][filtroConsultarContratoConsolidacao::$NmColSqEspecieContratoAtual];
-                        $termoAtual = $sqEspeciaAtual ."o $cdEspeciaAtual";
+                        $cdEspeciaAtual = $registro[filtroConsultarContratoConsolidacao::$NmColCdEspecieContratoAtual];
+                        $sqEspeciaAtual = $registro[filtroConsultarContratoConsolidacao::$NmColSqEspecieContratoAtual];
+                        if($sqEspeciaAtual == null){
+                        	//var_dump($registro);
+                        	$termoAtual = getTextoHTMLDestacado("Verifique<br>Vigência");
+                        }else{
+                        	$termoAtual = $cdEspeciaAtual==dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER?dominioEspeciesContrato::$DS_ESPECIE_CONTRATO_MATER:$sqEspeciaAtual ."o $cdEspeciaAtual";
+                        }
+                        //$termoAtual = $sqEspeciaAtual ."o $cdEspeciaAtual";
                         $gestor = $colecao[$i][vocontrato::$nmAtrGestorContrato];
                         
                         $inPrazoProrrogacao = $colecao[$i][voContratoInfo::$nmAtrInPrazoProrrogacao];

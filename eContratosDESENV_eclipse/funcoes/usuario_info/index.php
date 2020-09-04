@@ -13,7 +13,7 @@ $dbprocesso = $vo->dbprocesso;
 $titulo = "CONSULTAR " . $vo::getTituloJSP();
 setCabecalho($titulo);
 
-$filtro  = new filtroManterUsuario(true);
+$filtro  = new filtroManterUsuario();
 $filtro = filtroManter::verificaFiltroSessao($filtro);
 	
 $isHistorico = $filtro->isHistorico(); 
@@ -195,7 +195,12 @@ function alterar() {
 	                   	<TR> 
                             <TD class="botaofuncao">
                             <?php
-                            $arrayBotoesARemover = array(constantes::$CD_FUNCAO_INCLUIR);
+                            $arrayBotoesARemover = array(
+                            		constantes::$CD_FUNCAO_INCLUIR,
+                            		constantes::$CD_FUNCAO_EXCLUIR,
+                            		
+                            );
+                            
                             echo getBotoesRodapeComRestricao($arrayBotoesARemover, true);                            
                             ?></TD>                            
                          </TR>

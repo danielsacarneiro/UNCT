@@ -38,7 +38,7 @@ if($isInclusao){
 	$vo = $dbprocesso->consultarPorChaveTelaColecaoContrato($vo, $isHistorico);	
 	
 	$dbDemandaTramitacao = new dbDemandaTramitacao();
-	$dbDemandaTramitacao->validarEncaminhamento($vo);
+	//$dbDemandaTramitacao->validarEncaminhamento($vo);
 	
 	putObjetoSessao($vo->getNmTabela(), $vo);
 		
@@ -288,17 +288,45 @@ function iniciar(){
             	</TD>	        
             </TR>
 			<TR>
-	            <TH class="campoformulario" nowrap width="1%">Situação:</TH>
+	            <TH class="campoformulario" nowrap width="1%">Resp.:</TH>
 	            <TD class="campoformulario" colspan=3>
 	            <?php 
-	            echo $comboSituacao->getHtmlCombo("","", $vo->situacao, true, "camporeadonly", false, " disabled ");
-	            
-	            if($vo->cdPessoaRespATJA != null){
-	            	echo "&nbsp;ATJA.Resp.:".getComboPessoaRespPAConsulta(voDemanda::$nmAtrCdPessoaRespATJA, voDemanda::$nmAtrCdPessoaRespATJA, $vo->cdPessoaRespATJA, "camponaoobrigatorio", "disabled");
+	            $conector = "";
+	            if($vo->cdPessoaRespUNCT != null){
+	            	$arrayParamUsuario = array(
+	            			voDemanda::$nmAtrCdPessoaRespUNCT,
+	            			voDemanda::$nmAtrCdPessoaRespUNCT,
+	            			$vo->cdPessoaRespUNCT,
+	            			constantes::$CD_CLASS_CAMPO_READONLY,
+	            			"disabled",
+	            	);	            	
+	            	echo "UNCT:&nbsp;". getComboUsuarioPorSetor($arrayParamUsuario, dominioSetor::$CD_SETOR_UNCT). "&nbsp;";	            	
 	            }
-	            ?>
+	             if($vo->cdPessoaRespATJA != null){
+	            	echo $conector . "ATJA:&nbsp;".getComboPessoaRespPAConsulta(voDemanda::$nmAtrCdPessoaRespATJA, voDemanda::$nmAtrCdPessoaRespATJA, $vo->cdPessoaRespATJA, "camponaoobrigatorio", "disabled");
+	            }
+	             ?>
 	            </TD>				
 	        </TR>
+			<TR>
+	            <TH class="campoformulario" nowrap width="1%">Situação:</TH>
+	            <TD class="campoformulario" width="1%">
+	            <?php 
+	            echo $comboSituacao->getHtmlCombo("","", $vo->situacao, true, "camporeadonly", false, " disabled ");	            
+	             ?>
+	            </TD>
+	            <TH class="campoformulario" nowrap width="1%">Fase:</TH>
+	            <TD class="campoformulario" colspan=1>
+	            <?php 
+	            $nmCampoFaseHtml = voDemanda::$nmAtrFase."[]";
+	            //echo dominioFaseDemanda::getHtmlChecksBoxDetalhamento($nmCampoFaseHtml, $vo->fase, 1);
+	            echo dominioFaseDemanda::getHtmlChecksBox($nmCampoFaseHtml, $vo->fase, null, 1, false, "");
+	            //serve para comparar, ao enviar ao banco, se a fase foi alterada no encaminhamento, autorizando a alteracao do vodemanda
+	            echo getInputHidden(voDemandaTramitacao::$nmAtrFaseRegistroBanco, voDemandaTramitacao::$nmAtrFaseRegistroBanco, $vo->fase);
+	             ?>
+	            (Somente alterar se tiver certeza!)</TD>	            
+	        </TR>
+	        
 	        <?php
 	        }else{
 	        	//INCLUSAO

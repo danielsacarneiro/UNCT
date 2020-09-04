@@ -23,6 +23,10 @@ echo $vo->cdSetorDestino . " cd setor destino <BR>";
 echo $vo->cdSetorOrigem . " cd setor origem <BR>";*/
 
 putObjetoSessao("vo", $vo);
+
+/*$cdSetor = $vo->cdSetorOrigem;
+$cdSetorDestino = $vo->cdSetorDestino;
+echo "$cdSetor e $cdSetorDestino";*/
 //echo $funcao = @$_POST["funcao"];
 
 //redirecionar mantendo o post

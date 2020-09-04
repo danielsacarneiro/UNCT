@@ -2,16 +2,79 @@ ALTER DATABASE unct CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 drop table usuario_info;
 CREATE TABLE usuario_info (
-    ID INT NOT NULL, 
+    ID INT NOT NULL,
+    user_setor VARCHAR(100),
 
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_incl INT,
-    cd_usuario_ultalt INT,    
+    cd_usuario_ultalt INT,
+    in_desativado CHAR(1) NOT NULL DEFAULT 'N',
+
     CONSTRAINT pk PRIMARY KEY (ID)
 );
 
+CREATE TABLE usuario_info_hist (
+	hist INT NOT NULL AUTO_INCREMENT,
+    
+    ID INT NOT NULL, 
+    user_setor VARCHAR(100),
+    dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
+    cd_usuario_incl INT,
+    cd_usuario_ultalt INT,
+    in_desativado CHAR(1) NOT NULL DEFAULT 'N',
 
+    CONSTRAINT pk PRIMARY KEY (hist),
+    CONSTRAINT desativacao_demanda CHECK (in_desativado NOT IN ('S'))
+);
+
+/** INCLUSAO DOS USUARIOS INFO */
+DELIMITER $$
+DROP PROCEDURE IF EXISTS incluirUsuarioInfo $$
+-- CREATE PROCEDURE importarContratada(IN cdPessoa INT)
+CREATE PROCEDURE incluirUsuarioInfo()
+BEGIN
+
+  DECLARE done INTEGER DEFAULT 0;
+  DECLARE INDICE INTEGER DEFAULT 0;
+  DECLARE DATA_IN TIMESTAMP;
+
+  DECLARE cTabela CURSOR FOR 
+	  select ID,dh_inclusao from usuario_setor GROUP BY ID;
+      
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;  
+  
+  OPEN cTabela;  
+  REPEAT
+  -- read_loop: LOOP
+    #aqui você pega os valores do "select", para mais campos vocÇe pode fazer assim:
+    #cTabela INTO c1, c2, c3, ..., cn
+    FETCH cTabela INTO INDICE, DATA_IN;
+		IF NOT done THEN
+        
+		INSERT INTO usuario_info  (id, user_setor, cd_usuario_incl, cd_usuario_ultalt, dh_ultima_alt, dh_inclusao)  
+			values 
+            (INDICE,             
+            (SELECT GROUP_CONCAT(case LENGTH(usu_cd_setor) when 1 then CONCAT('0', usu_cd_setor) else usu_cd_setor end SEPARATOR '*') 
+			FROM usuario_setor
+			where id = INDICE),
+            1,
+            1,
+            DATA_IN,
+            DATA_IN
+            );         
+
+		END IF;
+  UNTIL done END REPEAT;
+  CLOSE cTabela;
+  
+END $$
+DELIMITER ;
+call incluirUsuarioInfo();
+/** INCLUSAO DOS USUARIO INFO*/
+
+-- a remover
 drop table usuario_setor;
 CREATE TABLE usuario_setor (
     ID BIGINT(20) NOT NULL,

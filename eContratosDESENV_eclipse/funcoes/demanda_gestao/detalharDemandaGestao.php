@@ -123,30 +123,52 @@ function confirmar() {
             	</TD>	        
             </TR>
 			<TR>
-	            <TH class="campoformulario" nowrap width="1%">Situação:</TH>
-	            <TD class="campoformulario">
+	            <TH class="campoformulario" nowrap width="1%">Resp.:</TH>
+	            <TD class="campoformulario" colspan=3>
 	            <?php 
-	            echo $comboSituacao->getHtmlCombo("","", $vo->situacao, true, "camporeadonly", false, " disabled ");?>
-				</TD>
-	            <TH class="campoformulario" width="1%">ATJA.Resp.:</TH>
-	            <TD class="campoformulario" >
-	            <?php
-	            $assessorResp = $vo->cdPessoaRespATJA==null?constantes::$CD_OPCAO_NENHUM:$vo->cdPessoaRespATJA;
-	            $arrayATJAResp = array(
-	            		voDemanda::$nmAtrCdPessoaRespATJA,
-	            		voDemanda::$nmAtrCdPessoaRespATJA,
-	            		$assessorResp,
-	            		true,
-	            		true,
-	            		"camponaoobrigatorio",
-	            		false,
-	            		"disabled",
-	            );
-	             
-	            echo getComboPessoaRespATJAConsulta($arrayATJAResp);	             
-	            //echo getComboPessoaRespATJAConsulta(voDemanda::$nmAtrCdPessoaRespATJA, voDemanda::$nmAtrCdPessoaRespATJA, $vo->cdPessoaRespATJA, "camponaoobrigatorio", "disabled");
-	          	?>
-				</TD>				
+	            $conector = "";
+	            if($vo->cdPessoaRespUNCT != null){
+	            	$arrayParamUsuario = array(
+	            			voDemanda::$nmAtrCdPessoaRespUNCT,
+	            			voDemanda::$nmAtrCdPessoaRespUNCT,
+	            			$vo->cdPessoaRespUNCT,
+	            			constantes::$CD_CLASS_CAMPO_READONLY,
+	            			"disabled",
+	            	);	            	
+	            	echo "UNCT:&nbsp;". getComboUsuarioPorSetor($arrayParamUsuario, dominioSetor::$CD_SETOR_UNCT). "&nbsp;";	            	
+	            }
+	             if($vo->cdPessoaRespATJA != null){	             	
+	             	$assessorResp = $vo->cdPessoaRespATJA==null?constantes::$CD_OPCAO_NENHUM:$vo->cdPessoaRespATJA;
+	             	$arrayATJAResp = array(
+	             			voDemanda::$nmAtrCdPessoaRespATJA,
+	             			voDemanda::$nmAtrCdPessoaRespATJA,
+	             			$assessorResp,
+	             			true,
+	             			true,
+	             			"camponaoobrigatorio",
+	             			false,
+	             			"disabled",
+	             	);
+	             	
+	             	echo "ATJA:&nbsp;". getComboPessoaRespATJAConsulta($arrayATJAResp);	            
+	             }
+	             ?>
+	            </TD>				
+	        </TR>
+			<TR>
+	            <TH class="campoformulario" nowrap width="1%">Situação:</TH>
+	            <TD class="campoformulario" width="1%">
+	            <?php 
+	            echo $comboSituacao->getHtmlCombo("","", $vo->situacao, true, "camporeadonly", false, " disabled ");	            
+	             ?>
+	            </TD>
+	            <TH class="campoformulario" nowrap width="1%">Fase:</TH>
+	            <TD class="campoformulario" colspan=1>
+	            <?php 
+	            $comboFase= new select(dominioFaseDemanda::getColecao());
+	            echo dominioFaseDemanda::getHtmlChecksBoxDetalhamento($nmCampoFaseHtml, $vo->fase, 1);	             
+	             ?>
+	            </TD>	            
 	        </TR>
 				<?php
 				$colecaoTramitacao = $vo->dbprocesso->consultarDemandaGestaoTramitacao($vo);

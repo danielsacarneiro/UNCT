@@ -1159,6 +1159,7 @@ class dbDemanda extends dbprocesso {
 		static::validarGenerico($vo);
 		
 		$tpDemandaContrato = $vo->tpDemandaContrato;
+		$fase = $vo->fase;
 		$tipo = $vo->tipo;
 		//quando vem da tela eh um array
 		//quando vem do banco, deve ser uma string
@@ -1166,8 +1167,13 @@ class dbDemanda extends dbprocesso {
 		if(is_array($tpDemandaContrato)){
 			$tpDemandaContrato = voDemanda::getArrayComoStringCampoSeparador($tpDemandaContrato);
 		}
-					
+		
+		if(is_array($fase)){
+			$fase = voDemanda::getArrayComoStringCampoSeparador($fase);
+		}
+		
 		$vo->tpDemandaContrato = $tpDemandaContrato;
+		$vo->fase = $fase;
 		if(!dominioTipoDemandaContrato::existeItemArrayOuStrCampoSeparador(dominioTipoDemandaContrato::$CD_TIPO_REAJUSTE, $tpDemandaContrato)){
 			$vo->inTpDemandaReajusteComMontanteA = null;
 		}		
@@ -1195,6 +1201,8 @@ class dbDemanda extends dbprocesso {
 		$retorno .= $this->getVarComoNumero ( $vo->prioridade ) . ",";
 		$retorno .= $this->getVarComoData ( $vo->dtReferencia ). ",";
 		$retorno .= $this->getVarComoNumero ( $vo->cdPessoaRespATJA ). ",";
+		$retorno .= $this->getVarComoNumero ( $vo->cdPessoaRespUNCT ). ",";
+		$retorno.= $this-> getVarComoString($vo->fase). ",";
 		$retorno .= $this->getVarComoString ( voDemanda::getNumeroPRTSemMascara($vo->prt) ) . ",";
 		
 		$retorno .= $this->getVarComoString($vo->inLegado);
@@ -1235,6 +1243,12 @@ class dbDemanda extends dbprocesso {
 		$sqlConector = ",";		
 		
 		$retorno .= $sqlConector . voDemanda::$nmAtrCdPessoaRespATJA . " = " . $this->getVarComoNumero ( $vo->cdPessoaRespATJA );
+		$sqlConector = ",";
+		
+		$retorno .= $sqlConector . voDemanda::$nmAtrCdPessoaRespUNCT . " = " . $this->getVarComoNumero ( $vo->cdPessoaRespUNCT);
+		$sqlConector = ",";
+		
+		$retorno .= $sqlConector . voDemanda::$nmAtrFase . " = " . $this->getVarComoString ( $vo->fase );
 		$sqlConector = ",";
 		
 		$retorno .= $sqlConector . voDemanda::$nmAtrProtocolo . " = " . $this->getVarComoString ( voDemanda::getNumeroPRTSemMascara($vo->prt));

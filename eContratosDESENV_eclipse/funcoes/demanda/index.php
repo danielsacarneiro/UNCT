@@ -36,6 +36,7 @@ $qtdRegistrosPorPag = $filtro->qtdRegistrosPorPag;
 $numTotalRegistros = $filtro->numTotalRegistros;
 
 $inConsultaHTML = getInConsultarHTMLString();
+$nmCampoFaseHtml = voDemanda::$nmAtrFase."[]";
 ?>
 
 <!DOCTYPE html>
@@ -183,7 +184,9 @@ function detalharDemandaGestao(){
 						<?php echo $comboSituacao->getHtmlCombo(voDemanda::$nmAtrSituacao,voDemanda::$nmAtrSituacao."[]", $filtro->vodemanda->situacao, true, "camponaoobrigatorio", false, " multiple ");?>
 	                	<TD class="campoformulario" width="1%">Passou.por</TD>
 	                	<TD class="campoformulario" >
-						<?php echo $comboSetor->getHtmlCombo(filtroManterDemanda::$NmAtrCdSetorPassagem,filtroManterDemanda::$NmAtrCdSetorPassagem."[]", $filtro->cdSetorPassagem, true, "camponaoobrigatorio", false, " multiple ");?>	                	
+						<?php 
+						echo $comboSetor->getHtmlCombo(filtroManterDemanda::$NmAtrCdSetorPassagem,filtroManterDemanda::$NmAtrCdSetorPassagem."[]", $filtro->cdSetorPassagem, true, "camponaoobrigatorio", false, " multiple ");
+						?>	                	
 						</TD>
 	                </TR>
 	                </TABLE>
@@ -342,10 +345,11 @@ function detalharDemandaGestao(){
 	            <?php echo $comboOuE->getHtmlSelect(filtroManterDemanda::$NmAtrInOR_AND,filtroManterDemanda::$NmAtrInOR_AND, $filtro->InOR_AND, false, "camponaoobrigatorio", false);?>					            	            
 	        </TR>			
 			<TR>
-                <TH class="campoformulario" nowrap>Nome Contratada:</TH>
-                <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>"  value="<?php echo($filtro->nmContratada);?>"  class="camponaoobrigatorio" size="50"></TD>
-                <TH class="campoformulario" width="1%" nowrap>CNPJ/CPF Contratada:</TH>
-                <TD class="campoformulario" ><INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($filtro->docContratada);?>" class="camponaoobrigatorio" size="20" maxlength="18"></TD>
+                <TH class="campoformulario" nowrap>Contratada:</TH>
+                <TD class="campoformulario" width="1%" colspan=3>
+                Nome: <INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>"  value="<?php echo($filtro->nmContratada);?>"  class="camponaoobrigatorio" size="50">                
+                CNPJ/CPF: <INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($filtro->docContratada);?>" class="camponaoobrigatorio" size="20" maxlength="18">
+                </TD>
             </TR>
 			<TR>
 				<?php
@@ -393,11 +397,20 @@ function detalharDemandaGestao(){
 				?>
 			</TR>
             <TR>            
-	            <TH class="campoformulario" nowrap width="1%">Usuário:</TH>
-				<TD class="campoformulario" width="1%">
-				Tram.:<?php echo $comboUsuTramitacao->getHtmlSelect(filtroManterDemanda::$NmAtrCdUsuarioTramitacao,filtroManterDemanda::$NmAtrCdUsuarioTramitacao, $filtro->cdUsuarioTramitacao, true, "camponaoobrigatorio", false);?>
-				<br>ATJA:
+	            <TH class="campoformulario" nowrap width="1%">Resp.:</TH>
+				<TD class="campoformulario" width="1%" colspan=3>
 				<?php 
+				echo "Tram.:&nbsp;".$comboUsuTramitacao->getHtmlSelect(filtroManterDemanda::$NmAtrCdUsuarioTramitacao,filtroManterDemanda::$NmAtrCdUsuarioTramitacao, $filtro->cdUsuarioTramitacao, true, "camponaoobrigatorio", false). "&nbsp";
+
+				$arrayParamUsuario = array(
+						voDemanda::$nmAtrCdPessoaRespUNCT,
+						voDemanda::$nmAtrCdPessoaRespUNCT,
+						$filtro->vodemanda->cdPessoaRespUNCT,
+						"camponaoobrigatorio",
+						"",
+				);
+				echo "UNCT:&nbsp;".getComboUsuarioPorSetor($arrayParamUsuario, dominioSetor::$CD_SETOR_UNCT) . "&nbsp";				
+				
 				$arrayATJAResp = array(
 						voDemanda::$nmAtrCdPessoaRespATJA,
 						voDemanda::$nmAtrCdPessoaRespATJA,
@@ -409,11 +422,13 @@ function detalharDemandaGestao(){
 						"",
 				);
 				
-				echo getComboPessoaRespATJAConsulta($arrayATJAResp);
+				echo "ATJA.:&nbsp;".getComboPessoaRespATJAConsulta($arrayATJAResp);
 				?>				
-				</TD>
-				<TH class="campoformulario" width="1%">Tempo.Vida.Mínimo:</TH>
-				<TD class="campoformulario" >				
+				</TD>			
+			</TR>
+            <TR>            
+	            <TH class="campoformulario" nowrap width="1%">Tempo.Vida.Mínimo:</TH>
+				<TD class="campoformulario" width="1%">
 				Última Tramitação: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=filtroManterDemanda::$ID_REQ_NuTempoVidaMinimoUltimaTram?>" name="<?=filtroManterDemanda::$ID_REQ_NuTempoVidaMinimoUltimaTram?>"  value="<?php echo(complementarCharAEsquerda($filtro->nuTempoVidaMinimoUltimaTram, "0", TAMANHO_CODIGOS_SAFI));?>"  class="camponaoobrigatorio" size="3" maxlength="3"> (dias)|				
 				Total: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=filtroManterDemanda::$ID_REQ_NuTempoVidaMinimo?>" name="<?=filtroManterDemanda::$ID_REQ_NuTempoVidaMinimo?>"  value="<?php echo(complementarCharAEsquerda($filtro->nuTempoVidaMinimo, "0", TAMANHO_CODIGOS_SAFI));?>"  class="camponaoobrigatorio" size="3" maxlength="3"> (dias)
 				<?php 
@@ -423,8 +438,27 @@ function detalharDemandaGestao(){
 				);
 				echo getBorracha($nmCamposDoc, "");
 				?>
-				</TD>				
-			</TR>
+				</TD>
+				<TH class="campoformulario" nowrap width="1%">Fase:</TH>
+				<TD class="campoformulario"> 
+				<?php 				
+				$pArrayFase = array(
+						$nmCampoFaseHtml,
+						$filtro->vodemanda->fase,
+						null,
+						1,
+						true,
+						"",
+						false,
+						"",
+						true,
+						filtroManterDemanda::$NmAtrInOR_AND_Fase,
+						$filtro->inOR_AND_Fase
+				);
+				echo dominioFaseDemanda::getHtmlChecksBoxArray($pArrayFase);
+				?>
+				</TD>												
+			</TR>			
        <?php
        echo getComponenteConsultaFiltro($vo->temTabHistorico, $filtro);
         ?>

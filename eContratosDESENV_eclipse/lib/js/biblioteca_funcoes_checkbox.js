@@ -113,6 +113,16 @@ function retornarValoresCheckBoxesSelecionadosComoString(pNmCheckBox) {
 	return stringRetorno;
 }
 
+/**
+ * os checks dentro de pArrayCdsInalterados permanecerao com os valores originais, sem permissao de check ou uncheck
+ * @param pNmCheckBox
+ * @param pArrayCdsInalterados
+ * @returns
+ */
+function manterCheckBoxesInalterados(pNmCheckBox, pArrayCdsInalterados) {
+;			
+}
+
 //Determina o estado atual dos checkboxes da pagina;
 //0 = desmarcado
 //1 = marcado

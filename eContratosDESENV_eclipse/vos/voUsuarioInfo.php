@@ -7,13 +7,26 @@ include_once (caminho_util."documentoPessoa.php");
  
 Class voUsuarioInfo extends vousuario{	
 	 
+	static $nmAtrSetor = "user_setor";
+	
 	var $colecaoSetor = null;
 	 
 	var $dbprocesso = null;
+	var $setor = null;
 	// ...............................................................
 	// Funcoes ( Propriedades e mÃ©todos da classe )
 
-	function __construct() {
+	//os outros atributos estao na classe PAI vousuario que representa o wp_users wordpress com adaptacoes
+	//lembrando que o vousuarioinfo eh um hibrido entre os dados do econti e os dados do wordpress, 
+	// dai seu funcionamento distinto
+	function __construct($arrayChave = null) {
+		parent::__construct ($arrayChave);
+		$class = self::getNmClassProcesso ();
+		$this->dbprocesso = new $class ();
+		$this->colecaoSetor = array ();
+	}	
+	
+	/*function __construct() {
 		parent::__construct0();
 		//por enquanto nao vai ter historico
 		//quando guardarmos mais informacoes do usuario, colocamos historico
@@ -31,7 +44,7 @@ Class voUsuarioInfo extends vousuario{
 		);
 		$this->removeAtributos($arrayAtribRemover);
 		$this->varAtributosARemover = $arrayAtribRemover;
-	}
+	}*/
 	 
 	public static function getTituloJSP(){
 		return  "USUÁRIO-INFORMAÇÕES ADICIONAIS";
@@ -75,7 +88,8 @@ Class voUsuarioInfo extends vousuario{
 		//as colunas default de voentidade sao incluidas pelo metodo getDadosBanco do voentidade
 		$this->id = $registrobanco[self::$nmAtrID];
 		$this->login = $registrobanco[self::$nmAtrLogin];
-		$this->name  = $registrobanco[self::$nmAtrName];		
+		$this->name  = $registrobanco[self::$nmAtrName];
+		$this->setor = $registrobanco[self::$nmAtrSetor];
 	}
 
 	function getDadosFormulario(){
@@ -83,22 +97,31 @@ Class voUsuarioInfo extends vousuario{
 		$this->login = $_POST[self::$nmAtrLogin];
 		$this->name  = $_POST[self::$nmAtrName];
 		
-		$this->colecaoSetor = $_POST[voUsuarioSetor::$nmAtrCdSetor];
+		$this->setor = $this->getColecaoSetorFormulario();
 		
 		//completa com os dados da entidade
 		$this->getDadosFormularioEntidade();
 	}
 	
-	function setColecaoSetorRegistroBanco($colecao) {
+	/**
+	 * Pega os setores da tela e formata para incluir na base
+	 * @param unknown $colecao
+	 */
+	function getColecaoSetorFormulario() {
 		$retorno = null;
+		$colecao = @$_POST [voUsuarioInfo::$nmAtrSetor];
+		
 		if ($colecao != null) {
-			$retorno = array ();
-			foreach ( $colecao as $registrobanco ) {
-				$retorno [] = $registrobanco[voUsuarioSetor::$nmAtrCdSetor];
-			}
+			$colecao = getArrayComItemTamanhoFormatado($colecao);
+			$retorno = self::getArrayComoStringCampoSeparador($colecao);			
 		}
 	
-		$this->colecaoSetor = $retorno;
+		return $retorno;
+	}
+	
+	
+	function setColecaoSetorRegistroBanco() {
+		$this->colecaoSetor = static::getStringCampoSeparadorComoArray($this->setor);
 	}	
 	 
 	function toString(){

@@ -10,6 +10,8 @@ $vo->getDadosFormulario();
 //echo $vo->id;
 //var_dump($vo->colecaoSetor);
 
+//var_dump($vo->setor);
+
 
 putObjetoSessao("vo", $vo);
 

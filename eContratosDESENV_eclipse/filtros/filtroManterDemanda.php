@@ -37,6 +37,8 @@ class filtroManterDemanda extends filtroManter{
 	static $NmColNuTempoVida = "NmColNuTempoVida";
 	static $NmColNuTempoUltimaTram= "NmColNuTempoUltimaTram";
 	
+	static $NmAtrInOR_AND_Fase = "InOR_AND_Fase";
+	
 	
 	var $vodemanda;
 	var $vocontrato;
@@ -65,6 +67,7 @@ class filtroManterDemanda extends filtroManter{
 	var $vlGlobalFinal;
 	
 	var $inOR_AND;
+	var $inOR_AND_Fase;
 	var $tipoExcludente;
 	var $prioridadeExcludente;
 	var $cdClassificacaoContrato;
@@ -121,6 +124,7 @@ class filtroManterDemanda extends filtroManter{
 		//echoo("recuperando atributo filtro TIPO." . $this->nmFiltro . " " . $vodemanda->tipo);
 		
 		$vodemanda->tpDemandaContrato = @$_POST[voDemanda::$nmAtrTpDemandaContrato];
+		$vodemanda->fase = @$_POST[voDemanda::$nmAtrFase];
 		$vodemanda->inTpDemandaReajusteComMontanteA = @$_POST[voDemanda::$nmAtrInTpDemandaReajusteComMontanteA];
 		//var_dump($vodemanda->tpDemandaContrato);
 		$vodemanda->situacao  = @$_POST[voDemanda::$nmAtrSituacao];		
@@ -128,6 +132,7 @@ class filtroManterDemanda extends filtroManter{
 		$this->prioridadeExcludente = @$_POST[static::$NmAtrPrioridadeExcludente];
 		$vodemanda->prt = trim(@$_POST[voDemandaTramitacao::$nmAtrProtocolo]);
 		$vodemanda->cdPessoaRespATJA  = @$_POST[voDemanda::$nmAtrCdPessoaRespATJA];
+		$vodemanda->cdPessoaRespUNCT = @$_POST[voDemanda::$nmAtrCdPessoaRespUNCT];
 		
 		$vocontrato->anoContrato = @$_POST[vocontrato::$nmAtrAnoContrato];
 		$vocontrato->cdContrato = @$_POST[vocontrato::$nmAtrCdContrato];
@@ -163,6 +168,7 @@ class filtroManterDemanda extends filtroManter{
 		$this->cdClassificacaoContrato = @$_POST [voContratoInfo::$nmAtrCdClassificacao];
 		$this->inMaoDeObra = @$_POST [voContratoInfo::$nmAtrInMaoDeObra];
 		$this->inOR_AND = @$_POST[self::$NmAtrInOR_AND];
+		$this->inOR_AND_Fase = @$_POST[self::$NmAtrInOR_AND_Fase];
 		$this->inComPAAPInstaurado = @$_POST[self::$NmAtrInComPAAPInstaurado];
 		$this->inSEI = @$_POST[self::$NmAtrInSEI];
 
@@ -170,7 +176,7 @@ class filtroManterDemanda extends filtroManter{
 		if($this->inOR_AND == null){
 			$this->inOR_AND = constantes::$CD_OPCAO_OR;
 		}
-		
+				
 		if($this->cdOrdenacao == null){
 			$this->cdOrdenacao = constantes::$CD_ORDEM_CRESCENTE;
 		}
@@ -301,6 +307,18 @@ class filtroManterDemanda extends filtroManter{
 			$conector  = "\n AND ";
 		}
 		
+		$fase = $this->vodemanda->fase;
+		if ($fase != null
+				&& $fase != ""
+				&& !$this->isAtributoArrayVazio($fase)) {		
+					$inOrAndFase = $this->inOR_AND_Fase;					
+					$strFiltroFase = getSQLBuscarStringCampoSeparador($fase, voDemanda::$nmAtrFase, $inOrAndFase);
+					//echo $strFiltroTpDemanda;
+					$filtro = $filtro . $conector . $strFiltroFase;
+					$conector  = "\n AND ";
+				}
+		
+				
 		$tpDemandaContrato = $this->vodemanda->tpDemandaContrato;
 		if ($tpDemandaContrato != null
 				&& $tpDemandaContrato != ""
@@ -551,6 +569,17 @@ class filtroManterDemanda extends filtroManter{
 		
 			$conector  = "\n AND ";
 		}		
+		
+		if($this->vodemanda->cdPessoaRespUNCT != null){
+			$filtro = $filtro . $conector
+			. $nmTabela. "." .voDemanda::$nmAtrCdPessoaRespUNCT;
+				
+			$temp = " = " . $this->vodemanda->cdPessoaRespUNCT;
+			$temp = $this->vodemanda->cdPessoaRespUNCT == constantes::$CD_OPCAO_NENHUM?" IS NULL ":$temp;
+			$filtro .= $temp;
+		
+			$conector  = "\n AND ";
+		}
 		
 		if($this->vocontrato->anoContrato != null){
 			$filtro = $filtro . $conector

@@ -37,6 +37,7 @@ setCabecalho($titulo);
 
 $nmCampoTpDemandaContratoSimples = voDemanda::$nmAtrTpDemandaContrato;
 $nmCampoTpDemandaContrato = $nmCampoTpDemandaContratoSimples."[]";
+$nmCampoFaseHtml = voDemanda::$nmAtrFase."[]";
 $nmDivInformacoesComplementares = voDemanda::$ID_REQ_DIV_REAJUSTE_MONTANTE_A;
 $nmCampoTpDemandaReajuste = voDemanda::$nmAtrInTpDemandaReajusteComMontanteA;
 ?>
@@ -197,7 +198,7 @@ function iniciar(){
 	        ?>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" colspan=3>
+	            <TD class="campoformulario" nowrap colspan=3>
 	            <?php	            
 	            //getCampoDadosColecaoContratos($vo->colecaoContrato, true, "camponaoobrigatorio", true);
 	            getContratoEntradaDeDadosVOSimples($vo->colecaoContrato[0], constantes::$CD_CLASS_CAMPO_OBRIGATORIO, true, true, true, true);
@@ -213,7 +214,24 @@ function iniciar(){
 		            	];
 	            </SCRIPT>
 	            <INPUT type="checkbox" id="<?=vodemanda::$ID_REQ_InTemContrato?>" name="<?=vodemanda::$ID_REQ_InTemContrato?>" onClick="validaFormRequiredCheckBox(this, colecaoIDCamposRequired);"> *Não tem contrato.	            
-	            </TD>
+				</TD>
+			</TR>
+				        <TR>
+				            <TH class="campoformulario" width="1%">Resp.:</TH>
+				            <TD class="campoformulario" colspan=3>
+				            <?php
+				            $arrayParamUsuario = array(
+				            		voDemanda::$nmAtrCdPessoaRespUNCT,
+				            		voDemanda::$nmAtrCdPessoaRespUNCT,
+				            		$vo->cdPessoaRespUNCT, 
+				            		"camponaoobrigatorio",
+				            		"required",				            		
+				            );
+				            echo "UNCT:&nbsp;".getComboUsuarioPorSetor($arrayParamUsuario, dominioSetor::$CD_SETOR_UNCT) . "&nbsp";
+				            echo "ATJA:&nbsp;".getComboPessoaRespPA(voDemanda::$nmAtrCdPessoaRespATJA, voDemanda::$nmAtrCdPessoaRespATJA, $vo->cdPessoaRespATJA, "camponaoobrigatorio", "required");
+				          	?>
+							</TD>				        
+			            <TR>
 	        </TR>	        
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Situação:</TH>
@@ -222,12 +240,12 @@ function iniciar(){
 	            echo $comboSituacao->getHtmlCombo(voDemanda::$nmAtrSituacao,voDemanda::$nmAtrSituacao, $vo->situacao, true, "campoobrigatorio", false, " required ");
 	            ?>
 				</TD>
-	            <TH class="campoformulario" width="1%">ATJA.Resp.:</TH>
+	            <TH class="campoformulario" width="1%">Fases:</TH>
 	            <TD class="campoformulario" >
 	            <?php
-	            echo getComboPessoaRespPA(voDemanda::$nmAtrCdPessoaRespATJA, voDemanda::$nmAtrCdPessoaRespATJA, $vo->cdPessoaRespATJA, "camponaoobrigatorio", "required");
+	            echo dominioFaseDemanda::getHtmlChecksBox($nmCampoFaseHtml, $vo->fase, null, 1, true, "");
 	          	?>
-				</TD>
+				</TD>				
 	        </TR>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">PRT/SEI(principal):</TH>
@@ -240,7 +258,9 @@ function iniciar(){
 							<SCRIPT language="JavaScript" type="text/javascript">
 				            	colecaoIDCdNaoObrigatorio = 
 					            	["<?=$nmCampoTpDemandaReajuste?>",
+					            	"<?=voDemanda::$nmAtrCdPessoaRespUNCT?>",
 					            	"<?=voDemanda::$nmAtrCdPessoaRespATJA?>",
+					            	"<?=voDemanda::$nmAtrFase?>",
 					            	"<?=voDemanda::$nmAtrProtocolo?>"
 					            	];
 				            </SCRIPT>

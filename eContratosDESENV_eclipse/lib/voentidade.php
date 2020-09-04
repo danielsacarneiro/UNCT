@@ -377,7 +377,7 @@ class voentidade extends multiplosConstrutores {
 		
 		return $retorno;
 	}
-	
+		
 	static function getArrayComoStringCampoSeparador($array) {		
 		if($array == null){
 			throw new excecaoGenerica("getArrayComoStringCampoSeparador não deve receber valor nulo.");

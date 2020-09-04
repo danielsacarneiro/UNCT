@@ -5,9 +5,7 @@
              <TBODY>
                 <TR>
                   <TH class="headertabeladados" width="1%">&nbsp;&nbsp;X</TH>
-                    <TH class="headertabeladados" width="1%" nowrap>Ano</TH>
-                    <TH class="headertabeladados" width="1%">Num.</TH>
-                    <TH class="headertabeladados" width="1%">Tipo</TH>
+                    <TH class="headertabeladados" width="1%" nowrap>Contrato</TH>
                     <TH class="headertabeladados" width="1%">Espécie</TH>
                     <TH class="headertabeladados" width="20%">Contratada</TH>
                     <TH class="headertabeladados" width="1%">CNPJ/CNPF</TH>
@@ -20,7 +18,7 @@
                     <TH class="headertabeladados" width="1%" nowrap>Global</TH>
                 </TR>
                 <?php
-                $colspan = 14;
+                $colspan = 12;
                 if (is_array($colecao))
                         $tamanho = sizeof($colecao);
                 else 
@@ -29,7 +27,7 @@
                 for ($i=0;$i<$tamanho;$i++) {
                         $voAtual = new vocontrato();
                         $voAtual->getDadosBanco($colecao[$i]);
-                        $especie = getDsEspecie($voAtual);                    
+                        $especie = getDsEspecie($voAtual, false);                    
                                                 
                         $sq = $colecao[$i][vocontrato::$nmAtrSqContrato];
                         $msgAlertaSq = "onMouseOver=toolTip('seq:".$sq."') onMouseOut=toolTip()";
@@ -81,16 +79,17 @@
                         }                        
                         $tagCelula = "class='$classColuna' " . $mensagemAlerta;
                         
-                        $tipo = $dominioTipoContrato->getDescricao($colecao[$i]["ct_tipo"]); 
-                                                
+                        $tipo = $dominioTipoContrato->getDescricao($colecao[$i]["ct_tipo"]);
+                        
+                        $contrato = formatarCodigoAnoComplemento($voAtual->cdContrato,
+                        		$voAtual->anoContrato,
+                        		$dominioTipoContrato->getDescricao($voAtual->tipo));                                                
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados" <?=$msgAlertaSq?>>
 					<?=getHTMLRadioButtonConsulta("rdb_consulta", "rdb_consulta", $voAtual);?>
                     </TD>
-                    <TD class="tabeladadosalinhadodireita"><?php echo $colecao[$i]["ct_exercicio"];?></TD>
-                    <TD class="tabeladadosalinhadodireita" ><?php echo complementarCharAEsquerda($colecao[$i]["ct_numero"], "0", 3)?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $tipo?></TD>
+                    <TD class="tabeladadosalinhadodireita" nowrap><?php echo $contrato;?></TD>
                     <TD class="tabeladados"><?php echo $especie?></TD>
                     <TD class="tabeladados"><?php echo $colecao[$i]["ct_contratada"]?></TD>
                     <TD class="tabeladados" nowrap><?php echo documentoPessoa::getNumeroDocFormatado($colecao[$i]["ct_doc_contratada"])?></TD>

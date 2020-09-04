@@ -4,7 +4,7 @@ include_once(caminho_lib ."filtroManter.php");
 
 class filtroManterUsuario extends filtroManter{
     
-    public static $nmFiltro = "filtroManterUsuario";
+    public $nmFiltro = "filtroManterUsuario";
     
     var $id;
     var $name;
@@ -16,7 +16,7 @@ class filtroManterUsuario extends filtroManter{
 	function getFiltroFormulario() {        
         $this->id = @$_POST[voUsuarioInfo::$nmAtrID];
         $this->name = @$_POST[voUsuarioInfo::$nmAtrName];
-        $this->cdSetor = @$_POST[voUsuarioSetor::$nmAtrCdSetor];        
+        $this->cdSetor = @$_POST[voUsuarioInfo::$nmAtrSetor];        
 	}
     	
 	function getFiltroConsultaSQL($comAtributoOrdenacao = null){
@@ -25,7 +25,7 @@ class filtroManterUsuario extends filtroManter{
 		$conector  = "";
 		
         $nmTabela = vousuario::getNmTabelaStatic($this->isHistorico());
-        $nmTabelaUsuSetor = voUsuarioSetor::getNmTabela ();
+        $nmTabelaUsuInfo = voUsuarioInfo::getNmTabela ();
         //$nmTabelaComplementar = vousuario::getNmTabelaDadosComplementares();
         if($this->nmEntidadePrincipal != null){
         	$nmTabela = $this->nmEntidadePrincipal; 
@@ -61,9 +61,10 @@ class filtroManterUsuario extends filtroManter{
 		
 		if($this->cdSetor != null){
 			$filtro = $filtro . $conector
-			. $nmTabelaUsuSetor. "." .voUsuarioSetor::$nmAtrCdSetor
-			. " = "
-			. $this->cdSetor
+			. $nmTabelaUsuInfo . "." .voUsuarioInfo::$nmAtrSetor
+			. " LIKE '%"
+			. complementarCharAEsquerda($this->cdSetor, "0", 2)
+			. "%'"
 			;
 		
 					$conector  = "\n AND ";
@@ -74,15 +75,15 @@ class filtroManterUsuario extends filtroManter{
 			$nmTabelaWPUsersMeta = vousuarioMeta::getNmTabela ();
 			$queryJoin .= "\n LEFT JOIN " . $nmTabelaWPUsersMeta;
 			$queryJoin .= "\n ON ";
-			$queryJoin .= $nmTabelaWPUsers . "." . vousuario::$nmAtrID . "=" . $nmTabelaUsuSetor . "." . voUsuarioSetor::$nmAtrID;
+			$queryJoin .= $nmTabelaWPUsers . "." . vousuario::$nmAtrID . "=" . $nmTabelaUsuInfo . "." . voUsuarioInfo::$nmAtrID;
 				
 			$filtro = $filtro . $conector
-			. $nmTabelaComplementar. "." .voUsuarioSetor::$nmAtrCdSetor
-			. " = "
-					. $this->cdSetor
-					;
+			. " LIKE '%"
+			. complementarCharAEsquerda($this->cdSetor, "0", 2)
+			. "%'"
+			;
 		
-					$conector  = "\n AND ";
+			$conector  = "\n AND ";
 		
 		}
 		

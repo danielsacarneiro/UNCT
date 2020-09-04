@@ -762,6 +762,16 @@ function getRadioButton($idRadio, $nmRadio, $chave, $checked, $complementoHTML) 
 	$retorno = "<INPUT type='radio' id='" . $idRadio . "' name='" . $nmRadio . "' value='" . $chave . "' " . $checked . " $complementoHTML>";
 	return $retorno;
 }
+
+/**
+ * @deprecated
+ * @param unknown $idRadio
+ * @param unknown $nmRadio
+ * @param unknown $chave
+ * @param unknown $checked
+ * @param unknown $complementoHTML
+ * @return string
+ */
 function getCheckBox($idRadio, $nmRadio, $chave, $checked = null, $complementoHTML = null) {
 	$retorno = "<INPUT type='checkbox' id='" . $idRadio . "' name='" . $nmRadio . "' value='" . $chave . "' " . $checked . " $complementoHTML>";
 	return $retorno;

@@ -77,6 +77,7 @@ class dbprocesso {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
 		// $temUsuInclusao = false;
 		$temUsuInclusao = existeItemNoArray ( voentidade::$nmAtrCdUsuarioInclusao, $vo->getTodosAtributos () );
+		//var_dump($vo->getTodosAtributos ());
 		$temUsuUltAlteracao = existeItemNoArray ( voentidade::$nmAtrCdUsuarioUltAlteracao, $vo->getTodosAtributos () );
 		$temUsuHistorico = $vo->temTabHistorico && $isHistorico;
 		
