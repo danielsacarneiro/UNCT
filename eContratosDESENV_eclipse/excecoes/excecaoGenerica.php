@@ -10,6 +10,7 @@ class excecaoGenerica extends Exception
 	static $CD_EXCECAO_NUM_PROC_LIC_INVALIDO = 4;
 	static $CD_EXCECAO_SISTEMA_MANUTENCAO = 5;
 	static $CD_EXCECAO_CHAVE_INEXISTENTE = 6;
+	static $CD_EXCECAO_METODO_NAO_IMPLEMENTADO = 7;
 	static $CD_EXCECAO_CHAVE_DUPLICADA = 1062;	
 	
     // Redefine a exceção de forma que a mensagem não seja opcional

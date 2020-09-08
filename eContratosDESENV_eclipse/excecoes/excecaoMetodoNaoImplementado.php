@@ -1,0 +1,16 @@
+<?php
+/**
+ * Define uma classe de exceção
+*/
+class excecaoMetodoNaoImplementado extends excecaoGenerica
+{
+	// Redefine a exceção de forma que a mensagem não seja opcional
+	public function __construct($message = "Método não implementado.", Exception $previous = null) {
+		// código
+
+		// garante que tudo está corretamente inicializado
+		parent::__construct($message, excecaoGenerica::$CD_EXCECAO_METODO_NAO_IMPLEMENTADO, $previous);
+	}
+
+}
+?>
