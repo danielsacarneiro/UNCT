@@ -7,6 +7,7 @@ class dominioTipoProcLicitatorio extends dominio {
 	static $CD_TIPO_TECNICA_PRECO = "TP";
 	static $CD_TIPO_MAIOR_LANCE = "ML";
 	static $CD_TIPO_MAIOR_DESCONTO = "MD";
+	static $CD_TIPO_NAOSE_APLICA = "00";
 	
 	static $DS_TIPO_MENOR_PRECO = "Menor Preço";
 	static $DS_TIPO_MELHOR_TECNICA = "Melhor Técnica";
@@ -22,6 +23,7 @@ class dominioTipoProcLicitatorio extends dominio {
 	}
 	static function getColecao() {
 		$retorno = array (
+				constantes::$CD_OPCAO_NAO_SEAPLICA => constantes::$DS_OPCAO_NAO_SEAPLICA,
 				self::$CD_TIPO_MENOR_PRECO => self::$DS_TIPO_MENOR_PRECO,
 				self::$CD_TIPO_MELHOR_TECNICA => self::$DS_TIPO_MELHOR_TECNICA,
 				self::$CD_TIPO_TECNICA_PRECO => self::$DS_TIPO_TECNICA_PRECO,

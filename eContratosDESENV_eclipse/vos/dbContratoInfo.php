@@ -228,7 +228,6 @@ class dbContratoInfo extends dbprocesso {
 		$queryJoin .= $nmTabContratoMINSq . "." . vocontrato::$nmAtrSqContrato . "=" . $nmTabContratoMater . "." . vocontrato::$nmAtrSqContrato;
 		
 		//TABELA $nmTabContratoATUAL
-		//pega o registro com maior sequencial, desde que a data final de vigencia nao seja nula ou '0000-00-00'
 		$queryJoin .= "\n LEFT JOIN ";
 		$queryJoin .= " (SELECT " . $groupbyinterno . ", MAX(" . vocontrato::$nmAtrSqContrato . ") AS " . vocontrato::$nmAtrSqContrato
 		. " FROM " . $nmTabContratoInterna;
@@ -256,8 +255,22 @@ class dbContratoInfo extends dbprocesso {
 		$queryJoin .= $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrCdPessoaContratada;
 	
 		$cdCampoSubstituir = "";
+		//pega o contrato atual (termo atual), maior sequencial, desde que a data final de vigencia nao seja nula ou '0000-00-00'
 		$nmColunaComparacao = vocontrato::$nmAtrDtVigenciaFinalContrato;
-		$cdCampoSubstituir = " WHERE $nmColunaComparacao IS NOT NULL AND $nmColunaComparacao <> '0000-00-00'";
+		$cdCampoSubstituir = " WHERE ($nmColunaComparacao IS NOT NULL AND $nmColunaComparacao <> '0000-00-00')";
+		
+		//analisar as informacoes que estao no filtroConsultarContratoConsolidacao
+		$inProduzindoEfeitos= $filtro->inProduzindoEfeitos;
+		if ($inProduzindoEfeitos != null) {
+			$nmColunaComparacao = vocontrato::$nmAtrDtPublicacaoContrato;
+			//pega o contrato atual (termo atual), de maior sequencial, desde que tenha sido publicado, provocando efeitos
+			if($inProduzindoEfeitos == constantes::$CD_SIM){				
+				$cdCampoSubstituir .= " AND ($nmColunaComparacao IS NOT NULL AND $nmColunaComparacao <> '0000-00-00')";
+			}/*else{
+				$cdCampoSubstituir .= " AND ($nmColunaComparacao IS NULL)";
+			}*/
+		}		
+		
 		if($filtro->cdEspecie != null){			
 			$cdCampoSubstituir .= " AND " . $filtro->getSQFiltroCdEspecie($nmTabContratoInterna);
 		}

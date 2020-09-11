@@ -5,18 +5,22 @@ class dominioComissaoProcLicitatorio extends dominio {
 	static $CD_CPL_II = 2;
 	static $CD_CPL_III = 3;
 	static $CD_CPL_CEL = 4;
+	static $CD_CPL_CEL_II = 5;
 	static $DS_CPL_I = "CPL-I";
 	static $DS_CPL_II = "CPL-II";
 	static $DS_CPL_III = "CPL-III";
 	static $DS_CPL_CEL = "CL-PROFISC";
+	static $DS_CPL_CEL_II = "CLII-PROFISC";
 	
 	static $NM_PREGOEIRO_CPL_I = "ODACY WELLINGTON DA SILVA";
 	static $NM_PREGOEIRO_CPL_II = "MARIA GORETE BRANDT DE CARVALHO";
 	static $NM_PREGOEIRO_CPL_III = "PATRICIA DE LUCENA FARIAS";
+	static $NM_PREGOEIRO_CEL_II = "ANA CAROLINA FURTADO";
 
 	static $CD_PESSOA_ODACY  = 474;
 	static $CD_PESSOA_GORETE = 473;
 	static $CD_PESSOA_PATRICIA = 451;
+	static $CD_PESSOA_CAROL = 570;
 	
 	// ...............................................................
 	// Construtor
@@ -28,7 +32,8 @@ class dominioComissaoProcLicitatorio extends dominio {
 				self::$CD_CPL_I => self::$DS_CPL_I,
 				self::$CD_CPL_II => self::$DS_CPL_II,
 				self::$CD_CPL_III => self::$DS_CPL_III,
-				self::$CD_CPL_CEL => self::$DS_CPL_CEL
+				self::$CD_CPL_CEL => self::$DS_CPL_CEL,
+				self::$CD_CPL_CEL_II => self::$DS_CPL_CEL_II,
 		);
 		
 		return $retorno;
@@ -42,6 +47,7 @@ class dominioComissaoProcLicitatorio extends dominio {
 				self::$CD_CPL_II => self::$CD_PESSOA_GORETE,
 				self::$CD_CPL_III => self::$CD_PESSOA_PATRICIA,
 				self::$CD_CPL_CEL => self::$CD_PESSOA_PATRICIA,
+				self::$CD_CPL_CEL_II => self::$CD_PESSOA_CAROL,
 		);
 	
 		return $retorno;
@@ -79,13 +85,17 @@ class dominioComissaoProcLicitatorio extends dominio {
 			$retorno = static::$NM_PREGOEIRO_CPL_I;
 		}else if ($proclic == static::$CD_CPL_II) {
 			$retorno = static::$NM_PREGOEIRO_CPL_II;
+		}else if ($proclic == static::$CD_CPL_CEL_II) {
+				$retorno = static::$NM_PREGOEIRO_CEL_II;
 		} else if ($proclic == static::$CD_CPL_III
 				|| $proclic == static::$CD_CPL_CEL) {
 			$retorno = static::$NM_PREGOEIRO_CPL_III;
 		} else if (existeStr1NaStr2ComSeparador ( $proclic, static::$DS_CPL_I)) {
 			$retorno = static::$NM_PREGOEIRO_CPL_I;
 		}else if (existeStr1NaStr2ComSeparador ( $proclic, static::$DS_CPL_II )) {
-			$retorno = static::$NM_PREGOEIRO_CPL_II;
+				$retorno = static::$NM_PREGOEIRO_CPL_II;
+		}else if (existeStr1NaStr2ComSeparador ( $proclic, static::$DS_CPL_CEL_II)) {
+			$retorno = static::$NM_PREGOEIRO_CEL_II;
 		} else if (existeStr1NaStr2ComSeparador ( $proclic, static::$DS_CPL_III ) 
 				|| existeStr1NaStr2ComSeparador ( $proclic, static::$DS_CPL_CEL)) {
 			$retorno = static::$NM_PREGOEIRO_CPL_III;

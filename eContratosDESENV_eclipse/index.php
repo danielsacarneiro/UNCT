@@ -29,6 +29,7 @@ setCabecalho($titulo);
     f1.adicionarItem(new Link('Documentos', '<?=caminho_funcoesHTML?>documento', ''));
     f1.adicionarItem(new Link('Orgãos gestores', '<?=caminho_funcoesHTML?>gestor', ''));
     f1.adicionarItem(new Link('Pessoas', '<?=caminho_funcoesHTML?>pessoa', ''));
+    f1.adicionarItem(new Link('Registro Livro', '<?=caminho_funcoesHTML?>registro_livro', ''));
 	f.adicionarItem(f1);
 	
 	f2 = new Tree('Serviço 02 (Contratos)');

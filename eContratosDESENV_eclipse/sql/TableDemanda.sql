@@ -276,21 +276,40 @@ DELIMITER $$
 DROP PROCEDURE IF EXISTS manterDemandas $$
 CREATE PROCEDURE manterDemandas()
 BEGIN
-
+	/*static $CD_SITUACAO_DEMANDA_ABERTA = 1;
+	static $CD_SITUACAO_DEMANDA_FECHADA = 2;
+	static $CD_SITUACAO_DEMANDA_EM_ANDAMENTO = 3;
+	static $CD_SITUACAO_DEMANDA_SUSPENSA = 4;
+	static $CD_SITUACAO_DEMANDA_A_FAZER = 99;*/
   DECLARE done INTEGER DEFAULT 0;
   DECLARE ano_demanda INT;
   DECLARE cd_demanda INT;
 
   DECLARE cTabela CURSOR FOR 
-	select demanda.dem_ex, demanda.dem_cd from demanda
-	inner join demanda_tram
-	on demanda.dem_ex = demanda_tram.dem_ex
-	and demanda.dem_cd = demanda_tram.dem_cd
+	-- select count(*) from (    
+    select demanda.dem_ex, demanda.dem_cd from demanda    
+     LEFT JOIN ( SELECT MAX(dtm_sq) AS dtm_sq,dem_cd,dem_ex FROM demanda_tram GROUP BY dem_cd,dem_ex) TABELA_MAX 
+     ON demanda.dem_ex = TABELA_MAX.dem_ex 
+     AND demanda.dem_cd = TABELA_MAX.dem_cd 
+		 LEFT JOIN demanda_tram 
+		 ON demanda.dem_ex = demanda_tram.dem_ex 
+		 AND demanda.dem_cd = demanda_tram.dem_cd 
+		 AND TABELA_MAX.dtm_sq = demanda_tram.dtm_sq
+			 /*LEFT JOIN demanda_tram DEMANDA_SEI
+			 ON demanda.dem_ex = DEMANDA_SEI.dem_ex 
+			 AND demanda.dem_cd = DEMANDA_SEI.dem_cd */         
 	where 
-	dem_situacao = 1
+	dem_situacao in (1,3)
+    and in_desativado = 'N'
+    -- static $CD_SETOR_UNCT = 2;
+    and (
+			(demanda_tram.dem_ex is null and dem_cd_setor = 2) -- SEM TRAMITACAO E ESTA NA UNCT
+			or (demanda_tram.dem_ex is not null and demanda_tram.dtm_cd_setor_destino = 2) -- COM TRAMITACAO E ESTA NA UNCT
+            )
+	 and (demanda.dtm_prt NOT IN (SELECT * FROM demanda_SEI) OR demanda.dtm_prt IS NULL)
 	group by demanda.dem_ex, demanda.dem_cd
-	having count(*) > 1;
-	
+    -- ) teste
+	;
   DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;  
   
   OPEN cTabela;  
@@ -302,7 +321,7 @@ BEGIN
 		IF NOT done THEN
         
         update demanda
-		set dem_situacao = 3
+		set dem_situacao = 2, cd_usuario_ultalt = 26 -- usuario batch
 		WHERE demanda.dem_ex = ano_demanda
           AND demanda.dem_cd = cd_demanda;
         	

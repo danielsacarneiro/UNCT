@@ -169,11 +169,16 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
         $retorno = "";
         $sqlConector = "";
                         
+        if($vo->tipo != null){
+        	$retorno.= $sqlConector . voProcLicitatorio::$nmAtrTipo . " = " . $this->getVarComoString($vo->tipo);
+        	$sqlConector = ",";
+        }
+        
         if($vo->cdModalidade != null){
         	$retorno.= $sqlConector . voProcLicitatorio::$nmAtrCdModalidade . " = " . $this->getVarComoString($vo->cdModalidade);
         	$sqlConector = ",";
         }
-        
+                
         if($vo->numModalidade != null){
         	$retorno.= $sqlConector . voProcLicitatorio::$nmAtrNumModalidade . " = " . $this->getVarComoNumero($vo->numModalidade);
         	$sqlConector = ",";

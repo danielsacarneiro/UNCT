@@ -33,6 +33,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	
 	static $ID_REQ_MesIntervaloFimVigencia = "ID_REQ_MesIntervaloFimVigencia";
 	static $ID_REQ_AnoIntervaloFimVigencia = "ID_REQ_AnoIntervaloFimVigencia";
+	static $ID_REQ_InProduzindoEfeitos = "ID_REQ_InProduzindoEfeitos";
 	
 	var $cdEspecie = "";
 	var $qtdDiasParaVencimento = "";
@@ -50,6 +51,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	
 	var $mesIntervaloFimVigencia= "";
 	var $anoIntervaloFimVigencia= "";
+	var $inProduzindoEfeitos = "";
 	
 	function __construct1($pegarFiltrosDaTela) {
 		parent::__construct1($pegarFiltrosDaTela);
@@ -75,6 +77,8 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		
 		$this->mesIntervaloFimVigencia = @$_POST [static::$ID_REQ_MesIntervaloFimVigencia];
 		$this->anoIntervaloFimVigencia = @$_POST [static::$ID_REQ_AnoIntervaloFimVigencia];
+		
+		$this->inProduzindoEfeitos = @$_POST [static::$ID_REQ_InProduzindoEfeitos];
 		
 	}
 	
@@ -165,6 +169,27 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 			
 			$conector = "\n AND ";
 		}
+	
+		//esse filtro deve ser conjulgado com o JOIN no dbContratoInfo
+		//isto porque, quando a producao dos efeitos for NAO, retornará os ultimos registros que ainda nao foram publicados
+		//ou seja, o JOIN, em dbContratoInfo, ja foi feito retornando o ultimo registro (mais atual)
+		//dai eh so verificar se a data publicacao EH NULA
+		//caso contrario, quando se desejar aqueles que produzem efeitos, basta, no JOIN do dbContratoInfo
+		//SOMENTE retornar o ultimo registro QUE TENHA A DATA DE PUBLICACAO DIFERENTE DE NULO, o que nao eh feito aqui
+		//ja que, para chegar aqui, o JOIN ja foi feito
+		$inProduzindoEfeitos= $this->inProduzindoEfeitos;
+		if ($inProduzindoEfeitos != null) {
+			$nmColunaComparacao = vocontrato::$nmAtrDtPublicacaoContrato;
+			//pega o contrato atual (termo atual), de maior sequencial, desde que tenha sido publicado, provocando efeitos
+			if($inProduzindoEfeitos == constantes::$CD_NAO){
+				$filtro = $filtro . $conector 
+				. "(". static::$NmTabContratoATUAL . ".$nmColunaComparacao IS NULL "
+				. " OR ". static::$NmTabContratoATUAL. ".$nmColunaComparacao = '0000-00-00')";
+				//$cdCampoSubstituir .= " AND ($nmColunaComparacao IS NOT NULL AND $nmColunaComparacao <> '0000-00-00')";
+			}
+			
+			$conector = "\n AND ";
+		}		
 		
 		// atributos do filtromanter
 		if ($this->anoContrato != null) {

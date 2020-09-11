@@ -401,14 +401,17 @@ function detalharDemandaGestao(){
 				<TD class="campoformulario" width="1%" colspan=3>
 				<?php 
 				echo "Tram.:&nbsp;".$comboUsuTramitacao->getHtmlSelect(filtroManterDemanda::$NmAtrCdUsuarioTramitacao,filtroManterDemanda::$NmAtrCdUsuarioTramitacao, $filtro->cdUsuarioTramitacao, true, "camponaoobrigatorio", false). "&nbsp";
-
+				
 				$arrayParamUsuario = array(
 						voDemanda::$nmAtrCdPessoaRespUNCT,
 						voDemanda::$nmAtrCdPessoaRespUNCT,
 						$filtro->vodemanda->cdPessoaRespUNCT,
+						true,
+						true,
 						"camponaoobrigatorio",
+						false,
 						"",
-				);
+				);								
 				echo "UNCT:&nbsp;".getComboUsuarioPorSetor($arrayParamUsuario, dominioSetor::$CD_SETOR_UNCT) . "&nbsp";				
 				
 				$arrayATJAResp = array(

@@ -144,7 +144,7 @@ class dbcontrato extends dbprocesso {
 		$queryJoin .= $nmTabContratoModSqMAXReajuste . "." . voContratoModificacao::$nmAtrSq . "=" . $nmTabelaContratoUltValorReajustado . "." . voContratoModificacao::$nmAtrSq;
 
 		//AGORA PARA REPACTUACAO
-		//se o contratoModMAx for repactuacoa, este sera o valor utilizado como valor referencia para acrescimo
+		//se o contratoModMAx for repactuacao, este sera o valor utilizado como valor referencia para acrescimo
 		//tendo em vista que a repactuacao tem efeito de nova contratacao
 		$queryJoin .= "\n LEFT JOIN ";
 		$queryJoin .= "\n\n (SELECT " . $groupbyinterno . ", MAX(" . voContratoModificacao::$nmAtrSq . ") AS " . voContratoModificacao::$nmAtrSq;
@@ -1217,9 +1217,12 @@ class dbcontrato extends dbprocesso {
 			 $retorno->dtVigenciaInicial = $this->getDataLinhaImportacao ( $retorno->dtVigenciaInicial );
 			 $retorno->dtVigenciaFinal = $this->getDataLinhaImportacao ( $retorno->dtVigenciaFinal );
 
-			 $retorno->cdUsuarioInclusao = "null";
-			 $retorno->cdUsuarioUltAlteracao = "null";
+			 /*$retorno->cdUsuarioInclusao = "null";
+			 $retorno->cdUsuarioUltAlteracao = "null";*/
 
+			 $retorno->cdUsuarioInclusao = constantes::$CD_USUARIO_BATCH;
+			 $retorno->cdUsuarioUltAlteracao = constantes::$CD_USUARIO_BATCH;
+			 
 			 /*
 			  * echo "<br>data assinatura: " . $retorno->dtAssinatura;
 			  * echo "<br>data dtVigenciaInicial: " . $retorno->dtVigenciaInicial;

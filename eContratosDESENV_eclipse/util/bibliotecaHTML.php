@@ -226,7 +226,7 @@ function getOrdemAtributos() {
 	return $varAtributos;
 }
 function incluirUsuarioDataHoraDetalhamento($voEntidade) {
-	$USUARIO_BATCH = "IMPORT.PLANILHA";
+	$USUARIO_BATCH = constantes::$NM_USUARIO_BATCH;
 	$nmusuinclusao = $voEntidade->nmUsuarioInclusao;
 	$nmusualteracao = $voEntidade->nmUsuarioUltAlteracao;
 	

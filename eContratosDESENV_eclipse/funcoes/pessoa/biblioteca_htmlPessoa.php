@@ -146,11 +146,6 @@ function getComboPessoaRespATJAConsulta($arrayParam){
 }
 
 function getComboUsuarioPorSetor($pArray, $cdSetor){
-	$idCampo = $pArray[0];
-	$nmCampo = $pArray[1];
-	$cdOpcaoSelecionada  = $pArray[2];
-	$classCampo = $pArray[3];
-	$tagHtml = $pArray[4];
 	
 	$dbprocesso = new dbUsuarioInfo();
 	$filtro = new filtroManterUsuario(false);
@@ -159,8 +154,8 @@ function getComboUsuarioPorSetor($pArray, $cdSetor){
 	
 	$select = new select(array());
 	$select->getRecordSetComoColecaoSelect(voUsuarioInfo::$nmAtrID, voUsuarioInfo::$nmAtrName, $colecao);
-
-	return getComboColecaoGenerico($select->colecao, $idCampo, $nmCampo, $cdOpcaoSelecionada, $classCampo, $tagHtml);
+	
+	return $select->getHtmlComboArray ( $pArray );
 }
 
 function getComboPessoaRespPA($idCampo, $nmCampo, $cdOpcaoSelecionada, $classCampo, $tagHtml){	

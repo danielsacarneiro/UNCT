@@ -34,13 +34,14 @@ include_once 'normativos.php';
     static $DS_OPCAO_TODOS = "Todos";
     static $DS_OPCAO_NENHUM = "Nenhum";
     static $DS_OPCAO_NAO_INFORMADO = "Não informado";
-    static $DS_OPCAO_NAO_SEAPLICA = "Não se aplica";
+    static $DS_OPCAO_NAO_SEAPLICA = "-Não se aplica-";
      
     static $CD_SIM  = "S";
     static $CD_NAO  = "N"; 
     static $CD_OPCAO_TODOS  = "op_todos";
     static $CD_OPCAO_VAZIO = "op_vazio";
     static $CD_OPCAO_NENHUM = "op_nenhum";
+    static $CD_OPCAO_NAO_SEAPLICA = "00";
     
     static $CD_ORDEM_CRESCENTE = "ASC";
     static $CD_ORDEM_DECRESCENTE = "DESC";
@@ -94,5 +95,9 @@ include_once 'normativos.php';
     
     static $TAMANHO_CAMPO_VALOR = 15;
     static $TAMANHO_CAMPO_DATA = 10;
+    
+    //os dados do usuario batch estao no banco wordpress
+    static $CD_USUARIO_BATCH = 26;
+    static $NM_USUARIO_BATCH = "USUÁRIO BATCH";
 }
 ?>

@@ -1198,5 +1198,27 @@ function getLinkPortarias() {
 	return "Portarias " . getLinkPesquisa($link);
 }
 
+/**
+ * Texto a ser exibido nas telas de consultas
+ * @param unknown $voContrato
+ * @return string|mixed
+ */
+function getTextoGridContrato($voContrato, $empresa=null){
+	$contrato = formatarCodigoAnoComplemento($voContrato->cdContrato,
+			$voContrato->anoContrato,
+			dominioTipoContrato::getDescricao($voContrato->tipo));
+	
+	$complementoContrato = getContratoDescricaoEspecie($voContrato);
+	if($complementoContrato != ""){
+		$contrato .= "|$complementoContrato";
+	}
+	
+	if($empresa != null){
+		$contrato .= ": ".$empresa;
+	}
+	
+	return $contrato;	
+}
+
 
 ?>

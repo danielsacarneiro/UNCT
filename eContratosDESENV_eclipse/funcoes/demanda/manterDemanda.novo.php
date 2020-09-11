@@ -268,15 +268,11 @@ function iniciar(){
 				
 				&nbsp;</DIV>
 				</TD>
-			</TR>        	        	
-	        
-				<?php 
+			</TR>
+			<?php 
 				include_once 'biblioteca_htmlDemanda.php';
 				$colecaoTramitacao = $vo->dbprocesso->consultarDemandaTramitacao($vo);
 				mostrarGridDemanda($colecaoTramitacao, true);
-				?>
-       	    
-	        <?php 
 	            echo "<TR>" . incluirUsuarioDataHoraDetalhamento($vo) .  "</TR>";	        	
 	        ?>
             </TBODY>

@@ -341,7 +341,14 @@ function movimentacoes(){
 				include_once(caminho_util."dominioTpVigencia.php");
 				$comboVigencia = new select(dominioTpVigencia::getColecao());						
 				?>
-	            <TD class="campoformulario" nowrap colspan=3><?php echo $comboVigencia->getHtmlOpcao($filtro::$nmAtrTpVigencia,$filtro::$nmAtrTpVigencia, $filtro->tpVigencia, false);?></TD>
+	            <TD class="campoformulario" nowrap colspan=3>
+	            <?php 
+	            echo $comboVigencia->getHtmlOpcao($filtro::$nmAtrTpVigencia,$filtro::$nmAtrTpVigencia, $filtro->tpVigencia, false);
+	            echo "| Termo Atual Produzindo Efeitos?". $comboSimNao->getHtmlCombo(
+	            		filtroConsultarContratoConsolidacao::$ID_REQ_InProduzindoEfeitos,
+	            		filtroConsultarContratoConsolidacao::$ID_REQ_InProduzindoEfeitos, 
+	            		$filtro->inProduzindoEfeitos, true, "camponaoobrigatorio", false, "");
+	            ?></TD>
 		    </TR>					
 	        
        <?php

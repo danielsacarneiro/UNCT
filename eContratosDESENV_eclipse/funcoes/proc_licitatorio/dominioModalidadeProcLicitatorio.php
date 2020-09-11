@@ -21,7 +21,19 @@ class dominioModalidadeProcLicitatorio extends dominio {
 	
 	//PROFISCO
 	static $CD_MODALIDADE_LPI = "LPI";
-	static $DS_MODALIDADE_LPI = "Licitação Pública Internacional";
+	static $CD_MODALIDADE_LPN = "LPN";
+	static $CD_MODALIDADE_CONTRATACAO_DIRETA = "CD";
+	static $CD_MODALIDADE_COMPARACAO_PRECOS = "CP";
+	static $CD_MODALIDADE_SB_QUALIDADE_CUSTO = "SBQC";
+	static $CD_MODALIDADE_SB_QUALIDADE = "SBQ";
+		
+	static $DS_MODALIDADE_LPI_EXT = "Licitação Pública Internacional";
+	static $DS_MODALIDADE_LPN_EXT = "LPN";
+	static $DS_MODALIDADE_CONTRATACAO_DIRETA_EXT = "Contratação Direta";
+	static $DS_MODALIDADE_COMPARACAO_PRECOS_EXT = "Comparação Preço";
+	static $DS_MODALIDADE_SB_QUALIDADE_CUSTO_EXT = "Seleção.B.Qualidade Custo";
+	static $DS_MODALIDADE_SB_QUALIDADE_EXT = "Seleção.B.Qualidade";
+	
 	static $DS_PROFISCO = "PROFISCO";
 	
 	// ...............................................................
@@ -31,7 +43,25 @@ class dominioModalidadeProcLicitatorio extends dominio {
 	}
 	static function getColecaoPROFISCO() {
 		$retorno = array (
-				self::$CD_MODALIDADE_LPI => SELF::$DS_PROFISCO . "-" . self::$CD_MODALIDADE_LPI,	
+				self::$CD_MODALIDADE_LPI => SELF::$DS_PROFISCO . "-" . self::$CD_MODALIDADE_LPI,
+				self::$CD_MODALIDADE_LPN => SELF::$DS_PROFISCO . "-" . self::$CD_MODALIDADE_LPN,
+				self::$CD_MODALIDADE_CONTRATACAO_DIRETA => SELF::$DS_PROFISCO . "-" . self::$CD_MODALIDADE_CONTRATACAO_DIRETA,
+				self::$CD_MODALIDADE_COMPARACAO_PRECOS => SELF::$DS_PROFISCO . "-" . self::$CD_MODALIDADE_COMPARACAO_PRECOS,
+				self::$CD_MODALIDADE_SB_QUALIDADE_CUSTO => SELF::$DS_PROFISCO . "-" . self::$CD_MODALIDADE_SB_QUALIDADE_CUSTO,
+				self::$CD_MODALIDADE_SB_QUALIDADE => SELF::$DS_PROFISCO . "-" . self::$CD_MODALIDADE_SB_QUALIDADE,
+		);
+	
+		return $retorno;
+	}
+	
+	static function getColecaoPROFISCOExtenso() {
+		$retorno = array (
+				self::$CD_MODALIDADE_LPI => SELF::$DS_PROFISCO . "-" . self::$DS_MODALIDADE_LPI,	
+				self::$CD_MODALIDADE_LPN => SELF::$DS_PROFISCO . "-" . self::$DS_MODALIDADE_LPN,
+				self::$CD_MODALIDADE_CONTRATACAO_DIRETA => SELF::$DS_PROFISCO . "-" . self::$DS_MODALIDADE_CONTRATACAO_DIRETA,
+				self::$CD_MODALIDADE_COMPARACAO_PRECOS => SELF::$DS_PROFISCO . "-" . self::$DS_MODALIDADE_COMPARACAO_PRECOS,
+				self::$CD_MODALIDADE_SB_QUALIDADE_CUSTO => SELF::$DS_PROFISCO . "-" . self::$DS_MODALIDADE_SB_QUALIDADE_CUSTO,
+				self::$CD_MODALIDADE_SB_QUALIDADE => SELF::$DS_PROFISCO . "-" . self::$DS_MODALIDADE_SB_QUALIDADE,
 		);
 	
 		return $retorno;
