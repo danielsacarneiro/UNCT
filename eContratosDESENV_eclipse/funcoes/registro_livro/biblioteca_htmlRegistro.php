@@ -18,6 +18,7 @@ function getModeloPublicacaoPreenchido($registrobanco){
 	$datafim = $termo->dtVigenciaFinal;
 	
 	$contrato = getTextoHTMLNegrito(getTextoGridContrato($termo, null, false, true));
+	//echo "ano contrato: " . $termo->anoContrato;
 	
 	$publicacao = "$contrato-$empresa.$tpdoc:$doc." . getTextoHTMLDestacado("XXX-INCLUIR OBJETO RESUMIDO(MAX 30 LETRAS)-XXX", "blue");
 	$publicacao .= ".Vigência:$datainicio a $datafim.";
