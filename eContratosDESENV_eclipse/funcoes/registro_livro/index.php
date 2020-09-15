@@ -91,6 +91,10 @@ function alterar() {
 
 }
 
+function publicar() {
+	location.href="publicar.php";
+}
+
 </SCRIPT>
 <?=setTituloPagina($vo->getTituloJSP())?>
 </HEAD>
@@ -240,7 +244,12 @@ function alterar() {
                        <TD>
                         <TABLE class="barraacoesaux" cellpadding="0" cellspacing="0">
 	                   	<TR> 
-                            <?=getBotoesRodape();?>                            
+                            <?=getBotoesRodape();?>
+                            <TD class='botaofuncao'>
+                            <?php 
+                            echo getBotaoValidacaoAcesso("bttPublicar", "Publicar", "botaofuncaop", false, false,true,false,"onClick='javascript:publicar();' accesskey='p'");
+                            ?>
+                            </TD>                                                        
                          </TR>
                          </TABLE>
 	                   </TD>

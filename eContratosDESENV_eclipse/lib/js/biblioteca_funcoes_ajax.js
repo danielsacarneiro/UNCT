@@ -92,17 +92,25 @@ function getDadosPorChaveGenerica(chave, linkRelativoPHPBusca, idDivResultado) {
      imprimeResultado(result, "../pessoa/campoDadosContratadaAjax.php?voentidade=voPA&chave=" + chavePAAP);     
  }
 
- function getNovoCampoDadosContratoAjax(idDivResultado, pIndiceContratoAtual, pIsLimpar) {
+//o nmFuncaoJSGenericaSemParametro foi uma tentativa de passar por parametro alguma funcao javascript generica
+ //mas desistiu antes de testar
+ function getNovoCampoDadosContratoAjax(idDivResultado, pIndiceContratoAtual, pIsLimpar, nmFuncaoJSGenericaSemParametro = null) {
      var result = document.getElementById(idDivResultado);
      var limpar = (pIsLimpar != null && pIsLimpar);
      if(limpar)
     	 retorno = "S";
      else
     	 retorno = "N";
-     
+         
      pIndiceContratoAtual++;
+     var url = "../contrato/campoDadosContratoAjax.php?limpar="+retorno + "&indice=" +pIndiceContratoAtual;
+     
+     if(nmFuncaoJSGenericaSemParametro != null){
+    	 url = url + "&nmFuncaoJSGenericaSemParametro=" + nmFuncaoJSGenericaSemParametro;
+     }
+
       
-     imprimeResultado(result, "../contrato/campoDadosContratoAjax.php?limpar="+retorno + "&indice=" +pIndiceContratoAtual);     
+     imprimeResultado(result, url);     
  }
 
  function manterDadosTramitacaoPA(textofase, docfase, idDivResultado, funcao, indice) {     
@@ -168,7 +176,12 @@ function getDadosPorChaveGenerica(chave, linkRelativoPHPBusca, idDivResultado) {
              
              // Verifica se o arquivo foi encontrado com sucesso
              if (xmlreq.status == 200) {
-                 objectResult.innerHTML = xmlreq.responseText;
+            	 /*if(mantemConteudoAnterior){
+            		 objectResult.innerHTML = objectResult.innerHTML + xmlreq.responseText;
+            	 }else{
+            		 objectResult.innerHTML = xmlreq.responseText;
+            	 }*/
+            	 objectResult.innerHTML = xmlreq.responseText;
              }else{
 				/*
 			  // there was a problem with the request,

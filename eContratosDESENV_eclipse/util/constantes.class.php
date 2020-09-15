@@ -35,6 +35,7 @@ include_once 'normativos.php';
     static $DS_OPCAO_NENHUM = "Nenhum";
     static $DS_OPCAO_NAO_INFORMADO = "Não informado";
     static $DS_OPCAO_NAO_SEAPLICA = "-Não se aplica-";
+    static $DS_OPCAO_SELECIONE = "-- Selecione --";
      
     static $CD_SIM  = "S";
     static $CD_NAO  = "N"; 

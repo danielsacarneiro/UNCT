@@ -321,14 +321,17 @@ function incluirUsuarioDataHoraDetalhamento($voEntidade) {
 	// return utf8_decode($retorno);
 	return $retorno;
 }
-function getDsEspecie($voContrato, $porExtenso = true) {
+function getDsEspecie($voContrato, $porExtenso = true, $omitirEspecieMater=false) {
 	$retorno = null;
 	
 	$cdEspecie = $voContrato->cdEspecie;
 	$especie = $voContrato->especie;
+	//so pega o sq especie para termo diferente do MATER
 	if ($cdEspecie != dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER) {
 		$sqEspecie = $voContrato->sqEspecie;
 	}
+	
+	$omitirEspecieMater = $cdEspecie == dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER && $omitirEspecieMater;
 	
 	if ($especie != null || $cdEspecie != null) {
 		
@@ -336,7 +339,15 @@ function getDsEspecie($voContrato, $porExtenso = true) {
 			$sqEspecie = $sqEspecie . "º";
 		
 		if ($cdEspecie != null) {
-			$dsEspecie = !$porExtenso?$cdEspecie:dominioEspeciesContrato::getDescricao ( $cdEspecie );
+			//$dsEspecie = !$porExtenso?$cdEspecie:dominioEspeciesContrato::getDescricao ( $cdEspecie );			
+			if(!$porExtenso){
+				if(!$omitirEspecieMater){
+					$dsEspecie = $cdEspecie;
+				}
+			}else{
+				$dsEspecie = dominioEspeciesContrato::getDescricao ( $cdEspecie );
+			}
+			
 			$retorno = $sqEspecie . $dsEspecie;
 		} else
 			$retorno = $especie;
@@ -550,12 +561,12 @@ function getBotoesRodapeComRestricao($arrayBotoesARemover, $restringeBotaoSemVal
 function getLinkPesquisa($link) {
 	return getImagemLink ( "javascript:abrirJanelaAuxiliar('" . $link . "',true, false, false);\" ", "lupa.png" );
 }
-function getImagemLink($href, $nmImagem) {
+function getImagemLink($href, $nmImagem, $nmLink='lnkFramework') {
 	
 	// $pasta = pasta_imagens . "//";
 	$pasta = getPastaImagens () . "//";
 	
-	$html = "<A id='lnkFramework' name='lnkFramework' " . "href=\"" . $href . "\"" . " class='linkNormal'>" . "<img src='" . $pasta . $nmImagem . "'  width='22' height='22' border='0'></A>";
+	$html = "<A id='$nmLink' name='$nmLink' " . "href=\"" . $href . "\"" . " class='linkNormal'>" . "<img src='" . $pasta . $nmImagem . "'  width='22' height='22' border='0'></A>";
 	
 	// echo $pasta;
 	
@@ -1178,6 +1189,11 @@ function getFuncaoJSDetalhar($caminhoPagina=null, $isNovaGuia=false){
 	 alert('funcionou');}";*/	
 				
 	return $retorno;	
+}
+
+function getTextoHTMLTagMouseOver($texto, $tag){
+	$retorno = "<abbr title='$tag'>$texto</abbr>";
+	return $retorno;
 }
 
 function getTextoHTMLDestacado($texto, $cor="red", $sublinhado = true){

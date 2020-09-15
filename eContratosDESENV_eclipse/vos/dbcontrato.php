@@ -393,6 +393,44 @@ class dbcontrato extends dbprocesso {
 		$colecao = $this->consultarMontandoQuery($voContrato, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico, false, $orderby);
 		return $colecao;
 	}
+	
+	/**
+	 * usado pra consultar informacoes do contrato incluindo informacoes de contrato_licon
+	 * @param unknown $vo
+	 * @param unknown $isHistorico
+	 * @return unknown|string
+	 */
+	function consultarContratoComLicon($vo, $isHistorico, $isConsultaPorChave=true) {
+		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
+		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
+		$nmTabelaContratoLicon = voContratoLicon::getNmTabelaStatic ( false );
+	
+		$arrayColunasRetornadas = array (
+				$nmTabela . ".*",
+				"$nmTabelaContratoInfo." . voContratoInfo::$nmAtrDtProposta,
+				"$nmTabelaContratoInfo." . voContratoInfo::$nmAtrInEscopo,
+				"$nmTabelaContratoLicon." . voContratoLicon::$nmAtrAnoContrato,
+		);
+		
+		$queryJoin .= "\n left JOIN " . $nmTabelaContratoLicon;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrAnoContrato;
+		$queryJoin .= " AND " . $nmTabela . "." . vocontrato::$nmAtrCdContrato. "=" . $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrCdContrato;
+		$queryJoin .= " AND " . $nmTabela . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrTipoContrato;
+		$queryJoin .= " AND " . $nmTabela . "." . vocontrato::$nmAtrCdEspecieContrato . "=" . $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrCdEspecieContrato;
+		$queryJoin .= " AND " . $nmTabela . "." . vocontrato::$nmAtrSqEspecieContrato . "=" . $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrSqEspecieContrato;
+	
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaContratoInfo;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrCdContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrCdContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrAnoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrAnoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrTipoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
+				
+		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryJoin, $isHistorico , $isConsultaPorChave);
+	}
+	
 	function incluirSQL($voContrato) {
 		$atributosInsert = $voContrato->getTodosAtributos ();
 		// var_dump ($atributosInsert);

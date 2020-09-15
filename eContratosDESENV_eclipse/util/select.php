@@ -102,7 +102,7 @@ class select extends multiplosConstrutores {
 		
 		// inclui opcao vazio
 		if ($comOpcaoSelecione) {
-			$html .= $this->getOpcao ( "", "-- Selecione --", null );
+			$html .= $this->getOpcao ( "", constantes::$DS_OPCAO_SELECIONE, null );
 			// $html .= $this->getOpcao(constantes::$CD_OPCAO_VAZIO, "-- Selecione --", null);
 		}
 		if ($comOpcaoNenhum) {

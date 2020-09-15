@@ -2,8 +2,8 @@
 require_once (caminho_util . "selectExercicio.php");
 // require_once(caminho_util."constantes.class.php");
 include_once (caminho_funcoes . "pessoa/biblioteca_htmlPessoa.php");
-require_once (caminho_funcoes . vocontrato::getNmTabela () . "/dominioTipoContrato.php");
-require_once (caminho_funcoes . vocontrato::getNmTabela () . "/dominioEspeciesContrato.php");
+require_once (caminho_funcoes . "contrato/dominioTipoContrato.php");
+require_once (caminho_funcoes . "contrato/dominioEspeciesContrato.php");
 include_once (caminho_funcoes . "pessoa/biblioteca_htmlPessoa.php");
 function isContratoValido($voContrato) {
 	// so exibe contrato se tiver
@@ -184,7 +184,9 @@ function getContratoDetalhamentoParam($arrayParametro) {
 <?php
 	}
 }
-function getContratoDescricaoEspecie($voContrato){
+
+/*function getContratoDescricaoEspecie($voContrato){
+	
 	//var_dump($voContrato);
 	if($voContrato->cdEspecie != null){
 		if($voContrato->cdEspecie != dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER){
@@ -193,7 +195,13 @@ function getContratoDescricaoEspecie($voContrato){
 		$str = $strSqEspecie . dominioEspeciesContrato::getDescricaoStatic($voContrato->cdEspecie);
 	}
 	return $str;	
+}*/
+
+function getContratoDescricaoEspecie($voContrato, $porExtenso = true, $omitirEspecieMater=false){
+	//fica na biblioHTML
+	return getDsEspecie($voContrato, $porExtenso, $omitirEspecieMater);
 }
+
 function getContratoEntradaDeDados($tipoContrato, $cdContrato, $anoContrato, $arrayCssClass, $arrayComplementoHTML, $comChaveCompletaSeNulo = true) {
 	return getContratoEntradaDeDadosMais ( $tipoContrato, $cdContrato, $anoContrato, $arrayCssClass, $arrayComplementoHTML, null, $comChaveCompletaSeNulo );
 }
@@ -205,7 +213,7 @@ function getContratoEntradaDeDadosMais($tipoContrato, $cdContrato, $anoContrato,
 	return getContratoEntradaDeDadosVO ( $vocontrato, $arrayCssClass, $arrayComplementoHTML, $indiceContrato, false, $comChaveCompletaSeNulo );
 }
 function getContratoEntradaDeDadosVO($vocontrato, $arrayCssClass, $arrayComplementoHTML, $indiceContrato, $isExibirContratadaSePreenchido, $comChaveCompletaSeNulo = true, $pIsAlterarDemanda=false) {
-	return 	getContratoEntradaDeDadosVOGenerico($vocontrato, $arrayCssClass, $arrayComplementoHTML, $indiceContrato, $isExibirContratadaSePreenchido, $comChaveCompletaSeNulo, $pIsAlterarDemanda);
+	return 	getContratoEntradaDeDadosVOGenerico($vocontrato, $arrayCssClass, $arrayComplementoHTML, $indiceContrato, $isExibirContratadaSePreenchido, $comChaveCompletaSeNulo, $pIsAlterarDemanda, $comChaveCompletaSeNulo);
 }
 
 function getContratoEntradaDeDadosVOSimples($vocontrato, $nmClass = "camponaoobrigatorio", $isExibirContratadaSePreenchido, $pcomChaveCompleta=false, $pIsAlterarDemanda=false, $pTemInformacoesComplementares=false) {	
@@ -322,6 +330,12 @@ function getContratoEntradaArrayGenerico($pArray) {
 			$arraycomplementoHTML);
 }
 
+/**
+ * @deprecated
+ * usar o getContratoEntradaArrayGenerico
+ * @param unknown $pArray
+ * @return unknown
+ */
 function getContratoEntradaArray($pArray) {
 	$vocontrato = $pArray[0];
 	$nmClass = $pArray[1];
@@ -367,6 +381,17 @@ function getContratoEntradaArray($pArray) {
 	return 	getContratoEntradaDeDadosVOGenerico($vocontrato, $arrayCssClass, $arrayComplementoHTML, null, $isExibirContratadaSePreenchido, $pcomChaveCompleta, $pIsAlterarDemanda,$pcomChaveCompleta);
 }
 
+/**
+ * @param unknown $vocontrato
+ * @param unknown $arrayCssClass
+ * @param unknown $arrayJavaScript
+ * @param unknown $indiceContrato
+ * @param unknown $isExibirContratadaSePreenchido
+ * @param string $comChaveCompletaSeNulo
+ * @param string $pIsAlterarDemanda
+ * @param string $pcomChaveCompleta
+ * @param unknown $arrayComplementoHTML
+ */
 function getContratoEntradaDeDadosVOGenerico(
 		$vocontrato, 
 		$arrayCssClass, 
@@ -398,12 +423,30 @@ function getContratoEntradaDeDadosVOGenerico(
 	$cssCdEspecieContrato = $arrayCssClass [3];
 	$cssSqEspecieContrato = $arrayCssClass [4];
 	
+	//a regra eh o complemento seguir os dados principais do contrato
+	/*if($cssCdEspecieContrato == null){
+		$cssCdEspecieContrato = $cssCdContrato;
+	}
+	
+	if($cssSqEspecieContrato == null){
+		$cssSqEspecieContrato = $cssCdContrato;
+	}*/
+	
 	if($arrayJavaScript != null){
 		$htmlTipoContrato = $arrayJavaScript [0];
 		$htmlCdContrato = $arrayJavaScript [1];
 		$htmlAnoContrato = $arrayJavaScript [2];
 		$htmlCdEspecieContrato = $arrayJavaScript [3];
 		$htmlSqEspecieContrato = $arrayJavaScript [4];
+		
+		/*if($htmlCdEspecieContrato == null){
+			$htmlCdEspecieContrato = $htmlCdContrato;
+		}
+		
+		if($htmlSqEspecieContrato == null){
+			$htmlSqEspecieContrato = $htmlCdContrato;
+		}*/
+		
 	}
 	
 	if($arrayComplementoHTML != null){
@@ -468,18 +511,20 @@ function getContratoEntradaDeDadosVOGenerico(
 		$paramAlterarDemanda = "false";
 	
 	if ($isOpcaoMultiplos) {
+		//ATENCAO a funcao carregaPublicacaoContrato so existe na pagina de 'publicacao' MARRETA
 		echo "&nbsp;" . getImagemLink ( "javascript:carregaNovoCampoContrato('$nmCampoDivNovoContrato', $indiceContrato);\" ", "sinal_mais.gif" );
-		echo "&nbsp;" . getImagemLink ( "javascript:limparCampoContrato('$nmCampoDivContratoAnterior', $indiceContrato, '$nmCampoDivPessoaContratada', '$strCamposALimparSeparador',$paramAlterarDemanda);\" ", "sinal_menos.gif" );
+		echo "&nbsp;" . getImagemLink ( "javascript:limparCampoContrato('$nmCampoDivContratoAnterior', $indiceContrato, '$nmCampoDivPessoaContratada', '$strCamposALimparSeparador',$paramAlterarDemanda);\" ", "sinal_menos.gif", "LimparContrato");
 	}
 		
+	//echo !$pcomChaveCompleta?"chave completa false":"true";
 	if($pcomChaveCompleta){
 	?>
 		<br>
-		<INPUT type="text" id="<?=vocontrato::$nmAtrSqEspecieContrato?>" name="<?=vocontrato::$nmAtrSqEspecieContrato?>" value="<?=$sqEspecie;?>"  class="<?=$cssSqEspecieContrato?>" size="3" maxlength=2 <?=$htmlSqEspecieContrato?>> º
+		<INPUT type="text" id="<?=$pIDCampoSqEspecieContrato?>" name="<?=vocontrato::$nmAtrSqEspecieContrato?>" value="<?=$sqEspecie;?>"  class="<?=$cssSqEspecieContrato?>" size="3" maxlength=2 <?=$htmlSqEspecieContrato?>> º
 		<?php				
 		//cria o combo
 		$combo = new select(dominioEspeciesContrato::getColecao());
-		echo $combo->getHtmlCombo(vocontrato::$nmAtrCdEspecieContrato, vocontrato::$nmAtrCdEspecieContrato, $cdEspecie, true, $cssCdEspecieContrato, false, $htmlCdEspecieContrato);
+		echo $combo->getHtmlCombo($pIDCampoCdEspecieContrato, vocontrato::$nmAtrCdEspecieContrato, $cdEspecie, true, $cssCdEspecieContrato, false, $htmlCdEspecieContrato);
 		
 	}else if ($comChaveCompletaSeNulo) {
 		
@@ -495,8 +540,13 @@ function getContratoEntradaDeDadosVOGenerico(
 		<INPUT type="hidden"
 			id="<?=$pNmCampoSqEspecieContrato.$indiceContrato?>"
 			name="<?=$pNmCampoSqEspecieContrato?>" value="1">
-	<?php
+	<?php	
 	}
+	
+	if($indiceContrato != null && $indiceContrato != ""){
+		echo getTextoHTMLNegrito(" $indiceContrato º TERMO");
+	}
+	
 	$jsComplementarBorracha = "document.getElementById('$nmCampoDivPessoaContratada').innerHTML='';";
 	echo getBorracha($nmCamposContrato, $jsComplementarBorracha);	
 ?>		
@@ -554,7 +604,7 @@ function getCampoDadosContratoSimples($nmClass = "camponaoobrigatorio", $complem
 	return getCampoDadosContratoMultiplosPorIndice ( null, $nmClass,$complementoHTML,$comChaveCompletaSeNulo);
 }
 //function getCampoDadosContratoMultiplos($nmClass = "campoobrigatorio") {
-function getCampoDadosContratoMultiplos($isCampoObrigatorio = true) {	
+function getCampoDadosContratoMultiplos($isCampoObrigatorio = true, $pcomChaveCompleta=false, $complementoHTML=null) {	
 	//porque a funcao pode receber tanto um booleano quanto a string do nome da class
 	if($isCampoObrigatorio || $isCampoObrigatorio == constantes::$CD_CLASS_CAMPO_OBRIGATORIO){
 		$nmClass = constantes::$CD_CLASS_CAMPO_OBRIGATORIO;
@@ -563,13 +613,15 @@ function getCampoDadosContratoMultiplos($isCampoObrigatorio = true) {
 	}
 	
 	$indiceQtdContrato = 1;
-	$html = getCampoDadosContratoMultiplosPorIndice ( $indiceQtdContrato, $nmClass );
-	// $html .= "<INPUT type='hidden' id='". vocontrato::$ID_REQ_QTD_CONTRATOS . "' name='" . vocontrato::$ID_REQ_QTD_CONTRATOS . "' value='".$indiceQtdContrato."'>";
+	$html = getCampoDadosContratoMultiplosPorIndice ( $indiceQtdContrato, $nmClass, $complementoHTML, $pcomChaveCompleta);
+
 	return $html;
 }
 function getCampoDadosContratoMultiplosPorIndice($indice, $nmClass = "camponaoobrigatorio", $complementoHTML=null, $comChaveCompletaSeNulo = true) {
-	return getCampoDadosVariosContrato ( "", "", "", $indice, $nmClass,$complementoHTML,$comChaveCompletaSeNulo);
+	//return getCampoDadosVariosContrato ( "", "", "", $indice, $nmClass,$complementoHTML,$comChaveCompletaSeNulo);
+	return getCampoDadosContratoVOPorIndice ( new vocontrato(), $indice, false, $nmClass, $comChaveCompletaSeNulo, $complementoHTML);
 }
+
 function getCampoDadosColecaoContratos($colecaoContrato, $isExibirContratadaSePreenchido, $nmClass = "camponaoobrigatorio", $pIsAlterarDemanda=false) {	
 	// var_dump($colecaoContrato);
 	$i = 1;
@@ -586,7 +638,7 @@ function getCampoDadosColecaoContratos($colecaoContrato, $isExibirContratadaSePr
 		$html = getCampoDadosContratoVOPorIndice ( null, $i, $isExibirContratadaSePreenchido, $nmClass, true,null,$pIsAlterarDemanda );
 	}
 }
-function getCampoDadosVariosContrato($tipoContrato, $cdContrato, $anoContrato, $indice, $nmClass = "camponaoobrigatorio", $complementoHTML=null, $comChaveCompletaSeNulo = true) {
+/*function getCampoDadosVariosContrato($tipoContrato, $cdContrato, $anoContrato, $indice, $nmClass = "camponaoobrigatorio", $complementoHTML=null, $comChaveCompletaSeNulo = true) {
 	
 	$vocontrato = new vocontrato ();
 	$vocontrato->tipo = $tipoContrato;
@@ -594,9 +646,8 @@ function getCampoDadosVariosContrato($tipoContrato, $cdContrato, $anoContrato, $
 	$vocontrato->cdContrato = $cdContrato;
 		
 	return getCampoDadosContratoVOPorIndice ( $vocontrato, $indice, false, $nmClass, $comChaveCompletaSeNulo, $complementoHTML);
-}
-function getCampoDadosContratoVOPorIndice($vocontrato, $indice, $isExibirContratadaSePreenchido, $nmClass = "camponaoobrigatorio", $comChaveCompletaSeNulo = true, $complementoHTML=null, $pIsAlterarDemanda=false) {
-	
+}*/
+function getCampoDadosContratoVOPorIndice($vocontrato, $indice, $isExibirContratadaSePreenchido, $nmClass = "camponaoobrigatorio", $comChaveCompletaSeNulo = true, $complementoHTML=null, $pIsAlterarDemanda=false) {	
 	/*
 	 * $tipoContrato = $vocontrato->tipo;
 	 * $cdContrato = $vocontrato->cdContrato;
@@ -628,16 +679,21 @@ function getCampoDadosContratoVOPorIndice($vocontrato, $indice, $isExibirContrat
 	$arrayCssClass = array (
 			$nmClass,
 			$nmClass,
-			$nmClass 
+			$nmClass,
+			$nmClass,
+			$nmClass,
 	);
 	$arrayComplementoHTML = array (
 			" $required onChange=$chamadaFuncaoJS ",
 			" $required onBlur=$chamadaFuncaoJS ",
-			" $required onChange=$chamadaFuncaoJS " 
+			" $required onChange=$chamadaFuncaoJS ",
+			" $required onChange=$chamadaFuncaoJS ",
+			" $required onBlur=$chamadaFuncaoJS ",
 	);
 	
 	// $html = getContratoEntradaDeDadosMais ( $tipoContrato, $cdContrato, $anoContrato, $arrayCssClass, $arrayComplementoHTML, $indice );
 	$html = getContratoEntradaDeDadosVO ( $vocontrato, $arrayCssClass, $arrayComplementoHTML, $indice, $isExibirContratadaSePreenchido, $comChaveCompletaSeNulo,$pIsAlterarDemanda);
+	
 	return $html;
 }
 /**
@@ -1203,12 +1259,13 @@ function getLinkPortarias() {
  * @param unknown $voContrato
  * @return string|mixed
  */
-function getTextoGridContrato($voContrato, $empresa=null){
+function getTextoGridContrato($voContrato, $empresa=null, $porExtenso=true, $omitirEspecieMater = false){
 	$contrato = formatarCodigoAnoComplemento($voContrato->cdContrato,
 			$voContrato->anoContrato,
 			dominioTipoContrato::getDescricao($voContrato->tipo));
 	
-	$complementoContrato = getContratoDescricaoEspecie($voContrato);
+	$complementoContrato = getContratoDescricaoEspecie($voContrato, $porExtenso, $omitirEspecieMater);
+	
 	if($complementoContrato != ""){
 		$contrato .= "|$complementoContrato";
 	}

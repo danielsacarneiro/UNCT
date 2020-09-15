@@ -339,15 +339,36 @@ function movimentacoes(){
 				<TH class="campoformulario" nowrap>Tp.Vigência:</TH>
 				<?php
 				include_once(caminho_util."dominioTpVigencia.php");
-				$comboVigencia = new select(dominioTpVigencia::getColecao());						
+				$comboVigencia = new select(dominioTpVigencia::getColecaoComVazio());						
 				?>
 	            <TD class="campoformulario" nowrap colspan=3>
 	            <?php 
 	            echo $comboVigencia->getHtmlOpcao($filtro::$nmAtrTpVigencia,$filtro::$nmAtrTpVigencia, $filtro->tpVigencia, false);
-	            echo "| Termo Atual Produzindo Efeitos?". $comboSimNao->getHtmlCombo(
+	            
+	            //echo "| Na data específica: ";
+	            ?>
+	            <!--  <INPUT type="text"
+	            		id="<?=filtroConsultarContratoConsolidacao::$nmAtrDtVigencia?>"
+	            		name="<?=filtroConsultarContratoConsolidacao::$nmAtrDtVigencia?>"
+	            		value="<?php echo($filtro->dtVigencia);?>"
+	            		onkeyup="formatarCampoData(this, event, false);"
+	            				class="camponaoobrigatorio"
+	            						size="10"
+	            								maxlength="10" >-->
+	            <?php
+	            $textoTag = getTextoHTMLTagMouseOver("Termo Atual Produzindo Efeitos?", "Exibe somente os termos formalizados.");
+	            echo "| $textoTag". $comboSimNao->getHtmlCombo(
 	            		filtroConsultarContratoConsolidacao::$ID_REQ_InProduzindoEfeitos,
 	            		filtroConsultarContratoConsolidacao::$ID_REQ_InProduzindoEfeitos, 
 	            		$filtro->inProduzindoEfeitos, true, "camponaoobrigatorio", false, "");
+	            
+	            $nmCamposVigencia = array(
+	            		filtroConsultarContratoConsolidacao::$nmAtrTpVigencia,
+	            		filtroConsultarContratoConsolidacao::$nmAtrDtVigencia,
+	            		filtroConsultarContratoConsolidacao::$ID_REQ_InProduzindoEfeitos,
+	            );
+	            echo getBorracha($nmCamposVigencia, "");
+	             
 	            ?></TD>
 		    </TR>					
 	        

@@ -8,9 +8,9 @@
 */
 
 var _globalQtdContrato = 1;
-function carregaNovoCampoContrato(pNmCampoDiv, pIndice) {	
+function carregaNovoCampoContrato(pNmCampoDiv, pIndice, nmFuncaoJSGenericaSemParametro = null) {	
 
-	getNovoCampoDadosContratoAjax(pNmCampoDiv,pIndice, false);
+	getNovoCampoDadosContratoAjax(pNmCampoDiv,pIndice, false, nmFuncaoJSGenericaSemParametro);
 	_globalQtdContrato++;
 	
 	if(_globalQtdContrato > 9){

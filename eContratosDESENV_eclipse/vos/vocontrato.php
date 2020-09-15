@@ -5,6 +5,7 @@ include_once(caminho_funcoes."demanda/dominioTipoDemanda.php");
 include_once(caminho_funcoes."documento/dominioTpDocumento.php");
 include_once(caminho_funcoes."documento/biblioteca_htmlDocumento.php");
 include_once(caminho_funcoes."contrato/dominioConsultaArquivoContrato.php");
+include_once(caminho_funcoes. "contrato/biblioteca_htmlContrato.php");
 
 include_once (caminho_util."bibliotecaFuncoesPrincipal.php");
 include_once(caminho_funcoes. "contrato/dominioAutorizacao.php");

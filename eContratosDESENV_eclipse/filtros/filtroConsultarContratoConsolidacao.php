@@ -79,6 +79,9 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		$this->anoIntervaloFimVigencia = @$_POST [static::$ID_REQ_AnoIntervaloFimVigencia];
 		
 		$this->inProduzindoEfeitos = @$_POST [static::$ID_REQ_InProduzindoEfeitos];
+		if($this->inProduzindoEfeitos == null || $this->inProduzindoEfeitos == ""){
+			$this->inProduzindoEfeitos = constantes::$CD_SIM;
+		}
 		
 	}
 	
@@ -157,7 +160,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 			$conector = "\n AND ";
 		}
 		
-		if ($this->tpVigencia != null && $this->tpVigencia != constantes::$CD_OPCAO_TODOS) {
+		if ($this->tpVigencia != null && $this->tpVigencia != "") {//constantes::$CD_OPCAO_TODOS) {
 			$nmcoldtinicio = static::$NmTabContratoMater . "." . vocontrato::$nmAtrDtVigenciaInicialContrato;
 			$nmcoldtfim = static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato;
 							
@@ -170,6 +173,19 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 			$conector = "\n AND ";
 		}
 	
+		/*if ($this->dtVigencia != null && $this->dtVigencia != "") {
+			$nmcoldtinicio = vocontrato::$nmAtrDtVigenciaInicialContrato;
+			$nmcoldtfim = vocontrato::$nmAtrDtVigenciaFinalContrato;
+				
+			$filtro = $filtro . $conector . getSQLDataVigenteSimplesPorData(
+					$nmTabelaContrato, 
+					$this->dtVigencia, 
+					$nmcoldtinicio, 
+					$nmcoldtfim);
+				
+			$conector = "\n AND ";
+		}*/
+		
 		//esse filtro deve ser conjulgado com o JOIN no dbContratoInfo
 		//isto porque, quando a producao dos efeitos for NAO, retornará os ultimos registros que ainda nao foram publicados
 		//ou seja, o JOIN, em dbContratoInfo, ja foi feito retornando o ultimo registro (mais atual)

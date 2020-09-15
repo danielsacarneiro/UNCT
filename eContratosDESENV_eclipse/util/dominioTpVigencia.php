@@ -21,6 +21,15 @@ Class dominioTpVigencia extends dominio{
 				self::$CD_OPCAO_NAO_VIGENTES => self::$DS_OPCAO_NAO_VIGENTES
 		);
 	}
+	
+	static function getColecaoComVazio(){
+		return array(
+				"" => constantes::$DS_OPCAO_SELECIONE,
+				self::$CD_OPCAO_VIGENTES => self::$DS_OPCAO_VIGENTES ,
+				self::$CD_OPCAO_NAO_VIGENTES => self::$DS_OPCAO_NAO_VIGENTES
+		);
+	}
+	
 
 }
 ?>

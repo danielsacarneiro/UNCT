@@ -1,4 +1,26 @@
 <?php
+include_once(caminho_util. "dominio.class.php");
+
+Class dominioTpDOCPessoa extends dominio{
+	static $CD_TPDOC_CPF = "03";
+	static $CD_TPDOC_CNPJ = "02";
+	static $CD_TPDOC_RG = "01";
+	
+	static $DS_TPDOC_CPF = "CPF";
+	static $DS_TPDOC_CNPJ = "CNPJ";
+	static $DS_TPDOC_RG = "RG";
+	
+	// ...............................................................
+	// Construtor
+	static function getColecao(){
+		return array(
+				SELF::$CD_TPDOC_CPF => SELF::$DS_TPDOC_CPF,
+				SELF::$CD_TPDOC_CNPJ => SELF::$DS_TPDOC_CNPJ,
+				SELF::$CD_TPDOC_RG => SELF::$DS_TPDOC_RG,
+		);
+	}
+
+}
 /**
  * ValidaCPFCNPJ valida e formata CPF e CNPJ
  *
@@ -61,6 +83,11 @@ class documentoPessoa
 		}
 	}
     
+	//nome alternativo da funcao
+	function getTpDoc () {
+		return self::verifica_cpf_cnpj();
+	}
+	
 	/**
 	 * Verifica se todos os números são iguais
 	 * 	 * 
@@ -298,4 +325,8 @@ class documentoPessoa
 		return $documento->getNumDoc();
 	}
 	
+	static function getTpDocSemMascara($num){
+		$documento = new documentoPessoa($num);
+		return $documento->getTpDoc();
+	}
 }
