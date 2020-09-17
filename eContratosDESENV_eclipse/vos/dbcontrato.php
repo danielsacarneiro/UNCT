@@ -409,7 +409,8 @@ class dbcontrato extends dbprocesso {
 				$nmTabela . ".*",
 				"$nmTabelaContratoInfo." . voContratoInfo::$nmAtrDtProposta,
 				"$nmTabelaContratoInfo." . voContratoInfo::$nmAtrInEscopo,
-				//"$nmTabelaContratoLicon." . voContratoLicon::$nmAtrAnoDemanda, //usado para saber se ha contrato_licon relacionado
+				"$nmTabelaContratoLicon." . voContratoLicon::$nmAtrAnoDemanda, //usado para saber se ha contrato_licon relacionado
+				"$nmTabelaContratoLicon." . voContratoLicon::$nmAtrCdDemanda,
 		);
 		
 		$queryJoin .= "\n left JOIN " . $nmTabelaContratoLicon;

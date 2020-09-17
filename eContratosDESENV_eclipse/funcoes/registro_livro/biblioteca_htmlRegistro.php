@@ -20,7 +20,9 @@ function getModeloPublicacaoPreenchido($registrobanco){
 	$contrato = getTextoHTMLNegrito(getTextoGridContrato($termo, null, false, true));
 	//echo "ano contrato: " . $termo->anoContrato;
 	
-	$publicacao = "$contrato-$empresa.$tpdoc:$doc." . getTextoHTMLDestacado("XXX-INCLUIR OBJETO RESUMIDO(MAX 30 LETRAS)-XXX", "blue");
+	$publicacao = "$contrato-$empresa.$tpdoc:$doc."; 
+	//$publicacao	.= getTextoHTMLDestacado("XXX-INCLUIR OBJETO RESUMIDO(MAX 30 LETRAS)-XXX", "blue");
+	$publicacao	.= getTextoHTMLDestacado("XXX[RESUMIR OBJETO AO MÁXIMO]-". $termo->objeto . "-XXX[RESUMIR]", "blue");
 	$publicacao .= ".Vigência:$datainicio a $datafim.";
 	
 	
@@ -65,23 +67,25 @@ function getDadosPublicacaoContrato($chaveContrato, $indice) {
 	try{
 		$colecao = $dbcontrato->consultarContratoComLicon($vocontrato, false, false);
 		$tamanho = sizeof ( $colecao );
-
+		$registrobanco = $colecao[0];
+		
 		if ($colecao == ""){
 			throw new excecaoChaveRegistroInexistente ("DbProcesso. Consulta Chave Primária");
-		}
-				
-		if ($tamanho > 1){
-				throw new excecaoMaisDeUmRegistroRetornado ();
-		}		
+		}else if ($tamanho > 1 || $registrobanco[voContratoLicon::$nmAtrAnoDemanda] != null){
+			//caso tenha demanda preenchida, significa que ja houve pelo menos uma tentativa de publicacao
+			//se ja houve publicacao anterior, deve ser alertado
+			//o alerta eh igual aquele levantado em caso de mais de um registro. Dai irem para a mesma opcao
+			//levantando a mesma excecao
+			throw new excecaoMaisDeUmRegistroRetornado ();
+		}	
 		
-		$registrobanco = $colecao[0];
 		$publicacao = getModeloPublicacaoPreenchido($registrobanco);
 
 	}catch (excecaoChaveRegistroInexistente $ex){
-		$publicacao = getTextoHTMLDestacado("VERIFIQUE O ". ($indice) ."º TERMO. CONSTA COMO INEXISTENTE.");
+		$publicacao = getTextoHTMLDestacado("VERIFIQUE O ". ($indice) ."º REGISTRO. CONSTA COMO INEXISTENTE.");
 	}catch (excecaoMaisDeUmRegistroRetornado $ex){
 		//informa a existencia de publicacao anterior e deixa pro usuario pensar o que fazer.
-		$publicacao = getTextoHTMLDestacado("VERIFIQUE O ". ($indice) ."º TERMO. PARECE JÁ TER SIDO ENVIADO PARA PUBLICAÇÃO. APAGUE PARA DESCONSIDERAR.");
+		$publicacao = getTextoHTMLDestacado("VERIFIQUE O ". ($indice) ."º REGISTRO. É POSSÍVEL QUE JÁ TENHA SIDO PUBLICADO. APAGUE PARA DESCONSIDERAR.");
 		$publicacao .= getModeloPublicacaoPreenchido($registrobanco);
 	}
 

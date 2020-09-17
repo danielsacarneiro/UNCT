@@ -266,6 +266,7 @@ class dbDemandaTramitacao extends dbprocesso {
 	function validarEncaminhamento($vo) {
 		if ($vo->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA) {
 			$msg = "Encaminhamento não permitido para demanda FECHADA.";
+			$msg .= "Demanda: " . $vo->getMensagemComplementarTelaSucesso();
 			throw new Exception ( $msg );
 		}
 				
@@ -276,7 +277,9 @@ class dbDemandaTramitacao extends dbprocesso {
 				
 		//o usuario NAO pode retirar a demanda do setor ao qual nao pertence, mas pode tramitar deixando no mesmo setor
 		if (!$dbUsuarioInfo->isUsuarioPertenceAoSetor($cdSetor) && $cdSetor != $cdSetorDestino) {
-			$msg = "Usuário não autorizado pelo Setor ". dominioSetor::getDescricaoStaticTeste($cdSetor)." para encaminhamento.";
+			$msg = "Usuário não autorizado pelo Setor ". dominioSetor::getDescricaoStaticTeste($cdSetor)." para encaminhamento. ";
+			$msg .= "Demanda: " . $vo->getMensagemComplementarTelaSucesso();
+								
 			throw new Exception ( $msg );
 		}		
 				

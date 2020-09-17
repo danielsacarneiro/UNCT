@@ -145,19 +145,6 @@ function checkResponsabilidade() {
 	}
 }
 
-function formataForm() {
-	campoSetorDestino = document.frm_principal.<?=voDemandaTramitacao::$nmAtrCdSetorDestino?>;
-	campoPRT = document.frm_principal.<?=voDemandaTramitacao::$nmAtrProtocolo?>;
-	campoResponsabilidade = document.frm_principal.<?=voDemandaTramitacao::$nmAtrInResponsabilidadePRT?>;
-	
-	if(campoSetorDestino.value != ""){
-		campoPRT.required = true;
-		campoResponsabilidade.checked = false;
-	}else{
-		campoPRT.required = false;
-	}
-}
-
 function validaFormulario() {
 	arrayPrioridadeAlta = ['<?=voDemanda::$nmAtrPrioridade?>', <?=dominioPrioridadeDemanda::$CD_PRIORI_ALTA;?>];	
 
@@ -254,7 +241,6 @@ function iniciar(){
 	        $votram->dtReferencia = dtHoje;
 	        
 	        $complementoHTML = "";
-	        $complementoHTMLSetorDestino = " onChange='formataForm();' ";
 	        
 	        if(!$isInclusao){
 	        	//ALTERACAO
@@ -320,7 +306,7 @@ function iniciar(){
 	            <?php 
 	            $nmCampoFaseHtml = voDemanda::$nmAtrFase."[]";
 	            //echo dominioFaseDemanda::getHtmlChecksBoxDetalhamento($nmCampoFaseHtml, $vo->fase, 1);
-	            echo dominioFaseDemanda::getHtmlChecksBox($nmCampoFaseHtml, $vo->fase, null, 1, false, "");
+	            echo dominioFaseDemanda::getHtmlChecksBox($nmCampoFaseHtml, $vo->fase, null, 1, false, "", false, " required ");
 	            //serve para comparar, ao enviar ao banco, se a fase foi alterada no encaminhamento, autorizando a alteracao do vodemanda
 	            echo getInputHidden(voDemandaTramitacao::$nmAtrFaseRegistroBanco, voDemandaTramitacao::$nmAtrFaseRegistroBanco, $vo->fase);
 	             ?>
@@ -424,6 +410,13 @@ function iniciar(){
 	            <TH class="campoformulario" nowrap width="1%">Setor Destino:</TH>
 	            <TD class="campoformulario" colspan=3>
 	            <?php echo $comboSetor->getHtmlCombo(voDemandaTramitacao::$nmAtrCdSetorDestino,voDemandaTramitacao::$nmAtrCdSetorDestino, $vo->cdSetorDestino, true, "camponaoobrigatorio", false, $complementoHTMLSetorDestino);?>
+	            <SCRIPT language="JavaScript" type="text/javascript">
+	            	colecaoIDCamposRequiredTramitacao = [
+	            		"<?=voDemandaTramitacao::$nmAtrProtocolo?>",
+	            		<?=dominioFaseDemanda::getColecaoCdsSeparador()?>
+	            		];
+	            </SCRIPT>
+	            <INPUT type="checkbox" id="checkResponsabilidade" name="checkResponsabilidade" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCamposRequiredTramitacao);"> <?=voMensageria::$DS_RESPONSABILIDADE_CAMPO_OBR?>	            
 				</TD>
 	        </TR>
 			<TR>
@@ -435,7 +428,7 @@ function iniciar(){
 	            <TH class="campoformulario" nowrap width="1%">PRT/SEI:</TH>
 	            <TD class="campoformulario" colspan=3>				
 	            <INPUT type="text" onkeyup="formatarCampoPRT(this, event);" id="<?=voDemandaTramitacao::$nmAtrProtocolo?>" name="<?=voDemandaTramitacao::$nmAtrProtocolo?>" value=""  class="camponaoobrigatorio" size="30" <?=$complementoHTML?>>
-	            <INPUT type="checkbox" id="<?=voDemandaTramitacao::$nmAtrInResponsabilidadePRT?>" name="<?=voDemandaTramitacao::$nmAtrInResponsabilidadePRT?>" value="" onClick="checkResponsabilidade();"> *Assumo a responsabilidade de não incluir PRT/SEI.	            	                        	                        
+	            <!-- <INPUT type="checkbox" id="<?=voDemandaTramitacao::$nmAtrInResponsabilidadePRT?>" name="<?=voDemandaTramitacao::$nmAtrInResponsabilidadePRT?>" value="" onClick="checkResponsabilidade();"> *Assumo a responsabilidade de não incluir PRT/SEI. -->	            	                        	                        
 	        </TR>
 	        <TR>
 		        <TH class="campoformulario" width="1%" nowrap>Documento:</TH>

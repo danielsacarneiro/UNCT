@@ -416,6 +416,33 @@ class dominio extends multiplosConstrutores {
 		return $retorno;
 	}
 	
+	/**
+	 * retorna uma string no formato de colecao separada por separador e por aspas
+	 * @param string $separador
+	 * @param string $aspas
+	 * @param unknown $colecao
+	 * @return string|mixed
+	 */
+	static function getColecaoCdsSeparador($separador = ",", $aspas = "\"", $colecao = null) {
+		if($colecao == null){
+			$colecao = static::getColecao();
+		}
+		$tamanho = count ( $colecao );
+		// echo $tamanho . "<br>";
+		// var_dump($colecao) . "<br>";
+		$chaves = array_keys ( $colecao );
+		// echo "<br>especie:$string";		
+		foreach($colecao as $chave => $descricao) {
+			$retorno .= $aspas. $chave . $aspas . $separador;
+		}
+	
+		if ($retorno != null) {
+			$retorno = removerUltimaString($separador, $retorno);
+		} 
+		return $retorno;
+	}
+	
+	
 	/*
 	 * function ordenaSetor( $a, $b ) {
 	 * if ( $a['pontos'] == $b['pontos'] ) {

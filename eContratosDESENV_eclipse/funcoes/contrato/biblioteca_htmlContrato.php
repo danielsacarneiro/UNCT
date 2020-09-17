@@ -544,7 +544,7 @@ function getContratoEntradaDeDadosVOGenerico(
 	}
 	
 	if($indiceContrato != null && $indiceContrato != ""){
-		echo getTextoHTMLNegrito(" $indiceContrato º TERMO");
+		echo getTextoHTMLNegrito(" $indiceContrato º REGISTRO");
 	}
 	
 	$jsComplementarBorracha = "document.getElementById('$nmCampoDivPessoaContratada').innerHTML='';";

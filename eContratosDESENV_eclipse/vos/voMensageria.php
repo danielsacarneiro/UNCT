@@ -3,6 +3,7 @@ include_once (caminho_lib . "voentidade.php");
 
 class voMensageria extends voentidade {	
 	
+	static $DS_RESPONSABILIDADE_CAMPO_OBR = "*Assumo a responsabilidade de não incluir os campos obrigatórios.";	
 	//ativa o envio da mensageria para a UNCT
 	static $ATIVADO = false;
 	//ativa o envio do email do relatorio diario
