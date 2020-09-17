@@ -284,6 +284,9 @@ function getSQLBuscarStringCampoSeparador($colecaoAtributos, $nmAtributo, $opera
 function substituirCaracterSQLLike($param) {
 	return substituirCaracterEspecial ( "*", "%", $param );
 }
+function getSQLLike($param) {
+	return " LIKE '%$param%'";
+}
 function substituirCaracterEspecial($strOrigem, $strDestino, $param) {
 	$retorno = null;
 	if ($param != null) {

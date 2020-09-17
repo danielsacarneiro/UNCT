@@ -44,6 +44,7 @@ class filtroManterContrato extends filtroManter {
 	
 	var $tpDemanda;
 	var $licon;
+	var $empenho;
 	
 	var $voproclic;
 	
@@ -99,6 +100,7 @@ class filtroManterContrato extends filtroManter {
 		
 		$this->cdAutorizacao = @$_POST [vocontrato::$nmAtrCdAutorizacaoContrato];
 		$this->licon = @$_POST [vocontrato::$nmAtrInLicomContrato];
+		$this->empenho = @$_POST [vocontrato::$nmAtrNumEmpenhoContrato];
 				
 		$this->InOR_AND = @$_POST[self::$NmAtrInOR_AND];
 		if($this->InOR_AND == null){
@@ -375,6 +377,12 @@ class filtroManterContrato extends filtroManter {
 		
 		if ($this->licon != null && $this->licon != constantes::$CD_OPCAO_TODOS) {
 			$filtro = $filtro . $conector . "$nmTabela." . vocontrato::$nmAtrInLicomContrato. "=" . getVarComoString($this->licon);				
+			$conector = "\n AND ";
+		}
+		
+		if ($this->empenho != null && $this->empenho != "") {
+			$filtro = $filtro . $conector . "$nmTabela." . vocontrato::$nmAtrNumEmpenhoContrato 
+			. getSQLLike($this->empenho);
 			$conector = "\n AND ";
 		}
 		
