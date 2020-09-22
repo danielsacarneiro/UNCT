@@ -161,27 +161,64 @@ class dominio extends multiplosConstrutores {
 		}
 		return $retorno;
 	}
+	
 	static function getColecaoApenasComElementos($chaves, $colecao = null) {
 		// usado para o caso de um dominio que tenha a colecao chamar sem o 2 argumento
 		if ($colecao == null) {
 			$colecao = static::getColecao ();
 		}
-		
+	
 		// var_dump($colecao);
 		$retorno = $colecao;
 		if ($chaves != null) {
-			
-			foreach ( array_keys ( $colecao ) as $chave ) {
 				
+			foreach ( array_keys ( $colecao ) as $chave ) {
+	
 				if (! in_array ( $chave, $chaves )) {
 					$retorno = self::removeElementoStatic ( $chave, $retorno );
 				}
 			}
-			
+				
 			// echo "remove";
 		}
 		return $retorno;
 	}
+	
+	/**
+	 * parametro $pStrChaveCodificada cria um codigo para chaves de dominios diferentes, mas que podem ter valores iguais
+	 * por ex.: dominio01 = (01 => 'daniel') e dominio02 = (01=>'alice') . Usados no HTML contendo o id como chave, serao sobrescritos, 
+	 * causando problemas no request e nas validacoes html
+	 * @param unknown $chaves
+	 * @param unknown $colecao
+	 * @param unknown $pChaveCodificada
+	 * @return string|unknown[]
+	 */
+	/*static function getColecaoApenasComElementos($chaves, $colecao = null, $pStrChaveCodificada=null) {
+		// usado para o caso de um dominio que tenha a colecao chamar sem o 2 argumento
+		if ($colecao == null) {
+			$colecao = static::getColecao ();
+		}
+		
+		if($chaves!=null && !is_array($chaves)){
+			$chaves = array($chaves);
+		}
+		
+		// var_dump($colecao);
+		$retorno = array();
+		if ($chaves != null) {
+			
+			foreach ( $chaves as $chave ) {
+				$chaveTemp = $pStrChaveCodificada!=null?$pStrChaveCodificada.constantes::$CD_CAMPO_SEPARADOR. $chave:$chave;
+				//echoo($chave);
+				$retorno = array_merge_keys($retorno, array($chaveTemp=>$colecao[$chave]));
+			}
+			//var_dump($retorno);
+			//echo ("chave codi" . $pStrChaveCodificada);
+			// echo "remove";
+		}
+		return $retorno;
+	}*/
+	
 	function getArrayHTMLChaves($nmVariavelHtml) {
 		$retorno = getStrComPuloLinha ( "$nmVariavelHtml = new Array();" );
 		$colecao = $this->colecao;
@@ -212,14 +249,45 @@ class dominio extends multiplosConstrutores {
 		return $html;
 	}
 	
-	static function getHtmlChecksBoxDetalhamento($nm, $opcaoSelecionada, $qtdItensPorColuna=4) {
+	/**
+	 * o parametro $usarIdCodificado transforma o id, que geralmente eh usado somente como codigo (que pode se repetir), em um id unico
+	 * conjugado com o $nm: esse uso impede que varios componentes htmls, de tipos diferentes, mas de mesmo codigo (e, portanto, mesmo id), 
+	 * entrem em conflito
+	 * 
+	 * parametro $usarIdCodificado cria um codigo para chaves de dominios diferentes, mas que podem ter valores iguais
+	 * por ex.: dominio01 = (01 => 'daniel') e dominio02 = (01=>'alice') . Usados no HTML contendo o id como chave, serao sobrescritos, 
+	 * causando problemas no request e nas validacoes html
+	 * @param unknown $nm
+	 * @param unknown $opcaoSelecionada
+	 * @param number $qtdItensPorColuna
+	 * @param string $usarIdCodificado
+	 * @return string
+	 */
+	static function getHtmlChecksBoxDetalhamento($nm, $opcaoSelecionada, $qtdItensPorColuna=4, $usarIdCodificado=false) {
 		if(!is_array($opcaoSelecionada)){
 			$opcaoSelecionada = getStringCampoSeparadorComoArray($opcaoSelecionada);
 		}
 		
 		$colecao = static::getColecaoApenasComElementos($opcaoSelecionada);
 		
-		return static::getHtmlChecksBox($nm, $opcaoSelecionada, $colecao, $qtdItensPorColuna, false, null, false, " disabled ");
+		//return static::getHtmlChecksBox($nm, $opcaoSelecionada, $colecao, $qtdItensPorColuna, false, null, false, " disabled ");
+		
+		$pArray = array(
+				$nm,
+				$opcaoSelecionada,
+				$colecao,
+				$qtdItensPorColuna,
+				false,
+				null,
+				false,
+				" disabled ",
+				null,
+				null,
+				null,
+				$usarIdCodificado,
+				);
+		
+		return static::getHtmlChecksBoxArray($pArray);
 		
 	}
 
@@ -250,6 +318,11 @@ class dominio extends multiplosConstrutores {
 		$comComboOR_And = $pArray[8]==null?false:$pArray[8];
 		$nmComboOr_And = $pArray[9];
 		$cdOpcaoSelecionadaComboOr_And = $pArray[10];
+		$usarIdCodificado = $pArray[11];
+		if($usarIdCodificado == null){
+			$usarIdCodificado = false;
+		}
+		//var_dump($usarIdCodificado);
 		
 		if($colecao==null){
 			$colecao = static::getColecao ();
@@ -286,10 +359,13 @@ class dominio extends multiplosConstrutores {
 			}else{
 				$conectorAntes = "";
 			}
-					
+			
+			$id = $usarIdCodificado?$nm . constantes::$CD_CAMPO_SEPARADOR. $chave :$chave;
 			$checked = stripos($opcaoSelecionada, "$chave", 0) !== false;
+			/*var_dump($opcaoSelecionada);
+			var_dump($chave);*/
 			//echoo("chave:$chave & selecao: $opcaoSelecionada");
-			$html .= "\n".$conectorAntes . getCheckBoxBoolean($chave, $nm, $chave, $checked, "$javascript $htmlAdicional")." ". static::getDescricaoStatic($chave,$colecao) . "<br>";
+			$html .= "\n".$conectorAntes . getCheckBoxBoolean($id, $nm, $chave, $checked, "$javascript $htmlAdicional")." ". static::getDescricaoStatic($chave,$colecao) . "<br>";
 			$i++;
 		}
 		//artificio usado para tirar o ultimo <br>

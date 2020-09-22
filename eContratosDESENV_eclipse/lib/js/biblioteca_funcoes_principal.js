@@ -192,7 +192,7 @@ function tornarCampoReadOnly(campoForm, pIsReadOnly, pIsRequired, pIsAlinhadoDir
 	campoForm.className=classe+complementoClasse;
 }
 
-function tornarRequiredCamposColecaoFormulario(colecaoIDCampos, pIsRequired){	
+function tornarRequiredCamposColecaoFormulario(colecaoIDCampos, pIsRequired, pExibirAlertErro = false){	
 	for(i=0;i<colecaoIDCampos.length;i++){					
 		id = colecaoIDCampos[i];		
 		element = document.getElementById(id);
@@ -200,7 +200,10 @@ function tornarRequiredCamposColecaoFormulario(colecaoIDCampos, pIsRequired){
 		if(element != null){			 
 			tornarCampoObrigatorio(element, pIsRequired)
 		}
-		//alert(element.id + " " + pIsRequired);
+		
+		if(pExibirAlertErro){
+			alert(element.id + " " + pIsRequired);
+		}
 	}
 }
 

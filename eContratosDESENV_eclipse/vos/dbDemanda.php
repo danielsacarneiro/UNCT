@@ -900,7 +900,7 @@ class dbDemanda extends dbprocesso {
 					//valida tambem se o usuario logado for o mesmo que incluiu a demanda, permite excluir
 					$retorno = true;					
 				}else{
-					$msg .= $conector . "'$textoFuncao' permitida para o usuário que incluiu a demanda";
+					$msg .= $conector . "'$textoFuncao' permitido/a para o usuário que incluiu a demanda";
 					$conector = " ou ";
 				}
 										

@@ -30,7 +30,7 @@ function getDemandaDetalhamentoComLupa($voDemanda, $temLupaDet, $exibeTipoDemand
 			}
 				
 			if(dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO == $voDemanda->tipo){				
-				echo getTpDemandaContratoDetalhamento("", "", "DIV_DETALHAR", $voDemanda);				
+				echo getTpDemandaContratoDetalhamento(voDemanda::$nmAtrTpDemandaContrato, "", "DIV_DETALHAR", $voDemanda);				
 			}			
 			echo "<INPUT type='hidden' id='" . voDemanda::$nmAtrTipo . "' name='" . voDemanda::$nmAtrTipo . "' value='$voDemanda->tipo'>";
 		}
@@ -189,7 +189,7 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 	$pCdOpcaoSelecionadaReajuste=$voDemanda->inTpDemandaReajusteComMontanteA;
 	$voContratoDemanda = $voDemanda->getContrato();
 		
-	$html .= dominioTipoDemandaContrato::getHtmlChecksBoxDetalhamento($nmCampoTpDemandaContrato, $pCdOpcaoSelecionadaTpDemandaContrato, 2);
+	$html .= dominioTipoDemandaContrato::getHtmlChecksBoxDetalhamento($nmCampoTpDemandaContrato, $pCdOpcaoSelecionadaTpDemandaContrato, 2, true);
 	
 	if(dominioTipoDemandaContrato::existeItemArrayOuStrCampoSeparador(dominioTipoDemandaContrato::$CD_TIPO_REAJUSTE, $pCdOpcaoSelecionadaTpDemandaContrato)){
 		//eh reajuste

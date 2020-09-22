@@ -224,9 +224,9 @@ function isApenasUmCheckBoxSelecionado(pNmCheckBox, pSemMensagem) {
 	return false;
 }
 
-function validaFormRequiredCheckBox(campoCheckBoxValidacao, colecaoIDCampos, pSetarVazio){
+function validaFormRequiredCheckBox(campoCheckBoxValidacao, colecaoIDCampos, pSetarVazio, pExibirAlertErro = false){
 	pIsRequired = !campoCheckBoxValidacao.checked;
-	tornarRequiredCamposColecaoFormulario(colecaoIDCampos, pIsRequired);
+	tornarRequiredCamposColecaoFormulario(colecaoIDCampos, pIsRequired, pExibirAlertErro);
 	
 	if(pSetarVazio != null && pSetarVazio){
 		limparCamposColecaoFormulario(colecaoIDCampos);
