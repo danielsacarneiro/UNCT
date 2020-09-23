@@ -321,7 +321,7 @@ function incluirUsuarioDataHoraDetalhamento($voEntidade) {
 	// return utf8_decode($retorno);
 	return $retorno;
 }
-function getDsEspecie($voContrato, $porExtenso = true, $omitirEspecieMater=false) {
+function getDsEspecie($voContrato, $porExtenso = true, $omitirEspecieMater=false, $apenasMaterPorExtenso=false) {
 	$retorno = null;
 	
 	$cdEspecie = $voContrato->cdEspecie;
@@ -331,7 +331,9 @@ function getDsEspecie($voContrato, $porExtenso = true, $omitirEspecieMater=false
 		$sqEspecie = $voContrato->sqEspecie;
 	}
 	
-	$omitirEspecieMater = $cdEspecie == dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER && $omitirEspecieMater;
+	$isEspecieMater = $cdEspecie == dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
+	$omitirEspecieMater = $isEspecieMater && $omitirEspecieMater;
+	$apenasMaterPorExtenso = $isEspecieMater && $apenasMaterPorExtenso;
 	
 	if ($especie != null || $cdEspecie != null) {
 		
@@ -341,6 +343,10 @@ function getDsEspecie($voContrato, $porExtenso = true, $omitirEspecieMater=false
 		if ($cdEspecie != null) {
 			//$dsEspecie = !$porExtenso?$cdEspecie:dominioEspeciesContrato::getDescricao ( $cdEspecie );			
 			if(!$porExtenso){
+				if($apenasMaterPorExtenso){
+					$cdEspecie = vocontrato::$DS_ESPECIE_MATER;
+				}
+				
 				if(!$omitirEspecieMater){
 					$dsEspecie = $cdEspecie;
 				}

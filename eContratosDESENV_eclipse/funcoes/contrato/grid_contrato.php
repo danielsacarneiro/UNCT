@@ -27,7 +27,7 @@
                 for ($i=0;$i<$tamanho;$i++) {
                         $voAtual = new vocontrato();
                         $voAtual->getDadosBanco($colecao[$i]);
-                        $especie = getDsEspecie($voAtual, false);                    
+                        $especie = getDsEspecie($voAtual, false, false, true);                    
                                                 
                         $sq = $colecao[$i][vocontrato::$nmAtrSqContrato];
                         $msgAlertaSq = "onMouseOver=toolTip('seq:".$sq."') onMouseOut=toolTip()";
