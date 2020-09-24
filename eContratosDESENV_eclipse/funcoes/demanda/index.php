@@ -545,7 +545,8 @@ function detalharDemandaGestao(){
                         $setorDestinoAtual = $colecao[$i][voDemandaTramitacao::$nmAtrCdSetorDestino];
                         $setorDestinoAtual = $dominioSetor->getDescricao($setorDestinoAtual);
                         
-                        $tipo = dominioTipoDemanda::getDescricaoStatic($voAtual->tipo);
+                        $cdTipoDemanda = $voAtual->tipo;
+                        $tipo = dominioTipoDemanda::getDescricaoStatic($cdTipoDemanda);
                         $dsTpDemandaContrato = $voAtual->tpDemandaContrato;
                         $dsTpDemandaContrato = dominioTipoDemandaContrato::getDescricaoColecaoChave($dsTpDemandaContrato, false, dominioTipoDemandaContrato::getColecaoAntiga());
 
@@ -584,6 +585,8 @@ function detalharDemandaGestao(){
 	                        	$contrato = formatarCodigoAnoComplemento($voDemandaPL->cdProcLic,
 	                        			$voDemandaPL->anoProcLic,
 	                        			$voDemandaPL->cdModProcLic);
+                        }else if($cdTipoDemanda == dominioTipoDemanda::$CD_TIPO_DEMANDA_TERMOADESAO){                        	
+	                        	$contrato = $voAtual->prt;
                         }
                         	
                         //$prioridade = $dominioPrioridade->getDescricao($voAtual->prioridade);

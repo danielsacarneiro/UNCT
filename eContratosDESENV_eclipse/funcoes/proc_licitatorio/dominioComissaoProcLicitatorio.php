@@ -9,7 +9,7 @@ class dominioComissaoProcLicitatorio extends dominio {
 	static $DS_CPL_I = "CPL-I";
 	static $DS_CPL_II = "CPL-II";
 	static $DS_CPL_III = "CPL-III";
-	static $DS_CPL_CEL = "CL-PROFISC";
+	static $DS_CPL_CEL = "CLI-PROFISC";
 	static $DS_CPL_CEL_II = "CLII-PROFISC";
 	
 	static $NM_PREGOEIRO_CPL_I = "ODACY WELLINGTON DA SILVA";

@@ -969,6 +969,20 @@ class dbDemanda extends dbprocesso {
 			
 			$this->isExclusaoPermitida ( $vo, "fechamento" );
 			
+			//verifica se o contrato foi incluindo em contratoinfo
+			$vocontratoInfo = new voContratoInfo();
+			//$vo = new voDemanda();
+			$vocontratoDemanda = $vo->getContrato();
+			if($vocontratoDemanda != null){
+				$vocontratoInfo->anoContrato = $vocontratoDemanda->anoContrato;
+				$vocontratoInfo->cdContrato = $vocontratoDemanda->cdContrato;
+				$vocontratoInfo->tipo = $vocontratoDemanda->tipo;
+				$vocontratoInfo = $vocontratoInfo->dbprocesso->consultarPorChaveVO($vocontratoInfo);
+				if($vocontratoInfo == null){
+					throw new excecaoChaveRegistroInexistente("Verifique a inclusão das informações adicionais ao contrato relacionado.");				
+				}			
+			}
+			
 			// verifica se tem PAAP para encerrar
 			  // $vo = new voDemanda();
 			if ($vo->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_PROCADM) {

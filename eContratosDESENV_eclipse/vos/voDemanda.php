@@ -382,7 +382,8 @@ class voDemanda extends voentidade {
 		if($numPRT != null){
 			$formatado = static::formataPRTParaApenasNumero($numPRT);
 			$tamanho = strlen($formatado);
-			$isValido = ($tamanho == 18 || $tamanho == 22) && isNumero($formatado);
+			//$isValido = ($tamanho == 18 || $tamanho == 22) && isNumero($formatado);
+			$isValido = $tamanho == 18 || static::isPRTSEI($numPRT);
 			if($levantarExcecao && !$isValido){
 				throw new excecaoGenerica("PRT Inválido. Tamanho PRT: $tamanho");
 			}
@@ -400,6 +401,26 @@ class voDemanda extends voentidade {
 		if($numPRT != null){
 			$formatado = static::formataPRTParaApenasNumero($numPRT);
 			$retorno = strlen($formatado) == 22;
+			
+			if(!$retorno){				
+				//verifica se tem formato SEI diferente, como o termo de adesao SEI 003.2020.011.SEFAZ.001
+				$retorno = existeStr1NaStr2("SEFAZ", $formatado);
+			}
+		}
+		return $retorno;
+	}
+	
+	/**
+	 * verifica se eh numero SEI padrao ou outro formado SEI, como os SEIs de termo de adesao da SAD no formato 003.2020.011.SEFAZ.001
+	 * @param unknown $numPRT
+	 * @return boolean
+	 */
+	static function isSEIPadrao($numPRT) {
+		$retorno = false;
+		if($numPRT != null){
+			$formatado = static::formataPRTParaApenasNumero($numPRT);
+			$tamanho = strlen($formatado);
+			$retorno = static::isPRTSEI($numPRT) && $tamanho == 22;
 		}
 		return $retorno;
 	}
@@ -408,15 +429,26 @@ class voDemanda extends voentidade {
 		$formatadoRetorno = $numPRT;
 		if($numPRT != null){
 			$formatado = static::formataPRTParaApenasNumero($numPRT);
+			$tamanho = strlen($formatado);
 			$isSEI = static::isPRTSEI($numPRT);
 			if(static::isPRTValido($numPRT, $levantarExcecao)){
 				//echo "valido";
 				if($isSEI){
-					$formatado  = substr( $numPRT, 0, 10 ) . '.';
-					$formatado .= substr( $numPRT, 10, 6 ) . '/';
-					$formatado .= substr( $numPRT, 16, 4 ) . '-';
-					$formatado .= substr( $numPRT, 20, 2 );
+					//echo "eh sei";
+					if(static::isSEIPadrao($numPRT)){
+						$formatado  = substr( $numPRT, 0, 10 ) . '.';
+						$formatado .= substr( $numPRT, 10, 6 ) . '/';
+						$formatado .= substr( $numPRT, 16, 4 ) . '-';
+						$formatado .= substr( $numPRT, 20, 2 );
+					}else{
+						$formatado  = substr( $numPRT, 0, 3 ) . '.';
+						$formatado .= substr( $numPRT, 3, 4 ) . '.';
+						$formatado .= substr( $numPRT, 7, 3 ) . '.';
+						$formatado .= substr( $numPRT, 10, 5 ) . '.';
+						$formatado .= substr( $numPRT, 15, 3 );
+					}
 				}else{
+					//echo "nao eh sei";
 					$formatado  = substr( $numPRT, 0, 4 ) . '.';
 					$formatado .= substr( $numPRT, 4, 5 ) . '.';
 					$formatado .= substr( $numPRT, 9, 4 ) . '.';
@@ -426,6 +458,9 @@ class voDemanda extends voentidade {
 	
 				$formatadoRetorno = $formatado;
 			}
+			/*else{	echo "nao eh PRT valido";
+			
+			}*/
 		}
 	
 		return $formatadoRetorno;
