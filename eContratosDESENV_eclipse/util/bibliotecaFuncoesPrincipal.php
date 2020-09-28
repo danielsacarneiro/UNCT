@@ -227,6 +227,7 @@ function getIndiceBarraOuPonto($param) {
 	
 	return $retorno;
 }
+
 function getDocLinkMascaraImportacao($param) {
 	$linkDoc = $param;
 	$linkDoc = str_replace("\\", "/", $linkDoc);
@@ -568,7 +569,6 @@ function getArrayComItemTamanhoFormatado($array, $qtdfinal = 2, $char = "0") {
 	}
 	return $array;
 }
-
 
 /*function isArrayMultiDimensional($array){
 	return count($array) == count($array, COUNT_RECURSIVE);

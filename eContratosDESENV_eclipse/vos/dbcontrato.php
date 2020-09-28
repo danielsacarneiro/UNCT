@@ -4,7 +4,6 @@ include_once (caminho_funcoes . "/contrato/dominioEspeciesContrato.php");
 include_once (caminho_vos . "vocontrato.php");
 include_once (caminho_vos . "vousuario.php");
 include_once (caminho_filtros . "filtroManterContrato.php");
-include_once (caminho_util . "bibliotecaFuncoesPrincipal.php");
 
 // .................................................................................................................
 // Classe select
@@ -1195,14 +1194,17 @@ class dbcontrato extends dbprocesso {
 			 	//echoo("Incluindo sequencial " . $retorno->sqEspecie . " para a especie " . dominioEspeciesContrato::getDescricao($cdEspecie));
 			 }
 
-			 $retorno->objeto = $objeto;
+			 //$retorno->objeto = $objeto;
+			 $retorno->objeto = getStringImportacaoCaracterEspecial($objeto);
 			 $retorno->nmGestorPessoa = $gestorPessoa;
-			 $retorno->gestor = $gestor;
+			 //$retorno->gestor = $gestor;
+			 $retorno->gestor = getStringImportacaoCaracterEspecial($gestor);
 
 			 $retorno->vlGlobal = $valorGlobal;
 			 $retorno->vlMensal = $valorMensal;
 			 if($processoLic != null){
-			 	$retorno->procLic = $processoLic;
+			 	//$retorno->procLic = $processoLic;
+			 	$retorno->procLic = getStringImportacaoCaracterEspecial($processoLic);
 			 		
 			 	try{
 			 		$arrayProcLic = getArrayFormatadoLinhaImportacaoPorSeparador($processoLic);
@@ -1229,7 +1231,8 @@ class dbcontrato extends dbprocesso {
 			 $retorno->modalidade = $modalidadeLic;
 			 $retorno->dtAssinatura = $dtAssinatura;
 			 $retorno->dataPublicacao = $dataPublic;
-			 $retorno->contratada = $nomeContratada;
+			 //$retorno->contratada = $nomeContratada;
+			 $retorno->contratada = getStringImportacaoCaracterEspecial($nomeContratada);
 
 			 $documento = new documentoPessoa ( $docContratada );
 			 $retorno->docContratada = $documento->getNumDoc ();

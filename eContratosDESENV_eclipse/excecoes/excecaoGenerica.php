@@ -11,13 +11,18 @@ class excecaoGenerica extends Exception
 	static $CD_EXCECAO_SISTEMA_MANUTENCAO = 5;
 	static $CD_EXCECAO_CHAVE_INEXISTENTE = 6;
 	static $CD_EXCECAO_METODO_NAO_IMPLEMENTADO = 7;
+	static $CD_EXCECAO_ATRIBUTO_INVALIDO = 8;
 	static $CD_EXCECAO_CHAVE_DUPLICADA = 1062;	
+	
+	var $mensagemSozinha = "";
 	
     // Redefine a exceção de forma que a mensagem não seja opcional
     public function __construct($message, $code = 0, Exception $previous = null) {
     	if($message == null || $message == ""){
     		$message = "Exceção Genérica.";
     	}
+    	
+    	$this->mensagemSozinha = $message;
     
         // garante que tudo está corretamente inicializado
         parent::__construct(get_class($this). "->". $message, $code, $previous);
@@ -26,4 +31,9 @@ class excecaoGenerica extends Exception
     public function __toString() {
         return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
     }
+    
+    public function getMsgEconti() {
+    	return $this->mensagemSozinha;
+    }
+    
 }

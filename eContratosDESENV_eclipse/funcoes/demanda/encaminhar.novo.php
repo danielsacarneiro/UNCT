@@ -377,25 +377,40 @@ function iniciar(){
 	        </TR>
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Setor Origem:</TH>
-	            <TD class="campoformulario" colspan=3>
+	            <TD class="campoformulario" width="1%">
 	            <?php 
 	            //o setor destino da ultima tramitacao sera o origem da nova
 	            echo $comboSetor->getHtmlCombo(voDemanda::$nmAtrCdSetor,voDemanda::$nmAtrCdSetor, "", true, "campoobrigatorio", false, " required ");?>
 				</TD>
+	            <TH class="campoformulario" nowrap width="1%">Prioridade:</TH>
+	            <TD class="campoformulario">
+	            <?php 
+	            //o setor destino da ultima tramitacao sera o origem da nova
+	            echo $comboPrioridade->getHtmlCombo(voDemanda::$nmAtrPrioridade,voDemanda::$nmAtrPrioridade, $vo->prioridade, true, "campoobrigatorio", false, " required onChange='formataPrioridade();' ");?>
+				</TD>				
 	        </TR>	 
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Título:</TH>
 	            <TD class="campoformulario" colspan=3>				
 	            <INPUT type="text" id="<?=voDemanda::$nmAtrTexto?>" name="<?=voDemanda::$nmAtrTexto?>" value=""  class="campoobrigatorio" size="80" required>	            	                        	                        
 	        </TR>
-			<TR>
-	            <TH class="campoformulario" nowrap width="1%">Prioridade:</TH>
-	            <TD class="campoformulario" colspan=3>
-	            <?php 
-	            //o setor destino da ultima tramitacao sera o origem da nova
-	            echo $comboPrioridade->getHtmlCombo(voDemanda::$nmAtrPrioridade,voDemanda::$nmAtrPrioridade, $vo->prioridade, true, "campoobrigatorio", false, " required onChange='formataPrioridade();' ");?>
-				</TD>
-	        </TR>	       	        
+			</TR>
+				        <TR>
+				            <TH class="campoformulario" width="1%"><?=getTextoHTMLTagMouseOver("Resp.", "Colaborador responsável por acompanhar a demanda na UNCT.")?>:</TH>
+				            <TD class="campoformulario" colspan=3>
+				            <?php
+				            $arrayParamUsuario = array(
+				            		voDemanda::$nmAtrCdPessoaRespUNCT,
+				            		voDemanda::$nmAtrCdPessoaRespUNCT,
+				            		$vo->cdPessoaRespUNCT, 
+				            		"camponaoobrigatorio",
+				            		"",				            		
+				            );
+				            echo "UNCT:&nbsp;".getComboUsuarioPorSetor($arrayParamUsuario, dominioSetor::$CD_SETOR_UNCT) . "&nbsp";
+				          	?>
+							</TD>				        
+			            <TR>
+	        </TR>	        
 	        <?php 
 	       }	       
 	       ?>

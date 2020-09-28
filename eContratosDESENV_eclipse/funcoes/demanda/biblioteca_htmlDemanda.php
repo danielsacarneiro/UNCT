@@ -165,10 +165,13 @@ function isContratoPermiteProrrogacao($voContrato){
 		$filtro->anoContrato = $voContrato->anoContrato;
 		$filtro->cdContrato = $voContrato->cdContrato;
 		$filtro->tipoContrato = $voContrato->tipo;
-		$db = new dbContratoInfo();
+		$db = new dbContratoInfo();				
 		$colecao = $db->consultarTelaConsultaConsolidacao($filtro);
+		//echo "eh vazia";
+		//echo $filtro->tpVigencia;
+
 		if(!isColecaoVazia($colecao)){
-			
+			//echo "nao eh vazia";			
 			$registro = $colecao[0];
 			$prorrogavel = $registro[filtroConsultarContratoConsolidacao::$NmColInProrrogavel];
 			$prorrExcepcional = $registro[filtroConsultarContratoConsolidacao::$NmColInProrrogacaoExcepcional];			
@@ -205,7 +208,10 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 		//var_dump($voDemanda->getContrato());
 		$exibirInfoProrrog = $voDemanda->situacao != dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA;		
 		if($exibirInfoProrrog && !isContratoPermiteProrrogacao($voContratoDemanda)){
-			$html .= $conectorAlerta . getTextoHTMLDestacado("ATENÇÃO: verifique se o contrato comporta prorrogação em 'Contratos-Consolidação'");
+			$texto = "ATENÇÃO: verifique se o contrato comporta prorrogação em 'Contratos-Consolidação'";
+			//$html .= $conectorAlerta . getTextoHTMLDestacado($texto);
+			$html .= $conectorAlerta . getTextoLink($texto, "../contrato_consolidacao");
+			
 			$conectorAlerta = "<BR>";
 		}	
 	}

@@ -72,7 +72,7 @@ class filtroManter extends multiplosConstrutores {
 		$this->isFazerControleSessao = $isFazerControleSessao;
 		
 		$this->cdConsultarArquivo = constantes::$CD_NAO;
-		$this->tpVigencia = constantes::$CD_OPCAO_TODOS;
+		//$this->tpVigencia = constantes::$CD_OPCAO_TODOS;
 		
 		if ($pegarFiltrosDaTela) {
 			$this->pegarFiltroDaTela ();

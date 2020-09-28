@@ -2,6 +2,23 @@
 //include_once("../../config_lib.php");
 include_once (caminho_funcoes . "contrato/biblioteca_htmlContrato.php");
 
+function isAtributoValido($atrib){
+	if(is_array($atrib)){
+		foreach ($atrib as $no){
+			//echo "$no***";
+			$retorno = $no != null && $no != "";
+			if(!$retorno){				
+				return $retorno;
+			}
+		}
+		
+	}else{
+		$retorno = $atrib != null && $atrib != "";
+	}
+	return $retorno;
+}
+
+
 function getModeloPublicacaoPreenchido($registrobanco){
 	/*
 	 MODELO PUBLICACAO
@@ -25,7 +42,18 @@ function getModeloPublicacaoPreenchido($registrobanco){
 	$publicacao	.= getTextoHTMLDestacado("XXX[RESUMIR OBJETO AO MÁXIMO]-". $termo->objeto . "-XXX[RESUMIR]", "blue");
 	$publicacao .= ".Vigência:$datainicio a $datafim.";
 	
+	$arrayValidacao = array(
+			$empresa,
+			$tpdoc,
+			$doc,
+			$datainicio,
+			$datafim,
+			$contrato,			
+	);
 	
+	if(!isAtributoValido($arrayValidacao)){
+		throw new excecaoAtributoInvalido($publicacao);
+	}
 	
 	return $publicacao;
 }
@@ -67,7 +95,10 @@ function getDadosPublicacaoContrato($chaveContrato, $indice) {
 	try{
 		$colecao = $dbcontrato->consultarContratoComLicon($vocontrato, false, false);
 		$tamanho = sizeof ( $colecao );
+		//echo "tamanho $tamanho!"; 
 		$registrobanco = $colecao[0];
+		
+		$publicacao = getModeloPublicacaoPreenchido($registrobanco);
 		
 		if ($colecao == ""){
 			throw new excecaoChaveRegistroInexistente ("DbProcesso. Consulta Chave Primária");
@@ -77,17 +108,20 @@ function getDadosPublicacaoContrato($chaveContrato, $indice) {
 			//o alerta eh igual aquele levantado em caso de mais de um registro. Dai irem para a mesma opcao
 			//levantando a mesma excecao
 			throw new excecaoMaisDeUmRegistroRetornado ();
-		}	
-		
-		$publicacao = getModeloPublicacaoPreenchido($registrobanco);
+		}
 
 	}catch (excecaoChaveRegistroInexistente $ex){
 		$publicacao = getTextoHTMLDestacado("VERIFIQUE O ". ($indice) ."º REGISTRO. CONSTA COMO INEXISTENTE.");
 	}catch (excecaoMaisDeUmRegistroRetornado $ex){
 		//informa a existencia de publicacao anterior e deixa pro usuario pensar o que fazer.
-		$publicacao = getTextoHTMLDestacado("VERIFIQUE O ". ($indice) ."º REGISTRO. É POSSÍVEL QUE JÁ TENHA SIDO PUBLICADO. APAGUE PARA DESCONSIDERAR.");
-		$publicacao .= getModeloPublicacaoPreenchido($registrobanco);
-	}
+		$publicacao = getTextoHTMLDestacado("VERIFIQUE O ". ($indice) ."º REGISTRO. É POSSÍVEL QUE JÁ TENHA SIDO PUBLICADO. APAGUE PARA DESCONSIDERAR.")
+		. $publicacao;
+		//$publicacao .= getModeloPublicacaoPreenchido($registrobanco);
+	}catch (excecaoAtributoInvalido $ex){
+		//informa a existencia de publicacao anterior e deixa pro usuario pensar o que fazer.
+		$publicacao = $ex->getMsgEconti() . "." . getTextoHTMLDestacado("VERIFIQUE O ". ($indice) ."º REGISTRO. HÁ DADOS NÃO PREENCHIDOS NA PLANILHA.");
+			
+	}		
 
 	return $publicacao;
 }

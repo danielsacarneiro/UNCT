@@ -228,7 +228,7 @@ function iniciar(){
 				            		"required",				            		
 				            );
 				            echo "UNCT:&nbsp;".getComboUsuarioPorSetor($arrayParamUsuario, dominioSetor::$CD_SETOR_UNCT) . "&nbsp";
-				            echo "ATJA:&nbsp;".getComboPessoaRespPA(voDemanda::$nmAtrCdPessoaRespATJA, voDemanda::$nmAtrCdPessoaRespATJA, $vo->cdPessoaRespATJA, "camponaoobrigatorio", "required");
+				            echo "ATJA:&nbsp;".getComboPessoaRespPA(voDemanda::$nmAtrCdPessoaRespATJA, voDemanda::$nmAtrCdPessoaRespATJA, $vo->cdPessoaRespATJA, "camponaoobrigatorio", "");
 				          	?>
 							</TD>				        
 			            <TR>
