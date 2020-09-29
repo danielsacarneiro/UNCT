@@ -223,12 +223,16 @@ function iniciar(){
 				            $arrayParamUsuario = array(
 				            		voDemanda::$nmAtrCdPessoaRespUNCT,
 				            		voDemanda::$nmAtrCdPessoaRespUNCT,
-				            		$vo->cdPessoaRespUNCT, 
-				            		"camponaoobrigatorio",
-				            		"required",				            		
+				            		$vo->cdPessoaRespUNCT,
+				            		true,
+				            		false,
+				            		constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO,
+				            		false,
+				            		"required",
 				            );
+				            
 				            echo "UNCT:&nbsp;".getComboUsuarioPorSetor($arrayParamUsuario, dominioSetor::$CD_SETOR_UNCT) . "&nbsp";
-				            echo "ATJA:&nbsp;".getComboPessoaRespPA(voDemanda::$nmAtrCdPessoaRespATJA, voDemanda::$nmAtrCdPessoaRespATJA, $vo->cdPessoaRespATJA, "camponaoobrigatorio", "");
+				            echo "ATJA:&nbsp;".getComboPessoaRespPA(voDemanda::$nmAtrCdPessoaRespATJA, voDemanda::$nmAtrCdPessoaRespATJA, $vo->cdPessoaRespATJA, "camponaoobrigatorio", " required ");
 				          	?>
 							</TD>				        
 			            <TR>

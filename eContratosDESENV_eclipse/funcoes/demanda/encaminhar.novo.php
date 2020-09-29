@@ -274,27 +274,6 @@ function iniciar(){
             	</TD>	        
             </TR>
 			<TR>
-	            <TH class="campoformulario" nowrap width="1%">Resp.:</TH>
-	            <TD class="campoformulario" colspan=3>
-	            <?php 
-	            $conector = "";
-	            if($vo->cdPessoaRespUNCT != null){
-	            	$arrayParamUsuario = array(
-	            			voDemanda::$nmAtrCdPessoaRespUNCT,
-	            			voDemanda::$nmAtrCdPessoaRespUNCT,
-	            			$vo->cdPessoaRespUNCT,
-	            			constantes::$CD_CLASS_CAMPO_READONLY,
-	            			"disabled",
-	            	);	            	
-	            	echo "UNCT:&nbsp;". getComboUsuarioPorSetor($arrayParamUsuario, dominioSetor::$CD_SETOR_UNCT). "&nbsp;";	            	
-	            }
-	             if($vo->cdPessoaRespATJA != null){
-	            	echo $conector . "ATJA:&nbsp;".getComboPessoaRespPAConsulta(voDemanda::$nmAtrCdPessoaRespATJA, voDemanda::$nmAtrCdPessoaRespATJA, $vo->cdPessoaRespATJA, "camponaoobrigatorio", "disabled");
-	            }
-	             ?>
-	            </TD>				
-	        </TR>
-			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Situação:</TH>
 	            <TD class="campoformulario" width="1%">
 	            <?php 
@@ -394,26 +373,49 @@ function iniciar(){
 	            <TD class="campoformulario" colspan=3>				
 	            <INPUT type="text" id="<?=voDemanda::$nmAtrTexto?>" name="<?=voDemanda::$nmAtrTexto?>" value=""  class="campoobrigatorio" size="80" required>	            	                        	                        
 	        </TR>
-			</TR>
-				        <TR>
-				            <TH class="campoformulario" width="1%"><?=getTextoHTMLTagMouseOver("Resp.", "Colaborador responsável por acompanhar a demanda na UNCT.")?>:</TH>
-				            <TD class="campoformulario" colspan=3>
-				            <?php
-				            $arrayParamUsuario = array(
-				            		voDemanda::$nmAtrCdPessoaRespUNCT,
-				            		voDemanda::$nmAtrCdPessoaRespUNCT,
-				            		$vo->cdPessoaRespUNCT, 
-				            		"camponaoobrigatorio",
-				            		"",				            		
-				            );
-				            echo "UNCT:&nbsp;".getComboUsuarioPorSetor($arrayParamUsuario, dominioSetor::$CD_SETOR_UNCT) . "&nbsp";
-				          	?>
-							</TD>				        
-			            <TR>
-	        </TR>	        
 	        <?php 
 	       }	       
 	       ?>
+			</TR>
+			<TR>
+	            <TH class="campoformulario" nowrap width="1%">Resp.:</TH>
+	            <TD class="campoformulario" colspan=3>
+	            <?php 
+
+	            if($isInclusao){
+	            	$classRespATJA = $classResp = constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO;
+	            	$jsResp = "";
+	            	
+	            	$jsRespATJA = " required ";
+	            	
+	            }else{
+	            	$classRespATJA = $classResp = constantes::$CD_CLASS_CAMPO_READONLY;
+	            	$jsRespATJA = $jsResp = "disabled";
+	            }
+	            $arrayParamUsuario = array(
+	            		voDemanda::$nmAtrCdPessoaRespUNCT,
+	            		voDemanda::$nmAtrCdPessoaRespUNCT,
+	            		$vo->cdPessoaRespUNCT,
+	            		true,
+	            		false,
+	            		$classResp,
+	            		false,
+	            		$jsResp,
+	            );
+	            echo getTextoHTMLTagMouseOver("UNCT.", "Colaborador responsável por acompanhar a demanda na UNCT.") . ":&nbsp;"
+    			.getComboUsuarioPorSetor($arrayParamUsuario, dominioSetor::$CD_SETOR_UNCT) . "&nbsp";	             
+	             
+	            echo getTextoHTMLTagMouseOver("ATJA.", "Assessor responsável por acompanhar a demanda na ATJA.") . ":&nbsp;"
+						.getComboPessoaRespPAConsulta(
+								voDemanda::$nmAtrCdPessoaRespATJA, 
+								voDemanda::$nmAtrCdPessoaRespATJA, 
+								$vo->cdPessoaRespATJA, 
+								$classRespATJA, 
+								$jsRespATJA);	            
+	             ?>
+	            </TD>				
+	        </TR>
+	       
 			<TR>
 				<TH class="textoseparadorgrupocampos" halign="left" colspan="4">
 				<DIV class="campoformulario" id="div_tramitacao">&nbsp;&nbsp;Novo Encaminhamento
