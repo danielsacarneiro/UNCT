@@ -578,11 +578,16 @@ function getImagemLink($href, $nmImagem, $nmLink='lnkFramework') {
 	
 	return $html;
 }
-function getTextoLink($texto, $href, $javascript=null, $isJanelaAuxiliar=false) {
+function getTextoLink($texto, $href, $javascript=null, $isJanelaAuxiliar=false, $isAbrirOutraJanela=false) {
 	if($isJanelaAuxiliar){
 		$href = "javascript:abrirJanelaAuxiliar('" . $href . "',true, false, false);\" ";
 	}
-	$html = "<A id='lnkFramework$texto' name='lnkFramework$texto' " . "href=\"" . $href . "\"" . " class='linkNormal' $javascript>$texto</A>";
+	
+	if($isAbrirOutraJanela){
+		$novaJanela = " target='_blank' ";
+	}
+	
+	$html = "<A id='lnkFramework$texto' name='lnkFramework$texto' " . "href=\"" . $href . "\"" . " $novaJanela class='linkNormal' $javascript>$texto</A>";
 	return $html;
 }
 

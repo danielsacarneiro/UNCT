@@ -193,10 +193,10 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		//caso contrario, quando se desejar aqueles que produzem efeitos, basta, no JOIN do dbContratoInfo
 		//SOMENTE retornar o ultimo registro QUE TENHA A DATA DE PUBLICACAO DIFERENTE DE NULO, o que nao eh feito aqui
 		//ja que, para chegar aqui, o JOIN ja foi feito
-		$inProduzindoEfeitos= $this->inProduzindoEfeitos;
+		/*$inProduzindoEfeitos= $this->inProduzindoEfeitos;
 		if ($inProduzindoEfeitos != null) {
 			$nmColunaComparacao = vocontrato::$nmAtrDtPublicacaoContrato;
-			//pega o contrato atual (termo atual), de maior sequencial, desde que tenha sido publicado, provocando efeitos
+			//pega o contrato atual (termo atual), de maior sequencial, independente de efeitos
 			if($inProduzindoEfeitos == constantes::$CD_NAO){
 				$filtro = $filtro . $conector 
 				. "(". static::$NmTabContratoATUAL . ".$nmColunaComparacao IS NULL "
@@ -205,7 +205,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 			}
 			
 			$conector = "\n AND ";
-		}		
+		}*/		
 		
 		// atributos do filtromanter
 		if ($this->anoContrato != null) {

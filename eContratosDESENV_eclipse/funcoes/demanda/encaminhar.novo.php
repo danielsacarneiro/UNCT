@@ -135,16 +135,6 @@ function confirmar() {
 	return confirm("Confirmar Alteracoes?");    
 }
 
-function checkResponsabilidade() {
-	campoResponsabilidade = document.frm_principal.<?=voDemandaTramitacao::$nmAtrInResponsabilidadePRT?>;
-	campoPRT = document.frm_principal.<?=voDemandaTramitacao::$nmAtrProtocolo?>;
-	if(campoResponsabilidade.checked){
-		campoPRT.required = false;
-	}else{
-		campoPRT.required = true;
-	}
-}
-
 function validaFormulario() {
 	arrayPrioridadeAlta = ['<?=voDemanda::$nmAtrPrioridade?>', <?=dominioPrioridadeDemanda::$CD_PRIORI_ALTA;?>];	
 
@@ -427,13 +417,6 @@ function iniciar(){
 	            <TH class="campoformulario" nowrap width="1%">Setor Destino:</TH>
 	            <TD class="campoformulario" colspan=3>
 	            <?php echo $comboSetor->getHtmlCombo(voDemandaTramitacao::$nmAtrCdSetorDestino,voDemandaTramitacao::$nmAtrCdSetorDestino, $vo->cdSetorDestino, true, "camponaoobrigatorio", false, $complementoHTMLSetorDestino);?>
-	            <SCRIPT language="JavaScript" type="text/javascript">
-	            	colecaoIDCamposRequiredTramitacao = [
-	            		"<?=voDemandaTramitacao::$nmAtrProtocolo?>",
-	            		<?=dominioFaseDemanda::getColecaoCdsSeparador()?>
-	            		];
-	            </SCRIPT>
-	            <INPUT type="checkbox" id="checkResponsabilidade" name="checkResponsabilidade" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCamposRequiredTramitacao);"> <?=voMensageria::$DS_RESPONSABILIDADE_CAMPO_OBR?>	            
 				</TD>
 	        </TR>
 			<TR>
@@ -470,6 +453,17 @@ function iniciar(){
 	            			class="campoobrigatorio" 
 	            			size="10" 
 	            			maxlength="10" required>
+	
+	            <SCRIPT language="JavaScript" type="text/javascript">
+	            	colecaoIDCamposRequiredTramitacao = [
+	            		"<?=voDemanda::$nmAtrInTpDemandaReajusteComMontanteA?>",
+	            		"<?=voDemanda::$nmAtrCdPessoaRespATJA?>",
+	            		"<?=voDemandaTramitacao::$nmAtrProtocolo?>",
+	            		<?=dominioFaseDemanda::getColecaoCdsSeparador()?>
+	            		];
+	            </SCRIPT>
+	            <INPUT type="checkbox" id="checkResponsabilidade" name="checkResponsabilidade" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCamposRequiredTramitacao);"> 
+	            <?=getTextoHTMLNegrito(voMensageria::$DS_RESPONSABILIDADE_CAMPO_OBR)?>	            	
 				</TD>
         	</TR>
         		<?php 
@@ -478,21 +472,7 @@ function iniciar(){
 					$colecaoTramitacao = $vo->dbprocesso->consultarDemandaTramitacao($vo);
 					mostrarGridDemanda($colecaoTramitacao, true);
 				}
-				?>
-        	
-	        
-<TR>
-	<TD halign="left" colspan="4">
-	<DIV class="textoseparadorgrupocampos">
-				<SCRIPT language="JavaScript" type="text/javascript">
-	            	colecaoIDCdNaoObrigatorio = ["<?=voDemanda::$nmAtrInTpDemandaReajusteComMontanteA?>"];
-	            </SCRIPT>
-	            <INPUT type="checkbox" id="checkCdNaoObrigatorio" name="checkCdNaoObrigatorio" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCdNaoObrigatorio);"> <?=constantes::$DS_RESPONSABILIDADE_NAO_INCLUSAO_CAMPOS?>
-	
-	&nbsp;</DIV>
-	</TD>
-</TR>        	        	
-	        <?php
+
 	        if(!$isInclusao){
 	            echo "<TR>" . incluirUsuarioDataHoraDetalhamento($vo) .  "</TR>";
 	        }

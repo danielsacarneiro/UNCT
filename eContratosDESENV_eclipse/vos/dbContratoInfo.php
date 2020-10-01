@@ -264,6 +264,7 @@ class dbContratoInfo extends dbprocesso {
 		if ($inProduzindoEfeitos != null) {
 			$nmColunaComparacao = vocontrato::$nmAtrDtPublicacaoContrato;
 			//pega o contrato atual (termo atual), de maior sequencial, desde que tenha sido publicado, provocando efeitos
+			//so vai consultar se for SIM, caso contrario, traz o ultimo registro, independente de ter sido publicado ou nao.
 			if($inProduzindoEfeitos == constantes::$CD_SIM){				
 				$cdCampoSubstituir .= " AND ($nmColunaComparacao IS NOT NULL AND $nmColunaComparacao <> '0000-00-00')";
 			}/*else{

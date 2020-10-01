@@ -210,7 +210,7 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 		if($exibirInfoProrrog && !isContratoPermiteProrrogacao($voContratoDemanda)){
 			$texto = "ATENÇÃO: verifique se o contrato comporta prorrogação em 'Contratos-Consolidação'";
 			//$html .= $conectorAlerta . getTextoHTMLDestacado($texto);
-			$html .= $conectorAlerta . getTextoLink($texto, "../contrato_consolidacao");
+			$html .= $conectorAlerta . getTextoLink($texto, "../contrato_consolidacao", null, false, true);
 			
 			$conectorAlerta = "<BR>";
 		}	

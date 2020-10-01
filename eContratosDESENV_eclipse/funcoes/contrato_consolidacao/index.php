@@ -356,8 +356,9 @@ function movimentacoes(){
 	            						size="10"
 	            								maxlength="10" >-->
 	            <?php
-	            $textoTag = getTextoHTMLTagMouseOver("Termo Atual Produzindo Efeitos?", "Exibe somente os termos formalizados.");
-	            echo "| $textoTag". $comboSimNao->getHtmlCombo(
+	            $comboSimNaoEfeitos = new select(array(constantes::$CD_SIM => "Com efeitos", constantes::$CD_NAO => "Últ.Termo"));
+	            $textoTag = getTextoHTMLTagMouseOver("Último Termo: ", "Exibe somente os termos formalizados.");
+	            echo "| $textoTag". $comboSimNaoEfeitos->getHtmlCombo(
 	            		filtroConsultarContratoConsolidacao::$ID_REQ_InProduzindoEfeitos,
 	            		filtroConsultarContratoConsolidacao::$ID_REQ_InProduzindoEfeitos, 
 	            		$filtro->inProduzindoEfeitos, true, "camponaoobrigatorio", false, "");
