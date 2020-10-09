@@ -72,6 +72,7 @@ include_once 'normativos.php';
     static $ID_REQ_CD_LUPA = "lupa";
     static $ID_REQ_MULTISELECAO = "multiSelecao";
     static $ID_REQ_IN_ENVIAR_EMAIL = "ENVIAR_EMAIL";
+    static $ID_REQ_GETPARAM_GET = "ID_REQ_GETPARAM_GET";
 
     static $CD_COLUNA_CHAVE  = "COLUNA_CD";
     static $CD_COLUNA_VALOR = "COLUNA_VALOR";

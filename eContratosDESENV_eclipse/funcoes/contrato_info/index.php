@@ -215,9 +215,7 @@ function alterar() {
                   <?php 
                   }
                   ?>
-                    <TH class="headertabeladados" width="1%" nowrap>Ano</TH>
-                    <TH class="headertabeladados" width="1%">Num.</TH>
-                    <TH class="headertabeladados" width="1%">Tipo</TH>
+                    <TH class="headertabeladados" width="1%" nowrap>Contrato</TH>
                     <TH class="headertabeladados" width="80%">Contratada</TH>
                     <TH class="headertabeladados" width="1%">CNPJ/CNPF</TH>
                     <TH class="headertabeladados" width="1%">Proposta</TH>
@@ -231,7 +229,7 @@ function alterar() {
                 
                 //echoo($tamanho);               
                                 
-                $colspan=8;
+                $colspan=6;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -254,6 +252,10 @@ function alterar() {
                         	$dsPessoa = "<B>CONTRATO NÃO INCLUÍDO NA PLANILHA</B>";
                         }
                         
+                        $contrato = formatarCodigoAnoComplemento($voAtual->cdContrato,
+                        		$voAtual->anoContrato,
+                        		$dominioTipoContrato->getDescricao($voAtual->tipo));                        
+                        
                    ?>
                 <TR class="dados">
                     <TD class="tabeladados">
@@ -266,9 +268,7 @@ function alterar() {
                   <?php 
                   }
                   ?>                    
-                    <TD class="tabeladadosalinhadodireita"><?php echo $voAtual->anoContrato;?></TD>
-                    <TD class="tabeladadosalinhadodireita" ><?php echo complementarCharAEsquerda($voAtual->cdContrato, "0", TAMANHO_CODIGOS_SAFI)?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $tipo?></TD>
+                    <TD class="tabeladados" nowrap><?php echo $contrato?></TD>
 					<TD class="tabeladados" nowrap><?php echo $dsPessoa?></TD>
 					<TD class="tabeladados" nowrap><?php echo documentoPessoa::getNumeroDocFormatado($voPessoa->doc)?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($voAtual->dtProposta)?></TD>

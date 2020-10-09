@@ -748,6 +748,7 @@ class dbprocesso {
 		return $retorno;
 	}
 	function alterarPorCima($voEntidade) {
+		$this->validaAlteracao ( $voEntidade );
 		$query = $this->alterarSQL ( $voEntidade );
 		// echo $query;
 		$retorno = $this->cDb->atualizar ( $query );

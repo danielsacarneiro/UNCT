@@ -6,6 +6,7 @@ include_once (caminho_util . "bibliotecaHTML.php");
 class filtroManterContrato extends filtroManter {
 	public $nmFiltro = "filtroManterContrato";
 	
+	public static $ID_REQ_InPublicado = "ID_REQ_InPublicado";
 	public static $nmAtrInTrazerConsolidadoPorVigencia = "nmAtrInTrazerConsolidadoPorVigencia";	
 	public static $nmAtrAnoArquivo = "nmAtrAnoArquivo";
 	public static $nmAtrTpDemanda = "nmAtrTpDemanda";
@@ -41,6 +42,7 @@ class filtroManterContrato extends filtroManter {
 	
 	var $cdConsultarArquivo;
 	var $inTrazerConsolidadoVigencia;
+	var $inPublicado;
 	
 	var $tpDemanda;
 	var $licon;
@@ -101,6 +103,7 @@ class filtroManterContrato extends filtroManter {
 		$this->cdAutorizacao = @$_POST [vocontrato::$nmAtrCdAutorizacaoContrato];
 		$this->licon = @$_POST [vocontrato::$nmAtrInLicomContrato];
 		$this->empenho = @$_POST [vocontrato::$nmAtrNumEmpenhoContrato];
+		$this->inPublicado = @$_POST [static::$ID_REQ_InPublicado];
 				
 		$this->InOR_AND = @$_POST[self::$NmAtrInOR_AND];
 		if($this->InOR_AND == null){
@@ -383,6 +386,16 @@ class filtroManterContrato extends filtroManter {
 		if ($this->empenho != null && $this->empenho != "") {
 			$filtro = $filtro . $conector . "$nmTabela." . vocontrato::$nmAtrNumEmpenhoContrato 
 			. getSQLLike($this->empenho);
+			$conector = "\n AND ";
+		}
+		
+		if ($this->inPublicado != null && $this->inPublicado != "") {
+			if($this->inPublicado == constantes::$CD_SIM){
+				$temp = " IS NOT NULL ";
+			}else{
+				$temp = " IS NULL ";
+			}
+			$filtro = $filtro . $conector . "$nmTabela." . vocontrato::$nmAtrDtPublicacaoContrato . $temp;
 			$conector = "\n AND ";
 		}
 		

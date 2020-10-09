@@ -424,7 +424,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		}		
 		
 		//para o caso de permitir sempre prorrogacao
-		$retorno .= "(". voContratoInfo::$nmAtrInPrazoProrrogacao ." = ". dominioProrrogacaoContrato::$CD_NAO_SEAPLICA .")";
+		$retorno .= "(". voContratoInfo::$nmAtrInPrazoProrrogacao ." IN (". getSQLStringFormatadaColecaoIN(array_keys(dominioProrrogacaoContrato::getColecaoPermiteProrrogacaoSQL())) . "))";
 		$retorno = "($retorno)";
 		
 		return $retorno;

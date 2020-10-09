@@ -13,6 +13,12 @@ function getData($dataSQL) {
 	return getDataHoraParam($dataSQL, false);
 }
 
+function isDataValidaNaoVazia($dataSQL, $temHora=false) {
+	$retorno = $dataSQL != null && $dataSQL != "" && $dataSQL != "0000-00-00";
+	return $retorno;
+}
+
+
 function getDataHoraParam($dataSQL, $temHora) {
 	$retorno = null;
 	if ($dataSQL != null){

@@ -228,7 +228,9 @@ class dbContratoInfo extends dbprocesso {
 		$queryJoin .= $nmTabContratoMINSq . "." . vocontrato::$nmAtrSqContrato . "=" . $nmTabContratoMater . "." . vocontrato::$nmAtrSqContrato;
 		
 		//TABELA $nmTabContratoATUAL
-		$queryJoin .= "\n LEFT JOIN ";
+		//RECENTEMENTE o trecho abaixo foi alterado para INNER (estava LEFT JOIN)
+		//isto porque, quando consultado o termo atual "com efeitos", e nao houver publicacao (ou seja, sem efeitos), o contrato NAO DEVE SER RETORNADO
+		$queryJoin .= "\n INNER JOIN ";
 		$queryJoin .= " (SELECT " . $groupbyinterno . ", MAX(" . vocontrato::$nmAtrSqContrato . ") AS " . vocontrato::$nmAtrSqContrato
 		. " FROM " . $nmTabContratoInterna;
 		$queryJoin .= constantes::$CD_CAMPO_SUBSTITUICAO . " GROUP BY " . $groupbyinterno;

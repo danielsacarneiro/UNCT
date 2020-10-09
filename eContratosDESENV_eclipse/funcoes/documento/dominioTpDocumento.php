@@ -114,7 +114,6 @@ class dominioTpDocumento extends dominio {
 				self::$CD_TP_DOC_CONTROLE_AQUISICAO => self::$DS_TP_DOC_CONTROLE_AQUISICAO,
 				self::$CD_TP_DOC_LEGISLACAO => self::$DS_TP_DOC_LEGISLACAO,
 				//self::$CD_TP_DOC_PARECER => self::$DS_TP_DOC_PARECER,
-				self::$CD_TP_DOC_PLANILHA_CUSTOS => self::$DS_TP_DOC_PLANILHA_CUSTOS,
 				self::$CD_TP_DOC_PROPOSTA_PRECOS => self::$DS_TP_DOC_PROPOSTA_PRECOS,
 				//self::$CD_TP_DOC_PLANILHA_LICON => self::$DS_TP_DOC_PLANILHA_LICON,
 		);
@@ -129,6 +128,7 @@ class dominioTpDocumento extends dominio {
 	}
 	static function getColecaoComum() {
 		$retorno = array (
+				self::$CD_TP_DOC_PLANILHA_CUSTOS => self::$DS_TP_DOC_PLANILHA_CUSTOS,
 				self::$CD_TP_DOC_CHECKLIST => self::$DS_TP_DOC_CHECKLIST,
 				self::$CD_TP_DOC_CI => self::$DS_TP_DOC_CI,
 				self::$CD_TP_DOC_DESPACHO => self::$DS_TP_DOC_DESPACHO,

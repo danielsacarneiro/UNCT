@@ -346,9 +346,9 @@ function confirmar() {
                </TD>	            
 	    </TR>
 			<TR>
-				<TH class="campoformulario" nowrap>Intervalo Data Inicial:</TH>
-				<TD class="campoformulario">
-                          	<INPUT type="text" 
+				<TH class="campoformulario" nowrap>Intervalo</TH>
+				<TD class="campoformulario" colspan=3>
+                          	Data Inicial: <INPUT type="text" 
                         	       id="dtInicio1" 
                         	       name="dtInicio1" 
                         			value="<?php echo($dtInicio1);?>" 
@@ -364,9 +364,7 @@ function confirmar() {
                         			class="camponaoobrigatorio" 
                         			size="10" 
                         			maxlength="10" >
-																</TD>
-                <TH class="campoformulario" nowrap>Intervalo Data Final:</TH>
-                <TD class="campoformulario">
+                        	| Data Final:
                         	<INPUT type="text" 
                         	       id="dtFim1" 
                         	       name="dtFim1" 
@@ -383,7 +381,13 @@ function confirmar() {
                         			class="camponaoobrigatorio" 
                         			size="10" 
                         			maxlength="10" >
-				</TD>						
+                        	| Publicado? 
+                        	<?php
+                        	echo $comboSimNao->getHtmlCombo(filtroManterContrato::$ID_REQ_InPublicado,
+                        			filtroManterContrato::$ID_REQ_InPublicado, 
+                        			$filtro->inPublicado, true, "camponaoobrigatorio", false,"");
+                        	?>
+				</TD>
          </TR>	    		
 		<TR>
 			<TH class="campoformulario" nowrap>Tp.Vigência:</TH>

@@ -1075,203 +1075,219 @@ class dbcontrato extends dbprocesso {
 	}
 
 	function getVOImportacaoPlanilha($tipo, $linha) {
-
 		$tpContrato = $linha ["A"];
-
-		if($tpContrato == trim(static::$CD_CONSTANTE_FIM_IMPORTACAO)){
-			throw new excecaoFimImportacaoContrato();
+		
+		if ($tpContrato == trim ( static::$CD_CONSTANTE_FIM_IMPORTACAO )) {
+			throw new excecaoFimImportacaoContrato ();
 		}
 
 		$numero = $linha ["B"];
 		$ano = $linha ["B"];
 		$especie = $linha ["D"];
+		//pega antes para validacoes anteriores
+		if ($tipo != "V") {
+			// contrato/profisco
+			$nomeContratada = $linha ["O"];
+		} else {
+			// convenio
+			$nomeContratada = $linha ["M"];
+		}
 
-		if(existeStr1NaStr2("CANCELADO", $especie))
+		$dtAlteracao = $linha ["E"];
+		$objeto = $linha ["F"];
+		
+		$cancelado = "CANCELADO";
+		$isCancelado = existeStr1NaStr2($cancelado, $especie) || $nomeContratada == $cancelado || $objeto == $cancelado;		
+		if($isCancelado){
 			throw new excecaoGenerica("Contrato CANCELADO.");
-
-			$dtAlteracao = $linha ["E"];
-
-			$objeto = $linha ["F"];
-			$gestorPessoa = $linha ["G"];
-			$linkDoc = $linha [vocontrato::$nmAtrLinkDoc];
-			$linkMinutaDoc = $linha [vocontrato::$nmAtrLinkMinutaDoc];
-
-			if ($tipo != "V") {
-				// contrato/profisco
-				$gestor = $linha ["H"];
-					
-				$valorGlobal = $linha ["J"];
-				$valorMensal = $linha ["I"];
-				$processoLic = $linha ["K"];
-				$modalidadeLic = $linha ["L"];
-				$dtAssinatura = $linha ["M"];
-				$dataPublic = $linha ["N"];
-				$nomeContratada = $linha ["O"];
-				$docContratada = $linha ["P"];
-					
-				$dtVigenciaInicio = $linha ["Q"];
-				$dtVigenciaFim = $linha ["R"];
-				$sqEmpenho = $linha ["T"];
-				//$sqEmpenho = $linha ["S"];
-				$tpAutorizacao = $linha ["U"];
-				//$tpAutorizacao = $linha ["T"];
-				//$inLicom = $linha ["V"];
-				$obs = $linha ["V"];
-			} else {
-				// convenio
-				$gestor = null;
-					
-				$valorGlobal = $linha ["H"];
-				$valorMensal = null;
-				//$processoLic = $linha ["H"];
-				$modalidadeLic = $linha ["J"];
-				$dtAssinatura = $linha ["K"];
-				$dataPublic = $linha ["L"];
-				$nomeContratada = $linha ["M"];
-				$docContratada = $linha ["N"];
-					
-				$dtVigenciaInicio = $linha ["O"];
-				$dtVigenciaFim = $linha ["P"];
-					
-				if ($tipo == "V")
-					$sqEmpenho = $linha ["R"];
-					else
-						$sqEmpenho = $linha ["Q"];
-							
-						$tpAutorizacao = null;
-						//$inLicom = $linha ["S"];
-						$obs = $linha ["S"];
+		}
+		
+		$gestorPessoa = $linha ["G"];
+		$linkDoc = $linha [vocontrato::$nmAtrLinkDoc];
+		$linkMinutaDoc = $linha [vocontrato::$nmAtrLinkMinutaDoc];
+		
+		if ($tipo != "V") {
+			// contrato/profisco
+			$gestor = $linha ["H"];
+			
+			$valorGlobal = $linha ["J"];
+			$valorMensal = $linha ["I"];
+			$processoLic = $linha ["K"];
+			$modalidadeLic = $linha ["L"];
+			$dtAssinatura = $linha ["M"];
+			$dataPublic = $linha ["N"];
+			//$nomeContratada = $linha ["O"];
+			$docContratada = $linha ["P"];
+			
+			$dtVigenciaInicio = $linha ["Q"];
+			$dtVigenciaFim = $linha ["R"];
+			$sqEmpenho = $linha ["T"];
+			// $sqEmpenho = $linha ["S"];
+			$tpAutorizacao = $linha ["U"];
+			// $tpAutorizacao = $linha ["T"];
+			// $inLicom = $linha ["V"];
+			$obs = $linha ["V"];
+		} else {
+			// convenio
+			$gestor = null;
+			
+			$valorGlobal = $linha ["H"];
+			$valorMensal = null;
+			// $processoLic = $linha ["H"];
+			$modalidadeLic = $linha ["J"];
+			$dtAssinatura = $linha ["K"];
+			$dataPublic = $linha ["L"];
+			//$nomeContratada = $linha ["M"];
+			$docContratada = $linha ["N"];
+			
+			$dtVigenciaInicio = $linha ["O"];
+			$dtVigenciaFim = $linha ["P"];
+			
+			if ($tipo == "V")
+				$sqEmpenho = $linha ["R"];
+			else
+				$sqEmpenho = $linha ["Q"];
+			
+			$tpAutorizacao = null;
+			// $inLicom = $linha ["S"];
+			$obs = $linha ["S"];
+		}
+		
+		// recupera o sequencial da especie (aditivo, apostilamento) quando existir
+		$sqEspecie = substr ( $especie, 0, 3 );
+		$indiceEspecie = getIndicePosteriorAoUltimoNumeroAPartirDoComeco ( $sqEspecie );
+		$sqEspecie = substr ( $sqEspecie, 0, $indiceEspecie );
+		// recuperar a especie propriamente dita
+		// $cdEspecie = $this->getCdEspecieContrato ( $especie, $objeto );
+		$cdEspecie = $this->getCdEspecieContrato ( $especie );
+		
+		// pega tp contrato que esteja na especie apenas excepcionalmente
+		// casos de contratos que foram cadastrados incorretamente. Em 2020 isso nao deve mais ocorrer
+		$tpContratoEspecie = $this->getTpContratoNaEspecie ( $especie );
+		// se tpContratoEspecie nao for nulo, quer dizer que o tipo esta na especie e ele deve prevalecer
+		if ($tpContratoEspecie != null) {
+			$tipo = $tpContratoEspecie;
+		}
+		
+		$situacao = "null";
+		$dtProposta = "null";
+		$cdGestor = "null";
+		$cdPessoaGestor = "null";
+		$cdPessoaContratada = "null";
+		
+		$importacao = "S";
+		// trata o valor do inlicom
+		/*
+		 * if ($inLicom == "OK")
+		 * $inLicom = "S";
+		 * else
+		 * $inLicom = "N";
+		 */
+		
+		$retorno = new vocontrato ();
+		/*
+		 * $retorno->cdContrato = $numero;
+		 * $retorno->anoContrato = $ano;
+		 */
+		// corrige os tipos de dados
+		$retorno->anoContrato = $this->getAnoLinhaImportacao ( $ano );
+		$retorno->cdContrato = $this->getNumeroLinhaImportacao ( $numero );
+		$retorno->tipo = $tipo;
+		$retorno->especie = $especie;
+		$retorno->cdEspecie = $cdEspecie;
+		$retorno->linkDoc = getDocLinkMascaraImportacao ( $linkDoc );
+		$retorno->linkMinutaDoc = getDocLinkMascaraImportacao ( $linkMinutaDoc );
+		
+		if ($sqEspecie != null) {
+			$retorno->sqEspecie = $sqEspecie;
+			// echoo("Encontrou sqEspecie $sqEspecie");
+		} else {
+			$retorno->sqEspecie = null;
+			static::manterMatrizTpDocContratoSqEspecie ( $retorno );
+			$retorno->sqEspecie = vocontrato::$matrizImportacao [$retorno->getValorChaveLogica ()];
+			// echoo("Incluindo sequencial " . $retorno->sqEspecie . " para a especie " . dominioEspeciesContrato::getDescricao($cdEspecie));
+		}
+		
+		// $retorno->objeto = $objeto;
+		$retorno->objeto = getStringImportacaoCaracterEspecial ( $objeto );
+		$retorno->nmGestorPessoa = $gestorPessoa;
+		// $retorno->gestor = $gestor;
+		$retorno->gestor = getStringImportacaoCaracterEspecial ( $gestor );
+		
+		$retorno->vlGlobal = $valorGlobal;
+		$retorno->vlMensal = $valorMensal;
+		if ($processoLic != null) {
+			// $retorno->procLic = $processoLic;
+			$retorno->procLic = getStringImportacaoCaracterEspecial ( $processoLic );
+			
+			try {
+				$arrayProcLic = getArrayFormatadoLinhaImportacaoPorSeparador ( $processoLic );
+				$retorno->cdProcLic = $arrayProcLic [0];
+				$retorno->anoProcLic = $arrayProcLic [1];
+				
+				// pega o cdmodalidade no campo modalidade da planilha
+				$retorno->cdModalidadeLic = dominioModalidadeProcLicitatorio::getChaveDeUmaStringPorExtenso ( $modalidadeLic, dominioModalidadeProcLicitatorio::getColecaoImportacaoPlanilha () );
+				if ($retorno->cdModalidadeLic == null) {
+					// se nao achar, busca no campo proclic
+					$retorno->cdModalidadeLic = dominioModalidadeProcLicitatorio::getChaveDeUmaStringPorColecaoSimples ( $processoLic, dominioModalidadeProcLicitatorio::getColecaoImportacaoPlanilhaPorCodigoSimples () );
+				}
+			} catch ( excecaoNumProcLicImportacaoInvalido $exProcLic ) {
+				if (static::$FLAG_PRINTAR_LOG_IMPORTACAO) {
+					echoo ( $exProcLic->getMessage () );
+				}
+			} catch ( Exception $ex ) {
+				if (static::$FLAG_PRINTAR_LOG_IMPORTACAO) {
+					echoo ( $ex->getMessage () );
+				}
 			}
-
-			// recupera o sequencial da especie (aditivo, apostilamento) quando existir
-			$sqEspecie = substr ( $especie, 0, 3 );
-			$indiceEspecie = getIndicePosteriorAoUltimoNumeroAPartirDoComeco ( $sqEspecie );
-			$sqEspecie = substr ( $sqEspecie, 0, $indiceEspecie );
-			// recuperar a especie propriamente dita
-			//$cdEspecie = $this->getCdEspecieContrato ( $especie, $objeto );
-			$cdEspecie = $this->getCdEspecieContrato ( $especie);
-
-			//pega tp contrato que esteja na especie apenas excepcionalmente
-			//casos de contratos que foram cadastrados incorretamente. Em 2020 isso nao deve mais ocorrer
-			$tpContratoEspecie = $this->getTpContratoNaEspecie($especie);
-			//se tpContratoEspecie nao for nulo, quer dizer que o tipo esta na especie e ele deve prevalecer
-			if($tpContratoEspecie != null){
-				$tipo = $tpContratoEspecie;
-			}
-
-			$situacao = "null";
-			$dtProposta = "null";
-			$cdGestor = "null";
-			$cdPessoaGestor = "null";
-			$cdPessoaContratada = "null";
-
-			$importacao = "S";
-			// trata o valor do inlicom
-			/*if ($inLicom == "OK")
-			 $inLicom = "S";
-			 else
-			 	$inLicom = "N";*/
-
-			 $retorno = new vocontrato ();
-			 /*$retorno->cdContrato = $numero;
-			  $retorno->anoContrato = $ano;*/
-			 // corrige os tipos de dados
-			 $retorno->anoContrato = $this->getAnoLinhaImportacao ( $ano );
-			 $retorno->cdContrato = $this->getNumeroLinhaImportacao ( $numero );
-			 $retorno->tipo = $tipo;
-			 $retorno->especie = $especie;
-			 $retorno->cdEspecie = $cdEspecie;
-			 $retorno->linkDoc = getDocLinkMascaraImportacao ( $linkDoc );
-			 $retorno->linkMinutaDoc = getDocLinkMascaraImportacao ( $linkMinutaDoc);
-
-			 if ($sqEspecie != null) {
-			 	$retorno->sqEspecie = $sqEspecie;
-			 	//echoo("Encontrou sqEspecie $sqEspecie");
-			 }else{
-			 	$retorno->sqEspecie = null;
-			 	static::manterMatrizTpDocContratoSqEspecie($retorno);
-			 	$retorno->sqEspecie = vocontrato::$matrizImportacao[$retorno->getValorChaveLogica()];
-			 	//echoo("Incluindo sequencial " . $retorno->sqEspecie . " para a especie " . dominioEspeciesContrato::getDescricao($cdEspecie));
-			 }
-
-			 //$retorno->objeto = $objeto;
-			 $retorno->objeto = getStringImportacaoCaracterEspecial($objeto);
-			 $retorno->nmGestorPessoa = $gestorPessoa;
-			 //$retorno->gestor = $gestor;
-			 $retorno->gestor = getStringImportacaoCaracterEspecial($gestor);
-
-			 $retorno->vlGlobal = $valorGlobal;
-			 $retorno->vlMensal = $valorMensal;
-			 if($processoLic != null){
-			 	//$retorno->procLic = $processoLic;
-			 	$retorno->procLic = getStringImportacaoCaracterEspecial($processoLic);
-			 		
-			 	try{
-			 		$arrayProcLic = getArrayFormatadoLinhaImportacaoPorSeparador($processoLic);
-			 		$retorno->cdProcLic = $arrayProcLic[0];
-			 		$retorno->anoProcLic = $arrayProcLic[1];
-			 		
-			 		//pega o cdmodalidade no campo modalidade da planilha
-			 		$retorno->cdModalidadeLic = dominioModalidadeProcLicitatorio::getChaveDeUmaStringPorExtenso($modalidadeLic, dominioModalidadeProcLicitatorio::getColecaoImportacaoPlanilha());
-			 		if($retorno->cdModalidadeLic == null){
-			 			//se nao achar, busca no campo proclic
-			 			$retorno->cdModalidadeLic = dominioModalidadeProcLicitatorio::getChaveDeUmaStringPorColecaoSimples($processoLic, dominioModalidadeProcLicitatorio::getColecaoImportacaoPlanilhaPorCodigoSimples());
-			 		}
-			 	}catch(excecaoNumProcLicImportacaoInvalido $exProcLic){
-			 		if(static::$FLAG_PRINTAR_LOG_IMPORTACAO){
-			 			echoo($exProcLic->getMessage());
-			 		}
-			 	}catch(Exception $ex){
-			 		if(static::$FLAG_PRINTAR_LOG_IMPORTACAO){
-						echoo($ex->getMessage());
-		 			}
-		 		}
-			 }
-
-			 $retorno->modalidade = $modalidadeLic;
-			 $retorno->dtAssinatura = $dtAssinatura;
-			 $retorno->dataPublicacao = $dataPublic;
-			 //$retorno->contratada = $nomeContratada;
-			 $retorno->contratada = getStringImportacaoCaracterEspecial($nomeContratada);
-
-			 $documento = new documentoPessoa ( $docContratada );
-			 $retorno->docContratada = $documento->getNumDoc ();
-
-			 $retorno->dtVigenciaInicial = $dtVigenciaInicio;
-			 $retorno->dtVigenciaFinal = $dtVigenciaFim;
-			 $retorno->empenho = $sqEmpenho;
-			 $retorno->tpAutorizacao = $tpAutorizacao;
-			 $retorno->licom = $inLicom;
-			 $retorno->obs = $obs;
-			 $retorno->importacao = $importacao;
-
-			 // corrige os tipos de dados
-			 $retorno->cdAutorizacao = $this->getCdAutorizacao ( $retorno->tpAutorizacao );
-			 //echoo("valor global:" . $valorGlobal);
-			 //echo "<br> VALOR GLOBAL: " . $retorno->vlGlobal;
-			 // echo "<br> VALOR vlMensal: " . $retorno->vlMensal;
-			 $retorno->vlGlobal = $this->getDecimalLinhaImportacao ( $retorno->vlGlobal );
-			 $retorno->vlMensal = $this->getDecimalLinhaImportacao ( $retorno->vlMensal );
-			 //echo "<br> VALOR GLOBAL: " . $retorno->vlGlobal;
-
-			 $retorno->dtAssinatura = $this->getDataLinhaImportacao ( $retorno->dtAssinatura );
-			 $retorno->dtPublicacao = $this->getDataPublicacaoImportacao ( $dataPublic );
-			 $retorno->dtVigenciaInicial = $this->getDataLinhaImportacao ( $retorno->dtVigenciaInicial );
-			 $retorno->dtVigenciaFinal = $this->getDataLinhaImportacao ( $retorno->dtVigenciaFinal );
-
-			 /*$retorno->cdUsuarioInclusao = "null";
-			 $retorno->cdUsuarioUltAlteracao = "null";*/
-
-			 $retorno->cdUsuarioInclusao = constantes::$CD_USUARIO_BATCH;
-			 $retorno->cdUsuarioUltAlteracao = constantes::$CD_USUARIO_BATCH;
-			 
-			 /*
-			  * echo "<br>data assinatura: " . $retorno->dtAssinatura;
-			  * echo "<br>data dtVigenciaInicial: " . $retorno->dtVigenciaInicial;
-			  * echo "<br>data dtVigenciaFinal: " . $retorno->dtVigenciaFinal;
-			  */
-
-			 return $retorno;
+		}
+		
+		$retorno->modalidade = $modalidadeLic;
+		$retorno->dtAssinatura = $dtAssinatura;
+		$retorno->dataPublicacao = $dataPublic;
+		// $retorno->contratada = $nomeContratada;
+		$retorno->contratada = getStringImportacaoCaracterEspecial ( $nomeContratada );
+		
+		$documento = new documentoPessoa ( $docContratada );
+		$retorno->docContratada = $documento->getNumDoc ();
+		
+		$retorno->dtVigenciaInicial = $dtVigenciaInicio;
+		$retorno->dtVigenciaFinal = $dtVigenciaFim;
+		$retorno->empenho = $sqEmpenho;
+		$retorno->tpAutorizacao = $tpAutorizacao;
+		$retorno->licom = $inLicom;
+		$retorno->obs = $obs;
+		$retorno->importacao = $importacao;
+		
+		// corrige os tipos de dados
+		$retorno->cdAutorizacao = $this->getCdAutorizacao ( $retorno->tpAutorizacao );
+		// echoo("valor global:" . $valorGlobal);
+		// echo "<br> VALOR GLOBAL: " . $retorno->vlGlobal;
+		// echo "<br> VALOR vlMensal: " . $retorno->vlMensal;
+		$retorno->vlGlobal = $this->getDecimalLinhaImportacao ( $retorno->vlGlobal );
+		$retorno->vlMensal = $this->getDecimalLinhaImportacao ( $retorno->vlMensal );
+		// echo "<br> VALOR GLOBAL: " . $retorno->vlGlobal;
+		
+		$retorno->dtAssinatura = $this->getDataLinhaImportacao ( $retorno->dtAssinatura );
+		$retorno->dtPublicacao = $this->getDataPublicacaoImportacao ( $dataPublic );
+		$retorno->dtVigenciaInicial = $this->getDataLinhaImportacao ( $retorno->dtVigenciaInicial );
+		$retorno->dtVigenciaFinal = $this->getDataLinhaImportacao ( $retorno->dtVigenciaFinal );
+		
+		/*
+		 * $retorno->cdUsuarioInclusao = "null";
+		 * $retorno->cdUsuarioUltAlteracao = "null";
+		 */
+		
+		$retorno->cdUsuarioInclusao = constantes::$CD_USUARIO_BATCH;
+		$retorno->cdUsuarioUltAlteracao = constantes::$CD_USUARIO_BATCH;
+		
+		/*
+		 * echo "<br>data assinatura: " . $retorno->dtAssinatura;
+		 * echo "<br>data dtVigenciaInicial: " . $retorno->dtVigenciaInicial;
+		 * echo "<br>data dtVigenciaFinal: " . $retorno->dtVigenciaFinal;
+		 */
+		
+		return $retorno;
 	}
 
 	function iniciarTabelaContrato(){

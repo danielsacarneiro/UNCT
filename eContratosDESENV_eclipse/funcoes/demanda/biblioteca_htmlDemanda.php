@@ -211,7 +211,7 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 			$texto = "ATENÇÃO: verifique se o contrato comporta prorrogação em 'Contratos-Consolidação'";
 			//$html .= $conectorAlerta . getTextoHTMLDestacado($texto);
 			$html .= $conectorAlerta . getTextoLink($texto, "../contrato_consolidacao", null, false, true);
-			
+						
 			$conectorAlerta = "<BR>";
 		}	
 	}

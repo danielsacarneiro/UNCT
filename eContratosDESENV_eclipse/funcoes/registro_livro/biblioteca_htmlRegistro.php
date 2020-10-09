@@ -98,17 +98,21 @@ function getDadosPublicacaoContrato($chaveContrato, $indice) {
 		//echo "tamanho $tamanho!"; 
 		$registrobanco = $colecao[0];
 		
-		$publicacao = getModeloPublicacaoPreenchido($registrobanco);
-		
 		if ($colecao == ""){
 			throw new excecaoChaveRegistroInexistente ("DbProcesso. Consulta Chave Primária");
-		}else if ($tamanho > 1 || $registrobanco[voContratoLicon::$nmAtrAnoDemanda] != null){
-			//caso tenha demanda preenchida, significa que ja houve pelo menos uma tentativa de publicacao
+		}else{
+			$publicacao = getModeloPublicacaoPreenchido($registrobanco);
+		}
+		
+		if ($tamanho > 1 
+				|| isDataValidaNaoVazia($registrobanco[vocontrato::$nmAtrDtPublicacaoContrato]) 
+				|| $registrobanco[voContratoLicon::$nmAtrAnoDemanda] != null){
+			//caso tenha demanda LICON preenchida, significa que ja houve pelo menos uma tentativa de publicacao
 			//se ja houve publicacao anterior, deve ser alertado
 			//o alerta eh igual aquele levantado em caso de mais de um registro. Dai irem para a mesma opcao
 			//levantando a mesma excecao
 			throw new excecaoMaisDeUmRegistroRetornado ();
-		}
+		}		
 
 	}catch (excecaoChaveRegistroInexistente $ex){
 		$publicacao = getTextoHTMLDestacado("VERIFIQUE O ". ($indice) ."º REGISTRO. CONSTA COMO INEXISTENTE.");
@@ -119,8 +123,7 @@ function getDadosPublicacaoContrato($chaveContrato, $indice) {
 		//$publicacao .= getModeloPublicacaoPreenchido($registrobanco);
 	}catch (excecaoAtributoInvalido $ex){
 		//informa a existencia de publicacao anterior e deixa pro usuario pensar o que fazer.
-		$publicacao = $ex->getMsgEconti() . "." . getTextoHTMLDestacado("VERIFIQUE O ". ($indice) ."º REGISTRO. HÁ DADOS NÃO PREENCHIDOS NA PLANILHA.");
-			
+		$publicacao = $ex->getMsgEconti() . "." . getTextoHTMLDestacado("VERIFIQUE O ". ($indice) ."º REGISTRO. HÁ DADOS NÃO PREENCHIDOS NA PLANILHA.");			
 	}		
 
 	return $publicacao;

@@ -85,7 +85,7 @@ function formataFormEscopo() {
 	}
 
 	if(isEscopo && campoProrrogacao.value != ""
-		&& campoProrrogacao.value != "<?=dominioProrrogacaoContrato::$CD_NAO_SEAPLICA?>"){
+		&& campoProrrogacao.value != "<?=dominioProrrogacaoContrato::$CD_ART57_PAR_1?>"){
 		exibirMensagem("A prorrogação do contrato por escopo fundamenta-se no art.57, §º1, lei 8666/93.");
 		campoProrrogacao.focus();
 		campoProrrogacao.value = "";
@@ -167,7 +167,7 @@ function transferirDadosPessoa(cd, nm) {
 	        ?>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" nowrap colspan=3><?php getCampoDadosContratoSimples(constantes::$CD_CLASS_CAMPO_OBRIGATORIO);//getContratoEntradaDeDados($tipoContrato, $anoContrato, $cdContrato, $arrayCssClass, $arrayComplementoHTML, $nmCampoDiv);?></TD>
+	            <TD class="campoformulario" nowrap colspan=3><?php getCampoDadosContratoSimples(constantes::$CD_CLASS_CAMPO_OBRIGATORIO, null, false);//getContratoEntradaDeDados($tipoContrato, $anoContrato, $cdContrato, $arrayCssClass, $arrayComplementoHTML, $nmCampoDiv);?></TD>
 	        </TR>	        
 	        <?php 
 	       }	       
