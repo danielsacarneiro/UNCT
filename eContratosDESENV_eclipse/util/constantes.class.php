@@ -101,5 +101,8 @@ include_once 'normativos.php';
     //os dados do usuario batch estao no banco wordpress
     static $CD_USUARIO_BATCH = 26;
     static $NM_USUARIO_BATCH = "USUÁRIO BATCH";
+    
+    static $VL_GLOBAL_ENVIO_PGE = 2000000;
+    static $VL_GLOBAL_ENVIO_SAD = 3000000;
 }
 ?>

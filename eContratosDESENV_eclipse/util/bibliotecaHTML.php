@@ -641,18 +641,60 @@ function getComboColecaoGenerico($colecao, $idCampo, $nmCampo, $cdOpcaoSeleciona
 	
 	return $retorno;
 }
-function getComponenteConsultaFiltro($temHistorico, $filtro, $comComboOrdenacao=true) {
+function getComponenteConsultaFiltro($temHistorico, $filtro, $comComboOrdenacao=true, $colecaoExportarExcel=null) {
 	// $comboOrdenacao = $filtro->getAtributosOrdenacao();
 	if($comComboOrdenacao){
 		$comboOrdenacao = $filtro->getComboOrdenacao ();
 	}
+
+	$arrayParam = array(
+		$comboOrdenacao,
+		$filtro->cdAtrOrdenacao,
+		$filtro->cdOrdenacao,
+		$filtro->TemPaginacao,
+		$filtro->qtdRegistrosPorPag,
+		$temHistorico,
+		$filtro->cdHistorico,
+		$colecaoExportarExcel,
+	);
 	
-	return getComponenteConsultaPaginacao ( $comboOrdenacao, $filtro->cdAtrOrdenacao, $filtro->cdOrdenacao, $filtro->TemPaginacao, $filtro->qtdRegistrosPorPag, $temHistorico, $filtro->cdHistorico );
+	return getComponenteConsultaPaginacaoArray($arrayParam);
 }
 function getComponenteConsulta($comboOrdenacao, $cdAtrOrdenacao, $cdOrdenacao, $qtdRegistrosPorPag, $temHistorico, $cdHistorico) {
 	return getComponenteConsultaPaginacao ( $comboOrdenacao, $cdAtrOrdenacao, $cdOrdenacao, true, $qtdRegistrosPorPag, $temHistorico, $cdHistorico );
 }
-function getComponenteConsultaPaginacao($comboOrdenacao, $cdAtrOrdenacao, $cdOrdenacao, $temPaginacao, $qtdRegistrosPorPag, $temHistorico, $cdHistorico) {
+
+function getComponenteConsultaPaginacao($comboOrdenacao, 
+		$cdAtrOrdenacao, 
+		$cdOrdenacao, 
+		$temPaginacao, 
+		$qtdRegistrosPorPag, 
+		$temHistorico, 
+		$cdHistorico) {
+	
+	$arrayParam = array(
+			$comboOrdenacao,
+			$cdAtrOrdenacao,
+			$cdOrdenacao,
+			$temPaginacao,
+			$qtdRegistrosPorPag,
+			$temHistorico,
+			$cdHistorico					
+	);
+	
+	return getComponenteConsultaPaginacaoArray($arrayParam);
+	
+}
+function getComponenteConsultaPaginacaoArray($arrayParam) {
+	$comboOrdenacao = $arrayParam[0]; 
+	$cdAtrOrdenacao = $arrayParam[1]; 
+	$cdOrdenacao = $arrayParam[2]; 
+	$temPaginacao = $arrayParam[3]; 
+	$qtdRegistrosPorPag = $arrayParam[4]; 
+	$temHistorico = $arrayParam[5]; 
+	$cdHistorico = $arrayParam[6];
+	$colecaoExportarExcel = $arrayParam[7];
+	
 	$html = "";
 	
 	$objetosPorPagina = new dominioQtdObjetosPagina ();
@@ -682,14 +724,20 @@ function getComponenteConsultaPaginacao($comboOrdenacao, $cdAtrOrdenacao, $cdOrd
 		$html .= " &nbsp;Histórico: " . $radioHistorico->getHtmlRadio ( "cdHistorico", "cdHistorico", $cdHistorico, false, false );
 	
 	$html .= "&nbsp;<button id='localizar' class='botaoconsulta' type='submit'>Consultar</button>\n";
-	$html .= "&nbsp;".getBorrachaTotalConsulta(). "</TR>";
+	$html .= "&nbsp;".getBorrachaTotalConsulta();
+	
+	if(!isColecaoVazia($colecaoExportarExcel)){
+		$html .= "&nbsp;". getLinkExportarExcelTelaContrato($colecaoExportarExcel);
+	}
+	
+	$html .= "</TD></TR>";
 	// $html .= "<imput type='hidden' id='javascript:ID_REQ_DT_HOJE' name='javascript:ID_REQ_DT_HOJE'>\n";
 	
 	return $html;
 }
 
 function getBorrachaTotalConsulta() {
-	$html = "&nbsp;&nbsp;<a href='javascript:limparFormularioGeral();' ><img  title='Limpar' src='" . caminho_imagens . "borracha.jpg' width='20' height='20'></a></TD>\n";
+	$html = "&nbsp;&nbsp;<a href='javascript:limparFormularioGeral();' ><img  title='Limpar' src='" . caminho_imagens . "borracha.jpg' width='20' height='20'></a>\n";
 	return $html;
 }
 

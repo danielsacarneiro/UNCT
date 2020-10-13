@@ -147,14 +147,22 @@ Class voContratoInfo extends voentidade{
 		return $retorno;
 	}
 	
-
-	function getVOContrato(){
+	/**
+	 * registrobanco serve somente pra completar as informacoes, quando existir
+	 * @param unknown $registrobanco
+	 * @return vocontrato
+	 */
+	function getVOContrato($registrobanco = null){
 		$retorno = new vocontrato();
 		$retorno->cdContrato = $this->cdContrato;
 		$retorno->anoContrato = $this->anoContrato;
 		$retorno->tipo = $this->tipo;
 		$retorno->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
 		$retorno->sqEspecie = 1;
+		if($registrobanco != null){
+			//echo "nao eh nulo " . $registrobanco[vocontrato::$nmAtrVlMensalContrato];
+			$retorno->vlMensal = $registrobanco[vocontrato::$nmAtrVlMensalContrato];
+		}
 		
 		return $retorno;
 	}
@@ -250,7 +258,7 @@ Class voContratoInfo extends voentidade{
 			$InOR_AND = constantes::$CD_OPCAO_OR;
 		}
 		
-		$parametroMetodoEspecifico = dominioAutorizacao::getColecaoCdAutorizacaoIntercace($colecaoAutorizacao, $InOR_AND);
+		$parametroMetodoEspecifico = dominioAutorizacao::getColecaoCdAutorizacaoInterface($colecaoAutorizacao, $InOR_AND);
 		$operador = " IN ";
 		$parametroComparacao = " (" . getSQLStringFormatadaColecaoIN($parametroMetodoEspecifico, false) . ")";
 		if($InOR_AND == constantes::$CD_OPCAO_AND){

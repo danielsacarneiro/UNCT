@@ -426,7 +426,7 @@ function confirmar() {
             </TD>
 	    </TR>					
 				<?php
-				echo getComponenteConsultaFiltro($voContrato->temTabHistorico, $filtro);
+				echo getComponenteConsultaFiltro($voContrato->temTabHistorico, $filtro, true, $colecao);
 				?>
        </TBODY>
   </TABLE>

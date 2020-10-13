@@ -41,13 +41,13 @@ class dominioAutorizacao extends dominio {
 		}
 		return $retorno;
 	}
-	static function getColecaoCdAutorizacaoIntercace($colecaoAutorizacao, $InOR_AND) {
+	static function getColecaoCdAutorizacaoInterface($colecaoAutorizacao, $InOR_AND) {
 		if($InOR_AND == constantes::$CD_OPCAO_OR)
-			return self::getColecaoCdAutorizacaoIntercaceOR ( $colecaoAutorizacao );
+			return self::getColecaoCdAutorizacaoInterfaceOR ( $colecaoAutorizacao );
 		else
-			return self::getColecaoCdAutorizacaoIntercaceAND( $colecaoAutorizacao );
+			return self::getColecaoCdAutorizacaoInterfaceAND( $colecaoAutorizacao );
 	}
-	static function getColecaoCdAutorizacaoIntercaceOR($colecaoAutorizacao) {
+	static function getColecaoCdAutorizacaoInterfaceOR($colecaoAutorizacao) {
 		$temSAD = in_array ( self::$CD_AUTORIZ_SAD, $colecaoAutorizacao );
 		$temPGE = in_array ( self::$CD_AUTORIZ_PGE, $colecaoAutorizacao );
 		$temGOV = in_array ( self::$CD_AUTORIZ_GOV, $colecaoAutorizacao );
@@ -77,7 +77,7 @@ class dominioAutorizacao extends dominio {
 		
 		return $retorno;
 	}
-	static function getColecaoCdAutorizacaoIntercaceAND($colecaoAutorizacao) {
+	static function getColecaoCdAutorizacaoInterfaceAND($colecaoAutorizacao) {
 		$temSAD = in_array ( self::$CD_AUTORIZ_SAD, $colecaoAutorizacao );
 		$temPGE = in_array ( self::$CD_AUTORIZ_PGE, $colecaoAutorizacao );
 		$temGOV = in_array ( self::$CD_AUTORIZ_GOV, $colecaoAutorizacao );

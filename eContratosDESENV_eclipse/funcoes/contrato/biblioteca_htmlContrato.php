@@ -141,7 +141,36 @@ function getContratoDetalhamentoParam($arrayParametro) {
 		try{
 			$colecao = $voContratoInfoPK->dbprocesso->consultarPorChaveTela($voContratoInfoPK, false);
 			$voContratoInfoPK->getDadosBanco($colecao);
-			echo getTextoHTMLNegrito("Autorização:" . dominioAutorizacao::getHtmlDetalhamento("", "", $voContratoInfoPK->cdAutorizacao, false));
+			$cdAutorizacaoEconti = $voContratoInfoPK->cdAutorizacao;
+			echo getTextoHTMLDestacado("Autorização", "black", true) . ":";
+					
+			$isContratoEnvioSAD = isContratoEnvioSADPGE($voContrato, dominioSetor::$CD_SETOR_SAD);
+			$isContratoEnvioPGE = isContratoEnvioSADPGE($voContrato, dominioSetor::$CD_SETOR_PGE);
+			//verifica se vai pra SAD ou PGE pelo valor e valida se a informacao do econti esta de acordo
+			if($isContratoEnvioSAD || $isContratoEnvioPGE){
+				echo "Pelo Valor ";
+				$conector = "";
+				if($isContratoEnvioSAD){
+					$arrayAutorizacao[]=dominioAutorizacao::$CD_AUTORIZ_SAD;
+					$strSetoresTemp = dominioSetor::$DS_SETOR_SAD;
+					$conector = "|";
+				}
+				if($isContratoEnvioPGE){
+					$arrayAutorizacao[]=dominioAutorizacao::$CD_AUTORIZ_PGE;
+					$strSetoresTemp .= $conector. dominioSetor::$DS_SETOR_PGE;
+					$conector = "|";
+				}
+				$cdAutorizacaoPorValor = dominioAutorizacao::getColecaoCdAutorizacaoInterfaceAND($arrayAutorizacao);				
+				echo dominioSetor::getHtmlDetalhamento("", "", $strSetoresTemp, false);
+				
+				if($cdAutorizacaoPorValor != $cdAutorizacaoEconti){
+					echo getTextoHTMLDestacado("Verifique informação adicional sobre 'Autorização' do contrato.", "red", true);				
+				}
+				
+			}else{
+				//nao precisa validar, pega a informacao do econti
+				echo getTextoHTMLNegrito(constantes::$nomeSistema." " . dominioAutorizacao::getHtmlDetalhamento("", "", $cdAutorizacaoEconti, false));
+			}
 		}catch (excecaoChaveRegistroInexistente $ex){
 			;			
 		}
@@ -183,6 +212,28 @@ function getContratoDetalhamentoParam($arrayParametro) {
 </TR>
 <?php
 	}
+}
+
+function isContratoEnvioSADPGE($voContrato, $setor){
+	$vlAComparar = 0;
+	if($setor == dominioSetor::$CD_SETOR_SAD){
+		$vlAComparar = constantes::$VL_GLOBAL_ENVIO_SAD;
+	}else{
+		$vlAComparar = constantes::$VL_GLOBAL_ENVIO_PGE;
+	}
+	
+	//$voContrato = new vocontrato();
+	$retorno = false;
+	if($voContrato != null){		
+		$vlMensal = $voContrato->vlMensal;
+		//lembrar que o valor de contrato eh recuperado diferente
+		$vlMensal = getVarComoDecimal($vlMensal);
+		$vlReferencia = $vlMensal*12;
+		//echo " $vlReferencia ";
+		$retorno =  $vlReferencia >= $vlAComparar;
+	}
+	
+	return $retorno;
 }
 
 /*function getContratoDescricaoEspecie($voContrato){
@@ -1275,6 +1326,11 @@ function getTextoGridContrato($voContrato, $empresa=null, $porExtenso=true, $omi
 	}
 	
 	return $contrato;	
+}
+
+function getLinkExportarExcelTelaContrato($colecao){
+	putObjetoSessao(vocontrato::$ID_REQ_COLECAO_EXPORTAR_EXCEL, $colecao);
+	return getTextoLink("exportarExcel", "exportarExcel.php", "", true);
 }
 
 

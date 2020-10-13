@@ -79,11 +79,11 @@
                         }                        
                         $tagCelula = "class='$classColuna' " . $mensagemAlerta;
                         
-                        $tipo = $dominioTipoContrato->getDescricao($colecao[$i]["ct_tipo"]);
+                        $tipo = dominioTipoContrato::getDescricao($colecao[$i]["ct_tipo"]);
                         
                         $contrato = formatarCodigoAnoComplemento($voAtual->cdContrato,
                         		$voAtual->anoContrato,
-                        		$dominioTipoContrato->getDescricao($voAtual->tipo));                                                
+                        		dominioTipoContrato::getDescricao($voAtual->tipo));                                                
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados" <?=$msgAlertaSq?>>
@@ -102,7 +102,9 @@
                     <TD class="tabeladadosalinhadodireita" ><?php echo getMoeda($colecao[$i]["ct_valor_global"])?></TD>
                 </TR>					
                 <?php
-				}				
+				}
+				
+				if(!$exportarExcel){
                 ?>
                 <TR>
                     <TD class="tabeladadosalinhadocentro" colspan=<?=$colspan?>><?=$filtro->paginacao->criarLinkPaginacaoGET()?></TD>
@@ -112,12 +114,18 @@
                 </TR>
                 <TR>
                     <TD class="totalizadortabeladadosalinhadodireita" colspan=<?=$colspan?>>Total de registro(s): <?=$numTotalRegistros?></TD>
-                </TR>				
+                </TR>
+                <?php 
+				}
+				?>				
             </TBODY>
         </TABLE>
         </DIV>
        </TD>
        </TR>
+       <?php 
+       if(!$exportarExcel){
+       ?>              
         <TR>
             <TD class="conteinerbarraacoes">
             <TABLE id="table_barraacoes" class="barraacoes" cellpadding="0" cellspacing="0">
@@ -142,3 +150,7 @@
             </TABLE>
             </TD>
         </TR>
+        <?php 
+		}
+		?>				
+        

@@ -32,7 +32,8 @@ include_once (caminho_util . "DocumentoPessoa.php");
         /*var $nmEntidade = "contrato";
         var $nmTabela = "contrato";
 		static $nmEntidadeStatic = "contrato";*/
-  		static $DS_ESPECIE_MATER = "Mater"; 
+  	static $ID_REQ_COLECAO_EXPORTAR_EXCEL = "ID_REQ_COLECAO_EXPORTAR_EXCEL";
+  	static $DS_ESPECIE_MATER = "Mater"; 
   		static $ID_REQ_CAMPO_CONTRATO = "ID_REQ_CAMPO_CONTRATO";
   		static $matrizImportacao;
   		//static $ID_REQ_QTD_CONTRATOS = "ID_REQ_QTD_CONTRATOS";

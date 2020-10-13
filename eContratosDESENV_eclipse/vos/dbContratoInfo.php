@@ -24,6 +24,7 @@ class dbContratoInfo extends dbprocesso {
 				$nmTabela . ".*",
 				getSQLCOALESCE($colecaoAtributoAutorizacaoCoalesce,voContratoInfo::$nmAtrCdAutorizacaoContrato),
 				$nmTabelaContrato . "." . vocontrato::$nmAtrCdAutorizacaoContrato,
+				$nmTabelaContrato . "." . vocontrato::$nmAtrVlMensalContrato,
 				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
 				//$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,				
 				getSQLCOALESCE($colecaoAtributoCoalesceNmPessoa,vopessoa::$nmAtrNome),

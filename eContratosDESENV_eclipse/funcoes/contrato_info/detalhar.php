@@ -93,7 +93,8 @@ function confirmar() {
             </TR>               
             <?php }	        	        	        
 	        
-			$voContrato = $vo->getVOContrato();
+			$voContrato = $vo->getVOContrato($colecao);
+			//echo $voContrato->vlMensal . "teste";
 	          
  	        require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
  	        //getContratoDetalhamento($voContrato, $colecao);
