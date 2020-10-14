@@ -32,13 +32,24 @@ include_once("voDemandaContrato.php");
               
        //retira os atributos padrao que nao possui
        //remove tambem os que o banco deve incluir default
-       $arrayAtribRemover = array(
+       /*$arrayAtribRemover = array(
        		self::$nmAtrDhInclusao,
        		self::$nmAtrDhUltAlteracao,
        		self::$nmAtrCdUsuarioUltAlteracao,
        );
        $this->removeAtributos($arrayAtribRemover);
-       $this->varAtributosARemover = $arrayAtribRemover;
+       $this->varAtributosARemover = $arrayAtribRemover;*/
+       
+       $arrayAtribRemover = array (
+        self::$nmAtrDhUltAlteracao,
+        self::$nmAtrCdUsuarioUltAlteracao,
+        );
+       
+       $arrayAtribInclusaoDBDefault = array (
+       		self::$nmAtrDhInclusao,
+       );
+       $this->setaAtributosRemocaoEInclusaoDBDefault($arrayAtribRemover, $arrayAtribInclusaoDBDefault);
+        
    }
    
    public static function getTituloJSP(){

@@ -212,10 +212,10 @@ class voentidade extends multiplosConstrutores {
 		}
 	}
 	function setaAtributosRemocaoEInclusaoDBDefault($arrayAtribRemover=null, $arrayAtributosDBDefault=null) {
-		$this->varAtributos = removeColecaoAtributos ( $this->varAtributos, $arrayAtribRemover );
-
-		$this->varAtributosDBDefault = $arrayAtributosDBDefault;
-		$this->varAtributosARemover = $arrayAtribRemover;
+		/*$this->varAtributos = removeColecaoAtributos ( $this->varAtributos, $arrayAtribRemover );
+		$this->varAtributosARemover = $arrayAtribRemover;*/		
+		$this->varAtributosDBDefault = $arrayAtributosDBDefault;		
+		$this->removeAtributos($arrayAtribRemover);
 	}
 	function removeAtributos($arrayAtribRemover) {
 		$this->varAtributos = removeColecaoAtributos ( $this->varAtributos, $arrayAtribRemover );

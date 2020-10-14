@@ -747,8 +747,11 @@ class dbprocesso {
 		
 		return $retorno;
 	}
-	function alterarPorCima($voEntidade) {
-		$this->validaAlteracao ( $voEntidade );
+	function alterarPorCima($voEntidade) {		
+		//so valida a alteracao (para evitar alteracoes simultaneas) se o voentidade permitir alteracao (tiverdhultimaalteracao)
+		if(!in_array(voentidade::$nmAtrDhUltAlteracao, $voEntidade->varAtributosARemover)){
+			$this->validaAlteracao ( $voEntidade );
+		}
 		$query = $this->alterarSQL ( $voEntidade );
 		// echo $query;
 		$retorno = $this->cDb->atualizar ( $query );
