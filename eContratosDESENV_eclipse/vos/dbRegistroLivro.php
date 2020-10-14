@@ -5,7 +5,7 @@ include_once (caminho_funcoes."contrato/dominioEspeciesContrato.php");
 
   Class dbRegistroLivro extends dbprocesso{
   	static $FLAG_PRINTAR_SQL = false;
-  	    
+  	  	    
   	function consultarPorChaveTela($vo, $isHistorico) {
   		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
   		//$nmTabelaDemandaPL = voDemandaPL::getNmTabela();

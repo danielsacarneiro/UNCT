@@ -95,6 +95,9 @@ function publicar() {
 	location.href="publicar.php";
 }
 
+function proximoTermo() {
+	location.href="proximoTermo.php";
+}
 </SCRIPT>
 <?=setTituloPagina($vo->getTituloJSP())?>
 </HEAD>
@@ -245,6 +248,11 @@ function publicar() {
                         <TABLE class="barraacoesaux" cellpadding="0" cellspacing="0">
 	                   	<TR> 
                             <?=getBotoesRodape();?>
+                            <TD class='botaofuncao'>
+                            <?php 
+                            echo getBotaoValidacaoAcesso("bttProximoTermo", "Prox.Termo", "botaofuncaop", false, false,true,false,"onClick='javascript:proximoTermo();' accesskey='t'");
+                            ?>
+                            </TD>                                                        
                             <TD class='botaofuncao'>
                             <?php 
                             echo getBotaoValidacaoAcesso("bttPublicar", "Publicar", "botaofuncaop", false, false,true,false,"onClick='javascript:publicar();' accesskey='p'");

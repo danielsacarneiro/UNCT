@@ -772,17 +772,38 @@ class dbprocesso {
 		
 		return $retorno;
 	}
-	function getSQLSequencialPorTabela($nmColunaSq, $voEntidade, $isHistorico) {
+	/**
+	 * $pArrayColunasAlternativas traz as colunas desejadas chaveadas com seus valores no formato array (coluna => valor)
+	 * somente quando desejado um sq que difere da chave primaria
+	 * @param unknown $nmColunaSq
+	 * @param unknown $voEntidade
+	 * @param unknown $isHistorico
+	 * @param unknown $pArrayColunasAlternativas
+	 * @return string
+	 */
+	function getSQLSequencialPorTabela($nmColunaSq, $voEntidade, $isHistorico, $pArrayColunasAlternativas = null) {
 		$nmTabela = $voEntidade->getNmTabelaEntidade ( $isHistorico );
 		
-		$arrayAtribRemover = array (
-				$nmColunaSq 
-		);
-		$arrayColunasChaveSemSq = removeColecaoAtributos ( $voEntidade->getAtributosChavePrimaria (), $arrayAtribRemover );
+		if($pArrayColunasAlternativas == null){
+			//vai pelos valores normais do voentidade
+			$arrayAtribRemover = array (
+					$nmColunaSq 
+			);
+			$arrayColunasChaveSemSq = removeColecaoAtributos ( $voEntidade->getAtributosChavePrimaria (), $arrayAtribRemover );
+			$valoresTemp = $voEntidade->getValoresWhereSQLChaveLogicaSemSQ ( $isHistorico );
+		}else{
+			//vai pelas colunas alternativas, considerando apenas as colunas passadas como parametro
+			$arrayColunasChaveSemSq = array_keys($pArrayColunasAlternativas);
+			$conector = "AND ";
+			foreach ($pArrayColunasAlternativas as $coluna => $valor){
+				$valoresTemp .= "$coluna = $valor $conector"; 
+			}
+			$valoresTemp = removerUltimaString($conector, $valoresTemp);			 
+		}
 		
 		$query = " SELECT MAX($nmColunaSq) AS $nmColunaSq FROM $nmTabela ";
 		$query .= " WHERE ";
-		$query .= $voEntidade->getValoresWhereSQLChaveLogicaSemSQ ( $isHistorico );
+		$query .= $valoresTemp;
 		$query .= "\n GROUP BY " . getSQLStringFormatadaColecaoIN ( $arrayColunasChaveSemSq, false );
 		
 		return $query;
@@ -800,7 +821,15 @@ class dbprocesso {
 		
 		return $retorno;
 	}
-	function getProximoSequencialChaveComposta($nmColunaSq, $voEntidade) {
+	
+	/**
+	 * $pArrayColunasAlternativas serve para trazer o prox sq de qualquer combinacao de colunas diferentes da chave primaria
+	 * @param unknown $nmColunaSq
+	 * @param unknown $voEntidade
+	 * @param unknown $pArrayColunasAlternativas
+	 * @return number|string
+	 */
+	function getProximoSequencialChaveComposta($nmColunaSq, $voEntidade, $pArrayColunasAlternativas=null) {
 		// nao eh mais necessario consultar tambem na tabela historico
 		// a consulta no historico existia para os casos de relacionamento, quando a exclusao do registro principal causava a perda dos relacionamentos
 		// isto porque a implementacao do desativado obriga a existencia de um registro na tabela principal
@@ -809,10 +838,10 @@ class dbprocesso {
 		// porem, nao ha problemas em deixar como esta, apenas por mais seguranca
 		$query = " SELECT COALESCE(MAX(" . $nmColunaSq . "),0)+1 AS " . $nmColunaSq . " FROM ";
 		$query .= "(";
-		$query .= $this->getSQLSequencialPorTabela ( $nmColunaSq, $voEntidade, false );
+		$query .= $this->getSQLSequencialPorTabela ( $nmColunaSq, $voEntidade, false, $pArrayColunasAlternativas);
 		if ($voEntidade->temTabHistorico ()) {
 			$query .= " UNION ";
-			$query .= $this->getSQLSequencialPorTabela ( $nmColunaSq, $voEntidade, true );
+			$query .= $this->getSQLSequencialPorTabela ( $nmColunaSq, $voEntidade, true, $pArrayColunasAlternativas );
 		}
 		$query .= ") TAB_SQ";
 		

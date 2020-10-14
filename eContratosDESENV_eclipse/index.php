@@ -193,6 +193,9 @@ setCabecalho($titulo);
                         				</TD>
                     				</TR>
                     				<?php 
+                    				$vodocumento = new voDocumento(array(2020, dominioSetor::$CD_SETOR_UNCT,dominioTpDocumento::$CD_TP_DOC_OUTROS, 44));
+                    				echo imprimeBotaoDocumento($vodocumento, "FLUXOGRAMA CONTRATOS");
+                    				
                     				$vodocumento = new voDocumento(array(2019, dominioSetor::$CD_SETOR_DILC,dominioTpDocumento::$CD_TP_DOC_OUTROS, 2));
                     				echo imprimeBotaoDocumento($vodocumento, "MACROPROCESSO LICITAÇÃO");
                     				?>
