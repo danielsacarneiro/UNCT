@@ -164,7 +164,7 @@ function getContratoDetalhamentoParam($arrayParametro) {
 				echo dominioSetor::getHtmlDetalhamento("", "", $strSetoresTemp, false);
 				
 				if($cdAutorizacaoPorValor != $cdAutorizacaoEconti){
-					echo getTextoHTMLDestacado("Verifique informação adicional sobre 'Autorização' do contrato.", "red", true);				
+					echo getTextoHTMLDestacado("Verifique informação adicional sobre 'Autorização' do contrato.<br>", "red", true);				
 				}
 				
 			}else{
