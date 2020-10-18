@@ -37,6 +37,7 @@ $numTotalRegistros = $filtro->numTotalRegistros;
 
 $inConsultaHTML = getInConsultarHTMLString();
 $nmCampoFaseHtml = voDemanda::$nmAtrFase."[]";
+$nmCampoFasePlanilhaHtml = filtroManterDemanda::$NmAtrFasePlanilha ."[]";
 ?>
 
 <!DOCTYPE html>
@@ -232,7 +233,7 @@ function detalharDemandaGestao(){
 	            <TH class="campoformulario" nowrap width="1%">PAAP:</TH>
 	            <TD class="campoformulario" nowrap>
 	            <?php getCampoDadosPAAP($filtro->voPA);
-	            echo " tem PAAP?: " . $comboSimNao->getHtmlCombo(filtroManterDemanda::$NmAtrInComPAAPInstaurado,
+	            echo " Tem?: " . $comboSimNao->getHtmlCombo(filtroManterDemanda::$NmAtrInComPAAPInstaurado,
 	            								filtroManterDemanda::$NmAtrInComPAAPInstaurado, 
 	            								$filtro->inComPAAPInstaurado, true, "camponaoobrigatorio", false,"");?>
 	            </TD>
@@ -357,15 +358,35 @@ function detalharDemandaGestao(){
 				$comboClassificacao = new select(dominioClassificacaoContrato::getColecao());
 				?>
 	            <TH class="campoformulario" nowrap>Classificação:</TH>
-	            <TD class="campoformulario" width="1%" colspan=3>
+	            <TD class="campoformulario" width="1%">
 	            <?php 
-	            echo $comboClassificacao->getHtmlCombo(voContratoInfo::$nmAtrCdClassificacao,voContratoInfo::$nmAtrCdClassificacao, $filtro->cdClassificacaoContrato, true, "camponaoobrigatorio", true, "");
+	            echo $comboClassificacao->getHtmlCombo(voContratoInfo::$nmAtrCdClassificacao,voContratoInfo::$nmAtrCdClassificacao, $filtro->cdClassificacaoContrato, true, "camponaoobrigatorio", false, "");
 	            //$radioMaodeObra = new radiobutton ( dominioSimNao::getColecao());
 	            //echo "&nbsp;&nbsp;Mão de obra incluída (planilha de custos)?: " . $radioMaodeObra->getHtmlRadioButton ( voContratoInfo::$nmAtrInMaoDeObra, voContratoInfo::$nmAtrInMaoDeObra, $vo->inMaoDeObra, false, " required " );
 	            
-	            echo "&nbsp;&nbsp;Mão de obra incluída (planilha de custos)?: ";
+	            echo "&nbsp;&nbsp;Planilha.Custos?: ";
 	            echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInMaoDeObra,voContratoInfo::$nmAtrInMaoDeObra, $filtro->inMaoDeObra, true, "camponaoobrigatorio", false,"");
 	            ?>
+				<TD class="campoformulario" width="1%"  colspan=2>	            
+	            <?php 
+	            $pArrayFasePlanilha = array(
+	            		$nmCampoFasePlanilhaHtml,
+	            		$filtro->fasePlanilha,
+	            		dominioFaseDemanda::getColecaoPlanilha(),
+	            		1,
+	            		true,
+	            		"",
+	            		false,
+	            		"",
+	            		false,
+	            		filtroManterDemanda::$NmAtrInOR_AND_Fase,
+	            		$filtro->inOR_AND_Fase,
+	            		false,
+	            		true,
+	            );
+	            echo dominioFaseDemanda::getHtmlChecksBoxArray($pArrayFasePlanilha);	            	            
+	            ?>
+	            </TD>
 	        </TR>
             <?php            
             $comboTpDoc = new select(dominioTpDocumento::getColecaoConsulta());
@@ -444,7 +465,7 @@ function detalharDemandaGestao(){
 				</TD>
 				<TH class="campoformulario" nowrap width="1%">Fase:</TH>
 				<TD class="campoformulario"> 
-				<?php 				
+				<?php				
 				$pArrayFase = array(
 						$nmCampoFaseHtml,
 						$filtro->vodemanda->fase,
@@ -456,7 +477,9 @@ function detalharDemandaGestao(){
 						"",
 						true,
 						filtroManterDemanda::$NmAtrInOR_AND_Fase,
-						$filtro->inOR_AND_Fase
+						$filtro->inOR_AND_Fase,
+						false,
+						true,
 				);
 				echo dominioFaseDemanda::getHtmlChecksBoxArray($pArrayFase);
 				?>

@@ -5,6 +5,53 @@ include_once("bibliotecaSQL.php");
 include_once("selectExercicio.php");
 include_once("dominioMeses.php");
 
+function getDataHtmlDoFinaldoTexto($texto) {
+	//limpa a string
+	$retorno = str_replace(" ", "", $texto);
+	$retorno = str_replace("'", "", $retorno);
+	$retorno = str_replace(".", "/", $retorno);
+	$retorno = str_replace("-", "/", $retorno);
+	$tamanho = strlen($retorno);
+	
+	//verifica se o ano tem 4 digitos
+	$ano = substr($retorno, $tamanho-4, 4);
+	if(!is_numeric($ano)){
+		$ano = substr($retorno, $tamanho-2, 2);
+		//transforma em 4 digitos
+		$ano =  $ano + 2000;
+		
+		$retorno = substr($retorno, $tamanho-8, 6) . $ano;
+	}else{	
+		$retorno = substr($retorno, $tamanho-10, 10);
+	}
+
+	return $retorno;
+}
+	
+function checkDataValida($dataHtml) {
+	$retorno = false;
+	if(isAtributoValido($dataHtml)){
+		$dataHtml= getVarComoDataSQL($dataHtml);
+		$dataHtml = str_replace("'", "", $dataHtml);
+		try{
+			$date = new DateTime($dataHtml);
+		}catch(Exception $ex){
+			return false;
+		}
+
+		$ano = $date->format("Y");
+		$mes = $date->format("m");
+		$dia = $date->format("d");		
+		//echoo("dia $dia mes $mes ano $ano");			
+		if (is_numeric ( trim ( $dia ) ) && is_numeric ( trim ( $mes ) ) && is_numeric ( trim ( $ano ) )) {
+			$retorno = checkdate ( $mes, $dia, $ano );
+		}
+	}
+	
+	return $retorno;
+}
+
+
 function getDataHora($dataSQL) {
 	return getDataHoraParam($dataSQL, true);
 }

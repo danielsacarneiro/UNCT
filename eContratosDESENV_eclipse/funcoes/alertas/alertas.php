@@ -235,8 +235,9 @@ function getMensagemSistemasExternos(&$count = 0){
 		);
 
 		$filtro->vodemanda->tipo = array(dominioTipoDemanda::$CD_TIPO_DEMANDA_PORTALTRANSPARENCIA, dominioTipoDemanda::$CD_TIPO_DEMANDA_LICON);
-		$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_ATJA;
-		$filtro->cdAtrOrdenacao = filtroManterDemanda::$NmColDtReferenciaSetorAtual;
+		$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_UNCT;
+		$filtro->cdAtrOrdenacao = filtroManterDemanda::$NmColNuTempoUltimaTram;
+		$filtro->inDesativado = constantes::$CD_NAO;
 		
 		$coluna1 =array(
 				constantes::$CD_COLUNA_CHAVE => "Sistema",
@@ -283,6 +284,49 @@ function getMensagemContratosAVencer(&$count = 0){
 		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Prazo(dias)', filtroConsultarContratoConsolidacao::$NmColQtdDiasParaVencimento);		
 		
 		$msg = getCorpoMensagemDemandaContratoColecao($assunto, $colecao, $colunasAAcrescentar);
+
+	} catch ( Exception $ex ) {
+		$msg = $ex->getMessage ();
+	}
+
+	return $msg;
+}
+
+
+/** ALERTAS UNCT **/
+function getMensagemDemandaIniciais(&$count = 0){
+	$assunto = "DEMANDAS INICIAIS:";
+	$assunto = getSequenciaAssunto($assunto, $count);
+	try {
+		$filtro = new filtroManterDemanda ( false );
+		$voDemanda = new voDemanda ();
+		$dbprocesso = $voDemanda->dbprocesso;
+		$filtro->voPrincipal = $voDemanda;
+		$filtro->isValidarConsulta = false;	
+		$filtro->setaFiltroConsultaSemLimiteRegistro ();
+		
+		$filtro->vodemanda->situacao = array (
+				dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_ABERTA,
+				dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO
+		);
+		/*$filtro->vodemanda->tipo = array_keys ( dominioTipoDemanda::getColecaoTipoDemandaSAD () );*/
+		$filtro->tipoExcludente = array(
+				dominioTipoDemanda::$CD_TIPO_DEMANDA_LICON,
+				dominioTipoDemanda::$CD_TIPO_DEMANDA_PORTALTRANSPARENCIA
+		);
+
+		$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_UNCT;
+		$filtro->cdAtrOrdenacao = filtroManterDemanda::$NmColNuTempoUltimaTram;
+		//$filtro->prioridadeExcludente = dominioPrioridadeDemanda::$CD_PRIORI_BAIXA;
+		/*$filtro->vocontrato->cdAutorizacao = array (
+				dominioAutorizacao::$CD_AUTORIZ_SAD
+		);*/
+		$filtro->vodemanda->fase = constantes::$CD_OPCAO_NENHUM;
+		$filtro->inOR_AND_Fase = constantes::$CD_OPCAO_AND;
+
+		$colecao = $dbprocesso->consultarTelaConsulta ( $voDemanda, $filtro );
+
+		$msg = getCorpoMensagemDemandaContratoColecao($assunto, $colecao, null);
 
 	} catch ( Exception $ex ) {
 		$msg = $ex->getMessage ();

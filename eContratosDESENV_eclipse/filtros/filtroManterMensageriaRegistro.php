@@ -4,7 +4,7 @@ include_once (caminho_lib . "filtroManter.php");
 
 class filtroManterMensageriaRegistro extends filtroManter {
 	//public static $nmFiltro = "filtroManterContratoLicon";
-	public $nmFiltro = "filtroManterMensageria";
+	public $nmFiltro = "filtroManterMensageriaRegistro";
 	
 	var $cdContrato = "";
 	var $anoContrato = "";

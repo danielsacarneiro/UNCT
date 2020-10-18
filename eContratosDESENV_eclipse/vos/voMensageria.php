@@ -5,13 +5,13 @@ class voMensageria extends voentidade {
 	
 	static $DS_RESPONSABILIDADE_CAMPO_OBR = "*Assumo a responsabilidade de não incluir os campos obrigatórios.";	
 	//ativa o envio da mensageria para a UNCT
-	static $ATIVADO = false;
+	static $ATIVADO = true;
 	//ativa o envio do email do relatorio diario
 	static $ENVIAR_EMAIL_RELATORIO_DIARIO = true;
 	//ativa o envio do email da mensageria ao gestor apenas para a UNCT
-	static $ENVIAR_EMAIL_GESTOR_UNCT = true;
+	static $ENVIAR_EMAIL_GESTOR_UNCT = false;
 	//ativa o envio do email da mensageria ao gestor
-	static $ENVIAR_EMAIL_GESTOR_CONTRATO = true;
+	static $ENVIAR_EMAIL_GESTOR_CONTRATO = false;
 	//ativa o envio do email para teste permitindo o envio de mais de um email por dia
 	static $IN_VERIFICAR_FREQUENCIA = "S";
 	static $IMPRIMIR_MENSAGEM_SE_CONSULTA_VAZIA = true;

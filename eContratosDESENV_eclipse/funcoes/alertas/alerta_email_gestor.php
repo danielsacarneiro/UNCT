@@ -51,5 +51,7 @@ if ($enviarEmailAlerta) {
 	}else{
 		echoo("Mensageria: não existem alertas para o dia de hoje.");
 	}
+	
+	echoo("FIM Mensageria.");
 }
 

@@ -315,17 +315,30 @@ class dominio extends multiplosConstrutores {
 		$javascriptadicional = $pArray[5];
 		$comBorracha = $pArray[6];
 		$htmlAdicional = $pArray[7];
+		
 		$comComboOR_And = $pArray[8]==null?false:$pArray[8];
 		$nmComboOr_And = $pArray[9];
 		$cdOpcaoSelecionadaComboOr_And = $pArray[10];
+				
 		$usarIdCodificado = $pArray[11];
+		$comOpcaoNenhum = $pArray[12];
 		if($usarIdCodificado == null){
 			$usarIdCodificado = false;
 		}
+		if($comOpcaoNenhum == null){
+			$comOpcaoNenhum = false;
+		}		
 		//var_dump($usarIdCodificado);
 		
 		if($colecao==null){
 			$colecao = static::getColecao ();
+		}
+		
+		if($comOpcaoNenhum){
+			$array2 = array (
+					constantes::$CD_OPCAO_NENHUM => constantes::$DS_OPCAO_NENHUM,
+			);
+			$colecao = putElementoArray2NoArray1ComChaves ( $colecao, $array2);				
 		}
 		
 		if($javascriptadicional != null){
@@ -365,7 +378,11 @@ class dominio extends multiplosConstrutores {
 			/*var_dump($opcaoSelecionada);
 			var_dump($chave);*/
 			//echoo("chave:$chave & selecao: $opcaoSelecionada");
-			$html .= "\n".$conectorAntes . getCheckBoxBoolean($id, $nm, $chave, $checked, "$javascript $htmlAdicional")." ". static::getDescricaoStatic($chave,$colecao) . "<br>";
+			$html .= "\n".$conectorAntes 
+				. getCheckBoxBoolean($id, $nm, $chave, $checked, "$javascript $htmlAdicional")
+				." "
+				. static::getDescricaoStatic($chave,$colecao) 
+				. "<br>";
 			$i++;
 		}
 		//artificio usado para tirar o ultimo <br>
@@ -377,11 +394,6 @@ class dominio extends multiplosConstrutores {
 			);				
 			$borracha = getBorracha($nmCamposDoc, "");
 		}
-		
-		$comComboOR_And = $pArray[8]==null?false:$pArray[8];
-		$nmComboOr_And = $pArray[9];
-		$cdOpcaoSelecionadaComboOr_And = $pArray[10];
-		
 		
 		if($comComboOR_And){
 			require_once (caminho_util . "/selectOR_AND.php");

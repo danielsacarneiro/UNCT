@@ -2,23 +2,6 @@
 //include_once("../../config_lib.php");
 include_once (caminho_funcoes . "contrato/biblioteca_htmlContrato.php");
 
-function isAtributoValido($atrib){
-	if(is_array($atrib)){
-		foreach ($atrib as $no){
-			//echo "$no***";
-			$retorno = $no != null && $no != "";
-			if(!$retorno){				
-				return $retorno;
-			}
-		}
-		
-	}else{
-		$retorno = $atrib != null && $atrib != "";
-	}
-	return $retorno;
-}
-
-
 function getModeloPublicacaoPreenchido($registrobanco){
 	/*
 	 MODELO PUBLICACAO

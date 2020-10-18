@@ -54,6 +54,7 @@ function getCorpoMensagemDemandaPorColecao($assunto, $filtro, $colunasAAcrescent
 
 function getCorpoMensagemDemandaContratoColecao($assunto, $colecao, $colunasAAcrescentar=null, $semTitulo=false) {
 
+	$colunas = incluirColunaColecao($colunas, 'SEI', voDemanda::$nmAtrProtocolo);
 	$colunas = incluirColunaColecao($colunas, 'ANO DEMANDA', voDemanda::$nmAtrAno);
 	$colunas = incluirColunaColecao($colunas, 'NÚMERO', voDemanda::$nmAtrCd, constantes::$TAMANHO_CODIGOS);
 	if(!$semTitulo){
@@ -290,7 +291,7 @@ function enviarEmail($assuntoParam, $mensagemParam, $enviarEmail=true, $listaEma
 				echo "<b>Informações do erro:</b> <br />" . $mail->mail->ErrorInfo;
 			}
 		} else {
-			echo "RELATÓRIO DIÁRIO: NÃO enviar email.";
+			echo "RELATÓRIO DIÁRIO: NÃO enviar email.<BR>*******<BR>";
 		}
 	} catch ( Exception $ex ) {
 		$msg = $ex->getMessage ();
@@ -436,6 +437,71 @@ TH.headertabeladados,TH.headertabeladadosalinhadodireita,TH.headertabeladadosali
 ";
 
 	return $html;
+}
+
+function getBotaoDetalharAlertas(){
+	$retorno .= getTagHTMLAbreJavaScript();
+	$retorno .= getFuncaoJSDetalharEmailPorVO(new voDemanda());
+	$retorno .= getTagHTMLFechaJavaScript();
+	$retorno .= "\n<TABLE width='100%' id='table_tabeladados' class='tabeladados' cellpadding='2' cellspacing='2' BORDER=0>\n
+				<TBODY>";
+	$retorno .= "<TR>\n
+	<TD class='botaofuncao' colspan=$colspan>" . getBotaoDetalhar () . "</TD>\n
+				</TR>\n";
+	$retorno .= "</TBODY>\n
+				</TABLE>";
+
+	return $retorno;
+}
+
+function imprimeTituloalerta($enviarEmail, $setor=null){
+	if (!($enviarEmail && email_sefaz::$FLAG_ENVIAR_EMAIL)) {
+		echoo("<font color='red'><b>RELATÓRIO DIÁRIO $setor: <u>SEM email</u>.</b></font></br>");
+	}	
+}
+
+function enviarEmailATJA($enviarEmail){
+	imprimeTituloalerta($enviarEmail, "ATJA");
+
+	$count = 0;
+	//envia alertas dos editais
+	$mensagem .= getMensagemAltaPrioridade($count);
+	//demandas que seguem para a SAD
+	$mensagem .= getMensagemDemandaSAD($count);
+	//envia alertas dos PAAPs pendentes de abertura
+	$mensagem .= getMensagemPAAPAbertoNaoEncaminhado($count);
+	//envia alertas dos PAAPs A Executar
+	//$mensagem .= getMensagemPAAPAExecutar($count);
+	//envia alertas dos PAAPs cujas analises tiveram prazo vencido
+	$mensagem .= getMensagemFimPrazoPAAP($count);
+	//envia alertas das demandas que devem ser analisadas pois ja tem suas proposta de precos vencida, tornando possivel o calculo do reajuste
+	$mensagem .= getMensagemDemandaContratoPropostaVencida($count);
+	
+	//envia alertas dos contratos a vencer. Ainda depende de definicao da diretoria
+	//$mensagem .= getMensagemContratosAVencer();
+	echo $mensagem . getBotaoDetalharAlertas();
+
+	$assunto = "Relatório diário";
+	enviarEmail($assunto, $mensagem, $enviarEmail);
+}
+
+function enviarEmailUNCT($enviarEmail){
+	echo("<br>");
+	imprimeTituloalerta($enviarEmail, "UNCT");
+	
+	$count = 0;	
+	//envia demandas iniciais
+	$mensagem .= getMensagemDemandaIniciais($count);
+	//sistemas licon portal da transparencia
+	$mensagem .= getMensagemSistemasExternos($count);
+	//demandas que seguem para a SAD
+	//$mensagem .= getMensagemDemandaSAD($count);
+
+	echo $mensagem . getBotaoDetalharAlertas();
+	
+	$assunto = "Relatório diário";
+	enviarEmail($assunto, $mensagem, $enviarEmail, email_sefaz::getListaEmailUNCT());	
+	//enviarEmail($assuntoParam, $mensagemParam, $enviarEmail=true, $listaEmail=null,$remetente = null) {
 }
 
 ?>

@@ -193,11 +193,18 @@ setCabecalho($titulo);
                         				</TD>
                     				</TR>
                     				<?php 
+                    				//verificar a possibilidade de usar o documento checklist pra fazer um laco e buscar esses documentos dinamicamente no econti
+                    				//facilitando a exibicao nesta tela direto quando incluido no banco
+                    				//SUGESTAO: usar o tipo documento CHECKLIST
                     				$vodocumento = new voDocumento(array(2020, dominioSetor::$CD_SETOR_UNCT,dominioTpDocumento::$CD_TP_DOC_OUTROS, 44));
                     				echo imprimeBotaoDocumento($vodocumento, "FLUXOGRAMA CONTRATOS");
                     				
+                    				$vodocumento = new voDocumento(array(2020, dominioSetor::$CD_SETOR_UNCT,dominioTpDocumento::$CD_TP_DOC_OUTROS, 45));
+                    				echo imprimeBotaoDocumento($vodocumento, "COMO REGISTRAR APOSTILAMENTOS");
+                    				
                     				$vodocumento = new voDocumento(array(2019, dominioSetor::$CD_SETOR_DILC,dominioTpDocumento::$CD_TP_DOC_OUTROS, 2));
                     				echo imprimeBotaoDocumento($vodocumento, "MACROPROCESSO LICITAÇÃO");
+                    				
                     				?>
                     				<TR>
                         				<TD class="tabeladadosdestacadonegrito">LEGISLAÇÃO:

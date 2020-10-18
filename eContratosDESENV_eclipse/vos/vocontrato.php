@@ -156,11 +156,38 @@ include_once (caminho_util . "DocumentoPessoa.php");
     
     public function getNmClassProcesso(){
         return  "dbcontrato";
-    }      
-        	
-    function getAtributosFilho(){
-        $retorno = array(
-            self::$nmAtrSqContrato,
+    }     
+    
+    /**
+     *  Chave primaria
+     */
+    function getAtributosChavePrimaria() {
+    	$retorno = array (
+    			vocontrato::$nmAtrSqContrato,
+    	);
+    
+    	return $retorno;
+    }
+    
+    /**
+     *  Chave logica
+     */
+    static function getAtributosChaveLogica() {
+    	$retorno = array (
+    			vocontrato::$nmAtrAnoContrato,
+    			vocontrato::$nmAtrCdContrato,
+    			vocontrato::$nmAtrTipoContrato,
+    			vocontrato::$nmAtrCdEspecieContrato,
+    			vocontrato::$nmAtrSqEspecieContrato,
+    	);
+    
+    	return $retorno;
+    }
+    
+  static function getAtributosFilho(){
+    	$array1 = static::getAtributosChavePrimaria();
+    	
+    	$array2 = array(
             self::$nmAtrAnoContrato,            
             self::$nmAtrCdContrato,
             self::$nmAtrTipoContrato,
@@ -198,11 +225,12 @@ include_once (caminho_util . "DocumentoPessoa.php");
         	self::$nmAtrLinkDoc,
         	self::$nmAtrLinkMinutaDoc,
         );
-        
+    	
+    	$retorno = array_merge($array1, $array2);        
         return $retorno;    
     }
     
-    function getAtributosMovimentacoes(){
+    static function getAtributosMovimentacoes(){
         $retorno = array(
             self::$nmAtrSqContrato,
             self::$nmAtrAnoContrato,            

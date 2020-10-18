@@ -4,9 +4,11 @@ include_once(caminho_lib ."filtroManter.php");
 include_once(caminho_vos ."voDemandaTramitacao.php");
 require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioAutorizacao.php");
 
-class filtroManterDemanda extends filtroManter{
-		
+class filtroManterDemanda extends filtroManter{		
 	public $nmFiltro = "filtroManterDemanda";
+	
+	static $NM_TABELA_DADOS_CONTRATO_DEMANDA = "NM_TABELA_DADOS_CONTRATO_DEMANDA";
+	static $NmAtrFasePlanilha = "NmAtrFasePlanilha";
 	static $NmAtrCdSetorPassagem = "NmAtrCdSetorPassagem";
 	static $NmColQtdDiasDataDtReferencia = "NmColQtdDiasDataDtReferencia";
 	static $NmColDhUltimaMovimentacao = "NmColDhUltimaMovimentacao";
@@ -68,6 +70,7 @@ class filtroManterDemanda extends filtroManter{
 	
 	var $inOR_AND;
 	var $inOR_AND_Fase;
+	var $fasePlanilha;
 	var $tipoExcludente;
 	var $prioridadeExcludente;
 	var $cdClassificacaoContrato;
@@ -125,6 +128,7 @@ class filtroManterDemanda extends filtroManter{
 		
 		$vodemanda->tpDemandaContrato = @$_POST[voDemanda::$nmAtrTpDemandaContrato];
 		$vodemanda->fase = @$_POST[voDemanda::$nmAtrFase];
+		$this->fasePlanilha = @$_POST[static::$NmAtrFasePlanilha];
 		$vodemanda->inTpDemandaReajusteComMontanteA = @$_POST[voDemanda::$nmAtrInTpDemandaReajusteComMontanteA];
 		//var_dump($vodemanda->tpDemandaContrato);
 		$vodemanda->situacao  = @$_POST[voDemanda::$nmAtrSituacao];		
@@ -307,18 +311,31 @@ class filtroManterDemanda extends filtroManter{
 			$conector  = "\n AND ";
 		}
 		
+		$fasePlanilha = $this->fasePlanilha;
+		if (isAtributoValido($fasePlanilha) && ! $this->isAtributoArrayVazio ( $fasePlanilha )) {
+			//echo "entrou2";
+			$inOrAndFase = $this->inOR_AND_Fase;
+			$strFiltroFase = getSQLBuscarStringCampoSeparador (
+					$fasePlanilha,
+					static::getDadosContratoColecaoCheckBox($this->isHistorico()),
+					$inOrAndFase);
+			// echo $strFiltroTpDemanda;
+			$filtro = $filtro . $conector . $strFiltroFase;
+			$conector = "\n AND ";
+		}
+		
 		$fase = $this->vodemanda->fase;
 		if ($fase != null
 				&& $fase != ""
-				&& !$this->isAtributoArrayVazio($fase)) {		
+				&& !$this->isAtributoArrayVazio($fase)) {
+					//echo "entrou1";
 					$inOrAndFase = $this->inOR_AND_Fase;					
 					$strFiltroFase = getSQLBuscarStringCampoSeparador($fase, voDemanda::$nmAtrFase, $inOrAndFase);
 					//echo $strFiltroTpDemanda;
 					$filtro = $filtro . $conector . $strFiltroFase;
 					$conector  = "\n AND ";
-				}
-		
-				
+		}
+						
 		$tpDemandaContrato = $this->vodemanda->tpDemandaContrato;
 		if ($tpDemandaContrato != null
 				&& $tpDemandaContrato != ""
@@ -916,6 +933,21 @@ class filtroManterDemanda extends filtroManter{
 
 		return $filtro;
 	}
+	
+	/**
+	 * Metodo que relaciona o codigo do dominio ao atributo no banco com cujo valor sera comparado
+	 * eh usado quando a consulta tiver dados check box de uma entidade, cujo filtro eh do tipo sim ou nao via checkbox
+	 * @return string[]
+	 */
+	static function getDadosContratoColecaoCheckBox($isTabHistorico) {
+		$retorno = array (
+				dominioFaseDemanda::$CD_FORNECEDOR_SEM_PENDENCIAS => static::$NM_TABELA_DADOS_CONTRATO_DEMANDA . "." . vocontrato::$nmAtrDtAssinaturaContrato,
+				dominioFaseDemanda::$CD_PUBLICADO => static::$NM_TABELA_DADOS_CONTRATO_DEMANDA . "." . vocontrato::$nmAtrDtPublicacaoContrato,
+		);
+	
+		return $retorno;
+	}
+	
 		
 	/**
 	 * retorna o SQL que permite verificar se uma demanda passou por um setor

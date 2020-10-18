@@ -244,8 +244,16 @@ function getSQLStringArgumentosFormatadoColecao($colecaoValores, $nmAtributo, $o
 	return $retorno;
 }
 
-function getSQLBuscarStringCampoSeparador($colecaoAtributos, $nmAtributo, $operador = "OR") {	
-	//$strFormato = " LOCATE('$tpDemandaContrato',".voDemanda::$nmAtrTpDemandaContrato.") ";	
+/**
+ * Se $nmAtributo for uma colecao, sera uma colecao de codigo (do dominio trabalhado) relacionado ao atributo a ser comparado no banco
+ * @param unknown $colecaoAtributos
+ * @param unknown $nmAtributo
+ * @param string $operador
+ * @return string
+ */
+function getSQLBuscarStringCampoSeparador($colecaoAtributos, $nmAtributoColecao, $operador = "OR") {	
+	//$strFormato = " LOCATE('$tpDemandaContrato',".voDemanda::$nmAtrTpDemandaContrato.") ";
+	//ECHO (" OPERADOR $operador ");
 	$retorno = "";
 	$separador = "";
 	if ($colecaoAtributos != null) {
@@ -259,13 +267,27 @@ function getSQLBuscarStringCampoSeparador($colecaoAtributos, $nmAtributo, $opera
 		for($i = 0; $i <= $tamanho; $i ++) {
 			$atrib = $colecaoAtributos [$i];
 				
-			if ($atrib != null) {
-				
-				if(constantes::$CD_OPCAO_NENHUM == $atrib){
-					$retorno .= " $separador $nmAtributo  IS NULL ";
-				}else{				
-					$retorno .= " $separador LOCATE('$atrib',$nmAtributo) ";
+			if ($atrib != null) {	
+ 
+				if(!is_array($nmAtributoColecao)){					
+					//a estrutura da consulta dependera do tipo passado como parametro em $nmAtributoColecao
+					if(constantes::$CD_OPCAO_NENHUM == $atrib){
+						$retorno .= " $separador $nmAtributoColecao  IS NULL ";
+					}else{				
+						$retorno .= " $separador LOCATE('$atrib',$nmAtributoColecao) ";
+					}					
+				}else{
+					//echo "aqui";
+					if(constantes::$CD_OPCAO_NENHUM == $atrib){
+						$comparacaoTemp = "IS NULL";
+					}else{
+						$comparacaoTemp = "IS NOT NULL";
+					}
+					$retorno .= " $separador " . dominio::getDescricaoStatic($atrib, $nmAtributoColecao) . "  $comparacaoTemp ";
+					
+					//echo $separador;
 				}
+				
 				$separador = " $operador ";
 			}
 			// echo "$retorno<br>";

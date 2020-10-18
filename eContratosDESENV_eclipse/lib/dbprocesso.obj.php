@@ -200,6 +200,7 @@ class dbprocesso {
 		$nmTabelaACompararCdUsuario = $vo->getNmTabelaEntidade ( $filtro->isHistorico );
 		// $retorno = $this->consultarMontandoQueryUsuarioFiltro ( $vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $filtro, false, $filtro->isValidarConsulta );
 		$retorno = $this->consultarMontandoQueryUsuarioFiltro ( $vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $filtro, false );
+		
 		return $retorno;
 	}
 	function consultarMontandoQueryUsuario($vo, $nmTabelaACompararCdUsuario, $arrayColunasRetornadas, $queryJoin, $queryWhere, $isHistorico, $isConsultaPorChave, $sqlComplemento=null) {
@@ -229,9 +230,9 @@ class dbprocesso {
 		
 		$queryFrom = $this->getQueryFrom_NmUsuarioTabelaAComparar ( $vo, $nmTabelaACompararCdUsuario, $queryJoin, $isHistorico );
 		
-		//echo $queryFrom;
-		//echo $queryJoin;
-		
+		//echoo("query join $queryJoin ");
+		//echoo ("query from $queryFrom ");
+				
 		//echo $querySelect;
 		//echo " testando $filtro->isValidarConsulta";
 		$retorno = $this->consultarFiltro ( $filtro, $querySelect, $queryFrom, $filtro->isValidarConsulta );
@@ -430,7 +431,7 @@ class dbprocesso {
 			if ($filtro->temQueryPadrao ()) {
 				$queryFrom = $filtro->getQueryFromJoin ();
 			}
-				
+			
 			// verifica se tem paginacao
 			$limite = "";
 			if ($filtro->TemPaginacao) {
@@ -749,7 +750,7 @@ class dbprocesso {
 	}
 	function alterarPorCima($voEntidade) {		
 		//so valida a alteracao (para evitar alteracoes simultaneas) se o voentidade permitir alteracao (tiverdhultimaalteracao)
-		if(!in_array(voentidade::$nmAtrDhUltAlteracao, $voEntidade->varAtributosARemover)){
+		if($voEntidade->varAtributosARemover != null && !in_array(voentidade::$nmAtrDhUltAlteracao, $voEntidade->varAtributosARemover)){
 			$this->validaAlteracao ( $voEntidade );
 		}
 		$query = $this->alterarSQL ( $voEntidade );

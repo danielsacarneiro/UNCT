@@ -8,8 +8,8 @@ Class dominioClassificacaoContrato extends dominio{
 	static $CD_LOCACAO_IMOVEL = 4;
 
 	static $DS_SERVICOS = 'Serviços';
-	static $DS_FORNECIMENTO_AQUISICAO = "Fornec. e Aquisição";
-	static $DS_MAO_OBRA = "Terceirização Mão de Obra";
+	static $DS_FORNECIMENTO_AQUISICAO = "Fornec./Aquisição";
+	static $DS_MAO_OBRA = "Terc. Mão de Obra";
 	static $DS_LOCACAO_IMOVEL = "Locação imóvel";
 	
 	// ...............................................................

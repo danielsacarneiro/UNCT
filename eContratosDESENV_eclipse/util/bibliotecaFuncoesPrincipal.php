@@ -570,6 +570,22 @@ function getArrayComItemTamanhoFormatado($array, $qtdfinal = 2, $char = "0") {
 	return $array;
 }
 
+function isAtributoValido($atrib){
+	if(is_array($atrib)){
+		foreach ($atrib as $no){
+			//echo "$no***";
+			$retorno = $no != null && $no != "";
+			if(!$retorno){
+				return $retorno;
+			}
+		}
+
+	}else{
+		$retorno = $atrib != null && $atrib != "";
+	}
+	return $retorno;
+}
+
 /*function isArrayMultiDimensional($array){
 	return count($array) == count($array, COUNT_RECURSIVE);
 }*/

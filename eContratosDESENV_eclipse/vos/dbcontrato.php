@@ -15,6 +15,8 @@ class dbcontrato extends dbprocesso {
 	static $FLAG_PRINTAR_LOG_IMPORTACAO_NUM_LINHA = false;
 
 	static $CD_CONSTANTE_FIM_IMPORTACAO = "FIM";
+	static $CD_CONSTANTE_PENDENTE_IMPORTACAO = "PENDENTE";
+	
 	static $ID_REQ_INICIAR_TAB_CONTRATO= "ID_REQ_INICIAR_TAB_CONTRATO";
 	static $ID_REQ_REMOVER_CARACTER_ESPECIAL = "ID_REQ_REMOVER_CARACTER_ESPECIAL";
 
@@ -33,11 +35,35 @@ class dbcontrato extends dbprocesso {
 			);
 			$filtro->groupby = $groupby;
 				
-			$retorno = $this->consultarFiltroManter ( $filtro, true );
+			//$retorno = $this->consultarFiltroManter ( $filtro, true );
+			$arrayParamConsulta = array($filtro);
+			$retorno = $this->consultarTelaConsulta($arrayParamConsulta);
 				
 			return $retorno;
 		}
 	}
+	
+	function consultarTelaConsulta($arrayParamConsulta){
+		$filtro = $arrayParamConsulta[0];
+		$vo = $filtro->voPrincipal;
+		$isHistorico = ("S" == $filtro->cdHistorico);
+		$nmTabela = $vo->getNmTabelaEntidade($isHistorico);
+		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic(false);
+		//$nmTabelaDemandaSolicCompra = voDemandaPL::getNmTabelaStatic(false);
+		
+		$arrayColunasRetornadas = array (
+				$nmTabela . ".*",
+		);		
+		 		 
+		$queryJoin .= "\n left JOIN " . $nmTabelaContratoInfo;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaContratoInfo . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrAnoContrato;
+		$queryJoin .= " AND " . $nmTabelaContratoInfo . "." . vocontrato::$nmAtrCdContrato. "=" . $nmTabela . "." . vocontrato::$nmAtrCdContrato;
+		$queryJoin .= " AND " . $nmTabelaContratoInfo . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
+	
+		return parent::consultarMontandoQueryTelaConsulta ( $vo, $filtro, $arrayColunasRetornadas, $queryJoin );
+	}
+	
 	function consultarContratoModificacao($vo, $isHistorico) {
 
 		$vocontratoTemp = clone $vo;
@@ -828,53 +854,35 @@ class dbcontrato extends dbprocesso {
 		// $mystring = utf8_decode($param);
 		return $retorno;
 	}
-	function getDataPublicacaoImportacao($param) {
+	
+	function getDataLinhaImportacao($param) {
 		// echo "<br> valor a converter: $param";
 		$retorno = null;
-		if ($param != null) {
-			$ano = 0;
-			$indiceSeparadorAno = getIndiceBarraOuPonto ( $param );
+		if (isAtributoValido ( $param )) {
+			$param = str_replace ( " ", "", $param );
 				
-			// echo "<br> tamanho da string" . strlen($param);
-			// echo "<br> indice separador" . $indiceSeparadorAno;
-				
-			$ano = substr ( $param, $indiceSeparadorAno + 1, 4 );
-			if ($ano < 2000) {
-				// echo "<br> tem 2 digitos";
-				$ano = $ano + 2000;
-			} /*
-			* else{
-			* echo "<br> tem 4 digitos";
-			* }
-			*/
-				
-			$mes = substr ( $param, $indiceSeparadorAno - 2, 2 );
-			$dia = substr ( $param, $indiceSeparadorAno - 5, 2 );
-			
-			if(is_numeric(trim($dia)) && is_numeric(trim($mes)) && is_numeric(trim($ano))){
-				$res = checkdate ( $mes, $dia, $ano );
-				if ($res == 1) {
-					// $retorno = $ano . "-" . "$mes" . "-". $dia;
-					$retorno = $dia . "/" . "$mes" . "/" . $ano;
-				}				
+			if ($param != static::$CD_CONSTANTE_PENDENTE_IMPORTACAO && $param != '0000-00-00') {
+	
+				$datahtml = substr ( $param, 3, 2 ) . "/" . substr ( $param, 0, 2 ) . "/" . (substr ( $param, 6, 4 ) + 2000);
+				$isdatavalida = checkDataValida($datahtml);
+	
+				if(!$isdatavalida){
+					// trecho que serve para data de publicacao quando vier com o extrato de publicacao nao formatado em data
+					//ou ultima tentativa de recuperar a data mal formatada
+					$datahtml = getDataHtmlDoFinaldoTexto($param);
+					//echoo(" tentativa2 $datahtml");
+					$isdatavalida = checkDataValida($datahtml);
+					if(!$isdatavalida){
+						$datahtml = 'null';
+					}
+						
+				}
 			}
-				
-			/*
-			 * try{
-			 * $ano = substr($param,$indiceSeparadorAno,4);
-			 * echo "<br> tem 4 digitos";
-			 * }catch(Exception $e){
-			 * echo "<br> tem 2 digitos";
-			 * $ano = substr($param,$indiceSeparadorAno,2);
-			 * $ano = $ano + 2000;
-			 * }
-			 */
-				
-			// echo "<BR> IMPRIMINDO A DATA PUBLICACAO SQL: " . $retorno;
 		}
-
-		return $retorno;
-	}
+	
+		return $datahtml;
+	}	
+	
 	function getNumeroLinhaImportacao($param) {
 		$retorno = "null";
 		if ($param != null)
@@ -890,19 +898,13 @@ class dbcontrato extends dbprocesso {
 			return $retorno;
 	}
 
-	function getDataLinhaImportacao($param) {
+	/*function getDataLinhaImportacao($param) {
 		$retorno = "null";
 		$isDataExcel = getPosicaoPalavraNaString ( $param, " " ) === false;
+		echo "XX$paramXX";
 
-		/*
-		 * if($isDataExcel){
-		 * echo " eh data excel";
-		 * }else{
-		 * echo " NAO eh data excel";
-		 * }
-		 */
-
-		if ($param != null && $param != "") {
+		//if (isatrib$param != null && $param != "") {
+		if (isAtributoValido($param) && $param != static::$CD_CONSTANTE_PENDENTE_IMPORTACAO && $param != '0000-00-00') {
 			if ($isDataExcel) {
 				// $retorno = "'" . substr($param,3,2) . "/" . substr($param,0,2) . "/" . (substr($param,6,4) + 2000). "'";
 				$retorno = substr ( $param, 3, 2 ) . "/" . substr ( $param, 0, 2 ) . "/" . (substr ( $param, 6, 4 ) + 2000);
@@ -913,11 +915,12 @@ class dbcontrato extends dbprocesso {
 			}
 		}
 
-		/*imprimeLinhaHTML ( "parametro:$param" );
-		 imprimeLinhaHTML ( "resultado:$retorno" );*/
+		//imprimeLinhaHTML ( "parametro:$param" );
+		// imprimeLinhaHTML ( "resultado:$retorno" );
 
 		return $retorno;
-	}
+	}*/
+	
 	function getDecimalLinhaImportacao($param) {
 		$retorno = "null";
 
@@ -1243,16 +1246,11 @@ class dbcontrato extends dbprocesso {
 		}
 		
 		$retorno->modalidade = $modalidadeLic;
-		$retorno->dtAssinatura = $dtAssinatura;
-		$retorno->dataPublicacao = $dataPublic;
-		// $retorno->contratada = $nomeContratada;
 		$retorno->contratada = getStringImportacaoCaracterEspecial ( $nomeContratada );
 		
 		$documento = new documentoPessoa ( $docContratada );
 		$retorno->docContratada = $documento->getNumDoc ();
 		
-		$retorno->dtVigenciaInicial = $dtVigenciaInicio;
-		$retorno->dtVigenciaFinal = $dtVigenciaFim;
 		$retorno->empenho = $sqEmpenho;
 		$retorno->tpAutorizacao = $tpAutorizacao;
 		$retorno->licom = $inLicom;
@@ -1268,10 +1266,10 @@ class dbcontrato extends dbprocesso {
 		$retorno->vlMensal = $this->getDecimalLinhaImportacao ( $retorno->vlMensal );
 		// echo "<br> VALOR GLOBAL: " . $retorno->vlGlobal;
 		
-		$retorno->dtAssinatura = $this->getDataLinhaImportacao ( $retorno->dtAssinatura );
-		$retorno->dtPublicacao = $this->getDataPublicacaoImportacao ( $dataPublic );
-		$retorno->dtVigenciaInicial = $this->getDataLinhaImportacao ( $retorno->dtVigenciaInicial );
-		$retorno->dtVigenciaFinal = $this->getDataLinhaImportacao ( $retorno->dtVigenciaFinal );
+		$retorno->dtAssinatura = $this->getDataLinhaImportacao ( $dtAssinatura );
+		$retorno->dtPublicacao = $this->getDataLinhaImportacao ( $dataPublic );
+		$retorno->dtVigenciaInicial = $this->getDataLinhaImportacao ( $dtVigenciaInicio );
+		$retorno->dtVigenciaFinal = $this->getDataLinhaImportacao ( $dtVigenciaFim );
 		
 		/*
 		 * $retorno->cdUsuarioInclusao = "null";

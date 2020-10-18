@@ -4,6 +4,7 @@ include_once (caminho_lib . "filtroManter.php");
 class filtroManterContratoInfo extends filtroManter {
 	public $nmFiltro = "filtroManterContratoInfo";
 	static $NmAtrInOR_AND = "NmAtrInOR_AND";
+	static $ID_REQ_InGestor= "ID_REQ_InGestor";
 	static $NmColAutorizacao = "NmColAutorizacao";
 	
 	var $cdContrato = "";
@@ -20,6 +21,7 @@ class filtroManterContratoInfo extends filtroManter {
 	
 	var $cdClassificacao = "";
 	var $inMaoDeObra = "";
+	var $inGestor = "";
 	var $objeto = "";
 	var $obs = "";
 	
@@ -40,6 +42,7 @@ class filtroManterContratoInfo extends filtroManter {
 		
 		$this->cdClassificacao = @$_POST [voContratoInfo::$nmAtrCdClassificacao];
 		$this->inMaoDeObra = @$_POST [voContratoInfo::$nmAtrInMaoDeObra];
+		$this->inGestor = @$_POST [STATIC::$ID_REQ_InGestor];
 		$this->objeto = @$_POST [vocontrato::$nmAtrObjetoContrato];
 		$this->obs = @$_POST [voContratoInfo::$nmAtrObs];
 		$this->inPrazoProrrogacao = @$_POST [voContratoInfo::$nmAtrInPrazoProrrogacao];
@@ -101,7 +104,7 @@ class filtroManterContratoInfo extends filtroManter {
 			$conector = "\n AND ";
 		}
 				
-		if ($this->inTemGarantia != null) {
+		if (isAtributoValido($this->inTemGarantia)) {
 		
 			$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrInTemGarantia . " = " . getVarComoString ( $this->inTemGarantia );
 		
@@ -118,6 +121,14 @@ class filtroManterContratoInfo extends filtroManter {
 		if ($this->inMaoDeObra != null) {
 		
 			$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrInMaoDeObra . " = " . getVarComoString ( $this->inMaoDeObra );
+		
+			$conector = "\n AND ";
+		}
+		
+		if (isAtributoValido($this->inGestor)) {
+			$temp = $this->inGestor == constantes::$CD_SIM? " IS NOT NULL ": " IS NULL "; 
+		
+			$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrCdPessoaGestor . $temp;
 		
 			$conector = "\n AND ";
 		}

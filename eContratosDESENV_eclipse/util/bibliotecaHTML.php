@@ -835,6 +835,7 @@ function getRadioButton($idRadio, $nmRadio, $chave, $checked, $complementoHTML) 
 
 /**
  * @deprecated
+ * checkbox que recebe string pra dizer que esta checado
  * @param unknown $idRadio
  * @param unknown $nmRadio
  * @param unknown $chave
@@ -846,7 +847,49 @@ function getCheckBox($idRadio, $nmRadio, $chave, $checked = null, $complementoHT
 	$retorno = "<INPUT type='checkbox' id='" . $idRadio . "' name='" . $nmRadio . "' value='" . $chave . "' " . $checked . " $complementoHTML>";
 	return $retorno;
 }
+
+/**
+ * checkbox que recebe um booleano pra dizer check
+ * @param unknown $idRadio
+ * @param unknown $nmRadio
+ * @param unknown $chave
+ * @param unknown $checked
+ * @param unknown $complementoHTML
+ * @return string
+ */
 function getCheckBoxBoolean($idRadio, $nmRadio, $chave, $checked = null, $complementoHTML = null) {
+	/*if ($checked == null) {
+		$checked = false;
+	}
+	if ($checked) {
+		$strchecked = "checked";
+	}
+
+	$retorno = "<INPUT type='checkbox' id='" . $idRadio . "' name='" . $nmRadio . "' value='" . $chave . "' " . $strchecked . " $complementoHTML>";
+	return $retorno; 
+	*/
+	
+	$pArray = array($idRadio, $nmRadio, $chave, $checked, $complementoHTML);
+	return getCheckBoxArray($pArray);
+}
+
+/**
+ * monta um check booleano sim-nao para a opcao
+ * @param unknown $idRadio
+ * @param unknown $nmRadio
+ * @param unknown $chave
+ * @param unknown $checked
+ * @param unknown $complementoHTML
+ * @return string
+ */
+function getCheckBoxArray($pArray) {
+	$idRadio = $pArray[0]; 
+	$nmRadio = $pArray[1]; 
+	$chave = $pArray[2]; 
+	$checked = $pArray[3]; 
+	$complementoHTML = $pArray[4];	
+	$isCheckSimNao = $pArray[5];
+	
 	if ($checked == null) {
 		$checked = false;
 	}
@@ -857,7 +900,7 @@ function getCheckBoxBoolean($idRadio, $nmRadio, $chave, $checked = null, $comple
 	$retorno = "<INPUT type='checkbox' id='" . $idRadio . "' name='" . $nmRadio . "' value='" . $chave . "' " . $strchecked . " $complementoHTML>";
 	return $retorno;
 }
-         
+
 function getInputText($idText, $nmText, $value, $class = null, $size = null, $maxlength = null, $complementoHTML = null) {
 	if ($maxlength == null) {
 		$maxlength = 20;
@@ -960,7 +1003,9 @@ function tratarExcecaoHTML($ex, $vo = null, $paginaErro="../mensagemErro.php") {
 	$msg = str_replace ( "\n", "", $msg );
 	$msg = str_replace ( "<br>", "", $msg );
 	echo $msg;
-	header ( "Location: $paginaErro?texto=" . $msg, TRUE, 307 );
+
+	$queryComplemento = constantes::$ID_REQ_CD_LUPA . "=" . getAtributoBooleanoComoString(isLupa());
+	header ( "Location: $paginaErro?$queryComplemento&texto=" . $msg, TRUE, 307 );
 	
 	/*<script language="JavaScript">
 	window.location="pagina1.php";

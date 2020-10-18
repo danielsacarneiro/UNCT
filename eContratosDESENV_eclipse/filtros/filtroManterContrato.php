@@ -6,6 +6,7 @@ include_once (caminho_util . "bibliotecaHTML.php");
 class filtroManterContrato extends filtroManter {
 	public $nmFiltro = "filtroManterContrato";
 	
+	public static $ID_REQ_InGestor= "ID_REQ_InGestor";	
 	public static $ID_REQ_InPublicado = "ID_REQ_InPublicado";
 	public static $nmAtrInTrazerConsolidadoPorVigencia = "nmAtrInTrazerConsolidadoPorVigencia";	
 	public static $nmAtrAnoArquivo = "nmAtrAnoArquivo";
@@ -43,6 +44,7 @@ class filtroManterContrato extends filtroManter {
 	var $cdConsultarArquivo;
 	var $inTrazerConsolidadoVigencia;
 	var $inPublicado;
+	var $inGestor;
 	
 	var $tpDemanda;
 	var $licon;
@@ -53,7 +55,7 @@ class filtroManterContrato extends filtroManter {
 	// ...............................................................
 	// construtor
 	
-	function __construct1($pegarFiltrosDaTela) {
+	/*function __construct1($pegarFiltrosDaTela) {
 		parent::__construct1($pegarFiltrosDaTela);
 		
 		$querySelect = "SELECT * ";
@@ -66,7 +68,7 @@ class filtroManterContrato extends filtroManter {
 		if($pegarFiltrosDaTela){
 			$this->getFiltroFormulario();		
 		}	
-	}
+	}*/
 	
 	function getFiltroFormulario(){
 		$this->voproclic = new voProcLicitatorio();
@@ -76,7 +78,12 @@ class filtroManterContrato extends filtroManter {
 		$this->anoArquivo = @$_POST [self::$nmAtrAnoArquivo];
 		$this->tipo = @$_POST [vocontrato::$nmAtrTipoContrato];
 		$this->especie = @$_POST [vocontrato::$nmAtrEspecieContrato];
-		$this->cdEspecie = @$_POST [vocontrato::$nmAtrCdEspecieContrato];		
+		$this->cdEspecie = @$_POST [vocontrato::$nmAtrCdEspecieContrato];
+		
+		//var_dump($this->cdEspecie);
+		if($this->cdEspecie == null){
+			$this->cdEspecie = @$_POST [vocontrato::$nmAtrCdEspecieContrato. "[]"];
+		}
 		$this->sqEspecie = @$_POST [vocontrato::$nmAtrSqEspecieContrato];
 		
 		$this->modalidade = @$_POST [vocontrato::$nmAtrModalidadeContrato];
@@ -104,6 +111,7 @@ class filtroManterContrato extends filtroManter {
 		$this->licon = @$_POST [vocontrato::$nmAtrInLicomContrato];
 		$this->empenho = @$_POST [vocontrato::$nmAtrNumEmpenhoContrato];
 		$this->inPublicado = @$_POST [static::$ID_REQ_InPublicado];
+		$this->inGestor = @$_POST [static::$ID_REQ_InGestor];
 				
 		$this->InOR_AND = @$_POST[self::$NmAtrInOR_AND];
 		if($this->InOR_AND == null){
@@ -133,6 +141,7 @@ class filtroManterContrato extends filtroManter {
 		 */
 		$isHistorico = $this->isHistorico;
 		$nmTabela = $voContrato->getNmTabelaEntidade ( $this->isHistorico );
+		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic(false);
 		
 		// seta os filtros obrigatorios
 		if ($this->isSetaValorDefault ()) {
@@ -396,6 +405,16 @@ class filtroManterContrato extends filtroManter {
 				$temp = " IS NULL ";
 			}
 			$filtro = $filtro . $conector . "$nmTabela." . vocontrato::$nmAtrDtPublicacaoContrato . $temp;
+			$conector = "\n AND ";
+		}
+		
+		if ($this->inGestor != null && $this->inGestor != "") {
+			if($this->inGestor == constantes::$CD_SIM){
+				$temp = " IS NOT NULL ";
+			}else{
+				$temp = " IS NULL ";
+			}
+			$filtro = $filtro . $conector . "$nmTabelaContratoInfo." . voContratoInfo::$nmAtrCdPessoaGestor . $temp;
 			$conector = "\n AND ";
 		}
 		

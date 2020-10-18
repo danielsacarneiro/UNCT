@@ -72,7 +72,15 @@ function cancela() {
 						<TD>
                     		<TABLE class="barraacoesaux" cellpadding="0" cellspacing="0">
 	                    	<TR>
-								<TD class="botaofuncao"><button id="cancelar" onClick="javascript:cancela();" class="botaofuncaop" type="submit" accesskey="o">OK</button></TD>
+								<TD class="botaofuncao">
+								<?php 
+								if(isLupa()){									
+									echo getBotaoFechar();
+								}else{
+								?>
+								<button id="cancelar" onClick="javascript:cancela();" class="botaofuncaop" type="submit" accesskey="o">OK</button>
+								<?php }?>
+								</TD>
 						    </TR>
 		                    </TABLE>
 	                    </TD>

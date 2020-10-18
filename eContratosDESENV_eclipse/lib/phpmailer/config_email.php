@@ -63,8 +63,9 @@ class email_sefaz extends multiplosConstrutores{
 	static function getListaEmailJuridico(){
 		return array(static::$REMETENTE_ATJA,
 				//"patricia.farias@sefaz.pe.gov.br",
-				//"alfredo.carvalho@sefaz.pe.gov.br",
-				"rogerio.f-carvalho@sefaz.pe.gov.br"
+				"alfredo.carvalho@sefaz.pe.gov.br",
+				//"margarida.vasconcelos@sefaz.pe.gov.br",
+				//"rogerio.f-carvalho@sefaz.pe.gov.br"
 		);	
 	}
 	
@@ -75,6 +76,16 @@ class email_sefaz extends multiplosConstrutores{
 				//"daniel.ribeiro@sefaz.pe.gov.br",
 				//"rogerio.f-carvalho@sefaz.pe.gov.br",
 				//"margarida.vasconcelos@sefaz.pe.gov.br"
+		);
+	}
+	
+	static function getListaEmailUNCT(){
+		return array(
+				"eduardo.s-goncalves@sefaz.pe.gov.br",
+				"daniel.ribeiro@sefaz.pe.gov.br",
+				//"rogerio.f-carvalho@sefaz.pe.gov.br",
+				"juliene.paiva@sefaz.pe.gov.br",
+				"Andrea.c-oliveira@sefaz.pe.gov.br",
 		);
 	}
 	

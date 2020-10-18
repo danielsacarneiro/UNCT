@@ -15,6 +15,7 @@ setCabecalho($titulo);
 $voContrato = new voContrato();
 
 $filtro  = new filtroManterContrato();
+$filtro->voPrincipal = $voContrato;
 $filtro = filtroManter::verificaFiltroSessao($filtro);
 
 $cdContrato = $filtro->cdContrato;
@@ -230,6 +231,8 @@ function confirmar() {
 	            $voContratoFiltro->cdEspecie = $filtro->cdEspecie;
 	            $voContratoFiltro->sqEspecie = $filtro->sqEspecie;
 	            
+	            //var_dump($filtro->cdEspecie);
+	            
 	            $arrayComplementoHTML = null;
 	            $arrayComplementoHTML = array (
 	            		" ",
@@ -239,14 +242,27 @@ function confirmar() {
 	            		" ",
 	            );
 	             
-	            
+	            $pNmCampoCdContrato = vocontrato::$nmAtrCdContrato;
+	            $pNmCampoAnoContrato = vocontrato::$nmAtrAnoContrato;
+	            $pNmCampoTipoContrato = vocontrato::$nmAtrTipoContrato;
+	            $pNmCampoCdEspecieContrato = vocontrato::$nmAtrCdEspecieContrato . "[]";
+	            $pNmCampoSqEspecieContrato = vocontrato::$nmAtrSqEspecieContrato;
+	            $nmCampoDivPessoaContratada = vopessoa::$nmAtrNome;
+	             
+	            $arrayNmCamposFormularioContrato[0] = $pNmCampoCdContrato;
+	            $arrayNmCamposFormularioContrato[1] = $pNmCampoAnoContrato;
+	            $arrayNmCamposFormularioContrato[2] = $pNmCampoTipoContrato;
+	            $arrayNmCamposFormularioContrato[3] = $pNmCampoCdEspecieContrato;
+	            $arrayNmCamposFormularioContrato[4] = $pNmCampoSqEspecieContrato;
+	            $arrayNmCamposFormularioContrato[5] = $nmCampoDivPessoaContratada;
+	             
 	            $pArray = array($voContratoFiltro,
 	            		constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO,
 	            		false,
 	            		true,
 	            		false,
 	            		null,
-	            		null,
+	            		$arrayNmCamposFormularioContrato,
 	            		$arrayComplementoHTML
 	            );
 	            
@@ -296,8 +312,20 @@ function confirmar() {
 	        </TR>	        
 			<TR>
                  <TH class="campoformulario" nowrap>Gestor:</TH>
-                 <TD class="campoformulario">
-                                <INPUT type="text" id="<?=vocontrato::$nmAtrGestorContrato?>" name="<?=vocontrato::$nmAtrGestorContrato?>"  value="<?php echo($nmGestor);?>"  class="camponaoobrigatorio" size="50" ></TD>
+                 <TD class="campoformulario">				                 
+	            <?php 
+	            include_once(caminho_util. "dominioSimNao.php");
+	            $comboSimNao = new select(dominioSimNao::getColecao());
+	             
+	            echo "E-mail? " . $comboSimNao->getHtmlCombo(
+	            		filtroManterContratoInfo::$ID_REQ_InGestor,
+	            		filtroManterContratoInfo::$ID_REQ_InGestor, 
+	            		$filtro->inGestor, true, "camponaoobrigatorio", false,
+	            	"");
+	            ?>
+				Nome: <INPUT type="text" id="<?=vocontrato::$nmAtrGestorContrato?>" name="<?=vocontrato::$nmAtrGestorContrato?>"  value="<?php echo($nmGestor);?>"  class="camponaoobrigatorio" size="20" >	            
+				</TD>
+                                
                 <TH class="campoformulario" nowrap>Modalidade:</TH>
 				<?php
 				include_once("../proc_licitatorio/dominioModalidadeProcLicitatorio.php");
@@ -305,7 +333,7 @@ function confirmar() {
 				$combo = new select($modalidades->colecao);						
 				?>
                  <TD class="campoformulario" nowrap><?php echo $combo->getHtml(vocontrato::$nmAtrCdModalidadeProcessoLicContrato,vocontrato::$nmAtrCdModalidadeProcessoLicContrato, $filtro->cdModalidade);?>
-                    <INPUT type="text" id="<?=vocontrato::$nmAtrModalidadeContrato?>" name="<?=vocontrato::$nmAtrModalidadeContrato?>"  value="<?php echo($filtro->modalidade);?>"  class="camponaoobrigatorio" size="30" >
+                    <INPUT type="text" id="<?=vocontrato::$nmAtrModalidadeContrato?>" name="<?=vocontrato::$nmAtrModalidadeContrato?>"  value="<?php echo($filtro->modalidade);?>"  class="camponaoobrigatorio" size="20" >
                  </TD>                                
             </TR>
 			<TR>
@@ -320,8 +348,6 @@ function confirmar() {
 	            <TH class="campoformulario" width="1%" nowrap>Licon:</TH>
 	            <TD class="campoformulario">
 	            <?php 	            
-	            include_once(caminho_util. "dominioSimNao.php");
-	            $comboSimNao = new select(dominioSimNao::getColecao());
 	            echo $comboSimNao->getHtmlCombo(vocontrato::$nmAtrInLicomContrato,vocontrato::$nmAtrInLicomContrato, $filtro->licon, true, "camponaoobrigatorio", false,"");
 	            ?>
 			</TR>
@@ -397,7 +423,7 @@ function confirmar() {
 			?>
             <TD class="campoformulario" nowrap colspan=3>
             <?php echo $comboVigencia->getHtmlOpcao($filtro::$nmAtrTpVigencia,$filtro::$nmAtrTpVigencia, $filtro->tpVigencia, false);?>
-			| Vigente da Data:
+			| Vigente na Data:
 			<INPUT type="text" 
                         	       id="dtVigencia" 
                         	       name="dtVigencia" 

@@ -181,17 +181,27 @@ function alterar() {
 	            ?>
 	        </TR>
 			<TR>
-                <TH class="campoformulario" nowrap>Observação:</TH>
-                <TD class="campoformulario" colspan=3><INPUT type="text" id="<?=voContratoInfo::$nmAtrObs?>" name="<?=voContratoInfo::$nmAtrObs?>"  value="<?php echo($filtro->obs);?>"  class="camponaoobrigatorio" size="50"></TD>
-            </TR>
-            <?php $comboProrrogacaoContrato = new select(dominioProrrogacaoContrato::getColecao());?>
-			<TR>
                <TH class="campoformulario" nowrap>Prorrogação:</TH>
-               <TD class="campoformulario" colspan=3>
-				<?php echo $comboProrrogacaoContrato->getHtmlCombo(voContratoInfo::$nmAtrInPrazoProrrogacao,voContratoInfo::$nmAtrInPrazoProrrogacao, $filtro->inPrazoProrrogacao, true, "camponaoobrigatorio", false,"");?>
+               <TD class="campoformulario">
+				<?php 
+				$comboProrrogacaoContrato = new select(dominioProrrogacaoContrato::getColecao());
+				echo $comboProrrogacaoContrato->getHtmlCombo(voContratoInfo::$nmAtrInPrazoProrrogacao,voContratoInfo::$nmAtrInPrazoProrrogacao, $filtro->inPrazoProrrogacao, true, "camponaoobrigatorio", false,"");
+				?>
                 </TD>
+	            <TH class="campoformulario" nowrap width="1%">Gestor:</TH>
+	            <TD class="campoformulario">Tem? 
+	            <?php echo $comboSimNao->getHtmlCombo(
+	            		filtroManterContratoInfo::$ID_REQ_InGestor,
+	            		filtroManterContratoInfo::$ID_REQ_InGestor, 
+	            		$filtro->inGestor, true, "camponaoobrigatorio", false,
+	            	"");?>
+	            </TD>                
             </TR>            
 	        
+			<TR>
+                <TH class="campoformulario" nowrap>Observação:</TH>
+                <TD class="campoformulario" colspan=3><INPUT type="text" id="<?=voContratoInfo::$nmAtrObs?>" name="<?=voContratoInfo::$nmAtrObs?>"  value="<?php echo($filtro->obs);?>"  class="camponaoobrigatorio" size="50"></TD>
+            </TR>	        
        <?php
        echo getComponenteConsultaFiltro($vo->temTabHistorico, $filtro);
         ?>

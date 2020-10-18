@@ -4,7 +4,8 @@ include_once(caminho_util."bibliotecaHTML.php");
 include_once(caminho_util."selectExercicio.php");
 
 //inicia os parametros
-inicio();
+try{
+	inicio();
 
 $vo = new voContratoInfo();
 $vo->getVOExplodeChave();
@@ -267,6 +268,11 @@ function confirmar() {
     </TBODY>
 </TABLE>
 </FORM>
+<?php 
+}catch (excecaoGenerica $ex){
+	tratarExcecaoHTML($ex);
+	//echo $ex->getMessage();
+}?>
 
 </BODY>
 </HTML>

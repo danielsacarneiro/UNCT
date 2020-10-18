@@ -289,22 +289,6 @@ function getContratoEntradaArrayGenerico($pArray) {
 	
 	$pIsAlterarDemanda= false;
 
-	if($arrayNmCamposContrato == null){
-		$pNmCampoCdContrato = vocontrato::$nmAtrCdContrato;
-		$pNmCampoAnoContrato = vocontrato::$nmAtrAnoContrato;
-		$pNmCampoTipoContrato = vocontrato::$nmAtrTipoContrato;
-		$pNmCampoCdEspecieContrato = vocontrato::$nmAtrCdEspecieContrato;
-		$pNmCampoSqEspecieContrato = vocontrato::$nmAtrSqEspecieContrato;
-		$nmCampoDivPessoaContratada = vopessoa::$nmAtrNome;
-	}else{
-		$pNmCampoCdContrato = $arrayNmCamposContrato[0];
-		$pNmCampoAnoContrato = $arrayNmCamposContrato[1];
-		$pNmCampoTipoContrato = $arrayNmCamposContrato[2];
-		$pNmCampoCdEspecieContrato = $arrayNmCamposContrato[3];
-		$pNmCampoSqEspecieContrato = $arrayNmCamposContrato[4];
-		$nmCampoDivPessoaContratada = $arrayNmCamposContrato[5];
-	}
-
 	$chamadaFuncaoJS = "\"$funcaoJS\"";
 
 	$required = "";
@@ -378,7 +362,8 @@ function getContratoEntradaArrayGenerico($pArray) {
 			$pcomChaveCompleta, 
 			$pIsAlterarDemanda,
 			$pcomChaveCompleta,
-			$arraycomplementoHTML);
+			$arraycomplementoHTML,
+			$arrayNmCamposFormularioContrato);
 }
 
 /**
@@ -452,7 +437,30 @@ function getContratoEntradaDeDadosVOGenerico(
 		$comChaveCompletaSeNulo = true, 
 		$pIsAlterarDemanda=false, 
 		$pcomChaveCompleta=false, 
-		$arrayComplementoHTML=null) {	
+		$arrayComplementoHTML=null,
+		$arrayNmCamposFormularioContrato = null) {
+			
+			
+		if($arrayNmCamposFormularioContrato == null){
+			$pNmCampoCdContrato = vocontrato::$nmAtrCdContrato;
+			$pNmCampoAnoContrato = vocontrato::$nmAtrAnoContrato;
+			$pNmCampoTipoContrato = vocontrato::$nmAtrTipoContrato;
+			$pNmCampoCdEspecieContrato = vocontrato::$nmAtrCdEspecieContrato;
+			$pNmCampoSqEspecieContrato = vocontrato::$nmAtrSqEspecieContrato;
+			$nmCampoDivPessoaContratada = vopessoa::$nmAtrNome;
+		}else{
+			//echo "teste";
+			$pNmCampoCdContrato = $arrayNmCamposFormularioContrato[0];
+			$pNmCampoAnoContrato = $arrayNmCamposFormularioContrato[1];
+			$pNmCampoTipoContrato = $arrayNmCamposFormularioContrato[2];
+			$pNmCampoCdEspecieContrato = $arrayNmCamposFormularioContrato[3];
+			$pNmCampoSqEspecieContrato = $arrayNmCamposFormularioContrato[4];
+			$nmCampoDivPessoaContratada = $arrayNmCamposFormularioContrato[5];
+		}
+			
+		
+	//var_dump($pNmCampoCdEspecieContrato);
+					
 	//$vocontrato = new vocontrato();
 	if ($vocontrato != null) {
 		$tipoContrato = $vocontrato->tipo;
@@ -515,13 +523,7 @@ function getContratoEntradaDeDadosVOGenerico(
 		$nmCampoDivContratoAnterior = vocontrato::$ID_REQ_CAMPO_CONTRATO . ($indiceContrato - 1);
 		$nmCampoDivPessoaContratada = vopessoa::$nmAtrNome . $indiceContrato;
 	}
-	
-	$pNmCampoCdContrato = vocontrato::$nmAtrCdContrato;
-	$pNmCampoAnoContrato = vocontrato::$nmAtrAnoContrato;
-	$pNmCampoTipoContrato = vocontrato::$nmAtrTipoContrato;
-	$pNmCampoCdEspecieContrato = vocontrato::$nmAtrCdEspecieContrato;
-	$pNmCampoSqEspecieContrato = vocontrato::$nmAtrSqEspecieContrato;
-	
+		
 	$pIDCampoCdContrato = $pNmCampoCdContrato . $indiceContrato;
 	$pIDCampoAnoContrato = $pNmCampoAnoContrato . $indiceContrato;
 	$pIDCampoTipoContrato = $pNmCampoTipoContrato . $indiceContrato;
@@ -575,7 +577,7 @@ function getContratoEntradaDeDadosVOGenerico(
 		<?php				
 		//cria o combo
 		$combo = new select(dominioEspeciesContrato::getColecao());
-		echo $combo->getHtmlCombo($pIDCampoCdEspecieContrato, vocontrato::$nmAtrCdEspecieContrato, $cdEspecie, true, $cssCdEspecieContrato, false, $htmlCdEspecieContrato);
+		echo $combo->getHtmlCombo($pIDCampoCdEspecieContrato, $pNmCampoCdEspecieContrato, $cdEspecie, true, $cssCdEspecieContrato, false, $htmlCdEspecieContrato);
 		
 	}else if ($comChaveCompletaSeNulo) {
 		
