@@ -224,6 +224,32 @@ function isApenasUmCheckBoxSelecionado(pNmCheckBox, pSemMensagem) {
 	return false;
 }
 
+function marcaApenasUmCheckBox(checkBox, pSemMensagem) {
+	if (checkBox == null) {
+		if (!pSemMensagem) {
+			exibirMensagem(mensagemGlobal(210));
+		}
+		return false;
+	}
+	
+	colecaocheckBox = document.getElementsByName(checkBox.name);	
+	var contador = 0;
+	var id = checkBox.id.split("*")[0];
+	
+	if (checkBox.checked) {
+		//desmarca os outros
+		for (var i = 0; i < colecaocheckBox.length; i++) {
+			checkAtual = colecaocheckBox[i];
+			var idAtual = checkAtual.id.split("*")[0];
+			if (checkAtual != checkBox && idAtual == id) {
+				checkAtual.checked = false;
+			}
+		}
+	}
+
+	return true;
+}
+
 function validaFormRequiredCheckBox(campoCheckBoxValidacao, colecaoIDCampos, pSetarVazio, pExibirAlertErro = false){
 	pIsRequired = !campoCheckBoxValidacao.checked;
 	tornarRequiredCamposColecaoFormulario(colecaoIDCampos, pIsRequired, pExibirAlertErro);

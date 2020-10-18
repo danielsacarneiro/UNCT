@@ -857,8 +857,8 @@ function getCheckBox($idRadio, $nmRadio, $chave, $checked = null, $complementoHT
  * @param unknown $complementoHTML
  * @return string
  */
-function getCheckBoxBoolean($idRadio, $nmRadio, $chave, $checked = null, $complementoHTML = null) {
-	/*if ($checked == null) {
+function getCheckBoxBoolean($idRadio, $nmRadio, $chave, $checked = null, $complementoHTML = null, $descricao=null) {
+	if ($checked == null) {
 		$checked = false;
 	}
 	if ($checked) {
@@ -866,11 +866,10 @@ function getCheckBoxBoolean($idRadio, $nmRadio, $chave, $checked = null, $comple
 	}
 
 	$retorno = "<INPUT type='checkbox' id='" . $idRadio . "' name='" . $nmRadio . "' value='" . $chave . "' " . $strchecked . " $complementoHTML>";
+	if($descricao != null){
+		$retorno.= "$descricao";		
+	}
 	return $retorno; 
-	*/
-	
-	$pArray = array($idRadio, $nmRadio, $chave, $checked, $complementoHTML);
-	return getCheckBoxArray($pArray);
 }
 
 /**
@@ -887,18 +886,33 @@ function getCheckBoxArray($pArray) {
 	$nmRadio = $pArray[1]; 
 	$chave = $pArray[2]; 
 	$checked = $pArray[3]; 
-	$complementoHTML = $pArray[4];	
-	$isCheckSimNao = $pArray[5];
+	$complementoHTML = $pArray[4];
+	$descricao = $pArray[5];
+	$isCheckSimNao = $pArray[6];
 	
-	if ($checked == null) {
-		$checked = false;
+	if(!$isCheckSimNao){
+		$retorno = getCheckBoxBoolean($idRadio, $nmRadio, $chave, $checked, $complementoHTML, $descricao);
+	}else{
+		$arrayAtrib = explode ( CAMPO_SEPARADOR, $chave );
+		$chavesimples = $arrayAtrib[0];
+		$chaveSim = getIdComponenteHtmlCheckSimNao($chavesimples, constantes::$CD_SIM);
+		$chaveNao = getIdComponenteHtmlCheckSimNao($chavesimples, constantes::$CD_NAO);
+				
+		$complementoHTML .= " onClick='marcaApenasUmCheckBox(this);' ";
+		$separador = "|";
+		$retorno = $separador . getTextoHTMLNegrito($descricao) 
+			. getCheckBoxBoolean(getIdComponenteHtmlCheckSimNao($idRadio, constantes::$CD_SIM), $nmRadio, 
+					$chaveSim, $chaveSim == $chave, $complementoHTML, constantes::$DS_SIM) 
+					
+			. getCheckBoxBoolean(getIdComponenteHtmlCheckSimNao($idRadio, constantes::$CD_NAO), $nmRadio, 
+					$chaveNao, $chaveNao == $chave, $complementoHTML, constantes::$DS_NAO);
 	}
-	if ($checked) {
-		$strchecked = "checked";
-	}
-
-	$retorno = "<INPUT type='checkbox' id='" . $idRadio . "' name='" . $nmRadio . "' value='" . $chave . "' " . $strchecked . " $complementoHTML>";
+	
 	return $retorno;
+}
+
+function getIdComponenteHtmlCheckSimNao($idRadio, $tipo){
+	return $idRadio . constantes::$CD_CAMPO_SEPARADOR . $tipo; 
 }
 
 function getInputText($idText, $nmText, $value, $class = null, $size = null, $maxlength = null, $complementoHTML = null) {

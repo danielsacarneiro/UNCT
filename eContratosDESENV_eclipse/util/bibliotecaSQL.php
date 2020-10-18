@@ -278,14 +278,23 @@ function getSQLBuscarStringCampoSeparador($colecaoAtributos, $nmAtributoColecao,
 					}					
 				}else{
 					//echo "aqui";
-					if(constantes::$CD_OPCAO_NENHUM == $atrib){
-						$comparacaoTemp = "IS NULL";
-					}else{
-						$comparacaoTemp = "IS NOT NULL";
+					// var_dump($colecaoAtributos);
+					//formato eh "05*S"
+					$arrayAtrib = explode ( CAMPO_SEPARADOR, $atrib );
+					$chave = $arrayAtrib[0];					
+					$opcaoSelecionada = $arrayAtrib[1];					
+					//echoo($atrib);					
+					if(isAtributoValido($opcaoSelecionada)){
+						if(constantes::$CD_NAO == $opcaoSelecionada){
+							$comparacaoTemp = "IS NULL";
+						}else{
+							$comparacaoTemp = "IS NOT NULL";
+						}
+						$retorno .= " $separador " . dominio::getDescricaoStatic($chave, $nmAtributoColecao) . "  $comparacaoTemp ";
 					}
-					$retorno .= " $separador " . dominio::getDescricaoStatic($atrib, $nmAtributoColecao) . "  $comparacaoTemp ";
+					//$retorno .= " $separador TRUE ";
 					
-					//echo $separador;
+					//echoo ($retorno);
 				}
 				
 				$separador = " $operador ";

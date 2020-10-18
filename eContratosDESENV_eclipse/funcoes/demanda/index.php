@@ -383,6 +383,7 @@ function detalharDemandaGestao(){
 	            		$filtro->inOR_AND_Fase,
 	            		false,
 	            		true,
+	            		true
 	            );
 	            echo dominioFaseDemanda::getHtmlChecksBoxArray($pArrayFasePlanilha);	            	            
 	            ?>

@@ -526,8 +526,8 @@ function getArrayFormatadoLinhaImportacaoPorSeparador($param) {
 	return $retorno;	
 }
 
-function getArrayComoStringCampoSeparador($array) {
-	return voentidade::getArrayComoStringCampoSeparador($array);
+function getArrayComoStringCampoSeparador($array, $campoSeparador = CAMPO_SEPARADOR) {
+	return voentidade::getArrayComoStringCampoSeparador($array, $campoSeparador);
 }
 
 function getStringCampoSeparadorComoArray($chave) {

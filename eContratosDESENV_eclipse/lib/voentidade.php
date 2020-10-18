@@ -378,11 +378,11 @@ class voentidade extends multiplosConstrutores {
 		return $retorno;
 	}
 		
-	static function getArrayComoStringCampoSeparador($array) {		
+	static function getArrayComoStringCampoSeparador($array, $campoSeparador = CAMPO_SEPARADOR) {		
 		if($array == null){
 			throw new excecaoGenerica("getArrayComoStringCampoSeparador não deve receber valor nulo.");
 		}
-		return implode( CAMPO_SEPARADOR, $array );
+		return implode($campoSeparador , $array );
 	}
 	
 	static function getStringCampoSeparadorComoArray($chave) {		

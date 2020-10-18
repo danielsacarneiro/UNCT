@@ -322,12 +322,20 @@ class dominio extends multiplosConstrutores {
 				
 		$usarIdCodificado = $pArray[11];
 		$comOpcaoNenhum = $pArray[12];
+		$comOpcaoSimNao = $pArray[13];
 		if($usarIdCodificado == null){
 			$usarIdCodificado = false;
 		}
+		//a ordem eh importante porque o 'simnao' influencia no 'nenhum'
+		if($comOpcaoSimNao == null){
+			$comOpcaoSimNao = false;
+		}			
 		if($comOpcaoNenhum == null){
 			$comOpcaoNenhum = false;
-		}		
+		}
+		$comOpcaoNenhum = $comOpcaoNenhum && !$comOpcaoSimNao;
+		$comOpcaoMarcarTodos = $comOpcaoMarcarTodos && !$comOpcaoSimNao;
+		
 		//var_dump($usarIdCodificado);
 		
 		if($colecao==null){
@@ -345,7 +353,8 @@ class dominio extends multiplosConstrutores {
 			$javascript = " onClick=$javascriptadicional ";
 		}
 				
-		$colecaoChave = array_keys($colecao);
+		$colecaoChave = array_keys($colecao);		
+		
 		$conector = "<br>";
 		$i=0;	
 		
@@ -362,9 +371,12 @@ class dominio extends multiplosConstrutores {
 		
 		$html.="\n<TD valign='top'>";
 		$novaTD = false;
-		if(is_array($opcaoSelecionada)){
+		
+		//se $comOpcaoSimNao, a opcaoselecionada deve permanecer como array pra possibilitar achar o campo checked
+		if(!$comOpcaoSimNao && is_array($opcaoSelecionada)){
 			$opcaoSelecionada = getArrayComoStringCampoSeparador($opcaoSelecionada);
 		}
+		
 		foreach ($colecaoChave as $chave){
 			$novaTD = $i%$qtdItensPorColuna==0;				
 			if($novaTD){
@@ -374,14 +386,23 @@ class dominio extends multiplosConstrutores {
 			}
 			
 			$id = $usarIdCodificado?$nm . constantes::$CD_CAMPO_SEPARADOR. $chave :$chave;
-			$checked = stripos($opcaoSelecionada, "$chave", 0) !== false;
-			/*var_dump($opcaoSelecionada);
-			var_dump($chave);*/
+			$descricao = static::getDescricaoStatic($chave,$colecao);
+			if(!$comOpcaoSimNao){
+				//sem o simnao, a validacao segue o rito normal
+				$checked = stripos($opcaoSelecionada, "$chave", 0) !== false;
+			}else if($opcaoSelecionada != null){
+				// o checked aqui nao vai fazer efeito algum
+				//ja que outros checks sao criados, com validacoes diferentes para o simnao
+				//que sao feitas internamente no metodo abaixo getCheckBoxArray
+				$chave = static::getChaveCheckSimNao($chave, $opcaoSelecionada);
+			}
+			
+			//var_dump($chave);
 			//echoo("chave:$chave & selecao: $opcaoSelecionada");
+			$arrayCheck = array($id, $nm, $chave, $checked, "$javascript $htmlAdicional", $descricao ,$comOpcaoSimNao);
 			$html .= "\n".$conectorAntes 
-				. getCheckBoxBoolean($id, $nm, $chave, $checked, "$javascript $htmlAdicional")
-				." "
-				. static::getDescricaoStatic($chave,$colecao) 
+				//. getCheckBoxBoolean($id, $nm, $chave, $checked, "$javascript $htmlAdicional", static::getDescricaoStatic($chave,$colecao))
+				. getCheckBoxArray($arrayCheck)
 				. "<br>";
 			$i++;
 		}
@@ -407,6 +428,26 @@ class dominio extends multiplosConstrutores {
 		$html.="\n</TABLE>";		
 		
 		return $html;
+	}
+	
+	/**
+	 * permite ao html reconhecer a existencia dos checks simnao e seleciona-los corretamente
+	 * @param unknown $colecaoDominio
+	 * @return string
+	 */
+	static function getChaveCheckSimNao($chave, $colecaoSelecionada){
+		$retorno = null;
+		if(!isColecaoVazia($colecaoSelecionada)){			
+			foreach ($colecaoSelecionada as $item){
+				$arrayAtrib = explode ( CAMPO_SEPARADOR, $item );
+				$chaveAtual = $arrayAtrib[0];
+				if($chaveAtual == $chave){
+					$retorno = $item;
+					break;
+				}				
+			}			
+		}		
+		return $retorno;
 	}
 	
 	static function getColecaoComDescricao($colecaoChaveSemDescricao) {

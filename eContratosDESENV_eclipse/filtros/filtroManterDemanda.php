@@ -314,11 +314,11 @@ class filtroManterDemanda extends filtroManter{
 		$fasePlanilha = $this->fasePlanilha;
 		if (isAtributoValido($fasePlanilha) && ! $this->isAtributoArrayVazio ( $fasePlanilha )) {
 			//echo "entrou2";
-			$inOrAndFase = $this->inOR_AND_Fase;
+			//$inOrAndFase = $this->inOR_AND_Fase;
 			$strFiltroFase = getSQLBuscarStringCampoSeparador (
 					$fasePlanilha,
 					static::getDadosContratoColecaoCheckBox($this->isHistorico()),
-					$inOrAndFase);
+					constantes::$CD_OPCAO_AND);
 			// echo $strFiltroTpDemanda;
 			$filtro = $filtro . $conector . $strFiltroFase;
 			$conector = "\n AND ";
@@ -941,7 +941,7 @@ class filtroManterDemanda extends filtroManter{
 	 */
 	static function getDadosContratoColecaoCheckBox($isTabHistorico) {
 		$retorno = array (
-				dominioFaseDemanda::$CD_FORNECEDOR_SEM_PENDENCIAS => static::$NM_TABELA_DADOS_CONTRATO_DEMANDA . "." . vocontrato::$nmAtrDtAssinaturaContrato,
+				dominioFaseDemanda::$CD_ASSINADO => static::$NM_TABELA_DADOS_CONTRATO_DEMANDA . "." . vocontrato::$nmAtrDtAssinaturaContrato,
 				dominioFaseDemanda::$CD_PUBLICADO => static::$NM_TABELA_DADOS_CONTRATO_DEMANDA . "." . vocontrato::$nmAtrDtPublicacaoContrato,
 		);
 	

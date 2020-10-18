@@ -16,6 +16,7 @@ class dbcontrato extends dbprocesso {
 
 	static $CD_CONSTANTE_FIM_IMPORTACAO = "FIM";
 	static $CD_CONSTANTE_PENDENTE_IMPORTACAO = "PENDENTE";
+	static $CD_CONSTANTE_DATA_INVALIDA = "00-00-00";
 	
 	static $ID_REQ_INICIAR_TAB_CONTRATO= "ID_REQ_INICIAR_TAB_CONTRATO";
 	static $ID_REQ_REMOVER_CARACTER_ESPECIAL = "ID_REQ_REMOVER_CARACTER_ESPECIAL";
@@ -508,10 +509,10 @@ class dbcontrato extends dbprocesso {
 		$retorno .= $this->getVarComoString ( $voContrato->modalidade ) . ",";
 
 		$retorno .= $this->getVarComoString ( $voContrato->dataPublicacao ) . ",";
-		$retorno .= $this->getDataSQL ( $voContrato->dtPublicacao ) . ",";
-		$retorno .= $this->getDataSQL ( $voContrato->dtAssinatura ) . ",";
-		$retorno .= $this->getDataSQL ( $voContrato->dtVigenciaInicial ) . ",";
-		$retorno .= $this->getDataSQL ( $voContrato->dtVigenciaFinal ) . ",";
+		$retorno .= $this->getVarComoData( $voContrato->dtPublicacao ) . ",";
+		$retorno .= $this->getVarComoData ( $voContrato->dtAssinatura ) . ",";
+		$retorno .= $this->getVarComoData ( $voContrato->dtVigenciaInicial ) . ",";
+		$retorno .= $this->getVarComoData ( $voContrato->dtVigenciaFinal ) . ",";
 		$retorno .= $this->getVarComoString ( $voContrato->contratada ) . ",";
 		$retorno .= $this->getVarComoString ( $voContrato->docContratada ) . ",";
 		$retorno .= $this->getVarComoString ( $voContrato->empenho ) . ",";
@@ -856,30 +857,32 @@ class dbcontrato extends dbprocesso {
 	}
 	
 	function getDataLinhaImportacao($param) {
-		// echo "<br> valor a converter: $param";
-		$retorno = null;
+		$datahtml = null;
 		if (isAtributoValido ( $param )) {
 			$param = str_replace ( " ", "", $param );
+			//echoo(" valor vindo planilha: $param ");
 				
-			if ($param != static::$CD_CONSTANTE_PENDENTE_IMPORTACAO && $param != '0000-00-00') {
-	
+			if ($param != static::$CD_CONSTANTE_PENDENTE_IMPORTACAO && $param != static::$CD_CONSTANTE_DATA_INVALIDA) {
+				
 				$datahtml = substr ( $param, 3, 2 ) . "/" . substr ( $param, 0, 2 ) . "/" . (substr ( $param, 6, 4 ) + 2000);
 				$isdatavalida = checkDataValida($datahtml);
+				//echoo(" tentativa1: $datahtml ");
 	
 				if(!$isdatavalida){
 					// trecho que serve para data de publicacao quando vier com o extrato de publicacao nao formatado em data
 					//ou ultima tentativa de recuperar a data mal formatada
 					$datahtml = getDataHtmlDoFinaldoTexto($param);
-					//echoo(" tentativa2 $datahtml");
 					$isdatavalida = checkDataValida($datahtml);
+					//echoo(" tentativa2: $datahtml");
 					if(!$isdatavalida){
-						$datahtml = 'null';
+						$datahtml = null;
 					}
 						
 				}
 			}
 		}
 	
+		//echoo(" retorno: $datahtml ");
 		return $datahtml;
 	}	
 	

@@ -34,6 +34,12 @@ function checkDataValida($dataHtml) {
 		$dataHtml= getVarComoDataSQL($dataHtml);
 		$dataHtml = str_replace("'", "", $dataHtml);
 		try{
+			$tamanho = strlen($dataHtml);
+			//o formato data deve ser 0000-00-00 ou 00-00-00
+			if(!($tamanho == 8 || $tamanho == 10)){
+				return false;
+			}
+			
 			$date = new DateTime($dataHtml);
 		}catch(Exception $ex){
 			return false;
