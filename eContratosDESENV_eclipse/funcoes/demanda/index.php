@@ -376,7 +376,7 @@ function detalharDemandaGestao(){
 	            		1,
 	            		true,
 	            		"",
-	            		false,
+	            		true,
 	            		"",
 	            		false,
 	            		filtroManterDemanda::$NmAtrInOR_AND_Fase,

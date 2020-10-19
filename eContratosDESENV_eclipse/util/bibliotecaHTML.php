@@ -892,7 +892,10 @@ function getCheckBoxArray($pArray) {
 	$isDetalhamento = $pArray[7];
 	
 	if($isDetalhamento){
+		//$complementoHTML .= " readonly ";
 		$complementoHTML .= " onClick='this.checked = true;' ";
+		$idRadio = "";
+		$nmRadio = "";
 	}
 	
 	if(!$isCheckSimNao){
