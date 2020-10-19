@@ -280,11 +280,14 @@ class dominio extends multiplosConstrutores {
 				false,
 				null,
 				false,
-				" disabled ",
+				"",
 				null,
 				null,
 				null,
 				$usarIdCodificado,
+				false,
+				false,
+				true,
 				);
 		
 		return static::getHtmlChecksBoxArray($pArray);
@@ -323,6 +326,12 @@ class dominio extends multiplosConstrutores {
 		$usarIdCodificado = $pArray[11];
 		$comOpcaoNenhum = $pArray[12];
 		$comOpcaoSimNao = $pArray[13];
+		$isDetalhamento = $pArray[14];
+		
+		if($isDetalhamento == null){
+			$isDetalhamento = false;
+		}
+		
 		if($usarIdCodificado == null){
 			$usarIdCodificado = false;
 		}
@@ -377,6 +386,7 @@ class dominio extends multiplosConstrutores {
 			$opcaoSelecionada = getArrayComoStringCampoSeparador($opcaoSelecionada);
 		}
 		
+		$isNenhumItemSelecionado = true;
 		foreach ($colecaoChave as $chave){
 			$novaTD = $i%$qtdItensPorColuna==0;				
 			if($novaTD){
@@ -397,17 +407,32 @@ class dominio extends multiplosConstrutores {
 				$chave = static::getChaveCheckSimNao($chave, $opcaoSelecionada);
 			}
 			
+			//para o caso de exibir pelo menos um item selecionado
+			if($checked){
+				$isNenhumItemSelecionado = false;
+			}
+			
 			//var_dump($chave);
 			//echoo("chave:$chave & selecao: $opcaoSelecionada");
-			$arrayCheck = array($id, $nm, $chave, $checked, "$javascript $htmlAdicional", $descricao ,$comOpcaoSimNao);
-			$html .= "\n".$conectorAntes 
-				//. getCheckBoxBoolean($id, $nm, $chave, $checked, "$javascript $htmlAdicional", static::getDescricaoStatic($chave,$colecao))
-				. getCheckBoxArray($arrayCheck)
-				. "<br>";
+			$arrayCheck = array($id, $nm, $chave, $checked, "$javascript $htmlAdicional", $descricao ,$comOpcaoSimNao, $isDetalhamento);
+			if(!$isDetalhamento || ($isDetalhamento && $checked)){
+				$html .= "\n".$conectorAntes 
+					//. getCheckBoxBoolean($id, $nm, $chave, $checked, "$javascript $htmlAdicional", static::getDescricaoStatic($chave,$colecao))
+					. getCheckBoxArray($arrayCheck)
+					. "<br>";
+			}
+			
 			$i++;
+		}		
+
+		//para o caso de ser detalhamento e nao haver nenhum selecionado
+		if($isDetalhamento && $isNenhumItemSelecionado){
+			//$html .= "Nenhum Item Selecionado";
+			;
+		}else{
+			//artificio usado para tirar o ultimo <br>
+			$html = removerUltimaString("<br>",$html);				
 		}
-		//artificio usado para tirar o ultimo <br>
-		$html = removerUltimaString("<br>",$html);
 		
 		if($comBorracha){
 			$nmCamposDoc = array(

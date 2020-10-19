@@ -889,10 +889,16 @@ function getCheckBoxArray($pArray) {
 	$complementoHTML = $pArray[4];
 	$descricao = $pArray[5];
 	$isCheckSimNao = $pArray[6];
+	$isDetalhamento = $pArray[7];
+	
+	if($isDetalhamento){
+		$complementoHTML .= " onClick='this.checked = true;' ";
+	}
 	
 	if(!$isCheckSimNao){
 		$retorno = getCheckBoxBoolean($idRadio, $nmRadio, $chave, $checked, $complementoHTML, $descricao);
 	}else{
+		//por enquanto eh usado somente em consultas
 		$arrayAtrib = explode ( CAMPO_SEPARADOR, $chave );
 		$chavesimples = $arrayAtrib[0];
 		$chaveSim = getIdComponenteHtmlCheckSimNao($chavesimples, constantes::$CD_SIM);
