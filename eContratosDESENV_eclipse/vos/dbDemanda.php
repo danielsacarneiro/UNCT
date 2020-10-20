@@ -983,7 +983,7 @@ class dbDemanda extends dbprocesso {
 			
 			$this->isExclusaoPermitida ( $vo, "fechamento" );
 			
-			//verifica se o contrato foi incluindo em contratoinfo
+			//verifica se o contrato foi incluido em contratoinfo
 			$vocontratoInfo = new voContratoInfo();
 			//$vo = new voDemanda();
 			$vocontratoDemanda = $vo->getContrato();
@@ -991,10 +991,11 @@ class dbDemanda extends dbprocesso {
 				$vocontratoInfo->anoContrato = $vocontratoDemanda->anoContrato;
 				$vocontratoInfo->cdContrato = $vocontratoDemanda->cdContrato;
 				$vocontratoInfo->tipo = $vocontratoDemanda->tipo;
-				$vocontratoInfo = $vocontratoInfo->dbprocesso->consultarPorChaveVO($vocontratoInfo);
-				if($vocontratoInfo == null){
-					throw new excecaoChaveRegistroInexistente("Verifique a inclusão das informações adicionais ao contrato relacionado.");				
-				}			
+				try{
+					$vocontratoInfo = $vocontratoInfo->dbprocesso->consultarPorChaveVO($vocontratoInfo);
+				}catch (excecaoChaveRegistroInexistente $ex){
+					throw new excecaoChaveRegistroInexistente("Verifique a inclusão das informações adicionais ao contrato relacionado.", null, $vocontratoInfo);
+				}
 			}
 			
 			// verifica se tem PAAP para encerrar

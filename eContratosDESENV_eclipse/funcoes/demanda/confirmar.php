@@ -9,13 +9,7 @@ $vo->getDadosFormulario();
 
 //echo "modalidade: " . $vo->voProcLicitatorio->cdModalidade;
 
-//var_dump($vo->voSolicCompra);
-
-/*$voDemandaCont = new voDemandaContrato();
-$voDemandaCont->getDadosFormulario();
-var_dump($voDemandaCont->tpDemandaContrato);*/
-
-//echo $vo->voProcLicitatorio->toString();
+//var_dump($vo);
 
 /*echo $vo->cdSetor . " cd setor <BR>";
 echo $vo->cdSetorAtual . " cd setor atual <BR>";

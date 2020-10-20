@@ -5,11 +5,14 @@
 class excecaoChaveRegistroInexistente extends excecaoGenerica
 {
     // Redefine a exceção de forma que a mensagem não seja opcional
-    public function __construct($message = "", Exception $previous = null) {
+    public function __construct($message = "", Exception $previous = null, $vo=null) {
     	
     	$code = excecaoGenerica::$CD_EXCECAO_CHAVE_INEXISTENTE;    	
     	
     	$str = "Chave Registro Inexistente.";
+    	if($vo != null){
+    		$str = get_class($vo). "|$str.";
+    	}
     	if($message != null && $message != ""){
     		$str.= "<br>" . $message;
     	}
