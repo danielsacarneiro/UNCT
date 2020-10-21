@@ -194,13 +194,25 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 		
 	$html .= dominioTipoDemandaContrato::getHtmlChecksBoxDetalhamento($nmCampoTpDemandaContrato, $pCdOpcaoSelecionadaTpDemandaContrato, 2, true);
 	
+	$countATENCAO = 1;
+	//informa que ha PAAPs abertos para o contrato
+	$temPAAPAberto = temPAAPAberto($voContratoDemanda);
+	if($temPAAPAberto){
+		$texto = "ATENÇÃO$countATENCAO: há PAAP(s) cadastrado(s) para este contrato.";
+		$html .= $conectorAlerta . getTextoLink($texto, "../pa", null, false, true);
+	
+		$conectorAlerta = "<BR>";
+		$countATENCAO++;
+	}	
+	
 	if(dominioTipoDemandaContrato::existeItemArrayOuStrCampoSeparador(dominioTipoDemandaContrato::$CD_TIPO_REAJUSTE, $pCdOpcaoSelecionadaTpDemandaContrato)){
 		//eh reajuste
 		$html .= "Reajuste: " . dominioTipoReajuste::getHtmlDetalhamento($nmCampoTpDemandaReajuste, $nmCampoTpDemandaReajuste, $pCdOpcaoSelecionadaReajuste, false);
 		
 		if(isSinalizarDemandaReajustePeriodoNaoTranscorrido($voDemanda)){
-			$html .= getTextoHTMLDestacado("ATENÇÃO: o período contratual necessário para o cálculo do reajuste(índice contratual) ainda não transcorreu. Verifique a Data Base de Reajuste do contrato.");
+			$html .= getTextoHTMLDestacado("ATENÇÃO$countATENCAO: o período contratual necessário para o cálculo do reajuste(índice contratual) ainda não transcorreu. Verifique a Data Base de Reajuste do contrato.");
 			$conectorAlerta = "<BR>";
+			$countATENCAO++;
 		}				
 	}
 	
@@ -208,11 +220,12 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 		//var_dump($voDemanda->getContrato());
 		$exibirInfoProrrog = $voDemanda->situacao != dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA;		
 		if($exibirInfoProrrog && !isContratoPermiteProrrogacao($voContratoDemanda)){
-			$texto = "ATENÇÃO: verifique se o contrato comporta prorrogação em 'Contratos-Consolidação'";
+			$texto = "ATENÇÃO$countATENCAO: verifique se o contrato comporta prorrogação em 'Contratos-Consolidação'";
 			//$html .= $conectorAlerta . getTextoHTMLDestacado($texto);
 			$html .= $conectorAlerta . getTextoLink($texto, "../contrato_consolidacao", null, false, true);
 						
 			$conectorAlerta = "<BR>";
+			$countATENCAO++;
 		}	
 	}
 	
@@ -221,8 +234,9 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 		//var_dump($voDemanda->getContrato());
 		$exibirInfoProrrog = $voDemanda->situacao != dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA;
 		if($exibirInfoProrrog){
-			$html .= $conectorAlerta . getTextoHTMLDestacado("ATENÇÃO: verifique se o contrato não está suspenso pela RESOLUÇÃO CPF 001.2020 ou 002.2020(CORONAVIRUS)");
+			$html .= $conectorAlerta . getTextoHTMLDestacado("ATENÇÃO$countATENCAO: verifique se o contrato não está suspenso pela RESOLUÇÃO CPF 001.2020 ou 002.2020(CORONAVIRUS)");
 			$conectorAlerta = "<BR>";
+			$countATENCAO++;
 		}
 	}
 		

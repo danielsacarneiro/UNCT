@@ -786,6 +786,19 @@ function consultarContratosPAAP($voPAAP) {
 	return $colecao;
 }
 
+function temPAAPAberto($vocontrato) {
+	//$vocontrato = new vocontrato();
+	$filtro = new filtroManterPA();
+	$filtro->anoContrato = $vocontrato->anoContrato;
+	$filtro->cdContrato = $vocontrato->cdContrato;
+	$filtro->tipoContrato = $vocontrato->tipo;
+	
+	$db = new dbPA();
+	$colecao = $db->consultarPAAP(new voPA(), $filtro);
+	
+	return  !isColecaoVazia($colecao);
+}
+
 function getDadosContratoMod($chave) {
 	//echo $chave;
 	if ($chave != null && $chave != "") {
