@@ -248,6 +248,7 @@ function getMensagemSistemasExternos(&$count = 0){
 		
 		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $coluna1);
 
+		//$msg = getCorpoMensagemDemandaPorColecao($assunto, $filtro, $colunasAAcrescentar, false);
 		$msg = getCorpoMensagemDemandaPorColecao($assunto, $filtro, $colunasAAcrescentar, false);
 
 	} catch ( Exception $ex ) {
@@ -295,7 +296,7 @@ function getMensagemContratosAVencer(&$count = 0){
 
 /** ALERTAS UNCT **/
 function getMensagemDemandaIniciais(&$count = 0){
-	$assunto = "DEMANDAS INICIAIS:";
+	$assunto = "DEMANDAS QUE PRECISAM DE ATRIBUIÇÃO DO RESPONSÁVEL:";
 	$assunto = getSequenciaAssunto($assunto, $count);
 	try {
 		$filtro = new filtroManterDemanda ( false );
@@ -321,12 +322,16 @@ function getMensagemDemandaIniciais(&$count = 0){
 		/*$filtro->vocontrato->cdAutorizacao = array (
 				dominioAutorizacao::$CD_AUTORIZ_SAD
 		);*/
-		$filtro->vodemanda->fase = constantes::$CD_OPCAO_NENHUM;
-		$filtro->inOR_AND_Fase = constantes::$CD_OPCAO_AND;
+		/*$filtro->vodemanda->fase = constantes::$CD_OPCAO_NENHUM;
+		$filtro->inOR_AND_Fase = constantes::$CD_OPCAO_AND;*/
+		
+		$filtro->inCdResponsavelUNCT = constantes::$CD_OPCAO_NENHUM;
 
 		$colecao = $dbprocesso->consultarTelaConsulta ( $voDemanda, $filtro );
+		
+		//$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'RESPONSÁVEL', filtroManterDemanda::$NM_TABELA_USUARIO_UNCT . ".". vousuario::$nmAtrName);
 
-		$msg = getCorpoMensagemDemandaContratoColecao($assunto, $colecao, null);
+		$msg = getCorpoMensagemDemandaContratoColecao($assunto, $colecao, $colunasAAcrescentar);
 
 	} catch ( Exception $ex ) {
 		$msg = $ex->getMessage ();

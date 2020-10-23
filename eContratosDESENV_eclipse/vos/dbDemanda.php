@@ -162,7 +162,6 @@ class dbDemanda extends dbprocesso {
 /**
  * consulta da tela de demanda rendimento
  * {@inheritDoc}
- * @see dbprocesso::consultarTelaConsulta()
  */
 	function consultarTelaConsultaRendimentoDemanda($filtro) {
 		$voPrincipal = new voDemandaTramitacao();		
@@ -335,7 +334,6 @@ class dbDemanda extends dbprocesso {
 	/**
  * consulta da tela de demanda gestao
  * {@inheritDoc}
- * @see dbprocesso::consultarTelaConsulta()
  */
 	function consultarTelaConsultaGestaoDemanda($filtro) {
 		
@@ -380,7 +378,6 @@ class dbDemanda extends dbprocesso {
 	/**
  * consulta da tela de detalhar demanda gestao
  * {@inheritDoc}
- * @see dbprocesso::consultarTelaConsulta()
  */
 	function consultarTelaGestaoDemandaDetalhePorTipo($filtro) {		
 		
@@ -500,11 +497,13 @@ class dbDemanda extends dbprocesso {
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
 		$nmTabelaPA = voPA::getNmTabelaStatic ( false );
+		$nmTabelaWPUsers = vousuario::getNmTabelaStatic ( false);
 	
 		$cdSetorAtual = $filtro->vodemanda->cdSetorDestino;
 		$isSetorAtualSelecionado = $filtro->isSetorAtualSelecionado ();
 		$nmTabelaMINDestinoTramitacao = "TABELA_MIN_TRAMDESTINO";
 		$nmTabelaDestinoTramitacao = "TABELA_DESTINO_TRAM";
+		$nmTabelaWPUsersUNCT = filtroManterDemanda::$NM_TABELA_USUARIO_UNCT;
 	
 		$colunaUsuHistorico = "";
 	
@@ -541,7 +540,8 @@ class dbDemanda extends dbprocesso {
 				$colunaUsuHistorico,
 				$colunaDtReferenciaSetorAtual,
 				filtroConsultarDemandaGestao::getSQLNuTempoUltimaTram($nmTabelaTramitacao, $nmTabela) . " AS " . filtroManterDemanda::$NmColNuTempoUltimaTram,
-				filtroConsultarDemandaGestao::getSQLNuTempoVida($nmTabela) . " AS " . filtroManterDemanda::$NmColNuTempoVida,				
+				filtroConsultarDemandaGestao::getSQLNuTempoVida($nmTabela) . " AS " . filtroManterDemanda::$NmColNuTempoVida,
+				"$nmTabelaWPUsersUNCT." . vousuario::$nmAtrName,
 		);
 	
 		$atributosGroup = voDemandaTramitacao::$nmAtrCd . "," . voDemandaTramitacao::$nmAtrAno;
@@ -631,6 +631,19 @@ class dbDemanda extends dbprocesso {
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaPA . "." . voPA::$nmAtrAnoDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrAno;
 		$queryJoin .= "\n AND " . $nmTabelaPA . "." . voPA::$nmAtrCdDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrCd;
+		
+		//pega o usuario responsavel da UNCT
+		$queryJoin .= "\n LEFT JOIN $nmTabelaWPUsers $nmTabelaWPUsersUNCT ";
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabela . "." . voDemanda::$nmAtrCdPessoaRespUNCT . "=" . $nmTabelaWPUsersUNCT . "." . vousuario::$nmAtrID;
+		
+		/*$querySelect = " SELECT * ";
+		$queryFrom = " FROM " . $nmTabelaUsuInfo;
+		$queryFrom .= " INNER JOIN " . $nmTabelaWPUsers;
+		$queryFrom .= "\n ON ";
+		$queryFrom .= $nmTabelaUsuInfo . "." . voUsuarioInfo::$nmAtrID . "=" . $nmTabelaWPUsers . "." . vousuario::$nmAtrID;		
+		//$nmTabelaUsuInfo = voUsuarioInfo::getNmTabelaStatic ( false);*/
+		
 	
 		// Para o caso de se desejar ordenar pela primeira vez que foi encaminhada ao setor atual selecionado pelo usuario
 		if ($isSetorAtualSelecionado) {

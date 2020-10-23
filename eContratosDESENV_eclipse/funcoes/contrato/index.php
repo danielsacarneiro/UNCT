@@ -75,6 +75,7 @@ $numTotalRegistros = $filtro->numTotalRegistros;
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_cnpfcnpj.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_checkbox.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_moeda.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>tooltip.js"></SCRIPT>
 
 <SCRIPT language="JavaScript" type="text/javascript">
@@ -407,6 +408,11 @@ function confirmar() {
                         			class="camponaoobrigatorio" 
                         			size="10" 
                         			maxlength="10" >
+                        	| Vl.Global:
+							<INPUT type="text" id="<?=filtroManterContrato::$NmAtrVlGlobalInicial?>" name="<?=filtroManterContrato::$NmAtrVlGlobalInicial?>"  value="<?php echo($filtro->vlGlobalInicial);?>"
+	            					onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="camponaoobrigatorioalinhadodireita" size="15" >
+	            				a <INPUT type="text" id="<?=filtroManterContrato::$NmAtrVlGlobalFinal?>" name="<?=filtroManterContrato::$NmAtrVlGlobalFinal?>"  value="<?php echo($filtro->vlGlobalFinal);?>"
+	            					onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="camponaoobrigatorioalinhadodireita" size="15" >
                         	| Publicado? 
                         	<?php
                         	echo $comboSimNao->getHtmlCombo(filtroManterContrato::$ID_REQ_InPublicado,

@@ -8,6 +8,7 @@ class filtroManterDemanda extends filtroManter{
 	public $nmFiltro = "filtroManterDemanda";
 	
 	static $NM_TABELA_DADOS_CONTRATO_DEMANDA = "NM_TABELA_DADOS_CONTRATO_DEMANDA";
+	static $NM_TABELA_USUARIO_UNCT = "NM_TABELA_USUARIO_UNCT";
 	static $NmAtrFasePlanilha = "NmAtrFasePlanilha";
 	static $NmAtrCdSetorPassagem = "NmAtrCdSetorPassagem";
 	static $NmColQtdDiasDataDtReferencia = "NmColQtdDiasDataDtReferencia";
@@ -84,6 +85,7 @@ class filtroManterDemanda extends filtroManter{
 	
 	var $nuTempoVidaMinimo;
 	var $nuTempoVidaMinimoUltimaTram;
+	var $inCdResponsavelUNCT;
 	
 	// ...............................................................
 	// construtor
@@ -492,9 +494,23 @@ class filtroManterDemanda extends filtroManter{
 			if(!getAtributoComoBooleano($this->inComPAAPInstaurado)){
 				$comparacao = " IS NULL ";
 			}
-			
+				
 			$filtro = $filtro . $conector
 			. $nmTabelaPA . "." .voPA::$nmAtrCdPA
+			. " $comparacao "
+			;
+		
+			$conector  = "\n AND ";
+		}
+		
+		if(isAtributoValido($this->inCdResponsavelUNCT)){
+			$comparacao = " IS NOT NULL ";
+			if(constantes::$CD_OPCAO_NENHUM == $this->inCdResponsavelUNCT){
+				$comparacao = " IS NULL ";
+			}
+			
+			$filtro = $filtro . $conector
+			. $nmTabela . "." .voDemanda::$nmAtrCdPessoaRespUNCT 
 			. " $comparacao "
 					;
 		
@@ -728,7 +744,7 @@ class filtroManterDemanda extends filtroManter{
 		if($this->vlGlobalFinal != null){
 			$filtro = $filtro . $conector
 			. $nmTabelaContrato . "." .vocontrato::$nmAtrVlGlobalContrato
-			. " >= "
+			. " <= "
 					. getVarComoDecimal($this->vlGlobalFinal);
 					$conector  = "\n AND ";
 		

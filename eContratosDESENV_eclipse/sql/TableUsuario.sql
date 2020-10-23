@@ -97,3 +97,22 @@ select ID from wp_users
 
 select * from wp_users
 where id = 5
+
+select * from usuario_info
+where id = 27
+
+insert into usuario_info
+(id, user_setor, cd_usuario_incl, cd_usuario_ultalt, in_desativado)
+values (27, '01*03*04*05*06*07*08*09*10*11*13*14*15*16*17*18*99', 1,1, 'N')
+
+
+'24', '01**03*04*05*06*07*08*09*10*11*13*14*15*16*17*18*99', '2020-09-02 11:46:17', '2020-09-04 09:45:59', '1', '1', 'N'
+
+SELECT pessoa_GERAL.pe_cd,pessoa_GERAL.pe_nome,pessoa_GERAL.pe_doc,pessoa_GERAL.pe_email,pessoa_GERAL.pe_tel,pessoa_vinculo.vi_cd,pessoa_vinculo.vi_inatribuicaoPAAP,pessoa_vinculo.vi_inatribuicaoPregoeiro 
+FROM 
+(SELECT * FROM pessoa WHERE pe_cd IN (SELECT pa_cd_responsavel FROM pa GROUP BY pa_cd_responsavel)) pessoa_GERAL 
+INNER JOIN pessoa_vinculo ON pessoa_GERAL.pe_cd=pessoa_vinculo.pe_cd 
+LEFT JOIN contrato ON pessoa_GERAL.pe_cd=contrato.pe_cd_contratada 
+GROUP BY pessoa_GERAL.pe_cd,pessoa_GERAL.pe_nome,pessoa_GERAL.pe_doc,pessoa_GERAL.pe_email,pessoa_GERAL.pe_tel,pessoa_vinculo.vi_cd,pessoa_vinculo.vi_inatribuicaoPAAP,pessoa_vinculo.vi_inatribuicaoPregoeiro
+ ORDER BY pe_nome
+

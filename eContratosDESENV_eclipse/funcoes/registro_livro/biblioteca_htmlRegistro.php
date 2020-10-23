@@ -23,7 +23,11 @@ function getModeloPublicacaoPreenchido($registrobanco){
 	$publicacao = "$contrato-$empresa.$tpdoc:$doc."; 
 	//$publicacao	.= getTextoHTMLDestacado("XXX-INCLUIR OBJETO RESUMIDO(MAX 30 LETRAS)-XXX", "blue");
 	$publicacao	.= getTextoHTMLDestacado("XXX[RESUMIR OBJETO AO MÁXIMO]-". $termo->objeto . "-XXX[RESUMIR]", "blue");
-	$publicacao .= ".Vigência:$datainicio a $datafim.";
+	if($datainicio == $datafim){
+		$publicacao .= ".Vigência:$datainicio.";
+	}else{
+		$publicacao .= ".Vigência:$datainicio a $datafim.";
+	}
 	
 	$arrayValidacao = array(
 			$empresa,

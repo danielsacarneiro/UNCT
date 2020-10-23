@@ -13,6 +13,9 @@ class filtroManterContrato extends filtroManter {
 	public static $nmAtrTpDemanda = "nmAtrTpDemanda";
 	public static $NmAtrInOR_AND = "NmAtrInOR_AND";
 	
+	static $NmAtrVlGlobalInicial = "NmAtrVlGlobalInicial";
+	static $NmAtrVlGlobalFinal = "NmAtrVlGlobalFinal";
+	
 	var $InOR_AND;
 	var $cdAutorizacao = "";	
 		
@@ -51,6 +54,9 @@ class filtroManterContrato extends filtroManter {
 	var $empenho;
 	
 	var $voproclic;
+	
+	var $vlGlobalInicial;
+	var $vlGlobalFinal;
 	
 	// ...............................................................
 	// construtor
@@ -112,6 +118,9 @@ class filtroManterContrato extends filtroManter {
 		$this->empenho = @$_POST [vocontrato::$nmAtrNumEmpenhoContrato];
 		$this->inPublicado = @$_POST [static::$ID_REQ_InPublicado];
 		$this->inGestor = @$_POST [static::$ID_REQ_InGestor];
+		
+		$this->vlGlobalInicial = @$_POST[self::$NmAtrVlGlobalInicial];
+		$this->vlGlobalFinal = @$_POST[self::$NmAtrVlGlobalFinal];
 				
 		$this->InOR_AND = @$_POST[self::$NmAtrInOR_AND];
 		if($this->InOR_AND == null){
@@ -437,6 +446,25 @@ class filtroManterContrato extends filtroManter {
 		
 					$conector  = "\n AND ";
 		}
+		
+		if($this->vlGlobalInicial != null){
+			$filtro = $filtro . $conector
+			. $nmTabela . "." .vocontrato::$nmAtrVlGlobalContrato
+			. " >= "
+					. getVarComoDecimal($this->vlGlobalInicial);
+					$conector  = "\n AND ";
+		
+		}
+		
+		//echo "global $this->vlGlobalFinal";
+		if($this->vlGlobalFinal != null){
+			$filtro = $filtro . $conector
+			. $nmTabela . "." .vocontrato::$nmAtrVlGlobalContrato
+			. " <= "
+					. getVarComoDecimal($this->vlGlobalFinal);
+					$conector  = "\n AND ";
+		
+		}		
 		
 		//serve para retirar a ambiguidade, quando existir, do atributo da ordenacao
 		//nem sempre sera usado pelos filtros
