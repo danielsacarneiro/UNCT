@@ -247,6 +247,12 @@ function getMensagemSistemasExternos(&$count = 0){
 		);
 		
 		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $coluna1);
+		
+		$array =array(
+				constantes::$CD_COLUNA_CHAVE => 'RESPONSÁVEL',
+				constantes::$CD_COLUNA_VALOR => filtroManterDemanda::$NM_COL_NOME_RESP_UNCT,
+		);
+		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);		
 
 		//$msg = getCorpoMensagemDemandaPorColecao($assunto, $filtro, $colunasAAcrescentar, false);
 		$msg = getCorpoMensagemDemandaPorColecao($assunto, $filtro, $colunasAAcrescentar, false);
@@ -296,7 +302,7 @@ function getMensagemContratosAVencer(&$count = 0){
 
 /** ALERTAS UNCT **/
 function getMensagemDemandaIniciais(&$count = 0){
-	$assunto = "DEMANDAS QUE PRECISAM DE ATRIBUIÇÃO DO RESPONSÁVEL:";
+	$assunto = "DEMANDAS A FAZER:";
 	$assunto = getSequenciaAssunto($assunto, $count);
 	try {
 		$filtro = new filtroManterDemanda ( false );
@@ -317,7 +323,7 @@ function getMensagemDemandaIniciais(&$count = 0){
 		);
 
 		$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_UNCT;
-		$filtro->cdAtrOrdenacao = filtroManterDemanda::$NmColNuTempoUltimaTram;
+		
 		//$filtro->prioridadeExcludente = dominioPrioridadeDemanda::$CD_PRIORI_BAIXA;
 		/*$filtro->vocontrato->cdAutorizacao = array (
 				dominioAutorizacao::$CD_AUTORIZ_SAD
@@ -325,12 +331,28 @@ function getMensagemDemandaIniciais(&$count = 0){
 		/*$filtro->vodemanda->fase = constantes::$CD_OPCAO_NENHUM;
 		$filtro->inOR_AND_Fase = constantes::$CD_OPCAO_AND;*/
 		
-		$filtro->inCdResponsavelUNCT = constantes::$CD_OPCAO_NENHUM;
+		//$filtro->inCdResponsavelUNCT = constantes::$CD_OPCAO_NENHUM;
+		//$filtro->cdAtrOrdenacao = filtroManterDemanda::$NmColNuTempoUltimaTram;
+		$filtro->cdAtrOrdenacao = voDemanda::$nmAtrCdPessoaRespUNCT . "," . filtroManterDemanda::$NmColNuTempoUltimaTram;		
 
 		$colecao = $dbprocesso->consultarTelaConsulta ( $voDemanda, $filtro );
+				
+		$array =array(
+				constantes::$CD_COLUNA_CHAVE => 'RESPONSÁVEL',
+				constantes::$CD_COLUNA_VALOR => filtroManterDemanda::$NM_COL_NOME_RESP_UNCT,
+		);		
+		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);
 		
-		//$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'RESPONSÁVEL', filtroManterDemanda::$NM_TABELA_USUARIO_UNCT . ".". vousuario::$nmAtrName);
-
+		$array =array(
+				constantes::$CD_COLUNA_CHAVE => 'PRAZO',
+				constantes::$CD_COLUNA_VALOR => filtroConsultarDemandaGestao::$NmColNuTempoUltimaTram,
+				constantes::$CD_COLUNA_TP_DADO =>  constantes::$TAMANHO_CODIGOS_SAFI,
+				constantes::$CD_COLUNA_VL_REFERENCIA =>  15,
+				constantes::$CD_COLUNA_TP_VALIDACAO =>  constantes::$CD_ALERTA_TP_VALIDACAO_MAIORQUE,
+		);
+		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);
+		
+		
 		$msg = getCorpoMensagemDemandaContratoColecao($assunto, $colecao, $colunasAAcrescentar);
 
 	} catch ( Exception $ex ) {

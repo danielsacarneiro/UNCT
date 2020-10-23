@@ -108,6 +108,7 @@ function getCorpoMensagemPorColecao($titulo, $colecao, $colunasAExibir, $isPrior
 
 				foreach ($colunasAExibir as $coluna){
 					$coluna_valor = $registro[$coluna[constantes::$CD_COLUNA_VALOR]];
+
 					if(constantes::$CD_TP_DADO_DATA == $coluna[constantes::$CD_COLUNA_TP_DADO]){
 						$coluna_valor = getData($coluna_valor);
 					}else if(constantes::$CD_TP_DADO_DOMINIO == $coluna[constantes::$CD_COLUNA_TP_DADO]){

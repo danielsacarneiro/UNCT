@@ -9,6 +9,7 @@ class filtroManterDemanda extends filtroManter{
 	
 	static $NM_TABELA_DADOS_CONTRATO_DEMANDA = "NM_TABELA_DADOS_CONTRATO_DEMANDA";
 	static $NM_TABELA_USUARIO_UNCT = "NM_TABELA_USUARIO_UNCT";
+	static $NM_COL_NOME_RESP_UNCT = "NM_COL_NOME_RESP_UNCT";
 	static $NmAtrFasePlanilha = "NmAtrFasePlanilha";
 	static $NmAtrCdSetorPassagem = "NmAtrCdSetorPassagem";
 	static $NmColQtdDiasDataDtReferencia = "NmColQtdDiasDataDtReferencia";

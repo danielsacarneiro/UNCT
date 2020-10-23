@@ -520,7 +520,7 @@ class dbDemanda extends dbprocesso {
 		$dhUltimaMov = filtroConsultarDemandaGestao::getSQLDataUltimaMovimentacao($nmTabelaTramitacao, $nmTabela);//"COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrDhInclusao . "," . $nmTabela . "." . voDemanda::$nmAtrDhUltAlteracao . ")";
 		$dtreferencia = filtroConsultarDemandaGestao::getSQLDataBaseTempoVida($nmTabela); //"$nmTabela." . voDemanda::$nmAtrDtReferencia;
 		$arrayColunasRetornadas = array (
-				$nmTabela . ".*",
+				$nmTabela . ".*",				
 				"COUNT(*)  AS " . filtroManterDemanda::$NmColQtdContratos,
 				static::$nmTabelaUsuarioInclusao . "." . vousuario::$nmAtrName . "  AS " . voDemanda::$nmAtrNmUsuarioInclusao,
 				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato,
@@ -541,7 +541,7 @@ class dbDemanda extends dbprocesso {
 				$colunaDtReferenciaSetorAtual,
 				filtroConsultarDemandaGestao::getSQLNuTempoUltimaTram($nmTabelaTramitacao, $nmTabela) . " AS " . filtroManterDemanda::$NmColNuTempoUltimaTram,
 				filtroConsultarDemandaGestao::getSQLNuTempoVida($nmTabela) . " AS " . filtroManterDemanda::$NmColNuTempoVida,
-				"$nmTabelaWPUsersUNCT." . vousuario::$nmAtrName,
+				"$nmTabelaWPUsersUNCT." . vousuario::$nmAtrName . " AS " .  filtroManterDemanda::$NM_COL_NOME_RESP_UNCT, 
 		);
 	
 		$atributosGroup = voDemandaTramitacao::$nmAtrCd . "," . voDemandaTramitacao::$nmAtrAno;
