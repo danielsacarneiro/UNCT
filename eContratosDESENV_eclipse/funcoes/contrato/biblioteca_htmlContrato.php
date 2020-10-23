@@ -1325,15 +1325,17 @@ function getLinkPortarias() {
  * @param unknown $voContrato
  * @return string|mixed
  */
-function getTextoGridContrato($voContrato, $empresa=null, $porExtenso=true, $omitirEspecieMater = false){
+function getTextoGridContrato($voContrato, $empresa=null, $porExtenso=true, $omitirEspecieMater = false, $exibirComplemento=true){
 	$contrato = formatarCodigoAnoComplemento($voContrato->cdContrato,
 			$voContrato->anoContrato,
 			dominioTipoContrato::getDescricao($voContrato->tipo));
 	
-	$complementoContrato = getContratoDescricaoEspecie($voContrato, $porExtenso, $omitirEspecieMater);
-	
-	if($complementoContrato != ""){
-		$contrato .= "|$complementoContrato";
+	if($exibirComplemento){
+		$complementoContrato = getContratoDescricaoEspecie($voContrato, $porExtenso, $omitirEspecieMater);
+		
+		if($complementoContrato != ""){
+			$contrato .= "|$complementoContrato";
+		}
 	}
 	
 	if($empresa != null){

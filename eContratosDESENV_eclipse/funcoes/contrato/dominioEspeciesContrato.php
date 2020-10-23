@@ -117,6 +117,14 @@ include_once(caminho_util. "dominio.class.php");
 		);
 	}
 	
+	static function getColecaoTermosNaoNumeradosPublicacao(){
+		return array(
+				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER,
+				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_RESCISAO_AMIGAVEL,
+				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_RESCISAO_UNILATERAL,
+				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_RESCISAO_ENCERRAMENTO,
+		);
+	}
 	
 }
 

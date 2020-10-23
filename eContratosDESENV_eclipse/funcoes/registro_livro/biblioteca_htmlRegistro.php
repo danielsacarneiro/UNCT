@@ -17,7 +17,9 @@ function getModeloPublicacaoPreenchido($registrobanco){
 	$datainicio = $termo->dtVigenciaInicial;
 	$datafim = $termo->dtVigenciaFinal;
 	
-	$contrato = getTextoHTMLNegrito(getTextoGridContrato($termo, null, false, true));
+	$exibirEspecie = !in_array($termo->cdEspecie, dominioEspeciesContrato::getColecaoTermosNaoNumeradosPublicacao());
+	
+	$contrato = getTextoHTMLNegrito(getTextoGridContrato($termo, null, false, true, $exibirEspecie));
 	//echo "ano contrato: " . $termo->anoContrato;
 	
 	$publicacao = "$contrato-$empresa.$tpdoc:$doc."; 
