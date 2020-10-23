@@ -455,13 +455,15 @@ function getBotaoDetalharAlertas(){
 }
 
 function imprimeTituloalerta($enviarEmail, $setor=null){
+	echo "<br>DEMANDAS::$setor<BR>";
 	if (!($enviarEmail && email_sefaz::$FLAG_ENVIAR_EMAIL)) {
 		echoo("<font color='red'><b>RELATÓRIO DIÁRIO $setor: <u>SEM email</u>.</b></font></br>");
 	}	
 }
 
 function enviarEmailATJA($enviarEmail){
-	imprimeTituloalerta($enviarEmail, "ATJA");
+	$setor = "ATJA";
+	imprimeTituloalerta($enviarEmail, $setor);
 
 	$count = 0;
 	//envia alertas dos editais
@@ -486,8 +488,8 @@ function enviarEmailATJA($enviarEmail){
 }
 
 function enviarEmailUNCT($enviarEmail){
-	echo("<br>");
-	imprimeTituloalerta($enviarEmail, "UNCT");
+	$setor = "UNCT";
+	imprimeTituloalerta($enviarEmail, $setor);
 	
 	$count = 0;	
 	//envia demandas iniciais
