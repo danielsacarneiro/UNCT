@@ -232,14 +232,14 @@ function marcaApenasUmCheckBox(checkBox, pSemMensagem) {
 		return false;
 	}
 	
-	colecaocheckBox = document.getElementsByName(checkBox.name);	
+	var colecaocheckBox = document.getElementsByName(checkBox.name);	
 	var contador = 0;
 	var id = checkBox.id.split("*")[0];
 	
 	if (checkBox.checked) {
 		//desmarca os outros
 		for (var i = 0; i < colecaocheckBox.length; i++) {
-			checkAtual = colecaocheckBox[i];
+			var checkAtual = colecaocheckBox[i];
 			var idAtual = checkAtual.id.split("*")[0];
 			if (checkAtual != checkBox && idAtual == id) {
 				checkAtual.checked = false;

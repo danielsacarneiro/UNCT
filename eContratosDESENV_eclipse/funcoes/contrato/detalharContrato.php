@@ -200,13 +200,14 @@ function confirmar() {
             	$start = strlen($procLic) - strlen($exemploFimFormatoNumProcLic);
             	$cdModalidade = substr($procLic, $start,2);
             	//echoo($cdModalidade);
-            	echo "Resultado importação e-Conti: ".formatarCodigoAno($voContrato->cdProcLic, $voContrato->anoProcLic) . "-" . dominioModalidadeProcLicitatorio::getDescricao($cdModalidade);
-            	
             	$voproclictemp = new voProcLicitatorio();
             	$voproclictemp->cd = $voContrato->cdProcLic;
             	$voproclictemp->ano = $voContrato->anoProcLic;
             	$voproclictemp->cdModalidade = $cdModalidade;
             	 
+            	echo "Resultado importação e-Conti: ".formatarCodigoAno($voContrato->cdProcLic, $voContrato->anoProcLic) 
+            		. "-" . dominioModalidadeProcLicitatorio::getDescricao($cdModalidade);
+            	            	 
             	echo getLinkPesquisa ( "../proc_licitatorio/detalhar.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $voproclictemp->getValorChaveHTML() );
             }
             ?>

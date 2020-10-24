@@ -35,6 +35,22 @@ function getSqDocumentoAtual($arrayParam) {
 	return $html; 
 }*/
 
+function imprimeLinkDocumento($link, $descricao){
+	
+	$html =
+	"\n<TR>
+	\n <TD class='campoformulario'>
+	$descricao: ";
+
+	$html .= getLinkPesquisa($link) . " \n";
+
+	$html .=
+	"\n </TD>
+	\n</TR>";
+
+	return $html;
+}
+
 
 function imprimeBotaoDocumento($vodocumento, $descricao){
 	$voDoc = $vodocumento->dbprocesso->consultarPorChaveVO($vodocumento, false);

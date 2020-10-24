@@ -245,67 +245,96 @@ function getSQLStringArgumentosFormatadoColecao($colecaoValores, $nmAtributo, $o
 }
 
 /**
- * Se $nmAtributo for uma colecao, sera uma colecao de codigo (do dominio trabalhado) relacionado ao atributo a ser comparado no banco
+ * Busca dentro de um atributo string com campo separador no banco de dados
  * @param unknown $colecaoAtributos
  * @param unknown $nmAtributo
  * @param string $operador
  * @return string
  */
-function getSQLBuscarStringCampoSeparador($colecaoAtributos, $nmAtributoColecao, $operador = "OR") {	
+function getSQLBuscarStringCampoSeparador($colecaoAtributos, $nmAtributo, $operador = "OR") {
 	//$strFormato = " LOCATE('$tpDemandaContrato',".voDemanda::$nmAtrTpDemandaContrato.") ";
 	//ECHO (" OPERADOR $operador ");
 	$retorno = "";
 	$separador = "";
 	if ($colecaoAtributos != null) {
-		$tamanho = count ( $colecaoAtributos );
-		// echo "<br> qtd registros: " . $tamanho;
-		
+
 		if(!is_array($colecaoAtributos)){
 			$colecaoAtributos = array($colecaoAtributos);
 		}
 
+		$tamanho = count ( $colecaoAtributos );
+		// echo "<br> qtd registros: " . $tamanho;
+
 		for($i = 0; $i <= $tamanho; $i ++) {
 			$atrib = $colecaoAtributos [$i];
-				
-			if ($atrib != null) {	
- 
-				if(!is_array($nmAtributoColecao)){					
-					//a estrutura da consulta dependera do tipo passado como parametro em $nmAtributoColecao
-					if(constantes::$CD_OPCAO_NENHUM == $atrib){
-						$retorno .= " $separador $nmAtributoColecao  IS NULL ";
-					}else{				
-						$retorno .= " $separador LOCATE('$atrib',$nmAtributoColecao) ";
-					}					
+
+			if ($atrib != null) {
+				if(constantes::$CD_OPCAO_NENHUM == $atrib){
+					$retorno .= " $separador $nmAtributo  IS NULL ";
 				}else{
-					//echo "aqui";
-					// var_dump($colecaoAtributos);
-					//formato eh "05*S"
-					$arrayAtrib = explode ( CAMPO_SEPARADOR, $atrib );
-					$chave = $arrayAtrib[0];					
-					$opcaoSelecionada = $arrayAtrib[1];					
-					//echoo($atrib);					
-					if(isAtributoValido($opcaoSelecionada)){
-						if(constantes::$CD_NAO == $opcaoSelecionada){
-							$comparacaoTemp = "IS NULL";
-						}else{
-							$comparacaoTemp = "IS NOT NULL";
-						}
-						$retorno .= " $separador " . dominio::getDescricaoStatic($chave, $nmAtributoColecao) . "  $comparacaoTemp ";
-					}
-					//$retorno .= " $separador TRUE ";
-					
-					//echoo ($retorno);
+					$retorno .= " $separador LOCATE('$atrib',$nmAtributo) ";
 				}
-				
 				$separador = " $operador ";
 			}
 			// echo "$retorno<br>";
 		}
-		
+
 		$retorno = "($retorno)";
 		//$retorno = substr ( $retorno, 0, count ( $retorno ) - 2 );
 	}
 	// echo $retorno;
+	return $retorno;
+}
+
+/**
+ * busca se o atributo passado como parametro eh nulo ou nao , ou eh do tipo sim ou nao: NADA MAIS QUE ISSO
+ * @param unknown $colecaoAtributos
+ * @param unknown $nmAtributoColecao
+ * @param string $operador
+ * @return string
+ */
+function getSQLBuscarAtributoSimOuNaoOuSeNulo($colecaoAtributos, $nmAtributoColecao, $operador = "OR", $isTpOperacaoSeNulo = true) {
+	$retorno = "";
+	$separador = "";
+	if ($colecaoAtributos != null) {
+		
+		if (! is_array ( $colecaoAtributos )) {
+			$colecaoAtributos = array (
+					$colecaoAtributos 
+			);
+		}
+		
+		$tamanho = count ( $colecaoAtributos );
+		// echo "<br> qtd registros: " . $tamanho;
+		
+		for($i = 0; $i <= $tamanho; $i ++) {
+			$atrib = $colecaoAtributos [$i];
+			
+			if ($atrib != null) {
+				$arrayAtrib = explode ( CAMPO_SEPARADOR, $atrib );
+				$chave = $arrayAtrib [0];
+				$opcaoSelecionada = $arrayAtrib [1];
+				// echoo($atrib);
+				if (isAtributoValido ( $opcaoSelecionada )) {
+					if ($isTpOperacaoSeNulo) {
+						//se a consulta eh pra verificar se eh nulo
+						if (constantes::$CD_NAO == $opcaoSelecionada) {
+							$comparacaoTemp = "IS NULL";
+						} else {
+							$comparacaoTemp = "IS NOT NULL";
+						}
+					} else {
+						//ou se a consulta eh pra verificar se eh sim ou nao
+						$comparacaoTemp = " = " . getVarComoString ( $opcaoSelecionada );
+					}
+					$retorno .= " $separador " . dominio::getDescricaoStatic ( $chave, $nmAtributoColecao ) . "  $comparacaoTemp ";
+				}
+				$separador = " $operador ";
+			}
+		}
+		
+		$retorno = "($retorno)";
+	}
 	return $retorno;
 }
 

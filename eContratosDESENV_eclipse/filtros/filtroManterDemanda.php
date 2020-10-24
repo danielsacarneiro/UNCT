@@ -318,7 +318,7 @@ class filtroManterDemanda extends filtroManter{
 		if (isAtributoValido($fasePlanilha) && ! $this->isAtributoArrayVazio ( $fasePlanilha )) {
 			//echo "entrou2";
 			//$inOrAndFase = $this->inOR_AND_Fase;
-			$strFiltroFase = getSQLBuscarStringCampoSeparador (
+			$strFiltroFase = getSQLBuscarAtributoSimOuNaoOuSeNulo (
 					$fasePlanilha,
 					static::getDadosContratoColecaoCheckBox($this->isHistorico()),
 					constantes::$CD_OPCAO_AND);

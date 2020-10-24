@@ -174,7 +174,13 @@ function transferirDadosPessoa(cd, nm) {
 	       ?>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Estudo Técnico:</TH>
-	            <TD class="campoformulario" colspan=3><?php echo $comboEstudoTecnico->getHtmlCombo(voContratoInfo::$nmAtrInEstudoTecnicoSAD,voContratoInfo::$nmAtrInEstudoTecnicoSAD, $vo->inEstudoTecnicoSAD, true, "camponaoobrigatorio", false, " onChange='' required ");?>	            
+	            <TD class="campoformulario" width="1%"><?php echo $comboEstudoTecnico->getHtmlCombo(voContratoInfo::$nmAtrInEstudoTecnicoSAD,voContratoInfo::$nmAtrInEstudoTecnicoSAD, $vo->inEstudoTecnicoSAD, true, "camponaoobrigatorio", false, " onChange='' required ");?>
+				<?php
+				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioAutorizacao.php");
+				$combo = new select(dominioAutorizacao::getColecao());				
+				?>
+	            <TH class="campoformulario" nowrap>Autorização:</TH>
+	            <TD class="campoformulario"><?php echo $combo->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato,voContratoInfo::$nmAtrCdAutorizacaoContrato, $cdAutorizacao, true, "camponaoobrigatorio", true, " required ");?>
 	        </TR>	       
 			<TR>
 				<?php
@@ -195,23 +201,6 @@ function transferirDadosPessoa(cd, nm) {
 	            		" onChange='formataFormClassificacao(this);' required ");
 	            ?>
 	        </TR>	       
-			<TR>
-				<?php
-				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioAutorizacao.php");
-				$combo = new select(dominioAutorizacao::getColecao());				
-				?>
-	            <TH class="campoformulario" nowrap>Autorização:</TH>
-	            <TD class="campoformulario" nowrap colspan=3><?php echo $combo->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato,voContratoInfo::$nmAtrCdAutorizacaoContrato, $cdAutorizacao, true, "camponaoobrigatorio", true, " required ");?>
-	        </TR>
-			<TR>
-			<?php 
-			//$mouseover = " onMouseOver=\"toolTip('sem valor referencial mensal?')\" onMouseOut='toolTip()' ";
-			?>
-	            <TH class="campoformulario" nowrap width="1%"><abbr title="Sem valor referencial mensal?">É por escopo?:</abbr></TH>
-	            <TD class="campoformulario" width="1%"><?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInEscopo,voContratoInfo::$nmAtrInEscopo, $vo->inEscopo, true, "camponaoobrigatorio", true, " onChange='formataFormEscopo();' required ");?>
-	            <TH class="campoformulario" >É credenciamento?:</TH>
-	            <TD class="campoformulario" colspan=3><?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInCredenciamento,voContratoInfo::$nmAtrInCredenciamento, $vo->inCredenciamento, true, "camponaoobrigatorio", true, " required ");?>
-	        </TR>
 	        <TR>	       
 	            <TH class="campoformulario" nowrap width="1%">Data.Proposta de preços:</TH>
 	            <TD class="campoformulario" width="1%">
@@ -252,6 +241,20 @@ function transferirDadosPessoa(cd, nm) {
 	        $jsGarantia = "formataFormTpGarantia('".voContratoInfo::$nmAtrInTemGarantia."', '".voContratoInfo::$nmAtrTpGarantia."');"
 	        ?>
 			<TR>
+			<?php 
+			//$mouseover = " onMouseOver=\"toolTip('sem valor referencial mensal?')\" onMouseOut='toolTip()' ";
+			?>
+	            <TH class="campoformulario" nowrap width="1%">Características:</TH>
+	            <TD class="campoformulario" colspan=3>
+	            <abbr title="Sem valor referencial mensal?">É por escopo?:</abbr>
+	            <?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInEscopo,voContratoInfo::$nmAtrInEscopo, $vo->inEscopo, true, "camponaoobrigatorio", true, " onChange='formataFormEscopo();' required ");?>
+	            | É credenciamento?:
+	            <?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInCredenciamento,voContratoInfo::$nmAtrInCredenciamento, $vo->inCredenciamento, true, "camponaoobrigatorio", true, " required ");?>
+	            | Será prorrogado?:
+	            <?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInSeraProrrogado,voContratoInfo::$nmAtrInSeraProrrogado, $vo->inSeraProrrogado, true, "camponaoobrigatorio", true, " required ");?>
+	        	</TD>
+	        </TR>
+			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Garantia:</TH>
 	            <TD class="campoformulario" colspan="3">
 	            Tem?: <?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInTemGarantia,voContratoInfo::$nmAtrInTemGarantia, $vo->inTemGarantia, true, "camponaoobrigatorio", false,
@@ -283,6 +286,7 @@ function transferirDadosPessoa(cd, nm) {
 	            	colecaoIDCamposRequired = ["<?=voContratoInfo::$nmAtrCdAutorizacaoContrato?>",
 	            		"<?=voContratoInfo::$nmAtrInEstudoTecnicoSAD?>",
 	            		"<?=voContratoInfo::$nmAtrInEscopo?>",
+	            		"<?=voContratoInfo::$nmAtrInSeraProrrogado?>",
 		            	"<?=voContratoInfo::$nmAtrCdClassificacao?>",
 		            	"<?=voContratoInfo::$nmAtrInMaoDeObra?>",
 		            	"<?=voContratoInfo::$nmAtrDtProposta?>",

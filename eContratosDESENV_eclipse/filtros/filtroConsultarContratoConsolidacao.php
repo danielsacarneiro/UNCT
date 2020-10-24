@@ -3,6 +3,11 @@ include_once (caminho_util . "bibliotecaSQL.php");
 class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	public $nmFiltro = "filtroConsultarContratoConsolidacao";
 	
+	static $ID_REQ_Caracteristicas = "ID_REQ_Caracteristicas"; 
+	static $DS_CREDENCIAMENTO = "Credenciamento";
+	static $DS_ESCOPO= "Escopo";
+	static $DS_PRORROGADO = "Será Prorrogado";	
+	
 	static $NmColInProrrogavel = "NmColInProrrogavel";
 	static $NmColInProrrogacaoExcepcional = "InProrrogacaoExcepcional";
 	
@@ -52,6 +57,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	var $mesIntervaloFimVigencia= "";
 	var $anoIntervaloFimVigencia= "";
 	var $inProduzindoEfeitos = "";
+	var $inCaracteristicas = "";
 	
 	function __construct1($pegarFiltrosDaTela) {
 		parent::__construct1($pegarFiltrosDaTela);
@@ -77,6 +83,8 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		
 		$this->mesIntervaloFimVigencia = @$_POST [static::$ID_REQ_MesIntervaloFimVigencia];
 		$this->anoIntervaloFimVigencia = @$_POST [static::$ID_REQ_AnoIntervaloFimVigencia];
+		
+		$this->inCaracteristicas = @$_POST [static::$ID_REQ_Caracteristicas];
 		
 		$this->inProduzindoEfeitos = @$_POST [static::$ID_REQ_InProduzindoEfeitos];
 		if($this->inProduzindoEfeitos == null || $this->inProduzindoEfeitos == ""){
@@ -357,6 +365,21 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 			$conector = "\n AND ";
 		}
 		
+		$inCaracteristicas = $this->inCaracteristicas;
+		//var_dump($inCaracteristicas);
+		if (isAtributoValido($inCaracteristicas) && ! $this->isAtributoArrayVazio ( $inCaracteristicas )) {
+			//echo "entrou2";
+			//$inOrAndFase = $this->inOR_AND_Fase;
+			$strFiltroCaracteristica = getSQLBuscarAtributoSimOuNaoOuSeNulo (
+					$inCaracteristicas,
+					static::getDadosContratoColecaoCheckBox($this->isHistorico()),
+					constantes::$CD_OPCAO_AND,
+					false);
+
+			$filtro = $filtro . $conector . $strFiltroCaracteristica;
+			$conector = "\n AND ";
+		}
+		
 		//retira os contratos CANCELADOS
 		//$filtro = $filtro . $conector . $nmTabelaContrato . "." . vocontrato::$nmAtrEspecieContrato . " NOT LIKE '%CANCELADO%'";
 		
@@ -430,6 +453,21 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		return $retorno;
 	}
 	
+	/**
+	 * Metodo que relaciona o codigo do dominio ao atributo no banco com cujo valor sera comparado
+	 * eh usado quando a consulta tiver dados check box de uma entidade, cujo filtro eh do tipo sim ou nao via checkbox
+	 * @return string[]
+	 */
+	static function getDadosContratoColecaoCheckBox($isTabHistorico) {
+		$retorno = array (
+				voContratoInfo::$nmAtrInEscopo => voContratoInfo::$nmAtrInEscopo,
+				voContratoInfo::$nmAtrInCredenciamento => voContratoInfo::$nmAtrInCredenciamento,
+				voContratoInfo::$nmAtrInSeraProrrogado => voContratoInfo::$nmAtrInSeraProrrogado,
+		);
+	
+		return $retorno;
+	}
+	
 	static function getComparacaoWhereDataVigencia($nmAtributoTabela){
 		return getSQLCASE($nmAtributoTabela
 						, '0000-00-00'						
@@ -448,8 +486,22 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		$varAtributos = array (
 				voContrato::$nmAtrAnoContrato => "Ano",
 				voContrato::$nmAtrCdContrato => "Número",
-				voContrato::$nmAtrTipoContrato => "Tipo", 
+				voContrato::$nmAtrTipoContrato => "Tipo",
+				static::$NmColDtFimVigencia => "Fim.Vigencia",
 		);
 		return $varAtributos;
 	}
+	/**
+	 * usado para fases retiradas da planilha
+	 */
+	static function getColecaoCaracteristicas() {
+		$retorno = array (
+				voContratoInfo::$nmAtrInEscopo => static::$DS_ESCOPO,
+				voContratoInfo::$nmAtrInCredenciamento => static::$DS_CREDENCIAMENTO,
+				voContratoInfo::$nmAtrInSeraProrrogado => static::$DS_PRORROGADO,
+		);
+	
+		return $retorno;
+	}
+	
 }

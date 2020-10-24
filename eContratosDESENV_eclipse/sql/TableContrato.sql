@@ -156,7 +156,8 @@ CREATE TABLE contrato_info (
     
     ctinf_in_mao_obra CHAR(1) NULL,
     ctinf_cd_classificacao INT,
-	ctinf_in_credenciamento CHAR(1) NULL,    
+	ctinf_in_credenciamento CHAR(1) NULL,
+	ctinf_in_seraprorrogado CHAR(1) NULL,  
     
     ctinf_cd_pegestor INT, 
     ctinf_in_escopo CHAR(1) NULL,
@@ -175,6 +176,7 @@ ALTER TABLE contrato_info ADD COLUMN ctinf_in_escopo CHAR(1) NULL AFTER ctinf_cd
 ALTER TABLE contrato_info ADD COLUMN ctinf_in_prazoprorrogacao INT NULL AFTER ctinf_in_escopo;
 ALTER TABLE contrato_info ADD COLUMN ctinf_in_sad_estudotec INT NULL AFTER ctinf_in_prazoprorrogacao;
 ALTER TABLE contrato_info ADD COLUMN ctinf_in_credenciamento CHAR(1) NULL AFTER ctinf_cd_classificacao;
+ALTER TABLE contrato_info ADD COLUMN ctinf_in_seraprorrogado CHAR(1) NULL AFTER ctinf_in_credenciamento;
 
 
 /*ALTER TABLE contrato_info ADD CONSTRAINT fk_contrato_info FOREIGN KEY (ct_exercicio, ct_numero, ct_tipo) REFERENCES contrato (ct_exercicio, ct_numero, ct_tipo)
@@ -211,6 +213,7 @@ CREATE TABLE contrato_info_hist (
     ctinf_in_mao_obra CHAR(1) NULL,
     ctinf_cd_classificacao INT,
     ctinf_in_credenciamento CHAR(1) NULL,
+    ctinf_in_seraprorrogado CHAR(1) NULL,  
     
     ctinf_cd_pegestor INT, 
     ctinf_in_escopo CHAR(1) NULL,
@@ -233,6 +236,7 @@ ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_escopo CHAR(1) NULL AFTER cti
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_prazoprorrogacao INT NULL AFTER ctinf_in_escopo;
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_sad_estudotec INT NULL AFTER ctinf_in_prazoprorrogacao;
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_credenciamento CHAR(1) NULL AFTER ctinf_cd_classificacao;
+ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_seraprorrogado CHAR(1) NULL AFTER ctinf_in_credenciamento;
 /*ALTER TABLE contrato_info_hist DROP COLUMN ctinf_email_gestor;
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_garantia CHAR(1) NULL AFTER ctinf_obs;
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_tp_garantia INT NULL AFTER ctinf_in_garantia;

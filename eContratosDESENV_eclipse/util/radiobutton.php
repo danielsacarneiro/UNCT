@@ -48,5 +48,19 @@ include_once ("select.php");
 		return $html = "<input type='radio' id='$idRadio' name='$nmRadio' value='$cd' $javaScript $selected>$ds</input>";
 	}
 		
+	function getHTMLDetalhamento($idRadio, $nmRadio, $cd, $ds=null, $javaScript=null) {
+		$selected = "checked";
+		if($ds == null){
+			$ds = $this->colecao[$cd];
+		}
+	
+		//return $html = "<input type='radio' id='$idRadio' name='$nmRadio' value='$cd' $javaScript $selected>$ds</input>";
+		return static::getHTMLRadioButtonStatic($idRadio, $nmRadio, $cd, $ds, " $selected $javaScript ");
+	}
+	
+	static function getHTMLRadioButtonStatic($idRadio, $nmRadio, $cd, $ds, $checked=false, $complementoHTMLJS =null) {
+		$selected = $checked?"checked":"";
+		return $html = "<input type='radio' id='$idRadio' name='$nmRadio' value='$cd' $selected $complementoHTMLJS>$ds</input>";
+	}
 }
 ?>

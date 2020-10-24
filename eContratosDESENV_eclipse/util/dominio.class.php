@@ -249,6 +249,21 @@ class dominio extends multiplosConstrutores {
 		return $html;
 	}
 	
+	static function getHtmlDetalhamentoRadio($id, $nm, $opcaoSelecionada, $colecaoAlternativa=null) {
+		$html = "";
+
+		if($colecaoAlternativa == null){
+			$colecaoAlternativa = static::getColecao();
+		}	
+		
+		if($opcaoSelecionada != null){
+			$ds = self::getDescricaoStatic($opcaoSelecionada, $colecaoAlternativa);
+		}else{
+			$ds = constantes::$DS_OPCAO_NAO_INFORMADO;
+		}
+		return radiobutton::getHTMLRadioButtonStatic($id, $nm, $opcaoSelecionada, getTextoHTMLNegrito($ds), true);
+	}
+	
 	/**
 	 * o parametro $usarIdCodificado transforma o id, que geralmente eh usado somente como codigo (que pode se repetir), em um id unico
 	 * conjugado com o $nm: esse uso impede que varios componentes htmls, de tipos diferentes, mas de mesmo codigo (e, portanto, mesmo id), 
@@ -349,6 +364,7 @@ class dominio extends multiplosConstrutores {
 		
 		if($colecao==null){
 			$colecao = static::getColecao ();
+			//echoo("coolecao NULA");
 		}
 		
 		if($comOpcaoNenhum){
@@ -387,6 +403,8 @@ class dominio extends multiplosConstrutores {
 		}
 		
 		$isNenhumItemSelecionado = true;
+		//var_dump($colecaoChave);
+		
 		foreach ($colecaoChave as $chave){
 			$novaTD = $i%$qtdItensPorColuna==0;				
 			if($novaTD){
@@ -405,6 +423,7 @@ class dominio extends multiplosConstrutores {
 				//ja que outros checks sao criados, com validacoes diferentes para o simnao
 				//que sao feitas internamente no metodo abaixo getCheckBoxArray
 				$chave = static::getChaveCheckSimNao($chave, $opcaoSelecionada);
+				//echoo("chave $chave");
 			}
 			
 			//para o caso de exibir pelo menos um item selecionado
@@ -461,7 +480,7 @@ class dominio extends multiplosConstrutores {
 	 * @return string
 	 */
 	static function getChaveCheckSimNao($chave, $colecaoSelecionada){
-		$retorno = null;
+		$retorno = $chave;
 		if(!isColecaoVazia($colecaoSelecionada)){			
 			foreach ($colecaoSelecionada as $item){
 				$arrayAtrib = explode ( CAMPO_SEPARADOR, $item );

@@ -21,6 +21,7 @@ Class voContratoInfo extends voentidade{
 	 
 	static $nmAtrCdClassificacao = "ctinf_cd_classificacao";
 	static $nmAtrInCredenciamento = "ctinf_in_credenciamento";
+	static $nmAtrInSeraProrrogado = "ctinf_in_seraprorrogado";	
 	
 	static $nmAtrInMaoDeObra = "ctinf_in_mao_obra";
 	static $nmAtrCdPessoaGestor = "ctinf_cd_pegestor";
@@ -46,6 +47,7 @@ Class voContratoInfo extends voentidade{
 	var $inMaoDeObra = "";
 	var $cdClassificacao = "";
 	var $inCredenciamento = "";
+	var $inSeraProrrogado = "";
 	var $cdPessoaGestor = "";
 	var $inEscopo = "";
 	var $inPrazoProrrogacao = "";
@@ -116,6 +118,7 @@ Class voContratoInfo extends voentidade{
 				self::$nmAtrTpGarantia,
 				self::$nmAtrCdClassificacao,
 				self::$nmAtrInCredenciamento,
+				self::$nmAtrInSeraProrrogado,
 				self::$nmAtrInMaoDeObra,
 				self::$nmAtrCdPessoaGestor,
 				self::$nmAtrInEscopo,
@@ -182,6 +185,7 @@ Class voContratoInfo extends voentidade{
 		
 		$this->cdClassificacao = $registrobanco[self::$nmAtrCdClassificacao];
 		$this->inCredenciamento = $registrobanco[self::$nmAtrInCredenciamento];
+		$this->inSeraProrrogado = $registrobanco[self::$nmAtrInSeraProrrogado];
 		$this->inMaoDeObra = $registrobanco[self::$nmAtrInMaoDeObra];
 		$this->cdPessoaGestor = $registrobanco[self::$nmAtrCdPessoaGestor];
 		$this->inEscopo = $registrobanco[self::$nmAtrInEscopo];
@@ -203,6 +207,7 @@ Class voContratoInfo extends voentidade{
 		
 		$this->cdClassificacao = $_POST[self::$nmAtrCdClassificacao];
 		$this->inCredenciamento = $_POST[self::$nmAtrInCredenciamento];
+		$this->inSeraProrrogado = $_POST[self::$nmAtrInSeraProrrogado];
 		$this->inMaoDeObra = $_POST[self::$nmAtrInMaoDeObra];		
 		$this->cdPessoaGestor = $_POST[self::$nmAtrCdPessoaGestor];
 		$this->inEscopo = $_POST[self::$nmAtrInEscopo];

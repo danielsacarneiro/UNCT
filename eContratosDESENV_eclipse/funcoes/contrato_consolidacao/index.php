@@ -31,6 +31,7 @@ if($filtro->temValorDefaultSetado){
 $qtdRegistrosPorPag = $filtro->qtdRegistrosPorPag;
 $numTotalRegistros = $filtro->numTotalRegistros;
 
+$nmCampoCaracteristicasHtml = filtroConsultarContratoConsolidacao::$ID_REQ_Caracteristicas . "[]";
 ?>
 
 <!DOCTYPE html>
@@ -42,6 +43,7 @@ $numTotalRegistros = $filtro->numTotalRegistros;
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_cnpfcnpj.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_moeda.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_checkbox.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>tooltip.js"></SCRIPT>
 
 <SCRIPT language="JavaScript" type="text/javascript">
@@ -53,7 +55,7 @@ function isFormularioValido() {
 	return true;
 }
 
-function detalhar(isExcluir) {    
+/*function detalhar(isExcluir) {    
     if(isExcluir == null || !isExcluir)
         funcao = "<?=constantes::$CD_FUNCAO_DETALHAR?>";
     else
@@ -65,6 +67,16 @@ function detalhar(isExcluir) {
 	chave = document.frm_principal.rdb_consulta.value;	
 	lupa = document.frm_principal.lupa.value;
 	location.href="detalhar.php?funcao=" + funcao + "&chave=" + chave + "&lupa="+ lupa;
+}*/
+
+function detalhar(){
+	funcao = "<?=constantes::$CD_FUNCAO_DETALHAR?>";
+    if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta")){
+            return;
+    }
+	chave = document.frm_principal.rdb_consulta.value;
+    url = "../contrato_info/detalhar.php?funcao=" + funcao + "&chave=" + chave + "&lupa=S";	
+    abrirJanelaAuxiliar(url, true, false, false);
 }
 
 function excluir() {
@@ -226,12 +238,27 @@ function movimentacoes(){
                 </TD>				
 			</TR>
 			<TR>
-               <TH class="campoformulario" nowrap>Proposta:</TH>
-               <TD class="campoformulario" colspan=3>
-               Dias.Vencimento:
-	            <INPUT type="text" id="<?=filtroConsultarContratoConsolidacao::$nmAtrQtdDiasParaVencimentoProposta?>" name="<?=filtroConsultarContratoConsolidacao::$nmAtrQtdDiasParaVencimentoProposta?>"  
-								value="<?php echo($filtro->qtdDiasParaVencimentoProposta);?>"  class="camponaoobrigatorio" size="3">
-                        			
+       			<TH class="campoformulario" >Características:</TH>
+                <TD class="campoformulario" colspan=3>
+                <?php 
+	            $pArrayCaracteristica = array(
+	            		$nmCampoCaracteristicasHtml,
+	            		$filtro->inCaracteristicas,
+	            		filtroConsultarContratoConsolidacao::getColecaoCaracteristicas(),
+	            		1,
+	            		true,
+	            		"",
+	            		true,
+	            		"",
+	            		false,
+	            		filtroManterDemanda::$NmAtrInOR_AND_Fase,
+	            		$filtro->inOR_AND_Fase,
+	            		false,
+	            		true,
+	            		true
+	            );
+	            echo dominioFaseDemanda::getHtmlChecksBoxArray($pArrayCaracteristica);	            	            
+	            ?>                        			
                 </TD>
             </TR>			
 	            <?php 
@@ -341,21 +368,10 @@ function movimentacoes(){
 				include_once(caminho_util."dominioTpVigencia.php");
 				$comboVigencia = new select(dominioTpVigencia::getColecaoComVazio());						
 				?>
-	            <TD class="campoformulario" nowrap colspan=3>
+	            <TD class="campoformulario" nowrap>
 	            <?php 
 	            echo $comboVigencia->getHtmlOpcao($filtro::$nmAtrTpVigencia,$filtro::$nmAtrTpVigencia, $filtro->tpVigencia, false);
 	            
-	            //echo "| Na data específica: ";
-	            ?>
-	            <!--  <INPUT type="text"
-	            		id="<?=filtroConsultarContratoConsolidacao::$nmAtrDtVigencia?>"
-	            		name="<?=filtroConsultarContratoConsolidacao::$nmAtrDtVigencia?>"
-	            		value="<?php echo($filtro->dtVigencia);?>"
-	            		onkeyup="formatarCampoData(this, event, false);"
-	            				class="camponaoobrigatorio"
-	            						size="10"
-	            								maxlength="10" >-->
-	            <?php
 	            $comboSimNaoEfeitos = new select(array(constantes::$CD_SIM => "Com efeitos", constantes::$CD_NAO => "Últ.Termo"));
 	            $textoTag = getTextoHTMLTagMouseOver("Último Termo: ", "Exibe somente os termos formalizados.");
 	            echo "| $textoTag". $comboSimNaoEfeitos->getHtmlCombo(
@@ -371,6 +387,12 @@ function movimentacoes(){
 	            echo getBorracha($nmCamposVigencia, "");
 	             
 	            ?></TD>
+               <TH class="campoformulario" nowrap>Proposta:</TH>
+               <TD class="campoformulario" >
+               Dias.Vencimento:
+	            <INPUT type="text" id="<?=filtroConsultarContratoConsolidacao::$nmAtrQtdDiasParaVencimentoProposta?>" name="<?=filtroConsultarContratoConsolidacao::$nmAtrQtdDiasParaVencimentoProposta?>"  
+								value="<?php echo($filtro->qtdDiasParaVencimentoProposta);?>"  class="camponaoobrigatorio" size="3">
+                </TD>		                	            
 		    </TR>					
 	        
        <?php
@@ -542,7 +564,11 @@ function movimentacoes(){
                             <?php                            
                             //echo getBotoesRodape();                            
                             ?>
-                            <!-- <TD class="botaofuncao"><?=getBotao("bttExecucao", "Execução", null, false, "onClick='javascript:execucao();' accesskey='e'")?></TD>-->
+                            <TD class='botaofuncao'>
+                            <?php 
+                            echo getBotaoValidacaoAcesso("bttDetalhar", "Detalhar", "botaofuncaop", false, false,true,false,"onClick='javascript:detalhar();' accesskey='g'");
+                            ?>                                                        	                   	
+                            </TD>
                             <TD class="botaofuncao"><?=getBotao("bttMovimentacao", "Movimentações", null, false, "onClick='javascript:movimentacoes();' accesskey='m'")?></TD>
                          </TR>
                          </TABLE>

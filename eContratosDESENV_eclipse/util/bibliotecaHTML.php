@@ -896,16 +896,22 @@ function getCheckBoxArray($pArray) {
 		$complementoHTML .= " onClick='this.checked = true;' ";
 		$idRadio = "";
 		$nmRadio = "";
+		//echoo("aPAGOU");
 	}
 	
 	if(!$isCheckSimNao){
 		$retorno = getCheckBoxBoolean($idRadio, $nmRadio, $chave, $checked, $complementoHTML, $descricao);
 	}else{
 		//por enquanto eh usado somente em consultas
+		/*if($chave == ""){
+			asdas ad sf
+		}*/
 		$arrayAtrib = explode ( CAMPO_SEPARADOR, $chave );
 		$chavesimples = $arrayAtrib[0];
 		$chaveSim = getIdComponenteHtmlCheckSimNao($chavesimples, constantes::$CD_SIM);
 		$chaveNao = getIdComponenteHtmlCheckSimNao($chavesimples, constantes::$CD_NAO);
+		
+		//echoo("chavesimples $chavesimples && idRadio $idRadio");
 				
 		$complementoHTML .= " onClick='marcaApenasUmCheckBox(this);' ";
 		$separador = "|";

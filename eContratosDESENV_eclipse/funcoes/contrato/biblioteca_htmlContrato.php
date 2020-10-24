@@ -227,9 +227,9 @@ function isContratoEnvioSADPGE($voContrato, $setor){
 	if($voContrato != null){		
 		$vlMensal = $voContrato->vlMensal;
 		//lembrar que o valor de contrato eh recuperado diferente
-		$vlMensal = getVarComoDecimal($vlMensal);
+		//$vlMensal = getVarComoDecimal($vlMensal);
 		$vlReferencia = $vlMensal*12;
-		//echo " $vlReferencia ";
+		//echo " Vl.Mensal: $vlMensal, VL.Referencia: $vlReferencia ";
 		$retorno =  $vlReferencia >= $vlAComparar;
 	}
 	
