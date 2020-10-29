@@ -79,6 +79,14 @@ class email_sefaz extends multiplosConstrutores{
 		);
 	}
 	
+	static function getListaEmailContratosAVencer(){
+		return array(
+				"eduardo.s-goncalves@sefaz.pe.gov.br",
+				"daniel.ribeiro@sefaz.pe.gov.br",
+				"rogerio.f-carvalho@sefaz.pe.gov.br",
+		);
+	}
+	
 	static function getListaEmailUNCT(){
 		return array(
 				"eduardo.s-goncalves@sefaz.pe.gov.br",

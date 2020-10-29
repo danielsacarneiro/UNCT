@@ -16,6 +16,7 @@ class filtroManterContratoInfo extends filtroManter {
 
 	var $InOR_AND;	
 	var $cdAutorizacao = "";
+	var $inSeraProrrogado = "";
 	var $inTemGarantia = "";
 	var $tpGarantia = "";	
 	
@@ -37,6 +38,7 @@ class filtroManterContratoInfo extends filtroManter {
 		$this->docContratada = @$_POST [vopessoa::$nmAtrDoc];
 		$this->cdAutorizacao = @$_POST [voContratoInfo::$nmAtrCdAutorizacaoContrato];
 		
+		$this->inSeraProrrogado = @$_POST [voContratoInfo::$nmAtrInSeraProrrogado];
 		$this->inTemGarantia = @$_POST [voContratoInfo::$nmAtrInTemGarantia];
 		$this->tpGarantia = @$_POST [voContratoInfo::$nmAtrTpGarantia];
 		
@@ -104,6 +106,13 @@ class filtroManterContratoInfo extends filtroManter {
 			$conector = "\n AND ";
 		}
 				
+		if (isAtributoValido($this->inSeraProrrogado)) {
+		
+			$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrInSeraProrrogado . " = " . getVarComoString ( $this->inSeraProrrogado );
+		
+			$conector = "\n AND ";
+		}
+		
 		if (isAtributoValido($this->inTemGarantia)) {
 		
 			$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrInTemGarantia . " = " . getVarComoString ( $this->inTemGarantia );

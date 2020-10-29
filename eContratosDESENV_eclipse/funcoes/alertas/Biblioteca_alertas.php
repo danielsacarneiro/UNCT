@@ -440,9 +440,13 @@ TH.headertabeladados,TH.headertabeladadosalinhadodireita,TH.headertabeladadosali
 	return $html;
 }
 
-function getBotaoDetalharAlertas(){
+function getBotaoDetalharAlertas($vo=null){
+	if($vo == null){
+		$vo=new voDemanda();
+	}
+	
 	$retorno .= getTagHTMLAbreJavaScript();
-	$retorno .= getFuncaoJSDetalharEmailPorVO(new voDemanda());
+	$retorno .= getFuncaoJSDetalharEmailPorVO($vo);
 	$retorno .= getTagHTMLFechaJavaScript();
 	$retorno .= "\n<TABLE width='100%' id='table_tabeladados' class='tabeladados' cellpadding='2' cellspacing='2' BORDER=0>\n
 				<TBODY>";
@@ -504,6 +508,21 @@ function enviarEmailUNCT($enviarEmail){
 	
 	$assunto = "Relatório diário";
 	enviarEmail($assunto, $mensagem, $enviarEmail, email_sefaz::getListaEmailUNCT());	
+	//enviarEmail($assuntoParam, $mensagemParam, $enviarEmail=true, $listaEmail=null,$remetente = null) {
+}
+
+function enviarEmailDiretoria($enviarEmail){
+	$setor = "DILC";
+	imprimeTituloalerta($enviarEmail, $setor);
+
+	$count = 0;
+	//envia contratos a vencer
+	$mensagem .= getMensagemContratosAVencerGestor($count);
+
+	echo $mensagem . getBotaoDetalharAlertas(new voContratoInfo());
+
+	$assunto = "Relatório diário";
+	enviarEmail($assunto, $mensagem, $enviarEmail, email_sefaz::getListaEmailContratosAVencer());
 	//enviarEmail($assuntoParam, $mensagemParam, $enviarEmail=true, $listaEmail=null,$remetente = null) {
 }
 

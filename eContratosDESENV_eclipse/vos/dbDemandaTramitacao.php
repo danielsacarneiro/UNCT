@@ -468,6 +468,9 @@ class dbDemandaTramitacao extends dbprocesso {
 		if ($vo->prt != null) {
 			$retorno .= $sqlConector . voDemandaTramitacao::$nmAtrProtocolo . " = " . $this->getVarComoString ( voDemandaTramitacao::getNumeroPRTSemMascara($vo->prt));
 			$sqlConector = ",";
+		}else{
+			$retorno .= $sqlConector . voDemandaTramitacao::$nmAtrProtocolo . " = null ";
+			$sqlConector = ",";
 		}
 		
 		if ($vo->dtReferencia != null) {

@@ -16,3 +16,5 @@ $enviarEmail = $enviarEmail && voMensageria::$ATIVADO && voMensageria::$ENVIAR_E
 enviarEmailATJA($enviarEmail);
 
 enviarEmailUNCT($enviarEmail);
+
+enviarEmailDiretoria($enviarEmail);

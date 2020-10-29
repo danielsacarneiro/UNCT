@@ -424,4 +424,48 @@ function getDataSQLDiferencaDias($data1, $data2) {
 	return " DATEDIFF($data2, $data1) ";
 }
 
+/**
+ * funcao que serve para indicar o atributo que sera comparado e se sera operacao de igual ou de diferenca
+ * @param unknown $param
+ * @param unknown $nmTabelaAtributo
+ * @param unknown $nmTabela
+ * @return string
+ */
+ function getSQLFiltroAtributoArrayComparacao($param, $nmAtributo, $nmTabelaParam=null){
+	$operador = " = ";
+	$operadorIN = " IN ";
+	$dados = $param;
+	if(is_array($param)){
+		if($param[0] == constantes::$CD_OPCAO_CONSULTA_DIFERENTE
+				|| $param[0] == constantes::$CD_OPCAO_CONSULTA_IGUAL){
+					$dados = $param[1];
+
+					if($param[0] == constantes::$CD_OPCAO_CONSULTA_DIFERENTE){
+						$isDiferente  = true;
+						$strTemp = "";
+						$operador = " <> ";
+						$operadorIN = " NOT IN ";
+					}
+		}
+	}
+		
+	$comparar = " $operador '$dados' ";
+	if(is_array($dados)){
+		$comparar = " $operadorIN (" . getSQLStringFormatadaColecaoIN($dados, true) . ") ";
+	}
+	
+	if($nmTabelaParam != null){
+		$nmTabelaParam = "$nmTabelaParam.";
+	}
+	
+	if($isDiferente){
+		$strTemp = " $nmTabelaParam" . "$nmAtributo IS NULL OR "  ;
+		
+	}
+	
+	$retorno = " ($strTemp $nmTabelaParam" . $nmAtributo . "$comparar) ";
+	
+	return $retorno;
+}
+
 ?>

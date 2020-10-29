@@ -122,19 +122,19 @@ function getContratoDetalhamentoParam($arrayParametro) {
 		
 		if ($temLupa) {
 			
-			if($detalharContratoInfo){
-				$voContratoInfo = new voContratoInfo();
-//				$vocontratoasdsa = new vocontrato();
-				$voContratoInfo->cdContrato = $voContrato->cdContrato;
-				$voContratoInfo->anoContrato = $voContrato->anoContrato;
-				$voContratoInfo->tipo = $voContrato->tipo;
+			$voContratoInfo = new voContratoInfo();
+			$voContratoInfo->cdContrato = $voContrato->cdContrato;
+			$voContratoInfo->anoContrato = $voContrato->anoContrato;
+			$voContratoInfo->tipo = $voContrato->tipo;
 				
+			if($detalharContratoInfo){				
 				echo getLinkPesquisa ( "../".voContratoInfo::getNmTabela()."/detalhar.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $voContratoInfo->getValorChaveHTML() );
 			}else{
 				
 				echo getLinkPesquisa ( "../contrato/detalharContrato.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $chaveContrato );
 			}
 			
+			alertaContratoInfoNaoCadastrado($voContratoInfo);			
 		}
 		
 		$voContratoInfoPK = voContratoInfo::getVOContratoInfoDeUmVoContrato($voContrato);
@@ -211,6 +211,15 @@ function getContratoDetalhamentoParam($arrayParametro) {
 		</TD>
 </TR>
 <?php
+	}
+}
+
+function alertaContratoInfoNaoCadastrado($vocontratoinfo){
+	$db = new dbContratoInfo();
+	try{
+		$db->consultarPorChaveVO($vocontratoinfo);
+	}catch(excecaoChaveRegistroInexistente $ex){
+		ECHO getTextoHTMLDestacado("ALERTA: Informações Adicionais ao contrato inexistentes. Providencie o cadastro urgentemente.");
 	}
 }
 

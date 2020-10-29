@@ -250,6 +250,15 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 			$conector = "\n AND ";
 		}
 		
+		if (isAtributoValido($this->inSeraProrrogado) && !$this->isAtributoArrayVazio($this->inSeraProrrogado)) {
+			
+			$filtroTemp = getSQLFiltroAtributoArrayComparacao($this->inSeraProrrogado, voContratoInfo::$nmAtrInSeraProrrogado, $nmTabelaContratoInfo);		
+		
+			$filtro = $filtro . $conector . $filtroTemp;
+		
+			$conector = "\n AND ";
+		}
+		
 		if ($this->inTemGarantia != null) {
 			
 			$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrInTemGarantia . " = " . getVarComoString ( $this->inTemGarantia );

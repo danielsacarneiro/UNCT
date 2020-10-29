@@ -21,7 +21,7 @@ $cdOrdenacao = $filtro->cdOrdenacao;
 $isHistorico = "S" == $cdHistorico; 
 
 $dbprocesso = $vo->dbprocesso;
-$colecao = $dbprocesso->consultarTelaConsultaConsolidacao($filtro);
+$colecao = $dbprocesso->consultarTelaConsultaConsolidacao($filtro, true);
 
 $paginacao = $filtro->paginacao;
 if($filtro->temValorDefaultSetado){

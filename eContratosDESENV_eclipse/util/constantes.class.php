@@ -43,6 +43,8 @@ include_once 'normativos.php';
     static $CD_OPCAO_VAZIO = "op_vazio";
     static $CD_OPCAO_NENHUM = "op_nenhum";
     static $CD_OPCAO_NAO_SEAPLICA = "00";
+    static $CD_OPCAO_CONSULTA_IGUAL = "=";
+    static $CD_OPCAO_CONSULTA_DIFERENTE = "<>";
     
     static $CD_ORDEM_CRESCENTE = "ASC";
     static $CD_ORDEM_DECRESCENTE = "DESC";

@@ -19,6 +19,7 @@ class filtroManter extends multiplosConstrutores {
 	static $nmAtrNumTotalRegistros = "numTotalRegistros";
 	static $nmAtrCdUtilizarSessao = "utilizarSessao";
 	static $nmAtrCdConsultar = "consultar";
+	
 	var $cdAtrOrdenacao;
 	var $cdOrdenacao;
 	var $dtVigencia;
@@ -530,7 +531,7 @@ class filtroManter extends multiplosConstrutores {
 	function setConsultaRealizada(){
 		return $this->inConsultaRealizada = true;
 	}	
-	
+		
 	/**
 	 * serve para guardar o filtro usado na consulta: sem WHERE ou ORDER BY
 	 * @param unknown $strFiltro
