@@ -145,13 +145,27 @@ function movimentacoes(){
     <DIV id="div_filtro" class="div_filtro">
     <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
         <TBODY>
-	        <?php	        	
+	        <?php	        
+	        include_once(caminho_util. "dominioSimNao.php");
+	        $comboSimNao = new select(dominioSimNao::getColecao());	         
+	        
 	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
 	        $arrayCssClass = array("camponaoobrigatorio","camponaoobrigatorio", "camponaoobrigatorio");
 	        ?>        
             <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" colspan="3"><?php getContratoEntradaDeDados($filtro->tipoContrato, $filtro->cdContrato, $filtro->anoContrato, $arrayCssClass, null, null);?></TD>
+	            <TD class="campoformulario" nowrap>
+	            <?php 
+	            getContratoEntradaDeDados($filtro->tipoContrato, $filtro->cdContrato, $filtro->anoContrato, $arrayCssClass, null, null);
+	            ?>
+	            </TD>	            
+	            <TH class="campoformulario" nowrap width="1%">Gestor:</TH>
+	            <TD class="campoformulario">
+	            <?php 
+	            echo "Tem? ".$comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrCdPessoaGestor,voContratoInfo::$nmAtrCdPessoaGestor
+							, $filtro->inGestor, true, "camponaoobrigatorio", false,"");
+	            ?>
+	            </TD>	            
 			</TR>
 			<TR>
                 <TH class="campoformulario" nowrap>Nome Contratada:</TH>
@@ -160,13 +174,9 @@ function movimentacoes(){
                 <TD class="campoformulario" ><INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($filtro->docContratada);?>" class="camponaoobrigatorio" size="20" maxlength="18"></TD>
             </TR>
             <?php 
-            $comboAutorizacao = new select(dominioAutorizacao::getColecao());
-            
+            $comboAutorizacao = new select(dominioAutorizacao::getColecao());            
             include_once(caminho_funcoes. "contrato/dominioTpGarantiaContrato.php");            
-            $comboGarantia = new select(dominioTpGarantiaContrato::getColecao());
-            include_once(caminho_util. "dominioSimNao.php");
-            $comboSimNao = new select(dominioSimNao::getColecao());
-            
+            $comboGarantia = new select(dominioTpGarantiaContrato::getColecao());            
             ?>                    
 			<TR>
 				<?php
@@ -189,8 +199,9 @@ function movimentacoes(){
 	            <TD class="campoformulario" width="1%"><?php echo $comboAutorizacao->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato, voContratoInfo::$nmAtrCdAutorizacaoContrato, $filtro->cdAutorizacao, true, "camponaoobrigatorio", false, "");?></TD>-->	            
 	            <TH class="campoformulario" nowrap width="1%">Garantia:</TH>
 	            <TD class="campoformulario">
-	            Tem?: <?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInTemGarantia,voContratoInfo::$nmAtrInTemGarantia, $filtro->inTemGarantia, true, "camponaoobrigatorio", false,
-	            		"");?>
+	            Tem?: <?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInTemGarantia,voContratoInfo::$nmAtrInTemGarantia, $filtro->inTemGarantia
+	            		, true, "camponaoobrigatorio", false,"");
+	            ?>
 	            Tipo: <?php echo $comboGarantia->getHtmlCombo(voContratoInfo::$nmAtrTpGarantia,voContratoInfo::$nmAtrTpGarantia, $filtro->tpGarantia, true, "camponaoobrigatorio", true, "");?>
 	            </TD>
 			</TR>
@@ -425,7 +436,7 @@ function movimentacoes(){
                     <TH class="headertabeladados" width="40%">Gestor</TH>
                     <TH class="headertabeladados" width="1%">Proposta</TH>                    
                     <TH class="headertabeladados" width="1%">Prorrogável</TH>
-                    <TH class="headertabeladados" width="1%">Excepcional</TH>
+                    <TH class="headertabeladados" width="1%">Pode.Excep.?</TH>
                     <TH class="headertabeladados" width="1%">Dt.Início</TH>
                     <TH class="headertabeladados" width="1%">Dt.Fim</TH>
                     <TH class="headertabeladados" width="1%">Anos</TH>

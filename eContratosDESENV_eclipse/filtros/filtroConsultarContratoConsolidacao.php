@@ -3,11 +3,14 @@ include_once (caminho_util . "bibliotecaSQL.php");
 class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	public $nmFiltro = "filtroConsultarContratoConsolidacao";
 	
-	static $ID_REQ_Caracteristicas = "ID_REQ_Caracteristicas"; 
-	static $DS_CREDENCIAMENTO = "Credenciamento";
+	static $ID_REQ_Caracteristicas = "ID_REQ_Caracteristicas";
+
+	static $DS_CREDENCIAMENTO = "Credenc.";
 	static $DS_ESCOPO= "Escopo";
-	static $DS_PRORROGADO = "Será Prorrogado";	
+	static $DS_DEMANDA = "Tem Demanda Prorrog.";
+	static $DS_PRORROGADO = "Será Prorrog.";	
 	
+	static $NmColInTemDemanda = "InTemDemanda";
 	static $NmColInProrrogavel = "NmColInProrrogavel";
 	static $NmColInProrrogacaoExcepcional = "InProrrogacaoExcepcional";
 	
@@ -91,6 +94,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 			$this->inProduzindoEfeitos = constantes::$CD_SIM;
 		}
 		
+		$this->inGestor = @$_POST [voContratoInfo::$nmAtrCdPessoaGestor];		
 	}
 	
 	static function getDataBaseReajuste($nmTabelaContratoInfo, $nmTabelaContrato){
@@ -158,8 +162,6 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 				
 		if ($this->inProrrogacao != null && $this->inProrrogacao != "") {			
 			$filtro = $filtro . $conector . static::getSQLComparacaoPrazoProrrogacao($this->inProrrogacao);
-			
-			//echo static::getSQLComparacaoPrazoProrrogacao($this->inProrrogacao);
 			$conector = "\n AND ";
 		}
 		
@@ -250,12 +252,11 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 			$conector = "\n AND ";
 		}
 		
-		if (isAtributoValido($this->inSeraProrrogado) && !$this->isAtributoArrayVazio($this->inSeraProrrogado)) {
-			
-			$filtroTemp = getSQLFiltroAtributoArrayComparacao($this->inSeraProrrogado, voContratoInfo::$nmAtrInSeraProrrogado, $nmTabelaContratoInfo);		
-		
-			$filtro = $filtro . $conector . $filtroTemp;
-		
+		//eh independente do inCaracteristicas (que eh usado na tela de consulta)
+		//este aqui eh usado para consultas especificas
+		if (isAtributoValido($this->inSeraProrrogado)) {
+			$filtro = $filtro . $conector . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrInSeraProrrogado . " = " . getVarComoString ( $this->inSeraProrrogado);			
+			//$filtroTemp = getSQLFiltroAtributoArrayComparacao($this->inSeraProrrogado, voContratoInfo::$nmAtrInSeraProrrogado, $nmTabelaContratoInfo);		
 			$conector = "\n AND ";
 		}
 		
@@ -389,6 +390,14 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 			$conector = "\n AND ";
 		}
 		
+		if (isAtributoValido($this->inGestor)) {
+			$temp = $this->inGestor == constantes::$CD_SIM? " IS NOT NULL ": " IS NULL ";
+		
+			$filtro = $filtro . $conector . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrCdPessoaGestor . $temp;
+		
+			$conector = "\n AND ";
+		}		
+		
 		//retira os contratos CANCELADOS
 		//$filtro = $filtro . $conector . $nmTabelaContrato . "." . vocontrato::$nmAtrEspecieContrato . " NOT LIKE '%CANCELADO%'";
 		
@@ -410,10 +419,13 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	}
 	
 	static function getSQLComparacaoPrazoProrrogacao($filtroPorrogacao){
+		//prorrogacao excepcional eh cabivel somente na modalidade do art. 57, II
 		//um formato para o filtro que nao tenha a ver com prorrogacao excepcional, cabivel apenas para o art 57,II, conforme art 57, par 4, lei 8666
 		//se nada tiver a ver com excepcional, o formato do filtro deve ser no modo loop abaixo porque deve levar em consideracao todos os tipos de prorrogacao
 		//caso contrario, basta verificar para o art 57, II, que eh o unico que admite prorrogacao excepcional
 		if(!array_key_exists($filtroPorrogacao, dominioProrrogacaoFiltroConsolidacao::getColecaoExcepcional())){
+		//if(!in_array($filtroPorrogacao, array_keys(dominioProrrogacaoFiltroConsolidacao::getColecaoExcepcional()))){
+			//echo "normal";
 			if($filtroPorrogacao == dominioProrrogacaoFiltroConsolidacao::$CD_PRORROGAVEL){
 				$sinal = "<";
 			}else{
@@ -433,12 +445,12 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 									
 				$retorno .= "($temp)$operadorSQL";
 			}			
-			/*
-			 // tamanho da string retirada do fim do retorno
-			 $qtdCharFim = strlen ( $retorno ) - strlen ( $operadorSQL );
-			 $retorno = substr ( $retorno, 0, $qtdCharFim );*/
+			
+			 // tamanho da string retirada do fim do retorno			
+			$retorno = removerUltimaString($operadorSQL, $retorno);
 					
 		}else{
+			//echo "excepcional";
 			//apenas para os filtros de prorrogacao excepcional
 			if($filtroPorrogacao == dominioProrrogacaoFiltroConsolidacao::$CD_PERMITE_EXCEPCIONAL){
 				$sinal = "=";
@@ -452,31 +464,20 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 			$nmAtributoAcomparar = static::getSQLQtdAnosVigenciaContrato();
 			$temp = voContratoInfo::$nmAtrInPrazoProrrogacao . " = $STR_SUBSTITUIR_IND_PROR AND $nmAtributoAcomparar >=0 AND $nmAtributoAcomparar $sinal " . $STR_SUBSTITUIR_VALOR_PRAZO;
 			$operadorSQL = " OR ";
-			$retorno .= "($temp)$operadorSQL";			
+			//$retorno .= "($temp)$operadorSQL";			
+			$retorno .= "$temp";
 		}		
 		
-		//para o caso de permitir sempre prorrogacao
-		$retorno .= "(". voContratoInfo::$nmAtrInPrazoProrrogacao ." IN (". getSQLStringFormatadaColecaoIN(array_keys(dominioProrrogacaoContrato::getColecaoPermiteProrrogacaoSQL())) . "))";
+		//para o caso de permitir sempre prorrogacao e a busca for por prorrogaveis
+		if($filtroPorrogacao == dominioProrrogacaoFiltroConsolidacao::$CD_PRORROGAVEL){
+			$retorno = "($retorno)$operadorSQL";
+			$retorno .= "(". voContratoInfo::$nmAtrInPrazoProrrogacao ." IN (". getSQLStringFormatadaColecaoIN(array_keys(dominioProrrogacaoContrato::getColecaoPermiteProrrogacaoSQL())) . "))";
+		}
 		$retorno = "($retorno)";
 		
 		return $retorno;
 	}
-	
-	/**
-	 * Metodo que relaciona o codigo do dominio ao atributo no banco com cujo valor sera comparado
-	 * eh usado quando a consulta tiver dados check box de uma entidade, cujo filtro eh do tipo sim ou nao via checkbox
-	 * @return string[]
-	 */
-	static function getDadosContratoColecaoCheckBox($isTabHistorico) {
-		$retorno = array (
-				voContratoInfo::$nmAtrInEscopo => voContratoInfo::$nmAtrInEscopo,
-				voContratoInfo::$nmAtrInCredenciamento => voContratoInfo::$nmAtrInCredenciamento,
-				voContratoInfo::$nmAtrInSeraProrrogado => voContratoInfo::$nmAtrInSeraProrrogado,
-		);
-	
-		return $retorno;
-	}
-	
+		
 	static function getComparacaoWhereDataVigencia($nmAtributoTabela){
 		return getSQLCASE($nmAtributoTabela
 						, '0000-00-00'						
@@ -508,9 +509,35 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 				voContratoInfo::$nmAtrInEscopo => static::$DS_ESCOPO,
 				voContratoInfo::$nmAtrInCredenciamento => static::$DS_CREDENCIAMENTO,
 				voContratoInfo::$nmAtrInSeraProrrogado => static::$DS_PRORROGADO,
+				voDemanda::$nmAtrAno => static::$DS_DEMANDA,
 		);
 	
 		return $retorno;
+	}
+	
+	/**
+	 * Metodo que relaciona o codigo do dominio ao atributo no banco com cujo valor sera comparado
+	 * eh usado quando a consulta tiver dados check box de uma entidade, cujo filtro eh do tipo sim ou nao via checkbox
+	 * @return string[]
+	 */
+	static function getDadosContratoColecaoCheckBox($isTabHistorico) {
+		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( false );
+		$retorno = array (
+				voContratoInfo::$nmAtrInEscopo => voContratoInfo::$nmAtrInEscopo,
+				voContratoInfo::$nmAtrInCredenciamento => voContratoInfo::$nmAtrInCredenciamento,
+				voContratoInfo::$nmAtrInSeraProrrogado => voContratoInfo::$nmAtrInSeraProrrogado,
+				voDemanda::$nmAtrAno => filtroConsultarContratoConsolidacao::getAtributoConsultaTemDemanda("$nmTabelaDemanda." . voDemanda::$nmAtrAno),
+	
+		);
+	
+		return $retorno;
+	}
+	
+	static function getAtributoConsultaTemDemanda($nmAtributoAComparar, $nmAtributoSQLAlias=null){
+		return 	getSQLCASEIsNULL($nmAtributoAComparar
+							, getVarComoString(constantes::$CD_NAO)
+							, getVarComoString(constantes::$CD_SIM),
+							$nmAtributoSQLAlias);	
 	}
 	
 }

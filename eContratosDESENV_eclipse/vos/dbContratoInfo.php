@@ -213,6 +213,8 @@ class dbContratoInfo extends dbprocesso {
 					"$nmTabelaDemanda.". voDemanda::$nmAtrCd,
 					"$nmTabelaDemanda.". voDemanda::$nmAtrProtocolo,
 					"$nmTabelaDemanda.". voDemanda::$nmAtrTexto,
+					filtroConsultarContratoConsolidacao::getAtributoConsultaTemDemanda("$nmTabelaDemanda.". voDemanda::$nmAtrAno,
+							filtroConsultarContratoConsolidacao::$NmColInTemDemanda),
 			);
 			$arrayColunasRetornadas = array_merge($arrayColunasRetornadas, $arrayTemp);
 		}
@@ -476,7 +478,10 @@ class dbContratoInfo extends dbprocesso {
 		if ($vo->inSeraProrrogado != null) {
 			$retorno .= $sqlConector . voContratoInfo::$nmAtrInSeraProrrogado . " = " . $this->getVarComoString($vo->inSeraProrrogado );
 			$sqlConector = ",";
-		}
+		}else{
+			$retorno .= $sqlConector . voContratoInfo::$nmAtrInSeraProrrogado . " = null ";
+			$sqlConector = ",";
+		}				
 		
 		if ($vo->inMaoDeObra != null) {
 			$retorno .= $sqlConector . voContratoInfo::$nmAtrInMaoDeObra . " = " . $this->getVarComoString( $vo->inMaoDeObra );

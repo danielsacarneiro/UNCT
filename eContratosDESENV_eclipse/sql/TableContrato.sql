@@ -157,7 +157,7 @@ CREATE TABLE contrato_info (
     ctinf_in_mao_obra CHAR(1) NULL,
     ctinf_cd_classificacao INT,
 	ctinf_in_credenciamento CHAR(1) NULL,
-	ctinf_in_seraprorrogado CHAR(1) NULL,  
+	ctinf_in_seraprorrogado CHAR(1) NOT NULL DEFAULT 'S', -- PRESUME-SE QUE TERA PRORROGACAO
     
     ctinf_cd_pegestor INT, 
     ctinf_in_escopo CHAR(1) NULL,
@@ -177,6 +177,8 @@ ALTER TABLE contrato_info ADD COLUMN ctinf_in_prazoprorrogacao INT NULL AFTER ct
 ALTER TABLE contrato_info ADD COLUMN ctinf_in_sad_estudotec INT NULL AFTER ctinf_in_prazoprorrogacao;
 ALTER TABLE contrato_info ADD COLUMN ctinf_in_credenciamento CHAR(1) NULL AFTER ctinf_cd_classificacao;
 ALTER TABLE contrato_info ADD COLUMN ctinf_in_seraprorrogado CHAR(1) NULL AFTER ctinf_in_credenciamento;
+alter table contrato_info modify ctinf_in_seraprorrogado CHAR(1) NOT NULL DEFAULT 'S';
+
 
 
 /*ALTER TABLE contrato_info ADD CONSTRAINT fk_contrato_info FOREIGN KEY (ct_exercicio, ct_numero, ct_tipo) REFERENCES contrato (ct_exercicio, ct_numero, ct_tipo)

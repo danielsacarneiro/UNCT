@@ -21,13 +21,18 @@ if(!$ativado){
 
 $enviarEmailAlerta = $ativado && $isEnvioEmail;
 if ($enviarEmailAlerta) {	
+	echoo("___________________________");
+	//consulta os contratos que nao tem alerta para cria-los
+	$log = criarAlertasEmailGestorColecaoContratos();
+	echoo($log);
+	
+	//busca os alertas a enviar
 	$filtro = new filtroManterMensageria ( false );
 	$filtro->isValidarConsulta = false;
 	$filtro->inHabilitado = constantes::$CD_SIM;
 	$filtro->inVerificarPeriodoVigente = constantes::$CD_SIM;
 	//$filtro->inVerificarFrequencia = constantes::$CD_NAO;
 	$filtro->inVerificarFrequencia = voMensageria::$IN_VERIFICAR_FREQUENCIA;
-	echoo("___________________________");
 	echoo("Verificador de Frequência do email: '$filtro->inVerificarFrequencia'.");
 	
 	$filtro->setaFiltroConsultaSemLimiteRegistro ();

@@ -118,7 +118,7 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		
   		$msg .= "<br><br>Atenciosamente, <br><br>UNCT-SAFI";
   	
-  		$remetente = voMensageriaRegistro::$REMETENTE_PRINCIPAL;
+  		$remetente = email_sefaz::$REMETENTE_PRINCIPAL;
 		enviarEmail($assunto, $msg, $enviarEmail, $listaEmailTemp, $remetente);
 		echoo($vomensageria->toString());
   	}
@@ -127,20 +127,25 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		//$retorno = "<br><br>Caro Gestor, favor verificar o vencimento do contrato $codigo.";
   		
   		//$numFrequencia = complementarCharAEsquerda($numFrequencia, "0", 3);
+  		$emailPrincipal = email_sefaz::$REMETENTE_PRINCIPAL;
+  		$emailCopia = email_sefaz::$REMETENTE_COPIA;
   		
   		$retorno = "<br>Prezado gestor,
   		
-  		<br><br><br>A Unidade de Contratos/SAFI solicita informações referentes à <b>prorrogação</b> do contrato <b>$codigoContrato</b>, que em breve se encerrará.
+  		<br><br><br>A Unidade de Contratos (UNCT/SAFI) solicita informações referentes à <b>prorrogação</b> do contrato <b>$codigoContrato</b>, que em breve se encerrará.
   		<br>Havendo interesse da SEFAZ pela prorrogação, favor enviar com a maior brevidade possível CI, via SEI à SAFI, junto com as cotações de preços e a anuência da Contratada.  		
 
-  		<br><br><b>Se o contrato não comportar mais prorrogação e persistindo a necessidade da contratação, o gestor deverá solicitar novo processo licitatório, juntamente com o termo de referência, sob pena de encerramento da prestação do serviço.
+  		<br><br><b>Não sendo possível nova prorrogação, e persistindo a necessidade da contratação, o gestor deverá solicitar novo processo licitatório
+  		em tempo hábil, sob pena de encerramento da prestação do serviço.
   		
-  		<br><br>Informamos ainda que o envio da garantia contratual atualizada, sendo este o caso, é necessária à instrução da renovação contratual.</b>  		
+  		<br><br>Informamos ainda que o envio da garantia contratual atualizada, sendo este o caso, é necessária à instrução da renovação contratual.</b> 
+  		
+  		<br><br>A resposta deve ser enviada para o seguinte correio eletrônico: <b><u>$emailPrincipal</u></b>, com cópia para <u>$emailCopia</u> .
+  		<br><br><b>Sem prejuízo quanto à responsabilidade referente à gestão contratual própria do setor demandante, 
+  		é imprescindível a resposta deste email, ainda que inexista interesse na prorrogação, para fins de controle e registro desta UNCT</b>.
+  		
   		<br><br>Caso já tenha enviado o pedido de prorrogação, favor desconsiderar esta solicitação.
-  		
-  		<br><br>A resposta deve ser enviada para o seguinte correio eletrônico: <b>Unidade de Contratos da SAFI-SEFAZ (UNCT): <u>".voMensageriaRegistro::$REMETENTE_PRINCIPAL."</u></b>.
-  		
-  		<br><br>Este e-mail é reenviado a cada <b>$numFrequencia dia(s)</b>.";  		 		
+  		<br><br>Na ausência de manifestação, este e-mail será reenviado a cada <b>$numFrequencia dia(s)</b>.";  		 		
   		
   		return $retorno;
   	}

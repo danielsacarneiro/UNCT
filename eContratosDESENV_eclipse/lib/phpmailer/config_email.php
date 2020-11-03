@@ -10,6 +10,10 @@ class email_sefaz extends multiplosConstrutores{
 	static $FLAG_ENVIAR_EMAIL = true;
 	static $CD_IMAGEM_SEFAZLOGO = "SEFAZ_LOGO";
 	static $REMETENTE_ATJA = "atja@sefaz.pe.gov.br";
+	static $REMETENTE_UNCT = "unct@sefaz.pe.gov.br";
+	
+	static $REMETENTE_COPIA = "eduardo.s-goncalves@sefaz.pe.gov.br";
+	static $REMETENTE_PRINCIPAL = "unct@sefaz.pe.gov.br";
 	
 	private $Host;
 	private $Port;
@@ -63,15 +67,17 @@ class email_sefaz extends multiplosConstrutores{
 	static function getListaEmailJuridico(){
 		return array(static::$REMETENTE_ATJA,
 				//"patricia.farias@sefaz.pe.gov.br",
+				"marcelo.sa@sefaz.pe.gov.br",
 				"alfredo.carvalho@sefaz.pe.gov.br",
-				//"margarida.vasconcelos@sefaz.pe.gov.br",
+				"margarida.vasconcelos@sefaz.pe.gov.br",
 				//"rogerio.f-carvalho@sefaz.pe.gov.br"
 		);	
 	}
 	
 	static function getListaEmailAvisoGestorContrato(){
 		return array(
-				"unct@sefaz.pe.gov.br",
+				static::$REMETENTE_PRINCIPAL,
+				static::$REMETENTE_COPIA,
 				//"eduardo.s-goncalves@sefaz.pe.gov.br",
 				//"daniel.ribeiro@sefaz.pe.gov.br",
 				//"rogerio.f-carvalho@sefaz.pe.gov.br",

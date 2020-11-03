@@ -1,5 +1,6 @@
 <?php
 include_once (caminho_lib . "voentidade.php");
+include_once(caminho_funcoes."alertas/Biblioteca_alertas.php");
 
 class voMensageria extends voentidade {	
 	
@@ -15,6 +16,8 @@ class voMensageria extends voentidade {
 	//ativa o envio do email para teste permitindo o envio de mais de um email por dia
 	static $IN_VERIFICAR_FREQUENCIA = "S";
 	static $IMPRIMIR_MENSAGEM_SE_CONSULTA_VAZIA = true;
+	
+	static $NUM_DIAS_FREQUENCIA_MAIL_PADRAO = 7;
 	
 	static $nmCOLDhUltimoEnvio = "nmCOLDhUltimoEnvio";
 	

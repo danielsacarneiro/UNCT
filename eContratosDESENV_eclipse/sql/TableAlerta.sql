@@ -38,4 +38,10 @@ CREATE TABLE msg_registro (
 );
 
 select * from mensageria
+where msg_in_habilitado = 'S'
+
+update mensageria
+set msg_in_habilitado = 'N', msg_dt_fim = DATE(NOW())
+where msg_in_habilitado = 'S'
+
 select * from msg_registro

@@ -132,7 +132,10 @@ function confirmar() {
 	            			voDemanda::$nmAtrCdPessoaRespUNCT,
 	            			voDemanda::$nmAtrCdPessoaRespUNCT,
 	            			$vo->cdPessoaRespUNCT,
+	            			false,
+	            			false,
 	            			constantes::$CD_CLASS_CAMPO_READONLY,
+	            			false,
 	            			"disabled",
 	            	);	            	
 	            	echo "UNCT:&nbsp;". getComboUsuarioPorSetor($arrayParamUsuario, dominioSetor::$CD_SETOR_UNCT). "&nbsp;";	            	

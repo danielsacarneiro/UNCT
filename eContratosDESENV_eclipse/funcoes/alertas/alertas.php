@@ -301,55 +301,28 @@ function getMensagemContratosAVencer(&$count = 0){
 
 
 /** ALERTAS DILC **/
+
 function getMensagemContratosAVencerGestor(&$count = 0){
 	$assunto = "CONTRATOS A VENCER:";
 	$assunto = getSequenciaAssunto($assunto, $count);
 	try {
-		$filtro = new filtroConsultarContratoConsolidacao ( false );
-		$vo = new voContratoInfo();
+		$filtro = getFiltroContratosAVencer();
+				
 		$dbprocesso = new dbContratoInfo();
-		
-		$filtro->voPrincipal = $vo;
-		$filtro->isValidarConsulta = false;
-		$filtro->setaFiltroConsultaSemLimiteRegistro ();
-
-		/*$filtro->vodemanda->situacao = array (
-				dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_ABERTA,
-				dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO
-		);
-
-		$filtro->tipoExcludente = array(
-				dominioTipoDemanda::$CD_TIPO_DEMANDA_LICON,
-				dominioTipoDemanda::$CD_TIPO_DEMANDA_PORTALTRANSPARENCIA
-		);
-		$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_UNCT;*/
-		
-		$filtro->tpVigencia = dominioTpVigencia::$CD_OPCAO_VIGENTES; 
-		$filtro->inProduzindoEfeitos = constantes::$CD_SIM;
-		//traz somente os contratos a vencer nos dias abaixo
-		$filtro->qtdDiasParaVencimento = 45;
-		//traz somente os contratos indicados como "serao prorrogados" ou nao indicados
-		$filtro->inSeraProrrogado = array(constantes::$CD_OPCAO_CONSULTA_DIFERENTE, constantes::$CD_NAO);
-
-		$nmTabelaContratoInfo = voContratoInfo::getNmTabela();
-		$filtro->cdAtrOrdenacao = "$nmTabelaContratoInfo." . voContratoInfo::$nmAtrAnoContrato 
-				. "," . "$nmTabelaContratoInfo." . voContratoInfo::$nmAtrTipoContrato 
-				. "," . "$nmTabelaContratoInfo." . voContratoInfo::$nmAtrCdContrato;
-
 		$colecao = $dbprocesso->consultarTelaConsultaConsolidacao ($filtro, true);
 
 		/*$array =array(
-				constantes::$CD_COLUNA_CHAVE => 'RESPONSÁVEL',
-				constantes::$CD_COLUNA_VALOR => voDemanda::$nmAtrCdPessoaRespUNCT,
-		);
+		 constantes::$CD_COLUNA_CHAVE => 'RESPONSÁVEL',
+		 constantes::$CD_COLUNA_VALOR => voDemanda::$nmAtrCdPessoaRespUNCT,
+		 );
 		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);
 
 		$array =array(
-				constantes::$CD_COLUNA_CHAVE => 'PRAZO',
-				constantes::$CD_COLUNA_VALOR => filtroConsultarDemandaGestao::$NmColNuTempoUltimaTram,
-				constantes::$CD_COLUNA_TP_DADO =>  constantes::$TAMANHO_CODIGOS_SAFI,
-				constantes::$CD_COLUNA_VL_REFERENCIA =>  15,
-				constantes::$CD_COLUNA_TP_VALIDACAO =>  constantes::$CD_ALERTA_TP_VALIDACAO_MAIORQUE,
+		constantes::$CD_COLUNA_CHAVE => 'PRAZO',
+		constantes::$CD_COLUNA_VALOR => filtroConsultarDemandaGestao::$NmColNuTempoUltimaTram,
+		constantes::$CD_COLUNA_TP_DADO =>  constantes::$TAMANHO_CODIGOS_SAFI,
+		constantes::$CD_COLUNA_VL_REFERENCIA =>  15,
+		constantes::$CD_COLUNA_TP_VALIDACAO =>  constantes::$CD_ALERTA_TP_VALIDACAO_MAIORQUE,
 		);
 		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);*/
 

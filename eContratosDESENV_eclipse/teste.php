@@ -12,7 +12,7 @@ setCabecalho($titulo);
 
 echoo("___________________________");
 
-$vocontrato = new voContratoInfo();
+/*$vocontrato = new voContratoInfo();
 $vomsgregistro = new voMensageriaRegistro();
 
 $registro = array(
@@ -29,7 +29,11 @@ try {
 	$dbMensageriaRegistro->incluirComEnvioEmail ( $registro );
 } catch ( Exception $e ) {
 	echoo ( $e->getMessage () );
-}
+}*/
+
+$vo = new voMensageria();
+
+//echo criarAlertasEmailGestorColecaoContratos();
 
 
 /*$ano = 2018;

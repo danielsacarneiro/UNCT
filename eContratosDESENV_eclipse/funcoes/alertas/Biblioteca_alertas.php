@@ -526,4 +526,101 @@ function enviarEmailDiretoria($enviarEmail){
 	//enviarEmail($assuntoParam, $mensagemParam, $enviarEmail=true, $listaEmail=null,$remetente = null) {
 }
 
+function getFiltroContratosAVencer($inTemDemandaEmTratamento = 'N'){
+	$filtro = new filtroConsultarContratoConsolidacao ( false );
+	$vo = new voContratoInfo();
+	$dbprocesso = new dbContratoInfo();
+
+	$filtro->voPrincipal = $vo;
+	$filtro->isValidarConsulta = false;
+	$filtro->setaFiltroConsultaSemLimiteRegistro ();
+
+	$filtro->tpVigencia = dominioTpVigencia::$CD_OPCAO_VIGENTES;
+	$filtro->inProduzindoEfeitos = constantes::$CD_SIM;
+	//traz somente os contratos a vencer nos dias abaixo
+	$filtro->qtdDiasParaVencimento = 45;
+	//traz somente os contratos indicados como "serao prorrogados"
+	$filtro->inSeraProrrogado = constantes::$CD_SIM;
+	//$filtro->inSeraProrrogado = array(constantes::$CD_OPCAO_CONSULTA_DIFERENTE, constantes::$CD_NAO);
+	if($inTemDemandaEmTratamento != null){
+		//o nome dos atributos abaixo estao definidos no filtro da consulta getColecaoCaracteristicas
+		$nmFiltroInTemDemanda = getIdComponenteHtmlCheckSimNao(voDemanda::$nmAtrAno, $inTemDemandaEmTratamento);
+		$inCaracteristica = array($nmFiltroInTemDemanda);
+		$filtro->inCaracteristicas = $inCaracteristica;
+	}
+
+	$nmTabelaContratoInfo = voContratoInfo::getNmTabela();
+	$filtro->cdAtrOrdenacao = "$nmTabelaContratoInfo." . voContratoInfo::$nmAtrAnoContrato
+	. "," . "$nmTabelaContratoInfo." . voContratoInfo::$nmAtrTipoContrato
+	. "," . "$nmTabelaContratoInfo." . voContratoInfo::$nmAtrCdContrato;
+
+	return $filtro;
+}
+
+function existeAlertaAtivoContrato($vocontratoinfo){
+	//$vocontratoinfo = new voContratoInfo();	
+	$db = new dbMensageria();
+	$filtro = new filtroManterMensageria();
+	$filtro->anoContrato = $vocontratoinfo->anoContrato;
+	$filtro->cdContrato = $vocontratoinfo->cdContrato;
+	$filtro->tipoContrato = $vocontratoinfo->tipo;
+	$filtro->inHabilitado = constantes::$CD_SIM;
+	$filtro->inVerificarPeriodoVigente = constantes::$CD_SIM;
+	
+	$colecao = $db->consultarTelaConsulta(new voMensageria(), $filtro);
+	
+	return !isColecaoVazia($colecao);
+}
+/**
+ * cria os alertas (se nao existirem) a partir de uma colecao de contratos
+ */
+function criarAlertasEmailGestorColecaoContratos(){
+	
+	$log = "Início de verificação dos contratos a vencer que gerarão alertas.";
+	$filtro = getFiltroContratosAVencer();
+	$dbprocesso = new dbContratoInfo();
+	$colecao = $dbprocesso->consultarTelaConsultaConsolidacao ($filtro, true);
+	
+	if(!isColecaoVazia($colecao)){
+		$colecao = array($colecao[0]);	
+		foreach ($colecao as $registrobanco){
+			$voAlerta = new voMensageria();
+			$vocontratoinfo = new voContratoInfo();
+			$vocontratoinfo->getDadosBanco($registrobanco);
+			
+			$voAlerta->vocontratoinfo = $vocontratoinfo;
+			$voAlerta->dtInicio = getDataHoje();
+			$voAlerta->dtFim = getData($registrobanco[filtroConsultarContratoConsolidacao::$NmColDtFimVigencia]);
+			//echoo ($voAlerta->dtFim);
+			
+			$voAlerta->inHabilitado = constantes::$CD_SIM;
+			$voAlerta->numDiasFrequencia = voMensageria::$NUM_DIAS_FREQUENCIA_MAIL_PADRAO;
+			$voAlerta->obs = "Alerta incluído automaticamente";
+			$voAlerta->cdUsuarioInclusao = $voAlerta->cdUsuarioUltAlteracao = constantes::$CD_USUARIO_BATCH;
+			
+			$db = new dbMensageria();
+			$msgIdContrato = $vocontratoinfo->toString();
+			try{
+				if(!existeAlertaAtivoContrato($vocontratoinfo)){
+					$db->incluir($voAlerta);
+					$log .= "<br>Alerta incluído com sucesso:.";
+				}else{
+					$log .= "<br>Já existe alerta vigente ao contrato:.";
+				}			
+				
+				$log .= " $msgIdContrato.";
+				
+			}catch(excecaoGenerica $ex){
+				$log .= "<br>Erro ao incluir alerta ao contrato:" 
+						. "$msgIdContrato |" . $ex->getMessage();
+			}
+			
+		}
+	}else{
+		$log .= "<br>Não há alertas a serem criados.";
+	}	
+	
+	return $log;	
+}
+
 ?>

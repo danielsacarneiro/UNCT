@@ -52,8 +52,15 @@ function getSQLCOALESCE($arrayAtributos, $nmAtributoRetornoClausulaAS = null) {
 	}
 	return $retorno;
 }
-function getSQLCASE($atributo, $valorCondicao, $valorTHEN, $valorELSE) {
-	return "CASE $atributo WHEN $valorCondicao THEN $valorTHEN ELSE $valorELSE END ";
+function getSQLCASE($atributo, $valorCondicao, $valorTHEN, $valorELSE, $nmAtributoAS=null) {
+	if($nmAtributoAS != null){
+		$nmAtributoAS = " AS $nmAtributoAS ";		
+	}
+	return "CASE $atributo WHEN $valorCondicao THEN $valorTHEN ELSE $valorELSE END $nmAtributoAS";
+}
+//sintaxe do CASE para comparar atributo nulo eh um pouco diferente
+function getSQLCASEIsNULL($atributo, $valorSeNulo, $valorSeNaoNulo, $nmAtributoAS=null) {
+	return getSQLCASE("", " $atributo IS NULL ", $valorSeNulo, $valorSeNaoNulo, $nmAtributoAS);
 }
 function getDataSQL($dataWeb) {
 	$retorno = "";
@@ -426,12 +433,13 @@ function getDataSQLDiferencaDias($data1, $data2) {
 
 /**
  * funcao que serve para indicar o atributo que sera comparado e se sera operacao de igual ou de diferenca
+ * via de regra, recebera um array bidirecional: posicao 0 eh a operacao, posicao 1, os dados
  * @param unknown $param
  * @param unknown $nmTabelaAtributo
  * @param unknown $nmTabela
  * @return string
  */
- function getSQLFiltroAtributoArrayComparacao($param, $nmAtributo, $nmTabelaParam=null){
+ function getSQLFiltroAtributoArrayComparacao($param, $nmAtributo, $nmTabelaParam=null, $isString = true){
 	$operador = " = ";
 	$operadorIN = " IN ";
 	$dados = $param;
@@ -451,7 +459,7 @@ function getDataSQLDiferencaDias($data1, $data2) {
 		
 	$comparar = " $operador '$dados' ";
 	if(is_array($dados)){
-		$comparar = " $operadorIN (" . getSQLStringFormatadaColecaoIN($dados, true) . ") ";
+		$comparar = " $operadorIN (" . getSQLStringFormatadaColecaoIN($dados, $isString) . ") ";
 	}
 	
 	if($nmTabelaParam != null){
