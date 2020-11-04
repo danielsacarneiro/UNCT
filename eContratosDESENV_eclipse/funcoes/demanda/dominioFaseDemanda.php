@@ -6,12 +6,17 @@ class dominioFaseDemanda extends dominio {
 	static $CD_VISTO_JURIDICO = "01";
 	static $CD_REVISAO_UNCT = "02";
 	static $CD_FORNECEDOR_SEM_PENDENCIAS = "03";
-	static $CD_PUBLICADO = "04";
-	static $CD_ASSINADO = "05";
-	
-	static $DS_VISTO_JURIDICO = "Visado ATJA";
-	static $DS_REVISAO_UNCT = "Revisado UNCT";
+	static $CD_MONITORADA_UNCT = "04";
+		
+	static $DS_VISTO_JURIDICO = "Visado.ATJA";
+	static $DS_REVISAO_UNCT = "Revisado.UNCT";
 	static $DS_FORNECEDOR_SEM_PENDENCIAS = "Assinado(Fornecedor)";
+	static $DS_MONITORADA_UNCT = "Monitorada.UNCT";
+	
+	
+	//usados somente pra consultas
+	static $CD_PUBLICADO = "PUBLICADO";
+	static $CD_ASSINADO = "ASSINADO";
 	static $DS_PUBLICADO = "Publicado";
 	static $DS_ASSINADO = "Assinado";
 	
@@ -31,6 +36,7 @@ class dominioFaseDemanda extends dominio {
 				static::$CD_REVISAO_UNCT=> self::$DS_REVISAO_UNCT,
 				static::$CD_VISTO_JURIDICO => self::$DS_VISTO_JURIDICO,
 				static::$CD_FORNECEDOR_SEM_PENDENCIAS => self::$DS_FORNECEDOR_SEM_PENDENCIAS,
+				//static::$CD_MONITORADA_UNCT => self::$DS_MONITORADA_UNCT,
 		);
 				
 		return $retorno;

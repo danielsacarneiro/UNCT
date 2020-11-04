@@ -31,13 +31,13 @@ function getContratoDetalhamentoAvulso($voContrato, $apenasComplemento=false){
 		$contrato = getDsEspecie($voContrato);		
 		
 		if(!$apenasComplemento){
-			$contrato = formatarCodigoAnoComplemento ( $voContrato->cdContrato, $voContrato->anoContrato, dominioTipoContrato::getDescricaoStatic($voContrato->tipo ) ) . $contrato;
+			$contrato = formatarCodigoAnoComplemento ( $voContrato->cdContrato, $voContrato->anoContrato, dominioTipoContrato::getDescricaoStatic($voContrato->tipo ) ) . "|$contrato";
 		}		
 	}	
 	return $contrato;	
 }
 
-function getContratoDetalhamento($voContrato, $colecao,  $detalharContratoInfo = false, $isDetalharChaveCompleta=false) {
+function getContratoDetalhamento($voContrato, $colecao=null,  $detalharContratoInfo = false, $isDetalharChaveCompleta=false) {
 	$arrayParametro[0] = $voContrato;
 	$arrayParametro[1] = $colecao;
 	$arrayParametro[2] = $detalharContratoInfo;
@@ -1363,5 +1363,37 @@ function getLinkExportarExcelTelaContrato($colecao){
 	return getTextoLink("exportarExcel", "exportarExcel.php", "", true);
 }
 
+function getContratoDemandaPorSEI($SEI){
+	$retorno = "";
+	if($SEI != null){
+		$SEI = voDemandaTramitacao::getNumeroPRTSemMascara($SEI);
+		$filtro = new filtroManterDemanda(false);
+		$filtro->inDesativado = constantes::$CD_NAO;
+		$filtro->vodemanda->prt = $SEI;
+		$filtro->vocontrato->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
+		$db = new dbDemanda();
+		$colecao = $db->consultarTelaConsulta(new voDemanda(), $filtro);
+		if(!isColecaoVazia($colecao)){
+			if(sizeof($colecao) == 1){
+				$registrobanco = $colecao[0];
+				$vocontrato = new vocontrato();
+				$vocontrato->getDadosBanco($registrobanco);
+				
+				//$retorno = getContratoDetalhamento($vocontrato);
+				$retorno = getTextoHTMLDestacado(getContratoDetalhamentoAvulso($vocontrato), "blue", false);				
+				
+			}else{
+				$retorno = "Há mais de um contrato demanda. Verifique e tente novamente.";
+			}
+			
+		}else{
+			$retorno = "Contrato demanda inexistente.";
+		}		
+
+	}else{
+		$retorno = "Número de SEI vazio.";
+	}
+	return $retorno;
+}
 
 ?>

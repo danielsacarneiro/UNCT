@@ -409,3 +409,24 @@ function getValorGlobalDoMensal(pCampoValorMensal, pCampoValorGlobal, pQtCasasDe
 	var vlGlobal = eval(pNumMesesContrato*vlMensal);
 	setValorCampoMoedaComSeparadorMilhar(pCampoValorGlobal, vlGlobal, pQtCasasDecimais);
 }
+
+/**
+ * recupera o contrato de um parametro SEI
+ * @returns
+ */
+function getContratoSubstituto(pIDCampo, pNmCampoDiv){
+	//alert(inDiasUteis);
+	var SEI = document.getElementById(pIDCampo).value;
+	
+	//alert(tipo);	
+	if(SEI != "" && SEI.length > 18){
+		chave = SEI;
+				
+		link = "campoDadosContratoPorSEI.php";
+		//biblio ajax
+		getDadosPorChaveGenerica(chave, link, pNmCampoDiv);
+	}else{
+		//limpa o campodiv da contratada
+		limpaCampoDiv(pNmCampoDiv);		
+	}	
+}

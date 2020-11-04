@@ -53,6 +53,7 @@ try{
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_ajax.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_pessoa.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_contrato.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_demanda.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>tooltip.js"></SCRIPT>
 
 <SCRIPT language="JavaScript" type="text/javascript">
@@ -122,11 +123,18 @@ function transferirDadosPessoa(cd, nm) {
 	document.getElementsByName("<?=vopessoa::$nmAtrNome?>").item(0).value = nm;*/
 }
 
+function iniciar(){
+	var pNmCampoDiv = "<?=voContratoInfo::$NM_DIV_CONTRATO_SUBS?>";
+	var pIDCampo = "<?=voContratoInfo::$nmAtrSEIContratoSubstituto?>";	
+	
+	getContratoSubstituto(pIDCampo, pNmCampoDiv);
+	formataFormTpGarantia('<?=voContratoInfo::$nmAtrInTemGarantia?>', '<?=voContratoInfo::$nmAtrTpGarantia?>');
+}
 
 </SCRIPT>
 <?=setTituloPagina($vo->getTituloJSP())?>
 </HEAD>
-<BODY class="paginadados" onload="formataFormTpGarantia('<?=voContratoInfo::$nmAtrInTemGarantia?>', '<?=voContratoInfo::$nmAtrTpGarantia?>');">
+<BODY class="paginadados" onload="iniciar();">
 	  
 <FORM name="frm_principal" method="post" action="confirmar.php" onSubmit="return confirmar();">
 
@@ -232,8 +240,23 @@ function transferirDadosPessoa(cd, nm) {
 	        ?>
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Prorrogação:</TH>
-	            <TD class="campoformulario" colspan="3"><?php echo $comboProrrogacao->getHtmlCombo(voContratoInfo::$nmAtrInPrazoProrrogacao,voContratoInfo::$nmAtrInPrazoProrrogacao, $vo->inPrazoProrrogacao, true, "campoobrigatorio", false," onChange='formataFormEscopo();' ");?>
-	            </TD>
+	            <TD class="campoformulario" width="1%"><?php echo $comboProrrogacao->getHtmlCombo(voContratoInfo::$nmAtrInPrazoProrrogacao,voContratoInfo::$nmAtrInPrazoProrrogacao, $vo->inPrazoProrrogacao, true, "campoobrigatorio", false," onChange='formataFormEscopo();' ");?>
+	            <TH class="campoformulario" nowrap width="1%">
+	            <?=getTextoHTMLTagMouseOver("SEI.Contrato.Substituto", "SEI da demanda do contrato MATER substituto da presente contratação.")?>:
+	            </TH>
+	            <TD class="campoformulario">
+			            <INPUT type="text" onkeyup="formatarCampoPRT(this, event);" id="<?=voContratoInfo::$nmAtrSEIContratoSubstituto?>" 
+			            		name="<?=voContratoInfo::$nmAtrSEIContratoSubstituto?>" 
+			            		value="<?=voDemandaTramitacao::getNumeroPRTComMascara($vo->SEIContratoSubstituto, false)?>"  
+			            		class="camponaoobrigatorio" size="30" onBlur='getContratoSubstituto()'>       
+ 							<?php	            
+				            $nmCampos = array(voContratoInfo::$nmAtrSEIContratoSubstituto,
+				            );
+				            echo getBorracha($nmCampos, "getContratoSubstituto();");
+				            ?>
+						<div id="<?=voContratoInfo::$NM_DIV_CONTRATO_SUBS?>">				  
+				        </div>	
+				</TD>
 	        </TR>
 	        <?php	        
 	        include_once(caminho_funcoes. "contrato/dominioTpGarantiaContrato.php");
@@ -247,11 +270,16 @@ function transferirDadosPessoa(cd, nm) {
 	            <TH class="campoformulario" nowrap width="1%">Características:</TH>
 	            <TD class="campoformulario" colspan=3>
 	            <abbr title="Sem valor referencial mensal?">É por escopo?:</abbr>
-	            <?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInEscopo,voContratoInfo::$nmAtrInEscopo, $vo->inEscopo, true, "camponaoobrigatorio", true, " onChange='formataFormEscopo();' required ");?>
+	            <?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInEscopo,voContratoInfo::$nmAtrInEscopo, $vo->inEscopo, true, "camponaoobrigatorio", false, " onChange='formataFormEscopo();' required ");?>
 	            | É credenciamento?:
-	            <?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInCredenciamento,voContratoInfo::$nmAtrInCredenciamento, $vo->inCredenciamento, true, "camponaoobrigatorio", true, " required ");?>
+	            <?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInCredenciamento,voContratoInfo::$nmAtrInCredenciamento, $vo->inCredenciamento, true, "camponaoobrigatorio", false, " required ");?>
 	            | Será prorrogado?:
-	            <?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInSeraProrrogado,voContratoInfo::$nmAtrInSeraProrrogado, $vo->inSeraProrrogado, true, "camponaoobrigatorio", true, " required ");?>
+	            <?php 
+	            $seraProrrogTemp = $vo->inSeraProrrogado;
+	            if($seraProrrogTemp == null){
+	            	$seraProrrogTemp = constantes::$CD_SIM;
+	            }
+	            echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInSeraProrrogado,voContratoInfo::$nmAtrInSeraProrrogado, $seraProrrogTemp, true, "camponaoobrigatorio", false, " required ");?>
 	        	</TD>
 	        </TR>
 			<TR>

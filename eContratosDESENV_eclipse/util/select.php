@@ -95,7 +95,8 @@ class select extends multiplosConstrutores {
 		$comOpcaoNenhum = $array[4];
 		$class = $array[5];
 		$isTrazerValuenoOption = $array[6];
-		$TagEJavaScript = $array[7];		
+		$TagEJavaScript = $array[7];
+		$tamMaximoDescricao = $array[8];
 		
 		$html = "";
 		$html = "<select id='$idSelect' name='$nmSelect' class='$class' $TagEJavaScript>\n";
@@ -119,6 +120,10 @@ class select extends multiplosConstrutores {
 		for($i = 0; $i < $totalResultado; $i ++) {
 			$cd = $chaves [$i];
 			$ds = $this->colecao [$cd];
+			
+			if($tamMaximoDescricao != null){
+				$ds = truncarStringHTML($ds, $tamMaximoDescricao, true,false);
+			}
 			
 			$html .= $this->getOpcaoValue ( $cd, $ds, $opcaoSelecionada, $isTrazerValuenoOption );
 		}

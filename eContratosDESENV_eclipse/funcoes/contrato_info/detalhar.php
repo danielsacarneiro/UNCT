@@ -47,7 +47,7 @@ setCabecalho($titulo);
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_ajax.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_oficio.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_pessoa.js"></SCRIPT>
-
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_contrato.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript">
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
 function isFormularioValido() {
@@ -67,10 +67,16 @@ function confirmar() {
 	return confirm("Confirmar Alteracoes?");    
 }
 
+function iniciar(){
+	var pNmCampoDiv = "<?=voContratoInfo::$NM_DIV_CONTRATO_SUBS?>";
+	var pIDCampo = "<?=voContratoInfo::$nmAtrSEIContratoSubstituto?>";		
+	getContratoSubstituto(pIDCampo, pNmCampoDiv);
+}
+
 </SCRIPT>
 <?=setTituloPagina($vo->getTituloJSP())?>
 </HEAD>
-<BODY class="paginadados" onload="">
+<BODY class="paginadados" onload="iniciar();">
 	  
 <FORM name="frm_principal" method="post" action="confirmar.php" onSubmit="return confirmar();">
 
@@ -177,8 +183,21 @@ function confirmar() {
 	        </TR>
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Prorrogação:</TH>
-	            <TD class="campoformulario" colspan="3"><?php echo dominioProrrogacaoContrato::getHtmlDetalhamento(voContratoInfo::$nmAtrInPrazoProrrogacao,voContratoInfo::$nmAtrInPrazoProrrogacao, $vo->inPrazoProrrogacao);?>
+	            <TD class="campoformulario" width="1%">
+	            <?php echo dominioProrrogacaoContrato::getHtmlDetalhamento(voContratoInfo::$nmAtrInPrazoProrrogacao,voContratoInfo::$nmAtrInPrazoProrrogacao, $vo->inPrazoProrrogacao);?>
 	            </TD>
+	            <TH class="campoformulario" width="1%">
+	            <?=getTextoHTMLTagMouseOver("SEI.Contrato.Substituto", voContratoInfo::$TEXTO_TAG_CONTRATO_SUBST)?>:
+	            </TH>
+	            <TD class="campoformulario">
+	            <?php
+	            echo getDetalhamentoHTML(voContratoInfo::$nmAtrSEIContratoSubstituto
+	            		, voContratoInfo::$nmAtrSEIContratoSubstituto
+	            		, voDemandaTramitacao::getNumeroPRTComMascara($vo->SEIContratoSubstituto, false));
+	            ?>
+						<div id="<?=voContratoInfo::$NM_DIV_CONTRATO_SUBS?>">				  
+				        </div>	
+				</TD>	            
 	        </TR>
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Características:</TH>

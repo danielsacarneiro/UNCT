@@ -5,7 +5,9 @@ include_once (caminho_util."dominioSetor.php");
 
 Class voContratoInfo extends voentidade{
 	
+	static $TEXTO_TAG_CONTRATO_SUBST = "SEI da demanda do contrato MATER substituto da presente contratação.";
 	static $IDREQNmPessoaGestor = "IDREQNmPessoaGestor";
+	static $NM_DIV_CONTRATO_SUBS = "NM_DIV_CONTRATO_SUBS";
 	
 	static $nmAtrCdContrato  = "ct_numero";
 	static $nmAtrAnoContrato  = "ct_exercicio";
@@ -32,6 +34,8 @@ Class voContratoInfo extends voentidade{
 	static $nmAtrInEstudoTecnicoSAD =  	"ctinf_in_sad_estudotec";
 	
 	static $nmAtrNumPrazoMater = "ctinf_numprazoMATER";
+	
+	static $nmAtrSEIContratoSubstituto = "ctinf_SEIcontratosubstituto";
 		
 	var $cdContrato = "";
 	var $anoContrato  = "";
@@ -52,6 +56,7 @@ Class voContratoInfo extends voentidade{
 	var $inEscopo = "";
 	var $inPrazoProrrogacao = "";
 	var $inEstudoTecnicoSAD = "";
+	var $SEIContratoSubstituto = "";
 	
 	var $dbprocesso = null;
 	// ...............................................................
@@ -124,6 +129,7 @@ Class voContratoInfo extends voentidade{
 				self::$nmAtrInEscopo,
 				self::$nmAtrInPrazoProrrogacao,
 				self::$nmAtrInEstudoTecnicoSAD,
+				self::$nmAtrSEIContratoSubstituto,
 		);
 
 		return $retorno;
@@ -191,6 +197,7 @@ Class voContratoInfo extends voentidade{
 		$this->inEscopo = $registrobanco[self::$nmAtrInEscopo];
 		$this->inPrazoProrrogacao = $registrobanco[self::$nmAtrInPrazoProrrogacao];
 		$this->inEstudoTecnicoSAD = $registrobanco[self::$nmAtrInEstudoTecnicoSAD];
+		$this->SEIContratoSubstituto = $registrobanco[self::$nmAtrSEIContratoSubstituto];
 	}
 
 	function getDadosFormulario(){
@@ -213,6 +220,7 @@ Class voContratoInfo extends voentidade{
 		$this->inEscopo = $_POST[self::$nmAtrInEscopo];
 		$this->inPrazoProrrogacao = $_POST[self::$nmAtrInPrazoProrrogacao];
 		$this->inEstudoTecnicoSAD = $_POST[self::$nmAtrInEstudoTecnicoSAD];
+		$this->SEIContratoSubstituto = $_POST[self::$nmAtrSEIContratoSubstituto];
 		//completa com os dados da entidade
 		$this->getDadosFormularioEntidade();
 	}

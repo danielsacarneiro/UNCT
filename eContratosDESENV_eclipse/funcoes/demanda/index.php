@@ -422,7 +422,20 @@ function detalharDemandaGestao(){
 	            <TH class="campoformulario" nowrap width="1%">Resp.:</TH>
 				<TD class="campoformulario" width="1%" colspan=3>
 				<?php 
-				echo "Tram.:&nbsp;".$comboUsuTramitacao->getHtmlSelect(filtroManterDemanda::$NmAtrCdUsuarioTramitacao,filtroManterDemanda::$NmAtrCdUsuarioTramitacao, $filtro->cdUsuarioTramitacao, true, "camponaoobrigatorio", false). "&nbsp";
+				//echo "Tram.:&nbsp;".$comboUsuTramitacao->getHtmlSelect(filtroManterDemanda::$NmAtrCdUsuarioTramitacao,filtroManterDemanda::$NmAtrCdUsuarioTramitacao, $filtro->cdUsuarioTramitacao, true, "camponaoobrigatorio", false). "&nbsp";
+				$arrayParamUsuarioTram = array(
+						filtroManterDemanda::$NmAtrCdUsuarioTramitacao,
+						filtroManterDemanda::$NmAtrCdUsuarioTramitacao,
+						$filtro->cdUsuarioTramitacao,
+						true,
+						true,
+						"camponaoobrigatorio",
+						false,
+						"",
+						20
+				);				
+				echo "Tram.:&nbsp;".$comboUsuTramitacao->getHtmlComboArray($arrayParamUsuarioTram);
+				
 				
 				$arrayParamUsuario = array(
 						voDemanda::$nmAtrCdPessoaRespUNCT,
@@ -433,6 +446,7 @@ function detalharDemandaGestao(){
 						"camponaoobrigatorio",
 						false,
 						"",
+						20
 				);								
 				echo "UNCT:&nbsp;".getComboUsuarioPorSetor($arrayParamUsuario, dominioSetor::$CD_SETOR_UNCT) . "&nbsp";				
 				
@@ -445,6 +459,7 @@ function detalharDemandaGestao(){
 						"camponaoobrigatorio",
 						false,
 						"",
+						20
 				);
 				
 				echo "ATJA.:&nbsp;".getComboPessoaRespATJAConsulta($arrayATJAResp);
@@ -452,20 +467,8 @@ function detalharDemandaGestao(){
 				</TD>			
 			</TR>
             <TR>            
-	            <TH class="campoformulario" nowrap width="1%">Tempo.Vida.Mínimo:</TH>
-				<TD class="campoformulario" width="1%">
-				Última Tramitação: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=filtroManterDemanda::$ID_REQ_NuTempoVidaMinimoUltimaTram?>" name="<?=filtroManterDemanda::$ID_REQ_NuTempoVidaMinimoUltimaTram?>"  value="<?php echo(complementarCharAEsquerda($filtro->nuTempoVidaMinimoUltimaTram, "0", TAMANHO_CODIGOS_SAFI));?>"  class="camponaoobrigatorio" size="3" maxlength="3"> (dias)|				
-				Total: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=filtroManterDemanda::$ID_REQ_NuTempoVidaMinimo?>" name="<?=filtroManterDemanda::$ID_REQ_NuTempoVidaMinimo?>"  value="<?php echo(complementarCharAEsquerda($filtro->nuTempoVidaMinimo, "0", TAMANHO_CODIGOS_SAFI));?>"  class="camponaoobrigatorio" size="3" maxlength="3"> (dias)
-				<?php 
-				$nmCamposDoc = array(
-						filtroManterDemanda::$ID_REQ_NuTempoVidaMinimo,
-						filtroManterDemanda::$ID_REQ_NuTempoVidaMinimoUltimaTram,
-				);
-				echo getBorracha($nmCamposDoc, "");
-				?>
-				</TD>
-				<TH class="campoformulario" nowrap width="1%">Fase:</TH>
-				<TD class="campoformulario"> 
+	            <TH class="campoformulario" nowrap width="1%">Fase:</TH>
+				<TD class="campoformulario" colspan=3> 
 				<?php				
 				$pArrayFase = array(
 						$nmCampoFaseHtml,
@@ -485,7 +488,21 @@ function detalharDemandaGestao(){
 				echo dominioFaseDemanda::getHtmlChecksBoxArray($pArrayFase);
 				?>
 				</TD>												
-			</TR>			
+			</TR>
+            <TR>            
+	            <TH class="campoformulario" nowrap width="1%">Tempo.Vida.Mínimo:</TH>
+				<TD class="campoformulario" colspan=3>
+				Última Tramitação: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=filtroManterDemanda::$ID_REQ_NuTempoVidaMinimoUltimaTram?>" name="<?=filtroManterDemanda::$ID_REQ_NuTempoVidaMinimoUltimaTram?>"  value="<?php echo(complementarCharAEsquerda($filtro->nuTempoVidaMinimoUltimaTram, "0", TAMANHO_CODIGOS_SAFI));?>"  class="camponaoobrigatorio" size="3" maxlength="3"> (dias)|				
+				Total: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=filtroManterDemanda::$ID_REQ_NuTempoVidaMinimo?>" name="<?=filtroManterDemanda::$ID_REQ_NuTempoVidaMinimo?>"  value="<?php echo(complementarCharAEsquerda($filtro->nuTempoVidaMinimo, "0", TAMANHO_CODIGOS_SAFI));?>"  class="camponaoobrigatorio" size="3" maxlength="3"> (dias)
+				<?php 
+				$nmCamposDoc = array(
+						filtroManterDemanda::$ID_REQ_NuTempoVidaMinimo,
+						filtroManterDemanda::$ID_REQ_NuTempoVidaMinimoUltimaTram,
+				);
+				echo getBorracha($nmCamposDoc, "");
+				?>
+				</TD>											
+			</TR>							
        <?php
        echo getComponenteConsultaFiltro($vo->temTabHistorico, $filtro);
         ?>
