@@ -123,11 +123,16 @@ function transferirDadosPessoa(cd, nm) {
 	document.getElementsByName("<?=vopessoa::$nmAtrNome?>").item(0).value = nm;*/
 }
 
-function iniciar(){
+function getContratoSubstitutoLocal(){
 	var pNmCampoDiv = "<?=voContratoInfo::$NM_DIV_CONTRATO_SUBS?>";
 	var pIDCampo = "<?=voContratoInfo::$nmAtrSEIContratoSubstituto?>";	
 	
 	getContratoSubstituto(pIDCampo, pNmCampoDiv);
+	
+}
+
+function iniciar(){
+	getContratoSubstitutoLocal();
 	formataFormTpGarantia('<?=voContratoInfo::$nmAtrInTemGarantia?>', '<?=voContratoInfo::$nmAtrTpGarantia?>');
 }
 
@@ -248,7 +253,7 @@ function iniciar(){
 			            <INPUT type="text" onkeyup="formatarCampoPRT(this, event);" id="<?=voContratoInfo::$nmAtrSEIContratoSubstituto?>" 
 			            		name="<?=voContratoInfo::$nmAtrSEIContratoSubstituto?>" 
 			            		value="<?=voDemandaTramitacao::getNumeroPRTComMascara($vo->SEIContratoSubstituto, false)?>"  
-			            		class="camponaoobrigatorio" size="30" onBlur='getContratoSubstituto()'>       
+			            		class="camponaoobrigatorio" size="30" onBlur='getContratoSubstitutoLocal()'>       
  							<?php	            
 				            $nmCampos = array(voContratoInfo::$nmAtrSEIContratoSubstituto,
 				            );

@@ -32,7 +32,7 @@ function getContratoDetalhamentoAvulso($voContrato, $apenasComplemento=false){
 		
 		if(!$apenasComplemento){
 			$contrato = formatarCodigoAnoComplemento ( $voContrato->cdContrato, $voContrato->anoContrato, dominioTipoContrato::getDescricaoStatic($voContrato->tipo ) ) . "|$contrato";
-		}		
+		}
 	}	
 	return $contrato;	
 }
@@ -1378,9 +1378,14 @@ function getContratoDemandaPorSEI($SEI){
 				$registrobanco = $colecao[0];
 				$vocontrato = new vocontrato();
 				$vocontrato->getDadosBanco($registrobanco);
-				
+				$nmEmpresa = $registrobanco[vopessoa::$nmAtrNome];
+				$texto = getContratoDetalhamentoAvulso($vocontrato);
+				if($nmEmpresa != null){					
+					$texto = $texto . "-$nmEmpresa";
+				}			
+				$texto = truncarStringHTML($texto, 50, true);
 				//$retorno = getContratoDetalhamento($vocontrato);
-				$retorno = getTextoHTMLDestacado(getContratoDetalhamentoAvulso($vocontrato), "blue", false);				
+				$retorno = getTextoHTMLDestacado($texto, "blue", false);				
 				
 			}else{
 				$retorno = "Há mais de um contrato demanda. Verifique e tente novamente.";

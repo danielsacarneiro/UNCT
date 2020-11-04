@@ -418,7 +418,7 @@ function getContratoSubstituto(pIDCampo, pNmCampoDiv){
 	//alert(inDiasUteis);
 	var SEI = document.getElementById(pIDCampo).value;
 	
-	//alert(tipo);	
+	//alert(SEI);	
 	if(SEI != "" && SEI.length > 18){
 		chave = SEI;
 				
