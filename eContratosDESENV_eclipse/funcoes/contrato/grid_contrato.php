@@ -134,6 +134,7 @@
                        <TD>
                         <TABLE class="barraacoesaux" cellpadding="0" cellspacing="0">
 	                   	<TR>
+	                   	    <!-- <TD class="botaofuncao"><?=getBotao("bttEstatistica", "Estatísticas", null, false, "onClick='javascript:estatisticas();' accesskey='e'")?></TD> -->
 	                   	    <TD class="botaofuncao"><?=getBotao("bttMovimentacao", "Movimentações", null, false, "onClick='javascript:movimentacoes();' accesskey='m'")?></TD>
 	                   		<?php
 	                   		$arrayBotoesARemover = array(constantes::$CD_FUNCAO_EXCLUIR,

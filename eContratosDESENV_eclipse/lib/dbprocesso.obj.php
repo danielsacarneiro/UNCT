@@ -1014,4 +1014,10 @@ class dbprocesso {
 		$retorno = $printarPAI || $printarFilho;
 		return $retorno;
 	}
+	
+	static function printarSQL($query, $nmFiltro=null){
+		if(static::isPrintarSQL()){
+			echo "<br> $nmFiltro $query<br>";
+		}		
+	}
 }

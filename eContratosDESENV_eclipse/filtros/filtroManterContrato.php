@@ -13,6 +13,9 @@ class filtroManterContrato extends filtroManter {
 	public static $nmAtrTpDemanda = "nmAtrTpDemanda";
 	public static $NmAtrInOR_AND = "NmAtrInOR_AND";
 	
+	public static $ID_REQ_DtAssinaturaInicial = "ID_REQ_DtAssinaturaInicial";
+	public static $ID_REQ_DtAssinaturaFinal = "ID_REQ_DtAssinaturaFinal";
+	
 	static $NmAtrVlGlobalInicial = "NmAtrVlGlobalInicial";
 	static $NmAtrVlGlobalFinal = "NmAtrVlGlobalFinal";
 	
@@ -37,6 +40,9 @@ class filtroManterContrato extends filtroManter {
 	var $objeto;
 	var $dtVigenciaInicial;
 	var $dtVigenciaFinal;
+	
+	var $dtAssinaturaInicial;
+	var $dtAssinaturaFinal;
 	
 	var $dtInicio1;
 	var $dtInicio2;
@@ -102,6 +108,8 @@ class filtroManterContrato extends filtroManter {
 		$this->objeto = @$_POST [vocontrato::$nmAtrObjetoContrato];
 		$this->dtVigenciaInicial = @$_POST [vocontrato::$nmAtrDtVigenciaInicialContrato];
 		$this->dtVigenciaFinal = @$_POST [vocontrato::$nmAtrDtVigenciaFinalContrato];
+		$this->dtAssinaturaInicial = @$_POST [static::$ID_REQ_DtAssinaturaInicial];
+		$this->dtAssinaturaFinal = @$_POST [static::$ID_REQ_DtAssinaturaFinal];
 		
 		$this->dtInicio1 = @$_POST ["dtInicio1"];
 		$this->dtInicio2 = @$_POST ["dtInicio2"];
@@ -260,6 +268,17 @@ class filtroManterContrato extends filtroManter {
 			 * . " IS NULL)) ";
 			 */
 			
+			$conector = "\n AND ";
+		}
+		
+		if ($this->dtAssinaturaInicial != null) {
+			$filtro = $filtro . $conector . $nmTabela . "." . vocontrato::$nmAtrDtAssinaturaContrato . ">='" . getDataSQL ( $this->dtAssinaturaInicial ) . "'";
+				
+			$conector = "\n AND ";
+		}
+		
+		if ($this->dtAssinaturaFinal != null) {
+			$filtro = $filtro . $conector . $nmTabela . "." . vocontrato::$nmAtrDtAssinaturaContrato . "<='" . getDataSQL ( $this->dtAssinaturaFinal ) . "'";
 			$conector = "\n AND ";
 		}
 		

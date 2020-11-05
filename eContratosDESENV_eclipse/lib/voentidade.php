@@ -19,6 +19,7 @@ class voentidade extends multiplosConstrutores {
 	static $nmAtrNmUsuarioUltAlteracao = "nm_usuario_ultalt";
 	static $nmAtrNmUsuarioOperacao = "nm_usuario_operacao";
 	static $nmAtrInDesativado = "in_desativado";
+	static $nmAtrNumQuantidade = "num_quantidade";
 	
 	//implementar a constante abaixo quando retirar o temTabHistorico das instancias
 	//static $existeTabHistorico = false;

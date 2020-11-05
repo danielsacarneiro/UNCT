@@ -76,6 +76,7 @@ $numTotalRegistros = $filtro->numTotalRegistros;
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_checkbox.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_moeda.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_select.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>tooltip.js"></SCRIPT>
 
 <SCRIPT language="JavaScript" type="text/javascript">
@@ -191,6 +192,22 @@ function confirmar() {
 	    
 	return true;
 }
+
+function estatisticas(){
+	funcao = "<?=constantes::$CD_FUNCAO_DETALHAR?>";
+    if (!isCampoSelectValido(document.frm_principal.<?=vocontrato::$nmAtrAnoContrato?>)){
+            return;
+    }
+	/*var chave = document.frm_principal.rdb_consulta.value;
+	var strAno = "<?=vocontrato::$nmAtrAnoContrato."=$anoContrato"?>";
+    url = "detalharEstatisticas.php?funcao=" + funcao + "&chave=" + chave + "&lupa=S&"+strAno;
+	*/
+	var chave = document.frm_principal.<?=vocontrato::$nmAtrAnoContrato?>.value;
+    url = "detalharEstatisticas.php?funcao=" + funcao + "&chave=" + chave + "&lupa=S";	
+    	
+    abrirJanelaAuxiliar(url, true, false, false);
+}
+
 
 </SCRIPT>
 <?=setTituloPagina(vocontrato::getTituloJSP().$complementoTitulo)?>
@@ -413,6 +430,27 @@ function confirmar() {
 	            					onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="camponaoobrigatorioalinhadodireita" size="15" >
 	            				a <INPUT type="text" id="<?=filtroManterContrato::$NmAtrVlGlobalFinal?>" name="<?=filtroManterContrato::$NmAtrVlGlobalFinal?>"  value="<?php echo($filtro->vlGlobalFinal);?>"
 	            					onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="camponaoobrigatorioalinhadodireita" size="15" >
+				</TD>
+         </TR>	    		
+			<TR>
+				<TH class="campoformulario" nowrap>Assinatura</TH>
+				<TD class="campoformulario" colspan=3>
+                          	De <INPUT type="text" 
+                        	       id="dtInicio1" 
+                        	       name="dtInicio1" 
+                        			value="<?php echo($dtInicio1);?>" 
+                        			onkeyup="formatarCampoData(this, event, false);" 
+                        			class="camponaoobrigatorio" 
+                        			size="10" 
+                        			maxlength="10" > a
+                        	<INPUT type="text" 
+                        	       id="dtInicio2" 
+                        	       name="dtInicio2" 
+                        			value="<?php echo($dtInicio2);?>" 
+                        			onkeyup="formatarCampoData(this, event, false);" 
+                        			class="camponaoobrigatorio" 
+                        			size="10" 
+                        			maxlength="10" >
                         	| Publicado? 
                         	<?php
                         	echo $comboSimNao->getHtmlCombo(filtroManterContrato::$ID_REQ_InPublicado,
@@ -420,8 +458,8 @@ function confirmar() {
                         			$filtro->inPublicado, true, "camponaoobrigatorio", false,"");
                         	?>
 				</TD>
-         </TR>	    		
-		<TR>
+         </TR>	
+         		<TR>
 			<TH class="campoformulario" nowrap>Tp.Vigência:</TH>
 			<?php
 			include_once(caminho_util."dominioTpVigencia.php");

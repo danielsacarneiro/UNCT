@@ -1375,5 +1375,43 @@ class dbcontrato extends dbprocesso {
 				return $sql;
 
 	}
+	
+	/**
+	 * consulta funcao estatisticas da tela de consulta de contrato
+	 * {@inheritDoc}
+	 * @see dbprocesso::consultarTelaConsulta()
+	 */
+	function consultarEstatisticas($ano){
+		$retorno = "";
+		if($ano != null){
+			$vo = new vocontrato();
+			$nmTabela = $vo->getNmTabelaEntidade(false);
+			$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic(false);
+			//$nmTabelaDemandaSolicCompra = voDemandaPL::getNmTabelaStatic(false);
+				
+			$query .= " SELECT ";
+			$query .= vocontrato::$nmAtrTipoContrato;
+			$query .= ",COUNT(" . vocontrato::$nmAtrTipoContrato;
+			$query .= ") AS " . vocontrato::$nmAtrNumQuantidade;
+			$query .= ") FROM " . $nmTabela;
+			/*$query .= "\n left JOIN " . $nmTabelaContratoInfo;
+			$query .= "\n ON ";
+			$query .= $nmTabelaContratoInfo . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrAnoContrato;
+			$query .= " AND " . $nmTabelaContratoInfo . "." . vocontrato::$nmAtrCdContrato. "=" . $nmTabela . "." . vocontrato::$nmAtrCdContrato;
+			$query .= " AND " . $nmTabelaContratoInfo . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
+			*/
+			$query .= " WHERE " 
+					. vocontrato::$nmAtrAnoContrato ." = $ano ";
+					//. " AND " . vocontrato::$nmAtrAnoContrato ." = $ano ";
+			
+			static::printarSQL($query);
+		
+			$retorno = parent::consultarEntidade ( $query, false);
+		}
+		
+		return $retorno;
+	}
+	
+	
 }
 ?>
