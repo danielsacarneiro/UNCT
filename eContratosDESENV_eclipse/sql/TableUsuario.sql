@@ -96,14 +96,14 @@ select ID from wp_users
 )
 
 select * from wp_users
-where id = 5
+where id = 13
 
 select * from usuario_info
-where id = 27
+where id = 13
 
 insert into usuario_info
 (id, user_setor, cd_usuario_incl, cd_usuario_ultalt, in_desativado)
-values (27, '01*03*04*05*06*07*08*09*10*11*13*14*15*16*17*18*99', 1,1, 'N')
+values (28, '01*03*04*05*06*07*08*09*10*11*13*14*15*16*17*18*99', 1,1, 'N')
 
 
 '24', '01**03*04*05*06*07*08*09*10*11*13*14*15*16*17*18*99', '2020-09-02 11:46:17', '2020-09-04 09:45:59', '1', '1', 'N'

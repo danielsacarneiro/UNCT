@@ -1170,12 +1170,52 @@ class dbDemanda extends dbprocesso {
 		// echo $query;
 		return $this->atualizarEntidade ( $query );
 	}
-	function incluirColecaoDemandaContrato($voDemanda) {
+
+	/**
+	 * verifica se ja existe uma demanda A FAZER de PRORROGACAO para o contrato
+	 * caso ja exista, a mesma numeracao nao pode ser utilizada como nova demanda.
+	 * Se ainda assim for necessário, a mesma demanda deve ser utilizada, nao sendo permitido incluir 
+	 * uma nova demanda para o mesmo termo aditivo
+	 * @param unknown $voDemanda
+	 * @return boolean
+	 */
+	function existeDemandaAbertaContratoProrrogacao($voDemanda) {
+		$retorno = false;
+		//$voDemanda = new voDemanda();
+		$vocontrato = $voDemanda->getContrato();
+		if($vocontrato != null){
+			$filtro = new filtroManterDemanda(false);
+			$filtro->vocontrato = new vocontrato();
+			$filtro->vodemanda = new voDemanda();
+			$filtro->vocontrato->anoContrato = $vocontrato->anoContrato;
+			$filtro->vocontrato->cdContrato = $vocontrato->cdContrato;
+			$filtro->vocontrato->tipo = $vocontrato->tipo;
+			$filtro->vocontrato->cdEspecie = $vocontrato->cdEspecie;
+			$filtro->vocontrato->sqEspecie = $vocontrato->sqEspecie;
+			$filtro->inDesativado = constantes::$CD_NAO;
+			$filtro->vodemanda->tpDemandaContrato = array(dominioTipoDemandaContrato::$CD_TIPO_PRORROGACAO);
+			
+			$filtro->vodemanda->situacao = array(dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_A_FAZER);
+			$colecao = $this->consultarTelaConsulta($voDemanda, $filtro);
+			
+			$retorno = !isColecaoVazia($colecao);
+			
+			if($retorno){
+				throw new excecaoGenerica("Já existe uma demanda ABERTA para o Contrato selecionado. Verifique se o TERMO/ADITIVO indicado está correto.");
+			}
+		}
+		
+		return 	$retorno;
+	}
+	
+	function incluirColecaoDemandaContrato($voDemanda) {		
 		$colecao = $voDemanda->colecaoContrato;
 		foreach ( $colecao as $voContrato ) {
-			$voDemContrato = new voDemandaContrato ();
-			$voDemContrato = $voDemanda->getVODemandaContrato ( $voContrato );
-			$this->incluirDemandaContrato ( $voDemContrato );
+			if(!$this->existeDemandaAbertaContratoProrrogacao($voDemanda)){
+				$voDemContrato = new voDemandaContrato ();
+				$voDemContrato = $voDemanda->getVODemandaContrato ( $voContrato );
+				$this->incluirDemandaContrato ( $voDemContrato );
+			}
 		}
 	}
 	function incluirDemandaContrato($voDemContrato) {

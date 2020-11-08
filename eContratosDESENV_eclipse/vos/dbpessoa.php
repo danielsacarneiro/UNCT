@@ -131,12 +131,22 @@ class dbpessoa extends dbprocesso {
 		
 		$nmTabela = $nmTabelaOriginal = $voPrincipal->getNmTabela();
 		$nmTabelaGeral = $voPrincipal->getNmTabelaGeralComHistorico();
+		$nmTabelaPessoaVinculo = vopessoavinculo::getNmTabela();
 		
 		//$nmTabJoin = getSQLTabelaTrazendoHistorico($voPrincipal);
 		//traz TODAS pessoas que ja instruiram PAAP
 		$nmTabPAAP = voPA::getNmTabela();
 		$nmAtrCdPessoaPAAP = voPA::$nmAtrCdResponsavel;
-		$nmTabJoin = "(SELECT * FROM $nmTabela WHERE ". vopessoa::$nmAtrCd." IN (SELECT $nmAtrCdPessoaPAAP FROM $nmTabPAAP GROUP BY $nmAtrCdPessoaPAAP)) $nmTabelaGeral ";
+		$nmTabJoin = 
+		"(SELECT $nmTabela.* FROM $nmTabela "
+		. " LEFT JOIN $nmTabelaPessoaVinculo "
+		. " ON $nmTabela." . vopessoa::$nmAtrCd . " = $nmTabelaPessoaVinculo." . vopessoa::$nmAtrCd
+		." WHERE "
+		. vopessoavinculo::$nmAtrInAtribuicaoPAAP . "='S' OR (("
+		. vopessoavinculo::$nmAtrInAtribuicaoPAAP . " IS NULL OR "
+		. vopessoavinculo::$nmAtrInAtribuicaoPAAP . "<>'S') AND ("
+		. "$nmTabela." . vopessoa::$nmAtrCd
+		." IN (SELECT $nmAtrCdPessoaPAAP FROM $nmTabPAAP GROUP BY $nmAtrCdPessoaPAAP)))) $nmTabelaGeral ";
 		$nmTabela = $nmTabelaGeral;		
 		
 		$atributosConsulta = $nmTabela . "." . vopessoa::$nmAtrCd;

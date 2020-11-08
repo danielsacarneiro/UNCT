@@ -436,17 +436,17 @@ function estatisticas(){
 				<TH class="campoformulario" nowrap>Assinatura</TH>
 				<TD class="campoformulario" colspan=3>
                           	De <INPUT type="text" 
-                        	       id="dtInicio1" 
-                        	       name="dtInicio1" 
-                        			value="<?php echo($dtInicio1);?>" 
+                        	       id="<?=filtroManterContrato::$ID_REQ_DtAssinaturaInicial?>" 
+                        	       name="<?=filtroManterContrato::$ID_REQ_DtAssinaturaInicial?>" 
+                        			value="<?php echo($filtro->dtAssinaturaInicial);?>" 
                         			onkeyup="formatarCampoData(this, event, false);" 
                         			class="camponaoobrigatorio" 
                         			size="10" 
                         			maxlength="10" > a
                         	<INPUT type="text" 
-                        	       id="dtInicio2" 
-                        	       name="dtInicio2" 
-                        			value="<?php echo($dtInicio2);?>" 
+                        	       id="<?=filtroManterContrato::$ID_REQ_DtAssinaturaFinal?>" 
+                        	       name="<?=filtroManterContrato::$ID_REQ_DtAssinaturaFinal?>"
+                        			value="<?php echo($filtro->dtAssinaturaFinal);?>" 
                         			onkeyup="formatarCampoData(this, event, false);" 
                         			class="camponaoobrigatorio" 
                         			size="10" 
