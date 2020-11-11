@@ -460,9 +460,10 @@ function getBotaoDetalharAlertas($vo=null){
 }
 
 function imprimeTituloalerta($enviarEmail, $setor=null){
-	echo "<br>DEMANDAS::$setor<BR>";
+	$titulo = "<br>RELATÓRIO DIÁRIO $setor<BR>";
+	echo getTextoHTMLDestacado($titulo, "blue", true);
 	if (!($enviarEmail && email_sefaz::$FLAG_ENVIAR_EMAIL)) {
-		echoo("<font color='red'><b>RELATÓRIO DIÁRIO $setor: <u>SEM email</u>.</b></font></br>");
+		echoo("<font color='red'><b><u>SEM email</u>.</b></font></br>");
 	}	
 }
 

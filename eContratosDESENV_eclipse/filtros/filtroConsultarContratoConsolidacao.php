@@ -487,16 +487,18 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	
 	function getAtributoOrdenacaoDefault() {
 		$nmTabela = (new vocontrato())->getNmTabelaEntidade($this->isHistorico );
-		$retorno = $nmTabela . "." . voContrato::$nmAtrTipoContrato . " " . $this->cdOrdenacao 
-		. "," . $nmTabela . "." . voContrato::$nmAtrAnoContrato . " " . $this->cdOrdenacao
-		. "," . $nmTabela . "." . voContrato::$nmAtrCdContrato . " " . $this->cdOrdenacao;
-		return $retorno;
+		$retorno = $nmTabela . "." . vocontrato::$nmAtrTipoContrato . " " . $this->cdOrdenacao 
+		. "," . $nmTabela . "." . vocontrato::$nmAtrAnoContrato . " " . $this->cdOrdenacao
+		. "," . $nmTabela . "." . vocontrato::$nmAtrCdContrato . " " . $this->cdOrdenacao;
+		//return $retorno;
+		return "";
 	}
 	function getAtributosOrdenacao() {
+		$nmTabela = (new vocontrato())->getNmTabelaEntidade($this->isHistorico );
 		$varAtributos = array (
-				voContrato::$nmAtrAnoContrato => "Ano",
-				voContrato::$nmAtrCdContrato => "Número",
-				voContrato::$nmAtrTipoContrato => "Tipo",
+				"$nmTabela.".vocontrato::$nmAtrAnoContrato => "Ano",
+				"$nmTabela.".vocontrato::$nmAtrCdContrato => "Número",
+				"$nmTabela.".vocontrato::$nmAtrTipoContrato => "Tipo",
 				static::$NmColDtFimVigencia => "Fim.Vigencia",
 		);
 		return $varAtributos;
