@@ -7,10 +7,12 @@ class filtroConsultarDemandaGestao extends filtroManterDemanda{
 	
 	public $nmFiltro = "filtroConsultarDemandaGestao";
 	static $NmTabelaDemandaTramSaida = "NmTabelaDemandaTramSaida";
+	static $NmTabelaDemandaTramEntrada = "NmTabelaDemandaTramEntrada";
 	static $NmTabelaDemandaPrazoPorSetor = "NmTabelaDemandaPrazoPorSetor";
 	
 	//colunas
 	static $NmColDtReferenciaSaida = "NmColDtReferenciaSaida";
+	static $NmColDtReferenciaEntrada = "NmColDtReferenciaEntrada";
 	static $NmColNumTotalDemandas = "NmColNumTotalDemandas";
 	static $NmColNumTempoVidaMedio = "NmColNumTempoVidaMedio";
 	static $NmColInSetorAtualDemanda= "NmColInSetorAtualDemanda";
@@ -129,8 +131,37 @@ class filtroConsultarDemandaGestao extends filtroManterDemanda{
 		//$dtDemandaTramSaida = " COALESCE($subSelectTramSaida,DATE(NOW())) ";
 		$dtDemandaTramSaida = " COALESCE($subSelectTramSaida,". static::getSQLDataUltimoSuspiro($nmTabelaDemanda). ") ";
 		
+		//getSQLCASE($atributo, $valorAComparar, $valorSeIgual, $valorELSE);
+		
 		return $dtDemandaTramSaida;
 	}	
+	
+	/**
+	 * retorna subselect com a data de entrada da tramitacao (pega a saida da tramitacao anterior), considerando que a da saida eh a data da propria tramitacao
+	 * @param unknown $nmTabelaTramitacao
+	 * @param unknown $nmTabelaDemanda
+	 * @return string
+	 */
+	static function getSQLDtDemandaTramitacaoEntrada($nmTabelaTramitacao, $nmTabelaDemanda){
+	
+		$nmTabelaDemandaSaida = static::$NmTabelaDemandaTramEntrada;
+		//a data de saida sera igual a data de referencia da tramitacao seguinte à atual
+		//para tanto usa-se o subselect abaixo com a opcao do LIMIT 1 (pega o proximo registro maior que o atual)
+		$subSelectTramSaida = "(SELECT ".voDemandaTramitacao::$nmAtrDtReferencia." FROM $nmTabelaTramitacao $nmTabelaDemandaSaida ";
+		$subSelectTramSaida .= " WHERE ";
+		$subSelectTramSaida .= " $nmTabelaTramitacao." . voDemandaTramitacao::$nmAtrAno . " = $nmTabelaDemandaSaida." . voDemandaTramitacao::$nmAtrAno;
+		$subSelectTramSaida .= " AND $nmTabelaTramitacao." . voDemandaTramitacao::$nmAtrCd . " = $nmTabelaDemandaSaida." . voDemandaTramitacao::$nmAtrCd;
+		$subSelectTramSaida .= " AND $nmTabelaTramitacao." . voDemandaTramitacao::$nmAtrSq . " > $nmTabelaDemandaSaida." . voDemandaTramitacao::$nmAtrSq ;
+		$subSelectTramSaida .= " order by ".voDemandaTramitacao::$nmAtrSq." desc LIMIT 1 " ;
+		$subSelectTramSaida .= ")" ;
+	
+		//$dtDemandaTramSaida = " COALESCE($subSelectTramSaida,DATE(NOW())) ";
+		$dtDemandaTramSaida = " COALESCE($subSelectTramSaida, $nmTabelaDemanda.". voDemanda::$nmAtrDtReferencia . ") ";
+	
+		//getSQLCASE($atributo, $valorAComparar, $valorSeIgual, $valorELSE);
+	
+		return $dtDemandaTramSaida;
+	}
 	
 	function getFiltroConsultaSQL($comAtributoOrdenacao = null){
 		$filtro = "";

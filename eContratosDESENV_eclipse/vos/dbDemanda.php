@@ -338,11 +338,6 @@ class dbDemanda extends dbprocesso {
 	function consultarTelaConsultaGestaoDemanda($filtro) {
 		
 		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( false );
-		/*$nmTabelaDemTram = voDemandaTramitacao::getNmTabelaStatic ( false );
-		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );
-		$nmTabelaUsuario = vousuario::getNmTabela ();
-				
-		$dtDemandaTramSaida = filtroConsultarDemandaGestao::getSQLDtDemandaTramitacaoSaida($nmTabelaDemTram);*/
 		$dtDemandaTramEntrada = "$nmTabelaDemanda." . voDemanda::$nmAtrDtReferencia;
 		$numDemandas = "COUNT(*)";
 		
@@ -745,22 +740,26 @@ class dbDemanda extends dbprocesso {
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );	
 		$nmTabelaUsuario = vousuario::getNmTabela ();
 				
-		$dtDemandaTramSaida = filtroConsultarDemandaGestao::getSQLDtDemandaTramitacaoSaida($nmTabela, $nmTabelaDemanda);
-		$dtDemandaTramEntrada = "$nmTabela." . voDemandaTramitacao::$nmAtrDtReferencia;
-	
+		/*$dtDemandaTramSaida = filtroConsultarDemandaGestao::getSQLDtDemandaTramitacaoSaida($nmTabela, $nmTabelaDemanda);
+		$dtDemandaTramEntrada = "$nmTabela." . voDemandaTramitacao::$nmAtrDtReferencia;*/
+		
+		$dtDemandaTramSaida = "$nmTabela." . voDemandaTramitacao::$nmAtrDtReferencia;
+		$dtDemandaTramEntrada = filtroConsultarDemandaGestao::getSQLDtDemandaTramitacaoEntrada($nmTabela, $nmTabelaDemanda);
+		
 		$querySelect = "SELECT ";
 		$querySelect .= $nmTabela . ".*";
+		$querySelect .= ", $dtDemandaTramEntrada AS " . filtroConsultarDemandaGestao::$NmColDtReferenciaEntrada;
 		$querySelect .= ", $dtDemandaTramSaida AS " . filtroConsultarDemandaGestao::$NmColDtReferenciaSaida;
 		$querySelect .= ", ". getDataSQLDiferencaDias($dtDemandaTramEntrada, $dtDemandaTramSaida) . " AS " . filtroConsultarDemandaGestao::$NmColNuTempoVida;
 		$querySelect .= "," . $nmTabelaUsuario . "." . vousuario::$nmAtrName;
 		$querySelect .= "  AS " . voDemanda::$nmAtrNmUsuarioInclusao;
 		$queryFrom = " FROM " . $nmTabela;
-	
+		
 		$queryFrom .= "\n INNER JOIN " . $nmTabelaDemanda;
 		$queryFrom .= "\n ON ";
 		$queryFrom .= $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $nmTabela . "." . voDemandaTramitacao::$nmAtrAno;
 		$queryFrom .= "\n AND " . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd . "=" . $nmTabela . "." . voDemandaTramitacao::$nmAtrCd;
-	
+		
 		$queryFrom .= "\n INNER JOIN " . $nmTabelaUsuario;
 		$queryFrom .= "\n ON ";
 		$queryFrom .= $nmTabelaUsuario . "." . vousuario::$nmAtrID . "=" . $nmTabela . "." . voDemanda::$nmAtrCdUsuarioInclusao;

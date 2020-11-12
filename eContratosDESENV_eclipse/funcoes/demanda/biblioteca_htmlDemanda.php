@@ -417,6 +417,7 @@ function mostrarGridDemandaGestao($colecaoTramitacao, $isDetalhamento) {
 			$voAtual->getDadosBanco ( $colecaoTramitacao [$i] );
 				
 			$sq = $voAtual->sq;
+
 			$prazo = $colecaoTramitacao [$i][filtroConsultarDemandaGestao::$NmColNuTempoVida];
 			$prazototal += $prazo;
 			//exibe apenas as tramitacoes com prazo acima de zero
@@ -434,6 +435,7 @@ function mostrarGridDemandaGestao($colecaoTramitacao, $isDetalhamento) {
 
 				//$textoTram = truncarStringHTML($voAtual->textoTram, 300);
 				$textoTram = truncarStringHTMLComDivExpansivel($voAtual->getValorChaveHTML(),$voAtual->textoTram,220, false);
+				$dataEntrada = $colecaoTramitacao [$i][filtroConsultarDemandaGestao::$NmColDtReferenciaEntrada];
 				$dataSaida = $colecaoTramitacao [$i][filtroConsultarDemandaGestao::$NmColDtReferenciaSaida];
 				
 				$html .= "<TD class='tabeladados' nowrap>" . complementarCharAEsquerda ( $sq, "0", TAMANHO_CODIGOS ) . "</TD> \n";
@@ -441,7 +443,7 @@ function mostrarGridDemandaGestao($colecaoTramitacao, $isDetalhamento) {
 				$html .= "<TD class='tabeladados' >" . $textoTram . "</TD> \n";
 				$html .= "<TD class='tabeladados' nowrap>" . $voAtual->prt . "</TD> \n";
 				$html .= "<TD class='tabeladados' nowrap>" . $voAtual->nmUsuarioInclusao . "</TD> \n";
-				$html .= "<TD class='tabeladados' nowrap>" . getData ( $voAtual->dtReferencia ) . "</TD> \n";
+				$html .= "<TD class='tabeladados' nowrap>" . getData ( $dataEntrada ) . "</TD> \n";
 				$html .= "<TD class='tabeladados' nowrap>" . getData ( $dataSaida ) . "</TD> \n";
 				$html .= "<TD class='tabeladadosalinhadodireita' nowrap>" . complementarCharAEsquerda($prazo, "0", constantes::$TAMANHO_CODIGOS_SAFI) . "</TD> \n";
 

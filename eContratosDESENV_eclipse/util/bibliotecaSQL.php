@@ -52,11 +52,11 @@ function getSQLCOALESCE($arrayAtributos, $nmAtributoRetornoClausulaAS = null) {
 	}
 	return $retorno;
 }
-function getSQLCASE($atributo, $valorCondicao, $valorTHEN, $valorELSE, $nmAtributoAS=null) {
+function getSQLCASE($atributo, $valorAComparar , $valorSeIgual , $valorELSE, $nmAtributoAS=null) {
 	if($nmAtributoAS != null){
 		$nmAtributoAS = " AS $nmAtributoAS ";		
 	}
-	return "CASE $atributo WHEN $valorCondicao THEN $valorTHEN ELSE $valorELSE END $nmAtributoAS";
+	return "CASE $atributo WHEN $valorAComparar THEN $valorSeIgual ELSE $valorELSE END $nmAtributoAS";
 }
 //sintaxe do CASE para comparar atributo nulo eh um pouco diferente
 function getSQLCASEIsNULL($atributo, $valorSeNulo, $valorSeNaoNulo, $nmAtributoAS=null) {
