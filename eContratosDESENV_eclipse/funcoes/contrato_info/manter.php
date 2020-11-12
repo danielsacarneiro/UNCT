@@ -284,7 +284,7 @@ function iniciar(){
 	            if($seraProrrogTemp == null){
 	            	$seraProrrogTemp = constantes::$CD_SIM;
 	            }
-	            echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInSeraProrrogado,voContratoInfo::$nmAtrInSeraProrrogado, $seraProrrogTemp, true, "camponaoobrigatorio", false, " required ");?>
+	            echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInSeraProrrogado,voContratoInfo::$nmAtrInSeraProrrogado, $seraProrrogTemp, false, "camponaoobrigatorio", false, " required ");?>
 	        	</TD>
 	        </TR>
 			<TR>
