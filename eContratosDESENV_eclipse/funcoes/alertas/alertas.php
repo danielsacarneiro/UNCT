@@ -295,7 +295,7 @@ function getMensagemContratosAVencer(&$count = 0){
 /** ALERTAS DILC **/
 
 function getMensagemContratosAVencerGestor(&$count = 0){
-	$assunto = "CONTRATOS A VENCER QUE NAO POSSUEM DEMANDA INICIADA:";
+	$assunto = "CONTRATOS A VENCER SEM DEMANDA INICIADA (COMUNICAR AO GESTOR):";
 	$assunto = getSequenciaAssunto($assunto, $count);
 	try {
 		$filtro = getFiltroContratosAVencer(constantes::$CD_NAO);
