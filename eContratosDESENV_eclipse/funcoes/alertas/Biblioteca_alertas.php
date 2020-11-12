@@ -485,8 +485,6 @@ function enviarEmailATJA($enviarEmail){
 	//envia alertas das demandas que devem ser analisadas pois ja tem suas proposta de precos vencida, tornando possivel o calculo do reajuste
 	$mensagem .= getMensagemDemandaContratoPropostaVencida($count);
 	
-	//envia alertas dos contratos a vencer. Ainda depende de definicao da diretoria
-	//$mensagem .= getMensagemContratosAVencer();
 	echo $mensagem . getBotaoDetalharAlertas();
 
 	$assunto = "Relatório diário";
@@ -517,7 +515,9 @@ function enviarEmailDiretoria($enviarEmail){
 	imprimeTituloalerta($enviarEmail, $setor);
 
 	$count = 0;
-	//envia contratos a vencer
+	//envia contratos a vencer TODOS
+	$mensagem .= getMensagemContratosAVencer($count);
+	//envia contratos a vencer SEM DEMANDA
 	$mensagem .= getMensagemContratosAVencerGestor($count);
 
 	echo $mensagem . getBotaoDetalharAlertas(new voContratoInfo());
@@ -527,7 +527,7 @@ function enviarEmailDiretoria($enviarEmail){
 	//enviarEmail($assuntoParam, $mensagemParam, $enviarEmail=true, $listaEmail=null,$remetente = null) {
 }
 
-function getFiltroContratosAVencer($inTemDemandaEmTratamento = 'N'){
+function getFiltroContratosAVencer($inTemDemandaEmTratamento = null){
 	$filtro = new filtroConsultarContratoConsolidacao ( false );
 	$vo = new voContratoInfo();
 	$dbprocesso = new dbContratoInfo();
@@ -539,7 +539,7 @@ function getFiltroContratosAVencer($inTemDemandaEmTratamento = 'N'){
 	$filtro->tpVigencia = dominioTpVigencia::$CD_OPCAO_VIGENTES;
 	$filtro->inProduzindoEfeitos = constantes::$CD_SIM;
 	//traz somente os contratos a vencer nos dias abaixo
-	$filtro->qtdDiasParaVencimento = 45;
+	$filtro->qtdDiasParaVencimento = voMensageria::$NUM_DIAS_CONTRATOS_A_VENCER;
 	//traz somente os contratos indicados como "serao prorrogados"
 	$filtro->inSeraProrrogado = constantes::$CD_SIM;
 	//$filtro->inSeraProrrogado = array(constantes::$CD_OPCAO_CONSULTA_DIFERENTE, constantes::$CD_NAO);
@@ -578,12 +578,14 @@ function existeAlertaAtivoContrato($vocontratoinfo){
 function criarAlertasEmailGestorColecaoContratos(){
 	
 	$log = "Início de verificação dos contratos a vencer que gerarão alertas.";
-	$filtro = getFiltroContratosAVencer();
+	$filtro = getFiltroContratosAVencer(constantes::$CD_NAO);
 	$dbprocesso = new dbContratoInfo();
 	$colecao = $dbprocesso->consultarTelaConsultaConsolidacao ($filtro, true);
 	
 	if(!isColecaoVazia($colecao)){
-		$colecao = array($colecao[0]);	
+		//$colecao = array($colecao[0]);
+		$tam = sizeof($colecao);
+		$log .= "<br>Proceder à inclusão de $tam alertas.";
 		foreach ($colecao as $registrobanco){
 			$voAlerta = new voMensageria();
 			$vocontratoinfo = new voContratoInfo();

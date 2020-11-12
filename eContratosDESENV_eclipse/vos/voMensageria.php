@@ -18,6 +18,7 @@ class voMensageria extends voentidade {
 	static $IMPRIMIR_MENSAGEM_SE_CONSULTA_VAZIA = true;
 	
 	static $NUM_DIAS_FREQUENCIA_MAIL_PADRAO = 7;
+	static $NUM_DIAS_CONTRATOS_A_VENCER = 45;
 	
 	static $nmCOLDhUltimoEnvio = "nmCOLDhUltimoEnvio";
 	

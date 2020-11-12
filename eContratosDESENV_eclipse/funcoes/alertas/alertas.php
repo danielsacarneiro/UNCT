@@ -272,20 +272,12 @@ function getMensagemContratosAVencer(&$count = 0){
 	$assunto = "CONTRATOS A VENCER:";
 	$assunto = getSequenciaAssunto($assunto, $count);
 	try {
-		$filtro = new filtroConsultarContratoConsolidacao(false);
-		$filtro->isValidarConsulta = false;
-		// $filtro->voPrincipal = $voDemanda;
-		$filtro->setaFiltroConsultaSemLimiteRegistro ();
-		
-		$filtro->tpVigencia = dominioTpVigencia::$CD_OPCAO_VIGENTES;
-		$filtro->qtdDiasParaVencimento = 120;
-		$filtro->cdHistorico = constantes::$CD_NAO;
-		$filtro->voPrincipal = new voContratoInfo();
+		//pega todos os contratos a vencer no prazo
+		$filtro = getFiltroContratosAVencer();
 		
 		$dbprocesso = new dbContratoInfo();
-		$colecao = $dbprocesso->consultarTelaConsultaConsolidacao($filtro );
+		$colecao = $dbprocesso->consultarTelaConsultaConsolidacao ($filtro, true);
 		
-		$colunasAAcrescentar = null;
 		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Início.Vigência', filtroConsultarContratoConsolidacao::$NmColDtInicioVigencia, constantes::$CD_TP_DADO_DATA);
 		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Fim.Vigência', filtroConsultarContratoConsolidacao::$NmColDtFimVigencia, constantes::$CD_TP_DADO_DATA);
 		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Prazo(dias)', filtroConsultarContratoConsolidacao::$NmColQtdDiasParaVencimento);		
@@ -303,10 +295,10 @@ function getMensagemContratosAVencer(&$count = 0){
 /** ALERTAS DILC **/
 
 function getMensagemContratosAVencerGestor(&$count = 0){
-	$assunto = "CONTRATOS A VENCER:";
+	$assunto = "CONTRATOS A VENCER QUE NAO POSSUEM DEMANDA INICIADA:";
 	$assunto = getSequenciaAssunto($assunto, $count);
 	try {
-		$filtro = getFiltroContratosAVencer();
+		$filtro = getFiltroContratosAVencer(constantes::$CD_NAO);
 				
 		$dbprocesso = new dbContratoInfo();
 		$colecao = $dbprocesso->consultarTelaConsultaConsolidacao ($filtro, true);
@@ -326,7 +318,10 @@ function getMensagemContratosAVencerGestor(&$count = 0){
 		);
 		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);*/
 
-
+		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Início.Vigência', filtroConsultarContratoConsolidacao::$NmColDtInicioVigencia, constantes::$CD_TP_DADO_DATA);
+		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Fim.Vigência', filtroConsultarContratoConsolidacao::$NmColDtFimVigencia, constantes::$CD_TP_DADO_DATA);
+		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Prazo(dias)', filtroConsultarContratoConsolidacao::$NmColQtdDiasParaVencimento);
+		
 		$msg = getCorpoMensagemDemandaContratoColecao($assunto, $colecao, $colunasAAcrescentar);
 
 	} catch ( Exception $ex ) {
