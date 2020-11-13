@@ -47,6 +47,14 @@ function getContratoDetalhamento($voContrato, $colecao=null,  $detalharContratoI
 }
 function getContratoDetalhamentoParam($arrayParametro) {
 	$voContrato = $arrayParametro[0];
+	// $voContrato = new vocontrato();
+	if ($voContrato->cdEspecie == null) {
+		$voContrato->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
+	}
+	if ($voContrato->sqEspecie == null) {
+		$voContrato->sqEspecie = 1;
+	}
+	
 	$colecao = $arrayParametro[1];
 	$detalharContratoInfo = $arrayParametro[2];
 	$isDetalharChaveCompleta=$arrayParametro[3];
@@ -104,15 +112,8 @@ function getContratoDetalhamentoParam($arrayParametro) {
 		type="text" value="<?php echo($contrato);?>"
 		class="camporeadonlyalinhadodireita" size="<?=strlen($contrato)+1?>"
 		readonly>	
-	<?php				
-		// $voContrato = new vocontrato();
-		if ($voContrato->cdEspecie == null) {
-			$voContrato->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
-		}
-		if ($voContrato->sqEspecie == null) {
-			$voContrato->sqEspecie = 1;
-		}
-		
+	<?php	
+	
 		if($isDetalharChaveCompleta){
 			$str = getContratoDescricaoEspecie($voContrato);
 			echo getDetalhamentoHTML("", "", $str);

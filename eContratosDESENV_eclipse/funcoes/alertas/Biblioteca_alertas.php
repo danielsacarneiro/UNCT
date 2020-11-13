@@ -269,6 +269,8 @@ function getPadraoHTMLMensagem($corpoMensagem, &$mail){
  */
 function enviarEmail($assuntoParam, $mensagemParam, $enviarEmail=true, $listaEmail=null,$remetente = null) {
 	
+	$log = "";
+	
 	if($listaEmail == null){
 		$listaEmail = email_sefaz::getListaEmailJuridico ();
 	}
@@ -286,19 +288,27 @@ function enviarEmail($assuntoParam, $mensagemParam, $enviarEmail=true, $listaEma
 			
 			$enviado = $mail->enviarMensagem ($mensagemParam, $assuntoParam );
 			if ($enviado) {
-				echoo ("Email enviado com sucesso");
+				echoo ("Email enviado com sucesso");				 
+				$log .= getLogComFlagImpressao("Email enviado com sucesso");
 			} else {
 				echo "Não foi possível enviar o e-mail.<br /><br />";
 				echo "<b>Informações do erro:</b> <br />" . $mail->mail->ErrorInfo;
+				
+				$log .= getLogComFlagImpressao("Não foi possível enviar o e-mail.<br /><br />");
+				$log .= getLogComFlagImpressao("<b>Informações do erro:</b> <br />" . $mail->mail->ErrorInfo);
 			}
 		} else {
 			echo "RELATÓRIO DIÁRIO: NÃO enviar email.<BR>*******<BR>";
+			
+			$log .= getLogComFlagImpressao("RELATÓRIO DIÁRIO: NÃO enviar email.<BR>*******<BR>");
 		}
 	} catch ( Exception $ex ) {
 		$msg = $ex->getMessage ();
 		echo $msg;
+		$log .= getLogComFlagImpressao($msg);
 	}
-
+	
+	return $log;
 }
 
 function getStyleEmail(){
@@ -622,6 +632,15 @@ function criarAlertasEmailGestorColecaoContratos(){
 	}else{
 		$log .= "<br>Não há alertas a serem criados.";
 	}	
+	
+	return $log;
+}
+
+//verifica se eh pra imprimir o log
+function getLogComFlagImpressao($log, $imprimir=false){
+	if($imprimir){
+		echoo($log);
+	}
 	
 	return $log;	
 }

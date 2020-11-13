@@ -7,6 +7,7 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   	function consultarPorChaveTela($vo, $isHistorico) {
   		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
   		$nmTabelaContrato = voContratoInfo::getNmTabelaStatic ( false );
+  		$nmTabelaContratoPlanilha = vocontrato::getNmTabelaStatic ( false );
   		$nmTabelaPessoaGestor = vopessoa::getNmTabelaStatic ( false );
   		
   		$colecaoAtributoCoalesceNmPessoa = array(
@@ -16,6 +17,7 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		 
   		$arrayColunasRetornadas = array (
   				$nmTabela . ".*",
+  				"$nmTabelaContratoPlanilha." . vocontrato::$nmAtrSqContrato,
   				$nmTabelaPessoaGestor . "." . vopessoa::$nmAtrCd. " AS " . voContratoInfo::$nmAtrCdPessoaGestor,
   				$nmTabelaPessoaGestor . "." . vopessoa::$nmAtrNome. " AS " . voContratoInfo::$IDREQNmPessoaGestor,
   				$nmTabelaPessoaGestor . "." . vopessoa::$nmAtrEmail,
@@ -31,7 +33,14 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoaGestor;
   		$queryJoin .= "\n ON ";
   		$queryJoin .= $nmTabelaPessoaGestor . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . voContratoInfo::$nmAtrCdPessoaGestor;
-  	
+
+  		$queryJoin .= "\n left JOIN " . $nmTabelaContratoPlanilha;
+  		$queryJoin .= "\n ON ";
+  		$queryJoin .= $nmTabelaContrato . "." . voContratoInfo::$nmAtrAnoContrato . "=" . $nmTabelaContratoPlanilha . "." . vocontrato::$nmAtrAnoContrato;
+  		$queryJoin .= " AND " . $nmTabelaContrato . "." . voContratoInfo::$nmAtrCdContrato. "=" . $nmTabelaContratoPlanilha . "." . vocontrato::$nmAtrCdContrato;
+  		$queryJoin .= " AND " . $nmTabelaContrato . "." . voContratoInfo::$nmAtrTipoContrato . "=" . $nmTabelaContratoPlanilha . "." . vocontrato::$nmAtrTipoContrato;
+  		$queryJoin .= " AND " . $nmTabelaContratoPlanilha . "." . vocontrato::$nmAtrCdEspecieContrato . "=" . getVarComoString(dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER);
+  		
   		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryJoin, $isHistorico );
   	}
   	
