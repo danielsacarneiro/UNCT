@@ -164,12 +164,18 @@ function alterar() {
             </TR>
             <TR>
                 <TH class="campoformulario" nowrap width="1%">Habilitado:</TH>
-                <TD class="campoformulario" width="1%" colspan=3>
+                <TD class="campoformulario" width="1%">
                 <?php
-                $comboSituacao = new select(dominioSimNao::getColecao());
-                echo $comboSituacao->getHtmlCombo(voMensageria::$nmAtrInHabilitado,voMensageria::$nmAtrInHabilitado, $filtro->inHabilitado, true, "camponaoobrigatorio", false, "");
+                $comboSimNao = new select(dominioSimNao::getColecao());
+                echo $comboSimNao->getHtmlCombo(voMensageria::$nmAtrInHabilitado,voMensageria::$nmAtrInHabilitado, $filtro->inHabilitado, true, "camponaoobrigatorio", false, "");
                 ?>
-				</TD>				
+				</TD>
+                <TH class="campoformulario" nowrap>Será.Prorrog?:</TH>
+                <TD class="campoformulario" >
+                <?php
+                echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInSeraProrrogado,voContratoInfo::$nmAtrInSeraProrrogado, $filtro->inSeraProrrogado, true, "camponaoobrigatorio", false, "");
+                ?>
+				</TD>								
             </TR>
 			<TR>
 				<TH class="campoformulario" nowrap>Tp.Vigência:</TH>

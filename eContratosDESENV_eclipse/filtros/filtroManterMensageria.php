@@ -18,6 +18,7 @@ class filtroManterMensageria extends filtroManter {
 	var $dtFim = "";
 	var $inVerificarPeriodoVigente = null;	
 	var $inVerificarFrequencia = null;
+	var $inSeraProrrogado = "";
 	var $sq = "";
 	
 	function getFiltroFormulario() {
@@ -33,6 +34,7 @@ class filtroManterMensageria extends filtroManter {
 		$this->dtInicio = @$_POST [voMensageria::$nmAtrDtInicio];
 		$this->dtFim = @$_POST [voMensageria::$nmAtrDtFim];
 		$this->tpVigencia = @$_POST [static::$nmAtrTpVigencia];
+		$this->inSeraProrrogado = @$_POST [voContratoInfo::$nmAtrInSeraProrrogado];
 		
 		if ($this->cdOrdenacao == null) {
 			$this->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
@@ -45,6 +47,7 @@ class filtroManterMensageria extends filtroManter {
 		
 		$nmTabela = voMensageria::getNmTabelaStatic ( $this->isHistorico () );
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
+		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
 		
 		// seta os filtros obrigatorios
@@ -135,6 +138,13 @@ class filtroManterMensageria extends filtroManter {
 		
 		if ($this->docContratada != null) {
 			$filtro = $filtro . $conector . $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc . " = '" . documentoPessoa::getNumeroDocSemMascara ( $this->docContratada ) . "'";
+			$conector = "\n AND ";
+		}
+		
+		if (isAtributoValido($this->inSeraProrrogado)) {
+		
+			$filtro = $filtro . $conector . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrInSeraProrrogado . " = " . getVarComoString ( $this->inSeraProrrogado );
+		
 			$conector = "\n AND ";
 		}
 						
