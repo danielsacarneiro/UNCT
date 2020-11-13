@@ -49,10 +49,11 @@ class voContratoLicon extends voentidade {
 		return "dbContratoLicon";
 	}
 	function getValoresWhereSQLChave($isHistorico) {
-		$nmTabela = $this->getNmTabelaEntidade ( $isHistorico );		
+		$nmTabela = $this->getNmTabelaEntidade ( false );		
 		
-		/*if ($isHistorico)
-			$query .= " AND " . $nmTabela . "." . self::$nmAtrSqHist . "=" . $this->sqHist;*/	
+		/*if ($isHistorico){
+			$query .= " AND " . $nmTabela . "." . self::$nmAtrSqHist . "=" . $this->sqHist;
+		}*/
 		
 		if ($isHistorico){
 			$this->vodemandacontrato->sqHist = $this->sqHist;

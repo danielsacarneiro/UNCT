@@ -341,6 +341,13 @@ class voentidade extends multiplosConstrutores {
 	function temTabHistorico() {
 		return $this->temTabHistorico;
 	}
+	
+	/**
+	 * metodo utilizado para buscar a chave primaria de uma tabela que usa (total ou parcialmente) outra entidade como sua chave primaria
+	 * @param unknown $isHistorico
+	 * @param unknown $nmOutraTabela
+	 * @return mixed
+	 */
 	function getValoresWhereSQLChaveComOutraTabela($isHistorico, $nmOutraTabela) {
 		$nmTabelaOriginal = $this->getNmTabelaEntidade ( $isHistorico );
 		if($nmOutraTabela == null || $nmOutraTabela == ""){

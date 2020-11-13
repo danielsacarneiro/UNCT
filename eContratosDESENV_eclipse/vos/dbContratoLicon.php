@@ -7,6 +7,7 @@ include_once 'voContratoLicon.php';
   	
   	function consultarPorChaveTela($vo, $isHistorico) {
   		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
+  		
   		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( false );
   		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
   		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
