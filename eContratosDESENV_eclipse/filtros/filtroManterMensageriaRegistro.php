@@ -6,6 +6,9 @@ class filtroManterMensageriaRegistro extends filtroManter {
 	//public static $nmFiltro = "filtroManterContratoLicon";
 	public $nmFiltro = "filtroManterMensageriaRegistro";
 	
+	static $ID_REQ_DtReferenciaInicial = "ID_REQ_DtReferenciaInicial";
+	static $ID_REQ_DtReferenciaFinal = "ID_REQ_DtReferenciaFinal";
+	
 	var $cdContrato = "";
 	var $anoContrato = "";
 	var $tipoContrato = "";
@@ -28,8 +31,8 @@ class filtroManterMensageriaRegistro extends filtroManter {
 		$this->nmContratada = @$_POST [vopessoa::$nmAtrNome];
 		$this->docContratada = @$_POST [vopessoa::$nmAtrDoc];
 		$this->inHabilitado = @$_POST [voMensageria::$nmAtrInHabilitado];
-		$this->dtInicio = @$_POST [voMensageria::$nmAtrDtInicio];
-		$this->dtFim = @$_POST [voMensageria::$nmAtrDtFim];
+		$this->dtInicio = @$_POST [static::$ID_REQ_DtReferenciaInicial];
+		$this->dtFim = @$_POST [static::$ID_REQ_DtReferenciaFinal];
 		
 		if ($this->cdOrdenacao == null) {
 			$this->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;

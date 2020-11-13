@@ -64,12 +64,14 @@ include_once(caminho_lib. "dbprocesso.obj.php");
 	  				$this->cDb->commit ();	  					
   				}
   				
-  				$this->enviarEmailGestor($registroMensageria);
+  				$log = $this->enviarEmailGestor($registroMensageria);
   				
   			} catch ( Exception $e ) {
   				$this->cDb->rollback ();
   				throw new Exception ( $e->getMessage () );
-  			}  		
+  			} 
+  			
+  			return $log;
   	} 
   	
   	function enviarEmailGestor($registro, $enviarEmail=true){  	
@@ -119,8 +121,11 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		$msg .= "<br><br>Atenciosamente, <br><br>UNCT-SAFI";
   	
   		$remetente = email_sefaz::$REMETENTE_PRINCIPAL;
-		enviarEmail($assunto, $msg, $enviarEmail, $listaEmailTemp, $remetente);
+		$log .= enviarEmail($assunto, $msg, $enviarEmail, $listaEmailTemp, $remetente);
+		$log .= getLogComFlagImpressao($vomensageria->toString());
 		echoo($vomensageria->toString());
+		
+		return $log;
   	}
   	
   	static function getMensagemGestor($codigoContrato, $numFrequencia){  		

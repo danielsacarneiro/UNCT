@@ -124,6 +124,27 @@ function alterar() {
 				?>
 				</TD>
 	        </TR>	        
+			<TR>
+	            <TH class="campoformulario" nowrap>Envio:</TH>
+	            <TD class="campoformulario" colspan=3>
+	            	<INPUT type="text" 
+	            	       id="<?=filtroManterMensageriaRegistro::$ID_REQ_DtReferenciaInicial?>" 
+	            	       name="<?=filtroManterMensageriaRegistro::$ID_REQ_DtReferenciaInicial?>" 
+	            			value="<?php echo($filtro->dtInicio);?>"
+	            			onkeyup="formatarCampoData(this, event, false);" 
+	            			class="camponaoobrigatorio" 
+	            			size="10" 
+	            			maxlength="10"> a 
+	            	<INPUT type="text" 
+	            	       id="<?=filtroManterMensageriaRegistro::$ID_REQ_DtReferenciaFinal?>" 
+	            	       name="<?=filtroManterMensageriaRegistro::$ID_REQ_DtReferenciaFinal?>" 
+	            			value="<?php echo($filtro->dtFim);?>"
+	            			onkeyup="formatarCampoData(this, event, false);" 
+	            			class="camponaoobrigatorio" 
+	            			size="10" 
+	            			maxlength="10">					            
+	            </TD>
+	        </TR>
 			
        <?php
        echo getComponenteConsultaFiltro($vo->temTabHistorico, $filtro);
