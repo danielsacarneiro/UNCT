@@ -64,7 +64,8 @@ include_once(caminho_lib. "dbprocesso.obj.php");
 	  				$this->cDb->commit ();	  					
   				}
   				
-  				$log = $this->enviarEmailGestor($registroMensageria);
+  				$isContratoImprorrogavel = $registroMensageria[voMensageria::$IS_CONTRATO_IMPRORROGAVEL];
+  				$log = $this->enviarEmailGestor($registroMensageria, true, $isContratoImprorrogavel);
   				
   			} catch ( Exception $e ) {
   				$this->cDb->rollback ();
@@ -74,7 +75,7 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   			return $log;
   	} 
   	
-  	function enviarEmailGestor($registro, $enviarEmail=true){  	
+  	function enviarEmailGestor($registro, $enviarEmail=true, $isContratoImprorrogavel=false){  	
   		$vomensageria = new voMensageria();
   		$vomensageria->getDadosBanco($registro);
   		$numFrequencia = $vomensageria->numDiasFrequencia;
@@ -101,7 +102,11 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   			$codigo = "$codigo - $dsPessoa"; 
   		}
   		
-  		$msg .= static::getMensagemGestor($codigo,$numFrequencia);
+  		if(!$isContratoImprorrogavel){
+  			$msg .= static::getMensagemGestor($codigo,$numFrequencia);
+  		}else{
+  			$msg .= static::getMensagemGestorContratoImprorrogavel($codigo,$numFrequencia);
+  		}
   		
   		//$msg .= "<br>O contrato vencerá em dias.";
   		if(!$isEmailGestorValido){
@@ -136,9 +141,9 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		$emailCopia = email_sefaz::$REMETENTE_COPIA;
   		
   		$retorno = "<br>Prezado gestor,
-  		
-  		<br><br><br>A Unidade de Contratos (UNCT/SAFI) solicita informações referentes à <b>prorrogação</b> do contrato <b>$codigoContrato</b>, que em breve se encerrará.
-  		<br>Havendo interesse da SEFAZ pela prorrogação, favor enviar com a maior brevidade possível CI, via SEI à SAFI, junto com as cotações de preços e a anuência da Contratada.  		
+		<br><br><br>Esta é uma mensagem automática, gerada pelo sistema de automação da Unidade de Contratos (UNCT/SAFI), 
+		solicitando informações referentes à <b>prorrogação</b> do contrato <b>$codigoContrato</b>, que em breve se encerrará.
+  		<br>Havendo interesse da SEFAZ pela prorrogação, requere-se provocação tempestiva, via SEI, à SAFI, junto com as cotações de preços e a anuência da Contratada.  		
 
   		<br><br><b>Não sendo possível nova prorrogação, e persistindo a necessidade da contratação, o gestor deverá solicitar novo processo licitatório
   		em tempo hábil, sob pena de encerramento da prestação do serviço.
@@ -155,6 +160,32 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		return $retorno;
   	}
   	
+  	static function getMensagemGestorContratoImprorrogavel($codigoContrato, $numFrequencia){
+  		//$retorno = "<br><br>Caro Gestor, favor verificar o vencimento do contrato $codigo.";
+  	
+  		//$numFrequencia = complementarCharAEsquerda($numFrequencia, "0", 3);
+  		$emailPrincipal = email_sefaz::$REMETENTE_PRINCIPAL;
+  		$emailCopia = email_sefaz::$REMETENTE_COPIA;
+  	
+  		$retorno = "<br>Prezado gestor,
+  		
+		<br><br><br>Esta é uma mensagem automática, gerada pelo sistema de automação da Unidade de Contratos (UNCT/SAFI), 
+		comunicando a <b>improrrogabilidade</b> do contrato <b>$codigoContrato</b>, que em breve se encerrará.
+  		<br>Havendo interesse da SEFAZ pela manutenção do serviço contratado, requere-se provocação tempestiva, via SEI, à SAFI, 
+  		pleiteando a abertura de novo processo licitatório.
+  	  	
+  		<br><br>Excepcionalmente, permite-se a análise extraordinária de uma nova prorrogação, desde que atenda os requisitos legais.</b>
+  	
+  		<br><br>A resposta deve ser enviada para o seguinte correio eletrônico: <b><u>$emailPrincipal</u></b>, com cópia para <u>$emailCopia</u> .
+  		<br><br><b>Sem prejuízo quanto à responsabilidade referente à gestão contratual própria do setor demandante,
+  		é imprescindível a resposta deste email, ainda que inexista interesse na prorrogação, para fins de controle e registro desta UNCT</b>.
+  	
+  		<br><br>Caso esta solicitação já tenha sido respondida, favor desconsiderá-la.
+  		<br><br>Na ausência de manifestação, este e-mail será reenviado a cada <b>$numFrequencia dia(s)</b>.";
+  	
+  		return $retorno;
+  	}
+  	 
   	function getSQLValuesInsert($vo){
   		  		
 		$retorno = "";

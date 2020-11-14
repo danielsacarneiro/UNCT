@@ -16,6 +16,7 @@ Class dominioProrrogacaoContrato extends dominio{
 	static $DS_ART57_V = "Art.57,V-Emergências/segurança nacional";
 	static $DS_ART57_PAR_1 = "Art.57,§1-Justificadas";
 	static $DS_NAO_SEAPLICA = "Regido por outra regra";
+	
 	static $DS_IMPRORROGAVEL = "Improrrogável (mas admite exceção)";
 	
 	// ...............................................................

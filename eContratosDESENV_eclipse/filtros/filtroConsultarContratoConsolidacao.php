@@ -160,7 +160,8 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 			$conector  = "\n AND ";
 		}
 				
-		if ($this->inProrrogacao != null && $this->inProrrogacao != "") {			
+		if ($this->inProrrogacao != null && $this->inProrrogacao != "") {
+			//echo "TESTE".$this->inProrrogacao ."teste";
 			$filtro = $filtro . $conector . static::getSQLComparacaoPrazoProrrogacao($this->inProrrogacao);
 			$conector = "\n AND ";
 		}

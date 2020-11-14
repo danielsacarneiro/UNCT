@@ -288,7 +288,8 @@ Class voContratoInfo extends voentidade{
 	}
 	
 	static function getTextoAlertaContratoLocação(){
-		$retorno = "Contratos de locação de imóvel vão para a SAD em qualquer situação de RENOVAÇÃO/PRORROGAÇÃO,";
+		$retorno .=	"ATENÇÃO: Contratos de locação de imóvel NÃO se submetem ao art. 57, II, lei 8666/93.";
+		$retorno .= " Tais contratos vão para a SAD em qualquer situação de RENOVAÇÃO/PRORROGAÇÃO,";
 		$retorno .=	" inclusive exige-se laudo de avaliação a cada 5 anos (60meses, art6, par 2, da portaria),";
 		$retorno .=	" de acordo com a portaria 1.116/2016. Em se tratando de REAJUSTE, é dispensável o envio à SAD (art 7, da mesma portaria).";
 		

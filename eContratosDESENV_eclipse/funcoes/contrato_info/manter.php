@@ -59,6 +59,19 @@ try{
 <SCRIPT language="JavaScript" type="text/javascript">
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
 function isFormularioValido() {
+	campoClassificacao = document.frm_principal.<?=voContratoInfo::$nmAtrCdClassificacao?>;
+	classificacao = campoClassificacao.value;
+	campoProrrogacao = document.frm_principal.<?=voContratoInfo::$nmAtrInPrazoProrrogacao?>;
+	inProrrog = campoProrrogacao.value;	
+
+	if(classificacao == "<?=dominioClassificacaoContrato::$CD_LOCACAO_IMOVEL?>"
+		&& inProrrog != "<?=dominioProrrogacaoContrato::$CD_NAO_SEAPLICA?>"){
+
+		exibirMensagem("<?=voContratoInfo::getTextoAlertaContratoLocação()?>");
+		campoProrrogacao.focus();
+		campoProrrogacao.value = "<?=dominioProrrogacaoContrato::$CD_NAO_SEAPLICA?>";
+		return false;			
+	}	
 	
 	return true;
 }
@@ -112,6 +125,10 @@ function formataFormClassificacao(pCampoChamada) {
 
 	if(classificacao == "<?=dominioClassificacaoContrato::$CD_LOCACAO_IMOVEL?>"){
 		exibirMensagem("<?=voContratoInfo::getTextoAlertaContratoLocação()?>");
+
+		campoProrrogacao = document.frm_principal.<?=voContratoInfo::$nmAtrInPrazoProrrogacao?>;
+		campoProrrogacao.value = "<?=dominioProrrogacaoContrato::$CD_NAO_SEAPLICA?>";
+			
 	}
 }
 
