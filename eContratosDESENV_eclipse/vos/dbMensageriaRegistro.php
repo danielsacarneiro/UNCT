@@ -64,7 +64,7 @@ include_once(caminho_lib. "dbprocesso.obj.php");
 	  				$this->cDb->commit ();	  					
   				}
   				
-  				$isContratoImprorrogavel = $registroMensageria[voMensageria::$IS_CONTRATO_IMPRORROGAVEL];
+  				$isContratoImprorrogavel = dominioTipoMensageria::$CD_CONTRATO_IMPRORROGAVEL == $registroMensageria[voMensageria::$nmAtrTipo];
   				$log = $this->enviarEmailGestor($registroMensageria, true, $isContratoImprorrogavel);
   				
   			} catch ( Exception $e ) {
@@ -141,7 +141,7 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		$emailCopia = email_sefaz::$REMETENTE_COPIA;
   		
   		$retorno = "<br>Prezado gestor,
-		<br><br><br>Esta é uma mensagem automática, gerada pelo sistema de automação da Unidade de Contratos (UNCT/SAFI), 
+		<br><br><br><b>Esta é uma mensagem automática</b>, gerada pelo sistema de automação da Unidade de Contratos (UNCT/SAFI), 
 		solicitando informações referentes à <b>prorrogação</b> do contrato <b>$codigoContrato</b>, que em breve se encerrará.
   		<br>Havendo interesse da SEFAZ pela prorrogação, requere-se provocação tempestiva, via SEI, à SAFI, junto com as cotações de preços e a anuência da Contratada.  		
 
@@ -169,12 +169,12 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   	
   		$retorno = "<br>Prezado gestor,
   		
-		<br><br><br>Esta é uma mensagem automática, gerada pelo sistema de automação da Unidade de Contratos (UNCT/SAFI), 
+		<br><br><br><b>Esta é uma mensagem automática</b>, gerada pelo sistema de automação da Unidade de Contratos (UNCT/SAFI), 
 		comunicando a <b>improrrogabilidade</b> do contrato <b>$codigoContrato</b>, que em breve se encerrará.
   		<br>Havendo interesse da SEFAZ pela manutenção do serviço contratado, requere-se provocação tempestiva, via SEI, à SAFI, 
   		pleiteando a abertura de novo processo licitatório.
   	  	
-  		<br><br>Excepcionalmente, permite-se a análise extraordinária de uma nova prorrogação, desde que atenda os requisitos legais.</b>
+  		<br><br>Excepcionalmente, permite-se a análise extraordinária de uma nova prorrogação, desde que atendidos os requisitos legais.</b>
   	
   		<br><br>A resposta deve ser enviada para o seguinte correio eletrônico: <b><u>$emailPrincipal</u></b>, com cópia para <u>$emailCopia</u> .
   		<br><br><b>Sem prejuízo quanto à responsabilidade referente à gestão contratual própria do setor demandante,

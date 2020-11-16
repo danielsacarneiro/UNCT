@@ -289,18 +289,18 @@ function enviarEmail($assuntoParam, $mensagemParam, $enviarEmail=true, $listaEma
 			$enviado = $mail->enviarMensagem ($mensagemParam, $assuntoParam );
 			if ($enviado) {
 				echoo ("Email enviado com sucesso");				 
-				$log .= getLogComFlagImpressao("Email enviado com sucesso");
+				$log .= getLogComFlagImpressao("<br>Email enviado com sucesso");
 			} else {
 				echo "Não foi possível enviar o e-mail.<br /><br />";
-				echo "<b>Informações do erro:</b> <br />" . $mail->mail->ErrorInfo;
+				echo "<b>Informações do erro:</b> <br>" . $mail->mail->ErrorInfo;
 				
-				$log .= getLogComFlagImpressao("Não foi possível enviar o e-mail.<br /><br />");
+				$log .= getLogComFlagImpressao("<br>Não foi possível enviar o e-mail.<br>");
 				$log .= getLogComFlagImpressao("<b>Informações do erro:</b> <br />" . $mail->mail->ErrorInfo);
 			}
 		} else {
 			echo "RELATÓRIO DIÁRIO: NÃO enviar email.<BR>*******<BR>";
 			
-			$log .= getLogComFlagImpressao("RELATÓRIO DIÁRIO: NÃO enviar email.<BR>*******<BR>");
+			$log .= getLogComFlagImpressao("<br>RELATÓRIO DIÁRIO: NÃO enviar email.<BR>*******<BR>");
 		}
 	} catch ( Exception $ex ) {
 		$msg = $ex->getMessage ();
@@ -529,12 +529,23 @@ function enviarEmailDiretoria($enviarEmail){
 	$mensagem .= getMensagemContratosAVencer($count);
 	//envia contratos a vencer SEM DEMANDA
 	$mensagem .= getMensagemContratosAVencerGestor($count);
-
+	//envia contratos a vencer SEM DEMANDA QUE NAO ADMITEM PRORROGACAO
+	$mensagem .= getMensagemContratosAVencerImprorrogaveisGestor($count);
+	
 	echo $mensagem . getBotaoDetalharAlertas(new voContratoInfo());
 
 	$assunto = "Relatório diário";
 	enviarEmail($assunto, $mensagem, $enviarEmail, email_sefaz::getListaEmailContratosAVencer());
 	//enviarEmail($assuntoParam, $mensagemParam, $enviarEmail=true, $listaEmail=null,$remetente = null) {
+}
+
+function getFiltroContratosAVencerImprorrog($inTemDemandaEmTratamento = null){
+	$filtro = getFiltroContratosAVencer($inTemDemandaEmTratamento);
+	
+	$filtro->qtdDiasParaVencimento = voMensageria::$NUM_DIAS_CONTRATOS_A_VENCER_IMPRORROGAVEIS;
+	$filtro->inProrrogacao = dominioProrrogacaoFiltroConsolidacao::$CD_NAOPRORROGAVEL;
+	
+	return $filtro;	
 }
 
 function getFiltroContratosAVencer($inTemDemandaEmTratamento = null){
@@ -582,13 +593,27 @@ function existeAlertaAtivoContrato($vocontratoinfo){
 	
 	return !isColecaoVazia($colecao);
 }
+
+/**
+ * cria os alertas (se nao existirem) a partir de uma colecao de contratos
+ * para os contratos IMPRORROGAVEIS
+ */
+function criarAlertasEmailGestorColecaoContratosImprorrog(){
+	$filtro = getFiltroContratosAVencerImprorrog(constantes::$CD_NAO);
+	$log = "<br>CONTRATOS IMPRORROGÁVEIS.";
+	return criarAlertasEmailGestorColecaoContratos($filtro, $log, true);
+}
+
 /**
  * cria os alertas (se nao existirem) a partir de uma colecao de contratos
  */
-function criarAlertasEmailGestorColecaoContratos(){
-	
-	$log = "Início de verificação dos contratos a vencer que gerarão alertas.";
-	$filtro = getFiltroContratosAVencer(constantes::$CD_NAO);
+function criarAlertasEmailGestorColecaoContratos($filtro=null, $log=null, $isContratosImprorrogaveis = false){
+
+	if($filtro == null){
+		$filtro = getFiltroContratosAVencer(constantes::$CD_NAO);
+	}
+	$log .= "<br>Início de verificação dos contratos a vencer que gerarão alertas.";
+
 	$dbprocesso = new dbContratoInfo();
 	$colecao = $dbprocesso->consultarTelaConsultaConsolidacao ($filtro, true);
 	
@@ -604,6 +629,10 @@ function criarAlertasEmailGestorColecaoContratos(){
 			$voAlerta->vocontratoinfo = $vocontratoinfo;
 			$voAlerta->dtInicio = getDataHoje();
 			$voAlerta->dtFim = getData($registrobanco[filtroConsultarContratoConsolidacao::$NmColDtFimVigencia]);
+			$voAlerta->tipo = dominioTipoMensageria::$CD_CONTRATO_PRORROGAVEL;
+			if($isContratosImprorrogaveis){
+				$voAlerta->tipo = dominioTipoMensageria::$CD_CONTRATO_IMPRORROGAVEL;
+			}
 			//echoo ($voAlerta->dtFim);
 			
 			$voAlerta->inHabilitado = constantes::$CD_SIM;

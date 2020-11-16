@@ -21,11 +21,14 @@ if(!$ativado){
 
 $enviarEmailAlerta = $ativado && $isEnvioEmail;
 if ($enviarEmailAlerta) {	
-	echoo("___________________________");
+	//echoo("___________________________");
 	$log .= getLogComFlagImpressao("___________________________");
 	//consulta os contratos que nao tem alerta para cria-los
+	$log .= criarAlertasEmailGestorColecaoContratosImprorrog();
+	
+	//echoo("___________________________");
+	$log .= getLogComFlagImpressao("___________________________");
 	$log .= criarAlertasEmailGestorColecaoContratos();
-	echoo($log);
 	
 	//busca os alertas a enviar
 	$filtro = new filtroManterMensageria ( false );
@@ -36,7 +39,8 @@ if ($enviarEmailAlerta) {
 	$filtro->inSeraProrrogado = constantes::$CD_SIM;
 	//$filtro->inVerificarFrequencia = constantes::$CD_NAO;
 	$filtro->inVerificarFrequencia = voMensageria::$IN_VERIFICAR_FREQUENCIA;
-	echoo("Verificador de Frequência do email: '$filtro->inVerificarFrequencia'.");
+	//echoo("Verificador de Frequência do email: '$filtro->inVerificarFrequencia'.");
+	$log .= getLogComFlagImpressao("<br>Verificador de Frequência do email: '$filtro->inVerificarFrequencia'.");
 	
 	$filtro->setaFiltroConsultaSemLimiteRegistro ();
 	
@@ -46,30 +50,31 @@ if ($enviarEmailAlerta) {
 	$dbMensageriaRegistro = new dbMensageriaRegistro ();
 	if (! isColecaoVazia ( $colecao )) {
 		
-		echoo("___________________________");
-		echoo("Enviando email para os contratos cadastrados.");		
+		//echoo("<br>___________________________");
+		//echoo("<br>Enviando email para os contratos cadastrados.");		
 		
-		$log .= getLogComFlagImpressao("___________________________");
-		$log .= getLogComFlagImpressao("Enviando email para os contratos cadastrados.");
+		$log .= getLogComFlagImpressao("<br>___________________________");
+		$log .= getLogComFlagImpressao("<br>Enviando email para os contratos cadastrados.");
 		
 		foreach ( $colecao as $registro ) {
 			try {
 				$log .= $dbMensageriaRegistro->incluirComEnvioEmail ( $registro );
 			} catch ( Exception $e ) {
-				echoo ( $e->getMessage () );
-				$log .= getLogComFlagImpressao($e->getMessage ());
+				//echoo ( $e->getMessage () );
+				$log .= getLogComFlagImpressao("<br>".$e->getMessage ());
 			}
 		}
 	}else{
-		echoo("Mensageria: não existem alertas para o dia de hoje.");
-		$log .= getLogComFlagImpressao("Mensageria: não existem alertas para o dia de hoje.");
+		//echoo("<br>Mensageria: não existem alertas para o dia de hoje.");
+		$log .= getLogComFlagImpressao("<br>Mensageria: não existem alertas para o dia de hoje.");
 	}
 	
-	echoo("FIM Mensageria.");
-	$log .= getLogComFlagImpressao("FIM Mensageria.");
+	//echoo("<br>FIM Mensageria.");
+	$log .= getLogComFlagImpressao("<br>FIM Mensageria.");
 	
 	//envia email com o log
-	enviarEmail("Log execução criação de alertas automático", $log, true, email_sefaz::getListaEmailLogAlertasGestor());	
+	enviarEmail("Log execução criação de alertas automático", $log, true, email_sefaz::getListaEmailLogAlertasGestor());
 	
+	echoo($log);	
 }
 

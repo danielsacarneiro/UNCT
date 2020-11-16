@@ -269,7 +269,7 @@ function getMensagemSistemasExternos(&$count = 0){
  * @return string
  */
 function getMensagemContratosAVencer(&$count = 0){
-	$assunto = "CONTRATOS A VENCER:";
+	$assunto = "CONTRATOS A VENCER (".voMensageria::$NUM_DIAS_CONTRATOS_A_VENCER." dias):";
 	$assunto = getSequenciaAssunto($assunto, $count);
 	try {
 		//pega todos os contratos a vencer no prazo
@@ -295,11 +295,11 @@ function getMensagemContratosAVencer(&$count = 0){
 /** ALERTAS DILC **/
 
 function getMensagemContratosAVencerGestor(&$count = 0){
-	$assunto = "CONTRATOS A VENCER SEM DEMANDA INICIADA (COMUNICAR AO GESTOR):";
+	$assunto = "CONTRATOS A VENCER (".voMensageria::$NUM_DIAS_CONTRATOS_A_VENCER." dias) SEM DEMANDA INICIADA (COMUNICAR AO GESTOR):";
 	$assunto = getSequenciaAssunto($assunto, $count);
 	try {
 		$filtro = getFiltroContratosAVencer(constantes::$CD_NAO);
-				
+
 		$dbprocesso = new dbContratoInfo();
 		$colecao = $dbprocesso->consultarTelaConsultaConsolidacao ($filtro, true);
 
@@ -317,6 +317,28 @@ function getMensagemContratosAVencerGestor(&$count = 0){
 		constantes::$CD_COLUNA_TP_VALIDACAO =>  constantes::$CD_ALERTA_TP_VALIDACAO_MAIORQUE,
 		);
 		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);*/
+
+		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Início.Vigência', filtroConsultarContratoConsolidacao::$NmColDtInicioVigencia, constantes::$CD_TP_DADO_DATA);
+		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Fim.Vigência', filtroConsultarContratoConsolidacao::$NmColDtFimVigencia, constantes::$CD_TP_DADO_DATA);
+		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Prazo(dias)', filtroConsultarContratoConsolidacao::$NmColQtdDiasParaVencimento);
+
+		$msg = getCorpoMensagemDemandaContratoColecao($assunto, $colecao, $colunasAAcrescentar);
+
+	} catch ( Exception $ex ) {
+		$msg = $ex->getMessage ();
+	}
+
+	return $msg;
+}
+
+function getMensagemContratosAVencerImprorrogaveisGestor(&$count = 0){
+	$assunto = "CONTRATOS A VENCER (". voMensageria::$NUM_DIAS_CONTRATOS_A_VENCER_IMPRORROGAVEIS ." dias)". getTextoHTMLDestacado("IMPRORROGÁVEIS"). " SEM DEMANDA INICIADA (COMUNICAR AO GESTOR):";
+	$assunto = getSequenciaAssunto($assunto, $count);
+	try {
+		$filtro = getFiltroContratosAVencerImprorrog(constantes::$CD_NAO);
+				
+		$dbprocesso = new dbContratoInfo();
+		$colecao = $dbprocesso->consultarTelaConsultaConsolidacao ($filtro, true);
 
 		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Início.Vigência', filtroConsultarContratoConsolidacao::$NmColDtInicioVigencia, constantes::$CD_TP_DADO_DATA);
 		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Fim.Vigência', filtroConsultarContratoConsolidacao::$NmColDtFimVigencia, constantes::$CD_TP_DADO_DATA);

@@ -8,6 +8,7 @@ CREATE TABLE mensageria (
     ct_numero INT NOT NULL,
     ct_tipo char(1) NOT NULL,
     
+    msg_tipo CHAR(1) NOT NULL DEFAULT 'P',
     msg_dt_inicio DATE NOT NULL,
     msg_dt_fim DATE NULL,
     msg_in_habilitado CHAR(1) NOT NULL DEFAULT 'S',
@@ -21,6 +22,7 @@ CREATE TABLE mensageria (
     
     CONSTRAINT pk PRIMARY KEY (msg_sq)
 );
+ALTER TABLE mensageria ADD COLUMN msg_tipo CHAR(1) NOT NULL DEFAULT 'P' AFTER ct_tipo;
 
 drop table msg_registro;
 CREATE TABLE msg_registro (	
@@ -38,7 +40,7 @@ CREATE TABLE msg_registro (
 );
 
 select * from mensageria
-where msg_in_habilitado = 'S'
+where msg_tipo = 'P'
 
 update mensageria
 set msg_in_habilitado = 'N', msg_dt_fim = DATE(NOW())

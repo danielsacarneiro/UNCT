@@ -1,6 +1,7 @@
 <?php
 include_once (caminho_lib . "voentidade.php");
 include_once(caminho_funcoes."alertas/Biblioteca_alertas.php");
+include_once(caminho_funcoes."mensageria/dominioTipoMensageria.php");
 
 class voMensageria extends voentidade {	
 	
@@ -10,9 +11,9 @@ class voMensageria extends voentidade {
 	//ativa o envio do email do relatorio diario
 	static $ENVIAR_EMAIL_RELATORIO_DIARIO = true;
 	//ativa o envio do email da mensageria ao gestor apenas para a UNCT
-	static $ENVIAR_EMAIL_GESTOR_UNCT = false;
+	static $ENVIAR_EMAIL_GESTOR_UNCT = true;
 	//ativa o envio do email da mensageria ao gestor
-	static $ENVIAR_EMAIL_GESTOR_CONTRATO = false;
+	static $ENVIAR_EMAIL_GESTOR_CONTRATO = true;
 	//ativa o envio do email para teste permitindo o envio de mais de um email por dia
 	static $IN_VERIFICAR_FREQUENCIA = "S";
 	static $IMPRIMIR_MENSAGEM_SE_CONSULTA_VAZIA = true;
@@ -21,7 +22,6 @@ class voMensageria extends voentidade {
 	static $NUM_DIAS_CONTRATOS_A_VENCER = 45;
 	static $NUM_DIAS_CONTRATOS_A_VENCER_IMPRORROGAVEIS = 180;
 	
-	static $IS_CONTRATO_IMPRORROGAVEL = "IS_CONTRATO_IMPRORROGAVEL";
 	static $nmCOLDhUltimoEnvio = "nmCOLDhUltimoEnvio";
 	
 	static $nmAtrSq = "msg_sq";
@@ -29,6 +29,7 @@ class voMensageria extends voentidade {
 	static $nmAtrCdContrato  = "ct_numero";
 	static $nmAtrTipoContrato =  "ct_tipo";
 	
+	static $nmAtrTipo = "msg_tipo";
 	static $nmAtrDtInicio = "msg_dt_inicio";
 	static $nmAtrDtFim = "msg_dt_fim";
 	static $nmAtrInHabilitado = "msg_in_habilitado";
@@ -41,6 +42,7 @@ class voMensageria extends voentidade {
 	var $dtInicio;
 	var $dtFim;
 	var $inHabilitado;
+	var $tipo;
 	var $numDiasFrequencia;
 	var $obs;	
 	
@@ -118,6 +120,7 @@ class voMensageria extends voentidade {
 				self::$nmAtrCdContrato,				
 				self::$nmAtrTipoContrato,
 				
+				self::$nmAtrTipo,
 				self::$nmAtrDtInicio,
 				self::$nmAtrDtFim,
 				self::$nmAtrInHabilitado,
@@ -135,6 +138,7 @@ class voMensageria extends voentidade {
 		$this->dtInicio = $registrobanco[self::$nmAtrDtInicio];		
 		$this->dtFim = $registrobanco[self::$nmAtrDtFim];
 		$this->inHabilitado = $registrobanco[self::$nmAtrInHabilitado];
+		$this->tipo = $registrobanco[self::$nmAtrTipo];
 		$this->numDiasFrequencia = $registrobanco[self::$nmAtrNumDiasFrequencia];
 		$this->obs = $registrobanco[self::$nmAtrObs];
 	}
@@ -146,6 +150,7 @@ class voMensageria extends voentidade {
 		$this->dtFim = getCampoRequest(self::$nmAtrDtFim, true);
 		
 		$this->inHabilitado = @$_POST[self::$nmAtrInHabilitado];
+		$this->tipo = @$_POST[self::$nmAtrTipo];
 		$this->numDiasFrequencia = @$_POST[self::$nmAtrNumDiasFrequencia];
 		$this->obs = @$_POST[self::$nmAtrObs];
 				

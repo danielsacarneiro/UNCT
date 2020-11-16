@@ -178,6 +178,7 @@ include_once(caminho_lib. "dbprocesso.obj.php");
 		$retorno.= $this-> getVarComoNumero($vo->vocontratoinfo->cdContrato). ",";
 		$retorno.= $this-> getVarComoString($vo->vocontratoinfo->tipo). ",";
 		
+		$retorno.= $this-> getVarComoString($vo->tipo). ",";		
 		$retorno.= $this-> getVarComoData($vo->dtInicio). ",";
 		$retorno.= $this-> getVarComoData($vo->dtFim). ",";
         $retorno.= $this-> getVarComoString("S"). ",";
@@ -200,6 +201,11 @@ include_once(caminho_lib. "dbprocesso.obj.php");
         
         if($vo->dtFim != null){
         	$retorno.= $sqlConector . voMensageria::$nmAtrDtFim. " = " . $this->getVarComoData($vo->dtFim);
+        	$sqlConector = ",";
+        }
+        
+        if($vo->tipo != null){
+        	$retorno.= $sqlConector . voMensageria::$nmAtrTipo . " = " . $this->getVarComoString($vo->tipo);
         	$sqlConector = ",";
         }
         

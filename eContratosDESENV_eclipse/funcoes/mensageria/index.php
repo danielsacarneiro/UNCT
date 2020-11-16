@@ -212,6 +212,7 @@ function alterar() {
                     <TH class="headertabeladados" width="1%" nowrap>Contrato</TH>
                     <TH class="headertabeladados" width="80%">Contratada</TH>
                     <TH class="headertabeladados" width="1%">CNPJ/CNPF</TH>                    
+                    <TH class="headertabeladados" width="1%">Tipo</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Dt.Inclusão</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Dt.Inicio</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Dt.Fim</TH>
@@ -225,7 +226,7 @@ function alterar() {
                         $tamanho = 0;
                 
                 //echoo($tamanho);                                
-                $colspan=10;
+                $colspan=11;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -280,6 +281,7 @@ function alterar() {
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo $contrato;?></TD>                    
 					<TD class="tabeladados" nowrap><?php echo $dsPessoa?></TD>					
 					<TD class="tabeladados" nowrap><?php echo documentoPessoa::getNumeroDocFormatado($voPessoa->doc)?></TD>
+                    <TD class="tabeladados" nowrap><?php echo dominioTipoMensageria::getDescricao($voAtual->tipo)?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($voAtual->dhInclusao)?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($voAtual->dtInicio)?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($voAtual->dtFim)?></TD>
