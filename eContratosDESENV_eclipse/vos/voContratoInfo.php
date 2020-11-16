@@ -35,6 +35,8 @@ Class voContratoInfo extends voentidade{
 	
 	static $nmAtrNumPrazoMater = "ctinf_numprazoMATER";
 	
+	static $nmAtrInPendencias = "ctinf_pendencias";
+	static $nmAtrInPendenciasBANCO = "ctinf_pendenciasBANCO";
 	static $nmAtrSEIContratoSubstituto = "ctinf_SEIcontratosubstituto";
 		
 	var $cdContrato = "";
@@ -56,6 +58,7 @@ Class voContratoInfo extends voentidade{
 	var $inEscopo = "";
 	var $inPrazoProrrogacao = "";
 	var $inEstudoTecnicoSAD = "";
+	var $inPendencias = "";
 	var $SEIContratoSubstituto = "";
 	
 	var $dbprocesso = null;
@@ -129,6 +132,7 @@ Class voContratoInfo extends voentidade{
 				self::$nmAtrInEscopo,
 				self::$nmAtrInPrazoProrrogacao,
 				self::$nmAtrInEstudoTecnicoSAD,
+				self::$nmAtrInPendencias,
 				self::$nmAtrSEIContratoSubstituto,
 		);
 
@@ -197,6 +201,7 @@ Class voContratoInfo extends voentidade{
 		$this->inEscopo = $registrobanco[self::$nmAtrInEscopo];
 		$this->inPrazoProrrogacao = $registrobanco[self::$nmAtrInPrazoProrrogacao];
 		$this->inEstudoTecnicoSAD = $registrobanco[self::$nmAtrInEstudoTecnicoSAD];
+		$this->inPendencias = $registrobanco[self::$nmAtrInPendencias];
 		$this->SEIContratoSubstituto = $registrobanco[self::$nmAtrSEIContratoSubstituto];
 	}
 
@@ -220,6 +225,11 @@ Class voContratoInfo extends voentidade{
 		$this->inEscopo = $_POST[self::$nmAtrInEscopo];
 		$this->inPrazoProrrogacao = $_POST[self::$nmAtrInPrazoProrrogacao];
 		$this->inEstudoTecnicoSAD = $_POST[self::$nmAtrInEstudoTecnicoSAD];
+		$this->inPendencias = $_POST[self::$nmAtrInPendencias];
+		if(is_array($this->inPendencias)){
+			$this->inPendencias = static::getArrayComoStringCampoSeparador($this->inPendencias);
+		}
+		
 		$this->SEIContratoSubstituto = $_POST[self::$nmAtrSEIContratoSubstituto];
 		//completa com os dados da entidade
 		$this->getDadosFormularioEntidade();

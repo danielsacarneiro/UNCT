@@ -164,6 +164,7 @@ CREATE TABLE contrato_info (
     ctinf_in_prazoprorrogacao INT NULL,
     ctinf_in_sad_estudotec INT NULL,
     
+    ctinf_pendencias VARCHAR(25) NULL,
     ctinf_SEIcontratosubstituto VARCHAR(25) NULL,
     
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -181,6 +182,7 @@ ALTER TABLE contrato_info ADD COLUMN ctinf_in_credenciamento CHAR(1) NULL AFTER 
 ALTER TABLE contrato_info ADD COLUMN ctinf_in_seraprorrogado CHAR(1) NULL AFTER ctinf_in_credenciamento;
 alter table contrato_info modify ctinf_in_seraprorrogado CHAR(1) NOT NULL DEFAULT 'S';
 ALTER TABLE contrato_info ADD COLUMN ctinf_SEIcontratosubstituto VARCHAR(25) NULL AFTER ctinf_in_sad_estudotec;
+ALTER TABLE contrato_info ADD COLUMN ctinf_pendencias VARCHAR(25) NULL AFTER ctinf_in_sad_estudotec;
 
 
 
@@ -225,6 +227,7 @@ CREATE TABLE contrato_info_hist (
     ctinf_in_prazoprorrogacao INT NULL,
     ctinf_in_sad_estudotec INT NULL,
     
+    ctinf_pendencias VARCHAR(25) NULL,
     ctinf_SEIcontratosubstituto VARCHAR(25) NULL,
     
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,

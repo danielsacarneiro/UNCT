@@ -1283,7 +1283,7 @@ class dbDemanda extends dbprocesso {
 		$retorno .= $this->getVarComoData ( $vo->dtReferencia ). ",";
 		$retorno .= $this->getVarComoNumero ( $vo->cdPessoaRespATJA ). ",";
 		$retorno .= $this->getVarComoNumero ( $vo->cdPessoaRespUNCT ). ",";
-		$retorno.= $this-> getVarComoString($vo->fase). ",";
+		$retorno .= $this-> getVarComoString($vo->fase). ",";
 		$retorno .= $this->getVarComoString ( voDemanda::getNumeroPRTSemMascara($vo->prt) ) . ",";
 		
 		$retorno .= $this->getVarComoString($vo->inLegado);

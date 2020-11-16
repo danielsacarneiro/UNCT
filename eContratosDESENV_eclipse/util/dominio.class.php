@@ -342,7 +342,10 @@ class dominio extends multiplosConstrutores {
 		$comOpcaoNenhum = $pArray[12];
 		$comOpcaoSimNao = $pArray[13];
 		$isDetalhamento = $pArray[14];
+		$nmCampoHiddenAlteracaoAComparar = $pArray[15];
 		
+		$existeCampoHiddenAlteracaoAComparar = $nmCampoHiddenAlteracaoAComparar != null;
+				
 		if($isDetalhamento == null){
 			$isDetalhamento = false;
 		}
@@ -446,7 +449,7 @@ class dominio extends multiplosConstrutores {
 
 		//para o caso de ser detalhamento e nao haver nenhum selecionado
 		if($isDetalhamento && $isNenhumItemSelecionado){
-			//$html .= "Nenhum Item Selecionado";
+			$html .= constantes::$DS_OPCAO_NAO_SEAPLICA;
 			;
 		}else{
 			//artificio usado para tirar o ultimo <br>
@@ -469,7 +472,11 @@ class dominio extends multiplosConstrutores {
 		$html.="$borracha $comboOR_AND\n</TD>";
 		$html.="\n</TR>";
 		$html.="\n</TBODY>";
-		$html.="\n</TABLE>";		
+		$html.="\n</TABLE>";
+		
+		if($existeCampoHiddenAlteracaoAComparar){
+			$html.= getInputHidden($nmCampoHiddenAlteracaoAComparar, $nmCampoHiddenAlteracaoAComparar, $opcaoSelecionada);
+		}
 		
 		return $html;
 	}

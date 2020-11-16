@@ -204,14 +204,30 @@ function iniciar(){
 	       ?>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Estudo Técnico:</TH>
-	            <TD class="campoformulario" width="1%"><?php echo $comboEstudoTecnico->getHtmlCombo(voContratoInfo::$nmAtrInEstudoTecnicoSAD,voContratoInfo::$nmAtrInEstudoTecnicoSAD, $vo->inEstudoTecnicoSAD, true, "camponaoobrigatorio", false, " onChange='' required ");?>
+	            <TD class="campoformulario" width="1%" colspan=3><?php echo $comboEstudoTecnico->getHtmlCombo(voContratoInfo::$nmAtrInEstudoTecnicoSAD,voContratoInfo::$nmAtrInEstudoTecnicoSAD, $vo->inEstudoTecnicoSAD, true, "camponaoobrigatorio", false, " onChange='' required ");?>
 				<?php
 				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioAutorizacao.php");
 				$combo = new select(dominioAutorizacao::getColecao());				
 				?>
+	        </TR>
+	        
+			<TR>
 	            <TH class="campoformulario" nowrap>Autorização:</TH>
 	            <TD class="campoformulario"><?php echo $combo->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato,voContratoInfo::$nmAtrCdAutorizacaoContrato, $cdAutorizacao, true, "camponaoobrigatorio", true, " required ");?>
-	        </TR>	       
+	            </TD>
+	            <TH class="campoformulario" nowrap width="1%">Pendências:</TH>
+	            <TD class="campoformulario" colspan=1>
+	            <?php 
+	            $nmCampoPendenciasHtml = voContratoInfo::$nmAtrInPendencias ."[]";
+	            $arrayParamPendencias = array($nmCampoPendenciasHtml, $vo->inPendencias, dominioAutorizacao::getColecaoPendencias(), 1, false, "", false, " ");
+	            //$arrayParamPendencias[11] = true;
+	            //$arrayParamPendencias[15] = vocontratoinfo::$nmAtrInPendenciasBANCO;
+	            echo dominioAutorizacao::getHtmlChecksBoxArray($arrayParamPendencias);
+	             ?>
+	            </TD>	            
+	        </TR>
+	        
+	        	       
 			<TR>
 				<?php
 				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioClassificacaoContrato.php");

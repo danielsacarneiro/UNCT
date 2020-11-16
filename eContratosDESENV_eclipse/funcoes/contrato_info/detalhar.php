@@ -114,13 +114,20 @@ function iniciar(){
 			?>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Estudo Técnico:</TH>
-	            <TD class="campoformulario" width="1%"><?php echo dominioEstudoTecnicoSAD::getHtmlDetalhamento(
+	            <TD class="campoformulario" width="1%" colspan=3>
+	            <?php 
+	            
+	            echo dominioEstudoTecnicoSAD::getHtmlDetalhamento(
 	            		voContratoInfo::$nmAtrInEstudoTecnicoSAD,
 	            		voContratoInfo::$nmAtrInEstudoTecnicoSAD, 
 	            		$vo->inEstudoTecnicoSAD,
 	            		false,
 	            		dominioEstudoTecnicoSAD::getColecaoFormatada()
-	            		);?>	
+	            		);?>
+	            </TD>	
+	        </TR>
+	        
+			<TR>
 				<?php
 				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioAutorizacao.php");
 				$combo = new select(dominioAutorizacao::getColecao());
@@ -132,11 +139,18 @@ function iniciar(){
 				}
 				?>
 	            <TH class="campoformulario" width="1%" nowrap>Autorização:</TH>
-	            <TD class="campoformulario">
+	            <TD class="campoformulario" nowrap>
 	            Planilha: <?php echo $combo->getHtmlCombo("","", $cdAutorizacaoPlanilha, true, "camporeadonly", true, " disabled ");?>	            
 	            Atual: <?php echo $combo->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato,voContratoInfo::$nmAtrCdAutorizacaoContrato, $vo->cdAutorizacao, true, "camporeadonly", true, " disabled ");?>
 				</TD>	            	        	            		            
-	        </TR>			
+	            <TH class="campoformulario" nowrap width="1%">Pendências:</TH>
+	            <TD class="campoformulario" colspan=1>
+	            <?php 
+	            echo dominioAutorizacao::getHtmlChecksBoxDetalhamento("", $vo->inPendencias, 1);	             
+	             ?>
+	            </TD>	            
+	        </TR>
+	        			
 			<TR>
 				<?php
 				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioClassificacaoContrato.php");

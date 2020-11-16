@@ -103,5 +103,13 @@ class dominioAutorizacao extends dominio {
 		
 		return $retorno;
 	}
+	
+	static function getColecaoPendencias() {
+		return array (
+				self::$CD_AUTORIZ_SAD => self::$DS_AUTORIZ_SAD,
+				self::$CD_AUTORIZ_PGE => self::$DS_AUTORIZ_PGE,
+		);
+	}
+	
 }
 ?>
