@@ -22,12 +22,12 @@ if(!$ativado){
 $enviarEmailAlerta = $ativado && $isEnvioEmail;
 if ($enviarEmailAlerta) {	
 	//echoo("___________________________");
-	$log .= getLogComFlagImpressao("___________________________");
+	$log .= getLogComFlagImpressao("<br>___________________________");
 	//consulta os contratos que nao tem alerta para cria-los
 	$log .= criarAlertasEmailGestorColecaoContratosImprorrog();
 	
 	//echoo("___________________________");
-	$log .= getLogComFlagImpressao("___________________________");
+	$log .= getLogComFlagImpressao("<br>___________________________");
 	$log .= criarAlertasEmailGestorColecaoContratos();
 	
 	//busca os alertas a enviar
@@ -56,14 +56,21 @@ if ($enviarEmailAlerta) {
 		$log .= getLogComFlagImpressao("<br>___________________________");
 		$log .= getLogComFlagImpressao("<br>Enviando email para os contratos cadastrados.");
 		
+		$qtdEmailsEnviados = 0;
+		$qtdEmailsErros = 0;
 		foreach ( $colecao as $registro ) {
 			try {
 				$log .= $dbMensageriaRegistro->incluirComEnvioEmail ( $registro );
+				$qtdEmailsEnviados++;
 			} catch ( Exception $e ) {
 				//echoo ( $e->getMessage () );
 				$log .= getLogComFlagImpressao("<br>".$e->getMessage ());
+				$qtdEmailsErros++;
 			}
 		}
+		
+		$log .= getLogComFlagImpressao("<br>$qtdEmailsEnviados emails enviados com sucesso.");
+		$log .= getLogComFlagImpressao("<br>$qtdEmailsErros emails com erro.");
 	}else{
 		//echoo("<br>Mensageria: não existem alertas para o dia de hoje.");
 		$log .= getLogComFlagImpressao("<br>Mensageria: não existem alertas para o dia de hoje.");

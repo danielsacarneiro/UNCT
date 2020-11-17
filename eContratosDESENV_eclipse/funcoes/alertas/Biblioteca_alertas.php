@@ -288,23 +288,23 @@ function enviarEmail($assuntoParam, $mensagemParam, $enviarEmail=true, $listaEma
 			
 			$enviado = $mail->enviarMensagem ($mensagemParam, $assuntoParam );
 			if ($enviado) {
-				echoo ("Email enviado com sucesso");				 
+				//echoo ("Email enviado com sucesso");				 
 				$log .= getLogComFlagImpressao("<br>Email enviado com sucesso");
 			} else {
-				echo "Não foi possível enviar o e-mail.<br /><br />";
-				echo "<b>Informações do erro:</b> <br>" . $mail->mail->ErrorInfo;
+				/*echo "Não foi possível enviar o e-mail.<br /><br />";
+				echo "<b>Informações do erro:</b> <br>" . $mail->mail->ErrorInfo;*/
 				
 				$log .= getLogComFlagImpressao("<br>Não foi possível enviar o e-mail.<br>");
 				$log .= getLogComFlagImpressao("<b>Informações do erro:</b> <br />" . $mail->mail->ErrorInfo);
 			}
 		} else {
-			echo "RELATÓRIO DIÁRIO: NÃO enviar email.<BR>*******<BR>";
+			//echo "RELATÓRIO DIÁRIO: NÃO enviar email.<BR>*******<BR>";
 			
 			$log .= getLogComFlagImpressao("<br>RELATÓRIO DIÁRIO: NÃO enviar email.<BR>*******<BR>");
 		}
 	} catch ( Exception $ex ) {
 		$msg = $ex->getMessage ();
-		echo $msg;
+		//echo $msg;
 		$log .= getLogComFlagImpressao($msg);
 	}
 	
@@ -620,7 +620,7 @@ function criarAlertasEmailGestorColecaoContratos($filtro=null, $log=null, $isCon
 	if(!isColecaoVazia($colecao)){
 		//$colecao = array($colecao[0]);
 		$tam = sizeof($colecao);
-		$log .= "<br>Proceder à inclusão de $tam alertas.";
+		$log .= "<br>Proceder à inclusão de <b>$tam alertas</b>.";
 		foreach ($colecao as $registrobanco){
 			$voAlerta = new voMensageria();
 			$vocontratoinfo = new voContratoInfo();
