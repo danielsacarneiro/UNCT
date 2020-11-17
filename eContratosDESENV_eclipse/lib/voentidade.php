@@ -125,24 +125,34 @@ class voentidade extends multiplosConstrutores {
 	 * @deprecated
 	 *
 	 */
-	function getSQLValuesUpdate() {
+	function getSQLValuesUpdate() {		
+		$idUsuarioAlteracao = $this->cdUsuarioUltAlteracao;				
+		if($idUsuarioAlteracao == null){
+			$idUsuarioAlteracao = id_user;
+		}
+		
 		$retorno = "";
 		$retorno .= self::$nmAtrDhUltAlteracao . " = now() ";
 		$retorno .= ",";
-		$retorno .= self::$nmAtrCdUsuarioUltAlteracao . " = " . id_user;
+		$retorno .= self::$nmAtrCdUsuarioUltAlteracao . " = " . $idUsuarioAlteracao;
 		
 		//echoo($retorno);
 		
 		return $retorno;
 	}
-	function getSQLValuesEntidadeUpdate() {
+	function getSQLValuesEntidadeUpdate($idUsuarioAlteracao = null) {
+		$idUsuarioAlteracao = $this->cdUsuarioUltAlteracao;
+		if($idUsuarioAlteracao == null){
+			$idUsuarioAlteracao = id_user;
+		}
+		
 		$temUsuarioAlt = array_search ( self::$nmAtrCdUsuarioUltAlteracao, $this->varAtributos );
 		$temDtAlt = array_search ( self::$nmAtrDhUltAlteracao, $this->varAtributos );
 		
 		$retorno = "";
 		$conector = ",";
 		if ($temUsuarioAlt) {
-			$retorno .= $conector . self::$nmAtrCdUsuarioUltAlteracao . " = " . id_user;
+			$retorno .= $conector . self::$nmAtrCdUsuarioUltAlteracao . " = " . $idUsuarioAlteracao;
 			$conector = ",";
 		}
 		if ($temDtAlt) {

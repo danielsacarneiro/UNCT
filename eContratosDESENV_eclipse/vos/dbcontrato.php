@@ -300,7 +300,7 @@ class dbcontrato extends dbprocesso {
 		$queryJoin .= ", $nmTabelaContratoInfo." . voContratoInfo::$nmAtrDtProposta;
 		$queryJoin .= ", $nmTabelaContratoInfo." . voContratoInfo::$nmAtrInEscopo;
 		$queryJoin .= ", $nmTabelaContratoLicon." . voContratoLicon::$nmAtrSituacao;
-
+		$queryJoin .= ", TAB1." . vousuario::$nmAtrName . " AS " . voentidade::$nmAtrNmUsuarioInclusao;
 		$queryJoin .= ", TAB2." . vousuario::$nmAtrName . " AS " . voentidade::$nmAtrNmUsuarioUltAlteracao;
 			
 
@@ -1013,7 +1013,7 @@ class dbcontrato extends dbprocesso {
 				if (($voContrato->cdPessoaContratada == null || $voContrato->cdPessoaContratada == "" || $voContrato->cdPessoaContratada == 0)
 						&& $cdPessoa != null && $cdPessoa != "") {
 							$voContrato->cdPessoaContratada = $cdPessoa;
-							$voContrato->cdUsuarioUltAlteracao = 1;
+							$voContrato->cdUsuarioUltAlteracao = constantes::$CD_USUARIO_BATCH;
 							$this->alterarPorCima ( $voContrato );
 								
 							$qtdRegistros ++;
