@@ -167,15 +167,22 @@ function carregaDadosContrato(){
 	        getContratoDet($voContrato, false, true);
 	        ?>
 	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">Tipo:</TH>
+	            <TD class="campoformulario" >
+	            <?php
+	            $comboTipo = new select(dominioTipoMensageria::getColecao());	             
+	            echo $comboTipo->getHtmlCombo(voMensageria::$nmAtrTipo,voMensageria::$nmAtrTipo, $vo->tipo, true, "camponaoobrigatorio", false,
+	            		"required ");
+	            ?></TD>
 	            <TH class="campoformulario" nowrap width="1%">Habilitado:</TH>
-	            <TD class="campoformulario" colspan=3>
+	            <TD class="campoformulario">
 	            <?php
 	            include_once(caminho_util. "dominioSimNao.php");
 	            $comboSimNao = new select(dominioSimNao::getColecao());
 	             
 	            echo $comboSimNao->getHtmlCombo(voMensageria::$nmAtrInHabilitado,voMensageria::$nmAtrInHabilitado, $vo->inHabilitado, true, "camponaoobrigatorio", false,
 	            		"required");
-	            ?></TD>
+	            ?></TD>	            
 	        </TR>
 	        <?php	         
 	        }else{	        	

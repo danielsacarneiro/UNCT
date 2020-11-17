@@ -579,14 +579,22 @@ function getFiltroContratosAVencer($inTemDemandaEmTratamento = null){
 	return $filtro;
 }
 
-function existeAlertaAtivoContrato($vocontratoinfo){
+/**
+ * verifica se ja existe alerta vigente, estando ele habilitado ou nao
+ * somente inclui um novo alerta NAO havendo alerta vigente.
+ * se estiver vigente, porem desabilitado, significa que o email NAO deve ser enviado, pelo motivo que for, embora esteja vigente
+ * dai que nao deve ser incluido novo alerta
+ * @param unknown $vocontratoinfo
+ * @return boolean
+ */
+function existeAlertaVigenteContrato($vocontratoinfo){
 	//$vocontratoinfo = new voContratoInfo();	
 	$db = new dbMensageria();
 	$filtro = new filtroManterMensageria();
 	$filtro->anoContrato = $vocontratoinfo->anoContrato;
 	$filtro->cdContrato = $vocontratoinfo->cdContrato;
 	$filtro->tipoContrato = $vocontratoinfo->tipo;
-	$filtro->inHabilitado = constantes::$CD_SIM;
+	//$filtro->inHabilitado = constantes::$CD_SIM;
 	$filtro->inVerificarPeriodoVigente = constantes::$CD_SIM;
 	
 	$colecao = $db->consultarTelaConsulta(new voMensageria(), $filtro);
@@ -637,17 +645,19 @@ function criarAlertasEmailGestorColecaoContratos($filtro=null, $log=null, $isCon
 			
 			$voAlerta->inHabilitado = constantes::$CD_SIM;
 			$voAlerta->numDiasFrequencia = voMensageria::$NUM_DIAS_FREQUENCIA_MAIL_PADRAO;
-			$voAlerta->obs = "Alerta incluído automaticamente";
+			$voAlerta->obs = "Alerta incluído automaticamente.";
 			$voAlerta->cdUsuarioInclusao = $voAlerta->cdUsuarioUltAlteracao = constantes::$CD_USUARIO_BATCH;
 			
 			$db = new dbMensageria();
 			$msgIdContrato = $vocontratoinfo->toString();
 			try{
-				if(!existeAlertaAtivoContrato($vocontratoinfo)){
+				if(!existeAlertaVigenteContrato($vocontratoinfo)){
+					//so inclui se nao houver alerta vigente
 					$db->incluir($voAlerta);
-					$log .= "<br>Alerta incluído com sucesso:.";
+					$log .= "<br>Alerta incluído com sucesso:";
 				}else{
-					$log .= "<br>Já existe alerta vigente ao contrato:.";
+					//havendo alerta vigente, deve seguir a indicacao do alerta ja existente
+					$log .= "<br>Já existe alerta vigente ao contrato:";
 				}			
 				
 				$log .= " $msgIdContrato.";
