@@ -86,7 +86,7 @@ class filtroManter extends multiplosConstrutores {
 			$this->isConsultaTela = true;
 		} else {
 			$this->isValidarConsulta = false;
-			$this->isConsultaTela = false;
+			$this->isConsultaTela = false;							
 		}
 		
 		if ($this->numTotalRegistros == null) {
@@ -95,10 +95,14 @@ class filtroManter extends multiplosConstrutores {
 		if ($this->qtdRegistrosPorPag == null) {
 			$this->qtdRegistrosPorPag = paginacao::$qtdRegistrosPorPag;
 		}
+		
 		$this->paginacao = null;
 		$this->TemPaginacao = $temPaginacao;
+		
 		if ($temPaginacao) {
 			$this->paginacao = new paginacao ( $this->qtdRegistrosPorPag );
+		}else{
+			$this->setaFiltroConsultaSemLimiteRegistro ();
 		}
 		
 		$this->isHistorico = "S" == $this->cdHistorico;

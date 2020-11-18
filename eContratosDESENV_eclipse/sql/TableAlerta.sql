@@ -40,10 +40,32 @@ CREATE TABLE msg_registro (
 );
 
 select * from mensageria
-where msg_tipo = 'P'
+where msg_dt_fim is null
 
 update mensageria
 set msg_in_habilitado = 'N', msg_dt_fim = DATE(NOW())
 where msg_in_habilitado = 'S'
 
-select * from msg_registro
+--
+delete from mensageria
+where msg_sq >= 74 and msg_sq <= 85
+
+delete from msg_registro
+where msg_sq >= 74 and msg_sq <= 85
+
+delete from mensageria
+where date(dh_inclusao) >= '2020-11-17'
+and msg_in_habilitado = 'S'
+
+delete from msg_registro
+where msg_sq in
+(
+select (msg_sq) from mensageria
+where date(dh_inclusao) >= '2020-11-17'
+and msg_in_habilitado = 'S'
+)
+
+update mensageria
+set msg_dt_fim = '2020-11-17'
+where msg_dt_fim is null
+

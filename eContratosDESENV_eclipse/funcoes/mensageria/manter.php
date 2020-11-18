@@ -165,26 +165,7 @@ function carregaDadosContrato(){
 	         -->	        
 	        <?php
 	        getContratoDet($voContrato, false, true);
-	        ?>
-	        <TR>
-	            <TH class="campoformulario" nowrap width="1%">Tipo:</TH>
-	            <TD class="campoformulario" >
-	            <?php
-	            $comboTipo = new select(dominioTipoMensageria::getColecao());	             
-	            echo $comboTipo->getHtmlCombo(voMensageria::$nmAtrTipo,voMensageria::$nmAtrTipo, $vo->tipo, true, "camponaoobrigatorio", false,
-	            		"required ");
-	            ?></TD>
-	            <TH class="campoformulario" nowrap width="1%">Habilitado:</TH>
-	            <TD class="campoformulario">
-	            <?php
-	            include_once(caminho_util. "dominioSimNao.php");
-	            $comboSimNao = new select(dominioSimNao::getColecao());
-	             
-	            echo $comboSimNao->getHtmlCombo(voMensageria::$nmAtrInHabilitado,voMensageria::$nmAtrInHabilitado, $vo->inHabilitado, true, "camponaoobrigatorio", false,
-	            		"required");
-	            ?></TD>	            
-	        </TR>
-	        <?php	         
+
 	        }else{	        	
 	        	//INCLUSAO
 	        ?>
@@ -208,6 +189,24 @@ function carregaDadosContrato(){
 	        <?php 
 	       }	       
 	       ?>
+	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">Tipo:</TH>
+	            <TD class="campoformulario" width="1%">
+	            <?php
+	            $comboTipo = new select(dominioTipoMensageria::getColecao());	             
+	            echo $comboTipo->getHtmlCombo(voMensageria::$nmAtrTipo,voMensageria::$nmAtrTipo, $vo->tipo, true, "camponaoobrigatorio", false,
+	            		"required ");
+	            ?></TD>
+	            <TH class="campoformulario" nowrap width="1%">Habilitado:</TH>
+	            <TD class="campoformulario">
+	            <?php
+	            include_once(caminho_util. "dominioSimNao.php");
+	            $comboSimNao = new select(dominioSimNao::getColecao());
+	             
+	            echo $comboSimNao->getHtmlCombo(voMensageria::$nmAtrInHabilitado,voMensageria::$nmAtrInHabilitado, $vo->inHabilitado, true, "camponaoobrigatorio", false,
+	            		"required");
+	            ?></TD>	            
+	        </TR>	       
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Frequência:</TH>
 	            <TD class="campoformulario" colspan="3">

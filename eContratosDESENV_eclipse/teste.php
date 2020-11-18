@@ -32,6 +32,18 @@ try {
 }*/
 
 $vo = new voMensageria();
+$db = new dbMensageria();
+$filtro = new filtroManterMensageria(false);
+$filtro->anoContrato = 2016;
+$filtro->cdContrato = 33;
+$filtro->tipoContrato = "C";
+//$filtro->inHabilitado = constantes::$CD_SIM;
+$filtro->inVerificarPeriodoVigente = constantes::$CD_SIM;
+
+$colecao = $db->consultarTelaConsulta(new voMensageria(), $filtro);
+
+echo "teste";
+
 
 //echo criarAlertasEmailGestorColecaoContratos();
 

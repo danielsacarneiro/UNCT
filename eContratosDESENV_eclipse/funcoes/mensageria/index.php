@@ -158,7 +158,7 @@ function alterar() {
 	        </TR>			
 			<TR>
                 <TH class="campoformulario" nowrap>Nome Contratada:</TH>
-                <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>"  value="<?php echo($filtro->nmContratada);?>"  class="camponaoobrigatorio" size="50"></TD>
+                <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>"  value="<?php echo($filtro->nmContratada);?>"  class="camponaoobrigatorio" size="20"></TD>
                 <TH class="campoformulario" width="1%" nowrap>CNPJ/CPF Contratada:</TH>
                 <TD class="campoformulario" ><INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($filtro->docContratada);?>" class="camponaoobrigatorio" size="20" maxlength="18"></TD>
             </TR>
@@ -179,11 +179,39 @@ function alterar() {
             </TR>
 			<TR>
 				<TH class="campoformulario" nowrap>Tp.Vigência:</TH>
-				<?php
-				include_once(caminho_util."dominioTpVigencia.php");
-				$comboVigencia = new select(dominioTpVigencia::getColecao());						
-				?>
-	            <TD class="campoformulario" nowrap colspan=3><?php echo $comboVigencia->getHtmlOpcao(filtroManterMensageria::$nmAtrTpVigencia,filtroManterMensageria::$nmAtrTpVigencia, $filtro->tpVigencia, false);?></TD>
+	            <TD class="campoformulario" colspan=3>
+	            <?php
+	            include_once(caminho_util."dominioTpVigencia.php");
+	            $comboVigencia = new select(dominioTpVigencia::getColecao());	             
+	            echo $comboVigencia->getHtmlOpcao(filtroManterMensageria::$nmAtrTpVigencia,filtroManterMensageria::$nmAtrTpVigencia, $filtro->tpVigencia, false);
+	            ?>
+			| Vigente na Data:
+			<INPUT type="text" 
+                        	       id="<?=filtroManterMensageria::$nmAtrDtVigencia?>" 
+                        	       name="<?=filtroManterMensageria::$nmAtrDtVigencia?>" 
+                        			value="<?php echo($filtro->dtVigencia);?>" 
+                        			onkeyup="formatarCampoData(this, event, false);" 
+                        			class="camponaoobrigatorio" 
+                        			size="10" 
+                        			maxlength="10" >	            						            
+	            | Período.Inclusao:
+	            	<INPUT type="text" 
+	            	       id="<?=voMensageria::$nmAtrDtInicio?>" 
+	            	       name="<?=voMensageria::$nmAtrDtInicio?>" 
+	            			value="<?php echo($filtro->dtInicio);?>"
+	            			onkeyup="formatarCampoData(this, event, false);" 
+	            			class="camponaoobrigatorio" 
+	            			size="10" 
+	            			maxlength="10"> a 
+	            	<INPUT type="text" 
+	            	       id="<?=voMensageria::$nmAtrDtFim?>" 
+	            	       name="<?=voMensageria::$nmAtrDtFim?>" 
+	            			value="<?php echo($filtro->dtFim);?>"
+	            			onkeyup="formatarCampoData(this, event, false);" 
+	            			class="camponaoobrigatorio" 
+	            			size="10" 
+	            			maxlength="10">		
+	            </TD>	            
 		    </TR>            	        
        <?php
        echo getComponenteConsultaFiltro($vo->temTabHistorico, $filtro);
@@ -279,7 +307,7 @@ function alterar() {
                   ?>                  
                   	<TD class="tabeladados" nowrap><?php echo complementarCharAEsquerda($voAtual->sq, "0", constantes::$TAMANHO_CODIGOS)?></TD>  
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo $contrato;?></TD>                    
-					<TD class="tabeladados" nowrap><?php echo $dsPessoa?></TD>					
+					<TD class="tabeladados"><?php echo $dsPessoa?></TD>					
 					<TD class="tabeladados" nowrap><?php echo documentoPessoa::getNumeroDocFormatado($voPessoa->doc)?></TD>
                     <TD class="tabeladados" nowrap><?php echo dominioTipoMensageria::getDescricao($voAtual->tipo)?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($voAtual->dhInclusao)?></TD>

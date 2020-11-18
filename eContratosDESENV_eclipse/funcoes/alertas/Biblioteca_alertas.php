@@ -289,7 +289,7 @@ function enviarEmail($assuntoParam, $mensagemParam, $enviarEmail=true, $listaEma
 			$enviado = $mail->enviarMensagem ($mensagemParam, $assuntoParam );
 			if ($enviado) {
 				//echoo ("Email enviado com sucesso");				 
-				$log .= getLogComFlagImpressao("<br>Email enviado com sucesso");
+				$log .= getLogComFlagImpressao("<br>Email enviado com sucesso.");
 			} else {
 				/*echo "Não foi possível enviar o e-mail.<br /><br />";
 				echo "<b>Informações do erro:</b> <br>" . $mail->mail->ErrorInfo;*/
@@ -526,7 +526,7 @@ function enviarEmailDiretoria($enviarEmail){
 
 	$count = 0;
 	//envia contratos a vencer TODOS
-	$mensagem .= getMensagemContratosAVencer($count);
+	//$mensagem .= getMensagemContratosAVencer($count);
 	//envia contratos a vencer SEM DEMANDA
 	$mensagem .= getMensagemContratosAVencerGestor($count);
 	//envia contratos a vencer SEM DEMANDA QUE NAO ADMITEM PRORROGACAO
@@ -590,7 +590,7 @@ function getFiltroContratosAVencer($inTemDemandaEmTratamento = null){
 function existeAlertaVigenteContrato($vocontratoinfo){
 	//$vocontratoinfo = new voContratoInfo();	
 	$db = new dbMensageria();
-	$filtro = new filtroManterMensageria();
+	$filtro = new filtroManterMensageria(false);
 	$filtro->anoContrato = $vocontratoinfo->anoContrato;
 	$filtro->cdContrato = $vocontratoinfo->cdContrato;
 	$filtro->tipoContrato = $vocontratoinfo->tipo;

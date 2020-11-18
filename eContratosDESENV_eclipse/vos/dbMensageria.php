@@ -2,7 +2,7 @@
 include_once(caminho_lib. "dbprocesso.obj.php");
 
   Class dbMensageria extends dbprocesso{
-  	static $FLAG_PRINTAR_SQL = FALSE;
+  	static $FLAG_PRINTAR_SQL = false;
   	
   	function consultarPorChaveTela($vo, $isHistorico) {
   		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );

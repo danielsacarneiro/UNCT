@@ -93,12 +93,21 @@ class filtroManterMensageria extends filtroManter {
 		}
 		
 		if ($this->dtInicio != null) {		
-			$filtro = $filtro . $conector . $nmTabela . "." . voMensageria::$nmAtrDtInicio . " >= " . getVarComoData($this->dtInicio);		
+			$filtro = $filtro . $conector . "DATE($nmTabela." . voMensageria::$nmAtrDhInclusao . ") >= " . getVarComoData($this->dtInicio);		
 			$conector = "\n AND ";
 		}
 		
 		if ($this->dtFim != null) {
-			$filtro = $filtro . $conector . $nmTabela . "." . voMensageria::$nmAtrDtFim . " <= " . getVarComoData($this->dtFim);
+			$filtro = $filtro . $conector . "DATE($nmTabela." . voMensageria::$nmAtrDhInclusao . ") <= " . getVarComoData($this->dtFim);
+			$conector = "\n AND ";
+		}
+		
+		if ($this->dtVigencia != null) {		
+			$filtro = $filtro . $conector . getSQLDataVigenteSimplesPorData($nmTabela, 
+					$this->dtVigencia, 
+					voMensageria::$nmAtrDtInicio, 
+					voMensageria::$nmAtrDtFim);
+				
 			$conector = "\n AND ";
 		}
 		

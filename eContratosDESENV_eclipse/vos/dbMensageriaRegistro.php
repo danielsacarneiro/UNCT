@@ -128,7 +128,7 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		$remetente = email_sefaz::$REMETENTE_PRINCIPAL;
 		$log .= enviarEmail($assunto, $msg, $enviarEmail, $listaEmailTemp, $remetente);
 		$log .= getLogComFlagImpressao($vomensageria->toString());
-		echoo($vomensageria->toString());
+		//echoo($vomensageria->toString());
 		
 		return $log;
   	}
