@@ -433,7 +433,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 				$sinal = ">=";
 			}							
 			
-			$STR_SUBSTITUIR_IND_PROR = constantes::$CD_CAMPO_SUBSTITUICAO . "IND_PROR";
+			$STR_SUBSTITUIR_IND_PROR = constantes::$CD_CAMPO_SUBSTITUICAO . "INDICADOR_PROR";
 			$STR_SUBSTITUIR_VALOR_PRAZO = constantes::$CD_CAMPO_SUBSTITUICAO . "VALOR_PRAZO";
 			//$nmAtributoAcomparar = getDataSQLDiferencaAnos(static::$NmTabContratoMater . "." . vocontrato::$nmAtrDtVigenciaInicialContrato, static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato);
 			$nmAtributoAcomparar = static::getSQLQtdAnosVigenciaContrato();		
@@ -471,9 +471,15 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		
 		//para o caso de permitir sempre prorrogacao e a busca for por prorrogaveis
 		if($filtroPorrogacao == dominioProrrogacaoFiltroConsolidacao::$CD_PRORROGAVEL){
-			$retorno = "($retorno)$operadorSQL";
+			$retorno = "($retorno) OR ";
 			$retorno .= "(". voContratoInfo::$nmAtrInPrazoProrrogacao ." IN (". getSQLStringFormatadaColecaoIN(array_keys(dominioProrrogacaoContrato::getColecaoPermiteProrrogacaoSQL())) . "))";
+		}else if($filtroPorrogacao == dominioProrrogacaoFiltroConsolidacao::$CD_NAOPRORROGAVEL){
+			//mesma logica acima
+			$retorno = "($retorno) OR ";
+			//$retorno .= "(". voContratoInfo::$nmAtrInPrazoProrrogacao ." IN (". getSQLStringFormatadaColecaoIN(array_keys(dominioProrrogacaoContrato::getColecaoPermiteProrrogacaoSQL())) . "))";
+			$retorno .= "(". voContratoInfo::$nmAtrInPrazoProrrogacao ." = ". dominioProrrogacaoContrato::$CD_IMPRORROGAVEL . ")";
 		}
+		
 		$retorno = "($retorno)";
 		
 		return $retorno;

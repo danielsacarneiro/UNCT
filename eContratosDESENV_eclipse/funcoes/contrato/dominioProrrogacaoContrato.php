@@ -2,11 +2,12 @@
 include_once(caminho_util."dominio.class.php");
 
 Class dominioProrrogacaoContrato extends dominio{
+	
+	static $CD_IMPRORROGAVEL = 1;
 	static $CD_ART57_II = 2;
+	static $CD_ART57_PAR_1 = 3;
 	static $CD_ART57_IV = 4;
 	static $CD_ART57_V = 5;
-	static $CD_ART57_PAR_1 = 3;
-	static $CD_IMPRORROGAVEL = 1;
 	static $CD_NAO_SEAPLICA = 99;
 
 	static $DS_ART57_II = "Art.57,II-serv.contínuos em geral";
@@ -61,6 +62,7 @@ Class dominioProrrogacaoContrato extends dominio{
 	
 	static function getPrazoProrrogacao($cd){
 		//de acordo com o art 57, lei 8666
+		//$retorno = 0;
 		if($cd == static::$CD_ART57_II)
 			$retorno = 5;
 		else if($cd == static::$CD_ART57_IV)
