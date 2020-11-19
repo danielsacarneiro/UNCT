@@ -912,7 +912,7 @@ function getContratoConsolidacao($vocontrato){
 
 function getContratoVigentePorData($vocontrato, $pData = null, $isTpVigenciaMAxSq=false){
 	//$vocontrato = new vocontrato();	
-	$filtro = new filtroManterContrato();
+	$filtro = new filtroManterContrato(false);
 	$filtro->tipo = $vocontrato->tipo;
 	$filtro->cdContrato = $vocontrato->cdContrato;
 	$filtro->anoContrato = $vocontrato->anoContrato;
@@ -935,7 +935,6 @@ function getContratoVigentePorData($vocontrato, $pData = null, $isTpVigenciaMAxS
 	$db = new dbcontrato();	
 	//$recordset = $db->consultarFiltroManter($filtro, false);	
 	
-	$filtro->isValidarConsulta = false;
 	$arrayParamConsulta = array($filtro);
 	$recordset = $db->consultarTelaConsulta($arrayParamConsulta);
 	

@@ -118,8 +118,14 @@ function confirmar() {
 	            </TD>
 	        </TR>
 	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">Tipo:</TH>
+	            <TD class="campoformulario" width="1%">
+	            <?php	             
+	            echo dominioTipoMensageria::getHtmlDetalhamento(voMensageria::$nmAtrTipo, voMensageria::$nmAtrTipo, $vo->tipo);
+	            ?>
+	            </TD>
 	            <TH class="campoformulario" nowrap width="1%">Habilitado:</TH>
-	            <TD class="campoformulario" colspan=3>
+	            <TD class="campoformulario">
 	            <?php
 	            include_once(caminho_util. "dominioSimNao.php");
 	            $comboSimNao = new select(dominioSimNao::getColecao());
