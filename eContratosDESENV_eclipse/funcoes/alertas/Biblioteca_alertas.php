@@ -629,6 +629,10 @@ function criarAlertasEmailGestorColecaoContratos($filtro=null, $log=null, $isCon
 		//$colecao = array($colecao[0]);
 		$tam = sizeof($colecao);
 		$log .= "<br>Proceder à inclusão de <b>$tam alertas</b>.";
+		$countAlertasIncluidos = 0;
+		$countAlertasExistentes = 0;
+		$countAlertasErro = 0;
+		
 		foreach ($colecao as $registrobanco){
 			$voAlerta = new voMensageria();
 			$vocontratoinfo = new voContratoInfo();
@@ -655,9 +659,11 @@ function criarAlertasEmailGestorColecaoContratos($filtro=null, $log=null, $isCon
 					//so inclui se nao houver alerta vigente
 					$db->incluir($voAlerta);
 					$log .= "<br>Alerta incluído com sucesso:";
+					$countAlertasIncluidos++;
 				}else{
 					//havendo alerta vigente, deve seguir a indicacao do alerta ja existente
 					$log .= "<br>Já existe alerta vigente ao contrato:";
+					$countAlertasExistentes++;
 				}			
 				
 				$log .= " $msgIdContrato.";
@@ -665,9 +671,16 @@ function criarAlertasEmailGestorColecaoContratos($filtro=null, $log=null, $isCon
 			}catch(excecaoGenerica $ex){
 				$log .= "<br>Erro ao incluir alerta ao contrato:" 
 						. "$msgIdContrato |" . $ex->getMessage();
+				
+				$countAlertasErro++;
 			}
 			
 		}
+		
+		$log .= getLogComFlagImpressao("<br>Alertas Incluídos: <b>$countAlertasIncluidos</b>.");
+		$log .= getLogComFlagImpressao("<br>Alertas Existentes: <b>$countAlertasExistentes</b>.");
+		$log .= getLogComFlagImpressao("<br>Alertas Erro: <b>$countAlertasErro</b>.");
+		
 	}else{
 		$log .= "<br>Não há alertas a serem criados.";
 	}	
