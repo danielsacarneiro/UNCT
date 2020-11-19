@@ -241,6 +241,7 @@ class dbcontrato extends dbprocesso {
 		$queryJoin .= "\n AND ";
 		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabelaContratoInseridoTela . "." . vocontrato::$nmAtrTipoContrato;
 
+		//echo "teste";
 		return $this->consultarPorChaveMontandoQuery ( $vocontratoTemp, $arrayColunasRetornadas, $queryJoin, $isHistorico );
 	}
 
@@ -290,13 +291,13 @@ class dbcontrato extends dbprocesso {
 		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryJoin, $isHistorico );
 	}
 	function consultarContratoPorChave($voContrato, $isHistorico) {
-		$nmTabela = $voContrato->getNmTabelaEntidade ( $isHistorico );
+		//$nmTabela = $voContrato->getNmTabelaEntidade ( $isHistorico );
+		$nmTabela = vocontrato::getNmTabelaStatic ( $isHistorico );
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
 		$nmTabelaContratoLicon = voContratoLicon::getNmTabelaStatic ( false );
 		$nmTabContratoLiconSqMAX = "TAB_MAX_LICON_CONTRATO";
 
-		$queryJoin = "SELECT " . $nmTabela;
-		$queryJoin .= ".*";
+		$queryJoin = "SELECT $nmTabela.*";
 		$queryJoin .= ", $nmTabelaContratoInfo." . voContratoInfo::$nmAtrDtProposta;
 		$queryJoin .= ", $nmTabelaContratoInfo." . voContratoInfo::$nmAtrInEscopo;
 		$queryJoin .= ", $nmTabelaContratoLicon." . voContratoLicon::$nmAtrSituacao;
@@ -326,8 +327,9 @@ class dbcontrato extends dbprocesso {
 		$nmTabContratoInterna = $nmTabelaContratoLicon;
 		$queryJoin .= "\n left JOIN ";
 
+		$nmTabelaTemp = "$nmTabela" . "TEMP";
 		$queryJoin .= " (SELECT " . voContratoLicon::$nmAtrAnoDemanda . "," . voContratoLicon::$nmAtrCdDemanda . ", $groupbyinterno, MAX($nmTabContratoInterna." . voContratoLicon::$nmAtrDhInclusao . ") FROM " . $nmTabContratoInterna;
-		$queryJoin .= " INNER JOIN " . $nmTabela;
+		$queryJoin .= " INNER JOIN $nmTabela ";
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabContratoInterna . "." . voContratoLicon::$nmAtrAnoContrato;
 		$queryJoin .= "\n AND ";
@@ -378,6 +380,9 @@ class dbcontrato extends dbprocesso {
 		$queryJoin .= "TAB2." . vousuario::$nmAtrID . "=$nmTabela." . vocontrato::$nmAtrCdUsuarioUltAlteracao;
 		$queryJoin .= " WHERE ";
 		$queryJoin .= $voContrato->getValoresWhereSQLChave ( $isHistorico );
+		
+		//echo $voContrato->getValoresWhereSQLChave ( $isHistorico );
+		//echo $queryJoin;
 		//$queryJoin .= " AND $nmTabelaContratoInfo." . voContratoInfo::$nmAtrInDesativado . "= 'N' ";
 		/*
 		 * $queryJoin.= $nmTabela . "." . vocontrato::$nmAtrCdContrato . "=" . $voContrato->cdContrato;

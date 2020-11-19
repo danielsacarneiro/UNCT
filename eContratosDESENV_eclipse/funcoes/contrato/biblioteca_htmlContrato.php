@@ -930,9 +930,15 @@ function getContratoVigentePorData($vocontrato, $pData = null, $isTpVigenciaMAxS
 		
 	$filtro->isTpVigenciaMAxSq = $isTpVigenciaMAxSq;
 	$filtro->dtVigencia = $pData;
+	$filtro->voPrincipal = $vocontrato;
 	
-	$db = new dbcontrato();
-	$recordset = $db->consultarFiltroManter($filtro, false);
+	$db = new dbcontrato();	
+	//$recordset = $db->consultarFiltroManter($filtro, false);	
+	
+	$filtro->isValidarConsulta = false;
+	$arrayParamConsulta = array($filtro);
+	$recordset = $db->consultarTelaConsulta($arrayParamConsulta);
+	
 	if(isColecaoVazia($recordset)){
 		throw new excecaoChaveRegistroInexistente("BiblioHtmlContrato. getContratoVigentePorData.");
 	}
@@ -976,9 +982,9 @@ function getCamposContratoMod($vo, $arrayParamComplemento = null){
 	//quando nesse caso, sendo apostilamento ou qualquer outro, o periodo de vigencia sera determinado pelo TA vigente na data de assinatura
 	//if($vo->cdEspecie != dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_TERMOADITIVO){
 	$voContratoReferencia = clone $voContrato;
-
+	
 	$registro = getContratoVigentePorData($vo, $dtEfeitoModificacao, true)[0];
-
+	
 	//aqui eh o termo inserido na tela
 	$voTermoInseridoTela = $dbcontrato->consultarPorChaveVO($voTermoInseridoTela, false);
 	//echo $vo->toString();

@@ -86,7 +86,7 @@ class filtroManter extends multiplosConstrutores {
 			$this->isConsultaTela = true;
 		} else {
 			$this->isValidarConsulta = false;
-			$this->isConsultaTela = false;							
+			$this->isConsultaTela = false;					
 		}
 		
 		if ($this->numTotalRegistros == null) {

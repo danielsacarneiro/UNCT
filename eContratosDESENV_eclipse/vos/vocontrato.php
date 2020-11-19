@@ -381,6 +381,7 @@ include_once (caminho_util . "DocumentoPessoa.php");
 		
 		//aqui so usa o sq se a chave logica nao estiver completa
 		if(!$this->isChaveLogicaValida()){
+			//echo "incompleta";
 			$query.= " AND ". $nmTabela . "." . self::$nmAtrSqContrato . "=" . $this->sq;
 		}
 		
@@ -397,6 +398,8 @@ include_once (caminho_util . "DocumentoPessoa.php");
 		$query.= " AND " . $nmTabela . "." . self::$nmAtrCdContrato . "=" . $this->cdContrato;		
 		$query.= " AND " . $nmTabela . "." . self::$nmAtrCdEspecieContrato . "=" . getVarComoString($this->cdEspecie);
 		$query.= " AND " . $nmTabela . "." . self::$nmAtrSqEspecieContrato . "=" . $this->sqEspecie;
+		
+		//echo "<br>$query";
 		
 		return $query;
 	}
