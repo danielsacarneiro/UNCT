@@ -110,26 +110,34 @@ function formataFormEscopo() {
 function formataFormClassificacao(pCampoChamada) {
 	campoClassificacao = document.frm_principal.<?=voContratoInfo::$nmAtrCdClassificacao?>;
 	campoMaodeObra = document.frm_principal.<?=voContratoInfo::$nmAtrInMaoDeObra?>;
+	campoTipoContrato = document.frm_principal.<?=voContratoInfo::$nmAtrTipoContrato?>;
 
-	classificacao = campoClassificacao.value;
+	var classificacao = campoClassificacao.value;
+	var tipoContrato = campoTipoContrato.value;
 
 	if(classificacao == "<?=dominioClassificacaoContrato::$CD_MAO_OBRA?>"){
 		campoMaodeObra.value = "<?=constantes::$CD_SIM?>";
 	}
-	else if(classificacao != "<?=dominioClassificacaoContrato::$CD_SERVICOS?>"){
+	else if(classificacao != null 
+			&& classificacao != ""
+			&& classificacao != "<?=dominioClassificacaoContrato::$CD_SERVICOS?>"){
 		campoMaodeObra.value = "<?=constantes::$CD_NAO?>";
 	}
 	else if(pCampoChamada == null || pCampoChamada.name != "<?=voContratoInfo::$nmAtrInMaoDeObra?>"){		
 		campoMaodeObra.value = "";
 	}
 
+	campoProrrogacao = document.frm_principal.<?=voContratoInfo::$nmAtrInPrazoProrrogacao?>;
 	if(classificacao == "<?=dominioClassificacaoContrato::$CD_LOCACAO_IMOVEL?>"){
 		exibirMensagem("<?=voContratoInfo::getTextoAlertaContratoLocação()?>");
-
-		campoProrrogacao = document.frm_principal.<?=voContratoInfo::$nmAtrInPrazoProrrogacao?>;
-		campoProrrogacao.value = "<?=dominioProrrogacaoContrato::$CD_NAO_SEAPLICA?>";
-			
+		campoProrrogacao.value = "<?=dominioProrrogacaoContrato::$CD_NAO_SEAPLICA?>";			
 	}
+
+	if(tipoContrato == "<?=dominioTipoContrato::$CD_TIPO_CONVENIO?>"){
+		//exibirMensagem("<?=voContratoInfo::getTextoAlertaContratoLocação()?>");
+		campoProrrogacao.value = "<?=dominioProrrogacaoContrato::$CD_NAO_SEAPLICA?>";			
+	}
+	
 }
 
 function transferirDadosPessoa(cd, nm) {		
@@ -197,7 +205,12 @@ function iniciar(){
 	        ?>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" nowrap colspan=3><?php getCampoDadosContratoSimples(constantes::$CD_CLASS_CAMPO_OBRIGATORIO, null, false);//getContratoEntradaDeDados($tipoContrato, $anoContrato, $cdContrato, $arrayCssClass, $arrayComplementoHTML, $nmCampoDiv);?></TD>
+	            <TD class="campoformulario" nowrap colspan=3>
+	            <?php
+	            $complementoHTML = 'formataFormClassificacao();';
+	            getCampoDadosContratoSimples(constantes::$CD_CLASS_CAMPO_OBRIGATORIO, $complementoHTML, false);
+	        	?>
+	            </TD>
 	        </TR>	        
 	        <?php 
 	       }	       
