@@ -6,6 +6,8 @@ include_once(caminho_funcoes."mensageria/dominioTipoMensageria.php");
 class voMensageria extends voentidade {	
 	
 	static $DS_RESPONSABILIDADE_CAMPO_OBR = "*Assumo a responsabilidade de não incluir os campos obrigatórios.";	
+	static $MSG_IN_VERIFICAR_SERA_PRORROGADO = "Verifique o indicador de prorrogação do contrato.";
+	
 	//ativa o envio da mensageria para a UNCT
 	static $ATIVADO = true;
 	//ativa o envio do email do relatorio diario

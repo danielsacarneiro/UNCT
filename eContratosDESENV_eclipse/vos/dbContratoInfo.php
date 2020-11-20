@@ -202,6 +202,7 @@ class dbContratoInfo extends dbprocesso {
 				
 				filtroConsultarContratoConsolidacao::getDataBaseReajuste($nmTabelaContratoInfo, $nmTabela) . "AS " . voContratoInfo::$nmAtrDtProposta,
 				$nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrInPrazoProrrogacao,
+				$nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrInSeraProrrogado,
 				$filtro->getSqlAtributoCoalesceAutorizacao() . " AS " . filtroManterContratoInfo::$NmColAutorizacao,
 				getSQLNmContratada(),
 				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,

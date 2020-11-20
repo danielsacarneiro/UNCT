@@ -421,26 +421,32 @@ function movimentacoes(){
          <TABLE id="table_tabeladados" class="tabeladados" cellpadding="0" cellspacing="0">						
              <TBODY>
                 <TR>
-                  <TH class="headertabeladados" width="1%">&nbsp;&nbsp;X</TH>
+                <?php
+                $rowspan="rowspan=2";
+                ?>
+                  <TH class="headertabeladados" width="1%" <?=$rowspan?>>&nbsp;&nbsp;X</TH>
                   <?php 
                   if($isHistorico){					                  	
                   	?>
-                  	<TH class="headertabeladados" width="1%">Sq.Hist</TH>
+                  	<TH class="headertabeladados" width="1%" <?=$rowspan?>>Sq.Hist</TH>
                   <?php 
                   }
                   ?>
-                    <TH class="headertabeladados" width="1%">Contrato</TH>
-                    <TH class="headertabeladados" width="1%">Atual</TH>
-                    <TH class="headertabeladados" width="30%">Contratada</TH>
-                    <TH class="headertabeladados" width="1%">CNPJ/CNPF</TH>
-                    <TH class="headertabeladados" width="40%">Gestor</TH>
-                    <TH class="headertabeladados" width="1%">Proposta</TH>                    
-                    <TH class="headertabeladados" width="1%">Prorrogável</TH>
-                    <TH class="headertabeladados" width="1%">Pode.Excep.?</TH>
-                    <TH class="headertabeladados" width="1%">Dt.Início</TH>
-                    <TH class="headertabeladados" width="1%">Dt.Fim</TH>
-                    <TH class="headertabeladados" width="1%">Anos</TH>
-                    <TH class="headertabeladados" width="1%">Autorização</TH>
+                    <TH class="headertabeladados" width="1%" <?=$rowspan?>>Contrato</TH>
+                    <TH class="headertabeladados" width="1%" <?=$rowspan?>>Atual</TH>
+                    <TH class="headertabeladados" width="30%" <?=$rowspan?>>Contratada</TH>
+                    <TH class="headertabeladados" width="40%" <?=$rowspan?>>Gestor</TH>
+                    <TH class="headertabeladados" width="1%" <?=$rowspan?>>Proposta</TH>                    
+                    <TH class="headertabeladadosalinhadocentro" width="1%" colspan="3">Prorrogação(do)</TH>
+                    <TH class="headertabeladados" width="1%" <?=$rowspan?>>Dt.Início</TH>
+                    <TH class="headertabeladados" width="1%" <?=$rowspan?>>Dt.Fim</TH>
+                    <TH class="headertabeladados" width="1%" <?=$rowspan?> >Anos</TH>
+                    <TH class="headertabeladados" width="1%" <?=$rowspan?>>Autorização</TH>
+                </TR>
+                <TR>
+					<TH class="headertabeladados" width="1%">Será?</TH>
+                    <TH class="headertabeladados" width="1%">Normal?</TH>
+                    <TH class="headertabeladados" width="1%">Excep.?</TH>                
                 </TR>
                 <?php								
                 if (is_array($colecao))
@@ -460,13 +466,13 @@ function movimentacoes(){
                 		$registro = $colecao[$i];
                 		
                         $voAtual = new voContratoInfo();
-                        $voAtual->getDadosBanco($colecao[$i]);
+                        $voAtual->getDadosBanco($registro);
                         
                         $voPessoa = new voPessoa();
-                        $voPessoa->getDadosBanco($colecao[$i]);                        
+                        $voPessoa->getDadosBanco($registro);                        
                                            
-                        $tipo = $dominioTipoContrato->getDescricao($colecao[$i]["ct_tipo"]);
-                        $autorizacaoAtual = $colecao[$i][filtroConsultarContratoConsolidacao::$NmColAutorizacao];
+                        $tipo = $dominioTipoContrato->getDescricao($registro["ct_tipo"]);
+                        $autorizacaoAtual = $registro[filtroConsultarContratoConsolidacao::$NmColAutorizacao];
                         
                         $dsPessoa = $voPessoa->nome;
                         if($dsPessoa == null){
@@ -483,19 +489,27 @@ function movimentacoes(){
                         	$termoAtual = $cdEspeciaAtual==dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER?dominioEspeciesContrato::$DS_ESPECIE_CONTRATO_MATER:$sqEspeciaAtual ."o $cdEspeciaAtual";
                         }
                         //$termoAtual = $sqEspeciaAtual ."o $cdEspeciaAtual";
-                        $gestor = $colecao[$i][vocontrato::$nmAtrGestorContrato];
+                        $gestor = $registro[vocontrato::$nmAtrGestorContrato];
                         
-                        $inPrazoProrrogacao = $colecao[$i][voContratoInfo::$nmAtrInPrazoProrrogacao];
-                        $inprorrogavel = $colecao[$i][filtroConsultarContratoConsolidacao::$NmColInProrrogavel];
-                        $inprorrogacaoExcepcional = $colecao[$i][filtroConsultarContratoConsolidacao::$NmColInProrrogacaoExcepcional];
+                        $inPrazoProrrogacao = $registro[voContratoInfo::$nmAtrInPrazoProrrogacao];                        
+                        $inSeraProrrogado = dominioSimNao::getDescricao($voAtual->inSeraProrrogado);
+                        $inprorrogavel = $registro[filtroConsultarContratoConsolidacao::$NmColInProrrogavel];
+                        $inprorrogacaoExcepcional = $registro[filtroConsultarContratoConsolidacao::$NmColInProrrogacaoExcepcional];
                         if($inPrazoProrrogacao == null){
                         	$inprorrogavel = $inprorrogacaoExcepcional= getTextoHTMLDestacado(constantes::$DS_OPCAO_NAO_INFORMADO, "red", false);
                         }else{
+                        	//se nao permitir qualquer prorrogacao, nao sera prorrogado, ainda que o contratoinfo informe algo diferente
+                        	//dai destacar a informacao que esta incorreta no contratoinfo
+                        	if(!$inprorrogavel && !$inprorrogacaoExcepcional && $inSeraProrrogado == constantes::$DS_SIM){
+                        		$inSeraProrrogado = getTextoHTMLTagMouseOver(getTextoHTMLDestacado($inSeraProrrogado)
+                        				, voMensageria::$MSG_IN_VERIFICAR_SERA_PRORROGADO);
+                        	}
+                        	 
                         	$inprorrogavel = dominioSimNao::getDescricao($inprorrogavel);
                         	$inprorrogacaoExcepcional = dominioSimNao::getDescricao($inprorrogacaoExcepcional);
                         }
                         
-                        $datafimSQL = $colecao[$i][filtroConsultarContratoConsolidacao::$NmColDtFimVigencia];
+                        $datafimSQL = $registro[filtroConsultarContratoConsolidacao::$NmColDtFimVigencia];
                         $dataFinal = getData($datafimSQL);
                         $validaAlerta = true;                        
                         try{
@@ -537,9 +551,9 @@ function movimentacoes(){
                     <TD class="tabeladados" nowrap><?php echo $contrato?></TD>
                     <TD class="tabeladados" nowrap><?php echo $termoAtual?></TD>
                     <TD class="tabeladados"><?php echo $dsPessoa?></TD>
-					<TD class="tabeladados" nowrap><?php echo documentoPessoa::getNumeroDocFormatado($voPessoa->doc)?></TD>
 					<TD class="tabeladados" ><?php echo $gestor?></TD>
 					<TD class="tabeladados" nowrap><?php echo getData($voAtual->dtProposta)?></TD>
+                    <TD class="tabeladados" nowrap><?php echo $inSeraProrrogado?></TD>
                     <TD class="tabeladados" nowrap><?php echo $inprorrogavel?></TD>					
 					<TD class="tabeladados" nowrap><?php echo $inprorrogacaoExcepcional?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($colecao[$i][filtroConsultarContratoConsolidacao::$NmColDtInicioVigencia])?></TD>

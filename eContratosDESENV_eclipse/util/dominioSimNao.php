@@ -15,11 +15,20 @@ Class dominioSimNao extends dominio{
 		);
 	}
 	
-	static function getDescricao($chave){		
-		if($chave == 1)
+	/**
+	 * permite o retorno da descricao tanto para numero como para booleano
+	 * @param unknown $chave
+	 * @return unknown|string
+	 */
+	static function getDescricao($chave){
+		//echo $chave;
+		$isnumero = is_numeric($chave);
+		if(($isnumero && $chave == 1) || $chave === true){
 			$chave = constantes::$CD_SIM;
-		else if($chave == 0)
-			$chave = constantes::$CD_NAO;		
+		} else if(($isnumero && $chave == 0) || $chave === false){
+			$chave = constantes::$CD_NAO;
+		}
+		//echo $chave;
 		
 		return parent::getDescricao($chave);
 	}
