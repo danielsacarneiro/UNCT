@@ -492,7 +492,9 @@ function movimentacoes(){
                         $gestor = $registro[vocontrato::$nmAtrGestorContrato];
                         
                         $inPrazoProrrogacao = $registro[voContratoInfo::$nmAtrInPrazoProrrogacao];                        
-                        $inSeraProrrogado = dominioSimNao::getDescricao($voAtual->inSeraProrrogado);
+                        //$inSeraProrrogado = dominioSimNao::getDescricao($voAtual->inSeraProrrogado);
+                        $inSeraProrrogado = $registro[filtroConsultarContratoConsolidacao::$NmColInSeraProrrogadoConsolidado];
+                        $inSeraProrrogado = dominioSimNao::getDescricao($inSeraProrrogado);
                         $inprorrogavel = $registro[filtroConsultarContratoConsolidacao::$NmColInProrrogavel];
                         $inprorrogacaoExcepcional = $registro[filtroConsultarContratoConsolidacao::$NmColInProrrogacaoExcepcional];
                         if($inPrazoProrrogacao == null){
@@ -500,10 +502,15 @@ function movimentacoes(){
                         }else{
                         	//se nao permitir qualquer prorrogacao, nao sera prorrogado, ainda que o contratoinfo informe algo diferente
                         	//dai destacar a informacao que esta incorreta no contratoinfo
-                        	if(!$inprorrogavel && !$inprorrogacaoExcepcional && $inSeraProrrogado == constantes::$DS_SIM){
+                        	/*if(!$inprorrogavel && !$inprorrogacaoExcepcional && $inSeraProrrogado == constantes::$DS_SIM){
                         		$inSeraProrrogado = getTextoHTMLTagMouseOver(getTextoHTMLDestacado($inSeraProrrogado)
                         				, voMensageria::$MSG_IN_VERIFICAR_SERA_PRORROGADO);
+                        	}*/
+                        	if($inSeraProrrogado == filtroConsultarContratoConsolidacao::$CD_ATENCAO){
+                        		$inSeraProrrogado = getTextoHTMLTagMouseOver(getTextoHTMLDestacado(constantes::$DS_NAO)
+                        				, voMensageria::$MSG_IN_VERIFICAR_SERA_PRORROGADO);
                         	}
+                        	 
                         	 
                         	$inprorrogavel = dominioSimNao::getDescricao($inprorrogavel);
                         	$inprorrogacaoExcepcional = dominioSimNao::getDescricao($inprorrogacaoExcepcional);

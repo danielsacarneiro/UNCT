@@ -165,6 +165,10 @@ class dbContratoInfo extends dbprocesso {
 		$nmAtrTempContratoAtualCDEspecie = $nmTabContratoATUAL . "." . vocontrato::$nmAtrCdEspecieContrato;
 		$nmAtrTempContratoAtualSqEspecie = $nmTabContratoATUAL . "." . vocontrato::$nmAtrSqEspecieContrato;
 		
+		$atributoProrrogavel = filtroConsultarContratoConsolidacao::getSQLComparacaoPrazoProrrogacao(dominioProrrogacaoFiltroConsolidacao::$CD_PRORROGAVEL);
+		$atributoProrrogavelExcepcional = filtroConsultarContratoConsolidacao::getSQLComparacaoPrazoProrrogacao(dominioProrrogacaoFiltroConsolidacao::$CD_PERMITE_EXCEPCIONAL);
+		$inAtributoSeraProrrogado = "$nmTabelaContratoInfo." . voContratoInfo::$nmAtrInSeraProrrogado;
+		
 		$arrayColunasRetornadas = array (
 				$nmTabela . "." . vocontrato::$nmAtrAnoContrato,
 				$nmTabela . "." . vocontrato::$nmAtrCdContrato,
@@ -197,12 +201,23 @@ class dbContratoInfo extends dbprocesso {
 						, " NOT NULL "
 						, filtroConsultarContratoConsolidacao::getSQLComparacaoPrazoProrrogacao(dominioProrrogacaoFiltroConsolidacao::$CD_PRORROGAVEL) 
 						, "NULL") . " AS " . filtroConsultarContratoConsolidacao::$NmColInProrrogavel,*/
-				filtroConsultarContratoConsolidacao::getSQLComparacaoPrazoProrrogacao(dominioProrrogacaoFiltroConsolidacao::$CD_PRORROGAVEL) . " AS " . filtroConsultarContratoConsolidacao::$NmColInProrrogavel, 
-				filtroConsultarContratoConsolidacao::getSQLComparacaoPrazoProrrogacao(dominioProrrogacaoFiltroConsolidacao::$CD_PERMITE_EXCEPCIONAL) . " AS " . filtroConsultarContratoConsolidacao::$NmColInProrrogacaoExcepcional,
+				$atributoProrrogavel . " AS " . filtroConsultarContratoConsolidacao::$NmColInProrrogavel, 
+				$atributoProrrogavelExcepcional . " AS " . filtroConsultarContratoConsolidacao::$NmColInProrrogacaoExcepcional,
 				
 				filtroConsultarContratoConsolidacao::getDataBaseReajuste($nmTabelaContratoInfo, $nmTabela) . "AS " . voContratoInfo::$nmAtrDtProposta,
 				$nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrInPrazoProrrogacao,
-				$nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrInSeraProrrogado,
+				$inAtributoSeraProrrogado,
+				//o retorno abaixo se refere ao atributo inseraprorrogado, quando o contrato for improrrogavel: deve mandar um sinal de atencao
+				//considerando que o inseraprorrogado no contratoinfo pode nao ter sido informado
+				getSQLCASEBooleano(
+						"!$atributoProrrogavel"
+						. " AND "
+						. "!$atributoProrrogavelExcepcional"
+						. " AND "
+						. "$inAtributoSeraProrrogado = 'S' ",
+						getVarComoString(filtroConsultarContratoConsolidacao::$CD_ATENCAO),
+						$inAtributoSeraProrrogado,
+						filtroConsultarContratoConsolidacao::$NmColInSeraProrrogadoConsolidado),
 				$filtro->getSqlAtributoCoalesceAutorizacao() . " AS " . filtroManterContratoInfo::$NmColAutorizacao,
 				getSQLNmContratada(),
 				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,

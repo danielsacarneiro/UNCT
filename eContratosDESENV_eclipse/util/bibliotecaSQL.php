@@ -62,6 +62,11 @@ function getSQLCASE($atributo, $valorAComparar , $valorSeIgual , $valorELSE, $nm
 function getSQLCASEIsNULL($atributo, $valorSeNulo, $valorSeNaoNulo, $nmAtributoAS=null) {
 	return getSQLCASE("", " $atributo IS NULL ", $valorSeNulo, $valorSeNaoNulo, $nmAtributoAS);
 }
+
+function getSQLCASEBooleano($expressaoBooleana, $resultadoSeTrue, $resultadoSeFalse, $nmAtributoAS=null) {
+	return getSQLCASE("", $expressaoBooleana, $resultadoSeTrue, $resultadoSeFalse, $nmAtributoAS);
+}
+
 function getDataSQL($dataWeb) {
 	$retorno = "";
 	if ($dataWeb != null) {
