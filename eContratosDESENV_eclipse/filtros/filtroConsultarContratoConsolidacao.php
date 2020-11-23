@@ -258,7 +258,14 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		//eh independente do inCaracteristicas (que eh usado na tela de consulta)
 		//este aqui eh usado para consultas especificas
 		if (isAtributoValido($this->inSeraProrrogado)) {
-			$filtro = $filtro . $conector . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrInSeraProrrogado . " = " . getVarComoString ( $this->inSeraProrrogado);			
+			$filtroTemp = $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrInSeraProrrogado . " = " . getVarComoString ( $this->inSeraProrrogado);
+			//SE FOR NULO na base, presume-se prorrogavel
+			if($this->inSeraProrrogado == constantes::$CD_SIM){
+				$filtroTemp .= " OR $nmTabelaContratoInfo." . voContratoInfo::$nmAtrInSeraProrrogado . " IS NULL ";
+				$filtroTemp = "($filtroTemp)";
+			}
+							
+			$filtro = $filtro . $conector . $filtroTemp;
 			//$filtroTemp = getSQLFiltroAtributoArrayComparacao($this->inSeraProrrogado, voContratoInfo::$nmAtrInSeraProrrogado, $nmTabelaContratoInfo);		
 			$conector = "\n AND ";
 		}
@@ -474,7 +481,8 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		//para o caso de permitir sempre prorrogacao e a busca for por prorrogaveis
 		if($filtroPorrogacao == dominioProrrogacaoFiltroConsolidacao::$CD_PRORROGAVEL){
 			$retorno = "($retorno) OR ";
-			$retorno .= "(". voContratoInfo::$nmAtrInPrazoProrrogacao ." IN (". getSQLStringFormatadaColecaoIN(array_keys(dominioProrrogacaoContrato::getColecaoPermiteProrrogacaoSQL())) . "))";
+			$retorno .= "(" . voContratoInfo::$nmAtrInPrazoProrrogacao . " IS NULL OR "
+					. voContratoInfo::$nmAtrInPrazoProrrogacao ." IN (". getSQLStringFormatadaColecaoIN(array_keys(dominioProrrogacaoContrato::getColecaoPermiteProrrogacaoSQL())) . "))";
 		}else if($filtroPorrogacao == dominioProrrogacaoFiltroConsolidacao::$CD_NAOPRORROGAVEL){
 			//mesma logica acima
 			$retorno = "($retorno) OR ";
@@ -519,7 +527,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		$retorno = array (
 				voContratoInfo::$nmAtrInEscopo => static::$DS_ESCOPO,
 				voContratoInfo::$nmAtrInCredenciamento => static::$DS_CREDENCIAMENTO,
-				voContratoInfo::$nmAtrInSeraProrrogado => static::$DS_PRORROGADO,
+				//voContratoInfo::$nmAtrInSeraProrrogado => static::$DS_PRORROGADO,
 				voDemanda::$nmAtrAno => static::$DS_DEMANDA,
 		);
 	
@@ -536,7 +544,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		$retorno = array (
 				voContratoInfo::$nmAtrInEscopo => voContratoInfo::$nmAtrInEscopo,
 				voContratoInfo::$nmAtrInCredenciamento => voContratoInfo::$nmAtrInCredenciamento,
-				voContratoInfo::$nmAtrInSeraProrrogado => voContratoInfo::$nmAtrInSeraProrrogado,
+				//voContratoInfo::$nmAtrInSeraProrrogado => voContratoInfo::$nmAtrInSeraProrrogado,
 				voDemanda::$nmAtrAno => filtroConsultarContratoConsolidacao::getAtributoConsultaTemDemanda("$nmTabelaDemanda." . voDemanda::$nmAtrAno),
 	
 		);

@@ -6,6 +6,8 @@ include_once (caminho_util . "dominio.class.php");
 // Classe select
 // cria um combo select html
 class select extends multiplosConstrutores {
+	static $TAM_PADRAO = 30;
+	
 	var $colecao;
 	// ...............................................................
 	// Construtor

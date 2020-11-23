@@ -168,6 +168,7 @@ class dbContratoInfo extends dbprocesso {
 		$atributoProrrogavel = filtroConsultarContratoConsolidacao::getSQLComparacaoPrazoProrrogacao(dominioProrrogacaoFiltroConsolidacao::$CD_PRORROGAVEL);
 		$atributoProrrogavelExcepcional = filtroConsultarContratoConsolidacao::getSQLComparacaoPrazoProrrogacao(dominioProrrogacaoFiltroConsolidacao::$CD_PERMITE_EXCEPCIONAL);
 		$inAtributoSeraProrrogado = "$nmTabelaContratoInfo." . voContratoInfo::$nmAtrInSeraProrrogado;
+		$inPrazoProrrogacao = "$nmTabelaContratoInfo." . voContratoInfo::$nmAtrInPrazoProrrogacao;
 		
 		$arrayColunasRetornadas = array (
 				$nmTabela . "." . vocontrato::$nmAtrAnoContrato,
@@ -205,10 +206,11 @@ class dbContratoInfo extends dbprocesso {
 				$atributoProrrogavelExcepcional . " AS " . filtroConsultarContratoConsolidacao::$NmColInProrrogacaoExcepcional,
 				
 				filtroConsultarContratoConsolidacao::getDataBaseReajuste($nmTabelaContratoInfo, $nmTabela) . "AS " . voContratoInfo::$nmAtrDtProposta,
-				$nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrInPrazoProrrogacao,
+				$inPrazoProrrogacao,
 				$inAtributoSeraProrrogado,
 				//o retorno abaixo se refere ao atributo inseraprorrogado, quando o contrato for improrrogavel: deve mandar um sinal de atencao
 				//considerando que o inseraprorrogado no contratoinfo pode nao ter sido informado
+				//SE $inPrazoProrrogacao for nulo, presume-se prorrogavel
 				getSQLCASEBooleano(
 						"!$atributoProrrogavel"
 						. " AND "
