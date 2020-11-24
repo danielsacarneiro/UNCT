@@ -176,7 +176,7 @@ function alterar() {
 	            
 	            include_once(caminho_util. "dominioSimNao.php");
 	            $comboSimNao = new select(dominioSimNao::getColecao());	             
-	            echo "&nbsp;&nbsp;Mão de obra incluída (planilha de custos)?: ";
+	            echo "&nbsp;&nbsp;Terceirização (planilha de custos)?: ";
 	            echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInMaoDeObra,voContratoInfo::$nmAtrInMaoDeObra, $filtro->inMaoDeObra, true, "camponaoobrigatorio", false,"");
 	            ?>
 	        </TR>
