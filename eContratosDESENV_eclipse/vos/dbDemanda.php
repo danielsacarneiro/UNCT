@@ -10,6 +10,7 @@ class dbDemanda extends dbprocesso {
 			$colecao = $this->consultarPorChaveTelaJoinContrato ( $vo, $isHistorico, true );
 			$voContrato = new vocontrato ();
 			$voContrato->getDadosBanco ( $colecao );
+			//echo $voContrato->docContratada;
 			
 			$voSolicCompra = new voSolicCompra();
 			$voSolicCompra->getDadosBanco ( $colecao );

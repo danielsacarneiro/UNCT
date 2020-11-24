@@ -796,15 +796,27 @@ function consultarContratosPAAP($voPAAP) {
 	return $colecao;
 }
 
-function temPAAPAberto($vocontrato) {
+function temPAAPAberto($vocontrato, $pLevantaExcecao = false) {
 	//$vocontrato = new vocontrato();
 	$retorno = false;
-	if($vocontrato != null && $vocontrato->cdContrato != null){
-		$filtro = new filtroManterPA();
-		$filtro->anoContrato = $vocontrato->anoContrato;
+	/*
+		$registroContratoTemp = getContratoVigentePorData($voContratoDemanda, getDataHoje());
+	$voContratoDemanda->getDadosBanco($registroContratoTemp[0]);
+	//var_dump($voContratoDemanda);	
+	//echo "doc contrato" . $voContratoDemanda->docContratada;
+
+	 */
+	if($vocontrato->docContratada == null && $pLevantaExcecao){
+		throw new excecaoGenerica("ATENÇÃO: para consulta de PAAP´s, o documento do fornecedor deve ser informado.");
+	}
+
+	if($vocontrato != null && $vocontrato->docContratada != null){
+		$filtro = new filtroManterPA(false);
+		$filtro->doc = $vocontrato->docContratada;
+		/*$filtro->anoContrato = $vocontrato->anoContrato;
 		$filtro->cdContrato = $vocontrato->cdContrato;
-		$filtro->tipoContrato = $vocontrato->tipo;
-		
+		$filtro->tipoContrato = $vocontrato->tipo;*/
+
 		$db = new dbPA();
 		$colecao = $db->consultarPAAP(new voPA(), $filtro);
 		$retorno = !isColecaoVazia($colecao);

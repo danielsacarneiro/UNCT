@@ -276,6 +276,10 @@ include_once (caminho_util . "DocumentoPessoa.php");
 		$this->cdPessoaContratada= $registrobanco[self::$nmAtrCdPessoaContratada];
 		$this->contratada = $registrobanco[self::$nmAtrContratadaContrato];
 		$this->docContratada = $registrobanco[self::$nmAtrDocContratadaContrato];
+		if($this->docContratada == null){
+			$this->docContratada = $registrobanco[vopessoa::$nmAtrDoc];
+		}
+		
 		$this->gestor = $registrobanco[self::$nmAtrGestorContrato];
         $this->cdGestor = $registrobanco[self::$nmAtrCdGestorContrato];
 		$this->nmGestorPessoa = $registrobanco[self::$nmAtrGestorPessoaContrato];

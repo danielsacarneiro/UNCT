@@ -50,10 +50,12 @@ class dbcontrato extends dbprocesso {
 		$isHistorico = ("S" == $filtro->cdHistorico);
 		$nmTabela = $vo->getNmTabelaEntidade($isHistorico);
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic(false);
+		$nmTabelaPessoa = vopessoa::getNmTabelaStatic ( false );
 		//$nmTabelaDemandaSolicCompra = voDemandaPL::getNmTabelaStatic(false);
 		
 		$arrayColunasRetornadas = array (
 				$nmTabela . ".*",
+				$nmTabelaPessoa . "." . vopessoa::$nmAtrDoc,
 		);		
 		 		 
 		$queryJoin .= "\n left JOIN " . $nmTabelaContratoInfo;
@@ -61,6 +63,10 @@ class dbcontrato extends dbprocesso {
 		$queryJoin .= $nmTabelaContratoInfo . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrAnoContrato;
 		$queryJoin .= " AND " . $nmTabelaContratoInfo . "." . vocontrato::$nmAtrCdContrato. "=" . $nmTabela . "." . vocontrato::$nmAtrCdContrato;
 		$queryJoin .= " AND " . $nmTabelaContratoInfo . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
+		
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoa;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaPessoa . "." . vopessoa::$nmAtrCd . "=" . $nmTabela . "." . vocontrato::$nmAtrCdPessoaContratada;
 	
 		return parent::consultarMontandoQueryTelaConsulta ( $vo, $filtro, $arrayColunasRetornadas, $queryJoin );
 	}

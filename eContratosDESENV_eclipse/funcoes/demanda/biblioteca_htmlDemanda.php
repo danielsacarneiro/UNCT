@@ -196,14 +196,20 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 	
 	$countATENCAO = 1;
 	//informa que ha PAAPs abertos para o contrato
-	$temPAAPAberto = temPAAPAberto($voContratoDemanda);
-	if($temPAAPAberto){
-		$texto = "ATENÇÃO$countATENCAO: há PAAP(s) cadastrado(s) para este contrato.";
-		$html .= $conectorAlerta . getTextoLink($texto, "../pa", null, false, true);
-	
+	try{
+		$temPAAPAberto = temPAAPAberto($voContratoDemanda, true);
+		if($temPAAPAberto){
+			$texto = "ATENÇÃO$countATENCAO: há PAAP(s) cadastrado(s) para este fornecedor.";
+			$html .= $conectorAlerta . getTextoLink($texto, "../pa", null, false, true);
+		
+			$conectorAlerta = "<BR>";
+			$countATENCAO++;
+		}	
+	}catch (excecaoGenerica $exDoc){
+		$texto = "ATENÇÃO$countATENCAO: " . $exDoc->getMessage();		
 		$conectorAlerta = "<BR>";
-		$countATENCAO++;
-	}	
+		$countATENCAO++;		
+	}
 	
 	if(dominioTipoDemandaContrato::existeItemArrayOuStrCampoSeparador(dominioTipoDemandaContrato::$CD_TIPO_REAJUSTE, $pCdOpcaoSelecionadaTpDemandaContrato)){
 		//eh reajuste
