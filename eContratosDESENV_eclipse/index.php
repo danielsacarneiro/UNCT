@@ -202,6 +202,9 @@ setCabecalho($titulo);
                     				echo imprimeLinkDocumento("https://drive.google.com/file/d/1Ngzidm2fXYZC8wZPKuYODTH1Rnr74YBy/view?usp=sharing"
                     						, "FLUXOGRAMA CONTRATOS");
                     				
+                    				$vodocumento = new voDocumento(array(2020, dominioSetor::$CD_SETOR_UNCT,dominioTpDocumento::$CD_TP_DOC_OUTROS, 50));
+                    				echo imprimeBotaoDocumento($vodocumento, "COMO CADASTRAR FORNECEDOR EXTERNO NO SEI");
+                    				
                     				$vodocumento = new voDocumento(array(2020, dominioSetor::$CD_SETOR_UNCT,dominioTpDocumento::$CD_TP_DOC_OUTROS, 45));
                     				echo imprimeBotaoDocumento($vodocumento, "COMO REGISTRAR APOSTILAMENTOS");
                     				
