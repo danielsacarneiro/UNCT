@@ -59,10 +59,12 @@ try{
 <SCRIPT language="JavaScript" type="text/javascript">
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
 function isFormularioValido() {
-	campoClassificacao = document.frm_principal.<?=voContratoInfo::$nmAtrCdClassificacao?>;
-	classificacao = campoClassificacao.value;
-	campoProrrogacao = document.frm_principal.<?=voContratoInfo::$nmAtrInPrazoProrrogacao?>;
-	inProrrog = campoProrrogacao.value;	
+	var campoClassificacao = document.frm_principal.<?=voContratoInfo::$nmAtrCdClassificacao?>;
+	var classificacao = campoClassificacao.value;
+	var campoProrrogacao = document.frm_principal.<?=voContratoInfo::$nmAtrInPrazoProrrogacao?>;
+	var inProrrog = campoProrrogacao.value;
+	var campoTemGarantia = document.frm_principal.<?=voContratoInfo::$nmAtrInTemGarantia?>;
+	var inTemGarantia = campoTemGarantia.value;	
 
 	if(classificacao == "<?=dominioClassificacaoContrato::$CD_LOCACAO_IMOVEL?>"
 		&& inProrrog != "<?=dominioProrrogacaoContrato::$CD_NAO_SEAPLICA?>"){
@@ -73,6 +75,14 @@ function isFormularioValido() {
 		return false;			
 	}	
 	
+	if(classificacao == "<?=dominioClassificacaoContrato::$CD_MAO_OBRA?>"
+		&& inTemGarantia != "<?=constantes::$CD_SIM?>"){
+
+		exibirMensagem("<?=voContratoInfo::getTextoAlertaContratoMaodeObra()?>");
+		campoTemGarantia.focus();
+		return false;			
+	}	
+
 	return true;
 }
 

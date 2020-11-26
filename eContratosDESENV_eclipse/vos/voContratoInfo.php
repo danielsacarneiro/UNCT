@@ -305,6 +305,11 @@ Class voContratoInfo extends voentidade{
 		
 		return $retorno;		
 	}
+	
+	static function getTextoAlertaContratoMaodeObra(){
+		$retorno .=	"ATENÇÃO: O art. 3º da Lei Estadual nº 12.525/2003 impõe a fixação de garantia de execução em 5% (cinco por cento) do valor global do contrato.";	
+		return $retorno;
+	}
 
 }
 ?>
