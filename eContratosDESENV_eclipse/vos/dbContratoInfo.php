@@ -458,17 +458,26 @@ class dbContratoInfo extends dbprocesso {
 		if ($vo->obs != null) {
 			$retorno .= $sqlConector . voContratoInfo::$nmAtrObs . " = " . $this->getVarComoString ( $vo->obs );
 			$sqlConector = ",";
-		}
+		}else{
+			$retorno .= $sqlConector . voContratoInfo::$nmAtrObs . " = null ";
+			$sqlConector = ",";
+		}				
 		
 		if ($vo->dtProposta != null) {
 			$retorno .= $sqlConector . voContratoInfo::$nmAtrDtProposta . " = " . $this->getVarComoData ( $vo->dtProposta );
 			$sqlConector = ",";
-		}
+		}else{
+			$retorno .= $sqlConector . voContratoInfo::$nmAtrDtProposta . " = null ";
+			$sqlConector = ",";
+		}				
 		
 		if ($vo->dtBaseReajuste != null) {
 			$retorno .= $sqlConector . voContratoInfo::$nmAtrDtBaseReajuste . " = " . $this->getVarComoData ( $vo->dtBaseReajuste );
 			$sqlConector = ",";
-		}
+		}else{
+			$retorno .= $sqlConector . voContratoInfo::$nmAtrDtBaseReajuste . " = null ";
+			$sqlConector = ",";
+		}				
 		
 		if ($vo->inTemGarantia != null) {
 			$retorno .= $sqlConector . voContratoInfo::$nmAtrInTemGarantia . " = " . $this->getVarComoString ( $vo->inTemGarantia );
