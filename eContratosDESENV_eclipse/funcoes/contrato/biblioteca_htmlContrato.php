@@ -236,7 +236,7 @@ function isContratoEnvioSADPGE($voContrato, $setor){
 	//$voContrato = new vocontrato();
 	$retorno = false;
 	if($voContrato != null){	
-		$prazoAnual = getDuracaoEmMesesContrato($voContrato);
+		$prazoAnual = getDuracaoEmMesesContratoAutorizacaoPGE_SAD($voContrato);
 		//echo $prazoAnual;
 		if($prazoAnual >= vocontrato::$NUM_PRAZO_PADRAO){
 			$prazoAnual = vocontrato::$NUM_PRAZO_PADRAO;
@@ -1426,7 +1426,7 @@ function getContratoDemandaPorSEI($SEI){
 	return $retorno;
 }
 
-function getDuracaoEmMesesContrato($voContrato){
+function getDuracaoEmMesesContratoAutorizacaoPGE_SAD($voContrato){
 	//$voContrato = new vocontrato();	
 	if($voContrato->dtVigenciaInicial != null && $voContrato->dtVigenciaFinal != null){
 		$prazoAnual = getQtdMesesEntreDatas($voContrato->dtVigenciaInicial, $voContrato->dtVigenciaFinal);
