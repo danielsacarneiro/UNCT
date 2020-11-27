@@ -430,9 +430,11 @@ class voDemanda extends voentidade {
 		if($numPRT != null){
 			$formatado = static::formataPRTParaApenasNumero($numPRT);
 			$tamanho = strlen($formatado);
+			
 			$isSEI = static::isPRTSEI($numPRT);
 			if(static::isPRTValido($numPRT, $levantarExcecao)){
 				//echo "valido";
+
 				if($isSEI){
 					//echo "eh sei";
 					if(static::isSEIPadrao($numPRT)){
@@ -440,12 +442,18 @@ class voDemanda extends voentidade {
 						$formatado .= substr( $numPRT, 10, 6 ) . '/';
 						$formatado .= substr( $numPRT, 16, 4 ) . '-';
 						$formatado .= substr( $numPRT, 20, 2 );
-					}else{
+					}else if($tamanho >= 18){
 						$formatado  = substr( $numPRT, 0, 3 ) . '.';
 						$formatado .= substr( $numPRT, 3, 4 ) . '.';
 						$formatado .= substr( $numPRT, 7, 3 ) . '.';
 						$formatado .= substr( $numPRT, 10, 5 ) . '.';
 						$formatado .= substr( $numPRT, 15, 3 );
+					}else{
+						//SEI MENOR - GERALMENTE VEM DA SAD
+						$formatado  = substr( $numPRT, 0, 3 ) . '.';
+						$formatado .= substr( $numPRT, 3, 4 ) . '.';
+						$formatado .= substr( $numPRT, 7, 5 ) . '.';
+						$formatado .= substr( $numPRT, 12, 3 );
 					}
 				}else{
 					//echo "nao eh sei";
@@ -455,7 +463,7 @@ class voDemanda extends voentidade {
 					$formatado .= substr( $numPRT, 13, 3 ) .'-';
 					$formatado .= substr( $numPRT, 16, 2 );
 				}
-	
+					
 				$formatadoRetorno = $formatado;
 			}
 			/*else{	echo "nao eh PRT valido";
