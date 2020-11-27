@@ -239,7 +239,7 @@ function iniciar(){
 					//. $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInTemGarantia,voContratoInfo::$nmAtrInTemGarantia, $vo->inTemGarantia, true, "camporeadonly", false, " disabled ");
 	            	. dominioSimNao::getHtmlDetalhamentoRadio(voContratoInfo::$nmAtrInTemGarantia, voContratoInfo::$nmAtrInTemGarantia, $vo->inTemGarantia);
 	            if($vo->inTemGarantia != constantes::$CD_NAO){
-	            	echo "Tipo: " . $comboGarantia->getHtmlCombo(voContratoInfo::$nmAtrTpGarantia,voContratoInfo::$nmAtrTpGarantia, $vo->tpGarantia, true, "camporeadonly", false, " disabled ");
+	            	echo " |Tipo: " . $comboGarantia->getHtmlCombo(voContratoInfo::$nmAtrTpGarantia,voContratoInfo::$nmAtrTpGarantia, $vo->tpGarantia, true, "camporeadonly", false, " disabled ");
 	            }
 	            ?>
 	            </TD>
