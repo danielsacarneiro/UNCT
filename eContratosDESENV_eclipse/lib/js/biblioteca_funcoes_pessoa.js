@@ -46,18 +46,28 @@ function carregaDadosContratada(pNmCampoAnoContrato, pNmCampoTipoContrato, pNmCa
 
 	//fica assim por conta do formato da chave do vocontrato
 	if(cdContrato != "" && anoContrato != "" && tpContrato != ""
-		&& ((isChaveCompleta && cdEspecieContrato != "" && sqEspecieContrato != "") || !isChaveCompleta)){
+		&& ((isChaveCompleta && cdEspecieContrato != "") || !isChaveCompleta)){
+		
 		var str = "" + CD_CAMPO_SEPARADOR + anoContrato + CD_CAMPO_SEPARADOR + cdContrato + CD_CAMPO_SEPARADOR + tpContrato;
 		
 		if(cdEspecieContrato != null)
 			str = str + CD_CAMPO_SEPARADOR + cdEspecieContrato;
 		
-		if(sqEspecieContrato != null)
+		if(sqEspecieContrato != null && sqEspecieContrato != ""){
 			str = str + CD_CAMPO_SEPARADOR + sqEspecieContrato;
-
+		}else{
+			//vai buscar o proximo termo quando possivel para exibir na tela
+			if(isChaveCompleta){			
+				link = "../contrato/campoSqProximoTermo.php";
+				//biblio ajax
+				getDadosPorChaveGenerica(str, link, pNmCampoDiv);
+				return;			
+			}
+		}
 		//alert(str);
 		//vai no ajax
 		getDadosContratadaPorContrato(str, pNmCampoDiv);
+	
 	}else{
 		//limpa o campodiv da contratada
 		limpaCampoDiv(pNmCampoDiv);		
