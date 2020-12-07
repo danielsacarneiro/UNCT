@@ -37,6 +37,7 @@ class filtroManterDemanda extends filtroManter{
 	
 	static $ID_REQ_NuTempoVidaMinimo = "ID_REQ_NuTempoVidaMinimo";
 	static $ID_REQ_NuTempoVidaMinimoUltimaTram = "ID_REQ_NuTempoVidaMinimoUltimaTram";
+	static $ID_REQ_InMonitorar = "ID_REQ_InMonitorar";
 	
 	static $NmColNuTempoVida = "NmColNuTempoVida";
 	static $NmColNuTempoUltimaTram= "NmColNuTempoUltimaTram";
@@ -87,6 +88,8 @@ class filtroManterDemanda extends filtroManter{
 	var $nuTempoVidaMinimo;
 	var $nuTempoVidaMinimoUltimaTram;
 	var $inCdResponsavelUNCT;
+	var $inMonitorar;
+	var $numPrazoMonitorar;
 	
 	// ...............................................................
 	// construtor
@@ -190,6 +193,7 @@ class filtroManterDemanda extends filtroManter{
 		
 		$this->nuTempoVidaMinimo = @$_POST[static::$ID_REQ_NuTempoVidaMinimo];
 		$this->nuTempoVidaMinimoUltimaTram = @$_POST[static::$ID_REQ_NuTempoVidaMinimoUltimaTram];
+		$this->inMonitorar = @$_POST[static::$ID_REQ_InMonitorar];
 	}
 	 	
 	function getFiltroConsultaSQL($comAtributoOrdenacao = null){
@@ -517,6 +521,28 @@ class filtroManterDemanda extends filtroManter{
 		
 					$conector  = "\n AND ";
 		}		
+		
+		if(isAtributoValido($this->inMonitorar)){				
+			$filtro = $filtro . $conector
+			. $nmTabela . "." .voDemanda::$nmAtrInMonitorar . " = " . getVarComoString($this->inMonitorar);
+			;
+		
+			$conector  = "\n AND ";
+			if($this->numPrazoMonitorar != null){
+				$filtro = $filtro . $conector
+				. " (("
+						. $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrCdSetorDestino
+						. " IS NULL AND "
+						. getDataSQLDiferencaDias("$nmTabela." .voDemanda::$nmAtrDtReferencia, getDataSQL(getDataHoje())) 
+						. " >= " . vodemanda::$NUM_PRAZO_MONITORAMENTO
+						. " ) OR ("
+						. $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrCdSetorDestino
+						. " IS NOT NULL AND "
+						. getDataSQLDiferencaDias("$nmTabelaTramitacao." .voDemandaTramitacao::$nmAtrDtReferencia, getDataSQL(getDataHoje())) 
+						. " >= " . vodemanda::$NUM_PRAZO_MONITORAMENTO
+						. "))";						
+			}
+		}
 		
 		if($this->inSEI != null){			
 			$numCaracteres = constantes::$TAMANHO_CARACTERES_PRT;

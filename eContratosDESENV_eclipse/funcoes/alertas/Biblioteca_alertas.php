@@ -506,11 +506,12 @@ function enviarEmailUNCT($enviarEmail){
 	imprimeTituloalerta($enviarEmail, $setor);
 	
 	$count = 0;	
+	//envia demandas monitoradas
+	$mensagem .= getMensagemDemandasMonitoradas($count);	
 	//envia demandas iniciais
 	$mensagem .= getMensagemDemandaIniciais($count);
 	//sistemas licon portal da transparencia
 	$mensagem .= getMensagemSistemasExternos($count);
-
 	//$mensagem .= getMensagemContratosNaoIncluidosPlanilha($count);
 	
 	echo $mensagem . getBotaoDetalharAlertas();

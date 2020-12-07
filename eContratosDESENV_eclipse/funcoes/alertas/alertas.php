@@ -389,6 +389,55 @@ function getMensagemContratosAVencerImprorrogaveisGestor(&$count = 0){
 	return $msg;
 }
 
+function getMensagemDemandasMonitoradas(&$count = 0){
+	$assunto = "DEMANDAS MONITORADAS:";
+	$assunto = getSequenciaAssunto($assunto, $count);
+	try {
+		$filtro = new filtroManterDemanda ( false );
+		$voDemanda = new voDemanda ();
+		$dbprocesso = $voDemanda->dbprocesso;
+		$filtro->voPrincipal = $voDemanda;
+		$filtro->isValidarConsulta = false;
+		$filtro->setaFiltroConsultaSemLimiteRegistro ();
+
+		$filtro->vodemanda->situacao = array (
+				dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_ABERTA,
+				dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO
+		);
+		
+		$filtro->inMonitorar = constantes::$CD_SIM;
+		$filtro->numPrazoMonitorar = voDemanda::$NUM_PRAZO_MONITORAMENTO;
+
+		//$filtro->inCdResponsavelUNCT = constantes::$CD_OPCAO_NENHUM;
+		//$filtro->cdAtrOrdenacao = filtroManterDemanda::$NmColNuTempoUltimaTram;
+		$filtro->cdAtrOrdenacao = voDemanda::$nmAtrCdPessoaRespUNCT . "," . filtroManterDemanda::$NmColNuTempoUltimaTram;
+
+		$colecao = $dbprocesso->consultarTelaConsulta ( $voDemanda, $filtro );
+
+		$array =array(
+				constantes::$CD_COLUNA_CHAVE => 'RESPONSÁVEL',
+				constantes::$CD_COLUNA_VALOR => filtroManterDemanda::$NM_COL_NOME_RESP_UNCT,
+		);
+		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);
+
+		$array =array(
+				constantes::$CD_COLUNA_CHAVE => 'PRAZO',
+				constantes::$CD_COLUNA_VALOR => filtroConsultarDemandaGestao::$NmColNuTempoUltimaTram,
+				constantes::$CD_COLUNA_TP_DADO =>  constantes::$TAMANHO_CODIGOS_SAFI,
+				constantes::$CD_COLUNA_VL_REFERENCIA =>  15,
+				constantes::$CD_COLUNA_TP_VALIDACAO =>  constantes::$CD_ALERTA_TP_VALIDACAO_MAIORQUE,
+		);
+		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);
+
+		$msg = getCorpoMensagemDemandaContratoColecao($assunto, $colecao, $colunasAAcrescentar);
+
+	} catch ( Exception $ex ) {
+		$msg = $ex->getMessage ();
+	}
+
+	return $msg;
+}
+
 function getMensagemDemandaIniciais(&$count = 0){
 	$assunto = "DEMANDAS A FAZER:";
 	$assunto = getSequenciaAssunto($assunto, $count);

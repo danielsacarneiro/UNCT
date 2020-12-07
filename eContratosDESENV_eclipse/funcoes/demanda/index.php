@@ -235,7 +235,8 @@ function detalharDemandaGestao(){
 	            <?php getCampoDadosPAAP($filtro->voPA);
 	            echo " Tem?: " . $comboSimNao->getHtmlCombo(filtroManterDemanda::$NmAtrInComPAAPInstaurado,
 	            								filtroManterDemanda::$NmAtrInComPAAPInstaurado, 
-	            								$filtro->inComPAAPInstaurado, true, "camponaoobrigatorio", false,"");?>
+	            								$filtro->inComPAAPInstaurado, true, "camponaoobrigatorio", false,"");
+	            ?>
 	            </TD>
 	        </TR>	                    
 	        <TR>
@@ -270,7 +271,14 @@ function detalharDemandaGestao(){
 	            			onkeyup="formatarCampoData(this, event, false);" 
 	            			class="camponaoobrigatorio" 
 	            			size="10" 
-	            			maxlength="10">					            
+	            			maxlength="10">
+	            			
+	            <?php 
+	            echo "| Monitorar?: " . $comboSimNao->getHtmlCombo(filtroManterDemanda::$ID_REQ_InMonitorar,
+	            								filtroManterDemanda::$ID_REQ_InMonitorar, 
+	            								$filtro->inMonitorar, true, "camponaoobrigatorio", false,"");
+	            ?>
+	            								            
 	            </TD>
 	            <TH class="campoformulario" nowrap width="1%">Dt.Últ.Mov.:</TH>
 	            <TD class="campoformulario">
