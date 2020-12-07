@@ -8,6 +8,7 @@ class filtroManterMensageriaRegistro extends filtroManter {
 	
 	static $ID_REQ_DtReferenciaInicial = "ID_REQ_DtReferenciaInicial";
 	static $ID_REQ_DtReferenciaFinal = "ID_REQ_DtReferenciaFinal";
+	static $ID_REQ_NumEmailsEnviados = "ID_REQ_NumEmailsEnviados";
 	
 	var $cdContrato = "";
 	var $anoContrato = "";
@@ -20,6 +21,7 @@ class filtroManterMensageriaRegistro extends filtroManter {
 	var $dtInicio = "";
 	var $dtFim = "";
 	var $sq = "";
+	var $numEmailsEnviados = "";
 	
 	function getFiltroFormulario() {
 		
@@ -33,6 +35,7 @@ class filtroManterMensageriaRegistro extends filtroManter {
 		$this->inHabilitado = @$_POST [voMensageria::$nmAtrInHabilitado];
 		$this->dtInicio = @$_POST [static::$ID_REQ_DtReferenciaInicial];
 		$this->dtFim = @$_POST [static::$ID_REQ_DtReferenciaFinal];
+		$this->numEmailsEnviados = @$_POST [static::$ID_REQ_NumEmailsEnviados];
 		
 		if ($this->cdOrdenacao == null) {
 			$this->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;

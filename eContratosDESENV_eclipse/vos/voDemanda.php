@@ -12,6 +12,8 @@ include_once (caminho_funcoes . "demanda/dominioTipoReajuste.php");
 include_once (caminho_funcoes . "demanda/biblioteca_htmlDemanda.php");
 
 class voDemanda extends voentidade {
+	static $MSG_IN_MONITORAR = "Permite aviso por email.";
+	
 	static $ID_REQ_DIV_REAJUSTE_MONTANTE_A = "ID_REQ_DIV_REAJUSTE_MONTANTE_A";
 	static $ID_REQ_InTemContrato  = "InTemContrato";	
 		
@@ -30,6 +32,7 @@ class voDemanda extends voentidade {
 	static $nmAtrCdPessoaRespATJA = "dem_cdpessoaresp_atja";
 	static $nmAtrCdPessoaRespUNCT = "dem_cdpessoaresp_unct";
 	static $nmAtrFase =  "dem_fase";
+	static $nmAtrInMonitorar =  "dem_inmonitorar";
 	//lembrar que o PRT foi migrado do demandatramitacao para ca
 	static $nmAtrProtocolo = "dtm_prt";
 	
@@ -50,6 +53,7 @@ class voDemanda extends voentidade {
 	var $cdPessoaRespATJA = "";
 	var $cdPessoaRespUNCT = "";
 	var $fase = "";
+	var $inMonitorar = "";
 	
 	var $prt = "";
 	var $dbprocesso = null;
@@ -125,6 +129,7 @@ class voDemanda extends voentidade {
 				self::$nmAtrCdPessoaRespATJA,
 				self::$nmAtrCdPessoaRespUNCT,
 				self::$nmAtrFase,
+				self::$nmAtrInMonitorar,
 				self::$nmAtrProtocolo,
 				self::$nmAtrInLegado
 		);
@@ -214,6 +219,7 @@ class voDemanda extends voentidade {
 		$this->cdPessoaRespATJA = $registrobanco [self::$nmAtrCdPessoaRespATJA];
 		$this->cdPessoaRespUNCT = $registrobanco [self::$nmAtrCdPessoaRespUNCT];
 		$this->fase = $registrobanco [self::$nmAtrFase];
+		$this->inMonitorar = $registrobanco [self::$nmAtrInMonitorar];
 		
 		$this->prt = $registrobanco[self::$nmAtrProtocolo];
 		$this->prt = voDemandaTramitacao::getNumeroPRTComMascara($this->prt, false);
@@ -253,6 +259,7 @@ class voDemanda extends voentidade {
 		$this->cdPessoaRespATJA = @$_POST [self::$nmAtrCdPessoaRespATJA];
 		$this->cdPessoaRespUNCT = @$_POST [self::$nmAtrCdPessoaRespUNCT];
 		$this->fase = @$_POST [voDemanda::$nmAtrFase];
+		$this->inMonitorar = @$_POST [voDemanda::$nmAtrInMonitorar];
 		
 		$this->prt = @$_POST[self::$nmAtrProtocolo];
 		$this->inLegado = @$_POST [self::$nmAtrInLegado];

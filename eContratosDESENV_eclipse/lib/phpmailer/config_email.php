@@ -11,6 +11,7 @@ class email_sefaz extends multiplosConstrutores{
 	static $CD_IMAGEM_SEFAZLOGO = "SEFAZ_LOGO";
 	static $REMETENTE_ATJA = "atja@sefaz.pe.gov.br";
 	static $REMETENTE_UNCT = "unct@sefaz.pe.gov.br";
+	static $REMETENTE_DILC = "carlos.pereira@sefaz.pe.gov.br";
 	
 	static $REMETENTE_COPIA = "eduardo.s-goncalves@sefaz.pe.gov.br";
 	static $REMETENTE_PRINCIPAL = "unct@sefaz.pe.gov.br";
@@ -78,7 +79,8 @@ class email_sefaz extends multiplosConstrutores{
 		return array(
 				static::$REMETENTE_PRINCIPAL,
 				static::$REMETENTE_COPIA,
-				"rogerio.f-carvalho@sefaz.pe.gov.br",
+				static::$REMETENTE_DILC,
+				//"rogerio.f-carvalho@sefaz.pe.gov.br",
 				//"eduardo.s-goncalves@sefaz.pe.gov.br",
 				//"daniel.ribeiro@sefaz.pe.gov.br",				
 				//"margarida.vasconcelos@sefaz.pe.gov.br"
@@ -96,7 +98,8 @@ class email_sefaz extends multiplosConstrutores{
 		return array(
 				"eduardo.s-goncalves@sefaz.pe.gov.br",
 				"daniel.ribeiro@sefaz.pe.gov.br",
-				"rogerio.f-carvalho@sefaz.pe.gov.br",
+				static::$REMETENTE_DILC,
+				//"rogerio.f-carvalho@sefaz.pe.gov.br",
 		);
 	}
 	

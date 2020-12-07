@@ -248,7 +248,13 @@ function iniciar(){
 	            <TD class="campoformulario" >
 	            <?php 
 	            //o setor destino da ultima tramitacao sera o origem da nova
-	            echo $comboPrioridade->getHtmlCombo(voDemanda::$nmAtrPrioridade,voDemanda::$nmAtrPrioridade, $vo->prioridade, true, "camporeadonly", false, " disabled ");?>	            
+	            echo $comboPrioridade->getHtmlCombo(voDemanda::$nmAtrPrioridade,voDemanda::$nmAtrPrioridade, $vo->prioridade, true, "camporeadonly", false, " disabled ");
+	            $comboSimNao = new select(dominioSimNao::getColecao());
+	            echo " | " . getTextoHTMLTagMouseOver(getTextoHTMLDestacado("Monitorar?"), voDemanda::$MSG_IN_MONITORAR) . ": ";
+	            echo $comboSimNao->getHtmlCombo(voDemanda::$nmAtrInMonitorar,voDemanda::$nmAtrInMonitorar, $vo->inMonitorar, true, "camponaoobrigatorio", false, "");
+	            echo getInputHiddenACompararBanco(voDemanda::$nmAtrInMonitorar, voDemanda::$nmAtrInMonitorar, $vo->inMonitorar);
+	            ?>
+	            	            
 				</TD>
 	        </TR>
 	        <TR>

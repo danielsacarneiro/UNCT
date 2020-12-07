@@ -1,5 +1,6 @@
 <?php
 include_once (caminho_lib . "voentidade.php");
+include_once(caminho_funcoes."alertas/alertas.php");
 include_once(caminho_funcoes."alertas/Biblioteca_alertas.php");
 include_once(caminho_funcoes."mensageria/dominioTipoMensageria.php");
 

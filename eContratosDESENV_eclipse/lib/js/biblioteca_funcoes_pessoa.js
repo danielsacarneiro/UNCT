@@ -53,9 +53,12 @@ function carregaDadosContratada(pNmCampoAnoContrato, pNmCampoTipoContrato, pNmCa
 		if(cdEspecieContrato != null)
 			str = str + CD_CAMPO_SEPARADOR + cdEspecieContrato;
 		
+		//alert(1);
 		if(sqEspecieContrato != null && sqEspecieContrato != ""){
 			str = str + CD_CAMPO_SEPARADOR + sqEspecieContrato;
+			//alert(2);
 		}else{
+			//alert(3);
 			//vai buscar o proximo termo quando possivel para exibir na tela
 			if(isChaveCompleta){			
 				link = "../contrato/campoSqProximoTermo.php";

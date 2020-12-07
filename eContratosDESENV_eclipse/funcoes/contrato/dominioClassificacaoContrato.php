@@ -6,11 +6,13 @@ Class dominioClassificacaoContrato extends dominio{
 	static $CD_FORNECIMENTO_AQUISICAO = 2;
 	static $CD_MAO_OBRA = 3;
 	static $CD_LOCACAO_IMOVEL = 4;
+	static $CD_LOCACAO_VEICULO = 5;
 
 	static $DS_SERVICOS = 'Serviços';
 	static $DS_FORNECIMENTO_AQUISICAO = "Fornec./Aquisição";
 	static $DS_MAO_OBRA = "Terc. Mão de Obra";
 	static $DS_LOCACAO_IMOVEL = "Locação imóvel";
+	static $DS_LOCACAO_VEICULO = "Locação veículo";
 	
 	// ...............................................................
 	// Construtor
@@ -26,6 +28,7 @@ Class dominioClassificacaoContrato extends dominio{
 				self::$CD_FORNECIMENTO_AQUISICAO => self::$DS_FORNECIMENTO_AQUISICAO,
 				self::$CD_MAO_OBRA => self::$DS_MAO_OBRA,
 				self::$CD_LOCACAO_IMOVEL => self::$DS_LOCACAO_IMOVEL,
+				self::$CD_LOCACAO_VEICULO => self::$DS_LOCACAO_VEICULO,
 		);
 	}
 

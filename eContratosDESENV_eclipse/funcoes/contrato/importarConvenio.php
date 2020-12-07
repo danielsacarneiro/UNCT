@@ -40,12 +40,14 @@ if($tipoContrato == null || $tipoContrato == "")
 	 $inputFileName = caminho.'planilha/UNCT_profisco.xls';
 	 }*/
 	
-$inputFileName = caminho."planilha/".dbcontrato::$NM_ARQUIVO_PLANILHA_CONTRATOS;
+//$inputFileName = caminho."planilha/".dbcontrato::$NM_ARQUIVO_PLANILHA_CONTRATOS;
+$inputFileName = dbcontrato::getCaminhoArquivoPlanilha(dominioTipoContrato::$CD_TIPO_CONTRATO);
 $isBuscarPlanilhaPorNome = true;
 //echoo("tipo contrato: " . $tipoContrato);
 if($tipoContrato != "V"){
 	$tipoContrato = "P";
-	$inputFileName = caminho.'planilha/CONTRATOS-PROFISCO.xls';
+	//$inputFileName = caminho.'planilha/CONTRATOS-PROFISCO.xls';
+	$inputFileName = dbcontrato::getCaminhoArquivoPlanilha(dominioTipoContrato::$CD_TIPO_PROFISCO);
 	$isBuscarPlanilhaPorNome = false;
 	echoo("IMPORTAÇÃO DE CONTRATOS PROFISCO INICIADA.");
 }else{
@@ -54,7 +56,8 @@ if($tipoContrato != "V"){
 
 $objPHPExcel = PHPExcel_IOFactory::load($inputFileName);
 if($isBuscarPlanilhaPorNome){
-	$objPHPExcel->setActiveSheetIndexByName(dbcontrato::$NM_PLANILHA_CONVENIOS);
+	//$objPHPExcel->setActiveSheetIndexByName(dbcontrato::$NM_PLANILHA_CONVENIOS);
+	$objPHPExcel->setActiveSheetIndexByName(dbcontrato::getNomePlanilhaAtiva(dominioTipoContrato::$CD_TIPO_CONVENIO));
 }
 $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
 

@@ -958,6 +958,24 @@ function getInputHidden($idText, $nmText, $value, $complementoHTML = null) {
 	$retorno = "<INPUT type='hidden' id='" . $idText . "' name='" . $nmText . "' value='" . $value . "' $complementoHTML>";
 	return $retorno;
 }
+
+/**
+ * funcao que inclui um hidden na pagina com o valor do atributo na base, para posterior comparacao
+ * geralmente usada na validacao de VOs, na verificacao se tais atributos sofreram ou nao alteracao na pagina
+ * @param unknown $idText
+ * @param unknown $nmText
+ * @param unknown $value
+ * @param unknown $complementoHTML
+ * @return string
+ */
+function getInputHiddenACompararBanco($idText, $nmText, $value, $complementoHTML = null) {
+	$idText .= constantes::$DS_BANCO;
+	$nmText .= constantes::$DS_BANCO;
+	
+	$retorno = getInputHidden($idText, $nmText, $value, $complementoHTML);
+	return $retorno;
+}
+
 function getInputTextArea($idText, $nmText, $value, $class = null, $rows = null, $cols = null, $maxlength = null, $complementoHTML = null) {
 	if ($maxlength == null) {
 		$maxlength = 300;
@@ -1356,6 +1374,16 @@ function getDivHtmlExpansivel($nmDiv, $conteudoDiv=null, $visivel=false, $class 
 	$html = "$link<DIV class='$class' id='$nmDiv' name='$nmDiv'>". getTextoHTMLDestacado($conteudoDiv, "red", false)  . "</DIV>";
 	$html .= getTagHtmlJavaScript($scriptOnLoad);
 	return $html;
+}
+
+/**
+ * recupera um atributo com o valor a comparar entre aquele inserido pelo usuario e o que esta na base de dados
+ * @param unknown $nmAtributo
+ * @return unknown
+ */
+function getAtributoTelaACompararBanco($nmAtributo){
+	$nmAtributo .= constantes::$DS_BANCO;
+	return $_POST[$nmAtributo];
 }
 
 

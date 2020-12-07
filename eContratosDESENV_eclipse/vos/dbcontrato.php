@@ -22,6 +22,7 @@ class dbcontrato extends dbprocesso {
 	static $ID_REQ_REMOVER_CARACTER_ESPECIAL = "ID_REQ_REMOVER_CARACTER_ESPECIAL";
 
 	static $NM_ARQUIVO_PLANILHA_CONTRATOS= "CONTRATOS C-SAFI  2017- UNCT - ATUAL.xlsx";
+	static $NM_ARQUIVO_PLANILHA_CONTRATOS_PROFISCO = "CONTRATOS-PROFISCO.xls";
 	static $NM_PLANILHA_CONTRATOS= "Contratos Vigentes";
 	static $NM_PLANILHA_CONVENIOS= "Convênios";
 
@@ -1423,6 +1424,63 @@ class dbcontrato extends dbprocesso {
 		return $retorno;
 	}
 	
+	function consultarContratosNaoIncluidosPlanilha(){
+		$retorno = "";
+		
+			$vo = new voDemandaContrato();
+			$nmTabela = $vo->getNmTabelaEntidade(false);
+			$nmTabelaContrato = vocontrato::getNmTabela();
+			//$nmTabelaDemandaSolicCompra = voDemandaPL::getNmTabelaStatic(false);
+			$groupby = "$nmTabela." . voDemandaContrato::$nmAtrAnoContrato
+			. ",$nmTabela." . voDemandaContrato::$nmAtrTipoContrato
+			. ",$nmTabela." . voDemandaContrato::$nmAtrCdContrato
+			. ",$nmTabela." . voDemandaContrato::$nmAtrCdEspecieContrato
+			. ",$nmTabela." . voDemandaContrato::$nmAtrSqEspecieContrato;
+	
+			$query .= " SELECT * ";
+			$query .= " FROM " . $nmTabela;
+			$query .= " WHERE "
+			. "$nmTabela." .  voDemandaContrato::$nmAtrCdEspecieContrato . "  = 'TA' AND " 
+			. " NOT EXISTS (SELECT 'X' FROM " . $nmTabelaContrato 
+			. " WHERE $nmTabela." . voDemandaContrato::$nmAtrAnoContrato . "= $nmTabelaContrato.". vocontrato::$nmAtrAnoContrato 
+			. " AND $nmTabela." . voDemandaContrato::$nmAtrTipoContrato . "= $nmTabelaContrato.". vocontrato::$nmAtrTipoContrato
+			. " AND $nmTabela." . voDemandaContrato::$nmAtrCdContrato . "= $nmTabelaContrato.". vocontrato::$nmAtrCdContrato
+			. " AND $nmTabela." . voDemandaContrato::$nmAtrCdEspecieContrato . "= $nmTabelaContrato.". vocontrato::$nmAtrCdEspecieContrato
+			. " AND $nmTabela." . voDemandaContrato::$nmAtrSqEspecieContrato . "= $nmTabelaContrato.". vocontrato::$nmAtrSqEspecieContrato
+			. ")\n";
+			$query .= " group by $groupby";
+						
+		static::printarSQL($query);	
+		$retorno = parent::consultarEntidade ( $query, false);	
+	
+		return $retorno;
+	}
+	
+	
+	/**
+	 * OPERACOES COM A PLANILHA
+	 */
+	 static function getCaminhoArquivoPlanilha($tipoContrato){
+	 	$retorno = caminho."planilha/";
+	 	if($tipoContrato == dominioTipoContrato::$CD_TIPO_CONTRATO
+	 			|| $tipoContrato == dominioTipoContrato::$CD_TIPO_CONVENIO){
+	 		$retorno .= static::$NM_ARQUIVO_PLANILHA_CONTRATOS;	 		
+	 	}else if($tipoContrato == dominioTipoContrato::$CD_TIPO_PROFISCO){
+	 		$retorno .= static::$NM_ARQUIVO_PLANILHA_CONTRATOS_PROFISCO;
+	 	}
+	 	
+	 	return $retorno;
+	}
+	
+	static function getNomePlanilhaAtiva($tipoContrato){
+		if($tipoContrato == dominioTipoContrato::$CD_TIPO_CONTRATO){
+			$retorno = static::$NM_PLANILHA_CONTRATOS;
+		}else if($tipoContrato == dominioTipoContrato::$CD_TIPO_CONVENIO){
+			$retorno = static::$NM_PLANILHA_CONVENIOS;
+		}
+		 
+		return $retorno;
+	}	
 	
 }
 ?>

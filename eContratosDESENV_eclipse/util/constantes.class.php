@@ -4,7 +4,7 @@ include_once 'normativos.php';
 
   Class constantes {	
 	
-	static $nomeSistema = "e@CONTi";
+	static $nomeSistema = "e-C@NTi";
 	static $ANO_INICIO = "2016";
 	static $DATA_INICIO = "01/01/1900";
 	static $DATA_FIM = "01/01/2099";
@@ -106,5 +106,7 @@ include_once 'normativos.php';
     
     static $VL_GLOBAL_ENVIO_PGE = 2000000;
     static $VL_GLOBAL_ENVIO_SAD = 3000000;
+    
+    static $DS_BANCO = "*BANCO*";
 }
 ?>

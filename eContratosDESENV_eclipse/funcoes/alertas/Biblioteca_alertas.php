@@ -510,12 +510,12 @@ function enviarEmailUNCT($enviarEmail){
 	$mensagem .= getMensagemDemandaIniciais($count);
 	//sistemas licon portal da transparencia
 	$mensagem .= getMensagemSistemasExternos($count);
-	//demandas que seguem para a SAD
-	//$mensagem .= getMensagemDemandaSAD($count);
 
+	//$mensagem .= getMensagemContratosNaoIncluidosPlanilha($count);
+	
 	echo $mensagem . getBotaoDetalharAlertas();
 	
-	$assunto = "Relatório diário";
+	$assunto = "$setor - Relatório diário";
 	enviarEmail($assunto, $mensagem, $enviarEmail, email_sefaz::getListaEmailUNCT());	
 	//enviarEmail($assuntoParam, $mensagemParam, $enviarEmail=true, $listaEmail=null,$remetente = null) {
 }
@@ -534,7 +534,7 @@ function enviarEmailDiretoria($enviarEmail){
 	
 	echo $mensagem . getBotaoDetalharAlertas(new voContratoInfo());
 
-	$assunto = "Relatório diário";
+	$assunto = "$setor - Relatório diário";
 	enviarEmail($assunto, $mensagem, $enviarEmail, email_sefaz::getListaEmailContratosAVencer());
 	//enviarEmail($assuntoParam, $mensagemParam, $enviarEmail=true, $listaEmail=null,$remetente = null) {
 }

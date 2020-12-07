@@ -192,6 +192,9 @@ include_once("voDemandaContrato.php");
 		return $voDemanda;
 	}
 	
+	/**
+	 * lembrar sempre que acrescentar um atributo no voDemanda, acrescentar aqui
+	 */
 	function getVOPai(){
 		$voDemanda = $this->getVOPaiChave();
 		$voDemanda->cdSetor = $this->cdSetor;
@@ -204,6 +207,7 @@ include_once("voDemandaContrato.php");
 		$voDemanda->cdPessoaRespATJA  = $this->cdPessoaRespATJA;
 		$voDemanda->cdPessoaRespUNCT  = $this->cdPessoaRespUNCT;
 		$voDemanda->fase  = $this->fase;
+		$voDemanda->inMonitorar  = $this->inMonitorar;
 		
 		$voDemanda->prt  = $this->prt;
 		$voDemanda->voSolicCompra = $this->voSolicCompra;

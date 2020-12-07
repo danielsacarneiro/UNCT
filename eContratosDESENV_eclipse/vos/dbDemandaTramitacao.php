@@ -287,6 +287,48 @@ class dbDemandaTramitacao extends dbprocesso {
 	}
 	
 	/**
+	 * verifica se os atributos cuja alteracao da DEMANDA eh permitida na tela de encaminhamento foram alterados
+	 * se existir alteracao a fazer, ja faz no vo
+	 * 
+	 * RETORNA NULO se nao houver alteracao a fazer
+	 * @param unknown $vo
+	 * @return boolean
+	 */
+	function getVODemandaPaiAAlterarEncaminhamento($vo){
+		$voDemanda = new voDemanda ();
+		$voDemanda = $vo->getVOPai ();		
+		$voDemanda = $voDemanda->dbprocesso->consultarPorChaveVO($voDemanda, false);
+		
+		//validacao anterior a presente alteracao: deixei como esta, alterar no futuro
+		$isFaseAlterada = $this->isFaseTelaAlterada($vo);		
+		if($isFaseAlterada){
+			$voDemanda->fase = $vo->fase;			
+		}
+		
+		$inMonitorarTela = $vo->inMonitorar;
+		//$inMonitorarBanco = getAtributoTelaACompararBanco(voDemanda::$nmAtrInMonitorar);
+		$inMonitorarBanco = $voDemanda->inMonitorar;
+		$isInMonitorarAlterado = $inMonitorarTela != $inMonitorarBanco;
+		if($isInMonitorarAlterado){
+			$voDemanda->inMonitorar = $vo->inMonitorar;
+		}
+		
+		$isSituacaoAlterada = $voDemanda->situacao != dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO;
+		if($isSituacaoAlterada){
+			$voDemanda->situacao = dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO;
+		}		
+		
+		//so retorna vo nao nulo se as alteracoes devem ser feitas nas condicoes abaixo
+		if($isSituacaoAlterada 
+				|| $isFaseAlterada
+				|| $isInMonitorarAlterado){
+			$retorno = $voDemanda;
+		}
+			
+		return $retorno;
+	}
+	
+	/**
 	 * verifica se a fase da demanda foi alterada na tela
 	 * usada para saber se eh necessario alterar a demanda na tela de encaminhamento
 	 * @param unknown $vo
@@ -319,23 +361,15 @@ class dbDemandaTramitacao extends dbprocesso {
 		$this->cDb->retiraAutoCommit ();
 		try {
 			$this->incluirDemandaTramitacaoSEMControleTransacao ( $vo );			
-			//sempre que uma demanda for encaminhada, ela estara em andamento ate que seja fechada
-			$voDemanda = new voDemanda ();
-			$voDemanda = $vo->getVOPai ();
 			
-			/*$registrobanco = $voDemanda->dbprocesso->consultarPorChave($voDemanda, false);
-			$voDemanda->getDadosBanco($registrobanco);*/
-			
-			$voDemanda = $voDemanda->dbprocesso->consultarPorChaveVO($voDemanda, false);
-			$isFaseAlterada = $this->isFaseTelaAlterada($vo);
+			//verifica se tem alteracao a fazer no voPai
+			$voDemandaPaiAlterar = $this->getVODemandaPaiAAlterarEncaminhamento($vo);
 			
 			//para alterar o voDemandaPAI eh necessario atribuir os novos valores expressamente
 			//considerando que a busca pela chave eh feita antes, e sobrescreve os valores recuperados na tela
-			if($voDemanda->situacao != dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO || $isFaseAlterada){
-				$voDemanda->dbprocesso->cDb = $this->cDb;
-				$voDemanda->situacao = dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO;
-				$voDemanda->fase = $vo->fase;
-				$voDemanda->dbprocesso->alterarApenasVODemanda($voDemanda);
+			if($voDemandaPaiAlterar != null){
+				$voDemandaPaiAlterar->dbprocesso->cDb = $this->cDb;
+				$voDemandaPaiAlterar->dbprocesso->alterarApenasVODemanda($voDemandaPaiAlterar);
 			}			
 			
 			// End transaction
@@ -345,6 +379,7 @@ class dbDemandaTramitacao extends dbprocesso {
 			throw new Exception ( $e->getMessage () );
 		}
 	}
+	
 	function incluirDemandaTramitacaoSEMControleTransacao($vo) {
 		// echo "codigo demandatramitacao: " . $vo->cd;
 		if ($vo->temTramitacaoParaIncluir ()) {

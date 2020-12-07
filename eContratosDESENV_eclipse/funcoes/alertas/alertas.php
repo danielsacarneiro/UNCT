@@ -264,6 +264,42 @@ function getMensagemSistemasExternos(&$count = 0){
 	return $msg;
 }
 
+function getMensagemContratosNaoIncluidosPlanilha(&$count = 0){
+	$assunto = "Contratos não incluídos na planilha:";
+	$assunto = getSequenciaAssunto($assunto, $count);
+
+	try {
+
+		$db = new dbcontrato();
+		$colecao = $db->consultarContratosNaoIncluidosPlanilha();
+
+		/*$coluna1 =array(
+				constantes::$CD_COLUNA_CHAVE => "Sistema",
+				constantes::$CD_COLUNA_VALOR => vodemanda::$nmAtrTipo,
+				constantes::$CD_COLUNA_TP_DADO =>  constantes::$CD_TP_DADO_DOMINIO,
+				constantes::$CD_COLUNA_NM_CLASSE_DOMINIO =>  "dominioTipoDemanda",
+		);
+
+		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $coluna1);*/
+
+		$colunas = incluirColunaColecao($colunas, 'TIPO', voDemandaContrato::$nmAtrTipoContrato);
+		$colunas = incluirColunaColecao($colunas, 'ANO', voDemandaContrato::$nmAtrAnoContrato);		
+		$colunas = incluirColunaColecao($colunas, 'NUMERO', voDemandaContrato::$nmAtrCdContrato);
+		$colunas = incluirColunaColecao($colunas, 'ESPECIE', voDemandaContrato::$nmAtrCdEspecieContrato);
+		$colunas = incluirColunaColecao($colunas, 'NUMERO', voDemandaContrato::$nmAtrSqEspecieContrato);
+
+		//$msg = getCorpoMensagemDemandaPorColecao($assunto, $filtro, $colunasAAcrescentar, false);
+		//$msg = getCorpoMensagemDemandaContratoColecao($assunto, $colecao, $colunasAAcrescentar);
+		$msg = getCorpoMensagemPorColecao($assunto, $colecao, $colunas);
+		
+
+	} catch ( Exception $ex ) {
+		$msg = $ex->getMessage ();
+	}
+
+	return $msg;
+}
+
 /**
  * 
  * @return string

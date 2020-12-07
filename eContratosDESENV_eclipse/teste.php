@@ -31,21 +31,15 @@ try {
 	echoo ( $e->getMessage () );
 }*/
 
-$vo = new voMensageria();
-$db = new dbMensageria();
-$filtro = new filtroManterMensageria(false);
-$filtro->anoContrato = 2016;
-$filtro->cdContrato = 33;
-$filtro->tipoContrato = "C";
-//$filtro->inHabilitado = constantes::$CD_SIM;
-$filtro->inVerificarPeriodoVigente = constantes::$CD_SIM;
+$VO = NEW voMensageria();
+$mensagem .= getMensagemContratosNaoIncluidosPlanilha($count);
 
-$colecao = $db->consultarTelaConsulta(new voMensageria(), $filtro);
-
-echo "teste";
+echo $mensagem;
 
 
 //echo criarAlertasEmailGestorColecaoContratos();
+$db = new dbcontrato();
+//echo $db->getCaminhoArquivoPlanilha(dominioTipoContrato::$CD_TIPO_PROFISCO);
 
 
 /*$ano = 2018;

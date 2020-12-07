@@ -36,9 +36,11 @@ if(!$isLimparContrato){
 	include "include_importarConvenio.php";
 	
 	//$inputFileName = caminho.'planilha/UNCT_contrato.xlsx';
-	$inputFileName = caminho."planilha/".dbcontrato::$NM_ARQUIVO_PLANILHA_CONTRATOS;
+	//$inputFileName = caminho."planilha/".dbcontrato::$NM_ARQUIVO_PLANILHA_CONTRATOS;
+	$inputFileName = dbcontrato::getCaminhoArquivoPlanilha(dominioTipoContrato::$CD_TIPO_CONTRATO);
 	$objPHPExcel = PHPExcel_IOFactory::load($inputFileName);
-	$objPHPExcel->setActiveSheetIndexByName(dbcontrato::$NM_PLANILHA_CONTRATOS);
+	//$objPHPExcel->setActiveSheetIndexByName(dbcontrato::$NM_PLANILHA_CONTRATOS);
+	$objPHPExcel->setActiveSheetIndexByName(dbcontrato::getNomePlanilhaAtiva(dominioTipoContrato::$CD_TIPO_CONTRATO));
 	$sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
 	
 	echoo("IMPORTAÇÃO DE CONTRATOS INICIADA.");

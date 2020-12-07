@@ -214,12 +214,18 @@ function detalhar(isExcluir) {
 	                    		|| $voAtual->tpModificacao == dominioTpContratoModificacao::$CD_TIPO_REPACTUACAO;*/
 	                    	
 	                    		                    	 
-	                    	//verifica se eh o mesmo termo
+	                    	/*verifica se eh o mesmo termo
 	                    	if($chaveTermoAtual == $chaveTermoAnterior){
 	                    		$vlLiconReferencial = $vlLiconReferencial + $vlModReferencial;
 	                    	}else{
 	                    		$vlLiconReferencial = $vlModReferencial;
-	                    	}	                    	
+	                    	}
+	                    	o trecho acima dava o valor acumulado, ou seja, se a supressao e o acrescimo estivessem no mesmo termo
+	                    	o resultado final seria a compensacao entre eles: como o LICON lista separadamente os acrescimos e supressoes
+	                    	devemos listar separado aqui tambem: pra isso o trecho acima fio substituido pelo trecho abaixo $vlLiconReferencial = $vlModReferencial;
+	                    	*/	                    		                    	
+	                    	$vlLiconReferencial = $vlModReferencial;
+	                    	
 	                    	/*echoo("$chaveTermoAtual == $chaveTermoAnterior & periodoAtual = $numMesesPeriodoAtual");
 	                    	echoo("$chaveTermoAtual & $tipo & periodoAtual = $numMesesPeriodoAtual");
 	                    	echoo("liconreferencial = $vlLiconReferencial");*/

@@ -177,6 +177,10 @@ function iniciar(){
 	            <?php 
 	            //o setor destino da ultima tramitacao sera o origem da nova
 	            echo $comboPrioridade->getHtmlCombo(voDemanda::$nmAtrPrioridade,voDemanda::$nmAtrPrioridade, $vo->prioridade, true, "campoobrigatorio", false, " required ");
+	            include_once(caminho_util. "dominioSimNao.php");
+	            $comboSimNao = new select(dominioSimNao::getColecao());
+	            echo " | " . getTextoHTMLTagMouseOver(getTextoHTMLDestacado("Monitorar?"), voDemanda::$MSG_IN_MONITORAR) . ": ";
+	            echo $comboSimNao->getHtmlCombo(voDemanda::$nmAtrInMonitorar,voDemanda::$nmAtrInMonitorar, $vo->inMonitorar, true, "camponaoobrigatorio", false, "");
 	            ?>
 				</TD>				
 	        </TR>

@@ -112,7 +112,9 @@ function confirmar() {
 	            <TD class="campoformulario" >
 	            <?php 
 	            //o setor destino da ultima tramitacao sera o origem da nova
-	            echo $comboPrioridade->getHtmlCombo(voDemanda::$nmAtrPrioridade,voDemanda::$nmAtrPrioridade, $vo->prioridade, true, "camporeadonly", false, " disabled ");?>
+	            echo $comboPrioridade->getHtmlCombo(voDemanda::$nmAtrPrioridade,voDemanda::$nmAtrPrioridade, $vo->prioridade, true, "camporeadonly", false, " disabled ");
+	            echo " | " . getTextoHTMLTagMouseOver(getTextoHTMLDestacado("Monitorar?"), "Permite aviso por email.") . ": " . dominioSimNao::getHtmlDetalhamentoRadio("", "", $vo->inMonitorar);
+	            ?>
 				</TD>				
 	        </TR>
 			<TR>
