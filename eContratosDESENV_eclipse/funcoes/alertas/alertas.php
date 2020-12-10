@@ -395,7 +395,7 @@ function getMensagemDemandasMonitoradas(&$count = 0){
 	try {
 		$filtro = new filtroManterDemanda ( false );
 		$voDemanda = new voDemanda ();
-		$dbprocesso = $voDemanda->dbprocesso;
+		$dbprocesso = new dbDemanda();
 		$filtro->voPrincipal = $voDemanda;
 		$filtro->isValidarConsulta = false;
 		$filtro->setaFiltroConsultaSemLimiteRegistro ();
@@ -414,6 +414,13 @@ function getMensagemDemandasMonitoradas(&$count = 0){
 
 		$colecao = $dbprocesso->consultarTelaConsulta ( $voDemanda, $filtro );
 
+		$array =array(
+				constantes::$CD_COLUNA_CHAVE => 'SETOR',
+				constantes::$CD_COLUNA_TP_DADO => constantes::$CD_TP_DADO_DOMINIO,
+				constantes::$CD_COLUNA_NM_CLASSE_DOMINIO => "dominioSetor",
+				constantes::$CD_COLUNA_VALOR => voDemandaTramitacao::$nmAtrCdSetorDestino,
+		);
+		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);
 		$array =array(
 				constantes::$CD_COLUNA_CHAVE => 'RESPONSÁVEL',
 				constantes::$CD_COLUNA_VALOR => filtroManterDemanda::$NM_COL_NOME_RESP_UNCT,

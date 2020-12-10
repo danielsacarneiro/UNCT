@@ -788,6 +788,7 @@ function getHTMLGridConsulta($nmRadio, $idRadio, $voAtualOuChaveString, $isCheck
 		// a chave eh o proprio parametro
 		$chave = $voAtualOuChaveString;
 	}
+	//echo $chave;
 
 	/*
 	 * if($voAtual != null){

@@ -529,18 +529,22 @@ class filtroManterDemanda extends filtroManter{
 		
 			$conector  = "\n AND ";
 			if($this->numPrazoMonitorar != null){
-				$filtro = $filtro . $conector
+				/*$filtro = $filtro . $conector
 				. " (("
 						. $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrCdSetorDestino
-						. " IS NULL AND "
-						. getDataSQLDiferencaDias("$nmTabela." .voDemanda::$nmAtrDtReferencia, getDataSQL(getDataHoje())) 
+						. " IS NULL AND " 
+						. getDataSQLDiferencaDias("$nmTabela." .voDemanda::$nmAtrDtReferencia, getVarComoDataSQL(getDataHoje()))
 						. " >= " . vodemanda::$NUM_PRAZO_MONITORAMENTO
 						. " ) OR ("
 						. $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrCdSetorDestino
 						. " IS NOT NULL AND "
-						. getDataSQLDiferencaDias("$nmTabelaTramitacao." .voDemandaTramitacao::$nmAtrDtReferencia, getDataSQL(getDataHoje())) 
+						. getDataSQLDiferencaDias("$nmTabelaTramitacao." .voDemandaTramitacao::$nmAtrDtReferencia, getVarComoDataSQL(getDataHoje()))
 						. " >= " . vodemanda::$NUM_PRAZO_MONITORAMENTO
-						. "))";						
+						. "))";	*/
+
+						$filtro = $filtro . $conector
+						. filtroConsultarDemandaGestao::getSQLNuTempoUltimaTram($nmTabelaTramitacao, $nmTabela) . " >= " . vodemanda::$NUM_PRAZO_MONITORAMENTO;						
+						
 			}
 		}
 		
