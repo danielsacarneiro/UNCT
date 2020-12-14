@@ -243,6 +243,10 @@ function isContratoEnvioSADPGE($voContrato, $setor){
 		}
 		
 		$vlMensal = $voContrato->vlMensal;
+		if(isCampoMoedaFormatadado($vlMensal)){
+			$vlMensal = getVarComoDecimal($vlMensal);
+			//echo $vlMensal;
+		}
 		//lembrar que o valor de contrato eh recuperado diferente
 		//$vlMensal = getVarComoDecimal($vlMensal);
 		$vlReferencia = $vlMensal*$prazoAnual;

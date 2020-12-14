@@ -311,5 +311,13 @@ Class voContratoInfo extends voentidade{
 		return $retorno;
 	}
 
+	static function getTextoAlertaContratoCredenciamento(){
+		$retorno .=	"ATENÇÃO: Contratos de credenciamento NÃO EXIGEM aprovação da PGE (art. 1, par 5, do Decreto Estadual n 37.271/11)"; 
+		$retorno .=	" e SAD (art. 5, VI, Decreto Estadual n 42.048/15), salvo a minuta, na fase do edital.";
+
+		
+		return $retorno;
+	}
+	
 }
 ?>

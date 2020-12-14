@@ -34,7 +34,7 @@ $cdHistorico = $filtro->cdHistorico;
 $cdOrdenacao = $filtro->cdOrdenacao;
 $isHistorico = "S" == $cdHistorico; 
 
-$dbprocesso = $vo->dbprocesso;
+$dbprocesso = new dbDemanda();
 /*echoo("nome filtro da consulta:".$filtro->nmFiltroOriginal);
 echoo("TIPO:");
 var_dump($filtro->vodemanda->tipo);*/

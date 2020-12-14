@@ -133,7 +133,7 @@ function formataFormClassificacao(pCampoChamada) {
 			&& classificacao != "<?=dominioClassificacaoContrato::$CD_SERVICOS?>"){
 		campoMaodeObra.value = "<?=constantes::$CD_NAO?>";
 	}
-	else if(pCampoChamada == null || pCampoChamada.name != "<?=voContratoInfo::$nmAtrInMaoDeObra?>"){		
+	else if(pCampoChamada != null && pCampoChamada == campoClassificacao){		
 		campoMaodeObra.value = "";
 	}
 
@@ -147,6 +147,13 @@ function formataFormClassificacao(pCampoChamada) {
 		//exibirMensagem("<?=voContratoInfo::getTextoAlertaContratoLocação()?>");
 		campoProrrogacao.value = "<?=dominioProrrogacaoContrato::$CD_NAO_SEAPLICA?>";			
 	}
+
+	if(pCampoChamada != null 
+			&& pCampoChamada.name == "<?=voContratoInfo::$nmAtrInCredenciamento?>"
+			&& pCampoChamada.value == "<?=constantes::$CD_SIM?>"){
+			
+		exibirMensagem("<?=voContratoInfo::getTextoAlertaContratoCredenciamento()?>");
+	}	
 	
 }
 
@@ -333,7 +340,7 @@ function iniciar(){
 	            <abbr title="Sem valor referencial mensal?">É por escopo?:</abbr>
 	            <?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInEscopo,voContratoInfo::$nmAtrInEscopo, $vo->inEscopo, true, "camponaoobrigatorio", false, " onChange='formataFormEscopo();' required ");?>
 	            | É credenciamento?:
-	            <?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInCredenciamento,voContratoInfo::$nmAtrInCredenciamento, $vo->inCredenciamento, true, "camponaoobrigatorio", false, " required ");?>
+	            <?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInCredenciamento,voContratoInfo::$nmAtrInCredenciamento, $vo->inCredenciamento, true, "camponaoobrigatorio", false, " required onChange='formataFormClassificacao(this);' ");?>
 	            | Será prorrogado?:
 	            <?php 
 	            $seraProrrogTemp = $vo->inSeraProrrogado;

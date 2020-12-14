@@ -586,6 +586,28 @@ function isAtributoValido($atrib){
 	return $retorno;
 }
 
+function isCampoMoedaFormatadado($valor){
+	$retorno = false;
+	$retorno = !is_numeric($valor);	
+	return $retorno;	
+}
+
+/**
+ * corrige o valor moeda passado como parametro que esteja formatado incorretamente 
+ * para permitir operacoes aritmeticas
+ * @param unknown $valor
+ * @return unknown|string|mixed
+ */
+function getValorMoedaComoDecimal($valor){
+	$retorno = $valor;
+	if(isCampoMoedaFormatadado($valor)){
+		$retorno = getVarComoDecimal($retorno);
+		//echo $vlMensal;
+	}
+	
+	return $retorno;	
+}
+
 /*function isArrayMultiDimensional($array){
 	return count($array) == count($array, COUNT_RECURSIVE);
 }*/

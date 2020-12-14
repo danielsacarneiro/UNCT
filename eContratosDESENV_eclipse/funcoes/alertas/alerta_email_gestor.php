@@ -60,7 +60,7 @@ if ($enviarEmailAlerta) {
 		$qtdEmailsErros = 0;
 		foreach ( $colecao as $registro ) {
 			try {
-				$log .= $dbMensageriaRegistro->incluirComEnvioEmail ( $registro );
+				$log .= getLogComFlagImpressao($dbMensageriaRegistro->incluirComEnvioEmail ( $registro ));
 				$qtdEmailsEnviados++;
 			} catch ( Exception $e ) {
 				//echoo ( $e->getMessage () );
