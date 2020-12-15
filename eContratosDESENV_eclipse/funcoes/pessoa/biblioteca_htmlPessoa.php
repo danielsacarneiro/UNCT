@@ -127,12 +127,17 @@ function converteRecordSetEmColecaoVOsContrato($colecao) {
  * @param unknown $tagHtml
  * @return string
  */
-function getComboPessoaRespPAConsulta($idCampo, $nmCampo, $cdOpcaoSelecionada, $classCampo, $tagHtml){
+function getComboPessoaRespPAConsulta($idCampo, $nmCampo, $cdOpcaoSelecionada, $classCampo, $tagHtml, $comCampoHiddenACompararBanco = false){
 	$dbprocesso = new dbpessoa();
 	$recordset = $dbprocesso->consultarPessoaManterConsultaPAAP();
 	$select = new select(array());
 	$select->getRecordSetComoColecaoSelect(vopessoa::$nmAtrCd, vopessoa::$nmAtrNome, $recordset);
-	return $select->getHtmlCombo ( $idCampo, $nmCampo, $cdOpcaoSelecionada, true, $classCampo, false, $tagHtml );
+	
+	$arrayCombo = array($idCampo, $nmCampo, $cdOpcaoSelecionada, true, false, $classCampo, false, $tagHtml);
+	$arrayCombo[9] = $comCampoHiddenACompararBanco;
+	
+	//return $select->getHtmlCombo ( $idCampo, $nmCampo, $cdOpcaoSelecionada, true, $classCampo, false, $tagHtml );
+	return $select->getHtmlComboArray ($arrayCombo);
 
 }
 

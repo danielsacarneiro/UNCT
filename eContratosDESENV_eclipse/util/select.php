@@ -99,6 +99,9 @@ class select extends multiplosConstrutores {
 		$isTrazerValuenoOption = $array[6];
 		$TagEJavaScript = $array[7];
 		$tamMaximoDescricao = $array[8];
+		$comCampoHiddenACompararBanco = $array[9];
+		
+		$comCampoHiddenACompararBanco = $comCampoHiddenACompararBanco == null?false:$comCampoHiddenACompararBanco;
 		
 		$html = "";
 		$html = "<select id='$idSelect' name='$nmSelect' class='$class' $TagEJavaScript>\n";
@@ -131,6 +134,10 @@ class select extends multiplosConstrutores {
 		}
 		
 		$html .= "</select>";
+		
+		if($comCampoHiddenACompararBanco){
+			$html .= getInputHiddenACompararBanco($idSelect, $nmSelect, $opcaoSelecionada);
+		}
 		return $html;
 	}
 	function getOpcao($cd, $ds, $opcaoSelecionada) {

@@ -378,15 +378,13 @@ function iniciar(){
 	            <TD class="campoformulario" colspan=3>
 	            <?php 
 
-	            if($isInclusao){
-	            	$classRespATJA = $classResp = constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO;
-	            	$jsResp = "";
-	            	
-	            	$jsRespATJA = " required ";
-	            	
-	            }else{
-	            	$classRespATJA = $classResp = constantes::$CD_CLASS_CAMPO_READONLY;
-	            	$jsRespATJA = $jsResp = "disabled";
+	            $classRespATJA = $classResp = constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO;
+	            $jsRespATJA = $jsResp = " required ";
+	            if(!$isInclusao){
+	            	/*$classRespATJA = $classResp = constantes::$CD_CLASS_CAMPO_READONLY;
+	            	$jsRespATJA = $jsResp = "disabled";*/
+	            	$classResp = constantes::$CD_CLASS_CAMPO_READONLY;
+	            	$jsResp = "disabled";	            	
 	            }
 	            $arrayParamUsuario = array(
 	            		voDemanda::$nmAtrCdPessoaRespUNCT,
@@ -463,6 +461,7 @@ function iniciar(){
 	            <SCRIPT language="JavaScript" type="text/javascript">
 	            	colecaoIDCamposRequiredTramitacao = [
 	            		"<?=voDemanda::$nmAtrInTpDemandaReajusteComMontanteA?>",
+	            		"<?=voDemanda::$nmAtrCdPessoaRespUNCT?>",
 	            		"<?=voDemanda::$nmAtrCdPessoaRespATJA?>",
 	            		"<?=voDemandaTramitacao::$nmAtrProtocolo?>",
 	            		<?=dominioFaseDemanda::getColecaoCdsSeparador()?>

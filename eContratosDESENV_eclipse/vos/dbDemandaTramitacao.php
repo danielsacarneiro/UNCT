@@ -313,6 +313,13 @@ class dbDemandaTramitacao extends dbprocesso {
 			$voDemanda->inMonitorar = $vo->inMonitorar;
 		}
 		
+		$cdPessoaRespATJATela = $vo->cdPessoaRespATJA;
+		$cdPessoaRespATJABanco = $voDemanda->cdPessoaRespATJA;
+		$iscdPessoaRespATJAAlterado = $cdPessoaRespATJATela != $cdPessoaRespATJABanco;
+		if($iscdPessoaRespATJAAlterado){
+			$voDemanda->cdPessoaRespATJA = $vo->cdPessoaRespATJA;
+		}
+		
 		$isSituacaoAlterada = $voDemanda->situacao != dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO;
 		if($isSituacaoAlterada){
 			$voDemanda->situacao = dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO;
@@ -321,7 +328,8 @@ class dbDemandaTramitacao extends dbprocesso {
 		//so retorna vo nao nulo se as alteracoes devem ser feitas nas condicoes abaixo
 		if($isSituacaoAlterada 
 				|| $isFaseAlterada
-				|| $isInMonitorarAlterado){
+				|| $isInMonitorarAlterado
+				|| $iscdPessoaRespATJAAlterado){
 			$retorno = $voDemanda;
 		}
 			
