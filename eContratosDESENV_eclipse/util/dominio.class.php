@@ -622,6 +622,20 @@ class dominio extends multiplosConstrutores {
 		return $retorno;
 	}
 	
+	function getColecaocomDescricaoSequenciada($colecao = null){
+		if($colecao == null){
+			$colecao = static::getColecao();			
+		}
+		
+		$i = 1;
+		foreach($colecao as $chave => $descricao) {
+			$retorno[$chave] = "($i)$descricao";
+			$i++;
+		}		
+		
+		return $retorno;		
+	}
+	
 	
 	/*
 	 * function ordenaSetor( $a, $b ) {

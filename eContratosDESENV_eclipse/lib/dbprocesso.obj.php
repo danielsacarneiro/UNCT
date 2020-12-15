@@ -769,6 +769,7 @@ class dbprocesso {
 			$this->alterarPorCima ( $voEntidade );
 			// End transaction
 			$this->cDb->commit ();
+			//echo "HISTORIOU";
 		} catch ( Exception $e ) {
 			$this->cDb->rollback ();
 			throw new Exception ( $e->getMessage () );

@@ -251,7 +251,7 @@ function iniciar(){
 	            <TH class="campoformulario" width="1%">Fases:</TH>
 	            <TD class="campoformulario" >
 	            <?php
-	            echo dominioFaseDemanda::getHtmlChecksBox($nmCampoFaseHtml, $vo->fase, null, 1, true, "");
+	            echo dominioFaseDemanda::getHtmlChecksBox($nmCampoFaseHtml, $vo->fase, dominioFaseDemanda::getColecaocomDescricaoSequenciada(), 2, true, "");
 	          	?>
 				</TD>				
 	        </TR>
