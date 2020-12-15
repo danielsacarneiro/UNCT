@@ -248,10 +248,16 @@ function iniciar(){
 	            echo $comboSituacao->getHtmlCombo(voDemanda::$nmAtrSituacao,voDemanda::$nmAtrSituacao, $vo->situacao, true, "campoobrigatorio", false, " required ");
 	            ?>
 				</TD>
+	            <TH class="campoformulario" width="1%">Data.Demanda:</TH>
+	            <TD class="campoformulario">	            	            	            
+	            <INPUT type="text" value="<?=getData($vo->dtReferencia);?>"  class="camporeadonly" size="12" readonly>
+            	</TD>				
+	        </TR>
+			<TR>
 	            <TH class="campoformulario" width="1%">Fases:</TH>
-	            <TD class="campoformulario" >
+	            <TD class="campoformulario" colspan=3>
 	            <?php
-	            echo dominioFaseDemanda::getHtmlChecksBox($nmCampoFaseHtml, $vo->fase, dominioFaseDemanda::getColecaocomDescricaoSequenciada(), 2, true, "");
+	            echo dominioFaseDemanda::getHtmlChecksBox($nmCampoFaseHtml, $vo->fase, null, 1, true, "");
 	          	?>
 				</TD>				
 	        </TR>

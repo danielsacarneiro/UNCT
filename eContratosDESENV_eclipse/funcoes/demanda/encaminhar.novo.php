@@ -264,24 +264,24 @@ function iniciar(){
 				</TD>
 	        </TR>	        
 			<TR>
-	            <TH class="campoformulario" nowrap width="1%">Data.Demanda:</TH>
-	            <TD class="campoformulario" colspan=3>	            	            	            
-	            <INPUT type="text" value="<?=getData($vo->dtReferencia);?>"  class="camporeadonly" size="12" readonly>
-            	</TD>	        
-            </TR>
-			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Situação:</TH>
 	            <TD class="campoformulario" width="1%">
 	            <?php 
 	            echo $comboSituacao->getHtmlCombo("","", $vo->situacao, true, "camporeadonly", false, " disabled ");	            
 	             ?>
-	            </TD>
-	            <TH class="campoformulario" width="1%">Fase (<u>só alterar se tiver certeza</u>!):</TH>
-	            <TD class="campoformulario" colspan=1>
+	            </TD>            		        
+	            <TH class="campoformulario" width="1%">Data.Demanda:</TH>
+	            <TD class="campoformulario">	            	            	            
+	            <INPUT type="text" value="<?=getData($vo->dtReferencia);?>"  class="camporeadonly" size="12" readonly>
+            	</TD>
+            </TR>
+			<TR>
+	            <TH class="campoformulario" width="1%">Fase:</TH>
+	            <TD class="campoformulario" colspan=3>
 	            <?php 
 	            $nmCampoFaseHtml = voDemanda::$nmAtrFase."[]";
 	            //echo dominioFaseDemanda::getHtmlChecksBoxDetalhamento($nmCampoFaseHtml, $vo->fase, 1);
-	            echo dominioFaseDemanda::getHtmlChecksBox($nmCampoFaseHtml, $vo->fase, dominioFaseDemanda::getColecaocomDescricaoSequenciada(), 2, false, "", false, " required ");
+	            echo dominioFaseDemanda::getHtmlChecksBox($nmCampoFaseHtml, $vo->fase, null, 1, false, "", false, " required ");
 	            //serve para comparar, ao enviar ao banco, se a fase foi alterada no encaminhamento, autorizando a alteracao do vodemanda
 	            echo getInputHidden(voDemandaTramitacao::$nmAtrFaseRegistroBanco, voDemandaTramitacao::$nmAtrFaseRegistroBanco, $vo->fase);
 	             ?>
