@@ -807,32 +807,55 @@ function consultarContratosPAAP($voPAAP) {
 	return $colecao;
 }
 
-function temPAAPAberto($vocontrato, $pLevantaExcecao = false) {
+function temPAAPAberto($vocontrato) {
+	$pLevantaExcecao = true;
 	//$vocontrato = new vocontrato();
-	$retorno = false;
-	/*
-		$registroContratoTemp = getContratoVigentePorData($voContratoDemanda, getDataHoje());
-	$voContratoDemanda->getDadosBanco($registroContratoTemp[0]);
-	//var_dump($voContratoDemanda);	
-	//echo "doc contrato" . $voContratoDemanda->docContratada;
-
-	 */
-	if($vocontrato->docContratada == null && $pLevantaExcecao){
-		throw new excecaoGenerica("ATEN플O: para consulta de PAAP큦, o documento do fornecedor deve ser informado.");
-	}
-
-	if($vocontrato != null && $vocontrato->docContratada != null){
-		$filtro = new filtroManterPA(false);
-		$filtro->doc = $vocontrato->docContratada;
-		/*$filtro->anoContrato = $vocontrato->anoContrato;
-		$filtro->cdContrato = $vocontrato->cdContrato;
-		$filtro->tipoContrato = $vocontrato->tipo;*/
-
-		$db = new dbPA();
-		$colecao = $db->consultarPAAP(new voPA(), $filtro);
-		$retorno = !isColecaoVazia($colecao);
+	$temPaapPorDoc = false;
+	$temPaapPorContrato = false;
+	
+	if($vocontrato == null 
+			|| $vocontrato->anoContrato == null 
+			|| $vocontrato->cdContrato == null  
+			|| $vocontrato->tipo == null){
+		throw new excecaoGenerica("ATEN플O: para consulta de PAAP큦, o contrato deve ser informado.");
 	}
 	
+		$registroContratoTemp = getContratoVigentePorData($vocontrato, getDataHoje());
+		$voContratoDemanda = new vocontrato();
+		$voContratoDemanda->getDadosBanco($registroContratoTemp[0]);
+		//var_dump($voContratoDemanda);
+		//echo "doc contrato" . $voContratoDemanda->docContratada;
+		$docContratada = $voContratoDemanda->docContratada;
+		
+		if($pLevantaExcecao && $docContratada == null){
+			throw new excecaoGenerica("ATEN플O: para consulta de PAAP큦, o documento do fornecedor deve ser informado.");
+		}			
+		
+		//consulta primeiro para o doc da contratada		
+		if($docContratada != null){		
+			$filtro = new filtroManterPA(false);
+			$filtro->doc = $docContratada;
+	
+			$db = new dbPA();
+			$colecao = $db->consultarPAAP(new voPA(), $filtro);
+			$temPaapPorDoc = !isColecaoVazia($colecao);
+		}
+		
+		//se nao achou nada pelo doc, tenta pelo contrato
+		if(!$temPaapPorDoc 
+			&& $isContratoValido){
+			$filtro = new filtroManterPA(false);
+
+			$filtro->anoContrato = $vocontrato->anoContrato;
+			$filtro->cdContrato = $vocontrato->cdContrato;
+			$filtro->tipoContrato = $vocontrato->tipo;
+		
+			$db = new dbPA();
+			$colecao = $db->consultarPAAP(new voPA(), $filtro);
+			$temPaapPorContrato = !isColecaoVazia($colecao);
+		}
+	
+	$retorno = $temPaapPorDoc || $temPaapPorContrato; 
 	return $retorno;
 }
 

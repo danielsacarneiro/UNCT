@@ -149,12 +149,14 @@ function isSinalizarDemandaReajustePeriodoNaoTranscorrido ($voDemanda){
 }
 
 /**
- * verifica se o contrato da demanda permite prorrogacao
+ * verifica se o contrato da demanda permite prorrogacao e se eh servico continuo
  * @param unknown $voDemanda
  * @return boolean
  */
 function isContratoPermiteProrrogacao($voContrato){
-	$retorno = false;
+	$isContratoPermiteProrrogacao = false;
+	$isPrazoProrrogacaoServicoContinuo = false;
+	
 	//$vocontrato = new vocontrato();
 	if($voContrato != null){
 
@@ -171,19 +173,24 @@ function isContratoPermiteProrrogacao($voContrato){
 		//echo $filtro->tpVigencia;
 
 		if(!isColecaoVazia($colecao)){
-			//echo "nao eh vazia";			
+			//echo "nao eh vazia";	
 			$registro = $colecao[0];
+			$vocontratoinfo = new voContratoInfo();
+			$vocontratoinfo->getDadosBanco($registro);
+			
 			$prorrogavel = $registro[filtroConsultarContratoConsolidacao::$NmColInProrrogavel];
 			$prorrExcepcional = $registro[filtroConsultarContratoConsolidacao::$NmColInProrrogacaoExcepcional];			
+			$tpProrrogacao = $vocontratoinfo->inPrazoProrrogacao;
+			$isPrazoProrrogacaoServicoContinuo = $tpProrrogacao == dominioProrrogacaoContrato::$CD_ART57_II;
 			//echo "$prorrogavel $prorrExcepcional";			
 			//verifica se o contrato permite prorrogacao
 			//$retorno = getAtributoComoBooleano($prorrogavel) || getAtributoComoBooleano($prorrExcepcional); 
-			$retorno = getAtributoComoBooleano($prorrogavel);
+			$isContratoPermiteProrrogacao = getAtributoComoBooleano($prorrogavel);
 		}		
 		
 	}
 
-	return $retorno;
+	return array($isContratoPermiteProrrogacao, $isPrazoProrrogacaoServicoContinuo);
 }
 
 function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpDemandaReajuste, $nmDivInformacoesComplementares, $voDemanda = null){
@@ -197,7 +204,7 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 	$countATENCAO = 1;
 	//informa que ha PAAPs abertos para o contrato
 	try{
-		$temPAAPAberto = temPAAPAberto($voContratoDemanda, true);
+		$temPAAPAberto = temPAAPAberto($voContratoDemanda);
 		if($temPAAPAberto){
 			$texto = "ATENÇÃO$countATENCAO: há PAAP(s) cadastrado(s) para este fornecedor.";
 			$html .= $conectorAlerta . getTextoLink($texto, "../pa", null, false, true);
@@ -207,6 +214,7 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 		}	
 	}catch (excecaoGenerica $exDoc){
 		$texto = "ATENÇÃO$countATENCAO: " . $exDoc->getMessage();		
+		$html .= $conectorAlerta . getTextoLink($texto, "../pa", null, false, true);
 		$conectorAlerta = "<BR>";
 		$countATENCAO++;		
 	}
@@ -224,14 +232,29 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 	
 	if(dominioTipoDemandaContrato::existeItemArrayOuStrCampoSeparador(dominioTipoDemandaContrato::$CD_TIPO_PRORROGACAO, $pCdOpcaoSelecionadaTpDemandaContrato)){
 		//var_dump($voDemanda->getContrato());
-		$exibirInfoProrrog = $voDemanda->situacao != dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA;		
-		if($exibirInfoProrrog && !isContratoPermiteProrrogacao($voContratoDemanda)){
-			$texto = "ATENÇÃO$countATENCAO: verifique se o contrato comporta prorrogação em 'Contratos-Consolidação'";
-			//$html .= $conectorAlerta . getTextoHTMLDestacado($texto);
-			$html .= $conectorAlerta . getTextoLink($texto, "../contrato_consolidacao", null, false, true);
-						
-			$conectorAlerta = "<BR>";
-			$countATENCAO++;
+		$exibirInfoProrrog = $voDemanda->situacao != dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA;
+		$arrayPermiteProrrogacao = isContratoPermiteProrrogacao($voContratoDemanda);
+		$permiteProrrogacao = $arrayPermiteProrrogacao[0];
+		$ehServicoContinuo = $arrayPermiteProrrogacao[1];
+		if($exibirInfoProrrog){
+			if(!$ehServicoContinuo){
+				$texto = "ATENÇÃO$countATENCAO: verifique a fundamentação legal para a prorrogação em 'Contratos-Consolidação'";
+				//$html .= $conectorAlerta . getTextoHTMLDestacado($texto);
+				$html .= $conectorAlerta . getTextoLink($texto, "../contrato_consolidacao", null, false, true);
+				
+				$conectorAlerta = "<BR>";
+				$countATENCAO++;				
+			}
+			
+			if(!$permiteProrrogacao){
+				$texto = "ATENÇÃO$countATENCAO: verifique se o contrato comporta prorrogação em 'Contratos-Consolidação'";
+				//$html .= $conectorAlerta . getTextoHTMLDestacado($texto);
+				$html .= $conectorAlerta . getTextoLink($texto, "../contrato_consolidacao", null, false, true);
+				
+				$conectorAlerta = "<BR>";
+				$countATENCAO++;				
+			}
+				
 		}	
 	}
 	
