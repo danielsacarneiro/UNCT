@@ -87,6 +87,9 @@ class voDemanda extends voentidade {
 	public static function getTituloDemandaRendimentoJSP() {
 		return "DEMANDA RENDIMENTO";
 	}
+	public static function getTituloDemandaUsuarioJSP() {
+		return "DEMANDA USUÁRIO";
+	}
 	public static function getTituloDemandaGestaoJSP() {
 		return "DEMANDA GESTÃO";
 	}

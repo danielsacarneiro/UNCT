@@ -880,6 +880,38 @@ class dbDemanda extends dbprocesso {
 		
 		return parent::consultarFiltro ( $filtro, $querySelect, $queryFrom, false );
 	}
+	
+	function consultarTelaConsultaDemandaUsuario($filtro) {
+	
+		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( false );
+		$nmTabelaWPUsers = vousuario::getNmTabela();
+		$numDemandas = "COUNT(*)";
+	
+		$arrayColunasRetornadas = array (
+				"$nmTabelaWPUsers." . vousuario::$nmAtrName,
+				"$nmTabelaWPUsers." . vousuario::$nmAtrID,
+				"$numDemandas  AS " . filtroConsultarDemandaGestao::$NmColNumTotalDemandas,
+		);
+		
+		$arrayGroupby = array (
+				$nmTabelaDemanda . "." . voDemanda::$nmAtrCdPessoaRespUNCT,
+		);
+		
+		//pega o usuario responsavel da UNCT
+		$queryJoin .= "\n LEFT JOIN $nmTabelaWPUsers ";
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaDemanda . "." . voDemanda::$nmAtrCdPessoaRespUNCT . "=" . $nmTabelaWPUsers . "." . vousuario::$nmAtrID;		
+	
+		$filtro->groupby = $arrayGroupby;
+	
+		$retorno = parent::consultarMontandoQueryTelaConsulta ( new voDemanda(), $filtro, $arrayColunasRetornadas, $queryJoin );
+		//$retorno = parent::consultarFiltro ( $filtro, $querySelect, $queryFrom, false );
+		
+		//implementar com a mesma logica de consultarTelaConsultaRendimentoDemanda, acrescentando as demandas que estao na unct
+		
+		return $retorno;
+	}
+	
 	function consultarPAAPDemanda($vo, $validarUnicoPAAP = true) {
 		// $vo = new voDemanda();
 		$voPA = null;

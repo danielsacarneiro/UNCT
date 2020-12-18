@@ -7,7 +7,7 @@ include_once("dominio.class.php");
   	static $cd_usuario_nivel1 = "contributor";
   	static $cd_usuario_nivel2 = "subscriber";
   	 
-  	static $DS_usuario_admin = "Administrator";
+  	static $DS_usuario_admin = "Administrador";
   	static $DS_usuario_nivel1 = "Nível1";
   	static $DS_usuario_nivel2 = "Nível2";
  

@@ -210,8 +210,8 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 			$html .= $conectorAlerta . getTextoLink($texto, "../pa", null, false, true);
 		
 			$conectorAlerta = "<BR>";
-			$countATENCAO++;
-		}	
+			$countATENCAO++;			
+		}
 	}catch (excecaoGenerica $exDoc){
 		$texto = "ATENÇÃO$countATENCAO: " . $exDoc->getMessage();		
 		$html .= $conectorAlerta . getTextoLink($texto, "../pa", null, false, true);

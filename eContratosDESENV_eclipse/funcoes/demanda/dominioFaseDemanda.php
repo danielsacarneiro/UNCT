@@ -12,7 +12,7 @@ class dominioFaseDemanda extends dominio {
 	static $CD_ASSINADO_DIGITAL = "07";
 		
 	static $DS_VISTO_JURIDICO = "Visado.ATJA";
-	static $DS_REVISAO_UNCT = "Revisado.UNCT";
+	static $DS_REVISAO_UNCT = "Revisado";
 	static $DS_ASSINADO_FISICO = "Assinado.Físico";
 	static $DS_GARANTIA_PRESTADA = "Garantia.OK";
 	static $DS_VISTO_SAD = "Visto.SAD";

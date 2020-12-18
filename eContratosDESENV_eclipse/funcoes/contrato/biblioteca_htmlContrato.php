@@ -817,10 +817,14 @@ function temPAAPAberto($vocontrato) {
 			|| $vocontrato->anoContrato == null 
 			|| $vocontrato->cdContrato == null  
 			|| $vocontrato->tipo == null){
-		throw new excecaoGenerica("ATENÇÃO: para consulta de PAAP´s, o contrato deve ser informado.");
+		throw new excecaoGenerica("Para consulta de PAAP´s, o contrato deve ser informado.");
 	}
 	
+	try{
 		$registroContratoTemp = getContratoVigentePorData($vocontrato, getDataHoje());
+	}catch (excecaoChaveRegistroInexistente $ex){
+		throw new excecaoGenerica("Para consulta de PAAP´s, o contrato deve ser incluído na planilha e em 'informações adicionais'.");		
+	}
 		$voContratoDemanda = new vocontrato();
 		$voContratoDemanda->getDadosBanco($registroContratoTemp[0]);
 		//var_dump($voContratoDemanda);
@@ -828,7 +832,7 @@ function temPAAPAberto($vocontrato) {
 		$docContratada = $voContratoDemanda->docContratada;
 		
 		if($pLevantaExcecao && $docContratada == null){
-			throw new excecaoGenerica("ATENÇÃO: para consulta de PAAP´s, o documento do fornecedor deve ser informado.");
+			throw new excecaoGenerica("Para consulta de PAAP´s, o documento do fornecedor deve ser informado.");
 		}			
 		
 		//consulta primeiro para o doc da contratada		
