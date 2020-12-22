@@ -504,7 +504,7 @@ class dbcontrato extends dbprocesso {
 			$arrayColunasRetornadas[vocontrato::$nmAtrCdEspecieContrato] = getVarComoString($cdEspecie);
 		}		
 		
-		$query = " SELECT MAX($nmColunaSq)+1 AS " . $nmColunaSq . " FROM (";		
+		$query = " SELECT COALESCE(MAX($nmColunaSq),0)+1 AS " . $nmColunaSq . " FROM (";		
 		$query .= $this->getSQLSequencialPorTabela ( $nmColunaSq, $vo, false, $arrayColunasRetornadas);
 		$query .= " UNION ALL ";
 		$query .= $this->getSQLSequencialPorTabela ( $nmColunaSq, $voDemandaContrato, false, $arrayColunasRetornadas);

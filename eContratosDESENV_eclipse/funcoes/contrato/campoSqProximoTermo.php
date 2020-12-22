@@ -8,7 +8,7 @@ $vo->getVOExplodeChave();
 
 $isCdContratoInserido = isAtributoValido($vo->cdContrato);
 try {
-	if ($isCdContratoInserido) {
+	/*if ($isCdContratoInserido) {
 		// pega o prox termo
 		$arrayColunasAlternativas = array (
 				vocontrato::$nmAtrAnoContrato => $vo->anoContrato,
@@ -31,7 +31,19 @@ try {
 		// $sqProximoContratoRegistro = $db->getProximoSequencialChaveComposta(vocontrato::$nmAtrCdContrato, $vo, $arrayColunasAlternativas);
 		
 		$sqProximoContratoRegistro = $db->consultarProxSequencialTermoContrato ( $vo, vocontrato::$nmAtrCdContrato );
+	}*/
+	
+	$db = new dbcontrato ();	
+	if ($isCdContratoInserido) {
+		// pega o prox termo e complementa com os dados do contrato
+		$sqProximoContratoRegistro = $db->consultarProxSequencialTermoContrato ( $vo, vocontrato::$nmAtrSqEspecieContrato);
+		$complemento = "<BR>" . getDadosContratada ( $chave, $voentidade );
+	}else{
+		//pega prox contrato
+		$vo->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
+		$sqProximoContratoRegistro = $db->consultarProxSequencialTermoContrato ( $vo, vocontrato::$nmAtrCdContrato );
 	}
+	
 	$retorno .= "Próximo " . getTextoHTMLDestacado ( dominioEspeciesContrato::getDescricao ( $vo->cdEspecie ), "black" ) . " A REGISTRAR será " . getTextoHTMLDestacado ( $sqProximoContratoRegistro ) . ".";
 	if ($complemento != null) {
 		$retorno .= $complemento;
