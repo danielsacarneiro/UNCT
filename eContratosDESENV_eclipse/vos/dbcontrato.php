@@ -470,6 +470,50 @@ class dbcontrato extends dbprocesso {
 		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryJoin, $isHistorico , $isConsultaPorChave);
 	}
 	
+	/**
+	 * consulta o numero do prox contrato mater
+	 * @param unknown $vo
+	 * @param unknown $isHistorico
+	 * @param string $isConsultaPorChave
+	 * @return unknown|string
+	 */
+	function consultarProxSequencialTermoContrato($vo, $nmColunaSq) {
+		//$vo = new vocontrato();
+		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
+		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );
+	
+		$ano = $vo->anoContrato;
+		$tipo = $vo->tipo;
+		$cd = $vo->cdContrato;
+		$cdEspecie = $vo->cdEspecie;
+		if($ano == null || $tipo == null){
+			throw new excecaoGenerica("O ano e tipo do contrato devem ser informados.");
+		}
+		$voDemandaContrato = new voDemandaContrato();
+		$voDemandaContrato->voContrato = $vo;
+		
+		$arrayColunasRetornadas = array (
+				vocontrato::$nmAtrAnoContrato => $ano,
+				vocontrato::$nmAtrTipoContrato => getVarComoString($tipo),
+		);
+		
+		if(isAtributoValido($cd)){
+			$arrayColunasRetornadas[vocontrato::$nmAtrCdContrato] = $cd;			
+		}
+		if(isAtributoValido($cdEspecie)){
+			$arrayColunasRetornadas[vocontrato::$nmAtrCdEspecieContrato] = getVarComoString($cdEspecie);
+		}		
+		
+		$query = " SELECT MAX($nmColunaSq)+1 AS " . $nmColunaSq . " FROM (";		
+		$query .= $this->getSQLSequencialPorTabela ( $nmColunaSq, $vo, false, $arrayColunasRetornadas);
+		$query .= " UNION ALL ";
+		$query .= $this->getSQLSequencialPorTabela ( $nmColunaSq, $voDemandaContrato, false, $arrayColunasRetornadas);
+		$query .= ") TAB ";
+		
+		$colecao = $this->consultarEntidade($query, false);
+		return $colecao[0][$nmColunaSq];	
+	}
+	
 	function incluirSQL($voContrato) {
 		$atributosInsert = $voContrato->getTodosAtributos ();
 		// var_dump ($atributosInsert);

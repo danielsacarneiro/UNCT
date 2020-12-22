@@ -22,14 +22,14 @@ $readonly = "readonly";
 	//echo $voContrato->getValorChaveHTML();
 	try{
 		$colecao = $dbprocesso->consultarContratoPorChave($voContrato, $isHistorico);
-	}catch (excecaoChaveRegistroInexistente $excecao){
+	}catch (excecaoGenerica $excecao){
 		//caso nao exista o contrato passado como parametro, tenta buscar sempre o mater
 		$voContrato->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
 		$voContrato->sqEspecie = 1;
 		$colecao = $dbprocesso->consultarContratoPorChave($voContrato, $isHistorico);
 		$msgComplementar = "TERMO BUSCADO INEXISTENTE - EXIBINDO O CONTRATO MATER.";
-		
-	}catch (excecaoChaveRegistroInexistente $excecao){
+				
+	}catch (excecaoGenerica $excecao){
 		//nao existindo direciona para a pagina de erro;
 		tratarExcecaoHTML($excecao);
 	}	

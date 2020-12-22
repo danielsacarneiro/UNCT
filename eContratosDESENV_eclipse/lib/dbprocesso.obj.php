@@ -862,6 +862,29 @@ class dbprocesso {
 		
 		return $retorno;
 	}
+	
+	/**
+	 * retorna o maior SQ dentro de um universo de VOs semelhantes com os dados preenchidos no VO
+	 * @param unknown $arrayConfiguracaoVOs
+	 * @return number|string
+	 * NUNCA TESTADA
+	 */
+	function getProximoSequencialMultiplosVOs($arrayConfiguracaoVOs) {
+		$maiorSq = 1;
+		foreach ($arrayConfiguracaoVOs as $arrayVO){
+			$nmColunaSq = $arrayVO[0]; 
+			$voEntidade = $arrayVO[1]; 
+			$pArrayColunasAlternativas = $arrayVO[2];
+			
+			$sqTemp = $this->getProximoSequencialChaveComposta($nmColunaSq, $voEntidade, $pArrayColunasAlternativas);
+			if($sqTemp > $maiorSq){
+				$maiorSq = $sqTemp;
+			}
+		}
+		
+		return $maiorSq;
+	}
+	
 	function existeRegistroVigente($vo) {
 		$retorno = true;
 		// verifica se existe outro registro vigente (que nao seja historico - obvio) com a mesma chave

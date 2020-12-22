@@ -408,6 +408,16 @@ class voentidade extends multiplosConstrutores {
 		return $array;
 	}
 	
+	
+	/**
+	 *  Chave logica
+	 *  para os casos em que ha chave logica especifica, deve ser implementada na classe filho
+	 */
+	static function getAtributosChaveLogica() {	
+		return static::getAtributosChavePrimaria();
+	}
+	
+	
 	/*
 	 * function validaExclusaoRelacionamentoHistorico(){
 	 * $retorno = false;
@@ -419,5 +429,6 @@ class voentidade extends multiplosConstrutores {
 	 * return $retorno;
 	 * }
 	 */
+	
 }
 ?>

@@ -885,8 +885,8 @@ class dbDemanda extends dbprocesso {
 	
 		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( false );
 		$nmTabelaWPUsers = vousuario::getNmTabela();
+						
 		$numDemandas = "COUNT(*)";
-	
 		$arrayColunasRetornadas = array (
 				"$nmTabelaWPUsers." . vousuario::$nmAtrName,
 				"$nmTabelaWPUsers." . vousuario::$nmAtrID,
@@ -905,9 +905,89 @@ class dbDemanda extends dbprocesso {
 		$filtro->groupby = $arrayGroupby;
 	
 		$retorno = parent::consultarMontandoQueryTelaConsulta ( new voDemanda(), $filtro, $arrayColunasRetornadas, $queryJoin );
-		//$retorno = parent::consultarFiltro ( $filtro, $querySelect, $queryFrom, false );
+
+		//implementar
+		/*$arrayColunasRetornadasSetor = array (
+				"$nmTabelaWPUsers." . vousuario::$nmAtrName,
+				"$nmTabelaWPUsers." . vousuario::$nmAtrID,
+				"1 AS " . filtroConsultarDemandaUsuario::$NmColNumDemandasSetor,
+				"0 AS " . filtroConsultarDemandaUsuario::$NmColNumTotalDemandas,
+				"0 AS " . filtroConsultarDemandaUsuario::$NmColFatorTrabalho,
+		);
 		
-		//implementar com a mesma logica de consultarTelaConsultaRendimentoDemanda, acrescentando as demandas que estao na unct
+		$arrayColunasRetornadasTotal = array (
+				"$nmTabelaWPUsers." . vousuario::$nmAtrName,
+				"$nmTabelaWPUsers." . vousuario::$nmAtrID,
+				"0 AS " . filtroConsultarDemandaUsuario::$NmColNumDemandasSetor,
+				"1 AS " . filtroConsultarDemandaUsuario::$NmColNumTotalDemandas,
+				"0 AS " . filtroConsultarDemandaUsuario::$NmColFatorTrabalho,
+		);
+		
+		$querySetor = "SELECT ";
+		$querySetor .= getSQLStringFormatadaColecaoIN($arrayColunasRetornadasEntrada);
+		$querySetor .= " FROM $nmTabela ";
+		$querySetor .= $joinComum;
+		$querySetor .= filtroManter::$CD_CAMPO_SUBSTITUICAO;
+		
+		$queryTotal = "SELECT ";
+		$queryTotal .= getSQLStringFormatadaColecaoIN($arrayColunasRetornadasSaida);
+		$queryTotal .= " FROM $nmTabela ";
+		$queryTotal .= $joinComum;
+		$queryTotal .= filtroManter::$CD_CAMPO_SUBSTITUICAO;
+		
+		$atributosGroup = voDemandaTramitacao::$nmAtrCd . "," . voDemandaTramitacao::$nmAtrAno . "," . voDemandaTramitacao::$nmAtrCdSetorDestino;
+		$nmatrsqtram = voDemandaTramitacao::$nmAtrSq;
+		$nmTabDemandaMinPorSetor = filtroConsultarDemandaRendimento::$NmTabelaTramitacaoMininaPorSetor;
+		$queryNumDemandas = "SELECT ";
+		$queryNumDemandas .= getSQLStringFormatadaColecaoIN($arrayColunasRetornadasNuDemandas);
+		$queryNumDemandas .= " FROM $nmTabelaDemanda ";
+		$queryNumDemandas .= $joinDemandaContrato;
+		$queryNumDemandas .= $joinDemandaPL;
+		$queryNumDemandas .= "\n INNER JOIN (SELECT MIN($nmatrsqtram) AS $nmatrsqtram,$atributosGroup FROM $nmTabela group by $atributosGroup) $nmTabDemandaMinPorSetor";
+		$queryNumDemandas .= "\n ON ";
+		$queryNumDemandas .= "$nmTabelaDemanda." . voDemanda::$nmAtrAno . "=$nmTabDemandaMinPorSetor." . voDemandaTramitacao::$nmAtrAno;
+		$queryNumDemandas .= "\n AND $nmTabelaDemanda." . voDemanda::$nmAtrCd . "=$nmTabDemandaMinPorSetor." . voDemandaTramitacao::$nmAtrCd;
+		$queryNumDemandas .= "\n INNER JOIN " . $nmTabela;
+		$queryNumDemandas .= "\n ON ";
+		$queryNumDemandas .= "$nmTabela." . voDemandaTramitacao::$nmAtrAno . "=$nmTabDemandaMinPorSetor." . voDemandaTramitacao::$nmAtrAno;
+		$queryNumDemandas .= "\n AND $nmTabela." . voDemandaTramitacao::$nmAtrCd . "=$nmTabDemandaMinPorSetor." . voDemandaTramitacao::$nmAtrCd;
+		$queryNumDemandas .= "\n AND $nmTabela." . voDemandaTramitacao::$nmAtrSq . "=$nmTabDemandaMinPorSetor." . voDemandaTramitacao::$nmAtrSq;
+		
+		$queryNumDemandas .= filtroManter::$CD_CAMPO_SUBSTITUICAO;
+		
+		$numSaidas = "SUM(".filtroConsultarDemandaRendimento::$NmTabelaRendimento . ".". filtroConsultarDemandaRendimento::$NmColNuSaidas .") AS ";
+		$numSaidas .= filtroConsultarDemandaRendimento::$NmColNuSaidas;
+		$numEntradas = "SUM(".filtroConsultarDemandaRendimento::$NmTabelaRendimento . ".".filtroConsultarDemandaRendimento::$NmColNuEntradas.") AS ";
+		$numEntradas .= filtroConsultarDemandaRendimento::$NmColNuEntradas;
+		$numDemandas = "SUM(".filtroConsultarDemandaRendimento::$NmTabelaRendimento . ".".filtroConsultarDemandaRendimento::$NmColNumTotalDemandas .") AS ";
+		$numDemandas .= filtroConsultarDemandaRendimento::$NmColNumTotalDemandas;
+		
+		$arrayColunasRetornadas = array (
+				vodemanda::$nmAtrCdSetor,
+				vodemanda::$nmAtrDtReferencia,
+				$numEntradas,
+				$numSaidas,
+				$numDemandas,
+		);
+		
+		$query = " SELECT ";
+		$query .= getSQLStringFormatadaColecaoIN($arrayColunasRetornadas);
+		$query .= " FROM ($queryEntrada UNION ALL $querySaida UNION ALL $queryNumDemandas) " . filtroConsultarDemandaRendimento::$NmTabelaRendimento;
+		$query .= filtroConsultarDemandaRendimento::$CD_CAMPO_SUBSTITUICAO_PRINCIPAL;
+		$query .= " GROUP BY " . $filtro->groupby;
+		
+		$filtroPrincipal = "";
+		if($filtro->vodemanda->cdSetor != null){
+			$filtroPrincipal = voDemanda::$nmAtrCdSetor . "=" . $filtro->vodemanda->cdSetor;
+		}
+		$arraySubstituicao = array(
+				filtroManter::$CD_CAMPO_SUBSTITUICAO => $filtro->getSQLFiltroPreenchido(),
+				filtroConsultarDemandaRendimento::$CD_CAMPO_SUBSTITUICAO_PRINCIPAL => $filtroPrincipal,
+		
+		);
+		
+		$filtro->sqlFiltrosASubstituir = $arraySubstituicao;
+		$retorno = parent::consultarFiltroPorSubstituicao($filtro, $query);*/
 		
 		return $retorno;
 	}

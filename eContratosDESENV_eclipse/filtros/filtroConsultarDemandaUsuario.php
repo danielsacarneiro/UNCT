@@ -7,6 +7,8 @@ class filtroConsultarDemandaUsuario extends filtroManter{
 	public static $nmFiltro = "filtroManterGestor";
 	
 	static $NmColNumTotalDemandas = "NmColNumTotalDemandas";
+	static $NmColNumDemandasSetor = "NmColNumDemandasSetor";
+	static $NmColFatorTrabalho = "NmColFatorTrabalho";
 	 
 	var $ano = "";
 	var $situacao  = "";

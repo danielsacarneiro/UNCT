@@ -44,32 +44,41 @@ function carregaDadosContratada(pNmCampoAnoContrato, pNmCampoTipoContrato, pNmCa
 	var required = cdEspecieContrato != cdEspecieContratoMater;	
 	tornarRequiredCamposColecaoFormulario(colecaoIDCamposRequired, required);
 
-	//fica assim por conta do formato da chave do vocontrato
-	if(cdContrato != "" && anoContrato != "" && tpContrato != ""
-		&& ((isChaveCompleta && cdEspecieContrato != "") || !isChaveCompleta)){
-		
+	var isChavePermiteConsulta = anoContrato != "" && tpContrato != "";
+	var isCdContratoInserido = cdContrato != null && cdContrato != "";
+	
+	if(isChavePermiteConsulta){
+		//fica assim por conta do formato da chave do vocontrato
 		var str = "" + CD_CAMPO_SEPARADOR + anoContrato + CD_CAMPO_SEPARADOR + cdContrato + CD_CAMPO_SEPARADOR + tpContrato;
-		
-		if(cdEspecieContrato != null)
-			str = str + CD_CAMPO_SEPARADOR + cdEspecieContrato;
-		
-		//alert(1);
-		if(sqEspecieContrato != null && sqEspecieContrato != ""){
-			str = str + CD_CAMPO_SEPARADOR + sqEspecieContrato;
-			//alert(2);
-		}else{
-			//alert(3);
-			//vai buscar o proximo termo quando possivel para exibir na tela
-			if(isChaveCompleta){			
-				link = "../contrato/campoSqProximoTermo.php";
-				//biblio ajax
-				getDadosPorChaveGenerica(str, link, pNmCampoDiv);
-				return;			
-			}
-		}
 		//alert(str);
-		//vai no ajax
-		getDadosContratadaPorContrato(str, pNmCampoDiv);
+		var permiteBuscarProxSqEspecie = false;
+		if(cdEspecieContrato != null && cdEspecieContrato != ""){
+			str = str + CD_CAMPO_SEPARADOR + cdEspecieContrato;
+			
+			//so coloca o sqEspecie se o cdEspecie tiver preenchido
+			if(sqEspecieContrato != null && sqEspecieContrato != ""){
+				str = str + CD_CAMPO_SEPARADOR + sqEspecieContrato;
+			}else{
+				//consideradno que o cdEspecie foi preenchido e o sq nao
+				permiteBuscarProxSqEspecie = true;
+			}
+			
+		}
+
+		if(!isCdContratoInserido || (isCdContratoInserido && isChaveCompleta && permiteBuscarProxSqEspecie)){			
+			//vai buscar o proximo termo quando possivel para exibir na tela
+			link = "../contrato/campoSqProximoTermo.php";
+			//biblio ajax
+			getDadosPorChaveGenerica(str, link, pNmCampoDiv);
+			return;			
+		}
+		
+		//alem disso, completa a informacao da contratada se o contrato tiver sido inserido
+		if(isCdContratoInserido){			
+			//alert(str);
+			//vai no ajax para pegar dados da contratada se o contrato estiver completo
+			getDadosContratadaPorContrato(str, pNmCampoDiv);
+		}
 	
 	}else{
 		//limpa o campodiv da contratada
