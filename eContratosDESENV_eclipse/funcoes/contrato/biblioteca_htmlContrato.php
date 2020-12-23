@@ -823,7 +823,7 @@ function temPAAPAberto($vocontrato) {
 	try{
 		$registroContratoTemp = getContratoVigentePorData($vocontrato, getDataHoje());
 	}catch (excecaoChaveRegistroInexistente $ex){
-		throw new excecaoGenerica("Para consulta de PAAP´s, o contrato deve ser incluído na planilha e em 'informações adicionais'.");		
+		throw new excecaoGenerica("Para consulta de PAAP´s, o contrato deve ser estar vigente e inserido em 'informações adicionais'.");		
 	}
 		$voContratoDemanda = new vocontrato();
 		$voContratoDemanda->getDadosBanco($registroContratoTemp[0]);
