@@ -372,6 +372,7 @@ class filtroManter extends multiplosConstrutores {
 		
 		// var_dump($this->groupby);
 		if ($this->groupby != null && $this->groupby != "") {
+			//echoo ("ok");
 			$str = $this->groupby;
 			if (is_array ( $this->groupby )) {
 				$str = getSQLStringFormatadaColecaoIN ( $this->groupby, false );
@@ -547,6 +548,17 @@ class filtroManter extends multiplosConstrutores {
 	
 	function getSQLFiltro(){
 		return $this->QUERY_FILTRO;
+	}
+	
+	/**
+	 * meetodo correto para consultar se eh caso de historico ou nao
+	 * eh preciso passar o voprincipal como parametro para que o sql saiba em que tabela validarah se eh caso de historico
+	 * @param unknown $cdHistorico
+	 * @param unknown $voPrincipal
+	 */
+	function setCdHistorico($cdHistorico, $voPrincipal){
+		$this->voPrincipal = $voPrincipal;
+		$this->cdHistorico = $cdHistorico;
 	}
 	
 }

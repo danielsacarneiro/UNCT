@@ -200,6 +200,7 @@ function detalhar(isExcluir) {
 	                        
 	                        $voContratoModReajuste = $registro[filtroManterContratoModificacao::$NmColVOContratoModReajustado];
 	                        $vlMensalAtual = $voContratoModReajuste->vlMensalAtual;
+	                        //echoo($vlMensalAtual);
 	                        $vlGlobalAtual = $voContratoModReajuste->vlGlobalAtual;
 	                        //$vlGlobalReal = $voAtual->vlGlobalReal;
 	                        $vlGlobalReal = $vlGlobalAtual;                      

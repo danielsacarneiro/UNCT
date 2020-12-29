@@ -102,6 +102,7 @@ class filtroManterDemanda extends filtroManter{
 		//echo "ano vodemanda " . $this->vodemanda->ano;
 		$this->vocontrato = new vocontrato();
 		$this->vocontrato->sqEspecie = null;
+		//$this->voPrincipal = new voDemanda();
 		//$this->voPA = new voPA();
 		
 		parent::__construct1($pegarFiltrosDaTela);

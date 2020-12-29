@@ -1424,9 +1424,13 @@ function getContratoDemandaPorSEI($SEI){
 	if($SEI != null){
 		$SEI = voDemandaTramitacao::getNumeroPRTSemMascara($SEI);
 		$filtro = new filtroManterDemanda(false);
-		$filtro->inDesativado = constantes::$CD_NAO;
+		//$filtro->inDesativado = constantes::$CD_NAO;
+		$filtro->setCdHistorico(constantes::$CD_NAO, new voDemanda());
+		
 		$filtro->vodemanda->prt = $SEI;
 		$filtro->vocontrato->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
+		$filtro->groupby = array(voDemandaContrato::$nmAtrAnoContrato, voDemandaContrato::$nmAtrCdContrato, voDemandaContrato::$nmAtrTipoContrato);
+		
 		$db = new dbDemanda();
 		$colecao = $db->consultarTelaConsulta(new voDemanda(), $filtro);
 		if(!isColecaoVazia($colecao)){
