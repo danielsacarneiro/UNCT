@@ -281,11 +281,24 @@ function getMensagemContratosNaoIncluidosPlanilha(&$count = 0){
 		);
 
 		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $coluna1);*/
-
-		$colunas = incluirColunaColecao($colunas, 'TIPO', voDemandaContrato::$nmAtrTipoContrato);
-		$colunas = incluirColunaColecao($colunas, 'ANO', voDemandaContrato::$nmAtrAnoContrato);		
+		
+		$array =array(
+				constantes::$CD_COLUNA_CHAVE => 'TIPO',
+				constantes::$CD_COLUNA_TP_DADO => constantes::$CD_TP_DADO_DOMINIO,
+				constantes::$CD_COLUNA_NM_CLASSE_DOMINIO => "dominioTipoContrato",				
+				constantes::$CD_COLUNA_VALOR => voDemandaContrato::$nmAtrTipoContrato,
+		);
+		$colunas = incluirColunaColecaoArray($colunas, $array);
 		$colunas = incluirColunaColecao($colunas, 'NUMERO', voDemandaContrato::$nmAtrCdContrato);
-		$colunas = incluirColunaColecao($colunas, 'ESPECIE', voDemandaContrato::$nmAtrCdEspecieContrato);
+		$colunas = incluirColunaColecao($colunas, 'ANO', voDemandaContrato::$nmAtrAnoContrato);		
+		
+		$array =array(
+				constantes::$CD_COLUNA_CHAVE => 'ESPECIE',
+				constantes::$CD_COLUNA_TP_DADO => constantes::$CD_TP_DADO_DOMINIO,
+				constantes::$CD_COLUNA_NM_CLASSE_DOMINIO => "dominioEspeciesContrato",
+				constantes::$CD_COLUNA_VALOR => voDemandaContrato::$nmAtrCdEspecieContrato,
+		);
+		$colunas = incluirColunaColecaoArray($colunas, $array);		
 		$colunas = incluirColunaColecao($colunas, 'NUMERO', voDemandaContrato::$nmAtrSqEspecieContrato);
 
 		//$msg = getCorpoMensagemDemandaPorColecao($assunto, $filtro, $colunasAAcrescentar, false);

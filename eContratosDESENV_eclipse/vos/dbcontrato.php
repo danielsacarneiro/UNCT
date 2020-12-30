@@ -1484,7 +1484,7 @@ class dbcontrato extends dbprocesso {
 			$query .= " SELECT * ";
 			$query .= " FROM " . $nmTabela;
 			$query .= " WHERE "
-			. "$nmTabela." .  voDemandaContrato::$nmAtrCdEspecieContrato . "  = 'TA' AND " 
+			. "$nmTabela." .  voDemandaContrato::$nmAtrCdEspecieContrato . "  IN ('CM','TA') AND " 
 			. " NOT EXISTS (SELECT 'X' FROM " . $nmTabelaContrato 
 			. " WHERE $nmTabela." . voDemandaContrato::$nmAtrAnoContrato . "= $nmTabelaContrato.". vocontrato::$nmAtrAnoContrato 
 			. " AND $nmTabela." . voDemandaContrato::$nmAtrTipoContrato . "= $nmTabelaContrato.". vocontrato::$nmAtrTipoContrato
@@ -1493,6 +1493,11 @@ class dbcontrato extends dbprocesso {
 			. " AND $nmTabela." . voDemandaContrato::$nmAtrSqEspecieContrato . "= $nmTabelaContrato.". vocontrato::$nmAtrSqEspecieContrato
 			. ")\n";
 			$query .= " group by $groupby";
+			$arrayGroupby = array(voDemandaContrato::$nmAtrAnoContrato . " DESC ",
+					voDemandaContrato::$nmAtrTipoContrato,
+					voDemandaContrato::$nmAtrCdEspecieContrato,
+			);
+			$query .= " order by " . getSQLStringFormatadaColecaoIN($arrayGroupby);
 						
 		static::printarSQL($query);	
 		$retorno = parent::consultarEntidade ( $query, false);	
