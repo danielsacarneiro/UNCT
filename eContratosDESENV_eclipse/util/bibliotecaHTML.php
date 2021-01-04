@@ -685,6 +685,22 @@ function getComponenteConsultaPaginacao($comboOrdenacao,
 	return getComponenteConsultaPaginacaoArray($arrayParam);
 	
 }
+
+/*function getComponenteConsultaPaginacaoArray($arrayParam) {
+	$comboOrdenacao = $arrayParam[0];
+	$cdAtrOrdenacao = $arrayParam[1];
+	$cdOrdenacao = $arrayParam[2];
+	$temPaginacao = $arrayParam[3];
+	$qtdRegistrosPorPag = $arrayParam[4];
+	$temHistorico = $arrayParam[5];
+	$cdHistorico = $arrayParam[6];
+	$colecaoExportarExcel = $arrayParam[7];
+	$complementoHTML = $arrayParam[8];
+	
+	return getComponenteConsultaPaginacaoArrayFiltro($arrayParam);
+
+}*/
+
 function getComponenteConsultaPaginacaoArray($arrayParam) {
 	$comboOrdenacao = $arrayParam[0]; 
 	$cdAtrOrdenacao = $arrayParam[1]; 
@@ -694,6 +710,7 @@ function getComponenteConsultaPaginacaoArray($arrayParam) {
 	$temHistorico = $arrayParam[5]; 
 	$cdHistorico = $arrayParam[6];
 	$colecaoExportarExcel = $arrayParam[7];
+	$complementoHTML = $arrayParam[8];
 	
 	$html = "";
 	
@@ -730,7 +747,7 @@ function getComponenteConsultaPaginacaoArray($arrayParam) {
 		$html .= "&nbsp;". getLinkExportarExcelTelaContrato($colecaoExportarExcel);
 	}
 	
-	$html .= "</TD></TR>";
+	$html .= "$complementoHTML</TD></TR>";
 	// $html .= "<imput type='hidden' id='javascript:ID_REQ_DT_HOJE' name='javascript:ID_REQ_DT_HOJE'>\n";
 	
 	return $html;

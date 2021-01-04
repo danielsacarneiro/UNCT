@@ -77,6 +77,7 @@ $numTotalRegistros = $filtro->numTotalRegistros;
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_checkbox.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_moeda.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_select.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_contrato.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>tooltip.js"></SCRIPT>
 
 <SCRIPT language="JavaScript" type="text/javascript">
@@ -494,9 +495,34 @@ function estatisticas(){
                         			size="10" 
                         			maxlength="10" >            
             </TD>
-	    </TR>					
-				<?php
-				echo getComponenteConsultaFiltro($voContrato->temTabHistorico, $filtro, true, $colecao);
+	    </TR>	
+	    <script>
+	    var pArrayIdCamposFiltroPortalTransparencia = new Array(
+	    		'<?=filtroManterContrato::$ID_REQ_DtAssinaturaInicial?>',
+	    		'<?=filtroManterContrato::$ID_REQ_DtAssinaturaFinal?>',
+	    		'<?=filtroManterContrato::$ID_REQ_InPublicado?>'
+	    		);
+		//alert(pArrayIdCamposFiltroPortalTransparencia);
+	    </script>				
+		<?php
+		$linkMontaFiltroPortalTransparencia = "&nbsp;" 
+		. getTextoLink("MontarFiltroPortalTransparencia", "#", 'onClick=setFiltroContratosPortalTransparencia(pArrayIdCamposFiltroPortalTransparencia)');
+		
+				$pArrayFiltroConsulta = array(
+						$filtro->getComboOrdenacao(),
+						$filtro->cdAtrOrdenacao,
+						$filtro->cdOrdenacao,
+						$filtro->TemPaginacao,
+						$filtro->qtdRegistrosPorPag,
+						$voContrato->temTabHistorico,
+						$filtro->cdHistorico,
+						$colecao,
+						$linkMontaFiltroPortalTransparencia
+				);
+				
+				
+				//echo getComponenteConsultaFiltro($voContrato->temTabHistorico, $filtro, true, $colecao);
+				echo getComponenteConsultaPaginacaoArray($pArrayFiltroConsulta);
 				?>
        </TBODY>
   </TABLE>
