@@ -611,15 +611,19 @@ class filtroManterDemanda extends filtroManter{
 		}
 		
 		if($this->vodemanda->prt != null){
+			$sqlFiltroPRTPrincipal = "$nmTabela." . voDemanda::$nmAtrProtocolo . " LIKE '%"			
+			. voDemandaTramitacao::getNumeroPRTSemMascara($this->vodemanda->prt,false)
+			. "%'";
+			
 			$filtro = $filtro . $conector
-			. " EXISTS (SELECT 'X' FROM " . $nmTabelaTramitacao
+			. "($sqlFiltroPRTPrincipal OR EXISTS (SELECT 'X' FROM " . $nmTabelaTramitacao
 			. " WHERE " 
 			. $nmTabela . "." . voDemanda::$nmAtrAno . "=" . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrAno
 			. " AND " . $nmTabela . "." . voDemanda::$nmAtrCd . "=" . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrCd
 			. " AND " . $nmTabelaTramitacao. "." . voDemandaTramitacao::$nmAtrProtocolo 
 			. " LIKE '%"			
 			. voDemandaTramitacao::getNumeroPRTSemMascara($this->vodemanda->prt,false)
-			. "%')\n";
+			. "%'))\n";
 		
 			$conector  = "\n AND ";
 		}
