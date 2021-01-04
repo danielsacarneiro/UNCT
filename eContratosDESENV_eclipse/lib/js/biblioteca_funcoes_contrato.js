@@ -443,4 +443,6 @@ function setFiltroContratosPortalTransparencia(pArrayIdCampos){
 	campoDataInicioAssinatura.value = '01/01/' + ano_A_Utilizar;
 	campoDataFimAssinatura.value = '31/12/' + ano_A_Utilizar;
 	campoPublicado.value = 'S';	
+	
+	exibirMensagem("Lembrar de selecionar o tipo de contrato (Ex. C-SAFI, CV-SAFI...).");
 }
