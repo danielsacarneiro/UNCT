@@ -274,7 +274,7 @@ function detalhar(isExcluir) {
                         <TD class='tabeladadosalinhadodireita'><?php echo $numMesesPrazoContrato?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($vlLiconReferencial)?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($vlLiconPrazoRestante)?></TD>
-                        <TD class='tabeladadosalinhadodireita'><?php echo getTextoHTMLNegrito(getMoeda($vlLicon)) . "<br>($numMesesPeriodoAtual meses)"?></TD>
+                        <TD class='tabeladadosdestacadoamarelo'><?php echo getTextoHTMLNegrito(getMoeda($vlLicon)) . "<br>($numMesesPeriodoAtual meses)"?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo $voContratoAtual->vlMensal?></TD>                    
                         <TD class='tabeladadosalinhadodireita' ><?php echo $vlMensalAtualStrCelula?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo $voContratoAtual->vlGlobal?></TD>                    
