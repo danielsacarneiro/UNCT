@@ -437,9 +437,12 @@ function getContratoSubstituto(pIDCampo, pNmCampoDiv){
 function setFiltroContratosPortalTransparencia(pArrayIdCampos){
 	var campoDataInicioAssinatura = document.getElementById(pArrayIdCampos[0]);
 	var campoDataFimAssinatura = document.getElementById(pArrayIdCampos[1]);
-	var campoPublicado = document.getElementById(pArrayIdCampos[2]);
-	
+	var campoPublicado = document.getElementById(pArrayIdCampos[2]);	
 	var ano_A_Utilizar = getAnoAtual()-1;
+	
+	//biblio...principal
+	limparFormularioGeral();
+	
 	campoDataInicioAssinatura.value = '01/01/' + ano_A_Utilizar;
 	campoDataFimAssinatura.value = '31/12/' + ano_A_Utilizar;
 	campoPublicado.value = 'S';	
