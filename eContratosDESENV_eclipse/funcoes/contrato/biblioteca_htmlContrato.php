@@ -1472,4 +1472,38 @@ function getDuracaoEmMesesContratoAutorizacaoPGE_SAD($voContrato){
 	return $prazoAnual;
 }
 
+function getContratosAVencerAno($data=null){
+	if($data == null){
+		$data = getDataHoje();
+	}
+	
+	$ano = getAnoData($data);
+	//echo $ano; 
+	$filtro = new filtroManterContrato(false);
+	$filtro->dtFim1 = "01/01/$ano";
+	$filtro->dtFim2 = "31/12/$ano";
+	$filtro->dtVigencia = $data;
+	
+	//echo $data;
+	
+	$filtro->isTpVigenciaMAxSq = true;
+	$filtro->isRetornarQueryCompleta = true;
+	
+	$dbcontratoinfo = new dbcontrato();
+	$colecao = $dbcontratoinfo->consultarTelaConsulta(array($filtro));
+	
+	$query = $filtro->getSQL_QUERY_COMPLETA();
+	
+	$coluna = vocontrato::$nmAtrDtVigenciaFinalContrato;
+	$atribMes = "MONTH($coluna)";
+	$query = "SELECT COUNT(*) AS " . filtroManterContrato::$NmColCOUNTFiltroManter 
+	. ", $atribMes AS $coluna" 
+	. " FROM ($query) TAB GROUP BY $atribMes ORDER BY COUNT(*) DESC"; 
+	
+	$colecao = $dbcontratoinfo->consultarEntidade($query, false);
+	
+	//var_dump($colecao);
+	RETURN $colecao;	
+}
+
 ?>

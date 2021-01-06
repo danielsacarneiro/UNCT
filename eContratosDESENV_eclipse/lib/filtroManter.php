@@ -7,6 +7,7 @@ class filtroManter extends multiplosConstrutores {
 	
 	static $ID_SESSAO_COUNT_FILTRO_SESSAO = "ID_SESSAO_COUNT_FILTRO_SESSAO";
 	static $CD_CAMPO_SUBSTITUICAO = "[[[[QEEWER_CD_CAMPO_SUBSTITUICAO_EREWFDSFS]]]]";
+	static $NmColCOUNTFiltroManter = "NmColCOUNTFiltroMante";
 	// ...............................................................
 
 	static $nmAtrCdConsultarArquivo = "cdConsultarArquivo";
@@ -45,11 +46,16 @@ class filtroManter extends multiplosConstrutores {
 	var $isFazerControleSessao = false;
 	
 	var $sqlFiltrosASubstituir;
+	
 	private $inConsultaRealizada = false;
 	private $QUERY_SELECT;
 	private $QUERY_FROM;
 	
 	private $QUERY_FILTRO;
+	
+	var $isRetornarQueryCompleta;
+	//quando acionada, guarda a query efetivamente consultada
+	private $QUERY_COMPLETA;
 	
 	var $voPrincipal;
 
@@ -559,6 +565,16 @@ class filtroManter extends multiplosConstrutores {
 	function setCdHistorico($cdHistorico, $voPrincipal){
 		$this->voPrincipal = $voPrincipal;
 		$this->cdHistorico = $cdHistorico;
+	}
+	
+	/**
+	 * utilizada somente quando selecionado o retorno apenas da query completa
+	 */
+	function setSQL_QUERY_COMPLETA($query){
+		$this->QUERY_COMPLETA = $query;
+	}
+	function getSQL_QUERY_COMPLETA(){
+		return $this->QUERY_COMPLETA;
 	}
 	
 }

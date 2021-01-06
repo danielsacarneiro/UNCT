@@ -391,7 +391,8 @@ function movimentacoes(){
 	            <?php 
 	            echo $comboVigencia->getHtmlOpcao($filtro::$nmAtrTpVigencia,$filtro::$nmAtrTpVigencia, $filtro->tpVigencia, false);
 	            
-	            $comboSimNaoEfeitos = new select(array(constantes::$CD_SIM => "Com efeitos", constantes::$CD_NAO => "Últ.Termo"));
+	            //$comboSimNaoEfeitos = new select(array(constantes::$CD_SIM => "Com efeitos", constantes::$CD_NAO => "Últ.Termo"));
+	            $comboSimNaoEfeitos = new select(dominioContratoProducaoEfeitos::getColecao());
 	            $textoTag = getTextoHTMLTagMouseOver("Último Termo: ", "Exibe somente os termos formalizados.");
 	            echo "| $textoTag". $comboSimNaoEfeitos->getHtmlCombo(
 	            		filtroConsultarContratoConsolidacao::$ID_REQ_InProduzindoEfeitos,

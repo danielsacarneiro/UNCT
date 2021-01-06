@@ -48,8 +48,12 @@ class dbcontrato extends dbprocesso {
 	function consultarTelaConsulta($arrayParamConsulta){
 		$filtro = $arrayParamConsulta[0];
 		$vo = $filtro->voPrincipal;
+		if( $vo == null){
+			$vo = new vocontrato();
+		}
 		$isHistorico = ("S" == $filtro->cdHistorico);
 		$nmTabela = $vo->getNmTabelaEntidade($isHistorico);
+		
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic(false);
 		$nmTabelaPessoa = vopessoa::getNmTabelaStatic ( false );
 		//$nmTabelaDemandaSolicCompra = voDemandaPL::getNmTabelaStatic(false);

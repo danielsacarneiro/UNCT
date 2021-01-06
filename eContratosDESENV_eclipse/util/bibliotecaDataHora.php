@@ -264,6 +264,13 @@ function getAnoHoje(){
 	return date ( 'Y' );
 }
 
+function getAnoData($dataHtml){
+	$dataSQL = getVarComoData($dataHtml);
+	$dataSQL = str_replace("'", "", $dataSQL);
+	$date = new DateTime($dataSQL);
+	return $date->format("Y");
+}
+
 function getUltimoDiaMes($mes, $ano=null){
 	if($ano == null){
 		$ano = date("Y"); // Ano atual

@@ -410,6 +410,7 @@ class dbContratoInfo extends dbprocesso {
 				
 		return parent::consultarFiltro ( $filtro, $querySelect, $queryFrom, false );
 	}
+	
 	function incluirSQL($vo) {
 		return $this->incluirQueryVO ( $vo );
 	}

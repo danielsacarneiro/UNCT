@@ -128,6 +128,13 @@ function Link(label, href, seq, background, pInJanelaAuxiliar, pValue, pInSeleci
 
     if (pInJanelaAuxiliar == true) {
 	    this.inJanelaAuxiliar = true;
+	    
+	    //acrescenta a informacao de que eh lupa
+	    /*var conectorLink = '?';
+	    if(href.indexof('?')){
+	    	conectorLink = '&';
+	    }
+	    this.href = href + conectorLink + "lupa=S";*/
     } else {
 		this.inJanelaAuxiliar = false;
 	}

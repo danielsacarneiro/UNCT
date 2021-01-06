@@ -23,16 +23,24 @@ setCabecalho($titulo);
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_oficio.js"></SCRIPT>
 
 <SCRIPT language="javascript">
+<?php
+$countServicos = 0;
+function getNumServico($count){
+	$qtdfinalServicos = 2;
+	return complementarCharAEsquerda($count, "0", $qtdfinalServicos);	
+}
+
+?>
 	f = new Tree('Menu de Funcionalidades finalizadas e entregue a SEFAZ-PE (Homologação)', true);
 	
-	f1 = new Tree('Serviço 01 (Tabelas)');	
+	f1 = new Tree('Serviço <?=getNumServico(++$count)?> (Tabelas)');	
     f1.adicionarItem(new Link('Documentos', '<?=caminho_funcoesHTML?>documento', ''));
     f1.adicionarItem(new Link('Orgãos gestores', '<?=caminho_funcoesHTML?>gestor', ''));
     f1.adicionarItem(new Link('Pessoas', '<?=caminho_funcoesHTML?>pessoa', ''));
     f1.adicionarItem(new Link('Registro Livro', '<?=caminho_funcoesHTML?>registro_livro', ''));
 	f.adicionarItem(f1);
 	
-	f2 = new Tree('Serviço 02 (Contratos)');
+	f2 = new Tree('Serviço <?=getNumServico(++$count)?> (Contratos)');
 	f2.adicionarItem(new Link("Contratos", "<?=caminho_funcoesHTML?>contrato", ""));
 	f2.adicionarItem(new Link("Contratos-Informações Adicionais", "<?=caminho_funcoesHTML?>contrato_info", ""));
 	f2.adicionarItem(new Link("Contratos-Consolidação", "<?=caminho_funcoesHTML?>contrato_consolidacao", ""));
@@ -41,21 +49,23 @@ setCabecalho($titulo);
 	f2.adicionarItem(new Link("Contratos não incluídos PLANILHA", "<?=caminho_funcoesHTML?>contrato/contratoAincluir.php", "", null,true));
 	f.adicionarItem(f2);
 
-	f3 = new Tree('Serviço 03 (Demanda)');
+	f3 = new Tree('Serviço <?=getNumServico(++$count)?> (Demanda)');
 	f3.adicionarItem(new Link("Demandas", "<?=caminho_funcoesHTML?>demanda", ""));
 	f3.adicionarItem(new Link("Demanda por Usuário", "<?=caminho_funcoesHTML?>demanda_gestao/detalharDemandaUsuario.php", "", null, true));
-	f3.adicionarItem(new Link("Rendimento Demanda", "<?=caminho_funcoesHTML?>demanda_gestao/indexRendimento.php", ""));
-	f3.adicionarItem(new Link("Gestão Demanda", "<?=caminho_funcoesHTML?>demanda_gestao", ""));
-	
 	<?php
 	if(isUsuarioRodaImportacao()){
 	?>	    
 		f3.adicionarItem(new Link("ATENÇÃO: Tramitação Demanda", "<?=caminho_funcoesHTML?>demanda_tram", ""));
-	<?php }?>
-	
+	<?php }?>	
 	f.adicionarItem(f3);
 
-	f4 = new Tree('Serviço 04 (PAAP)');
+	fgestao = new Tree('Serviço <?=getNumServico(++$count)?> (Gestão)');
+	fgestao.adicionarItem(new Link("Contratos a vencer/Ano", "<?=caminho_funcoesHTML?>contrato_consolidacao/detalharContratosAnosAVencer.php", "", null, true));
+	fgestao.adicionarItem(new Link("Rendimento Demanda", "<?=caminho_funcoesHTML?>demanda_gestao/indexRendimento.php", ""));
+	fgestao.adicionarItem(new Link("Gestão Demanda", "<?=caminho_funcoesHTML?>demanda_gestao", ""));
+	f.adicionarItem(fgestao);	
+
+	f4 = new Tree('Serviço <?=getNumServico(++$count)?> (PAAP)');
     f4.adicionarItem(new Link('Processo Administrativo de Aplicação de Penalidade (PAAP)', '<?=caminho_funcoesHTML?>pa', ''));    
     f4.adicionarItem(new Link('Penalidades', '<?=caminho_funcoesHTML?>pa_penalidade', ''));
     f4.adicionarItem(new Link('EXTERNO: Penalidades e-Fisco', 'http://efisco.sefaz.pe.gov.br/sfi_fin_gbp/PREmitirFornecedorPenalidade', ''));
@@ -63,17 +73,17 @@ setCabecalho($titulo);
     f4.adicionarItem(new Link('EXTERNO: Penalidades Portal da Transparência', 'http://www.portaltransparencia.gov.br/sancoes/ceis?ordenarPor=nome&direcao=asc', ''));
 	f.adicionarItem(f4);
 
-	fprocLic = new Tree('Serviço 05 (Proc.Licitatório)');
+	fprocLic = new Tree('Serviço <?=getNumServico(++$count)?> (Proc.Licitatório)');
 	fprocLic.adicionarItem(new Link('Proc.Licitatório', '<?=caminho_funcoesHTML.voProcLicitatorio::getNmTabela()?>', ''));
 	fprocLic.adicionarItem(new Link('Portarias das CPL´s', '<?=caminho_funcoesHTML.voProcLicitatorio::getNmTabela()?>/portarias.php', "", null,true));
 	fprocLic.adicionarItem(new Link('EXTERNO: Mural PEIntegrado', 'https://www.peintegrado.pe.gov.br/Portal/Mural.aspx', "", null,true));	
 	f.adicionarItem(fprocLic);	
 	
-	fSolicCompra = new Tree('Serviço 06 (Solic.Compra)');
+	fSolicCompra = new Tree('Serviço <?=getNumServico(++$count)?> (Solic.Compra)');
 	fSolicCompra.adicionarItem(new Link('Solic.Compra', '<?=caminho_funcoesHTML.voSolicCompra::getNmTabela()?>', ''));
 	f.adicionarItem(fSolicCompra);	
 
-	fMensageria = new Tree('Servico 07 (Mensageria)');
+	fMensageria = new Tree('Servico <?=getNumServico(++$count)?> (Mensageria)');
 	fMensageria.adicionarItem(new Link('Mensageria', '<?=caminho_funcoesHTML.voMensageria::getNmTabela()?>', ''));	
 	fMensageria.adicionarItem(new Link('Mensageria Registro', '<?=caminho_funcoesHTML.voMensageriaRegistro::getNmTabela()?>', ''));
 	f.adicionarItem(fMensageria);

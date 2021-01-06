@@ -6,6 +6,7 @@ include_once (caminho_util . "bibliotecaHTML.php");
 class filtroManterContrato extends filtroManter {
 	public $nmFiltro = "filtroManterContrato";
 	
+	public static $NM_TAB_MAXSQCONTRATO = "NM_TAB_MAXSQCONTRATO";
 	public static $ID_REQ_InGestor= "ID_REQ_InGestor";	
 	public static $ID_REQ_InPublicado = "ID_REQ_InPublicado";
 	public static $nmAtrInTrazerConsolidadoPorVigencia = "nmAtrInTrazerConsolidadoPorVigencia";	

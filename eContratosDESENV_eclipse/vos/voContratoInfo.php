@@ -1,6 +1,5 @@
 <?php
-include_once("vocontrato.php");
-include_once("dbDemanda.php");
+include_once(caminho_funcoes."contrato_consolidacao/dominioContratoProducaoEfeitos.php");
 include_once (caminho_util."dominioSetor.php");
 
 Class voContratoInfo extends voentidade{
@@ -90,6 +89,10 @@ Class voContratoInfo extends voentidade{
 
 	public static function getTituloJSPConsolidacao(){
 		return  "CONTRATO-CONSOLIDAÇÃO";
+	}
+	
+	public static function getTituloJSPContratosAVencerAno(){
+		return  "CONTRATOS-CONSOLIDAÇÃO-A VENCER";
 	}
 	
 	public static function getNmTabela(){

@@ -408,7 +408,14 @@ class dbprocesso {
 	}
 	
 	function consultarFiltro(&$filtro, $querySelect, $queryFrom, $validaConsulta) {
+		//$filtro = new filtroConsultar();
 		$retorno = "";
+		$isRetornarApenasQueryCompleta = getAtributoComoBooleano($filtro->isRetornarQueryCompleta);
+		/*if($isRetornarApenasQueryCompleta){
+			echo "true";
+		}else{
+			echo "false";
+		}*/
 		$isHistorico = ("S" == $filtro->cdHistorico);
 	
 		/*if(!isUsuarioAdmin()){
@@ -419,7 +426,7 @@ class dbprocesso {
 		$isConsultar = $filtro->isConsultarHTML();
 	
 		//echoo("valida consulta " . $filtro->nmFiltro);
-		if ($isConsultar || ! $validaConsulta) {
+		if ($isConsultar || ! $validaConsulta || $isRetornarApenasQueryCompleta) {
 			//echoo("valida consulta " . $filtro->nmFiltro);
 				
 			// removeObjetoSessao($filtro->nmFiltro);
@@ -434,7 +441,7 @@ class dbprocesso {
 			
 			// verifica se tem paginacao
 			$limite = "";
-			if ($filtro->TemPaginacao) {
+			if ($filtro->TemPaginacao && !$isRetornarApenasQueryCompleta) {
 				// ECHO "TEM PAGINACAO";
 				$pagina = $filtro->paginacao->getPaginaAtual ();
 	
@@ -470,6 +477,12 @@ class dbprocesso {
 			//if(static::$FLAG_PRINTAR_SQL){
 			if(static::isPrintarSQL()){
 				echo "<br> ".$filtro->getNmFiltro()." $query<br>";
+			}
+			
+			//para o caso de apenas retornar a query completa
+			if($isRetornarApenasQueryCompleta){
+				$filtro->setSQL_QUERY_COMPLETA($query);
+				return;
 			}
 				
 			//echo $query;
