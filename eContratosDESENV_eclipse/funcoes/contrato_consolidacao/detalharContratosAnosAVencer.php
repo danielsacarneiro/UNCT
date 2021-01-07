@@ -97,7 +97,8 @@ function detalharDemandaRendimento(){
                 
                 $selectExercicio = new selectExercicio();
 				echo $selectExercicio->getHtmlCombo(vocontrato::$nmAtrAnoContrato,vocontrato::$nmAtrAnoContrato, $ano, true, "camponaoobrigatorio", false, " onChange='document.frm_principal.submit();'");
-				?>                
+				?> 
+				*contratos registrados na planilha, MESMO QUE AINDA NÃO PROVOQUEM EFEITOS.               
                 </TD>
              </TR>
 			 <!-- <TR>
