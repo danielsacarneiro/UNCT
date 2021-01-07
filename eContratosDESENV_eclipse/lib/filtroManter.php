@@ -20,6 +20,7 @@ class filtroManter extends multiplosConstrutores {
 	static $nmAtrNumTotalRegistros = "numTotalRegistros";
 	static $nmAtrCdUtilizarSessao = "utilizarSessao";
 	static $nmAtrCdConsultar = "consultar";
+	static $nmAtrIsTpVigenciaMAxSq = "nmAtrIsTpVigenciaMAxSq";
 	
 	var $cdAtrOrdenacao;
 	var $cdOrdenacao;
@@ -115,7 +116,7 @@ class filtroManter extends multiplosConstrutores {
 		// para o caso de ser necessario setar um filtro default para nao trazer todos os registros
 		$this->temValorDefaultSetado = false;
 		$this->inDesativado = null;
-		$this->isTpVigenciaMAxSq = false;
+		//$this->isTpVigenciaMAxSq = false;
 		//$this->inTrazerComHistorico = false;
 	}
 	
@@ -576,7 +577,7 @@ class filtroManter extends multiplosConstrutores {
 	function getSQL_QUERY_COMPLETA(){
 		return $this->QUERY_COMPLETA;
 	}
-	
+		
 }
 
 /*

@@ -33,6 +33,35 @@ Class dominioSimNao extends dominio{
 		return parent::getDescricao($chave);
 	}
 	
+	static function getBooleanFormulario($IdReq){
+		$atributo = @$_POST[$IdReq];
+		if(isAtributoValido($atributo)){
+			$retorno = static::getBooleano($atributo);
+			}
+		return $retorno;
+	}
+	
+	static function getBooleano($atributo){		
+		$retorno = null;
+		if(isAtributoValido($atributo)){
+			$retorno = $atributo == constantes::$CD_SIM;
+		}
+		return $retorno;
+	}
+	
+	static function getString($booleano){
+		$retorno = null;
+		if($booleano !== null){
+			if($booleano){
+				$retorno = constantes::$CD_SIM;				
+			}else{
+				$retorno = constantes::$CD_NAO;
+			}
+		}	
+		return $retorno;
+	}
+	
+	
 	// ...............................................................
 // Funções( Propriedades e metodos da classe )
 	

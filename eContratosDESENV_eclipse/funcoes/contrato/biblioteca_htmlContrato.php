@@ -1472,17 +1472,17 @@ function getDuracaoEmMesesContratoAutorizacaoPGE_SAD($voContrato){
 	return $prazoAnual;
 }
 
-function getContratosAVencerAno($data=null){
-	if($data == null){
-		$data = getDataHoje();
+function getContratosAVencerAno($ano=null){
+	if($ano == null){
+		$ano = getAnoHoje();
 	}
 	
-	$ano = getAnoData($data);
 	//echo $ano; 
 	$filtro = new filtroManterContrato(false);
 	$filtro->dtFim1 = "01/01/$ano";
 	$filtro->dtFim2 = "31/12/$ano";
-	$filtro->dtVigencia = $data;
+	$filtro->cdEspecie = dominioEspeciesContrato::getColecaoFiltroContratoConsolidacao();
+	//$filtro->dtVigencia = $data;
 	
 	//echo $data;
 	

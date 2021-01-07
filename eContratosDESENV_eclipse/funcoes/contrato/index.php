@@ -493,7 +493,14 @@ function estatisticas(){
                         			onkeyup="formatarCampoData(this, event, false);"
                         			class="camponaoobrigatorio" 
                         			size="10" 
-                        			maxlength="10" >            
+                        			maxlength="10" > 
+                        	| Sq.Max? 
+                        	<?php
+                        	//$filtro->isTpVigenciaMAxSq = true;
+                        	echo $comboSimNao->getHtmlCombo(filtroManterContrato::$nmAtrIsTpVigenciaMAxSq,
+                        			filtroManterContrato::$nmAtrIsTpVigenciaMAxSq, 
+                        			dominioSimNao::getString($filtro->isTpVigenciaMAxSq), true, "camponaoobrigatorio", false,"");
+                        	?>                        			           
             </TD>
 	    </TR>	
 	    <script>

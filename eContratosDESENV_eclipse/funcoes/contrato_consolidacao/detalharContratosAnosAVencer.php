@@ -82,18 +82,26 @@ function detalharDemandaRendimento(){
 			 <TR>
                 <TH class="campoformulario" nowrap width="1%">Ano:</TH>
                 <TD class="campoformulario" colspan=3>
-                <?php   
-                
-                $data = @$_POST[filtroManterContrato::$nmAtrDtVigencia];
+                <?php                   
+                /*$data = @$_POST[filtroManterContrato::$nmAtrDtVigencia];
                 if($data == null){
                 	$data = getDataHoje();
                 }                
                 $ano = getAnoData($data);                
-                echo getTextoHTMLNegrito($ano);
-                ?>
+                echo getTextoHTMLNegrito($ano);*/
+
+                $ano = @$_POST[vocontrato::$nmAtrAnoContrato];
+                if($ano == null){
+                	$ano = getAnoHoje();
+                }
+                
+                $selectExercicio = new selectExercicio();
+				echo $selectExercicio->getHtmlCombo(vocontrato::$nmAtrAnoContrato,vocontrato::$nmAtrAnoContrato, $ano, true, "camponaoobrigatorio", false, " onChange='document.frm_principal.submit();'");
+				?>                
                 </TD>
-			 <TR>
-                <TH class="campoformulario" nowrap width="1%">Data:</TH>
+             </TR>
+			 <!-- <TR>
+                <TH class="campoformulario" nowrap width="1%">Ano:</TH>
                 <TD class="campoformulario" colspan=3>
                 <INPUT type="text" 
                         	       id="<?=filtroManterContrato::$nmAtrDtVigencia?>" 
@@ -105,7 +113,7 @@ function detalharDemandaRendimento(){
                         			size="10" 
                         			maxlength="10" > * serão retornados os contratos vigentes nesta data, que se encerram nos meses abaixo
                 </TD>
-            </TR>
+            </TR> -->
        </TBODY>
   </TABLE>
 		</DIV>
@@ -122,7 +130,7 @@ function detalharDemandaRendimento(){
                     <TH class="headertabeladados"width="1%" nowrap >Num.Demandas</TH>                                       
                 </TR>
                 <?php	
-                $colecao = getContratosAVencerAno($data);
+                $colecao = getContratosAVencerAno($ano);
                 
                 if (is_array($colecao))
                         $tamanho = sizeof($colecao);

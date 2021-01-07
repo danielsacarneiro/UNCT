@@ -114,6 +114,22 @@ function getSQLDataVigente($pNmTableEntidade, $pNmColSequencial, $pChaveTuplaCom
 	return getSQLDataVigenteArrayParam($pArrayParam);	
 }
 
+function formataArrayChaveTuplaComparacaoSequencial($pChaveTuplaComparacaoSemSequencial, $pNmTableEntidade){
+	if(is_array($pChaveTuplaComparacaoSemSequencial)){
+		for ($i=0; $i< sizeof($pChaveTuplaComparacaoSemSequencial); $i++){
+			$atributo = $pChaveTuplaComparacaoSemSequencial[$i];
+			if(strpos($atributo, ".") === false){
+				$atributo = "$pNmTableEntidade." . $atributo;
+				$pChaveTuplaComparacaoSemSequencial[$i]=$atributo;
+			}
+				
+		}
+		$pChaveTuplaComparacaoSemSequencial = getColecaoEntreSeparador($pChaveTuplaComparacaoSemSequencial, ",");
+	}
+	
+	return $pChaveTuplaComparacaoSemSequencial;
+}
+
 function getSQLDataVigenteArrayParam($pArrayParam) {	
 	$pNmTableEntidade = $pArrayParam[0];
 	$pNmColSequencial = $pArrayParam[1];
@@ -129,7 +145,8 @@ function getSQLDataVigenteArrayParam($pArrayParam) {
 		$pNmTableEntidade = "$pNmTableEntidade.";
 	}*/
 	
-	if(is_array($pChaveTuplaComparacaoSemSequencial)){
+	$pChaveTuplaComparacaoSemSequencial = formataArrayChaveTuplaComparacaoSequencial($pChaveTuplaComparacaoSemSequencial,$pNmTableEntidade);
+	/*if(is_array($pChaveTuplaComparacaoSemSequencial)){
 		for ($i=0; $i< sizeof($pChaveTuplaComparacaoSemSequencial); $i++){
 			$atributo = $pChaveTuplaComparacaoSemSequencial[$i];
 			if(strpos($atributo, ".") === false){
@@ -139,7 +156,7 @@ function getSQLDataVigenteArrayParam($pArrayParam) {
 			
 		}
 		$pChaveTuplaComparacaoSemSequencial = getColecaoEntreSeparador($pChaveTuplaComparacaoSemSequencial, ",");
-	}
+	}*/
 	
 	
 	$nmColDtInicioVigencia = "$pNmTableEntidade." . $pNmColDtInicioVigencia;
@@ -190,7 +207,7 @@ function getSQLIntervaloDatas($tableEntidade, $pNmColDataAComparar, $data1, $dat
 		$data2 = constantes::$DATA_FIM;
 	
 	$coluna = $tableEntidade . "." . $pNmColDataAComparar;
-	$retorno = "(" . $coluna . " BETWEEN '" . getDataSQL ( $data1 ) . "'\n AND '" . getDataSQL ( $data2 ) . "'\n )";
+	$retorno = "( $coluna BETWEEN '" . getDataSQL ( $data1 ) . "'\n AND '" . getDataSQL ( $data2 ) . "'\n )";
 	
 	/*
 	 * $retorno =
