@@ -143,13 +143,15 @@ class filtroManterContrato extends filtroManter {
 	function isSetaValorDefault() {
 		$retorno = false;
 		// verifica os filtros obrigatorios
-		if (! isUsuarioAdmin() && $this->contratada == null && $this->docContratada == null && $this->anoContrato == null 
+		if ($this->isValidarConsulta 
+				&& !isUsuarioAdmin() && $this->contratada == null && $this->docContratada == null && $this->anoContrato == null 
 				&& $this->dtVigenciaInicial == null && $this->dtVigenciaFinal == null && $this->objeto == null && $this->dtVigencia == null) {
 			$retorno = true;
 			$this->temValorDefaultSetado = true;			
 		}		
 		return $retorno;		
 	}
+	
 	function getFiltroConsultaSQL() {
 		$filtro = "";
 		$conector = "";

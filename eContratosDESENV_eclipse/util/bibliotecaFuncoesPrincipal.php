@@ -608,6 +608,19 @@ function getValorMoedaComoDecimal($valor){
 	return $retorno;	
 }
 
+function getIndiceDaChaveDeUmArrayMultiplo($array, $key){
+	$retorno = false;
+	$i = 0;
+	foreach ($array as $chave => $desc){
+		if($chave == $key){
+			$retorno = $i;
+			break;
+		}			
+		$i++;
+	}
+	return $retorno;	
+}
+
 /*function isArrayMultiDimensional($array){
 	return count($array) == count($array, COUNT_RECURSIVE);
 }*/

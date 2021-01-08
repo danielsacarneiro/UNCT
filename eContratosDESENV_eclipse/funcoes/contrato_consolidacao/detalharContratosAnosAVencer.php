@@ -61,7 +61,7 @@ function detalharDemandaRendimento(){
 </HEAD>
 <BODY class="paginadados" onload="">
 	  
-<FORM name="frm_principal" method="post" action="detalharContratosAnosAVencer.php?consultar=S">
+<FORM name="frm_principal" method="post" action="detalharContratosAnosAVencer.php?consultar=S&lupa=S">
 
 <INPUT type="hidden" name="utilizarSessao" value="N">
 <INPUT type="hidden" id="numTotalRegistros" value="<?=$numTotalRegistros?>">
@@ -128,7 +128,7 @@ function detalharDemandaRendimento(){
              <TBODY>
                 <TR>
                     <TH class="headertabeladados" width="90%">Mês</TH>
-                    <TH class="headertabeladados"width="1%" nowrap >Num.Demandas</TH>                                       
+                    <TH class="headertabeladados"width="1%" nowrap >Num.Contratos</TH>                                       
                 </TR>
                 <?php	
                 $colecao = getContratosAVencerAno($ano);
@@ -139,28 +139,59 @@ function detalharDemandaRendimento(){
                         $tamanho = 0;
                                 
                 $colspan=1;
-                //laco para calcular o total
+                
+                //laco para ordenar por num contrato
+                for ($i=0;$i<$tamanho;$i++) {
+                	$registro = $colecao[$i];
+                	$numDemandas = $registro[filtroManterContrato::$NmColCOUNTFiltroManter];
+                	$mes = $registro[vocontrato::$nmAtrDtVigenciaFinalContrato];
+                	$ordem[$mes] = $numDemandas;
+                }
+				
+                //ordena crescente mantendo a chave
+                asort($ordem);
+                
+                //montar array de cores
+                $i=0;
+                $j=1;
+                $cores = array_keys(dominioCoresCrescente::getColecao());
+                //var_dump($cores);
+                foreach ($ordem as $mes => $numContratos) {
+                	$arrayCores[$mes] = $cores[$i];
+                	$j++;
+                	$restdiv2 = $j%2;
+                	$i=$i+$restdiv2;
+                	//echoo($restdiv2);
+                }
+                //var_dump($ordem);
                 
                 $numTotalDemandas = 0;
                 
                 $voAtual = new voDemanda();
-                for ($i=0;$i<$tamanho;$i++) {
-                	$registro = $colecao[$i];
-                	$voAtual->getDadosBanco($registro);
-                	
-                	$mes = $registro[vocontrato::$nmAtrDtVigenciaFinalContrato];
-                	$mes = dominioMeses::getDescricao($mes);
-                	
-                	
-                	$numDemandas = $registro[filtroManterContrato::$NmColCOUNTFiltroManter];
-                	$numTotalDemandas += $numDemandas; 
+                for ($i=1;$i<=12;$i++) {                	
+                	$mesNumero = $i;
+                	$mes = dominioMeses::getDescricao($mesNumero);
+                	if(array_key_exists($mesNumero, $ordem)){
+                		$numDemandas = $ordem[$mesNumero];
+                		$corCelula = $arrayCores[$mesNumero];
+                		$corFonte = dominioCoresCrescente::getDescricao($corCelula);
+                	}else{
+                		$numDemandas = "0";
+                		$corFonte = "black";
+                		$corCelula = "white";
+                	}       
+                	//echoo($numDemandas);
+
+                	$numTotalDemandas += $numDemandas;
+                	//echoo("mes $mesNumero | cor $cor");
+                	//echoo($corFonte);
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados"><?php echo $mes?></TD>
-                    <TD class="tabeladadosalinhadodireita" nowrap>
+                    <TD class="tabeladadosalinhadodireita" nowrap bgcolor=<?=$corCelula?>>
                     <?php 
                     $str = complementarCharAEsquerda($numDemandas, "0", constantes::$TAMANHO_CODIGOS_SAFI);
-                    echo $str;
+                    echo getTextoHTMLDestacado($str, $corFonte, false);
                     ?>
                     </TD>                    
                 </TR>					

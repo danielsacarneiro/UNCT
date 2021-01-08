@@ -1482,6 +1482,7 @@ function getContratosAVencerAno($ano=null){
 	$filtro->dtFim1 = "01/01/$ano";
 	$filtro->dtFim2 = "31/12/$ano";
 	$filtro->cdEspecie = dominioEspeciesContrato::getColecaoFiltroContratoConsolidacao();
+	//$filtro->isConsultarHTML = true;
 	//$filtro->dtVigencia = $data;
 	
 	//echo $data;
@@ -1498,8 +1499,9 @@ function getContratosAVencerAno($ano=null){
 	$atribMes = "MONTH($coluna)";
 	$query = "SELECT COUNT(*) AS " . filtroManterContrato::$NmColCOUNTFiltroManter 
 	. ", $atribMes AS $coluna" 
-	. " FROM ($query) TAB GROUP BY $atribMes ORDER BY COUNT(*) DESC"; 
+	. " FROM ($query) TAB GROUP BY $atribMes ORDER BY $atribMes"; 
 	
+	//echo $query;
 	$colecao = $dbcontratoinfo->consultarEntidade($query, false);
 	
 	//var_dump($colecao);

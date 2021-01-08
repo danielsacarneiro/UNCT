@@ -254,7 +254,9 @@ class dbprocesso {
 			echo "<br>$query<br>";
 		}
 		
-		$retorno = $this->cDb->consultar ( $query );			
+		//var_dump($retorno);
+		$retorno = $this->cDb->consultar ( $query );
+		//var_dump($retorno);
 		
 		if ($isPorChavePrimaria) {
 			$tamanho = sizeof ( $retorno );

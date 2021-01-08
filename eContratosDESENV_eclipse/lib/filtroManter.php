@@ -7,7 +7,7 @@ class filtroManter extends multiplosConstrutores {
 	
 	static $ID_SESSAO_COUNT_FILTRO_SESSAO = "ID_SESSAO_COUNT_FILTRO_SESSAO";
 	static $CD_CAMPO_SUBSTITUICAO = "[[[[QEEWER_CD_CAMPO_SUBSTITUICAO_EREWFDSFS]]]]";
-	static $NmColCOUNTFiltroManter = "NmColCOUNTFiltroMante";
+	static $NmColCOUNTFiltroManter = "NmColCOUNTFiltroManter";
 	// ...............................................................
 
 	static $nmAtrCdConsultarArquivo = "cdConsultarArquivo";

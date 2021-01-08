@@ -7,6 +7,7 @@ include_once ("dominioPermissaoUsuario.php");
 include_once ("dominioSimNao.php");
 include_once ("dominioQtdObjetosPagina.php");
 include_once ("radiobutton.php");
+include_once ("dominioCoresCrescente.php");
 include_once ("sessao.php");
 include_once (caminho_vos . "vousuario.php");
 require_once (caminho_funcoes . "contrato/dominioTipoContrato.php");
