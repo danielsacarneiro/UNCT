@@ -56,6 +56,7 @@ class dbcontrato extends dbprocesso {
 		
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic(false);
 		$nmTabelaPessoa = vopessoa::getNmTabelaStatic ( false );
+		$nmTabelaLicon = voContratoLicon::getNmTabelaStatic ( false );
 		//$nmTabelaDemandaSolicCompra = voDemandaPL::getNmTabelaStatic(false);
 		
 		$arrayColunasRetornadas = array (
@@ -68,6 +69,14 @@ class dbcontrato extends dbprocesso {
 		$queryJoin .= $nmTabelaContratoInfo . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrAnoContrato;
 		$queryJoin .= " AND " . $nmTabelaContratoInfo . "." . vocontrato::$nmAtrCdContrato. "=" . $nmTabela . "." . vocontrato::$nmAtrCdContrato;
 		$queryJoin .= " AND " . $nmTabelaContratoInfo . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
+		
+		$queryJoin .= "\n left JOIN " . $nmTabelaLicon;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaLicon . "." . voContratoLicon::$nmAtrAnoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrAnoContrato;
+		$queryJoin .= " AND " . $nmTabelaLicon . "." . voContratoLicon::$nmAtrCdContrato. "=" . $nmTabela . "." . vocontrato::$nmAtrCdContrato;
+		$queryJoin .= " AND " . $nmTabelaLicon . "." . voContratoLicon::$nmAtrTipoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
+		$queryJoin .= " AND " . $nmTabelaLicon . "." . voContratoLicon::$nmAtrCdEspecieContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrCdEspecieContrato;
+		$queryJoin .= " AND " . $nmTabelaLicon . "." . voContratoLicon::$nmAtrSqEspecieContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrSqEspecieContrato;
 		
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoa;
 		$queryJoin .= "\n ON ";
@@ -287,6 +296,12 @@ class dbcontrato extends dbprocesso {
 		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrCdProcessoLicContrato . "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrCd;
 		$queryJoin .= "\n AND ";
 		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrCdModalidadeProcessoLicContrato . "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrCdModalidade;
+		/*$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrCdcpl . "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrCdCPL;*/
+		//isto porque nas adesoes a ATA, os Pl´s sao de outros orgaos
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrProcessoLicContrato . " LIKE '%SEFAZ%' ";
+		
 		
 		$queryJoin .= "\n LEFT JOIN $nmTabelaPessoa $nmTabelaPregoeiro" ;
 		$queryJoin .= "\n ON ";

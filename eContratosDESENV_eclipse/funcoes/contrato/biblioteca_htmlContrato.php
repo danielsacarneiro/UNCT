@@ -1179,7 +1179,8 @@ function getInformacaoCPL($registroBanco, $mostrarTodasPortarias = true){
 	if ($nmPregoeiro == null) {
 		//var_dump($registroBanco);		
 		//echo $proclic;
-		$nmPregoeiro = dominioComissaoProcLicitatorio::getNmPregoeiroPorCPL ( $proclic );		
+		$nmPregoeiro = dominioComissaoProcLicitatorio::getNmPregoeiroPorCPL ( $proclic );
+		//echo $nmPregoeiro;
 	} 
 		
 	$cpl = dominioComissaoProcLicitatorio::getDescricao($registroBanco [voProcLicitatorio::$nmAtrCdCPL]);

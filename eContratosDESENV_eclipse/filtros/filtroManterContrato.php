@@ -165,6 +165,7 @@ class filtroManterContrato extends filtroManter {
 		$isHistorico = $this->isHistorico;
 		$nmTabela = $voContrato->getNmTabelaEntidade ( $this->isHistorico );
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic(false);
+		$nmTabelaLicon = voContratoLicon::getNmTabelaStatic ( false );
 		
 		// seta os filtros obrigatorios
 		if ($this->isSetaValorDefault ()) {
@@ -443,8 +444,19 @@ class filtroManterContrato extends filtroManter {
 					$conector  = "\n AND ";
 		}
 		
-		if ($this->licon != null && $this->licon != constantes::$CD_OPCAO_TODOS) {
-			$filtro = $filtro . $conector . "$nmTabela." . vocontrato::$nmAtrInLicomContrato. "=" . getVarComoString($this->licon);				
+		if (isAtributoValido($this->licon)) {
+			$not = "";
+			$liconPlanilha = "$nmTabela.".vocontrato::$nmAtrInLicomContrato. "='S'";
+			if($this->licon == constantes::$CD_NAO){
+				$liconPlanilha = "$nmTabela.".vocontrato::$nmAtrInLicomContrato. "<>'S' OR $nmTabelaLicon." . voContratoLicon::$nmAtrSituacao . " IS NULL ";
+				$not = "NOT";
+			}
+			
+			$filtroTemp = "$nmTabelaLicon." . voContratoLicon::$nmAtrSituacao . " $not IN (" 
+					. getSQLStringFormatadaColecaoIN(array_keys(dominioSituacaoContratoLicon::getColecaoIncluidoSucesso())) . ")";				
+			$filtroTemp .= " OR $liconPlanilha";
+			
+			$filtro = $filtro . $conector . "($filtroTemp)";
 			$conector = "\n AND ";
 		}
 		
