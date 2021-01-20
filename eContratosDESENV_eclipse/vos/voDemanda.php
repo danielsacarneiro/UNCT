@@ -34,6 +34,7 @@ class voDemanda extends voentidade {
 	static $nmAtrCdPessoaRespUNCT = "dem_cdpessoaresp_unct";
 	static $nmAtrFase =  "dem_fase";
 	static $nmAtrInMonitorar =  "dem_inmonitorar";
+	static $nmAtrDtMonitoramento =  "dem_dtmonitoramento";
 	//lembrar que o PRT foi migrado do demandatramitacao para ca
 	static $nmAtrProtocolo = "dtm_prt";
 	

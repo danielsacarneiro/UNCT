@@ -821,7 +821,7 @@ function temPAAPAberto($vocontrato) {
 	}
 	
 	try{
-		$registroContratoTemp = getContratoVigentePorData($vocontrato, getDataHoje());
+		$registroContratoTemp = getContratoVigentePorData($vocontrato, getDataHoje(), true, true);
 	}catch (excecaoChaveRegistroInexistente $ex){
 		throw new excecaoGenerica("Para consulta de PAAP´s, o contrato deve ser estar vigente e inserido em 'informações adicionais'.");		
 	}
@@ -960,7 +960,7 @@ function getContratoConsolidacao($vocontrato){
 	//var_dump($recordset);
 }
 
-function getContratoVigentePorData($vocontrato, $pData = null, $isTpVigenciaMAxSq=false){
+function getContratoVigentePorData($vocontrato, $pData = null, $isTpVigenciaMAxSq=false, $inTrazerVigenciaFutura = false){
 	//$vocontrato = new vocontrato();	
 	$filtro = new filtroManterContrato(false);
 	$filtro->tipo = $vocontrato->tipo;
@@ -980,6 +980,7 @@ function getContratoVigentePorData($vocontrato, $pData = null, $isTpVigenciaMAxS
 		
 	$filtro->isTpVigenciaMAxSq = $isTpVigenciaMAxSq;
 	$filtro->dtVigencia = $pData;
+	$filtro->inTrazerVigenciaFutura = $inTrazerVigenciaFutura;
 	$filtro->voPrincipal = $vocontrato;
 	
 	$db = new dbcontrato();	

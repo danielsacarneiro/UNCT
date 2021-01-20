@@ -98,6 +98,15 @@ function publicar() {
 function proximoTermo() {
 	location.href="proximoTermo.php";
 }
+
+function detalharTermoARegistrar() {
+	funcao = "<?=constantes::$CD_FUNCAO_DETALHAR?>";
+
+    url = "termoARegistrar.php?funcao=" + funcao + "&lupa=S";	
+    abrirJanelaAuxiliar(url, true, false, false);
+	
+}
+
 </SCRIPT>
 <?=setTituloPagina($vo->getTituloJSP())?>
 </HEAD>
@@ -247,6 +256,11 @@ function proximoTermo() {
                        <TD>
                         <TABLE class="barraacoesaux" cellpadding="0" cellspacing="0">
 	                   	<TR> 
+                            <TD class='botaofuncao'>
+                            <?php 
+                            echo getBotaoValidacaoAcesso("bttDetalharTermoARegistrar", "A Registrar", "botaofuncaop", false, false,true,false,"onClick='javascript:detalharTermoARegistrar();' accesskey='r'");
+                            ?>                                                        
+                            </TD>	                   	
                             <?=getBotoesRodape();?>
                             <TD class='botaofuncao'>
                             <?php 

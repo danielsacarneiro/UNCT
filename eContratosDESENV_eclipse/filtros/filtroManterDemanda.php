@@ -16,6 +16,7 @@ class filtroManterDemanda extends filtroManter{
 	static $NmColDhUltimaMovimentacao = "NmColDhUltimaMovimentacao";
 	static $NmColQtdContratos = "NmColQtdContratos";
 	static $NmColDtReferenciaSetorAtual = "NmColDtReferenciaSetorAtual";
+	static $NmColDtLimiteContratoAVencer = "NmColDtLimiteContratoAVencer";
 
 	static $NmAtrCdDemandaInicial = "NmAtrCdDemandaInicial";
 	static $NmAtrCdDemandaFinal = "NmAtrCdDemandaFinal";
@@ -38,6 +39,7 @@ class filtroManterDemanda extends filtroManter{
 	static $ID_REQ_NuTempoVidaMinimo = "ID_REQ_NuTempoVidaMinimo";
 	static $ID_REQ_NuTempoVidaMinimoUltimaTram = "ID_REQ_NuTempoVidaMinimoUltimaTram";
 	static $ID_REQ_InMonitorar = "ID_REQ_InMonitorar";
+	//static $ID_REQ_InDemandaContratosAVencer = "ID_REQ_InDemandaContratosAVencer";
 	
 	static $NmColNuTempoVida = "NmColNuTempoVida";
 	static $NmColNuTempoUltimaTram= "NmColNuTempoUltimaTram";
@@ -89,6 +91,7 @@ class filtroManterDemanda extends filtroManter{
 	var $nuTempoVidaMinimoUltimaTram;
 	var $inCdResponsavelUNCT;
 	var $inMonitorar;
+	var $inDemandasContratosAVencer;
 	var $numPrazoMonitorar;
 	
 	// ...............................................................
@@ -205,6 +208,7 @@ class filtroManterDemanda extends filtroManter{
 		$nmTabelaTramitacao = voDemandaTramitacao::getNmTabelaStatic(false);
 		$nmTabelaTramitacaoDoc = voDemandaTramDoc::getNmTabelaStatic(false);
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic(false);
+		$nmTabelaDadosDemandaContrato = static::$NM_TABELA_DADOS_CONTRATO_DEMANDA;
 		$nmTabelaDemandaPL = voDemandaPL::getNmTabelaStatic(false);
 		$nmTabelaProcLic = voProcLicitatorio::getNmTabelaStatic(false);
 		$nmTabelaPA = voPA::getNmTabelaStatic(false);
@@ -967,7 +971,6 @@ class filtroManterDemanda extends filtroManter{
 		}
 		
 		if($this->nuTempoVidaMinimoUltimaTram != null){
-			//if($this->vodemanda->cdSetorDestino != null){
 			$filtro = $filtro . $conector
 			. filtroConsultarDemandaGestao::getSQLNuTempoUltimaTram($nmTabelaTramitacao, $nmTabela)
 			. " >= "
@@ -977,6 +980,29 @@ class filtroManterDemanda extends filtroManter{
 					$conector  = "\n AND ";
 		}
 		
+		//VERIFICA SE A DATA DO CONTRATO DA DEMANDA JA FOI ULTRaPASSADA - o contrato estah atrasado e sob risco
+		if(isAtributoValido($this->inDemandasContratosAVencer) && getAtributoComoBooleano($this->inDemandasContratosAVencer)){
+			
+			$arrayNomesAtributos = static::getNmAtributosDataACompararDemandasContratoAVencer($nmTabelaDadosDemandaContrato, $nmTabelaContrato);
+			/*$nmTabelaContratoMAX = $nmTabelaContrato;			
+			$nmAtrDataAcompararContratoDemanda = "$nmTabelaDadosDemandaContrato." . vocontrato::$nmAtrDtVigenciaInicialContrato;
+			$nmAtrDataAcompararContratoMAX = "$nmTabelaContratoMAX." . vocontrato::$nmAtrDtVigenciaFinalContrato;*/			
+				
+			$nmAtrDataAcompararContratoDemanda = $arrayNomesAtributos[0];
+			$nmAtrDataAcompararContratoMAX = $arrayNomesAtributos[1];
+			$dataAcomparar = getVarComoDataSQL(somarOuSubtrairDiasNaData(getDataHoje(), constantes::$qts_dias_ALERTA_DEMANDA_CONTRATO_AVENCER));
+			
+			$filtro = $filtro . $conector
+			."("
+			."($nmAtrDataAcompararContratoDemanda IS NOT NULL AND $nmAtrDataAcompararContratoDemanda <= $dataAcomparar)" 
+			. " OR "	
+			. "($nmAtrDataAcompararContratoDemanda IS NULL AND $nmAtrDataAcompararContratoMAX <= $dataAcomparar)" 
+			. ")"	
+			;
+		
+			$conector  = "\n AND ";
+		}
+		
 		$this->formataCampoOrdenacao(new voDemanda());
 		//finaliza o filtro
 		$filtro = parent::getFiltroSQL($filtro, $comAtributoOrdenacao);
@@ -984,6 +1010,15 @@ class filtroManterDemanda extends filtroManter{
 		//echo "Filtro:$filtro<br>";
 
 		return $filtro;
+	}
+	
+	static function getNmAtributosDataACompararDemandasContratoAVencer($nmTabelaContratoMaisAtual){	
+		
+		$nmTabelaDadosDemandaContrato = static::$NM_TABELA_DADOS_CONTRATO_DEMANDA;
+		$nmAtrDataAcompararContratoDemanda = "$nmTabelaDadosDemandaContrato." . vocontrato::$nmAtrDtVigenciaInicialContrato;
+		$nmAtrDataAcompararContratoMAX = "$nmTabelaContratoMaisAtual." . vocontrato::$nmAtrDtVigenciaFinalContrato;
+		
+		return array($nmAtrDataAcompararContratoDemanda,$nmAtrDataAcompararContratoMAX);		
 	}
 	
 	/**

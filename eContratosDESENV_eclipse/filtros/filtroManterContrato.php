@@ -257,24 +257,7 @@ class filtroManterContrato extends filtroManter {
 		
 		if ($this->dtVigenciaFinal != null) {
 			$filtro = $filtro . $conector . $nmTabela . "." . vocontrato::$nmAtrDtVigenciaFinalContrato . "<='" . getDataSQL ( $this->dtVigenciaFinal ) . "'";
-			
-			/*
-			 * $filtro = $filtro . $conector
-			 * . "("
-			 * . $nmTabela. "." .vocontrato::$nmAtrDtVigenciaFinalContrato
-			 * . "<='"
-			 * . getDataSQL($this->voContrato->dtVigenciaFinal)
-			 * . "' OR ("
-			 * . $nmTabela. "." .vocontrato::$nmAtrDtVigenciaInicialContrato
-			 * . "<='"
-			 * . getDataSQL($this->voContrato->dtVigenciaFinal)
-			 * . "' AND "
-			 * . $nmTabela
-			 * . "."
-			 * .vocontrato::$nmAtrDtVigenciaFinalContrato
-			 * . " IS NULL)) ";
-			 */
-			
+						
 			$conector = "\n AND ";
 		}
 		
@@ -294,8 +277,11 @@ class filtroManterContrato extends filtroManter {
 				,vocontrato::$nmAtrAnoContrato
 				, vocontrato::$nmAtrTipoContrato);
 		
+		//data de vigencia tem preferencia sobre o tpvigencia
 		if ($this->dtVigencia != null) {
-			//$pChaveTuplaComparacaoSemSequencial = $nmTabela . "." . vocontrato::$nmAtrCdContrato . "," . $nmTabela . "." . vocontrato::$nmAtrAnoContrato. "," . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
+			
+			//data de vigencia tem preferencia sobre o tpvigencia, se tiver sido setado, eh desconsiderado
+			$this->tpVigencia = "";				
 			
 			$pArrayParam = array(
 					$nmTabela,
@@ -307,12 +293,22 @@ class filtroManterContrato extends filtroManter {
 					vocontrato::$nmAtrDtVigenciaFinalContrato,
 					$this->isTpVigenciaMAxSq,
 					$filtro,
+					$this->inTrazerVigenciaFutura,
 					
 			);
 				
 			$filtro = $filtro . $conector . getSQLDataVigenteArrayParam($pArrayParam);
 			
 			//echo $filtro;
+			$conector = "\n AND ";
+		}else if (isAtributoValido($this->tpVigencia) && $this->tpVigencia != constantes::$CD_OPCAO_TODOS) {
+			if ($this->tpVigencia == dominioTpVigencia::$CD_OPCAO_VIGENTES) {
+				$filtro = $filtro . $conector . getSQLDataVigenteSqSimples ( $nmTabela, vocontrato::$nmAtrDtVigenciaInicialContrato, vocontrato::$nmAtrDtVigenciaFinalContrato );
+			} else if ($this->tpVigencia == dominioTpVigencia::$CD_OPCAO_NAO_VIGENTES) {
+				$filtro = $filtro . $conector . getSQLDataNaoVigenteSqSimples ( $nmTabela, vocontrato::$nmAtrDtVigenciaInicialContrato, vocontrato::$nmAtrDtVigenciaFinalContrato );
+			} else {
+					$filtro = $filtro . $conector . getSQLDataVigenciaFutura($nmTabela, vocontrato::$nmAtrDtVigenciaInicialContrato);
+			}				
 			
 			$conector = "\n AND ";
 		}
@@ -358,16 +354,6 @@ class filtroManterContrato extends filtroManter {
 		
 		if ($this->dtInclusao != null) {
 			$filtro = $filtro . $conector . "DATE($nmTabela" . "." . vocontrato::$nmAtrDhInclusao . ")='" . getDataSQL ( $this->dtInclusao ) . "'";
-			
-			$conector = "\n AND ";
-		}
-		
-		if ($this->tpVigencia != null && $this->tpVigencia != constantes::$CD_OPCAO_TODOS) {
-			if ($this->tpVigencia == dominioTpVigencia::$CD_OPCAO_VIGENTES) {
-				$filtro = $filtro . $conector . getSQLDataVigenteSqSimples ( $nmTabela, vocontrato::$nmAtrDtVigenciaInicialContrato, vocontrato::$nmAtrDtVigenciaFinalContrato );
-			} else {
-				$filtro = $filtro . $conector . getSQLDataNaoVigenteSqSimples ( $nmTabela, vocontrato::$nmAtrDtVigenciaInicialContrato, vocontrato::$nmAtrDtVigenciaFinalContrato );
-			}
 			
 			$conector = "\n AND ";
 		}

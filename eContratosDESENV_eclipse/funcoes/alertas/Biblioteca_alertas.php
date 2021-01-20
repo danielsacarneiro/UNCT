@@ -506,6 +506,8 @@ function enviarEmailUNCT($enviarEmail){
 	imprimeTituloalerta($enviarEmail, $setor);
 	
 	$count = 0;	
+	//demandas com contratos a vencer
+	$mensagem .= getMensagemDemandasDeContratosAVencer($count);
 	//envia demandas monitoradas
 	$mensagem .= getMensagemDemandasMonitoradas($count);	
 	//envia demandas iniciais

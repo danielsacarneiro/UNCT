@@ -13,6 +13,7 @@ class filtroManter extends multiplosConstrutores {
 	static $nmAtrCdConsultarArquivo = "cdConsultarArquivo";
 	static $nmAtrCdAtrOrdenacao = "cdAtrOrdenacao";
 	static $nmAtrCdOrdenacao = "cdOrdenacao";
+	static $nmAtrInTrazerVigenciaFutura = "InTrazerVigenciaFutura";
 	static $nmAtrDtVigencia = "dtVigencia";
 	static $nmAtrTpVigencia = "tpVigencia";
 	static $nmAtrCdHistorico = "cdHistorico";
@@ -24,6 +25,7 @@ class filtroManter extends multiplosConstrutores {
 	
 	var $cdAtrOrdenacao;
 	var $cdOrdenacao;
+	var $inTrazerVigenciaFutura;
 	var $dtVigencia;
 	var $tpVigencia;
 	var $cdHistorico;

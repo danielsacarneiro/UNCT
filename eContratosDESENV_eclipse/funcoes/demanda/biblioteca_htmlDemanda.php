@@ -182,6 +182,7 @@ function isContratoPermiteProrrogacao($voContrato){
 			$prorrExcepcional = $registro[filtroConsultarContratoConsolidacao::$NmColInProrrogacaoExcepcional];			
 			$tpProrrogacao = $vocontratoinfo->inPrazoProrrogacao;
 			$isPrazoProrrogacaoServicoContinuo = $tpProrrogacao == dominioProrrogacaoContrato::$CD_ART57_II;
+			$isPrazoProrrogacaoServicoInformatica = $tpProrrogacao == dominioProrrogacaoContrato::$CD_ART57_IV;
 			//echo "$prorrogavel $prorrExcepcional";			
 			//verifica se o contrato permite prorrogacao
 			//$retorno = getAtributoComoBooleano($prorrogavel) || getAtributoComoBooleano($prorrExcepcional); 
@@ -190,7 +191,7 @@ function isContratoPermiteProrrogacao($voContrato){
 		
 	}
 
-	return array($isContratoPermiteProrrogacao, $isPrazoProrrogacaoServicoContinuo);
+	return array($isContratoPermiteProrrogacao, $isPrazoProrrogacaoServicoContinuo, $isPrazoProrrogacaoServicoInformatica);
 }
 
 function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpDemandaReajuste, $nmDivInformacoesComplementares, $voDemanda = null){
@@ -236,8 +237,9 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 		$arrayPermiteProrrogacao = isContratoPermiteProrrogacao($voContratoDemanda);
 		$permiteProrrogacao = $arrayPermiteProrrogacao[0];
 		$ehServicoContinuo = $arrayPermiteProrrogacao[1];
+		$ehServicoInformatica = $arrayPermiteProrrogacao[2];
 		if($exibirInfoProrrog){
-			if(!$ehServicoContinuo){
+			if(!($ehServicoContinuo || $ehServicoInformatica)){
 				$texto = "ATENÇÃO$countATENCAO: verifique a fundamentação legal para a prorrogação em 'Contratos-Consolidação'";
 				//$html .= $conectorAlerta . getTextoHTMLDestacado($texto);
 				$html .= $conectorAlerta . getTextoLink($texto, "../contrato_consolidacao", null, false, true);

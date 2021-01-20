@@ -16,6 +16,7 @@ CREATE TABLE demanda (
     dem_cdpessoaresp_unct INT,
     dem_fase VARCHAR(100),
     dem_inmonitorar CHAR(1) NULL,
+    dem_dtmonitoramento DATE,
     dtm_prt VARCHAR(25),
     -- dem_prt VARCHAR(25),
     dem_inlegado CHAR(1) NOT NULL DEFAULT 'N',
@@ -40,6 +41,7 @@ ALTER TABLE demanda ADD COLUMN dtm_prt VARCHAR(25) AFTER dem_cdpessoaresp_atja;
 ALTER TABLE demanda ADD COLUMN dem_cdpessoaresp_unct INT AFTER dem_cdpessoaresp_atja;
 ALTER TABLE demanda ADD COLUMN dem_fase VARCHAR(100) AFTER dem_cdpessoaresp_unct;
 ALTER TABLE demanda ADD COLUMN dem_inmonitorar CHAR(1) NULL AFTER dem_fase;
+ALTER TABLE demanda ADD COLUMN dem_dtmonitoramento DATE NULL AFTER dem_inmonitorar;
 
 
 select dem_tipo from demanda where dem_tp_contrato is null group by dem_tipo;
@@ -83,6 +85,7 @@ CREATE TABLE demanda_hist (
 	dem_cdpessoaresp_unct INT,   
     dem_fase VARCHAR(100),
     dem_inmonitorar CHAR(1) NULL,
+    dem_dtmonitoramento DATE,
     dtm_prt VARCHAR(25),
     -- dem_prt VARCHAR(25),
     dem_inlegado CHAR(1) NOT NULL DEFAULT 'N',
@@ -110,6 +113,7 @@ ALTER TABLE demanda_hist ADD COLUMN dtm_prt VARCHAR(25) AFTER dem_cdpessoaresp_a
 ALTER TABLE demanda_hist ADD COLUMN dem_cdpessoaresp_unct INT AFTER dem_cdpessoaresp_atja;
 ALTER TABLE demanda_hist ADD COLUMN dem_fase VARCHAR(100) AFTER dem_cdpessoaresp_unct;
 ALTER TABLE demanda_hist ADD COLUMN dem_inmonitorar CHAR(1) NULL AFTER dem_fase;
+ALTER TABLE demanda_hist ADD COLUMN dem_dtmonitoramento DATE NULL AFTER dem_inmonitorar;
 
 drop table demanda_tram;
 CREATE TABLE demanda_tram (

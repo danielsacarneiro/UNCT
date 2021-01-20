@@ -515,6 +515,13 @@ class dbDemanda extends dbprocesso {
 		}
 		$dhUltimaMov = filtroConsultarDemandaGestao::getSQLDataUltimaMovimentacao($nmTabelaTramitacao, $nmTabela);//"COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrDhInclusao . "," . $nmTabela . "." . voDemanda::$nmAtrDhUltAlteracao . ")";
 		$dtreferencia = filtroConsultarDemandaGestao::getSQLDataBaseTempoVida($nmTabela); //"$nmTabela." . voDemanda::$nmAtrDtReferencia;
+		 
+		//mostra a data do contrato da demanda que venceu ou vencera
+		$atributoDataLimiteDemandaContratoAVencer = filtroManterDemanda::getNmAtributosDataACompararDemandasContratoAVencer($nmTabelaContrato);
+		$atributoDataLimiteDemandaContratoAVencer = getSQLCOALESCE($atributoDataLimiteDemandaContratoAVencer, filtroManterDemanda::$NmColDtLimiteContratoAVencer);
+		
+		//echo "atributos a verificar $atributoDataLimiteDemandaContratoAVencer";
+		
 		$arrayColunasRetornadas = array (
 				$nmTabela . ".*",				
 				"COUNT(*)  AS " . filtroManterDemanda::$NmColQtdContratos,
@@ -524,6 +531,7 @@ class dbDemanda extends dbprocesso {
 				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato,
 				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdEspecieContrato,
 				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato,
+				$atributoDataLimiteDemandaContratoAVencer,
 				$nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdProcLic,
 				$nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrAnoProcLic,
 				$nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdModalidadeProcLic,

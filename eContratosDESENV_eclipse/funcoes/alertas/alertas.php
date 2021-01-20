@@ -274,6 +274,55 @@ function getMensagemContratosNaoIncluidosPlanilha(&$count = 0){
 		$colecao = $db->consultarContratosNaoIncluidosPlanilha();
 
 		/*$coluna1 =array(
+		 constantes::$CD_COLUNA_CHAVE => "Sistema",
+		 constantes::$CD_COLUNA_VALOR => vodemanda::$nmAtrTipo,
+		 constantes::$CD_COLUNA_TP_DADO =>  constantes::$CD_TP_DADO_DOMINIO,
+		 constantes::$CD_COLUNA_NM_CLASSE_DOMINIO =>  "dominioTipoDemanda",
+		 );
+
+		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $coluna1);*/
+
+		$array =array(
+				constantes::$CD_COLUNA_CHAVE => 'TIPO',
+				constantes::$CD_COLUNA_TP_DADO => constantes::$CD_TP_DADO_DOMINIO,
+				constantes::$CD_COLUNA_NM_CLASSE_DOMINIO => "dominioTipoContrato",
+				constantes::$CD_COLUNA_VALOR => voDemandaContrato::$nmAtrTipoContrato,
+		);
+		$colunas = incluirColunaColecaoArray($colunas, $array);
+		$colunas = incluirColunaColecao($colunas, 'NUMERO', voDemandaContrato::$nmAtrCdContrato);
+		$colunas = incluirColunaColecao($colunas, 'ANO', voDemandaContrato::$nmAtrAnoContrato);
+
+		$array =array(
+				constantes::$CD_COLUNA_CHAVE => 'ESPECIE',
+				constantes::$CD_COLUNA_TP_DADO => constantes::$CD_TP_DADO_DOMINIO,
+				constantes::$CD_COLUNA_NM_CLASSE_DOMINIO => "dominioEspeciesContrato",
+				constantes::$CD_COLUNA_VALOR => voDemandaContrato::$nmAtrCdEspecieContrato,
+		);
+		$colunas = incluirColunaColecaoArray($colunas, $array);
+		$colunas = incluirColunaColecao($colunas, 'NUMERO', voDemandaContrato::$nmAtrSqEspecieContrato);
+
+		//$msg = getCorpoMensagemDemandaPorColecao($assunto, $filtro, $colunasAAcrescentar, false);
+		//$msg = getCorpoMensagemDemandaContratoColecao($assunto, $colecao, $colunasAAcrescentar);
+		$msg = getCorpoMensagemPorColecao($assunto, $colecao, $colunas);
+
+
+	} catch ( Exception $ex ) {
+		$msg = $ex->getMessage ();
+	}
+
+	return $msg;
+}
+
+function getMensagemContratosNaoRegistradosLivro(&$count = 0){
+	$assunto = "Contratos não registrados:";
+	$assunto = getSequenciaAssunto($assunto, $count);
+
+	try {
+
+		$db = new dbRegistroLivro();
+		$colecao = $db->consultarContratosNaoRegistrados();
+
+		/*$coluna1 =array(
 				constantes::$CD_COLUNA_CHAVE => "Sistema",
 				constantes::$CD_COLUNA_VALOR => vodemanda::$nmAtrTipo,
 				constantes::$CD_COLUNA_TP_DADO =>  constantes::$CD_TP_DADO_DOMINIO,
@@ -300,7 +349,14 @@ function getMensagemContratosNaoIncluidosPlanilha(&$count = 0){
 		);
 		$colunas = incluirColunaColecaoArray($colunas, $array);		
 		$colunas = incluirColunaColecao($colunas, 'NUMERO', voDemandaContrato::$nmAtrSqEspecieContrato);
-
+		$array =array(
+				constantes::$CD_COLUNA_CHAVE => 'DATA INCL.',
+				constantes::$CD_COLUNA_TP_DADO => constantes::$CD_TP_DADO_DATA,
+				//constantes::$CD_COLUNA_NM_CLASSE_DOMINIO => "dominioTipoContrato",
+				constantes::$CD_COLUNA_VALOR => voDemandaContrato::$nmAtrDhInclusao,
+		);
+		$colunas = incluirColunaColecaoArray($colunas, $array);
+		
 		//$msg = getCorpoMensagemDemandaPorColecao($assunto, $filtro, $colunasAAcrescentar, false);
 		//$msg = getCorpoMensagemDemandaContratoColecao($assunto, $colecao, $colunasAAcrescentar);
 		$msg = getCorpoMensagemPorColecao($assunto, $colecao, $colunas);
@@ -458,13 +514,14 @@ function getMensagemDemandasMonitoradas(&$count = 0){
 	return $msg;
 }
 
-function getMensagemDemandaIniciais(&$count = 0){
-	$assunto = "DEMANDAS A FAZER:";
+function getMensagemDemandasDeContratosAVencer(&$count = 0){
+	$assunto = "URGENTE => DEMANDAS CUJOS CONTRATOS VENCERAM OU VENCERÃO EM BREVE:";
+	$assunto = getTextoHTMLDestacado($assunto) ;
 	$assunto = getSequenciaAssunto($assunto, $count);
 	try {
 		$filtro = new filtroManterDemanda ( false );
 		$voDemanda = new voDemanda ();
-		$dbprocesso = $voDemanda->dbprocesso;
+		$dbprocesso = new dbDemanda();
 		$filtro->voPrincipal = $voDemanda;
 		$filtro->isValidarConsulta = false;	
 		$filtro->setaFiltroConsultaSemLimiteRegistro ();
@@ -480,17 +537,12 @@ function getMensagemDemandaIniciais(&$count = 0){
 		);
 
 		$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_UNCT;
-		
-		//$filtro->prioridadeExcludente = dominioPrioridadeDemanda::$CD_PRIORI_BAIXA;
-		/*$filtro->vocontrato->cdAutorizacao = array (
-				dominioAutorizacao::$CD_AUTORIZ_SAD
-		);*/
-		/*$filtro->vodemanda->fase = constantes::$CD_OPCAO_NENHUM;
-		$filtro->inOR_AND_Fase = constantes::$CD_OPCAO_AND;*/
-		
-		//$filtro->inCdResponsavelUNCT = constantes::$CD_OPCAO_NENHUM;
-		//$filtro->cdAtrOrdenacao = filtroManterDemanda::$NmColNuTempoUltimaTram;
-		$filtro->cdAtrOrdenacao = voDemanda::$nmAtrCdPessoaRespUNCT . "," . filtroManterDemanda::$NmColNuTempoUltimaTram;		
+		//traz as demandas que estao com os contratos vencidos ou prestes a vencer
+		$filtro->inDemandasContratosAVencer = true;		
+		$filtro->prioridadeExcludente = dominioPrioridadeDemanda::$CD_PRIORI_BAIXA;
+
+		//$filtro->cdAtrOrdenacao = voDemanda::$nmAtrCdPessoaRespUNCT . "," . filtroManterDemanda::$NmColNuTempoUltimaTram;		
+		$filtro->cdAtrOrdenacao =  filtroManterDemanda::$NmColNuTempoUltimaTram . " DESC ";
 
 		$colecao = $dbprocesso->consultarTelaConsulta ( $voDemanda, $filtro );
 				
@@ -501,7 +553,14 @@ function getMensagemDemandaIniciais(&$count = 0){
 		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);
 		
 		$array =array(
-				constantes::$CD_COLUNA_CHAVE => 'PRAZO',
+				constantes::$CD_COLUNA_CHAVE => 'DT.<BR>REFERENCIA',
+				constantes::$CD_COLUNA_VALOR => filtroManterDemanda::$NmColDtLimiteContratoAVencer,
+				constantes::$CD_COLUNA_TP_DADO =>  constantes::$CD_TP_DADO_DATA,
+		);
+		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);
+		
+		$array =array(
+				constantes::$CD_COLUNA_CHAVE => 'NO SETOR(dias)',
 				constantes::$CD_COLUNA_VALOR => filtroConsultarDemandaGestao::$NmColNuTempoUltimaTram,
 				constantes::$CD_COLUNA_TP_DADO =>  constantes::$TAMANHO_CODIGOS_SAFI,
 				constantes::$CD_COLUNA_VL_REFERENCIA =>  15,
@@ -510,6 +569,67 @@ function getMensagemDemandaIniciais(&$count = 0){
 		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);
 		
 		
+		$msg = getCorpoMensagemDemandaContratoColecao($assunto, $colecao, $colunasAAcrescentar);
+
+	} catch ( Exception $ex ) {
+		$msg = $ex->getMessage ();
+	}
+
+	return $msg;
+}
+
+function getMensagemDemandaIniciais(&$count = 0){
+	$assunto = "DEMANDAS A FAZER:";
+	$assunto = getSequenciaAssunto($assunto, $count);
+	try {
+		$filtro = new filtroManterDemanda ( false );
+		$voDemanda = new voDemanda ();
+		$dbprocesso = $voDemanda->dbprocesso;
+		$filtro->voPrincipal = $voDemanda;
+		$filtro->isValidarConsulta = false;
+		$filtro->setaFiltroConsultaSemLimiteRegistro ();
+
+		$filtro->vodemanda->situacao = array (
+				dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_ABERTA,
+				dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO
+		);
+		/*$filtro->vodemanda->tipo = array_keys ( dominioTipoDemanda::getColecaoTipoDemandaSAD () );*/
+		$filtro->tipoExcludente = array(
+				dominioTipoDemanda::$CD_TIPO_DEMANDA_LICON,
+				dominioTipoDemanda::$CD_TIPO_DEMANDA_PORTALTRANSPARENCIA
+		);
+
+		$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_UNCT;
+
+		//$filtro->prioridadeExcludente = dominioPrioridadeDemanda::$CD_PRIORI_BAIXA;
+		/*$filtro->vocontrato->cdAutorizacao = array (
+		 dominioAutorizacao::$CD_AUTORIZ_SAD
+		 );*/
+		/*$filtro->vodemanda->fase = constantes::$CD_OPCAO_NENHUM;
+		 $filtro->inOR_AND_Fase = constantes::$CD_OPCAO_AND;*/
+
+		//$filtro->inCdResponsavelUNCT = constantes::$CD_OPCAO_NENHUM;
+		//$filtro->cdAtrOrdenacao = filtroManterDemanda::$NmColNuTempoUltimaTram;
+		$filtro->cdAtrOrdenacao = voDemanda::$nmAtrCdPessoaRespUNCT . "," . filtroManterDemanda::$NmColNuTempoUltimaTram;
+
+		$colecao = $dbprocesso->consultarTelaConsulta ( $voDemanda, $filtro );
+
+		$array =array(
+				constantes::$CD_COLUNA_CHAVE => 'RESPONSÁVEL',
+				constantes::$CD_COLUNA_VALOR => filtroManterDemanda::$NM_COL_NOME_RESP_UNCT,
+		);
+		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);
+
+		$array =array(
+				constantes::$CD_COLUNA_CHAVE => 'PRAZO',
+				constantes::$CD_COLUNA_VALOR => filtroConsultarDemandaGestao::$NmColNuTempoUltimaTram,
+				constantes::$CD_COLUNA_TP_DADO =>  constantes::$TAMANHO_CODIGOS_SAFI,
+				constantes::$CD_COLUNA_VL_REFERENCIA =>  15,
+				constantes::$CD_COLUNA_TP_VALIDACAO =>  constantes::$CD_ALERTA_TP_VALIDACAO_MAIORQUE,
+		);
+		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);
+
+
 		$msg = getCorpoMensagemDemandaContratoColecao($assunto, $colecao, $colunasAAcrescentar);
 
 	} catch ( Exception $ex ) {

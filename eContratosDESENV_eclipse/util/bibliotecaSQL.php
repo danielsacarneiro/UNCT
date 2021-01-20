@@ -85,6 +85,19 @@ function getSQLDataNaoVigenteSqSimples($pNmTableEntidade, $pNmColDtInicioVigenci
 	
 	return getSQLDataNaoVigente ( $pNmTableEntidade, null, null, null, $pDataComparacao, $pNmColDtInicioVigencia, $pNmColDtFimVigencia );
 }
+function getSQLDataVigenciaFutura($pNmTableEntidade, $pNmColDtInicioVigencia, $pDataComparacao=null) {
+	if($pDataComparacao == null){
+		$pDataComparacao = getDataHoje();
+	}
+	if ($pNmTableEntidade != null) {
+		$pNmTableEntidade = "$pNmTableEntidade.";
+	}
+	$nmColDtInicioVigencia = $pNmTableEntidade . $pNmColDtInicioVigencia;
+
+	$sqlFinal = "( " . $nmColDtInicioVigencia . " > " . getVarComoDataSQL ( $pDataComparacao ) . ")";
+
+	return $sqlFinal;
+}
 function getSQLDataNaoVigente($pNmTableEntidade, $pNmColSequencial, $pChaveTuplaComparacaoSemSequencial, $pChaveGroupBy, $pDataComparacao, $pNmColDtInicioVigencia, $pNmColDtFimVigencia) {
 	if ($pNmTableEntidade != null) {
 		$pNmTableEntidade = "$pNmTableEntidade.";
@@ -140,6 +153,7 @@ function getSQLDataVigenteArrayParam($pArrayParam) {
 	$pNmColDtFimVigencia = $pArrayParam[6];
 	$isTrazerMaiorSqVigente = $pArrayParam[7];	
 	$sqlFiltroInternoMaiorSq = $pArrayParam[8];
+	$isTrazerVigenciaFutura = $pArrayParam[9];
 
 	/*if ($pNmTableEntidade != null) {
 		$pNmTableEntidade = "$pNmTableEntidade.";
@@ -163,7 +177,13 @@ function getSQLDataVigenteArrayParam($pArrayParam) {
 	$nmColDtFimVigencia = "$pNmTableEntidade." . $pNmColDtFimVigencia;
 	
 	// $pDataComparacao = "'" . $pDataComparacao . "'";	
-	$sqlComparacaoDatas = "(( " . getVarComoDataSQL ( $pDataComparacao ) . " BETWEEN " . $nmColDtInicioVigencia . "\n AND " . $nmColDtFimVigencia . "\n ) OR ( " . $nmColDtInicioVigencia . " <= " . getVarComoDataSQL ( $pDataComparacao ) . " " . "\n AND " . $nmColDtFimVigencia . " IS NULL" . "))";
+	$sqlComparacaoDatas = "(( " . getVarComoDataSQL ( $pDataComparacao ) . " BETWEEN " . $nmColDtInicioVigencia . "\n AND " . $nmColDtFimVigencia . "\n ) OR ( " . $nmColDtInicioVigencia . " <= " . getVarComoDataSQL ( $pDataComparacao ) . "\n AND " . $nmColDtFimVigencia . " IS NULL" . ")";
+	
+	if($isTrazerVigenciaFutura){
+		$sqlComparacaoDatas .= "\n OR ( " . $nmColDtInicioVigencia . " > " . getVarComoDataSQL ( $pDataComparacao ) . ")";
+	}
+	
+	$sqlComparacaoDatas .= ")";
 	
 	$sqlFinal = "($sqlComparacaoDatas";
 	

@@ -1500,16 +1500,19 @@ class dbcontrato extends dbprocesso {
 			. ",$nmTabela." . voDemandaContrato::$nmAtrCdEspecieContrato
 			. ",$nmTabela." . voDemandaContrato::$nmAtrSqEspecieContrato;
 			
-			$arrayTemos = array(
+			/*$arrayTermos = array(
 					dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER,
 					dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_TERMOADITIVO,
+					dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_RERRATIFICACAO,
 					dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_APOSTILAMENTO,
-			);
+			);*/
+			
+			$arrayTermos = array_keys(dominioEspeciesContrato::getColecaoImportacaoPlanilha());
 	
 			$query .= " SELECT * ";
 			$query .= " FROM " . $nmTabela;
 			$query .= " WHERE "
-			. "$nmTabela." .  voDemandaContrato::$nmAtrCdEspecieContrato . "  IN (". getSQLStringFormatadaColecaoIN($arrayTemos, true).") AND " 
+			. "$nmTabela." .  voDemandaContrato::$nmAtrCdEspecieContrato . "  IN (". getSQLStringFormatadaColecaoIN($arrayTermos, true).") AND " 
 			. " NOT EXISTS (SELECT 'X' FROM " . $nmTabelaContrato 
 			. " WHERE $nmTabela." . voDemandaContrato::$nmAtrAnoContrato . "= $nmTabelaContrato.". vocontrato::$nmAtrAnoContrato 
 			. " AND $nmTabela." . voDemandaContrato::$nmAtrTipoContrato . "= $nmTabelaContrato.". vocontrato::$nmAtrTipoContrato

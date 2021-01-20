@@ -228,7 +228,7 @@ function iniciar(){
 	        $comboPrioridade = new select(dominioPrioridadeDemanda::getColecao());
 	        $selectExercicio = selectExercicio::getSelectColecaoAnoInicio();
 	        
-	        $votram->dtReferencia = dtHoje;
+	        $votram->dtReferencia = getDataHoje();
 	        
 	        $complementoHTML = "";
 	        

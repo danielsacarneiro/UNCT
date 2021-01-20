@@ -48,7 +48,50 @@ include_once (caminho_funcoes."contrato/dominioEspeciesContrato.php");
     	$queryJoin .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrSqEspecieContrato;
     	 
         return parent::consultarMontandoQueryTelaConsulta ( $vo, $filtro, $arrayColunasRetornadas, $queryJoin );        
-    }    
+    }   
+    
+    function consultarContratosNaoRegistrados(){
+    	$retorno = "";
+    
+    	$vo = new voDemandaContrato();
+    	$nmTabela = $vo->getNmTabelaEntidade(false);
+    	$nmTabelaRegistro = voRegistroLivro::getNmTabela();
+    	//$nmTabelaDemandaSolicCompra = voDemandaPL::getNmTabelaStatic(false);
+    	$groupby = "$nmTabela." . voDemandaContrato::$nmAtrAnoContrato
+    	. ",$nmTabela." . voDemandaContrato::$nmAtrTipoContrato
+    	. ",$nmTabela." . voDemandaContrato::$nmAtrCdContrato
+    	. ",$nmTabela." . voDemandaContrato::$nmAtrCdEspecieContrato
+    	. ",$nmTabela." . voDemandaContrato::$nmAtrSqEspecieContrato;
+    		    		
+    	$arrayTermos = array_keys(dominioEspeciesContrato::getColecaoImportacaoPlanilha());
+    
+    	$query .= " SELECT * ";
+    	$query .= " FROM " . $nmTabela;
+    	$query .= " WHERE "
+    			. "$nmTabela." .  voDemandaContrato::$nmAtrCdEspecieContrato . "  IN (". getSQLStringFormatadaColecaoIN($arrayTermos, true).") AND "
+    					. " NOT EXISTS (SELECT 'X' FROM " . $nmTabelaRegistro
+    					. " WHERE $nmTabela." . voDemandaContrato::$nmAtrAnoContrato . "= $nmTabelaRegistro.". vocontrato::$nmAtrAnoContrato
+    					. " AND $nmTabela." . voDemandaContrato::$nmAtrTipoContrato . "= $nmTabelaRegistro.". vocontrato::$nmAtrTipoContrato
+    					. " AND $nmTabela." . voDemandaContrato::$nmAtrCdContrato . "= $nmTabelaRegistro.". vocontrato::$nmAtrCdContrato
+    					. " AND $nmTabela." . voDemandaContrato::$nmAtrCdEspecieContrato . "= $nmTabelaRegistro.". vocontrato::$nmAtrCdEspecieContrato
+    					. " AND $nmTabela." . voDemandaContrato::$nmAtrSqEspecieContrato . "= $nmTabelaRegistro.". vocontrato::$nmAtrSqEspecieContrato
+    					. ")\n";
+
+    	$query .= " AND DATE($nmTabela." .  voDemandaContrato::$nmAtrDhInclusao . ") >= " . getVarComoDataSQL("01/09/2020");
+    	$query .= " group by $groupby";
+    	
+    	$arrayGroupby = array(voDemandaContrato::$nmAtrAnoContrato . " DESC ",
+    							voDemandaContrato::$nmAtrTipoContrato,
+    							voDemandaContrato::$nmAtrCdEspecieContrato,
+    					);
+    	
+    	$stringOrderBy = "$nmTabela." .  voDemandaContrato::$nmAtrDhInclusao . " DESC," . getSQLStringFormatadaColecaoIN($arrayGroupby);
+    	$query .= " order by $stringOrderBy";
+    
+    	$retorno = parent::consultarEntidade ( $query, false);
+    
+    	return $retorno;
+    }
     
     function getSQLValuesInsert($vo){    			
 		$colecaoAtributos = array(
