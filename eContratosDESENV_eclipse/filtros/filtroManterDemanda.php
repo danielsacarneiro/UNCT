@@ -400,19 +400,24 @@ class filtroManterDemanda extends filtroManter{
 		}
 		
 		if($this->vodemanda->cdSetorDestino != null){
+			$cdSetorDestino = $this->vodemanda->cdSetorDestino;
+			if(is_array($cdSetorDestino)){
+				$strComparacaoDestino = " IN (" . getSQLStringFormatadaColecaoIN($cdSetorDestino) . ")";
+			}else{
+				$strComparacaoDestino = " = $cdSetorDestino";
+			}
+			
 			$filtro = $filtro . $conector
 			. " (("
 			. $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrCdSetorDestino
 			. " IS NULL AND "
 			.$nmTabela. "." .voDemanda::$nmAtrCdSetor
-			. " = "
-			. $this->vodemanda->cdSetorDestino			
+			. $strComparacaoDestino			
 			. " ) OR ("
 			. $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrCdSetorDestino
 			. " IS NOT NULL AND "
 			. $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrCdSetorDestino
-			. " = "
-			. $this->vodemanda->cdSetorDestino
+			. $strComparacaoDestino
 			. "))";
 										
 			$conector  = "\n AND ";

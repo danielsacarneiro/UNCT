@@ -535,8 +535,8 @@ function getMensagemDemandasDeContratosAVencer(&$count = 0){
 				dominioTipoDemanda::$CD_TIPO_DEMANDA_LICON,
 				dominioTipoDemanda::$CD_TIPO_DEMANDA_PORTALTRANSPARENCIA
 		);
-
-		$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_UNCT;
+		
+		$filtro->vodemanda->cdSetorDestino = array(dominioSetor::$CD_SETOR_DIFIN, dominioSetor::$CD_SETOR_UNCT);
 		//traz as demandas que estao com os contratos vencidos ou prestes a vencer
 		$filtro->inDemandasContratosAVencer = true;		
 		$filtro->prioridadeExcludente = dominioPrioridadeDemanda::$CD_PRIORI_BAIXA;
@@ -553,12 +553,20 @@ function getMensagemDemandasDeContratosAVencer(&$count = 0){
 		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);
 		
 		$array =array(
+				constantes::$CD_COLUNA_CHAVE => 'SETOR',
+				constantes::$CD_COLUNA_TP_DADO => constantes::$CD_TP_DADO_DOMINIO,
+				constantes::$CD_COLUNA_NM_CLASSE_DOMINIO => "dominioSetor",
+				constantes::$CD_COLUNA_VALOR => voDemandaTramitacao::$nmAtrCdSetorDestino,
+		);
+		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);
+		
+		$array =array(
 				constantes::$CD_COLUNA_CHAVE => 'DT.<BR>REFERENCIA',
 				constantes::$CD_COLUNA_VALOR => filtroManterDemanda::$NmColDtLimiteContratoAVencer,
 				constantes::$CD_COLUNA_TP_DADO =>  constantes::$CD_TP_DADO_DATA,
 		);
 		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);
-		
+				
 		$array =array(
 				constantes::$CD_COLUNA_CHAVE => 'NO SETOR(dias)',
 				constantes::$CD_COLUNA_VALOR => filtroConsultarDemandaGestao::$NmColNuTempoUltimaTram,

@@ -651,9 +651,14 @@ class dbDemanda extends dbprocesso {
 	
 		// Para o caso de se desejar ordenar pela primeira vez que foi encaminhada ao setor atual selecionado pelo usuario
 		if ($isSetorAtualSelecionado) {
+			$compararSetorAtual = "= $cdSetorAtual";
+			if(is_array($cdSetorAtual)){
+				$compararSetorAtual = " IN (" . getSQLStringFormatadaColecaoIN($cdSetorAtual). ")";
+			}
 			// echo "tem";
 			$queryJoin .= "\n LEFT JOIN (";
-			$queryJoin .= " SELECT MIN(" . voDemandaTramitacao::$nmAtrSq . ") AS " . voDemandaTramitacao::$nmAtrSq . "," . $atributosGroup . " FROM " . $nmTabelaTramitacao . " WHERE " . voDemandaTramitacao::$nmAtrCdSetorDestino . " = " . $cdSetorAtual . " GROUP BY " . $atributosGroup;
+			$queryJoin .= " SELECT MIN(" . voDemandaTramitacao::$nmAtrSq . ") AS " . voDemandaTramitacao::$nmAtrSq . "," . $atributosGroup . " FROM " . $nmTabelaTramitacao 
+			. " WHERE " . voDemandaTramitacao::$nmAtrCdSetorDestino . " $compararSetorAtual GROUP BY " . $atributosGroup;
 			$queryJoin .= ") $nmTabelaMINDestinoTramitacao ";
 			$queryJoin .= "\n ON " . $nmTabela . "." . voDemandaTramitacao::$nmAtrAno . " = $nmTabelaMINDestinoTramitacao." . voDemandaTramitacao::$nmAtrAno;
 			$queryJoin .= "\n AND " . $nmTabela . "." . voDemandaTramitacao::$nmAtrCd . " = $nmTabelaMINDestinoTramitacao." . voDemandaTramitacao::$nmAtrCd;
@@ -1114,7 +1119,7 @@ class dbDemanda extends dbprocesso {
 		
 		if ($vo->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA) {
 			
-			$this->isExclusaoPermitida ( $vo, "fechamento" );
+			//$this->isExclusaoPermitida ( $vo, "fechamento" );
 			
 			//verifica se o contrato foi incluido em contratoinfo
 			$vocontratoInfo = new voContratoInfo();
@@ -1302,8 +1307,10 @@ class dbDemanda extends dbprocesso {
 	function existeDemandaAbertaContratoProrrogacao($voDemanda) {
 		$retorno = false;
 		//$voDemanda = new voDemanda();
+		$isSituacaoFechada = $voDemanda->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA;
 		$vocontrato = $voDemanda->getContrato();
-		if($vocontrato != null){
+		//se a situacao eh pra fechar, nao precisa validar
+		if(!$isSituacaoFechada && $vocontrato != null){
 			$filtro = new filtroManterDemanda(false);
 			$filtro->vocontrato = new vocontrato();
 			$filtro->vodemanda = new voDemanda();
@@ -1330,6 +1337,7 @@ class dbDemanda extends dbprocesso {
 	
 	function incluirColecaoDemandaContrato($voDemanda) {		
 		$colecao = $voDemanda->colecaoContrato;
+		
 		foreach ( $colecao as $voContrato ) {
 			if(!$this->existeDemandaAbertaContratoProrrogacao($voDemanda)){
 				$voDemContrato = new voDemandaContrato ();
