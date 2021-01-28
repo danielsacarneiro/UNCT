@@ -532,30 +532,58 @@ class filtroManterDemanda extends filtroManter{
 					$conector  = "\n AND ";
 		}		
 		
-		if(isAtributoValido($this->inMonitorar)){				
-			$filtro = $filtro . $conector
-			. $nmTabela . "." .voDemanda::$nmAtrInMonitorar . " = " . getVarComoString($this->inMonitorar);
-			;
-		
-			$conector  = "\n AND ";
-			if($this->numPrazoMonitorar != null){
-				/*$filtro = $filtro . $conector
-				. " (("
-						. $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrCdSetorDestino
-						. " IS NULL AND " 
-						. getDataSQLDiferencaDias("$nmTabela." .voDemanda::$nmAtrDtReferencia, getVarComoDataSQL(getDataHoje()))
-						. " >= " . vodemanda::$NUM_PRAZO_MONITORAMENTO
-						. " ) OR ("
-						. $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrCdSetorDestino
-						. " IS NOT NULL AND "
-						. getDataSQLDiferencaDias("$nmTabelaTramitacao." .voDemandaTramitacao::$nmAtrDtReferencia, getVarComoDataSQL(getDataHoje()))
-						. " >= " . vodemanda::$NUM_PRAZO_MONITORAMENTO
-						. "))";	*/
-
-						$filtro = $filtro . $conector
-						. filtroConsultarDemandaGestao::getSQLNuTempoUltimaTram($nmTabelaTramitacao, $nmTabela) . " >= " . vodemanda::$NUM_PRAZO_MONITORAMENTO;						
-						
+		if(isAtributoValido($this->inMonitorar)){			
+			
+			/*if($this->inMonitorar == constantes::$CD_SIM || $this->inMonitorar == voDemanda::$CD_MONITORAR_POR_DATA){
+				//valida se o campo data de inicio de monitoramento foi preenchido
+				$filtroTempx .= " ($nmTabela." . voDemanda::$nmAtrDtMonitoramento . " IS NULL"
+						." OR ($nmTabela." . voDemanda::$nmAtrDtMonitoramento . " IS NOT NULL"
+								." AND $nmTabela.". voDemanda::$nmAtrDtMonitoramento . " <= DATE(NOW())))";		
+				$conectorInterno  = "\n AND ";
 			}
+			
+			if($this->inMonitorar == constantes::$CD_SIM){
+				if($this->numPrazoMonitorar != null){
+					$filtroTempx .= " $conectorInterno "
+							. filtroConsultarDemandaGestao::getSQLNuTempoUltimaTram($nmTabelaTramitacao, $nmTabela)
+							. " >= " . vodemanda::$NUM_PRAZO_MONITORAMENTO;
+						$conectorInterno  = "\n AND ";
+				}
+			}*/
+				
+			
+			if($this->inMonitorar != voDemanda::$CD_MONITORAR_POR_DATA){
+				if($this->inMonitorar == constantes::$CD_SIM){
+					$filtroTempx = " $nmTabela." .voDemanda::$nmAtrInMonitorar . " = 'S'";
+				}else{
+					$filtroTempx = " ($nmTabela." .voDemanda::$nmAtrInMonitorar . " = 'N'"
+							. " OR $nmTabela." .voDemanda::$nmAtrInMonitorar . " IS NULL)";
+				}
+			}else{
+				$filtroTempx = " ($nmTabela." .voDemanda::$nmAtrInMonitorar . " = 'S'";
+				$conectorInterno  = "\n AND ";
+				//valida se o campo data de inicio de monitoramento foi preenchido
+				$filtroTempx .= " $conectorInterno ($nmTabela." . voDemanda::$nmAtrDtMonitoramento . " IS NULL"
+						." OR ($nmTabela." . voDemanda::$nmAtrDtMonitoramento . " IS NOT NULL"
+								." AND $nmTabela.". voDemanda::$nmAtrDtMonitoramento . " <= DATE(NOW())))";
+				$conectorInterno  = "\n AND ";
+				
+				if($this->numPrazoMonitorar != null){
+					$filtroTempx .= " $conectorInterno "
+					. filtroConsultarDemandaGestao::getSQLNuTempoUltimaTram($nmTabelaTramitacao, $nmTabela)
+					. " >= " . vodemanda::$NUM_PRAZO_MONITORAMENTO;
+					$conectorInterno  = "\n AND ";
+				}		
+				
+				$filtroTempx .= ")";
+				$conectorInterno = "";				
+			}
+		
+						
+			$filtro = $filtro . $conector . "$filtroTempx";
+			
+			$conector  = "\n AND ";		
+
 		}
 		
 		if($this->inSEI != null){			

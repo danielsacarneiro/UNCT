@@ -440,7 +440,7 @@ class dominio extends multiplosConstrutores {
 			if(!$isDetalhamento || ($isDetalhamento && $checked)){
 				$html .= "\n".$conectorAntes 
 					//. getCheckBoxBoolean($id, $nm, $chave, $checked, "$javascript $htmlAdicional", static::getDescricaoStatic($chave,$colecao))
-					. getCheckBoxArray($arrayCheck)
+					. "|". getCheckBoxArray($arrayCheck)
 					. "<br>";
 			}
 			

@@ -238,6 +238,7 @@ function getMensagemSistemasExternos(&$count = 0){
 		$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_UNCT;
 		$filtro->cdAtrOrdenacao = filtroManterDemanda::$NmColNuTempoUltimaTram;
 		$filtro->inDesativado = constantes::$CD_NAO;
+		$filtro->voPrincipal = $voDemanda;
 		
 		$coluna1 =array(
 				constantes::$CD_COLUNA_CHAVE => "Sistema",
@@ -474,7 +475,7 @@ function getMensagemDemandasMonitoradas(&$count = 0){
 				dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO
 		);
 		
-		$filtro->inMonitorar = constantes::$CD_SIM;
+		$filtro->inMonitorar = voDemanda::$CD_MONITORAR_POR_DATA;
 		$filtro->numPrazoMonitorar = voDemanda::$NUM_PRAZO_MONITORAMENTO;
 
 		//$filtro->inCdResponsavelUNCT = constantes::$CD_OPCAO_NENHUM;
@@ -608,6 +609,8 @@ function getMensagemDemandaIniciais(&$count = 0){
 		);
 
 		$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_UNCT;
+		//isto porque as monitoradas ja sao exibidas em outra colecao de mensagem
+		$filtro->inMonitorar = constantes::$CD_NAO;
 
 		//$filtro->prioridadeExcludente = dominioPrioridadeDemanda::$CD_PRIORI_BAIXA;
 		/*$filtro->vocontrato->cdAutorizacao = array (

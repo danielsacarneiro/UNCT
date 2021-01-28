@@ -14,6 +14,7 @@ include_once (caminho_funcoes . "demanda/biblioteca_htmlDemanda.php");
 class voDemanda extends voentidade {
 	static $NUM_PRAZO_MONITORAMENTO = 5;
 	static $MSG_IN_MONITORAR = "Permite aviso por email.";
+	static $CD_MONITORAR_POR_DATA = "CD_MONITORAR_POR_DATA";
 	
 	static $ID_REQ_DIV_REAJUSTE_MONTANTE_A = "ID_REQ_DIV_REAJUSTE_MONTANTE_A";
 	static $ID_REQ_InTemContrato  = "InTemContrato";	
@@ -56,6 +57,7 @@ class voDemanda extends voentidade {
 	var $cdPessoaRespUNCT = "";
 	var $fase = "";
 	var $inMonitorar = "";
+	var $dtMonitoramento = "";
 	
 	var $prt = "";
 	var $dbprocesso = null;
@@ -135,6 +137,7 @@ class voDemanda extends voentidade {
 				self::$nmAtrCdPessoaRespUNCT,
 				self::$nmAtrFase,
 				self::$nmAtrInMonitorar,
+				self::$nmAtrDtMonitoramento,
 				self::$nmAtrProtocolo,
 				self::$nmAtrInLegado
 		);
@@ -225,6 +228,7 @@ class voDemanda extends voentidade {
 		$this->cdPessoaRespUNCT = $registrobanco [self::$nmAtrCdPessoaRespUNCT];
 		$this->fase = $registrobanco [self::$nmAtrFase];
 		$this->inMonitorar = $registrobanco [self::$nmAtrInMonitorar];
+		$this->dtMonitoramento = $registrobanco [self::$nmAtrDtMonitoramento];
 		
 		$this->prt = $registrobanco[self::$nmAtrProtocolo];
 		$this->prt = voDemandaTramitacao::getNumeroPRTComMascara($this->prt, false);
@@ -265,6 +269,10 @@ class voDemanda extends voentidade {
 		$this->cdPessoaRespUNCT = @$_POST [self::$nmAtrCdPessoaRespUNCT];
 		$this->fase = @$_POST [voDemanda::$nmAtrFase];
 		$this->inMonitorar = @$_POST [voDemanda::$nmAtrInMonitorar];
+		
+		if($this->inMonitorar == constantes::$CD_SIM){
+			$this->dtMonitoramento = @$_POST [self::$nmAtrDtMonitoramento];
+		}
 		
 		$this->prt = @$_POST[self::$nmAtrProtocolo];
 		$this->inLegado = @$_POST [self::$nmAtrInLegado];

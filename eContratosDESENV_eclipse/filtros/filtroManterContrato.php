@@ -65,6 +65,8 @@ class filtroManterContrato extends filtroManter {
 	var $vlGlobalInicial;
 	var $vlGlobalFinal;
 	
+	var $inSQLJoinContratoInfo;
+	
 	// ...............................................................
 	// construtor
 	

@@ -477,11 +477,10 @@ function imprimeTituloalerta($enviarEmail, $setor=null){
 	}	
 }
 
-function enviarEmailATJA($enviarEmail){
+function enviarEmailATJA($enviarEmail, $count = 0){
 	$setor = "ATJA";
 	imprimeTituloalerta($enviarEmail, $setor);
 
-	$count = 0;
 	//envia alertas dos editais
 	$mensagem .= getMensagemAltaPrioridade($count);
 	//demandas que seguem para a SAD
@@ -501,15 +500,17 @@ function enviarEmailATJA($enviarEmail){
 	enviarEmail($assunto, $mensagem, $enviarEmail);
 }
 
-function enviarEmailUNCT($enviarEmail){
+function enviarEmailUNCT($enviarEmail, $count = 0){	
 	$setor = "UNCT";
-	imprimeTituloalerta($enviarEmail, $setor);
-	
-	$count = 0;	
+	imprimeTituloalerta($enviarEmail, $setor);	
+		
 	//demandas com contratos a vencer
 	$mensagem .= getMensagemDemandasDeContratosAVencer($count);
+	$msgAproveitavel .= $mensagem;
 	//envia demandas monitoradas
-	$mensagem .= getMensagemDemandasMonitoradas($count);	
+	$mensagemX = getMensagemDemandasMonitoradas($count);
+	$msgAproveitavel .= $mensagemX;
+	$mensagem .= $mensagemX;
 	//envia demandas iniciais
 	$mensagem .= getMensagemDemandaIniciais($count);
 	//sistemas licon portal da transparencia
@@ -521,13 +522,14 @@ function enviarEmailUNCT($enviarEmail){
 	$assunto = "$setor - Relatório diário";
 	enviarEmail($assunto, $mensagem, $enviarEmail, email_sefaz::getListaEmailUNCT());	
 	//enviarEmail($assuntoParam, $mensagemParam, $enviarEmail=true, $listaEmail=null,$remetente = null) {
+	
+	return array(2, $msgAproveitavel);
 }
 
-function enviarEmailDiretoria($enviarEmail){
+function enviarEmailDiretoria($enviarEmail, $count = 0, $msgAproveitavel = null){
 	$setor = "DILC";
 	imprimeTituloalerta($enviarEmail, $setor);
 
-	$count = 0;
 	//envia contratos a vencer TODOS
 	//$mensagem .= getMensagemContratosAVencer($count);
 	//envia contratos a vencer SEM DEMANDA
@@ -538,7 +540,7 @@ function enviarEmailDiretoria($enviarEmail){
 	echo $mensagem . getBotaoDetalharAlertas(new voContratoInfo());
 
 	$assunto = "$setor - Relatório diário";
-	enviarEmail($assunto, $mensagem, $enviarEmail, email_sefaz::getListaEmailContratosAVencer());
+	enviarEmail($assunto, $msgAproveitavel . $mensagem, $enviarEmail, email_sefaz::getListaEmailContratosAVencer());
 	//enviarEmail($assuntoParam, $mensagemParam, $enviarEmail=true, $listaEmail=null,$remetente = null) {
 }
 

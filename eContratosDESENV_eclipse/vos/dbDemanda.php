@@ -1129,11 +1129,25 @@ class dbDemanda extends dbprocesso {
 				$vocontratoInfo->anoContrato = $vocontratoDemanda->anoContrato;
 				$vocontratoInfo->cdContrato = $vocontratoDemanda->cdContrato;
 				$vocontratoInfo->tipo = $vocontratoDemanda->tipo;
-				try{
+				try{					
 					$vocontratoInfo = $vocontratoInfo->dbprocesso->consultarPorChaveVO($vocontratoInfo);
 				}catch (excecaoChaveRegistroInexistente $ex){
 					throw new excecaoChaveRegistroInexistente("Verifique a inclusão das informações adicionais ao contrato relacionado.", null, $vocontratoInfo);
 				}
+				
+				/*$dbcontrato = new dbcontrato();
+				$filtroManterContrato = new filtroManterContrato();
+				$filtroManterContrato->inSQLJoinContratoInfo = "INNER JOIN";
+				$filtroManterContrato->anoContrato = $vocontratoDemanda->anoContrato;
+				$filtroManterContrato->cdContrato = $vocontratoDemanda->cdContrato;
+				$filtroManterContrato->tipo = $vocontratoDemanda->tipo;
+				$filtroManterContrato->cdEspecie = $vocontratoDemanda->cdEspecie;
+				$filtroManterContrato->sqEspecie = $vocontratoDemanda->sqEspecie;
+				$retorno = $dbcontrato->consultarTelaConsulta(array($filtroManterContrato));
+				if(isColecaoVazia($retorno)){
+					throw new excecaoConsultaVazia("Fechamento da demanda permitido apenas para contrato incluído na (1)planilha e na função (2)'informações adicionais'.");
+				}*/
+				
 			}
 			
 			// verifica se tem PAAP para encerrar
@@ -1414,6 +1428,7 @@ class dbDemanda extends dbprocesso {
 		$retorno .= $this->getVarComoNumero ( $vo->cdPessoaRespUNCT ). ",";
 		$retorno .= $this-> getVarComoString($vo->fase). ",";
 		$retorno .= $this-> getVarComoString($vo->inMonitorar). ",";
+		$retorno .= $this->getVarComoData ( $vo->dtMonitoramento). ",";
 		$retorno .= $this->getVarComoString ( voDemanda::getNumeroPRTSemMascara($vo->prt) ) . ",";
 		
 		$retorno .= $this->getVarComoString($vo->inLegado);
@@ -1465,6 +1480,9 @@ class dbDemanda extends dbprocesso {
 		$retorno .= $sqlConector . voDemanda::$nmAtrInMonitorar . " = " . $this->getVarComoString ( $vo->inMonitorar );
 		$sqlConector = ",";
 		
+		$retorno .= $sqlConector . voDemanda::$nmAtrDtMonitoramento . " = " . $this->getVarComoData( $vo->dtMonitoramento);
+		$sqlConector = ",";
+				
 		$retorno .= $sqlConector . voDemanda::$nmAtrProtocolo . " = " . $this->getVarComoString ( voDemanda::getNumeroPRTSemMascara($vo->prt));
 		$sqlConector = ",";
 				

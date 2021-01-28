@@ -62,9 +62,15 @@ class dbcontrato extends dbprocesso {
 		$arrayColunasRetornadas = array (
 				$nmTabela . ".*",
 				$nmTabelaPessoa . "." . vopessoa::$nmAtrDoc,
-		);		
+		);	
+		
+		$inSQLJoinContratoInfo = "LEFT JOIN";
+		//$filtro = new filtroManterContrato();
+		if($filtro->inSQLJoinContratoInfo != null){
+			$inSQLJoinContratoInfo = $filtro->inSQLJoinContratoInfo;			
+		}
 		 		 
-		$queryJoin .= "\n left JOIN " . $nmTabelaContratoInfo;
+		$queryJoin .= "\n $inSQLJoinContratoInfo " . $nmTabelaContratoInfo;
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaContratoInfo . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrAnoContrato;
 		$queryJoin .= " AND " . $nmTabelaContratoInfo . "." . vocontrato::$nmAtrCdContrato. "=" . $nmTabela . "." . vocontrato::$nmAtrCdContrato;
@@ -1493,6 +1499,7 @@ class dbcontrato extends dbprocesso {
 			$vo = new voDemandaContrato();
 			$nmTabela = $vo->getNmTabelaEntidade(false);
 			$nmTabelaContrato = vocontrato::getNmTabela();
+			$nmTabelaDemanda = voDemanda::getNmTabela();
 			//$nmTabelaDemandaSolicCompra = voDemandaPL::getNmTabelaStatic(false);
 			$groupby = "$nmTabela." . voDemandaContrato::$nmAtrAnoContrato
 			. ",$nmTabela." . voDemandaContrato::$nmAtrTipoContrato
@@ -1511,6 +1518,10 @@ class dbcontrato extends dbprocesso {
 	
 			$query .= " SELECT * ";
 			$query .= " FROM " . $nmTabela;
+			$query .= " INNER JOIN " . $nmTabelaDemanda;
+			$query .= " ON $nmTabela." . voDemandaContrato::$nmAtrAnoDemanda . "= $nmTabelaDemanda.". voDemanda::$nmAtrAno;
+			$query .= " AND $nmTabela." . voDemandaContrato::$nmAtrCdDemanda . "= $nmTabelaDemanda.". voDemanda::$nmAtrCd;
+								
 			$query .= " WHERE "
 			. "$nmTabela." .  voDemandaContrato::$nmAtrCdEspecieContrato . "  IN (". getSQLStringFormatadaColecaoIN($arrayTermos, true).") AND " 
 			. " NOT EXISTS (SELECT 'X' FROM " . $nmTabelaContrato 
@@ -1519,7 +1530,15 @@ class dbcontrato extends dbprocesso {
 			. " AND $nmTabela." . voDemandaContrato::$nmAtrCdContrato . "= $nmTabelaContrato.". vocontrato::$nmAtrCdContrato
 			. " AND $nmTabela." . voDemandaContrato::$nmAtrCdEspecieContrato . "= $nmTabelaContrato.". vocontrato::$nmAtrCdEspecieContrato
 			. " AND $nmTabela." . voDemandaContrato::$nmAtrSqEspecieContrato . "= $nmTabelaContrato.". vocontrato::$nmAtrSqEspecieContrato
+			/*. " AND ($nmTabelaContrato." . vocontrato::$nmAtrCdEspecieContrato . " NOT LIKE '%CANCELADO%' "
+			. " OR $nmTabelaContrato." . vocontrato::$nmAtrContratadaContrato . " NOT LIKE '%CANCELADO%' "
+			. " OR $nmTabelaContrato." . vocontrato::$nmAtrObjetoContrato . " NOT LIKE '%CANCELADO%' )"*/
 			. ")\n";
+			
+			//so consulta a aberta porque presume que se a demanda foi fechada, o contrato foi incluido na planilha
+			$query .= " AND $nmTabelaDemanda." . voDemanda::$nmAtrSituacao . "<> ".dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA ." ";
+			$query .= " AND $nmTabelaDemanda." . voDemanda::$nmAtrInDesativado . "= 'N' ";
+						
 			$query .= " group by $groupby";
 			$arrayGroupby = array(voDemandaContrato::$nmAtrAnoContrato . " DESC ",
 					voDemandaContrato::$nmAtrTipoContrato,

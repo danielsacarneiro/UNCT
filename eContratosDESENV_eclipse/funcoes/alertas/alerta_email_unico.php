@@ -15,6 +15,8 @@ $enviarEmail = $enviarEmail && voMensageria::$ATIVADO && voMensageria::$ENVIAR_E
 
 enviarEmailATJA($enviarEmail);
 
-enviarEmailUNCT($enviarEmail);
+$arrayRetorno = enviarEmailUNCT($enviarEmail);
+$count = $arrayRetorno[0];
+$msgAproveitavel = $arrayRetorno[1];
 
-enviarEmailDiretoria($enviarEmail);
+enviarEmailDiretoria($enviarEmail, $count, $msgAproveitavel);

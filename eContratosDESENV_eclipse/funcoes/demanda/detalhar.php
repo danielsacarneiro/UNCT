@@ -114,7 +114,19 @@ function confirmar() {
 	            //o setor destino da ultima tramitacao sera o origem da nova
 	            echo $comboPrioridade->getHtmlCombo(voDemanda::$nmAtrPrioridade,voDemanda::$nmAtrPrioridade, $vo->prioridade, true, "camporeadonly", false, " disabled ");
 	            echo " | " . getTextoHTMLTagMouseOver(getTextoHTMLDestacado("Monitorar?"), "Permite aviso por email.") . ": " . dominioSimNao::getHtmlDetalhamentoRadio("", "", $vo->inMonitorar);
+	            if($vo->dtMonitoramento != null){
+	            echo " | " . getTextoHTMLTagMouseOver("Dt.Monitoramento", "Data de início do monitoramento.") . ":";
 	            ?>
+         	            	 <INPUT type="text" 
+         	            	       id="<?=voDemandaTramitacao::$nmAtrDtMonitoramento?>" 
+         	            	       name="<?=voDemandaTramitacao::$nmAtrDtMonitoramento?>" 
+          	            			value="<?php echo(getData($vo->dtMonitoramento));?>"	            	            			 
+          	            			class="camporeadonly" 
+          	            			size="10" 
+          	            			maxlength="10" readonly>
+	            <?php 
+	            }
+	            ?>	            	            			
 				</TD>				
 	        </TR>
 			<TR>
