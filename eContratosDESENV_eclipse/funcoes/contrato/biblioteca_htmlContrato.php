@@ -142,6 +142,15 @@ function getContratoDetalhamentoParam($arrayParametro) {
 		try{
 			$colecao = $voContratoInfoPK->dbprocesso->consultarPorChaveTela($voContratoInfoPK, false);
 			$voContratoInfoPK->getDadosBanco($colecao);
+			//var_dump($colecao);
+			$sqRerra = $colecao["testando"];
+			
+			//echo "rerra $sqRerra";
+			$temRerra = isAtributoValido($sqRerra);
+			if($temRerra){
+				echo getTextoHTMLTagMouseOver("|". getTextoHTMLDestacado("ReRRA"), "Verifique se o RERRA alterou dados relevantes do contrato.", true);
+			}
+			
 			$cdAutorizacaoEconti = $voContratoInfoPK->cdAutorizacao;
 			echo getTextoHTMLDestacado("Autorização", "black", true) . ":";
 					

@@ -9,6 +9,7 @@ class dbContratoInfo extends dbprocesso {
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
 		$nmTabelaPessoaGestor = "NM_TAB_PESSOA_GESTOR";
 		$nmTabContratoSqMAX = "TAB_MAXCONTRATO";
+		$nmTabelaContratoInfoRerra = voContratoInfo::$NM_TABELA_RERRA;
 		
 		$colecaoAtributoCoalesceNmPessoa = array(
 				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
@@ -30,6 +31,7 @@ class dbContratoInfo extends dbprocesso {
 				getSQLCOALESCE($colecaoAtributoCoalesceNmPessoa,vopessoa::$nmAtrNome),
 				$nmTabelaPessoaGestor . "." . vopessoa::$nmAtrCd . " AS " . voContratoInfo::$nmAtrCdPessoaGestor,
 				$nmTabelaPessoaGestor . "." . vopessoa::$nmAtrNome . " AS " . voContratoInfo::$IDREQNmPessoaGestor,
+				"$nmTabelaContratoInfoRerra." . vocontrato::$nmAtrSqContrato . " AS testando",
 		);
 		
 		$groupbyinterno = $nmTabela . "." . vocontrato::$nmAtrAnoContrato . "," . $nmTabela . "." . vocontrato::$nmAtrCdContrato . "," . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
@@ -63,7 +65,25 @@ class dbContratoInfo extends dbprocesso {
 		
 		$queryJoin .= "\n LEFT JOIN $nmTabelaPessoaContrato $nmTabelaPessoaGestor";
 		$queryJoin .= "\n ON ";
-		$queryJoin .= $nmTabelaPessoaGestor . "." . vopessoa::$nmAtrCd . "=" . $nmTabela . "." . voContratoInfo::$nmAtrCdPessoaGestor;		
+		$queryJoin .= $nmTabelaPessoaGestor . "." . vopessoa::$nmAtrCd . "=" . $nmTabela . "." . voContratoInfo::$nmAtrCdPessoaGestor;	
+		
+		//indica se o contrato tem RERRA, para que seja chamada a atencao para qq alteracao contratual
+		$dadosRerra = $nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato 
+		. "," . $nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato 
+		. "," . $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato
+		/*. ",$nmTabelaContrato." . vocontrato::$nmAtrCdEspecieContrato
+		. ",$nmTabelaContrato." . vocontrato::$nmAtrSqEspecieContrato*/
+		;		
+		$queryJoin .= "\n LEFT JOIN ";
+		$queryJoin .= " (SELECT $dadosRerra, MAX(" . vocontrato::$nmAtrSqContrato . ") AS " . vocontrato::$nmAtrSqContrato . " FROM " . $nmTabContratoInterna;
+		$queryJoin .= " WHERE " . vocontrato::$nmAtrCdEspecieContrato . " = " . getVarComoString(dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_RERRATIFICACAO);
+		$queryJoin .= " group by $dadosRerra) $nmTabelaContratoInfoRerra \n ON ";
+		$queryJoin .= $nmTabela . "." . voContratoInfo::$nmAtrAnoContrato . "=" . $nmTabelaContratoInfoRerra . "." . vocontrato::$nmAtrAnoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabela . "." . voContratoInfo::$nmAtrTipoContrato . "=" . $nmTabelaContratoInfoRerra . "." . vocontrato::$nmAtrTipoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabela . "." . voContratoInfo::$nmAtrCdContrato . "=" . $nmTabelaContratoInfoRerra . "." . vocontrato::$nmAtrCdContrato;
+		
 		/*
 		 * $queryWhere = "\n WHERE ";
 		 * $queryWhere .= $vo->getValoresWhereSQLChave ( $isHistorico );

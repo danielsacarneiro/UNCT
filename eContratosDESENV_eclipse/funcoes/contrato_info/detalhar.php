@@ -200,7 +200,7 @@ function iniciar(){
 	            <TD class="campoformulario" width="1%">
 	            <?php echo dominioProrrogacaoContrato::getHtmlDetalhamento(voContratoInfo::$nmAtrInPrazoProrrogacao,voContratoInfo::$nmAtrInPrazoProrrogacao, $vo->inPrazoProrrogacao);?>
 	            </TD>
-	            <TH class="campoformulario" width="1%">
+	            <TH class="campoformulario" width="1%" nowrap>
 	            <?=getTextoHTMLTagMouseOver("SEI.Contrato.Substituto", voContratoInfo::$TEXTO_TAG_CONTRATO_SUBST)?>:
 	            </TH>
 	            <TD class="campoformulario">
@@ -216,8 +216,8 @@ function iniciar(){
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Características:</TH>
 	            <TD class="campoformulario" colspan=3>
-	            <abbr title="Sem valor referencial mensal?">É por escopo?:</abbr>
 	            <?php 
+	            echo getTextoHTMLTagMouseOver("É por escopo?:", "Sem valor referencial mensal?");
 	            echo dominioSimNao::getHtmlDetalhamentoRadio(voContratoInfo::$nmAtrInEscopo, voContratoInfo::$nmAtrInEscopo, $vo->inEscopo);
 	            echo " | É credenciamento?:" 
 					. dominioSimNao::getHtmlDetalhamentoRadio(voContratoInfo::$nmAtrInCredenciamento, voContratoInfo::$nmAtrInCredenciamento, $vo->inCredenciamento);

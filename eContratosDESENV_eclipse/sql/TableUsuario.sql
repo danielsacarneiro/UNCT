@@ -104,7 +104,7 @@ where id = 11
 
 update usuario_info
 set user_setor = '01*02*03*04*05*06*07*08*09*10*11*13*14*15*16*17*18*99'
-where id = 11
+where id = 31
 
 insert into usuario_info
 (id, user_setor, cd_usuario_incl, cd_usuario_ultalt, in_desativado)

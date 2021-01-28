@@ -1361,9 +1361,20 @@ function getFuncaoJSDetalhar($caminhoPagina=null, $isNovaGuia=false){
 	return $retorno;	
 }
 
-function getTextoHTMLTagMouseOver($texto, $tag){
-	$retorno = "<abbr title='$tag'>$texto</abbr>";
+function getTextoHTMLTagMouseOver($texto, $tag, $comImagemInterrogacao = true){
+	
+	if($comImagemInterrogacao){
+		$imagem = getImagem("ajuda.gif", 15, $tag);
+	}
+	
+	$retorno = "<abbr title='$tag'>$texto$imagem</abbr>";
+	
+	
 	return $retorno;
+}
+
+function getImagem($nmImagem, $tam=15, $titulo=null){
+	return "<img  title='$titulo' src='" . pasta_imagens . "$nmImagem' width='$tam' height='$tam'>";
 }
 
 function getTextoHTMLDestacado($texto, $cor="red", $sublinhado = true){
