@@ -14,7 +14,11 @@ CREATE TABLE pa (
     
     pa_dt_abertura DATE NOT NULL,
     pa_dt_notificacao DATE,
-    pa_dt_ult_notmanifestacao DATE,
+    pa_dt_ult_notmanifestacao DATE,	
+    pa_prazodias_ult_notificacao INT,
+    pa_dt_ultnotprazoencerrado DATE,
+    pa_numdoc_imputada VARCHAR(30),
+
     pa_dt_inicio_prazo DATE NULL,
     pa_si INT NOT NULL,
     
@@ -35,6 +39,7 @@ ALTER TABLE pa ADD COLUMN pa_dt_notificacao DATE AFTER pa_dt_abertura;
 ALTER TABLE pa ADD COLUMN pa_dt_ult_notmanifestacao DATE AFTER pa_dt_notificacao;
 ALTER TABLE pa ADD COLUMN pa_prazodias_ult_notificacao INT AFTER pa_dt_ult_notmanifestacao;
 ALTER TABLE pa ADD COLUMN pa_dt_ultnotprazoencerrado DATE AFTER pa_prazodias_ult_notificacao;
+ALTER TABLE pa ADD COLUMN pa_numdoc_imputada VARCHAR(30) AFTER pa_dt_ultnotprazoencerrado;
 
 drop table if exists pa_hist;
 CREATE TABLE pa_hist (
@@ -51,7 +56,11 @@ CREATE TABLE pa_hist (
     
     pa_dt_abertura DATE NOT NULL,
     pa_dt_notificacao DATE,
-    pa_dt_ult_notmanifestacao DATE,
+    pa_dt_ult_notmanifestacao DATE,	
+    pa_prazodias_ult_notificacao INT,
+    pa_dt_ultnotprazoencerrado DATE,
+    pa_numdoc_imputada VARCHAR(30),
+
     pa_dt_inicio_prazo DATE NULL,
     pa_si INT NOT NULL,
     
@@ -73,6 +82,7 @@ ALTER TABLE pa_hist ADD COLUMN pa_dt_notificacao DATE AFTER pa_dt_abertura;
 ALTER TABLE pa_hist ADD COLUMN pa_dt_ult_notmanifestacao DATE AFTER pa_dt_notificacao;
 ALTER TABLE pa_hist ADD COLUMN pa_prazodias_ult_notificacao INT AFTER pa_dt_ult_notmanifestacao;
 ALTER TABLE pa_hist ADD COLUMN pa_dt_ultnotprazoencerrado DATE AFTER pa_prazodias_ult_notificacao;
+ALTER TABLE pa_hist ADD COLUMN pa_numdoc_imputada VARCHAR(30) AFTER pa_dt_ultnotprazoencerrado;
 
 show create table pa_hist;
 

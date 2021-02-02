@@ -5,6 +5,7 @@ include_once (caminho_funcoes . "pessoa/biblioteca_htmlPessoa.php");
 require_once (caminho_funcoes . "contrato/dominioTipoContrato.php");
 require_once (caminho_funcoes . "contrato/dominioEspeciesContrato.php");
 include_once (caminho_funcoes . "pessoa/biblioteca_htmlPessoa.php");
+
 function isContratoValido($voContrato) {
 	// so exibe contrato se tiver
 	return $voContrato != null && $voContrato->cdContrato;

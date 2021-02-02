@@ -610,17 +610,8 @@ function getMensagemDemandaIniciais(&$count = 0){
 
 		$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_UNCT;
 		//isto porque as monitoradas ja sao exibidas em outra colecao de mensagem
-		$filtro->inMonitorar = constantes::$CD_NAO;
+		//$filtro->inMonitorar = constantes::$CD_NAO;
 
-		//$filtro->prioridadeExcludente = dominioPrioridadeDemanda::$CD_PRIORI_BAIXA;
-		/*$filtro->vocontrato->cdAutorizacao = array (
-		 dominioAutorizacao::$CD_AUTORIZ_SAD
-		 );*/
-		/*$filtro->vodemanda->fase = constantes::$CD_OPCAO_NENHUM;
-		 $filtro->inOR_AND_Fase = constantes::$CD_OPCAO_AND;*/
-
-		//$filtro->inCdResponsavelUNCT = constantes::$CD_OPCAO_NENHUM;
-		//$filtro->cdAtrOrdenacao = filtroManterDemanda::$NmColNuTempoUltimaTram;
 		$filtro->cdAtrOrdenacao = voDemanda::$nmAtrCdPessoaRespUNCT . "," . filtroManterDemanda::$NmColNuTempoUltimaTram;
 
 		$colecao = $dbprocesso->consultarTelaConsulta ( $voDemanda, $filtro );
@@ -631,6 +622,16 @@ function getMensagemDemandaIniciais(&$count = 0){
 		);
 		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);
 
+		$array =array(
+				constantes::$CD_COLUNA_CHAVE => 'MONITOR.',
+				constantes::$CD_COLUNA_VALOR => voDemanda::$nmAtrInMonitorar,
+				constantes::$CD_COLUNA_VL_REFERENCIA =>  constantes::$CD_SIM,
+				constantes::$CD_COLUNA_TP_VALIDACAO =>  constantes::$CD_ALERTA_TP_VALIDACAO_IGUAL,
+				//constantes::$CD_COLUNA_TP_DADO => constantes::$CD_TP_DADO_DOMINIO,
+				//constantes::$CD_COLUNA_NM_CLASSE_DOMINIO => "dominioSimNao", 				
+		);
+		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);
+				
 		$array =array(
 				constantes::$CD_COLUNA_CHAVE => 'PRAZO',
 				constantes::$CD_COLUNA_VALOR => filtroConsultarDemandaGestao::$NmColNuTempoUltimaTram,

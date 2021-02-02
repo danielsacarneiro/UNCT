@@ -84,6 +84,7 @@ include_once 'normativos.php';
     static $CD_COLUNA_TP_VALIDACAO = "CD_COLUNA_TP_VALIDACAO";
     static $CD_COLUNA_NM_CLASSE_DOMINIO = "CD_COLUNA_NM_CLASSE_DOMINIO";
     static $CD_ALERTA_TP_VALIDACAO_MAIORQUE = "MAIORQUE";
+    static $CD_ALERTA_TP_VALIDACAO_IGUAL = "IGUAL";
     static $CD_COLUNA_CONTRATO = "CONTRATO";
     
     //constantes que comporao o $CD_COLUNA_TP_DADO

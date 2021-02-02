@@ -136,7 +136,13 @@ function getCorpoMensagemPorColecao($titulo, $colecao, $colunasAExibir, $isPrior
 								$classColuna = "tabeladadosdestacadovermelho";
 							}
 							//$coluna_valor = complementarCharAEsquerda ( $coluna_valor, '0', $colunaTipoDado );
+						}else if($colunaTpValidacao == constantes::$CD_ALERTA_TP_VALIDACAO_IGUAL){
+							if($coluna_valor == $colunaVlReferencia){
+								$classColuna = "tabeladadosdestacadovermelho";
+							}
+							//$coluna_valor = complementarCharAEsquerda ( $coluna_valor, '0', $colunaTipoDado );
 						}						
+						
 					}
 						
 					//para o caso de ter dados do contrato

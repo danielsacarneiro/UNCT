@@ -77,9 +77,9 @@ function getDadosPorChaveGenerica(chave, linkRelativoPHPBusca, idDivResultado) {
      imprimeResultado(result, "../pessoa/campoDadosContratadaAjax.php?chave=" + chaveContrato);     
  }
  
- function getDadosContratadaPorDemanda(chaveDemanda, idDivResultado) {
+ function getDadosContratadaPorDemanda(chaveDemanda, idDivResultado, cdFuncao=null) {
      var result = document.getElementById(idDivResultado);          
-     imprimeResultado(result, "../pessoa/campoDadosContratadaAjax.php?voentidade=vodemanda&chave=" + chaveDemanda);     
+     imprimeResultado(result, "../pessoa/campoDadosContratadaAjax.php?funcao="+cdFuncao+"&voentidade=vodemanda&chave=" + chaveDemanda);     
  }
 
  function getDadosContratoLicon(chave, idDivResultado) {

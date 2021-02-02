@@ -156,7 +156,7 @@ include_once (caminho_filtros."filtroManterPA.php");
     			$nmTabelaContrato. "." . vocontrato::$nmAtrAnoContrato,
     			$nmTabelaContrato. "." . vocontrato::$nmAtrCdContrato,
     			$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd,
-    			$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
+    			getSQLCOALESCE(array("$nmTabelaPessoaContrato." . vopessoa::$nmAtrDoc, "$nmTabela." . voPA::$nmAtrNumDocImputada), vopessoa::$nmAtrDoc),
     			getSQLCOALESCE(array($nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome, $nmTabelaDemanda . "." . voDemanda::$nmAtrTexto), $filtro->nmColNomePessoaContrato),
     			$nmTabelaDemandaProcLic . "." . voProcLicitatorio::$nmAtrCd,
     			$nmTabelaDemandaProcLic . "." . voProcLicitatorio::$nmAtrAno,
@@ -222,6 +222,9 @@ include_once (caminho_filtros."filtroManterPA.php");
         $groupbyPA = array("$nmTabela." .voPA::$nmAtrAnoPA,
         		"$nmTabela." . voPA::$nmAtrCdPA,        		
         );
+        if ($isHistorico) {
+        	$groupbyPA[] = "$nmTabela." . voPA::$nmAtrSqHist; 
+        }
         
         //$filtro->cdEspecieContrato = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
         $filtro->groupby = $groupbyPA;
@@ -494,10 +497,12 @@ include_once (caminho_filtros."filtroManterPA.php");
 		$retorno.= $this-> getVarComoString($vo->obs). ",";
 		$retorno.= $this-> getVarComoString($vo->publicacao). ",";
 		$retorno.= $this-> getVarComoData($vo->dtAbertura). ",";
-		$retorno.= $this-> getVarComoData($vo->dtNotificacao). ",";
+		$retorno.= $this-> getVarComoData($vo->dtNotificacao). ",";		
 		$retorno.= $this-> getVarComoData($vo->dtUlNotificacaoParaManifestacao). ",";
-		$retorno.= $this-> getVarComoData($vo->dtUlNotificacaoPrazoEncerrado). ",";
-		$retorno.= $this-> getVarComoNumero($vo->numDiasPrazoUltNotificacao). ",";		
+		$retorno.= $this-> getVarComoNumero($vo->numDiasPrazoUltNotificacao). ",";
+		
+		$retorno.= $this-> getVarComoData($vo->dtUlNotificacaoPrazoEncerrado). ",";		
+		$retorno.= $this-> getVarComoString($vo->numDocImputada). ",";
 		$retorno.= $this-> getVarComoNumero($vo->situacao);		
 	
 		$retorno.= $vo->getSQLValuesInsertEntidade();
@@ -552,6 +557,15 @@ include_once (caminho_filtros."filtroManterPA.php");
         	$retorno.= $sqlConector . voPA::$nmAtrNumDiasPrazoUltNotificacao . " = NULL";
         	$sqlConector = ",";
         }        	 
+        
+        if($vo->numDocImputada != null){
+        	$retorno.= $sqlConector . voPA::$nmAtrNumDocImputada . " = " . $this->getVarComoString($vo->numDocImputada);
+        	$sqlConector = ",";
+        }else{
+        	$retorno.= $sqlConector . voPA::$nmAtrNumDocImputada . " = NULL";
+        	$sqlConector = ",";
+        }
+        
         
         if($vo->cdResponsavel != null){
         	$retorno.= $sqlConector . voPA::$nmAtrCdResponsavel. " = " . $this->getVarComoNumero($vo->cdResponsavel);

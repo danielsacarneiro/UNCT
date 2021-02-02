@@ -57,7 +57,7 @@ class dbprocesso {
 		$query .= " WHERE ";
 		$query .= $voEntidade->getValoresWhereSQLChave ( false );
 		
-		// echo $query;
+		//echo $query;
 		$registro = $this->consultarEntidade ( $query, true );
 		$dhValidacao = $registro [0] [voentidade::$nmAtrDhUltAlteracao];
 		
@@ -1050,7 +1050,7 @@ class dbprocesso {
 		$printarFilho = static::$FLAG_PRINTAR_SQL;
 		$printarPAI = self::$FLAG_PRINTAR_SQL;
 		
-		$retorno = $printarPAI || $printarFilho;
+		$retorno = isUsuarioAdmin() && ($printarPAI || $printarFilho);
 		return $retorno;
 	}
 	

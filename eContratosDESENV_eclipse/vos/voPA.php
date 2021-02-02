@@ -1,6 +1,7 @@
 <?php
 include_once (caminho_funcoes . "pa/dominioSituacaoPA.php");
 include_once (caminho_funcoes . "pa_penalidade/dominioTipoPenalidade.php");
+include_once(caminho_util."DocumentoPessoa.php");
 
 class voPA extends voentidade {
 	static $ID_REQ_DIV_PRAZO = "ID_REQ_DIV_PRAZO";
@@ -17,9 +18,10 @@ class voPA extends voentidade {
 	static $nmAtrDtNotificacao = "pa_dt_notificacao";
 	static $nmAtrDtUltNotificacaoParaManifestacao = "pa_dt_ult_notmanifestacao";
 	static $nmAtrNumDiasPrazoUltNotificacao = "pa_prazodias_ult_notificacao";
-	
+	static $nmAtrNumDocImputada = "pa_numdoc_imputada";
 	static $nmAtrDtUltNotificacaoPrazoEncerrado = "pa_dt_ultnotprazoencerrado";
 	static $nmAtrSituacao = "pa_si";
+	
 	var $cdPA = "";
 	var $anoPA = "";
 	var $cdDemanda = "";
@@ -32,6 +34,7 @@ class voPA extends voentidade {
 	var $dtUlNotificacaoParaManifestacao = "";
 	var $dtUlNotificacaoPrazoEncerrado = "";
 	var $numDiasPrazoUltNotificacao = "";
+	var $numDocImputada = "";
 	var $situacao = "";
 	var $cdResponsavel = "";
 	
@@ -91,9 +94,12 @@ class voPA extends voentidade {
 				self::$nmAtrPublicacao,
 				self::$nmAtrDtAbertura,
 				self::$nmAtrDtNotificacao,
+				
 				self::$nmAtrDtUltNotificacaoParaManifestacao,
-				self::$nmAtrDtUltNotificacaoPrazoEncerrado,
 				self::$nmAtrNumDiasPrazoUltNotificacao,
+				self::$nmAtrDtUltNotificacaoPrazoEncerrado,				
+				self::$nmAtrNumDocImputada,
+
 				self::$nmAtrSituacao 
 		);
 		
@@ -123,6 +129,8 @@ class voPA extends voentidade {
 		$this->dtUlNotificacaoParaManifestacao = $registrobanco [self::$nmAtrDtUltNotificacaoParaManifestacao];
 		$this->dtUlNotificacaoPrazoEncerrado = $registrobanco [self::$nmAtrDtUltNotificacaoPrazoEncerrado];
 		$this->numDiasPrazoUltNotificacao = $registrobanco [self::$nmAtrNumDiasPrazoUltNotificacao];
+		$this->numDocImputada = $registrobanco [self::$nmAtrNumDocImputada];
+		
 		$this->situacao = $registrobanco [self::$nmAtrSituacao];
 		$this->dtPublicacao = $registrobanco [voPenalidadePA::$nmAtrDtAplicacao];
 
@@ -141,6 +149,11 @@ class voPA extends voentidade {
 		$this->dtUlNotificacaoParaManifestacao = @$_POST [self::$nmAtrDtUltNotificacaoParaManifestacao];
 		$this->dtUlNotificacaoPrazoEncerrado = @$_POST [self::$nmAtrDtUltNotificacaoPrazoEncerrado];
 		$this->numDiasPrazoUltNotificacao = @$_POST [self::$nmAtrNumDiasPrazoUltNotificacao];
+		$this->numDocImputada = @$_POST [self::$nmAtrNumDocImputada];
+		if($this->numDocImputada != null){
+			$this->numDocImputada = documentoPessoa::getNumeroDocSemMascara($this->numDocImputada);
+		}
+		
 		$this->situacao = @$_POST [self::$nmAtrSituacao];
 		
 		//completa com os dados da entidade

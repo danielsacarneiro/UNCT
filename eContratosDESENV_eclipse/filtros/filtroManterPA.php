@@ -212,10 +212,15 @@ class filtroManterPA extends filtroManter{
 		
 		if($this->doc != null){
 			$filtro = $filtro . $conector
-						. $nmTabelaPessoaContrato. "." .vopessoa::$nmAtrDoc
-						. "='"
-						. documentoPessoa::getNumeroDocSemMascara($this->doc)
-						. "'";
+						. "($nmTabelaPessoaContrato." .vopessoa::$nmAtrDoc
+						. "="
+						. getVarComoString(documentoPessoa::getNumeroDocSemMascara($this->doc))
+						. " OR "
+						. "$nmTabela." .voPA::$nmAtrNumDocImputada
+						. "="
+						. getVarComoString(documentoPessoa::getNumeroDocSemMascara($this->doc))
+						. ")"
+						;
 			
 			$conector  = "\n AND ";
 		}	

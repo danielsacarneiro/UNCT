@@ -208,7 +208,7 @@ class filtroManterProcLicitatorio extends filtroManter{
 		
 		if($this->cdPessoa != null){
 			$filtro = $filtro . $conector
-			. $nmTabelaPessoaContrato. "." .vopessoa::$nmAtrCd
+			. $nmTabelaContrato. "." .vopessoa::$nmAtrCd
 			. " = "
 					. $this->cdPessoa;
 		
@@ -217,7 +217,7 @@ class filtroManterProcLicitatorio extends filtroManter{
 		
 		if($this->nome != null){
 			$filtro = $filtro . $conector
-			. $nmTabelaPessoaContrato. "." .vopessoa::$nmAtrNome
+			. $nmTabelaContrato. "." .vocontrato::$nmAtrContratadaContrato
 			. " LIKE '%"
 					. utf8_encode($this->nome)
 					. "%'";

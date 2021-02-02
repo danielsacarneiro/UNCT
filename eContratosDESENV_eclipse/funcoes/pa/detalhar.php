@@ -115,7 +115,21 @@ function confirmar() {
                     include_once(caminho_funcoes."pessoa/biblioteca_htmlPessoa.php");                    
                     echo getComboPessoaRespPA(voPA::$nmAtrCdResponsavel, voPA::$nmAtrCdResponsavel, $vo->cdResponsavel, "camponaoobrigatorio", "disabled");                                        
                     ?>
-            </TR>	        	        
+            </TR>
+            <?php 
+            if(!isContratoValido($voContrato)){
+            ?>
+            <TR>
+            	<TH class="campoformulario" nowrap>CNPJ/CPF imputada:</TH>
+            	<TD class="campoformulario" colspan=3>
+            	<?php 
+            	echo getHTMLInputNumDocumentoPessoa(voPA::$nmAtrNumDocImputada, voPA::$nmAtrNumDocImputada, documentoPessoa::getNumeroDocFormatado($vo->numDocImputada), "camporeadonly");
+            	?>
+            	</TD>
+            </TR>
+			<?php 
+       		}
+   			?>
 			<TR>
 	            <TH class="campoformulario" nowrap>Situação:</TH>
 	            <TD class="campoformulario" colspan=3><INPUT type="text" value="<?php echo(strtoupper($situacao));?>"  class="camporeadonly" size="20" readonly></TD>

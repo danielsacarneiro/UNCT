@@ -181,7 +181,7 @@ function iniciar(){
 	            $comboSimNao = new select(dominioSimNao::getColecao());
 	            echo " | " . getTextoHTMLTagMouseOver(getTextoHTMLDestacado("Monitorar?"), voDemanda::$MSG_IN_MONITORAR) . ": ";
 	            echo $comboSimNao->getHtmlCombo(voDemanda::$nmAtrInMonitorar,voDemanda::$nmAtrInMonitorar, $vo->inMonitorar, true, "camponaoobrigatorio", false, "");
-	            echo "|" . getTextoHTMLTagMouseOver("Dt.Monitoramento", "Data de início do monitoramento.");
+	            echo "|" . getTextoHTMLTagMouseOver("Dt.Monitoramento", "Data de início do monitoramento: apenas para demandas não urgentes!");
 	            ?>
 	            : 
 	            	 <INPUT type="text" 

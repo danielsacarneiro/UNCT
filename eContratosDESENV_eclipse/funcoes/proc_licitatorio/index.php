@@ -143,18 +143,18 @@ function alterar() {
 	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
 	        $arrayCssClass = array("camponaoobrigatorio","camponaoobrigatorio", "camponaoobrigatorio");
 	        ?>        
-            <TR>
+            <!--<TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
 	            <TD class="campoformulario" colspan="3"><?php getContratoEntradaDeDados($filtro->tipoContrato, $filtro->cdContrato, $filtro->anoContrato, $arrayCssClass, null, null);?></TD>        	            
 			</TR>        
-			<TR>
+			  <TR>
                 <TH class="campoformulario" nowrap>Contratada:</TH>
                 <TD class="campoformulario" width="1%">
                 Cód: <INPUT type="text" id="<?=vopessoa::$nmAtrCd?>" name="<?=vopessoa::$nmAtrCd?>"  value="<?php echo complementarCharAEsquerda($filtro->cdPessoa, "0", TAMANHO_CODIGOS);?>"  class="camponaoobrigatorio" size="7" >
                 Nome: <INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>"  value="<?php echo($nome);?>"  class="camponaoobrigatorio" size="30" ></TD>
                 <TH class="campoformulario" width="1%" nowrap>CNPJ/CPF:</TH>
                 <TD class="campoformulario"><INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($doc);?>" class="camponaoobrigatorio" size="20" maxlength="18"></TD>
-            </TR>
+            </TR>-->
         
             <?php            
             $comboTpDoc = new select(dominioTpDocumento::getColecaoDocsPAAP());

@@ -5,7 +5,17 @@ include_once(caminho_vos . "vogestor.php");
 include_once(caminho_filtros. "filtroManterPessoa.php");
 include_once (caminho_funcoes . "contrato/biblioteca_htmlContrato.php");
 
-function getHTMLConsultaPorDemanda($chave){
+function getHTMLInputNumDocumentoPessoa($ID, $Name, $value="", $class = "camponaoobrigatorio"){
+	return getInputText($ID
+						, $Name
+						, $value
+						, $class,
+						dominioTpDOCPessoa::$TAMANHO_HTML,
+						dominioTpDOCPessoa::$NUM_MAX_CARACTER_HTML,
+						" onkeyup='formatarCampoCNPFouCNPJ(this, event);' ");
+}
+
+function getHTMLConsultaPorDemanda($chave, $isFuncaoInserirDados=false){
 	$vo = new voDemanda ();
 	$vo->getChavePrimariaVOExplodeParam ( $chave );
 	$colecao= consultarDadosHTMLDemanda ( $vo );
@@ -16,7 +26,15 @@ function getHTMLConsultaPorDemanda($chave){
 		
 		$retorno = "<TR><TD>Título: <INPUT type='text' value='" . $vo->texto . "'  class='camporeadonly' size='70' readonly></TD></TR>";
 		// vai na bibliotacontrato
-		$retorno = $retorno . getColecaoContratoDet ( $colecaoContrato );		
+		//var_dump($colecaoContrato);
+		if(!isColecaoVazia($colecaoContrato)){
+			$retorno = $retorno . getColecaoContratoDet ( $colecaoContrato );
+		}else{
+			if($isFuncaoInserirDados){
+				$retorno = $retorno . "<br>CNPJ/CPF imputada:" . getHTMLInputNumDocumentoPessoa(voPA::$nmAtrNumDocImputada,
+						voPA::$nmAtrNumDocImputada, "", constantes::$CD_CLASS_CAMPO_OBRIGATORIO);
+			}
+		}
 	}else{
 		$stringTexto = getHTMLTextoObjetoNaoEncontrato();
 		$retorno = $stringTexto;
@@ -36,7 +54,7 @@ function getHTMLConsultaPorPAAP($chave){
 	$retorno = $retorno . getColecaoContratoDet ( $colecaoContrato );
 	return $retorno;	
 }
-function getDadosContratada($chave, $voentidade = null) {
+function getDadosContratada($chave, $voentidade = null, $funcao = null) {
 	$isConsultaPessoaPorDemanda = $voentidade == "vodemanda";
 	$isConsultaPessoaPorPAAP = $voentidade == "voPA";
 	$isConsultaPorContrato = !($isConsultaPessoaPorDemanda || $isConsultaPessoaPorPAAP);
@@ -76,7 +94,7 @@ function getDadosContratada($chave, $voentidade = null) {
 			}
 		} else {
 			if($isConsultaPessoaPorDemanda){
-				$retorno =	getHTMLConsultaPorDemanda($chave);
+				$retorno =	getHTMLConsultaPorDemanda($chave, $funcao == constantes::$CD_FUNCAO_INCLUIR);
 			}else{
 				$retorno =	getHTMLConsultaPorPAAP($chave);
 			}
@@ -109,8 +127,10 @@ function converteRecordSetEmColecaoVOsContrato($colecao) {
 		foreach ( $colecao as $registrobanco ) {
 			$vocontrato = new vocontrato ();
 			$vocontrato->getDadosBanco ( $registrobanco );
-				
-			$retorno [] = $vocontrato;
+			
+			if(isContratoValido($vocontrato)){
+				$retorno [] = $vocontrato;
+			}
 		}
 	}
 

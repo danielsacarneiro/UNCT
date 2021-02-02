@@ -10,6 +10,9 @@ Class dominioTpDOCPessoa extends dominio{
 	static $DS_TPDOC_CNPJ = "CNPJ";
 	static $DS_TPDOC_RG = "RG";
 	
+	static $TAMANHO_HTML = "20";
+	static $NUM_MAX_CARACTER_HTML = "18";
+	
 	// ...............................................................
 	// Construtor
 	static function getColecao(){

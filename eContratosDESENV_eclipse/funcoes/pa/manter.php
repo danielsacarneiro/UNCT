@@ -62,6 +62,7 @@ setCabecalho($titulo);
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_datahora.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_checkbox.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_cnpfcnpj.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_ajax.js"></script>
 
 <SCRIPT language="JavaScript" type="text/javascript">
@@ -77,6 +78,12 @@ function isFormularioValido() {
 		return confirm("VERIFIQUE SE A SITUAÇÃO '<?=dominioSituacaoPA::$DS_SITUACAO_PA_AGUARDANDO_ACAO?>' ESTÁ CORRETA!");		
 	}
 			
+	campoNumDocImputada = document.frm_principal.<?=voPA::$nmAtrNumDocImputada?>;
+	//if (campoNumDocImputada != null && !isCampoCNPFouCNPJValido(campoNumDocImputada, true)){
+	if (campoNumDocImputada != null && !isCampoTextoValido(campoNumDocImputada, true)){				
+		return false;		
+	}
+
 	return true;
 }
 
@@ -102,7 +109,7 @@ function carregaDadosContratada(){
 	if(cdDemanda != "" && anoDemanda != ""){
 		str = anoDemanda + '<?=CAMPO_SEPARADOR?>' + cdDemanda;
 		//vai no ajax
-		getDadosContratadaPorDemanda(str, '<?=vopessoa::$nmAtrNome?>');
+		getDadosContratadaPorDemanda(str, '<?=vopessoa::$nmAtrNome?>', '<?=constantes::$CD_FUNCAO_INCLUIR?>');
 	}
 }
 
@@ -163,28 +170,38 @@ function getDataPrazo(){
             <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
             <TBODY>
 	        <?php
+	        $domSiPA = new dominioSituacaoPA();
+	        $comboSituacao = new select($domSiPA::getColecao());
 	        
-	        if(!$isInclusao){
-
+	        if(!$isInclusao){        
 	        getDemandaDetalhamento($voDemanda);
 			getContratoDet($voContrato);
 			
-			$domSiPA = new dominioSituacaoPA();
-			$comboSituacao = new select($domSiPA::getColecao());				
+			if(!isContratoValido($voContrato)){
 	        ?>
 			<TR>
-	            <TH class="campoformulario" nowrap>Situação:</TH>
-	            <TD class="campoformulario" colspan=3><?php echo $comboSituacao->getHtmlCombo(voPA::$nmAtrSituacao,voPA::$nmAtrSituacao, $vo->situacao, true, "campoobrigatorio", false, " required ");?></TD>
-				</TD>
+	            <TH class="campoformulario" nowrap>CNPJ/CPF imputada:</TH>
+	            <TD class="campoformulario" colspan=3>
+	            <?php 
+	            echo getHTMLInputNumDocumentoPessoa(voPA::$nmAtrNumDocImputada, voPA::$nmAtrNumDocImputada, documentoPessoa::getNumeroDocFormatado($vo->numDocImputada), "campoobrigatorio");
+	            ?>
+	            </TD>
 	        </TR>
-			
+	        <?php 
+			}
+			?>
+			<TR>
+	            <TH class="campoformulario" nowrap>Situação:</TH>
+	            <TD class="campoformulario" colspan=3>
+	            <?php 
+	            echo $comboSituacao->getHtmlCombo(voPA::$nmAtrSituacao,voPA::$nmAtrSituacao, $vo->situacao, true, "campoobrigatorio", false, " required ");?>
+	            </TD>
+	        </TR>			
 			<?php			
 	        }else{
 	            $selectExercicio = new selectExercicio();
 	            $vo->dtAbertura = dtHojeSQL;
 	            
-	            $domSiPA = new dominioSituacaoPA();
-	            $comboSituacao = new select($domSiPA::getColecao());
 	            echoo(getInputHidden(voPA::$nmAtrSituacao, voPA::$nmAtrSituacao, dominioSituacaoPA::$CD_SITUACAO_PA_INSTAURADO));
 	        ?>
 			<TR>
