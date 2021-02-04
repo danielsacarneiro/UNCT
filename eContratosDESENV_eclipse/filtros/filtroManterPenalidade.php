@@ -174,14 +174,19 @@ class filtroManterPenalidade extends filtroManter{
 		
 		if($this->doc != null){
 			$filtro = $filtro . $conector
-						. $nmTabelaPessoaContrato. "." .vopessoa::$nmAtrDoc
-						. "='"
-						. documentoPessoa::getNumeroDocSemMascara($this->doc)
-						. "'";
-			
-			$conector  = "\n AND ";
-		}	
-
+			. "($nmTabelaPessoaContrato." .vopessoa::$nmAtrDoc
+			. "="
+					. getVarComoString(documentoPessoa::getNumeroDocSemMascara($this->doc))
+					. " OR "
+							. "$nmTabela." .voPA::$nmAtrNumDocImputada
+							. "="
+									. getVarComoString(documentoPessoa::getNumeroDocSemMascara($this->doc))
+									. ")"
+											;
+												
+											$conector  = "\n AND ";
+		}
+		
 		if($this->cdGestor != null){
 			$filtro = $filtro . $conector
 						//. $nmTabela. "." .voPA::$nmAtrCdGestor

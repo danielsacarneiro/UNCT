@@ -312,13 +312,17 @@ class dbDemandaTramitacao extends dbprocesso {
 		if($isInMonitorarAlterado){
 			$voDemanda->inMonitorar = $vo->inMonitorar;
 		}
-		
+				
 		$cdPessoaRespATJATela = $vo->cdPessoaRespATJA;
 		$cdPessoaRespATJABanco = $voDemanda->cdPessoaRespATJA;
 		$iscdPessoaRespATJAAlterado = $cdPessoaRespATJATela != $cdPessoaRespATJABanco;
 		if($iscdPessoaRespATJAAlterado){
 			$voDemanda->cdPessoaRespATJA = $vo->cdPessoaRespATJA;
 		}
+		
+		//$voDemanda = new voDemanda();
+		//alternativa para o trecho acima, implementado depois
+		//$isCdPessoaRespUNCTAlterado = $voDemanda->setAtributoTelaSeAlterado($vo, "cdPessoaRespUNCT");
 		
 		$isSituacaoAlterada = $voDemanda->situacao != dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO;
 		if($isSituacaoAlterada){
@@ -329,7 +333,8 @@ class dbDemandaTramitacao extends dbprocesso {
 		if($isSituacaoAlterada 
 				|| $isFaseAlterada
 				|| $isInMonitorarAlterado
-				|| $iscdPessoaRespATJAAlterado){
+				|| $iscdPessoaRespATJAAlterado
+				|| $isCdPessoaRespUNCTAlterado){
 			$retorno = $voDemanda;
 		}
 			
