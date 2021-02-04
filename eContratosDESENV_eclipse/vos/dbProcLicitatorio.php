@@ -33,6 +33,8 @@ include_once (caminho_funcoes."pa/dominioSituacaoPA.php");
 	  			$retorno = $registrobanco;
 	  			
 	  		}
+  		}else {
+  			throw new excecaoChaveRegistroInexistente();
   		}
   	
   		return $retorno;

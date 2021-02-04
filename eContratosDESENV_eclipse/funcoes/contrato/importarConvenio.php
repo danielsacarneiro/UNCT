@@ -50,6 +50,7 @@ if($tipoContrato != "V"){
 	$inputFileName = dbcontrato::getCaminhoArquivoPlanilha(dominioTipoContrato::$CD_TIPO_PROFISCO);
 	$isBuscarPlanilhaPorNome = false;
 	echoo("IMPORTAÇÃO DE CONTRATOS PROFISCO INICIADA.");
+	$isImportacaoPROFISCO = true;
 }else{
 	echoo("IMPORTAÇÃO DE CONVÊNIOS INICIADA.");
 }
@@ -113,6 +114,10 @@ if($totalResultado <= 0){
 	$dbprocesso->finalizar();
 }
 
+if($isImportacaoPROFISCO){
+	echo "IMPORTANDO NOVAS CONTRATADAS ... <br><br>";
+	$dbprocesso->atualizarEntidade("call importarContratada();");
+}
 echo "FIM... <br><br>";
 
 function imprimeLinha($linha){

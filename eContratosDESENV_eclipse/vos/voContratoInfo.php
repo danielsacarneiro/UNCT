@@ -5,6 +5,7 @@ include_once (caminho_util."dominioSetor.php");
 Class voContratoInfo extends voentidade{
 	
 	static $NM_TABELA_RERRA = "NM_TABELA_RERRA";
+	static $NmColNumRerra = "NmColNumRerra";
 	static $TEXTO_TAG_CONTRATO_SUBST = "SEI da demanda do contrato MATER substituto da presente contratação.";
 	static $IDREQNmPessoaGestor = "IDREQNmPessoaGestor";
 	static $NM_DIV_CONTRATO_SUBS = "NM_DIV_CONTRATO_SUBS";

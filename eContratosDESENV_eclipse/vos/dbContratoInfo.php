@@ -1,7 +1,7 @@
 <?php
 include_once (caminho_lib . "dbprocesso.obj.php");
 class dbContratoInfo extends dbprocesso {
-	static $FLAG_PRINTAR_SQL = false;
+	static $FLAG_PRINTAR_SQL = FALSE;
 	
 	function consultarPorChaveTela($vo, $isHistorico) {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
@@ -31,7 +31,7 @@ class dbContratoInfo extends dbprocesso {
 				getSQLCOALESCE($colecaoAtributoCoalesceNmPessoa,vopessoa::$nmAtrNome),
 				$nmTabelaPessoaGestor . "." . vopessoa::$nmAtrCd . " AS " . voContratoInfo::$nmAtrCdPessoaGestor,
 				$nmTabelaPessoaGestor . "." . vopessoa::$nmAtrNome . " AS " . voContratoInfo::$IDREQNmPessoaGestor,
-				"$nmTabelaContratoInfoRerra." . vocontrato::$nmAtrSqContrato . " AS testando",
+				"$nmTabelaContratoInfoRerra." . voContratoInfo::$NmColNumRerra,
 		);
 		
 		$groupbyinterno = $nmTabela . "." . vocontrato::$nmAtrAnoContrato . "," . $nmTabela . "." . vocontrato::$nmAtrCdContrato . "," . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
@@ -75,7 +75,9 @@ class dbContratoInfo extends dbprocesso {
 		. ",$nmTabelaContrato." . vocontrato::$nmAtrSqEspecieContrato*/
 		;		
 		$queryJoin .= "\n LEFT JOIN ";
-		$queryJoin .= " (SELECT $dadosRerra, MAX(" . vocontrato::$nmAtrSqContrato . ") AS " . vocontrato::$nmAtrSqContrato . " FROM " . $nmTabContratoInterna;
+		$queryJoin .= " (SELECT $dadosRerra, MAX(" . vocontrato::$nmAtrSqContrato . ") AS " . vocontrato::$nmAtrSqContrato
+		. ", COUNT(*) AS " . voContratoInfo::$NmColNumRerra
+		. " FROM " . $nmTabContratoInterna;
 		$queryJoin .= " WHERE " . vocontrato::$nmAtrCdEspecieContrato . " = " . getVarComoString(dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_RERRATIFICACAO);
 		$queryJoin .= " group by $dadosRerra) $nmTabelaContratoInfoRerra \n ON ";
 		$queryJoin .= $nmTabela . "." . voContratoInfo::$nmAtrAnoContrato . "=" . $nmTabelaContratoInfoRerra . "." . vocontrato::$nmAtrAnoContrato;

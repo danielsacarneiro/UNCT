@@ -417,6 +417,22 @@ class voentidade extends multiplosConstrutores {
 		return static::getAtributosChavePrimaria();
 	}
 	
+	/**
+	 * Seta o atributo apenas se ele sofreu alteracao na tela
+	 * @param unknown $voTela
+	 * @param unknown $nmAtributo
+	 * @return falso se nao foi alterado, verdadeiro caso contrario
+	 */
+	function setAtributoTelaSeAlterado($voTela, $nmAtributo){
+		$atributoTela = $voTela->$nmAtributo;
+		$atributoBanco = $this->$nmAtributo;
+		$isatributoAlterado = $atributoTela != $atributoBanco;
+		if($isatributoAlterado){
+			$this->$nmAtributo = $atributoTela;
+		}
+		
+		return $isatributoAlterado;
+	}	
 	
 	/*
 	 * function validaExclusaoRelacionamentoHistorico(){

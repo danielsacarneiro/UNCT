@@ -144,12 +144,12 @@ function getContratoDetalhamentoParam($arrayParametro) {
 			$colecao = $voContratoInfoPK->dbprocesso->consultarPorChaveTela($voContratoInfoPK, false);
 			$voContratoInfoPK->getDadosBanco($colecao);
 			//var_dump($colecao);
-			$sqRerra = $colecao["testando"];
+			$numRerra = $colecao[voContratoInfo::$NmColNumRerra];
 			
 			//echo "rerra $sqRerra";
-			$temRerra = isAtributoValido($sqRerra);
+			$temRerra = isAtributoValido($numRerra);
 			if($temRerra){
-				echo getTextoHTMLTagMouseOver("|". getTextoHTMLDestacado("ReRRA"), "Verifique se o RERRA alterou dados relevantes do contrato.", true);
+				echo getTextoHTMLTagMouseOver("|". getTextoHTMLDestacado("ReRRA($numRerra)"), "Verifique se o(s) RERRA(s) alterou(raram) dados relevantes do contrato.", true);
 			}
 			
 			$cdAutorizacaoEconti = $voContratoInfoPK->cdAutorizacao;

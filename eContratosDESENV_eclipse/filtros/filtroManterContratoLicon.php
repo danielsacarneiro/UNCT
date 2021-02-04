@@ -162,6 +162,7 @@ class filtroManterContratoLicon extends filtroManter {
 	function getAtributosOrdenacao() {
 		$varAtributos = array (
 				voDemandaContrato::$nmAtrAnoDemanda => "Ano.Demanda",
+				voDemandaContrato::$nmAtrAnoContrato => "Ano.Contrato",
 				voDemandaContrato::$nmAtrCdDemanda => "Cd.Demanda",
 				voContratoLicon::$nmAtrDhUltAlteracao => "Data"
 		);

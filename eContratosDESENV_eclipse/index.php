@@ -133,7 +133,7 @@ function getNumServico($count){
 		f5.adicionarItem(new Link("IMPORTAR PROFISCO", "<?=caminho_funcoesHTML?>contrato/importarConvenio.php?tipo=P", "", null,true));
 		f5.adicionarItem(new Link('______', '#', ''));		
 		f5.adicionarItem(new Link("ATUALIZAR CONTRATADA", "<?=caminho_funcoesHTML?>contrato/atualizarContratada.php", "", null,true));
-		f5.adicionarItem(new Link("REMOVER CARACTERES ESPECIAIS", "<?=caminho_funcoesHTML."contrato/atualizarContratada.php?". dbcontrato::$ID_REQ_REMOVER_CARACTER_ESPECIAL?>=S", "", null,true));
+		//f5.adicionarItem(new Link("REMOVER CARACTERES ESPECIAIS", "<?=caminho_funcoesHTML."contrato/atualizarContratada.php?". dbcontrato::$ID_REQ_REMOVER_CARACTER_ESPECIAL?>=S", "", null,true));
 		f.adicionarItem(f5);	
 	<?php
 	}

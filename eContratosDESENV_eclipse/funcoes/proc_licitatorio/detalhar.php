@@ -6,6 +6,7 @@ include_once (caminho_funcoes . "contrato/biblioteca_htmlContrato.php");
 include_once (caminho_funcoes . "demanda/biblioteca_htmlDemanda.php");
 
 //inicia os parametros
+try{
 inicio();
 
 $vo = new voProcLicitatorio();
@@ -225,6 +226,11 @@ function confirmar() {
     </TBODY>
 </TABLE>
 </FORM>
+<?php 
+}catch (excecaoGenerica $ex){
+	tratarExcecaoHTML($ex);
+	//echo $ex->getMessage();
+}?>
 
 </BODY>
 </HTML>
