@@ -310,7 +310,14 @@ function calcularModificacaoNovo(pArrayCampos) {
 		var vlBasePercentualGestor = 0;
 		/*alert(campoVlBasePercentualGestor);
 		alert(campoVlMensalBase);*/
-		campoVlBasePercentualGestor.value = campoVlMensalBase.value;
+		try{
+			campoVlBasePercentualGestor.value = campoVlMensalBase.value;
+		}catch(ex){
+			//se levantar o erro aqui, eh porque o campo valor mensal, e qualquer outro do contrato, nao foi carregado
+			exibirMensagem("Termo nao localizado. Inclua-o no sistema para continuar.");
+			return;
+		}		
+
 		/*var vlTemp = getValorCampoMoedaComoNumeroValido(campoVlMensalBase);
 		campoVlBasePercentualGestor.value = vlTemp;
 		setValorCampoMoedaComSeparadorMilhar(campoVlBasePercentualGestor, vlTemp , 2);*/		
@@ -448,4 +455,167 @@ function setFiltroContratosPortalTransparencia(pArrayIdCampos){
 	campoPublicado.value = 'S';	
 	
 	exibirMensagem("Lembrar de selecionar o tipo de contrato (Ex. C-SAFI, CV-SAFI...).\nRealizada a consulta, exportar em Excel.");
+}
+
+//Formata o proclic para o padrao SEFAZ
+function getValorCampoProcLicitatorio(pCampo) {
+
+	var vlCampo = pCampo.value;
+	var tam = vlCampo.length;
+
+	// Tira os '.'
+	/*while (vlCampo.indexOf('.') != -1) {
+		vlCampo = vlCampo.replace('.', '');
+	}*/
+	// Tira os ' '
+	while (vlCampo.indexOf(' ') != -1) {
+		vlCampo = vlCampo.replace(' ', '');
+	}
+	
+	// Tira os '/'
+	while (vlCampo.indexOf('/') != -1) {
+		vlCampo = vlCampo.replace('/', '.');
+	}
+	
+	tam = vlCampo.length;
+	vlCampo = vlCampo.toUpperCase();
+	
+	
+	/*if (tam > 14) {
+		tam = 14;
+		vlCampo = vlCampo.substr(0, 14);
+	}*/
+			
+	/*if ((tam < 11 ) || (tam > 11 && tam < 14)){
+		return;	
+	}
+	if (tam == 11 && isCampoCNPFouCNPJValido(pCampo, true, true)){
+		formatarCampoCNPF(pCampo, pEvento)
+	}else if (tam == 14 ){
+		formatarCampoCNPJ(pCampo, pEvento)
+	}*/
+	
+	return vlCampo;
+}
+
+//usado no metodo onblur ou onkeyup
+function formatarCampoProcLicitatorio(pCampo, pEvento) {
+	if (isTeclaFuncional(pEvento)) {
+		return;
+	}
+
+	var vlCampo = pCampo.value;
+	var tam = vlCampo.length;	
+
+	vlCampo = getValorCampoProcLicitatorio(pCampo);
+	pCampo.value = vlCampo;
+}
+
+// Valida se o proclic eh da SEFAZ
+function isCampoProcLicitatorioSEFAZValido(pCampo, pInObrigatorio, pSemMensagem) {
+  var vlCampo = pCampo.value;
+  var tam = vlCampo.length;
+  var msg = "";
+  
+  var isvalido = vlCampo.indexOf('SAD') == -1 && vlCampo.indexOf('SEFAZ') != -1;
+
+	if (pInObrigatorio != null) {
+		if (pInObrigatorio) {
+			if (pCampo.className == "campoobrigatorio") {
+				msg = "\n" + mensagemGlobal(0);
+			} else {
+				msg = "\n" + mensagemGlobal(12);
+			}
+
+		} else {
+			msg = "\n" + mensagemGlobal(1);
+
+			if (vlCampo == "")
+				return true;
+		}
+	}
+
+	var filtro = /^([A-Z0-9.-])*$/;
+	if (!filtro.test(vlCampo)) {
+		if (!pSemMensagem) {
+			selecionarCampo(pCampo);
+			exibirMensagem(mensagemGlobal(43) + msg);
+			focarCampo(pCampo);
+		}
+
+		return false;
+	}
+
+	/*numcnpf = vlCampo;
+	numcnpf = numcnpf.toString().replace("-", "");
+	numcnpf = numcnpf.toString().replace(".", "");
+	numcnpf = numcnpf.toString().replace(".", "");
+	numcnpf = numcnpf.toString().replace("/", "");*/
+
+	if(!isvalido){
+		if (!pSemMensagem) {
+			selecionarCampo(pCampo);
+			exibirMensagem("Verifique o formato do numero do PL." + msg);
+			focarCampo(pCampo);
+		}
+
+		return false;
+	}
+	
+	return true;	
+	
+	
+}
+
+// Formata o campo CNPF "pCampo" passado como parâmetro
+function formatarCampoCNPF(pCampo, pEvento) {
+	var vlCampo = pCampo.value;
+	var tam = vlCampo.length;
+
+	if (isTeclaFuncional(pEvento)) {
+		return;
+	}
+
+	// Ignorando a tentativa de colocar máscara durante a digitação em dispositivos móveis
+	if (pEvento && isAcessoMovel() && pEvento.type == "keyup") {
+		return;
+	}
+
+	// Tira os '.'
+	while (vlCampo.indexOf('.') != -1) {
+		vlCampo = vlCampo.replace('.', '');
+	}
+	// Tira os '-'
+	while (vlCampo.indexOf('-') != -1) {
+		vlCampo = vlCampo.replace('-', '');
+	}
+	// Caso seja grande demais, trunca.
+	var tamanho = vlCampo.length;
+	/*if (tamanho > 11) {
+		tamanho = 11;
+		vlCampo = vlCampo.substr(0, 11);
+	}*/
+
+	var filtro = /^([0-9])*$/;
+	if (!filtro.test(vlCampo)) {
+		pCampo.select();
+		exibirMensagem(mensagemGlobal(90));
+		pCampo.value = pCampo.value.substr(0, tam - 1);
+		focarCampo(pCampo);
+		return;
+	}
+
+	if (tamanho > 3 && tamanho <= 6) {
+		vlCampo = vlCampo.substr(0, 3) + '.' + vlCampo.substr(3);
+	} else if (tamanho > 6 && tamanho <= 9) {
+		vlCampo = vlCampo.substr(0, 3) + '.' + vlCampo.substr(3, 3) + '.' + vlCampo.substr(6);
+	} else if (tamanho > 9) {
+		vlCampo = vlCampo.substr(0, 3) + '.' + vlCampo.substr(3, 3) + '.' + vlCampo.substr(6, 3) + '-' + vlCampo.substr(9);
+	}
+
+	pCampo.value = vlCampo;
+
+	/*if (tamanho >= 11) {
+		isCampoCNPFValido(pCampo);
+	}*/
 }
