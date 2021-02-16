@@ -94,17 +94,29 @@ class db {
 		$query = str_replace ( constantes::$CD_NOVA_LINHA, "", $query );
 		
 		//$msg = "<br>----ERROR------:<br>" . mysqli_error ( $this->id_conexao ) . "<br>";
-		$msg = "<br>----ERROR------:<br>";
-		$msg .= $ex->getMessage (). "<br>";
+		$msgError = "<br>----ERROR------:<br>";
+		$msg = $msgError . $ex->getMessage (). "<br>";
 		$msg = $msg. "Query: $query";
-		$msg = $msg. ".<br>CODIGO:".$ex->getCode()."<br>";		
+		$msg = truncarStringHTMLComDivExpansivel("testeDIVErro", $msg, sizeof($msgError), false, true);
+		//$msg = $msg. ".<br>CODIGO:".$ex->getCode()."<br>";		
 		
+		$exRetorno = new excecaoGenerica($msg);
 		if($ex != null){
-			throw new excecaoGenerica($msg, $ex->getCode(), $ex);
-		}else{
-			throw new excecaoGenerica($msg);
-		}		
+			$exCode = $ex->getCode();
+			if($exCode == excecaoGenerica::$CD_EXCECAO_CHAVE_INEXISTENTE){
+				$exRetorno = new excecaoChaveRegistroInexistente($msg, $ex);
 				
+			}else if($exCode == excecaoGenerica::$CD_EXCECAO_CHAVE_DUPLICADA){
+				$exRetorno = new excecaoChaveRegistroDuplicado($msg, $ex);
+			}else if($exCode == excecaoGenerica::$CD_EXCECAO_ERRO_SINTAXE){
+				$exRetorno = new excecaoErroSintaxe($msg, $ex);
+			
+			}else{				
+				$exRetorno = new excecaoGenerica($msg, $ex->getCode(), $ex);
+			}
+		}
+		
+		throw $exRetorno;				
 	}
 	
 	/**

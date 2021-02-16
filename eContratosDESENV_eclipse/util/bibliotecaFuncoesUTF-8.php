@@ -5,11 +5,14 @@
  * @param unknown $param
  * @return mixed
  */
-function getStringImportacaoCaracterEspecial($param){
+function getStringImportacaoCaracterEspecial($param, $removerEspaco= false){
 	$param = str_replace('“', '"', $param);
 	$param = str_replace('”', '"', $param);
 	$param = str_replace('–', '-', $param);
 	$param = str_replace('?', '-', $param);
+	if($removerEspaco){
+		$param = str_replace(' ', '', $param);
+	}
 	
 	/*UPDATE contrato SET
 	 ct_contratada = replace(replace(replace(replace(ct_contratada,'“','"'),'”','"'),'–','-'), '?','-'),

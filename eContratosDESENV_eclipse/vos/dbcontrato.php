@@ -62,6 +62,10 @@ class dbcontrato extends dbprocesso {
 		$arrayColunasRetornadas = array (
 				$nmTabela . ".*",
 				$nmTabelaPessoa . "." . vopessoa::$nmAtrDoc,
+				getSQLCASEIsNULL("$nmTabelaContratoInfo.".voContratoInfo::$nmAtrCdContrato
+						, getVarComoString(constantes::$CD_NAO)
+						, getVarComoString(constantes::$CD_SIM)
+						, filtroManterContrato::$NmColTemContratoInfo),
 		);	
 		
 		$inSQLJoinContratoInfo = "LEFT JOIN";
@@ -354,7 +358,6 @@ class dbcontrato extends dbprocesso {
 		. "," . $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrSqEspecieContrato
 		;
 
-
 		//a query abaixo eh p pegar a ultima situacao incluida em contratolicon que definirah se o contrato foi incluido no licon
 		$nmTabContratoInterna = $nmTabelaContratoLicon;
 		$queryJoin .= "\n left JOIN ";
@@ -539,7 +542,16 @@ class dbcontrato extends dbprocesso {
 		return $colecao[0][$nmColunaSq];	
 	}
 	
+	/*function alterar($vo) {
+		$vo = $this->setDadosNormalizados($vo);
+		parent::alterar ( $vo );
+	}*/
+	
 	function incluirSQL($voContrato) {
+		//var_dump($voContrato);
+		
+		//echo "dados contrato: " . $voContrato->sqEspecie;
+		
 		$atributosInsert = $voContrato->getTodosAtributos ();
 		// var_dump ($atributosInsert);
 		$arrayAtribRemover = array (
@@ -549,11 +561,16 @@ class dbcontrato extends dbprocesso {
 		);
 
 		// var_dump($arrayAtribRemover);
+		//$voContrato = new vocontrato();
+		//so normaliza se a inclusao vier da tela
+		if($voContrato->importacao == "N"){
+			$voContrato = $this->setDadosNormalizados($voContrato);
+		}
 
 		$atributosInsert = removeColecaoAtributos ( $atributosInsert, $arrayAtribRemover );
 		// var_dump ($atributosInsert);
 
-		$atributosInsert = getColecaoEntreSeparador ( $atributosInsert, "," );
+		$atributosInsert = getColecaoEntreSeparador ( $atributosInsert, ", " );
 
 		// echo "<br>$atributosInsert";
 
@@ -619,72 +636,18 @@ class dbcontrato extends dbprocesso {
 
 		return $retorno;
 	}
+	
 	function getSQLValuesUpdate($voContrato) {
 		$retorno = "";
 		$sqlConector = "";
-
-		if ($voContrato->tipo != null) {
-			$retorno .= $sqlConector . vocontrato::$nmAtrTipoContrato . " = " . $this->getVarComoString ( $voContrato->tipo );
-			$sqlConector = ",";
-		}
-
-		if ($voContrato->especie != null) {
-			$retorno .= $sqlConector . vocontrato::$nmAtrEspecieContrato . " = " . $this->getVarComoString ( $voContrato->especie );
-			$sqlConector = ",";
-		}
-
-		if ($voContrato->sqEspecie != null) {
-			$retorno .= $sqlConector . vocontrato::$nmAtrSqEspecieContrato . " = " . $this->getVarComoNumero ( $voContrato->sqEspecie );
-			$sqlConector = ",";
-		}
-
-		if ($voContrato->cdEspecie != null) {
-			$retorno .= $sqlConector . vocontrato::$nmAtrCdEspecieContrato . " = " . $this->getVarComoString ( $voContrato->cdEspecie );
-			$sqlConector = ",";
-		}
-
-		if ($voContrato->modalidade != null) {
-			$retorno .= $sqlConector . vocontrato::$nmAtrModalidadeContrato . " = " . $this->getVarComoString ( $voContrato->modalidade );
-			$sqlConector = ",";
-		}
-
-		if ($voContrato->cdPessoaContratada != null) {
-			$retorno .= $sqlConector . vocontrato::$nmAtrCdPessoaContratada . " = " . $this->getVarComoNumero ( $voContrato->cdPessoaContratada );
-			$sqlConector = ",";
-		}
-
-		if ($voContrato->contratada != null) {
-			$retorno .= $sqlConector . vocontrato::$nmAtrContratadaContrato . " = " . $this->getVarComoString ( $voContrato->contratada );
-			$sqlConector = ",";
-		}
-
-		if ($voContrato->docContratada != null) {
-			$retorno .= $sqlConector . vocontrato::$nmAtrDocContratadaContrato . " = " . $this->getVarComoString ( $voContrato->docContratada );
-			$sqlConector = ",";
-		}
-
+		
+		//$vo = new vocontrato();
+		//se o contrato foi alterado, ele deixa de ser IMPORTADO
+		$retorno .= $sqlConector . vocontrato::$nmAtrInImportacaoContrato . " = " . $this->getVarComoString (constantes::$CD_NAO);
+		$sqlConector = ",";
+		
 		if ($voContrato->gestor != null) {
 			$retorno .= $sqlConector . vocontrato::$nmAtrGestorContrato . " = " . $this->getVarComoString ( $voContrato->gestor );
-			$sqlConector = ",";
-		}
-
-		if ($voContrato->cdGestor != null) {
-			$retorno .= $sqlConector . vocontrato::$nmAtrCdGestorContrato . " = " . $this->getVarComoNumero ( $voContrato->cdGestor );
-			$sqlConector = ",";
-		}
-
-		if ($voContrato->nmGestorPessoa != null) {
-			$retorno .= $sqlConector . vocontrato::$nmAtrGestorPessoaContrato . " = " . $this->getVarComoString ( $voContrato->nmGestorPessoa );
-			$sqlConector = ",";
-		}
-
-		if ($voContrato->cdPessoaGestor != null) {
-			$retorno .= $sqlConector . vocontrato::$nmAtrCdPessoaGestorContrato . " = " . $this->getVarComoNumero ( $voContrato->cdPessoaGestor );
-			$sqlConector = ",";
-		}
-
-		if ($voContrato->obs != null) {
-			$retorno .= $sqlConector . vocontrato::$nmAtrObservacaoContrato . " = " . $this->getVarComoString ( $voContrato->obs );
 			$sqlConector = ",";
 		}
 
@@ -692,10 +655,12 @@ class dbcontrato extends dbprocesso {
 			$retorno .= $sqlConector . vocontrato::$nmAtrObjetoContrato . " = " . $this->getVarComoString ( $voContrato->objeto );
 			$sqlConector = ",";
 		}
-
-		if ($voContrato->procLic != null) {
+		
+		if ($voContrato->procLic != null) {			
 			$retorno .= $sqlConector . vocontrato::$nmAtrProcessoLicContrato . " = " . $this->getVarComoString ( $voContrato->procLic );
-			$sqlConector = ",";
+			$sqlConector = ",";			
+			//seta os outros dados do proclic para tambem serem alterados nos ifs seguintes
+			setProcLiciContratoFormatado($voContrato);
 		}
 
 		if ($voContrato->cdProcLic != null) {
@@ -707,13 +672,59 @@ class dbcontrato extends dbprocesso {
 			$retorno .= $sqlConector . vocontrato::$nmAtrAnoProcessoLicContrato . " = " . $this->getVarComoNumero($voContrato->anoProcLic );
 			$sqlConector = ",";
 		}
-
+		//$voContrato = new vocontrato();
+		if ($voContrato->cdModalidadeLic != null) {
+			$retorno .= $sqlConector . vocontrato::$nmAtrCdModalidadeProcessoLicContrato . " = " . $this->getVarComoString($voContrato->cdModalidadeLic);
+			$sqlConector = ",";
+		}
+		
+		if ($voContrato->vlMensal != null) {
+			$retorno .= $sqlConector . vocontrato::$nmAtrVlMensalContrato . " = " . $this->getVarComoDecimal( $voContrato->vlMensal );
+			$sqlConector = ",";
+		}
+		if ($voContrato->vlGlobal != null) {
+			$retorno .= $sqlConector . vocontrato::$nmAtrVlGlobalContrato . " = " . $this->getVarComoDecimal ( $voContrato->vlGlobal );
+			$sqlConector = ",";
+		}
+		
+		if ($voContrato->dtVigenciaInicial != null) {
+			$retorno .= $sqlConector . vocontrato::$nmAtrDtVigenciaInicialContrato . " = " . $this->getVarComoData($voContrato->dtVigenciaInicial );
+			$sqlConector = ",";
+		}
+		if ($voContrato->dtVigenciaFinal != null) {
+			$retorno .= $sqlConector . vocontrato::$nmAtrDtVigenciaFinalContrato . " = " . $this->getVarComoData ( $voContrato->dtVigenciaFinal );
+			$sqlConector = ",";
+		}
+		
+		if ($voContrato->dtAssinatura != null) {
+			$retorno .= $sqlConector . vocontrato::$nmAtrDtAssinaturaContrato . " = " . $this->getVarComoData ( $voContrato->dtAssinatura );
+			$sqlConector = ",";
+		}
+		if ($voContrato->dtPublicacao != null) {
+			$retorno .= $sqlConector . vocontrato::$nmAtrDtPublicacaoContrato . " = " . $this->getVarComoData ( $voContrato->dtPublicacao );
+			$sqlConector = ",";
+		}
+		
 		if ($voContrato->empenho != null) {
 			$retorno .= $sqlConector . vocontrato::$nmAtrNumEmpenhoContrato . " = " . $this->getVarComoString ( $voContrato->empenho );
 			$sqlConector = ",";
 		}
+		
+		if ($voContrato->obs != null) {
+			$retorno .= $sqlConector . vocontrato::$nmAtrObservacaoContrato . " = " . $this->getVarComoString ( $voContrato->obs );
+			$sqlConector = ",";
+		}
+		
+		/*if ($voContrato->linkDoc != null) {
+			$retorno .= $sqlConector . vocontrato::$nmAtrLinkDoc . " = " . $this->getVarComoString ( $voContrato->linkDoc );
+			$sqlConector = ",";
+		}
+		if ($voContrato->linkMinutaDoc != null) {
+			$retorno .= $sqlConector . vocontrato::$nmAtrLinkMinutaDoc . " = " . $this->getVarComoString ( $voContrato->linkMinutaDoc );
+			$sqlConector = ",";
+		}*/		
 
-		if ($voContrato->tpAutorizacao != null) {
+		/*if ($voContrato->tpAutorizacao != null) {
 			$retorno .= $sqlConector . vocontrato::$nmAtrTipoAutorizacaoContrato . " = " . $this->getVarComoString ( $voContrato->tpAutorizacao );
 			$sqlConector = ",";
 		}
@@ -728,30 +739,6 @@ class dbcontrato extends dbprocesso {
 			$sqlConector = ",";
 		}
 
-		if ($voContrato->dtVigenciaInicial != null) {
-			$retorno .= $sqlConector . vocontrato::$nmAtrDtVigenciaInicialContrato . " = " . $this->getDataSQL ( $voContrato->dtVigenciaInicial );
-			$sqlConector = ",";
-		}
-		if ($voContrato->dtVigenciaFinal != null) {
-			$retorno .= $sqlConector . vocontrato::$nmAtrDtVigenciaFinalContrato . " = " . $this->getDataSQL ( $voContrato->dtVigenciaFinal );
-			$sqlConector = ",";
-		}
-		if ($voContrato->dtAssinatura != null) {
-			$retorno .= $sqlConector . vocontrato::$nmAtrDtAssinaturaContrato . " = " . $this->getDataSQL ( $voContrato->dtAssinatura );
-			$sqlConector = ",";
-		}
-		if ($voContrato->dtPublicacao != null) {
-			$retorno .= $sqlConector . vocontrato::$nmAtrDtPublicacaoContrato . " = " . $this->getDataSQL ( $voContrato->dtPublicacao );
-			$sqlConector = ",";
-		}
-		if ($voContrato->vlMensal != null) {
-			$retorno .= $sqlConector . vocontrato::$nmAtrVlMensalContrato . " = " . $this->getDecimalSQL ( $voContrato->vlMensal );
-			$sqlConector = ",";
-		}
-		if ($voContrato->vlGlobal != null) {
-			$retorno .= $sqlConector . vocontrato::$nmAtrVlGlobalContrato . " = " . $this->getDecimalSQL ( $voContrato->vlGlobal );
-			$sqlConector = ",";
-		}
 		if ($voContrato->situacao != null) {
 			$retorno .= $sqlConector . vocontrato::$nmAtrCdSituacaoContrato . " = " . $this->getVarComoString ( $voContrato->situacao );
 			$sqlConector = ",";
@@ -759,15 +746,8 @@ class dbcontrato extends dbprocesso {
 		if ($voContrato->dtProposta != null) {
 			$retorno .= $sqlConector . vocontrato::$nmAtrDtProposta . " = " . $this->getDataSQL ( $voContrato->dtProposta );
 			$sqlConector = ",";
-		}
-		if ($voContrato->linkDoc != null) {
-			$retorno .= $sqlConector . vocontrato::$nmAtrLinkDoc . " = " . $this->getVarComoString ( $voContrato->linkDoc );
-			$sqlConector = ",";
-		}
-		if ($voContrato->linkMinutaDoc != null) {
-			$retorno .= $sqlConector . vocontrato::$nmAtrLinkMinutaDoc . " = " . $this->getVarComoString ( $voContrato->linkMinutaDoc );
-			$sqlConector = ",";
-		}
+		}*/
+		
 		$retorno = $retorno . $sqlConector . $voContrato->getSQLValuesUpdate ();
 
 		return $retorno;
@@ -834,9 +814,6 @@ class dbcontrato extends dbprocesso {
 						$msgErro .= "<BR>" . $e->getMessage ();
 				echo "<BR>" . $msgErro . "<BR>";
 			}
-					//$query = "";
-					// se der pau, vai alterar
-					// $retorno = $this->cDb->atualizarImportacao($query);
 		}
 
 		return $retorno;
@@ -1161,6 +1138,41 @@ class dbcontrato extends dbprocesso {
 		//return $matriz;
 	}
 
+	/**
+	 * funcao usada para processar os dados informados por extenso para dados normalizados do contrato
+	 * como ex o PL, quando eh traduzido em cd e ano
+	 * @throws excecaoFimImportacaoContrato
+	 * @throws excecaoGenerica
+	 * @return vocontrato
+	 */
+	function setDadosNormalizados($vo) {
+		//$vo = new vocontrato();
+		//nao se trata mais de importacao da planilha				
+		$importacao = "N";
+		$registro = consultarPessoaDocumento($vo->docContratada);
+		$cdPessoa = $registro[vopessoa::$nmAtrCd];
+		
+		$retorno = $vo;
+		 	// corrige os tipos de dados
+		$retorno->cdPessoaContratada = $cdPessoa;
+			
+		$retorno->objeto = getStringImportacaoCaracterEspecial ( $retorno->objeto );
+		$retorno->gestor = getStringImportacaoCaracterEspecial ( $retorno->gestor );	
+		
+		setProcLiciContratoFormatado($retorno);
+				
+	 	// echo "<br> VALOR GLOBAL: " . $retorno->vlGlobal;
+	 	// echo "<br> VALOR vlMensal: " . $retorno->vlMensal;
+	 	$retorno->vlGlobal = $this->getDecimalLinhaImportacao ( $retorno->vlGlobal );
+	 	$retorno->vlMensal = $this->getDecimalLinhaImportacao ( $retorno->vlMensal );
+	 	
+	 	$retorno->linkDoc = getDocLinkMascaraImportacao ( $retorno->linkDoc );
+	 	$retorno->linkMinutaDoc = getDocLinkMascaraImportacao ( $retorno->linkMinutaDoc );	 	 
+	 	//getEnderecoArquivoAInserirBase($retorno);
+				
+	 	return $retorno;	
+	}
+	
 	function getVOImportacaoPlanilha($tipo, $linha) {
 		$tpContrato = $linha ["A"];
 		

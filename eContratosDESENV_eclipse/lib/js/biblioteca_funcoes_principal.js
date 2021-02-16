@@ -258,22 +258,40 @@ function limpaCampoDiv(pNmCampoDiv){
 	objectResult.innerHTML = "";
 }
 
-function limparFormularioGeral(){	
+function limparFormularioGeral(pArrayIDCamposExcecao){	
 
-	frm_principal.reset();
+	if(pArrayIDCamposExcecao == null){
+		frm_principal.reset();
+	}
+	
 	for(i=0;i<frm_principal.length;i++){		
 					
-		element = frm_principal.elements[i];		
-		//retira os campos que nao serao resetados 
-		naoValidar = element.name == "cdAtrOrdenacao" 
+		var element = frm_principal.elements[i];		
+		//retira os campos que nao serao resetados
+		var name = element.name;
+		var naoValidar = element.name == "cdAtrOrdenacao" 
 						|| element.name == "qtdRegistrosPorPag" 
 						|| element.name == "utilizarSessao"
 						|| element.name == "consultar"
 						|| element.name == "cdHistorico"							
 						|| element.name == "lupa"
-						|| element.name == "rdb_consulta"							
+						|| element.name == "rdb_consulta"
+						|| element.name == "funcao"	
 						|| element.name == "cdOrdenacao";
-		if(!naoValidar){
+		
+		/*if(name == "ct_tipo"){
+			alert(name + " indice colecao:" + pArrayIDCamposExcecao.indexOf(name));
+		}*/
+		var isExcecao = pArrayIDCamposExcecao!=null  && pArrayIDCamposExcecao.indexOf(name) != -1;
+		/*if(name == "ct_tipo"){
+			if(isExcecao){
+				alert("excecao");
+			}else{
+				alert("nao eh excecao");
+			}
+		}*/
+		
+		if(!naoValidar && !isExcecao){
 			//alert(element.type);
 			limparCampoFormularioEConti(element);
 		}/*else{

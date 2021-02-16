@@ -118,23 +118,17 @@ class voDocumento extends voentidade {
 		$domSetor = new dominioSetor ();
 		$retorno = dominioTpDocumento::getEnderecoPastaBase ();
 		if ($this->cdSetor == dominioSetor::$CD_SETOR_UNCT) {
-			//ESTRUTURA DE PASTAS DA UNCT EH OUTRA
+			// ESTRUTURA DE PASTAS DA UNCT EH OUTRA
 			$retorno = dominioTpDocumento::getEnderecoPastaBaseUNCT ();
-			
-			/*if ($this->tp != null) {
-				$enderecoTemp = "\\" . dominioTpDocumento::getEnderecoPastaBasePorTpDocumento ( $this->tp );
-				$retorno .= "\\ANO $this->ano" . $enderecoTemp;
-				$retorno .= "\\";			
-				$retorno .= $this->link;
-			}*/				
 		}
-		//else{		
-			if ($this->tp != null) {
-				$enderecoTemp = "\\" . dominioTpDocumento::getEnderecoPastaBasePorTpDocumento ( $this->tp );
-				
-				$isDocPA = in_array($this->tp, array_keys(dominioTpDocumento::getColecaoDocsPAAP()));
-				//verifica se eh doc de PA
-				if ($isDocPA){
+		
+		if ($this->tp != null) {
+			$enderecoTemp = "\\" . dominioTpDocumento::getEnderecoPastaBasePorTpDocumento ( $this->tp );
+			
+			if ($this->tp != dominioTpDocumento::$CD_TP_DOC_CONTRATO) {
+				$isDocPA = in_array ( $this->tp, array_keys ( dominioTpDocumento::getColecaoDocsPAAP () ) );
+				// verifica se eh doc de PA
+				if ($isDocPA) {
 					$enderecoPA = dominioTpDocumento::$ENDERECO_PASTA_PA;
 				}
 				
@@ -148,13 +142,26 @@ class voDocumento extends voentidade {
 					$retorno .= $enderecoPA . $enderecoTemp;
 					$retorno .= $enderecoTemp . " $this->ano\\";
 				}
-				
-				$retorno .= $this->link;
+			} else {
+				// separa o nome do doc pelo separador '_' para pegar o contrato
+				// CUIDADO COM O FORMATO DO NOMEM DO ARQUIVO QUE NAO PODE SER ALTERADO!
+				$arrayDoc = explode ( "_", $this->link );
+				$pastacontrato = $arrayDoc [0];
+				// explode pra pegar o ano do contrato
+				$arrayDoc = explode ( "-", $pastacontrato );
+				$anoDocContrato = $arrayDoc [2] + 2000;
+				// regra geral
+				$retorno .= dominioTpDocumento::$ENDERECO_PASTA_DOCUMENTOS;
+				$retorno .= $enderecoPA . $enderecoTemp;
+				$retorno .= $enderecoTemp . " $anoDocContrato\\" . "$pastacontrato\\";
 			}
-		//}
+			
+			$retorno .= $this->link;
+		}
 		
 		return $retorno;
 	}
+	
 	function formatarCodigo($comDescricaoPorExtenso = false) {
 		$retorno = self::formatarCodigoDocumento ( $this->sq, $this->cdSetor, $this->ano, $this->tp );
 		

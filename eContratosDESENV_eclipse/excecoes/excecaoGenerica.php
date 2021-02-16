@@ -13,6 +13,8 @@ class excecaoGenerica extends Exception
 	static $CD_EXCECAO_METODO_NAO_IMPLEMENTADO = 7;
 	static $CD_EXCECAO_ATRIBUTO_INVALIDO = 8;
 	static $CD_EXCECAO_CHAVE_DUPLICADA = 1062;	
+	static $CD_EXCECAO_CHAVE_CONSTRAINT_VIOLADA = -99968678;
+	static $CD_EXCECAO_ERRO_SINTAXE = 1064;
 	
 	var $mensagemSozinha = "";
 	
@@ -34,6 +36,10 @@ class excecaoGenerica extends Exception
     
     public function getMsgEconti() {
     	return $this->mensagemSozinha;
+    }
+    
+    function getMensagemTruncadaTelaConfirmar($str){
+    	return strtoupper(getTextoHTMLDestacado("<BR><BR>$str", white));
     }
     
 }

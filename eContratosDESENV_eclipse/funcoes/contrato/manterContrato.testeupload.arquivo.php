@@ -102,9 +102,9 @@ function isFormularioValido() {
 		return false;		
 	}
 	
-	/*if (!isNmArquivoValido()){
+	if (!isNmArquivoValido()){
 		return false;		
-	}*/
+	}
 
 	return true;
 }
@@ -139,9 +139,9 @@ function cancelar() {
 }
 
 function confirmar() {
-	if(!isFormularioValido()){
+	/*if(!isFormularioValido()){
 		return false;
-	}
+	}*/
 	
 	return confirm("Confirmar Alteracoes?");    
 }
@@ -249,7 +249,7 @@ function testeArquivo(){
 </HEAD>
 <BODY class="paginadados" onload="">
 	  
-<FORM name="frm_principal" method="post" action="confirmarManterContrato.php" onSubmit="return confirmar();">
+<FORM name="frm_principal" method="post" action="campoDadosArquivo.php" enctype="multipart/form-data" onSubmit="return confirmar();">
 
 <INPUT type="hidden" id="funcao" name="funcao" value="<?=$funcao?>">
 
@@ -265,195 +265,16 @@ function testeArquivo(){
             <DIV id="div_filtro" class="div_filtro">
             <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
                 <TBODY>		
-		<?php 
-		if($isInclusao){
-		?>
-	        <TR>
-	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" colspan=3>
-	            <?php 	            
-	            //getCampoDadosContratoSimples(constantes::$CD_CLASS_CAMPO_OBRIGATORIO, "carregaDadosContrato()", false);	            
-	            $pArray = array(null,constantes::$CD_CLASS_CAMPO_OBRIGATORIO,true,true,false,true,"carregaDadosContrato();");
-	            getContratoEntradaArray($pArray);	            	 
-	            ?>
-				<div id="<?=vocontrato::$ID_REQ_DIV_DADOS_MANTER_CONTRATO?>">
-				</div>	            
-	            </TD>
-	        </TR>	
 		<TR>
-            <TH class="campoformulario" nowrap>Nome Contratada:</TH>
-            <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vocontrato::$nmAtrContratadaContrato?>" name="<?=vocontrato::$nmAtrContratadaContrato?>"  value="<?php echo($nmContratada);?>"  class="camponaoobrigatorio" size="50" required></TD>
-            <TH class="campoformulario" width="1%" nowrap>CNPJ/CNPF Contratada:</TH>
-            <TD class="campoformulario" ><INPUT type="text" id="<?=vocontrato::$nmAtrDocContratadaContrato?>" name="<?=vocontrato::$nmAtrDocContratadaContrato?>"  value="<?php echo($docContratada);?>"  onkeyup="formatarCampoCNPFouCNPJ(this, event);" class="camponaoobrigatorio" size="20" maxlength="40" required></TD>
-        </TR>	                	        
-		
-		<?php 
-		}else{
-			getContratoDet($voContrato, false, true);
-		}
-		?>
-		<TR>
-            <TH class="campoformulario" nowrap>Unid.Demandante:</TH>
+
+            <TH class="campoformulario" nowrap>Doc.Assinado:</TH>
             <TD class="campoformulario" colspan="3">
-                 <?php
-                 /*
-                include_once(caminho_vos . "dbgestor.php");
-                $dbgestor = new dbgestor(null);
-                $recordSet = $dbgestor->consultarSelect();
-                $gestorSelect = new select(array());                                
-                $gestorSelect->getRecordSetComoColecaoSelect(vogestor::$nmAtrCd, vogestor::$nmAtrDescricao, $recordSet);
-                echo $gestorSelect->getHtmlCombo($idCampoGestor, $idCampoGestor, $voContrato->cdGestor, true, "camponaoobrigatorio", true, " onChange=carregaGestorPessoa();");                               
-                */?>
-                <INPUT type="text" id="<?=vocontrato::$nmAtrGestorContrato?>" name="<?=vocontrato::$nmAtrGestorContrato?>"  value="<?php echo($nmGestor);?>"  class="campoobrigatorio" size="50" required></TD>
-        </TR>
-		<TR>
-            <TH class="campoformulario" nowrap>Objeto:</TH>
-            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=vocontrato::$nmAtrObjetoContrato?>" name="<?=vocontrato::$nmAtrObjetoContrato?>" class="camponaoobrigatorio" required><?php echo($dsObjeto);?></textarea>
-			</TD>
-        </TR>
-		<TR>
-            <TH class="campoformulario" nowrap><?=getTextoHTMLTagMouseOver("Proc.Licitatorio", "Para os PLs da SEFAZ, o formato deve seguir o exemplo 0013.2018.CPLI.PE.0009.SEFAZ-PE")?>:</TH>
-            <TD class="campoformulario" colspan="3"><INPUT type="text" id="<?=vocontrato::$nmAtrProcessoLicContrato?>" name="<?=vocontrato::$nmAtrProcessoLicContrato?>"  value="<?php echo($procLic);?>"  
-            onKeyUp='formatarCampoProcLicitatorio(this, event)'class="campoobrigatorio" size="50" required></TD>
-        </TR>
-		<TR>
-            <TH class="campoformulario" nowrap>Valor Mensal:</TH>
-            <TD class="campoformulario" ><INPUT type="text" id="<?=vocontrato::$nmAtrVlMensalContrato?>" name="<?=vocontrato::$nmAtrVlMensalContrato?>"  value="<?php echo($vlMensal);?>"
-            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="camponaoobrigatorioalinhadodireita" size="15" required></TD>
-            <TH class="campoformulario" nowrap>Valor Global:</TH>
-            <TD class="campoformulario"><INPUT type="text" id="<?=vocontrato::$nmAtrVlGlobalContrato?>" name="<?=vocontrato::$nmAtrVlGlobalContrato?>"  value="<?php echo($vlGlobal);?>"
-            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="camponaoobrigatorioalinhadodireita" size="15" required></TD>
-        </TR>
-		
-		<TR>
-            <TH class="campoformulario" nowrap>Periodo de Vigencia:</TH>
-            <TD class="campoformulario" colspan="3">
-            	<INPUT type="text" 
-            	       id="<?=vocontrato::$nmAtrDtVigenciaInicialContrato?>" 
-            	       name="<?=vocontrato::$nmAtrDtVigenciaInicialContrato?>" 
-            			value="<?php echo($dtVigenciaInicial);?>"
-            			onkeyup="formatarCampoData(this, event, false);" 
-            			class="camponaoobrigatorio" 
-            			size="10" 
-            			maxlength="10" required> a
-            	<INPUT type="text" 
-            	       id="<?=vocontrato::$nmAtrDtVigenciaFinalContrato?>" 
-            	       name="<?=vocontrato::$nmAtrDtVigenciaFinalContrato?>" 
-            			value="<?php echo($dtVigenciaFinal);?>"
-            			onkeyup="formatarCampoData(this, event, false);" 
-            			class="camponaoobrigatorio" 
-            			size="10" 
-            			maxlength="10" required>
-			</TD>
-        </TR>
-		<TR>
-            <TH class="campoformulario" nowrap>Data Assinatura:</TH>
-            <TD class="campoformulario">
-            	<INPUT type="text" 
-            	       id="<?=vocontrato::$nmAtrDtAssinaturaContrato?>" 
-            	       name="<?=vocontrato::$nmAtrDtAssinaturaContrato?>" 
-            			value="<?php echo($dtAssinatura);?>"
-            			onkeyup="formatarCampoData(this, event, false);" 
-            			class="camponaoobrigatorio" 
-            			size="10" 
-            			maxlength="10" required>
-			</TD>
-               <TH class="campoformulario" nowrap>Data Publicacao:</TH>
-               <TD class="campoformulario">
-                    	<INPUT type="text" 
-                    	       id="<?=vocontrato::$nmAtrDtPublicacaoContrato?>" 
-                    	       name="<?=vocontrato::$nmAtrDtPublicacaoContrato?>" 
-                    			value="<?php echo($dtPublicacao);?>"
-                    			onkeyup="formatarCampoData(this, event, false);" 
-                    			class="camponaoobrigatorio" 
-                    			size="10" 
-                    			maxlength="10" required>
-					</TD>
-    		</TD>
-           </TR>
-		<TR>
-            <TH class="campoformulario" nowrap>Empenho:</TH>
-            <TD class="campoformulario" colspan="3">
-            <INPUT type="text" id="<?=vocontrato::$nmAtrNumEmpenhoContrato?>" name="<?=vocontrato::$nmAtrNumEmpenhoContrato?>"  value="<?php echo($empenho);?>"  class="camponaoobrigatorio" size="20" required></TD>
-        </TR>
-        <?php
-        if(!$isInclusao){
-        ?>
-			<TR>
-		        <TH class="campoformulario" nowrap width="1%">Documento:</TH>
-		        <?php
-		        $endereco = $voContrato->getLinkDocumento();
-		        $enderecoMinuta = $voContrato->getEnredeçoDocumento($voContrato->linkMinutaDoc);
-		        $isContratoPlanilha = $voContrato->importacao != constantes::$CD_NAO;
-		        
-		        $arrayRetorno = getHTMLDocumentosContrato($voContrato);
-		        $temDocsAExibir = $arrayRetorno[0];
-		        $docsAexibir = $arrayRetorno[1];
-		        ?>
-				<TD class="campoformulario" colspan=3>
-				<?php
-				if($isContratoPlanilha || !$temDocsAExibir){
-				?>
-				<TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
-					<TR>						
-						<TH class="campoformulario">
-						Minuta:
-						</TH>											
-						<TD class="campoformulario">
-				        <textarea id="<?=vocontrato::$nmAtrLinkMinutaDoc?>" name="<?=vocontrato::$nmAtrLinkMinutaDoc?>" rows="2" cols="80" class="camporeadonly" readonly><?php echo  $enderecoMinuta;?></textarea>
-					    	<?php    	
-					    	echo getBotaoAbrirDocumento(vocontrato::$nmAtrLinkMinutaDoc);
-					    	?>					        
-				        </TD>
-						</TR>
-						<TR>
-							<TH class="campoformulario">
-							Assinado:
-							</TH>			
-							<TD class="campoformulario">
-					        <textarea id="<?=vocontrato::$nmAtrLinkDoc?>" name="<?=vocontrato::$nmAtrLinkDoc?>" rows="2" cols="80" class="camporeadonly" readonly><?php echo  $endereco;?></textarea>
-					    	<?php    	
-					    	echo getBotaoAbrirDocumento(vocontrato::$nmAtrLinkDoc);
-					    	?>				
-							</TD>						
-					</TR>
-			    </TABLE>
-			   <?php
-				}else{				
-				?>
-				<TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
-					<TR>
-				<?php
-				echo $docsAexibir;
-				?>					
-					</TR>
-			    </TABLE>
-				<?php 
-				}
-				?>	
-				</TD>								
-			</TR>	
-        <?php
-        }
-        ?>					
-			<TR>
-            <TH class="campoformulario" nowrap>Observação:</TH>
-            <TD class="campoformulario" colspan="3">
-				<textarea rows=5 cols="80" id="<?=vocontrato::$nmAtrObservacaoContrato?>" name="<?=vocontrato::$nmAtrObservacaoContrato?>" class="camponaoobrigatorio" ><?php echo($obs);?></textarea>
-				<?php 
-				$pArrayResponsabilidade = array(vocontrato::$nmAtrDtAssinaturaContrato,
-						vocontrato::$nmAtrDtPublicacaoContrato,
-						vocontrato::$nmAtrDtVigenciaInicialContrato,
-						vocontrato::$nmAtrDtVigenciaFinalContrato,
-						vocontrato::$nmAtrNumEmpenhoContrato,
-						vocontrato::$nmAtrVlMensalContrato,
-						vocontrato::$nmAtrVlGlobalContrato,
-						vocontrato::$nmAtrLinkDoc,
-				);
-				
-				echo "<br>".getInputCampoCheckResponsabilidade($pArrayResponsabilidade);
-				?>  
-			</TD>
+            <?php 
+            //echo " |PDF: " .  getInputFile(vocontrato::$nmAtrLinkDoc, vocontrato::$nmAtrLinkDoc, " required onChange='testeArquivo();'");
+            echo " |PDF: " .  getInputFile(vocontrato::$nmAtrLinkDoc, vocontrato::$nmAtrLinkDoc, " required ");
+            ?>
+            </TD>
+         
         </TR>
         <?php if(!$isInclusao){
             echo "<TR>" . incluirUsuarioDataHoraDetalhamento($voContrato) .  "</TR>";

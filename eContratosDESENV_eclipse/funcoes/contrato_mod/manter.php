@@ -176,7 +176,7 @@ function calcular(eElement){
 
 	pCampoVlMensalAtualizado = document.frm_principal.<?=voContratoModificacao::$nmAtrVlMensalAtualizado?>;
 	pCampoVlGlobalAtualizado = document.frm_principal.<?=voContratoModificacao::$nmAtrVlGlobalAtualizado?>;
-	
+
 	pArrayCampos = new Array();
 	pArrayCampos[0] = pCampoVlReferencial;
 	pArrayCampos[1] = pCampoModContrato;
@@ -210,7 +210,7 @@ function calcular(eElement){
 	pArrayCampos[22] = document.frm_principal.<?=voContratoModificacao::$nmAtrVlGlobalModAtual?>;
 	pArrayCampos[23] = document.frm_principal.<?=voContratoInfo::$nmAtrInEscopo?>;
 	pArrayCampos[24] = document.frm_principal.<?=voContratoModificacao::$ID_REQ_NumPrazoUltimaProrrogacao?>;
-			
+
 	calcularModificacaoNovo(pArrayCampos);
 }
 
@@ -383,7 +383,7 @@ function iniciar(){
 			<TR>
 	            <TH class="campoformulario" nowrap>Percentual:</TH>
 	            <TD class="campoformulario" colspan="3">
-	            <b>Acréscimo legal:
+	            <b>Percentual legal:
 	         	<INPUT type="text" id="<?=voContratoModificacao::$nmAtrNumPercentual?>" name="<?=voContratoModificacao::$nmAtrNumPercentual?>"  value="<?php echo(getMoeda($vo->numPercentual,4));?>"
 	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 4, event);" onBlur='calcular(false);' class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="10" readonly>%
 				de <INPUT type="text" id="<?=voContratoModificacao::$ID_REQ_VL_BASE_PERCENTUAL?>" name="<?=voContratoModificacao::$ID_REQ_VL_BASE_PERCENTUAL?>"  value="<?php echo(getMoeda($vo->vlModificacaoReferencial));?>"

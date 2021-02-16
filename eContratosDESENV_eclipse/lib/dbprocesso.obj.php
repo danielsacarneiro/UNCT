@@ -578,7 +578,7 @@ class dbprocesso {
 		// var_dump ($atributosInsert);
 		// echo "<br>";
 		
-		$atributosInsert = getColecaoEntreSeparador ( $atributosInsert, "," );
+		$atributosInsert = getColecaoEntreSeparador ( $atributosInsert, ", " );
 		
 		// echo "<br>$atributosInsert";
 		
@@ -712,6 +712,19 @@ class dbprocesso {
 	}
 	function excluirSQL($voEntidade, $isHistorico) {
 		$nmTabela = $voEntidade->getNmTabelaEntidade ( $isHistorico );
+
+		$query = " SELECT * FROM " . $nmTabela . " \n";
+		$query .= "\n WHERE ";
+		// chave primaria
+		$query .= $voEntidade->getValoresWhereSQLChave ( $isHistorico );
+		
+		$retorno = $this->cDb->consultar( $query );
+		if(isColecaoVazia($retorno)){
+			throw new excecaoChaveRegistroInexistente("Registro inexistente para exclusão.");
+		}
+		if(sizeof($retorno) > 1){
+			throw new excecaoMaisDeUmRegistroRetornado("Mais de um registro a ser excluído. Contate o Suporte.");
+		}
 		
 		$query = " DELETE FROM " . $nmTabela . " \n";
 		$query .= "\n WHERE ";

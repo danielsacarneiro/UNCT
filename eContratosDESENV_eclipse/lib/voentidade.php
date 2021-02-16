@@ -4,6 +4,7 @@ include_once (caminho_util . "bibliotecaFuncoesPrincipal.php");
 class voentidade extends multiplosConstrutores {
 	static $nmTabelaSufixoHistorico = "_hist";
 	static $nmTabelaSufixoSequencial = "_seq";
+	
 	static $nmAtrConfirmarNaoInclusaoDeCamposObrigatorios = "ConfirmarNaoInclusaoDeCamposObrigatorios";
 	static $nmAtrTemDesativado = "TemDesativado";
 	static $nmAtrSqHist = "hist";
@@ -20,6 +21,9 @@ class voentidade extends multiplosConstrutores {
 	static $nmAtrNmUsuarioOperacao = "nm_usuario_operacao";
 	static $nmAtrInDesativado = "in_desativado";
 	static $nmAtrNumQuantidade = "num_quantidade";
+	
+	//usado para os casos de input hidden quando se quer validar o formulario por outros motivos
+	static $ID_REQ_IN_FORMULARIO_VALIDO = "ID_REQ_IN_FORMULARIO_VALIDO";
 	
 	//implementar a constante abaixo quando retirar o temTabHistorico das instancias
 	//static $existeTabHistorico = false;
@@ -433,6 +437,16 @@ class voentidade extends multiplosConstrutores {
 		
 		return $isatributoAlterado;
 	}	
+	
+	/**
+	 * cria nomes alternativos que podem ser usados temporariamente no codigo
+	 * @param unknown $nmAtributo
+	 * @param string $nmAlternativo
+	 * @return boolean
+	 */
+	static function getNomeAtributoAlternativo($nmAtributo, $nmAlternativo = "_hidden"){
+		return "$nmAtributo$nmAlternativo";
+	}
 	
 	/*
 	 * function validaExclusaoRelacionamentoHistorico(){

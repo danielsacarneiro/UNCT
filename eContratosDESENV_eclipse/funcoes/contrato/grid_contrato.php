@@ -5,6 +5,9 @@
              <TBODY>
                 <TR>
                   <TH class="headertabeladados" width="1%">&nbsp;&nbsp;X</TH>
+		                  <?php if($isHistorico){?>
+		                  	<TH class="headertabeladados"  width="1%">Sq.Hist</TH>
+		                  <?php }?>                  
                     <TH class="headertabeladados" width="1%" nowrap>Contrato</TH>
                     <TH class="headertabeladados" width="1%">Espécie</TH>
                     <TH class="headertabeladados" width="20%">Contratada</TH>
@@ -23,6 +26,11 @@
                         $tamanho = sizeof($colecao);
                 else 
                         $tamanho = 0;	
+                
+                 if($isHistorico){
+                 	$colspan++;
+                 }
+                        
                             
                 for ($i=0;$i<$tamanho;$i++) {
                         $voAtual = new vocontrato();
@@ -89,6 +97,13 @@
                     <TD class="tabeladados" <?=$msgAlertaSq?>>
 					<?=getHTMLRadioButtonConsulta("rdb_consulta", "rdb_consulta", $voAtual);?>
                     </TD>
+                  <?php                  
+                  if($isHistorico){                  	
+                  	?>
+                  	<TD class="tabeladados"><?php echo complementarCharAEsquerda($colecao[$i][voRegistroLivro::$nmAtrSqHist], "0", TAMANHO_CODIGOS);?></TD>
+                  <?php 
+                  }
+                  ?>                                        
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo $contrato;?></TD>
                     <TD class="tabeladados"><?php echo $especie?></TD>
                     <TD class="tabeladados"><?php echo $colecao[$i]["ct_contratada"]?></TD>
@@ -137,10 +152,10 @@
 	                   	    <!-- <TD class="botaofuncao"><?=getBotao("bttEstatistica", "Estatísticas", null, false, "onClick='javascript:estatisticas();' accesskey='e'")?></TD> -->
 	                   	    <TD class="botaofuncao"><?=getBotao("bttMovimentacao", "Movimentações", null, false, "onClick='javascript:movimentacoes();' accesskey='m'")?></TD>
 	                   		<?php
-	                   		$arrayBotoesARemover = array(constantes::$CD_FUNCAO_EXCLUIR,
+	                   		/*$arrayBotoesARemover = array(constantes::$CD_FUNCAO_EXCLUIR,
 	                   				constantes::$CD_FUNCAO_INCLUIR,
 	                   				constantes::$CD_FUNCAO_ALTERAR,
-	                   		);
+	                   		);*/
 	                   		echo getBotoesRodapeComRestricao($arrayBotoesARemover, TRUE);
 	                   		?> 
                          </TR>

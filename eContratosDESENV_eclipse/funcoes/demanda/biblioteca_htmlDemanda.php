@@ -274,8 +274,7 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 	return $html;
 }
 
-function getHtmlDocumento($voAtual, $comDescricaoPorExtenso = false) {
-	$html .= "<TD class='tabeladadosalinhadodireita' nowrap> \n";
+function getHtmlDocumentoSemTD($voAtual, $comDescricaoPorExtenso = false, $nmClassCelula="tabeladadosalinhadodireita", $msgDocNaoExiste=null) {
 	if ($voAtual->voDoc->sq != null) {
 		$voDoc = $voAtual->voDoc;
 			
@@ -291,7 +290,29 @@ function getHtmlDocumento($voAtual, $comDescricaoPorExtenso = false) {
 		$html .= "<input type='hidden' name='" . $chave . "' id='" . $chave . "' value='" . $endereco . "'>" . " \n";
 		// $html .= getBotaoValidacaoAcesso("bttabrir_arq", "Abrir Anexo", "botaofuncaop", false,true,true,true, "onClick=\"javascript:abrirArquivo('".$chave."');\"");
 		$html .= getBotaoAbrirDocumento ( $chave );
+	}else{
+		if(isAtributoValido($msgDocNaoExiste)){
+			$html .= $msgDocNaoExiste;
+		}
 	}
+
+	return $html;
+}
+
+function getHtmlDocumento($voAtual, $comDescricaoPorExtenso = false, $nmClassCelula="tabeladadosalinhadodireita") {
+	$html .= "<TD class='$nmClassCelula' nowrap> \n";
+	$html .= getHtmlDocumentoSemTD($voAtual, $comDescricaoPorExtenso, $nmClassCelula);
+	/*if ($voAtual->voDoc->sq != null) {
+		$voDoc = $voAtual->voDoc;
+			
+		$endereco = $voDoc->getEnderecoTpDocumento ();
+		$chave = $voDoc->getValorChavePrimaria ();
+			
+		$html .= $voDoc->formatarCodigo ($comDescricaoPorExtenso) . " \n";
+		$html .= "<input type='hidden' name='" . $chave . "' id='" . $chave . "' value='" . $endereco . "'>" . " \n";
+		// $html .= getBotaoValidacaoAcesso("bttabrir_arq", "Abrir Anexo", "botaofuncaop", false,true,true,true, "onClick=\"javascript:abrirArquivo('".$chave."');\"");
+		$html .= getBotaoAbrirDocumento ( $chave );
+	}*/
 	$html .= "</TD>\n";
 	
 	return $html;	

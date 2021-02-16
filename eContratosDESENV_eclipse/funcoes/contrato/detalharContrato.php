@@ -7,7 +7,7 @@ include_once(caminho_vos."dbcontrato.php");
 //inicia os parametros
 inicio();
 
-$voContrato = new voContrato();
+$vo = $voContrato = new voContrato();
 
 $classChaves = "camporeadonly";
 $readonly = "readonly";		
@@ -134,55 +134,29 @@ function confirmar() {
         <DIV id="div_filtro" class="div_filtro">
         <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
             <TBODY>
+            <?php if($isHistorico){?>
+			<TR>
+                <TH class="campoformulario" nowrap width=1%>Sq.Hist:</TH>
+                <TD class="campoformulario" colspan=3><INPUT type="text" value="<?php echo(complementarCharAEsquerda($vo->sqHist, "0", TAMANHO_CODIGOS));?>"  class="camporeadonlyalinhadodireita" size="5" readonly></TD>
+                <INPUT type="hidden" id="<?=voRegistroLivro::$nmAtrSqHist?>" name="<?=voRegistroLivro::$nmAtrSqHist?>" value="<?=$vo->sqHist?>">
+            </TR>
            <?php
+			}
            if($msgComplementar != null){
            ?>
 			<TR>
 	            <TD class="campoformulario" colspan="4"><?=getTextoHTMLDestacado($msgComplementar)?></TD>
-	        </TR>            
+	        </TR>  
         <?php
           }
         require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
-        getContratoDet($voContrato, true);                
+        //getContratoDet($voContrato, true);      
+        getContratoDet($voContrato, true, true);
         ?>
-        <TR>
-            <TH class="campoformulario" nowrap>Espécie/Ordem:</TH>
-            <TD class="campoformulario" colspan="3">
-                    <?php                    
-                    $dsEspecie = getDsEspecie($voContrato);
-                    ?>
-                     <INPUT type="text" value="<?php echo(strtoupper($dsEspecie));?>"  class="camporeadonlydestacado" size="30" <?=$readonly?>>
-                     <INPUT type="hidden" id="<?=vocontrato::$nmAtrEspecieContrato?>" name="<?=vocontrato::$nmAtrEspecieContrato?>"  value="<?=$voContrato->especie;?>">
-                     <INPUT type="hidden" id="<?=vocontrato::$nmAtrSqEspecieContrato?>" name="<?=vocontrato::$nmAtrSqEspecieContrato?>"  value="<?=$voContrato->sqEspecie;?>">
-        </TR>                    
 		<TR>
-            <TH class="campoformulario" nowrap>Gestor:</TH>
+            <TH class="campoformulario" nowrap>Unid.Demandante:</TH>
             <TD class="campoformulario" colspan="3">
-                <?php
-                 include_once(caminho_funcoes. "gestor/biblioteca_htmlGestor.php");
-                 /*if($voContrato->cdGestor != null){
-                    echo getComboGestorMais(new dbgestor(), vocontrato::$nmAtrCdGestorPessoaContrato, vocontrato::$nmAtrCdGestorPessoaContrato, $voContrato->cdGestor, "camporeadonly", " disabled ");
-                 }
-                 
-                 if($voContrato->gestor != null){
-                    echo "<INPUT type='text' id='nmGestor' name='nmGestor'  value='". $nmGestor ."'  class='camporeadonly' size='50' " . $readonly . ">";
-                }*/
-                ?>
-                </TD>
-        </TR>
-		<TR>
-            <TH class="campoformulario" nowrap>Responsavel:</TH>
-            <TD class="campoformulario" colspan="3">
-                <?php
-                 include_once(caminho_funcoes. "pessoa/biblioteca_htmlPessoa.php");
-                 if($voContrato->cdGestorPessoa != null)
-                    echo getComboGestorPessoaMais(new dbgestorpessoa(), vocontrato::$nmAtrCdGestorPessoaContrato, vocontrato::$nmAtrCdGestorPessoaContrato, $voContrato->cdGestor, $voContrato->cdGestorPessoa, "camporeadonly", " disabled ");
-                 
-                 if($voContrato->nmGestorPessoa != null){
-                    echo "<INPUT type='text' id='nmGestor' name='nmGestor'  value='". $nmGestorPessoa ."'  class='camporeadonly' size='50' " . $readonly . ">";                
-                 }
-                ?>
-                </TD>
+			<INPUT type="text" id="<?=vocontrato::$nmAtrGestorContrato?>" name="<?=vocontrato::$nmAtrGestorContrato?>"  value="<?php echo($nmGestor);?>"  class="camporeadonly" size="50" readonly></TD>                </TD>
         </TR>
 		<TR>
             <TH class="campoformulario" nowrap>Objeto:</TH>
@@ -196,14 +170,10 @@ function confirmar() {
             <INPUT type="text" id="<?=vocontrato::$nmAtrProcessoLicContrato?>" name="<?=vocontrato::$nmAtrProcessoLicContrato?>"  value="<?php echo($procLic);?>"  class="camporeadonly" size="50" <?=$readonly?>>
             <?php            
             if($voContrato->cdProcLic != null){
-            	$exemploFimFormatoNumProcLic = "PE.0028.SEFAZ-PE";
-            	$start = strlen($procLic) - strlen($exemploFimFormatoNumProcLic);
-            	$cdModalidade = substr($procLic, $start,2);
-            	//echoo($cdModalidade);
             	$voproclictemp = new voProcLicitatorio();
             	$voproclictemp->cd = $voContrato->cdProcLic;
             	$voproclictemp->ano = $voContrato->anoProcLic;
-            	$voproclictemp->cdModalidade = $cdModalidade;
+            	$cdModalidade = $voproclictemp->cdModalidade = $voContrato->cdModalidadeLic;
             	 
             	echo "Resultado importação e-Conti: ".formatarCodigoAno($voContrato->cdProcLic, $voContrato->anoProcLic) 
             		. "-" . dominioModalidadeProcLicitatorio::getDescricao($cdModalidade);
@@ -213,10 +183,10 @@ function confirmar() {
             ?>
             </TD>
         </TR>
-		<TR>
+		<!-- <TR>
             <TH class="campoformulario" nowrap>Modalidade:</TH>
             <TD class="campoformulario" colspan="3"><INPUT type="text" id="<?=vocontrato::$nmAtrModalidadeContrato?>" name="<?=vocontrato::$nmAtrModalidadeContrato?>"  value="<?php echo($modalidade);?>"  class="camporeadonly" size="50" <?=$readonly?>></TD>
-        </TR>
+        </TR> -->
 		<TR>
             <TH class="campoformulario" nowrap>Valor Mensal:</TH>
             <TD class="campoformulario" colspan="3"><INPUT type="text" id="<?=vocontrato::$nmAtrVlMensalContrato?>" name="<?=vocontrato::$nmAtrVlMensalContrato?>"  value="<?php echo($vlMensal);?>"  class="camporeadonlyalinhadodireita" size="15" <?=$readonly?>></TD>
@@ -319,41 +289,60 @@ function confirmar() {
 			<textarea rows=5 cols="80" id="<?=vocontrato::$nmAtrObservacaoContrato?>" name="<?=vocontrato::$nmAtrObservacaoContrato?>" class="camporeadonly" <?=$readonly?>><?php echo($obs);?></textarea>  
 		</TD>
     </TR>
-	<TR>
-        <TH class="campoformulario" nowrap width="1%">Documento:</TH>
-        <?php
-        $endereco = $voContrato->getLinkDocumento();
-        $enderecoMinuta = $voContrato->getEnredeçoDocumento($voContrato->linkMinutaDoc);
-        
-        //echo "endereco: " . $enderecoMinuta; 
-        ?>
-		<TD class="campoformulario" colspan=3>
-		<TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
 			<TR>
-				<TH class="campoformulario">
-				Minuta:
-				</TH>			
-				<TD class="campoformulario">
-		        <textarea id="<?=vocontrato::$nmAtrLinkMinutaDoc?>" name="<?=vocontrato::$nmAtrLinkMinutaDoc?>" rows="2" cols="80" class="camporeadonly" readonly><?php echo  $enderecoMinuta;?></textarea>
-		    	<?php    	
-		    	echo getBotaoAbrirDocumento(vocontrato::$nmAtrLinkMinutaDoc);
-		    	?>				
-				</TD>			
+		        <TH class="campoformulario" nowrap width="1%">Documento:</TH>
+		        <?php
+		        $endereco = $voContrato->getLinkDocumento();
+		        $enderecoMinuta = $voContrato->getEnredeçoDocumento($voContrato->linkMinutaDoc);
+		        $isContratoPlanilha = $voContrato->importacao != constantes::$CD_NAO;
+		        
+		        $arrayRetorno = getHTMLDocumentosContrato($voContrato);
+		        $temDocsAExibir = $arrayRetorno[0];
+		        $docsAexibir = $arrayRetorno[1]; 
+		        ?>
+				<TD class="campoformulario" colspan=3>
+				<?php
+				if($isContratoPlanilha || !$temDocsAExibir){
+				?>
+				<TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
+					<TR>						
+						<TH class="campoformulario">
+						Minuta:
+						</TH>											
+						<TD class="campoformulario">
+				        <textarea id="<?=vocontrato::$nmAtrLinkMinutaDoc?>" name="<?=vocontrato::$nmAtrLinkMinutaDoc?>" rows="2" cols="80" class="camporeadonly" readonly><?php echo  $enderecoMinuta;?></textarea>
+					    	<?php    	
+					    	echo getBotaoAbrirDocumento(vocontrato::$nmAtrLinkMinutaDoc);
+					    	?>					        
+				        </TD>
+						</TR>
+						<TR>
+							<TH class="campoformulario">
+							Assinado:
+							</TH>			
+							<TD class="campoformulario">
+					        <textarea id="<?=vocontrato::$nmAtrLinkDoc?>" name="<?=vocontrato::$nmAtrLinkDoc?>" rows="2" cols="80" class="camporeadonly" readonly><?php echo  $endereco;?></textarea>
+					    	<?php    	
+					    	echo getBotaoAbrirDocumento(vocontrato::$nmAtrLinkDoc);
+					    	?>				
+							</TD>						
+					</TR>
+			    </TABLE>
+			   <?php
+				}else{				
+				?>
+				<TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
+					<TR>
+				<?php
+				echo $docsAexibir;
+				?>					
+					</TR>
+			    </TABLE>
+				<?php 
+				}
+				?>	
+				</TD>								
 			</TR>
-			<TR>
-				<TH class="campoformulario">
-				Assinado:
-				</TH>			
-				<TD class="campoformulario">
-		        <textarea id="<?=vocontrato::$nmAtrLinkDoc?>" name="<?=vocontrato::$nmAtrLinkDoc?>" rows="2" cols="80" class="camporeadonly" readonly><?php echo  $endereco;?></textarea>
-		    	<?php    	
-		    	echo getBotaoAbrirDocumento(vocontrato::$nmAtrLinkDoc);
-		    	?>				
-				</TD>			
-			</TR>
-    	</TABLE>
-		</TD>                
-	</TR>
     
 	<TR><?=incluirUsuarioDataHoraDetalhamento($voContrato);?></TR>
         </TBODY>

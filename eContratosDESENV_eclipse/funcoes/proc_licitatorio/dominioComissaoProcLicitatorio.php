@@ -160,6 +160,31 @@ class dominioComissaoProcLicitatorio extends dominio {
 		
 		return $retorno;
 	}
+		
+	/**
+	 * traz colecao de comissoes com as possibilidades de serem encontradadas dentro do numero extenso do proc licitatorio
+	 * @return string
+	 */
+	static function getColecaoComissaoNormalizacaoProcLicitatorio(){
+		//deixa na ultima posicao as especies que podem se repetir
+		// A ORDEM EH IMPORTANTE, pq o item seguinte so sera selecionado se o anterior nao contiver nenhuma palavra em comum
+		$colecao = static::getColecao();
+		foreach ($colecao as $cd => $ds){
+			$retorno[$cd] = static::getOpcoesComissaoFormatado($ds);			
+		}
+		
+		return $retorno;
+	}
+	
+	static function getOpcoesComissaoFormatado($ds){
+		//simula as varias possibilidades de ingresarem o proc licitatorio por extenso, baseado nos valores da planilha
+		return "$ds*". str_replace("-", "", $ds) 
+		. "*" . str_replace("-", " ", $ds)
+		. "*" . str_replace("-", ".", $ds)
+		;
+		
+	}
+	
 	
 }
 ?>

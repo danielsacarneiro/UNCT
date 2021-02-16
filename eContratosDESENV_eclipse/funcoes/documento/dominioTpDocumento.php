@@ -4,6 +4,7 @@ class dominioTpDocumento extends dominio {
 	static $UNIDADE_REDE_LOCAL = "J:";
 	static $UNIDADE_REDE_PLANILHA = "G:";
 	static $ENDERECO_DRIVE = "\\\\sf044836\\_dag$";
+
 	// static $ENDERECO_DRIVE_HTML = "\\sf044836\\\\_dag$";
 	static $ENDERECO_DRIVE_HTML = "J:";
 	static $ENDERECO_PASTABASE = "ATJA";
@@ -36,6 +37,7 @@ class dominioTpDocumento extends dominio {
 	static $CD_TP_DOC_MINUTA = "MI";
 	static $CD_TP_DOC_CERTIDAO_TRANSITO_JULGADO = "TJ";
 	static $CD_TP_DOC_TERMO_CONST_CREDITO = "TC";
+	static $CD_TP_DOC_CONTRATO = "CT";
 	
 	static $DS_TP_DOC_PAAP = "PAAP(digitalizado)";
 	static $DS_TP_DOC_APOSTILAMENTO = "Apostilamento";
@@ -64,6 +66,7 @@ class dominioTpDocumento extends dominio {
 	static $DS_TP_DOC_CERTIDAO_TRANSITO_JULGADO = "Certidão Transito Julgado";
 	//static $DS_TP_DOC_TERMO_CONST_CREDITO = "Termo Const. Crédito";
 	static $DS_TP_DOC_TERMO_CONST_CREDITO = "Termo.Const.Crédito";
+	static $DS_TP_DOC_CONTRATO = "Contrato";
 	
 	// ...............................................................
 	// Construtor
@@ -107,7 +110,7 @@ class dominioTpDocumento extends dominio {
 		ksort ( $retorno );
 		return $retorno;
 	}
-	
+		
 	static function getColecaoATJA($comComum = true) {
 				
 		$retorno = array (
@@ -143,8 +146,8 @@ class dominioTpDocumento extends dominio {
 	}
 	static function getColecaoUNCT($comComum = true) {
 		$retorno = array (
-				//self::$CD_TP_DOC_APOSTILAMENTO => self::$DS_TP_DOC_APOSTILAMENTO,
-				self::$CD_TP_DOC_MINUTA => self::$DS_TP_DOC_MINUTA 
+				self::$CD_TP_DOC_CONTRATO => self::$DS_TP_DOC_CONTRATO,
+				self::$CD_TP_DOC_MINUTA => self::$DS_TP_DOC_MINUTA,
 		);
 		
 		if($comComum)
@@ -176,6 +179,23 @@ class dominioTpDocumento extends dominio {
 	static function getEnderecoPastaBaseUNCT() {
 		return self::$ENDERECO_DRIVE . "\\" . self::$ENDERECO_PASTABASE_UNCT;
 	}
+/*	static function getEnderecoPastaTermoDigitalizado($tipoContrato) {
+		if($tipoContrato == dominioTipoContrato::$CD_TIPO_CONTRATO){
+			$retorno = "CONTRATOS DIGITALIZADOS";	
+		}ELSE if($tipoContrato == dominioTipoContrato::$CD_TIPO_PROFISCO){
+			$retorno = "CONTRATOS DIGITALIZADOS PROFISCO II";	
+		}ELSE if($tipoContrato == dominioTipoContrato::$CD_TIPO_CONVENIO){
+				$retorno = "CONVÊNIOS DIGITALIZADOS";
+		}				
+		
+		return $retorno;
+	}*/
+	
+	static function getEnderecoPastaTermoDigitalizado() {
+		$retorno = "CONTRATOS DIGITALIZADOS";
+		return $retorno;
+	}
+	
 	static function getEnderecoPastaBasePorTpDocumento($tpDoc) {
 		$retorno = self::getDescricaoStatic ( $tpDoc, self::getColecao () );
 		

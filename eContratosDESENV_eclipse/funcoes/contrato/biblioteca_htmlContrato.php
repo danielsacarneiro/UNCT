@@ -299,8 +299,14 @@ function getContratoEntradaDeDadosVO($vocontrato, $arrayCssClass, $arrayCompleme
 }
 
 function getContratoEntradaDeDadosVOSimples($vocontrato, $nmClass = "camponaoobrigatorio", $isExibirContratadaSePreenchido, $pcomChaveCompleta=false, $pIsAlterarDemanda=false, $pTemInformacoesComplementares=false) {	
-	 $pArray = array($vocontrato,$nmClass,$isExibirContratadaSePreenchido,$pcomChaveCompleta,$pIsAlterarDemanda,$pTemInformacoesComplementares);	
-	return getContratoEntradaArray($pArray);
+	 
+	$pArray = array($vocontrato,$nmClass,$isExibirContratadaSePreenchido,$pcomChaveCompleta,$pIsAlterarDemanda,$pTemInformacoesComplementares);	
+	
+	 return getContratoEntradaArray($pArray);
+	 
+	/* $pArray = array($vocontrato,$nmClass,$isExibirContratadaSePreenchido,$pcomChaveCompleta,$pTemInformacoesComplementares, $funcaoJS, $arrayNmCamposFormularioContrato, $complementoHTML);	 
+	 return getContratoEntradaArrayGenerico($pArray);*/
+	 
 }
 
 /**
@@ -422,6 +428,7 @@ function getContratoEntradaArray($pArray) {
 	$indiceJS = $indice;	
 	$indiceJS = "''";
 	
+	//biblio...contrato.js
 	$chamadaFuncaoJS = "\"carregaContratada($indiceJS, '$pNmCampoCdContrato', '$pNmCampoAnoContrato', '$pNmCampoTipoContrato', '$pNmCampoCdEspecieContrato', '$pNmCampoSqEspecieContrato', '$nmCampoDivPessoaContratada');$complementoHTML\"";
 	
 	$required = "";
@@ -831,7 +838,10 @@ function temPAAPAberto($vocontrato) {
 	}
 	
 	try{
-		$registroContratoTemp = getContratoVigentePorData($vocontrato, getDataHoje(), true, true);
+		//$registroContratoTemp = getContratoVigentePorData($vocontrato, getDataHoje(), true, true);
+		$registroContratoTemp = getUltimoContratoVigente($vocontrato);
+		//var_dump($registroContratoTemp);
+	
 	}catch (excecaoChaveRegistroInexistente $ex){
 		throw new excecaoGenerica("Para consulta de PAAP´s, o contrato deve ser estar vigente e inserido em 'informações adicionais'.");		
 	}
@@ -971,6 +981,35 @@ function getContratoConsolidacao($vocontrato){
 }
 
 function getContratoVigentePorData($vocontrato, $pData = null, $isTpVigenciaMAxSq=false, $inTrazerVigenciaFutura = false){
+	$pArray = array($vocontrato, $pData, $isTpVigenciaMAxSq, $inTrazerVigenciaFutura);
+	return getContratoVigentePorArray($pArray);
+}
+
+function getUltimoContratoVigente($vocontrato){
+	$pArrayContratoRetorno = array($vocontrato, null, true, true, dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_TERMOADITIVO);
+	return getContratoVigentePorArray($pArrayContratoRetorno);
+}
+
+
+/**
+ * traz o contrato vigente na data escolhida
+ * se a data for nula, ele traz o MATER ou o ULTIMO vigente, a depender da escolha do usuario
+ * @param unknown $pArray
+ * @throws excecaoChaveRegistroInexistente
+ * @throws excecaoMaisDeUmRegistroRetornado
+ * @return unknown|void|string
+ */
+function getContratoVigentePorArray($pArray){
+	$vocontrato = $pArray[0];
+	$pData = $pArray[1];
+	$isTpVigenciaMAxSq = $pArray[2];
+	$inTrazerVigenciaFutura = $pArray[3];
+	$inRetornoSeDataNula = $pArray[4];
+	
+	if($inRetornoSeDataNula == null){
+		$inRetornoSeDataNula = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
+	}
+	
 	//$vocontrato = new vocontrato();	
 	$filtro = new filtroManterContrato(false);
 	$filtro->tipo = $vocontrato->tipo;
@@ -980,10 +1019,9 @@ function getContratoVigentePorData($vocontrato, $pData = null, $isTpVigenciaMAxS
 			dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER,
 			dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_TERMOADITIVO
 	);
-	/*if($pData == null){
-		$pData = $vocontrato->dtAssinatura;
-	}*/	
-	if($pData == null){
+
+	//se a data eh nula e nao deve trazer o MATER, traz o ultimo registro vigente
+	if($pData == null && $inRetornoSeDataNula == dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER){		
 		$filtro->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
 		//$filtro->sqEspecie = 1;
 	}	
@@ -1519,5 +1557,133 @@ function getContratosAVencerAno($ano=null){
 	//var_dump($colecao);
 	RETURN $colecao;	
 }
+/**
+ * funcao chamada na tela manter contrato
+ * @param unknown $chave
+ * @return string
+ */
+function getDadosManterContrato($chave) {
+	//echo $chave;
+	if ($chave != null && $chave != "") {
+		$vo = new vocontrato ();
+		$vo->getChavePrimariaVOExplodeParam ( $chave );
+		$dbcontrato = new dbcontrato();
+		
+		$isInclusao = true;
+		try{				
+			$recordSet = getUltimoContratoVigente($vo);			
+		}catch(excecaoChaveRegistroInexistente $ex){
+			//$retorno = "Dados: <INPUT type='text' class='camporeadonly' size=50 readonly value='NOVO CONTRATO'>\n";
+			;
+		}
+		
+		$retorno .= getCamposManterContrato($recordSet[0]);
+
+	}
+
+	return $retorno;
+}
+
+function getCamposManterContrato($recordSet){
+	$registrobanco = $recordSet;
+	$voContrato = new vocontrato();
+	$voContrato->getDadosBanco($registrobanco);
+
+	$voContratoInfo = new voContratoInfo();
+	$voContratoInfo->getDadosBanco($registrobanco);
+	$nmFuncaoJSCopiaDados = constantes::$NM_FUNCAO_JS_COPIADADOS_TERMO_ANTERIOR;
+	$temContratoInfo = $registrobanco[filtroManterContrato::$NmColTemContratoInfo] == constantes::$CD_SIM;
+	
+	$countATENCAO = 1;
+	if(!$temContratoInfo){
+		$nmfuncaoContratoInfo = voContratoInfo::getNmTabela();
+		$texto = "ATENÇÃO$countATENCAO: Contrato deve ser incluído em 'informações adicionais'.";
+		$retorno .= getInputHidden(voentidade::$ID_REQ_IN_FORMULARIO_VALIDO, voentidade::$ID_REQ_IN_FORMULARIO_VALIDO, constantes::$CD_NAO);
+		$retorno .= $conectorAlerta . getTextoLink($texto, "../$nmfuncaoContratoInfo", null, false, true);
+		$conectorAlerta = "<BR>";
+		$countATENCAO++;
+		return $retorno;
+	}
+
+	if($voContrato != null){
+		//$retorno .= getTextoHTMLTagMouseOver("Exibindo dados último termo vigente.", "Verifique se há dados que pode aproveitar.") . "<br>";
+		$retorno .= getTextoHTMLDestacado(getTextoLink("Copiar dados último termo vigente ("
+			. getTextoHTMLNegrito(getContratoDetalhamentoAvulso($voContrato, true)) 
+			. ").", "#", "onclick='$nmFuncaoJSCopiaDados()'")) . "<br>";
+			
+		$retorno .= "Vigência: " . getInputText("", "", getData($voContrato->dtVigenciaInicial), constantes::$CD_CLASS_CAMPO_READONLY);
+		$retorno .= " a " . getInputText("", "", getData($voContrato->dtVigenciaFinal), constantes::$CD_CLASS_CAMPO_READONLY);
+		
+		$pArray = array(vocontrato::$nmAtrGestorContrato => $voContrato->gestor,
+				vocontrato::$nmAtrProcessoLicContrato => $voContrato->procLic,
+				vocontrato::$nmAtrContratadaContrato => $voContrato->contratada,
+				vocontrato::$nmAtrDocContratadaContrato => documentoPessoa::getNumeroDocFormatado($voContrato->docContratada),
+				//a data inicial a ser preenchida na tela vai com o valor da data final do termo anterior
+				vocontrato::$nmAtrDtVigenciaInicialContrato => somarOuSubtrairDiasNaData(getData($voContrato->dtVigenciaFinal), 1),
+		);
+		$retorno .= getInputHiddenPorArrayNomeAlternativo($pArray); 
+
+	}
+
+	return $retorno;
+}
+
+/**
+ * formata os dados do proc lic por extenso no vocontrato
+ * @param unknown $vocontrato
+ */
+function setProcLiciContratoFormatado(&$vocontrato){
+	//$vocontrato = new vocontrato();
+	$processoLic = $vocontrato->procLic;
+	$processoLic = getStringImportacaoCaracterEspecial ($processoLic, true);
+	$vocontrato->procLic = $processoLic;
+	
+	if ($processoLic != null && isProcLicSEFAZ($processoLic)) {
+		// $retorno->procLic = $processoLic;
+		$array = explode(".",$processoLic);
+	
+		$cdPL = $array[0];
+		$anoPL = $array[1];
+		$cdComissao = $array[2];
+		$tipoModalidade = $array[3];
+		$numModalidade = $array[4];
+				
+		$vocontrato->anoProcLic = $anoPL;
+		$vocontrato->cdProcLic = $cdPL;
+		$vocontrato->cdModalidadeLic = $tipoModalidade;
+	
+		/*try {
+		 $arrayProcLic = getArrayFormatadoLinhaImportacaoPorSeparador ( $processoLic );
+		 $retorno->cdProcLic = $arrayProcLic [0];
+		 $retorno->anoProcLic = $arrayProcLic [1];
+				
+		 $modalidadeLic =
+		 // pega o cdmodalidade no campo modalidade da planilha
+		 $retorno->cdModalidadeLic = dominioModalidadeProcLicitatorio::getChaveDeUmaStringPorExtenso ( $modalidadeLic, dominioModalidadeProcLicitatorio::getColecaoImportacaoPlanilha () );
+		 if ($retorno->cdModalidadeLic == null) {
+		 // se nao achar, busca no campo proclic
+		 $retorno->cdModalidadeLic = dominioModalidadeProcLicitatorio::getChaveDeUmaStringPorColecaoSimples ( $processoLic, dominioModalidadeProcLicitatorio::getColecaoImportacaoPlanilhaPorCodigoSimples () );
+		 }
+		 } catch ( excecaoNumProcLicImportacaoInvalido $exProcLic ) {
+		 if (static::$FLAG_PRINTAR_LOG_IMPORTACAO) {
+		 echoo ( $exProcLic->getMessage () );
+		 }
+		 } catch ( Exception $ex ) {
+		 if (static::$FLAG_PRINTAR_LOG_IMPORTACAO) {
+		 echoo ( $ex->getMessage () );
+		 }
+		 }*/
+	}
+}
+
+/**
+ * verifica se estao validos os contratos inseridos na planilha ou ja podemos usasr os documentos inseridos na demanda com a nova sistematica de arquivos e pastas da UNCT
+ * @param unknown $voContrato
+ * @return boolean
+ */
+function usarDocumentosContratoDaPlanilha($voContrato){
+	return $voContrato->importacao != constantes::$CD_NAO;	
+}
+
 
 ?>

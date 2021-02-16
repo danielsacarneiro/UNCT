@@ -1158,7 +1158,10 @@ class filtroManterDemanda extends filtroManter{
 		
 		if($atributoDtReferenciaSetorAtual != null)
 			$varAtributos = putElementoArray2NoArray1ComChaves ($atributoDtReferenciaSetorAtual, $varAtributos);
-				
+		
+		//acrescenta sq historico quando o caso
+		$this->setFiltroOrdenacaoComplemento($varAtributos);
+		
 		return $varAtributos;
 	}	
 

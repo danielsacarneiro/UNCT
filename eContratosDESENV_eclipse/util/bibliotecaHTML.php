@@ -852,6 +852,11 @@ function getRadioButton($idRadio, $nmRadio, $chave, $checked, $complementoHTML) 
 	return $retorno;
 }
 
+function getInputFile($id, $nm, $complementoHTML) {
+	$retorno = "<INPUT type='file' id='$id' name='$nm' $complementoHTML>";
+	return $retorno;
+}
+
 /**
  * @deprecated
  * checkbox que recebe string pra dizer que esta checado
@@ -1113,13 +1118,22 @@ function getEntradaDadosCdAno($cd, $ano, $pNmCampoCd, $pNmCampoAno, $arrayCssCla
 }
 
 
-function getColecaoComoVariavelJS($colecao, $nmVariavelJS){
+function getColecaoComoVariavelJS($colecao, $nmVariavelJS, $isChaveString=false, $isValorString=true){
 	if(!isColecaoVazia($colecao)){		
-		$jsvarColecao = "$nmVariavelJS = new Array();\n";
+		$jsvarColecao = "var $nmVariavelJS = new Array();\n";
 		$chaves = array_keys($colecao);
 		for ($i=0; $i<count($colecao);$i++){
 			$chave = $chaves[$i];
-			$jsvarColecao .=  $nmVariavelJS."[$chave]='". $colecao[$chave] . "';\n";
+			$valor = $colecao[$chave];
+			if($isChaveString){
+				$chave = "'$chave'";
+			}
+			
+			if($isValorString){
+				$valor = "'$valor'";
+			}
+				
+			$jsvarColecao .=  $nmVariavelJS."[$chave]=$valor;\n";
 		}
 	}
 	return 	$jsvarColecao;
@@ -1394,14 +1408,14 @@ function getTextoHTMLNegrito($texto){
 function getTextoHTMLFonteParametros($texto, $size=12){
 	return "<font size='$size'>$texto</font>";
 }
-function getDivHtmlExpansivel($nmDiv, $conteudoDiv=null, $visivel=false, $class = 'campoformulario'){	
+function getDivHtmlExpansivel($nmDiv, $conteudoDiv=null, $visivel=false, $class = 'campoformulario', $corTexto="red"){	
 	//biblioteca_funcoes_principal.js
 	$scriptOnLoad = "esconderDiv(document.getElementById('$nmDiv'), null, true);";
 	$scriptOnClick = "esconderDiv(document.getElementById('$nmDiv'), null, document.getElementById('$nmDiv').style.display=='');";
 	$imagem = "<img  title='Entrar' src='" . pasta_imagens . "sinal_mais.gif' width='15' height='15'>";	
 	$link = "<a href=\"javascript:$scriptOnClick\" >$imagem</a>";
 	//$html = "$imagem<DIV class='$class' id='$nmDiv' name='$nmDiv' onLoad='ocultarElemento('$nmDiv')'>$conteudoDiv</DIV>";
-	$html = "$link<DIV class='$class' id='$nmDiv' name='$nmDiv'>". getTextoHTMLDestacado($conteudoDiv, "red", false)  . "</DIV>";
+	$html = "$link<DIV class='$class' id='$nmDiv' name='$nmDiv'>". getTextoHTMLDestacado($conteudoDiv, $corTexto, false)  . "</DIV>";
 	$html .= getTagHtmlJavaScript($scriptOnLoad);
 	return $html;
 }
@@ -1416,4 +1430,45 @@ function getAtributoTelaACompararBanco($nmAtributo){
 	return $_POST[$nmAtributo];
 }
 
+/**
+ * retorna varios inputs hidden
+ * @param unknown $pArray
+ */
+function getInputHiddenPorArrayNomeAlternativo($pArray){
+	foreach ($pArray as $id => $valor){
+		$id = voentidade::getNomeAtributoAlternativo($id);
+		$retorno .= "\n".getInputHidden($id, $id, $valor);		
+	}
+	return $retorno;
+}
+
+/**
+ * monta variavel hash pra ser usada no java script
+ * @param unknown $pArray
+ * @return string
+ */
+function montarHashNomeAlternativo($pArrayAtributos, $nmVariavelJS,$isChaveString=false, $isValorString=true){
+	foreach ($pArrayAtributos as $atributo){
+		$arrayCompleto[$atributo] = voentidade::getNomeAtributoAlternativo($atributo);
+	}
+	
+	$retorno = getColecaoComoVariavelJS($arrayCompleto, $nmVariavelJS,$isChaveString,$isValorString);
+	return $retorno;
+}
+
+function getInputCampoCheckResponsabilidade($pArrayCamposResponsabilidade, $nmVariavelJS="varJSCamposResponsabilidade"){
+	$nmCheckBox = constantes::$ID_REQ_CHECK_RESPONSABILIDADE;
+
+	$retorno = "\n<SCRIPT language='JavaScript' type='text/javascript'>\n";
+	$retorno .= getColecaoComoVariavelJS($pArrayCamposResponsabilidade, $nmVariavelJS);
+	$retorno .= "\n</SCRIPT>";
+	$retorno .= "\n<INPUT type='checkbox' id='$nmCheckBox' name='$nmCheckBox' value='' onClick='validaFormRequiredCheckBox(this, $nmVariavelJS);'>". voMensageria::$DS_RESPONSABILIDADE_CAMPO_OBR;
+	
+	return $retorno;
+}
+
+function redirecionarConfirmar($vo){
+	putObjetoSessao("vo", $vo);
+	header("Location: ../confirmar.php?class=".$vo->getNmClassProcesso(),TRUE,307);
+}
 

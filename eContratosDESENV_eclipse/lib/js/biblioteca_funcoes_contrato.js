@@ -14,7 +14,7 @@ function carregaNovoCampoContrato(pNmCampoDiv, pIndice, nmFuncaoJSGenericaSemPar
 	_globalQtdContrato++;
 	
 	if(_globalQtdContrato > 9){
-		exibirMensagem("ATEN√á√ÉO: Muitos contratos podem provocar erro no sistema.");
+		exibirMensagem("ATEN«√O: Muitos contratos podem provocar erro no sistema.");
 	}
 	//campoQtdContrato = document.getElementById(pNMCampoQtdContratos);
 	//campoQtdContrato.value = _globalQtdContrato;		    
@@ -314,7 +314,7 @@ function calcularModificacaoNovo(pArrayCampos) {
 			campoVlBasePercentualGestor.value = campoVlMensalBase.value;
 		}catch(ex){
 			//se levantar o erro aqui, eh porque o campo valor mensal, e qualquer outro do contrato, nao foi carregado
-			exibirMensagem("Termo nao localizado. Inclua-o no sistema para continuar.");
+			exibirMensagem("Termo n„o localizado. Inclua-o no sistema para continuar.");
 			return;
 		}		
 
@@ -517,7 +517,7 @@ function isCampoProcLicitatorioSEFAZValido(pCampo, pInObrigatorio, pSemMensagem)
   var tam = vlCampo.length;
   var msg = "";
   
-  var isvalido = vlCampo.indexOf('SAD') == -1 && vlCampo.indexOf('SEFAZ') != -1;
+  var isPLSEFAZ = vlCampo.indexOf('SAD') == -1 && vlCampo.indexOf('SEFAZ') != -1;
 
 	if (pInObrigatorio != null) {
 		if (pInObrigatorio) {
@@ -552,7 +552,7 @@ function isCampoProcLicitatorioSEFAZValido(pCampo, pInObrigatorio, pSemMensagem)
 	numcnpf = numcnpf.toString().replace(".", "");
 	numcnpf = numcnpf.toString().replace("/", "");*/
 
-	if(!isvalido){
+	/*if(isPLSEFAZ){
 		if (!pSemMensagem) {
 			selecionarCampo(pCampo);
 			exibirMensagem("Verifique o formato do numero do PL." + msg);
@@ -560,14 +560,14 @@ function isCampoProcLicitatorioSEFAZValido(pCampo, pInObrigatorio, pSemMensagem)
 		}
 
 		return false;
-	}
+	}*/
 	
 	return true;	
 	
 	
 }
 
-// Formata o campo CNPF "pCampo" passado como par√¢metro
+// Formata o campo CNPF "pCampo" passado como par‚metro
 function formatarCampoCNPF(pCampo, pEvento) {
 	var vlCampo = pCampo.value;
 	var tam = vlCampo.length;
@@ -576,7 +576,7 @@ function formatarCampoCNPF(pCampo, pEvento) {
 		return;
 	}
 
-	// Ignorando a tentativa de colocar m√°scara durante a digita√ß√£o em dispositivos m√≥veis
+	// Ignorando a tentativa de colocar m·scara durante a digitaÁ„o em dispositivos mÛveis
 	if (pEvento && isAcessoMovel() && pEvento.type == "keyup") {
 		return;
 	}

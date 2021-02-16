@@ -24,6 +24,17 @@ function getMultiPos($haystack, $needles, $sensitive=true, $offset=0){
 }
 
 function truncarStringHTMLComDivExpansivel($nmDiv, $string, $tamMAximo = 100, $usarReticencia = false, $comDivExpansivel=true){
+	return truncarStringHTMLArray(array($nmDiv, $string, $tamMAximo, $usarReticencia, $comDivExpansivel));
+}
+
+function truncarStringHTMLArray($pArray){
+	$nmDiv = $pArray[0]; 
+	$string = $pArray[1];
+	$tamMAximo = $pArray[2];
+	$usarReticencia = $pArray[3];
+	$comDivExpansivel = $pArray[4];
+	$corTextoTruncado = $pArray[5];
+
 	/*$separador = " ";
 	 $array = explode($separador, $string);
 	
@@ -47,7 +58,8 @@ function truncarStringHTMLComDivExpansivel($nmDiv, $string, $tamMAximo = 100, $u
 		$retorno .= $complem;
 
 		if($comDivExpansivel){
-			$retorno .= getDivHtmlExpansivel($nmDiv, $string);
+			//$retorno .= getDivHtmlExpansivel($nmDiv, $string);
+			$retorno .= getDivHtmlExpansivel($nmDiv, $string, false, 'campoformulario', $corTextoTruncado);
 		}
 	}
 
@@ -377,7 +389,8 @@ function getColecaoEntreSeparadorAspas($colecaoAtributos, $separador, $comAspas)
 			}
 			// echo "$retorno<br>";
 		}
-		$retorno = substr ( $retorno, 0, count ( $retorno ) - 2 );
+		//$retorno = substr ( $retorno, 0, count ( $retorno ) - 2 );
+		$retorno = removerUltimaString($separador, $retorno);
 	}
 	// echo $retorno;
 	return $retorno;
@@ -472,6 +485,12 @@ function getLinkChamadaPHP() {
 	return $_SERVER ['PHP_SELF'];
 }
 
+/**
+ * retorna um array com os dados SEFAZ do PL
+ * @param unknown $param
+ * @throws excecaoNumProcLicImportacaoInvalido
+ * @return string
+ */
 function getArrayFormatadoLinhaImportacaoPorSeparador($param) {
 	$param = str_replace("/", ".", $param);
 	$param = str_replace(",", ".", $param);
@@ -495,6 +514,9 @@ function getArrayFormatadoLinhaImportacaoPorSeparador($param) {
 		//pega apenas os 2 primeiros
 		$cd= $array[0];
 		$ano = $array[1];
+		$dsComissao = $array[2]; 
+		$cdModalidade = $array[3];
+		$sqModalidade = $array[4];
 		//verifica o numero embutido
 		try{
 			$cd = getNumeroEmbutidoString($cd);
@@ -516,6 +538,9 @@ function getArrayFormatadoLinhaImportacaoPorSeparador($param) {
 		}
 		$retorno[0] = $cd;
 		$retorno[1] = $ano;		
+		$retorno[2] = $dsComissao;
+		$retorno[3] = $cdModalidade;
+		$retorno[4] = $sqModalidade;
 		
 	}else{
 		//apenas por seguranca

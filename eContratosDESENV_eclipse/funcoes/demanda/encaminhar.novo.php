@@ -380,12 +380,14 @@ function iniciar(){
 
 	            $classRespATJA = $classResp = constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO;
 	            $jsRespATJA = $jsResp = " required ";
-	            if(!$isInclusao){
-	            	/*$classRespATJA = $classResp = constantes::$CD_CLASS_CAMPO_READONLY;
-	            	$jsRespATJA = $jsResp = "disabled";*/
+	            
+	            $classResp = $classRespATJA;
+	            $jsResp = $jsRespATJA;
+	             
+	            /*if(!$isInclusao){
 	            	$classResp = constantes::$CD_CLASS_CAMPO_READONLY;
 	            	$jsResp = "disabled";	            	
-	            }
+	            }*/
 	            $arrayParamUsuario = array(
 	            		voDemanda::$nmAtrCdPessoaRespUNCT,
 	            		voDemanda::$nmAtrCdPessoaRespUNCT,

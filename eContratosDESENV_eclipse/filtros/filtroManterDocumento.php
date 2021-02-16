@@ -12,6 +12,7 @@ class filtroManterDocumento extends filtroManter{
     	var $ano = "";
     	var $tp = "";
     	var $link = "";
+    	var $vocontrato;
     // ...............................................................
 	// construtor	
 	//function __construct() {
@@ -41,6 +42,7 @@ class filtroManterDocumento extends filtroManter{
 
 		$isHistorico = $this->isHistorico;
         $nmTabela = $voDocumento->getNmTabelaEntidade($isHistorico);
+        $nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic(false);
         
 		//seta os filtros obrigatorios        
 		if($this->isSetaValorDefault()){
@@ -49,6 +51,62 @@ class filtroManterDocumento extends filtroManter{
             ;                        
 		}
         
+		//$this->vocontrato = new vocontrato();
+		if($this->vocontrato->anoContrato != null){
+			$filtro = $filtro . $conector
+			. "$nmTabelaDemandaContrato." .voDemandaContrato::$nmAtrAnoContrato
+			. " = "
+					. $this->vocontrato->anoContrato
+					;
+						
+					$conector  = "\n AND ";
+		
+		}
+
+		if($this->vocontrato->cdContrato != null){
+			$filtro = $filtro . $conector
+			. "$nmTabelaDemandaContrato." .voDemandaContrato::$nmAtrCdContrato
+			. " = "
+					. $this->vocontrato->cdContrato
+					;
+		
+					$conector  = "\n AND ";
+		
+		}
+		
+		if($this->vocontrato->tipo != null){
+			$filtro = $filtro . $conector
+			. "$nmTabelaDemandaContrato." .voDemandaContrato::$nmAtrTipoContrato
+			. " = "
+					. getVarComoString($this->vocontrato->tipo)
+					;
+		
+					$conector  = "\n AND ";
+		
+		}
+		
+		if($this->vocontrato->cdEspecie != null){
+			$filtro = $filtro . $conector
+			. "$nmTabelaDemandaContrato." .voDemandaContrato::$nmAtrCdEspecieContrato
+			. " = "
+					. getVarComoString($this->vocontrato->cdEspecie)
+					;
+		
+					$conector  = "\n AND ";
+		
+		}
+		
+		if($this->vocontrato->sqEspecie != null){
+			$filtro = $filtro . $conector
+			. "$nmTabelaDemandaContrato." .voDemandaContrato::$nmAtrSqEspecieContrato
+			. " = "
+					. $this->vocontrato->sqEspecie
+					;
+		
+					$conector  = "\n AND ";
+		
+		}		
+		
 		if($this->sq != null){
 			$filtro = $filtro . $conector
 						. $nmTabela. "." .voDocumento::$nmAtrSq

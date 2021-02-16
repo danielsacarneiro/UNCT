@@ -322,7 +322,7 @@ class dbDemandaTramitacao extends dbprocesso {
 		
 		//$voDemanda = new voDemanda();
 		//alternativa para o trecho acima, implementado depois
-		//$isCdPessoaRespUNCTAlterado = $voDemanda->setAtributoTelaSeAlterado($vo, "cdPessoaRespUNCT");
+		$isCdPessoaRespUNCTAlterado = $voDemanda->setAtributoTelaSeAlterado($vo, "cdPessoaRespUNCT");
 		
 		$isSituacaoAlterada = $voDemanda->situacao != dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO;
 		if($isSituacaoAlterada){

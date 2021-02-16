@@ -302,7 +302,6 @@ function detalharDemandaGestao(){
 	        </TR>
 	        <?php	        
 	        require_once (caminho_funcoes . vocontrato::getNmTabela() . "/biblioteca_htmlContrato.php");
-	        $arrayCssClass = array("camponaoobrigatorio","camponaoobrigatorio", "camponaoobrigatorio");
 	        ?>        
             <TR>
 	            <TH class="campoformulario" nowrap width="1%" ROWSPAN=2>Contrato:</TH>
@@ -324,10 +323,9 @@ function detalharDemandaGestao(){
 	            		null);
 	             
 	            getContratoEntradaArrayGenerico($pArray);
-			             
-	            		//getContratoEntradaDeDados($filtro->vocontrato->tipo, $filtro->vocontrato->cdContrato, $filtro->vocontrato->anoContrato, $arrayCssClass, null, null);
-	            		
-	            		?></TD>
+			             	            		
+	            ?>
+	            </TD>
 	            <TH class="campoformulario" >Valor Global:</TH>
 	            <TD class="campoformulario" ><INPUT type="text" id="<?=filtroManterDemanda::$NmAtrVlGlobalInicial?>" name="<?=filtroManterDemanda::$NmAtrVlGlobalInicial?>"  value="<?php echo($filtro->vlGlobalInicial);?>"
 	            							onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="camponaoobrigatorioalinhadodireita" size="15" >

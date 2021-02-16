@@ -12,7 +12,7 @@ inicio();
 $titulo = "CONSULTAR CONTRATOS-PLANILHA";
 setCabecalho($titulo);
 
-$voContrato = new voContrato();
+$voContrato = new vocontrato();
 
 $filtro  = new filtroManterContrato();
 $filtro->voPrincipal = $voContrato;

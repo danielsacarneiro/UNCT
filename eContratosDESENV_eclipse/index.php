@@ -174,6 +174,9 @@ function getNumServico($count){
                     				/*$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_OUTROS, 3));
                     				echo imprimeBotaoDocumento($vodocumento, "Manual Visto Edital");*/
                     				
+                    				$vodocumento = new voDocumento(array(2021, dominioSetor::$CD_SETOR_UNCT,dominioTpDocumento::$CD_TP_DOC_CHECKLIST, 1));
+                    				echo imprimeBotaoDocumento($vodocumento, getTextoHTMLNegrito("MANUAL DE BOAS PRÁTICAS ECONTI (em constante evolução)"));
+                    				
                     				$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_OUTROS, 4));
                     				echo imprimeBotaoDocumento($vodocumento, "Manual Visto Editais/Contratos");
                     				
@@ -198,8 +201,8 @@ function getNumServico($count){
                     				$vodocumento = new voDocumento(array(2019, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_OUTROS, 192));
                     				echo imprimeBotaoDocumento($vodocumento, "Publicação CONTRATOS PORTAL DA TRANSPARÊNCIA.");
                     				
-                    				$vodocumento = new voDocumento(array(2019, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_OUTROS, 21));
-                    				echo imprimeBotaoDocumento($vodocumento, "Publicação CONVÊNIOS PORTAL DA TRANSPARÊNCIA.");
+                    				/*$vodocumento = new voDocumento(array(2019, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_OUTROS, 21));
+                    				echo imprimeBotaoDocumento($vodocumento, "Publicação CONVÊNIOS PORTAL DA TRANSPARÊNCIA.");*/
                     				?>
                     				<TR>
                         				<TD class="tabeladadosdestacadonegrito">PROCESSOS:

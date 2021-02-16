@@ -326,6 +326,15 @@ class dbContratoModificacao extends dbprocesso {
 		 * }
 		 */
 	}
+	
+	/*function alterarTermoRelacionado($voMod){
+		//$voMod = new voContratoModificacao();
+		$vocontrato = $voMod->vocontrato;
+		
+		$dbcontrato = new dbcontrato(); 
+		$vocontrato = $dbcontrato->consultarContratoPorChave($vocontrato, false);
+		
+	}*/
 
 	function incluir($vo) {
 		$this->validarInclusao ( $vo );

@@ -276,6 +276,8 @@ function getComboGestorResponsavel($cdGestor){
 function consultarPessoasContrato($voContrato, $pIsChaveCompleta=false){
 	//$voContrato = new vocontrato();
 	$filtro = new filtroManterPessoa(false);
+	//$filtro->voPrincipal = new vopessoa();
+	
 	$filtro->anoContrato = $voContrato->anoContrato;
 	$filtro->cdContrato = $voContrato->cdContrato;
 	$filtro->tpContrato = $voContrato->tipo;
@@ -284,17 +286,42 @@ function consultarPessoasContrato($voContrato, $pIsChaveCompleta=false){
 		$filtro->sqEspecieContrato = $voContrato->sqEspecie;
 		//echo $filtro->cdEspecieContrato ;
 	}
-	
+
 	$filtro->setaFiltroConsultaSemLimiteRegistro();
 	//seta clausula group by
 	$filtro->groupby = array(vopessoa::$nmAtrDoc, vopessoa::$nmAtrNome);
 	$filtro->cdAtrOrdenacao = vocontrato::$nmAtrSqContrato;
 	$filtro->cdOrdenacao = constantes::$CD_ORDEM_CRESCENTE;
+
+	$db = new dbpessoa();
+	$colecao = $db->consultarPessoaContratoFiltro($filtro);
+
+	return $colecao;
+}
+
+function consultarPessoaDocumento($numDoc, $pDataVigencia = null){
+	$filtro = new filtroManterPessoa(false);
+	$numDoc = documentoPessoa::getNumeroDocSemMascara($numDoc);
+	$filtro->doc = $numDoc;
+	$filtro->dtVigencia = $pDataVigencia;
+	//echo $numDoc;
+	//seta clausula group by
+	$filtro->groupby = array(vopessoa::$nmAtrCd);
+	$filtro->cdAtrOrdenacao = vopessoa::$nmAtrCd;
+	$filtro->cdOrdenacao = constantes::$CD_ORDEM_CRESCENTE;
 	
 	$db = new dbpessoa();
 	$colecao = $db->consultarPessoaContratoFiltro($filtro);
 	
-	return $colecao;
+	if(isColecaoVazia($colecao)){
+		throw new excecaoConsultaVazia("Não existe pessoa com o documento em questão.");
+	}
+	
+	if(sizeof($colecao)>1){
+		throw new excecaoConsultaVazia("Verifique o cadastro de pessoas. Existe mais de uma pessoa associada ao documento.");
+	}
+	
+	return $colecao[0];
 }
 
 function getCampoContratada($pNmContratada, $pDocContratada, $pChaveContrato, $complemento=null){

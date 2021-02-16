@@ -15,4 +15,6 @@ putObjetoSessao("vo", $vo);
 //o codigo 307 especificado no RFC do protocolo HTTP 1.0 como temporary redirect, mantendo o post
 
 header("Location: ../confirmar.php?class=".$vo->getNmClassProcesso(),TRUE,307);
+
+//redirecionarConfirmar($vo);
 ?>

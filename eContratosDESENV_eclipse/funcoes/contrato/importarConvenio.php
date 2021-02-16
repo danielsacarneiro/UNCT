@@ -111,13 +111,13 @@ if($totalResultado <= 0){
 	//atualiza as contratadas
 	echo "<br><br>Atualizando CNPJ das contratadas.<br><br>";
 	$dbprocesso->atualizarPessoasContrato();    
-	$dbprocesso->finalizar();
 }
 
 if($isImportacaoPROFISCO){
-	echo "IMPORTANDO NOVAS CONTRATADAS ... <br><br>";
+	echo "<br><br>IMPORTANDO NOVAS CONTRATADAS ... <br><br>";
 	$dbprocesso->atualizarEntidade("call importarContratada();");
 }
+$dbprocesso->finalizar();
 echo "FIM... <br><br>";
 
 function imprimeLinha($linha){

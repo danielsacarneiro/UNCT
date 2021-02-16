@@ -40,9 +40,9 @@ function carregaDadosContratada(pNmCampoAnoContrato, pNmCampoTipoContrato, pNmCa
 	}
 	//alert(cdContrato + CD_CAMPO_SEPARADOR + anoContrato + CD_CAMPO_SEPARADOR + tpContrato);
 		
-	var colecaoIDCamposRequired = [pNmCampoSqEspecieContrato];
+	/*var colecaoIDCamposRequired = [pNmCampoSqEspecieContrato];
 	var required = cdEspecieContrato != cdEspecieContratoMater;	
-	tornarRequiredCamposColecaoFormulario(colecaoIDCamposRequired, required);
+	tornarRequiredCamposColecaoFormulario(colecaoIDCamposRequired, required);*/
 
 	var isChavePermiteConsulta = anoContrato != "" && tpContrato != "";
 	var isCdContratoInserido = cdContrato != null && cdContrato != "";

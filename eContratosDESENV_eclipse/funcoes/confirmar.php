@@ -28,6 +28,10 @@ try{
 	inicioComValidacaoUsuario(true);
 	
 	$funcao = @$_POST["funcao"];
+	if(!isAtributoValido($funcao)){
+		throw new excecaoAtributoInvalido("FUNCAO NÃO DETERMINADA. Contate o Excelentíssimo Senhor Doutor Administrador.");
+		
+	}
 	//echo $funcao;
 	$isInclusao = $funcao == constantes::$CD_FUNCAO_INCLUIR;
 	$isExclusao = $funcao == constantes::$CD_FUNCAO_EXCLUIR;
@@ -103,6 +107,10 @@ try{
 <!DOCTYPE html>
 <HEAD>
 <?=setTituloPaginaPorNivel($titulo,1)?>
+
+<SCRIPT language="JavaScript" type="text/javascript" src="../lib/js/biblioteca_funcoes_principal.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="../lib/js/biblioteca_funcoes_text.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="../lib/js/tooltip.js"></SCRIPT>
 
 <SCRIPT language="JavaScript" type="text/javascript">
 

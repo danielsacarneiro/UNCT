@@ -5,6 +5,8 @@ include_once 'normativos.php';
   Class constantes {	
 	
 	static $nomeSistema = "e-C@NTi";
+	static $TAMANHO_MAXIMO_NM_ARQUIVO = 40;
+	
 	static $ANO_INICIO = "2016";
 	static $DATA_INICIO = "01/01/1900";
 	static $DATA_FIM = "01/01/2099";
@@ -69,7 +71,7 @@ include_once 'normativos.php';
     static $CD_CAMPO_SEPARADOR = "*";
     static $CD_CAMPO_SEPARADOR_FILTRO = "SEPARADOR*FILTRO*SEPARADOR";
     static $CD_CAMPO_SUBSTITUICAO = "[[*]]";
-    static $DS_CAMPO_NAO_ENCONTRADO= "NAO.ENCONTRADO";
+    static $DS_CAMPO_NAO_ENCONTRADO= "NÃO.ENCONTRADO";
     static $CD_CAMPO_NULO = "null";
     static $ID_REQ_SESSAO_VO = "vo";
     static $ID_REQ_CD_LUPA = "lupa";
@@ -110,5 +112,7 @@ include_once 'normativos.php';
     static $VL_GLOBAL_ENVIO_SAD = 3000000;
     
     static $DS_BANCO = "*BANCO*";
+    static $NM_FUNCAO_JS_COPIADADOS_TERMO_ANTERIOR = "copiarDadosTermoAnterior";
+    static $ID_REQ_CHECK_RESPONSABILIDADE = 'checkResponsabilidade';
 }
 ?>

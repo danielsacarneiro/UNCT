@@ -42,10 +42,12 @@ CREATE TABLE contrato (
     ct_valor_mensal DECIMAL (14,4),
     ct_doc_link TEXT NULL,
     ct_doc_minuta TEXT NULL,
+    
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_incl INT,
-    cd_usuario_ultalt INT,
+    cd_usuario_ultalt INT,    
+    in_desativado CHAR(1) NOT NULL DEFAULT 'N',
     
     CONSTRAINT pk PRIMARY KEY (sq, ct_exercicio, ct_numero, ct_tipo),
     UNIQUE KEY chave_logica_contrato (ct_exercicio, ct_numero, ct_tipo, ct_cd_especie, ct_sq_especie),
@@ -59,6 +61,7 @@ CREATE TABLE contrato (
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT
 );
+ALTER TABLE contrato ADD COLUMN in_desativado CHAR(1) NOT NULL DEFAULT 'N' AFTER cd_usuario_ultalt;
 -- ALTER TABLE contrato ADD COLUMN ct_doc_minuta TEXT AFTER ct_doc_link;
 -- ALTER TABLE contrato ADD COLUMN gp_cd INT NULL AFTER ct_gestor_pessoa;
         
@@ -92,16 +95,17 @@ ct_processo_lic = replace(replace(replace(replace(ct_processo_lic,'â€œ','"'),'â€
 -- WHERE sq = 1751;-- ct_exercicio = 2016 and ct_numero = 13;
 
 
-drop table contrato_hist;
+drop table IF EXISTS contrato_hist;
 CREATE TABLE contrato_hist (
     hist INT NOT NULL AUTO_INCREMENT,
-    sq INT NOT NULL,
-    ct_exercicio INT,
-    ct_numero INT,
-    ct_tipo char(1),
+    
+    sq INT NOT NULL,	
+    ct_exercicio INT NOT NULL,
+    ct_numero INT NOT NULL,
+    ct_tipo char(1) NOT NULL,
 	ct_especie VARCHAR(50),
-    ct_sq_especie INT, -- indice do documento em questao (primeiro ou segundo apostilamento, por ex)
-    ct_cd_especie CHAR(2), -- especie do registro (mater, apostilamento, aditivo)
+    ct_sq_especie INT DEFAULT 1 NOT NULL, -- indice do documento em questao (primeiro ou segundo apostilamento, por ex)
+    ct_cd_especie CHAR(2) NOT NULL, -- especie do registro (mater, apostilamento, aditivo)
 	ct_cd_situacao CHAR(2),
     ct_objeto LONGTEXT,
     ct_gestor_pessoa VARCHAR(300) ,
@@ -117,7 +121,7 @@ CREATE TABLE contrato_hist (
     ct_dt_public DATE,
     ct_dt_assinatura DATE,
     ct_dt_vigencia_inicio DATE,
-    ct_dt_vigencia_fim DATE,
+    ct_dt_vigencia_fim DATE,    
 	ct_dt_proposta DATE NULL,
     ct_contratada VARCHAR(300),
     pe_cd_contratada INT,
@@ -126,17 +130,21 @@ CREATE TABLE contrato_hist (
     ct_tp_autorizacao VARCHAR(15), 
     ct_cd_autorizacao INT, 
     ct_in_licom CHAR(1),
-	ct_in_importacao CHAR(1),
+	ct_in_importacao CHAR(1) DEFAULT 'N',
     ct_observacao LONGTEXT,    
     ct_valor_global DECIMAL (14,4),
     ct_valor_mensal DECIMAL (14,4),
     ct_doc_link TEXT NULL,
     ct_doc_minuta TEXT NULL,
-    
-    dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        
+	dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_incl INT,
     cd_usuario_ultalt INT,
+    in_desativado CHAR(1) NOT NULL,
+    
+	dh_operacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    cd_usuario_operacao INT,    
     
     CONSTRAINT pk PRIMARY KEY (hist)
 );

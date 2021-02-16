@@ -3,6 +3,8 @@ include_once(caminho_lib. "dbprocesso.obj.php");
 include_once 'voDocumento.php';
 
   Class dbDocumento extends dbprocesso{
+  	
+  	static $FLAG_PRINTAR_SQL = false;
             
   	function getProximoSqDoc($filtro){
   		//$filtro = new filtroManterDocumento();
@@ -16,15 +18,41 @@ include_once 'voDocumento.php';
   	function consultarTelaConsulta($arrayParamConsulta){
   		$filtro = $arrayParamConsulta[0];
   		$voentidade = $filtro->voPrincipal;
+  		if($voentidade  == null){
+  			$voentidade = new voDocumento();
+  		}
   		
   		$isHistorico = ("S" == $filtro->cdHistorico);
   		$nmTabela = $voentidade->getNmTabelaEntidade($isHistorico);
+  		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic(false);
+  		$nmTabelaDemandaDoc = voDemandaTramDoc::getNmTabelaStatic(false);
   			
-  		$atributosConsulta = "*";
-  		$querySelect = "SELECT ". $atributosConsulta;
-  		$queryFrom = "\n FROM ". $nmTabela;
-  		 
-  		return $this->consultarComPaginacaoQuery($voentidade, $filtro, $querySelect, $queryFrom);  		
+  		$arrayColunasRetornadas = array("$nmTabela.*");
+  		//$atributosConsulta = "$nmTabela.*";
+  		//$querySelect = "SELECT ". $atributosConsulta;
+  		//$queryFrom .= "\n FROM ". $nmTabela;
+  		$queryFrom .= "\n LEFT JOIN ". $nmTabelaDemandaDoc;
+  		$queryFrom .= "\n ON $nmTabelaDemandaDoc.". voDemandaTramDoc::$nmAtrAnoDoc . "= $nmTabela." . voDocumento::$nmAtrAno;
+  		$queryFrom .= "\n AND $nmTabelaDemandaDoc.". voDemandaTramDoc::$nmAtrTpDoc . "= $nmTabela." . voDocumento::$nmAtrTp;
+  		$queryFrom .= "\n AND $nmTabelaDemandaDoc.". voDemandaTramDoc::$nmAtrCdSetorDoc . "= $nmTabela." . voDocumento::$nmAtrCdSetor;
+  		$queryFrom .= "\n AND $nmTabelaDemandaDoc.". voDemandaTramDoc::$nmAtrSqDoc . "= $nmTabela." . voDocumento::$nmAtrSq;
+  		
+  		$queryFrom .= "\n LEFT JOIN ". $nmTabelaDemandaContrato;
+  		$queryFrom .= "\n ON $nmTabelaDemandaDoc.". voDemandaTramDoc::$nmAtrAnoDemanda . "= $nmTabelaDemandaContrato." . voDemandaContrato::$nmAtrAnoDemanda;
+  		$queryFrom .= "\n AND $nmTabelaDemandaDoc.". voDemandaTramDoc::$nmAtrCdDemanda . "= $nmTabelaDemandaContrato." . voDemandaContrato::$nmAtrCdDemanda;
+  		
+  		$groupby = array("$nmTabela." . voDocumento::$nmAtrAno,
+  				"$nmTabela." . voDocumento::$nmAtrTp,
+  				"$nmTabela." . voDocumento::$nmAtrCdSetor,
+  				"$nmTabela." . voDocumento::$nmAtrSq,
+  		);
+  		
+  		$filtro->groupby = $groupby;
+  		
+  		//echo $queryFrom;
+  		
+  		//return $this->consultarComPaginacaoQuery($voentidade, $filtro, $querySelect, $queryFrom);  
+  		return parent::consultarMontandoQueryTelaConsulta ( $voentidade, $filtro, $arrayColunasRetornadas, $queryFrom );
   	}  	
   	
   	function consultarDocumento($voentidade, $filtro){

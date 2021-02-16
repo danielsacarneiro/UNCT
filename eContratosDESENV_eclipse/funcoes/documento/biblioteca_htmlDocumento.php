@@ -154,4 +154,54 @@ function getBotaoAbrirDocumentoVO($vodoc, $isMenuSistema = true){
 	return getBotaoAbrirDocumento($chave, $isMenuSistema);
 }
 
+function getHTMLDocumentosContrato($voContrato){
+	//echo "deveria ter minuta";
+	$msgDocNaoExiste = "Documento não inserido na demanda.";
+	
+	$vodemandatram = new voDemandaTramitacao();
+	$vodocminuta = getDocumentoContrato($voContrato, dominioTpDocumento::$CD_TP_DOC_MINUTA);
+	$temDocMinuta = $vodocminuta != null;
+	$vodemandatram->voDoc = $vodocminuta;
+	
+	$retorno .= getTextoHTMLNegrito("|Minuta: ") . getHtmlDocumentoSemTD($vodemandatram, false, "tabeladadosalinhadoesquerda", $msgDocNaoExiste);
+	
+	$vodocpdf = getDocumentoContrato($voContrato, dominioTpDocumento::$CD_TP_DOC_CONTRATO);
+	$temDocPDF = $vodocpdf != null;
+	$vodemandatram->voDoc = $vodocpdf;
+	$retorno .= getTextoHTMLNegrito("  |Assinado: ") . getHtmlDocumentoSemTD($vodemandatram, false, "tabeladadosalinhadoesquerda", $msgDocNaoExiste);
+	
+	$temDocsAExibir = $temDocMinuta || $temDocPDF;
+	$temAmbosDocsAExibir = $temDocMinuta && $temDocPDF;
+	$array[0] = $temDocsAExibir;
+	$array[1] = $retorno;
+	$array[2] = $temAmbosDocsAExibir;
+	
+	return $array;
+	
+}
+function getDocumentoContrato($vocontrato, $tpDoc = null){
+	if($tpDoc == null){
+		$tpDoc = dominioTpDocumento::$CD_TP_DOC_CONTRATO;
+	}
+	//$vocontrato = new vocontrato();	
+	$filtro = new filtroManterDocumento(false, false);
+	$filtro->vocontrato = $vocontrato;
+	$filtro->cdSetor = dominioSetor::$CD_SETOR_UNCT;
+	$filtro->tp = $tpDoc;
+	$filtro->cdAtrOrdenacao = vodocumento::$nmAtrAno . " DESC, " . voDocumento::$nmAtrSq . " DESC";
+	
+	$dbDoc = new dbDocumento();
+	$colecao = $dbDoc->consultarTelaConsulta(array($filtro));
+	//$colecao = $dbDoc->consultarDocumento(new voDocumento(), $filtro);	
+	
+	//var_dump($colecao);
+	
+	if(!isColecaoVazia($colecao)){
+		$retorno = new voDocumento();
+		$retorno->getDadosBanco($colecao[0]);
+	}
+	
+	return $retorno;
+}
+
 ?>

@@ -10,6 +10,8 @@ include_once (caminho_funcoes . "proc_licitatorio/dominioComissaoProcLicitatorio
 include_once (caminho_funcoes . "proc_licitatorio/biblioteca_htmlProcLicitatorio.php");
 
 class voProcLicitatorio extends voentidade {
+	static $ID_REQ_DIV_NORMALIZAR_PL= "ID_REQ_DIV_NORMALIZAR_PL";
+	
 	static $NmColNomePregoeiro = "NmColNomePregoeiro";
 	
 	static $nmAtrCd = "pl_cd";

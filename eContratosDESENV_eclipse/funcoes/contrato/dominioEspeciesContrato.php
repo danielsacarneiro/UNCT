@@ -88,7 +88,7 @@ include_once(caminho_util. "dominio.class.php");
 	}	
 	
 	static function getColecaoImportacaoPlanilha(){
-		//cooperacao e convalidacao seram considerados como MATER
+		//cooperacao e convalidacao serao considerados como MATER
 		//deixa na ultima posicao as especies que podem se repetir
 		// A ORDEM EH IMPORTANTE, pq o item seguinte so sera selecionado se o anterior nao contiver nenhuma palavra em comum
 		return array(

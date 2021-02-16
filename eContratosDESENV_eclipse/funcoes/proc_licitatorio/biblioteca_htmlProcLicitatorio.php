@@ -91,3 +91,49 @@ function getCampoDadosProcLicitatorio($voProcLicitatorio, $nmClass = "camponaoob
 	}
 	
 }
+
+/**
+ * valida se o PL foi feito pela SEFAZ
+ * @param unknown $procLicExtenso
+ * @return boolean
+ */
+function isProcLicSEFAZ($procLicExtenso){
+		$procLicExtenso = str_replace(" ", "", $procLicExtenso);
+		//tem SEFAZ e nao tem SAD
+		//se tiver SAD o processo eh centralizado na SAD, nao da SEFAZ 
+		return $procLicExtenso != null && existeStr1NaStr2("SEFAZ", $procLicExtenso) && !existeStr1NaStr2("SAD", $procLicExtenso);		
+} 
+
+/**
+ * funcao para identificar os dados do PL considerando o campo por extenso
+ * @param unknown $procLic
+ * @return string
+ * TERMINAR: comecou a fazer a normalizacao mas desistiu
+ */
+function getCamposNormalizarPL($procLic){
+	if($procLic != null){
+		$procLic = getStringImportacaoCaracterEspecial ( $procLic );
+		$procLic = str_replace("SEFAZ-PE", "SEFAZ-PE", $procLic);
+		
+		if(!isProcLicSEFAZ($procLic)){
+			$retorno = getTextoHTMLDestacado("NÃO É PL SEFAZ");
+			return $retorno;			
+		}
+		
+		$arrayProcLic = getArrayFormatadoLinhaImportacaoPorSeparador ( $procLic );
+		$cd = $arrayProcLic[0];
+		$ano = $arrayProcLic[1];
+		$dsComissao = $arrayProcLic[2];
+		$cdModalidade = $arrayProcLic[3];
+		$sqModalidade = $arrayProcLic[4];		
+		
+		$retorno .= "PL.Formatado: Cd:" . getInputText(vocontrato::$nmAtrCdProcessoLicContrato, vocontrato::$nmAtrCdProcessoLicContrato, complementarCharAEsquerda($cd, "0", constantes::$TAMANHO_CODIGOS_SAFI), constantes::$CD_CLASS_CAMPO_READONLY);
+		$retorno .= "Ano:" . getInputText(vocontrato::$nmAtrAnoProcessoLicContrato, vocontrato::$nmAtrAnoProcessoLicContrato, $ano , constantes::$CD_CLASS_CAMPO_READONLY);
+		$retorno .= "<BR>Modalidade.Formatado:" . getInputText(vocontrato::$nmAtrCdModalidadeProcessoLicContrato, vocontrato::$nmAtrCdModalidadeProcessoLicContrato, $cdModalidade, constantes::$CD_CLASS_CAMPO_READONLY);
+		//ACRESCENTRA NO VOCONTRATO OS ATRIBUTOS ABAIXO
+		//$retorno .= "getInputText(vocontrato::$nmAtrsqModalidadeProcessoLicContrato, vocontrato::$nmAtrCdModalidadeProcessoLicContrato, $cdModalidade, constantes::$CD_CLASS_CAMPO_READONLY);
+
+	}
+
+	return $retorno;
+}

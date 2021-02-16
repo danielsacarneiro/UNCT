@@ -86,9 +86,40 @@ function getDescricaoChaveDS(cd, colecaoCdDS){
 	return retorno;	
 }
 
-function formatarCodigoDocumento(sq, cdSetor, ano, tpDoc, colecaoSetor, separador){
+function formatarCodigoContrato(cd, ano, tipo, cdEspecie, SqEspecie, separador){
 	str = "";
 	conector = "";
+	if(separador == null){
+		separador = "-";
+	}
+
+	if(tipo != null && tipo != ""){
+		str = str + conector + tipo;
+		conector = " ";
+	}
+	
+	if(cd != null && cd != ""){
+		str = str + conector + completarNumeroComZerosEsquerda(cd, TAMANHO_CODIGOS_DOCUMENTOS);
+		conector = separador;
+	}
+
+	if(ano != null && ano != ""){
+		str = str + conector + ano.substr(2,2);
+		conector = ".";
+	}
+
+	if(cdEspecie != null && cdEspecie != "" && cdEspecie != 'CM'
+		&& SqEspecie != null && SqEspecie != ""){
+		str = str + conector + SqEspecie + cdEspecie;
+		conector = separador;
+	}
+
+	return str;	
+}
+
+function formatarCodigoDocumento(sq, cdSetor, ano, tpDoc, colecaoSetor, separador, isContrato=false){
+	var str = "";
+	var conector = "";
 	if(separador == null){
 		separador = "-";
 	}
@@ -120,6 +151,10 @@ function formatarCodigoDocumento(sq, cdSetor, ano, tpDoc, colecaoSetor, separado
 		str = str + conector + ano.substr(2,2);
 		conector = separador;
 	}
+	
+	if(isContrato){
+		str = str.replaceAll(" ", ".");
+	}
 			
 	return str;	
 }
@@ -142,8 +177,14 @@ function getExtensaoDocumento(tpDoc) {
 	retorno = ".docx";
 	if(tpDoc == 'PC' || tpDoc == 'CA' || tpDoc == 'LC')
 		retorno = ".xlsx";
-	else if(tpDoc == 'PU' || tpDoc == 'PP' || tpDoc == 'DC')
+	else if(tpDoc == 'PU' || tpDoc == 'PP' || tpDoc == 'DC' || tpDoc == 'CT')
 		retorno = ".pdf";
 	
 	return retorno;	
+}
+
+function isExtensaoArquivoValida(nmArquivo, extensao) {
+	nmArquivo = nmArquivo.toUpperCase();
+	extensao = extensao.toUpperCase();
+	return nmArquivo.indexOf(extensao) != -1;	
 }

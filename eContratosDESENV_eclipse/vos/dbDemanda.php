@@ -1135,6 +1135,12 @@ class dbDemanda extends dbprocesso {
 					throw new excecaoChaveRegistroInexistente("Verifique a inclusão das informações adicionais ao contrato relacionado.", null, $vocontratoInfo);
 				}
 				
+				$arrayRetorno = getHTMLDocumentosContrato($vocontratoDemanda);
+				$temAmbosDocsAExibir = $arrayRetorno[3];
+				if(!$temAmbosDocsAExibir){
+					throw new excecaoGenerica("Fechamento só permitido quando ambos os documentos 'MINUTA' (em word) e 'CONTRATO' (em pdf) forem anexados à demanda.", null, $vocontratoDemanda);
+				}
+				
 				/*$dbcontrato = new dbcontrato();
 				$filtroManterContrato = new filtroManterContrato();
 				$filtroManterContrato->inSQLJoinContratoInfo = "INNER JOIN";

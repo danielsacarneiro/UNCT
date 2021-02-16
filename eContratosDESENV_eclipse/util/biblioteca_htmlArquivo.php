@@ -267,6 +267,180 @@ function randString($size){
 	return $return;
 }
 
+function localizarArquivosPorPasta($enderecoPasta, $nmArquivo){
+	$arquivos = array();
+	
+	$iterator = new FileSystemIterator($enderecoPasta);
+	foreach ($iterator as $file) {	
+		$filename = $file->getRealpath();	
+		//if (strpos($filename, $termo) !== false) {
+		if (existeStr1NaStr2($nmArquivo, $filename)) {
+			$arquivos[] = $filename;
+		}
+	}
+	
+	return $arquivos;
+}
+
+function acharArquivos($dir, $strFiltro) {
+
+	$pasta = $dir . "\\\*";
+	$dir = new GlobIterator ( $pasta );
+	
+	$i = 0;
+	// atribui o valor de $dir para $file em loop
+	foreach ( $dir as $file ) {
+	//foreach(glob("$dir*.pdf") as $file){
+//		echo $dname = $file->getFilename ();
+		
+		if ($file->isDir ()) {
+			$dname = $file->getFilename ();
+			$pastaTemp = "$pasta\\$dname\\\*";
+			$retorno = acharArquivos($pastaTemp, $strFiltro);
+			// foreach(glob("$pasta*.txt") as $arquivo)
+			//echo $dname = $file->getFilename ();
+			//$i++;
+		}else if($file->isFile ()){
+			$dname = $file->getFilename ();
+			if(existeStr1NaStr2($strFiltro, $dname)){
+				$retorno = $file;				
+			}
+			
+		}
+
+	}
+	
+	return $retorno;
+}
+
+/*$url = $_SERVER["PHP_SELF"];
+if(preg_match("class.Upload.php", "$url"))
+{
+	header("Location: ../index.php");
+}*/
+
+function uploadArquivo($idArquivo, $pastaUpload){
+	//define os tipos permitidos
+	$tipos[0]=".pdf";
+	
+	if(isset($_FILES[$idArquivo]))	{
+		$upArquivo = new Upload();
+		if($upArquivo->UploadArquivo($_FILES[$idArquivo], $pastaUpload, $tipos)){
+			$nome = $upArquivo->nome;
+			$tipo = $upArquivo->tipo;
+			$tamanho = $upArquivo->tamanho;
+			echo "Envio com sucesso.<br>";
+		}else{
+			echo "Falha no envio.<br>";
+		}
+	}else{
+		echo "Arquivo não encontrado.<br>";
+	}
+	
+/*
+//define os tipos permitidos
+$tipos[0]=".gif";
+$tipos[1]=".jpg";
+$tipos[2]=".jpeg";
+$tipos[3]=".png";
+
+if(isset($HTTP_POST_FILES["userfile"]))
+{
+$upArquivo = new Upload;
+if($upArquivo->UploadArquivo($HTTP_POST_FILES["userfile"], "Imagens/", $tipos))
+{
+$nome = $upArquivo->nome;
+$tipo = $upArquivo->tipo;
+$tamanho = $upArquivo->tamanho;
+}else{
+echo "Falha no envio<br />";
+}
+} 
+ */	
+}
+
+class Upload {
+	var $tipo;
+	var $nome;
+	var $tamanho;
+	
+	function Upload() {
+		// Criando objeto
+	}
+	
+	function UploadArquivo($arquivo, $pasta, $tipos) {
+		if (isset ( $arquivo )) {
+			$nomeOriginal = $arquivo ["name"];
+			$nomeFinal = md5 ( $nomeOriginal . date ( "dmYHis" ) );
+			$tipo = strrchr ( $arquivo ["name"], "." );
+			$tamanho = $arquivo ["size"];
+			
+			for($i = 0; $i <= count ( $tipos ); $i ++) {
+				if ($tipos [$i] == $tipo) {
+					$arquivoPermitido = true;
+				}
+			}
+			
+			if ($arquivoPermitido == false) {
+				echo "Extensão de arquivo não permitido!";
+				exit ();
+			}
+			
+			$pasta = './uploads/';
+			/* VERIFICO SE A PASTA EXISTE, SE ELA NÃO EXISTIR, EU CRIO A PASTA */
+			if(!file_exists($pasta)) {
+				echo "criou pasta";
+				mkdir($pasta, 0777);
+			}else{
+				echo ("pasta existente");
+			}
+			
+			//echoo("antes de move");
+			//if (move_uploaded_file ( $arquivo ["tmp_name"], $pasta . $nomeFinal . $tipo )) {
+			if (move_uploaded_file ( $arquivo ["tmp_name"], $pasta . "teste.pdf" )) {
+			//if (move_uploaded_file ($nomeOriginal, $pasta . $nomeFinal . $tipo )) {
+				$this->nome = $pasta . $nomeFinal . $tipo;
+				$this->tipo = $tipo;
+				$this->tamanho = number_format ( $arquivo ["size"] / 1024, 2 ) . "KB";
+				return true;
+			} else {
+				echoo("RETORNOU FALSE");
+				return false;
+			}
+		}
+	}
+}
+
+class FileFilter {
+
+	private $diretorio;
+	private $filtro;
+
+	public function __construct($diretorio, $filtro) {
+
+		$this->diretorio = $diretorio;
+		$this->filtro = $filtro;
+
+	}
+
+	public function showFiles() {
+		$pasta = str_replace(dominioTpDocumento::$ENDERECO_DRIVE, dominioTpDocumento::$ENDERECO_DRIVE_HTML, $this->diretorio);
+
+		$dir = new DirectoryIterator($pasta);
+		$filtro = $this->filtro;
+		echoo($filtro);
+		echo "pasta $dir" . $pasta;
+		$filtro = new RegexIterator($dir, "/^". $this->filtro . "/");//  '/^test/'
+
+		foreach ($filtro as $arquivo)  {
+			var_dump($arquivo);
+			;
+		}
+
+	}
+}
+
+
 
 
 

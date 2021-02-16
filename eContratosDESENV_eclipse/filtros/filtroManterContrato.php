@@ -13,6 +13,7 @@ class filtroManterContrato extends filtroManter {
 	public static $nmAtrAnoArquivo = "nmAtrAnoArquivo";
 	public static $nmAtrTpDemanda = "nmAtrTpDemanda";
 	public static $NmAtrInOR_AND = "NmAtrInOR_AND";
+	public static $NmColTemContratoInfo = "NmColTemContratoInfo";
 	
 	public static $ID_REQ_DtAssinaturaInicial = "ID_REQ_DtAssinaturaInicial";
 	public static $ID_REQ_DtAssinaturaFinal = "ID_REQ_DtAssinaturaFinal";

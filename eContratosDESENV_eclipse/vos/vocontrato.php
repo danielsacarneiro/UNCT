@@ -34,6 +34,8 @@ include_once (caminho_util . "DocumentoPessoa.php");
 		static $nmEntidadeStatic = "contrato";*/
   	static $NUM_PRAZO_PADRAO = 12;
   	static $ID_REQ_COLECAO_EXPORTAR_EXCEL = "ID_REQ_COLECAO_EXPORTAR_EXCEL";
+  	static $ID_REQ_DIV_DADOS_MANTER_CONTRATO = "ID_REQ_DIV_DADOS_MANTER_CONTRATO";
+  	
   	static $DS_ESPECIE_MATER = "Mater"; 
   		static $ID_REQ_CAMPO_CONTRATO = "ID_REQ_CAMPO_CONTRATO";
   		static $matrizImportacao;
@@ -117,12 +119,27 @@ include_once (caminho_util . "DocumentoPessoa.php");
 
 // ...............................................................
 // Construtor
-   function __construct() {   	
+
+		function __construct() {
+			parent::__construct ();
+			$this->temTabHistorico = false;
+		
+			$arrayAtribInclusaoDBDefault = array (
+					self::$nmAtrDhInclusao,
+					self::$nmAtrDhUltAlteracao
+			);
+			$this->setaAtributosRemocaoEInclusaoDBDefault($arrayAtribRemover, $arrayAtribInclusaoDBDefault);
+			$this->sqEspecie = 1;
+			$this->importacao = "N";				
+		}	
+		
+   /*function __construct() {   	
        parent::__construct();
        $this->temTabHistorico = false;
+       
        $this->sqEspecie = 1;
        $this->importacao = "N";
-   }
+   }*/
     
    /*function __construct1($pArrayChavesOuSemSqDefault = null) {
    		if($pArrayChavesOuSemSqDefault == null){
@@ -162,6 +179,35 @@ include_once (caminho_util . "DocumentoPessoa.php");
     public function getNmClassProcesso(){
         return  "dbcontrato";
     }     
+    
+    function getValoresWhereSQLChave($isHistorico){
+    	$nmTabela = self::getNmTabelaStatic($isHistorico);
+    	$query = $this->getValoresWhereSQLChaveLogicaSemSQ($isHistorico);
+    
+    	//aqui so usa o sq se a chave logica nao estiver completa
+    	if(!$this->isChaveLogicaValida()){
+    		//echo "incompleta";
+    		$query.= " AND ". $nmTabela . "." . self::$nmAtrSqContrato . "=" . $this->sq;
+    	}
+    
+    	if($isHistorico)
+    		$query.= " AND ". $nmTabela . "." . self::$nmAtrSqHist . "=" . $this->sqHist;
+    
+    		return $query;
+    }
+    
+    function getValoresWhereSQLChaveLogicaSemSQ($isHistorico){
+    	$nmTabela = self::getNmTabelaStatic($isHistorico);
+    	$query = $nmTabela . "." . self::$nmAtrTipoContrato . "=" . getVarComoString($this->tipo);
+    	$query.= " AND " . $nmTabela . "." . self::$nmAtrAnoContrato . "=" . $this->anoContrato;
+    	$query.= " AND " . $nmTabela . "." . self::$nmAtrCdContrato . "=" . $this->cdContrato;
+    	$query.= " AND " . $nmTabela . "." . self::$nmAtrCdEspecieContrato . "=" . getVarComoString($this->cdEspecie);
+    	$query.= " AND " . $nmTabela . "." . self::$nmAtrSqEspecieContrato . "=" . $this->sqEspecie;
+    
+    	//echo "<br>$query";
+    
+    	return $query;
+    }
     
     /**
      *  Chave primaria
@@ -340,6 +386,10 @@ include_once (caminho_util . "DocumentoPessoa.php");
         $this->cdPessoaContratada= @$_POST[self::$nmAtrCdPessoaContratada];
         $this->contratada = @$_POST[self::$nmAtrContratadaContrato];
 		$this->docContratada = @$_POST[self::$nmAtrDocContratadaContrato];
+		if($this->docContratada != null){
+			$this->docContratada = str_replace(" ", "", $this->docContratada);
+			$this->docContratada = documentoPessoa::getNumeroDocSemMascara($this->docContratada);			
+		}
 		$this->gestor = @$_POST[self::$nmAtrGestorContrato];
         $this->cdGestor = @$_POST[self::$nmAtrCdGestorContrato];        
         $this->nmGestorPessoa = @$_POST[self::$nmAtrGestorPessoaContrato];
@@ -361,13 +411,12 @@ include_once (caminho_util . "DocumentoPessoa.php");
 		$this->cdAutorizacao = @$_POST[self::$nmAtrCdAutorizacaoContrato];
 		$this->licom = @$_POST[self::$nmAtrInLicomContrato];
 		$this->obs = @$_POST[self::$nmAtrObservacaoContrato];
+		
 		$this->linkDoc = @$_POST[self::$nmAtrLinkDoc];
 		$this->linkMinutaDoc = @$_POST[self::$nmAtrLinkMinutaDoc];
         
-        $this->dhUltAlteracao = @$_POST[self::$nmAtrDhUltAlteracao];
-        $this->sqHist = @$_POST[self::$nmAtrSqHist];
-        //usuario de ultima manutencao sempre sera o id_user
-        $this->cdUsuarioUltAlteracao = id_user;
+        // completa com os dados da entidade
+        $this->getDadosFormularioEntidade ();        
 	}
 	
 	function isChaveLogicaValida(){
@@ -378,35 +427,6 @@ include_once (caminho_util . "DocumentoPessoa.php");
 		|| $this->sqEspecie == null;
 		
 		return !$retorno;
-	}
-	
-	function getValoresWhereSQLChave($isHistorico){
-		$nmTabela = self::getNmTabelaStatic($isHistorico);
-		$query = $this->getValoresWhereSQLChaveLogicaSemSQ($isHistorico);
-		
-		//aqui so usa o sq se a chave logica nao estiver completa
-		if(!$this->isChaveLogicaValida()){
-			//echo "incompleta";
-			$query.= " AND ". $nmTabela . "." . self::$nmAtrSqContrato . "=" . $this->sq;
-		}
-		
-		if($isHistorico)
-			$query.= " AND ". $nmTabela . "." . self::$nmAtrSqHist . "=" . $this->sqHist;
-	
-		return $query;
-	}
-	
-	function getValoresWhereSQLChaveLogicaSemSQ($isHistorico){
-		$nmTabela = self::getNmTabelaStatic($isHistorico);
-		$query = $nmTabela . "." . self::$nmAtrTipoContrato . "=" . getVarComoString($this->tipo);
-		$query.= " AND " . $nmTabela . "." . self::$nmAtrAnoContrato . "=" . $this->anoContrato;
-		$query.= " AND " . $nmTabela . "." . self::$nmAtrCdContrato . "=" . $this->cdContrato;		
-		$query.= " AND " . $nmTabela . "." . self::$nmAtrCdEspecieContrato . "=" . getVarComoString($this->cdEspecie);
-		$query.= " AND " . $nmTabela . "." . self::$nmAtrSqEspecieContrato . "=" . $this->sqEspecie;
-		
-		//echo "<br>$query";
-		
-		return $query;
 	}
             
     function getValorChavePrimaria(){    	
@@ -492,14 +512,61 @@ include_once (caminho_util . "DocumentoPessoa.php");
 		return static::getEnredeçoDocumento($this->linkMinutaDoc);
 	}
 	
+	/**
+	 * identifica o endereco do arquivo que deve ser incluido na base de dados
+	 * eh obrigatoria a observancia correta do sistema de arquivos do econti
+	 * @param unknown $vocontrato
+	 */
+	function getEnderecoArquivoInseridoTela(){
+		//$vocontrato = new vocontrato();
+		$tipo = $this->tipo;
+	
+		$chave = $this->linkDoc;
+		//retira a existencia de qualquer pasta anterior ao nome do arquivo
+		$array = explode("\\", $chave);
+		$nmArquivo = $array[(sizeof($array))-1];
+		$nmPasta = dominioTpDocumento::getEnderecoPastaBaseUNCT() . "\\" . dominioTpDocumento::getEnderecoPastaTermoDigitalizado($tipo);
+		
+		//$fileFiltro = new FileFilter($nmPasta, $nmArquivo);
+		//$fileFiltro->showFiles();
+		
+		/*$file = acharArquivos($nmPasta, $nmArquivo);
+		if($file != null){
+			echo $file->getFilename ();
+		}else{
+			echo "arquivo nao encontrado";
+		}*/
+		
+		$retorno = "$nmPasta\\$nmArquivo";
+		 
+		return $retorno;
+	}
+	
+	/**
+	 * serve somente para o arquivo pdf
+	 * o arquivo minuta vai ser selecionado da demanda que trata o termo
+	 */
+	function getEnderecoDocumentoMascarado($link){
+		if(isAtributoValido($link)){
+			if($this->importacao == constantes::$CD_SIM){
+				//se foi importado da planilha
+				$retorno = static::getEnredeçoDocumento($link);
+			}else{
+				$retorno = $this->getEnderecoArquivoInseridoTela();
+			}
+		}
+		
+		return $retorno;		
+	}
+	
 	static function getEnredeçoDocumento($link){
-		//para o caso de o link do doc vier em endereco relativo ("../")
-		$pastaUNCTPrincipalSubs = dominioTpDocumento::$ENDERECO_DRIVE . "\\" . dominioTpDocumento::$ENDERECO_PASTABASE_UNCT;
-		$link = str_ireplace("../", $pastaUNCTPrincipalSubs . "\\" , $link);
-		$link = str_ireplace("..\\", $pastaUNCTPrincipalSubs . "\\" , $link);
-
-		$link = str_ireplace("/", "\\" , $link);
-		$link = str_ireplace(dominioTpDocumento::$UNIDADE_REDE_PLANILHA, dominioTpDocumento::$ENDERECO_DRIVE, $link);
+			//para o caso de o link do doc vier em endereco relativo ("../")
+			$pastaUNCTPrincipalSubs = dominioTpDocumento::$ENDERECO_DRIVE . "\\" . dominioTpDocumento::$ENDERECO_PASTABASE_UNCT;
+			$link = str_ireplace("../", $pastaUNCTPrincipalSubs . "\\" , $link);
+			$link = str_ireplace("..\\", $pastaUNCTPrincipalSubs . "\\" , $link);
+	
+			$link = str_ireplace("/", "\\" , $link);
+			$link = str_ireplace(dominioTpDocumento::$UNIDADE_REDE_PLANILHA, dominioTpDocumento::$ENDERECO_DRIVE, $link);
 
 		return $link; 
 	}
@@ -549,5 +616,11 @@ include_once (caminho_util . "DocumentoPessoa.php");
 		return $retorno; 
 	}
 	
+	function getMensagemComplementarTelaSucesso(){
+		$retorno = "Contrato : " . $this->getCodigoContratoFormatado(true);		
+		return $retorno;
+	}
+	
 }
+
 ?>

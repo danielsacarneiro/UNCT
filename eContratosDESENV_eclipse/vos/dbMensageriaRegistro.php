@@ -154,7 +154,7 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		<br><br><b>Sem prejuízo quanto à responsabilidade referente à gestão contratual própria do setor demandante, 
   		é imprescindível a resposta deste email, ainda que inexista interesse na prorrogação, para fins de controle e registro desta UNCT</b>.
   		
-  		<br><br>Caso já tenha enviado o pedido de prorrogação, favor desconsiderar esta solicitação.
+  		<br><br>Caso o pedido de prorrogação já tenha sido formalizado, <b>favor informar o número do SEI que trata da presente questão</b>.
   		<br><br>Na ausência de manifestação, este e-mail será reenviado a cada <b>$numFrequencia dia(s)</b>.";  		 		
   		
   		return $retorno;
@@ -180,7 +180,8 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		<br><br><b>Sem prejuízo quanto à responsabilidade referente à gestão contratual própria do setor demandante,
   		é imprescindível a resposta deste email, ainda que inexista interesse na prorrogação, para fins de controle e registro desta UNCT</b>.
   	
-  		<br><br>Caso esta solicitação já tenha sido respondida, favor desconsiderá-la.
+  		<br><br>Caso esta solicitação já tenha sido respondida, <b>favor informar o número do SEI que trata da presente questão</b>.
+  		
   		<br><br>Na ausência de manifestação, este e-mail será reenviado a cada <b>$numFrequencia dia(s)</b>.";
   	
   		return $retorno;

@@ -423,8 +423,14 @@ class filtroManter extends multiplosConstrutores {
 		$conectorOrdem = "";
 		//concatena as ordenacoes que existirem
 		if($atributoOrdenacao != ""){
-			$ordenacaoFinal = $atributoOrdenacao;
-			$conectorOrdem = ",";
+			//remove a ordenacao por historico se a consulta NAO for por historico
+			//MARRETA ORDER BY
+			if(!$this->isHistorico() && existeStr1NaStr2(voentidade::$nmAtrSqHist, $atributoOrdenacao)){
+				$atributoOrdenacao = "";				
+			}else{
+				$ordenacaoFinal = $atributoOrdenacao;
+				$conectorOrdem = ",";
+			}
 		}
 
 		if($strOrdemAnteriorDefault != ""){
@@ -578,6 +584,13 @@ class filtroManter extends multiplosConstrutores {
 	}
 	function getSQL_QUERY_COMPLETA(){
 		return $this->QUERY_COMPLETA;
+	}
+	
+	function setFiltroOrdenacaoComplemento(&$varAtributos){
+		if($this->isHistorico()){
+			$atributo = array(voentidade::$nmAtrSqHist => "Sq.Hist");
+			$varAtributos = putElementoArray2NoArray1ComChaves ($atributo, $varAtributos);
+		}
 	}
 		
 }
