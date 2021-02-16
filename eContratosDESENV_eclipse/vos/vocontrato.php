@@ -122,7 +122,7 @@ include_once (caminho_util . "DocumentoPessoa.php");
 
 		function __construct() {
 			parent::__construct ();
-			$this->temTabHistorico = false;
+			$this->temTabHistorico = true;
 		
 			$arrayAtribInclusaoDBDefault = array (
 					self::$nmAtrDhInclusao,
@@ -410,6 +410,8 @@ include_once (caminho_util . "DocumentoPessoa.php");
 		$this->tpAutorizacao = @$_POST[self::$nmAtrTipoAutorizacaoContrato];
 		$this->cdAutorizacao = @$_POST[self::$nmAtrCdAutorizacaoContrato];
 		$this->licom = @$_POST[self::$nmAtrInLicomContrato];
+		//se veio da tela nao eh importacao
+		$this->importacao = constantes::$CD_NAO;
 		$this->obs = @$_POST[self::$nmAtrObservacaoContrato];
 		
 		$this->linkDoc = @$_POST[self::$nmAtrLinkDoc];

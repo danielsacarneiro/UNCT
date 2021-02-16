@@ -12,6 +12,7 @@ function getStringImportacaoCaracterEspecial($param, $removerEspaco= false){
 	$param = str_replace('?', '-', $param);
 	if($removerEspaco){
 		$param = str_replace(' ', '', $param);
+		$param = str_replace(',', '.', $param);
 	}
 	
 	/*UPDATE contrato SET

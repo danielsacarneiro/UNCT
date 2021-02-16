@@ -643,8 +643,15 @@ class dbcontrato extends dbprocesso {
 		
 		//$vo = new vocontrato();
 		//se o contrato foi alterado, ele deixa de ser IMPORTADO
-		$retorno .= $sqlConector . vocontrato::$nmAtrInImportacaoContrato . " = " . $this->getVarComoString (constantes::$CD_NAO);
-		$sqlConector = ",";
+		if ($voContrato->importacao != null) {
+			$retorno .= $sqlConector . vocontrato::$nmAtrInImportacaoContrato . " = " . $this->getVarComoString ($voContrato->importacao);
+			$sqlConector = ",";
+		}
+		
+		if ($voContrato->cdPessoaContratada != null) {
+			$retorno .= $sqlConector . vocontrato::$nmAtrCdPessoaContratada . " = " . $this->getVarComoNumero ( $voContrato->cdPessoaContratada );
+			$sqlConector = ",";
+		}
 		
 		if ($voContrato->gestor != null) {
 			$retorno .= $sqlConector . vocontrato::$nmAtrGestorContrato . " = " . $this->getVarComoString ( $voContrato->gestor );
@@ -1000,6 +1007,7 @@ class dbcontrato extends dbprocesso {
 		return $retorno;
 	}
 	function atualizarPessoasContrato() {
+		
 		echoo("Atualizando contratadas");
 
 		$query = "SELECT ";
@@ -1025,20 +1033,10 @@ class dbcontrato extends dbprocesso {
 		//var_dump($arrayDocs);
 
 		$query = "SELECT * ";
-		/*$query .= vocontrato::getNmTabela () . "." . vocontrato::$nmAtrSqContrato;
-		 $query .= "," . vocontrato::getNmTabela () . "." . vocontrato::$nmAtrAnoContrato;
-		 $query .= "," . vocontrato::getNmTabela () . "." . vocontrato::$nmAtrCdContrato;
-		 $query .= "," . vocontrato::getNmTabela () . "." . vocontrato::$nmAtrTipoContrato;
-		 $query .= "," . vocontrato::getNmTabela () . "." . vocontrato::$nmAtrCdEspecieContrato;
-		 $query .= "," . vocontrato::getNmTabela () . "." . vocontrato::$nmAtrSqEspecieContrato;
-		 $query .= "," . vocontrato::getNmTabela () . "." . vocontrato::$nmAtrDocContratadaContrato;
-		 $query .= "," . vocontrato::getNmTabela () . "." . vocontrato::$nmAtrCdPessoaContratada;
-		 $query .= "," . vocontrato::getNmTabela () . "." . vocontrato::$nmAtrDhUltAlteracao;*/
 		$query .= "\n FROM " . vocontrato::getNmTabela ();
 		$query .= "\n WHERE " . vocontrato::$nmAtrDocContratadaContrato . " IS NOT NULL";
 		$query .= "\n AND " . vocontrato::$nmAtrCdPessoaContratada . " IS NULL";
 		$query .= "\n ORDER BY " . vocontrato::$nmAtrSqContrato;
-		// $query.= " AND " .vocontrato::$nmAtrSqContrato . " = " . "1";
 
 		// echo $query;
 
@@ -1050,6 +1048,7 @@ class dbcontrato extends dbprocesso {
 
 		if(!isColecaoVazia($colecaoContratos)){
 			for($i = 0; $i < $tam; $i ++) {
+				try{
 				$voContrato = new voContrato ();
 				$voContrato->getDadosBanco ( $colecaoContratos [$i] );
 				$docContrato = new documentoPessoa ( $voContrato->docContratada );
@@ -1081,6 +1080,12 @@ class dbcontrato extends dbprocesso {
 				if(dbcontrato::$FLAG_PRINTAR_LOG_IMPORTACAO){
 					echoo("CONTRATO:: " . $voContrato->getCodigoContratoFormatado() . "|" .$voContrato->sqEspecie . " " . dominioEspeciesContrato::getDescricaoStatic($voContrato->cdEspecie));
 				}
+				
+				}catch(Exception $ex){
+					echoo("CONTRATO:: " . $voContrato->getCodigoContratoFormatado() . "|" .$voContrato->sqEspecie . " " . dominioEspeciesContrato::getDescricaoStatic($voContrato->cdEspecie));
+					echoo($ex->getMessage());
+				}
+				
 			}
 		}
 

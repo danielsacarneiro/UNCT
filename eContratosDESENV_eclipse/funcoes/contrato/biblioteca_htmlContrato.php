@@ -1648,8 +1648,8 @@ function setProcLiciContratoFormatado(&$vocontrato){
 		$tipoModalidade = $array[3];
 		$numModalidade = $array[4];
 				
-		$vocontrato->anoProcLic = $anoPL;
-		$vocontrato->cdProcLic = $cdPL;
+		$vocontrato->anoProcLic = removerNaoNumericos($anoPL);
+		$vocontrato->cdProcLic = removerNaoNumericos($cdPL);
 		$vocontrato->cdModalidadeLic = $tipoModalidade;
 	
 		/*try {

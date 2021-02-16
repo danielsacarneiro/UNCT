@@ -646,6 +646,10 @@ function getIndiceDaChaveDeUmArrayMultiplo($array, $key){
 	return $retorno;	
 }
 
+function removerNaoNumericos($str){
+	return preg_replace("/[^0-9]/", "", $str);
+}
+
 /*function isArrayMultiDimensional($array){
 	return count($array) == count($array, COUNT_RECURSIVE);
 }*/

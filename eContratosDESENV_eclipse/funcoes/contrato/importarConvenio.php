@@ -21,7 +21,7 @@ inicioComValidacaoUsuario(true);
 
 <?php
 
-header('Content-Type: text/html; charset=utf-8',true);
+header('Content-Type: text/html; ',true);
 
 include_once caminho_wordpress.'excel/Classes/PHPExcel.php';
 include_once caminho_wordpress.'excel/Classes/PHPExcel/Writer/Excel2007.php';
