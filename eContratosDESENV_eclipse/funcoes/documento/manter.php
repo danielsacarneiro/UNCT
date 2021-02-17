@@ -116,10 +116,12 @@ function getDSPAAP(){
 	return retorno;
 }
 
-function setaCampoContratoObrigatorio(){
+function formataFormDocContrato(){
 	var documento =  document.frm_principal;
 	var isDocContrato = false;
+	var campoComplemento = "";
 	try{
+		campoComplemento = documento.<?=voDocumento::$nmAtrComplemento?>;
 		isDocContrato = documento.<?=voDocumento::$nmAtrTp?>.value == 'CT';
 	}catch(ex){
 		;
@@ -132,7 +134,15 @@ function setaCampoContratoObrigatorio(){
 	'<?=vocontrato::$nmAtrCdEspecieContrato?>',
 	'<?=vocontrato::$nmAtrSqEspecieContrato?>'];
 		
-	tornarRequiredCamposColecaoFormulario(colecaoIDCamposRequired, isDocContrato);	
+	tornarRequiredCamposColecaoFormulario(colecaoIDCamposRequired, isDocContrato);
+
+	if(campoComplemento != null){
+		if(isDocContrato){
+			campoComplemento.value = "";
+		}
+		tornarCampoReadOnly(campoComplemento, isDocContrato, false);
+	}
+	
 }
 
 
@@ -140,7 +150,7 @@ function criarNomeDocumento(campoChamada){
 	<?php
 	if($isInclusao){
 	?>
-	setaCampoContratoObrigatorio();
+	formataFormDocContrato();
 	
 	//formatarNomeDocumento(sq, cdSetor, ano, tpDoc, complemento);
 	
