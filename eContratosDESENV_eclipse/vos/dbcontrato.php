@@ -1400,62 +1400,66 @@ class dbcontrato extends dbprocesso {
 	}
 
 	static function getSQLLimparTabelaContrato(){
-		$sql =
+		
+		$sql = 
 		"CREATE TABLE contrato (
-		    sq INT NOT NULL AUTO_INCREMENT,
-		    ct_exercicio INT NOT NULL,
-		    ct_numero INT NOT NULL,
-		    ct_tipo char(1) NOT NULL,
-			ct_especie VARCHAR(50),
-		    ct_sq_especie INT DEFAULT 1 NOT NULL,
-		    ct_cd_especie CHAR(2) NOT NULL,
-			ct_cd_situacao CHAR(2),
-		    ct_objeto LONGTEXT,
-		    ct_gestor_pessoa VARCHAR(300) ,
-		    pe_cd_resp INT ,
-		    ct_gestor VARCHAR(200) ,
-		    gt_cd INT ,
-			ct_processo_lic VARCHAR(300),
-		    ct_cd_processo_lic INT,
-		    ct_ano_processo_lic INT,
-		    ct_cdmod_processo_lic CHAR(2),
-			ct_modalidade_lic VARCHAR(300),
-			ct_data_public VARCHAR(300),
-		    ct_dt_public DATE,
-		    ct_dt_assinatura DATE,
-		    ct_dt_vigencia_inicio DATE,
-		    ct_dt_vigencia_fim DATE,
-			ct_dt_proposta DATE NULL,
-		    ct_contratada VARCHAR(300),
-		    pe_cd_contratada INT,
-		    ct_doc_contratada VARCHAR(30),
-		    ct_num_empenho VARCHAR(50),
-		    ct_tp_autorizacao VARCHAR(15),
-		    ct_cd_autorizacao INT,
-		    ct_in_licom CHAR(1),
-			ct_in_importacao CHAR(1) DEFAULT 'N',
-		    ct_observacao LONGTEXT,
-		    ct_valor_global DECIMAL (14,4),
-		    ct_valor_mensal DECIMAL (14,4),
-		    ct_doc_link TEXT NULL,
-			ct_doc_minuta TEXT NULL,
-		    dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-		    dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
-		    cd_usuario_incl INT,
-		    cd_usuario_ultalt INT,
-
-		    CONSTRAINT pk PRIMARY KEY (sq, ct_exercicio, ct_numero, ct_tipo),
-		    UNIQUE KEY chave_logica_contrato (ct_exercicio, ct_numero, ct_tipo, ct_cd_especie, ct_sq_especie),
-		    CONSTRAINT fk_ct_gestor FOREIGN KEY ( gt_cd ) REFERENCES gestor (gt_cd)
-			ON DELETE RESTRICT
-			ON UPDATE RESTRICT,
-			CONSTRAINT fk_ct_pessoa_resp FOREIGN KEY ( pe_cd_resp ) REFERENCES pessoa (pe_cd)
-			ON DELETE RESTRICT
-			ON UPDATE RESTRICT,
-			CONSTRAINT fk_ct_pessoa_contratada FOREIGN KEY ( pe_cd_contratada ) REFERENCES pessoa (pe_cd)
-			ON DELETE RESTRICT
-			ON UPDATE RESTRICT
-		);";
+				sq INT NOT NULL AUTO_INCREMENT,
+				ct_exercicio INT NOT NULL,
+				ct_numero INT NOT NULL,
+				ct_tipo char(1) NOT NULL,
+				ct_especie VARCHAR(50),
+				ct_sq_especie INT DEFAULT 1 NOT NULL, -- indice do documento em questao (primeiro ou segundo apostilamento, por ex)
+				ct_cd_especie CHAR(2) NOT NULL, -- especie do registro (mater, apostilamento, aditivo)
+				ct_cd_situacao CHAR(2),
+				ct_objeto LONGTEXT,
+				ct_gestor_pessoa VARCHAR(300) ,
+				pe_cd_resp INT ,
+				ct_gestor VARCHAR(200) ,
+				gt_cd INT ,
+				ct_processo_lic VARCHAR(300),
+				ct_cd_processo_lic INT,
+				ct_ano_processo_lic INT,
+				ct_cdmod_processo_lic CHAR(2),
+				ct_modalidade_lic VARCHAR(300),
+				ct_data_public VARCHAR(300),
+				ct_dt_public DATE,
+				ct_dt_assinatura DATE,
+				ct_dt_vigencia_inicio DATE,
+				ct_dt_vigencia_fim DATE,
+				ct_dt_proposta DATE NULL,
+				ct_contratada VARCHAR(300),
+				pe_cd_contratada INT,
+				ct_doc_contratada VARCHAR(30),
+				ct_num_empenho VARCHAR(50),
+				ct_tp_autorizacao VARCHAR(15),
+				ct_cd_autorizacao INT,
+				ct_in_licom CHAR(1),
+				ct_in_importacao CHAR(1) DEFAULT 'N',
+				ct_observacao LONGTEXT,
+				ct_valor_global DECIMAL (14,4),
+				ct_valor_mensal DECIMAL (14,4),
+				ct_doc_link TEXT NULL,
+				ct_doc_minuta TEXT NULL,
+		
+				dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+				dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
+				cd_usuario_incl INT,
+				cd_usuario_ultalt INT,
+				in_desativado CHAR(1) NOT NULL DEFAULT 'N',
+		
+				CONSTRAINT pk PRIMARY KEY (sq, ct_exercicio, ct_numero, ct_tipo),
+				UNIQUE KEY chave_logica_contrato (ct_exercicio, ct_numero, ct_tipo, ct_cd_especie, ct_sq_especie),
+				CONSTRAINT fk_ct_gestor FOREIGN KEY ( gt_cd ) REFERENCES gestor (gt_cd)
+				ON DELETE RESTRICT
+				ON UPDATE RESTRICT,
+				CONSTRAINT fk_ct_pessoa_resp FOREIGN KEY ( pe_cd_resp ) REFERENCES pessoa (pe_cd)
+				ON DELETE RESTRICT
+				ON UPDATE RESTRICT,
+				CONSTRAINT fk_ct_pessoa_contratada FOREIGN KEY ( pe_cd_contratada ) REFERENCES pessoa (pe_cd)
+				ON DELETE RESTRICT
+				ON UPDATE RESTRICT
+				);";
+		
 		return $sql;
 	}
 

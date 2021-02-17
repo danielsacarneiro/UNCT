@@ -7,7 +7,7 @@ include_once(caminho_util."selectExercicio.php");
 //inicia os parametros
 inicio();
 
-$titulo = "Contratos a incluir na planilha";
+$titulo = "Contratos a incluir";
 setCabecalho($titulo);
 
 ?>

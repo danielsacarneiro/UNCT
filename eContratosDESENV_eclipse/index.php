@@ -46,7 +46,7 @@ function getNumServico($count){
 	f2.adicionarItem(new Link("Contratos-Consolidação", "<?=caminho_funcoesHTML?>contrato_consolidacao", ""));
 	f2.adicionarItem(new Link("Controle Sistemas Externos (LICON)", "<?=caminho_funcoesHTML?>contrato_licon", ""));
 	f2.adicionarItem(new Link("Contrato Execução (Acréscimos, Supressões e Reajustes)", '<?=caminho_funcoesHTML.voContratoModificacao::getNmTabela()?>', ""));
-	f2.adicionarItem(new Link("Contratos não incluídos PLANILHA", "<?=caminho_funcoesHTML?>contrato/contratoAincluir.php", "", null,true));
+	f2.adicionarItem(new Link("Contratos não incluídos!", "<?=caminho_funcoesHTML?>contrato/contratoAincluir.php", "", null,true));
 	f.adicionarItem(f2);
 
 	f3 = new Tree('Serviço <?=getNumServico(++$count)?> (Demanda)');
