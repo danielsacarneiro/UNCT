@@ -160,12 +160,14 @@ function getHTMLDocumentosContrato($voContrato){
 	
 	$vodemandatram = new voDemandaTramitacao();
 	$vodocminuta = getDocumentoContrato($voContrato, dominioTpDocumento::$CD_TP_DOC_MINUTA);
+	//var_dump($vodocminuta);
 	$temDocMinuta = $vodocminuta != null;
 	$vodemandatram->voDoc = $vodocminuta;
 	
 	$retorno .= getTextoHTMLNegrito("|Minuta: ") . getHtmlDocumentoSemTD($vodemandatram, false, "tabeladadosalinhadoesquerda", $msgDocNaoExiste);
 	
 	$vodocpdf = getDocumentoContrato($voContrato, dominioTpDocumento::$CD_TP_DOC_CONTRATO);
+	//var_dump($vodocpdf);
 	$temDocPDF = $vodocpdf != null;
 	$vodemandatram->voDoc = $vodocpdf;
 	$retorno .= getTextoHTMLNegrito("  |Assinado: ") . getHtmlDocumentoSemTD($vodemandatram, false, "tabeladadosalinhadoesquerda", $msgDocNaoExiste);

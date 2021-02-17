@@ -392,7 +392,7 @@ function testeArquivo(){
 		        ?>
 				<TD class="campoformulario" colspan=3>
 				<?php
-				if($isContratoPlanilha || !$temDocsAExibir){
+				if($isContratoPlanilha && !$temDocsAExibir){
 				?>
 				<TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
 					<TR>						

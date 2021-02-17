@@ -1136,9 +1136,10 @@ class dbDemanda extends dbprocesso {
 				}
 				
 				$arrayRetorno = getHTMLDocumentosContrato($vocontratoDemanda);
-				$temAmbosDocsAExibir = $arrayRetorno[3];
+				$temAmbosDocsAExibir = $arrayRetorno[2];
 				if(!$temAmbosDocsAExibir){
-					throw new excecaoGenerica("Fechamento só permitido quando ambos os documentos 'MINUTA' (em word) e 'CONTRATO' (em pdf) forem anexados à demanda.", null, $vocontratoDemanda);
+					throw new excecaoGenerica("Fechamento só permitido quando ambos os documentos 'MINUTA' (em word) e 'CONTRATO' (em pdf) forem anexados à demanda. |" 
+							. $vocontratoDemanda->toString());
 				}
 				
 				/*$dbcontrato = new dbcontrato();
