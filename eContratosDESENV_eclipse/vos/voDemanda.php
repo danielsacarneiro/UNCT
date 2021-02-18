@@ -6,6 +6,7 @@ include_once (caminho_util . "dominioSetor.php");
 include_once (caminho_funcoes . "demanda/dominioSituacaoDemanda.php");
 include_once (caminho_funcoes . "demanda/dominioTipoDemanda.php");
 include_once (caminho_funcoes . "demanda/dominioFaseDemanda.php");
+include_once (caminho_funcoes . "demanda/dominioCaracteristicasDemanda.php");
 include_once (caminho_funcoes . "demanda/dominioTipoDemandaContrato.php");
 include_once (caminho_funcoes . "demanda/dominioPrioridadeDemanda.php");
 include_once (caminho_funcoes . "demanda/dominioTipoReajuste.php");
@@ -34,7 +35,9 @@ class voDemanda extends voentidade {
 	static $nmAtrCdPessoaRespATJA = "dem_cdpessoaresp_atja";
 	static $nmAtrCdPessoaRespUNCT = "dem_cdpessoaresp_unct";
 	static $nmAtrFase =  "dem_fase";
+	static $nmAtrInCaracteristicas =  "dem_incaracteristicas";
 	static $nmAtrInMonitorar =  "dem_inmonitorar";
+
 	static $nmAtrDtMonitoramento =  "dem_dtmonitoramento";
 	//lembrar que o PRT foi migrado do demandatramitacao para ca
 	static $nmAtrProtocolo = "dtm_prt";
@@ -56,6 +59,7 @@ class voDemanda extends voentidade {
 	var $cdPessoaRespATJA = "";
 	var $cdPessoaRespUNCT = "";
 	var $fase = "";
+	var $inCaracteristicas = "";
 	var $inMonitorar = "";
 	var $dtMonitoramento = "";
 	
@@ -136,6 +140,7 @@ class voDemanda extends voentidade {
 				self::$nmAtrCdPessoaRespATJA,
 				self::$nmAtrCdPessoaRespUNCT,
 				self::$nmAtrFase,
+				self::$nmAtrInCaracteristicas,
 				self::$nmAtrInMonitorar,
 				self::$nmAtrDtMonitoramento,
 				self::$nmAtrProtocolo,
@@ -227,6 +232,7 @@ class voDemanda extends voentidade {
 		$this->cdPessoaRespATJA = $registrobanco [self::$nmAtrCdPessoaRespATJA];
 		$this->cdPessoaRespUNCT = $registrobanco [self::$nmAtrCdPessoaRespUNCT];
 		$this->fase = $registrobanco [self::$nmAtrFase];
+		$this->inCaracteristicas = $registrobanco [self::$nmAtrInCaracteristicas];
 		$this->inMonitorar = $registrobanco [self::$nmAtrInMonitorar];
 		$this->dtMonitoramento = $registrobanco [self::$nmAtrDtMonitoramento];
 		
@@ -268,6 +274,7 @@ class voDemanda extends voentidade {
 		$this->cdPessoaRespATJA = @$_POST [self::$nmAtrCdPessoaRespATJA];
 		$this->cdPessoaRespUNCT = @$_POST [self::$nmAtrCdPessoaRespUNCT];
 		$this->fase = @$_POST [voDemanda::$nmAtrFase];
+		$this->inCaracteristicas = @$_POST [voDemanda::$nmAtrInCaracteristicas];
 		$this->inMonitorar = @$_POST [voDemanda::$nmAtrInMonitorar];
 		
 		if($this->inMonitorar == constantes::$CD_SIM){

@@ -170,7 +170,7 @@ function getHTMLDocumentosContrato($voContrato){
 	//var_dump($vodocpdf);
 	$temDocPDF = $vodocpdf != null;
 	$vodemandatram->voDoc = $vodocpdf;
-	$retorno .= getTextoHTMLNegrito("  |Assinado: ") . getHtmlDocumentoSemTD($vodemandatram, false, "tabeladadosalinhadoesquerda", $msgDocNaoExiste);
+	$retorno .= getTextoHTMLNegrito("  |PDF: ") . getHtmlDocumentoSemTD($vodemandatram, false, "tabeladadosalinhadoesquerda", $msgDocNaoExiste);
 	
 	$temDocsAExibir = $temDocMinuta || $temDocPDF;
 	$temAmbosDocsAExibir = $temDocMinuta && $temDocPDF;

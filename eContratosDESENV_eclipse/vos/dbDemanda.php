@@ -1137,9 +1137,25 @@ class dbDemanda extends dbprocesso {
 				
 				$arrayRetorno = getHTMLDocumentosContrato($vocontratoDemanda);
 				$temAmbosDocsAExibir = $arrayRetorno[2];
-				if(!$temAmbosDocsAExibir){
-					throw new excecaoGenerica("Fechamento só permitido quando ambos os documentos 'MINUTA' (em word) e 'CONTRATO' (em pdf) forem anexados à demanda. |" 
-							. $vocontratoDemanda->toString());
+				$naovalidaDocs = isAtributoValido($vo->inCaracteristicas) && in_array(dominioCaracteristicasDemanda::$CD_NAO_VALIDA_DOCS, $vo->inCaracteristicas);
+				
+				/*echo $temAmbosDocsAExibir?"tem contratos":"nao tem contratos";
+				echo $naovalidaDocs?"nao valida docs":"valida docs";
+				
+				throw new excecaoGenerica("Fechamento não permitido: ambos os documentos 'MINUTA' (em word) e 'CONTRATO' (em pdf) devem ser anexados à demanda. |"
+						. $vocontratoDemanda->toString());*/
+				
+				if(!$temAmbosDocsAExibir && !$naovalidaDocs){
+					throw new excecaoGenerica("Fechamento não permitido: ambos os documentos 'MINUTA' (em word) e 'CONTRATO' (em pdf) devem ser anexados à demanda. |" 
+							. $vocontratoDemanda->getCodigoContratoFormatado(true));
+				}
+				
+				$temGarantia = $vocontratoInfo->inTemGarantia == constantes::$CD_SIM;				
+				//$vo = new voDemandaTramitacao();
+				$garantiaOk = in_array(dominioFaseDemanda::$CD_GARANTIA_PRESTADA, $vo->fase);
+				if($temGarantia && !$garantiaOk){ 
+					throw new excecaoGenerica("Fechamento não permitido: verifique a garantia do contrato. |"
+							. $vocontratoDemanda->toString());						
 				}
 				
 				/*$dbcontrato = new dbcontrato();
@@ -1389,8 +1405,9 @@ class dbDemanda extends dbprocesso {
 	function tratarDados(&$vo){
 		static::validarGenerico($vo);
 		
-		$tpDemandaContrato = $vo->tpDemandaContrato;
+		$tpDemandaContrato = $vo->tpDemandaContrato;		
 		$fase = $vo->fase;
+		$inCaracteristicas = $vo->inCaracteristicas;		
 		$tipo = $vo->tipo;
 		//quando vem da tela eh um array
 		//quando vem do banco, deve ser uma string
@@ -1402,9 +1419,14 @@ class dbDemanda extends dbprocesso {
 		if(is_array($fase)){
 			$fase = voDemanda::getArrayComoStringCampoSeparador($fase);
 		}
+		if(is_array($inCaracteristicas)){
+			$inCaracteristicas = voDemanda::getArrayComoStringCampoSeparador($inCaracteristicas);
+		}
 		
 		$vo->tpDemandaContrato = $tpDemandaContrato;
 		$vo->fase = $fase;
+		$vo->inCaracteristicas = $inCaracteristicas;
+		
 		if(!dominioTipoDemandaContrato::existeItemArrayOuStrCampoSeparador(dominioTipoDemandaContrato::$CD_TIPO_REAJUSTE, $tpDemandaContrato)){
 			$vo->inTpDemandaReajusteComMontanteA = null;
 		}		
@@ -1434,6 +1456,7 @@ class dbDemanda extends dbprocesso {
 		$retorno .= $this->getVarComoNumero ( $vo->cdPessoaRespATJA ). ",";
 		$retorno .= $this->getVarComoNumero ( $vo->cdPessoaRespUNCT ). ",";
 		$retorno .= $this-> getVarComoString($vo->fase). ",";
+		$retorno .= $this-> getVarComoString($vo->inCaracteristicas). ",";
 		$retorno .= $this-> getVarComoString($vo->inMonitorar). ",";
 		$retorno .= $this->getVarComoData ( $vo->dtMonitoramento). ",";
 		$retorno .= $this->getVarComoString ( voDemanda::getNumeroPRTSemMascara($vo->prt) ) . ",";
@@ -1482,6 +1505,9 @@ class dbDemanda extends dbprocesso {
 		$sqlConector = ",";
 		
 		$retorno .= $sqlConector . voDemanda::$nmAtrFase . " = " . $this->getVarComoString ( $vo->fase );
+		$sqlConector = ",";
+		
+		$retorno .= $sqlConector . voDemanda::$nmAtrInCaracteristicas . " = " . $this->getVarComoString ( $vo->inCaracteristicas );
 		$sqlConector = ",";
 		
 		$retorno .= $sqlConector . voDemanda::$nmAtrInMonitorar . " = " . $this->getVarComoString ( $vo->inMonitorar );

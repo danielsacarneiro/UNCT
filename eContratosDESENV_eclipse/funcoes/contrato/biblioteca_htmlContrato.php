@@ -230,7 +230,10 @@ function alertaContratoInfoNaoCadastrado($vocontratoinfo){
 	try{
 		$db->consultarPorChaveVO($vocontratoinfo);
 	}catch(excecaoChaveRegistroInexistente $ex){
-		ECHO getTextoHTMLDestacado("ALERTA: Informações Adicionais ao contrato inexistentes. Providencie o cadastro urgentemente.");
+		$texto = "ALERTA: Informações Adicionais ao contrato inexistentes. Providencie o cadastro urgentemente.";
+		echo getTextoLink($texto, "../contrato_info", null, false, true);
+		
+		//ECHO getTextoHTMLDestacado();
 	}
 }
 

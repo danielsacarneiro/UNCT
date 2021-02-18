@@ -207,6 +207,7 @@ include_once("voDemandaContrato.php");
 		$voDemanda->cdPessoaRespATJA  = $this->cdPessoaRespATJA;
 		$voDemanda->cdPessoaRespUNCT  = $this->cdPessoaRespUNCT;
 		$voDemanda->fase  = $this->fase;
+		$voDemanda->inCaracteristicas  = $this->inCaracteristicas;
 		$voDemanda->inMonitorar  = $this->inMonitorar;
 		
 		$voDemanda->prt  = $this->prt;

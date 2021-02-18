@@ -38,6 +38,7 @@ setCabecalho($titulo);
 $nmCampoTpDemandaContratoSimples = voDemanda::$nmAtrTpDemandaContrato;
 $nmCampoTpDemandaContrato = $nmCampoTpDemandaContratoSimples."[]";
 $nmCampoFaseHtml = voDemanda::$nmAtrFase."[]";
+$nmCampoCaracteristicasHtml = voDemanda::$nmAtrInCaracteristicas ."[]";
 $nmDivInformacoesComplementares = voDemanda::$ID_REQ_DIV_REAJUSTE_MONTANTE_A;
 $nmCampoTpDemandaReajuste = voDemanda::$nmAtrInTpDemandaReajusteComMontanteA;
 ?>
@@ -160,12 +161,27 @@ function iniciar(){
 	        //function getDemandaDetalhamentoComLupa($voDemanda, $temLupaDet, $exibeTipoDemanda = true, $colspan=null, $comProcLici = true){
 	        ?>	        	        
 	        <TR>
-	            <TH class="campoformulario" nowrap width="1%">Tipo:</TH>
-	            <TD class="campoformulario" colspan=3>	            
+            <TH class="campoformulario" nowrap width="1%">Tipo:</TH>	        
+	        <TD class="campoformulario" colspan=3>
+				<TABLE id="table_tipo" class="filtro" cellpadding="0" cellspacing="0">
+					<TBODY>
+					<TR>
+		            <TD class="campoformulario">					
 	            <?php 
 	            echo "Tipo: " . $comboTipo->getHtmlCombo(voDemanda::$nmAtrTipo, voDemanda::$nmAtrTipo, $vo->tipo, true, "campoobrigatorio", false, " required onChange='validaFormulario();'");
 	            echo getTpDemandaContrato($nmCampoTpDemandaContrato, $nmCampoTpDemandaReajuste, $nmDivInformacoesComplementares, $vo->tpDemandaContrato, $vo->inTpDemandaReajusteComMontanteA);	            
 	            ?>
+	            </TD>
+	            <TH class="campoformulario" nowrap width="1%">Características:</TH>
+	            <TD class="campoformulario" nowrap>
+	            <?php
+	            echo dominioCaracteristicasDemanda::getHtmlChecksBox($nmCampoCaracteristicasHtml , $vo->inCaracteristicas, null, 1, false, "");
+	          	?>	 
+	          	 </TD>
+		          	</TR>
+		          	</TBODY>
+		         </TABLE>
+		    </TD>
 	        </TR>	        
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Setor Responsável:</TH>
