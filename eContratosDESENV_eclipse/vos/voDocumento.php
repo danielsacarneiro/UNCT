@@ -8,6 +8,7 @@ class voDocumento extends voentidade {
 	
 	static $ID_REQ_DIV_SQATUAL = "ID_REQ_DIV_SQATUAL";
 	static $ID_REQ_DIV_TpDocumentoSetor = "ID_REQ_DIV_TpDocumentoSetor";
+	static $ID_REQ_DIV_Endereco = "ID_REQ_DIV_Endereco";
 	static $nmAtrComplemento = "nmAtrComplemento";
 	static $nmAtrCdARP = "nmAtrCdARP";
 	static $nmAtrAnoARP = "nmAtrAnoARP";
@@ -144,7 +145,7 @@ class voDocumento extends voentidade {
 				}
 			} else {
 				// separa o nome do doc pelo separador '_' para pegar o contrato
-				// CUIDADO COM O FORMATO DO NOMEM DO ARQUIVO QUE NAO PODE SER ALTERADO!
+				// CUIDADO COM O FORMATO DO NOME DO ARQUIVO QUE NAO PODE SER ALTERADO!
 				$arrayDoc = explode ( "_", $this->link );
 				$pastacontrato = $arrayDoc [0];
 				// explode pra pegar o ano do contrato

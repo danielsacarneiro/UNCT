@@ -249,6 +249,7 @@ function criarNomeDocumento(campoChamada){
 	complemento = complemento + getExtensaoDocumento(tpDoc);	
 	
 	document.frm_principal.<?=voDocumento::$nmAtrLink?>.value = complemento;
+	getPreviaEnderecoArquivo();
 
 	isCampoChaveDoc = false;
 	//isChavesPreenchidas = ano != "" && cdSetor != "" && tpDoc != "" && sq != "";
@@ -320,6 +321,42 @@ function getTpDocumentoSetor(){
 	}	
 }
 
+function getChaveAjaxDocumento(){	
+	var pIDCampoAno = "<?=voDocumento::$nmAtrAno?>";
+	var pIDCampoSetor = "<?=voDocumento::$nmAtrCdSetor?>";
+	var pIDCampoTp = "<?=voDocumento::$nmAtrTp?>";	
+	var pIDCampoSq = "<?=voDocumento::$nmAtrSq?>";
+	
+	//alert(inDiasUteis);
+	var ano = document.getElementById(pIDCampoAno).value;
+	var setor = document.getElementById(pIDCampoSetor).value;
+	var sq = document.getElementById(pIDCampoSq).value;
+	var tipo = "";
+	try{
+		tipo = document.getElementById(pIDCampoTp).value;
+	}catch(e){
+		tipo = "";
+	}
+
+	var chave = null;
+	if(ano != "" && setor != "" && tipo != "" && sq != ""){
+		chave = ano + '<?=CAMPO_SEPARADOR?>' + setor + '<?=CAMPO_SEPARADOR?>' + tipo + '<?=CAMPO_SEPARADOR?>' + sq;			
+	}
+	return chave;	
+}
+
+function getPreviaEnderecoArquivo(){
+	var pNmCampoDiv = "<?=voDocumento::$ID_REQ_DIV_Endereco?>";
+	var chave = getChaveAjaxDocumento();
+	var nmArquivo = document.getElementById("<?=voDocumento::$nmAtrLink?>").value;
+	
+	if(chave != null){
+		chave = chave + '<?=CAMPO_SEPARADOR?>' + nmArquivo;
+		getDadosPorChaveGenerica(chave, "campoDadosEndereco.php", pNmCampoDiv);		
+	}else{
+		limpaCampoDiv(pNmCampoDiv);
+	}	
+}
 
 function iniciar(){
 	//alert(getDescricaoChaveDS(11,<?=$varColecaoGlobalSetor?>));
@@ -468,7 +505,10 @@ function iniciar(){
 	        }?>
 			<TR>
                 <TH class="campoformulario" nowrap width="1%">Arquivo:</TH>
-                <TD class="campoformulario" colspan=3><INPUT type="text" id="<?=voDocumento::$nmAtrLink?>" name="<?=voDocumento::$nmAtrLink?>" value="<?php echo $vo->link;?>"  class="camponaoobrigatorio" size="80" required onClick='criarNomeDocumento();'></TD>
+                <TD class="campoformulario" colspan=3><INPUT type="text" id="<?=voDocumento::$nmAtrLink?>" name="<?=voDocumento::$nmAtrLink?>" value="<?php echo $vo->link;?>"  class="camponaoobrigatorio" size="80" required onClick='criarNomeDocumento();'>
+                <div id="<?=voDocumento::$ID_REQ_DIV_Endereco?>">
+                </div>
+                </TD>
             </TR>
 	        
 <TR>

@@ -110,7 +110,7 @@ function formatarCodigoContrato(cd, ano, tipo, cdEspecie, SqEspecie, separador){
 
 	if(cdEspecie != null && cdEspecie != "" && cdEspecie != 'CM'
 		&& SqEspecie != null && SqEspecie != ""){
-		str = str + conector + SqEspecie + cdEspecie;
+		str = str + "_" + SqEspecie + cdEspecie;
 		conector = separador;
 	}
 
