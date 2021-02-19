@@ -325,6 +325,12 @@ function testeArquivo(){
             onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="camponaoobrigatorioalinhadodireita" size="15" required></TD>
         </TR>
 		
+		<?php 
+		
+		if($dtVigenciaFinal == null){
+			$dtVigenciaFinal = "31/12/" . anoDefault;
+		}
+		?>
 		<TR>
             <TH class="campoformulario" nowrap>Periodo de Vigencia:</TH>
             <TD class="campoformulario" colspan="3">
@@ -444,7 +450,6 @@ function testeArquivo(){
 				$pArrayResponsabilidade = array(vocontrato::$nmAtrDtAssinaturaContrato,
 						vocontrato::$nmAtrDtPublicacaoContrato,
 						vocontrato::$nmAtrDtVigenciaInicialContrato,
-						vocontrato::$nmAtrDtVigenciaFinalContrato,
 						vocontrato::$nmAtrNumEmpenhoContrato,
 						vocontrato::$nmAtrVlMensalContrato,
 						vocontrato::$nmAtrVlGlobalContrato,

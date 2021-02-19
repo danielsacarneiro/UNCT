@@ -143,6 +143,9 @@ class voDocumento extends voentidade {
 					$retorno .= $enderecoPA . $enderecoTemp;
 					$retorno .= $enderecoTemp . " $this->ano\\";
 				}
+				
+				//corrige mudanca das pastas contratos digitalizados
+				$retorno = $retorno;
 			} else {
 				// separa o nome do doc pelo separador '_' para pegar o contrato
 				// CUIDADO COM O FORMATO DO NOME DO ARQUIVO QUE NAO PODE SER ALTERADO!

@@ -1472,3 +1472,9 @@ function redirecionarConfirmar($vo){
 	header("Location: ../confirmar.php?class=".$vo->getNmClassProcesso(),TRUE,307);
 }
 
+function getFuncaoOperacaoHTML(){
+	$funcao = @$_GET ["funcao"];
+	return $funcao;
+}
+
+

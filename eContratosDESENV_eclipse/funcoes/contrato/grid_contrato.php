@@ -10,8 +10,8 @@
 		                  <?php }?>                  
                     <TH class="headertabeladados" width="1%" nowrap>Contrato</TH>
                     <TH class="headertabeladados" width="1%">Espécie</TH>
-                    <TH class="headertabeladados" width="20%">Contratada</TH>
-                    <TH class="headertabeladados" width="1%">CNPJ/CNPF</TH>
+                    <TH class="headertabeladados" width="1%">Proc.Lic</TH>
+					<TH class="headertabeladados" width="20%">Contratada</TH>
                     <TH class="headertabeladados" width="70%">Objeto</TH>						
                     <TH class="headertabeladados" width="1%" nowrap>Assinatura</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Publicação</TH>
@@ -91,7 +91,9 @@
                         
                         $contrato = formatarCodigoAnoComplemento($voAtual->cdContrato,
                         		$voAtual->anoContrato,
-                        		dominioTipoContrato::getDescricao($voAtual->tipo));                                                
+                        		dominioTipoContrato::getDescricao($voAtual->tipo));  
+                        
+                        $procLicitatorio = $voAtual->procLic;
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados" <?=$msgAlertaSq?>>
@@ -106,8 +108,9 @@
                   ?>                                        
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo $contrato;?></TD>
                     <TD class="tabeladados"><?php echo $especie?></TD>
-                    <TD class="tabeladados"><?php echo $colecao[$i]["ct_contratada"]?></TD>
-                    <TD class="tabeladados" nowrap><?php echo documentoPessoa::getNumeroDocFormatado($colecao[$i]["ct_doc_contratada"])?></TD>
+                    <TD class="tabeladados"><?php echo $procLicitatorio?></TD>
+                    <TD class="tabeladados"><?php echo $colecao[$i]["ct_contratada"]?></TD>                    
+                    <!-- <TD class="tabeladados" nowrap><?php echo documentoPessoa::getNumeroDocFormatado($colecao[$i]["ct_doc_contratada"])?></TD> -->
                     <TD class="tabeladados"><?php echo $colecao[$i]["ct_objeto"]?></TD>
                     <TD class="tabeladados"><?php echo getData($voAtual->dtAssinatura)?></TD>
                     <TD class="tabeladados"><?php echo getData($voAtual->dtPublicacao)?></TD>

@@ -1,7 +1,7 @@
 <?php
 include_once (caminho_lib . "dbprocesso.obj.php");
 class dbContratoInfo extends dbprocesso {
-	static $FLAG_PRINTAR_SQL = FALSE;
+	static $FLAG_PRINTAR_SQL = false;
 	
 	function consultarPorChaveTela($vo, $isHistorico) {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
@@ -357,7 +357,7 @@ class dbContratoInfo extends dbprocesso {
 			$nmColunaComparacao = vocontrato::$nmAtrDtPublicacaoContrato;
 			//pega o contrato atual (termo atual), de maior sequencial, desde que tenha sido publicado, provocando efeitos
 			//so vai consultar se for SIM, caso contrario, traz o ultimo registro, independente de ter sido publicado ou nao.
-			if($inProduzindoEfeitos == constantes::$CD_SIM){				
+			if($inProduzindoEfeitos == dominioContratoProducaoEfeitos::$CD_VISTO_COM_EFEITOS){				
 				$cdCampoSubstituir .= " AND ($nmColunaComparacao IS NOT NULL AND $nmColunaComparacao <> '0000-00-00')";
 			}/*else{
 				$cdCampoSubstituir .= " AND ($nmColunaComparacao IS NULL)";

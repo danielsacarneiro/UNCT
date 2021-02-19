@@ -1580,14 +1580,14 @@ function getDadosManterContrato($chave) {
 			;
 		}
 		
-		$retorno .= getCamposManterContrato($recordSet[0]);
+		$retorno .= getCamposManterContrato($recordSet[0], $vo);
 
 	}
 
 	return $retorno;
 }
 
-function getCamposManterContrato($recordSet){
+function getCamposManterContrato($recordSet, $voContratoInseridoNaTela=null){
 	$registrobanco = $recordSet;
 	$voContrato = new vocontrato();
 	$voContrato->getDadosBanco($registrobanco);
@@ -1598,34 +1598,42 @@ function getCamposManterContrato($recordSet){
 	$temContratoInfo = $registrobanco[filtroManterContrato::$NmColTemContratoInfo] == constantes::$CD_SIM;
 	
 	$countATENCAO = 1;
-	if(!$temContratoInfo){
-		$nmfuncaoContratoInfo = voContratoInfo::getNmTabela();
-		$texto = "ATENÇÃO$countATENCAO: Contrato deve ser incluído em 'informações adicionais'.";
-		$retorno .= getInputHidden(voentidade::$ID_REQ_IN_FORMULARIO_VALIDO, voentidade::$ID_REQ_IN_FORMULARIO_VALIDO, constantes::$CD_NAO);
-		$retorno .= $conectorAlerta . getTextoLink($texto, "../$nmfuncaoContratoInfo", null, false, true);
-		$conectorAlerta = "<BR>";
-		$countATENCAO++;
-		return $retorno;
-	}
 
-	if($voContrato != null){
-		//$retorno .= getTextoHTMLTagMouseOver("Exibindo dados último termo vigente.", "Verifique se há dados que pode aproveitar.") . "<br>";
-		$retorno .= getTextoHTMLDestacado(getTextoLink("Copiar dados último termo vigente ("
-			. getTextoHTMLNegrito(getContratoDetalhamentoAvulso($voContrato, true)) 
-			. ").", "#", "onclick='$nmFuncaoJSCopiaDados()'")) . "<br>";
-			
-		$retorno .= "Vigência: " . getInputText("", "", getData($voContrato->dtVigenciaInicial), constantes::$CD_CLASS_CAMPO_READONLY);
-		$retorno .= " a " . getInputText("", "", getData($voContrato->dtVigenciaFinal), constantes::$CD_CLASS_CAMPO_READONLY);
+	$isInclusaoMater = $voContratoInseridoNaTela != null 
+			&& $voContratoInseridoNaTela->cdEspecie == dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER
+		//		&& getFuncaoOperacaoHTML() == constantes::$CD_FUNCAO_INCLUIR
+	;
 		
-		$pArray = array(vocontrato::$nmAtrGestorContrato => $voContrato->gestor,
-				vocontrato::$nmAtrProcessoLicContrato => $voContrato->procLic,
-				vocontrato::$nmAtrContratadaContrato => $voContrato->contratada,
-				vocontrato::$nmAtrDocContratadaContrato => documentoPessoa::getNumeroDocFormatado($voContrato->docContratada),
-				//a data inicial a ser preenchida na tela vai com o valor da data final do termo anterior
-				vocontrato::$nmAtrDtVigenciaInicialContrato => somarOuSubtrairDiasNaData(getData($voContrato->dtVigenciaFinal), 1),
-		);
-		$retorno .= getInputHiddenPorArrayNomeAlternativo($pArray); 
-
+	if(!$isInclusaoMater){
+		if(!$temContratoInfo){
+			$nmfuncaoContratoInfo = voContratoInfo::getNmTabela();
+			$texto = "ATENÇÃO$countATENCAO: Contrato deve ser incluído em 'informações adicionais'.";
+			$retorno .= getInputHidden(voentidade::$ID_REQ_IN_FORMULARIO_VALIDO, voentidade::$ID_REQ_IN_FORMULARIO_VALIDO, constantes::$CD_NAO);
+			$retorno .= $conectorAlerta . getTextoLink($texto, "../$nmfuncaoContratoInfo", null, false, true);
+			$conectorAlerta = "<BR>";
+			$countATENCAO++;
+			return $retorno;
+		}
+	
+		if($voContrato != null){
+			//$retorno .= getTextoHTMLTagMouseOver("Exibindo dados último termo vigente.", "Verifique se há dados que pode aproveitar.") . "<br>";
+			$retorno .= getTextoHTMLDestacado(getTextoLink("Copiar dados último termo vigente ("
+				. getTextoHTMLNegrito(getContratoDetalhamentoAvulso($voContrato, true)) 
+				. ").", "#", "onclick='$nmFuncaoJSCopiaDados()'")) . "<br>";
+				
+			$retorno .= "Vigência: " . getInputText("", "", getData($voContrato->dtVigenciaInicial), constantes::$CD_CLASS_CAMPO_READONLY);
+			$retorno .= " a " . getInputText("", "", getData($voContrato->dtVigenciaFinal), constantes::$CD_CLASS_CAMPO_READONLY);
+			
+			$pArray = array(vocontrato::$nmAtrGestorContrato => $voContrato->gestor,
+					vocontrato::$nmAtrProcessoLicContrato => $voContrato->procLic,
+					vocontrato::$nmAtrContratadaContrato => $voContrato->contratada,
+					vocontrato::$nmAtrDocContratadaContrato => documentoPessoa::getNumeroDocFormatado($voContrato->docContratada),
+					//a data inicial a ser preenchida na tela vai com o valor da data final do termo anterior
+					vocontrato::$nmAtrDtVigenciaInicialContrato => somarOuSubtrairDiasNaData(getData($voContrato->dtVigenciaFinal), 1),
+			);
+			$retorno .= getInputHiddenPorArrayNomeAlternativo($pArray); 
+	
+		}
 	}
 
 	return $retorno;

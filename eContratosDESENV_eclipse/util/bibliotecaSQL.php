@@ -147,37 +147,33 @@ function getSQLDataVigenteArrayParam($pArrayParam) {
 	$pNmTableEntidade = $pArrayParam[0];
 	$pNmColSequencial = $pArrayParam[1];
 	$pChaveTuplaComparacaoSemSequencial = $pArrayParam[2];
-	$pChaveGroupBy = $pArrayParam[3];
+	//$pChaveGroupBy = $pArrayParam[3];
 	$pDataComparacao = $pArrayParam[4];
 	$pNmColDtInicioVigencia = $pArrayParam[5];
 	$pNmColDtFimVigencia = $pArrayParam[6];
 	$isTrazerMaiorSqVigente = $pArrayParam[7];	
 	$sqlFiltroInternoMaiorSq = $pArrayParam[8];
 	$isTrazerVigenciaFutura = $pArrayParam[9];
-
-	/*if ($pNmTableEntidade != null) {
-		$pNmTableEntidade = "$pNmTableEntidade.";
-	}*/
+	$isPermiteDataFimNula = $pArrayParam[10];
+	
+	if($isPermiteDataFimNula  === null){
+		$isPermiteDataFimNula = true;
+	}
 	
 	$pChaveTuplaComparacaoSemSequencial = formataArrayChaveTuplaComparacaoSequencial($pChaveTuplaComparacaoSemSequencial,$pNmTableEntidade);
-	/*if(is_array($pChaveTuplaComparacaoSemSequencial)){
-		for ($i=0; $i< sizeof($pChaveTuplaComparacaoSemSequencial); $i++){
-			$atributo = $pChaveTuplaComparacaoSemSequencial[$i];
-			if(strpos($atributo, ".") === false){
-				$atributo = "$pNmTableEntidade." . $atributo;
-				$pChaveTuplaComparacaoSemSequencial[$i]=$atributo;
-			}
-			
-		}
-		$pChaveTuplaComparacaoSemSequencial = getColecaoEntreSeparador($pChaveTuplaComparacaoSemSequencial, ",");
-	}*/
-	
 	
 	$nmColDtInicioVigencia = "$pNmTableEntidade." . $pNmColDtInicioVigencia;
 	$nmColDtFimVigencia = "$pNmTableEntidade." . $pNmColDtFimVigencia;
 	
-	// $pDataComparacao = "'" . $pDataComparacao . "'";	
-	$sqlComparacaoDatas = "(( " . getVarComoDataSQL ( $pDataComparacao ) . " BETWEEN " . $nmColDtInicioVigencia . "\n AND " . $nmColDtFimVigencia . "\n ) OR ( " . $nmColDtInicioVigencia . " <= " . getVarComoDataSQL ( $pDataComparacao ) . "\n AND " . $nmColDtFimVigencia . " IS NULL" . ")";
+	if($isPermiteDataFimNula){
+		$sqlPermiteDataFimNula = " OR ( " . $nmColDtInicioVigencia . " <= " . getVarComoDataSQL ( $pDataComparacao ) . "\n AND " . $nmColDtFimVigencia . " IS NULL" . ")";
+		//echo "NULO";
+	}else{
+		$sqlNAOPermiteDataFimNula = " $nmColDtFimVigencia IS NOT NULL AND $nmColDtFimVigencia <> '0000-00-00' AND ";
+		//echo "NAO NULO";
+	}
+	//$sqlComparacaoDatas = "(( " . getVarComoDataSQL ( $pDataComparacao ) . " BETWEEN " . $nmColDtInicioVigencia . "\n AND " . $nmColDtFimVigencia . "\n ) OR ( " . $nmColDtInicioVigencia . " <= " . getVarComoDataSQL ( $pDataComparacao ) . "\n AND " . $nmColDtFimVigencia . " IS NULL" . ")";
+	$sqlComparacaoDatas = "(( $sqlNAOPermiteDataFimNula " . getVarComoDataSQL ( $pDataComparacao ) . " BETWEEN " . $nmColDtInicioVigencia . "\n AND " . $nmColDtFimVigencia . "\n ) " . $sqlPermiteDataFimNula;
 	
 	if($isTrazerVigenciaFutura){
 		$sqlComparacaoDatas .= "\n OR ( " . $nmColDtInicioVigencia . " > " . getVarComoDataSQL ( $pDataComparacao ) . ")";
@@ -193,6 +189,7 @@ function getSQLDataVigenteArrayParam($pArrayParam) {
 		if($sqlFiltroInternoMaiorSq != null){
 			$sqlFiltroInternoMaiorSq = " AND " . $sqlFiltroInternoMaiorSq;
 		}
+		
 		$sqlFinal .=
 		" AND (("
 				. $pChaveTuplaComparacaoSemSequencial

@@ -192,10 +192,10 @@ class dominioTpDocumento extends dominio {
 	}*/
 	
 	static function getEnderecoPastaTermoDigitalizado() {
-		$retorno = "CONTRATOS DIGITALIZADOS";
+		$retorno = "PDFs\\CONTRATOS DIGITALIZADOS";
 		return $retorno;
 	}
-	
+		
 	static function getEnderecoPastaBasePorTpDocumento($tpDoc) {
 		$retorno = self::getDescricaoStatic ( $tpDoc, self::getColecao () );
 		

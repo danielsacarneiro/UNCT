@@ -10,6 +10,7 @@ include_once (caminho_filtros . "filtroManterContrato.php");
 // cria um combo select html
 class dbcontrato extends dbprocesso {
 	static $FLAG_PRINTAR_SQL = false;
+	
 	static $FLAG_PRINTAR_LOG_IMPORTACAO = false;
 	static $FLAG_PRINTAR_LOG_IMPORTACAO_ERRO = TRUE;
 	static $FLAG_PRINTAR_LOG_IMPORTACAO_NUM_LINHA = false;

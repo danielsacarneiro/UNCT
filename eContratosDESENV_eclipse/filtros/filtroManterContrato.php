@@ -275,72 +275,7 @@ class filtroManterContrato extends filtroManter {
 			$conector = "\n AND ";
 		}
 		
-		$pChaveTuplaComparacaoSemSequencial = array(
-				vocontrato::$nmAtrCdContrato
-				,vocontrato::$nmAtrAnoContrato
-				, vocontrato::$nmAtrTipoContrato);
-		
-		//data de vigencia tem preferencia sobre o tpvigencia
-		if ($this->dtVigencia != null) {
-			
-			//data de vigencia tem preferencia sobre o tpvigencia, se tiver sido setado, eh desconsiderado
-			$this->tpVigencia = "";				
-			
-			$pArrayParam = array(
-					$nmTabela,
-					vocontrato::$nmAtrSqContrato,
-					$pChaveTuplaComparacaoSemSequencial,
-					$pChaveTuplaComparacaoSemSequencial,
-					$this->dtVigencia,
-					vocontrato::$nmAtrDtVigenciaInicialContrato,
-					vocontrato::$nmAtrDtVigenciaFinalContrato,
-					$this->isTpVigenciaMAxSq,
-					$filtro,
-					$this->inTrazerVigenciaFutura,
-					
-			);
-				
-			$filtro = $filtro . $conector . getSQLDataVigenteArrayParam($pArrayParam);
-			
-			//echo $filtro;
-			$conector = "\n AND ";
-		}else if (isAtributoValido($this->tpVigencia) && $this->tpVigencia != constantes::$CD_OPCAO_TODOS) {
-			if ($this->tpVigencia == dominioTpVigencia::$CD_OPCAO_VIGENTES) {
-				$filtro = $filtro . $conector . getSQLDataVigenteSqSimples ( $nmTabela, vocontrato::$nmAtrDtVigenciaInicialContrato, vocontrato::$nmAtrDtVigenciaFinalContrato );
-			} else if ($this->tpVigencia == dominioTpVigencia::$CD_OPCAO_NAO_VIGENTES) {
-				$filtro = $filtro . $conector . getSQLDataNaoVigenteSqSimples ( $nmTabela, vocontrato::$nmAtrDtVigenciaInicialContrato, vocontrato::$nmAtrDtVigenciaFinalContrato );
-			} else {
-					$filtro = $filtro . $conector . getSQLDataVigenciaFutura($nmTabela, vocontrato::$nmAtrDtVigenciaInicialContrato);
-			}				
-			
-			$conector = "\n AND ";
-		}
-		
-		$isTrazerMaiorSqVigente = $this->isTpVigenciaMAxSq;
-		if($isTrazerMaiorSqVigente){
-			$pNmColSequencial = vocontrato::$nmAtrSqContrato;
-			
-				if($filtro != null){
-					$sqlFiltroInternoMaiorSq = " WHERE $filtro ";
-				}
-				
-				$striAtributosChaveSemSq = formataArrayChaveTuplaComparacaoSequencial($pChaveTuplaComparacaoSemSequencial,$nmTabela);
-				$filtro = $filtro . $conector .
-				" (("
-						. $striAtributosChaveSemSq
-						. ", $nmTabela.$pNmColSequencial" 
-						. ")\n IN \n( SELECT "
-						. $striAtributosChaveSemSq
-						. ", MAX($nmTabela.$pNmColSequencial)"
-						. "\n FROM "
-						. $nmTabela
-						. $sqlFiltroInternoMaiorSq
-						. "\n GROUP BY "
-						. $striAtributosChaveSemSq
-						. "))";		
-				
-						$conector = "\n AND ";
-		}
+
 				
 		
 		if ($this->dtInicio1 != null || $this->dtInicio2 != null) {
@@ -512,7 +447,113 @@ class filtroManterContrato extends filtroManter {
 					. getVarComoDecimal($this->vlGlobalFinal);
 					$conector  = "\n AND ";
 		
-		}		
+		}			
+		
+		/**
+		 * OS FILTROS DE VIGENCIA DEVEM SEMPRE FICAREM AO FINAL POSTO QUE UTILIZAM DENTRO DO SQL INTERNO ($sqlFiltroInternoMaiorSq)
+		 * OS MESMOS FILTROS SELECIONADOS NA TELA, dai necessario que todo o filtro seja processado para ser passado para os filtros de vigencia
+		 */
+		
+		if($filtro != null){
+			$sqlFiltroInternoMaiorSq = " WHERE $filtro ";
+		}
+		
+		$pChaveTuplaComparacaoSemSequencial = array(
+				vocontrato::$nmAtrCdContrato
+				,vocontrato::$nmAtrAnoContrato
+				, vocontrato::$nmAtrTipoContrato);
+		
+		//data de vigencia tem preferencia sobre o tpvigencia
+		if ($this->dtVigencia != null) {
+				
+			//data de vigencia tem preferencia sobre o tpvigencia, se tiver sido setado, eh desconsiderado
+			$this->tpVigencia = "";
+				
+			$pArrayParam = array(
+					$nmTabela,
+					vocontrato::$nmAtrSqContrato,
+					$pChaveTuplaComparacaoSemSequencial,
+					$pChaveTuplaComparacaoSemSequencial,
+					$this->dtVigencia,
+					vocontrato::$nmAtrDtVigenciaInicialContrato,
+					vocontrato::$nmAtrDtVigenciaFinalContrato,
+					$this->isTpVigenciaMAxSq,
+					$filtro,
+					$this->inTrazerVigenciaFutura,
+						
+			);
+		
+			$filtro = $filtro . $conector . getSQLDataVigenteArrayParam($pArrayParam);
+				
+			//echo $filtro;
+			$conector = "\n AND ";
+		}else if (isAtributoValido($this->tpVigencia) && $this->tpVigencia != constantes::$CD_OPCAO_TODOS) {
+			if ($this->tpVigencia == dominioTpVigencia::$CD_OPCAO_VIGENTES) {
+				/*$filtro = $filtro . $conector . getSQLDataVigenteSqSimples (
+				 $nmTabela,
+				 vocontrato::$nmAtrDtVigenciaInicialContrato,
+				 vocontrato::$nmAtrDtVigenciaFinalContrato );*/
+		
+				$arrayTuplaSemSq = vocontrato::getAtributosChaveLogica();
+		
+				$pArrayParam = array(
+						$nmTabela,
+						vocontrato::$nmAtrSqContrato,
+						$arrayTuplaSemSq,
+						null,
+						dtHoje,
+						vocontrato::$nmAtrDtVigenciaInicialContrato,
+						vocontrato::$nmAtrDtVigenciaFinalContrato,
+						true,
+						null,
+						false,
+						false,
+				);
+		
+				$filtro = $filtro . $conector . getSQLDataVigenteArrayParam($pArrayParam);
+				/*$pNmTableEntidade = $pArrayParam[0];
+				 $pNmColSequencial = $pArrayParam[1];
+				 $pChaveTuplaComparacaoSemSequencial = $pArrayParam[2];
+				 $pChaveGroupBy = $pArrayParam[3];
+				 $pDataComparacao = $pArrayParam[4];
+				 $pNmColDtInicioVigencia = $pArrayParam[5];
+				 $pNmColDtFimVigencia = $pArrayParam[6];
+				 $isTrazerMaiorSqVigente = $pArrayParam[7];
+				 $sqlFiltroInternoMaiorSq = $pArrayParam[8];
+				 $isTrazerVigenciaFutura = $pArrayParam[9];
+				 $isPermiteDataFimNula = $pArrayParam[10];*/
+					
+					
+			} else if ($this->tpVigencia == dominioTpVigencia::$CD_OPCAO_NAO_VIGENTES) {
+				$filtro = $filtro . $conector . getSQLDataNaoVigenteSqSimples ( $nmTabela, vocontrato::$nmAtrDtVigenciaInicialContrato, vocontrato::$nmAtrDtVigenciaFinalContrato );
+			} else {
+				$filtro = $filtro . $conector . getSQLDataVigenciaFutura($nmTabela, vocontrato::$nmAtrDtVigenciaInicialContrato);
+			}
+				
+			$conector = "\n AND ";
+		}
+		
+		$isTrazerMaiorSqVigente = $this->isTpVigenciaMAxSq;
+		if($isTrazerMaiorSqVigente){
+			$pNmColSequencial = vocontrato::$nmAtrSqContrato;
+						
+			$striAtributosChaveSemSq = formataArrayChaveTuplaComparacaoSequencial($pChaveTuplaComparacaoSemSequencial,$nmTabela);
+			$filtro = $filtro . $conector .
+			" (("
+					. $striAtributosChaveSemSq
+					. ", $nmTabela.$pNmColSequencial"
+					. ")\n IN \n( SELECT "
+							. $striAtributosChaveSemSq
+							. ", MAX($nmTabela.$pNmColSequencial)"
+							. "\n FROM "
+									. $nmTabela
+									. $sqlFiltroInternoMaiorSq
+									. "\n GROUP BY "
+											. $striAtributosChaveSemSq
+											. "))";
+		
+											$conector = "\n AND ";
+		}
 		
 		//serve para retirar a ambiguidade, quando existir, do atributo da ordenacao
 		//nem sempre sera usado pelos filtros
