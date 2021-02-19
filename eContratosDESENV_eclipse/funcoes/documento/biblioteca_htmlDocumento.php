@@ -154,23 +154,62 @@ function getBotaoAbrirDocumentoVO($vodoc, $isMenuSistema = true){
 	return getBotaoAbrirDocumento($chave, $isMenuSistema);
 }
 
-function getHTMLDocumentosContrato($voContrato){
-	//echo "deveria ter minuta";
-	$msgDocNaoExiste = "Documento não inserido na demanda.";
+/**
+ * 
+ * @param unknown $voContrato vocontrato
+ */
+function getHTMLDocumentoContratoPorDemandaDoc($voContrato, $tpDoc){
 	
 	$vodemandatram = new voDemandaTramitacao();
-	$vodocminuta = getDocumentoContrato($voContrato, dominioTpDocumento::$CD_TP_DOC_MINUTA);
+	$vodoc = getDocumentoContrato($voContrato, $tpDoc);
 	//var_dump($vodocminuta);
-	$temDocMinuta = $vodocminuta != null;
-	$vodemandatram->voDoc = $vodocminuta;
+
+	$vodemandatram->voDoc = $vodoc;
+	$temDoc = $vodoc != null;
 	
-	$retorno .= getTextoHTMLNegrito("|Minuta: ") . getHtmlDocumentoSemTD($vodemandatram, false, "tabeladadosalinhadoesquerda", $msgDocNaoExiste);
+	$msgDocNaoExiste = "Documento não inserido na demanda.";	
 	
-	$vodocpdf = getDocumentoContrato($voContrato, dominioTpDocumento::$CD_TP_DOC_CONTRATO);
-	//var_dump($vodocpdf);
-	$temDocPDF = $vodocpdf != null;
-	$vodemandatram->voDoc = $vodocpdf;
-	$retorno .= getTextoHTMLNegrito("  |PDF: ") . getHtmlDocumentoSemTD($vodemandatram, false, "tabeladadosalinhadoesquerda", $msgDocNaoExiste);
+	//$voContrato = new vocontrato();
+	//var_dump($voContrato);
+	if(dominioTpDocumento::$CD_TP_DOC_CONTRATO == $tpDoc){
+		$endereco = vocontrato::getEnredeçoDocumento($voContrato->linkDoc);
+		$nmCampo = vocontrato::$nmAtrLinkDoc;
+		$descricao = "PDF";
+		$cor = "blue";
+	}else{
+		$endereco = vocontrato::getEnredeçoDocumento($voContrato->linkMinutaDoc);
+		$nmCampo = vocontrato::$nmAtrLinkMinutaDoc;
+		$descricao = "Minuta";
+		$cor = "red";
+	}
+
+	$retorno .= getTextoHTMLDestacado("  |$descricao: ", $cor, false) . getHtmlDocumentoSemTD($vodemandatram, false, "tabeladadosalinhadoesquerda", $msgDocNaoExiste);
+	
+	if(!$temDoc){
+	
+		$retorno .= "<br>".getTextoHTMLDestacado("Exibindo antigo link $descricao planilha: ", $cor, false)
+		."<textarea id='$nmCampo' name='$nmCampo' rows='2' cols='80' class='camporeadonly' readonly>"
+				. $endereco . "</textarea>"
+					. getBotaoAbrirDocumento($nmCampo)
+					;
+	}
+	
+	return array($retorno, $temDoc);
+}
+
+/**
+ * recupera ambos arquivos minuta e contrato do termo
+ * @param unknown $voContrato
+ * @return string[]|boolean[]
+ */
+function getHTMLDocumentosContrato($voContrato){	
+	$array = getHTMLDocumentoContratoPorDemandaDoc($voContrato, dominioTpDocumento::$CD_TP_DOC_MINUTA);
+	$retorno .= $array[0];
+	$temDocMinuta = $array[1]; 
+	
+	$array = getHTMLDocumentoContratoPorDemandaDoc($voContrato, dominioTpDocumento::$CD_TP_DOC_CONTRATO);
+	$retorno .= $array[0];
+	$temDocPDF = $array[1];
 	
 	$temDocsAExibir = $temDocMinuta || $temDocPDF;
 	$temAmbosDocsAExibir = $temDocMinuta && $temDocPDF;

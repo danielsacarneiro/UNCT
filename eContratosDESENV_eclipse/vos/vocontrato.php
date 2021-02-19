@@ -515,46 +515,17 @@ include_once (caminho_util . "DocumentoPessoa.php");
 	}
 	
 	/**
-	 * identifica o endereco do arquivo que deve ser incluido na base de dados
-	 * eh obrigatoria a observancia correta do sistema de arquivos do econti
-	 * @param unknown $vocontrato
-	 */
-	function getEnderecoArquivoInseridoTela(){
-		//$vocontrato = new vocontrato();
-		$tipo = $this->tipo;
-	
-		$chave = $this->linkDoc;
-		//retira a existencia de qualquer pasta anterior ao nome do arquivo
-		$array = explode("\\", $chave);
-		$nmArquivo = $array[(sizeof($array))-1];
-		$nmPasta = dominioTpDocumento::getEnderecoPastaBaseUNCT() . "\\" . dominioTpDocumento::getEnderecoPastaTermoDigitalizado($tipo);
-		
-		//$fileFiltro = new FileFilter($nmPasta, $nmArquivo);
-		//$fileFiltro->showFiles();
-		
-		/*$file = acharArquivos($nmPasta, $nmArquivo);
-		if($file != null){
-			echo $file->getFilename ();
-		}else{
-			echo "arquivo nao encontrado";
-		}*/
-		
-		$retorno = "$nmPasta\\$nmArquivo";
-		 
-		return $retorno;
-	}
-	
-	/**
 	 * serve somente para o arquivo pdf
 	 * o arquivo minuta vai ser selecionado da demanda que trata o termo
 	 */
 	function getEnderecoDocumentoMascarado($link){
+		
 		if(isAtributoValido($link)){
 			if($this->importacao == constantes::$CD_SIM){
 				//se foi importado da planilha
 				$retorno = static::getEnredeçoDocumento($link);
 			}else{
-				$retorno = $this->getEnderecoArquivoInseridoTela();
+				//$retorno = $this->getEnderecoArquivoInseridoTela();
 			}
 		}
 		
@@ -569,6 +540,10 @@ include_once (caminho_util . "DocumentoPessoa.php");
 	
 			$link = str_ireplace("/", "\\" , $link);
 			$link = str_ireplace(dominioTpDocumento::$UNIDADE_REDE_PLANILHA, dominioTpDocumento::$ENDERECO_DRIVE, $link);
+			
+			//echoo("LINK BASE $link");
+			$link = str_replace(dominioTpDocumento::getEnderecoAntigoPastaTermoDigitalizado(), dominioTpDocumento::getEnderecoPastaTermoDigitalizado(), $link);
+			//echoo("LINK ALTERADO $link");
 
 		return $link; 
 	}

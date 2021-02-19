@@ -504,16 +504,23 @@ function estatisticas(){
             </TD>
 	    </TR>	
 	    <script>
+	    <?php 
+	    $colecaoespecieLAI = dominioEspeciesContrato::getColecaoTermosQuePodemAlterarVigencia();
+	    $nmVariavelJSEspecieContratosLAI = "varNmVariavelJSEspecieContratosLAI";
+	    echo getColecaoComoVariavelJS($colecaoespecieLAI, $nmVariavelJSEspecieContratosLAI);
+	    ?>
 	    var pArrayIdCamposFiltroPortalTransparencia = new Array(
-	    		'<?=filtroManterContrato::$ID_REQ_DtAssinaturaInicial?>',
-	    		'<?=filtroManterContrato::$ID_REQ_DtAssinaturaFinal?>',
-	    		'<?=filtroManterContrato::$ID_REQ_InPublicado?>'
+	    		'<?=filtroManterContrato::$nmAtrTpVigencia?>',
+	    		'<?=filtroManterContrato::$nmAtrIsTpVigenciaMAxSq?>',
+	    		'<?=filtroManterContrato::$ID_REQ_InPublicado?>',
+	    		'<?=$pNmCampoCdEspecieContrato?>',
+	    		'<?=filtroManter::$nmAtrQtdRegistrosPorPag?>'
 	    		);
 		//alert(pArrayIdCamposFiltroPortalTransparencia);
 	    </script>				
 		<?php
 		$linkMontaFiltroPortalTransparencia = "&nbsp;" 
-		. getTextoLink("MontarFiltroPortalTransparencia", "#", 'onClick=setFiltroContratosPortalTransparencia(pArrayIdCamposFiltroPortalTransparencia)');
+		. getTextoLink("MontarFiltroPortalTransparencia", "#", "onClick='setFiltroContratosPortalTransparencia(pArrayIdCamposFiltroPortalTransparencia, varNmVariavelJSEspecieContratosLAI);'");
 		
 				$pArrayFiltroConsulta = array(
 						$filtro->getComboOrdenacao(),

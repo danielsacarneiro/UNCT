@@ -440,8 +440,32 @@ function getContratoSubstituto(pIDCampo, pNmCampoDiv){
 
 /**
  * Precisa da bibliotecadatahora.js
+ * 	    		'<?=filtroManterContrato::$nmAtrTpVigencia?>',
+	    		'<?=filtroManterContrato::$nmAtrIsTpVigenciaMAxSq?>',
+	    		'<?=filtroManterContrato::$ID_REQ_InPublicado?>',
+	    		'<?=$pNmCampoCdEspecieContrato?>'
  */
-function setFiltroContratosPortalTransparencia(pArrayIdCampos){
+function setFiltroContratosPortalTransparencia(pArrayIdCampos,pArrayEspeciesContratoLAI){
+	var campoTpVigencia = document.getElementById(pArrayIdCampos[0]);
+	var campoTpVigenciaMaxSq = document.getElementById(pArrayIdCampos[1]);
+	var campoPublicado = document.getElementById(pArrayIdCampos[2]);
+	var campoEspecieContrato = document.getElementById(pArrayIdCampos[3]);	
+	var campoQtdRegistrosPagina = document.getElementById(pArrayIdCampos[4]);
+	
+	//biblio...principal
+	limparFormularioGeral();
+	
+	campoTpVigencia.value = 1;
+	campoTpVigenciaMaxSq.value = 'S';
+	campoPublicado.value = 'S';
+	campoQtdRegistrosPagina.value = 'op_todos';
+	
+	selecionaSelectMultiple(campoEspecieContrato, pArrayEspeciesContratoLAI);
+		
+	exibirMensagem("Lembrar de selecionar o tipo de contrato (Ex. C-SAFI, CV-SAFI...).\nRealizada a consulta, exportar em Excel.");
+}
+
+/*function setFiltroContratosPortalTransparencia(pArrayIdCampos){
 	var campoDataInicioAssinatura = document.getElementById(pArrayIdCampos[0]);
 	var campoDataFimAssinatura = document.getElementById(pArrayIdCampos[1]);
 	var campoPublicado = document.getElementById(pArrayIdCampos[2]);	
@@ -455,7 +479,7 @@ function setFiltroContratosPortalTransparencia(pArrayIdCampos){
 	campoPublicado.value = 'S';	
 	
 	exibirMensagem("Lembrar de selecionar o tipo de contrato (Ex. C-SAFI, CV-SAFI...).\nRealizada a consulta, exportar em Excel.");
-}
+}*/
 
 //Formata o proclic para o padrao SEFAZ
 function getValorCampoProcLicitatorio(pCampo) {

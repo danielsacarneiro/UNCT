@@ -233,17 +233,6 @@ function limpaDadosContrato(){
 	limparFormularioGeral(<?=$varCamposExcecao?>);
 }
 
-function testeArquivo(){
-	var documento = document.frm_principal;
-	var campo = documento.<?=vocontrato::$nmAtrLinkDoc?>;
-	var chave = campo.value;
-
-	chave = chave.replace("C:\\fakepath\\", "");
-
-	getDadosPorChaveGenerica(chave, 'campoDadosArquivo.php', '<?=vocontrato::$ID_REQ_DIV_DADOS_MANTER_CONTRATO?>');
-	
-}
-
 </SCRIPT>
 <?=setTituloPagina($titulo)?>
 </HEAD>

@@ -5,10 +5,10 @@
  */
 
 /*
- Descrição:
- - Contém funções para tratamento de selects
+ Descriï¿½ï¿½o:
+ - Contï¿½m funï¿½ï¿½es para tratamento de selects
 
- Dependências:
+ Dependï¿½ncias:
  - biblioteca_funcoes_principal.js
 */
 
@@ -38,4 +38,20 @@ function retornarValorSelectComoArray(pCampoSelect) {
 	var valorSelect = pCampoSelect.value + CD_CAMPO_SEPARADOR;
 
 	return valorSelect.split(CD_CAMPO_SEPARADOR);
+}
+
+function selecionaSelectMultiple(pCampoSelect, pArrayItens) {
+	var colecao = pCampoSelect.options;
+	var i=0;
+	if(colecao != null){
+		for(i=0;i<colecao.length;i++){			
+			var option = colecao[i];
+			var valor = option.value;
+			if(valor != null && valor != "" && pArrayItens.indexOf(valor) != -1){
+				option.selected = true;				
+			}
+			//alert(option.value);			
+		}
+	}
+
 }
