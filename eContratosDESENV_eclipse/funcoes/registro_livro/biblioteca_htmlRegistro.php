@@ -112,7 +112,7 @@ function getDadosPublicacaoContrato($chaveContrato, $indice) {
 		//$publicacao .= getModeloPublicacaoPreenchido($registrobanco);
 	}catch (excecaoAtributoInvalido $ex){
 		//informa a existencia de publicacao anterior e deixa pro usuario pensar o que fazer.
-		$publicacao = $ex->getMsgEconti() . "." . getTextoHTMLDestacado("VERIFIQUE O ". ($indice) ."º REGISTRO. HÁ DADOS NÃO PREENCHIDOS NA PLANILHA.");			
+		$publicacao = $ex->getMsgEconti() . "." . getTextoHTMLDestacado("VERIFIQUE O ". ($indice) ."º REGISTRO. HÁ DADOS NÃO PREENCHIDOS DO CONTRATO.");			
 	}		
 
 	return $publicacao;
