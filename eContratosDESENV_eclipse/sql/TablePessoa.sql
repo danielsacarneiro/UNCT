@@ -48,6 +48,7 @@ ALTER TABLE pessoa ADD CONSTRAINT fk_pessoa_usuario FOREIGN KEY (ID) REFERENCES 
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;
     
+-- corrigir a linha abaixo quando PUDER
 ALTER TABLE pessoa ADD UNIQUE KEY chave_logica_pessoa (pe_doc,in_desativado); 
 ALTER TABLE pessoa CHANGE chave_logica_pessoa (pe_doc);
     
