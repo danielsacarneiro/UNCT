@@ -15,9 +15,12 @@ if($cdTela != null && $cdTela == 1){
 	$paginaEncaminhamento = "../index.php";
 	$classMensagem = "campomensagemverde";
 	$msg = "OPERACAO REALIZADA COM SUCESSO.<br>";	
-}else{
+}else{	
 	
 	if($vo != null){
+		/*
+		$linkconsulta = getLinkRetornoConsulta();
+		$paginaEncaminhamento = $vo->getNmTabela()."/$linkconsulta";*/
 		$paginaEncaminhamento = $vo->getNmTabela()."/index.php?consultar=S";
 	}else{
 		$paginaEncaminhamento = "../index.php";

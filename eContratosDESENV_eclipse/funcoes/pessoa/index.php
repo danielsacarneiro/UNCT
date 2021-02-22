@@ -106,8 +106,9 @@ function selecionar() {
 
 		cd = array[0];
 		nome = array[1];
+		doc = array[3];
 				
-		window.opener.transferirDadosPessoa(cd, nome);
+		window.opener.transferirDadosPessoa(cd, nome, doc);
 		window.close();
 	}
 }

@@ -1307,6 +1307,40 @@ function getCampoRequest($nmCampo, $setarNulo=false) {
 	return $retorno;
 }
 
+/**
+ * serve para retornar a pagina de consulta sem acionar o filtro quando nao solicitado
+ * @return number
+ */
+function getLinkRetornoConsulta(){
+	$inConsultaHTML = getInConsultarHTMLString();
+
+	$complem = constantes::$ID_REQ_CD_LUPA . "=" . getAtributoBooleanoComoString(isLupa());
+	
+	$retorno = "index.php?consultar=$inConsultaHTML&$complem";
+	
+	return $retorno;
+}
+
+/**
+ * funcao chamada na pagina index da entidade
+ * @param unknown $paginamanter
+ * @param unknown $funcao
+ * @return string
+ */
+function getLinkManter($paginamanter, $funcao=null){
+	if($funcao == null){
+		$funcao = constantes::$CD_FUNCAO_INCLUIR;
+	}
+	$inConsultaHTML = getInConsultarHTMLString();
+
+	$complem = "&" . constantes::$ID_REQ_CD_LUPA . "=" . getAtributoBooleanoComoString(isLupa());
+	$complem .= "&funcao=$funcao";	
+
+	$retorno = "$paginamanter?consultar=$inConsultaHTML" . $complem;
+
+	return $retorno;
+}
+
 function getInConsultarHTMLString(){
 	return getAtributoBooleanoComoString(filtroManter::isConsultarHTML());
 }
@@ -1476,5 +1510,3 @@ function getFuncaoOperacaoHTML(){
 	$funcao = @$_GET ["funcao"];
 	return $funcao;
 }
-
-

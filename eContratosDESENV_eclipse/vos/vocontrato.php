@@ -169,7 +169,7 @@ include_once (caminho_util . "DocumentoPessoa.php");
 	}
     
 	public static function getTituloJSP(){
-		return  "CONTRATO-PLANILHA";
+		return  "CONTRATO";
 	}
 	
 	public static function getNmTabela(){

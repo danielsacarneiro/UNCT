@@ -75,6 +75,8 @@ include_once 'normativos.php';
     static $CD_CAMPO_NULO = "null";
     static $ID_REQ_SESSAO_VO = "vo";
     static $ID_REQ_CD_LUPA = "lupa";
+    static $ID_REQ_CD_CONSULTAR = "consultar";
+    
     static $ID_REQ_MULTISELECAO = "multiSelecao";
     static $ID_REQ_IN_ENVIAR_EMAIL = "ENVIAR_EMAIL";
     static $ID_REQ_GETPARAM_GET = "ID_REQ_GETPARAM_GET";

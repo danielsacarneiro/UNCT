@@ -195,9 +195,9 @@ class filtroManter extends multiplosConstrutores {
 	 * @return boolean
 	 */
 	static function isConsultarHTML() {
-		$consultar = @$_GET ["consultar"];
+		$consultar = @$_GET [constantes::$ID_REQ_CD_CONSULTAR];
 		if ($consultar == null || $consultar == "") {
-			$consultar = @$_POST ["consultar"];
+			$consultar = @$_POST [constantes::$ID_REQ_CD_CONSULTAR];
 		}
 		//echo "consultar == $consultar";
 	

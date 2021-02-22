@@ -9,7 +9,7 @@ include_once(caminho_vos . "dbcontrato.php");
 try{
 inicio();
 
-$titulo = "CONSULTAR CONTRATOS-PLANILHA";
+$titulo = "CONSULTAR CONTRATOS";
 setCabecalho($titulo);
 
 $voContrato = new vocontrato();
@@ -169,7 +169,8 @@ function excluir() {
 }
 
 function incluir() {
-	location.href="manterContrato.php?funcao=<?=constantes::$CD_FUNCAO_INCLUIR?>";
+	//location.href="manterContrato.php?funcao=<?=constantes::$CD_FUNCAO_INCLUIR?>";
+	location.href="<?=getLinkManter("manterContrato.php")?>";	
 }
 
 function alterar() {
@@ -219,7 +220,9 @@ function estatisticas(){
 <INPUT type="hidden" id="evento" name="<%=PRManterReferenciaLegal.ID_REQ_EVENTO%>" value=""> 
 <INPUT type="hidden" name="utilizarSessao" value="N"> 
 <INPUT type="hidden" id="numTotalRegistros" value="<?=$numTotalRegistros?>">
-<INPUT type="hidden" name="consultar" id="consultar" value="N">    
+
+<!--  <INPUT type="hidden" id="<?=constantes::$ID_REQ_CD_CONSULTAR?>" name="<?=constantes::$ID_REQ_CD_CONSULTAR?>" value="<?=getInConsultarHTMLString()?>">  -->
+<INPUT type="hidden" id="<?=constantes::$ID_REQ_CD_CONSULTAR?>" name="<?=constantes::$ID_REQ_CD_CONSULTAR?>" value="N">
 
 <TABLE id="table_conteiner" class="conteiner" cellpadding="0" cellspacing="0">
     <TBODY>

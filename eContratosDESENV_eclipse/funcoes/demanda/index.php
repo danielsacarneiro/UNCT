@@ -70,7 +70,8 @@ function excluir() {
 }
 
 function incluir() {
-	location.href="encaminhar.novo.php?funcao=<?=constantes::$CD_FUNCAO_INCLUIR?>";
+	//location.href="encaminhar.novo.php?funcao=<?=constantes::$CD_FUNCAO_INCLUIR?>";
+	location.href="<?=getLinkManter("encaminhar.novo.php")?>";
 }
 
 function alterar() {

@@ -125,7 +125,8 @@ function isFormularioValido() {
 
 function cancelar() {
 	//history.back();
-	location.href="index.php?consultar=S";	
+	//location.href="index.php?consultar=S";	
+	location.href="<?=getLinkRetornoConsulta()?>";
 }
 
 function confirmar() {

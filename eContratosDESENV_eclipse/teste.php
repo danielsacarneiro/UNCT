@@ -31,14 +31,11 @@ try {
 	echoo ( $e->getMessage () );
 }*/
 
-$VO = NEW voMensageria();
-$mensagem .= getMensagemContratosNaoIncluidosPlanilha($count);
-
-echo $mensagem;
-
-
 //echo criarAlertasEmailGestorColecaoContratos();
 $db = new dbcontrato();
+$vopessoa = new vopessoa();
+include_once (caminho_funcoes . "pessoa/biblioteca_htmlPessoa.php");
+echo consultarPessoaDocumento('2342423');
 //echo $db->getCaminhoArquivoPlanilha(dominioTipoContrato::$CD_TIPO_PROFISCO);
 
 

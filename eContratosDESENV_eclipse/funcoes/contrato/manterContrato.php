@@ -101,6 +101,10 @@ function isFormularioValido() {
 	if (!isCampoProcLicitatorioSEFAZValido(documento.<?=vocontrato::$nmAtrProcessoLicContrato?>, true)){
 		return false;		
 	}
+
+	if (!isCampoCNPFouCNPJValido(documento.<?=vocontrato::$nmAtrDocContratadaContrato?>, true)){
+		return false;		
+	}	
 	
 	/*if (!isNmArquivoValido()){
 		return false;		
@@ -135,7 +139,8 @@ function isNmArquivoValido(){
 
 function cancelar() {
 	//history.back();
-	location.href="index.php?consultar=S";	
+	//location.href="index.php?consultar=S";
+	location.href="<?=getLinkRetornoConsulta()?>";
 }
 
 function confirmar() {
@@ -233,6 +238,15 @@ function limpaDadosContrato(){
 	limparFormularioGeral(<?=$varCamposExcecao?>);
 }
 
+function transferirDadosPessoa(cd, nm, doc) {
+	campoDoc = document.getElementById("<?=vocontrato::$nmAtrDocContratadaContrato?>"); 
+	campoDoc.value = doc;
+	document.getElementById("<?=vocontrato::$nmAtrContratadaContrato?>").value = nm;
+	formatarCampoCNPFouCNPJ(campoDoc);
+
+	//formatarCampoCNPFouCNPJ(this, event);
+}
+
 </SCRIPT>
 <?=setTituloPagina($titulo)?>
 </HEAD>
@@ -270,10 +284,20 @@ function limpaDadosContrato(){
 	            </TD>
 	        </TR>	
 		<TR>
-            <TH class="campoformulario" nowrap>Nome Contratada:</TH>
-            <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vocontrato::$nmAtrContratadaContrato?>" name="<?=vocontrato::$nmAtrContratadaContrato?>"  value="<?php echo($nmContratada);?>"  class="camponaoobrigatorio" size="50" required></TD>
-            <TH class="campoformulario" width="1%" nowrap>CNPJ/CNPF Contratada:</TH>
-            <TD class="campoformulario" ><INPUT type="text" id="<?=vocontrato::$nmAtrDocContratadaContrato?>" name="<?=vocontrato::$nmAtrDocContratadaContrato?>"  value="<?php echo($docContratada);?>"  onkeyup="formatarCampoCNPFouCNPJ(this, event);" class="camponaoobrigatorio" size="20" maxlength="40" required></TD>
+            <TH class="campoformulario" width="1%" nowrap>Contratada:</TH>
+            <TD class="campoformulario" colspan=3>
+            <INPUT type="text" id="<?=vocontrato::$nmAtrContratadaContrato?>" name="<?=vocontrato::$nmAtrContratadaContrato?>"  value="<?php echo($nmContratada);?>"  class="camporeadonly" size="50" readonly required>
+            | CNPJ/CNPF:
+            <INPUT type="text" id="<?=vocontrato::$nmAtrDocContratadaContrato?>" name="<?=vocontrato::$nmAtrDocContratadaContrato?>"  value="<?php echo($docContratada);?>"  onkeyup="formatarCampoCNPFouCNPJ(this, event);" class="camporeadonly" size="20" maxlength="40" readonly  required>
+                    <?php 
+                    echo getLinkPesquisa("../pessoa");                    
+                    $nmCamposDocApagar = array(
+                    		vocontrato::$nmAtrContratadaContrato,
+                    		vocontrato::$nmAtrDocContratadaContrato,
+                    );
+                    echo getBorracha($nmCamposDocApagar, "");                    
+                    ?>            
+            </TD>
         </TR>	                	        
 		
 		<?php 

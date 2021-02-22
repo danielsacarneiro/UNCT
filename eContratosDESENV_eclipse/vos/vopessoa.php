@@ -143,8 +143,20 @@ include_once (caminho_funcoes . "pessoa/biblioteca_htmlPessoa.php");
 	function getValorChavePrimaria(){
 		return $this->cd 
 		. constantes::$CD_CAMPO_SEPARADOR . $this->nome
-		. constantes::$CD_CAMPO_SEPARADOR . $this->sqHist;
+		. constantes::$CD_CAMPO_SEPARADOR . $this->sqHist
+		;
 	}
+	
+	function getValorChaveHTML(){
+		$chave = $this->cd
+		. constantes::$CD_CAMPO_SEPARADOR . $this->nome
+		. constantes::$CD_CAMPO_SEPARADOR . $this->sqHist
+		. constantes::$CD_CAMPO_SEPARADOR . $this->doc
+		;
+	
+		return $chave;
+	}
+	
 	
 	function getChavePrimariaVOExplode($array){
 		$this->cd = $array[0];
