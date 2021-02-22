@@ -311,7 +311,10 @@ function consultarPessoaDocumento($numDoc, $pDataVigencia = null){
 	$filtro->cdOrdenacao = constantes::$CD_ORDEM_CRESCENTE;
 	
 	$db = new dbpessoa();
-	$colecao = $db->consultarPessoaContratoFiltro($filtro);
+	//$colecao = $db->consultarPessoaContratoFiltro($filtro);
+	$colecao = $db->consultarPessoaManter($filtro, false);
+	
+	//ECHO "AQUI";
 	
 	if(isColecaoVazia($colecao)){
 		throw new excecaoConsultaVazia("Não existe pessoa com o documento em questão.");

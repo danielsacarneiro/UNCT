@@ -566,6 +566,7 @@ class dbcontrato extends dbprocesso {
 		//so normaliza se a inclusao vier da tela
 		if($voContrato->importacao == "N"){
 			$voContrato = $this->setDadosNormalizados($voContrato);
+			//throw new excecaoGenerica("NAO PASSARAS!");
 		}
 
 		$atributosInsert = removeColecaoAtributos ( $atributosInsert, $arrayAtribRemover );

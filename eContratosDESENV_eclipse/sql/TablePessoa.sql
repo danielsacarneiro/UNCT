@@ -41,11 +41,15 @@ CREATE TABLE pessoa (
     CONSTRAINT fk_pessoa_usuario FOREIGN KEY (ID) REFERENCES wp_users (ID)
 		ON DELETE RESTRICT
 		ON UPDATE RESTRICT,
-    CONSTRAINT pk PRIMARY KEY (pe_cd)
+    CONSTRAINT pk PRIMARY KEY (pe_cd),
+    UNIQUE KEY chave_logica_pessoa (pe_doc)
 );
 ALTER TABLE pessoa ADD CONSTRAINT fk_pessoa_usuario FOREIGN KEY (ID) REFERENCES wp_users (ID)
 	ON DELETE RESTRICT
 	ON UPDATE RESTRICT;
+    
+ALTER TABLE pessoa ADD UNIQUE KEY chave_logica_pessoa (pe_doc,in_desativado); 
+ALTER TABLE pessoa CHANGE chave_logica_pessoa (pe_doc);
     
 ALTER TABLE pessoa ADD COLUMN pe_in_pat CHAR(1) NULL AFTER pe_obs;
 ALTER TABLE pessoa ADD COLUMN in_desativado CHAR(1) NOT NULL DEFAULT 'N' AFTER cd_usuario_ultalt;
