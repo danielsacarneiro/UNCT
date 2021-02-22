@@ -185,7 +185,7 @@ function getHTMLDocumentoContratoPorDemandaDoc($voContrato, $tpDoc){
 
 	$retorno .= getTextoHTMLDestacado("  |$descricao: ", $cor, false) . getHtmlDocumentoSemTD($vodemandatram, false, "tabeladadosalinhadoesquerda", $msgDocNaoExiste);
 	
-	if(!$temDoc){
+	if(!$temDoc && isAtributoValido($endereco)){
 	
 		$retorno .= "<br>".getTextoHTMLDestacado("Exibindo antigo link $descricao planilha: ", $cor, false)
 		."<textarea id='$nmCampo' name='$nmCampo' rows='2' cols='80' class='camporeadonly' readonly>"
