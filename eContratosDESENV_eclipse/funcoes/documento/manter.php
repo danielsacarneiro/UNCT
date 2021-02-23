@@ -91,7 +91,7 @@ function isNomeDocumentoValido(){
 	if(nomeDoc.indexOf(naoencontrado) == -1){
 		return true;
 	}else{
-		exibirMensagem("Verifique o trecho '" + naoencontrado + "' para o nome do contratado.");
+		exibirMensagem("Verifique o trecho '" + naoencontrado + "' para o nome do contratado. Tente incluir o termo desejado na função 'contratos'.");
 		criarNomeDocumento();
 		campoDoc.focus();
 		return false;
