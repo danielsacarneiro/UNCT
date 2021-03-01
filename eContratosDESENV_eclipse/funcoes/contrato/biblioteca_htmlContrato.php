@@ -641,12 +641,23 @@ function getContratoEntradaDeDadosVOGenericoArray($pArray){
 	class="<?=$cssCdContrato?>" size="4" maxlength="3" <?=$htmlCdContrato?>>
 <?php
 	echo "Ano: " . $selectExercicio->getHtmlCombo ( $pIDCampoAnoContrato, $pNmCampoAnoContrato, $anoContrato, true, $cssAnoContrato, false, $htmlAnoContrato );
-	$nmCamposContrato = array(vocontrato::$nmAtrAnoContrato.$indiceContrato,
+	
+	/*$nmCamposContrato = array(
+			vocontrato::$nmAtrAnoContrato.$indiceContrato,
 			vocontrato::$nmAtrCdContrato.$indiceContrato,
 			vocontrato::$nmAtrTipoContrato.$indiceContrato,
 			vocontrato::$nmAtrCdEspecieContrato.$indiceContrato,
 			vocontrato::$nmAtrSqEspecieContrato.$indiceContrato,
-	);	
+	);	*/
+	
+	$nmCamposContrato = array(
+			$pIDCampoAnoContrato,
+			$pIDCampoCdContrato,
+			$pIDCampoTipoContrato,
+			$pIDCampoCdEspecieContrato,
+			$pIDCampoSqEspecieContrato,
+	);
+	
 	
 	if($pIsAlterarDemanda)
 		$paramAlterarDemanda = "true";
