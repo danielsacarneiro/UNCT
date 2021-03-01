@@ -93,6 +93,10 @@ class filtroManterContrato extends filtroManter {
 		$this->anoContrato = @$_POST [vocontrato::$nmAtrAnoContrato];
 		$this->anoArquivo = @$_POST [self::$nmAtrAnoArquivo];
 		$this->tipo = @$_POST [vocontrato::$nmAtrTipoContrato];
+		if($this->tipo == null){
+			$this->tipo = @$_POST [vocontrato::$nmAtrTipoContrato. "[]"];
+		}
+		
 		$this->especie = @$_POST [vocontrato::$nmAtrEspecieContrato];
 		$this->cdEspecie = @$_POST [vocontrato::$nmAtrCdEspecieContrato];
 		
@@ -188,11 +192,24 @@ class filtroManterContrato extends filtroManter {
 			$conector = "\n AND ";
 		}
 		
-		if ($this->tipo != null) {
+		/*if ($this->tipo != null) {
 			$filtro = $filtro . $conector . $nmTabela . "." . vocontrato::$nmAtrTipoContrato . "='" . $this->tipo . "'";
 			
 			$conector = "\n AND ";
+		}*/
+		
+		if ($this->tipo != null && !$this->isAtributoArrayVazio($this->tipo)) {
+			$comparar = " = '" . $this->tipo . "'";
+			if(is_array($this->tipo)){
+				$comparar = " IN (" . getSQLStringFormatadaColecaoIN($this->tipo, true) . ")";
+				//echo "EH ARRAY";
+			}
+				
+			$filtro = $filtro . $conector . $nmTabela . "." . vocontrato::$nmAtrTipoContrato . $comparar;
+				
+			$conector = "\n AND ";
 		}
+		
 				
 		if ($this->cdModalidade != null) {
 			$filtro = $filtro . $conector . $nmTabela . "." . vocontrato::$nmAtrCdModalidadeProcessoLicContrato . "='" . $this->cdModalidade . "'";

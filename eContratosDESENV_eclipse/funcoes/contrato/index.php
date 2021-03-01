@@ -285,7 +285,8 @@ function estatisticas(){
 	            		false,
 	            		null,
 	            		$arrayNmCamposFormularioContrato,
-	            		$arrayComplementoHTML
+	            		$arrayComplementoHTML,
+	            		true,
 	            );
 	            
 	            getContratoEntradaArrayGenerico($pArray);

@@ -326,6 +326,7 @@ function getContratoEntradaArrayGenerico($pArray) {
 	$funcaoJS = $pArray[5];
 	$arrayNmCamposFormularioContrato = $pArray[6];
 	$complementoHTML = $pArray[7];
+	$isTpContratoMultiple = $pArray[8];
 	
 	$pIsAlterarDemanda= false;
 
@@ -403,7 +404,8 @@ function getContratoEntradaArrayGenerico($pArray) {
 			$pIsAlterarDemanda,
 			$pcomChaveCompleta,
 			$arraycomplementoHTML,
-			$arrayNmCamposFormularioContrato);
+			$arrayNmCamposFormularioContrato,
+			$isTpContratoMultiple);
 }
 
 /**
@@ -459,6 +461,7 @@ function getContratoEntradaArray($pArray) {
 }
 
 /**
+ * 
  * @param unknown $vocontrato
  * @param unknown $arrayCssClass
  * @param unknown $arrayJavaScript
@@ -468,20 +471,57 @@ function getContratoEntradaArray($pArray) {
  * @param string $pIsAlterarDemanda
  * @param string $pcomChaveCompleta
  * @param unknown $arrayComplementoHTML
+ * @param unknown $arrayNmCamposFormularioContrato
+ * @return unknown
  */
-function getContratoEntradaDeDadosVOGenerico(
-		$vocontrato, 
-		$arrayCssClass, 
-		$arrayJavaScript, 
-		$indiceContrato, 
-		$isExibirContratadaSePreenchido, 
-		$comChaveCompletaSeNulo = true, 
-		$pIsAlterarDemanda=false, 
-		$pcomChaveCompleta=false, 
-		$arrayComplementoHTML=null,
-		$arrayNmCamposFormularioContrato = null) {
-			
-			
+function getContratoEntradaDeDadosVOGenerico(	
+	$vocontrato,
+	$arrayCssClass,
+	$arrayJavaScript,
+	$indiceContrato,
+	$isExibirContratadaSePreenchido,
+	$comChaveCompletaSeNulo = true,
+	$pIsAlterarDemanda=false,
+	$pcomChaveCompleta=false,
+	$arrayComplementoHTML=null,
+	$arrayNmCamposFormularioContrato = null,
+	$isTpContratoMultiple = null){
+	
+		$pArray = array(	
+			$vocontrato,
+			$arrayCssClass,
+			$arrayJavaScript,
+			$indiceContrato,
+			$isExibirContratadaSePreenchido,
+			$comChaveCompletaSeNulo,
+			$pIsAlterarDemanda,
+			$pcomChaveCompleta,
+			$arrayComplementoHTML,
+			$arrayNmCamposFormularioContrato,
+			$isTpContratoMultiple,
+		);
+		
+	return getContratoEntradaDeDadosVOGenericoArray($pArray);
+}
+
+/**
+ * 
+ * @param unknown $pArray
+ */
+function getContratoEntradaDeDadosVOGenericoArray($pArray){
+
+		$vocontrato = $pArray[0]; 
+		$arrayCssClass = $pArray[1];
+		$arrayJavaScript = $pArray[2]; 
+		$indiceContrato = $pArray[3];
+		$isExibirContratadaSePreenchido = $pArray[4]; 
+		$comChaveCompletaSeNulo = $pArray[5];
+		$pIsAlterarDemanda = $pArray[6];
+		$pcomChaveCompleta = $pArray[7];
+		$arrayComplementoHTML = $pArray[8];
+		$arrayNmCamposFormularioContrato = $pArray[9];
+		$isTpContratoMultiple = $pArray[10];	
+					
 		if($arrayNmCamposFormularioContrato == null){
 			$pNmCampoCdContrato = vocontrato::$nmAtrCdContrato;
 			$pNmCampoAnoContrato = vocontrato::$nmAtrAnoContrato;
@@ -499,6 +539,11 @@ function getContratoEntradaDeDadosVOGenerico(
 			$nmCampoDivPessoaContratada = $arrayNmCamposFormularioContrato[5];
 		}
 			
+		$isTpContratoMultiple === true;
+		if($isTpContratoMultiple){
+			$htmlComboTipo = " multiple ";
+			$pNmCampoTipoContrato = $pNmCampoTipoContrato. "[]";
+		}
 		
 	//var_dump($pNmCampoCdEspecieContrato);
 					
@@ -583,7 +628,11 @@ function getContratoEntradaDeDadosVOGenerico(
 	 * $pNmCampoSqEspecieContrato .= $indiceContrato;
 	 */
 	
-	echo $combo->getHtmlCombo ( $pIDCampoTipoContrato, $pNmCampoTipoContrato, $tipoContrato, true, $cssTipoContrato, false, $htmlTipoContrato );
+	//se nao for multiplo, fica no comeco
+	$comboTipoContrato = $combo->getHtmlCombo ( $pIDCampoTipoContrato, $pNmCampoTipoContrato, $tipoContrato, true, $cssTipoContrato, false, $htmlTipoContrato.$htmlComboTipo ); 
+	if(!$isTpContratoMultiple){
+		echo $comboTipoContrato;
+	}
 	?>
 	Número:
 <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)"
@@ -639,6 +688,10 @@ function getContratoEntradaDeDadosVOGenerico(
 	
 	if($indiceContrato != null && $indiceContrato != ""){
 		echo getTextoHTMLNegrito(" $indiceContrato º REGISTRO");
+	}
+	
+	if($isTpContratoMultiple){
+		echo $comboTipoContrato;
 	}
 	
 	$jsComplementarBorracha = "document.getElementById('$nmCampoDivPessoaContratada').innerHTML='';";
