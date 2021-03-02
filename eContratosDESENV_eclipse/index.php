@@ -174,8 +174,11 @@ function getNumServico($count){
                     				/*$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_OUTROS, 3));
                     				echo imprimeBotaoDocumento($vodocumento, "Manual Visto Edital");*/
                     				
-                    				$vodocumento = new voDocumento(array(2021, dominioSetor::$CD_SETOR_UNCT,dominioTpDocumento::$CD_TP_DOC_CHECKLIST, 1));
-                    				echo imprimeBotaoDocumento($vodocumento, getTextoHTMLNegrito("MANUAL DE BOAS PRÁTICAS ECONTI (em constante evolução)"));
+                    				echo imprimeLinkDocumento("https://drive.google.com/open?id=1Iv6zfreYXtT4yttK9betEI-82HoRwWu8"
+                    						, "MANUAL DE BOAS PRÁTICAS ECONTI (em constante evolução)");
+                    				
+                    				/*$vodocumento = new voDocumento(array(2021, dominioSetor::$CD_SETOR_UNCT,dominioTpDocumento::$CD_TP_DOC_CHECKLIST, 1));
+                    				echo imprimeBotaoDocumento($vodocumento, getTextoHTMLNegrito("MANUAL DE BOAS PRÁTICAS ECONTI (em constante evolução)"));*/
                     				
                     				$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_OUTROS, 4));
                     				echo imprimeBotaoDocumento($vodocumento, "Manual Visto Editais/Contratos");
@@ -215,7 +218,7 @@ function getNumServico($count){
                     				/*$vodocumento = new voDocumento(array(2020, dominioSetor::$CD_SETOR_UNCT,dominioTpDocumento::$CD_TP_DOC_OUTROS, 44));
                     				echo imprimeBotaoDocumento($vodocumento, "FLUXOGRAMA CONTRATOS");*/
                     				
-                    				echo imprimeLinkDocumento("https://drive.google.com/file/d/1Ngzidm2fXYZC8wZPKuYODTH1Rnr74YBy/view?usp=sharing"
+                    				echo imprimeLinkDocumento("https://drive.google.com/open?id=1Ngzidm2fXYZC8wZPKuYODTH1Rnr74YBy"
                     						, "FLUXOGRAMA CONTRATOS");
                     				
                     				$vodocumento = new voDocumento(array(2020, dominioSetor::$CD_SETOR_UNCT,dominioTpDocumento::$CD_TP_DOC_OUTROS, 50));
