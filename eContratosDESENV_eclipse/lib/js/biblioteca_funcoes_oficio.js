@@ -177,7 +177,7 @@ function getExtensaoDocumento(tpDoc) {
 	retorno = ".docx";
 	if(tpDoc == 'PC' || tpDoc == 'CA' || tpDoc == 'LC')
 		retorno = ".xlsx";
-	else if(tpDoc == 'PU' || tpDoc == 'PP' || tpDoc == 'DC' || tpDoc == 'CT')
+	else if(tpDoc == 'LE' || tpDoc == 'PU' || tpDoc == 'PP' || tpDoc == 'DC' || tpDoc == 'CT')
 		retorno = ".pdf";
 	
 	return retorno;	
