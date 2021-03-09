@@ -1086,6 +1086,22 @@ class dbDemanda extends dbprocesso {
 		}
 	}	
 		
+	static function validarDadosContrato($voContrato, $vocontratoInfo) {
+		//$voContrato = new vocontrato();		
+		$array = $voContrato->getValoresAtributosObrigatorios($vocontratoInfo);
+		if($array!= null && !isColecaoVazia($array)){
+			foreach ($array as $valor => $descricao){
+				if(!isAtributoValido($valor)){
+					throw new excecaoAtributoObrigatorio("Verifique o campo '$descricao' do termo relacionado.");
+				}				
+			}
+			
+		}else{
+			throw new excecaoGenerica("Verifique os campos obrigatórios do contrato.");
+		}		
+		
+	}
+	
 	static function validarGenerico(&$vo) {
 		$tipo = $vo->tipo;
 		$tpDemandaContrato = $vo->tpDemandaContrato;
@@ -1112,9 +1128,9 @@ class dbDemanda extends dbprocesso {
 			throw new excecaoGenerica ( $msg );
 		}
 	}
+		
 	
 	function validarAlteracao($vo) {
-		
 		$this->validarGenerico($vo);
 		
 		if ($vo->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA) {
@@ -1125,7 +1141,14 @@ class dbDemanda extends dbprocesso {
 			$vocontratoInfo = new voContratoInfo();
 			//$vo = new voDemanda();
 			$vocontratoDemanda = $vo->getContrato();
-			if($vocontratoDemanda != null){
+			if($vocontratoDemanda != null){				
+				try{
+					$dbContrato = new dbcontrato();
+					$vocontratoDemanda =$dbContrato->consultarPorChaveVO($vocontratoDemanda);
+				}catch (Exception $ex){
+					throw new excecaoGenerica("Verifique se o termo relacionado foi incluído corretamente.");
+				}
+				
 				$vocontratoInfo->anoContrato = $vocontratoDemanda->anoContrato;
 				$vocontratoInfo->cdContrato = $vocontratoDemanda->cdContrato;
 				$vocontratoInfo->tipo = $vocontratoDemanda->tipo;
@@ -1158,18 +1181,7 @@ class dbDemanda extends dbprocesso {
 							. $vocontratoDemanda->toString());						
 				}
 				
-				/*$dbcontrato = new dbcontrato();
-				$filtroManterContrato = new filtroManterContrato();
-				$filtroManterContrato->inSQLJoinContratoInfo = "INNER JOIN";
-				$filtroManterContrato->anoContrato = $vocontratoDemanda->anoContrato;
-				$filtroManterContrato->cdContrato = $vocontratoDemanda->cdContrato;
-				$filtroManterContrato->tipo = $vocontratoDemanda->tipo;
-				$filtroManterContrato->cdEspecie = $vocontratoDemanda->cdEspecie;
-				$filtroManterContrato->sqEspecie = $vocontratoDemanda->sqEspecie;
-				$retorno = $dbcontrato->consultarTelaConsulta(array($filtroManterContrato));
-				if(isColecaoVazia($retorno)){
-					throw new excecaoConsultaVazia("Fechamento da demanda permitido apenas para contrato incluído na (1)planilha e na função (2)'informações adicionais'.");
-				}*/
+				$this->validarDadosContrato($vocontratoDemanda, $vocontratoInfo);
 				
 			}
 			

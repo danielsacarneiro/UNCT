@@ -154,6 +154,26 @@ Class voContratoInfo extends voentidade{
 		return $retorno;
 	}
 	
+	/**
+	 * utilizada para validar a inclusao dos campos obrigatorios
+	 * @return string[]
+	 */
+	function getValoresAtributosObrigatorios(){
+		$retorno = array(
+				$this->inEstudoTecnicoSAD => "Estudo.Técnico.SAD",
+				$this->cdClassificacao => "Classificação",
+				$this->inPrazoProrrogacao => "Prorrogação",
+				$this->inEscopo => "Escopo",
+				$this->inCredenciamento => "Credenciamento",
+				$this->inTemGarantia => "Tem.Garantia",
+				$this->dtProposta => "Dt.Proposta",
+		);
+		
+		$retorno = $this->getValoresAtributosObrigatoriosPorEntidade($retorno);
+		
+		return $retorno;
+	}
+	
 	static function getVOContratoInfoDeUmVoContrato($vocontrato){
 		$retorno = new voContratoInfo();
 		$retorno->cdContrato = $vocontrato->cdContrato;

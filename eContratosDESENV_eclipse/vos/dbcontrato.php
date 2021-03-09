@@ -471,6 +471,12 @@ class dbcontrato extends dbprocesso {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
 		$nmTabelaContratoLicon = voContratoLicon::getNmTabelaStatic ( false );
+		$nmTabelaPessoa = vopessoa::getNmTabelaStatic ( false );		
+		
+		$arrayAtributosContratada = array(
+				vopessoa::$nmAtrNome,
+				vocontrato::$nmAtrContratadaContrato
+		);
 	
 		$arrayColunasRetornadas = array (
 				$nmTabela . ".*",
@@ -478,6 +484,7 @@ class dbcontrato extends dbprocesso {
 				"$nmTabelaContratoInfo." . voContratoInfo::$nmAtrInEscopo,
 				"$nmTabelaContratoLicon." . voContratoLicon::$nmAtrAnoDemanda, //usado para saber se ha contrato_licon relacionado
 				"$nmTabelaContratoLicon." . voContratoLicon::$nmAtrCdDemanda,
+				getSQLCOALESCE($arrayAtributosContratada, vocontrato::$nmAtrContratadaContrato),
 		);
 		
 		$queryJoin .= "\n left JOIN " . $nmTabelaContratoLicon;
@@ -495,6 +502,11 @@ class dbcontrato extends dbprocesso {
 		$queryJoin .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrAnoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrAnoContrato;
 		$queryJoin .= "\n AND ";
 		$queryJoin .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrTipoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
+		
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoa;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaPessoa . "." . vopessoa::$nmAtrCd . "=" . $nmTabela . "." . vocontrato::$nmAtrCdPessoaContratada;
+		
 				
 		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryJoin, $isHistorico , $isConsultaPorChave);
 	}

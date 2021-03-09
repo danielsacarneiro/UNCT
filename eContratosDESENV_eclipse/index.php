@@ -175,13 +175,17 @@ function getNumServico($count){
                     				echo imprimeBotaoDocumento($vodocumento, "Manual Visto Edital");*/
                     				
                     				echo imprimeLinkDocumento("https://drive.google.com/open?id=1Iv6zfreYXtT4yttK9betEI-82HoRwWu8"
-                    						, "MANUAL DE BOAS PRÁTICAS ECONTI (em constante evolução)");
+                    						, getTextoHTMLNegrito("MANUAL DE BOAS PRÁTICAS ECONTI (em constante evolução)"));
+
+                    				echo imprimeLinkDocumento("https://drive.google.com/file/d/1JvnwCMl-3dq3AocY7ll8chQRndihOCsp/view?usp=sharing"
+                    						, getTextoHTMLNegrito("UNCT - ORIENTAÇÕES GERAIS"));
                     				
                     				/*$vodocumento = new voDocumento(array(2021, dominioSetor::$CD_SETOR_UNCT,dominioTpDocumento::$CD_TP_DOC_CHECKLIST, 1));
                     				echo imprimeBotaoDocumento($vodocumento, getTextoHTMLNegrito("MANUAL DE BOAS PRÁTICAS ECONTI (em constante evolução)"));*/
                     				
-                    				$vodocumento = new voDocumento(array(2018, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_OUTROS, 4));
-                    				echo imprimeBotaoDocumento($vodocumento, "Manual Visto Editais/Contratos");
+                    				/*$vodocumento = new voDocumento(array(2021, dominioSetor::$CD_SETOR_UNCT,dominioTpDocumento::$CD_TP_DOC_OUTROS, 34));
+                    				echo imprimeBotaoDocumento($vodocumento, "UNCT - ORIENTAÇÕES GERAIS");*/
+                    				
                     				
                     				$vodocumento = new voDocumento(array(2019, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_CHECKLIST, 1));
                     				echo imprimeBotaoDocumento($vodocumento, "Procedimento ATJA/CPL para visto em Edital.");

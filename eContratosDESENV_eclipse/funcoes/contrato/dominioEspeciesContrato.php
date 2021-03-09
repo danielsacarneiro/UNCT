@@ -76,7 +76,7 @@ include_once(caminho_util. "dominio.class.php");
 	 * @return string[]
 	 */
 	static function getColecaoFiltroContratoConsolidacao(){
-		return array(
+		/*return array(
 				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER,
 				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_TERMOADITIVO,
 				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_RERRATIFICACAO,
@@ -84,8 +84,18 @@ include_once(caminho_util. "dominio.class.php");
 				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_RESCISAO_ENCERRAMENTO,
 				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_RESCISAO_UNILATERAL,
 		
-		);		
+		);*/
+		
+		return static::getColecaoTermosQuePodemAlterarVigencia();
 	}	
+	
+	/**
+	 * colecao de termos que exigem publicacao
+	 * @return string[]
+	 */
+	static function getColecaoTermosPublicacao(){
+		return static::getColecaoTermosQuePodemAlterarVigencia();
+	}
 	
 	static function getColecaoImportacaoPlanilha(){
 		//cooperacao e convalidacao serao considerados como MATER

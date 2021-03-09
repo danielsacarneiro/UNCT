@@ -484,7 +484,7 @@ class filtroManterContrato extends filtroManter {
 		if ($this->dtVigencia != null) {
 				
 			//data de vigencia tem preferencia sobre o tpvigencia, se tiver sido setado, eh desconsiderado
-			$this->tpVigencia = "";
+			//$this->tpVigencia = "";
 				
 			$pArrayParam = array(
 					$nmTabela,
@@ -504,7 +504,9 @@ class filtroManterContrato extends filtroManter {
 				
 			//echo $filtro;
 			$conector = "\n AND ";
-		}else if (isAtributoValido($this->tpVigencia) && $this->tpVigencia != constantes::$CD_OPCAO_TODOS) {
+		}
+		
+		if (isAtributoValido($this->tpVigencia) && $this->tpVigencia != constantes::$CD_OPCAO_TODOS) {
 			if ($this->tpVigencia == dominioTpVigencia::$CD_OPCAO_VIGENTES) {
 				/*$filtro = $filtro . $conector . getSQLDataVigenteSqSimples (
 				 $nmTabela,

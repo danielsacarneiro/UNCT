@@ -448,6 +448,30 @@ class voentidade extends multiplosConstrutores {
 		return "$nmAtributo$nmAlternativo";
 	}
 	
+	/**
+	 * Acrescenta o nome da entidade na descricao dos atributos obrigatorios
+	 * @param unknown $array
+	 * @return unknown
+	 */
+	function getValoresAtributosObrigatoriosPorEntidade($array){
+		
+		$nmEntidade = "";
+		try{
+			$nmEntidade = $this->getTituloJSP();
+			$nmEntidade .= ": ";
+		}catch(Exception $ex){
+			;
+		}
+		
+		if($array != null){
+			foreach ($array as $chave => $descricao){
+				$retorno[$chave] = $nmEntidade.$descricao;				
+			}
+		}
+		
+		return $retorno;		
+	}
+	
 	/*
 	 * function validaExclusaoRelacionamentoHistorico(){
 	 * $retorno = false;

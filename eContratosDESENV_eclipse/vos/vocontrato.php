@@ -303,6 +303,44 @@ include_once (caminho_util . "DocumentoPessoa.php");
         return $retorno;    
     }
     
+    /**
+     * utilizada para validar a inclusao dos campos obrigatorios
+     * @return string[]
+     */
+    function getValoresAtributosObrigatorios($vocontratoinfo=null){
+    	$retorno = array(
+    			$this->dtAssinatura => "Dt.Assinatura",
+    			$this->dtVigenciaFinal => "Dt.Vigencia.Final",
+    			$this->dtVigenciaInicial => "Dt.Vigencia.Inicial",
+    			$this->vlMensal => "Vl.Mensal",
+    			$this->vlGlobal => "Vl.Global",
+    			$this->procLic => "Proc.Licitatorio",
+    	);
+    	
+    	if(in_array($this->cdEspecie, dominioEspeciesContrato::getColecaoTermosPublicacao())){
+    		$retorno[$this->dtPublicacao] = "Dt.Publicacao";    		
+    	}
+
+    	if($this->cdEspecie == dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_APOSTILAMENTO){
+    		$retorno[$this->empenho] = "Empenho";
+    	}
+    	
+    	$retorno = $this->getValoresAtributosObrigatoriosPorEntidade($retorno);
+    	
+    	
+    	if($vocontratoinfo != null){
+	    	//$vocontratoinfo = new voContratoInfo();
+	    	/*$nmVoComplementar = "Informações Adicionais:";
+    		if(in_array($this->cdEspecie, dominioEspeciesContrato::getColecaoTermosQuePodemAlterarVigencia())){
+	    		$retorno[$vocontratoinfo->dtProposta] = "$nmVoComplementar Dt.Proposta";    		
+	    	}*/
+	    	
+	    	$arrayContratoInfo = $vocontratoinfo->getValoresAtributosObrigatorios();	    	
+	    	$retorno = array_merge_keys($retorno, $arrayContratoInfo);    	
+    	}
+    	 
+    	return $retorno;
+    }
 
     function getAtributosInsertImportacao(){
         $novosAtributos = $this->getAtributosFilho();        
