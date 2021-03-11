@@ -1081,7 +1081,7 @@ TD.areapassoapasso {
 }
 
 /*  Representa o header de uma tabela de visualização de dados */
-TD.tabeladados,TD.tabeladadosalinhadodireita,TD.tabeladadosalinhadocentro,TD.tabeladadosdestacado,TD.tabeladadosdestacadoamarelo, TD.tabeladadosdestacadoverde,TD.tabeladadosdestacadovermelho,TD.tabeladadosdestacadoazulclaro,TD.tabeladadosdestacadonegrito
+TD.tabeladados,TD.tabeladadosalinhadodireita,TD.tabeladadosalinhadocentro,TD.tabeladadosdestacado,TD.tabeladadosdestacadoamarelo, TD.tabeladadosdestacadoverde,TD.tabeladadosdestacadovermelho,TD.tabeladadosdestacadoazulclaro,TD.tabeladadosdestacadonegrito, TD.tabeladadosdestacadomarrom
 	{
 	color: #222;
 	font-family: Helvetica, Arial, sans-serif;
@@ -1140,6 +1140,12 @@ TD.tabeladadosdestacadoazulclaro {
 	text-align: left;
 	background-color: #DEEBF5;
 	color: #003399;
+}
+
+TD.tabeladadosdestacadomarrom {
+	text-align: left;
+	background-color: brown;
+	color: white;
 }
 
 /*  Representa células invisíveis (sem borda) da tabela de resultado da interface de consulta */
