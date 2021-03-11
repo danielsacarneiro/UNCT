@@ -110,7 +110,7 @@ class email_sefaz extends multiplosConstrutores{
 				//"rogerio.f-carvalho@sefaz.pe.gov.br",
 				"juliene.paiva@sefaz.pe.gov.br",
 				"Andrea.c-oliveira@sefaz.pe.gov.br",
-				"laura.oliveira@sefaz.pe.gov.br",
+				"andrielle.rodrigues@sefaz.pe.gov.br",
 		);
 	}
 	

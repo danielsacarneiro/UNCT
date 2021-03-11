@@ -20,7 +20,7 @@ include_once(caminho_util. "dominio.class.php");
   	static $DS_ESPECIE_CONTRATO_TERMOADITIVO = "Termo Aditivo";
   	static $DS_ESPECIE_CONTRATO_APOSTILAMENTO = "Apostilamento";
   	
-  	static $DS_ESPECIE_CONTRATO_TERMOAJUSTE = "Termo Ajuste";
+  	static $DS_ESPECIE_CONTRATO_TERMOAJUSTE = "Termo Ajuste Contas";
   	static $DS_ESPECIE_CONTRATO_RERRATIFICACAO = "Termo Rerratificação";
   	static $DS_ESPECIE_CONTRATO_COOPERACAO = "Termo Cooperação";
   	static $DS_ESPECIE_CONTRATO_CONVALIDACAO = "Termo Convalidação";

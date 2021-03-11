@@ -1170,10 +1170,13 @@ class dbcontrato extends dbprocesso {
 		$importacao = "N";
 		$registro = consultarPessoaDocumento($vo->docContratada);
 		$cdPessoa = $registro[vopessoa::$nmAtrCd];
+		$nmPessoa = $registro[vopessoa::$nmAtrNome];
 		
 		$retorno = $vo;
 		 	// corrige os tipos de dados
 		$retorno->cdPessoaContratada = $cdPessoa;
+		//pega nome mais recente da contratada
+		$retorno->contratada = $nmPessoa;
 			
 		$retorno->objeto = getStringImportacaoCaracterEspecial ( $retorno->objeto );
 		$retorno->gestor = getStringImportacaoCaracterEspecial ( $retorno->gestor );	

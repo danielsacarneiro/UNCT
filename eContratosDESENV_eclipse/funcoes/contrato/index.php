@@ -183,7 +183,8 @@ function alterar() {
     }?>
     
 	chave = document.frm_principal.rdb_consulta.value;	
-	location.href="manterContrato.php?funcao=<?=constantes::$CD_FUNCAO_ALTERAR?>&chave=" + chave;
+	//location.href="manterContrato.php?funcao=<?=constantes::$CD_FUNCAO_ALTERAR?>&chave=" + chave;
+	location.href="<?=getLinkManter("manterContrato.php",constantes::$CD_FUNCAO_ALTERAR)?>&chave=" + chave;
 
 }
 

@@ -20,6 +20,7 @@ $classChaves = "";
 $readonlyChaves = "";
 
 $isInclusao = $funcao == constantes::$CD_FUNCAO_INCLUIR;
+$isAlteracao = $funcao == constantes::$CD_FUNCAO_ALTERAR;
 
 if($isInclusao){
     $classChaves = "campoobrigatorio";    	
@@ -70,7 +71,8 @@ setCabecalho($titulo);
     $cdUsuarioInclusao = $voContrato->cdUsuarioInclusao;
     $cdUsuarioUltAlteracao = $voContrato->cdUsuarioUltAlteracao;
 	
-
+    $idCampoCarac = voContratoInfo::$nmAtrInPendencias;
+    $nmCampoCarac = $idCampoCarac ."[]";
 ?>
 <!DOCTYPE html>
 
@@ -88,11 +90,28 @@ setCabecalho($titulo);
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_ajax.js"></script>
 
 <SCRIPT language="JavaScript" type="text/javascript">
+<?php
+		 $varNomesAlternativos = "varJSNomesAlternativos";
+		 $pArrayAtributos = array(vocontrato::$nmAtrGestorContrato,
+		 		vocontrato::$nmAtrProcessoLicContrato,
+		 		vocontrato::$nmAtrContratadaContrato,
+		 		vocontrato::$nmAtrDocContratadaContrato,
+		 		vocontrato::$nmAtrDtVigenciaInicialContrato,
+		 		vocontrato::$nmAtrDtVigenciaFinalContrato,
+		 		vocontrato::$nmAtrVlGlobalContrato,
+		 		vocontrato::$nmAtrVlMensalContrato,
+		 );
+		 		 	
+		 echo montarHashNomeAlternativo($pArrayAtributos, $varNomesAlternativos, true);
+?>
 
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
 function isFormularioValido() {
 	var documento = document.frm_principal;
 	var campoFormularioValido = documento.<?=voentidade::$ID_REQ_IN_FORMULARIO_VALIDO?>;
+	var campoCaracteristicas = documento.<?=$idCampoCarac?>;
+	var nmCampoCaracteristicas = "<?=$nmCampoCarac?>";
+	
 	if (campoFormularioValido != null && campoFormularioValido.value == 'N'){
 		exibirMensagem("Para continuar, corriga os ALERTAS no topo da página.");
 		return false;		
@@ -102,10 +121,38 @@ function isFormularioValido() {
 		return false;		
 	}
 
-	if (!isCampoCNPFouCNPJValido(documento.<?=vocontrato::$nmAtrDocContratadaContrato?>, true)){
+	var campoDoc = documento.<?=vocontrato::$nmAtrDocContratadaContrato?>;
+	if (campoDoc != null && !isCampoCNPFouCNPJValido(campoDoc, true)){
 		return false;		
 	}	
+
+	var campoDataInicial = documento.<?=vocontrato::$nmAtrDtVigenciaInicialContrato?>;
+	var campoDataFinal = documento.<?=vocontrato::$nmAtrDtVigenciaFinalContrato?>;
+	if(!isPeriodoValido(campoDataInicial, campoDataFinal, true)){
+		return false;
+	}
+
+	var funcao = document.frm_principal.funcao.value;
+	var isInclusao = funcao == "<?=constantes::$CD_FUNCAO_INCLUIR?>";
 	
+	//if(isCheckBoxConsultaSelecionado("<?=$nmCampoCarac?>", true)){
+	if(!isCheckBoxSelecionado(nmCampoCaracteristicas, true)){
+		exibirMensagem("Selecione pelo menos um item 'Características'.");		
+		return false;		
+	}else if(!isItemCheckBoxSelecionado(nmCampoCaracteristicas, "<?=constantes::$CD_OPCAO_NENHUM?>")){
+
+		var pArrayNomeCamposOriginais = [
+			"<?=vocontrato::$nmAtrVlMensalContrato?>",
+			"<?=vocontrato::$nmAtrVlGlobalContrato?>"];
+
+		//so valida na inclusao
+		if(isInclusao && !isValoresCamposAlternativosAlterados(pArrayNomeCamposOriginais, <?=$varNomesAlternativos?>, true)){
+			exibirMensagem("O termo em questão altera o valor do contrato, revise o valor inserido.");
+			return false;	
+		}
+		
+	}
+
 	/*if (!isNmArquivoValido()){
 		return false;		
 	}*/
@@ -113,6 +160,33 @@ function isFormularioValido() {
 	return true;
 }
 
+function isValoresCamposAlternativosAlterados(pArrayNomeCamposOriginais, pArrayValoresAlternativos, pSemMensagem, pNaoSetarFoco){
+		
+	var i=0;
+	for(i=0;i<pArrayNomeCamposOriginais.length;i++){
+		var nome = pArrayNomeCamposOriginais[i];
+		var campoOriginal = document.getElementById(nome);
+
+		var nomeAlternatico = pArrayValoresAlternativos[nome];
+		var campoAlternativo = document.getElementById(nomeAlternatico);
+
+		if(campoAlternativo.value == campoOriginal.value){
+			if(!pSemMensagem){
+				exibirMensagem("Valor deve sofrer alteração.");
+				pNaoSetarFoco = false;
+			}
+
+			if(!pNaoSetarFoco){
+				campoOriginal.focus();
+			}
+			return false;
+		}
+		
+	}
+
+	return true;
+}
+	
 function isNmArquivoValido(){
 	var documento = document.frm_principal;
 	var campo = documento.<?=vocontrato::$nmAtrLinkDoc?>;
@@ -144,7 +218,13 @@ function cancelar() {
 }
 
 function confirmar() {
-	if(!isFormularioValido()){
+	
+	try{
+		if(!isFormularioValido()){
+			return false;
+		}
+	}catch(ex){
+		alert(ex.message);
 		return false;
 	}
 	
@@ -159,28 +239,37 @@ function carregaGestorPessoa(){
     getDadosGestorPessoa('<?=$idCampoGestor?>', '<?=$idDiv?>');     
 }
 
-function carregaDadosContrato(){
-	str = "";
+function carregaDadosContrato(pCampoChamada=null){
+	var str = "";
 
-	cdContrato = document.frm_principal.<?=vocontrato::$nmAtrCdContrato?>.value;
-	anoContrato = document.frm_principal.<?=vocontrato::$nmAtrAnoContrato?>.value;
-	tipoContrato = document.frm_principal.<?=vocontrato::$nmAtrTipoContrato?>.value;
-	cdEspecie = document.frm_principal.<?=vocontrato::$nmAtrCdEspecieContrato?>.value;
-	sqEspecie = document.frm_principal.<?=vocontrato::$nmAtrSqEspecieContrato?>.value;
+	var cdContrato = document.frm_principal.<?=vocontrato::$nmAtrCdContrato?>.value;
+	var anoContrato = document.frm_principal.<?=vocontrato::$nmAtrAnoContrato?>.value;
+	var tipoContrato = document.frm_principal.<?=vocontrato::$nmAtrTipoContrato?>.value;
+	var cdEspecie = document.frm_principal.<?=vocontrato::$nmAtrCdEspecieContrato?>.value;
+	var sqEspecie = document.frm_principal.<?=vocontrato::$nmAtrSqEspecieContrato?>.value;
+	var dataVigencia = document.frm_principal.<?=vocontrato::$nmAtrDtAssinaturaContrato?>.value;
+	var funcao = document.frm_principal.funcao.value;
+	var isAlteracao = funcao == "<?=constantes::$CD_FUNCAO_ALTERAR?>";
 		
-	if(cdContrato != "" && anoContrato != "" && tipoContrato != "" && cdEspecie != ""){
+	if(!isAlteracao && cdContrato != "" && anoContrato != "" && tipoContrato != "" && cdEspecie != ""){
 
-		if(cdEspecie == '<?=dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER?>')
+		if(cdEspecie == '<?=dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER?>'){
 			sqEspecie = 1;
+		}else if(cdEspecie == '<?=dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_APOSTILAMENTO?>'
+			&& dataVigencia == ""){
+			exibirMensagem("Para carregar dados anteriores do apostilamento, insira a data de assinatura.");
+			return;
+		}
 
 		if(sqEspecie != ""){		
 			str = "null"+ '<?=CAMPO_SEPARADOR?>' + anoContrato + '<?=CAMPO_SEPARADOR?>' + cdContrato + '<?=CAMPO_SEPARADOR?>' 
 			+ tipoContrato + '<?=CAMPO_SEPARADOR?>' + cdEspecie
-			+ '<?=CAMPO_SEPARADOR?>' + sqEspecie;
+			+ '<?=CAMPO_SEPARADOR?>' + sqEspecie
+			+ '<?=CAMPO_SEPARADOR?>' + dataVigencia;
 			//vai no ajax
 			getDadosPorChaveGenerica(str, 'campoDadosManterContrato.php', '<?=vocontrato::$ID_REQ_DIV_DADOS_MANTER_CONTRATO?>');
 			
-			limpaDadosContrato();
+			limpaDadosContrato(pCampoChamada);
 		}
 	}
 }
@@ -205,17 +294,6 @@ function carregaDadosContrato(){
 		}
 	}
 
- <?php
-		 $varNomesAlternativos = "varJSNomesAlternativos";
-		 $pArrayAtributos = array(vocontrato::$nmAtrGestorContrato,
-		 		vocontrato::$nmAtrProcessoLicContrato,
-		 		vocontrato::$nmAtrContratadaContrato,
-		 		vocontrato::$nmAtrDocContratadaContrato,
-		 		vocontrato::$nmAtrDtVigenciaInicialContrato,
-		 );
-		 		 	
-		 echo montarHashNomeAlternativo($pArrayAtributos, $varNomesAlternativos, true);
-		 ?>
  /**
   * o nome dessa funcao deve ser igual ao da constantes::$NM_FUNCAO_JS_COPIADADOS_TERMO_ANTERIOR
   */
@@ -226,15 +304,31 @@ function copiarDadosTermoAnterior(){
 	documento.<?=vocontrato::$nmAtrProcessoLicContrato?>.value =  procLic.replace(" ", "");	
 }
 
-function limpaDadosContrato(){
+function limpaDadosContrato(pCampoChamada=null){
 	var documento = document.frm_principal;
-	/*var campos = [documento.<?=vocontrato::$nmAtrGestorContrato?>];
-	limparCamposColecaoDeCamposFormulario(campos);*/	
+	campoEspecie = documento.<?=vocontrato::$nmAtrCdEspecieContrato?>;
+	cdEspecie = campoEspecie.value;
 
+	var isCampoChamadaDataAssinatura = false;
+	if(pCampoChamada != null){
+		isCampoChamadaDataAssinatura = pCampoChamada.id = "<?=vocontrato::$nmAtrDtAssinaturaContrato?>";
+	}
+	
 	 <?php
-			 $varCamposExcecao = "varJSCamposExcecao";		
-			 echo getColecaoComoVariavelJS(vocontrato::getAtributosChaveLogica(), $varCamposExcecao);
+			 $varCamposExcecao = "varJSCamposExcecao";
+			 $colecaoExcecao = vocontrato::getAtributosChaveLogica();
+			 echo getColecaoComoVariavelJS($colecaoExcecao, $varCamposExcecao);
 			 ?>
+	if(cdEspecie == "<?=dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_APOSTILAMENTO?>"){
+		//<?=$varCamposExcecao?>[(<?=$varCamposExcecao?>.length)-1] = "<?=vocontrato::$nmAtrDtAssinaturaContrato?>";
+		<?=$varCamposExcecao?>.push("<?=vocontrato::$nmAtrDtAssinaturaContrato?>");
+	}
+
+	if(isCampoChamadaDataAssinatura){
+		//nao apaga os campos com name='', posto que servem apenas pra detalhamento
+		<?=$varCamposExcecao?>.push("");
+	}
+	
 	limparFormularioGeral(<?=$varCamposExcecao?>);
 }
 
@@ -326,18 +420,18 @@ function transferirDadosPessoa(cd, nm, doc) {
         </TR>
 		<TR>
             <TH class="campoformulario" nowrap><?=getTextoHTMLTagMouseOver("Proc.Licitatorio", "Para os PLs da SEFAZ, o formato deve seguir o exemplo 0013.2018.CPLI.PE.0009.SEFAZ-PE")?>:</TH>
-            <TD class="campoformulario" colspan="3"><INPUT type="text" id="<?=vocontrato::$nmAtrProcessoLicContrato?>" name="<?=vocontrato::$nmAtrProcessoLicContrato?>"  value="<?php echo($procLic);?>"  
-            onKeyUp='formatarCampoProcLicitatorio(this, event)'class="campoobrigatorio" size="50" required></TD>
-        </TR>
-		<TR>
-            <TH class="campoformulario" nowrap>Valor Mensal:</TH>
-            <TD class="campoformulario" ><INPUT type="text" id="<?=vocontrato::$nmAtrVlMensalContrato?>" name="<?=vocontrato::$nmAtrVlMensalContrato?>"  value="<?php echo($vlMensal);?>"
-            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="camponaoobrigatorioalinhadodireita" size="15" required></TD>
-            <TH class="campoformulario" nowrap>Valor Global:</TH>
-            <TD class="campoformulario"><INPUT type="text" id="<?=vocontrato::$nmAtrVlGlobalContrato?>" name="<?=vocontrato::$nmAtrVlGlobalContrato?>"  value="<?php echo($vlGlobal);?>"
-            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="camponaoobrigatorioalinhadodireita" size="15" required></TD>
-        </TR>
-		
+            <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vocontrato::$nmAtrProcessoLicContrato?>" name="<?=vocontrato::$nmAtrProcessoLicContrato?>"  value="<?php echo($procLic);?>"  
+            onKeyUp='formatarCampoProcLicitatorio(this, event)'class="campoobrigatorio" size="50" required>
+            </TD>
+	            <TH class="campoformulario" nowrap width="1%">Características:</TH>
+	            <TD class="campoformulario" colspan=1>
+	            <?php 
+	            $arrayParamCarac = array($nmCampoCarac, $vo->inPendencias, dominioTipoDemandaContrato::getColecaoAlteraValorContrato(), 1, false, "", false, " ");
+	            $arrayParamCarac[12] = true;
+	            echo dominioAutorizacao::getHtmlChecksBoxArray($arrayParamCarac);
+	             ?>
+	            </TD>            
+        </TR>		
 		<?php 
 		
 		if($dtVigenciaFinal == null){
@@ -373,6 +467,7 @@ function transferirDadosPessoa(cd, nm, doc) {
             	       name="<?=vocontrato::$nmAtrDtAssinaturaContrato?>" 
             			value="<?php echo($dtAssinatura);?>"
             			onkeyup="formatarCampoData(this, event, false);" 
+                		onChange="if(document.getElementById('<?=vocontrato::$nmAtrCdEspecieContrato?>').value=='<?=dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_APOSTILAMENTO?>'){carregaDadosContrato(this);}"
             			class="camponaoobrigatorio" 
             			size="10" 
             			maxlength="10" required>
@@ -387,9 +482,21 @@ function transferirDadosPessoa(cd, nm, doc) {
                     			class="camponaoobrigatorio" 
                     			size="10" 
                     			maxlength="10" required>
-					</TD>
     		</TD>
            </TR>
+		<TR>
+            <TH class="campoformulario" nowrap>Valor Mensal:</TH>
+            <TD class="campoformulario" ><INPUT type="text" id="<?=vocontrato::$nmAtrVlMensalContrato?>" name="<?=vocontrato::$nmAtrVlMensalContrato?>"  value="<?php echo($vlMensal);?>"
+            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" 
+            onBlur="setaValorCampoPorFator(this, '<?=vocontrato::$nmAtrVlGlobalContrato?>', getNumMesesNoPeriodo('<?=vocontrato::$nmAtrDtVigenciaInicialContrato?>', '<?=vocontrato::$nmAtrDtVigenciaFinalContrato?>', true, true));"
+            class="camponaoobrigatorioalinhadodireita" size="15" required></TD>
+            <TH class="campoformulario" nowrap>Valor Global:</TH>
+            <TD class="campoformulario"><INPUT type="text" id="<?=vocontrato::$nmAtrVlGlobalContrato?>" name="<?=vocontrato::$nmAtrVlGlobalContrato?>"  value="<?php echo($vlGlobal);?>"
+            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" 
+           	onBlur="setaValorCampoPorFator(this, '<?=vocontrato::$nmAtrVlMensalContrato?>', eval(1/(getNumMesesNoPeriodo('<?=vocontrato::$nmAtrDtVigenciaInicialContrato?>', '<?=vocontrato::$nmAtrDtVigenciaFinalContrato?>')), true, true));"
+            class="camponaoobrigatorioalinhadodireita" size="15" required></TD>
+        </TR>
+           
 		<TR>
             <TH class="campoformulario" nowrap>Empenho:</TH>
             <TD class="campoformulario" colspan="3">

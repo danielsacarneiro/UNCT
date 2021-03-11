@@ -377,6 +377,42 @@ function calcularModificacaoNovo(pArrayCampos) {
 	}
 }
 
+function getNumMesesNoPeriodo(pIDCampoDataInicial, pIDCampoDataFinal, pValidarDatas, pSemMensagem){
+	var campoDataInicial = document.getElementById(pIDCampoDataInicial);
+	var campoDataFinal = document.getElementById(pIDCampoDataFinal);
+	
+	var dataInicial = campoDataInicial.value;
+	var dataFinal = campoDataFinal.value;
+	
+	var numMeses = 1;	
+	if(pValidarDatas){
+		//funcao datahora.js
+		if(!isPeriodoValido(campoDataInicial, campoDataFinal, true, false, true, pSemMensagem, true)){
+			return false;
+		}		
+	}
+	//funcao datahora.js
+	if(isPeriodoValido(campoDataInicial, campoDataFinal, false, false, false, true, false)) {
+		//alert("Data.Ini: " + dataInicial + "|Data.Fim: " + dataFinal);
+		var numDias = getQtDias(dataInicial, dataFinal);
+		numMeses = numDias/29;
+		//alert("numDias: " + numDias + "|Num.Meses: " + numMeses);
+	}	
+	
+	//alert("numeses" + numMeses);
+	if(isNaN(numMeses)){
+		numMeses = 0
+	}			
+	numMesesAoFinal = arredondarValorMoedaParaBaixo(Math.abs(numMeses), 0);
+	
+	//pelo menos 1 mes deve ser considerado
+	if(numMesesAoFinal == 0){
+		numMesesAoFinal = 1;
+	}
+	
+	return numMesesAoFinal;
+}
+
 function calcularValorModificacaoAtualizado(pArrayCampos) {
 	campoVlReferencial = pArrayCampos[0];
 	campoVlModAoContrato = pArrayCampos[1];
@@ -415,6 +451,34 @@ function getValorGlobalDoMensal(pCampoValorMensal, pCampoValorGlobal, pQtCasasDe
 	var vlMensal = getValorCampoMoedaComoNumeroValido(pCampoValorMensal);
 	var vlGlobal = eval(pNumMesesContrato*vlMensal);
 	setValorCampoMoedaComSeparadorMilhar(pCampoValorGlobal, vlGlobal, pQtCasasDecimais);
+}
+
+function setaValorCampoPorFator(pCampoChamada, pIdCampoACorrigir, pFator, pQtCasasDecimais){
+	var pCampoACorrigir = document.getElementById(pIdCampoACorrigir);
+	if(pQtCasasDecimais == null){
+		pQtCasasDecimais = 2;
+	}
+	
+	var isCorrigirValor = confirm("Corrigir valor relacionado?");
+	
+	if(pFator === false && isCorrigirValor){
+		exibirMensagem("Preencha o campo indicado e tente novamente.");
+		return;
+	}
+	if(pFator == null){
+		pFator = 12;
+	}
+	//alert(pFator);
+	
+	var vlChamada = getValorCampoMoedaComoNumeroValido(pCampoChamada);
+	//alert(vlChamada);
+	var vlACorrigir = eval(pFator*vlChamada);
+	//alert(vlACorrigir);
+	if(isCorrigirValor){
+		//alert(pFator);
+		setValorCampoMoedaComSeparadorMilhar(pCampoACorrigir, vlACorrigir, pQtCasasDecimais);	
+		exibirMensagem("Confirme se o valor corrigido está correto.");
+	}	
 }
 
 /**

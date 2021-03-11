@@ -58,7 +58,7 @@ function getDadosContratada($chave, $voentidade = null, $funcao = null) {
 	$isConsultaPessoaPorDemanda = $voentidade == "vodemanda";
 	$isConsultaPessoaPorPAAP = $voentidade == "voPA";
 	$isConsultaPorContrato = !($isConsultaPessoaPorDemanda || $isConsultaPessoaPorPAAP);
-
+	
 	//echo $chave;
 	if ($chave != null && $chave != "") {
 		if ($isConsultaPorContrato) {				

@@ -44,7 +44,7 @@ $isHistorico = ($voContrato->sqHist != null && $voContrato->sqHist != "");
 
 $funcao = @$_GET["funcao"];
 
-$titulo = "MOVIMENTAÇÕES";
+$titulo = vocontrato::getTituloJSP() . "-MOVIMENTAÇÕES";
 setCabecalho($titulo);
 
 $colecaoMov = $dbprocesso->consultarContratoMovimentacoes($voContrato, $isHistorico);
@@ -88,7 +88,7 @@ function detalhar(isExcluir) {
 }
 
 </SCRIPT>
-<?=setTituloPagina(null)?>
+<?=setTituloPagina($titulo)?>
 </HEAD>
 <BODY class="paginadados" onload="">
 	  
@@ -219,20 +219,29 @@ function detalhar(isExcluir) {
                         <TD class='tabeladados' nowrap><?php echo getData($colecaoMov[$i][vocontrato::$nmAtrDtVigenciaFinalContrato])?></TD>                        
                         <TD class='tabeladados' nowrap>
                         <?php
-				        $endereco = $voAtual->getLinkDocumento();
-				        $nmCampoEndereco = vocontrato::$nmAtrLinkDoc.$chave;
-				        if($endereco != null){
-				        	echo "<INPUT type='hidden' id='$nmCampoEndereco' name='$nmCampoEndereco' value='$endereco'>";
-				    		echo getBotaoAbrirDocumento($nmCampoEndereco, false, "PDF");
-				        }
-				        
-				        $endereco = $voAtual->getLinkMinutaDocumento();
-				        $nmCampoEndereco = vocontrato::$nmAtrLinkDoc.$chave."minuta";
-				        if($endereco != null){
-				        	echo "<br><INPUT type='hidden' id='$nmCampoEndereco' name='$nmCampoEndereco' value='$endereco'>";
-				        	echo getBotaoAbrirDocumento($nmCampoEndereco, false, "Minuta");
-				        }
-				        
+                        $isContratoPlanilha = $voAtual->importacao != constantes::$CD_NAO;
+                        
+                        $arrayRetorno = getHTMLDocumentosContrato($voAtual, true);
+                        $temDocsAExibir = $arrayRetorno[0];
+                        $docsAexibir = $arrayRetorno[1];
+                 		
+                 		if($isContratoPlanilha && !$temDocsAExibir){                        
+					        $endereco = $voAtual->getLinkDocumento();
+					        $nmCampoEndereco = vocontrato::$nmAtrLinkDoc.$chave;
+					        if($endereco != null){
+					        	echo "<INPUT type='hidden' id='$nmCampoEndereco' name='$nmCampoEndereco' value='$endereco'>";
+					    		echo getBotaoAbrirDocumento($nmCampoEndereco, false, "PDF");
+					        }
+					        
+					        $endereco = $voAtual->getLinkMinutaDocumento();
+					        $nmCampoEndereco = vocontrato::$nmAtrLinkDoc.$chave."minuta";
+					        if($endereco != null){
+					        	echo "<br><INPUT type='hidden' id='$nmCampoEndereco' name='$nmCampoEndereco' value='$endereco'>";
+					        	echo getBotaoAbrirDocumento($nmCampoEndereco, false, "Minuta");
+					        }
+                 		}else{
+                 			echo $docsAexibir;
+                 		}				        
 				    	?>                        
                         </TD>
                     </TR>					

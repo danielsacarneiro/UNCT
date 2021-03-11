@@ -480,7 +480,8 @@ class filtroManterContrato extends filtroManter {
 				,vocontrato::$nmAtrAnoContrato
 				, vocontrato::$nmAtrTipoContrato);
 		
-		//data de vigencia tem preferencia sobre o tpvigencia
+		//data de vigencia tem preferencia sobre o vigenciaMaiorSq pois ja o leva em consideracao dentro de sua query
+		$isTrazerMaiorSqVigente = $this->isTpVigenciaMAxSq;
 		if ($this->dtVigencia != null) {
 				
 			//data de vigencia tem preferencia sobre o tpvigencia, se tiver sido setado, eh desconsiderado
@@ -494,7 +495,7 @@ class filtroManterContrato extends filtroManter {
 					$this->dtVigencia,
 					vocontrato::$nmAtrDtVigenciaInicialContrato,
 					vocontrato::$nmAtrDtVigenciaFinalContrato,
-					$this->isTpVigenciaMAxSq,
+					$isTrazerMaiorSqVigente,
 					$filtro,
 					$this->inTrazerVigenciaFutura,
 						
@@ -504,6 +505,29 @@ class filtroManterContrato extends filtroManter {
 				
 			//echo $filtro;
 			$conector = "\n AND ";
+		}else{
+			//so traz o o ultimo vigente de forma independente se a dtvigencia nao foi passada
+			//porque no filtro por dtvigencia, ja eh considerado se deve ser trazido o ultimo registro vigente
+			if($isTrazerMaiorSqVigente){
+				$pNmColSequencial = vocontrato::$nmAtrSqContrato;
+			
+				$striAtributosChaveSemSq = formataArrayChaveTuplaComparacaoSequencial($pChaveTuplaComparacaoSemSequencial,$nmTabela);
+				$filtro = $filtro . $conector .
+				" (("
+						. $striAtributosChaveSemSq
+						. ", $nmTabela.$pNmColSequencial"
+						. ")\n IN \n( SELECT "
+								. $striAtributosChaveSemSq
+								. ", MAX($nmTabela.$pNmColSequencial)"
+								. "\n FROM "
+										. $nmTabela
+										. $sqlFiltroInternoMaiorSq
+										. "\n GROUP BY "
+												. $striAtributosChaveSemSq
+												. "))";
+			
+												$conector = "\n AND ";
+			}				
 		}
 		
 		if (isAtributoValido($this->tpVigencia) && $this->tpVigencia != constantes::$CD_OPCAO_TODOS) {
@@ -512,6 +536,11 @@ class filtroManterContrato extends filtroManter {
 				 $nmTabela,
 				 vocontrato::$nmAtrDtVigenciaInicialContrato,
 				 vocontrato::$nmAtrDtVigenciaFinalContrato );*/
+				
+				$dataVigenciaComparar = $this->dtVigencia;
+				if($dataVigenciaComparar == null){
+					$dataVigenciaComparar = dtHoje;
+				}
 		
 				$arrayTuplaSemSq = vocontrato::getAtributosChaveLogica();
 		
@@ -520,7 +549,7 @@ class filtroManterContrato extends filtroManter {
 						vocontrato::$nmAtrSqContrato,
 						$arrayTuplaSemSq,
 						null,
-						dtHoje,
+						$dataVigenciaComparar,
 						vocontrato::$nmAtrDtVigenciaInicialContrato,
 						vocontrato::$nmAtrDtVigenciaFinalContrato,
 						true,
@@ -550,28 +579,6 @@ class filtroManterContrato extends filtroManter {
 			}
 				
 			$conector = "\n AND ";
-		}
-		
-		$isTrazerMaiorSqVigente = $this->isTpVigenciaMAxSq;
-		if($isTrazerMaiorSqVigente){
-			$pNmColSequencial = vocontrato::$nmAtrSqContrato;
-						
-			$striAtributosChaveSemSq = formataArrayChaveTuplaComparacaoSequencial($pChaveTuplaComparacaoSemSequencial,$nmTabela);
-			$filtro = $filtro . $conector .
-			" (("
-					. $striAtributosChaveSemSq
-					. ", $nmTabela.$pNmColSequencial"
-					. ")\n IN \n( SELECT "
-							. $striAtributosChaveSemSq
-							. ", MAX($nmTabela.$pNmColSequencial)"
-							. "\n FROM "
-									. $nmTabela
-									. $sqlFiltroInternoMaiorSq
-									. "\n GROUP BY "
-											. $striAtributosChaveSemSq
-											. "))";
-		
-											$conector = "\n AND ";
 		}
 		
 		//serve para retirar a ambiguidade, quando existir, do atributo da ordenacao

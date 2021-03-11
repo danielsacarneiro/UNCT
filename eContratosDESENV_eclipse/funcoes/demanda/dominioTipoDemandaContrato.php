@@ -64,6 +64,17 @@ class dominioTipoDemandaContrato extends dominio {
 		return $retorno;
 	}
 	
+	static function getColecaoAlteraValorContrato() {
+		$retorno = array (
+				static::$CD_TIPO_REAJUSTE => self::$DS_TIPO_REAJUSTE,
+				static::$CD_TIPO_REEQUILIBRIO => self::$DS_TIPO_REEQUILIBRIO,
+				static::$CD_TIPO_ACRESCIMO => self::$DS_TIPO_ACRESCIMO,
+				static::$CD_TIPO_SUPRESSAO => self::$DS_TIPO_SUPRESSAO,
+		);
+	
+		return $retorno;
+	}
+	
 	static function getColecaolegado() {
 		$array1 = static::getColecao();
 		$array2 = array (

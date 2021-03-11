@@ -115,10 +115,16 @@ function formatarCampoCNPF(pCampo, pEvento) {
 	}*/
 }
 
+function getNumDocSemMascara(pdoc){
+	var numDoc = pdoc.replaceAll(".", ""); 
+	numDoc = numDoc.replaceAll("-", "");	
+	return numDoc;
+}
 // Valida o campo CNPF "pCampo" passado como parâmetro
 function isCampoCNPFValido(pCampo, pInObrigatorio, pSemMensagem) {
 	var msg = "";
 	var vlCampo = pCampo.value;
+	var numDoc = getNumDocSemMascara(vlCampo); 
 
 	if (pInObrigatorio != null) {
 		if (pInObrigatorio) {
@@ -136,6 +142,7 @@ function isCampoCNPFValido(pCampo, pInObrigatorio, pSemMensagem) {
 		}
 	}
 
+	//alert(0);
 	var filtro = /^([0-9.-])*$/;
 	if (!filtro.test(vlCampo)) {
 		if (!pSemMensagem) {
@@ -146,8 +153,11 @@ function isCampoCNPFValido(pCampo, pInObrigatorio, pSemMensagem) {
 
 		return false;
 	}
+	
+	//alert(1);
 
-	if (vlCampo.length != 11) {
+	//if (vlCampo.length != 11) {
+	if (numDoc.length != 11) {		
 		if (!pSemMensagem) {
 			selecionarCampo(pCampo);
 			exibirMensagem(mensagemGlobal(90) + msg);
@@ -156,6 +166,8 @@ function isCampoCNPFValido(pCampo, pInObrigatorio, pSemMensagem) {
 
 		return false;
 	}
+	
+	//alert(2);
 
 	numcnpf = vlCampo;
 	numcnpf = numcnpf.toString().replace("-", "");
@@ -184,6 +196,8 @@ function isCampoCNPFValido(pCampo, pInObrigatorio, pSemMensagem) {
 		
 		return false;
     }
+    
+    //alert(3);
 
 	len = numcnpf.length;
 	x = len - 1;

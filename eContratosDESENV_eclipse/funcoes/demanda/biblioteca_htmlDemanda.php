@@ -274,22 +274,45 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 	return $html;
 }
 
-function getHtmlDocumentoSemTD($voAtual, $comDescricaoPorExtenso = false, $nmClassCelula="tabeladadosalinhadodireita", $msgDocNaoExiste=null) {
+function getHtmlDocumentoSemTD($voAtual, $comDescricaoPorExtenso = false, $nmClassCelula="tabeladadosalinhadodireita", $msgDocNaoExiste=null, $exibirCodigoDocFormatado=true) {
+	$pArray = array($voAtual, $comDescricaoPorExtenso, $nmClassCelula, $msgDocNaoExiste, $exibirCodigoDocFormatado);
+	return getHtmlDocumentoArray($pArray);
+}
+
+function getHtmlDocumentoArray($pArray) {
+	$voAtual = $pArray[0];
+	$comDescricaoPorExtenso  = $pArray[1];
+	$nmClassCelula = $pArray[2];
+	$msgDocNaoExiste = $pArray[3];
+	$exibirCodigoDocFormatado = $pArray[4];
+	$exibirDocComoLink = $pArray[5];
+	$textoLink = $pArray[6];
+	
+	if($exibirDocComoLink == null){
+		$exibirDocComoLink = false;
+	}
+	
 	if ($voAtual->voDoc->sq != null) {
 		$voDoc = $voAtual->voDoc;
-			
-		/*
-		 * $voDoc->dbprocesso = new dbDocumento();
-		 * $registro = $voDoc->dbprocesso->consultarPorChave($voDoc, false);
-		 */
-			
+						
 		$endereco = $voDoc->getEnderecoTpDocumento ();
 		$chave = $voDoc->getValorChavePrimaria ();
-			
-		$html .= $voDoc->formatarCodigo ($comDescricaoPorExtenso) . " \n";
+		
+		if($exibirCodigoDocFormatado){
+			$html .= $voDoc->formatarCodigo ($comDescricaoPorExtenso) . " \n";
+		}
 		$html .= "<input type='hidden' name='" . $chave . "' id='" . $chave . "' value='" . $endereco . "'>" . " \n";
-		// $html .= getBotaoValidacaoAcesso("bttabrir_arq", "Abrir Anexo", "botaofuncaop", false,true,true,true, "onClick=\"javascript:abrirArquivo('".$chave."');\"");
-		$html .= getBotaoAbrirDocumento ( $chave );
+
+		if(!$exibirDocComoLink){
+			$html .= getBotaoAbrirDocumento ( $chave );
+		}else{
+			$nmFuncaoJavaScript = "abrirArquivo";
+			$complementoJS = "onClick=javascript:".$nmFuncaoJavaScript."Cliente('" . $chave. "',false);";
+			if(isUsuarioAdmin()){
+				$complementoJS = "onClick=javascript:".$nmFuncaoJavaScript."('" . $chave. "',false);";
+			}
+			$html .= getTextoLink($textoLink,"#",$complementoJS);
+		}
 	}else{
 		if(isAtributoValido($msgDocNaoExiste)){
 			$html .= $msgDocNaoExiste;

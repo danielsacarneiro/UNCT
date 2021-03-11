@@ -15,24 +15,39 @@
 // Verifica se algum "checkbox" esta selecionado na colecao com nome "pNmCheckBox" passado como parametro.
 // Se  pSemMensagem igual a true, não exibe mensagem.
 // Utilizado em telas de consulta.
-function isCheckBoxConsultaSelecionado(pNmCheckBox, pSemMensagem, pInTodosObrigatorios) {
+function isCheckBoxConsultaSelecionado(pNmCheckBox, pSemMensagem, pInTodosObrigatorios, pInPeloMenosUmObrigatorio) {
 	var i = 0;
 
 	//checkBox = eval(pNmCheckBox);
 	checkBox = document.getElementsByName(pNmCheckBox);
 	
-	if (pInTodosObrigatorios) {
+	if (pInTodosObrigatorios || pInPeloMenosUmObrigatorio) {
 		
 		if (checkBox != null) {
 			if (checkBox.checked) {
 				return true;
 			} else {
-				if (checkBox.length == null)
+				if (checkBox.length == null){
+					if (!pSemMensagem) {
+						exibirMensagem(mensagemGlobal(210));
+					}
+
 					return false;
+				}
 					
-				for (i = 0; i < checkBox.length; i++) 
-					if (!checkBox.item(i).checked) 
+				for (i = 0; i < checkBox.length; i++){ 
+					if (checkBox.item(i).checked && pInPeloMenosUmObrigatorio && !pInTodosObrigatorios){ 
+						return true;
+					}
+
+					if (!checkBox.item(i).checked){
+						if (!pSemMensagem) {
+							exibirMensagem(mensagemGlobal(210));
+						}
+
 						return false;
+					}
+				}
 			}
 		}	
 
@@ -62,6 +77,53 @@ function isCheckBoxConsultaSelecionado(pNmCheckBox, pSemMensagem, pInTodosObriga
 	}
 
 	return false;
+}
+
+function isCheckBoxSelecionado(pNmCheckBox, pSemMensagem, pInTodosObrigatorios) {
+	var i = 0;
+	var retorno = false;
+
+	//checkBox = eval(pNmCheckBox);
+	var checkBox = document.getElementsByName(pNmCheckBox);
+
+		if (checkBox != null) {
+			if (checkBox.checked) {
+				// Quando existe apenas um checkbox no formulario
+				retorno = true;				
+			} else {
+				if (checkBox.length == null){
+					retorno = false;
+				}
+					
+				for (i = 0; i < checkBox.length; i++){ 
+					if (checkBox.item(i).checked){ 
+						retorno = true;
+						if(!pInTodosObrigatorios){
+							break;
+						}
+					}else{
+						if (pInTodosObrigatorios){
+							retorno = false;
+							break;
+						}						
+					}
+
+				}
+			}
+		}	
+		
+	var campoFocus = checkBox;
+	//alert(checkBox.length);
+	if(checkBox.length > 1){
+		campoFocus = checkBox.item((checkBox.length)-1);
+	}
+		
+	if (!retorno && !pSemMensagem) {
+		campoFocus.focus();
+		exibirMensagem(mensagemGlobal(211));
+	}
+
+	return retorno;
 }
 
 // Retorna um Array com os checkBoxes "pNmCheckBox" passado como parâmetro
@@ -96,6 +158,11 @@ function retornarValoresCheckBoxesSelecionadosComoArray(pNmCheckBox) {
 	}
 
 	return arrayRetorno;
+}
+
+function isItemCheckBoxSelecionado(pNmCheckBox, pValorItem) {
+	var itens = retornarValoresCheckBoxesSelecionadosComoString(pNmCheckBox);
+	return 	itens.indexOf(pValorItem) != -1;
 }
 
 //Retorna uma String com os checkBoxes "pNmCheckBox" passado como parâmetro Separados por CD_CAMPO_SEPARADOR_AUX
