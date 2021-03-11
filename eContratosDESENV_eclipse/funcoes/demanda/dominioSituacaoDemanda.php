@@ -7,6 +7,7 @@ Class dominioSituacaoDemanda extends dominio{
 	static $CD_SITUACAO_DEMANDA_FECHADA = 2;
 	static $CD_SITUACAO_DEMANDA_EM_ANDAMENTO = 3;
 	static $CD_SITUACAO_DEMANDA_SUSPENSA = 4;
+	static $CD_SITUACAO_DEMANDA_ARQUIVADA = 5;
 	static $CD_SITUACAO_DEMANDA_A_FAZER = 99;
 	
 	
@@ -15,6 +16,7 @@ Class dominioSituacaoDemanda extends dominio{
 	static $DS_SITUACAO_DEMANDA_EM_ANDAMENTO = "Em andamento";
 	static $DS_SITUACAO_DEMANDA_SUSPENSA = "Suspensa";
 	static $DS_SITUACAO_DEMANDA_A_FAZER = "A Fazer";
+	static $DS_SITUACAO_DEMANDA_ARQUIVADA = "Arquivada";
 	
 	// ...............................................................
 	// Construtor
@@ -28,6 +30,7 @@ Class dominioSituacaoDemanda extends dominio{
 				self::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO => self::$DS_SITUACAO_DEMANDA_EM_ANDAMENTO,
 				self::$CD_SITUACAO_DEMANDA_FECHADA => self::$DS_SITUACAO_DEMANDA_FECHADA,
 				self::$CD_SITUACAO_DEMANDA_SUSPENSA => self::$DS_SITUACAO_DEMANDA_SUSPENSA,
+				self::$CD_SITUACAO_DEMANDA_ARQUIVADA => self::$DS_SITUACAO_DEMANDA_ARQUIVADA,
 		);
 	}
 
@@ -47,6 +50,13 @@ Class dominioSituacaoDemanda extends dominio{
 		);
 	}
 	
+	static function getColecaoFechada(){
+		return array(
+				self::$CD_SITUACAO_DEMANDA_FECHADA => self::$DS_SITUACAO_DEMANDA_FECHADA,
+				self::$CD_SITUACAO_DEMANDA_ARQUIVADA => self::$DS_SITUACAO_DEMANDA_ARQUIVADA,
+		);
+	}
+	
 	static function getCorColuna($cdSituacao){
 		$classColunaSituacao = "tabeladadosdestacadoverde";
 		if($cdSituacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA){
@@ -55,7 +65,9 @@ Class dominioSituacaoDemanda extends dominio{
 			$classColunaSituacao = "tabeladadosdestacado";
 		} else if($cdSituacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_SUSPENSA){
 			$classColunaSituacao = "tabeladadosdestacadovermelho";
-		}
+		} else if($cdSituacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_ARQUIVADA){
+				$classColunaSituacao = "tabeladadosdestacadomarrom";
+		}				
 		
 		return $classColunaSituacao;		
 	}

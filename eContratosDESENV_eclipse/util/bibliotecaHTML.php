@@ -1327,10 +1327,7 @@ function getLinkRetornoConsulta(){
  * @param unknown $funcao
  * @return string
  */
-function getLinkManter($paginamanter, $funcao=null){
-	if($funcao == null){
-		$funcao = constantes::$CD_FUNCAO_INCLUIR;
-	}
+function getLinkManter($paginamanter, $funcao){
 	$inConsultaHTML = getInConsultarHTMLString();
 
 	$complem = "&" . constantes::$ID_REQ_CD_LUPA . "=" . getAtributoBooleanoComoString(isLupa());

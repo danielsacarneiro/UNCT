@@ -602,6 +602,11 @@ function formatarCampoProcLicitatorio(pCampo, pEvento) {
 // Valida se o proclic eh da SEFAZ
 function isCampoProcLicitatorioSEFAZValido(pCampo, pInObrigatorio, pSemMensagem) {
   var vlCampo = pCampo.value;
+  vlCampo = vlCampo.replaceAll(" ","");
+  vlCampo = vlCampo.replaceAll("/",".");
+  vlCampo = vlCampo.replaceAll("\\",".");
+  vlCampo = vlCampo.replaceAll("º","");
+  
   var tam = vlCampo.length;
   var msg = "";
   
@@ -650,8 +655,8 @@ function isCampoProcLicitatorioSEFAZValido(pCampo, pInObrigatorio, pSemMensagem)
 		return false;
 	}*/
 	
-	return true;	
-	
+	pCampo.value = vlCampo;
+	return true;
 	
 }
 

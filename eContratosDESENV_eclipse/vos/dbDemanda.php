@@ -1133,8 +1133,7 @@ class dbDemanda extends dbprocesso {
 	function validarAlteracao($vo) {
 		$this->validarGenerico($vo);
 		
-		if ($vo->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA) {
-			
+		if ($vo->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA) {			
 			//$this->isExclusaoPermitida ( $vo, "fechamento" );
 			
 			//verifica se o contrato foi incluido em contratoinfo
@@ -1356,7 +1355,8 @@ class dbDemanda extends dbprocesso {
 	function existeDemandaAbertaContratoProrrogacao($voDemanda) {
 		$retorno = false;
 		//$voDemanda = new voDemanda();
-		$isSituacaoFechada = $voDemanda->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA;
+		//$isSituacaoFechada = $voDemanda->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA;
+		$isSituacaoFechada = isSituacaoDemandaFechada($voDemanda->situacao);
 		$vocontrato = $voDemanda->getContrato();
 		//se a situacao eh pra fechar, nao precisa validar
 		if(!$isSituacaoFechada && $vocontrato != null){

@@ -264,7 +264,8 @@ class dbDemandaTramitacao extends dbprocesso {
 		dbDemanda::validarGenerico($vo);
 	}
 	function validarEncaminhamento($vo) {
-		if ($vo->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA) {
+		//if ($vo->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA) {
+		if (isSituacaoDemandaFechada($vo->situacao)) {
 			$msg = "Encaminhamento não permitido para demanda FECHADA.";
 			$msg .= "Demanda: " . $vo->getMensagemComplementarTelaSucesso();
 			throw new Exception ( $msg );

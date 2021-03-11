@@ -87,7 +87,10 @@ class filtroConsultarDemandaGestao extends filtroManterDemanda{
 	}
 	
 	static function getSQLDataUltimoSuspiro($nmTabelaDemanda){
-		return getSQLCASE("$nmTabelaDemanda.".voDemanda::$nmAtrSituacao, dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA, "DATE($nmTabelaDemanda.".voDemanda::$nmAtrDhUltAlteracao.")", "DATE(now())");
+		//return getSQLCASE("$nmTabelaDemanda.".voDemanda::$nmAtrSituacao, dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA, "DATE($nmTabelaDemanda.".voDemanda::$nmAtrDhUltAlteracao.")", "DATE(now())");
+		
+		$strSiDemandaFechada = getColecaoEntreSeparador ( array_keys(dominioSituacaoDemanda::getColecaoFechada()), " OR " );
+		return getSQLCASE("$nmTabelaDemanda.".voDemanda::$nmAtrSituacao, "($strSiDemandaFechada)", "DATE($nmTabelaDemanda.".voDemanda::$nmAtrDhUltAlteracao.")", "DATE(now())");
 	}
 	/**
 	 * retorna sql que traz o tempo de vida da demanda

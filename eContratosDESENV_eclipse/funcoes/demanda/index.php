@@ -71,7 +71,7 @@ function excluir() {
 
 function incluir() {
 	//location.href="encaminhar.novo.php?funcao=<?=constantes::$CD_FUNCAO_INCLUIR?>";
-	location.href="<?=getLinkManter("encaminhar.novo.php")?>";
+	location.href="<?=getLinkManter("encaminhar.novo.php", constantes::$CD_FUNCAO_INCLUIR)?>";
 }
 
 function alterar() {
@@ -84,6 +84,8 @@ function alterar() {
     
 	chave = document.frm_principal.rdb_consulta.value;	
 	location.href="manterDemanda.novo.php?funcao=<?=constantes::$CD_FUNCAO_ALTERAR?>&chave=" + chave;
+
+	//location.href="<?=getLinkManter("manterDemanda.novo.php",constantes::$CD_FUNCAO_ALTERAR)?>&chave=" + chave;
 }
 
 function alertar() {
@@ -108,7 +110,9 @@ function encaminhar() {
     }?>
     
 	chave = document.frm_principal.rdb_consulta.value;	
-	location.href="encaminhar.novo.php?funcao=<?=dbDemandaTramitacao::$NM_FUNCAO_ENCAMINHAR?>&chave=" + chave;
+	//location.href="encaminhar.novo.php?funcao=<?=dbDemandaTramitacao::$NM_FUNCAO_ENCAMINHAR?>&chave=" + chave;
+
+	location.href="<?=getLinkManter("encaminhar.novo.php",dbDemandaTramitacao::$NM_FUNCAO_ENCAMINHAR)?>&chave=" + chave;
 }
 
 function detalharDemandaGestao(){

@@ -1574,7 +1574,8 @@ class dbcontrato extends dbprocesso {
 			. ")\n";
 			
 			//so consulta a aberta porque presume que se a demanda foi fechada, o contrato foi incluido na planilha
-			$query .= " AND $nmTabelaDemanda." . voDemanda::$nmAtrSituacao . "<> ".dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA ." ";
+			//$query .= " AND $nmTabelaDemanda." . voDemanda::$nmAtrSituacao . "<> ".dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA ." ";
+			$query .= " AND $nmTabelaDemanda." . voDemanda::$nmAtrSituacao . " NOT IN (". getSQLStringFormatadaColecaoIN(array_keys(dominioSituacaoDemanda::getColecaoFechada())).") ";
 			$query .= " AND $nmTabelaDemanda." . voDemanda::$nmAtrInDesativado . "= 'N' ";
 						
 			$query .= " group by $groupby";

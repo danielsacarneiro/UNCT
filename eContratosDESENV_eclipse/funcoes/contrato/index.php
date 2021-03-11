@@ -170,7 +170,7 @@ function excluir() {
 
 function incluir() {
 	//location.href="manterContrato.php?funcao=<?=constantes::$CD_FUNCAO_INCLUIR?>";
-	location.href="<?=getLinkManter("manterContrato.php")?>";	
+	location.href="<?=getLinkManter("manterContrato.php", constantes::$CD_FUNCAO_INCLUIR)?>";	
 }
 
 function alterar() {

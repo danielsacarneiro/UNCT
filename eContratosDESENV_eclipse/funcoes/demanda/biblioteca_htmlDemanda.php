@@ -194,6 +194,10 @@ function isContratoPermiteProrrogacao($voContrato){
 	return array($isContratoPermiteProrrogacao, $isPrazoProrrogacaoServicoContinuo, $isPrazoProrrogacaoServicoInformatica);
 }
 
+function isSituacaoDemandaFechada($situacao){
+	return array_key_exists($situacao, dominioSituacaoDemanda::getColecaoFechada());
+}
+
 function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpDemandaReajuste, $nmDivInformacoesComplementares, $voDemanda = null){
 
 	$pCdOpcaoSelecionadaTpDemandaContrato=$voDemanda->tpDemandaContrato;
@@ -231,9 +235,13 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 		}				
 	}
 	
+	if($voDemanda != null){
+		//$exibirInfoProrrog = $voDemanda->situacao != dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA;
+		$exibirInfoProrrog = !isSituacaoDemandaFechada($voDemanda->situacao);		
+	}
+	
 	if(dominioTipoDemandaContrato::existeItemArrayOuStrCampoSeparador(dominioTipoDemandaContrato::$CD_TIPO_PRORROGACAO, $pCdOpcaoSelecionadaTpDemandaContrato)){
-		//var_dump($voDemanda->getContrato());
-		$exibirInfoProrrog = $voDemanda->situacao != dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA;
+		//var_dump($voDemanda->getContrato());		
 		$arrayPermiteProrrogacao = isContratoPermiteProrrogacao($voContratoDemanda);
 		$permiteProrrogacao = $arrayPermiteProrrogacao[0];
 		$ehServicoContinuo = $arrayPermiteProrrogacao[1];
@@ -263,7 +271,7 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 	$dtinicioContrato = $voContratoDemanda->dtVigenciaInicial;
 	if($dtinicioContrato >= normativos::$DATA_PUBLICACAO_RESOLUCAOCPF0012020){
 		//var_dump($voDemanda->getContrato());
-		$exibirInfoProrrog = $voDemanda->situacao != dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA;
+
 		if($exibirInfoProrrog){
 			$html .= $conectorAlerta . getTextoHTMLDestacado("ATENÇÃO$countATENCAO: verifique se o contrato não está suspenso pela RESOLUÇÃO CPF 001.2020 ou 002.2020(CORONAVIRUS)");
 			$conectorAlerta = "<BR>";
