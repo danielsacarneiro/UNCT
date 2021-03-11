@@ -57,6 +57,15 @@ function getCorpoMensagemDemandaContratoColecao($assunto, $colecao, $colunasAAcr
 	$colunas = incluirColunaColecao($colunas, 'SEI', voDemanda::$nmAtrProtocolo);
 	$colunas = incluirColunaColecao($colunas, 'ANO DEMANDA', voDemanda::$nmAtrAno);
 	$colunas = incluirColunaColecao($colunas, 'NÚMERO', voDemanda::$nmAtrCd, constantes::$TAMANHO_CODIGOS);
+	
+	$array =array(
+			constantes::$CD_COLUNA_CHAVE => 'TIPO',
+			constantes::$CD_COLUNA_TP_DADO => constantes::$CD_TP_DADO_DOMINIO,
+			constantes::$CD_COLUNA_NM_CLASSE_DOMINIO => "dominioTipoDemandaContrato",
+			constantes::$CD_COLUNA_VALOR => voDemanda::$nmAtrTpDemandaContrato,
+	);
+	$colunas = incluirColunaColecaoArray($colunas, $array);
+	
 	if(!$semTitulo){
 		$colunas = incluirColunaColecao($colunas, 'TÍTULO', voDemanda::$nmAtrTexto);
 	}
@@ -158,8 +167,17 @@ function getCorpoMensagemPorColecao($titulo, $colecao, $colunasAExibir, $isPrior
 						} else if($voDemandaContrato->voContrato->cdContrato != null || $empresa != null){
 							
 							$conectorContrato = "";
-							if($voDemandaContrato->voContrato->cdContrato != null){
-								$contrato = formatarCodigoAnoComplemento ( $voDemandaContrato->voContrato->cdContrato, $voDemandaContrato->voContrato->anoContrato, $dominioTipoContrato->getDescricao ( $voDemandaContrato->voContrato->tipo ) );
+							$voContratoTemp = $voDemandaContrato->voContrato;
+							if($voContratoTemp->cdContrato != null){
+								$cdEspeciaAtual = $voContratoTemp->cdEspecie;
+								$sqEspeciaAtual = $voContratoTemp->sqEspecie;
+								$contrato = formatarCodigoAnoComplemento ( $voContratoTemp->cdContrato, $voContratoTemp->anoContrato, $dominioTipoContrato->getDescricao ( $voContratoTemp->tipo ) );
+								if($sqEspeciaAtual != null){
+									$contrato .= "|";
+									$strtemp = $cdEspeciaAtual==dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER?dominioEspeciesContrato::$DS_ESPECIE_CONTRATO_MATER:$sqEspeciaAtual ."o$cdEspeciaAtual";
+									$contrato .= getTextoHTMLNegrito($strtemp);
+								}
+								
 								$conectorContrato = ": ";
 							}
 
