@@ -606,6 +606,7 @@ function isCampoProcLicitatorioSEFAZValido(pCampo, pInObrigatorio, pSemMensagem)
   vlCampo = vlCampo.replaceAll("/",".");
   vlCampo = vlCampo.replaceAll("\\",".");
   vlCampo = vlCampo.replaceAll("º","");
+  vlCampo = vlCampo.replaceAll("_",".");
   
   var tam = vlCampo.length;
   var msg = "";

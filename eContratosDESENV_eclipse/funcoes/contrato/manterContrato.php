@@ -258,6 +258,7 @@ function carregaDadosContrato(pCampoChamada=null){
 		}else if(cdEspecie == '<?=dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_APOSTILAMENTO?>'
 			&& dataVigencia == ""){
 			exibirMensagem("Para carregar dados anteriores do apostilamento, insira a data de assinatura.");
+			limpaDadosContrato(pCampoChamada);
 			return;
 		}
 

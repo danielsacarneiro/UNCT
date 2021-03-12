@@ -17,6 +17,7 @@ include_once(caminho_funcoes. "contrato/dominioEstudoTecnicoSAD.php");
 include_once(caminho_funcoes. "contrato/dominioProrrogacaoFiltroConsolidacao.php");
 include_once (caminho_util . "biblioteca_htmlArquivo.php");
 include_once (caminho_util . "DocumentoPessoa.php");
+include_once ("voDemanda.php");
 
 
 //include_once(caminho_vos."vogestor.php");
@@ -49,6 +50,7 @@ include_once (caminho_util . "DocumentoPessoa.php");
         static $nmAtrSqEspecieContrato =  "ct_sq_especie"; //sequencial da especie (primeiro, segundo TA, por ex)
         static $nmAtrCdEspecieContrato =  "ct_cd_especie"; //especie propriamente dita(TA, apostilamento)
         static $nmAtrCdSituacaoContrato =  "ct_cd_situacao";
+        
 		static $nmAtrObjetoContrato =  "ct_objeto";
 		static $nmAtrGestorPessoaContrato =  "ct_gestor_pessoa";
         static $nmAtrCdPessoaGestorContrato =  "pe_cd_resp";
@@ -71,6 +73,8 @@ include_once (caminho_util . "DocumentoPessoa.php");
 		static $nmAtrCdAutorizacaoContrato =  	"ct_cd_autorizacao";
 		static $nmAtrInLicomContrato =  	"ct_in_licom";
         static $nmAtrInImportacaoContrato =  	"ct_in_importacao";
+        static $nmAtrInCaracteristicas =  "ct_in_caracteristicas";
+        
 		static $nmAtrObservacaoContrato =  	"ct_observacao";
 		static $nmAtrVlGlobalContrato =  	"ct_valor_global";
 		static $nmAtrVlMensalContrato =  	"ct_valor_mensal";
@@ -112,6 +116,7 @@ include_once (caminho_util . "DocumentoPessoa.php");
 		var $cdAutorizacao ;
 		var $licom ;
         var $importacao ;
+        var $inCaracteristicas;
 		var $obs ;
 		var $linkDoc ;
 		var $linkMinutaDoc ;
@@ -268,6 +273,7 @@ include_once (caminho_util . "DocumentoPessoa.php");
         	self::$nmAtrCdAutorizacaoContrato,
             self::$nmAtrInLicomContrato,
             self::$nmAtrInImportacaoContrato,
+    		self::$nmAtrInCaracteristicas,
             self::$nmAtrObservacaoContrato,
             self::$nmAtrVlGlobalContrato,
             self::$nmAtrVlMensalContrato,
@@ -387,6 +393,7 @@ include_once (caminho_util . "DocumentoPessoa.php");
 		$this->cdAutorizacao = $registrobanco[self::$nmAtrCdAutorizacaoContrato];
 		$this->licom = $registrobanco[self::$nmAtrInLicomContrato];
         $this->importacao = $registrobanco[self::$nmAtrInImportacaoContrato];
+        $this->inCaracteristicas = $registrobanco[self::$nmAtrInCaracteristicas];
 		$this->obs = $registrobanco[self::$nmAtrObservacaoContrato];
 		$this->linkDoc = $registrobanco[self::$nmAtrLinkDoc];
 		$this->linkMinutaDoc = $registrobanco[self::$nmAtrLinkMinutaDoc];
@@ -450,6 +457,11 @@ include_once (caminho_util . "DocumentoPessoa.php");
 		$this->licom = @$_POST[self::$nmAtrInLicomContrato];
 		//se veio da tela nao eh importacao
 		$this->importacao = constantes::$CD_NAO;
+		$this->inCaracteristicas = @$_POST[self::$nmAtrInCaracteristicas];
+		if(is_array($this->inCaracteristicas)){
+			$this->inCaracteristicas = static::getArrayComoStringCampoSeparador($this->inCaracteristicas);
+		}
+		
 		$this->obs = @$_POST[self::$nmAtrObservacaoContrato];
 		
 		$this->linkDoc = @$_POST[self::$nmAtrLinkDoc];

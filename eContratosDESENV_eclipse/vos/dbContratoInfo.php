@@ -461,7 +461,7 @@ class dbContratoInfo extends dbprocesso {
 		$retorno .= $this->getVarComoString($vo->inEscopo) . ",";
 		$retorno .= $this->getVarComoNumero($vo->inPrazoProrrogacao). ",";
 		$retorno .= $this->getVarComoNumero($vo->inEstudoTecnicoSAD). ",";
-		$retorno .= $this->getVarComoNumero($vo->inPendencias). ",";
+		$retorno .= $this->getVarComoString($vo->inPendencias). ",";
 		$retorno .= $this->getVarComoString(voDemanda::getNumeroPRTSemMascara($vo->SEIContratoSubstituto));
 		
 		$retorno .= $vo->getSQLValuesInsertEntidade ();

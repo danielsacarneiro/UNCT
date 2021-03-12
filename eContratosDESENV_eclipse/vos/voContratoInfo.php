@@ -1,6 +1,7 @@
 <?php
 include_once(caminho_funcoes."contrato_consolidacao/dominioContratoProducaoEfeitos.php");
 include_once (caminho_util."dominioSetor.php");
+include_once ("vocontrato.php");
 
 Class voContratoInfo extends voentidade{
 	

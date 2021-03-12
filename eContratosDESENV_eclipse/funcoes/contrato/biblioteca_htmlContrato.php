@@ -5,6 +5,7 @@ include_once (caminho_funcoes . "pessoa/biblioteca_htmlPessoa.php");
 require_once (caminho_funcoes . "contrato/dominioTipoContrato.php");
 require_once (caminho_funcoes . "contrato/dominioEspeciesContrato.php");
 include_once (caminho_funcoes . "pessoa/biblioteca_htmlPessoa.php");
+require_once (caminho_vos . "voProcLicitatorio.php");
 
 function isContratoValido($voContrato) {
 	// so exibe contrato se tiver
@@ -1728,6 +1729,8 @@ function getCamposManterContrato($recordSet, $voContratoInseridoNaTela=null){
 				$pArray[vocontrato::$nmAtrDtVigenciaFinalContrato] = $campovalorVigenciaDtFinal;
 				
 				$retorno .= getInputHiddenPorArrayNomeAlternativo($pArray); 
+				
+				//$retorno .= getTagHtmlJavaScript("$nmFuncaoJSCopiaDados();");
 		
 			}
 		}

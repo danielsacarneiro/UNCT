@@ -560,7 +560,18 @@ class dbcontrato extends dbprocesso {
 		parent::alterar ( $vo );
 	}*/
 	
-	function incluirSQL($voContrato) {
+	function incluirSQL($vo) {
+		//var_dump($vo);
+		
+		if($vo->importacao == "N"){
+			$vo = $this->setDadosNormalizados($vo);
+			//throw new excecaoGenerica("NAO PASSARAS!");
+		}
+		
+		return $this->incluirQueryVO ( $vo );
+	}
+	
+	/*function incluirSQL($voContrato) {
 		//var_dump($voContrato);
 		
 		//echo "dados contrato: " . $voContrato->sqEspecie;
@@ -599,8 +610,11 @@ class dbcontrato extends dbprocesso {
 		//echoo($query);
 
 		return $query;
-	}
+	}*/
+	
 	function getSQLValuesInsert($voContrato) {
+		//$voContrato = new vocontrato();
+		
 		$retorno = "";
 		$retorno .= $voContrato->anoContrato . ",";
 		$retorno .= $voContrato->cdContrato . ",";
@@ -632,6 +646,7 @@ class dbcontrato extends dbprocesso {
 		$retorno .= $this->getVarComoNumero ( $voContrato->cdAutorizacao ) . ",";
 		$retorno .= $this->getVarComoString ( $voContrato->licom ) . ",";
 		$retorno .= $this->getVarComoString ( $voContrato->importacao ) . ",";
+		$retorno .= $this->getVarComoString ( $voContrato->inCaracteristicas) . ",";
 		$retorno .= $this->getVarComoString ( $voContrato->obs ) . ",";
 		/*$retorno .= $this->getDecimalSQL ( $voContrato->vlGlobal ) . ",";
 		 $retorno .= $this->getDecimalSQL ( $voContrato->vlMensal ) . ",";*/
@@ -655,10 +670,15 @@ class dbcontrato extends dbprocesso {
 		$retorno = "";
 		$sqlConector = "";
 		
-		//$vo = new vocontrato();
+		//$voContrato = new vocontrato();
 		//se o contrato foi alterado, ele deixa de ser IMPORTADO
 		if ($voContrato->importacao != null) {
 			$retorno .= $sqlConector . vocontrato::$nmAtrInImportacaoContrato . " = " . $this->getVarComoString ($voContrato->importacao);
+			$sqlConector = ",";
+		}
+		
+		if ($voContrato->inCaracteristicas != null) {
+			$retorno .= $sqlConector . vocontrato::$nmAtrInCaracteristicas . " = " . $this->getVarComoString ($voContrato->inCaracteristicas);
 			$sqlConector = ",";
 		}
 		

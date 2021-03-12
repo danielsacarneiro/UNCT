@@ -166,7 +166,7 @@ function confirmar() {
 
 		<TR>
             <TH class="campoformulario" nowrap>Proc.Licitatorio:</TH>
-            <TD class="campoformulario" colspan="3">
+            <TD class="campoformulario" width="1%">
             <INPUT type="text" id="<?=vocontrato::$nmAtrProcessoLicContrato?>" name="<?=vocontrato::$nmAtrProcessoLicContrato?>"  value="<?php echo($procLic);?>"  class="camporeadonly" size="50" <?=$readonly?>>
             <?php            
             if($voContrato->cdProcLic != null){
@@ -182,6 +182,12 @@ function confirmar() {
             }
             ?>
             </TD>
+            <TH class="campoformulario" nowrap width="1%">Características:</TH>
+            <TD class="campoformulario">
+            <?php 
+            echo dominioTipoDemandaContrato::getHtmlChecksBoxDetalhamento("", $voContrato->inCaracteristicas, 1);	             
+             ?>
+            </TD>            
         </TR>
 		<!-- <TR>
             <TH class="campoformulario" nowrap>Modalidade:</TH>
