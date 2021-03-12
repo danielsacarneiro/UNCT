@@ -37,6 +37,8 @@ CREATE TABLE contrato (
     ct_cd_autorizacao INT, 
     ct_in_licom CHAR(1),
 	ct_in_importacao CHAR(1) DEFAULT 'N',
+    ct_in_caracteristicas VARCHAR(150),
+    
     ct_observacao LONGTEXT,    
     ct_valor_global DECIMAL (14,4),
     ct_valor_mensal DECIMAL (14,4),
@@ -62,6 +64,7 @@ CREATE TABLE contrato (
 	ON UPDATE RESTRICT
 );
 ALTER TABLE contrato ADD COLUMN in_desativado CHAR(1) NOT NULL DEFAULT 'N' AFTER cd_usuario_ultalt;
+ALTER TABLE contrato ADD COLUMN ct_in_caracteristicas VARCHAR(150) AFTER ct_in_importacao;
 -- ALTER TABLE contrato ADD COLUMN ct_doc_minuta TEXT AFTER ct_doc_link;
 -- ALTER TABLE contrato ADD COLUMN gp_cd INT NULL AFTER ct_gestor_pessoa;
         
@@ -131,6 +134,8 @@ CREATE TABLE contrato_hist (
     ct_cd_autorizacao INT, 
     ct_in_licom CHAR(1),
 	ct_in_importacao CHAR(1) DEFAULT 'N',
+    ct_in_caracteristicas VARCHAR(150),
+    
     ct_observacao LONGTEXT,    
     ct_valor_global DECIMAL (14,4),
     ct_valor_mensal DECIMAL (14,4),
@@ -148,6 +153,7 @@ CREATE TABLE contrato_hist (
     
     CONSTRAINT pk PRIMARY KEY (hist)
 );
+ALTER TABLE contrato_hist ADD COLUMN ct_in_caracteristicas VARCHAR(150) AFTER ct_in_importacao;
 
 drop table contrato_info;
 CREATE TABLE contrato_info (	
