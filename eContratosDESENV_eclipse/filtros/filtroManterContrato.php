@@ -62,6 +62,7 @@ class filtroManterContrato extends filtroManter {
 	var $empenho;
 	
 	var $voproclic;
+	var $dsproclic;
 	
 	var $vlGlobalInicial;
 	var $vlGlobalFinal;
@@ -144,6 +145,7 @@ class filtroManterContrato extends filtroManter {
 		}
 		
 		$this->isTpVigenciaMAxSq = dominioSimNao::getBooleanFormulario(self::$nmAtrIsTpVigenciaMAxSq);
+		$this->dsproclic = @$_POST[vocontrato::$nmAtrProcessoLicContrato];
 		
 	}
 		
@@ -217,8 +219,8 @@ class filtroManterContrato extends filtroManter {
 			$conector = "\n AND ";
 		}
 		
-		if ($this->modalidade != null) {
-			$filtro = $filtro . $conector . $nmTabela . "." . vocontrato::$nmAtrProcessoLicContrato . " LIKE '%" . utf8_encode ( $this->modalidade ) . "%'";
+		if ($this->dsproclic != null) {
+			$filtro = $filtro . $conector . $nmTabela . "." . vocontrato::$nmAtrProcessoLicContrato . " LIKE '%" . utf8_encode ( $this->dsproclic ) . "%'";
 				
 			$conector = "\n AND ";
 		}
