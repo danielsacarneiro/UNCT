@@ -71,7 +71,7 @@ setCabecalho($titulo);
     $cdUsuarioInclusao = $voContrato->cdUsuarioInclusao;
     $cdUsuarioUltAlteracao = $voContrato->cdUsuarioUltAlteracao;
 	
-    $idCampoCarac = voContratoInfo::$nmAtrInPendencias;
+    $idCampoCarac = vocontrato::$nmAtrInCaracteristicas;
     $nmCampoCarac = $idCampoCarac ."[]";
 ?>
 <!DOCTYPE html>
@@ -426,7 +426,7 @@ function transferirDadosPessoa(cd, nm, doc) {
 	            <TH class="campoformulario" nowrap width="1%">Características:</TH>
 	            <TD class="campoformulario" colspan=1>
 	            <?php 
-	            $arrayParamCarac = array($nmCampoCarac, $vo->inPendencias, dominioTipoDemandaContrato::getColecaoAlteraValorContrato(), 1, false, "", false, " ");
+	            $arrayParamCarac = array($nmCampoCarac, $vo->inCaracteristicas, dominioTipoDemandaContrato::getColecaoAlteraValorContrato(), 1, false, "", false, " ");
 	            $arrayParamCarac[12] = true;
 	            echo dominioAutorizacao::getHtmlChecksBoxArray($arrayParamCarac);
 	             ?>
