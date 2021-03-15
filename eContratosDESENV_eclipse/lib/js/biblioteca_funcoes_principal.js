@@ -2471,3 +2471,27 @@ function isPeloMenosUmCampoFormularioSelecionado(colecaoNmCamposForm, colecaoDes
 	
 	return temCampo;
 }
+
+function indexOfChaveArray(chave, pArray, pSemMensagem) {
+	var retorno = -1;
+	if (pArray == null) {
+		if (!pSemMensagem) {
+			exibirMensagem("Array para buscar a chave eh nulo.");
+		}
+		retorno = -1;
+	}
+	
+	var chaves = pArray.keys();
+		
+		//desmarca os outros
+		for (var i = 0; i < chaves.length; i++) {
+			var chaveAtual = chaves[i];
+
+			if (chaveAtual == chave) {
+				retorno = i;
+				break;
+			}
+		}
+
+	return retorno;
+}

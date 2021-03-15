@@ -105,9 +105,18 @@ function confirmar() {
 	            <TH class="campoformulario" nowrap width="1%">ID:</TH>
 				<TD class="campoformulario" nowrap width="1%"><INPUT type="text" id="<?=voUsuarioInfo::$nmAtrID?>" name="<?=voUsuarioInfo::$nmAtrID?>" value="<?php echo complementarCharAEsquerda($vo->id, "0", TAMANHO_CODIGOS);?>"  class="camporeadonly" size="7" readonly></TD>
 				<TH class="campoformulario" >Nome:</TH>
-				<TD class="campoformulario"><INPUT type="text" id="<?=voUsuarioInfo::$nmAtrName?>" name="<?=voUsuarioInfo::$nmAtrName?>" value="<?php echo $vo->name;?>"  class="camporeadonly" size="30" readonly></TD>	            
-					            
+				<TD class="campoformulario"><INPUT type="text" id="<?=voUsuarioInfo::$nmAtrName?>" name="<?=voUsuarioInfo::$nmAtrName?>" value="<?php echo $vo->name;?>"  class="camporeadonly" size="30" readonly>
+				</TD>					            
 	        </TR>			
+			<TR>
+				</TD>	            	        	            		            
+	            <TH class="campoformulario" nowrap width="1%">Características:</TH>
+	            <TD class="campoformulario" colspan=3>
+	            <?php 
+	            echo dominioUsuarioCaracteristicas::getHtmlChecksBoxDetalhamento("", $vo->inCaracteristicas, 1);	             
+	             ?>
+	            </TD>	            
+	        </TR>
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Setor:</TH>
 	            <TD class="campoformulario" colspan=3>

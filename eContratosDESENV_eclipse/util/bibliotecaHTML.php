@@ -636,6 +636,24 @@ function temPermissaoPorFuncao($cdFuncaoBotao, $isHistorico) {
 	}
 	return $retorno;
 }
+
+function getCaracteristicasUsuarioLogado() {
+
+	$idusuario = getIdUsuarioLogado();
+	$vousuarioinfo = new voUsuarioInfo();
+	$vousuarioinfo->id = $idusuario;
+	$dbusuario = new dbUsuarioInfo();
+	$vousuarioinfo = $dbusuario->consultarPorChaveVO($vousuarioinfo);
+	
+	//$vousuarioinfo = new voUsuarioInfo();
+	$retorno = $vousuarioinfo->inCaracteristicas;
+	if($retorno == null){
+		$retorno = constantes::$CD_OPCAO_NENHUM;
+	}
+	
+	return $retorno;	
+}
+
 function getComboColecaoGenerico($colecao, $idCampo, $nmCampo, $cdOpcaoSelecionada, $classCampo, $tagHtml) {
 	$select = new select ( $colecao );
 	$retorno = $select->getHtmlCombo ( $idCampo, $nmCampo, $cdOpcaoSelecionada, true, $classCampo, true, $tagHtml );
@@ -1351,7 +1369,7 @@ function getTagHTMLFechaJavaScript(){
 }
 
 function getTagHtmlJavaScript($script){
-	return getTagHTMLAbreJavaScript() . $script . getTagHTMLFechaJavaScript();
+	return getTagHTMLAbreJavaScript() . "\n" . $script . getTagHTMLFechaJavaScript();
 }
 
 function getTagHTMLAbreFormulario($inConsulta=null){

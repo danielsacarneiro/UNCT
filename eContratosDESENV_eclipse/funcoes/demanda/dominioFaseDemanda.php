@@ -60,5 +60,19 @@ class dominioFaseDemanda extends dominio {
 		);
 	
 		return $retorno;
-	}	
+	}
+	
+	/**
+	 * metodo que indica as caracteristicas do usuario que possuem permissao para alterar as opcoes indicadas do dominio
+	 * geralmente utilizada para a funcao java script isCheckBoxPermiteAlteracao que esta em encaminhar.novo.php
+	 * @return unknown[]|string[]
+	 */
+	static function getColecaoPermissaoCaracteristicasUsuario() {
+		$retorno = array (
+				static::$CD_REVISAO_UNCT => getArrayComoStringCampoSeparador(array(dominioUsuarioCaracteristicas::$CD_CHEFE)),
+		);
+	
+		return $retorno;
+	}
+	
 }

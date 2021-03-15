@@ -3,6 +3,7 @@ include_once("../../config_lib.php");
 include_once(caminho_util."bibliotecaHTML.php");
 include_once(caminho_util."selectExercicio.php");
 include_once(caminho_vos."voDemandaTramitacao.php");
+include_once(caminho_vos."voUsuarioInfo.php");
 include_once (caminho_funcoes . "demanda/biblioteca_htmlDemanda.php");
 
 try{
@@ -280,9 +281,15 @@ function iniciar(){
 	            <TH class="campoformulario" width="1%">Fase:</TH>
 	            <TD class="campoformulario" colspan=3>
 	            <?php 
+	            $varCamposPermiteAlteracao = "varJSCamposCaracteristicasPermitidos";
+	            echo getTagHtmlJavaScript(getColecaoComoVariavelJS(dominioFaseDemanda::getColecaoPermissaoCaracteristicasUsuario(), 
+	            		$varCamposPermiteAlteracao, true));	             
+	            $pPropriedadeValorCondicao = getVarComoString(getCaracteristicasUsuarioLogado());	            
+	            $jsOnClickAdicional = "isCheckBoxPermiteAlteracao(this, $pPropriedadeValorCondicao, $varCamposPermiteAlteracao);";
+	             
 	            $nmCampoFaseHtml = voDemanda::$nmAtrFase."[]";
 	            //echo dominioFaseDemanda::getHtmlChecksBoxDetalhamento($nmCampoFaseHtml, $vo->fase, 1);
-	            echo dominioFaseDemanda::getHtmlChecksBox($nmCampoFaseHtml, $vo->fase, null, 1, false, "", false, " required ");
+	            echo dominioFaseDemanda::getHtmlChecksBox($nmCampoFaseHtml, $vo->fase, null, 1, false, "$jsOnClickAdicional", false, " required ");
 	            //serve para comparar, ao enviar ao banco, se a fase foi alterada no encaminhamento, autorizando a alteracao do vodemanda
 	            echo getInputHidden(voDemandaTramitacao::$nmAtrFaseRegistroBanco, voDemandaTramitacao::$nmAtrFaseRegistroBanco, $vo->fase);
 	             ?>

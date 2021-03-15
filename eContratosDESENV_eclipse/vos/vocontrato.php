@@ -130,6 +130,7 @@ include_once ("voDemanda.php");
 			$this->temTabHistorico = true;
 		
 			$arrayAtribInclusaoDBDefault = array (
+					self::$nmAtrSqContrato,
 					self::$nmAtrDhInclusao,
 					self::$nmAtrDhUltAlteracao
 			);

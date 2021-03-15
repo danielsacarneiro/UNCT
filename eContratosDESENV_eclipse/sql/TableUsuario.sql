@@ -3,7 +3,8 @@ ALTER DATABASE unct CHARACTER SET utf8 COLLATE utf8_general_ci;
 drop table usuario_info;
 CREATE TABLE usuario_info (
     ID INT NOT NULL,
-    user_setor VARCHAR(100),
+    user_setor VARCHAR(100),    
+    user_in_caracteristicas VARCHAR(100),
 
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
@@ -13,21 +14,32 @@ CREATE TABLE usuario_info (
 
     CONSTRAINT pk PRIMARY KEY (ID)
 );
+ALTER TABLE usuario_info ADD COLUMN user_in_caracteristicas VARCHAR(100) AFTER user_setor;
 
 CREATE TABLE usuario_info_hist (
 	hist INT NOT NULL AUTO_INCREMENT,
     
     ID INT NOT NULL, 
     user_setor VARCHAR(100),
+    user_in_caracteristicas VARCHAR(100),
+    
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_incl INT,
     cd_usuario_ultalt INT,
     in_desativado CHAR(1) NOT NULL DEFAULT 'N',
+    
+   	dh_operacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    cd_usuario_operacao INT,    
 
     CONSTRAINT pk PRIMARY KEY (hist),
     CONSTRAINT desativacao_demanda CHECK (in_desativado NOT IN ('S'))
 );
+ALTER TABLE usuario_info_hist ADD COLUMN user_in_caracteristicas VARCHAR(100) AFTER user_setor;
+ALTER TABLE usuario_info_hist ADD COLUMN dh_operacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL AFTER in_desativado;
+ALTER TABLE usuario_info_hist ADD COLUMN cd_usuario_operacao INT AFTER dh_operacao;
+
+select * from usuario_info_hist
 
 /** INCLUSAO DOS USUARIOS INFO */
 DELIMITER $$

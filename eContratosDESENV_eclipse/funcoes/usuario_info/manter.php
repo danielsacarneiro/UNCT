@@ -45,6 +45,10 @@ try{
 	$ID_REQ_CDSETOR_ORIGEM = "cdSetorOrigem";
 	//colecao
 	$ID_REQ_CDSETOR_DESTINO = voUsuarioInfo::$nmAtrSetor;
+	
+	$idCampoCarac = voUsuarioInfo::$nmAtrInCaracteristicas;
+	$nmCampoCarac = $idCampoCarac ."[]";
+	
 	?>
 <!DOCTYPE html>
 <HEAD>
@@ -53,6 +57,7 @@ try{
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_text.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_datahora.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_radiobutton.js"></SCRIPT>
+<SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_checkbox.js"></SCRIPT>
 <SCRIPT language="JavaScript" type="text/javascript">
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
 function isFormularioValido() {
@@ -70,6 +75,10 @@ function confirmar() {
 		return false;
 
 	return confirm("Confirmar Alteracoes?");    
+}
+
+function formatarFormNovoUsuarioPadrao() {
+	//inicialmente o usuario padrao pode tramitar  DE TODOS OS SETORES;
 }
 
 </SCRIPT>
@@ -98,7 +107,8 @@ function confirmar() {
 	        $comboSetor = new select(dominioSetor::getColecao());	        
 	         
 	        if(!$isInclusao){
-	        	$id = $vo->id;	        	        	
+	        	$id = $vo->id;
+	        }
 	        ?>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">ID:</TH>
@@ -107,13 +117,25 @@ function confirmar() {
 				<TD class="campoformulario"><INPUT type="text" id="<?=voUsuarioInfo::$nmAtrName?>" name="<?=voUsuarioInfo::$nmAtrName?>" value="<?php echo $vo->name;?>"  class="camporeadonly" size="30" readonly></TD>	            
 					            
 	        </TR>			
-			<?php
-	        }else{
-	        	//INCLUSAO
-				//por enquanto nao tem
-				;
-	       }	       	       
-	        ?>
+		<TR>
+	            <TH class="campoformulario" nowrap width="1%">Características:</TH>
+	            <TD class="campoformulario" colspan=3>
+	            <?php 
+/*	            $varCamposPermiteAlteracao = "varJSCamposCaracteristicasPermitidos";
+	            $arrayTeste = array(dominioUsuarioCaracteristicas::$CD_ATJA => dominioUsuarioCaracteristicas::$CD_CHEFE);
+	            
+	            echo getTagHtmlJavaScript(getColecaoComoVariavelJS($arrayTeste, $varCamposPermiteAlteracao, true));
+	            
+	            $pPropriedadeValorCondicao = getVarComoString(dominioUsuarioCaracteristicas::$CD_ATJA);
+	             
+	            $jsOnClickAdicional = "isCheckBoxPermiteAlteracao(this, $pPropriedadeValorCondicao, $varCamposPermiteAlteracao);";*/
+	            
+	            $arrayParamCarac = array($nmCampoCarac, $vo->inCaracteristicas, null, 1, false, "$jsOnClickAdicional", false, " ");
+	            //$arrayParamCarac[12] = true;
+	            echo dominioUsuarioCaracteristicas::getHtmlChecksBoxArray($arrayParamCarac);
+	             ?>
+	            </TD>            
+        </TR>	        
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Setor:</TH>
 	            <TD class="campoformulario" colspan=3>

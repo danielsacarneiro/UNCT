@@ -560,18 +560,27 @@ class dbcontrato extends dbprocesso {
 		parent::alterar ( $vo );
 	}*/
 	
-	function incluirSQL($vo) {
+	function validarInclusao($vo){
+		//$recordSet = getUltimoContratoVigente($vo, $dataVigencia);
+		;
+	}
+	
+	function incluir($vo) {
 		//var_dump($vo);
-		
 		if($vo->importacao == "N"){
 			$vo = $this->setDadosNormalizados($vo);
 			//throw new excecaoGenerica("NAO PASSARAS!");
 		}
 		
+		$this->validarInclusao($vo);
+		return parent::incluir ( $vo );
+	 }
+	
+	/*function incluirSQL($vo) {
 		return $this->incluirQueryVO ( $vo );
 	}
 	
-	/*function incluirSQL($voContrato) {
+	function incluirSQL($voContrato) {
 		//var_dump($voContrato);
 		
 		//echo "dados contrato: " . $voContrato->sqEspecie;

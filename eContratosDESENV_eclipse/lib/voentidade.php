@@ -403,6 +403,8 @@ class voentidade extends multiplosConstrutores {
 	static function getArrayComoStringCampoSeparador($array, $campoSeparador = CAMPO_SEPARADOR) {		
 		if($array == null){
 			throw new excecaoGenerica("getArrayComoStringCampoSeparador não deve receber valor nulo.");
+		}else if(!is_array($array)){
+			return $array;
 		}
 		return implode($campoSeparador , $array );
 	}
@@ -470,6 +472,21 @@ class voentidade extends multiplosConstrutores {
 		}
 		
 		return $retorno;		
+	}
+	/**
+	 * recupera o atributo de formulario que permite inclusao de multiplos valores
+	 * ex.: pendencias em contratoinfo, ou caracteristicas na demanda
+	 * @param unknown $atributo
+	 * @param unknown $IDAtributo
+	 * @return unknown|string
+	 */	
+	static function getAtributoFormularioMultiplosValores($atributo, $IDAtributo){
+		$atributo = $_POST[$IDAtributo];
+		if(is_array($atributo)){
+			$atributo = static::getArrayComoStringCampoSeparador($atributo);
+		}
+		
+		return $atributo;		
 	}
 	
 	/*

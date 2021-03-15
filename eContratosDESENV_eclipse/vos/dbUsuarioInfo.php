@@ -12,11 +12,13 @@ class dbUsuarioInfo extends dbprocesso {
 				$nmTabelaWPUsers . "." . vousuario::$nmAtrID,
 				$nmTabelaWPUsers . "." . vousuario::$nmAtrLogin,
 				$nmTabelaWPUsers . "." . vousuario::$nmAtrName,				
-				$nmTabelaUsuInfo . "." . voUsuarioInfo::$nmAtrSetor,
+/*				$nmTabelaUsuInfo . "." . voUsuarioInfo::$nmAtrSetor,
+				$nmTabelaUsuInfo . "." . voUsuarioInfo::$nmAtrInCaracteristicas,
 				$nmTabelaUsuInfo . "." . voUsuarioInfo::$nmAtrCdUsuarioInclusao,
 				$nmTabelaUsuInfo . "." . voUsuarioInfo::$nmAtrCdUsuarioUltAlteracao,
 				$nmTabelaUsuInfo . "." . voUsuarioInfo::$nmAtrDhInclusao,
-				$nmTabelaUsuInfo . "." . voUsuarioInfo::$nmAtrDhUltAlteracao,
+				$nmTabelaUsuInfo . "." . voUsuarioInfo::$nmAtrDhUltAlteracao,	*/			
+				$nmTabelaUsuInfo . ".*",
 		)
 		;
 		
@@ -154,6 +156,9 @@ class dbUsuarioInfo extends dbprocesso {
 		$sqlConector = "";
 	
 		$retorno .= $sqlConector . voUsuarioInfo::$nmAtrSetor . " = " . $this->getVarComoString ( $vo->setor );
+		$sqlConector = ",";		
+		
+		$retorno .= $sqlConector . voUsuarioInfo::$nmAtrInCaracteristicas . " = " . $this->getVarComoString ( $vo->inCaracteristicas );
 		$sqlConector = ",";		
 	
 		$retorno = $retorno . $sqlConector . $vo->getSQLValuesUpdate ();

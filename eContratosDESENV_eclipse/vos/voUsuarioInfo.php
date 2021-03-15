@@ -4,15 +4,18 @@ include_once("dbUsuarioInfo.php");
 include_once (caminho_util."bibliotecaFuncoesPrincipal.php");
 include_once (caminho_util."dominioSetor.php");
 include_once (caminho_util."documentoPessoa.php");
+include_once (caminho_funcoes . "usuario_info/dominioUsuarioCaracteristicas.php");
  
 Class voUsuarioInfo extends vousuario{	
 	 
 	static $nmAtrSetor = "user_setor";
+	static $nmAtrInCaracteristicas = "user_in_caracteristicas";	
 	
 	var $colecaoSetor = null;
 	 
 	var $dbprocesso = null;
 	var $setor = null;
+	var $inCaracteristicas = null;
 	// ...............................................................
 	// Funcoes ( Propriedades e mÃ©todos da classe )
 
@@ -24,28 +27,9 @@ Class voUsuarioInfo extends vousuario{
 		$class = self::getNmClassProcesso ();
 		$this->dbprocesso = new $class ();
 		$this->colecaoSetor = array ();
+		//para saber se tem historico, consultar a classe pai
 	}	
 	
-	/*function __construct() {
-		parent::__construct0();
-		//por enquanto nao vai ter historico
-		//quando guardarmos mais informacoes do usuario, colocamos historico
-		$this->temTabHistorico = false;
-		$class = self::getNmClassProcesso();
-		$this->dbprocesso= new $class();
-		
-		$this->colecaoSetor = array ();
-		
-		//retira os atributos padrao que nao possui
-		//remove tambem os que o banco deve incluir default
-		$arrayAtribRemover = array(
-				self::$nmAtrDhInclusao,
-				self::$nmAtrDhUltAlteracao
-		);
-		$this->removeAtributos($arrayAtribRemover);
-		$this->varAtributosARemover = $arrayAtribRemover;
-	}*/
-	 
 	public static function getTituloJSP(){
 		return  "USUÁRIO-INFORMAÇÕES ADICIONAIS";
 	}
@@ -68,19 +52,22 @@ Class voUsuarioInfo extends vousuario{
 			return $query;
 	}
 
-	function getAtributosFilho(){
-		$retorno = array(
-				self::$nmAtrID
-		);
-
-		return $retorno;
-	}
-
 	function getAtributosChavePrimaria(){
 		$retorno = array(
 				self::$nmAtrID
 		);
-
+	
+		return $retorno;
+	}
+	
+	function getAtributosFilho(){
+		$array1 = static::getAtributosChavePrimaria();
+		
+		$array2 = array (
+				self::$nmAtrInCaracteristicas,
+		);
+		$retorno = array_merge($array1, $array2);
+		
 		return $retorno;
 	}
 	
@@ -90,6 +77,7 @@ Class voUsuarioInfo extends vousuario{
 		$this->login = $registrobanco[self::$nmAtrLogin];
 		$this->name  = $registrobanco[self::$nmAtrName];
 		$this->setor = $registrobanco[self::$nmAtrSetor];
+		$this->inCaracteristicas = $registrobanco[self::$nmAtrInCaracteristicas];
 	}
 
 	function getDadosFormulario(){
@@ -97,7 +85,8 @@ Class voUsuarioInfo extends vousuario{
 		$this->login = $_POST[self::$nmAtrLogin];
 		$this->name  = $_POST[self::$nmAtrName];
 		
-		$this->setor = $this->getColecaoSetorFormulario();
+		$this->setor = $this->getColecaoSetorFormulario();		
+		$this->inCaracteristicas = static::getAtributoFormularioMultiplosValores($this->inCaracteristicas, self::$nmAtrInCaracteristicas);		
 		
 		//completa com os dados da entidade
 		$this->getDadosFormularioEntidade();

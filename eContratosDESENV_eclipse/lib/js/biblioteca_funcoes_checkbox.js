@@ -342,31 +342,86 @@ function validaFormReadOnlyCheckBox(campoCheckBoxValidacao, colecaoIDCampos, pSe
  * @param pSemMensagem
  * @returns
  */
-function isCheckBoxPermiteAlteracao(pCampoCheckBox, pArrayItensNaoPermitidos, pSemMensagem) {
+function isCheckBoxPermiteAlteracao(pCampoCheckBox, pPropriedadeValorCondicao, pArrayItensPermitidos, pNaoPermitidos, pSemMensagem) {
 	var i = 0;
 	var retorno = true;
 
 	//checkBox = eval(pNmCheckBox);
 	var checkBox = pCampoCheckBox;
+	if(pPropriedadeValorCondicao != null){
+		pArrayPropriedades  = pPropriedadeValorCondicao.split("*");
+	}
 
 	if (checkBox != null) {
-		if (checkBox.length == null){
-			//para o caso de existir apenas um item?
-			retorno = false;
-		}
-		
-		for (i = 0; i < checkBox.length; i++){
-			var id = checkBox.item(i).id;
+		/*for (i = 0; i < checkBox.length; i++){
+			var option = checkBox.item(i);
+			var id = option.id;
+			var checkedOrigem = option.checked;
+			
+			alert(id);
 				
 			if(pArrayItensNaoPermitidos.indexOf(id) != -1){
 				retorno = false;
+				option.checked = checkedOrigem;
 				break;						
 			}
-		}			
+		}*/		
+			var id = checkBox.id;
+			//var checkedOrigem = checkBox.checked;
+			
+			//alert(id);
+			
+		/*if(pArrayItensNaoPermitidos != null){
+			if(pArrayItensNaoPermitidos.indexOf(id) != -1){
+				retorno = false;
+				checkBox.checked = !checkBox.checked;						
+			}
+		}*/
+
+		if(pArrayItensPermitidos != null && pPropriedadeValorCondicao != null){
+			//alert(1);
+			//funcao indexOfChaveArray(chave, pArray, pSemMensagem) em biblio...checkbox
+			//var validar = indexOfChaveArray(id, pArrayItensPermitidos, pSemMensagem) != -1;
+			var validar = pArrayItensPermitidos[id] != null;
+			if(validar){
+				//alert(2);
+				if (pArrayPropriedades != null) {					
+					//valoresPermitidos eh uma string com campo separador
+					var valoresPermitidos = pArrayItensPermitidos[id];				
+
+					//valida pra cada valor de pArrayPropriedades
+					//se pelo menos uma condicao se satisfizer, resolvido
+					for (i = 0; i < pArrayPropriedades.length; i++) {
+						var propri = pArrayPropriedades[i];						
+						/*alert(propri);
+						alert(valoresPermitidos);*/
+						if(valoresPermitidos.indexOf(propri) == -1){
+							retorno = false;	
+							//alert("nao encontrou");
+						}else{
+							//alert("encontrou");
+							//se encontrou pelo menos um, retorna verdadeiro
+							retorno = true;
+							break;
+						}										
+
+					}
+				}				
+				
+			}/*else{
+				retorno = false;
+			}*/
+		}
+
 	}	
 				
-	if (!retorno && !pSemMensagem) {
-		exibirMensagem("SeleÃ§Ã£o nÃ£o permitida para o usuÃ¡rio.");
+	if (!retorno) {
+		checkBox.checked = !checkBox.checked;
+
+		if (!pSemMensagem) {
+			exibirMensagem("Seleção não permitida para o usuário.");
+		}
+
 	}
 
 	return retorno;

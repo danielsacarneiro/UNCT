@@ -1072,11 +1072,12 @@ function getContratoVigentePorArray($pArray){
 	$pData = $pArray[1];
 	$isTpVigenciaMAxSq = $pArray[2];
 	$inTrazerVigenciaFutura = $pArray[3];
-	$inRetornoSeDataNula = $pArray[4];
+	$inTermoARetornarSeDataNula = $pArray[4];
+	//$cdEspecie = $pArray[5];
 	//echo $pData;
 	
-	if($inRetornoSeDataNula == null){
-		$inRetornoSeDataNula = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
+	if($inTermoARetornarSeDataNula == null){
+		$inTermoARetornarSeDataNula = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
 	}
 	
 	//$vocontrato = new vocontrato();	
@@ -1084,13 +1085,18 @@ function getContratoVigentePorArray($pArray){
 	$filtro->tipo = $vocontrato->tipo;
 	$filtro->cdContrato = $vocontrato->cdContrato;
 	$filtro->anoContrato = $vocontrato->anoContrato;
-	$filtro->cdEspecie = array(
+	
+	//if($cdEspecie == null){
+		$cdEspecie = array(
 			dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER,
 			dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_TERMOADITIVO
-	);
+		);
+	//}
+		
+	$filtro->cdEspecie = $cdEspecie;
 
 	//se a data eh nula e nao deve trazer o MATER, traz o ultimo registro vigente
-	if($pData == null && $inRetornoSeDataNula == dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER){		
+	if($pData == null && $inTermoARetornarSeDataNula == dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER){		
 		$filtro->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
 		//$filtro->sqEspecie = 1;
 	}	

@@ -378,7 +378,7 @@ class dominio extends multiplosConstrutores {
 		}
 		
 		if($javascriptadicional != null){
-			$javascript = " onClick=$javascriptadicional ";
+			$javascript = " onClick=\"$javascriptadicional\" ";
 		}
 				
 		$colecaoChave = array_keys($colecao);		
