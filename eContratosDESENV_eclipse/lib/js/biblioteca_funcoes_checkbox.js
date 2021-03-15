@@ -334,3 +334,40 @@ function validaFormReadOnlyCheckBox(campoCheckBoxValidacao, colecaoIDCampos, pSe
 		limparCamposColecaoFormulario(colecaoIDCampos);
 	}
 }
+
+/**
+ * funcao a ser usada no onclick
+ * @param pCampoCheckBox
+ * @param pArrayItensNaoPermitidos
+ * @param pSemMensagem
+ * @returns
+ */
+function isCheckBoxPermiteAlteracao(pCampoCheckBox, pArrayItensNaoPermitidos, pSemMensagem) {
+	var i = 0;
+	var retorno = true;
+
+	//checkBox = eval(pNmCheckBox);
+	var checkBox = pCampoCheckBox;
+
+	if (checkBox != null) {
+		if (checkBox.length == null){
+			//para o caso de existir apenas um item?
+			retorno = false;
+		}
+		
+		for (i = 0; i < checkBox.length; i++){
+			var id = checkBox.item(i).id;
+				
+			if(pArrayItensNaoPermitidos.indexOf(id) != -1){
+				retorno = false;
+				break;						
+			}
+		}			
+	}	
+				
+	if (!retorno && !pSemMensagem) {
+		exibirMensagem("Seleção não permitida para o usuário.");
+	}
+
+	return retorno;
+}
