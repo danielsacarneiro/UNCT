@@ -157,6 +157,13 @@ class dbDemandaTramitacao extends dbprocesso {
 		$arrayColunasRetornadas = array (
 				$nmTabelaTramitacao . ".*",
 				"$nmTabelaDemanda." . voDemanda::$nmAtrTipo,
+				"$nmTabelaDemandaContrato." . voDemandaContrato::$nmAtrAnoContrato,
+				"$nmTabelaDemandaContrato." . voDemandaContrato::$nmAtrCdContrato,
+				"$nmTabelaDemandaContrato." . voDemandaContrato::$nmAtrTipoContrato,
+				"$nmTabelaDemandaContrato." . voDemandaContrato::$nmAtrCdEspecieContrato,
+				"$nmTabelaDemandaContrato." . voDemandaContrato::$nmAtrSqEspecieContrato,
+				"$nmTabelaPessoaContrato." . vopessoa::$nmAtrNome,
+				
 				static::$nmTabelaUsuarioInclusao . "." . vousuario::$nmAtrName . "  AS " . voDemanda::$nmAtrNmUsuarioInclusao,
 				$colunaUsuHistorico 
 		);

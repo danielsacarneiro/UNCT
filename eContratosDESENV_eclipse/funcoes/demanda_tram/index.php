@@ -177,7 +177,8 @@ function alterar() {
                     <TH class="headertabeladados" width="1%">Origem</TH>
                     <TH class="headertabeladados" width="1%">Destino</TH>
                     <TH class="headertabeladados" width="1%">Tipo</TH>
-                    <TH class="headertabeladados"width="90%" >Texto</TH>
+                    <TH class="headertabeladados" width="30%">Contrato</TH>
+                    <TH class="headertabeladados"width="70%" >Texto</TH>
                     <TH class="headertabeladados"width="1%" nowrap >Usuário</TH>
                     <TH class="headertabeladados"width="1%" nowrap >Dt.Referência</TH>
                     <TH class="headertabeladados"width="1%" nowrap >Dt.Movimentação</TH>
@@ -192,14 +193,18 @@ function alterar() {
                 $dominioSituacao = new dominioSituacaoDemanda();
                 $dominioSetor = new dominioSetor();                
                                 
-                $colspan=11;
+                $colspan=12;
                 if($isHistorico){
                 	$colspan++;
                 }
                 
                 for ($i=0;$i<$tamanho;$i++) {
+                	$registroatual = $colecao[$i];
                         $voAtual = new voDemandaTramitacao();
                         $voAtual->getDadosBanco($colecao[$i]);     
+                        
+                        $voDemandaContrato = new voDemandaContrato();
+                        $voDemandaContrato->getDadosBanco($registroatual);
                         
                         $setor = $dominioSetor->getDescricao($voAtual->cdSetorOrigem);                        
                         $setorDestino = $dominioSetor->getDescricao($voAtual->cdSetorDestino);
@@ -213,6 +218,24 @@ function alterar() {
                         }
                         
                         $dataMovimentacao = $voAtual->dhInclusao;
+                        
+                        $empresa = $colecao[$i][vopessoa::$nmAtrNome];
+                        if($voDemandaContrato != null){
+                        	 
+                        		$contrato = formatarCodigoAnoComplemento($voDemandaContrato->voContrato->cdContrato,
+                        				$voDemandaContrato->voContrato->anoContrato,
+                        				dominioTipoContrato::getDescricao($voDemandaContrato->voContrato->tipo));
+                        
+                        		$complementoContrato = getContratoDescricaoEspecie($voDemandaContrato->voContrato);
+                        		if($complementoContrato != ""){
+                        			$contrato .= "|$complementoContrato";
+                        		}
+                        
+                        		if($empresa != null){
+                        			$contrato .= ": ".$empresa;
+                        		}
+                        }
+                        
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados">
@@ -231,6 +254,7 @@ function alterar() {
 					<TD class="tabeladados" nowrap><?php echo $setor?></TD>
 					<TD class="tabeladados" nowrap><?php echo $setorDestino?></TD>
 					<TD class="tabeladados" nowrap><?php echo $tipo?></TD>
+					<TD class="tabeladados" ><?php echo truncarStringHTML($contrato, 60, true)?></TD>					
                     <TD class="tabeladados" ><?php echo $voAtual->textoTram;?></TD>                    
                     <TD class="tabeladados" nowrap><?php echo $nmUsuario;?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($voAtual->dtReferencia);?></TD>
