@@ -301,6 +301,12 @@ function getMensagemContratosNaoIncluidosPlanilha(&$count = 0){
 		);
 		$colunas = incluirColunaColecaoArray($colunas, $array);
 		$colunas = incluirColunaColecao($colunas, 'NUMERO', voDemandaContrato::$nmAtrSqEspecieContrato);
+		
+		$array =array(
+				constantes::$CD_COLUNA_CHAVE => 'RESPONSÁVEL',
+				constantes::$CD_COLUNA_VALOR => vousuario::$nmAtrName,
+		);
+		$colunas = incluirColunaColecaoArray($colunas, $array);
 
 		//$msg = getCorpoMensagemDemandaPorColecao($assunto, $filtro, $colunasAAcrescentar, false);
 		//$msg = getCorpoMensagemDemandaContratoColecao($assunto, $colecao, $colunasAAcrescentar);

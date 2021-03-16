@@ -1567,6 +1567,8 @@ class dbcontrato extends dbprocesso {
 			$nmTabela = $vo->getNmTabelaEntidade(false);
 			$nmTabelaContrato = vocontrato::getNmTabela();
 			$nmTabelaDemanda = voDemanda::getNmTabela();
+			$nmTabelaWPUsers = vousuario::getNmTabelaStatic ( false);
+			
 			//$nmTabelaDemandaSolicCompra = voDemandaPL::getNmTabelaStatic(false);
 			$groupby = "$nmTabela." . voDemandaContrato::$nmAtrAnoContrato
 			. ",$nmTabela." . voDemandaContrato::$nmAtrTipoContrato
@@ -1583,11 +1585,16 @@ class dbcontrato extends dbprocesso {
 			
 			$arrayTermos = array_keys(dominioEspeciesContrato::getColecaoImportacaoPlanilha());
 	
-			$query .= " SELECT * ";
+			$query .= " SELECT $nmTabela.*,  $nmTabelaWPUsers." . vousuario::$nmAtrName;
 			$query .= " FROM " . $nmTabela;
 			$query .= " INNER JOIN " . $nmTabelaDemanda;
 			$query .= " ON $nmTabela." . voDemandaContrato::$nmAtrAnoDemanda . "= $nmTabelaDemanda.". voDemanda::$nmAtrAno;
 			$query .= " AND $nmTabela." . voDemandaContrato::$nmAtrCdDemanda . "= $nmTabelaDemanda.". voDemanda::$nmAtrCd;
+			
+			//pega o usuario responsavel da UNCT
+			$query .= "\n LEFT JOIN $nmTabelaWPUsers ";
+			$query .= "\n ON ";
+			$query .= "$nmTabelaDemanda." . voDemanda::$nmAtrCdPessoaRespUNCT . "=" . "$nmTabelaWPUsers." . vousuario::$nmAtrID;
 								
 			$query .= " WHERE "
 			. "$nmTabela." .  voDemandaContrato::$nmAtrCdEspecieContrato . "  IN (". getSQLStringFormatadaColecaoIN($arrayTermos, true).") AND " 
