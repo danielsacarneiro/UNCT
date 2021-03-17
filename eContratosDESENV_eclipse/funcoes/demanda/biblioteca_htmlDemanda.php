@@ -198,19 +198,59 @@ function isSituacaoDemandaFechada($situacao){
 	return array_key_exists($situacao, dominioSituacaoDemanda::getColecaoFechada());
 }
 
+function getAlertaOrientacao($msgAlerta, &$countATENCAO, $conectorAlerta = null, $link=null){		
+	
+	$texto = "ATENÇÃO$countATENCAO: $msgAlerta";
+	
+	if($link != null){
+		$texto = getTextoLink($texto, $link, null, false, true);
+	}else{
+		$texto = getTextoHTMLDestacado($texto, "red", false);
+	}
+	
+	$html .= $conectorAlerta . $texto;
+	
+	$countATENCAO++;
+		
+	return $html;	
+}
+
+
 function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpDemandaReajuste, $nmDivInformacoesComplementares, $voDemanda = null){
 
 	$pCdOpcaoSelecionadaTpDemandaContrato=$voDemanda->tpDemandaContrato;
 	$pCdOpcaoSelecionadaReajuste=$voDemanda->inTpDemandaReajusteComMontanteA;
 	$voContratoDemanda = $voDemanda->getContrato();
-		
-	$html .= dominioTipoDemandaContrato::getHtmlChecksBoxDetalhamento($nmCampoTpDemandaContrato, $pCdOpcaoSelecionadaTpDemandaContrato, 2, true);
 	
 	$countATENCAO = 1;
+	$isVODemandaNaoNulo = $voDemanda != null;
+	$conectorAlerta = "<BR>";
+	
+	try{
+		$isReajusteDemanda = $isVODemandaNaoNulo && existeStr1NaStr2ComSeparador($voDemanda->tpDemandaContrato, dominioTipoDemandaContrato::$CD_TIPO_REAJUSTE);
+		//if(!$temReajustePendente){echo "teste";}		
+		$retornoTemReajustePendente = temReajustePendente($voContratoDemanda);
+		$temReajustePendente = $retornoTemReajustePendente[0];
+		$exibirAlertaReajustePendente = $temReajustePendente &&  !$isReajusteDemanda;
+		
+		if($exibirAlertaReajustePendente){
+			$html .= getAlertaOrientacao("há reajustes pendentes.", $countATENCAO, $conectorAlerta);
+			$conectorAlerta = "<BR>";
+		}
+	}catch (excecaoGenerica $exReajuste){
+		/*$texto = "ATENÇÃO$countATENCAO: " . $exDoc->getMessage();
+		$html .= $conectorAlerta . $texto;
+		$conectorAlerta = "<BR>";
+		$countATENCAO++;*/
+		$html .= getAlertaOrientacao($exReajuste->getMessage(), $countATENCAO, $conectorAlerta);
+		$conectorAlerta = "<BR>";
+	}
+	
 	//informa que ha PAAPs abertos para o contrato
 	try{
 		$temPAAPAberto = temPAAPAberto($voContratoDemanda);
 		if($temPAAPAberto){
+			//$html .= getAlertaOrientacao("há PAAP(s) cadastrado(s) para este fornecedor.", $countATENCAO);
 			$texto = "ATENÇÃO$countATENCAO: há PAAP(s) cadastrado(s) para este fornecedor.";
 			$html .= $conectorAlerta . getTextoLink($texto, "../pa", null, false, true);
 		
@@ -224,6 +264,7 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 		$countATENCAO++;		
 	}
 	
+	$html .= dominioTipoDemandaContrato::getHtmlChecksBoxDetalhamento($nmCampoTpDemandaContrato, $pCdOpcaoSelecionadaTpDemandaContrato, 2, true);
 	if(dominioTipoDemandaContrato::existeItemArrayOuStrCampoSeparador(dominioTipoDemandaContrato::$CD_TIPO_REAJUSTE, $pCdOpcaoSelecionadaTpDemandaContrato)){
 		//eh reajuste
 		$html .= "Reajuste: " . dominioTipoReajuste::getHtmlDetalhamento($nmCampoTpDemandaReajuste, $nmCampoTpDemandaReajuste, $pCdOpcaoSelecionadaReajuste, false);
@@ -235,7 +276,7 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 		}				
 	}
 	
-	if($voDemanda != null){
+	if($isVODemandaNaoNulo != null){
 		//$exibirInfoProrrog = $voDemanda->situacao != dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA;
 		$exibirInfoProrrog = !isSituacaoDemandaFechada($voDemanda->situacao);		
 	}

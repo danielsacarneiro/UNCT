@@ -892,6 +892,49 @@ function consultarContratosPAAP($voPAAP) {
 	return $colecao;
 }
 
+function temReajustePendente($vocontrato) {
+	//$vocontrato = new vocontrato();
+
+	if($vocontrato == null
+			|| $vocontrato->anoContrato == null
+			|| $vocontrato->cdContrato == null
+			|| $vocontrato->tipo == null){
+				throw new excecaoGenerica("Para consulta de reajustes, o contrato deve ser informado.");
+	}
+
+	$filtro = new filtroManterDemanda ( false );
+	$voDemanda = new voDemanda ();
+	$dbprocesso = new dbDemanda();
+	$filtro->vodemanda = $filtro->voPrincipal = $voDemanda;
+	
+	$vocontrato->cdEspecie = null;
+	$vocontrato->sqEspecie = null;
+	$filtro->vocontrato = $vocontrato;
+	
+	$filtro->isValidarConsulta = false;
+	// $filtro->voPrincipal = $voDemanda;
+	$filtro->setaFiltroConsultaSemLimiteRegistro ();
+	$filtro->vodemanda->situacao = array (
+			dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_A_FAZER,
+			dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_SUSPENSA,
+	);
+	$filtro->vodemanda->tpDemandaContrato = array(dominioTipoDemandaContrato::$CD_TIPO_REAJUSTE);
+	$filtro->inDesativado = 'N';
+	
+	//busca com datas mais recentes: demandas anteriores podem nao ter sido fechadas indevidamente
+	$filtro->dtReferenciaInicial = "01/01/2020";	
+	//$filtro->prioridadeExcludente = dominioPrioridadeDemanda::$CD_PRIORI_BAIXA;
+	
+	$colecao = $dbprocesso->consultarTelaConsulta ( $voDemanda, $filtro );
+	
+	//var_dump($colecao);
+
+	$retorno[] = !isColecaoVazia($colecao);
+	$retorno[] = $colecao;
+	
+	return $retorno;
+}
+
 function temPAAPAberto($vocontrato) {
 	$pLevantaExcecao = true;
 	//$vocontrato = new vocontrato();

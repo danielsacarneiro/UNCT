@@ -198,6 +198,8 @@ class filtroManterDemanda extends filtroManter{
 		$this->nuTempoVidaMinimo = @$_POST[static::$ID_REQ_NuTempoVidaMinimo];
 		$this->nuTempoVidaMinimoUltimaTram = @$_POST[static::$ID_REQ_NuTempoVidaMinimoUltimaTram];
 		$this->inMonitorar = @$_POST[static::$ID_REQ_InMonitorar];
+		
+		//echo "aqui";
 	}
 	 	
 	function getFiltroConsultaSQL($comAtributoOrdenacao = null){
@@ -349,12 +351,13 @@ class filtroManterDemanda extends filtroManter{
 		}
 						
 		$tpDemandaContrato = $this->vodemanda->tpDemandaContrato;
+		//echo "tpdemandacontrato: $tpDemandaContrato";
 		if ($tpDemandaContrato != null
 				&& $tpDemandaContrato != ""
 				&& !$this->isAtributoArrayVazio($tpDemandaContrato)) {
 				
 				$strFiltroTpDemanda = getSQLBuscarStringCampoSeparador($tpDemandaContrato, voDemanda::$nmAtrTpDemandaContrato, constantes::$CD_OPCAO_OR);
-				//echo $strFiltroTpDemanda;
+				//echo "teste".$strFiltroTpDemanda;
 				$filtro = $filtro . $conector . $strFiltroTpDemanda;
 				$conector  = "\n AND ";
 		}

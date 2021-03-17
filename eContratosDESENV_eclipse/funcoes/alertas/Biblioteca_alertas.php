@@ -601,7 +601,9 @@ function getFiltroContratosAVencer($inTemDemandaEmTratamento = null){
 	}
 
 	$nmTabelaContratoInfo = voContratoInfo::getNmTabela();
-	$filtro->cdAtrOrdenacao = "$nmTabelaContratoInfo." . voContratoInfo::$nmAtrAnoContrato
+	$filtro->cdAtrOrdenacao = 
+	filtroConsultarContratoConsolidacao::$NmColQtdDiasParaVencimento
+	. ",$nmTabelaContratoInfo." . voContratoInfo::$nmAtrAnoContrato
 	. "," . "$nmTabelaContratoInfo." . voContratoInfo::$nmAtrTipoContrato
 	. "," . "$nmTabelaContratoInfo." . voContratoInfo::$nmAtrCdContrato;
 

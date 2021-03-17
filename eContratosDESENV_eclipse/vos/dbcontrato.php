@@ -1597,6 +1597,7 @@ class dbcontrato extends dbprocesso {
 			$query .= "$nmTabelaDemanda." . voDemanda::$nmAtrCdPessoaRespUNCT . "=" . "$nmTabelaWPUsers." . vousuario::$nmAtrID;
 								
 			$query .= " WHERE "
+			//. vousuario::$nmAtrID . "=12 AND "  
 			. "$nmTabela." .  voDemandaContrato::$nmAtrCdEspecieContrato . "  IN (". getSQLStringFormatadaColecaoIN($arrayTermos, true).") AND " 
 			. " NOT EXISTS (SELECT 'X' FROM " . $nmTabelaContrato 
 			. " WHERE $nmTabela." . voDemandaContrato::$nmAtrAnoContrato . "= $nmTabelaContrato.". vocontrato::$nmAtrAnoContrato 
