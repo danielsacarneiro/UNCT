@@ -168,6 +168,7 @@ Class voContratoInfo extends voentidade{
 				$this->inCredenciamento => "Credenciamento",
 				$this->inTemGarantia => "Tem.Garantia",
 				$this->dtProposta => "Dt.Proposta",
+				$this->cdPessoaGestor => "Gestor",
 		);
 		
 		$retorno = $this->getValoresAtributosObrigatoriosPorEntidade($retorno);

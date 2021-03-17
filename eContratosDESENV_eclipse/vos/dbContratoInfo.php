@@ -174,7 +174,7 @@ class dbContratoInfo extends dbprocesso {
 		$vo = new vocontrato();		
 		$isHistorico = $filtro->isHistorico;
 		//$isHistorico = false;
-		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );			
+		$nmTabela = $vo->getNmTabelaEntidade ( false );			
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( $isHistorico );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
 		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( false );

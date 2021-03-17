@@ -416,7 +416,7 @@ function movimentacoes(){
 		    </TR>					
 	        
        <?php
-       echo getComponenteConsultaFiltro(true, $filtro);
+       echo getComponenteConsultaFiltro(false, $filtro);
         ?>
        </TBODY>
   </TABLE>

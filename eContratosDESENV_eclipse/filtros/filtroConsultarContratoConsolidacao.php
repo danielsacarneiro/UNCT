@@ -125,9 +125,8 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		$conector = "";
 		$isHistorico = $this->isHistorico;
 		
-		$nmTabela = voContratoInfo::getNmTabelaStatic ( $this->isHistorico );
+		$nmTabelaContratoInfo = $nmTabela = voContratoInfo::getNmTabelaStatic ( $this->isHistorico );
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
-		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( $isHistorico );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
 
 		if($this->qtdDiasParaVencimentoProposta != null){	
