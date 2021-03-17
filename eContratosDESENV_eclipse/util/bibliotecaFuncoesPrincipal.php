@@ -77,7 +77,7 @@ function getStringDoArrayComSeparador($array, $separador = CAMPO_SEPARADOR){
 	}
 	//substituira o separador + substituicao, que so aparecera no fim da string
 	$result.=CAMPO_SUBSTITUICAO;
-	$result = str_replace(CAMPO_SEPARADOR.CAMPO_SUBSTITUICAO, "", $result);
+	$result = str_replace($separador.CAMPO_SUBSTITUICAO, "", $result);
 	return $result;
 }
 

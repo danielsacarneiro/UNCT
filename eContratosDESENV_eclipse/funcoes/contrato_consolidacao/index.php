@@ -449,8 +449,10 @@ function movimentacoes(){
                     <TH class="headertabeladadosalinhadocentro" width="1%" colspan="3">Prorrogação(do)</TH>
                     <TH class="headertabeladados" width="1%" <?=$rowspan?>>Dt.Início</TH>
                     <TH class="headertabeladados" width="1%" <?=$rowspan?>>Dt.Fim</TH>
-                    <TH class="headertabeladados" width="1%" <?=$rowspan?> >Anos</TH>
+                    <TH class="headertabeladados" width="1%" <?=$rowspan?>>Anos</TH>
                     <TH class="headertabeladados" width="1%" <?=$rowspan?>>Autorização</TH>
+                    <TH class="headertabeladados" width="1%" <?=$rowspan?>>Mensal</TH>
+                    <TH class="headertabeladados" width="1%" <?=$rowspan?>>Global</TH>
                 </TR>
                 <TR>
 					<TH class="headertabeladados" width="1%">Será?</TH>
@@ -463,7 +465,7 @@ function movimentacoes(){
                 else 
                         $tamanho = 0;                                
                                 
-                $colspan=13;
+                $colspan=15;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -479,7 +481,10 @@ function movimentacoes(){
                         
                         $voPessoa = new voPessoa();
                         $voPessoa->getDadosBanco($registro);                        
-                                           
+                        
+                        $voContratoAtual = new vocontrato();
+                        $voContratoAtual->getDadosBanco($registro);
+                        
                         $tipo = $dominioTipoContrato->getDescricao($registro["ct_tipo"]);
                         $autorizacaoAtual = $registro[filtroConsultarContratoConsolidacao::$NmColAutorizacao];
                         
@@ -578,10 +583,25 @@ function movimentacoes(){
                     <TD <?=$tagCelula?>><?php echo getData($dataFinal)?></TD>
                     <TD class="tabeladados" nowrap><?php echo $colecao[$i][filtroConsultarContratoConsolidacao::$NmColPeriodoEmAnos]?></TD>
                     <TD class="tabeladados" nowrap><?php echo $dominioAutorizacao->getDescricao($autorizacaoAtual)?></TD>
+                    <TD class="tabeladados" nowrap><?php echo $voContratoAtual->vlMensal?></TD>
+                    <TD class="tabeladados" nowrap><?php echo $voContratoAtual->vlGlobal?></TD>
                 </TR>					
                 <?php
-				}				
+				}
+				
+				if($filtro->temColecaoTotalizadores()){
+					$arrayTotalizadores = $filtro->getColecaoTotalizadores();
+					$colspanTotalizador = $colspan - sizeof($arrayTotalizadores)+1;
+					//var_dump($arrayTotalizadores);
                 ?>
+                <TR>
+                    <TD class="totalizadortabeladadosalinhadodireita" colspan=<?=$colspanTotalizador?>>TOTAL:</TD>
+                    <TD class="totalizadortabeladadosalinhadodireita"><?php echo getMoeda($arrayTotalizadores[vocontrato::$nmAtrVlMensalContrato])?></TD>
+                    <TD class="totalizadortabeladadosalinhadodireita"><?php echo getMoeda($arrayTotalizadores[vocontrato::$nmAtrVlGlobalContrato])?></TD>
+                </TR>				
+                <?php
+				}
+				?>
                 <TR>
                     <TD class="tabeladadosalinhadocentro" colspan=<?=$colspan?>><?=$paginacao->criarLinkPaginacaoGET()?></TD>
                 </TR>				

@@ -197,6 +197,8 @@ class dbContratoInfo extends dbprocesso {
 				$nmTabela . "." . vocontrato::$nmAtrCdContrato,
 				$nmTabela . "." . vocontrato::$nmAtrTipoContrato,
 				$nmTabContratoMater . "." . vocontrato::$nmAtrSqContrato . " AS " . filtroConsultarContratoConsolidacao::$NmColSqContratoMater,
+				$nmTabContratoATUAL . "." . vocontrato::$nmAtrVlMensalContrato,
+				$nmTabContratoATUAL . "." . vocontrato::$nmAtrVlGlobalContrato,
 				$nmTabContratoATUAL . "." . vocontrato::$nmAtrSqContrato . " AS " . filtroConsultarContratoConsolidacao::$NmColSqContratoAtual,
 				//$nmTabContratoATUAL . "." . vocontrato::$nmAtrCdEspecieContrato . " AS " . filtroConsultarContratoConsolidacao::$NmColCdEspecieContratoAtual,
 				"$nmAtrTempContratoAtualCDEspecie AS " . filtroConsultarContratoConsolidacao::$NmColCdEspecieContratoAtual,				
@@ -299,6 +301,7 @@ class dbContratoInfo extends dbprocesso {
 		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabContratoMAXSq . "." . vocontrato::$nmAtrAnoContrato;
 		$queryJoin .= "\n AND $nmTabela." . vocontrato::$nmAtrCdContrato . "=" . $nmTabContratoMAXSq . "." . vocontrato::$nmAtrCdContrato;
 		$queryJoin .= "\n AND $nmTabela." .vocontrato::$nmAtrTipoContrato . "=" . $nmTabContratoMAXSq . "." . vocontrato::$nmAtrTipoContrato;		
+		
 		$queryJoin .= "\n LEFT JOIN $nmTabela $nmTabContratoATUAL";
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabContratoMAXSq . "." . vocontrato::$nmAtrSqContrato . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrSqContrato;

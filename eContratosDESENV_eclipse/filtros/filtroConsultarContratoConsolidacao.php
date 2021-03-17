@@ -559,4 +559,13 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 							$nmAtributoSQLAlias);	
 	}
 	
+	/**
+	 * retorna os atributos que serao totalizados
+	 */
+	static function getAtributosValoresTotalizados(){
+		$nmTABContratoAtual = filtroConsultarContratoConsolidacao::$NmTabContratoATUAL;
+		//return array("SUM($nmTABContratoAtual.".vocontrato::$nmAtrVlMensalContrato. ")", "SUM($nmTABContratoAtual.".vocontrato::$nmAtrVlGlobalContrato . ")");		
+		return array("$nmTABContratoAtual.".vocontrato::$nmAtrVlMensalContrato, "$nmTABContratoAtual.".vocontrato::$nmAtrVlGlobalContrato);
+	}
+	
 }

@@ -40,6 +40,7 @@ try {
 		$complemento = "<BR>" . getDadosContratada ( $chave, $voentidade );
 	}else{
 		//pega prox contrato
+		//echo "teste";
 		$vo->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
 		$sqProximoContratoRegistro = $db->consultarProxSequencialTermoContrato ( $vo, vocontrato::$nmAtrCdContrato );
 	}

@@ -409,6 +409,36 @@ class dbprocesso {
 		return $retorno;
 	}
 	
+	
+	
+	static function getQuerySQLTotalizadores(&$filtro, $queryFrom){		
+		
+		$sqlAtributosTotalizados = "";
+		$sqlAtributosInternoTotalizados = "'X'";
+		$filtroSQLPaginacao = $filtro->getSQLWhere ( false );
+		
+		if($filtro->temTotalizadoresFiltro()){
+			$sqlTotalizados = $filtro->getStringSQLAtributosTotalizados();
+			$sqlAtributosTotalizados = $sqlAtributosInternoTotalizados = $sqlTotalizados;
+			
+			//script abaixo serve para pegar o nome da tabela interna, se existir, para corrigir o sql
+			//$sqlAtributosTotalizados = "," . removeNomeTabelaDoAtributo($sqlAtributosTotalizados);
+			
+			$sqlAtributosTotalizados = ",".$filtro->getStringSQLAtributosTotalizados($filtro->getAtributosTotalizadoresOperacionados());
+							
+			//echo "totalizados $sqlAtributosTotalizados";						
+			//echo $queryFrom;				
+		}		
+		
+		//echo $filtroSQLPaginacao. "<br>";
+		$queryCount = "SELECT count(*) as " . dbprocesso::$nmCampoCount . $sqlAtributosTotalizados;
+		$queryCount .= "\n FROM (SELECT $sqlAtributosInternoTotalizados " . $queryFrom . $filtroSQLPaginacao . ") ALIAS_COUNT";
+		
+		//echo $queryCount;
+		
+		return $queryCount;		
+	}
+	
 	function consultarFiltro(&$filtro, $querySelect, $queryFrom, $validaConsulta) {
 		//$filtro = new filtroConsultar();
 		$retorno = "";
@@ -447,13 +477,14 @@ class dbprocesso {
 				// ECHO "TEM PAGINACAO";
 				$pagina = $filtro->paginacao->getPaginaAtual ();
 	
-				$filtroSQLPaginacao = $filtro->getSQLWhere ( false );
+				/*$filtroSQLPaginacao = $filtro->getSQLWhere ( false );
 				// echo $filtroSQLPaginacao. "<br>";
 				$queryCount = "SELECT count(*) as " . dbprocesso::$nmCampoCount;
-				$queryCount .= "\n FROM (SELECT 'X' " . $queryFrom . $filtroSQLPaginacao . ") ALIAS_COUNT";
+				$queryCount .= "\n FROM (SELECT 'X' " . $queryFrom . $filtroSQLPaginacao . ") ALIAS_COUNT";*/
+				$queryCount = static::getQuerySQLTotalizadores($filtro, $queryFrom);
 	
 				// guarda o numero total de registros para nao ter que executar a consulta TODOS novamente
-				$numTotalRegistros = $filtro->numTotalRegistros = $this->getNumTotalRegistrosQuery ( $queryCount );
+				$numTotalRegistros = $filtro->numTotalRegistros = $this->getNumTotalRegistrosQuery ( $queryCount, $filtro );
 	
 				$qtdRegistrosPorPag = $filtro->qtdRegistrosPorPag;
 	
@@ -539,14 +570,26 @@ class dbprocesso {
 	}
 	
 	
-	function getNumTotalRegistrosQuery($query) {
+	function getNumTotalRegistrosQuery($query, &$filtro = null) {
+		$temTotalizadorValor=false;
+		if($filtro != null){
+			//$filtro = new filtroManter();
+			$temTotalizadorValor = $filtro->temTotalizadoresFiltro();			
+		}
+		
 		$queryCount = $query;
 		//echo $queryCount;
 		$retorno = $this->cDb->consultar ( $queryCount );
 		$numTotalRegistros = 0;
 		
 		if ($retorno != "") {
-			$numTotalRegistros = $retorno [0] [dbprocesso::$nmCampoCount];
+			$registro = $retorno [0];
+			$numTotalRegistros =  $registro[dbprocesso::$nmCampoCount];
+			if($temTotalizadorValor){
+				//echo $queryCount;
+				//var_dump($registro);
+				$filtro->setColecaoTotalizadores($registro);
+			}
 		}
 		return $numTotalRegistros;
 	}
@@ -817,6 +860,11 @@ class dbprocesso {
 	function getSQLSequencialPorTabela($nmColunaSq, $voEntidade, $isHistorico, $pArrayColunasAlternativas = null) {
 		$nmTabela = $voEntidade->getNmTabelaEntidade ( $isHistorico );
 		
+		//$voEntidade = new voentidade();
+		if(!$isHistorico && $voEntidade->temTabHistorico){
+			$atributoDesativado = " AND " . voentidade::$nmAtrInDesativado . "= 'N'";
+		}
+		
 		if($pArrayColunasAlternativas == null){
 			//vai pelos valores normais do voentidade
 			$arrayAtribRemover = array (
@@ -836,7 +884,7 @@ class dbprocesso {
 		
 		$query = " SELECT MAX($nmColunaSq) AS $nmColunaSq FROM $nmTabela ";
 		$query .= " WHERE ";
-		$query .= $valoresTemp;
+		$query .= $valoresTemp . $atributoDesativado;
 		$query .= "\n GROUP BY " . getSQLStringFormatadaColecaoIN ( $arrayColunasChaveSemSq, false );
 		
 		return $query;

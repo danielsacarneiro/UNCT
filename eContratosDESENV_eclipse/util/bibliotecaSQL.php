@@ -515,4 +515,19 @@ function getDataSQLDiferencaDias($data1, $data2) {
 	return $retorno;
 }
 
+function removeNomeTabelaDoAtributo ($atributo){
+	$retorno = $atributo;
+	$arraytemp = explode(".", $retorno);
+	if(is_array($arraytemp) && sizeof($arraytemp) > 1){
+		$nmTabelaARemover = $arraytemp[0];
+		//$nmTabelaARemover = str_replace(",", "", $nmTabelaARemover);
+		//echoo($atributo );
+	
+		$retorno = str_replace("$nmTabelaARemover.", "", $retorno);
+	
+	}
+	
+	return $retorno;
+}
+
 ?>

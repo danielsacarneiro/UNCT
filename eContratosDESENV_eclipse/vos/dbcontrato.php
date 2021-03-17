@@ -551,6 +551,8 @@ class dbcontrato extends dbprocesso {
 		$query .= $this->getSQLSequencialPorTabela ( $nmColunaSq, $voDemandaContrato, false, $arrayColunasRetornadas);
 		$query .= ") TAB ";
 		
+		//echo $query;
+		
 		$colecao = $this->consultarEntidade($query, false);
 		return $colecao[0][$nmColunaSq];	
 	}

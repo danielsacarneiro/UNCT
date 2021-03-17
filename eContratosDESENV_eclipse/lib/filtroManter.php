@@ -61,6 +61,7 @@ class filtroManter extends multiplosConstrutores {
 	private $QUERY_COMPLETA;
 	
 	var $voPrincipal;
+	private $colecaoTotalizadores;
 
 	// construtor
 	function __construct0() {
@@ -592,7 +593,57 @@ class filtroManter extends multiplosConstrutores {
 			$varAtributos = putElementoArray2NoArray1ComChaves ($atributo, $varAtributos);
 		}
 	}
+	
+	/**
+	 * retorna o necessario para o caso da consulta possuir valores totalizados
+	 */
+	function getStringSQLAtributosTotalizados($arrayAtributos=null){
+		$retorno = "";
+
+		$nmMetodo = "getAtributosValoresTotalizados";
+		if(method_exists($this, $nmMetodo)){
+			if($arrayAtributos == null){
+				$arrayAtributos = $this->$nmMetodo();
+			}
+			
+			//var_dump($arrayParam);
+			$retorno = getStringDoArrayComSeparador($arrayAtributos, ",");
+		}
 		
+		return $retorno;		
+	}
+	
+	function getAtributosTotalizadoresOperacionados($operacao="SUM", $removeNomeTabelaAtributo=true){
+		$retorno = "";
+		$nmMetodo = "getAtributosValoresTotalizados";
+		if(method_exists($this, $nmMetodo)){
+			$array = $this->$nmMetodo();
+			foreach ($array as $atributo){
+				if($removeNomeTabelaAtributo){
+					$atributo = removeNomeTabelaDoAtributo($atributo);
+				}
+				$retorno[] = "$operacao($atributo) AS $atributo";				
+			}
+		}
+		
+		return $retorno;
+	}
+	
+	function temTotalizadoresFiltro(){
+		return isAtributoValido($this->getStringSQLAtributosTotalizados());
+	}
+	
+	function setColecaoTotalizadores($colecao){
+		$this->colecaoTotalizadores = $colecao;		
+	}
+
+	function getColecaoTotalizadores(){
+		return $this->colecaoTotalizadores;
+	}
+	
+	function temColecaoTotalizadores(){
+		return !isColecaoVazia($this->getColecaoTotalizadores());
+	}
 }
 
 /*
