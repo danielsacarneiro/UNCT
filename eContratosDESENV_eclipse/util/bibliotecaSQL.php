@@ -166,7 +166,7 @@ function getSQLDataVigenteArrayParam($pArrayParam) {
 	$nmColDtFimVigencia = "$pNmTableEntidade." . $pNmColDtFimVigencia;
 	
 	if($isPermiteDataFimNula){
-		$sqlPermiteDataFimNula = " OR ( " . $nmColDtInicioVigencia . " <= " . getVarComoDataSQL ( $pDataComparacao ) . "\n AND " . $nmColDtFimVigencia . " IS NULL" . ")";
+		$sqlPermiteDataFimNula = " OR ( $nmColDtInicioVigencia  <= " . getVarComoDataSQL ( $pDataComparacao ) . "\n AND $nmColDtFimVigencia IS NULL" . ")";
 		//echo "NULO";
 	}else{
 		$sqlNAOPermiteDataFimNula = " $nmColDtFimVigencia IS NOT NULL AND $nmColDtFimVigencia <> '0000-00-00' AND ";

@@ -292,7 +292,13 @@ class dbContratoInfo extends dbprocesso {
 		//TABELA $nmTabContratoATUAL
 		//RECENTEMENTE o trecho abaixo foi alterado para INNER (estava LEFT JOIN)
 		//isto porque, quando consultado o termo atual "com efeitos", e nao houver publicacao (ou seja, sem efeitos), o contrato NAO DEVE SER RETORNADO
-		$queryJoin .= "\n INNER JOIN ";
+		//$filtro = new filtroConsultarContratoConsolidacao();
+		$jointemp = "LEFT";
+		$tipoJoinINNER = isAtributoValido($filtro->tpVigencia) || $filtro->inProduzindoEfeitos == dominioContratoProducaoEfeitos::$CD_VISTO_COM_EFEITOS;
+		if($tipoJoinINNER){
+			$jointemp = "INNER";
+		}
+		$queryJoin .= "\n $jointemp JOIN ";
 		$queryJoin .= " (SELECT " . $groupbyinterno . ", MAX(" . vocontrato::$nmAtrSqContrato . ") AS " . vocontrato::$nmAtrSqContrato
 		. " FROM " . $nmTabContratoInterna;
 		$queryJoin .= constantes::$CD_CAMPO_SUBSTITUICAO . " GROUP BY " . $groupbyinterno;
