@@ -407,6 +407,9 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 			$conector = "\n AND ";
 		}		
 		
+		//como a consulta nao vê historico, os contratos so servem se ativados 
+		$filtro = $filtro . $conector . "$nmTabelaContrato." .vocontrato::$nmAtrInDesativado . "='N' ";
+		
 		//retira os contratos CANCELADOS
 		//$filtro = $filtro . $conector . $nmTabelaContrato . "." . vocontrato::$nmAtrEspecieContrato . " NOT LIKE '%CANCELADO%'";
 		
