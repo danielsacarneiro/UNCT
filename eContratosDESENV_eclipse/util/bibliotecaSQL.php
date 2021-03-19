@@ -132,7 +132,10 @@ function formataArrayChaveTuplaComparacaoSequencial($pChaveTuplaComparacaoSemSeq
 		for ($i=0; $i< sizeof($pChaveTuplaComparacaoSemSequencial); $i++){
 			$atributo = $pChaveTuplaComparacaoSemSequencial[$i];
 			if(strpos($atributo, ".") === false){
-				$atributo = "$pNmTableEntidade." . $atributo;
+				if(isAtributoValido($pNmTableEntidade)){
+					$pNmTableEntidadeTemp = "$pNmTableEntidade.";
+				}
+				$atributo = $pNmTableEntidadeTemp . $atributo;
 				$pChaveTuplaComparacaoSemSequencial[$i]=$atributo;
 			}
 				
@@ -162,8 +165,13 @@ function getSQLDataVigenteArrayParam($pArrayParam) {
 	
 	$pChaveTuplaComparacaoSemSequencial = formataArrayChaveTuplaComparacaoSequencial($pChaveTuplaComparacaoSemSequencial,$pNmTableEntidade);
 	
-	$nmColDtInicioVigencia = "$pNmTableEntidade." . $pNmColDtInicioVigencia;
-	$nmColDtFimVigencia = "$pNmTableEntidade." . $pNmColDtFimVigencia;
+	$nmColDtInicioVigencia = $pNmColDtInicioVigencia;
+	$nmColDtFimVigencia = $pNmColDtFimVigencia;
+	
+	if(isAtributoValido($pNmTableEntidade)){
+		$nmColDtInicioVigencia = "$pNmTableEntidade." . $pNmColDtInicioVigencia;
+		$nmColDtFimVigencia = "$pNmTableEntidade." . $pNmColDtFimVigencia;
+	}
 	
 	if($isPermiteDataFimNula){
 		$sqlPermiteDataFimNula = " OR ( $nmColDtInicioVigencia  <= " . getVarComoDataSQL ( $pDataComparacao ) . "\n AND $nmColDtFimVigencia IS NULL" . ")";
@@ -185,6 +193,7 @@ function getSQLDataVigenteArrayParam($pArrayParam) {
 	
 	if($isTrazerMaiorSqVigente){
 		//$sqlFinal .= " AND (EXISTS SELECT MAX($pNmColSequencial) FROM $pNmTableEntidade WHERE )";
+		//echo "entrou";
 		
 		if($sqlFiltroInternoMaiorSq != null){
 			$sqlFiltroInternoMaiorSq = " AND " . $sqlFiltroInternoMaiorSq;
