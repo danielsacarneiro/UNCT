@@ -156,8 +156,8 @@ function getContratoDetalhamentoParam($arrayParametro) {
 			$cdAutorizacaoEconti = $voContratoInfoPK->cdAutorizacao;
 			echo getTextoHTMLDestacado("Autorização", "black", true) . ":";
 					
-			$isContratoEnvioSAD = isContratoEnvioSADPGE($voContrato, dominioSetor::$CD_SETOR_SAD);
-			$isContratoEnvioPGE = isContratoEnvioSADPGE($voContrato, dominioSetor::$CD_SETOR_PGE);
+			$isContratoEnvioSAD = isContratoEnvioSADPGE($voContrato, dominioSetor::$CD_SETOR_SAD, $voContratoInfoPK);
+			$isContratoEnvioPGE = isContratoEnvioSADPGE($voContrato, dominioSetor::$CD_SETOR_PGE, $voContratoInfoPK);
 			//verifica se vai pra SAD ou PGE pelo valor e valida se a informacao do econti esta de acordo
 			if($isContratoEnvioSAD || $isContratoEnvioPGE){
 				echo "Pelo Valor ";
@@ -238,18 +238,34 @@ function alertaContratoInfoNaoCadastrado($vocontratoinfo){
 	}
 }
 
-function isContratoEnvioSADPGE($voContrato, $setor){
+function isContratoEnvioSADPGE($voContrato, $setor, $voContratoInfoPK=null){
 	$vlAComparar = 0;
 	if($setor == dominioSetor::$CD_SETOR_SAD){
 		$vlAComparar = constantes::$VL_GLOBAL_ENVIO_SAD;
+		$validarValorSAD = true;
 	}else{
 		$vlAComparar = constantes::$VL_GLOBAL_ENVIO_PGE;
+		$validarValorPGE = true;
 		//echoo ("vl base: $vlAComparar");
 	}
 	
+	$isContratoCredenciamento = false;
+	if($voContratoInfoPK == null){
+		$voContratoInfoPK = new voContratoInfo();
+		$voContratoInfoPK = voContratoInfo::getVOContratoInfoDeUmVoContrato($voContrato);
+		$dbcontratoinfo = new dbContratoInfo();		
+		try{
+			$voContratoInfoPK = $dbcontratoinfo->consultarPorChaveVO($voContratoInfoPK);
+		}catch (excecaoChaveRegistroInexistente $ex){
+			;
+		}
+	}
+	
+	$isContratoCredenciamento = $voContratoInfoPK->inCredenciamento == 'S';
+	$validarValorPGE = $validarValorPGE && !$isContratoCredenciamento;
 	//$voContrato = new vocontrato();
 	$retorno = false;
-	if($voContrato != null){	
+	if($voContrato != null && ($validarValorSAD || $validarValorPGE)){	
 		$prazoAnual = getDuracaoEmMesesContratoAutorizacaoPGE_SAD($voContrato);
 		//echo $prazoAnual;
 		if($prazoAnual >= vocontrato::$NUM_PRAZO_PADRAO){
