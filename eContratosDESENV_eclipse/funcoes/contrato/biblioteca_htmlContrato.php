@@ -261,7 +261,10 @@ function isContratoEnvioSADPGE($voContrato, $setor, $voContratoInfoPK=null){
 		}
 	}
 	
-	$isContratoCredenciamento = $voContratoInfoPK->inCredenciamento == 'S';
+	if($voContratoInfoPK != null){
+		$isContratoCredenciamento = $voContratoInfoPK->inCredenciamento == 'S';
+	}
+	
 	$validarValorPGE = $validarValorPGE && !$isContratoCredenciamento;
 	//$voContrato = new vocontrato();
 	$retorno = false;
