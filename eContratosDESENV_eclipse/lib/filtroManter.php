@@ -49,6 +49,7 @@ class filtroManter extends multiplosConstrutores {
 	var $isFazerControleSessao = false;
 	
 	var $sqlFiltrosASubstituir;
+	private $temSQLFiltrosASubstituir = false;
 	
 	private $inConsultaRealizada = false;
 	private $QUERY_SELECT;
@@ -644,6 +645,20 @@ class filtroManter extends multiplosConstrutores {
 	function temColecaoTotalizadores(){
 		return !isColecaoVazia($this->getColecaoTotalizadores());
 	}
+	
+	function temSQLFiltrosASubstituir(){
+		return $this->temSQLFiltrosASubstituir;
+	}
+	
+	function setSQLFiltrosASubstituir($param){
+		$this->sqlFiltrosASubstituir = $param;
+		$this->temSQLFiltrosASubstituir = true;
+	}
+	
+	function getSQLFiltrosASubstituir(){
+		return $this->sqlFiltrosASubstituir;
+	}
+	
 }
 
 /*

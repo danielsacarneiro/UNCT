@@ -471,6 +471,11 @@ class dbprocesso {
 				$queryFrom = $filtro->getQueryFromJoin ();
 			}
 			
+			//para o caso de haver filtro a substituir no join
+			if($filtro->temSQLFiltrosASubstituir()){
+				$queryFrom = $filtro->getSQLQueryComFiltroSubstituicao($queryFrom, $filtro->sqlFiltrosASubstituir, false);
+			}
+			
 			// verifica se tem paginacao
 			$limite = "";
 			if ($filtro->TemPaginacao && !$isRetornarApenasQueryCompleta) {
@@ -482,6 +487,7 @@ class dbprocesso {
 				$queryCount = "SELECT count(*) as " . dbprocesso::$nmCampoCount;
 				$queryCount .= "\n FROM (SELECT 'X' " . $queryFrom . $filtroSQLPaginacao . ") ALIAS_COUNT";*/
 				$queryCount = static::getQuerySQLTotalizadores($filtro, $queryFrom);
+				//echo $queryCount;
 	
 				// guarda o numero total de registros para nao ter que executar a consulta TODOS novamente
 				$numTotalRegistros = $filtro->numTotalRegistros = $this->getNumTotalRegistrosQuery ( $queryCount, $filtro );

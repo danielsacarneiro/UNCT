@@ -172,53 +172,6 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 			$conector = "\n AND ";
 		}
 		
-		if ($this->tpVigencia != null && $this->tpVigencia != "") {//constantes::$CD_OPCAO_TODOS) {
-			$nmcoldtinicio = static::$NmTabContratoMater . "." . vocontrato::$nmAtrDtVigenciaInicialContrato;
-			$nmcoldtfim = static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato;
-							
-			if ($this->tpVigencia == dominioTpVigencia::$CD_OPCAO_VIGENTES) {
-				$filtro = $filtro . $conector . getSQLDataVigenteSqSimples ( null, $nmcoldtinicio, $nmcoldtfim );
-			} else {
-				$filtro = $filtro . $conector . getSQLDataNaoVigenteSqSimples ( null, $nmcoldtinicio, $nmcoldtfim );
-			}
-			
-			$conector = "\n AND ";
-		}
-	
-		/*if ($this->dtVigencia != null && $this->dtVigencia != "") {
-			$nmcoldtinicio = vocontrato::$nmAtrDtVigenciaInicialContrato;
-			$nmcoldtfim = vocontrato::$nmAtrDtVigenciaFinalContrato;
-				
-			$filtro = $filtro . $conector . getSQLDataVigenteSimplesPorData(
-					$nmTabelaContrato, 
-					$this->dtVigencia, 
-					$nmcoldtinicio, 
-					$nmcoldtfim);
-				
-			$conector = "\n AND ";
-		}*/
-		
-		//esse filtro deve ser conjulgado com o JOIN no dbContratoInfo
-		//isto porque, quando a producao dos efeitos for NAO, retornará os ultimos registros que ainda nao foram publicados
-		//ou seja, o JOIN, em dbContratoInfo, ja foi feito retornando o ultimo registro (mais atual)
-		//dai eh so verificar se a data publicacao EH NULA
-		//caso contrario, quando se desejar aqueles que produzem efeitos, basta, no JOIN do dbContratoInfo
-		//SOMENTE retornar o ultimo registro QUE TENHA A DATA DE PUBLICACAO DIFERENTE DE NULO, o que nao eh feito aqui
-		//ja que, para chegar aqui, o JOIN ja foi feito
-		/*$inProduzindoEfeitos= $this->inProduzindoEfeitos;
-		if ($inProduzindoEfeitos != null) {
-			$nmColunaComparacao = vocontrato::$nmAtrDtPublicacaoContrato;
-			//pega o contrato atual (termo atual), de maior sequencial, independente de efeitos
-			if($inProduzindoEfeitos == constantes::$CD_NAO){
-				$filtro = $filtro . $conector 
-				. "(". static::$NmTabContratoATUAL . ".$nmColunaComparacao IS NULL "
-				. " OR ". static::$NmTabContratoATUAL. ".$nmColunaComparacao = '0000-00-00')";
-				//$cdCampoSubstituir .= " AND ($nmColunaComparacao IS NOT NULL AND $nmColunaComparacao <> '0000-00-00')";
-			}
-			
-			$conector = "\n AND ";
-		}*/		
-		
 		// atributos do filtromanter
 		if ($this->anoContrato != null) {
 			
@@ -405,7 +358,30 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 			$filtro = $filtro . $conector . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrCdPessoaGestor . $temp;
 		
 			$conector = "\n AND ";
-		}		
+		}	
+		
+		$sqlSubstituicaoJoinContratoATUAL = "";
+		if ($this->tpVigencia != null && $this->tpVigencia != "") {//constantes::$CD_OPCAO_TODOS) {
+			$nmcoldtinicioTemp = vocontrato::$nmAtrDtVigenciaInicialContrato;
+			$nmcoldtfimTemp = vocontrato::$nmAtrDtVigenciaFinalContrato;
+		
+			$nmcoldtinicio = static::$NmTabContratoMater . "." . $nmcoldtinicioTemp;
+			$nmcoldtfim = static::$NmTabContratoATUAL . "." . $nmcoldtfimTemp;
+				
+			if ($this->tpVigencia == dominioTpVigencia::$CD_OPCAO_VIGENTES) {
+				$filtro = $filtro . $conector . getSQLDataVigenteSqSimples ( null, $nmcoldtinicio, $nmcoldtfim );
+				$sqlSubstituicaoJoinContratoATUAL = " AND ". getSQLDataVigenteSqSimples ( null, $nmcoldtinicioTemp, $nmcoldtfimTemp );
+			} else {
+				$filtro = $filtro . $conector . getSQLDataNaoVigenteSqSimples ( null, $nmcoldtinicio, $nmcoldtfim );
+				$sqlSubstituicaoJoinContratoATUAL = " AND ". getSQLDataNaoVigenteSqSimples ( null, $nmcoldtinicioTemp, $nmcoldtfimTemp );
+			}
+				
+			$conector = "\n AND ";
+				
+		}
+			
+		//substitui $CD_CAMPO_SUBSTITUICAO feito desde a confeccao do join da consulta em dbcontratoinfo
+		$this->setSQLFiltrosASubstituir($sqlSubstituicaoJoinContratoATUAL);
 		
 		//como a consulta nao vê historico, os contratos so servem se ativados 
 		$filtro = $filtro . $conector . "$nmTabelaContrato." .vocontrato::$nmAtrInDesativado . "='N' ";

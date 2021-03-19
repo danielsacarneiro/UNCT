@@ -377,7 +377,8 @@ class dbContratoInfo extends dbprocesso {
 			$cdCampoSubstituir .= " AND " . $filtro->getSQFiltroCdEspecie($nmTabContratoInterna);
 		}
 		
-		$queryJoin = str_replace(constantes::$CD_CAMPO_SUBSTITUICAO, $cdCampoSubstituir, $queryJoin);
+		$queryJoin = str_replace(constantes::$CD_CAMPO_SUBSTITUICAO, $cdCampoSubstituir . $filtro::$CD_CAMPO_SUBSTITUICAO, $queryJoin);
+		//$queryJoin = str_replace(constantes::$CD_CAMPO_SUBSTITUICAO, $cdCampoSubstituir, $queryJoin);
 		
 		//ECHO $queryJoin; 
 		/*
