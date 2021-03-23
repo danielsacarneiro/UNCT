@@ -206,7 +206,7 @@ function getAlertaOrientacao($msgAlerta, &$countATENCAO, $conectorAlerta = null,
 	if($link != null){
 		$texto = getTextoLink($texto, $link, null, false, true);
 	}else{
-		$texto = getTextoHTMLDestacado($texto, "red", false);
+		$texto = getTextoHTMLDestacado($texto, "red", true);
 	}
 	
 	$html .= $conectorAlerta . $texto;
@@ -226,11 +226,25 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 	
 	$countATENCAO = 1;
 	$isVODemandaNaoNulo = $voDemanda != null;
-	$conectorAlerta = "<BR>";
+	//$conectorAlerta = "<BR>";
+	
+	$html .= dominioTipoDemandaContrato::getHtmlChecksBoxDetalhamento($nmCampoTpDemandaContrato, $pCdOpcaoSelecionadaTpDemandaContrato, 2, true);
+	$isReajusteDemanda = $isVODemandaNaoNulo 
+		&& dominioTipoDemandaContrato::existeItemArrayOuStrCampoSeparador(dominioTipoDemandaContrato::$CD_TIPO_REAJUSTE, $pCdOpcaoSelecionadaTpDemandaContrato);
+	
+	if($isReajusteDemanda){
+		//eh reajuste
+		$html .= "Reajuste: " . dominioTipoReajuste::getHtmlDetalhamento($nmCampoTpDemandaReajuste, $nmCampoTpDemandaReajuste, $pCdOpcaoSelecionadaReajuste, false);
+	
+		if(isSinalizarDemandaReajustePeriodoNaoTranscorrido($voDemanda)){
+			$html .= $conectorAlerta . getTextoHTMLDestacado("ATENÇÃO$countATENCAO: o período contratual necessário para o cálculo do reajuste(índice contratual) ainda não transcorreu. Verifique a Data Base de Reajuste do contrato.");
+			$conectorAlerta = "<BR>";
+			$countATENCAO++;
+		}
+	}
+	
 	
 	try{
-		$isReajusteDemanda = $isVODemandaNaoNulo && existeStr1NaStr2ComSeparador($voDemanda->tpDemandaContrato, dominioTipoDemandaContrato::$CD_TIPO_REAJUSTE);
-		
 		//if(!$temReajustePendente){echo "teste";}		
 		$retornoTemReajustePendente = temReajustePendente($voContratoDemanda);
 		$temReajustePendente = $retornoTemReajustePendente[0];
@@ -267,7 +281,7 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 		$countATENCAO++;		
 	}
 	
-	$html .= dominioTipoDemandaContrato::getHtmlChecksBoxDetalhamento($nmCampoTpDemandaContrato, $pCdOpcaoSelecionadaTpDemandaContrato, 2, true);
+	/*$html .= dominioTipoDemandaContrato::getHtmlChecksBoxDetalhamento($nmCampoTpDemandaContrato, $pCdOpcaoSelecionadaTpDemandaContrato, 2, true);
 	if(dominioTipoDemandaContrato::existeItemArrayOuStrCampoSeparador(dominioTipoDemandaContrato::$CD_TIPO_REAJUSTE, $pCdOpcaoSelecionadaTpDemandaContrato)){
 		//eh reajuste
 		$html .= "Reajuste: " . dominioTipoReajuste::getHtmlDetalhamento($nmCampoTpDemandaReajuste, $nmCampoTpDemandaReajuste, $pCdOpcaoSelecionadaReajuste, false);		
@@ -277,9 +291,9 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 			$conectorAlerta = "<BR>";
 			$countATENCAO++;
 		}				
-	}
+	}*/
 
-	if($isVODemandaNaoNulo != null){
+	if($isVODemandaNaoNulo){
 		//$exibirInfoProrrog = $voDemanda->situacao != dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA;
 		$exibirInfoProrrog = !isSituacaoDemandaFechada($voDemanda->situacao);		
 	}
