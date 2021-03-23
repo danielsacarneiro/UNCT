@@ -1145,7 +1145,7 @@ class dbDemanda extends dbprocesso {
 					$dbContrato = new dbcontrato();
 					$vocontratoDemanda =$dbContrato->consultarPorChaveVO($vocontratoDemanda);
 				}catch (Exception $ex){
-					throw new excecaoGenerica("Verifique se o termo relacionado foi incluído corretamente.");
+					throw new excecaoGenerica("Verifique se o termo relacionado foi incluído corretamente na função 'contratos'.");
 				}
 				
 				$vocontratoInfo->anoContrato = $vocontratoDemanda->anoContrato;

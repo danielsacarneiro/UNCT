@@ -539,4 +539,10 @@ function removeNomeTabelaDoAtributo ($atributo){
 	return $retorno;
 }
 
+function getSQLConsultaIntervaloData($colunaAComparar, $pValorData, $pOperacaoData){
+	
+	return "($colunaAComparar IS NOT NULL AND $colunaAComparar $pOperacaoData " . getVarComoData($pValorData) . ") ";
+	
+}
+
 ?>

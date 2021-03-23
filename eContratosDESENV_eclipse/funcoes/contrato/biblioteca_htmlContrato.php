@@ -20,6 +20,7 @@ function getColecaoContratoDet($colecao,$isDetalharChaveCompleta=false) {
 	//var_dump($colecao);
 	if(!isColecaoVazia($colecao)){
 		foreach ( $colecao as $voContrato ) {
+			//echo $voContrato->toString();
 			$html .= getContratoDet ( $voContrato,false,$isDetalharChaveCompleta );
 		}
 	}else{
@@ -922,16 +923,16 @@ function temReajustePendente($vocontrato) {
 	}
 
 	$filtro = new filtroManterDemanda ( false );
-	$voDemanda = new voDemanda ();
+	$voDemandaTemp = new voDemanda ();
 	$dbprocesso = new dbDemanda();
-	$filtro->vodemanda = $filtro->voPrincipal = $voDemanda;
+	$filtro->vodemanda = $filtro->voPrincipal = $voDemandaTemp;
 	
 	$vocontrato->cdEspecie = null;
 	$vocontrato->sqEspecie = null;
 	$filtro->vocontrato = $vocontrato;
 	
 	$filtro->isValidarConsulta = false;
-	// $filtro->voPrincipal = $voDemanda;
+	// $filtro->voPrincipal = $voDemandaTemp;
 	$filtro->setaFiltroConsultaSemLimiteRegistro ();
 	$filtro->vodemanda->situacao = array (
 			dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_A_FAZER,
@@ -944,7 +945,7 @@ function temReajustePendente($vocontrato) {
 	$filtro->dtReferenciaInicial = "01/01/2020";	
 	//$filtro->prioridadeExcludente = dominioPrioridadeDemanda::$CD_PRIORI_BAIXA;
 	
-	$colecao = $dbprocesso->consultarTelaConsulta ( $voDemanda, $filtro );
+	$colecao = $dbprocesso->consultarTelaConsulta ( $voDemandaTemp, $filtro );
 	
 	//var_dump($colecao);
 
@@ -1659,6 +1660,18 @@ function getDuracaoEmMesesContratoAutorizacaoPGE_SAD($voContrato){
 	return $prazoAnual;
 }
 
+/**
+ * o resultado da consulta abaixo, por consolidar, mes a mes, os contratos que vencem em determinado ano
+ * pode apresentar resultado diferente da consulta de consolidacao, se feita buscando os contratos que vencem em certo mÊs
+ * isto porque, na consolidacao, os contratos que vencem em certo mês podem também vencer em um mês mais a frente, num novo aditivo
+ * dai que aquele contrato, considerando o ano como um todo, nao encerrará no mes consultado no filtro de consolidacao, e sim mais a frente
+ * nao incrementando o número de contratos vencidos para o mes consultado em consolidacao
+ * Ex.: a consulta de consolidacao retorna 9 contratos que vencem em fev.2021 , mas a consulta de contratos a vencer por ano, traz apenas 8 que vencem em fev.2021
+ * isto porque o contrato que sobra tem um aditivo que vence em agosto.2021 (5 TA do CSAFI 04.2018), nao sendo computado como vencido em fev.2021 (4 TA)
+ * Isto quer dizer que a data final de vigencia correta para o contrato em questao, considerando o ano de 2021, é dada pelo 5 TA, e nao pelo 4 TA
+ * @param unknown $ano
+ * @return string
+ */
 function getContratosAVencerAno($ano=null){
 	if($ano == null){
 		$ano = getAnoHoje();
@@ -1669,6 +1682,7 @@ function getContratosAVencerAno($ano=null){
 	$filtro->dtFim1 = "01/01/$ano";
 	$filtro->dtFim2 = "31/12/$ano";
 	$filtro->cdEspecie = dominioEspeciesContrato::getColecaoFiltroContratoConsolidacao();
+	$filtro->voPrincipal = new vocontrato();
 	//$filtro->isConsultarHTML = true;
 	//$filtro->dtVigencia = $data;
 	
@@ -1676,9 +1690,11 @@ function getContratosAVencerAno($ano=null){
 	
 	$filtro->isTpVigenciaMAxSq = true;
 	$filtro->isRetornarQueryCompleta = true;
+	$filtro->inDesativado = constantes::$CD_NAO;
 	
 	$dbcontratoinfo = new dbcontrato();
-	$colecao = $dbcontratoinfo->consultarTelaConsulta(array($filtro));
+	//$colecao = $dbcontratoinfo->consultarTelaConsulta(array($filtro));
+	$colecao = $dbcontratoinfo->consultarFiltroManterContrato(new vocontrato(), $filtro);
 	
 	$query = $filtro->getSQL_QUERY_COMPLETA();
 	

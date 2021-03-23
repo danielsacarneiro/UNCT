@@ -355,40 +355,10 @@ class dbContratoInfo extends dbprocesso {
 			$queryJoin .= "\n AND " . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdDemanda . "=" . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd;				
 		}
 	
-		$cdCampoSubstituir = "";
-		//pega o contrato atual (termo atual), maior sequencial, desde que a data final de vigencia nao seja nula ou '0000-00-00'
-		$nmColunaComparacao = vocontrato::$nmAtrDtVigenciaFinalContrato;
-		$cdCampoSubstituir = " WHERE ($nmColunaComparacao IS NOT NULL AND $nmColunaComparacao <> '0000-00-00')";
-		
-		//analisar as informacoes que estao no filtroConsultarContratoConsolidacao
-		$inProduzindoEfeitos= $filtro->inProduzindoEfeitos;
-		if ($inProduzindoEfeitos != null) {
-			$nmColunaComparacao = vocontrato::$nmAtrDtPublicacaoContrato;
-			//pega o contrato atual (termo atual), de maior sequencial, desde que tenha sido publicado, provocando efeitos
-			//so vai consultar se for SIM, caso contrario, traz o ultimo registro, independente de ter sido publicado ou nao.
-			if($inProduzindoEfeitos == dominioContratoProducaoEfeitos::$CD_VISTO_COM_EFEITOS){				
-				$cdCampoSubstituir .= " AND ($nmColunaComparacao IS NOT NULL AND $nmColunaComparacao <> '0000-00-00')";
-			}/*else{
-				$cdCampoSubstituir .= " AND ($nmColunaComparacao IS NULL)";
-			}*/
-		}		
-		
-		if($filtro->cdEspecie != null){			
-			$cdCampoSubstituir .= " AND " . $filtro->getSQFiltroCdEspecie($nmTabContratoInterna);
-		}
-		
+		$cdCampoSubstituir = $filtro->getSQLTermoMaiorSqVigencia($nmTabContratoInterna);
+		//substitui o sql no join do MAXCONTRATO
 		$queryJoin = str_replace(constantes::$CD_CAMPO_SUBSTITUICAO, $cdCampoSubstituir . $filtro::$CD_CAMPO_SUBSTITUICAO, $queryJoin);
 		//$queryJoin = str_replace(constantes::$CD_CAMPO_SUBSTITUICAO, $cdCampoSubstituir, $queryJoin);
-		
-		//ECHO $queryJoin; 
-		/*
-		 * $arrayGroupby = array($nmTabela . "." . voContratoInfo::$nmAtrAnoContrato,
-		 * $nmTabela . "." . voContratoInfo::$nmAtrCdContrato,
-		 * $nmTabela . "." . voContratoInfo::$nmAtrTipoContrato
-		 * );
-		 *
-		 * $filtro->groupby = $arrayGroupby;
-		 */
 		
 		$filtro->groupby = $groupbyinterno;
 	

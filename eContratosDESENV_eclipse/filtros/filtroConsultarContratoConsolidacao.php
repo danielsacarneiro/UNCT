@@ -272,31 +272,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 				
 			$conector = "\n AND ";
 		}
-		
-		if ($this->mesIntervaloFimVigencia != null) {
-			if($this->anoIntervaloFimVigencia == null){
-				$this->anoIntervaloFimVigencia = getAnoHoje();
-			}
-			$anoTemp = $this->anoIntervaloFimVigencia;
-			
-			$this->dtFimVigenciaFinal = getDataUltimoDiaMesHtml($this->mesIntervaloFimVigencia, $anoTemp);
-			$this->dtFimVigenciaInicial = getDataMesHtml("01", $this->mesIntervaloFimVigencia, $anoTemp);
-		}		
-		
-		if ($this->dtFimVigenciaInicial != null) {
-			$colunaAComparar = static::getComparacaoWhereDataVigencia(static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato);				
-			$filtro = $filtro . $conector . "($colunaAComparar IS NOT NULL AND $colunaAComparar >= " . getVarComoData($this->dtFimVigenciaInicial) . ") ";
 				
-			$conector = "\n AND ";
-		}
-
-		if ($this->dtFimVigenciaFinal != null) {
-			$colunaAComparar = static::getComparacaoWhereDataVigencia(static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato);		
-			$filtro = $filtro . $conector . "($colunaAComparar IS NOT NULL AND $colunaAComparar <= " . getVarComoData($this->dtFimVigenciaFinal) . ") ";
-		
-			$conector = "\n AND ";
-		}		
-		
 		$fatorMensal = "*12";
 		if ($this->valorInicial != null || $this->valorFinal != null) {
 			$filtro = $filtro . $conector . static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrVlMensalContrato . " > '0' ";
@@ -360,7 +336,40 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 			$conector = "\n AND ";
 		}	
 		
+		if ($this->mesIntervaloFimVigencia != null) {
+			if($this->anoIntervaloFimVigencia == null){
+				$this->anoIntervaloFimVigencia = getAnoHoje();
+			}
+			$anoTemp = $this->anoIntervaloFimVigencia;
+				
+			$this->dtFimVigenciaFinal = getDataUltimoDiaMesHtml($this->mesIntervaloFimVigencia, $anoTemp);
+			$this->dtFimVigenciaInicial = getDataMesHtml("01", $this->mesIntervaloFimVigencia, $anoTemp);
+		}
+		
 		$sqlSubstituicaoJoinContratoATUAL = "";
+		if ($this->dtFimVigenciaInicial != null) {
+			$colunaAComparar = static::getComparacaoWhereDataVigencia(static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato);
+			$sqlFiltroTemp = getSQLConsultaIntervaloData($colunaAComparar, $this->dtFimVigenciaInicial, ">=");
+			//$sqlFiltroTemp = "($colunaAComparar IS NOT NULL AND $colunaAComparar >= " . getVarComoData($this->dtFimVigenciaInicial) . ") ";
+			$filtro = $filtro . $conector . $sqlFiltroTemp;
+			
+			//vai sem o nome da tabela porque o filtro abaixo vai ser utilizado na tabela interna do maior SQ no join
+			$sqlSubstituicaoJoinContratoATUAL .= " AND " . getSQLConsultaIntervaloData(vocontrato::$nmAtrDtVigenciaFinalContrato, $this->dtFimVigenciaInicial, ">=");
+		
+			$conector = "\n AND ";
+		}
+		
+		if ($this->dtFimVigenciaFinal != null) {
+			$colunaAComparar = static::getComparacaoWhereDataVigencia(static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato);
+			$sqlFiltroTemp = getSQLConsultaIntervaloData($colunaAComparar, $this->dtFimVigenciaFinal, "<=");
+			//$sqlFiltroTemp = "($colunaAComparar IS NOT NULL AND $colunaAComparar <= " . getVarComoData($this->dtFimVigenciaFinal) . ") ";
+			$filtro = $filtro . $conector . $sqlFiltroTemp;
+			
+			$sqlSubstituicaoJoinContratoATUAL .= " AND " . getSQLConsultaIntervaloData(vocontrato::$nmAtrDtVigenciaFinalContrato, $this->dtFimVigenciaFinal, "<=");
+		
+			$conector = "\n AND ";
+		}		
+		
 		if ($this->tpVigencia != null && $this->tpVigencia != "") {//constantes::$CD_OPCAO_TODOS) {
 			$nmcoldtinicioTemp = vocontrato::$nmAtrDtVigenciaInicialContrato;
 			$nmcoldtfimTemp = vocontrato::$nmAtrDtVigenciaFinalContrato;
@@ -370,14 +379,16 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 				
 			if ($this->tpVigencia == dominioTpVigencia::$CD_OPCAO_VIGENTES) {
 				$filtro = $filtro . $conector . getSQLDataVigenteSqSimples ( null, $nmcoldtinicio, $nmcoldtfim );
-				$sqlSubstituicaoJoinContratoATUAL = " AND ". getSQLDataVigenteSqSimples ( null, $nmcoldtinicioTemp, $nmcoldtfimTemp );
+				$sqlSubstituicaoJoinContratoATUAL .= " AND ". getSQLDataVigenteSqSimples ( null, $nmcoldtinicioTemp, $nmcoldtfimTemp );
 			} else {
 				$filtro = $filtro . $conector . getSQLDataNaoVigenteSqSimples ( null, $nmcoldtinicio, $nmcoldtfim );
-				$sqlSubstituicaoJoinContratoATUAL = " AND ". getSQLDataNaoVigenteSqSimples ( null, $nmcoldtinicioTemp, $nmcoldtfimTemp );
+				$sqlSubstituicaoJoinContratoATUAL .= " AND ". getSQLDataNaoVigenteSqSimples ( null, $nmcoldtinicioTemp, $nmcoldtfimTemp );
 			}
+			
+			//o filtro de vigencia deve ter o mesmo filtro utilizado no join, para nao dar conflito com zero resultado
+			$filtro = $filtro . $conector . $this->getSQLTermoMaiorSqVigencia(static::$NmTabContratoATUAL, false);
 				
-			$conector = "\n AND ";
-				
+			$conector = "\n AND ";				
 		}
 			
 		//substitui $CD_CAMPO_SUBSTITUICAO feito desde a confeccao do join da consulta em dbcontratoinfo
@@ -396,6 +407,36 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		// echo "Filtro:$filtro<br>";
 		
 		return $filtro;
+	}
+	
+	function getSQLTermoMaiorSqVigencia($nmTabContrato, $comWhere = true){
+		
+		$retorno = "";
+		//pega o contrato atual (termo atual), maior sequencial, desde que a data final de vigencia nao seja nula ou '0000-00-00'
+		$nmColunaComparacao = "$nmTabContrato." . vocontrato::$nmAtrDtVigenciaFinalContrato;
+		
+		$where = "WHERE";
+		if(!$comWhere){
+			$where = "";
+		}
+		$retorno = " $where ($nmColunaComparacao IS NOT NULL AND $nmColunaComparacao <> '0000-00-00')";		
+		
+		$isProduzindoEfeitosSelecionado = $this->inProduzindoEfeitos != null;
+		$inProduzindoEfeitos = $this->inProduzindoEfeitos;
+		if ($isProduzindoEfeitosSelecionado) {
+			$nmColunaComparacao = "$nmTabContrato." . vocontrato::$nmAtrDtPublicacaoContrato;
+			//pega o contrato atual (termo atual), de maior sequencial, desde que tenha sido publicado, provocando efeitos
+			//so vai consultar se for SIM, caso contrario, traz o ultimo registro, independente de ter sido publicado ou nao.
+			if($inProduzindoEfeitos == dominioContratoProducaoEfeitos::$CD_VISTO_COM_EFEITOS){
+				$retorno .= " AND ($nmColunaComparacao IS NOT NULL AND $nmColunaComparacao <> '0000-00-00')";
+			}
+		}
+		
+		if($this->cdEspecie != null){
+			$retorno .= " AND " . $this->getSQFiltroCdEspecie($nmTabContrato);
+		}		
+		
+		return $retorno;		
 	}
 	
 	/**

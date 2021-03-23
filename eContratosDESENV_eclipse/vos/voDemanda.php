@@ -381,7 +381,7 @@ class voDemanda extends voentidade {
 		if($this->colecaoContrato != null){
 			$retorno = $this->colecaoContrato[0]; 
 		}
-		return $retorno;
+		return clone $retorno;
 	}	
 	function toString() {
 		$retorno .= $this->ano;

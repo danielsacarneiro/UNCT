@@ -101,6 +101,7 @@ function confirmar() {
 	        $selectExercicio = new selectExercicio();	         
 	        	        	        
 	        $complementoHTML = "";	
+	        //var_dump($vo->colecaoContrato);
 	        getDemandaDetalhamentoComLupa($vo, false);
 	        ?>
 			<TR>

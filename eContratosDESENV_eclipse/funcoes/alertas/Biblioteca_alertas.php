@@ -700,8 +700,8 @@ function criarAlertasEmailGestorColecaoContratos($filtro=null, $log=null, $isCon
 				$log .= " $msgIdContrato.";
 				
 			}catch(excecaoGenerica $ex){
-				$log .= "<br>Erro ao incluir alerta ao contrato:" 
-						. "$msgIdContrato |" . $ex->getMessage();
+				$log .= getTextoHTMLDestacado("<br>Erro ao incluir alerta ao contrato:" 
+						. "$msgIdContrato |" . $ex->getMessage());
 				
 				$countAlertasErro++;
 			}
@@ -710,7 +710,11 @@ function criarAlertasEmailGestorColecaoContratos($filtro=null, $log=null, $isCon
 		
 		$log .= getLogComFlagImpressao("<br>Alertas Incluídos: <b>$countAlertasIncluidos</b>.");
 		$log .= getLogComFlagImpressao("<br>Alertas Existentes: <b>$countAlertasExistentes</b>.");
-		$log .= getLogComFlagImpressao("<br>Alertas Erro: <b>$countAlertasErro</b>.");
+		$msgAlertaErro = "Alertas Erro: <b>$countAlertasErro</b>.";
+		if($countAlertasErro > 0){
+			$msgAlertaErro = getTextoHTMLDestacado("Alertas Erro: $countAlertasErro.");
+		}
+		$log .= getLogComFlagImpressao("<br>$msgAlertaErro");
 		
 	}else{
 		$log .= "<br>Não há alertas a serem criados.";

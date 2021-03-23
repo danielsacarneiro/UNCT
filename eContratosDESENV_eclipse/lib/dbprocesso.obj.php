@@ -473,7 +473,8 @@ class dbprocesso {
 			
 			//para o caso de haver filtro a substituir no join
 			if($filtro->temSQLFiltrosASubstituir()){
-				$queryFrom = $filtro->getSQLQueryComFiltroSubstituicao($queryFrom, $filtro->sqlFiltrosASubstituir, false);
+				$queryFrom = $filtro->getSQLQueryComFiltroSubstituicao($queryFrom, $filtro->getSQLFiltrosASubstituir(), false);
+				//echoo("teste");
 			}
 			
 			// verifica se tem paginacao
