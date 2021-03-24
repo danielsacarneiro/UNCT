@@ -290,7 +290,7 @@ function iniciar(){
 	            			maxlength="10"
 	            			required>
 				</TD>
-	            <TH class="campoformulario" nowrap width="1%">Data.Base Reajuste:</TH>
+	            <TH class="campoformulario" nowrap width="1%"><?=getTextoHTMLTagMouseOver("Data.Base Reajuste", "Incluir somente se a data base para reajuste for DIFERENTE da data da proposta (VER NO CONTRATO. Ex.: pode ser a data da assinatura ou outra determinada por um TA).")?>:</TH>
 	            <TD class="campoformulario">
 	            	<INPUT type="text" 
 	            	       id="<?=voContratoInfo::$nmAtrDtBaseReajuste?>" 

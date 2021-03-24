@@ -564,25 +564,7 @@ include_once ("voDemanda.php");
 	function getLinkMinutaDocumento(){
 		return static::getEnredeçoDocumento($this->linkMinutaDoc);
 	}
-	
-	/**
-	 * serve somente para o arquivo pdf
-	 * o arquivo minuta vai ser selecionado da demanda que trata o termo
-	 */
-	function getEnderecoDocumentoMascarado($link){
 		
-		if(isAtributoValido($link)){
-			if($this->importacao == constantes::$CD_SIM){
-				//se foi importado da planilha
-				$retorno = static::getEnredeçoDocumento($link);
-			}else{
-				//$retorno = $this->getEnderecoArquivoInseridoTela();
-			}
-		}
-		
-		return $retorno;		
-	}
-	
 	static function getEnredeçoDocumento($link){
 			//para o caso de o link do doc vier em endereco relativo ("../")
 			$pastaUNCTPrincipalSubs = dominioTpDocumento::$ENDERECO_DRIVE . "\\" . dominioTpDocumento::$ENDERECO_PASTABASE_UNCT;
@@ -590,10 +572,19 @@ include_once ("voDemanda.php");
 			$link = str_ireplace("..\\", $pastaUNCTPrincipalSubs . "\\" , $link);
 	
 			$link = str_ireplace("/", "\\" , $link);
-			$link = str_ireplace(dominioTpDocumento::$UNIDADE_REDE_PLANILHA, dominioTpDocumento::$ENDERECO_DRIVE, $link);
+			//aqui remove a unidade de rede que pode variar de maquina para maquina
+			//$link = str_ireplace(dominioTpDocumento::$UNIDADE_REDE_PLANILHA, dominioTpDocumento::$ENDERECO_DRIVE, $link);
+			$partes = explode(":", $link);
+			if(is_array($partes) && sizeof($partes) > 1){
+				//pega o segundo trecho do array a partir dos : que separam o link da unidade mapeada
+				$link = $partes[1];
+				$link = dominioTpDocumento::$ENDERECO_DRIVE . $link;
+			}
 			
 			//echoo("LINK BASE $link");
-			$link = str_replace(dominioTpDocumento::getEnderecoAntigoPastaTermoDigitalizado(), dominioTpDocumento::getEnderecoPastaTermoDigitalizado(), $link);
+			//if(strrpos($link, dominioTpDocumento::$ENDERECO_NOVA_PASTA_PDF) === false){
+				$link = str_replace(dominioTpDocumento::getEnderecoAntigoPastaTermoDigitalizado(), dominioTpDocumento::getEnderecoPastaTermoDigitalizado(), $link);
+			//}
 			//echoo("LINK ALTERADO $link");
 
 		return $link; 

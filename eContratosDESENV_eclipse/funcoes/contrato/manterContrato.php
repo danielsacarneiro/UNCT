@@ -513,7 +513,7 @@ function transferirDadosPessoa(cd, nm, doc) {
 		        $enderecoMinuta = $voContrato->getEnredeçoDocumento($voContrato->linkMinutaDoc);
 		        $isContratoPlanilha = $voContrato->importacao != constantes::$CD_NAO;
 		        
-		        $arrayRetorno = getHTMLDocumentosContrato($voContrato);
+		        $arrayRetorno = getHTMLDocumentosContrato($voContrato, false, true);
 		        $temDocsAExibir = $arrayRetorno[0];
 		        $docsAexibir = $arrayRetorno[1];
 		        ?>
@@ -527,7 +527,7 @@ function transferirDadosPessoa(cd, nm, doc) {
 						Minuta:
 						</TH>											
 						<TD class="campoformulario">
-				        <textarea id="<?=vocontrato::$nmAtrLinkMinutaDoc?>" name="<?=vocontrato::$nmAtrLinkMinutaDoc?>" rows="2" cols="80" class="camporeadonly" readonly><?php echo  $enderecoMinuta;?></textarea>
+				        <textarea id="<?=vocontrato::$nmAtrLinkMinutaDoc?>" name="<?=vocontrato::$nmAtrLinkMinutaDoc?>" rows="2" cols="80" class="camporeadonly"><?php echo  $enderecoMinuta;?></textarea>
 					    	<?php    	
 					    	echo getBotaoAbrirDocumento(vocontrato::$nmAtrLinkMinutaDoc);
 					    	?>					        
@@ -538,7 +538,7 @@ function transferirDadosPessoa(cd, nm, doc) {
 							Assinado:
 							</TH>			
 							<TD class="campoformulario">
-					        <textarea id="<?=vocontrato::$nmAtrLinkDoc?>" name="<?=vocontrato::$nmAtrLinkDoc?>" rows="2" cols="80" class="camporeadonly" readonly><?php echo  $endereco;?></textarea>
+					        <textarea id="<?=vocontrato::$nmAtrLinkDoc?>" name="<?=vocontrato::$nmAtrLinkDoc?>" rows="2" cols="80" class="camporeadonly"><?php echo  $endereco;?></textarea>
 					    	<?php    	
 					    	echo getBotaoAbrirDocumento(vocontrato::$nmAtrLinkDoc);
 					    	?>				

@@ -158,27 +158,29 @@ function getBotaoAbrirDocumentoVO($vodoc, $isMenuSistema = true){
  * 
  * @param unknown $voContrato vocontrato
  */
-function getHTMLDocumentoContratoPorDemandaDoc($voContrato, $tpDoc, $isVersaoResumida=false){
+function getHTMLDocumentoContratoPorDemandaDoc($voContrato, $tpDoc, $isVersaoResumida=false, $isAlteracaoContrato=false){
 	
 	$vodemandatram = new voDemandaTramitacao();
 	$vodoc = getDocumentoContrato($voContrato, $tpDoc);
 	//var_dump($vodocminuta);
-
-	$vodemandatram->voDoc = $vodoc;
 	$temDoc = $vodoc != null;
+	if($temDoc){
+		$vodemandatram->voDoc = $vodoc;
+	}
 	
 	$msgDocNaoExiste = "Documento não inserido na demanda.";	
 	
 	//$voContrato = new vocontrato();
 	//var_dump($voContrato);
+	$nmCampo = $voContrato->getValorChaveLogica();
 	if(dominioTpDocumento::$CD_TP_DOC_CONTRATO == $tpDoc){
-		$endereco = vocontrato::getEnredeçoDocumento($voContrato->linkDoc);
-		$nmCampo = vocontrato::$nmAtrLinkDoc;
+		$enderecoTemp = vocontrato::getEnredeçoDocumento($voContrato->linkDoc);
+		$nmCampo .= vocontrato::$nmAtrLinkDoc;
 		$descricao = "PDF";
 		$cor = "blue";
 	}else{
-		$endereco = vocontrato::getEnredeçoDocumento($voContrato->linkMinutaDoc);
-		$nmCampo = vocontrato::$nmAtrLinkMinutaDoc;
+		$enderecoTemp = vocontrato::getEnredeçoDocumento($voContrato->linkMinutaDoc);
+		$nmCampo .= vocontrato::$nmAtrLinkMinutaDoc;
 		$descricao = "Minuta";
 		$cor = "red";
 	}
@@ -191,17 +193,24 @@ function getHTMLDocumentoContratoPorDemandaDoc($voContrato, $tpDoc, $isVersaoRes
 		$retorno .= getHtmlDocumentoArray($pArray);
 	}
 	
-	if(!$temDoc && isAtributoValido($endereco)){
+	if(!$temDoc && isAtributoValido($enderecoTemp)){
+		$opcaohtml = "readonly";
+		$classEndereco = "camporeadonly";
+		if($isAlteracaoContrato){
+			$opcaohtml = "";
+			$classEndereco = constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO;				
+		}
 	
 		if(!$isVersaoResumida){
 			$retorno .= "<br>".getTextoHTMLDestacado("Exibindo antigo link $descricao planilha: ", $cor, false)
-			."<textarea id='$nmCampo' name='$nmCampo' rows='2' cols='80' class='camporeadonly' readonly>"
-					. $endereco . "</textarea>"
+			."<textarea id='$nmCampo' name='$nmCampo' rows='2' cols='80' class='$classEndereco' $opcaohtml>"
+					. $enderecoTemp . "</textarea>"
 						. getBotaoAbrirDocumento($nmCampo)
 						;
 		}else{
+			//echo $enderecoTemp;
 			$retorno .= 
-			getInputHidden($nmCampo, $nmCampo, $endereco)
+			getInputHidden($nmCampo, $nmCampo, $enderecoTemp)
 			. getBotaoAbrirDocumento($nmCampo, false, $descricao)
 					;						
 		}
@@ -215,12 +224,14 @@ function getHTMLDocumentoContratoPorDemandaDoc($voContrato, $tpDoc, $isVersaoRes
  * @param unknown $voContrato
  * @return string[]|boolean[]
  */
-function getHTMLDocumentosContrato($voContrato, $isVersaoResumida=false){	
+function getHTMLDocumentosContrato($voContrato, $isVersaoResumida=false, $isAlteracaoContrato=false){
+	//$voContrato = new vocontrato();
+	//echo $voContrato->linkDoc;
 	$array = getHTMLDocumentoContratoPorDemandaDoc($voContrato, dominioTpDocumento::$CD_TP_DOC_MINUTA, $isVersaoResumida);
 	$retorno .= $array[0];
 	$temDocMinuta = $array[1]; 
 	
-	$array = getHTMLDocumentoContratoPorDemandaDoc($voContrato, dominioTpDocumento::$CD_TP_DOC_CONTRATO, $isVersaoResumida);
+	$array = getHTMLDocumentoContratoPorDemandaDoc($voContrato, dominioTpDocumento::$CD_TP_DOC_CONTRATO, $isVersaoResumida, $isAlteracaoContrato);
 	$retorno .= "<br>".$array[0];
 	$temDocPDF = $array[1];
 	

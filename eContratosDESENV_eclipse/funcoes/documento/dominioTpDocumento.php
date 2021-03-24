@@ -4,6 +4,7 @@ class dominioTpDocumento extends dominio {
 	static $UNIDADE_REDE_LOCAL = "J:";
 	static $UNIDADE_REDE_PLANILHA = "G:";
 	static $ENDERECO_DRIVE = "\\\\sf044836\\_dag$";
+	static $ENDERECO_NOVA_PASTA_PDF = "PDFs";
 
 	// static $ENDERECO_DRIVE_HTML = "\\sf044836\\\\_dag$";
 	static $ENDERECO_DRIVE_HTML = "J:";
@@ -197,7 +198,7 @@ class dominioTpDocumento extends dominio {
 	}
 	
 	static function getEnderecoPastaTermoDigitalizado() {
-		$retorno = "PDFs\\CONTRATOS%20DIGITALIZADOS";
+		$retorno = STATIC::$ENDERECO_NOVA_PASTA_PDF . "\\CONTRATOS%20DIGITALIZADOS";
 		return $retorno;
 	}
 		

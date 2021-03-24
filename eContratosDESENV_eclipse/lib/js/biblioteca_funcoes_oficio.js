@@ -7,19 +7,22 @@
 */
 
 function abrirArquivo(pNmCampoLinkDoc, pIsMenuSistema){		
-	linkDoc = document.getElementById(pNmCampoLinkDoc).value;
+	var linkDoc = document.getElementById(pNmCampoLinkDoc).value;
 	abrirArquivoLink(linkDoc, pIsMenuSistema);
 	/*url = "../abrir_windowsexplorer.php?comando=" + linkDoc;
     window.open(url,'_blank');*/
 }
 
 function abrirArquivoLink(pLinkDoc, pIsMenuSistema){
+	var pPaginaAlternativa = "";
 	if(pIsMenuSistema){
 		pPaginaAlternativa = "funcoes/abrir_windowsexplorer.php"; 
 	}else{
 		pPaginaAlternativa = "../abrir_windowsexplorer.php";
 	}
-	url = pPaginaAlternativa + "?comando=" + pLinkDoc;
+	
+	//alert(pLinkDoc);
+	var url = pPaginaAlternativa + "?comando=" + pLinkDoc;
     window.open(url,'_blank');
 }
 
@@ -30,18 +33,19 @@ function abrirArquivoLink(pLinkDoc, pIsMenuSistema){
 }*/
 
 function abrirArquivoCliente(pNmCampoLinkDoc, pIsMenuSistema){
-	linkDoc = document.getElementById(pNmCampoLinkDoc).value;
+	var linkDoc = document.getElementById(pNmCampoLinkDoc).value;
 	abrirArquivoLinkCliente(linkDoc, pIsMenuSistema);
 }
 
 function abrirArquivoLinkCliente(pLinkDoc, pIsMenuSistema){	
+	var pPaginaAlternativa = "";
 	if(pIsMenuSistema){
 		pPaginaAlternativa = "funcoes/download_arquivo.php"; 
 	}else{
 		pPaginaAlternativa = "../download_arquivo.php";
 	}
 		
-    url = pPaginaAlternativa + "?arquivo=" + pLinkDoc;
+    var url = pPaginaAlternativa + "?arquivo=" + pLinkDoc;
     window.open(url,'_blank');
 }
 

@@ -767,14 +767,14 @@ class dbcontrato extends dbprocesso {
 			$sqlConector = ",";
 		}
 		
-		/*if ($voContrato->linkDoc != null) {
+		if ($voContrato->linkDoc != null) {
 			$retorno .= $sqlConector . vocontrato::$nmAtrLinkDoc . " = " . $this->getVarComoString ( $voContrato->linkDoc );
 			$sqlConector = ",";
 		}
 		if ($voContrato->linkMinutaDoc != null) {
 			$retorno .= $sqlConector . vocontrato::$nmAtrLinkMinutaDoc . " = " . $this->getVarComoString ( $voContrato->linkMinutaDoc );
 			$sqlConector = ",";
-		}*/		
+		}		
 
 		/*if ($voContrato->tpAutorizacao != null) {
 			$retorno .= $sqlConector . vocontrato::$nmAtrTipoAutorizacaoContrato . " = " . $this->getVarComoString ( $voContrato->tpAutorizacao );

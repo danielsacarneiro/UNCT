@@ -221,11 +221,13 @@ function detalhar(isExcluir) {
                         <?php
                         $isContratoPlanilha = $voAtual->importacao != constantes::$CD_NAO;
                         
+                        $endereco = null;
                         $arrayRetorno = getHTMLDocumentosContrato($voAtual, true);
                         $temDocsAExibir = $arrayRetorno[0];
                         $docsAexibir = $arrayRetorno[1];
                  		
-                 		if($isContratoPlanilha && !$temDocsAExibir){                        
+                 		if($isContratoPlanilha && !$temDocsAExibir){
+                 			//echo "aqui";
 					        $endereco = $voAtual->getLinkDocumento();
 					        $nmCampoEndereco = vocontrato::$nmAtrLinkDoc.$chave;
 					        if($endereco != null){
@@ -241,6 +243,7 @@ function detalhar(isExcluir) {
 					        }
                  		}else{
                  			echo $docsAexibir;
+                 			//echo "aqui";
                  		}				        
 				    	?>                        
                         </TD>
