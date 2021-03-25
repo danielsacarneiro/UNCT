@@ -494,7 +494,7 @@ function transferirDadosPessoa(cd, nm, doc) {
             <TH class="campoformulario" nowrap>Valor Global:</TH>
             <TD class="campoformulario"><INPUT type="text" id="<?=vocontrato::$nmAtrVlGlobalContrato?>" name="<?=vocontrato::$nmAtrVlGlobalContrato?>"  value="<?php echo($vlGlobal);?>"
             onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" 
-           	onBlur="setaValorCampoPorFator(this, '<?=vocontrato::$nmAtrVlMensalContrato?>', eval(1/(getNumMesesNoPeriodo('<?=vocontrato::$nmAtrDtVigenciaInicialContrato?>', '<?=vocontrato::$nmAtrDtVigenciaFinalContrato?>')), true, true));"
+           	onChange="setaValorCampoPorFator(this, '<?=vocontrato::$nmAtrVlMensalContrato?>', eval(1/(getNumMesesNoPeriodo('<?=vocontrato::$nmAtrDtVigenciaInicialContrato?>', '<?=vocontrato::$nmAtrDtVigenciaFinalContrato?>')), true, true));"
             class="camponaoobrigatorioalinhadodireita" size="15" required></TD>
         </TR>
            
@@ -527,7 +527,7 @@ function transferirDadosPessoa(cd, nm, doc) {
 						Minuta:
 						</TH>											
 						<TD class="campoformulario">
-				        <textarea id="<?=vocontrato::$nmAtrLinkMinutaDoc?>" name="<?=vocontrato::$nmAtrLinkMinutaDoc?>" rows="2" cols="80" class="camporeadonly"><?php echo  $enderecoMinuta;?></textarea>
+				        <textarea id="<?=vocontrato::$nmAtrLinkMinutaDoc?>" name="<?=vocontrato::$nmAtrLinkMinutaDoc?>" rows="2" cols="80" class="camponaoobrigatorio"><?php echo  $enderecoMinuta;?></textarea>
 					    	<?php    	
 					    	echo getBotaoAbrirDocumento(vocontrato::$nmAtrLinkMinutaDoc);
 					    	?>					        
@@ -538,7 +538,7 @@ function transferirDadosPessoa(cd, nm, doc) {
 							Assinado:
 							</TH>			
 							<TD class="campoformulario">
-					        <textarea id="<?=vocontrato::$nmAtrLinkDoc?>" name="<?=vocontrato::$nmAtrLinkDoc?>" rows="2" cols="80" class="camporeadonly"><?php echo  $endereco;?></textarea>
+					        <textarea id="<?=vocontrato::$nmAtrLinkDoc?>" name="<?=vocontrato::$nmAtrLinkDoc?>" rows="2" cols="80" class="camponaoobrigatorio"><?php echo  $endereco;?></textarea>
 					    	<?php    	
 					    	echo getBotaoAbrirDocumento(vocontrato::$nmAtrLinkDoc);
 					    	?>				

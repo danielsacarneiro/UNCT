@@ -21,7 +21,7 @@ $cdOrdenacao = $filtro->cdOrdenacao;
 $isHistorico = "S" == $cdHistorico; 
 
 $dbprocesso = $vo->dbprocesso;
-$colecao = $dbprocesso->consultarTelaConsultaConsolidacao($filtro, true);
+$colecao = $dbprocesso->consultarTelaConsultaConsolidacao($filtro);
 
 $paginacao = $filtro->paginacao;
 if($filtro->temValorDefaultSetado){
@@ -300,6 +300,10 @@ function movimentacoes(){
 				echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInSeraProrrogado,
 						voContratoInfo::$nmAtrInSeraProrrogado,
 						$filtro->inSeraProrrogado, true, "camponaoobrigatorio", false, " ");
+				echo "|" .  getTextoHTMLNegrito("Iniciada?") . ":";
+				echo $comboSimNao->getHtmlCombo(filtroConsultarContratoConsolidacao::$ID_REQ_InTemDemandaProrrogacao,
+						filtroConsultarContratoConsolidacao::$ID_REQ_InTemDemandaProrrogacao,
+						$filtro->inTemDemandaProrrogacao, true, "camponaoobrigatorio", false, " ");
 				?>                        			
                 </TD>
             </TR>

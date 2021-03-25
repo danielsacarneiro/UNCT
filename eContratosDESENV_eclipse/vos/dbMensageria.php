@@ -92,7 +92,6 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		$nmTabMsgRegistroMAXSq = "TAB_MSGREGISTRO_MAX_SQ";
   		$groupbyinterno = "$nmTabelaMsgRegistro." . voMensageriaRegistro::$nmAtrSqMensageria;
   		
-  		//TABELA $nmTabContratoMater
   		$queryJoin .= "\n LEFT JOIN ";
   		$queryJoin .= " (SELECT " . $groupbyinterno . ", MAX(" . voMensageriaRegistro::$nmAtrSq. ") AS " . voMensageriaRegistro::$nmAtrSq
   		. " FROM " . $nmTabelaMsgRegistro;

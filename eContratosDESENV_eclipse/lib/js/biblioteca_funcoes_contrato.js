@@ -459,7 +459,11 @@ function setaValorCampoPorFator(pCampoChamada, pIdCampoACorrigir, pFator, pQtCas
 		pQtCasasDecimais = 2;
 	}
 	
+	//alert("antes mensagem." + pCampoChamada.name);
 	var isCorrigirValor = confirm("Corrigir valor relacionado?");
+	if(!isCorrigirValor){
+		return;	
+	}
 	
 	if(pFator === false && isCorrigirValor){
 		exibirMensagem("Preencha o campo indicado e tente novamente.");

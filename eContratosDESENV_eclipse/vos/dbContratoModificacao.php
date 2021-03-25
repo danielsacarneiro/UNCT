@@ -576,7 +576,12 @@ class dbContratoModificacao extends dbprocesso {
 						
 						//serve apenas para registrar a prorrogacao
 						if(isProrrogacaoNaoRegistrada($voContratoModAtual)){
+							//inclui para exibicao as prorrogacoes 
+							//aqui PODERIA SER UM LUGAR para corrigir o valor do contrato, considerando que a prorrogacao tem valor estático
+							//inclusive porque o econti apenas trata de valores aproximados: mas isso nao eh feito para nao prejudicar o resto do calculo
+							//echoo($voContratoModAtual->vlMensalAtual);
 							$registro[filtroManterContratoModificacao::$NmColVOContratoModReajustado] = $voContratoReajustadoAtual;
+							
 							$retorno[] = $registro;
 						}
 						

@@ -388,7 +388,7 @@ function getMensagemContratosAVencer(&$count = 0){
 		$filtro = getFiltroContratosAVencer();
 		
 		$dbprocesso = new dbContratoInfo();
-		$colecao = $dbprocesso->consultarTelaConsultaConsolidacao ($filtro, true);
+		$colecao = $dbprocesso->consultarTelaConsultaConsolidacao ($filtro);
 		
 		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Início.Vigência', filtroConsultarContratoConsolidacao::$NmColDtInicioVigencia, constantes::$CD_TP_DADO_DATA);
 		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Fim.Vigência', filtroConsultarContratoConsolidacao::$NmColDtFimVigencia, constantes::$CD_TP_DADO_DATA);
@@ -413,7 +413,7 @@ function getMensagemContratosAVencerGestor(&$count = 0){
 		$filtro = getFiltroContratosAVencer(constantes::$CD_NAO);
 
 		$dbprocesso = new dbContratoInfo();
-		$colecao = $dbprocesso->consultarTelaConsultaConsolidacao ($filtro, true);
+		$colecao = $dbprocesso->consultarTelaConsultaConsolidacao ($filtro);
 
 		/*$array =array(
 		 constantes::$CD_COLUNA_CHAVE => 'RESPONSÁVEL',
@@ -450,7 +450,7 @@ function getMensagemContratosAVencerImprorrogaveisGestor(&$count = 0){
 		$filtro = getFiltroContratosAVencerImprorrog(constantes::$CD_NAO);
 				
 		$dbprocesso = new dbContratoInfo();
-		$colecao = $dbprocesso->consultarTelaConsultaConsolidacao ($filtro, true);
+		$colecao = $dbprocesso->consultarTelaConsultaConsolidacao ($filtro);
 
 		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Início.Vigência', filtroConsultarContratoConsolidacao::$NmColDtInicioVigencia, constantes::$CD_TP_DADO_DATA);
 		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Fim.Vigência', filtroConsultarContratoConsolidacao::$NmColDtFimVigencia, constantes::$CD_TP_DADO_DATA);

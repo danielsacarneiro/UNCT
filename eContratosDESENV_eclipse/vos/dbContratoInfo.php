@@ -169,7 +169,7 @@ class dbContratoInfo extends dbprocesso {
 		
 		return parent::consultarMontandoQueryTelaConsulta ( $vo, $filtro, $arrayColunasRetornadas, $queryJoin );
 	}
-	function consultarTelaConsultaConsolidacao($filtro, $trazerComDadosDemanda=false) {		
+	function consultarTelaConsultaConsolidacao($filtro) {		
 		
 		$vo = new vocontrato();		
 		$isHistorico = $filtro->isHistorico;
@@ -177,13 +177,13 @@ class dbContratoInfo extends dbprocesso {
 		$nmTabela = $vo->getNmTabelaEntidade ( false );			
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( $isHistorico );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
-		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( false );
-		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );
-	
 		//echo "tabela vo: $nmTabela | tabela contrato_info: $nmTabelaContratoInfo";
 		
 		$nmTabContratoMater = filtroConsultarContratoConsolidacao::$NmTabContratoMater;
 		$nmTabContratoATUAL = filtroConsultarContratoConsolidacao::$NmTabContratoATUAL;
+		$nmTabDemandaContratoATUAL = filtroConsultarContratoConsolidacao::$NmTabDemandaContratoATUAL;
+		$nmTabDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );
+		
 		$nmAtrTempContratoAtualCDEspecie = $nmTabContratoATUAL . "." . vocontrato::$nmAtrCdEspecieContrato;
 		$nmAtrTempContratoAtualSqEspecie = $nmTabContratoATUAL . "." . vocontrato::$nmAtrSqEspecieContrato;
 		
@@ -248,19 +248,7 @@ class dbContratoInfo extends dbprocesso {
 				getSQLNmContratada(),
 				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
 		);
-		
-		if ($trazerComDadosDemanda) {
-			$arrayTemp = array (
-					"$nmTabelaDemanda.". voDemanda::$nmAtrAno,
-					"$nmTabelaDemanda.". voDemanda::$nmAtrCd,
-					"$nmTabelaDemanda.". voDemanda::$nmAtrProtocolo,
-					"$nmTabelaDemanda.". voDemanda::$nmAtrTexto,
-					filtroConsultarContratoConsolidacao::getAtributoConsultaTemDemanda("$nmTabelaDemanda.". voDemanda::$nmAtrAno,
-							filtroConsultarContratoConsolidacao::$NmColInTemDemanda),
-			);
-			$arrayColunasRetornadas = array_merge($arrayColunasRetornadas, $arrayTemp);
-		}
-		
+				
 		if ($isHistorico) {		
 			$arrayColunasHistorico = array (
 					"$nmTabelaContratoInfo.". voContratoInfo::$nmAtrSqHist,
@@ -325,14 +313,8 @@ class dbContratoInfo extends dbprocesso {
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrCdPessoaContratada;
 		
-		if($trazerComDadosDemanda){
-			/*$nmCampoAditivoCdEspecie = vocontrato::$nmAtrCdEspecieContrato;
-			$nmCampoAditivoSqEspecie = vocontrato::$nmAtrSqEspecieContrato;
-			$sqlWhereTemp = " WHERE $nmCampoAditivoCdEspecie = '" .dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_TERMOADITIVO.  "' ";
-			$sqlWhereTemp .= " AND $nmCampoAditivoSqEspecie = ($nmAtrTempContratoAtualSqEspecie+1) ";
-				
-			$selectTemp = " SELECT * FROM $nmTabelaDemandaContrato ";*/
-			$strSQLCaseTemp = getSQLCASE($nmAtrTempContratoAtualCDEspecie
+		//busca se ha proximo termo aditivo de prorrogacao
+			/*$strSQLCaseTemp = getSQLCASE($nmAtrTempContratoAtualCDEspecie
 					, getVarComoString(dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER)
 					, 1
 					, "($nmAtrTempContratoAtualSqEspecie + 1)");
@@ -353,7 +335,20 @@ class dbContratoInfo extends dbprocesso {
 			$queryJoin .= "\n ON ";
 			$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoDemanda . "=" . $nmTabelaDemanda . "." . voDemanda::$nmAtrAno;
 			$queryJoin .= "\n AND " . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdDemanda . "=" . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd;				
-		}
+			//$queryJoin .= "\n AND " . getSQLBuscarStringCampoSeparador(dominioTipoDemandaContrato::$CD_TIPO_PRORROGACAO, "$nmTabelaDemanda.".voDemanda::$nmAtrTpDemandaContrato, constantes::$CD_OPCAO_AND);
+			*/
+			
+			$queryJoin .= "\n LEFT JOIN $nmTabDemandaContrato $nmTabDemandaContratoATUAL";
+			$queryJoin .= "\n ON ";
+			$queryJoin .= $nmTabDemandaContratoATUAL . "." . voDemandaContrato::$nmAtrAnoContrato . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrAnoContrato;
+			$queryJoin .= "\n AND ";
+			$queryJoin .= $nmTabDemandaContratoATUAL . "." . voDemandaContrato::$nmAtrTipoContrato . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrTipoContrato;
+			$queryJoin .= "\n AND ";
+			$queryJoin .= $nmTabDemandaContratoATUAL . "." . voDemandaContrato::$nmAtrCdContrato . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrCdContrato;
+			$queryJoin .= "\n AND ";
+			$queryJoin .= $nmTabDemandaContratoATUAL . "." . voDemandaContrato::$nmAtrCdEspecieContrato . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrCdEspecieContrato;
+			$queryJoin .= "\n AND ";
+			$queryJoin .= $nmTabDemandaContratoATUAL . "." . voDemandaContrato::$nmAtrSqEspecieContrato . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrSqEspecieContrato;
 	
 		$cdCampoSubstituir = $filtro->getSQLTermoMaiorSqVigencia($nmTabContratoInterna);
 		//substitui o sql no join do MAXCONTRATO

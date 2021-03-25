@@ -595,9 +595,10 @@ function getFiltroContratosAVencer($inTemDemandaEmTratamento = null){
 	//$filtro->inSeraProrrogado = array(constantes::$CD_OPCAO_CONSULTA_DIFERENTE, constantes::$CD_NAO);
 	if($inTemDemandaEmTratamento != null){
 		//o nome dos atributos abaixo estao definidos no filtro da consulta getColecaoCaracteristicas
-		$nmFiltroInTemDemanda = getIdComponenteHtmlCheckSimNao(voDemanda::$nmAtrAno, $inTemDemandaEmTratamento);
+		/*$nmFiltroInTemDemanda = getIdComponenteHtmlCheckSimNao(voDemanda::$nmAtrAno, $inTemDemandaEmTratamento);
 		$inCaracteristica = array($nmFiltroInTemDemanda);
-		$filtro->inCaracteristicas = $inCaracteristica;
+		$filtro->inCaracteristicas = $inCaracteristica;*/
+		$filtro->inTemDemandaProrrogacao = $inTemDemandaEmTratamento;
 	}
 
 	$nmTabelaContratoInfo = voContratoInfo::getNmTabela();
@@ -654,7 +655,7 @@ function criarAlertasEmailGestorColecaoContratos($filtro=null, $log=null, $isCon
 	$log .= "<br>Início de verificação dos contratos a vencer que gerarão alertas.";
 
 	$dbprocesso = new dbContratoInfo();
-	$colecao = $dbprocesso->consultarTelaConsultaConsolidacao ($filtro, true);
+	$colecao = $dbprocesso->consultarTelaConsultaConsolidacao ($filtro);
 	
 	if(!isColecaoVazia($colecao)){
 		//$colecao = array($colecao[0]);

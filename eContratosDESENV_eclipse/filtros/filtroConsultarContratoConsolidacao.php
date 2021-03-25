@@ -11,6 +11,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	static $DS_DEMANDA = "Tem Demanda Prorrog.";
 	static $DS_PRORROGADO = "Será Prorrog.";	
 	
+	static $ID_REQ_InTemDemandaProrrogacao = "ID_REQ_InTemDemandaProrrogacao";
 	static $NmColInSeraProrrogadoConsolidado = "NmColInSeraProrrogadoConsolidado";
 	static $NmColInTemDemanda = "InTemDemanda";
 	static $NmColInProrrogavel = "NmColInProrrogavel";
@@ -27,6 +28,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	static $NmColSqEspecieContratoAtual = "NmColSqEspecieContratoAtual";
 	static $NmTabContratoMater = "TAB_CONTRATO_MATER";
 	static $NmTabContratoATUAL = "TAB_CONTRATO_ATUAL";
+	static $NmTabDemandaContratoATUAL = "TAB_DEMANDA_CONTRATO_ATUAL";
 	
 	static $nmAtrQtdDiasParaVencimento = "nmAtrQtdDiasParaVencimento";
 	static $nmAtrQtdDiasParaVencimentoProposta = "nmAtrQtdDiasParaVencimentoProposta";
@@ -63,6 +65,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	var $anoIntervaloFimVigencia= "";
 	var $inProduzindoEfeitos = "";
 	var $inCaracteristicas = "";
+	var $inTemDemandaProrrogacao = "";
 	
 	function __construct1($pegarFiltrosDaTela) {
 		parent::__construct1($pegarFiltrosDaTela);
@@ -97,6 +100,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		}
 		
 		$this->inGestor = @$_POST [voContratoInfo::$nmAtrCdPessoaGestor];		
+		$this->inTemDemandaProrrogacao = @$_POST [static::$ID_REQ_InTemDemandaProrrogacao];
 	}
 	
 	static function getDataBaseReajuste($nmTabelaContratoInfo, $nmTabelaContrato){
@@ -128,6 +132,9 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		$nmTabelaContratoInfo = $nmTabela = voContratoInfo::getNmTabelaStatic ( $this->isHistorico );
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
+		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( false );
+		$nmTabContratoATUAL = static::$NmTabContratoATUAL;	
+		$nmTabDemandaContratoATUAL = static::$NmTabDemandaContratoATUAL;
 
 		if($this->qtdDiasParaVencimentoProposta != null){	
 			$dtReferencia = getVarComoDataSQL(getDataHoje());
@@ -148,12 +155,6 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		}
 		
 		if($this->qtdDiasParaVencimento != null){
-			/*$nmAtributoDataNotificacao = static::$NmTabContratoATUAL . "." .vocontrato::$nmAtrDtVigenciaFinalContrato;
-			$dtNotificacaoPAram = getVarComoDataSQL(somarOuSubtrairDiasNaData(getDataHoje(), $this->qtdDiasParaVencimento));
-				
-			//se a data consultada + qtddiasprazo for menor que a data de hoje, significa que o prazo ja passou, entao a demanda deve ser exibida
-			$filtro = $filtro . $conector
-			. " (!($nmAtributoDataNotificacao IS NULL OR $nmAtributoDataNotificacao = '0000-00-00') AND $nmAtributoDataNotificacao <= $dtNotificacaoPAram ) ";*/
 						
 			$nmAtributoDataNotificacao = getDataSQLDiferencaDias(getVarComoDataSQL(getDataHoje()), static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato);
 			$filtro = $filtro . $conector . "$nmAtributoDataNotificacao >=0 AND $nmAtributoDataNotificacao <= $this->qtdDiasParaVencimento";
@@ -205,6 +206,49 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		if ($this->docContratada != null) {
 			$filtro = $filtro . $conector . $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc . " = '" . documentoPessoa::getNumeroDocSemMascara ( $this->docContratada ) . "'";
 			$conector = "\n AND ";
+		}
+		
+		$inTemDemandaProrrogacao = $this->inTemDemandaProrrogacao;
+		if (isAtributoValido($inTemDemandaProrrogacao)) {
+			$nmTabelaDemandaContratoTA = voDemandaContrato::getNmTabela();
+			
+			// busca as demandas de prorrogacao pra esse contrato
+			$queryExists .= "\n SELECT 'X' FROM  $nmTabelaDemanda";
+			$queryExists .= "\n INNER JOIN $nmTabelaDemandaContratoTA ";
+			$queryExists .= "\n ON ";
+			$queryExists .= $nmTabelaDemandaContratoTA . "." . voDemandaContrato::$nmAtrAnoDemanda . "=" . $nmTabelaDemanda . "." . voDemanda::$nmAtrAno;
+			$queryExists .= "\n AND ";
+			$queryExists .= $nmTabelaDemandaContratoTA . "." . voDemandaContrato::$nmAtrCdDemanda . "=" . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd;
+				
+			$queryExists .= " WHERE ";
+			//demanda de prorrogacao
+			$queryExists .= getSQLBuscarStringCampoSeparador ( dominioTipoDemandaContrato::$CD_TIPO_PRORROGACAO, "$nmTabelaDemanda." . voDemanda::$nmAtrTpDemandaContrato, constantes::$CD_OPCAO_AND );
+			//demandas que surgiram apos a assinatura do contrato atual
+			$queryExists .= "\n AND ";
+			$queryExists .= $nmTabelaDemanda . "." . voDemanda::$nmAtrDtReferencia . ">" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrDtAssinaturaContrato;
+			$queryExists .= "\n AND ";
+			$queryExists .= $nmTabelaDemandaContratoTA . "." . voDemandaContrato::$nmAtrAnoContrato . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrAnoContrato;
+			$queryExists .= "\n AND ";
+			$queryExists .= $nmTabelaDemandaContratoTA . "." . voDemandaContrato::$nmAtrTipoContrato . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrTipoContrato;
+			$queryExists .= "\n AND ";
+			$queryExists .= $nmTabelaDemandaContratoTA . "." . voDemandaContrato::$nmAtrCdContrato . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrCdContrato;
+			$queryExists .= "\n AND ";
+			$queryExists .= $nmTabelaDemandaContratoTA . "." . voDemandaContrato::$nmAtrCdEspecieContrato . "='" . dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_TERMOADITIVO . "' ";
+			//e que sejam diferentes da propria demanda do contrato atual
+			$queryExists .= "\n AND ";
+			$queryExists .= "$nmTabDemandaContratoATUAL." . voDemandaContrato::$nmAtrAnoDemanda . "<> $nmTabelaDemandaContratoTA." . voDemandaContrato::$nmAtrAnoDemanda;
+			$queryExists .= "\n AND ";
+			$queryExists .= "$nmTabDemandaContratoATUAL." . voDemandaContrato::$nmAtrCdDemanda . "<> $nmTabelaDemandaContratoTA." . voDemandaContrato::$nmAtrCdDemanda;
+				
+			$operadorTemp = "EXISTS";
+			if($inTemDemandaProrrogacao == 'N'){
+				$operadorTemp = "NOT EXISTS";
+			}
+			$filtro = $filtro . $conector . " $operadorTemp ($queryExists)\n";
+			
+			//echoo ($filtro);
+								
+			$conector  = "\n AND ";
 		}
 		
 		//eh independente do inCaracteristicas (que eh usado na tela de consulta)
@@ -547,7 +591,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 				voContratoInfo::$nmAtrInEscopo => static::$DS_ESCOPO,
 				voContratoInfo::$nmAtrInCredenciamento => static::$DS_CREDENCIAMENTO,
 				//voContratoInfo::$nmAtrInSeraProrrogado => static::$DS_PRORROGADO,
-				voDemanda::$nmAtrAno => static::$DS_DEMANDA,
+				//voDemanda::$nmAtrAno => static::$DS_DEMANDA,
 		);
 	
 		return $retorno;
@@ -564,20 +608,12 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 				voContratoInfo::$nmAtrInEscopo => voContratoInfo::$nmAtrInEscopo,
 				voContratoInfo::$nmAtrInCredenciamento => voContratoInfo::$nmAtrInCredenciamento,
 				//voContratoInfo::$nmAtrInSeraProrrogado => voContratoInfo::$nmAtrInSeraProrrogado,
-				voDemanda::$nmAtrAno => filtroConsultarContratoConsolidacao::getAtributoConsultaTemDemanda("$nmTabelaDemanda." . voDemanda::$nmAtrAno),
-	
+				//voDemanda::$nmAtrAno => filtroConsultarContratoConsolidacao::getAtributoConsultaTemDemanda("$nmTabelaDemanda." . voDemanda::$nmAtrAno),
 		);
 	
 		return $retorno;
 	}
-	
-	static function getAtributoConsultaTemDemanda($nmAtributoAComparar, $nmAtributoSQLAlias=null){
-		return 	getSQLCASEIsNULL($nmAtributoAComparar
-							, getVarComoString(constantes::$CD_NAO)
-							, getVarComoString(constantes::$CD_SIM),
-							$nmAtributoSQLAlias);	
-	}
-	
+		
 	/**
 	 * retorna os atributos que serao totalizados
 	 */

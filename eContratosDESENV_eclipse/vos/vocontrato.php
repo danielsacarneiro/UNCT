@@ -582,9 +582,10 @@ include_once ("voDemanda.php");
 			}
 			
 			//echoo("LINK BASE $link");
-			//if(strrpos($link, dominioTpDocumento::$ENDERECO_NOVA_PASTA_PDF) === false){
+			//so substitui pela nova pasta se ja nao tiver sido substituido antes
+			if(strrpos($link, dominioTpDocumento::$ENDERECO_NOVA_PASTA_PDF) === false){
 				$link = str_replace(dominioTpDocumento::getEnderecoAntigoPastaTermoDigitalizado(), dominioTpDocumento::getEnderecoPastaTermoDigitalizado(), $link);
-			//}
+			}
 			//echoo("LINK ALTERADO $link");
 
 		return $link; 

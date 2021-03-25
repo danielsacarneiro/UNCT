@@ -114,7 +114,7 @@ function detalhar(isExcluir) {
     </TR>
     
     <TR>
-       <TD class="textoseparadorgrupocampos">EXECUÇÃO - a diferença entre os valores documentados e executados é resultado dos reajustes retroativos</TD>
+       <TD class="textoseparadorgrupocampos">EXECUÇÃO - a diferença entre os valores documentados e executados é resultado dos reajustes APROXIMADOS e retroativos</TD>
     </TR>
     
     <TR>
@@ -147,8 +147,6 @@ function detalhar(isExcluir) {
                     </TR>
                     <?php
                     
-                    //$colecaoMov = $dbContratoMod->consultarExecucao($voContrato);
-                    //$colecaoMov = $dbContratoMod->consultarExecucaoValorGlobalReferencial($voContrato);
                     $colecaoMov = $dbContratoMod->consultarExecucaoValorGlobalReferencial($colecao);
                     
                     if (is_array($colecaoMov))

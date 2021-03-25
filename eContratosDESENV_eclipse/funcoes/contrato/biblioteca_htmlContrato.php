@@ -1564,7 +1564,7 @@ function isProrrogacaoNaoRegistrada($voContratoModificacao){
 	if($voContratoModificacao->tpModificacao == dominioTpContratoModificacao::$CD_TIPO_PRORROGACAO
 			&& !in_array($chave, voContratoModificacao::$ColecaoProrrogacoesRegistradas)
 			){	
-		//registra a prorrogacao
+		//registra a prorrogacao, indicando que ela ja foi analisada
 		voContratoModificacao::$ColecaoProrrogacoesRegistradas[] = $chave;
 		$retorno = true;
 	}
