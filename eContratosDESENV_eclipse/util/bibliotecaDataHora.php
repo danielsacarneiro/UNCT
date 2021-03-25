@@ -109,46 +109,37 @@ function getDataFormatoSQL($data) {
 						
 	return $retorno;
 }
-	
-//retorna negativo se a data inicio for maior que a data fim
+
 function getQtdDiasEntreDatas($dataini, $datafim) {
-    if($dataini == null || $datafim == null)
-        throw new Exception("uma das datas nula!");
-    
-	//usa o tipo DateTime
-	$data1 = new DateTime(getDataFormatoSQL($dataini));
-	$data2 = new DateTime(getDataFormatoSQL($datafim));
-	
-	$intervalo = $data1->diff( $data2 );
-	
-	$ano = $intervalo->y;
-	$mes = $intervalo->m;
-	$dia = $intervalo->d;
-    
-    $fator = 1;
-    if($data1 > $data2){
-        $fator = -1;
-    }
-	
-	$retorno = 0;
-	if($ano != null)
-		$retorno = abs($ano)*365;
-
-	if($mes != null)
-		$retorno = $retorno  + (abs($mes)*30);
-
-	if($dia != null)
-		$retorno = $retorno  + abs($dia);
-	
-	//echo "Intervalo Ã© de {$intervalo->y} anos, {$intervalo->m} meses e {$intervalo->d} dias";
-			
-	return $retorno*$fator;
-}
-
-function getQtdMesesEntreDatas($dataini, $datafim) {
 	try{
 		$dataini = getDataSQL($dataini);
 		$datafim = getDataSQL($datafim);
+		//media determinada para facilitar o calculo, considerando que ha anos bissextos e meses que nao tem 30 dias
+		/*$numMediaDiasMes = 30;
+
+		$date = new DateTime($dataini);
+		$diferenca = $date->diff(new DateTime($datafim));
+		$diferenca_mostra_anos = $diferenca->format('%Y')*12;
+		$diferenca_mostra_meses = $diferenca->format('%m');
+		$diferenca_mostra_dias = $diferenca->format('%d');
+		$total_dias = ($diferenca_mostra_anos+$diferenca_mostra_meses)*$numMediaDiasMes+$diferenca_mostra_dias;*/
+		
+		// Calcula a diferença em segundos entre as datas
+		$diferenca = strtotime($datafim) - strtotime($dataini);
+		//Calcula a diferença em dias
+		$total_dias = floor($diferenca/(60*60*24));
+	}catch (Exception $ex){
+		echo "Erro ao calcular. Verifique as datas do período.";
+		$total_dias = 0;
+	}
+
+	return $total_dias;
+}
+
+function getQtdMesesEntreDatas($pdataini, $pdatafim) {
+	try{
+		$dataini = getDataSQL($pdataini);
+		$datafim = getDataSQL($pdatafim);
 		//media determinada para facilitar o calculo, considerando que ha anos bissextos e meses que nao tem 30 dias
 		$numMediaDiasMes = 30;
 		
@@ -157,8 +148,10 @@ function getQtdMesesEntreDatas($dataini, $datafim) {
 		$diferenca_mostra_anos = $diferenca->format('%Y')*12;
 		$diferenca_mostra_meses = $diferenca->format('%m');	
 		$diferenca_mostra_dias = $diferenca->format('%d');
-		$total_dias = ($diferenca_mostra_anos+$diferenca_mostra_meses)*$numMediaDiasMes+$diferenca_mostra_dias;
+		//$total_dias = ($diferenca_mostra_anos+$diferenca_mostra_meses)*$numMediaDiasMes+$diferenca_mostra_dias;
 		//echoo($total_dias);
+		
+		$total_dias = getQtdDiasEntreDatas($pdataini, $pdatafim);
 		
 		$total_meses = round(($total_dias/$numMediaDiasMes), 0, PHP_ROUND_HALF_UP); //funcao para arredondar para cima
 		

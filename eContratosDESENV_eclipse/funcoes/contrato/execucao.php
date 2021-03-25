@@ -291,7 +291,7 @@ function detalhar(isExcluir) {
 	                <TR>
 	                    <TD class="totalizadortabeladadosalinhadoesquerda" colspan=<?=$colspan?>>
 	                    <?php 
-		                    $complementoDet = " Valor ATUAL (havendo prorrogação): Mensal " . getInputText("", "", $vlMensalAtualStrInput, constantes::$CD_CLASS_CAMPO_READONLY);
+		                    $complementoDet = " Valor ATUAL ". getTextoHTMLDestacado("APROXIMADO")." (havendo prorrogação): Mensal " . getInputText("", "", $vlMensalAtualStrInput, constantes::$CD_CLASS_CAMPO_READONLY);
 		                    $complementoDet .= " Global: " . getInputText("", "", getMoeda($vlGlobalSeProrrogado), constantes::$CD_CLASS_CAMPO_READONLY);
 		                    
 		                    echo getTextoHTMLNegrito($complementoDet);

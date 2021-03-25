@@ -342,6 +342,16 @@ function transferirDadosPessoa(cd, nm, doc) {
 	//formatarCampoCNPFouCNPJ(this, event);
 }
 
+function getDiferencaDiasVigencia(){
+	campoDataIni = document.getElementById("<?=vocontrato::$nmAtrDtVigenciaInicialContrato?>");
+	campoDataFim = document.getElementById("<?=vocontrato::$nmAtrDtVigenciaFinalContrato?>");
+	campoNumDias = document.getElementById("numDias");
+
+	pDataInicial = campoDataIni.value;
+	pDataFinal = campoDataFim.value;
+	campoNumDias.value = getQtDias(pDataInicial, pDataFinal);
+}
+
 </SCRIPT>
 <?=setTituloPagina($titulo)?>
 </HEAD>
@@ -447,17 +457,31 @@ function transferirDadosPessoa(cd, nm, doc) {
             	       name="<?=vocontrato::$nmAtrDtVigenciaInicialContrato?>" 
             			value="<?php echo($dtVigenciaInicial);?>"
             			onkeyup="formatarCampoData(this, event, false);" 
+            			onBlur='getDiferencaDiasVigencia();'
             			class="camponaoobrigatorio" 
             			size="10" 
-            			maxlength="10" required> a
+            			maxlength="10" required > a
             	<INPUT type="text" 
             	       id="<?=vocontrato::$nmAtrDtVigenciaFinalContrato?>" 
             	       name="<?=vocontrato::$nmAtrDtVigenciaFinalContrato?>" 
             			value="<?php echo($dtVigenciaFinal);?>"
             			onkeyup="formatarCampoData(this, event, false);" 
+            			onBlur='getDiferencaDiasVigencia();'
             			class="camponaoobrigatorio" 
             			size="10" 
             			maxlength="10" required>
+            	<?php
+            	//$numDias = getQtdDiasEntreDatas(getDataSQL($dtVigenciaInicial), getDataSQL($dtVigenciaFinal));
+            	$numDias = getQtdDiasEntreDatas($dtVigenciaInicial, $dtVigenciaFinal);
+            	?>		
+            	<INPUT type="text" 
+            	       id="numDias" 
+            	       name="numDias" 
+            			value="<?php echo($numDias);?>" 
+            			class="camporeadonly" 
+            			size="4" 
+            			readonly> (dias aprox.)
+            			
 			</TD>
         </TR>
 		<TR>
