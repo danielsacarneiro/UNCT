@@ -578,7 +578,7 @@ class dbContratoModificacao extends dbprocesso {
 						if(isProrrogacaoNaoRegistrada($voContratoModAtual)){
 							//inclui para exibicao as prorrogacoes 
 							//echoo($voContratoModAtual->vlMensalAtual);
-							//corrige valor das prorrogacoes que nao tem reajustes posteriores
+							//corrige valor das prorrogacoes que nao tem reajustes posteriores, e nao sofrem alteracoes
 							if(!existeReajusteRetroativoComEfeitos($voContratoAtual, $colecaoReajuste)){
 								$voContratoReajustadoAtual = $voContratoModAtual;
 							}
