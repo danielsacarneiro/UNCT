@@ -219,6 +219,17 @@ function confirmar() {
             			class="camporeadonly" 
             			size="10" 
             			maxlength="10" <?=$readonly?>>
+            	<?php
+            	//$numDias = getQtdDiasEntreDatas(getDataSQL($dtVigenciaInicial), getDataSQL($dtVigenciaFinal));
+            	$numDias = getQtdDiasEntreDatas($dtVigenciaInicial, $dtVigenciaFinal);
+            	?>		
+            	<INPUT type="text" 
+            	       id="<?=vocontrato::$ID_REQ_NumDias?>" 
+            	       name="<?=vocontrato::$ID_REQ_NumDias?>" 
+            			value="<?php echo($numDias);?>" 
+            			class="camporeadonly" 
+            			size="4" 
+            			readonly> (dias aprox.)            			
 			</TD>
         </TR>
 		<TR>

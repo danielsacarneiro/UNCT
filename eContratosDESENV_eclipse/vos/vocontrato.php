@@ -38,6 +38,7 @@ include_once ("voDemanda.php");
   	static $ID_REQ_DIV_DADOS_MANTER_CONTRATO = "ID_REQ_DIV_DADOS_MANTER_CONTRATO";
   	
   	static $DS_ESPECIE_MATER = "Mater"; 
+  		static $ID_REQ_NumDias = "ID_REQ_NumDias";
   		static $ID_REQ_CAMPO_CONTRATO = "ID_REQ_CAMPO_CONTRATO";
   		static $matrizImportacao;
   		//static $ID_REQ_QTD_CONTRATOS = "ID_REQ_QTD_CONTRATOS";

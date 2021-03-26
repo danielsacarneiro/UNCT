@@ -345,7 +345,7 @@ function transferirDadosPessoa(cd, nm, doc) {
 function getDiferencaDiasVigencia(){
 	campoDataIni = document.getElementById("<?=vocontrato::$nmAtrDtVigenciaInicialContrato?>");
 	campoDataFim = document.getElementById("<?=vocontrato::$nmAtrDtVigenciaFinalContrato?>");
-	campoNumDias = document.getElementById("numDias");
+	campoNumDias = document.getElementById("<?=vocontrato::$ID_REQ_NumDias?>");
 
 	pDataInicial = campoDataIni.value;
 	pDataFinal = campoDataFim.value;
@@ -475,8 +475,8 @@ function getDiferencaDiasVigencia(){
             	$numDias = getQtdDiasEntreDatas($dtVigenciaInicial, $dtVigenciaFinal);
             	?>		
             	<INPUT type="text" 
-            	       id="numDias" 
-            	       name="numDias" 
+            	       id="<?=vocontrato::$ID_REQ_NumDias?>" 
+            	       name="<?=vocontrato::$ID_REQ_NumDias?>" 
             			value="<?php echo($numDias);?>" 
             			class="camporeadonly" 
             			size="4" 
