@@ -1880,5 +1880,43 @@ function usarDocumentosContratoDaPlanilha($voContrato){
 	return $voContrato->importacao != constantes::$CD_NAO;	
 }
 
+/**
+ * se existir reajuste retroativo com data posterior ao da data do contrato, esse reajuste alterara o valor do contrato
+ * caso contrario, o valor do contrato será o correto e nao precisa ser reajustado
+ * @param unknown $vocontrato
+ * @param unknown $recordset
+ * @throws excecaoGenerica
+ * @return boolean
+ */
+function existeReajusteRetroativoComEfeitos($vocontrato, $recordset){
+	$retorno = false;
+	$dtAssinaturaTermo = $vocontrato->dtAssinatura;
+	
+	if($dtAssinaturaTermo == null){
+		throw new excecaoGenerica("Data assinatura inválida para validação do valor da prorrogação em contrato modificação.");		
+	}	
+	foreach ($recordset as $registro){
+		$voTemp = new voContratoModificacao ();
+		$voTemp->getDadosBanco ( $registro );
+		
+		if($voTemp->tpModificacao == dominioTpContratoModificacao::$CD_TIPO_REAJUSTE){
+			$dtAssinaturaReajuste = $voTemp->vocontrato->dtAssinatura; 
+			
+			//echoo($vocontrato->toString() . "|data inicio $dtAssinaturaTermo e data fim reajuste $dtAssinaturaReajuste|" . $voTemp->vocontrato->toString());
+			
+			if(isDataFimMaiorDataInicio($dtAssinaturaTermo, $dtAssinaturaReajuste)){
+				$retorno = true;
+				//echoo("data maior: reajuste retroativo.");
+				break;
+			}
+			
+		}
+		
+	}
+	
+	return $retorno;
+	
+}
+
 
 ?>

@@ -287,4 +287,38 @@ function getDataUltimoDiaMesHtml($mes, $ano=null){
 	return getDataMesHtml(getUltimoDiaMes($mes, $ano), $mes, $ano);
 }
 
+function isDataFimMaiorDataInicio($datainihtml, $datafimhtml){
+	return compararDatas($datainihtml, $datafimhtml) == 1;
+}
+
+function compararDatas($datainihtml, $datafimhtml){
+	//$timeZone = new DateTimeZone('UTC');
+	
+	/** Assumido que $dataEntrada e $dataSaida estao em formato dia/mes/ano */
+	/*$data1 = DateTime::createFromFormat ('d/m/Y', $dataEntrada, $timeZone);
+	$data2 = DateTime::createFromFormat ('d/m/Y', $dataSaida, $timeZone);*/
+	
+	$data1 = DateTime::createFromFormat ('d/m/Y', $datainihtml);
+	$data2 = DateTime::createFromFormat ('d/m/Y', $datafimhtml);
+	
+	/** Testa se sao validas */
+	if (!($data1 instanceof DateTime)) {
+		throw new excecaoAtributoInvalido('Data de entrada invalida!');
+	}
+	
+	if (!($data2 instanceof DateTime)) {
+		throw new excecaoAtributoInvalido('Data de saída invalida!');
+	}
+	
+	$retorno = 0;	
+	/** Compara as datas normalmente com operadores de comparacao < > = e !=*/
+	if ($data1 > $data2) {
+		$retorno = -1;
+	} else if ($data1 < $data2) {
+		$retorno = 1;
+	}		
+	
+	return $retorno;
+}
+
 ?>

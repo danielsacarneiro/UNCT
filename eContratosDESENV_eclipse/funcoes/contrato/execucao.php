@@ -294,20 +294,28 @@ function detalhar(isExcluir) {
 	                    <?php 
 	                    try{
 	                    	$vlContratoPErcentual = getVarComoDecimal($vlMensalContratoAtual);
-	                    	$vlContratoModPErcentual = getVarComoDecimal($vlMensalAtual);
+	                    	$vlContratoModPErcentual = $vlMensalAtual;
+	                    	
+	                    	//echoo($vlContratoPErcentual);
+	                    	//echoo($vlContratoModPErcentual);
 	                    	
 	                    	if($vlContratoPErcentual>$vlContratoModPErcentual){
 	                    		$percMargemErro = $vlContratoModPErcentual/$vlContratoPErcentual;
 	                    	}else{
 	                    		$percMargemErro = $vlContratoPErcentual/$vlContratoModPErcentual;
 	                    	}
+	                    	//$percMargemErro = number_format($percMargemErro, 2);
+	                    	
 	                    	$percMargemErro = 100*(1-$percMargemErro);
-	                    	echo "Margem de erro é " . getTextoHTMLDestacado(getMoeda(1-$percMargemErro)."%") .", por conta das aproximações.<br>";
+	                    	//echoo($percMargemErro );
+	                    	if($percMargemErro != 0){
+	                    		echo "Margem de erro é " . getTextoHTMLDestacado(getMoeda($percMargemErro)."%") .", por conta das aproximações.<br>";
+	                    	}
 	                    }catch (excecaoGenerica $exTem){
 	                    	echo "Erro ao calcular margem de erro<br>.";
 	                    }
 	                    
-		                    $complementoDet = " Valor ATUAL ". getTextoHTMLDestacado("APROXIMADO")." (havendo prorrogação): Mensal " . getInputText("", "", $vlMensalAtualStrInput, constantes::$CD_CLASS_CAMPO_READONLY);
+		                    $complementoDet = " Valor ATUAL (havendo prorrogação): Mensal " . getInputText("", "", $vlMensalAtualStrInput, constantes::$CD_CLASS_CAMPO_READONLY);
 		                    $complementoDet .= " Global: " . getInputText("", "", getMoeda($vlGlobalSeProrrogado), constantes::$CD_CLASS_CAMPO_READONLY);
 		                    
 		                    echo getTextoHTMLNegrito($complementoDet);

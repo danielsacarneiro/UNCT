@@ -577,9 +577,12 @@ class dbContratoModificacao extends dbprocesso {
 						//serve apenas para registrar a prorrogacao
 						if(isProrrogacaoNaoRegistrada($voContratoModAtual)){
 							//inclui para exibicao as prorrogacoes 
-							//aqui PODERIA SER UM LUGAR para corrigir o valor do contrato, considerando que a prorrogacao tem valor estático
-							//inclusive porque o econti apenas trata de valores aproximados: mas isso nao eh feito para nao prejudicar o resto do calculo
 							//echoo($voContratoModAtual->vlMensalAtual);
+							//corrige valor das prorrogacoes que nao tem reajustes posteriores
+							if(!existeReajusteRetroativoComEfeitos($voContratoAtual, $colecaoReajuste)){
+								$voContratoReajustadoAtual = $voContratoModAtual;
+							}
+											
 							$registro[filtroManterContratoModificacao::$NmColVOContratoModReajustado] = $voContratoReajustadoAtual;
 							
 							$retorno[] = $registro;
@@ -589,6 +592,7 @@ class dbContratoModificacao extends dbprocesso {
 						$colecaoReajustesAplicar = getColecaoReajustesAAplicarContratoMod($voContratoAtual, $colecaoReajuste);
 						
 						for($indiceReajuste=0; $indiceReajuste < sizeof($colecaoReajustesAplicar); $indiceReajuste++){
+							//echoo($voContratoAtual->toString());
 							
 							$registroReajuste = $colecaoReajustesAplicar[$indiceReajuste];
 							$voTempReajuste = new voContratoModificacao ();
@@ -606,8 +610,8 @@ class dbContratoModificacao extends dbprocesso {
 							$retorno[] = $registroReajuste;
 						}						
 						
-					}				
-	
+					}
+						
 				}else{
 					$retorno = $recordSet;
 					$retorno = $this->atualizaColecaoRegistros($retorno);
