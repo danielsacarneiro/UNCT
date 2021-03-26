@@ -139,11 +139,11 @@ function detalhar(isExcluir) {
                         <TH class='headertabeladadosalinhadocentro' width='40%' nowrap colspan=3>Vl.Global</TH>
                     </TR>
                     <TR>
-                        <TH class='headertabeladadosalinhadocentro' width='1%'>Doc</TH>
-                        <TH class='headertabeladadosalinhadocentro' width='1%'>Exec</TH>
-                        <TH class='headertabeladadosalinhadocentro' width='1%'>Doc</TH>
-                        <TH class='headertabeladadosalinhadocentro' width='1%'>Exec</TH>
-                        <TH class='headertabeladadosalinhadocentro' width='1%'>Prorr</TH>
+                        <TH class='headertabeladadosalinhadocentro' width='1%'>Doc.</TH>
+                        <TH class='headertabeladadosalinhadocentro' width='1%'>Exec.</TH>
+                        <TH class='headertabeladadosalinhadocentro' width='1%'>Doc.</TH>
+                        <TH class='headertabeladadosalinhadocentro' width='1%'>Exec.</TH>
+                        <TH class='headertabeladadosalinhadocentro' width='1%'>Prorrog.</TH>
                     </TR>
                     <?php
                     
@@ -257,6 +257,7 @@ function detalhar(isExcluir) {
 	                    	$percentualSimples = getMoeda($voAtual->vlModificacaoReferencial/$voAtual->vlMensalAnterior*100,4). "%";
 	                    	$vlMensalAtualStrCelula = !$isEscopo?getTextoHTMLNegrito(getMoeda($vlMensalAtual)):getTextoHTMLDestacado(constantes::$DS_OPCAO_NAO_SEAPLICA, "red", false);
 	                    	$vlMensalAtualStrInput = !$isEscopo?getMoeda($vlMensalAtual):constantes::$DS_OPCAO_NAO_SEAPLICA;
+	                    	$vlMensalContratoAtual = $voContratoAtual->vlMensal;
                     ?>
                     <TR class='dados'>
                         <TD class='tabeladados' width=1%>
@@ -273,7 +274,7 @@ function detalhar(isExcluir) {
                         <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($vlLiconReferencial)?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo getMoeda($vlLiconPrazoRestante)?></TD>
                         <TD class='tabeladadosdestacadoamarelo'><?php echo getTextoHTMLNegrito(getMoeda($vlLicon)) . "<br>($numMesesPeriodoAtual meses)"?></TD>
-                        <TD class='tabeladadosalinhadodireita' ><?php echo $voContratoAtual->vlMensal?></TD>                    
+                        <TD class='tabeladadosalinhadodireita' ><?php echo $vlMensalContratoAtual?></TD>                    
                         <TD class='tabeladadosalinhadodireita' ><?php echo $vlMensalAtualStrCelula?></TD>
                         <TD class='tabeladadosalinhadodireita' ><?php echo $voContratoAtual->vlGlobal?></TD>                    
                         <TD class='tabeladadosalinhadodireita' ><?php echo getTextoHTMLNegrito(getMoeda($vlGlobalReal))?></TD>
@@ -291,6 +292,21 @@ function detalhar(isExcluir) {
 	                <TR>
 	                    <TD class="totalizadortabeladadosalinhadoesquerda" colspan=<?=$colspan?>>
 	                    <?php 
+	                    try{
+	                    	$vlContratoPErcentual = getVarComoDecimal($vlMensalContratoAtual);
+	                    	$vlContratoModPErcentual = getVarComoDecimal($vlMensalAtual);
+	                    	
+	                    	if($vlContratoPErcentual>$vlContratoModPErcentual){
+	                    		$percMargemErro = $vlContratoModPErcentual/$vlContratoPErcentual;
+	                    	}else{
+	                    		$percMargemErro = $vlContratoPErcentual/$vlContratoModPErcentual;
+	                    	}
+	                    	$percMargemErro = 100*(1-$percMargemErro);
+	                    	echo "Margem de erro é " . getTextoHTMLDestacado(getMoeda(1-$percMargemErro)."%") .", por conta das aproximações.<br>";
+	                    }catch (excecaoGenerica $exTem){
+	                    	echo "Erro ao calcular margem de erro<br>.";
+	                    }
+	                    
 		                    $complementoDet = " Valor ATUAL ". getTextoHTMLDestacado("APROXIMADO")." (havendo prorrogação): Mensal " . getInputText("", "", $vlMensalAtualStrInput, constantes::$CD_CLASS_CAMPO_READONLY);
 		                    $complementoDet .= " Global: " . getInputText("", "", getMoeda($vlGlobalSeProrrogado), constantes::$CD_CLASS_CAMPO_READONLY);
 		                    
