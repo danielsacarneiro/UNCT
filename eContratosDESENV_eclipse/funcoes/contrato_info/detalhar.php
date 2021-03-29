@@ -114,7 +114,7 @@ function iniciar(){
 			?>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Estudo Técnico:</TH>
-	            <TD class="campoformulario" width="1%" colspan=3>
+	            <TD class="campoformulario" width="1%">
 	            <?php 
 	            
 	            echo dominioEstudoTecnicoSAD::getHtmlDetalhamento(
@@ -122,12 +122,10 @@ function iniciar(){
 	            		voContratoInfo::$nmAtrInEstudoTecnicoSAD, 
 	            		$vo->inEstudoTecnicoSAD,
 	            		false,
-	            		dominioEstudoTecnicoSAD::getColecaoFormatada()
+	            		dominioEstudoTecnicoSAD::getColecaoFormatada(),
+	            		constantes::$DS_OPCAO_NAO_SEAPLICA
 	            		);?>
-	            </TD>	
-	        </TR>
-	        
-			<TR>
+	            </TD>
 				<?php
 				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioAutorizacao.php");
 				$combo = new select(dominioAutorizacao::getColecao());
@@ -142,7 +140,20 @@ function iniciar(){
 	            <TD class="campoformulario" nowrap>
 	            Planilha: <?php echo $combo->getHtmlCombo("","", $cdAutorizacaoPlanilha, true, "camporeadonly", true, " disabled ");?>	            
 	            Atual: <?php echo $combo->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato,voContratoInfo::$nmAtrCdAutorizacaoContrato, $vo->cdAutorizacao, true, "camporeadonly", true, " disabled ");?>
-				</TD>	            	        	            		            
+				</TD>	            	
+	        </TR>	        
+			<TR>
+	            <TH class="campoformulario" nowrap width="1%">Garantia:</TH>
+	            <TD class="campoformulario">
+	            <?php 
+	            echo "Tem?: " 
+					//. $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInTemGarantia,voContratoInfo::$nmAtrInTemGarantia, $vo->inTemGarantia, true, "camporeadonly", false, " disabled ");
+	            	. dominioSimNao::getHtmlDetalhamentoRadio(voContratoInfo::$nmAtrInTemGarantia, voContratoInfo::$nmAtrInTemGarantia, $vo->inTemGarantia);
+	           /* if($vo->inTemGarantia != constantes::$CD_NAO){
+	            	echo " |Tipo: " . $comboGarantia->getHtmlCombo(voContratoInfo::$nmAtrTpGarantia,voContratoInfo::$nmAtrTpGarantia, $vo->tpGarantia, true, "camporeadonly", false, " disabled ");
+	            }*/
+	            ?>
+	            </TD>					            	        	            		            
 	            <TH class="campoformulario" nowrap width="1%">Pendências:</TH>
 	            <TD class="campoformulario" colspan=1>
 	            <?php 
@@ -229,21 +240,8 @@ function iniciar(){
 	        <?php	        
 	        include_once(caminho_funcoes. "contrato/dominioTpGarantiaContrato.php");
 	        $comboGarantia = new select(dominioTpGarantiaContrato::getColecao());
-	        $jsGarantia = "formataFormTpGarantia('".voContratoInfo::$nmAtrInTemGarantia."', '".voContratoInfo::$nmAtrTpGarantia."');"
+	        //$jsGarantia = "formataFormTpGarantia('".voContratoInfo::$nmAtrInTemGarantia."', '".voContratoInfo::$nmAtrTpGarantia."');"
 	        ?>	        
-			<TR>
-	            <TH class="campoformulario" nowrap width="1%">Garantia:</TH>
-	            <TD class="campoformulario" colspan="3">
-	            <?php 
-	            echo "Tem?: " 
-					//. $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInTemGarantia,voContratoInfo::$nmAtrInTemGarantia, $vo->inTemGarantia, true, "camporeadonly", false, " disabled ");
-	            	. dominioSimNao::getHtmlDetalhamentoRadio(voContratoInfo::$nmAtrInTemGarantia, voContratoInfo::$nmAtrInTemGarantia, $vo->inTemGarantia);
-	            if($vo->inTemGarantia != constantes::$CD_NAO){
-	            	echo " |Tipo: " . $comboGarantia->getHtmlCombo(voContratoInfo::$nmAtrTpGarantia,voContratoInfo::$nmAtrTpGarantia, $vo->tpGarantia, true, "camporeadonly", false, " disabled ");
-	            }
-	            ?>
-	            </TD>
-	        </TR>
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Gestor:</TH>
 	            <TD class="campoformulario" colspan="3">

@@ -235,14 +235,18 @@ class dominio extends multiplosConstrutores {
 		return $retorno;
 	}
 	
-	static function getHtmlDetalhamento($id, $nm, $opcaoSelecionada, $isTrazerValuenoOption=false, $colecaoAlternativa=null) {
+	static function getHtmlDetalhamento($id, $nm, $opcaoSelecionada, $isTrazerValuenoOption=false, $colecaoAlternativa=null, $textoSeNulo=null) {
 		$html = "";
 		$value = self::getDescricaoStatic($opcaoSelecionada, $colecaoAlternativa);
 		if($isTrazerValuenoOption){
 			$value = select::getDescricaoComValueNoOption($opcaoSelecionada, $value);
 		}
 		if($value == null || $value == ""){
-			$value = " ";			
+			$value = " ";	
+			
+			if($textoSeNulo != null){
+				$value = $textoSeNulo;
+			}
 		}
 		
 		$html = getInputText($id, $nm, $value, constantes::$CD_CLASS_CAMPO_READONLY)."\n";

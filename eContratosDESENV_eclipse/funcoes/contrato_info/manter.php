@@ -175,7 +175,7 @@ function getContratoSubstitutoLocal(){
 
 function iniciar(){
 	getContratoSubstitutoLocal();
-	formataFormTpGarantia('<?=voContratoInfo::$nmAtrInTemGarantia?>', '<?=voContratoInfo::$nmAtrTpGarantia?>');
+	//formataFormTpGarantia('<?=voContratoInfo::$nmAtrInTemGarantia?>', '<?=voContratoInfo::$nmAtrTpGarantia?>');
 }
 
 </SCRIPT>
@@ -234,16 +234,28 @@ function iniciar(){
 	       ?>
 	        <TR>
 	            <TH class="campoformulario" nowrap width="1%">Estudo Técnico:</TH>
-	            <TD class="campoformulario" width="1%" colspan=3><?php echo $comboEstudoTecnico->getHtmlCombo(voContratoInfo::$nmAtrInEstudoTecnicoSAD,voContratoInfo::$nmAtrInEstudoTecnicoSAD, $vo->inEstudoTecnicoSAD, true, "camponaoobrigatorio", false, " onChange='' required ");?>
+	            <TD class="campoformulario" width="1%">
+	            <?php echo $comboEstudoTecnico->getHtmlCombo(voContratoInfo::$nmAtrInEstudoTecnicoSAD,voContratoInfo::$nmAtrInEstudoTecnicoSAD, $vo->inEstudoTecnicoSAD, true, "camponaoobrigatorio", false, " onChange='' required ");?>
 				<?php
 				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioAutorizacao.php");
 				$combo = new select(dominioAutorizacao::getColecao());				
 				?>
-	        </TR>
-	        
-			<TR>
-	            <TH class="campoformulario" nowrap>Autorização:</TH>
+				</TD>
+	            <TH class="campoformulario" width="1%" nowrap>Autorização:</TH>
 	            <TD class="campoformulario"><?php echo $combo->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato,voContratoInfo::$nmAtrCdAutorizacaoContrato, $cdAutorizacao, true, "camponaoobrigatorio", true, " required ");?>
+	            </TD>				
+	        </TR>		                
+			<TR>
+			<TH class="campoformulario" nowrap width="1%">Garantia:</TH>
+	            <TD class="campoformulario" >
+	            Tem?: 
+	            <?php 
+	            include_once(caminho_util. "dominioSimNao.php");
+	            $comboSimNao = new select(dominioSimNao::getColecao());
+	             
+	            echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInTemGarantia,voContratoInfo::$nmAtrInTemGarantia, $vo->inTemGarantia, true, "camponaoobrigatorio", false,
+	            		" onChange=\"". $jsGarantia. "\" required ");?>
+	            <?php //echo "|Tipo:" . $comboGarantia->getHtmlCombo(voContratoInfo::$nmAtrTpGarantia,voContratoInfo::$nmAtrTpGarantia, $vo->tpGarantia, true, "camponaoobrigatorio", true, " disabled ");?>
 	            </TD>
 	            <TH class="campoformulario" nowrap width="1%">Pendências:</TH>
 	            <TD class="campoformulario" colspan=1>
@@ -255,9 +267,7 @@ function iniciar(){
 	            echo dominioAutorizacao::getHtmlChecksBoxArray($arrayParamPendencias);
 	             ?>
 	            </TD>	            
-	        </TR>
-	        
-	        	       
+	        </TR>	        	       
 			<TR>
 				<?php
 				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioClassificacaoContrato.php");
@@ -266,12 +276,10 @@ function iniciar(){
 	            <TH class="campoformulario" nowrap>Classificação:</TH>
 	            <TD class="campoformulario" width="1%" colspan=3>
 	            <?php 
-	            echo $comboClassificacao->getHtmlCombo(voContratoInfo::$nmAtrCdClassificacao,voContratoInfo::$nmAtrCdClassificacao, $vo->cdClassificacao, true, "camponaoobrigatorio", true, " onChange='formataFormClassificacao();' required ");
+	            echo $comboClassificacao->getHtmlCombo(voContratoInfo::$nmAtrCdClassificacao,voContratoInfo::$nmAtrCdClassificacao, $vo->cdClassificacao, true, "camponaoobrigatorio", false, " onChange='formataFormClassificacao();' required ");
 	            //$radioMaodeObra = new radiobutton ( dominioSimNao::getColecao());
 	            //echo "&nbsp;&nbsp;Mão de obra incluída (planilha de custos)?: " . $radioMaodeObra->getHtmlRadioButton ( voContratoInfo::$nmAtrInMaoDeObra, voContratoInfo::$nmAtrInMaoDeObra, $vo->inMaoDeObra, false, " required " );
 	            
-	            include_once(caminho_util. "dominioSimNao.php");
-	            $comboSimNao = new select(dominioSimNao::getColecao());	             
 	            echo "&nbsp;&nbsp;Planilha de custos/formação de preço?: ";
 	            echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInMaoDeObra,voContratoInfo::$nmAtrInMaoDeObra, $vo->inMaoDeObra, true, "camponaoobrigatorio", false,
 	            		" onChange='formataFormClassificacao(this);' required ");
@@ -329,7 +337,7 @@ function iniciar(){
 	        <?php	        
 	        include_once(caminho_funcoes. "contrato/dominioTpGarantiaContrato.php");
 	        $comboGarantia = new select(dominioTpGarantiaContrato::getColecao());
-	        $jsGarantia = "formataFormTpGarantia('".voContratoInfo::$nmAtrInTemGarantia."', '".voContratoInfo::$nmAtrTpGarantia."');"
+	        //$jsGarantia = "formataFormTpGarantia('".voContratoInfo::$nmAtrInTemGarantia."', '".voContratoInfo::$nmAtrTpGarantia."');"
 	        ?>
 			<TR>
 			<?php 
@@ -349,14 +357,6 @@ function iniciar(){
 	            }
 	            echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInSeraProrrogado,voContratoInfo::$nmAtrInSeraProrrogado, $seraProrrogTemp, false, "camponaoobrigatorio", false, " required ");?>
 	        	</TD>
-	        </TR>
-			<TR>
-	            <TH class="campoformulario" nowrap width="1%">Garantia:</TH>
-	            <TD class="campoformulario" colspan="3">
-	            Tem?: <?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInTemGarantia,voContratoInfo::$nmAtrInTemGarantia, $vo->inTemGarantia, true, "camponaoobrigatorio", false,
-	            		" onChange=\"". $jsGarantia. "\" required ");?>
-	            Tipo: <?php echo $comboGarantia->getHtmlCombo(voContratoInfo::$nmAtrTpGarantia,voContratoInfo::$nmAtrTpGarantia, $vo->tpGarantia, true, "camponaoobrigatorio", true, " disabled ");?>
-	            </TD>
 	        </TR>
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Gestor:</TH>
@@ -387,8 +387,7 @@ function iniciar(){
 		            	"<?=voContratoInfo::$nmAtrInMaoDeObra?>",
 		            	"<?=voContratoInfo::$nmAtrDtProposta?>",
 		            	"<?=voContratoInfo::$nmAtrDtBaseReajuste?>",
-		            	"<?=voContratoInfo::$nmAtrInPrazoProrrogacao?>",
-	            		"<?=voContratoInfo::$nmAtrTpGarantia?>"];
+		            	"<?=voContratoInfo::$nmAtrInPrazoProrrogacao?>"];
 	            </SCRIPT>
 	            <INPUT type="checkbox" id="checkResponsabilidade" name="checkResponsabilidade" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCamposRequired);"> <?=voMensageria::$DS_RESPONSABILIDADE_CAMPO_OBR?>
 				</TD>
