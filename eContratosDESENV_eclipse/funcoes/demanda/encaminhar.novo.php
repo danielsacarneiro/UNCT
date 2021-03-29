@@ -84,12 +84,13 @@ function formataPrioridade() {
 
 function isFormularioValido() {
 
-	campoSetorDestino = document.frm_principal.<?=voDemandaTramitacao::$nmAtrCdSetorDestino?>;
-	campoTipoDemanda = document.frm_principal.<?=voDemandaTramitacao::$nmAtrTipo?>;
+	var campoSetorDestino = document.frm_principal.<?=voDemandaTramitacao::$nmAtrCdSetorDestino?>;
+	var campoTipoDemanda = document.frm_principal.<?=voDemandaTramitacao::$nmAtrTipo?>;
 	//verifica se tem algum contrato selecionado atraves do campo pessoa contratada preenchido
-	campoPessoaContrato = document.getElementsByName("<?=vopessoa::getID_REQ_ColecaoContrato()?>")[0];
-
-	if(campoSetorDestino.value != "" && !isCampoTextoValido(document.frm_principal.<?=voDemandaTramitacao::$nmAtrTexto?>, true))	
+	var campoPessoaContrato = document.getElementsByName("<?=vopessoa::getID_REQ_ColecaoContrato()?>")[0];
+	var setorDestino = campoSetorDestino.value;
+	
+	if( setorDestino != "" && !isCampoTextoValido(document.frm_principal.<?=voDemandaTramitacao::$nmAtrTexto?>, true))	
 		return false;		
 	
 	if(campoTipoDemanda.value == "<?=dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL?>"){		
@@ -118,6 +119,10 @@ function isFormularioValido() {
 			return false;		
 		}
  
+	}
+
+	if(setorDestino == "<?=dominioSetor::$CD_SETOR_SAFI?>"){
+		exibirMensagem("Para envio à SAFI, verifique a necessidade de manifestação do jurídico.");
 	}
 
 			
