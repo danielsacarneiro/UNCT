@@ -132,6 +132,10 @@ function getQtdDiasEntreDatas($dataini, $datafim) {
 		echo "Erro ao calcular. Verifique as datas do período.";
 		$total_dias = 0;
 	}
+	
+	if($dataini == null || $datafim == null){
+		$total_dias = 0;
+	}
 
 	return $total_dias;
 }
