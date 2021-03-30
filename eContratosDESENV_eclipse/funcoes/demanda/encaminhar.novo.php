@@ -121,7 +121,7 @@ function isFormularioValido() {
  
 	}
 
-	if(setorDestino == "<?=dominioSetor::$CD_SETOR_SAFI?>"){
+	if("<?=(dominioSetor::$CD_SETOR_ATJA == $vo->cdSetorAtual)?>"!="1" && setorDestino == "<?=dominioSetor::$CD_SETOR_SAFI?>"){
 		exibirMensagem("Para envio à SAFI, verifique a necessidade de manifestação do jurídico.");
 	}
 
