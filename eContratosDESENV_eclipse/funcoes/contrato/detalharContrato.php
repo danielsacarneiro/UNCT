@@ -35,7 +35,7 @@ $readonly = "readonly";
 	}	
 	$registrobanco = $colecao[0];
 	
-	$voContrato->getDadosBanco($colecao[0]);
+	$voContrato->getDadosBanco($registrobanco);
 	
 	//echo $voContrato->linkMinutaDoc;
 	

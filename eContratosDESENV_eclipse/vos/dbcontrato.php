@@ -68,7 +68,7 @@ class dbcontrato extends dbprocesso {
 						, getVarComoString(constantes::$CD_SIM)
 						, filtroManterContrato::$NmColTemContratoInfo),
 		);	
-		
+				
 		$inSQLJoinContratoInfo = "LEFT JOIN";
 		//$filtro = new filtroManterContrato();
 		if($filtro->inSQLJoinContratoInfo != null){
@@ -327,22 +327,29 @@ class dbcontrato extends dbprocesso {
 			
 		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryJoin, $isHistorico );
 	}
+	
 	function consultarContratoPorChave($voContrato, $isHistorico) {
 		//$nmTabela = $voContrato->getNmTabelaEntidade ( $isHistorico );
 		$nmTabela = vocontrato::getNmTabelaStatic ( $isHistorico );
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
 		$nmTabelaContratoLicon = voContratoLicon::getNmTabelaStatic ( false );
 		$nmTabContratoLiconSqMAX = "TAB_MAX_LICON_CONTRATO";
+		
+		$arrayColunasRetornadas = array("$nmTabela.*",
+			"$nmTabelaContratoInfo." . voContratoInfo::$nmAtrDtProposta,
+			"$nmTabelaContratoInfo." . voContratoInfo::$nmAtrInEscopo,
+			"$nmTabelaContratoLicon." . voContratoLicon::$nmAtrSituacao,
+			"TAB1." . vousuario::$nmAtrName . " AS " . voentidade::$nmAtrNmUsuarioInclusao,
+			"TAB2." . vousuario::$nmAtrName . " AS " . voentidade::$nmAtrNmUsuarioUltAlteracao,
+		);
 
-		$queryJoin = "SELECT $nmTabela.*";
+		/*$queryJoin = "SELECT $nmTabela.*";
 		$queryJoin .= ", $nmTabelaContratoInfo." . voContratoInfo::$nmAtrDtProposta;
 		$queryJoin .= ", $nmTabelaContratoInfo." . voContratoInfo::$nmAtrInEscopo;
 		$queryJoin .= ", $nmTabelaContratoLicon." . voContratoLicon::$nmAtrSituacao;
 		$queryJoin .= ", TAB1." . vousuario::$nmAtrName . " AS " . voentidade::$nmAtrNmUsuarioInclusao;
 		$queryJoin .= ", TAB2." . vousuario::$nmAtrName . " AS " . voentidade::$nmAtrNmUsuarioUltAlteracao;
-			
-
-		$queryJoin .= " FROM " . $nmTabela;
+		$queryJoin .= " FROM " . $nmTabela;*/
 
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaContratoInfo;
 		$queryJoin .= "\n ON ";
@@ -414,20 +421,14 @@ class dbcontrato extends dbprocesso {
 		$queryJoin .= "\n LEFT JOIN " . vousuario::$nmEntidade;
 		$queryJoin .= "\n TAB2 ON ";
 		$queryJoin .= "TAB2." . vousuario::$nmAtrID . "=$nmTabela." . vocontrato::$nmAtrCdUsuarioUltAlteracao;
-		$queryJoin .= " WHERE ";
+		/*$queryJoin .= " WHERE ";
 		$queryJoin .= $voContrato->getValoresWhereSQLChave ( $isHistorico );
 		
-		//echo $voContrato->getValoresWhereSQLChave ( $isHistorico );
-		//echo $queryJoin;
-		//$queryJoin .= " AND $nmTabelaContratoInfo." . voContratoInfo::$nmAtrInDesativado . "= 'N' ";
-		/*
-		 * $queryJoin.= $nmTabela . "." . vocontrato::$nmAtrCdContrato . "=" . $voContrato->cdContrato;
-		 * $queryJoin.= " AND " . $nmTabela . "." . vocontrato::$nmAtrAnoContrato . "=" . $voContrato->anoContrato;
-		 * $queryJoin.= " AND ". $nmTabela . "." . vocontrato::$nmAtrSqContrato . "=" . $voContrato->sq;
-		 */
-
 		// echo $queryJoin;
-		return $this->consultarEntidade ( $queryJoin, true );
+		return $this->consultarEntidade ( $queryJoin, true );*/
+		
+		$registro = $this->consultarPorChaveMontandoQuery ( $voContrato, $arrayColunasRetornadas, $queryJoin, $isHistorico );
+		return array($registro);
 	}
 
 	function consultarContratoMovimentacoes($voContrato, $isHistorico=false) {
