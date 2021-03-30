@@ -182,7 +182,7 @@ function getContratoDetalhamentoParam($arrayParametro) {
 				
 			}else{
 				//nao precisa validar, pega a informacao do econti
-				echo getTextoHTMLNegrito(constantes::$nomeSistema." " . dominioAutorizacao::getHtmlDetalhamento("", "", $cdAutorizacaoEconti, false));
+				echo getTextoHTMLNegrito(constantes::$nomeSistema." " . dominioAutorizacao::getHtmlDetalhamento("", "", $cdAutorizacaoEconti, false, null, constantes::$DS_OPCAO_NENHUM));
 			}
 		}catch (excecaoChaveRegistroInexistente $ex){
 			;			
