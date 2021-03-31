@@ -193,7 +193,9 @@ class dominioTpDocumento extends dominio {
 	}*/
 	
 	static function getEnderecoAntigoPastaTermoDigitalizado() {
-		$retorno = "CONTRATOS%20DIGITALIZADOS";
+		$retorno = array ("CONTRATOS%20DIGITALIZADOS",
+				"CONTRATOS DIGITALIZADOS"
+		);
 		return $retorno;
 	}
 	
