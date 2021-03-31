@@ -274,7 +274,7 @@ function alterar() {
                                                                    
                         $dsPessoa = $voPessoa->nome;
                         if($dsPessoa == null){
-                        	$dsPessoa = "<B>CONTRATO NÃO INCLUÍDO NA PLANILHA</B>";
+                        	$dsPessoa = "<B>CONTRATO NÃO INCLUÍDO</B>";
                         }
                         $habilitado = dominioSimNao::getDescricaoStatic($voAtual->inHabilitado);
                         $tipo = $registroBanco[voDemanda::$nmAtrTipo];

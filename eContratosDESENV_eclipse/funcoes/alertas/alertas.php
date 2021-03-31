@@ -266,7 +266,7 @@ function getMensagemSistemasExternos(&$count = 0){
 }
 
 function getMensagemContratosNaoIncluidosPlanilha(&$count = 0){
-	$assunto = "Contratos não incluídos na planilha:";
+	$assunto = "Contratos não incluídos:";
 	$assunto = getSequenciaAssunto($assunto, $count);
 
 	try {

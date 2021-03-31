@@ -258,6 +258,7 @@ function detalhar(isExcluir) {
 	                    	$vlMensalAtualStrCelula = !$isEscopo?getTextoHTMLNegrito(getMoeda($vlMensalAtual)):getTextoHTMLDestacado(constantes::$DS_OPCAO_NAO_SEAPLICA, "red", false);
 	                    	$vlMensalAtualStrInput = !$isEscopo?getMoeda($vlMensalAtual):constantes::$DS_OPCAO_NAO_SEAPLICA;
 	                    	$vlMensalContratoAtual = $voContratoAtual->vlMensal;
+	                    	$vlGlobalContratoAtual = $voContratoAtual->vlGlobal;
                     ?>
                     <TR class='dados'>
                         <TD class='tabeladados' width=1%>
@@ -293,8 +294,11 @@ function detalhar(isExcluir) {
 	                    <TD class="totalizadortabeladadosalinhadoesquerda" colspan=<?=$colspan?>>
 	                    <?php 
 	                    try{
-	                    	$vlContratoPErcentual = getVarComoDecimal($vlMensalContratoAtual);
-	                    	$vlContratoModPErcentual = $vlMensalAtual;
+	                    	//$vlContratoPErcentual = getVarComoDecimal($vlMensalContratoAtual);
+	                    	//$vlContratoModPErcentual = $vlMensalAtual;
+	                    	
+	                    	$vlContratoPErcentual = getVarComoDecimal($vlGlobalContratoAtual);
+	                    	$vlContratoModPErcentual = $vlGlobalSeProrrogado;
 	                    	
 	                    	//echoo($vlContratoPErcentual);
 	                    	//echoo($vlContratoModPErcentual);
@@ -304,7 +308,6 @@ function detalhar(isExcluir) {
 	                    	}else{
 	                    		$percMargemErro = $vlContratoPErcentual/$vlContratoModPErcentual;
 	                    	}
-	                    	//$percMargemErro = number_format($percMargemErro, 2);
 	                    	
 	                    	$percMargemErro = 100*(1-$percMargemErro);
 	                    	//echoo($percMargemErro );

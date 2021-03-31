@@ -259,7 +259,7 @@ function alterar() {
                         
                         $dsPessoa = $voPessoa->nome;
                         if($dsPessoa == null){
-                        	$dsPessoa = "<B>CONTRATO NÃO INCLUÍDO NA PLANILHA</B>";
+                        	$dsPessoa = "<B>CONTRATO NÃO INCLUÍDO</B>";
                         }
                         
                         $contrato = formatarCodigoAnoComplemento($voAtual->cdContrato,
