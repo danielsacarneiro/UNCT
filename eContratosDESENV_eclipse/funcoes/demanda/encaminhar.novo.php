@@ -84,6 +84,7 @@ function formataPrioridade() {
 
 function isFormularioValido() {
 
+	var campoRespUNCT = document.frm_principal.<?=voDemandaTramitacao::$nmAtrCdPessoaRespUNCT?>;
 	var campoSetorDestino = document.frm_principal.<?=voDemandaTramitacao::$nmAtrCdSetorDestino?>;
 	var campoTipoDemanda = document.frm_principal.<?=voDemandaTramitacao::$nmAtrTipo?>;
 	//verifica se tem algum contrato selecionado atraves do campo pessoa contratada preenchido
@@ -121,10 +122,18 @@ function isFormularioValido() {
  
 	}
 
+	//para enviar a SAFI, lembrar de manifestacao juridica
 	if("<?=(dominioSetor::$CD_SETOR_ATJA == $vo->cdSetorAtual)?>"!="1" && setorDestino == "<?=dominioSetor::$CD_SETOR_SAFI?>"){
 		exibirMensagem("Para envio à SAFI, verifique a necessidade de manifestação do jurídico.");
 	}
 
+	//so deixa tramitar saindo da UNCT se o responsavel UNCT tiver inserido
+	if("<?=(dominioSetor::$CD_SETOR_UNCT == $vo->cdSetorAtual)?>"=="1"
+		&& campoRespUNCT.value == ""){
+		exibirMensagem("Selecione o usuário responsável na UNCT.");
+		campoRespUNCT.focus();
+		return false;
+	}
 			
 	return true;
 }

@@ -1160,13 +1160,7 @@ class dbDemanda extends dbprocesso {
 				$arrayRetorno = getHTMLDocumentosContrato($vocontratoDemanda);
 				$temAmbosDocsAExibir = $arrayRetorno[2];
 				$naovalidaDocs = isAtributoValido($vo->inCaracteristicas) && in_array(dominioCaracteristicasDemanda::$CD_NAO_VALIDA_DOCS, $vo->inCaracteristicas);
-				
-				/*echo $temAmbosDocsAExibir?"tem contratos":"nao tem contratos";
-				echo $naovalidaDocs?"nao valida docs":"valida docs";
-				
-				throw new excecaoGenerica("Fechamento não permitido: ambos os documentos 'MINUTA' (em word) e 'CONTRATO' (em pdf) devem ser anexados à demanda. |"
-						. $vocontratoDemanda->toString());*/
-				
+								
 				if(!$temAmbosDocsAExibir && !$naovalidaDocs){
 					throw new excecaoGenerica("Fechamento não permitido: ambos os documentos 'MINUTA' (em word) e 'CONTRATO' (em pdf) devem ser anexados à demanda. |" 
 							. $vocontratoDemanda->getCodigoContratoFormatado(true));
@@ -1178,6 +1172,12 @@ class dbDemanda extends dbprocesso {
 				if($temGarantia && !$garantiaOk){ 
 					throw new excecaoGenerica("Fechamento não permitido: verifique a garantia do contrato. |"
 							. $vocontratoDemanda->toString());						
+				}
+				
+				//$vo = new voDemandaTramitacao();
+				$temRespUNCT = isAtributoValido($vo->cdPessoaRespUNCT);
+				if(!$temRespUNCT){
+					throw new excecaoGenerica("Fechamento não permitido: indique o responsável UNCT pela demanda.");
 				}
 				
 				$this->validarDadosContrato($vocontratoDemanda, $vocontratoInfo);
