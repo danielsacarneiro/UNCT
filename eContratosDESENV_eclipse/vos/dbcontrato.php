@@ -1623,7 +1623,7 @@ class dbcontrato extends dbprocesso {
 					voDemandaContrato::$nmAtrTipoContrato,
 					voDemandaContrato::$nmAtrCdEspecieContrato,
 			);
-			$query .= " order by " . getSQLStringFormatadaColecaoIN($arrayGroupby);
+			$query .= " order by " . voDemanda::$nmAtrDtReferencia . " DESC, " . getSQLStringFormatadaColecaoIN($arrayGroupby);
 						
 		static::printarSQL($query);	
 		$retorno = parent::consultarEntidade ( $query, false);	
