@@ -267,13 +267,14 @@ function isContratoEnvioSADPGE($voContrato, $setor, $voContratoInfoPK=null){
 	}
 	
 	$validarValorPGE = $validarValorPGE && !$isContratoCredenciamento;
+	$validarValorSAD = $validarValorSAD && !$isContratoCredenciamento;
 	//$voContrato = new vocontrato();
 	$retorno = false;
 	if($voContrato != null && ($validarValorSAD || $validarValorPGE)){	
-		$prazoAnual = getDuracaoEmMesesContratoAutorizacaoPGE_SAD($voContrato);
-		//echo $prazoAnual;
-		if($prazoAnual >= vocontrato::$NUM_PRAZO_PADRAO){
-			$prazoAnual = vocontrato::$NUM_PRAZO_PADRAO;
+		$qtMeses = getDuracaoEmMesesContratoAutorizacaoPGE_SAD($voContrato);
+		//echo $qtMeses;
+		if($qtMeses >= vocontrato::$NUM_PRAZO_PADRAO){
+			$qtMeses = vocontrato::$NUM_PRAZO_PADRAO;
 		}
 		
 		$vlMensal = $voContrato->vlMensal;
@@ -283,7 +284,7 @@ function isContratoEnvioSADPGE($voContrato, $setor, $voContratoInfoPK=null){
 		}
 		//lembrar que o valor de contrato eh recuperado diferente
 		//$vlMensal = getVarComoDecimal($vlMensal);
-		$vlReferencia = $vlMensal*$prazoAnual;
+		$vlReferencia = $vlMensal*$qtMeses;
 		//echo " Vl.Mensal: $vlMensal, VL.Referencia: $vlReferencia ";
 		$retorno =  $vlReferencia >= $vlAComparar;
 	}
@@ -1652,12 +1653,12 @@ function getContratoDemandaPorSEI($SEI){
 function getDuracaoEmMesesContratoAutorizacaoPGE_SAD($voContrato){
 	//$voContrato = new vocontrato();	
 	if($voContrato->dtVigenciaInicial != null && $voContrato->dtVigenciaFinal != null){
-		$prazoAnual = getQtdMesesEntreDatas($voContrato->dtVigenciaInicial, $voContrato->dtVigenciaFinal);
+		$qtMeses = getQtdMesesEntreDatas($voContrato->dtVigenciaInicial, $voContrato->dtVigenciaFinal);
 	}else{
-		$prazoAnual = vocontrato::$NUM_PRAZO_PADRAO;
+		$qtMeses = vocontrato::$NUM_PRAZO_PADRAO;
 	}
 	
-	return $prazoAnual;
+	return $qtMeses;
 }
 
 /**
