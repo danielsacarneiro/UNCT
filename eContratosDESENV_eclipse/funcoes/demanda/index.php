@@ -109,7 +109,15 @@ function encaminhar() {
     	echo "exibirMensagem('Registro de historico nao permite encaminhamento.');return";
     }?>
     
-	chave = document.frm_principal.rdb_consulta.value;	
+	var chave = document.frm_principal.rdb_consulta.value;
+	var arrayChave = chave.split("*");
+	var situacao = "'" + arrayChave[3] + "'";
+	var strSituacaoFechada = "<?=dominioSituacaoDemanda::getColecaoChavesComoStringSeparador(dominioSituacaoDemanda::getColecaoFechada())?>";
+	if(strSituacaoFechada.indexOf(situacao) != -1){
+		exibirMensagem('Encaminhamento não permitido. Verifique a situação da demanda.');
+		return;
+	}
+	//alert(situacao);
 	//location.href="encaminhar.novo.php?funcao=<?=dbDemandaTramitacao::$NM_FUNCAO_ENCAMINHAR?>&chave=" + chave;
 
 	location.href="<?=getLinkManter("encaminhar.novo.php",dbDemandaTramitacao::$NM_FUNCAO_ENCAMINHAR)?>&chave=" + chave;

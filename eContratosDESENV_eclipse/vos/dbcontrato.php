@@ -276,6 +276,12 @@ class dbcontrato extends dbprocesso {
 		return $this->consultarPorChaveMontandoQuery ( $vocontratoTemp, $arrayColunasRetornadas, $queryJoin, $isHistorico );
 	}
 
+	/**
+	 * @deprecated analisar a possibilidade de remover esse metodo, considerando que o metodo mais utilizado eh o consultarContratoPorChave
+	 * @param unknown $vo
+	 * @param unknown $isHistorico
+	 * @return unknown|string
+	 */
 	function consultarPorChaveTela($vo, $isHistorico) {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
@@ -283,8 +289,10 @@ class dbcontrato extends dbprocesso {
 		$nmTabelaPessoa = vopessoa::getNmTabelaStatic ( false );
 		$nmTabelaPregoeiro = "NM_TAB_PREGOEIRO";
 
+		//ha um erro no script abaixo deixado de proposito para saber se essa consulta eh usada em algum lugar
 		$arrayColunasRetornadas = array (
 				$nmTabela . ".*",
+				"$nmTabelaPessoa.*" . vopessoa::$nmAtrDoc,
 				"$nmTabelaProcLic.".voProcLicitatorio::$nmAtrCdCPL,
 				"$nmTabelaContratoInfo." . voContratoInfo::$nmAtrDtProposta,
 				"$nmTabelaContratoInfo." . voContratoInfo::$nmAtrInEscopo,
@@ -314,10 +322,14 @@ class dbcontrato extends dbprocesso {
 		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrProcessoLicContrato . " LIKE '%SEFAZ%' ";
 		
 		
+		$queryJoin .= "\n LEFT JOIN $nmTabelaPessoa " ;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaPessoa . "." . vopessoa::$nmAtrCd . "=" . $nmTabela . "." . vocontrato::$nmAtrCdPessoaContratada;
+
 		$queryJoin .= "\n LEFT JOIN $nmTabelaPessoa $nmTabelaPregoeiro" ;
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaPregoeiro . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrCdPregoeiro;
-
+		
 		$queryJoin .= "\n LEFT JOIN " . vousuario::$nmEntidade;
 		$queryJoin .= "\n TAB1 ON ";
 		$queryJoin .= "TAB1." . vousuario::$nmAtrID . "=$nmTabela." . vocontrato::$nmAtrCdUsuarioInclusao;
@@ -333,9 +345,12 @@ class dbcontrato extends dbprocesso {
 		$nmTabela = vocontrato::getNmTabelaStatic ( $isHistorico );
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
 		$nmTabelaContratoLicon = voContratoLicon::getNmTabelaStatic ( false );
+		$nmTabelaPessoa = vopessoa::getNmTabelaStatic ( false );
+		
 		$nmTabContratoLiconSqMAX = "TAB_MAX_LICON_CONTRATO";
 		
 		$arrayColunasRetornadas = array("$nmTabela.*",
+			"$nmTabelaPessoa." . vopessoa::$nmAtrDoc,
 			"$nmTabelaContratoInfo." . voContratoInfo::$nmAtrDtProposta,
 			"$nmTabelaContratoInfo." . voContratoInfo::$nmAtrInEscopo,
 			"$nmTabelaContratoLicon." . voContratoLicon::$nmAtrSituacao,
@@ -414,6 +429,10 @@ class dbcontrato extends dbprocesso {
 		$queryJoin .= $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrAnoDemanda . "=" . $nmTabContratoLiconSqMAX . "." . voContratoLicon::$nmAtrAnoDemanda;
 		$queryJoin .= "\n AND ";
 		$queryJoin .= $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrCdDemanda . "=" . $nmTabContratoLiconSqMAX . "." . voContratoLicon::$nmAtrCdDemanda;
+		
+		$queryJoin .= "\n LEFT JOIN $nmTabelaPessoa " ;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaPessoa . "." . vopessoa::$nmAtrCd . "=" . $nmTabela . "." . vocontrato::$nmAtrCdPessoaContratada;
 
 		$queryJoin .= "\n LEFT JOIN " . vousuario::$nmEntidade;
 		$queryJoin .= "\n TAB1 ON ";
@@ -558,10 +577,10 @@ class dbcontrato extends dbprocesso {
 		return $colecao[0][$nmColunaSq];	
 	}
 	
-	/*function alterar($vo) {
+	function alterar($vo) {
 		$vo = $this->setDadosNormalizados($vo);
 		parent::alterar ( $vo );
-	}*/
+	}
 	
 	function validarInclusao($vo){
 		//$recordSet = getUltimoContratoVigente($vo, $dataVigencia);

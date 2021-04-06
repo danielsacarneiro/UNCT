@@ -283,7 +283,8 @@ function iniciar(){
 	            <TH class="campoformulario" nowrap width="1%">Situação:</TH>
 	            <TD class="campoformulario" width="1%">
 	            <?php 
-	            echo $comboSituacao->getHtmlCombo("","", $vo->situacao, true, "camporeadonly", false, " disabled ");	            
+	            //echo $comboSituacao->getHtmlCombo("","", $vo->situacao, true, "camporeadonly", false, " disabled ");
+	            echo $comboSituacao->getHtmlCombo(voDemandaTramitacao::$nmAtrSituacao,voDemandaTramitacao::$nmAtrSituacao, $vo->situacao, true, "campoobrigatorio", false, " required ");
 	             ?>
 	            </TD>            		        
 	            <TH class="campoformulario" width="1%">Data.Demanda:</TH>

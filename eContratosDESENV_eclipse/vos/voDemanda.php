@@ -379,9 +379,9 @@ class voDemanda extends voentidade {
 	function getContrato() {
 		$retorno = null;
 		if($this->colecaoContrato != null){
-			$retorno = $this->colecaoContrato[0]; 
+			$retorno = clone $this->colecaoContrato[0]; 
 		}
-		return clone $retorno;
+		return  $retorno;
 	}	
 	function toString() {
 		$retorno .= $this->ano;
@@ -391,6 +391,13 @@ class voDemanda extends voentidade {
 	function getValorChavePrimaria() {
 		return $this->ano . CAMPO_SEPARADOR . $this->cd . CAMPO_SEPARADOR . $this->sqHist;
 	}
+	
+	//se a chaveHTML for igual a getValorChavePrimaria nao precisa desse metodo
+	//pq ja tem no voentidade
+	function getValorChaveHTML(){
+		return $this->ano . CAMPO_SEPARADOR . $this->cd . CAMPO_SEPARADOR . $this->sqHist . CAMPO_SEPARADOR . $this->situacao;
+	}
+	
 	function getChavePrimariaVOExplode($array) {
 		$this->ano = $array [0];
 		$this->cd = $array [1];

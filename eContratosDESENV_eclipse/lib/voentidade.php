@@ -55,12 +55,7 @@ class voentidade extends multiplosConstrutores {
 	function __construct1($arrayChave = null) {
 		// exemplo de chamada de construtor da classe pai em caso de override
 		// parent::__construct($altura,$grossura,$largura,$cor);
-		$this->varAtributos = array (
-				voentidade::$nmAtrDhInclusao,
-				voentidade::$nmAtrDhUltAlteracao,
-				voentidade::$nmAtrCdUsuarioInclusao,
-				voentidade::$nmAtrCdUsuarioUltAlteracao 
-		);
+		$this->varAtributos = static::getColecaoNmAtributosPadrao();
 		
 		$this->cdUsuarioUltAlteracao = id_user;
 		$this->NM_METODO_RETORNO_CONFIRMAR = null;
@@ -83,6 +78,15 @@ class voentidade extends multiplosConstrutores {
 		 * $class = static::getNmClassProcesso();
 		 * $this->dbprocesso= new $class();
 		 */
+	}
+	
+	static function getColecaoNmAtributosPadrao(){
+		return array (
+				voentidade::$nmAtrDhInclusao,
+				voentidade::$nmAtrDhUltAlteracao,
+				voentidade::$nmAtrCdUsuarioInclusao,
+				voentidade::$nmAtrCdUsuarioUltAlteracao 
+		);	
 	}
 	
 	// ...............................................................

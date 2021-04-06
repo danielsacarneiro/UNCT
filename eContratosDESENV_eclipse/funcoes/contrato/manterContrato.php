@@ -37,6 +37,10 @@ if($isInclusao){
 	$colecao = $dbprocesso->limpaResultado();
 	$colecao = $dbprocesso->consultarContratoPorChave($voContrato, $isHistorico);	
 	$voContrato->getDadosBanco($colecao[0]);
+	$vopessoacontratada = new vopessoa();
+	$vopessoacontratada->getDadosBanco($colecao[0]);
+	//var_dump($vopessoacontratada);
+	
 	putObjetoSessao($voContrato->getNmTabela(), $voContrato);
 
 	$titComplemento = "ALTERAR";        
@@ -387,13 +391,20 @@ function getDiferencaDiasVigencia(){
 				<div id="<?=vocontrato::$ID_REQ_DIV_DADOS_MANTER_CONTRATO?>">
 				</div>	            
 	            </TD>
-	        </TR>	
+	        </TR>			
+		<?php 
+		}else{
+			getContratoDet($voContrato, false, true);
+		}
+		?>
 		<TR>
             <TH class="campoformulario" width="1%" nowrap>Contratada:</TH>
             <TD class="campoformulario" colspan=3>
-            <INPUT type="text" id="<?=vocontrato::$nmAtrContratadaContrato?>" name="<?=vocontrato::$nmAtrContratadaContrato?>"  value="<?php echo($nmContratada);?>"  class="camporeadonly" size="50" readonly required>
-            | CNPJ/CNPF:
-            <INPUT type="text" id="<?=vocontrato::$nmAtrDocContratadaContrato?>" name="<?=vocontrato::$nmAtrDocContratadaContrato?>"  value="<?php echo($docContratada);?>"  onkeyup="formatarCampoCNPFouCNPJ(this, event);" class="camporeadonly" size="20" maxlength="40" readonly  required>
+            <INPUT type="text" id="<?=vocontrato::$nmAtrContratadaContrato?>" name="<?=vocontrato::$nmAtrContratadaContrato?>"  
+            value="<?php echo($nmContratada);?>"  class="camporeadonly" size="50" readonly required>
+            | CNPJ/CNPF (em caso de alteração):
+            <INPUT type="text" id="<?=vocontrato::$nmAtrDocContratadaContrato?>" name="<?=vocontrato::$nmAtrDocContratadaContrato?>"  
+            value="<?php echo(documentoPessoa::getNumeroDocFormatado($vopessoacontratada->doc));?>"  onkeyup="formatarCampoCNPFouCNPJ(this, event);" class="camporeadonly" size="20" maxlength="40"  readonly required>
                     <?php 
                     echo getLinkPesquisa("../pessoa");                    
                     $nmCamposDocApagar = array(
@@ -404,12 +415,6 @@ function getDiferencaDiasVigencia(){
                     ?>            
             </TD>
         </TR>	                	        
-		
-		<?php 
-		}else{
-			getContratoDet($voContrato, false, true);
-		}
-		?>
 		<TR>
             <TH class="campoformulario" nowrap>Unid.Demandante:</TH>
             <TD class="campoformulario" colspan="3">

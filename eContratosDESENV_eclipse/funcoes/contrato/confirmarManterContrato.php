@@ -7,6 +7,8 @@ inicioComValidacaoUsuario(true);
 $vo = new vocontrato();
 $vo->getDadosFormulario();
 
+//echo $vo->docContratada;
+
 //$vo->dbprocesso->validarAlteracao($vo);
 
 putObjetoSessao("vo", $vo);

@@ -252,6 +252,16 @@ include_once("voDemandaContrato.php");
 				. CAMPO_SEPARADOR
 				. $this->sq;				
 	}
+	
+	/**
+	 * funcao replicada aqui para nao pegar o getValorChaveHTML da classe pai
+	 * {@inheritDoc}
+	 * @see voDemanda::getValorChaveHTML()
+	 */
+	function getValorChaveHTML(){
+		return $this->getValorChavePrimaria();
+	}
+	
 		
 	function getChavePrimariaVOExplode($array){
 		$this->ano = $array[0];

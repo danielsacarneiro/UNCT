@@ -1083,7 +1083,7 @@ class dbDemanda extends dbprocesso {
 				//var_dump($vo);
 				throw new excecaoGenerica( $msg );
 			}
-		}
+		};
 	}	
 		
 	static function validarDadosContrato($voContrato, $vocontratoInfo) {
@@ -1121,7 +1121,7 @@ class dbDemanda extends dbprocesso {
 			}*/
 		}
 		
-		static::validarDemandaLicon($vo);
+		//static::validarDemandaLicon($vo);
 		
 		if (dominioTipoDemanda::isContratoObrigatorio($tipo) && ! $vo->temContratoParaIncluir ()) {
 			$msg = "Selecione ao menos um contrato.";
@@ -1168,10 +1168,28 @@ class dbDemanda extends dbprocesso {
 				
 				$temGarantia = $vocontratoInfo->inTemGarantia == constantes::$CD_SIM;				
 				//$vo = new voDemandaTramitacao();
-				$garantiaOk = isAtributoValido($vo->fase) && in_array(dominioFaseDemanda::$CD_GARANTIA_PRESTADA, $vo->fase);
-				if($temGarantia && !$garantiaOk){ 
+				$garantiaOk = $temGarantia  && isAtributoValido($vo->fase) && in_array(dominioFaseDemanda::$CD_GARANTIA_PRESTADA, $vo->fase);
+				if(!$garantiaOk){ 
 					throw new excecaoGenerica("Fechamento não permitido: verifique a garantia do contrato. |"
 							. $vocontratoDemanda->toString());						
+				}
+				
+				$temPendenciaContratoEnvioSAD = isAtributoValido($vocontratoInfo->inPendencias) && in_array(dominioAutorizacao::$CD_AUTORIZ_SAD, $vocontratoInfo->inPendencias);
+				$temPendenciaContratoEnvioPGE = isAtributoValido($vocontratoInfo->inPendencias) && in_array(dominioAutorizacao::$CD_AUTORIZ_PGE, $vocontratoInfo->inPendencias);
+				
+				$isContratoEnvioSAD = !$temPendenciaContratoEnvioSAD && isContratoEnvioSADPGE($vocontratoDemanda, dominioSetor::$CD_SETOR_SAD, $vocontratoInfo);
+				$isContratoEnvioPGE = !$temPendenciaContratoEnvioPGE && isContratoEnvioSADPGE($vocontratoDemanda, dominioSetor::$CD_SETOR_PGE, $vocontratoInfo);				
+				//$vo = new voDemandaTramitacao();
+				$isAnaliseSADOK = $isContratoEnvioSAD && isAtributoValido($vo->fase) && in_array(dominioFaseDemanda::$CD_VISTO_SAD, $vo->fase);
+				$isAnalisePGEOK = $isContratoEnvioPGE && isAtributoValido($vo->fase) && in_array(dominioFaseDemanda::$CD_VISTO_PGE, $vo->fase);
+				if(!$isAnaliseSADOK){
+					throw new excecaoGenerica("Fechamento não permitido: ausente análise SAD ao contrato. |"
+							. $vocontratoDemanda->toString());
+				}
+				
+				if(!$isAnalisePGEOK){
+					throw new excecaoGenerica("Fechamento não permitido: ausente análise PGE ao contrato. |"
+							. $vocontratoDemanda->toString());
 				}
 				
 				//$vo = new voDemandaTramitacao();

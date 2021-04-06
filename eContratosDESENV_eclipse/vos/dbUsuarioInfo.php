@@ -8,6 +8,8 @@ class dbUsuarioInfo extends dbprocesso {
 		$nmTabelaWPUsers = vousuario::getNmTabela ();
 		$nmTabelaUsuInfo = voUsuarioInfo::getNmTabela ();
 		
+		$arrayComplementoEntidade = voentidade::getColecaoNmAtributosPadrao();
+		
 		$arrayColunasRetornadas = array (
 				$nmTabelaWPUsers . "." . vousuario::$nmAtrID,
 				$nmTabelaWPUsers . "." . vousuario::$nmAtrLogin,
@@ -17,10 +19,13 @@ class dbUsuarioInfo extends dbprocesso {
 				$nmTabelaUsuInfo . "." . voUsuarioInfo::$nmAtrCdUsuarioInclusao,
 				$nmTabelaUsuInfo . "." . voUsuarioInfo::$nmAtrCdUsuarioUltAlteracao,
 				$nmTabelaUsuInfo . "." . voUsuarioInfo::$nmAtrDhInclusao,
-				$nmTabelaUsuInfo . "." . voUsuarioInfo::$nmAtrDhUltAlteracao,	*/			
-				$nmTabelaUsuInfo . ".*",
+				$nmTabelaUsuInfo . "." . voUsuarioInfo::$nmAtrDhUltAlteracao,	*/
+				"$nmTabelaUsuInfo." . voUsuarioInfo::$nmAtrInCaracteristicas,
+				"$nmTabelaUsuInfo." . voUsuarioInfo::$nmAtrSetor,
 		)
 		;
+		
+		$arrayColunasRetornadas = array_merge($arrayColunasRetornadas, $arrayComplementoEntidade);
 		
 		$queryJoin .= "\n LEFT JOIN " . $nmTabela;
 		$queryJoin .= "\n ON ";
@@ -126,8 +131,11 @@ class dbUsuarioInfo extends dbprocesso {
 			try {
 				//primeiro tenta incluir o usuario na tabela de usuario_info
 				//nem sempre existira, so existirá se algum dia alguem associou algum setor a ele
+				//echoo("tentando incluir");
 				$this->incluir($vo);
 			} catch ( Exception $e ) {
+				//throw $e;
+				//echoo("tentando alterar");
 				//se ja existir, tenta alterar
 				parent::alterar($vo);
 			}
@@ -139,18 +147,21 @@ class dbUsuarioInfo extends dbprocesso {
 		}
 	}
 	
-	function getSQLValuesInsert($vo) {
-		throw new excecaoGenerica ( "método não implementado" );
-		// $vo = new voContratoInfo();
-		/*
-		 * $retorno = "";
-		 * $retorno .= $this->getVarComoNumero ( $vo->id );
-		 *
-		 * $retorno .= $vo->getSQLValuesInsertEntidade ();
-		 *
-		 * return $retorno;
-		 */
+	function getSQLValuesInsert($vo){
+		//throw new excecaoGenerica ( "método não implementado" );
+		
+		$colecaoAtributos = array(
+				$this-> getVarComoString($vo->id),
+				$this-> getVarComoString($vo->inCaracteristicas),
+				$this-> getVarComoString($vo->setor),
+		);
+	
+		$retorno = getSQLStringFormatadaColecaoIN($colecaoAtributos);
+		$retorno.= $vo->getSQLValuesInsertEntidade();
+	
+		return $retorno;
 	}
+	
 	function getSQLValuesUpdate($vo) {		
 		$retorno = "";
 		$sqlConector = "";

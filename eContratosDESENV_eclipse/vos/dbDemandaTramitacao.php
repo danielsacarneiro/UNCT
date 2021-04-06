@@ -271,12 +271,12 @@ class dbDemandaTramitacao extends dbprocesso {
 		dbDemanda::validarGenerico($vo);
 	}
 	function validarEncaminhamento($vo) {
-		//if ($vo->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA) {
-		if (isSituacaoDemandaFechada($vo->situacao)) {
+		//validacao de demanda FECHADA eh feita no javascript
+		/*if (isSituacaoDemandaFechada($vo->situacao)) {
 			$msg = "Encaminhamento não permitido para demanda ". dominioSituacaoDemanda::getDescricao($vo->situacao). ".";
 			$msg .= "Demanda: " . $vo->getMensagemComplementarTelaSucesso();
 			throw new Exception ( $msg );
-		}
+		}*/
 				
 		$dbUsuarioInfo = new dbUsuarioInfo();
 		$cdSetor = $vo->cdSetorOrigem;
@@ -332,12 +332,19 @@ class dbDemandaTramitacao extends dbprocesso {
 		//alternativa para o trecho acima, implementado depois
 		$isCdPessoaRespUNCTAlterado = $voDemanda->setAtributoTelaSeAlterado($vo, "cdPessoaRespUNCT");
 		
-		$isSituacaoAlterada = $voDemanda->situacao != dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO;
+		$isSituacaoAlterada = false;
+		//com o encaminhamento, a situacao fica, no minimo, EM ANDAMENTO
+		if(!isAtributoValido($vo->situacao) || $vo->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_ABERTA){
+			$vo->situacao = dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO;
+		}		
+		$isSituacaoAlterada = $voDemanda->setAtributoTelaSeAlterado($vo, "situacao");
+				
+		/*$isSituacaoAlterada = $voDemanda->situacao != dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO;
 		if($isSituacaoAlterada){
 			$voDemanda->situacao = dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO;
-		}		
+		}*/		
 		
-		//so retorna vo nao nulo se as alteracoes devem ser feitas nas condicoes abaixo
+		//so retorna VO nao nulo se as condicoes abaixo forem satisfeitas, permitindo a alteracao do VODEMANDAPAI
 		if($isSituacaoAlterada 
 				|| $isFaseAlterada
 				|| $isInMonitorarAlterado
@@ -381,8 +388,7 @@ class dbDemandaTramitacao extends dbprocesso {
 		// Start transaction
 		$this->cDb->retiraAutoCommit ();
 		try {
-			$this->incluirDemandaTramitacaoSEMControleTransacao ( $vo );			
-			
+			$this->incluirDemandaTramitacaoSEMControleTransacao ( $vo );
 			//verifica se tem alteracao a fazer no voPai
 			$voDemandaPaiAlterar = $this->getVODemandaPaiAAlterarEncaminhamento($vo);
 			

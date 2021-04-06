@@ -65,6 +65,7 @@ Class voUsuarioInfo extends vousuario{
 		
 		$array2 = array (
 				self::$nmAtrInCaracteristicas,
+				self::$nmAtrSetor,
 		);
 		$retorno = array_merge($array1, $array2);
 		

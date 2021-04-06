@@ -640,6 +640,20 @@ class dominio extends multiplosConstrutores {
 		return $retorno;		
 	}
 	
+	/**
+	 * retorna as chaves de uma colecao como uma string com campo separador
+	 * @param unknown $colecao
+	 * @param string $limitador
+	 * @return string|mixed
+	 */
+	static function getColecaoChavesComoStringSeparador($colecao=null, $limitador="'"){
+		if($colecao == null){
+			$colecao = static::getColecao();
+		}
+		
+		return static::getColecaoCdsSeparador(constantes::$CD_CAMPO_SEPARADOR, $limitador, $colecao);		
+	}
+	
 	
 	/*
 	 * function ordenaSetor( $a, $b ) {

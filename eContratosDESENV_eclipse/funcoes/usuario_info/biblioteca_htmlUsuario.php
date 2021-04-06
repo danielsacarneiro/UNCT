@@ -11,4 +11,15 @@ function getUsuarioATJA(){
 	return $retorno;
 }
 
+function getComboUsuarioATJA($idCampo, $nmCampo, $cdOpcaoSelecionada, $classCampo, $tagHtml){
+
+	$recordset = getUsuarioATJA();
+	$select = new select(array());
+	$select->getRecordSetComoColecaoSelect(voUsuarioInfo::$nmAtrID, voUsuarioInfo::$nmAtrName, $recordset);
+
+	$arrayCombo = array($idCampo, $nmCampo, $cdOpcaoSelecionada, true, false, $classCampo, false, $tagHtml);
+	
+	return $select->getHtmlComboArray ($arrayCombo);
+}
+
 ?>
