@@ -1180,8 +1180,8 @@ class dbDemanda extends dbprocesso {
 				$isContratoEnvioSAD = !$temPendenciaContratoEnvioSAD && isContratoEnvioSADPGE($vocontratoDemanda, dominioSetor::$CD_SETOR_SAD, $vocontratoInfo);
 				$isContratoEnvioPGE = !$temPendenciaContratoEnvioPGE && isContratoEnvioSADPGE($vocontratoDemanda, dominioSetor::$CD_SETOR_PGE, $vocontratoInfo);				
 				//$vo = new voDemandaTramitacao();
-				$isAnaliseSADOK = $isContratoEnvioSAD && isAtributoValido($vo->fase) && in_array(dominioFaseDemanda::$CD_VISTO_SAD, $vo->fase);
-				$isAnalisePGEOK = $isContratoEnvioPGE && isAtributoValido($vo->fase) && in_array(dominioFaseDemanda::$CD_VISTO_PGE, $vo->fase);
+				$isAnaliseSADOK = !$isContratoEnvioSAD || (isAtributoValido($vo->fase) && in_array(dominioFaseDemanda::$CD_VISTO_SAD, $vo->fase));
+				$isAnalisePGEOK = !$isContratoEnvioPGE || (isAtributoValido($vo->fase) && in_array(dominioFaseDemanda::$CD_VISTO_PGE, $vo->fase));
 				if(!$isAnaliseSADOK){
 					throw new excecaoGenerica("Fechamento não permitido: ausente análise SAD ao contrato. |"
 							. $vocontratoDemanda->toString());
