@@ -148,13 +148,13 @@ function movimentacoes(){
             return;
     }    
   	
-	var array = retornarValorRadioButtonSelecionadoComoArray("document.frm_principal.rdb_consulta", "*", false);
+	/*var array = retornarValorRadioButtonSelecionadoComoArray("document.frm_principal.rdb_consulta", "*", false);
 	especie = array[4];
 	
 	if(especie != '<?=dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;?>'){
 		alert("Operação permitida apenas para contrato Mater.");
 		return;
-	}
+	}*/
 
 	chave = document.frm_principal.rdb_consulta.value;
     url = "movimentacaoContrato.php?chave=" + chave;
