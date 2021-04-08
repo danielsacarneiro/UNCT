@@ -192,6 +192,8 @@ include_once ("voDemanda.php");
     	$query = $this->getValoresWhereSQLChaveLogicaSemSQ($isHistorico);
     
     	//aqui so usa o sq se a chave logica nao estiver completa
+    	//DO JEITO QUE ESTA ESTA ERRADO...deveria consultar com o sq SOMENTE se a chave logica tivesse incompleta
+    	//do jeito que esta ele consulta com a chave incompleta e com o sq, ai dá erro. CORRIGIR DEPOIS
     	if(!$this->isChaveLogicaValida()){
     		//echo "incompleta";
     		$query.= " AND ". $nmTabela . "." . self::$nmAtrSqContrato . "=" . $this->sq;

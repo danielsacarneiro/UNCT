@@ -226,6 +226,7 @@ function iniciar(){
 
 <INPUT type="hidden" id="funcao" name="funcao" value="<?=$funcao?>">
 <?=getInputHidden(voDemanda::$nmAtrInLegado, voDemanda::$nmAtrInLegado, "N")?>
+<?=getInputHidden(voDemanda::$ID_PAGINA_ENCAMINHAR_NOVO, voDemanda::$ID_PAGINA_ENCAMINHAR_NOVO, voDemanda::$ID_PAGINA_ENCAMINHAR_NOVO)?>
  
 <TABLE id="table_conteiner" class="conteiner" cellpadding="0" cellspacing="0">
     <TBODY>

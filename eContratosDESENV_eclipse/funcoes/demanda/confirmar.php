@@ -9,7 +9,7 @@ $vo->getDadosFormulario();
 
 //echo "modalidade: " . $vo->voProcLicitatorio->cdModalidade;
 
-//var_dump($vo);
+//var_dump($vo->getContrato());
 
 /*echo $vo->cdSetor . " cd setor <BR>";
 echo $vo->cdSetorAtual . " cd setor atual <BR>";

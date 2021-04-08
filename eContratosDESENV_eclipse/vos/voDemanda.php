@@ -13,6 +13,8 @@ include_once (caminho_funcoes . "demanda/dominioTipoReajuste.php");
 include_once (caminho_funcoes . "demanda/biblioteca_htmlDemanda.php");
 
 class voDemanda extends voentidade {
+	static $ID_PAGINA_ENCAMINHAR_NOVO = "ID_PAGINA_ENCAMINHAR_NOVO";
+	
 	static $NUM_PRAZO_MONITORAMENTO = 5;
 	static $MSG_IN_MONITORAR = "Permite aviso por email.";
 	static $CD_MONITORAR_POR_DATA = "CD_MONITORAR_POR_DATA";
@@ -286,11 +288,10 @@ class voDemanda extends voentidade {
 		// quando existir
 		// recupera quando da consulta da contratada, ao inserir o contrato na tela
 		$chaveContrato = @$_POST [vopessoa::$ID_CONTRATO];
-		// echo "chave contrato:" . $chaveContrato;
+		// echo "chave contrato:" . $chaveContrato;		
 		
-		$isEncaminharNovo = $this->tpDemandaContrato != null;
-		/*echo "vai entrar manter. Chavecontrato: "; 
-		var_dump($chaveContrato);*/
+		//$isEncaminharNovo = $this->tpDemandaContrato != null;
+		$isEncaminharNovo = static::isPaginaEncaminharNovo();
 		if (!$isEncaminharNovo  && $chaveContrato != null) {			
 			//quando vem do encaminhar.php
 			$this->setColecaoContratoFormulario ( $chaveContrato );
@@ -300,8 +301,8 @@ class voDemanda extends voentidade {
 			$voContratoAvulso = new vocontrato();
 			$voContratoAvulso->getDadosFormulario();
 			//garante que o contrato so sera recuperado se pelo menos a chave logica (tipo, numero e exercicio) esteja preenchida
+			//echo "funciona!";
 			if($voContratoAvulso->isChaveLogicaValida()){
-				//echo "funciona!";
 				$voContratoAvulso->getDadosFormulario();
 				$this->colecaoContrato = array($voContratoAvulso);
 			}
@@ -521,6 +522,12 @@ class voDemanda extends voentidade {
 		}
 		return $retorno;
 	}
+	
+	static function isPaginaEncaminharNovo(){
+		$teste = @$_POST [self::$ID_PAGINA_ENCAMINHAR_NOVO];
+		return isAtributoValido($teste);
+	}
+	
 
 }
 ?>

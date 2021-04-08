@@ -1143,10 +1143,13 @@ class dbDemanda extends dbprocesso {
 			if($vocontratoDemanda != null){				
 				try{
 					$dbContrato = new dbcontrato();
+					//var_dump($vocontratoDemanda);
 					$vocontratoDemanda =$dbContrato->consultarPorChaveVO($vocontratoDemanda);
-				}catch (Exception $ex){
+				}catch (excecaoChaveRegistroInexistente $ex){
 					throw new excecaoGenerica("Verifique se o termo relacionado foi incluído corretamente na função 'contratos'.");
 				}
+				
+				//throw new excecaoGenerica("Aguardem....");
 				
 				$vocontratoInfo->anoContrato = $vocontratoDemanda->anoContrato;
 				$vocontratoInfo->cdContrato = $vocontratoDemanda->cdContrato;
