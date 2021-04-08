@@ -387,8 +387,9 @@ class filtroManterContrato extends filtroManter {
 					$conector  = "\n AND ";
 		}
 		
-		if (isAtributoValido($this->licon)) {
-			$not = "";
+		$atribLicon = $this->licon;
+		if (isAtributoValido($atribLicon)) {
+			/*$not = "";
 			$liconPlanilha = "$nmTabela.".vocontrato::$nmAtrInLicomContrato. "='S'";
 			if($this->licon == constantes::$CD_NAO){
 				$liconPlanilha = "$nmTabela.".vocontrato::$nmAtrInLicomContrato. "<>'S' OR $nmTabelaLicon." . voContratoLicon::$nmAtrSituacao . " IS NULL ";
@@ -397,9 +398,42 @@ class filtroManterContrato extends filtroManter {
 			
 			$filtroTemp = "$nmTabelaLicon." . voContratoLicon::$nmAtrSituacao . " $not IN (" 
 					. getSQLStringFormatadaColecaoIN(array_keys(dominioSituacaoContratoLicon::getColecaoIncluidoSucesso())) . ")";				
-			$filtroTemp .= " OR $liconPlanilha";
+			$filtroTemp .= " OR $liconPlanilha";			
 			
-			$filtro = $filtro . $conector . "($filtroTemp)";
+			$filtro = $filtro . $conector . "($filtroTemp)";*/
+			$nmTabelaContratoTempLicon = "TabelaContratoTempLicon";
+			$queryExists .= "\n SELECT 'X' FROM  $nmTabelaLicon";
+			$queryExists .= "\n INNER JOIN $nmTabela $nmTabelaContratoTempLicon ";
+			$queryExists .= "\n ON ";
+			$queryExists .= "$nmTabelaContratoTempLicon." . vocontrato::$nmAtrAnoContrato . "=$nmTabelaLicon." . voContratoLicon::$nmAtrAnoContrato;
+			$queryExists .= "\n AND ";
+			$queryExists .= "$nmTabelaContratoTempLicon." . vocontrato::$nmAtrCdContrato . "=$nmTabelaLicon." . voContratoLicon::$nmAtrCdContrato;
+			$queryExists .= "\n AND ";
+			$queryExists .= "$nmTabelaContratoTempLicon." . vocontrato::$nmAtrTipoContrato . "=$nmTabelaLicon." . voContratoLicon::$nmAtrTipoContrato ;
+			$queryExists .= "\n AND ";
+			$queryExists .= "$nmTabelaContratoTempLicon." . vocontrato::$nmAtrCdEspecieContrato . "=$nmTabelaLicon." . voContratoLicon::$nmAtrCdEspecieContrato;
+			$queryExists .= "\n AND ";
+			$queryExists .= "$nmTabelaContratoTempLicon." . vocontrato::$nmAtrSqEspecieContrato . "=$nmTabelaLicon." . voContratoLicon::$nmAtrSqEspecieContrato;				
+							
+			$queryExists .= " WHERE ";
+			$queryExists .= "$nmTabelaContratoTempLicon." . vocontrato::$nmAtrAnoContrato . "=$nmTabela." . vocontrato::$nmAtrAnoContrato;
+			$queryExists .= "\n AND ";
+			$queryExists .= "$nmTabelaContratoTempLicon." . vocontrato::$nmAtrCdContrato . "=$nmTabela." . vocontrato::$nmAtrCdContrato;
+			$queryExists .= "\n AND ";
+			$queryExists .= "$nmTabelaContratoTempLicon." . vocontrato::$nmAtrTipoContrato . "=$nmTabela." . vocontrato::$nmAtrTipoContrato ;
+			$queryExists .= "\n AND ";
+			$queryExists .= "$nmTabelaContratoTempLicon." . vocontrato::$nmAtrCdEspecieContrato . "=$nmTabela." . vocontrato::$nmAtrCdEspecieContrato;
+			$queryExists .= "\n AND ";
+			$queryExists .= "$nmTabelaContratoTempLicon." . vocontrato::$nmAtrSqEspecieContrato . "=$nmTabela." . vocontrato::$nmAtrSqEspecieContrato;
+			$queryExists .= "\n AND ";
+			//demanda de prorrogacao
+			$queryExists .= voContratoLicon::$nmAtrSituacao . " IN (" . getSQLStringFormatadaColecaoIN(array_keys(dominioSituacaoContratoLicon::getColecaoIncluidoSucesso())) . ")";
+			
+			$operadorTemp = "EXISTS";
+			if($atribLicon == 'N'){
+				$operadorTemp = "NOT EXISTS";
+			}
+			$filtro = $filtro . $conector . " $operadorTemp ($queryExists)\n";
 			$conector = "\n AND ";
 		}
 		

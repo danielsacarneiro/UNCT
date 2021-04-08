@@ -57,7 +57,7 @@ class dbcontrato extends dbprocesso {
 		
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic(false);
 		$nmTabelaPessoa = vopessoa::getNmTabelaStatic ( false );
-		$nmTabelaLicon = voContratoLicon::getNmTabelaStatic ( false );
+		//$nmTabelaLicon = voContratoLicon::getNmTabelaStatic ( false );
 		//$nmTabelaDemandaSolicCompra = voDemandaPL::getNmTabelaStatic(false);
 		
 		$arrayColunasRetornadas = array (
@@ -81,13 +81,13 @@ class dbcontrato extends dbprocesso {
 		$queryJoin .= " AND " . $nmTabelaContratoInfo . "." . vocontrato::$nmAtrCdContrato. "=" . $nmTabela . "." . vocontrato::$nmAtrCdContrato;
 		$queryJoin .= " AND " . $nmTabelaContratoInfo . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
 		
-		$queryJoin .= "\n left JOIN " . $nmTabelaLicon;
+		/*$queryJoin .= "\n left JOIN " . $nmTabelaLicon;
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaLicon . "." . voContratoLicon::$nmAtrAnoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrAnoContrato;
 		$queryJoin .= " AND " . $nmTabelaLicon . "." . voContratoLicon::$nmAtrCdContrato. "=" . $nmTabela . "." . vocontrato::$nmAtrCdContrato;
 		$queryJoin .= " AND " . $nmTabelaLicon . "." . voContratoLicon::$nmAtrTipoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
 		$queryJoin .= " AND " . $nmTabelaLicon . "." . voContratoLicon::$nmAtrCdEspecieContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrCdEspecieContrato;
-		$queryJoin .= " AND " . $nmTabelaLicon . "." . voContratoLicon::$nmAtrSqEspecieContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrSqEspecieContrato;
+		$queryJoin .= " AND " . $nmTabelaLicon . "." . voContratoLicon::$nmAtrSqEspecieContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrSqEspecieContrato;*/
 		
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoa;
 		$queryJoin .= "\n ON ";
@@ -289,10 +289,10 @@ class dbcontrato extends dbprocesso {
 		$nmTabelaPessoa = vopessoa::getNmTabelaStatic ( false );
 		$nmTabelaPregoeiro = "NM_TAB_PREGOEIRO";
 
-		//ha um erro no script abaixo deixado de proposito para saber se essa consulta eh usada em algum lugar
+		//USADO NA TELA DE INCLUSAO CONTRATO-LICON		
 		$arrayColunasRetornadas = array (
 				$nmTabela . ".*",
-				"$nmTabelaPessoa.*" . vopessoa::$nmAtrDoc,
+				"$nmTabelaPessoa." . vopessoa::$nmAtrDoc,
 				"$nmTabelaProcLic.".voProcLicitatorio::$nmAtrCdCPL,
 				"$nmTabelaContratoInfo." . voContratoInfo::$nmAtrDtProposta,
 				"$nmTabelaContratoInfo." . voContratoInfo::$nmAtrInEscopo,
