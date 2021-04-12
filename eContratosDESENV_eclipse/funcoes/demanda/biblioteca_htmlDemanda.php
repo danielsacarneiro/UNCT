@@ -725,4 +725,72 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDad
 	echo $html;
 }
 
+ function getEmailConvocacaoAssinatura($registro){
+ 	$vocontratoinfo = new voContratoInfo();
+ 	$vocontratoinfo->getDadosBanco($registro);
+ 	
+ 	$vocontrato = new vocontrato();
+ 	$vocontrato->getDadosBanco($registro);
+ 	
+ 	$vodemanda = new voDemanda();
+ 	$vodemanda->getDadosBanco($registro);
+ 	//$codigoContrato = getCodigoContratoFormatadoEmail($registro);
+ 	
+ 	$codigoContrato = formatarCodigoContrato($vocontratoinfo->cdContrato, $vocontratoinfo->anoContrato, $vocontratoinfo->tipo);
+ 	$codigoContratoCompleto = getTextoHTMLNegrito(getCodigoContratoPublicacao($vocontrato));
+ 	
+ 	$dsPessoa = $registro[vopessoa::$nmAtrNome];
+ 	
+ 	$a_preencher = "XXXXXXX";
+ 	$numSEI = $vodemanda->prt;
+ 	if($numSEI == null){
+ 		$numSEI = $a_preencher;
+ 	}
+ 	$dtInicioVigencia = getData($vocontrato->dtVigenciaInicial);
+ 	if($dtInicioVigencia == null){
+ 		$dtInicioVigencia = $a_preencher;
+ 	}
+ 	$str_confirmar = getTextoHTMLDestacado("[CONFIRMAR]");
+
+	$retorno = "<br>À ".getTextoHTMLNegrito($dsPessoa).",
+	<br><br>
+	ASSUNTO: ".getTextoHTMLNegrito("ASSINATURA DO $codigoContratoCompleto")."
+	<br><br>".getTextoHTMLDestacado("Ref. SEI nº $numSEI", "blue").". $str_confirmar
+	
+	<br><br><br>Prezado(s) Senhor(es),
+	Em decorrência da Pandemia do Coronavírus e, cumprindo determinação do Governo do Estado de Pernambuco, o atendimento presencial, 
+	na SEFAZ/PE foi substituído pelo trabalho remoto. Por esse motivo, estamos encaminhando para assinatura, em formato digital, 01(uma) via do supramencionado contrato,
+	cujo objeto é ".getTextoHTMLNegrito($vocontrato->objeto)."$str_confirmar, com vigência a partir de ".getTextoHTMLNegrito($dtInicioVigencia).".
+	
+	<br><br>Solicitamos que sejam impressas ".getTextoHTMLNegrito("02(duas) vias").", assinadas e rubricadas pelo representante legal, no prazo de até ".getTextoHTMLNegrito("10(dez) dias")." 
+	contados a partir do recebimento do presente email, sendo posteriormente devolvidas pelos Correios ou protocoladas na  recepção do prédio desta SEFAZ,
+	situada na Av. Cruz Cabugá, N° 1419, Térreo, Santo Amaro, Recife/PE, CEP.: 50.040-000, no horário de atendimento presencial ".getTextoHTMLNegrito("excepcional: 9h as 15h.");
+	
+	if($vocontratoinfo->inTemGarantia == "N"){
+		$retorno .= "<br><br>Por oportuno, informamos que será necessária a PRESTAÇÃO, ou REFORÇO, se acréscimo, ".getTextoHTMLNegrito("DA GARANTIA CONTRATUAL").", 
+		conforme previsão editalícia, devendo esta ser apresentada no prazo de até ".getTextoHTMLNegrito("10(dez) dias úteis").".". getTextoHTMLDestacado("[CONFIRMAR PRAZO NO EDITAL]");
+	}
+	
+	try{
+		$isDataRetroativa = isDataRetroativa($dtInicioVigencia);
+		if(!$isDataRetroativa){
+			$retorno .= "<br><br>Permite-se o uso da assinatura digital, desde que sejam também encaminhados os meios necessários
+			à autenticação do documento digital.$str_confirmar";
+		
+			if(isDataValidaNaoVazia($dtInicioVigencia)){
+				$retorno .= getTextoHTMLDestacado("<br>ATENÇÃO"). ": sob pena de inadmissibilidade, a assinatura digital deve ocorrer até ".getTextoHTMLDestacado($dtInicioVigencia).".$str_confirmar";
+			}
+		}
+	
+	}catch (excecaoAtributoInvalido $ex){
+		$retorno .= getTextoHTMLDestacado("<br><br>ATENÇÃO: verifique a data de início de vigência do contrato.<br><br>");
+	}
+	//echo compararDatas($dthtmlassinatura, getDataHoje()) . " $dthtmlassinatura  e " . getDataHoje(); 
+	
+	$retorno .= "<br><br>Favor acusar recebimento, devolvendo a via assinada junto com os documentos que comprovem a legitimidade da representação legal do procurador assinante.";
+
+	return $retorno;
+}
+
+
 ?>

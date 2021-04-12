@@ -319,37 +319,34 @@ include_once ("voDemanda.php");
      */
     function getValoresAtributosObrigatorios($vocontratoinfo=null){
     	$retorno = array(
-    			$this->dtAssinatura => "Dt.Assinatura",
-    			$this->dtVigenciaFinal => "Dt.Vigencia.Final",
-    			$this->dtVigenciaInicial => "Dt.Vigencia.Inicial",
-    			$this->vlMensal => "Vl.Mensal",
-    			$this->vlGlobal => "Vl.Global",
-    			$this->procLic => "Proc.Licitatorio",
+    			"Dt.Assinatura" => $this->dtAssinatura,
+    			"Dt.Vigencia.Final" => $this->dtVigenciaFinal,
+    			"Dt.Vigencia.Inicial" => $this->dtVigenciaInicial,
+    			"Vl.Mensal"=>$this->vlMensal,
+    			"Vl.Global"=>$this->vlGlobal,
+    			"Proc.Licitatorio"=> $this->procLic,
     	);
     	
     	if(in_array($this->cdEspecie, dominioEspeciesContrato::getColecaoTermosPublicacao())){
-    		$retorno[$this->dtPublicacao] = "Dt.Publicacao";    		
+    		$retorno["Dt.Publicacao"] = $this->dtPublicacao;    		
     	}
 
     	if($this->cdEspecie == dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_APOSTILAMENTO){
-    		$retorno[$this->empenho] = "Empenho";
+    		$retorno["Empenho"] = $this->empenho;
     	}
     	
-    	$retorno = $this->getValoresAtributosObrigatoriosPorEntidade($retorno);
+    	//var_dump($retorno);
+    	$retornoTemp = $this->getValoresAtributosObrigatoriosPorEntidade($retorno);
+    	//var_dump($retornoTemp);
     	
     	
     	if($vocontratoinfo != null){
-	    	//$vocontratoinfo = new voContratoInfo();
-	    	/*$nmVoComplementar = "Informações Adicionais:";
-    		if(in_array($this->cdEspecie, dominioEspeciesContrato::getColecaoTermosQuePodemAlterarVigencia())){
-	    		$retorno[$vocontratoinfo->dtProposta] = "$nmVoComplementar Dt.Proposta";    		
-	    	}*/
-	    	
-	    	$arrayContratoInfo = $vocontratoinfo->getValoresAtributosObrigatorios();	    	
-	    	$retorno = array_merge_keys($retorno, $arrayContratoInfo);    	
+	    	$arrayContratoInfo = $vocontratoinfo->getValoresAtributosObrigatorios();
+	    	//var_dump($arrayContratoInfo);
+	    	$retornoTemp = array_merge_keys($retornoTemp, $arrayContratoInfo);    	
     	}
     	 
-    	return $retorno;
+    	return $retornoTemp;
     }
 
     function getAtributosInsertImportacao(){

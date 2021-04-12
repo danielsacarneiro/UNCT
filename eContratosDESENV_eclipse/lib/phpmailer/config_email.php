@@ -68,7 +68,7 @@ class email_sefaz extends multiplosConstrutores{
 	static function getListaEmailJuridico(){
 		return array(static::$REMETENTE_ATJA,
 				//"patricia.farias@sefaz.pe.gov.br",
-				"marcelo.sa@sefaz.pe.gov.br",
+				"frederico.britto@sefaz.pe.gov.br",
 				//"alfredo.carvalho@sefaz.pe.gov.br",
 				"margarida.vasconcelos@sefaz.pe.gov.br",
 				//"rogerio.f-carvalho@sefaz.pe.gov.br"

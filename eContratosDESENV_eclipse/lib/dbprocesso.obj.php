@@ -58,7 +58,8 @@ class dbprocesso {
 		$query .= $voEntidade->getValoresWhereSQLChave ( false );
 		
 		//echo $query;
-		$registro = $this->consultarEntidade ( $query, true );
+		//$registro = $this->consultarEntidade ( $query, true );
+		$registro = $this->consultarEntidadeComValidacao ( $query, true, true);
 		$dhValidacao = $registro [0] [voentidade::$nmAtrDhUltAlteracao];
 		
 		if ($dhValidacao != $voEntidade->dhUltAlteracao) {
@@ -1127,4 +1128,26 @@ class dbprocesso {
 			echo "<br> $nmFiltro $query<br>";
 		}		
 	}
+	
+	/**
+	 * a entrada deve ter o formato $valor_atributo_entidade => descricao do atributo
+	 * @param unknown $array
+	 * @throws excecaoAtributoObrigatorio
+	 * @throws excecaoGenerica
+	 */
+	static function validarDadosEntidadeArray($array) {
+		//var_dump($array);
+			foreach ($array as $descricao => $valor){
+				if(!isAtributoValido($valor) || (isMoeda($valor) && $valor=="0,00")){
+					$arrayRetorno[]=$descricao;
+					//echoo($descricao);
+				}
+			}
+			
+			if(!isColecaoVazia($arrayRetorno)){
+				$msg = getArrayComoStringCampoSeparador($arrayRetorno, ";<br>");
+				throw new excecaoAtributoObrigatorio("Verifique o(s) seguinte(s) campo(s) do termo relacionado: <br>'$msg' .");
+			}					
+	}
+	
 }

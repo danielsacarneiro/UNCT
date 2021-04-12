@@ -295,6 +295,13 @@ function isDataFimMaiorDataInicio($datainihtml, $datafimhtml){
 	return compararDatas($datainihtml, $datafimhtml) == 1;
 }
 
+function isDataRetroativa($datahtml , $datafimhtml=null){
+	if($datafimhtml == null){
+		$datafimhtml = getDataHoje();
+	}
+	return isDataValidaNaoVazia($datahtml) && (compararDatas($datahtml, $datafimhtml) == 1);
+}
+
 function compararDatas($datainihtml, $datafimhtml){
 	//$timeZone = new DateTimeZone('UTC');
 	
@@ -307,11 +314,11 @@ function compararDatas($datainihtml, $datafimhtml){
 	
 	/** Testa se sao validas */
 	if (!($data1 instanceof DateTime)) {
-		throw new excecaoAtributoInvalido('Data de entrada invalida!');
+		throw new excecaoAtributoInvalido("Data1 de entrada invalida![$data1]");
 	}
 	
 	if (!($data2 instanceof DateTime)) {
-		throw new excecaoAtributoInvalido('Data de saída invalida!');
+		throw new excecaoAtributoInvalido("Data2 de saída invalida![$data2]");
 	}
 	
 	$retorno = 0;	

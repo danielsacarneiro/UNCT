@@ -1919,5 +1919,12 @@ function existeReajusteRetroativoComEfeitos($vocontrato, $recordset){
 	
 }
 
+function getCodigoContratoPublicacao($vocontrato){
+	$exibirEspecie = !in_array($vocontrato->cdEspecie, dominioEspeciesContrato::getColecaoTermosNaoNumeradosPublicacao());	
+	$contrato = getTextoHTMLNegrito(getTextoGridContrato($vocontrato, null, false, true, $exibirEspecie));
+	
+	return $contrato;	
+}
+
 
 ?>

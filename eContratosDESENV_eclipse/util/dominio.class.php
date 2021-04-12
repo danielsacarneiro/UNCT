@@ -109,6 +109,34 @@ class dominio extends multiplosConstrutores {
 		
 		return $retorno;
 	}
+	
+	/**
+	 * verifica se existe qualquer item em $chaveColecao dentro de $arrayOuStringSeparador (que pode ser array ou string com camposeparador)
+	 * @param unknown $chaveColecao
+	 * @param unknown $arrayOuStringSeparador
+	 * @param string $isChaveStringNumeroComZeroAEsquerda
+	 * @return boolean
+	 */
+	static function existePeloMenosUmaChaveColecaoNoArrayOuStrSeparador($chaveColecao, $arrayOuStringSeparador, $isChaveStringNumeroComZeroAEsquerda=false) {
+		$retorno = false;	
+		if(!is_array($arrayOuStringSeparador)){
+			$arrayOuStringSeparador = voentidade::getStringCampoSeparadorComoArray($arrayOuStringSeparador);			
+		}
+		
+		foreach ($chaveColecao as $chave){
+			if($isChaveStringNumeroComZeroAEsquerda){
+				$tam = sizeof($arrayOuStringSeparador[0]);
+				$chave = complementarCharAEsquerda($chave, "0", $tam);
+			}
+			$retorno = in_array($chave, $arrayOuStringSeparador);
+			//echoo("$chave|$arrayOuStringSeparador[0]");
+			if($retorno){
+				break;
+			}
+		}
+			
+		return $retorno;
+	}
 	static function existeItem($chave, $colecao=null) {
 		if($colecao==null){
 			$colecao = static::getColecao();
@@ -373,6 +401,8 @@ class dominio extends multiplosConstrutores {
 			$colecao = static::getColecao ();
 			//echoo("coolecao NULA");
 		}
+		
+		//var_dump($colecao);
 		
 		if($comOpcaoNenhum){
 			$array2 = array (

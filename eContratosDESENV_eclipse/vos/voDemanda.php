@@ -11,6 +11,7 @@ include_once (caminho_funcoes . "demanda/dominioTipoDemandaContrato.php");
 include_once (caminho_funcoes . "demanda/dominioPrioridadeDemanda.php");
 include_once (caminho_funcoes . "demanda/dominioTipoReajuste.php");
 include_once (caminho_funcoes . "demanda/biblioteca_htmlDemanda.php");
+include_once ("voContratoModificacao.php");
 
 class voDemanda extends voentidade {
 	static $ID_PAGINA_ENCAMINHAR_NOVO = "ID_PAGINA_ENCAMINHAR_NOVO";
@@ -277,6 +278,10 @@ class voDemanda extends voentidade {
 		$this->cdPessoaRespUNCT = @$_POST [self::$nmAtrCdPessoaRespUNCT];
 		$this->fase = @$_POST [voDemanda::$nmAtrFase];
 		$this->inCaracteristicas = @$_POST [voDemanda::$nmAtrInCaracteristicas];
+		/*if(is_array($this->inCaracteristicas)){
+			$this->inCaracteristicas = static::getArrayComoStringCampoSeparador($this->inCaracteristicas);
+		}*/
+		
 		$this->inMonitorar = @$_POST [voDemanda::$nmAtrInMonitorar];
 		
 		if($this->inMonitorar == constantes::$CD_SIM){

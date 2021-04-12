@@ -65,11 +65,24 @@ class dominioTipoDemandaContrato extends dominio {
 	}
 	
 	static function getColecaoAlteraValorContrato() {
+		$array1 = static::getColecaoReajustamento();
+				
+		$array2 = array (
+				static::$CD_TIPO_ACRESCIMO => static::$DS_TIPO_ACRESCIMO,
+				static::$CD_TIPO_SUPRESSAO => static::$DS_TIPO_SUPRESSAO,
+		);
+		
+		//o array_merge da erro nao detectado
+		$retorno = array_merge_keys($array1, $array2);
+		//var_dump($temp);				
+		
+		return $retorno;		
+	}
+	
+	static function getColecaoReajustamento() {
 		$retorno = array (
-				static::$CD_TIPO_REAJUSTE => self::$DS_TIPO_REAJUSTE,
-				static::$CD_TIPO_REEQUILIBRIO => self::$DS_TIPO_REEQUILIBRIO,
-				static::$CD_TIPO_ACRESCIMO => self::$DS_TIPO_ACRESCIMO,
-				static::$CD_TIPO_SUPRESSAO => self::$DS_TIPO_SUPRESSAO,
+				static::$CD_TIPO_REAJUSTE => static::$DS_TIPO_REAJUSTE,
+				static::$CD_TIPO_REEQUILIBRIO => static::$DS_TIPO_REEQUILIBRIO,
 		);
 	
 		return $retorno;

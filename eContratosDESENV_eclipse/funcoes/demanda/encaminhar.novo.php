@@ -435,7 +435,11 @@ function iniciar(){
 	             ?>
 	            </TD>				
 	        </TR>
-	       
+	        <TR>
+	            <TH class="campoformulario" nowrap width="1%">PRT/SEI(principal):</TH>
+	            <TD class="campoformulario" colspan=3>				
+	            <INPUT type="text" onkeyup="formatarCampoPRT(this, event);" value="<?=$vo->prt?>"  class="camporeadonly" size="30" readonly>
+	        </TR>	       
 			<TR>
 				<TH class="textoseparadorgrupocampos" halign="left" colspan="4">
 				<DIV class="campoformulario" id="div_tramitacao">&nbsp;&nbsp;Novo Encaminhamento

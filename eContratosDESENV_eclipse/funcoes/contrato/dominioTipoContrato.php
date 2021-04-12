@@ -8,7 +8,8 @@ include_once(caminho_util."dominio.class.php");
   	static $CD_TIPO_PROFISCO  = "P";
   	static $CD_TIPO_CESSAO_USO = "S";
   	//static $CD_TIPO_TERMOAJUSTE = "A";
-  	static $CD_TIPO_TERMO_COLABORACAO = "T";  	 
+  	static $CD_TIPO_TERMO_COLABORACAO = "T";
+  	static $CD_TIPO_CONTRATO_GESTAO  = "G";
   	
   	static $DS_TIPO_CONTRATO  = "C-SAFI";
   	static $DS_TIPO_CONVENIO  = "CV-SAFI";
@@ -16,6 +17,7 @@ include_once(caminho_util."dominio.class.php");
   	static $DS_TIPO_CESSAO_USO = "CS-SAFI";
   	//static $DS_TIPO_TERMOAJUSTE = "TAC";
   	static $DS_TIPO_TERMO_COLABORACAO = "Termo de colaboração";
+  	static $DS_TIPO_CONTRATO_GESTAO  = "CG-SAFI";
   	
   	static $DS_TIPO_INSTRUMENTO_CONTRATO = "Contrato";
   	static $DS_TIPO_INSTRUMENTO_CONVENIO = "Convênio";
@@ -35,6 +37,7 @@ include_once(caminho_util."dominio.class.php");
 				static::$CD_TIPO_CONVENIO => static::$DS_TIPO_CONVENIO,
 				static::$CD_TIPO_CESSAO_USO => static::$DS_TIPO_CESSAO_USO,
 				static::$CD_TIPO_PROFISCO => static::$DS_TIPO_PROFISCO,
+				static::$CD_TIPO_CONTRATO_GESTAO => static::$DS_TIPO_CONTRATO_GESTAO,
 				//static::$CD_TIPO_TERMOAJUSTE => static::$DS_TIPO_TERMOAJUSTE,
 		);
 	}
@@ -42,6 +45,7 @@ include_once(caminho_util."dominio.class.php");
 	static function getColecaoInstrumentos(){
 		return array(
 				static::$CD_TIPO_CONTRATO => static::$DS_TIPO_INSTRUMENTO_CONTRATO,
+				static::$CD_TIPO_CONTRATO_GESTAO => static::$DS_TIPO_INSTRUMENTO_CONTRATO,
 				static::$CD_TIPO_PROFISCO => static::$DS_TIPO_INSTRUMENTO_CONTRATO,
 				static::$CD_TIPO_CESSAO_USO => static::$DS_TIPO_INSTRUMENTO_CONTRATO,
 				static::$CD_TIPO_CONVENIO => static::$DS_TIPO_INSTRUMENTO_CONVENIO,

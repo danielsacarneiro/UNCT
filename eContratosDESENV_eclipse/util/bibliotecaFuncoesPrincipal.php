@@ -280,6 +280,15 @@ function getMoedaMascaraImportacao($param) {
 function isNumero($param) {
 	return isNumeroComDecimal ( $param, true );
 }
+function isMoeda($param) {
+	$valor = str_replace(".", "", $param);
+	$valor = str_replace(",", ".", $valor);
+	return existeStr1NaStr2(",", $param) && isNumero($valor); 
+}
+function isMoedaValido($param) {
+	return isMoeda($param) && $param != "0,00";
+}
+
 function isNumeroComDecimal($param, $isDecimal) {
 	//o traco é para valores negativos
 	$referencia = "012345678-9";

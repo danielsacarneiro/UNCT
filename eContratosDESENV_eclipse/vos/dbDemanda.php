@@ -1,5 +1,6 @@
 <?php
 include_once (caminho_lib . "dbprocesso.obj.php");
+include_once ("vocontrato.php");
 class dbDemanda extends dbprocesso {
 	static $FLAG_PRINTAR_SQL = false;
 	
@@ -43,7 +44,7 @@ class dbDemanda extends dbprocesso {
 		
 		return $vo;
 	}
-	function consultarPorChaveTelaJoinContrato($vo, $isHistorico, $isConsultaPorChave) {
+	function consultarPorChaveTelaJoinContrato($vo, $isHistorico, $isConsultaPorChave, $isTrazerMaisDadosContrato=false) {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );
@@ -64,7 +65,9 @@ class dbDemanda extends dbprocesso {
 				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdEspecieContrato,
 				$nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato,
 				$nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato,
+				$nmTabelaContrato . "." . vocontrato::$nmAtrDtAssinaturaContrato,
 				$nmTabelaContrato . "." . vocontrato::$nmAtrVlMensalContrato,
+				//$nmTabelaContrato . "." . vocontrato::$nmAtrVlGlobalContrato,
 				$nmTabelaContrato . "." . vocontrato::$nmAtrDtVigenciaInicialContrato,
 				$nmTabelaPessoa . "." . vopessoa::$nmAtrDoc,
 				
@@ -84,6 +87,10 @@ class dbDemanda extends dbprocesso {
 				getSQLNmContratada (),
 				"COALESCE (" . " . $nmTabelaTramitacao." . voDemandaTramitacao::$nmAtrCdSetorDestino . "," . $nmTabela . "." . voDemanda::$nmAtrCdSetor . ") AS " . voDemanda::$nmAtrCdSetorAtual 
 		);
+		
+		if($isTrazerMaisDadosContrato){
+			$arrayColunasRetornadas[] = $nmTabelaContrato . "." . vocontrato::$nmAtrObjetoContrato;
+		}
 		
 		$atributosGroup = voDemandaTramitacao::$nmAtrCd . "," . voDemandaTramitacao::$nmAtrAno;
 		// o proximo join eh p pegar a ultima tramitacao apenas, se houver
@@ -1089,7 +1096,9 @@ class dbDemanda extends dbprocesso {
 	static function validarDadosContrato($voContrato, $vocontratoInfo) {
 		//$voContrato = new vocontrato();		
 		$array = $voContrato->getValoresAtributosObrigatorios($vocontratoInfo);
-		if($array!= null && !isColecaoVazia($array)){
+		//var_dump($array);
+		static::validarDadosEntidadeArray($array);
+		/*if($array!= null && !isColecaoVazia($array)){
 			foreach ($array as $valor => $descricao){
 				if(!isAtributoValido($valor)){
 					throw new excecaoAtributoObrigatorio("Verifique o campo '$descricao' do termo relacionado.");
@@ -1098,7 +1107,9 @@ class dbDemanda extends dbprocesso {
 			
 		}else{
 			throw new excecaoGenerica("Verifique os campos obrigatórios do contrato.");
-		}		
+		}*/		
+		
+		//throw new excecaoGenerica("Verifique os campos obrigatórios do contrato.");
 		
 	}
 	
@@ -1369,7 +1380,8 @@ class dbDemanda extends dbprocesso {
 	 * verifica se ja existe uma demanda A FAZER de PRORROGACAO para o contrato
 	 * caso ja exista, a mesma numeracao nao pode ser utilizada como nova demanda.
 	 * Se ainda assim for necessário, a mesma demanda deve ser utilizada, nao sendo permitido incluir 
-	 * uma nova demanda para o mesmo termo aditivo
+	 * uma nova demanda para o mesmo termo aditivo de prorrogacao, que deve ser unificada com o novo evento que se deseja registrar
+	 * RESUMINDO: havendo uma demanda de prorrogacao aberta, para o mesmo contrato, esta deve ser utilizada para qualquer novo evento
 	 * @param unknown $voDemanda
 	 * @return boolean
 	 */
@@ -1378,27 +1390,37 @@ class dbDemanda extends dbprocesso {
 		//$voDemanda = new voDemanda();
 		//$isSituacaoFechada = $voDemanda->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA;
 		$isSituacaoFechada = isSituacaoDemandaFechada($voDemanda->situacao);
+			
 		$vocontrato = $voDemanda->getContrato();
 		//se a situacao eh pra fechar, nao precisa validar
 		if(!$isSituacaoFechada && $vocontrato != null){
-			$filtro = new filtroManterDemanda(false);
-			$filtro->vocontrato = new vocontrato();
-			$filtro->vodemanda = new voDemanda();
-			$filtro->vocontrato->anoContrato = $vocontrato->anoContrato;
-			$filtro->vocontrato->cdContrato = $vocontrato->cdContrato;
-			$filtro->vocontrato->tipo = $vocontrato->tipo;
-			$filtro->vocontrato->cdEspecie = $vocontrato->cdEspecie;
-			$filtro->vocontrato->sqEspecie = $vocontrato->sqEspecie;
-			$filtro->inDesativado = constantes::$CD_NAO;
-			$filtro->vodemanda->tpDemandaContrato = array(dominioTipoDemandaContrato::$CD_TIPO_PRORROGACAO);
-			
-			$filtro->vodemanda->situacao = array(dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_A_FAZER);
-			$colecao = $this->consultarTelaConsulta($voDemanda, $filtro);
-			
-			$retorno = !isColecaoVazia($colecao);
-			
-			if($retorno){
-				throw new excecaoGenerica("Já existe uma demanda ABERTA para o Contrato selecionado. Verifique se o TERMO/ADITIVO indicado está correto.");
+			//$vocontrato = new vocontrato();
+			//$voDemanda = new voDemanda();
+			//unico caso em que permite incluir demanda para um contrato que ja possui demanda de prorrogacao aberta: quando eh reajuste, posto que nao se sabe o termo que sera gerado no futuro(pode ser TA ou apostilamento)
+			$permiteDemandaMesmoContrato = $vocontrato->cdEspecie == dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER 
+				&& dominio::existePeloMenosUmaChaveColecaoNoArrayOuStrSeparador(array_keys(dominioTipoDemandaContrato::getColecaoReajustamento()), $voDemanda->tpDemandaContrato);
+			//var_dump($voDemanda->tpDemandaContrato);
+			//throw new excecaoGenerica($voDemanda->tpDemandaContrato . " " . $permiteDemandaMesmoContrato);			
+			if(!$permiteDemandaMesmoContrato){
+				$filtro = new filtroManterDemanda(false);
+				$filtro->vocontrato = new vocontrato();
+				$filtro->vodemanda = new voDemanda();
+				$filtro->vocontrato->anoContrato = $vocontrato->anoContrato;
+				$filtro->vocontrato->cdContrato = $vocontrato->cdContrato;
+				$filtro->vocontrato->tipo = $vocontrato->tipo;
+				$filtro->vocontrato->cdEspecie = $vocontrato->cdEspecie;
+				$filtro->vocontrato->sqEspecie = $vocontrato->sqEspecie;
+				$filtro->inDesativado = constantes::$CD_NAO;
+				$filtro->vodemanda->tpDemandaContrato = array(dominioTipoDemandaContrato::$CD_TIPO_PRORROGACAO);
+				
+				$filtro->vodemanda->situacao = array(dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_A_FAZER);
+				$colecao = $this->consultarTelaConsulta($voDemanda, $filtro);
+				
+				$retorno = !isColecaoVazia($colecao);
+				//$vocontrato = new vocontrato();			
+				if($retorno){
+					throw new excecaoGenerica("Já existe uma demanda ABERTA para o Contrato ".$vocontrato->getCodigoContratoFormatado().". Verifique se o TERMO/ADITIVO indicado está correto.");
+				}
 			}
 		}
 		

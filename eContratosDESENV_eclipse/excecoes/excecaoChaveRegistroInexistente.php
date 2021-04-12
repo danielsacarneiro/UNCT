@@ -9,9 +9,9 @@ class excecaoChaveRegistroInexistente extends excecaoGenerica
     	
     	$code = excecaoGenerica::$CD_EXCECAO_CHAVE_INEXISTENTE;    	
     	
-    	$str = "Chave Registro Inexistente.";
+    	$str = "Chave Registro Inexistente";
     	if($vo != null){
-    		$str = get_class($vo). "|$str.";
+    		$str = "<br>".get_class($vo). "|$str.";
     	}
     	if($message != null && $message != ""){
     		$str.= "<br>" . $message;

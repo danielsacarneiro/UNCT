@@ -133,6 +133,16 @@ function detalharDemandaGestao(){
     abrirJanelaAuxiliar(url, true, false, false);
 }
 
+function convocarAssinatura(){
+	funcao = "<?=constantes::$CD_FUNCAO_DETALHAR?>";
+    if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta")){
+            return;
+    }
+	chave = document.frm_principal.rdb_consulta.value;
+    url = "convocarAssinatura.php?funcao=" + funcao + "&chave=" + chave + "&lupa=S";	
+    abrirJanelaAuxiliar(url, true, false, false);
+}
+
 </SCRIPT>
 <?=setTituloPagina($vo->getTituloJSP())?>
 </HEAD>
@@ -712,6 +722,11 @@ function detalharDemandaGestao(){
                        <TD>
                         <TABLE class="barraacoesaux" cellpadding="0" cellspacing="0">
 	                   	<TR> 
+                            <TD class='botaofuncao'>
+                            <?php 
+                            echo getBotaoValidacaoAcesso("bttConvocacaoAssinatura", "Convocar.Assinatura", "botaofuncaop", false, false,true,false,"onClick='javascript:convocarAssinatura();' accesskey='c'");
+                            ?>                                                        
+                            </TD>	                   	
                             <TD class='botaofuncao'>
                             <?php 
                             echo getBotaoValidacaoAcesso("bttDetalharDemandaGestao", "Gestao.Prazo", "botaofuncaop", false, false,true,false,"onClick='javascript:detalharDemandaGestao();' accesskey='g'");

@@ -466,12 +466,13 @@ class voentidade extends multiplosConstrutores {
 			$nmEntidade = $this->getTituloJSP();
 			$nmEntidade .= ": ";
 		}catch(Exception $ex){
-			;
+			$nmEntidade = "";
 		}
 		
+		$retorno = array();
 		if($array != null){
 			foreach ($array as $chave => $descricao){
-				$retorno[$chave] = $nmEntidade.$descricao;				
+				$retorno[$nmEntidade.$chave] = $descricao;				
 			}
 		}
 		

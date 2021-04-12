@@ -161,14 +161,14 @@ Class voContratoInfo extends voentidade{
 	 */
 	function getValoresAtributosObrigatorios(){
 		$retorno = array(
-				$this->inEstudoTecnicoSAD => "Estudo.Técnico.SAD",
-				$this->cdClassificacao => "Classificação",
-				$this->inPrazoProrrogacao => "Prorrogação",
-				$this->inEscopo => "Escopo",
-				$this->inCredenciamento => "Credenciamento",
-				$this->inTemGarantia => "Tem.Garantia",
-				$this->dtProposta => "Dt.Proposta",
-				$this->cdPessoaGestor => "Gestor",
+				"Estudo.Técnico.SAD" => $this->inEstudoTecnicoSAD,
+				"Classificação" => $this->cdClassificacao,
+				"Prorrogação" => $this->inPrazoProrrogacao,
+				"Escopo" => $this->inEscopo,
+				"Credenciamento" => $this->inCredenciamento,
+				"Tem.Garantia" => $this->inTemGarantia,
+				"Dt.Proposta" => $this->dtProposta,
+				"Gestor" => $this->cdPessoaGestor,
 		);
 		
 		$retorno = $this->getValoresAtributosObrigatoriosPorEntidade($retorno);

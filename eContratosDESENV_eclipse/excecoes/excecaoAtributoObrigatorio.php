@@ -8,7 +8,7 @@ class excecaoAtributoObrigatorio extends excecaoGenerica
     public function __construct($message = "", Exception $previous = null, $vo=null) {
  
     	$code = excecaoGenerica::$CD_EXCECAO_ATRIBUTO_OBRIGATORIO;
-    	$str = "Atributo obrigatório não preenchido.";
+    	$str = "<br>Atributo obrigatório não preenchido.";
     	//$str = strtoupper(getTextoHTMLDestacado("<BR><BR>$str", white));
     	if($vo != null){
     		$str = get_class($vo). "|$str.";
