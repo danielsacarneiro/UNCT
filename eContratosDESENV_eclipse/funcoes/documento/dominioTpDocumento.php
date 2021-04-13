@@ -117,9 +117,6 @@ class dominioTpDocumento extends dominio {
 		$retorno = array (
 				self::$CD_TP_DOC_CONTROLE_AQUISICAO => self::$DS_TP_DOC_CONTROLE_AQUISICAO,
 				self::$CD_TP_DOC_LEGISLACAO => self::$DS_TP_DOC_LEGISLACAO,
-				//self::$CD_TP_DOC_PARECER => self::$DS_TP_DOC_PARECER,
-				self::$CD_TP_DOC_PROPOSTA_PRECOS => self::$DS_TP_DOC_PROPOSTA_PRECOS,
-				//self::$CD_TP_DOC_PLANILHA_LICON => self::$DS_TP_DOC_PLANILHA_LICON,
 		);
 		
 		$retorno = putElementoArray2NoArray1ComChaves ( $retorno, static::getColecaoDocsPAAP());
@@ -140,6 +137,7 @@ class dominioTpDocumento extends dominio {
 				self::$CD_TP_DOC_OUTROS => self::$DS_TP_DOC_OUTROS,
 				self::$CD_TP_DOC_NOTA_TECNICA => "Nota Técnica",
 				self::$CD_TP_DOC_PARECER => self::$DS_TP_DOC_PARECER,
+				self::$CD_TP_DOC_PROPOSTA_PRECOS => self::$DS_TP_DOC_PROPOSTA_PRECOS,
 		);
 		
 		ksort ( $retorno );

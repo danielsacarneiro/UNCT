@@ -177,8 +177,8 @@ function getNumServico($count){
                     				echo imprimeLinkDocumento("https://drive.google.com/open?id=1Iv6zfreYXtT4yttK9betEI-82HoRwWu8"
                     						, getTextoHTMLNegrito("MANUAL DE BOAS PRÁTICAS ECONTI (em constante evolução)"));
 
-                    				echo imprimeLinkDocumento("https://drive.google.com/file/d/1JvnwCMl-3dq3AocY7ll8chQRndihOCsp/view?usp=sharing"
-                    						, getTextoHTMLNegrito("UNCT - ORIENTAÇÕES GERAIS"));
+                    				echo imprimeLinkDocumento("https://drive.google.com/open?id=1KqUtXE6Pxq5q7d8vhK3XIuyA4NBQ6jON"
+                    						, getTextoHTMLNegrito("UNCT - MANUAL"));
                     				
                     				/*$vodocumento = new voDocumento(array(2021, dominioSetor::$CD_SETOR_UNCT,dominioTpDocumento::$CD_TP_DOC_CHECKLIST, 1));
                     				echo imprimeBotaoDocumento($vodocumento, getTextoHTMLNegrito("MANUAL DE BOAS PRÁTICAS ECONTI (em constante evolução)"));*/
@@ -205,11 +205,6 @@ function getNumServico($count){
                     				$vodocumento = new voDocumento(array(2019, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_CHECKLIST, 2));
                     				echo imprimeBotaoDocumento($vodocumento, "Manual Publicação CEPE.DOE.");
                     				
-                    				$vodocumento = new voDocumento(array(2019, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_OUTROS, 192));
-                    				echo imprimeBotaoDocumento($vodocumento, "Publicação CONTRATOS PORTAL DA TRANSPARÊNCIA.");
-                    				
-                    				/*$vodocumento = new voDocumento(array(2019, dominioSetor::$CD_SETOR_ATJA,dominioTpDocumento::$CD_TP_DOC_OUTROS, 21));
-                    				echo imprimeBotaoDocumento($vodocumento, "Publicação CONVÊNIOS PORTAL DA TRANSPARÊNCIA.");*/
                     				?>
                     				<TR>
                         				<TD class="tabeladadosdestacadonegrito">PROCESSOS:
