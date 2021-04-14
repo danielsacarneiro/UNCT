@@ -516,11 +516,21 @@ function estatisticas(){
 	    		'<?=$pNmCampoCdEspecieContrato?>',
 	    		'<?=filtroManter::$nmAtrQtdRegistrosPorPag?>'
 	    		);
-		//alert(pArrayIdCamposFiltroPortalTransparencia);
+
+	    var pArrayIdCamposFiltroLicon = new Array(
+	    		'<?=filtroManterContrato::$ID_REQ_InPublicado?>',
+	    		'<?=vocontrato::$nmAtrInLicomContrato?>',	    		
+	    		'<?=$pNmCampoCdEspecieContrato?>'
+	    		);
+
+	    //alert(pArrayIdCamposFiltroPortalTransparencia);
 	    </script>				
 		<?php
 		$linkMontaFiltroPortalTransparencia = "&nbsp;" 
-		. getTextoLink("MontarFiltroPortalTransparencia", "#", "onClick='setFiltroContratosPortalTransparencia(pArrayIdCamposFiltroPortalTransparencia, varNmVariavelJSEspecieContratosLAI);'");
+		. getTextoLink("|MontarFiltroPortalTransparencia", "#", "onClick='setFiltroContratosPortalTransparencia(pArrayIdCamposFiltroPortalTransparencia, varNmVariavelJSEspecieContratosLAI);'");
+		
+		$linkMontaFiltroLicon = "&nbsp;"
+				. getTextoLink("|MontarFiltroLicon", "#", "onClick='setFiltroContratosLicon(pArrayIdCamposFiltroLicon, varNmVariavelJSEspecieContratosLAI);'");
 		
 				$pArrayFiltroConsulta = array(
 						$filtro->getComboOrdenacao(),
@@ -531,7 +541,7 @@ function estatisticas(){
 						$voContrato->temTabHistorico,
 						$filtro->cdHistorico,
 						$colecao,
-						$linkMontaFiltroPortalTransparencia
+						$linkMontaFiltroPortalTransparencia . $linkMontaFiltroLicon
 				);
 				
 				

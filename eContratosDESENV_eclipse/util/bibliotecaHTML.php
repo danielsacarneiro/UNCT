@@ -10,7 +10,9 @@ include_once ("radiobutton.php");
 include_once ("dominioCoresCrescente.php");
 include_once ("sessao.php");
 include_once (caminho_vos . "vousuario.php");
+include_once (caminho_vos . "voUsuarioInfo.php");
 require_once (caminho_funcoes . "contrato/dominioTipoContrato.php");
+require_once (caminho_funcoes . "usuario_info/biblioteca_htmlUsuario.php");
 
 // .................................................................................................................
 

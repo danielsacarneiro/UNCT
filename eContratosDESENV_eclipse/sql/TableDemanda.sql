@@ -46,7 +46,24 @@ ALTER TABLE demanda ADD COLUMN dem_dtmonitoramento DATE NULL AFTER dem_inmonitor
 ALTER TABLE demanda ADD COLUMN dem_incaracteristicas VARCHAR(100) AFTER dem_fase;
 
 
-select dem_tipo from demanda where dem_tp_contrato is null group by dem_tipo;
+select count(*) from demanda 
+where year(dem_dtreferencia) <= 2019
+and dem_situacao in (1,3)
+and in_desativado = 'N'
+
+select dem_situacao from demanda 
+group by dem_situacao
+
+-- atualizando a base para encerrar as demandas antigas
+UPDATE demanda 
+SET dem_situacao = 2, dh_ultima_alt = CURRENT_TIMESTAMP, cd_usuario_ultalt = 26
+where year(dem_dtreferencia) <= 2019
+and dem_situacao in (1,3)
+and in_desativado = 'N'
+
+
+
+
 
 UPDATE demanda SET dem_tp_contrato = dem_tipo
 where  dem_tipo in (1,5,6,7,8,10);

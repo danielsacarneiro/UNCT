@@ -22,4 +22,10 @@ function getComboUsuarioATJA($idCampo, $nmCampo, $cdOpcaoSelecionada, $classCamp
 	return $select->getHtmlComboArray ($arrayCombo);
 }
 
+function isUsuarioChefia() {
+	$vousu = new voUsuarioInfo();
+	return existeStr1NaStr2(dominioUsuarioCaracteristicas::$CD_CHEFE, getCaracteristicasUsuarioLogado())
+	|| existeStr1NaStr2(dominioUsuarioCaracteristicas::$CD_ATJA, getCaracteristicasUsuarioLogado());
+}
+
 ?>

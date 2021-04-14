@@ -1138,6 +1138,16 @@ class dbDemanda extends dbprocesso {
 			$msg = "Selecione ao menos um contrato.";
 			throw new excecaoGenerica ( $msg );
 		}
+		
+		//apenas usuario avancado pode determinar prioridade alta
+		if (!isUsuarioChefia()) {
+			//$vo = new voDemandaTramitacao();
+			if ($vo->tipo != dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL && $vo->prioridade == dominioPrioridadeDemanda::$CD_PRIORI_ALTA) {
+				$msg = "Usuário não autorizado para incluir demandas com prioridade ALTA.";
+				throw new Exception ( $msg );
+			}
+		}
+		
 	}
 		
 	

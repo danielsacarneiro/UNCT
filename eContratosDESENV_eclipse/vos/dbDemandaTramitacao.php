@@ -216,23 +216,7 @@ class dbDemandaTramitacao extends dbprocesso {
 			$voDemanda = new voDemanda ();
 			$voDemanda = $vo->getVOPai ();
 			$voDemanda->dbprocesso->cDb = $this->cDb;
-			
-			$dbUsuarioInfo = new dbUsuarioInfo();
-			$cdSetor = $vo->cdSetor;			
-			if (!$dbUsuarioInfo->isUsuarioPertenceAoSetor($cdSetor)) {
-				$msg = "Usuário não autorizado pelo Setor ". dominioSetor::getDescricaoStaticTeste($cdSetor)." para incluir demanda.";
-				throw new Exception ( $msg );
-			}				
-			
-			//apenas usuario avancado pode determinar prioridade alta
-			if (!isUsuarioAdmin()) {
-				//$vo = new voDemandaTramitacao();
-				if ($vo->tipo != dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL && $vo->prioridade == dominioPrioridadeDemanda::$CD_PRIORI_ALTA) {
-					$msg = "Usuário não autorizado para incluir demandas com prioridade ALTA.";
-					throw new Exception ( $msg );
-				}
-			}
-						
+												
 			$voDemanda->dbprocesso->incluir ( $voDemanda );			
 			$vo->cd = $voDemanda->cd;
 			
@@ -267,6 +251,13 @@ class dbDemandaTramitacao extends dbprocesso {
 		return $voDemanda;
 	}
 	function validarInclusao($vo) {
+		$dbUsuarioInfo = new dbUsuarioInfo();
+		$cdSetor = $vo->cdSetor;
+		if (!$dbUsuarioInfo->isUsuarioPertenceAoSetor($cdSetor)) {
+			$msg = "Usuário não autorizado pelo Setor ". dominioSetor::getDescricaoStaticTeste($cdSetor)." para incluir demanda.";
+			throw new Exception ( $msg );
+		}
+		
 		//para o caso do encaminhar.novo.php
 		dbDemanda::validarGenerico($vo);
 	}

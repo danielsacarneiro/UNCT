@@ -533,21 +533,20 @@ function setFiltroContratosPortalTransparencia(pArrayIdCampos,pArrayEspeciesCont
 	exibirMensagem("Lembrar de selecionar o tipo de contrato (Ex. C-SAFI, CV-SAFI...).\nRealizada a consulta, exportar em Excel.");
 }
 
-/*function setFiltroContratosPortalTransparencia(pArrayIdCampos){
-	var campoDataInicioAssinatura = document.getElementById(pArrayIdCampos[0]);
-	var campoDataFimAssinatura = document.getElementById(pArrayIdCampos[1]);
-	var campoPublicado = document.getElementById(pArrayIdCampos[2]);	
-	var ano_A_Utilizar = getAnoAtual()-1;
+function setFiltroContratosLicon(pArrayIdCampos, pArrayEspeciesContrato){
+	var campoPublicado = document.getElementById(pArrayIdCampos[0]);
+	var campoInLicon = document.getElementById(pArrayIdCampos[1]);
+	var campoEspecieContrato = document.getElementById(pArrayIdCampos[2]);
 	
 	//biblio...principal
 	limparFormularioGeral();
 	
-	campoDataInicioAssinatura.value = '01/01/' + ano_A_Utilizar;
-	campoDataFimAssinatura.value = '31/12/' + ano_A_Utilizar;
-	campoPublicado.value = 'S';	
+	selecionaSelectMultiple(campoEspecieContrato, pArrayEspeciesContrato);
+	campoPublicado.value = 'S';
+	campoInLicon.value = 'N';
 	
-	exibirMensagem("Lembrar de selecionar o tipo de contrato (Ex. C-SAFI, CV-SAFI...).\nRealizada a consulta, exportar em Excel.");
-}*/
+	exibirMensagem("Para refinar a busca, selecionar o ano e o tipo de contrato (Ex. C-SAFI, C-PROFISCO...).");
+}
 
 //Formata o proclic para o padrao SEFAZ
 function getValorCampoProcLicitatorio(pCampo) {

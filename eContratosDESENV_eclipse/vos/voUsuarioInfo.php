@@ -1,9 +1,12 @@
 <?php
 include_once(caminho_lib."voentidade.php");
 include_once("dbUsuarioInfo.php");
+include_once("vousuario.php");
 include_once (caminho_util."bibliotecaFuncoesPrincipal.php");
 include_once (caminho_util."dominioSetor.php");
 include_once (caminho_util."documentoPessoa.php");
+include_once (caminho_funcoes . "usuario_info/dominioUsuarioCaracteristicas.php");
+include_once (caminho_funcoes . "usuario_info/biblioteca_htmlUsuario.php");
 include_once (caminho_funcoes . "usuario_info/dominioUsuarioCaracteristicas.php");
  
 Class voUsuarioInfo extends vousuario{	
