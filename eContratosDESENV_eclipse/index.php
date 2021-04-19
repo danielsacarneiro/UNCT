@@ -115,10 +115,11 @@ function getNumServico($count){
 	if(isUsuarioRodaImportacao()){?>
 		f5 = new Tree('ADMINISTRADOR');
 		<?php if(isUsuarioAdmin()){?>
-		    f5.adicionarItem(new Link('Usuários', '<?=caminho_funcoesHTML?>usuario_info', ''));    
+		    f5.adicionarItem(new Link('Usuários', '<?=caminho_funcoesHTML?>usuario_info', ''));
+		    f5.adicionarItem(new Link('______', '#', ''));    
 			f5.adicionarItem(new Link("Agendamento de alertas (COM EMAIL)", "agendamento.php?<?=constantes::$ID_REQ_IN_ENVIAR_EMAIL?>=S", ""));
 		<?php }?>
-		f5.adicionarItem(new Link('______', '#', ''));
+		/*f5.adicionarItem(new Link('______', '#', ''));
 		f5.adicionarItem(new Link('______', '#', ''));
 		f5.adicionarItem(new Link("LIMPAR TABELA CONTRATO", "<?=caminho_funcoesHTML. "contrato/importarContrato.php?". dbcontrato::$ID_REQ_INICIAR_TAB_CONTRATO?>=S", "", null,true));
 		f5.adicionarItem(new Link('______', '#', ''));
@@ -131,9 +132,9 @@ function getNumServico($count){
 		f5.adicionarItem(new Link("IMPORTAR CV-SAFI", "<?=caminho_funcoesHTML?>contrato/importarConvenio.php?tipo=V", "", null,true));
 		f5.adicionarItem(new Link('______', '#', ''));
 		f5.adicionarItem(new Link("IMPORTAR PROFISCO", "<?=caminho_funcoesHTML?>contrato/importarConvenio.php?tipo=P", "", null,true));
+		//f5.adicionarItem(new Link("REMOVER CARACTERES ESPECIAIS", "<?=caminho_funcoesHTML."contrato/atualizarContratada.php?". dbcontrato::$ID_REQ_REMOVER_CARACTER_ESPECIAL?>=S", "", null,true));*/
 		f5.adicionarItem(new Link('______', '#', ''));		
 		f5.adicionarItem(new Link("ATUALIZAR CONTRATADA", "<?=caminho_funcoesHTML?>contrato/atualizarContratada.php", "", null,true));
-		//f5.adicionarItem(new Link("REMOVER CARACTERES ESPECIAIS", "<?=caminho_funcoesHTML."contrato/atualizarContratada.php?". dbcontrato::$ID_REQ_REMOVER_CARACTER_ESPECIAL?>=S", "", null,true));
 		f.adicionarItem(f5);	
 	<?php
 	}

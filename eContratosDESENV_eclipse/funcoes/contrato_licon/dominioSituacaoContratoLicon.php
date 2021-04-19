@@ -9,11 +9,11 @@ Class dominioSituacaoContratoLicon extends dominio{
 	static $CD_SITUACAO_FORMALIZACAO_PENDENTE = 4;
 	static $CD_SITUACAO_INCLUIDO_COM_OBS = 5;
 		
-	static $DS_SITUACAO_INCLUIDO = 'Incluído Sucesso';
+	static $DS_SITUACAO_INCLUIDO = 'Formalizado OK';
 	static $DS_SITUACAO_EXISTENTE = 'Já Existia';
 	static $DS_SITUACAO_ERRO = "ERRO";
 	static $DS_SITUACAO_FORMALIZACAO_PENDENTE = "Formalização Pendente";
-	static $DS_SITUACAO_INCLUIDO_COM_OBS = "Incluído com Obs.";
+	static $DS_SITUACAO_INCLUIDO_COM_OBS = "Formalizado com Obs.";
 	
 	// ...............................................................
 	// Construtor

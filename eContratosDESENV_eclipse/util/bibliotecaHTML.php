@@ -664,11 +664,11 @@ function getComboColecaoGenerico($colecao, $idCampo, $nmCampo, $cdOpcaoSeleciona
 }
 function getComponenteConsultaFiltro($temHistorico, $filtro, $comComboOrdenacao=true, $colecaoExportarExcel=null) {
 	// $comboOrdenacao = $filtro->getAtributosOrdenacao();
-	if($comComboOrdenacao){
-		$comboOrdenacao = $filtro->getComboOrdenacao ();
+	if($comComboOrdenacao){		
+			$comboOrdenacao = $filtro->getComboOrdenacao ();
 	}
-
-	$arrayParam = array(
+	
+	/*$arrayParam = array(
 		$comboOrdenacao,
 		$filtro->cdAtrOrdenacao,
 		$filtro->cdOrdenacao,
@@ -677,15 +677,25 @@ function getComponenteConsultaFiltro($temHistorico, $filtro, $comComboOrdenacao=
 		$temHistorico,
 		$filtro->cdHistorico,
 		$colecaoExportarExcel,
+	);*/
+	
+	$arrayParam = array(
+			$filtro,
+			$temHistorico,
+			$comComboOrdenacao,
+			$colecaoExportarExcel,
+			null,
 	);
 	
 	return getComponenteConsultaPaginacaoArray($arrayParam);
 }
-function getComponenteConsulta($comboOrdenacao, $cdAtrOrdenacao, $cdOrdenacao, $qtdRegistrosPorPag, $temHistorico, $cdHistorico) {
+
+/*function getComponenteConsulta($comboOrdenacao, $cdAtrOrdenacao, $cdOrdenacao, $qtdRegistrosPorPag, $temHistorico, $cdHistorico) {
 	return getComponenteConsultaPaginacao ( $comboOrdenacao, $cdAtrOrdenacao, $cdOrdenacao, true, $qtdRegistrosPorPag, $temHistorico, $cdHistorico );
 }
 
-function getComponenteConsultaPaginacao($comboOrdenacao, 
+
+ function getComponenteConsultaPaginacao($comboOrdenacao, 
 		$cdAtrOrdenacao, 
 		$cdOrdenacao, 
 		$temPaginacao, 
@@ -705,7 +715,7 @@ function getComponenteConsultaPaginacao($comboOrdenacao,
 	
 	return getComponenteConsultaPaginacaoArray($arrayParam);
 	
-}
+}*/
 
 /*function getComponenteConsultaPaginacaoArray($arrayParam) {
 	$comboOrdenacao = $arrayParam[0];
@@ -723,15 +733,32 @@ function getComponenteConsultaPaginacao($comboOrdenacao,
 }*/
 
 function getComponenteConsultaPaginacaoArray($arrayParam) {
-	$comboOrdenacao = $arrayParam[0]; 
-	$cdAtrOrdenacao = $arrayParam[1]; 
-	$cdOrdenacao = $arrayParam[2]; 
-	$temPaginacao = $arrayParam[3]; 
-	$qtdRegistrosPorPag = $arrayParam[4]; 
-	$temHistorico = $arrayParam[5]; 
-	$cdHistorico = $arrayParam[6];
-	$colecaoExportarExcel = $arrayParam[7];
-	$complementoHTML = $arrayParam[8];
+	
+	/*$comboOrdenacao = $arrayParam[0];
+	 $cdAtrOrdenacao = $arrayParam[1];
+	 $cdOrdenacao = $arrayParam[2];
+	 $temPaginacao = $arrayParam[3];
+	 $qtdRegistrosPorPag = $arrayParam[4];
+	 $temHistorico = $arrayParam[5];
+	 $cdHistorico = $arrayParam[6];
+	 $colecaoExportarExcel = $arrayParam[7];
+	 $complementoHTML = $arrayParam[8];*/
+		
+	$filtro = $arrayParam[0];
+	$temHistorico = $arrayParam[1];
+	$comComboOrdenacao = $arrayParam[2];
+	$colecaoExportarExcel = $arrayParam[3];
+	$complementoHTML = $arrayParam[4];
+	$isExportarPlanilhaManterContrato = $arrayParam[5];
+	
+	if($comComboOrdenacao){
+		$comboOrdenacao = $filtro->getComboOrdenacao();
+	}
+	$cdAtrOrdenacao = $filtro->cdAtrOrdenacao;
+	$cdOrdenacao = $filtro->cdOrdenacao;
+	$temPaginacao = $filtro->TemPaginacao;
+	$qtdRegistrosPorPag = $filtro->qtdRegistrosPorPag;
+	$cdHistorico = $filtro->cdHistorico;	
 	
 	$html = "";
 	
@@ -765,7 +792,7 @@ function getComponenteConsultaPaginacaoArray($arrayParam) {
 	$html .= "&nbsp;".getBorrachaTotalConsulta();
 	
 	if(!isColecaoVazia($colecaoExportarExcel)){
-		$html .= "&nbsp;". getLinkExportarExcelTelaContrato($colecaoExportarExcel);
+		$html .= "&nbsp;". getLinkExportarPlanilha($colecaoExportarExcel, $isExportarPlanilhaManterContrato);
 	}
 	
 	$html .= "$complementoHTML</TD></TR>";

@@ -136,7 +136,11 @@ function alterar() {
                 <TH class="campoformulario" width="1%" nowrap>Descrição:</TH>
                 <TD class="campoformulario"  colspan=3><INPUT type="text" id="<?=vogestor::$nmAtrDescricao?>" name="<?=vogestor::$nmAtrDescricao?>"  value="<?php echo($nome);?>"  class="camponaoobrigatorio" size="50" ></TD>
             </TR>
-        <?=getComponenteConsulta(null, null, $cdOrdenacao, $qtdRegistrosPorPag, false, $cdHistorico)?>
+        <?php 
+        //echo getComponenteConsulta(null, null, $cdOrdenacao, $qtdRegistrosPorPag, false, $cdHistorico);
+        
+        echo getComponenteConsultaFiltro($voGestor->temTabHistorico, $filtro);
+        ?>
        </TBODY>
   </TABLE>
 		</DIV>

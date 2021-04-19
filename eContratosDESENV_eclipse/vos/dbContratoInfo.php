@@ -177,6 +177,7 @@ class dbContratoInfo extends dbprocesso {
 		$nmTabela = $vo->getNmTabelaEntidade ( false );			
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( $isHistorico );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
+		$nmTabelaPessoaGestorContratoInfo = "TAB_GESTOR_CONTRATO_INFO";
 		//echo "tabela vo: $nmTabela | tabela contrato_info: $nmTabelaContratoInfo";
 		
 		$nmTabContratoMater = filtroConsultarContratoConsolidacao::$NmTabContratoMater;
@@ -192,11 +193,16 @@ class dbContratoInfo extends dbprocesso {
 		$inAtributoSeraProrrogado = "$nmTabelaContratoInfo." . voContratoInfo::$nmAtrInSeraProrrogado;
 		$inPrazoProrrogacao = "$nmTabelaContratoInfo." . voContratoInfo::$nmAtrInPrazoProrrogacao;
 		
+		$arrayCoalesceGestor = array(
+				"$nmTabelaPessoaGestorContratoInfo." . vopessoa::$nmAtrNome,
+				"$nmTabContratoATUAL." . vocontrato::$nmAtrGestorContrato);
+		
 		$arrayColunasRetornadas = array (
 				$nmTabela . "." . vocontrato::$nmAtrAnoContrato,
 				$nmTabela . "." . vocontrato::$nmAtrCdContrato,
 				$nmTabela . "." . vocontrato::$nmAtrTipoContrato,
 				$nmTabContratoMater . "." . vocontrato::$nmAtrSqContrato . " AS " . filtroConsultarContratoConsolidacao::$NmColSqContratoMater,
+				$nmTabContratoMater . "." . vocontrato::$nmAtrObjetoContrato,
 				$nmTabContratoATUAL . "." . vocontrato::$nmAtrVlMensalContrato,
 				$nmTabContratoATUAL . "." . vocontrato::$nmAtrVlGlobalContrato,
 				$nmTabContratoATUAL . "." . vocontrato::$nmAtrSqContrato . " AS " . filtroConsultarContratoConsolidacao::$NmColSqContratoAtual,
@@ -205,7 +211,7 @@ class dbContratoInfo extends dbprocesso {
 				//$nmTabContratoATUAL . "." . vocontrato::$nmAtrSqEspecieContrato . " AS " . filtroConsultarContratoConsolidacao::$NmColSqEspecieContratoAtual,
 				"$nmAtrTempContratoAtualSqEspecie AS " . filtroConsultarContratoConsolidacao::$NmColSqEspecieContratoAtual,
 				
-				$nmTabContratoATUAL . "." . vocontrato::$nmAtrGestorContrato,
+				getSQLCOALESCE($arrayCoalesceGestor, vocontrato::$nmAtrGestorContrato),
 				
 				filtroConsultarContratoConsolidacao::getComparacaoWhereDataVigencia($nmTabContratoMater . "." . vocontrato::$nmAtrDtVigenciaInicialContrato)
 				. " AS " . filtroConsultarContratoConsolidacao::$NmColDtInicioVigencia,
@@ -309,6 +315,10 @@ class dbContratoInfo extends dbprocesso {
 		$queryJoin .= "\n AND ";
 		$queryJoin .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrTipoContrato . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrTipoContrato;
 			
+		$queryJoin .= "\n LEFT JOIN $nmTabelaPessoaContrato $nmTabelaPessoaGestorContratoInfo ";
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaPessoaGestorContratoInfo . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrCdPessoaGestor;
+		
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoaContrato;
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrCdPessoaContratada;

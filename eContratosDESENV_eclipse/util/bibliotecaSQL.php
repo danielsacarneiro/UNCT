@@ -168,7 +168,9 @@ function getSQLDataVigenteArrayParam($pArrayParam) {
 	$nmColDtInicioVigencia = $pNmColDtInicioVigencia;
 	$nmColDtFimVigencia = $pNmColDtFimVigencia;
 	
-	if(isAtributoValido($pNmTableEntidade)){
+	//se os atributos ja vierem preenchidos com o nome da tabela, nao precisa inclui-la
+	if(isAtributoValido($pNmTableEntidade) && !(existeStr1NaStr2(".", $pNmColDtInicioVigencia) || existeStr1NaStr2(".", $pNmColDtFimVigencia))){
+	//if(isAtributoValido($pNmTableEntidade)){
 		$nmColDtInicioVigencia = "$pNmTableEntidade." . $pNmColDtInicioVigencia;
 		$nmColDtFimVigencia = "$pNmTableEntidade." . $pNmColDtFimVigencia;
 	}

@@ -309,7 +309,7 @@ function movimentacoes(){
             </TR>
 			<TR>
                <TH class="campoformulario" nowrap>Prazo:</TH>
-               <TD class="campoformulario" colspan=3>               				
+               <TD class="campoformulario" >               				
 				Período (anos):
                				<INPUT type="text" 
                         	       id="<?=filtroConsultarContratoConsolidacao::$ID_REQ_NumPeriodoEmAnosInicial?>" 
@@ -329,9 +329,14 @@ function movimentacoes(){
                         			maxlength="3" >
                | Dias.Vencimento:
 	            <INPUT type="text" id="<?=filtroConsultarContratoConsolidacao::$nmAtrQtdDiasParaVencimento?>" name="<?=filtroConsultarContratoConsolidacao::$nmAtrQtdDiasParaVencimento?>"  
-								value="<?php echo($filtro->qtdDiasParaVencimento);?>"  class="camponaoobrigatorio" size="3">
-                        			
+								value="<?php echo($filtro->qtdDiasParaVencimento);?>"  class="camponaoobrigatorio" size="3">                        			
                 </TD>
+               <TH class="campoformulario" nowrap>Proposta:</TH>
+               <TD class="campoformulario" >
+               Dias.Vencimento:
+	            <INPUT type="text" id="<?=filtroConsultarContratoConsolidacao::$nmAtrQtdDiasParaVencimentoProposta?>" name="<?=filtroConsultarContratoConsolidacao::$nmAtrQtdDiasParaVencimentoProposta?>"  
+								value="<?php echo($filtro->qtdDiasParaVencimentoProposta);?>"  class="camponaoobrigatorio" size="3">
+                </TD>                
             </TR>
             
             <TR>
@@ -391,7 +396,7 @@ function movimentacoes(){
 				include_once(caminho_util."dominioTpVigencia.php");
 				$comboVigencia = new select(dominioTpVigencia::getColecaoComVazio());						
 				?>
-	            <TD class="campoformulario" nowrap>
+	            <TD class="campoformulario" nowrap colspan=3>
 	            <?php 
 	            echo $comboVigencia->getHtmlOpcao($filtro::$nmAtrTpVigencia,$filtro::$nmAtrTpVigencia, $filtro->tpVigencia, false);
 	            
@@ -408,19 +413,34 @@ function movimentacoes(){
 	            		filtroConsultarContratoConsolidacao::$nmAtrDtVigencia,
 	            		filtroConsultarContratoConsolidacao::$ID_REQ_InProduzindoEfeitos,
 	            );
-	            echo getBorracha($nmCamposVigencia, "");
-	             
-	            ?></TD>
-               <TH class="campoformulario" nowrap>Proposta:</TH>
-               <TD class="campoformulario" >
-               Dias.Vencimento:
-	            <INPUT type="text" id="<?=filtroConsultarContratoConsolidacao::$nmAtrQtdDiasParaVencimentoProposta?>" name="<?=filtroConsultarContratoConsolidacao::$nmAtrQtdDiasParaVencimentoProposta?>"  
-								value="<?php echo($filtro->qtdDiasParaVencimentoProposta);?>"  class="camponaoobrigatorio" size="3">
-                </TD>		                	            
+	            echo "| Vigente na data: "	             
+	            ?>
+                        	<INPUT type="text" 
+                        	       id="<?=filtroConsultarContratoConsolidacao::$nmAtrDtVigencia?>" 
+                        	       name="<?=filtroConsultarContratoConsolidacao::$nmAtrDtVigencia?>" 
+                        			value="<?php echo($filtro->dtVigencia);?>" 
+                        			onkeyup="formatarCampoData(this, event, false);" 
+                        			class="camponaoobrigatorio" 
+                        			size="10" 
+                        			maxlength="10" >
+                <?=getBorracha($nmCamposVigencia, "");?>
+	            </TD>
 		    </TR>					
 	        
        <?php
-       echo getComponenteConsultaFiltro(false, $filtro);
+       
+       $colecaoPlanilha = filtroConsultarContratoConsolidacao::montarColecaoExportarPlanilha($colecao);
+       $pArrayFiltroConsulta = array(
+       		$filtro,
+       		false,
+       		true,
+       		$colecaoPlanilha,
+       );       
+       
+       //echo getComponenteConsultaFiltro($voContrato->temTabHistorico, $filtro, true, $colecao);
+       echo getComponenteConsultaPaginacaoArray($pArrayFiltroConsulta);
+        
+       //echo getComponenteConsultaFiltro(false, $filtro);
         ?>
        </TBODY>
   </TABLE>
@@ -448,19 +468,18 @@ function movimentacoes(){
                     <TH class="headertabeladados" width="1%" <?=$rowspan?>>Contrato</TH>
                     <TH class="headertabeladados" width="1%" <?=$rowspan?>>Atual</TH>
                     <TH class="headertabeladados" width="30%" <?=$rowspan?>>Contratada</TH>
-                    <TH class="headertabeladados" width="40%" <?=$rowspan?>>Gestor</TH>
-                    <TH class="headertabeladados" width="1%" <?=$rowspan?>>Proposta</TH>                    
-                    <TH class="headertabeladadosalinhadocentro" width="1%" colspan="3">Prorrogação(do)</TH>
-                    <TH class="headertabeladados" width="1%" <?=$rowspan?>>Dt.Início</TH>
-                    <TH class="headertabeladados" width="1%" <?=$rowspan?>>Dt.Fim</TH>
+                    <TH class="headertabeladados" width="70%" <?=$rowspan?>>Objeto</TH>
+                    <TH class="headertabeladados" width="15%" <?=$rowspan?>>Gestor</TH>                    
+                    <TH class="headertabeladadosalinhadocentro" width="1%" colspan="3">Prorrogação</TH>
+                    <TH class="headertabeladados" width="1%" <?=$rowspan?>>Início</TH>
+                    <TH class="headertabeladados" width="1%" <?=$rowspan?>>Fim</TH>
                     <TH class="headertabeladados" width="1%" <?=$rowspan?>>Anos</TH>
-                    <TH class="headertabeladados" width="1%" <?=$rowspan?>>Autorização</TH>
                     <TH class="headertabeladados" width="1%" <?=$rowspan?>>Mensal</TH>
                     <TH class="headertabeladados" width="1%" <?=$rowspan?>>Global</TH>
                 </TR>
                 <TR>
-					<TH class="headertabeladados" width="1%">Será?</TH>
-                    <TH class="headertabeladados" width="1%">Normal?</TH>
+					<TH class="headertabeladados" width="1%">Indic.</TH>
+                    <TH class="headertabeladados" width="1%">Permite?</TH>
                     <TH class="headertabeladados" width="1%">Excep.?</TH>                
                 </TR>
                 <?php								
@@ -469,7 +488,7 @@ function movimentacoes(){
                 else 
                         $tamanho = 0;                                
                                 
-                $colspan=15;
+                $colspan=14;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -561,7 +580,9 @@ function movimentacoes(){
                          
                          $contrato = formatarCodigoAnoComplemento($voAtual->cdContrato,
                          		$voAtual->anoContrato,
-                         		$dominioTipoContrato->getDescricao($voAtual->tipo));                         
+                         		$dominioTipoContrato->getDescricao($voAtual->tipo));
+                         
+                         $objeto = $registro[vocontrato::$nmAtrObjetoContrato];
                                                 
                    ?>
                 <TR class="dados">
@@ -578,15 +599,14 @@ function movimentacoes(){
                     <TD class="tabeladados" nowrap><?php echo $contrato?></TD>
                     <TD class="tabeladados" nowrap><?php echo $termoAtual?></TD>
                     <TD class="tabeladados"><?php echo $dsPessoa?></TD>
+                    <TD class="tabeladados"><?php echo $objeto?></TD>
 					<TD class="tabeladados" ><?php echo $gestor?></TD>
-					<TD class="tabeladados" nowrap><?php echo getData($voAtual->dtProposta)?></TD>
                     <TD class="tabeladados" nowrap><?php echo $inSeraProrrogado?></TD>
                     <TD class="tabeladados" nowrap><?php echo $inprorrogavel?></TD>					
 					<TD class="tabeladados" nowrap><?php echo $inprorrogacaoExcepcional?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($colecao[$i][filtroConsultarContratoConsolidacao::$NmColDtInicioVigencia])?></TD>
                     <TD <?=$tagCelula?>><?php echo getData($dataFinal)?></TD>
                     <TD class="tabeladados" nowrap><?php echo $colecao[$i][filtroConsultarContratoConsolidacao::$NmColPeriodoEmAnos]?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $dominioAutorizacao->getDescricao($autorizacaoAtual)?></TD>
                     <TD class="tabeladados" nowrap><?php echo $voContratoAtual->vlMensal?></TD>
                     <TD class="tabeladados" nowrap><?php echo $voContratoAtual->vlGlobal?></TD>
                 </TR>					

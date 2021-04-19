@@ -475,8 +475,9 @@ class filtroManter extends multiplosConstrutores {
 		$comboOrdenacao = null;
 		try {
 			// $comboOrdenacao = new select(static::getAtributosOrdenacao());
-			$comboOrdenacao = new select ( $this->getAtributosOrdenacao () );
-			
+			if(method_exists($this, "getAtributosOrdenacao")){
+				$comboOrdenacao = new select ( $this->getAtributosOrdenacao () );
+			}			
 			// }catch (Throwable $ex){
 		} catch ( Error $ex ) {
 			echo "FiltroManter:Error";

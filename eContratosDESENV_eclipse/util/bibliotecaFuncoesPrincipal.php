@@ -1,4 +1,44 @@
 <?php
+include_once (caminho_util . "multiplosConstrutores.php");
+
+Class colunaPlanilha extends multiplosConstrutores{
+	
+	var $titulo = "";
+	var $tpDado = null;
+	var $nmClasseDominio = null;
+	var $nmAtributo = "";
+	
+	static $TP_DADO_DATA = "DATA";
+	static $TP_DADO_DOMINIO= "DOMINIO";
+	
+	function __construct2($titulo, $nmAtributo) {
+		$this->titulo = $titulo;
+		$this->nmAtributo = $nmAtributo;		
+	}
+
+	function __construct3($titulo, $nmAtributo, $tpDado) {
+		self::__construct2($titulo, $nmAtributo);
+		$this->tpDado = $tpDado;
+	}
+
+	function __construct4($titulo, $nmAtributo, $tpDado, $nmClasseDominio) {
+		self::__construct3($titulo, $nmAtributo, $tpDado);
+		$this->nmClasseDominio = $nmClasseDominio;
+	}
+	
+	
+	function getValorCampoRegistro($registro){
+		$retorno = $registro[$this->nmAtributo];
+		if(isAtributoValido($this->nmClasseDominio)){
+			$dominio = new $this->nmClasseDominio();
+			$retorno = $dominio::getDescricao($registro[$this->nmAtributo]);
+		}
+		
+		return $retorno;
+	}
+	
+}
+
 
 function imprimeLinhaHTML($texto){
 	echo $texto . "<br>";

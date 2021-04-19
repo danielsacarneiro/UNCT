@@ -167,9 +167,12 @@ Class voContratoInfo extends voentidade{
 				"Escopo" => $this->inEscopo,
 				"Credenciamento" => $this->inCredenciamento,
 				"Tem.Garantia" => $this->inTemGarantia,
-				"Dt.Proposta" => $this->dtProposta,
 				"Gestor" => $this->cdPessoaGestor,
 		);
+		
+		if(!isAtributoValido($this->inCredenciamento) || $this->inCredenciamento == 'N'){
+			$retorno["Dt.Proposta"] = $this->dtProposta;
+		}
 		
 		$retorno = $this->getValoresAtributosObrigatoriosPorEntidade($retorno);
 		

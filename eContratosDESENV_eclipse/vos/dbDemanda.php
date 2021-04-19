@@ -1195,7 +1195,7 @@ class dbDemanda extends dbprocesso {
 				$garantiaOk = !$temGarantia  || (isAtributoValido($vo->fase) && in_array(dominioFaseDemanda::$CD_GARANTIA_PRESTADA, $vo->fase));
 				if(!$garantiaOk){ 
 					throw new excecaoGenerica("Fechamento não permitido: verifique a garantia do contrato. |"
-							. $vocontratoDemanda->toString());						
+							. $vocontratoDemanda->getCodigoContratoFormatado(true));						
 				}
 				
 				$temPendenciaContratoEnvioSAD = isAtributoValido($vocontratoInfo->inPendencias) && in_array(dominioAutorizacao::$CD_AUTORIZ_SAD, $vocontratoInfo->inPendencias);
@@ -1208,12 +1208,12 @@ class dbDemanda extends dbprocesso {
 				$isAnalisePGEOK = !$isContratoEnvioPGE || (isAtributoValido($vo->fase) && in_array(dominioFaseDemanda::$CD_VISTO_PGE, $vo->fase));
 				if(!$isAnaliseSADOK){
 					throw new excecaoGenerica("Fechamento não permitido: ausente análise SAD ao contrato. |"
-							. $vocontratoDemanda->toString());
+							. $vocontratoDemanda->getCodigoContratoFormatado(true));
 				}
 				
 				if(!$isAnalisePGEOK){
 					throw new excecaoGenerica("Fechamento não permitido: ausente análise PGE ao contrato. |"
-							. $vocontratoDemanda->toString());
+							. $vocontratoDemanda->getCodigoContratoFormatado(true));
 				}
 				
 				//$vo = new voDemandaTramitacao();

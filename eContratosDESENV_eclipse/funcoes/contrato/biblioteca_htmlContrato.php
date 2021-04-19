@@ -1605,7 +1605,16 @@ function getTextoGridContrato($voContrato, $empresa=null, $porExtenso=true, $omi
 
 function getLinkExportarExcelTelaContrato($colecao){
 	putObjetoSessao(vocontrato::$ID_REQ_COLECAO_EXPORTAR_EXCEL, $colecao);
-	return getTextoLink("exportarExcel", "exportarExcel.php", "", true);
+	return getTextoLink("exportarPlanilha", "exportarExcel.php", "", true);
+}
+
+function getLinkExportarPlanilha($colecao, $isTelaManterContrato = false){
+	if($isTelaManterContrato){
+		return getLinkExportarExcelTelaContrato($colecao);
+	}else{
+		putObjetoSessao(constantes::$ID_REQ_COLECAO_EXPORTAR_PLANILHA, $colecao);
+		return getTextoLink("exportarPlanilha", "../exportarPlanilha.php", "", true);
+	}
 }
 
 function getContratoDemandaPorSEI($SEI){

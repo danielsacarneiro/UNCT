@@ -116,5 +116,7 @@ include_once 'normativos.php';
     static $DS_BANCO = "*BANCO*";
     static $NM_FUNCAO_JS_COPIADADOS_TERMO_ANTERIOR = "copiarDadosTermoAnterior";
     static $ID_REQ_CHECK_RESPONSABILIDADE = 'checkResponsabilidade';
+    
+    static $ID_REQ_COLECAO_EXPORTAR_PLANILHA = "ID_REQ_COLECAO_EXPORTAR_PLANILHA";
 }
 ?>

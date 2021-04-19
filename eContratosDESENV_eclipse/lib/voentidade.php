@@ -1,5 +1,4 @@
 <?php
-include_once (caminho_util . "multiplosConstrutores.php");
 include_once (caminho_util . "bibliotecaFuncoesPrincipal.php");
 class voentidade extends multiplosConstrutores {
 	static $nmTabelaSufixoHistorico = "_hist";

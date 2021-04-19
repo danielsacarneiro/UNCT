@@ -18,6 +18,7 @@ header ("Content-Description: PHP Generated Data" );
 inicio();
 $colecao = getObjetoSessao(vocontrato::$ID_REQ_COLECAO_EXPORTAR_EXCEL);
 $exportarExcel = true;
+//removeObjetoSessao(vocontrato::$ID_REQ_COLECAO_EXPORTAR_EXCEL);
 
 include_once 'grid_contrato.php';
 

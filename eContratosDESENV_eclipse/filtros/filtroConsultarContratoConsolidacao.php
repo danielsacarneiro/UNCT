@@ -414,25 +414,56 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 			$conector = "\n AND ";
 		}		
 		
-		if ($this->tpVigencia != null && $this->tpVigencia != "") {//constantes::$CD_OPCAO_TODOS) {
-			$nmcoldtinicioTemp = vocontrato::$nmAtrDtVigenciaInicialContrato;
-			$nmcoldtfimTemp = vocontrato::$nmAtrDtVigenciaFinalContrato;
+		if ($this->dtVigencia != null) {
+			$pChaveTuplaComparacaoSemSequencial = array(
+					vocontrato::$nmAtrCdContrato
+					,vocontrato::$nmAtrAnoContrato
+					, vocontrato::$nmAtrTipoContrato);
+				
 		
-			$nmcoldtinicio = static::$NmTabContratoMater . "." . $nmcoldtinicioTemp;
-			$nmcoldtfim = static::$NmTabContratoATUAL . "." . $nmcoldtfimTemp;
-				
-			if ($this->tpVigencia == dominioTpVigencia::$CD_OPCAO_VIGENTES) {
-				$filtro = $filtro . $conector . getSQLDataVigenteSqSimples ( null, $nmcoldtinicio, $nmcoldtfim );
-				$sqlSubstituicaoJoinContratoATUAL .= " AND ". getSQLDataVigenteSqSimples ( null, $nmcoldtinicioTemp, $nmcoldtfimTemp );
-			} else {
-				$filtro = $filtro . $conector . getSQLDataNaoVigenteSqSimples ( null, $nmcoldtinicio, $nmcoldtfim );
-				$sqlSubstituicaoJoinContratoATUAL .= " AND ". getSQLDataNaoVigenteSqSimples ( null, $nmcoldtinicioTemp, $nmcoldtfimTemp );
-			}
+			$pArrayParam = array(
+					vocontrato::getNmTabela(),
+					vocontrato::$nmAtrSqContrato,
+					$pChaveTuplaComparacaoSemSequencial,
+					$pChaveTuplaComparacaoSemSequencial,
+					$this->dtVigencia,
+					static::$NmTabContratoMater . "." .vocontrato::$nmAtrDtVigenciaInicialContrato,
+					static::$NmTabContratoATUAL . "." .vocontrato::$nmAtrDtVigenciaFinalContrato,
+					true,
+					$filtro,
+					false,
+		
+			);
+		
+			$filtro = $filtro . $conector . getSQLDataVigenteArrayParam($pArrayParam);
+		
+			//echo $filtro;
+			$conector = "\n AND ";
 			
-			//o filtro de vigencia deve ter o mesmo filtro utilizado no join, para nao dar conflito com zero resultado
-			$filtro = $filtro . $conector . $this->getSQLTermoMaiorSqVigencia(static::$NmTabContratoATUAL, false);
+			//so permite busca pelo tipo de vigencia se a data de vigencia for nula
+			$this->tpVigencia = "";
+		}else{
+			//so permite busca pelo tipo de vigencia se a data de vigencia for nula		
+			if (isAtributoValido($this->tpVigencia)) {
+				$nmcoldtinicioTemp = vocontrato::$nmAtrDtVigenciaInicialContrato;
+				$nmcoldtfimTemp = vocontrato::$nmAtrDtVigenciaFinalContrato;
+			
+				$nmcoldtinicio = static::$NmTabContratoMater . "." . $nmcoldtinicioTemp;
+				$nmcoldtfim = static::$NmTabContratoATUAL . "." . $nmcoldtfimTemp;
+					
+				if ($this->tpVigencia == dominioTpVigencia::$CD_OPCAO_VIGENTES) {
+					$filtro = $filtro . $conector . getSQLDataVigenteSqSimples ( null, $nmcoldtinicio, $nmcoldtfim );
+					$sqlSubstituicaoJoinContratoATUAL .= " AND ". getSQLDataVigenteSqSimples ( null, $nmcoldtinicioTemp, $nmcoldtfimTemp );
+				} else {
+					$filtro = $filtro . $conector . getSQLDataNaoVigenteSqSimples ( null, $nmcoldtinicio, $nmcoldtfim );
+					$sqlSubstituicaoJoinContratoATUAL .= " AND ". getSQLDataNaoVigenteSqSimples ( null, $nmcoldtinicioTemp, $nmcoldtfimTemp );
+				}
 				
-			$conector = "\n AND ";				
+				//o filtro de vigencia deve ter o mesmo filtro utilizado no join, para nao dar conflito com zero resultado
+				$filtro = $filtro . $conector . $this->getSQLTermoMaiorSqVigencia(static::$NmTabContratoATUAL, false);
+					
+				$conector = "\n AND ";				
+			}
 		}
 			
 		//substitui $CD_CAMPO_SUBSTITUICAO feito desde a confeccao do join da consulta em dbcontratoinfo
@@ -621,6 +652,19 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		$nmTABContratoAtual = filtroConsultarContratoConsolidacao::$NmTabContratoATUAL;
 		//return array("SUM($nmTABContratoAtual.".vocontrato::$nmAtrVlMensalContrato. ")", "SUM($nmTABContratoAtual.".vocontrato::$nmAtrVlGlobalContrato . ")");		
 		return array("$nmTABContratoAtual.".vocontrato::$nmAtrVlMensalContrato, "$nmTABContratoAtual.".vocontrato::$nmAtrVlGlobalContrato);
+	}
+	
+	static function montarColecaoExportarPlanilha($colecao){
+		$colecaoAtributos[] = new colunaPlanilha("Tipo", vocontrato::$nmAtrTipoContrato, colunaPlanilha::$TP_DADO_DOMINIO, "dominioTipoContrato");
+		$colecaoAtributos[] = new colunaPlanilha("Numero", vocontrato::$nmAtrCdContrato);
+		$colecaoAtributos[] = new colunaPlanilha("Ano", vocontrato::$nmAtrAnoContrato);
+		$colecaoAtributos[] = new colunaPlanilha("Objeto", vocontrato::$nmAtrObjetoContrato);
+		$colecaoAtributos[] = new colunaPlanilha("Gestor", vocontrato::$nmAtrGestorContrato);
+		$colecaoAtributos[] = new colunaPlanilha("Inicio", filtroConsultarContratoConsolidacao::$NmColDtInicioVigencia);
+		$colecaoAtributos[] = new colunaPlanilha("Fim", filtroConsultarContratoConsolidacao::$NmColDtFimVigencia);
+		$colecaoPlanilha = array ($colecaoAtributos, $colecao);
+		
+		return $colecaoPlanilha;		
 	}
 	
 }

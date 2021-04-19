@@ -189,8 +189,9 @@ function calcularModificacaoNovo(pArrayCampos) {
 	
 		/*var numMesesAoFinal = getValorCampoMoedaComoNumeroValido(campoNumMesesAoFim,0);	
 		if(numMesesAoFinal == 0){*/
-			var numMeses = getQtDias(campoDtModificacao.value, campoDtModificacaoFim.value)/28;
-			//alert("numeses" + numMeses);
+			//var numMeses = getQtDias(campoDtModificacao.value, campoDtModificacaoFim.value)/28;
+			var numMeses = getQtMesesAuxiliar(campoDtModificacao.value, campoDtModificacaoFim.value);
+			
 			if(isNaN(numMeses)){
 				numMeses = 0
 			}			
@@ -395,7 +396,9 @@ function getNumMesesNoPeriodo(pIDCampoDataInicial, pIDCampoDataFinal, pValidarDa
 	if(isPeriodoValido(campoDataInicial, campoDataFinal, false, false, false, true, false)) {
 		//alert("Data.Ini: " + dataInicial + "|Data.Fim: " + dataFinal);
 		var numDias = getQtDias(dataInicial, dataFinal);
-		numMeses = numDias/29;
+		numMeses = getQtMesesAuxiliar(dataInicial, dataFinal);
+		//numMeses = getQtMeses(dataInicial, dataFinal);
+				
 		//alert("numDias: " + numDias + "|Num.Meses: " + numMeses);
 	}	
 	
