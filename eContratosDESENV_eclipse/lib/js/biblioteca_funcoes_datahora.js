@@ -1658,13 +1658,26 @@ function getQtDias(pDataInicial, pDataFinal){
 
 function getQtMesesAuxiliar(pDataInicial, pDataFinal, pSemMensagem){
 	var numDias = getQtDias(pDataInicial, pDataFinal);
-	var retorno = numDias/30;
+	var meses = numDias/30;
+	var anos = meses/12;
 	
-	retorno = Math.round(retorno);
-	if(!pSemMensagem){
-		exibirMensagem("O termo tem duração aproximada de "+retorno + " meses. Confirme se está correto.");
+	mesesExatos = Math.round(meses);
+	anos = Math.round(anos);
+	
+	//a operacao abaixo verifica se o numero de anos esta com a aproximacao correta
+	//caso contrario, a corrige
+	var restodivisaoAnoMes = meses % 12;
+	//alert(restodivisaoAnoMes);
+	if(restodivisaoAnoMes >= 0.55){
+		//arredonda para baixo
+		mesesExatos = Math.floor(meses); 
 	}
-	return retorno ;
+	
+	if(!pSemMensagem){
+		exibirMensagem("O termo tem duração aproximada de "+mesesExatos + " meses, ou "+ anos +" anos. Confirme se está correto.");
+	}
+	
+	return mesesExatos ;
 }
 //Retorna a quantidade de meses entre as duas datas passadas como parï¿½metros
 function getQtMeses(pDataInicial, pDataFinal) {

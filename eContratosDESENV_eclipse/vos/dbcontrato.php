@@ -786,7 +786,7 @@ class dbcontrato extends dbprocesso {
 			$retorno .= $sqlConector . vocontrato::$nmAtrObservacaoContrato . " = " . $this->getVarComoString ( $voContrato->obs );
 			$sqlConector = ",";
 		}
-		
+		 //throw new excecaoGenerica("link:" . $voContrato->linkDoc);
 		if ($voContrato->linkDoc != null) {
 			$retorno .= $sqlConector . vocontrato::$nmAtrLinkDoc . " = " . $this->getVarComoString ( $voContrato->linkDoc );
 			$sqlConector = ",";

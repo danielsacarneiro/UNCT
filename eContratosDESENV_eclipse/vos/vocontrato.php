@@ -465,11 +465,29 @@ include_once ("voDemanda.php");
 		
 		$this->obs = @$_POST[self::$nmAtrObservacaoContrato];
 		
-		$this->linkDoc = @$_POST[self::$nmAtrLinkDoc];
-		$this->linkMinutaDoc = @$_POST[self::$nmAtrLinkMinutaDoc];
-        
-        // completa com os dados da entidade
+		/*$this->linkDoc = @$_POST[self::$nmAtrLinkDoc];
+		$this->linkMinutaDoc = @$_POST[self::$nmAtrLinkMinutaDoc];*/        
+		$this->linkDoc = $this->getFormularioLinkDoc(self::$nmAtrLinkDoc);
+		$this->linkMinutaDoc = $this->getFormularioLinkDoc(self::$nmAtrLinkMinutaDoc);
+		
+		// completa com os dados da entidade
         $this->getDadosFormularioEntidade ();        
+	}
+	
+	function getFormularioLinkDoc($nmatr){
+		$retorno = @$_POST[$nmatr];
+		//se for nulo, verifica se o endereco veio no campo identificado com a chave do contrato
+		if(!isAtributoValido($retorno)){
+			$nmCampo = $this->getValorChaveLogica();
+			$nmCampo .= $nmatr;
+			$retorno = @$_POST[$nmCampo];
+		}		
+		/*$nmCampo = $voContrato->getValorChaveLogica();
+		if(dominioTpDocumento::$CD_TP_DOC_CONTRATO == $tpDoc){
+			$enderecoTemp = vocontrato::getEnredeçoDocumento($voContrato->linkDoc);
+			$nmCampo .= vocontrato::$nmAtrLinkDoc;*/
+		
+		return $retorno;		
 	}
 	
 	function isChaveLogicaValida(){
@@ -566,6 +584,10 @@ include_once ("voDemanda.php");
 	}
 		
 	static function getEnredeçoDocumento($link){
+			$link = str_ireplace("\\\\", "\\" , $link);
+			$link = str_ireplace("//", "/" , $link);
+		//echoo($link);
+		
 			//para o caso de o link do doc vier em endereco relativo ("../")
 			$pastaUNCTPrincipalSubs = dominioTpDocumento::$ENDERECO_DRIVE . "\\" . dominioTpDocumento::$ENDERECO_PASTABASE_UNCT;
 			$link = str_ireplace("../", $pastaUNCTPrincipalSubs . "\\" , $link);

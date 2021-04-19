@@ -395,6 +395,7 @@ function getNumMesesNoPeriodo(pIDCampoDataInicial, pIDCampoDataFinal, pValidarDa
 	//funcao datahora.js
 	if(isPeriodoValido(campoDataInicial, campoDataFinal, false, false, false, true, false)) {
 		//alert("Data.Ini: " + dataInicial + "|Data.Fim: " + dataFinal);
+		//ambas as funcoes abaixo estao em bibli*.datahora.js
 		var numDias = getQtDias(dataInicial, dataFinal);
 		numMeses = getQtMesesAuxiliar(dataInicial, dataFinal);
 		//numMeses = getQtMeses(dataInicial, dataFinal);
