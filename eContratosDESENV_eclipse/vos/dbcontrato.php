@@ -27,7 +27,7 @@ class dbcontrato extends dbprocesso {
 	static $NM_PLANILHA_CONTRATOS= "Contratos Vigentes";
 	static $NM_PLANILHA_CONVENIOS= "Convênios";
 
-	function consultarFiltroManterContrato($voentidade, $filtro) {
+	function consultarFiltroManterContrato($filtro) {
 		$isArquivo = ("S" == $filtro->cdConsultarArquivo);
 
 		if ($isArquivo) {
@@ -60,9 +60,15 @@ class dbcontrato extends dbprocesso {
 		//$nmTabelaLicon = voContratoLicon::getNmTabelaStatic ( false );
 		//$nmTabelaDemandaSolicCompra = voDemandaPL::getNmTabelaStatic(false);
 		
+		$arrayCoalesceNmContratada = array(
+				"$nmTabelaPessoa." . vopessoa::$nmAtrNome,
+				"$nmTabela." . vocontrato::$nmAtrContratadaContrato,
+		);
+		
 		$arrayColunasRetornadas = array (
 				$nmTabela . ".*",
 				$nmTabelaPessoa . "." . vopessoa::$nmAtrDoc,
+				getSQLCOALESCE($arrayCoalesceNmContratada, vopessoa::$nmAtrNome),
 				getSQLCASEIsNULL("$nmTabelaContratoInfo.".voContratoInfo::$nmAtrCdContrato
 						, getVarComoString(constantes::$CD_NAO)
 						, getVarComoString(constantes::$CD_SIM)

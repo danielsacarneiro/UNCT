@@ -6,6 +6,7 @@ require_once (caminho_util . "/selectOR_AND.php");
 class filtroManter extends multiplosConstrutores {
 	
 	static $ID_SESSAO_COUNT_FILTRO_SESSAO = "ID_SESSAO_COUNT_FILTRO_SESSAO";
+	static $ID_REQ_NmFiltroExportarPlanilha = "ID_REQ_NmFiltroExportarPlanilha";
 	static $CD_CAMPO_SUBSTITUICAO = "[[[[QEEWER_CD_CAMPO_SUBSTITUICAO_EREWFDSFS]]]]";
 	static $NmColCOUNTFiltroManter = "NmColCOUNTFiltroManter";
 	// ...............................................................
@@ -23,6 +24,8 @@ class filtroManter extends multiplosConstrutores {
 	static $nmAtrCdConsultar = "consultar";
 	static $nmAtrIsTpVigenciaMAxSq = "nmAtrIsTpVigenciaMAxSq";
 	
+	private $nmMetodoExportarPlanilha = "";
+	private $nmVOEntidadeExportarPlanilha = "";
 	var $cdAtrOrdenacao;
 	var $cdOrdenacao;
 	var $inTrazerVigenciaFutura;
@@ -658,6 +661,32 @@ class filtroManter extends multiplosConstrutores {
 	
 	function getSQLFiltrosASubstituir(){
 		return $this->sqlFiltrosASubstituir;
+	}
+	
+	function setArrayObjetosExportarPlanilha($array){
+		$this->setNmVOEntidadeExportarPlanilha(get_class($array[0]));
+		//var_dump($this->voEntidadeExportarPlanilha);
+		$this->setNmMetodoExportarPlanilha($array[1]);
+	}
+	
+	function setNmMetodoExportarPlanilha($nmMetodo){
+		$this->nmMetodoExportarPlanilha = $nmMetodo;
+	}
+
+	function getNmMetodoExportarPlanilha(){
+		return $this->nmMetodoExportarPlanilha;
+	}
+	
+	function setNmVOEntidadeExportarPlanilha($nmvo){
+		$this->nmVOEntidadeExportarPlanilha = $nmvo;
+	}
+	
+	function getNmVOEntidadeExportarPlanilha(){
+		return $this->nmVOEntidadeExportarPlanilha;
+	}
+	
+	function isFiltroPlanilhaExportar(){
+		return $this->nmMetodoExportarPlanilha != "";
 	}
 	
 }

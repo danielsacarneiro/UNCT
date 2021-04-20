@@ -1603,7 +1603,7 @@ function getTextoGridContrato($voContrato, $empresa=null, $porExtenso=true, $omi
 	return $contrato;	
 }
 
-function getLinkExportarExcelTelaContrato($colecao){
+/*function getLinkExportarExcelTelaContrato($colecao){
 	putObjetoSessao(vocontrato::$ID_REQ_COLECAO_EXPORTAR_EXCEL, $colecao);
 	return getTextoLink("exportarPlanilha", "exportarExcel.php", "", true);
 }
@@ -1615,7 +1615,7 @@ function getLinkExportarPlanilha($colecao, $isTelaManterContrato = false){
 		putObjetoSessao(constantes::$ID_REQ_COLECAO_EXPORTAR_PLANILHA, $colecao);
 		return getTextoLink("exportarPlanilha", "../exportarPlanilha.php", "", true);
 	}
-}
+}*/
 
 function getContratoDemandaPorSEI($SEI){
 	$retorno = "";
@@ -1702,9 +1702,9 @@ function getContratosAVencerAno($ano=null){
 	$filtro->isRetornarQueryCompleta = true;
 	$filtro->inDesativado = constantes::$CD_NAO;
 	
-	$dbcontratoinfo = new dbcontrato();
+	$dbcontrato = new dbcontrato();
 	//$colecao = $dbcontratoinfo->consultarTelaConsulta(array($filtro));
-	$colecao = $dbcontratoinfo->consultarFiltroManterContrato(new vocontrato(), $filtro);
+	$colecao = $dbcontrato->consultarFiltroManterContrato($filtro);
 	
 	$query = $filtro->getSQL_QUERY_COMPLETA();
 	
@@ -1715,7 +1715,7 @@ function getContratosAVencerAno($ano=null){
 	. " FROM ($query) TAB GROUP BY $atribMes ORDER BY $atribMes"; 
 	
 	//echo $query;
-	$colecao = $dbcontratoinfo->consultarEntidade($query, false);
+	$colecao = $dbcontrato->consultarEntidade($query, false);
 	
 	//var_dump($colecao);
 	RETURN $colecao;	

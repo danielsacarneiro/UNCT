@@ -16,6 +16,10 @@ $voContrato = new vocontrato();
 
 $filtro  = new filtroManterContrato();
 $filtro->voPrincipal = $voContrato;
+$nmMetodoExportarPlanilha = "consultarFiltroManterContrato";
+$arrayObjetosExportarPlanilha = array($voContrato, $nmMetodoExportarPlanilha);
+$filtro->setArrayObjetosExportarPlanilha($arrayObjetosExportarPlanilha);
+
 $filtro = filtroManter::verificaFiltroSessao($filtro);
 
 $cdContrato = $filtro->cdContrato;
@@ -52,7 +56,7 @@ $requiredArquivo = "";
 
 $dbprocesso = new dbcontrato();
 //$colecao = $dbprocesso->consultarComPaginacao($voContrato, $filtro, $numTotalRegistros, $pagina, $qtdRegistrosPorPag);
-$colecao = $dbprocesso->consultarFiltroManterContrato($voContrato, $filtro);
+$colecao = $dbprocesso->$nmMetodoExportarPlanilha($filtro);
 
 //aqui verifica se pelo menos um filtro valido foi inserido
 //se nao, seta os filtros defalts para diminuir o retorno da consulta
@@ -548,9 +552,7 @@ function estatisticas(){
 						$filtro,
 						$voContrato->temTabHistorico,
 						true,
-						$colecao,
 						$linkMontaFiltroPortalTransparencia . $linkMontaFiltroLicon,
-						true,
 				);
 				
 				//echo getComponenteConsultaFiltro($voContrato->temTabHistorico, $filtro, true, $colecao);

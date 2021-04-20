@@ -643,6 +643,23 @@ class filtroManterContrato extends filtroManter {
 		);
 		return $varAtributos;
 	}
+	
+	static function getArrayColunasExportarPlanilha(){
+		$colecaoAtributos[] = new colunaPlanilha("Tipo", vocontrato::$nmAtrTipoContrato, colunaPlanilha::$TP_DADO_DOMINIO, "dominioTipoContrato");
+		$colecaoAtributos[] = new colunaPlanilha("Numero", vocontrato::$nmAtrCdContrato);
+		$colecaoAtributos[] = new colunaPlanilha("Ano", vocontrato::$nmAtrAnoContrato);
+		$colecaoAtributos[] = new colunaPlanilha("Proc.Lic", vocontrato::$nmAtrProcessoLicContrato);
+		$colecaoAtributos[] = new colunaPlanilha("Contratada", vopessoa::$nmAtrNome);
+		$colecaoAtributos[] = new colunaPlanilha("Objeto", vocontrato::$nmAtrObjetoContrato);
+		$colecaoAtributos[] = new colunaPlanilha("Assinatura", vocontrato::$nmAtrDtAssinaturaContrato);
+		$colecaoAtributos[] = new colunaPlanilha("Publicação", vocontrato::$nmAtrDtPublicacaoContrato);
+		$colecaoAtributos[] = new colunaPlanilha("Inicio", vocontrato::$nmAtrDtVigenciaInicialContrato);
+		$colecaoAtributos[] = new colunaPlanilha("Fim", vocontrato::$nmAtrDtVigenciaFinalContrato);
+		$colecaoAtributos[] = new colunaPlanilha("Mensal", vocontrato::$nmAtrVlMensalContrato, colunaPlanilha::$TP_DADO_MOEDA);
+		$colecaoAtributos[] = new colunaPlanilha("Global", vocontrato::$nmAtrVlGlobalContrato, colunaPlanilha::$TP_DADO_MOEDA);
+	
+		return $colecaoAtributos;
+	}
 }
 
 ?>

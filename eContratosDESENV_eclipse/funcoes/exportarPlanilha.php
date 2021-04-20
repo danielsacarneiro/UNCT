@@ -2,12 +2,16 @@
 <HTML>
 
 <?php 
+
 include_once("../config_lib.php");
 include_once(caminho_util."bibliotecaHTML.php");
 include_once(caminho_util."constantes.class.php");
 include_once(caminho_util. "select.php");
+include_once(caminho_lib. "filtroManter.php");
 include_once(caminho_vos . "dbcontrato.php");
 
+try{
+	inicio();
 
 // Configurações header para forçar o download
 header ("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
@@ -17,19 +21,24 @@ header ("Pragma: no-cache");
 header ("Content-type: application/x-msexcel");
 header ("Content-Disposition: attachment; filename=\"nome_arquivo.xls\"" );
 header ("Content-Description: PHP Generated Data" );
-
-try{
-	inicio();
-	$colecaoPlanilha = getObjetoSessao(constantes::$ID_REQ_COLECAO_EXPORTAR_PLANILHA);
-	//removeObjetoSessao(constantes::$ID_REQ_COLECAO_EXPORTAR_PLANILHA);	
-	/*$colecaoPlanilha = array(
-			array("codigo", "descricao"),
-			array(array("codigo" => "1", "descricao" => "daniel"), array("codigo" => "2", "descricao" => "amanda"))
-			,
-	);*/
+	
+	$nmFiltroExportar = @$_GET [filtroManter::$ID_REQ_NmFiltroExportarPlanilha];
+	$filtro = getObjetoSessao($nmFiltroExportar);
+	//$filtro = new filtroManter();
+	$nmVo = $filtro->getNmVOEntidadeExportarPlanilha(); 
+	$voExportar = new $nmVo();
+	//var_dump($voExportar);
+	$nmClasseDbProcesso = $voExportar->getNmClassProcesso();
+	$dbprocesso = new $nmClasseDbProcesso();
+	$nmMetodoExportarPlanilha = $filtro->getNmMetodoExportarPlanilha();
+	
+	//$colecaoPlanilha = getObjetoSessao(constantes::$ID_REQ_COLECAO_EXPORTAR_PLANILHA);
+	$filtro->isValidarConsulta = false;
+	$filtro->setaFiltroConsultaSemLimiteRegistro();
+	$colecaoPlanilha = $dbprocesso->$nmMetodoExportarPlanilha($filtro);
 	
 	if(isColecaoVazia($colecaoPlanilha)){
-		throw new excecaoConsultaVazia();	
+		throw new excecaoConsultaVazia("Erro ao exportar.");	
 	}
 		
 	$exportarExcel = true;
@@ -109,8 +118,8 @@ TD.tabeladados,TD.tabeladadosalinhadodireita,TD.tabeladadosalinhadocentro,TD.tab
              <TBODY>
                 <TR>
                 <?php
-                $arrayAtributos = $colecaoPlanilha[0];
-                $colecao = $colecaoPlanilha[1];
+                $arrayAtributos = $filtro->getArrayColunasExportarPlanilha();
+                $colecao = $colecaoPlanilha;
                 
                 $tamAtributos = sizeof($arrayAtributos);
                 for ($j=0;$j<$tamAtributos;$j++) {
@@ -156,7 +165,7 @@ TD.tabeladados,TD.tabeladadosalinhadodireita,TD.tabeladadosalinhadocentro,TD.tab
 </HTML>
 <?php 
 }catch(Exception $ex){
-	putObjetoSessao("vo", $vo, "mensagemErro.php");
-	tratarExcecaoHTML($ex);	
+	putObjetoSessao("vo", $vo);
+	tratarExcecaoHTML($ex, $vo, "mensagemErro.php");	
 }
 ?>

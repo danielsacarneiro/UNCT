@@ -13,7 +13,10 @@ $titulo = "CONSULTAR " . voContratoInfo::getTituloJSPConsolidacao();
 setCabecalho($titulo);
 
 $filtro  = new filtroConsultarContratoConsolidacao();
-//$filtro->voPrincipal = new vocontrato();
+//$filtro->voPrincipal = $vo;
+$nmMetodoExportarPlanilha = "consultarTelaConsultaConsolidacao";
+$arrayObjetosExportarPlanilha = array($vo, $nmMetodoExportarPlanilha);
+$filtro->setArrayObjetosExportarPlanilha($arrayObjetosExportarPlanilha);
 $filtro = filtroManter::verificaFiltroSessao($filtro);
 
 $cdHistorico = $filtro->cdHistorico;
@@ -21,7 +24,7 @@ $cdOrdenacao = $filtro->cdOrdenacao;
 $isHistorico = "S" == $cdHistorico; 
 
 $dbprocesso = $vo->dbprocesso;
-$colecao = $dbprocesso->consultarTelaConsultaConsolidacao($filtro);
+$colecao = $dbprocesso->$nmMetodoExportarPlanilha($filtro);
 
 $paginacao = $filtro->paginacao;
 if($filtro->temValorDefaultSetado){
@@ -430,12 +433,11 @@ function movimentacoes(){
 	        
        <?php
        
-       $colecaoPlanilha = filtroConsultarContratoConsolidacao::montarColecaoExportarPlanilha($colecao);
+       //$colecaoPlanilha = filtroConsultarContratoConsolidacao::montarColecaoExportarPlanilha($colecao);
        $pArrayFiltroConsulta = array(
        		$filtro,
        		false,
        		true,
-       		$colecaoPlanilha,
        );       
        
        //echo getComponenteConsultaFiltro($voContrato->temTabHistorico, $filtro, true, $colecao);

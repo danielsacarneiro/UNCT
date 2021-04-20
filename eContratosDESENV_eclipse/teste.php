@@ -10,40 +10,29 @@ inicio();
 $titulo = "TESTE de Funções UNCT";
 setCabecalho($titulo);
 
-echoo("___________________________");
+$nmFiltroExportar = "filtroConsultarContratoConsolidacao";
+//$filtro  = new $nmFiltroExportar(false);
+$filtro = getObjetoSessao($nmFiltroExportar);
+//$filtro = filtroManter::verificaFiltroSessao($filtro);
+//var_dump($filtro);
+//$filtro = new filtroManter();
+$nmVo = $filtro->getNmVOEntidadeExportarPlanilha();
+$voExportar = new $nmVo();
+//var_dump($voExportar);
+$nmClasseDbProcesso = $voExportar->getNmClassProcesso();
+$dbprocesso = new $nmClasseDbProcesso();
+var_dump($nmClasseDbProcesso);
+$nmMetodoExportarPlanilha = $filtro->getNmMetodoExportarPlanilha();
 
-$vousuario = new voUsuarioInfo();
-if(isUsuarioChefia()){
-	echo "CHEFIA";
-}ELSE{
-	ECHO "ESCRAVO!";
+//$colecaoPlanilha = getObjetoSessao(constantes::$ID_REQ_COLECAO_EXPORTAR_PLANILHA);
+//$filtro = new filtroManter();
+$filtro->setaFiltroConsultaSemLimiteRegistro();
+$filtro->isValidarConsulta = false;
+$colecaoPlanilha = $dbprocesso->$nmMetodoExportarPlanilha($filtro);
+
+if(isColecaoVazia($colecaoPlanilha)){
+	throw new excecaoConsultaVazia("Erro ao exportar.");
 }
-
-/*$vocontrato = new voContratoInfo();
-$vomsgregistro = new voMensageriaRegistro();
-
-$registro = array(
-		voMensageria::$nmAtrSq = 2,
-		voContratoInfo::$nmAtrAnoContrato = 2000,
-		voContratoInfo::$nmAtrCdContrato = 2,
-		voContratoInfo::$nmAtrTipoContrato = dominioTipoContrato::$CD_TIPO_PROFISCO,
-		vopessoa::$nmAtrEmail => "daniel.ribeiro@sefaz.pe.gov.br ; eduardo.s-goncalves@sefaz.pe.gov.br"
-		//vopessoa::$nmAtrEmail => "daniel.ribeiro@sefaz.pe.gov.br"
-);
-
-$dbMensageriaRegistro = new dbMensageriaRegistro ();
-try {
-	$dbMensageriaRegistro->incluirComEnvioEmail ( $registro );
-} catch ( Exception $e ) {
-	echoo ( $e->getMessage () );
-}*/
-//echo $db->getCaminhoArquivoPlanilha(dominioTipoContrato::$CD_TIPO_PROFISCO);
-
-
-/*$ano = 2018;
-$mes = "02";
-
-echo getDataUltimoDiaMesHtml($mes,$ano);*/
 
 
 ?>

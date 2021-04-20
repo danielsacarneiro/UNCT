@@ -654,7 +654,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		return array("$nmTABContratoAtual.".vocontrato::$nmAtrVlMensalContrato, "$nmTABContratoAtual.".vocontrato::$nmAtrVlGlobalContrato);
 	}
 	
-	static function montarColecaoExportarPlanilha($colecao){
+	static function getArrayColunasExportarPlanilha(){
 		$colecaoAtributos[] = new colunaPlanilha("Tipo", vocontrato::$nmAtrTipoContrato, colunaPlanilha::$TP_DADO_DOMINIO, "dominioTipoContrato");
 		$colecaoAtributos[] = new colunaPlanilha("Numero", vocontrato::$nmAtrCdContrato);
 		$colecaoAtributos[] = new colunaPlanilha("Ano", vocontrato::$nmAtrAnoContrato);
@@ -662,9 +662,8 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		$colecaoAtributos[] = new colunaPlanilha("Gestor", vocontrato::$nmAtrGestorContrato);
 		$colecaoAtributos[] = new colunaPlanilha("Inicio", filtroConsultarContratoConsolidacao::$NmColDtInicioVigencia);
 		$colecaoAtributos[] = new colunaPlanilha("Fim", filtroConsultarContratoConsolidacao::$NmColDtFimVigencia);
-		$colecaoPlanilha = array ($colecaoAtributos, $colecao);
 		
-		return $colecaoPlanilha;		
+		return $colecaoAtributos;		
 	}
 	
 }

@@ -7,8 +7,10 @@ Class colunaPlanilha extends multiplosConstrutores{
 	var $tpDado = null;
 	var $nmClasseDominio = null;
 	var $nmAtributo = "";
+	var $funcaoAExecutar = "";
 	
 	static $TP_DADO_DATA = "DATA";
+	static $TP_DADO_MOEDA = "MOEDA";
 	static $TP_DADO_DOMINIO= "DOMINIO";
 	
 	function __construct2($titulo, $nmAtributo) {
@@ -26,12 +28,25 @@ Class colunaPlanilha extends multiplosConstrutores{
 		$this->nmClasseDominio = $nmClasseDominio;
 	}
 	
+	function __construct5($titulo, $nmAtributo, $tpDado, $nmClasseDominio, $funcaoAExecutar) {
+		self::__construct4($titulo, $nmAtributo, $tpDado, $nmClasseDominio);
+		$this->funcaoAExecutar = $funcaoAExecutar;
+	}
 	
 	function getValorCampoRegistro($registro){
 		$retorno = $registro[$this->nmAtributo];
 		if(isAtributoValido($this->nmClasseDominio)){
 			$dominio = new $this->nmClasseDominio();
 			$retorno = $dominio::getDescricao($registro[$this->nmAtributo]);
+		}
+		
+		if($this->tpDado == static::$TP_DADO_MOEDA){
+			$retorno = getMoeda($registro[$this->nmAtributo]);
+		}
+		
+		if(isAtributoValido($this->funcaoAExecutar)){
+			$funcao = $this->funcaoAExecutar;
+			$retorno = $funcao($registro[$this->nmAtributo]);
 		}
 		
 		return $retorno;

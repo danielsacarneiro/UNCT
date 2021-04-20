@@ -747,8 +747,7 @@ function getComponenteConsultaPaginacaoArray($arrayParam) {
 	$filtro = $arrayParam[0];
 	$temHistorico = $arrayParam[1];
 	$comComboOrdenacao = $arrayParam[2];
-	$colecaoExportarExcel = $arrayParam[3];
-	$complementoHTML = $arrayParam[4];
+	$complementoHTML = $arrayParam[3];
 	$isExportarPlanilhaManterContrato = $arrayParam[5];
 	
 	if($comComboOrdenacao){
@@ -791,8 +790,13 @@ function getComponenteConsultaPaginacaoArray($arrayParam) {
 	$html .= "&nbsp;<button id='localizar' class='botaoconsulta' type='submit'>Consultar</button>\n";
 	$html .= "&nbsp;".getBorrachaTotalConsulta();
 	
-	if(!isColecaoVazia($colecaoExportarExcel)){
-		$html .= "&nbsp;". getLinkExportarPlanilha($colecaoExportarExcel, $isExportarPlanilhaManterContrato);
+	if($filtro->isFiltroPlanilhaExportar()){
+		//quando eh somente o nome do filtro exportar
+		//$filtro = new filtroConsultarContratoConsolidacao();
+		$nmFiltroExportar = $filtro->nmFiltro;
+		putObjetoSessao($nmFiltroExportar, $filtro);
+		$nmFiltroExportar = filtroManter::$ID_REQ_NmFiltroExportarPlanilha . "=$nmFiltroExportar";		
+		$html .= "&nbsp;". getTextoLink("exportarPlanilha", "../exportarPlanilha.php?$nmFiltroExportar", "", true);
 	}
 	
 	$html .= "$complementoHTML</TD></TR>";

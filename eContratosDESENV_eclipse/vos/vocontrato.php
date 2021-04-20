@@ -379,8 +379,15 @@ include_once ("voDemanda.php");
 		$this->objeto = $registrobanco[self::$nmAtrObjetoContrato];
 		$this->dtVigenciaInicial = getData($registrobanco[self::$nmAtrDtVigenciaInicialContrato]);
 		$this->dtVigenciaFinal = getData($registrobanco[self::$nmAtrDtVigenciaFinalContrato]);
+		
 		$this->vlMensal = getMoeda($registrobanco[self::$nmAtrVlMensalContrato]);
 		$this->vlGlobal = getMoeda($registrobanco[self::$nmAtrVlGlobalContrato]);
+		
+		//os campos valores abaixo sao usados para manter a formatacao original
+		//isso ocorreu por mudanca do framework, considerando que o contrato foi o primeiro vo a ser criado
+		$this->vlMensalSQL = $registrobanco[self::$nmAtrVlMensalContrato];
+		$this->vlGlobalSQL = $registrobanco[self::$nmAtrVlGlobalContrato];
+		
 		$this->procLic = $registrobanco[self::$nmAtrProcessoLicContrato];				
 		$this->cdProcLic = $registrobanco[self::$nmAtrCdProcessoLicContrato];
 		$this->anoProcLic = $registrobanco[self::$nmAtrAnoProcessoLicContrato];
