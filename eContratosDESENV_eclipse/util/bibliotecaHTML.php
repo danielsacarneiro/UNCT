@@ -748,7 +748,6 @@ function getComponenteConsultaPaginacaoArray($arrayParam) {
 	$temHistorico = $arrayParam[1];
 	$comComboOrdenacao = $arrayParam[2];
 	$complementoHTML = $arrayParam[3];
-	$isExportarPlanilhaManterContrato = $arrayParam[5];
 	
 	if($comComboOrdenacao){
 		$comboOrdenacao = $filtro->getComboOrdenacao();

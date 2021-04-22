@@ -2,7 +2,6 @@
 <HTML>
 
 <?php 
-
 include_once("../config_lib.php");
 include_once(caminho_util."bibliotecaHTML.php");
 include_once(caminho_util."constantes.class.php");
@@ -23,25 +22,9 @@ header ("Content-Disposition: attachment; filename=\"nome_arquivo.xls\"" );
 header ("Content-Description: PHP Generated Data" );
 	
 	$nmFiltroExportar = @$_GET [filtroManter::$ID_REQ_NmFiltroExportarPlanilha];
-	$filtro = getObjetoSessao($nmFiltroExportar);
-	//$filtro = new filtroManter();
-	$nmVo = $filtro->getNmVOEntidadeExportarPlanilha(); 
-	$voExportar = new $nmVo();
-	//var_dump($voExportar);
-	$nmClasseDbProcesso = $voExportar->getNmClassProcesso();
-	$dbprocesso = new $nmClasseDbProcesso();
-	$nmMetodoExportarPlanilha = $filtro->getNmMetodoExportarPlanilha();
-	
-	//$colecaoPlanilha = getObjetoSessao(constantes::$ID_REQ_COLECAO_EXPORTAR_PLANILHA);
-	$filtro->isValidarConsulta = false;
-	$filtro->setaFiltroConsultaSemLimiteRegistro();
-	$colecaoPlanilha = $dbprocesso->$nmMetodoExportarPlanilha($filtro);
-	
-	if(isColecaoVazia($colecaoPlanilha)){
-		throw new excecaoConsultaVazia("Erro ao exportar.");	
-	}
-		
-	$exportarExcel = true;
+	$filtro = getObjetoSessao($nmFiltroExportar);	
+	$colecaoPlanilha = $filtro->consultarExportarPlanilha();
+				
 	$titulo = "EXPORTAR PLANILHA";
 ?>
 <head>

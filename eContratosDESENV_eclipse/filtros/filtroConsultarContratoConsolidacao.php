@@ -12,6 +12,8 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	static $DS_PRORROGADO = "Será Prorrog.";	
 	
 	static $ID_REQ_InTemDemandaProrrogacao = "ID_REQ_InTemDemandaProrrogacao";
+	static $NmColQtdDiasSomadosTermoAtual = "NmColQtdDiasSomadosTermoAtual";
+	static $NmColDtFimVigenciaOP = "NmColDtFimVigenciaOrdemParalisacao";
 	static $NmColInSeraProrrogadoConsolidado = "NmColInSeraProrrogadoConsolidado";
 	static $NmColInTemDemanda = "InTemDemanda";
 	static $NmColInProrrogavel = "NmColInProrrogavel";

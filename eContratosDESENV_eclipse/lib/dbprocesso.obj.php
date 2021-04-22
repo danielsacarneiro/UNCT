@@ -405,6 +405,8 @@ class dbprocesso {
 			$retorno = $this->cDb->consultar ( $queryfinal );
 			$this->incluirFiltroNaSessao($filtro);	
 			$filtro->setConsultaRealizada();
+		}else{
+			static::exibeFlagValidacaoConsulta($validaConsulta);
 		}
 	
 		return $retorno;
@@ -438,6 +440,14 @@ class dbprocesso {
 		//echo $queryCount;
 		
 		return $queryCount;		
+	}
+	
+	static function exibeFlagValidacaoConsulta($validaConsulta){
+		if(!$validaConsulta){
+			$msg = getTextoHTMLDestacado("ATENÇÃO: Flag validação da consulta desativado.");
+			//echo $msg;
+			throw new excecaoConsultaVazia($msg);
+		}
 	}
 	
 	function consultarFiltro(&$filtro, $querySelect, $queryFrom, $validaConsulta) {
@@ -537,8 +547,9 @@ class dbprocesso {
 			}*/
 				
 			$filtro->setConsultaRealizada();
-		}
-	
+		}else{
+			static::exibeFlagValidacaoConsulta($validaConsulta);
+		}	
 		// echo $filtro->toString();
 	
 		return $retorno;
@@ -573,7 +584,10 @@ class dbprocesso {
 				 putObjetoSessao ( $filtro->nmFiltro, $filtro );
 			 }*/
 			$filtro->setConsultaRealizada();			
-		}		
+		}else{
+				static::exibeFlagValidacaoConsulta($validaConsulta);
+		}
+				
 		return $retorno;
 	}
 	

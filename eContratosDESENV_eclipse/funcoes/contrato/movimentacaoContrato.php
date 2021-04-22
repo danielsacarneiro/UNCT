@@ -202,7 +202,10 @@ function detalhar(isExcluir) {
                             
                             $tipo = $dominioTipoContrato->getDescricao($colecaoMov[$i]["ct_tipo"]);                            
                             
-                            //$especie = $especiesContrato->getDescricao($colecaoMov[$i]["ct_cd_especie"]);                        
+                            //$especie = $especiesContrato->getDescricao($colecaoMov[$i]["ct_cd_especie"]);      
+                            if($voAtual->cdEspecie == dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_ORDEM_PARALISACAO){
+                            	$especie = getTextoHTMLDestacado($especie);
+                            }
                     ?>
                     <TR class='dados'>
                         <TD class='tabeladados'>

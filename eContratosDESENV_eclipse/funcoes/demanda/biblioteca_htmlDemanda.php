@@ -789,6 +789,9 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDad
 	
 	$retorno .= "<br><br>Favor acusar recebimento, devolvendo a via assinada junto com os documentos que comprovem a legitimidade da representação legal do procurador assinante.";
 
+	$sublinhado = getTextoHTMLDestacado("o número do SEI", "black", true);
+	$retorno .= getTextoHTMLNegrito("<br><br>Para um melhor atendimento, ao comparecer a esta unidade para recolhimento da via contratual, favor trazer, em mãos, $sublinhado a que se refere a presente demanda.");
+
 	return $retorno;
 }
 

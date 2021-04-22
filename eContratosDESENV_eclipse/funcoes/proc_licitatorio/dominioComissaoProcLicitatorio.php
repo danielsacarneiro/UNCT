@@ -114,6 +114,19 @@ class dominioComissaoProcLicitatorio extends dominio {
 		$numPortarias = 0;
 		$numPortariaMaximaAExibir = 2;		
 		
+		$ano = 2021;
+		$pegarPortaria = $numPortarias < $numPortariaMaximaAExibir || $anoPortaria == null;
+		if($pegarPortaria || $anoPortaria == $ano){
+			$retorno .= "<br>Ano $ano:<br>";
+			$retorno .= "<b>840/$ano</b>(".static::getDescricao(static::$CD_CPL_I) ."), publicada no DOE de 17.04.$ano.<br>";
+			/*$retorno .= "<b>1341/$ano</b>(".static::getDescricao(static::$CD_CPL_I) ."), publicada no DOE de 30.07.$ano.<br>";
+			$retorno .= "<b>1065/$ano</b>(".static::getDescricao(static::$CD_CPL_I) ."), publicada no DOE de 27.05.$ano.<br>";
+			$retorno .= "<b>1066/$ano</b>(".static::getDescricao(static::$CD_CPL_II) ."), publicada no DOE de 27.05.$ano<br>";
+			$retorno .= "<b>XXX/$ano</b>(".static::getDescricao(static::$CD_CPL_III) ."), publicada no DOE de 27.05.$ano<br>";
+			$retorno .= "<b>1067/$ano</b>(".static::getDescricao(static::$CD_CPL_CEL) ."), publicada no DOE de 27.05.$ano<br>";*/
+			$numPortarias++;
+		}
+		
 		$ano = 2020;
 		$pegarPortaria = $numPortarias < $numPortariaMaximaAExibir || $anoPortaria == null;
 		if($pegarPortaria || $anoPortaria == $ano){

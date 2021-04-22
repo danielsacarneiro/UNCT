@@ -5,6 +5,7 @@ include_once(caminho_util. "dominio.class.php");
   	
   	static $CD_ESPECIE_CONTRATO_MATER = "CM";
   	static $CD_ESPECIE_CONTRATO_TERMOADITIVO = "TA";
+  	static $CD_ESPECIE_CONTRATO_ORDEM_PARALISACAO = "OP";
   	static $CD_ESPECIE_CONTRATO_APOSTILAMENTO = "AP";
   	static $CD_ESPECIE_CONTRATO_TERMOAJUSTE = "AJ";
   	//static $CD_ESPECIE_CONTRATO_CESSAO_USO = "CS";
@@ -18,6 +19,7 @@ include_once(caminho_util. "dominio.class.php");
 
   	static $DS_ESPECIE_CONTRATO_MATER = "Mater";
   	static $DS_ESPECIE_CONTRATO_TERMOADITIVO = "Termo Aditivo";
+  	static $DS_ESPECIE_CONTRATO_ORDEM_PARALISACAO = "Ordem Paralisação";
   	static $DS_ESPECIE_CONTRATO_APOSTILAMENTO = "Apostilamento";
   	
   	static $DS_ESPECIE_CONTRATO_TERMOAJUSTE = "Termo Ajuste Contas";
@@ -53,6 +55,7 @@ include_once(caminho_util. "dominio.class.php");
         				self::$CD_ESPECIE_CONTRATO_MATER => self::$DS_ESPECIE_CONTRATO_MATER,
         				self::$CD_ESPECIE_CONTRATO_APOSTILAMENTO => self::$DS_ESPECIE_CONTRATO_APOSTILAMENTO,
         				self::$CD_ESPECIE_CONTRATO_TERMOADITIVO => self::$DS_ESPECIE_CONTRATO_TERMOADITIVO,
+						self::$CD_ESPECIE_CONTRATO_ORDEM_PARALISACAO => self::$DS_ESPECIE_CONTRATO_ORDEM_PARALISACAO,
         				self::$CD_ESPECIE_CONTRATO_TERMOAJUSTE => self::$DS_ESPECIE_CONTRATO_TERMOAJUSTE,
         				//self::$CD_ESPECIE_CONTRATO_CESSAO_USO => "Termo de Cessão de Uso",
         				self::$CD_ESPECIE_CONTRATO_RERRATIFICACAO => self::$DS_ESPECIE_CONTRATO_RERRATIFICACAO,
@@ -119,6 +122,7 @@ include_once(caminho_util. "dominio.class.php");
 		return array(
 				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER,
 				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_TERMOADITIVO,
+				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_ORDEM_PARALISACAO,
 				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_RERRATIFICACAO,
 				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_RESCISAO_AMIGAVEL,
 				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_RESCISAO_ENCERRAMENTO,

@@ -689,6 +689,27 @@ class filtroManter extends multiplosConstrutores {
 		return $this->nmMetodoExportarPlanilha != "";
 	}
 	
+	function consultarExportarPlanilha(){
+		$nmVo = $this->getNmVOEntidadeExportarPlanilha();
+		$voExportar = new $nmVo();
+		//var_dump($voExportar);
+		$nmClasseDbProcesso = $voExportar->getNmClassProcesso();
+		$dbprocesso = new $nmClasseDbProcesso();
+		$nmMetodoExportarPlanilha = $this->getNmMetodoExportarPlanilha();
+		
+		//$colecaoPlanilha = getObjetoSessao(constantes::$ID_REQ_COLECAO_EXPORTAR_PLANILHA);
+		$this->isValidarConsulta = false;
+		$this->setaFiltroConsultaSemLimiteRegistro();
+		
+		$colecaoPlanilha = $dbprocesso->$nmMetodoExportarPlanilha($this);
+		
+		if(isColecaoVazia($colecaoPlanilha)){
+			throw new excecaoConsultaVazia("Erro ao exportar.");
+		}
+		
+		return $colecaoPlanilha;		
+	}
+	
 }
 
 /*
