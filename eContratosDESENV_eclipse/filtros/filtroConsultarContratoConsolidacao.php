@@ -30,6 +30,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	static $NmColSqEspecieContratoAtual = "NmColSqEspecieContratoAtual";
 	static $NmTabContratoMater = "TAB_CONTRATO_MATER";
 	static $NmTabContratoATUAL = "TAB_CONTRATO_ATUAL";
+	static $NmTABDadosOrdemParalisacao = "NmTABDadosOrdemParalisacao";
 	static $NmTabDemandaContratoATUAL = "TAB_DEMANDA_CONTRATO_ATUAL";
 	
 	static $nmAtrQtdDiasParaVencimento = "nmAtrQtdDiasParaVencimento";
@@ -136,7 +137,10 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
 		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( false );
 		$nmTabContratoATUAL = static::$NmTabContratoATUAL;	
+		$nmTabDadosOrdemParalisacao = static::$NmTABDadosOrdemParalisacao;
 		$nmTabDemandaContratoATUAL = static::$NmTabDemandaContratoATUAL;
+		//a data final de vigencia passa a considerar as ordens de paralisacao
+		$colunaACompararDtFim = filtroConsultarContratoConsolidacao::getAtributoDtFimVigenciaConsolidacao();
 
 		if($this->qtdDiasParaVencimentoProposta != null){	
 			$dtReferencia = getVarComoDataSQL(getDataHoje());
@@ -157,8 +161,9 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		}
 		
 		if($this->qtdDiasParaVencimento != null){
-						
-			$nmAtributoDataNotificacao = getDataSQLDiferencaDias(getVarComoDataSQL(getDataHoje()), static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato);
+			//$nmColunaDtFim = static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato;						
+			$colunaAComparar = static::getAtributoDtFimVigenciaConsolidacao();
+			$nmAtributoDataNotificacao = getDataSQLDiferencaDias(getVarComoDataSQL(getDataHoje()), $colunaAComparar);
 			$filtro = $filtro . $conector . "$nmAtributoDataNotificacao >=0 AND $nmAtributoDataNotificacao <= $this->qtdDiasParaVencimento";
 				
 			$conector  = "\n AND ";
@@ -394,24 +399,28 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		
 		$sqlSubstituicaoJoinContratoATUAL = "";
 		if ($this->dtFimVigenciaInicial != null) {
-			$colunaAComparar = static::getComparacaoWhereDataVigencia(static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato);
+			//$colunaAComparar = static::getComparacaoWhereDataVigencia(static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato);
+			$colunaAComparar = $colunaACompararDtFim;
+			
 			$sqlFiltroTemp = getSQLConsultaIntervaloData($colunaAComparar, $this->dtFimVigenciaInicial, ">=");
 			//$sqlFiltroTemp = "($colunaAComparar IS NOT NULL AND $colunaAComparar >= " . getVarComoData($this->dtFimVigenciaInicial) . ") ";
 			$filtro = $filtro . $conector . $sqlFiltroTemp;
 			
 			//vai sem o nome da tabela porque o filtro abaixo vai ser utilizado na tabela interna do maior SQ no join
-			$sqlSubstituicaoJoinContratoATUAL .= " AND " . getSQLConsultaIntervaloData(vocontrato::$nmAtrDtVigenciaFinalContrato, $this->dtFimVigenciaInicial, ">=");
+			//[ATENCAO: COMENTOU O TRECHO ABAIXO APOS A MUDANCA COM DATA FIM VIGENCIA CONSIDERANDO ORDEM DE PARALISACAO]: checar se isso tratá algum impacto
+			//$sqlSubstituicaoJoinContratoATUAL .= " AND " . getSQLConsultaIntervaloData(vocontrato::$nmAtrDtVigenciaFinalContrato, $this->dtFimVigenciaInicial, ">=");
 		
 			$conector = "\n AND ";
 		}
 		
 		if ($this->dtFimVigenciaFinal != null) {
-			$colunaAComparar = static::getComparacaoWhereDataVigencia(static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato);
+			//$colunaAComparar = static::getComparacaoWhereDataVigencia(static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato);
+			$colunaAComparar = $colunaACompararDtFim;
 			$sqlFiltroTemp = getSQLConsultaIntervaloData($colunaAComparar, $this->dtFimVigenciaFinal, "<=");
 			//$sqlFiltroTemp = "($colunaAComparar IS NOT NULL AND $colunaAComparar <= " . getVarComoData($this->dtFimVigenciaFinal) . ") ";
 			$filtro = $filtro . $conector . $sqlFiltroTemp;
 			
-			$sqlSubstituicaoJoinContratoATUAL .= " AND " . getSQLConsultaIntervaloData(vocontrato::$nmAtrDtVigenciaFinalContrato, $this->dtFimVigenciaFinal, "<=");
+			//$sqlSubstituicaoJoinContratoATUAL .= " AND " . getSQLConsultaIntervaloData(vocontrato::$nmAtrDtVigenciaFinalContrato, $this->dtFimVigenciaFinal, "<=");
 		
 			$conector = "\n AND ";
 		}		
@@ -422,7 +431,6 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 					,vocontrato::$nmAtrAnoContrato
 					, vocontrato::$nmAtrTipoContrato);
 				
-		
 			$pArrayParam = array(
 					vocontrato::getNmTabela(),
 					vocontrato::$nmAtrSqContrato,
@@ -430,7 +438,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 					$pChaveTuplaComparacaoSemSequencial,
 					$this->dtVigencia,
 					static::$NmTabContratoMater . "." .vocontrato::$nmAtrDtVigenciaInicialContrato,
-					static::$NmTabContratoATUAL . "." .vocontrato::$nmAtrDtVigenciaFinalContrato,
+					$colunaACompararDtFim,
 					true,
 					$filtro,
 					false,
@@ -451,7 +459,8 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 				$nmcoldtfimTemp = vocontrato::$nmAtrDtVigenciaFinalContrato;
 			
 				$nmcoldtinicio = static::$NmTabContratoMater . "." . $nmcoldtinicioTemp;
-				$nmcoldtfim = static::$NmTabContratoATUAL . "." . $nmcoldtfimTemp;
+				//$nmcoldtfim = static::$NmTabContratoATUAL . "." . $nmcoldtfimTemp;
+				$nmcoldtfim = $colunaACompararDtFim;
 					
 				if ($this->tpVigencia == dominioTpVigencia::$CD_OPCAO_VIGENTES) {
 					$filtro = $filtro . $conector . getSQLDataVigenteSqSimples ( null, $nmcoldtinicio, $nmcoldtfim );
@@ -461,7 +470,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 					$sqlSubstituicaoJoinContratoATUAL .= " AND ". getSQLDataNaoVigenteSqSimples ( null, $nmcoldtinicioTemp, $nmcoldtfimTemp );
 				}
 				
-				//o filtro de vigencia deve ter o mesmo filtro utilizado no join, para nao dar conflito com zero resultado
+				//o filtro de vigencia deve ter o mesmo filtro utilizado no join em dbcontratoinfo, para nao dar conflito com zero resultado
 				$filtro = $filtro . $conector . $this->getSQLTermoMaiorSqVigencia(static::$NmTabContratoATUAL, false);
 					
 				$conector = "\n AND ";				
@@ -486,11 +495,18 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		return $filtro;
 	}
 	
-	function getSQLTermoMaiorSqVigencia($nmTabContrato, $comWhere = true){
+	function getSQLTermoMaiorSqVigencia($nmTabContrato, $isTabInterna = true){
+		$comWhere = $isTabInterna;
 		
 		$retorno = "";
 		//pega o contrato atual (termo atual), maior sequencial, desde que a data final de vigencia nao seja nula ou '0000-00-00'
-		$nmColunaComparacao = "$nmTabContrato." . vocontrato::$nmAtrDtVigenciaFinalContrato;
+		if($isTabInterna){
+			//para o caso de ser filtro de tabela interna
+			$nmColunaComparacao = "$nmTabContrato." . vocontrato::$nmAtrDtVigenciaFinalContrato;
+		}else{
+			//para o caso da consulta se referir ao filtro da tela de chamada, sempre deverá ser o campo abaixo
+			$nmColunaComparacao = static::getAtributoDtFimVigenciaConsolidacao();
+		}
 		
 		$where = "WHERE";
 		if(!$comWhere){
@@ -521,7 +537,9 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	 * @return string
 	 */
 	static function getSQLQtdAnosVigenciaContrato(){
-		return getDataSQLDiferencaAnos(static::$NmTabContratoMater . "." . vocontrato::$nmAtrDtVigenciaInicialContrato, static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato);
+		//$colunaAComparar = static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato;
+		$colunaAComparar = static::getAtributoDtFimVigenciaConsolidacao();
+		return getDataSQLDiferencaAnos(static::$NmTabContratoMater . "." . vocontrato::$nmAtrDtVigenciaInicialContrato, $colunaAComparar);
 	}
 	
 	static function getSQLComparacaoPrazoProrrogacao($filtroPorrogacao){
@@ -590,6 +608,20 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		
 		return $retorno;
 	}
+	
+	static function getAtributoDtFimVigenciaConsolidacao(){
+		$nmTabContratoATUAL = static::$NmTabContratoATUAL;
+		$nmTabDadosOrdemParalisacao = static::$NmTABDadosOrdemParalisacao;
+		
+		$nmTempAtributoDtVigenciaFim = $nmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato;
+		//passa a considerar a mudanca de vigencia devido a ordens de paralisacao
+		$arrayAtributosCoalesceOP[] = "$nmTabDadosOrdemParalisacao." . filtroConsultarContratoConsolidacao::$NmColDtFimVigenciaOP;
+		$arrayAtributosCoalesceOP[] = $nmTempAtributoDtVigenciaFim;
+		$nmTempAtributoDtVigenciaFim = getSQLCOALESCE($arrayAtributosCoalesceOP);
+		$nmTempAtributoDtVigenciaFim = filtroConsultarContratoConsolidacao::getComparacaoWhereDataVigencia($nmTempAtributoDtVigenciaFim);
+	
+		return $nmTempAtributoDtVigenciaFim;
+	}
 		
 	static function getComparacaoWhereDataVigencia($nmAtributoTabela){
 		return getSQLCASE($nmAtributoTabela
@@ -612,7 +644,8 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 				"$nmTabela.".vocontrato::$nmAtrAnoContrato => "Ano",
 				"$nmTabela.".vocontrato::$nmAtrCdContrato => "Número",
 				"$nmTabela.".vocontrato::$nmAtrTipoContrato => "Tipo",
-				static::$NmColDtFimVigencia => "Fim.Vigencia",
+				//static::$NmColDtFimVigencia => "Fim.Vigencia",
+				static::getAtributoDtFimVigenciaConsolidacao() => "Fim.Vigencia",
 		);
 		return $varAtributos;
 	}

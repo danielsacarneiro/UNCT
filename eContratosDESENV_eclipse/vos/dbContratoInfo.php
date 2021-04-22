@@ -275,7 +275,7 @@ class dbContratoInfo extends dbprocesso {
 		
 		return $queryJoin;		
 	} 
-	
+		
 	function consultarTelaConsultaConsolidacao($filtro) {		
 		
 		$vo = new vocontrato();		
@@ -285,7 +285,7 @@ class dbContratoInfo extends dbprocesso {
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( $isHistorico );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
 		$nmTabelaPessoaGestorContratoInfo = "TAB_GESTOR_CONTRATO_INFO";
-		$nmTabDadosOrdemParalisacao = "NM_TAB_DADOS_OP";
+		$nmTabDadosOrdemParalisacao = filtroConsultarContratoConsolidacao::$NmTABDadosOrdemParalisacao;
 		//echo "tabela vo: $nmTabela | tabela contrato_info: $nmTabelaContratoInfo";
 		
 		$nmTabContratoMater = filtroConsultarContratoConsolidacao::$NmTabContratoMater;
@@ -306,16 +306,11 @@ class dbContratoInfo extends dbprocesso {
 				"$nmTabContratoATUAL." . vocontrato::$nmAtrGestorContrato);
 		
 		//faz as operacoes nas datas de vigencia
-		$nmTempAtributoDtVigenciaInicio = $nmTabContratoMater . "." . vocontrato::$nmAtrDtVigenciaInicialContrato;		
-		$nmTempAtributoDtVigenciaFim = $nmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato;
-		//passa a considerar a mudanca de vigencia devido a ordens de paralisacao
-		$arrayAtributosCoalesceOP[] = "$nmTabDadosOrdemParalisacao." . filtroConsultarContratoConsolidacao::$NmColDtFimVigenciaOP;
-		$arrayAtributosCoalesceOP[] = $nmTempAtributoDtVigenciaFim;
-		$nmTempAtributoDtVigenciaFim = getSQLCOALESCE($arrayAtributosCoalesceOP);
-		
+		$nmTempAtributoDtVigenciaInicio = $nmTabContratoMater . "." . vocontrato::$nmAtrDtVigenciaInicialContrato;	
 		//corrige para o caso da data ser inserida em formato errado antigo da planilha
 		$nmTempAtributoDtVigenciaInicio = filtroConsultarContratoConsolidacao::getComparacaoWhereDataVigencia($nmTempAtributoDtVigenciaInicio);
-		$nmTempAtributoDtVigenciaFim = filtroConsultarContratoConsolidacao::getComparacaoWhereDataVigencia($nmTempAtributoDtVigenciaFim);
+		//somente a data de vigencia pode ser alterada pelas ordens de paralisacao
+		$nmTempAtributoDtVigenciaFim = filtroConsultarContratoConsolidacao::getAtributoDtFimVigenciaConsolidacao();		
 				
 		$arrayColunasRetornadas = array (
 				$nmTabela . "." . vocontrato::$nmAtrAnoContrato,
@@ -383,10 +378,9 @@ class dbContratoInfo extends dbprocesso {
 			
 		$groupbyinterno = $nmTabela . "." . vocontrato::$nmAtrAnoContrato . "," . $nmTabela . "." . vocontrato::$nmAtrCdContrato . "," . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;	
 		
-		//$nmTabContratoInterna = vocontrato::getNmTabelaStatic ( false );
 		$nmTabContratoInterna = $nmTabela;		
 		$nmTabContratoMINSq = "TAB_CONTRATO_MIN_SQ";
-		$nmTabContratoMAXSq = "TAB_CONTRATO_MAX_SQ";
+		//$nmTabContratoMAXSq = "TAB_CONTRATO_MAX_SQ";
 		
 		//TABELA $nmTabContratoMater
 		$queryJoin .= "\n LEFT JOIN ";
