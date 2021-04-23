@@ -37,31 +37,6 @@ function formataFormEditalPorTpDemanda(pNmCampoTpDemanda, pColecaoNmObjetosForm,
 	formataFormPorTpDemanda(pNmCampoTpDemanda, pCdTpDemandaEdital, pColecaoNmObjetosForm);	
 }
 
-
-/*function formataFormEditalPorTpDemanda(pNmCampoTpDemanda, pColecaoNmObjetosForm, pCdTpDemandaEdital, pArrayComplemento) {
-	var pNmCampoPrioridadeDemanda = null;
-	var pCdPrioridadeAlta = null;
-	if(pArrayComplemento != null){
-		pNmCampoPrioridadeDemanda = pArrayComplemento[0]; 
-		pCdPrioridadeAlta = pArrayComplemento[1];
-	}
-
-	//biblioprincipal
-	var campoPrioridadeDemanda = getElementByIdValido(pNmCampoPrioridadeDemanda);
-	var campoTpDemanda = document.getElementById(pNmCampoTpDemanda);
-	var cdTpDemanda = campoTpDemanda.value;
-	
-	var isDemandaEdital = cdTpDemanda == pCdTpDemandaEdital;
-	if(campoPrioridadeDemanda != null){
-		if(isDemandaEdital && isCampoEditavel(campoPrioridadeDemanda) && pCdPrioridadeAlta != null){
-			campoPrioridadeDemanda.value = pCdPrioridadeAlta;
-		}else{
-			campoPrioridadeDemanda.value = "";
-		}
-	}
-	habilitarCamposPorNome(pColecaoNmObjetosForm, isDemandaEdital);	
-}*/
-
 function formataFormTpDemanda(pNmCampoTpDemanda, pNmCampoAtributos) {
 	//precisa da bibliotecafuncoesprincipal.js
 	campoTpDemanda = document.getElementById(pNmCampoTpDemanda);

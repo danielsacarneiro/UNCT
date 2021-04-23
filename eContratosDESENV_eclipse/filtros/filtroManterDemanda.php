@@ -8,6 +8,7 @@ class filtroManterDemanda extends filtroManter{
 	public $nmFiltro = "filtroManterDemanda";
 	
 	static $NM_TABELA_DADOS_CONTRATO_DEMANDA = "NM_TABELA_DADOS_CONTRATO_DEMANDA";
+	
 	static $NM_TABELA_USUARIO_UNCT = "NM_TABELA_USUARIO_UNCT";
 	static $NM_COL_NOME_RESP_UNCT = "NM_COL_NOME_RESP_UNCT";
 	static $NmAtrFasePlanilha = "NmAtrFasePlanilha";
@@ -214,7 +215,7 @@ class filtroManterDemanda extends filtroManter{
 		$nmTabelaDemandaPL = voDemandaPL::getNmTabelaStatic(false);
 		$nmTabelaProcLic = voProcLicitatorio::getNmTabelaStatic(false);
 		$nmTabelaPA = voPA::getNmTabelaStatic(false);
-		$nmTabelaContrato = vocontrato::getNmTabelaStatic(false);
+		$nmTabelaContrato = vocontrato::getNmTabela();
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic(false);
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic(false);
 					
@@ -1019,21 +1020,23 @@ class filtroManterDemanda extends filtroManter{
 		//VERIFICA SE A DATA DO CONTRATO DA DEMANDA JA FOI ULTRaPASSADA - o contrato estah atrasado e sob risco
 		if(isAtributoValido($this->inDemandasContratosAVencer) && getAtributoComoBooleano($this->inDemandasContratosAVencer)){
 			
-			$arrayNomesAtributos = static::getNmAtributosDataACompararDemandasContratoAVencer($nmTabelaDadosDemandaContrato, $nmTabelaContrato);
-			/*$nmTabelaContratoMAX = $nmTabelaContrato;			
-			$nmAtrDataAcompararContratoDemanda = "$nmTabelaDadosDemandaContrato." . vocontrato::$nmAtrDtVigenciaInicialContrato;
-			$nmAtrDataAcompararContratoMAX = "$nmTabelaContratoMAX." . vocontrato::$nmAtrDtVigenciaFinalContrato;*/			
-				
+			$arrayNomesAtributos = static::getNmAtributosDataACompararDemandasContratoAVencer();
 			$nmAtrDataAcompararContratoDemanda = $arrayNomesAtributos[0];
 			$nmAtrDataAcompararContratoMAX = $arrayNomesAtributos[1];
 			$dataAcomparar = getVarComoDataSQL(somarOuSubtrairDiasNaData(getDataHoje(), constantes::$qts_dias_ALERTA_DEMANDA_CONTRATO_AVENCER));
+			//echo $dataAcomparar;
+			
+			$sqlEspeciePermitida = "$nmTabelaDemandaContrato.". vocontrato::$nmAtrCdEspecieContrato 
+			. " IN (" 
+			. getSQLStringFormatadaColecaoIN(dominioEspeciesContrato::getColecaoTermosQuePodemAlterarVigencia(), true)
+			. ") AND ";
 			
 			$filtro = $filtro . $conector
-			."("
-			."($nmAtrDataAcompararContratoDemanda IS NOT NULL AND $nmAtrDataAcompararContratoDemanda <= $dataAcomparar)" 
+			."($sqlEspeciePermitida"
+			."(($nmAtrDataAcompararContratoDemanda IS NOT NULL AND $nmAtrDataAcompararContratoDemanda <= $dataAcomparar)" 
 			. " OR "	
 			. "($nmAtrDataAcompararContratoDemanda IS NULL AND $nmAtrDataAcompararContratoMAX <= $dataAcomparar)" 
-			. ")"	
+			. "))"	
 			;
 		
 			$conector  = "\n AND ";
@@ -1048,11 +1051,12 @@ class filtroManterDemanda extends filtroManter{
 		return $filtro;
 	}
 	
-	static function getNmAtributosDataACompararDemandasContratoAVencer($nmTabelaContratoMaisAtual){	
+	static function getNmAtributosDataACompararDemandasContratoAVencer(){	
 		
 		$nmTabelaDadosDemandaContrato = static::$NM_TABELA_DADOS_CONTRATO_DEMANDA;
+		$nmTabelaDadosDemandaContratoMAX = vocontrato::getNmTabela();
 		$nmAtrDataAcompararContratoDemanda = "$nmTabelaDadosDemandaContrato." . vocontrato::$nmAtrDtVigenciaInicialContrato;
-		$nmAtrDataAcompararContratoMAX = "$nmTabelaContratoMaisAtual." . vocontrato::$nmAtrDtVigenciaFinalContrato;
+		$nmAtrDataAcompararContratoMAX = "$nmTabelaDadosDemandaContratoMAX." . vocontrato::$nmAtrDtVigenciaFinalContrato;
 		
 		return array($nmAtrDataAcompararContratoDemanda,$nmAtrDataAcompararContratoMAX);		
 	}

@@ -100,13 +100,14 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		$assunto = "$codigo - $assunto";
   		$dsPessoa = $registro[vopessoa::$nmAtrNome];
   		if($dsPessoa != null && $dsPessoa != ""){
-  			$codigo = "$codigo - $dsPessoa"; 
+  			$codigo = "$codigo - $dsPessoa";
+  			$assunto .= ": $dsPessoa";
   		}
   		
   		if(!$isContratoImprorrogavel){
-  			$msg .= static::getMensagemGestor($codigo,$numFrequencia);
+  			$msg .= voMensageriaRegistro::getMensagemGestor($codigo,$numFrequencia);
   		}else{
-  			$msg .= static::getMensagemGestorContratoImprorrogavel($codigo,$numFrequencia);
+  			$msg .= voMensageriaRegistro::getMensagemGestorContratoImprorrogavel($codigo,$numFrequencia);
   		}
   		
   		//$msg .= "<br>O contrato vencerá em dias.";
@@ -134,11 +135,16 @@ include_once(caminho_lib. "dbprocesso.obj.php");
 		return $log;
   	}
   	
+  	/**
+  	 * @deprecated
+  	 * @param unknown $codigoContrato
+  	 * @param unknown $numFrequencia
+  	 * @return string
+  	 */
   	static function getMensagemGestor($codigoContrato, $numFrequencia){  		
-  		//$retorno = "<br><br>Caro Gestor, favor verificar o vencimento do contrato $codigo.";
+  		return voMensageriaRegistro::getMensagemGestor($codigoContrato, $numFrequencia);
   		
-  		//$numFrequencia = complementarCharAEsquerda($numFrequencia, "0", 3);
-  		$emailPrincipal = email_sefaz::$REMETENTE_PRINCIPAL;
+  		/*$emailPrincipal = email_sefaz::$REMETENTE_PRINCIPAL;
   		$emailCopia = email_sefaz::$REMETENTE_COPIA;
   		
   		$retorno = "<br>Prezado gestor,
@@ -158,14 +164,19 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		<br><br>Caso o pedido de prorrogação já tenha sido formalizado, <b>favor informar o número do SEI que trata da presente questão</b>.
   		<br><br>Na ausência de manifestação, este e-mail será reenviado a cada <b>$numFrequencia dia(s)</b>.";  		 		
   		
-  		return $retorno;
+  		return $retorno;*/
   	}
   	
+  	/**
+  	 * @deprecated
+  	 * @param unknown $codigoContrato
+  	 * @param unknown $numFrequencia
+  	 * @return string
+  	 */
   	static function getMensagemGestorContratoImprorrogavel($codigoContrato, $numFrequencia){
-  		//$retorno = "<br><br>Caro Gestor, favor verificar o vencimento do contrato $codigo.";
-  	
-  		//$numFrequencia = complementarCharAEsquerda($numFrequencia, "0", 3);
-  		$emailPrincipal = email_sefaz::$REMETENTE_PRINCIPAL;
+  		return voMensageriaRegistro::getMensagemGestorContratoImprorrogavel($codigoContrato, $numFrequencia);
+
+  		/*$emailPrincipal = email_sefaz::$REMETENTE_PRINCIPAL;
   		$emailCopia = email_sefaz::$REMETENTE_COPIA;
   	
   		$retorno = "<br>Prezado gestor,
@@ -185,7 +196,7 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		
   		<br><br>Na ausência de manifestação, este e-mail será reenviado a cada <b>$numFrequencia dia(s)</b>.";
   	
-  		return $retorno;
+  		return $retorno;*/
   	}
   	 
   	function getSQLValuesInsert($vo){

@@ -538,7 +538,8 @@ function movimentacoes(){
                         //$termoAtual = $sqEspeciaAtual ."o $cdEspeciaAtual";
                         $gestor = $registro[vocontrato::$nmAtrGestorContrato];
                         
-                        $inPrazoProrrogacao = $registro[voContratoInfo::$nmAtrInPrazoProrrogacao];                        
+                        $inPrazoProrrogacao = $registro[voContratoInfo::$nmAtrInPrazoProrrogacao];
+                        
                         //$inSeraProrrogado = dominioSimNao::getDescricao($voAtual->inSeraProrrogado);
                         $inSeraProrrogado = $registro[filtroConsultarContratoConsolidacao::$NmColInSeraProrrogadoConsolidado];
                         $inSeraProrrogado = dominioSimNao::getDescricao($inSeraProrrogado);

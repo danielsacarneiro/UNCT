@@ -36,6 +36,7 @@ $titulo = $nmFuncao. $titulo. $complementoTit;
 setCabecalho($titulo);
 
 $inConsultaHTML = getInConsultarHTMLString();
+
 ?>
 
 <!DOCTYPE html>

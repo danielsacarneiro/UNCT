@@ -37,6 +37,7 @@ class filtroManterContratoModificacao extends filtroManter {
 	var $dtProducaoEfeitoTermoPosterior = "";
 	var $tipoExceto = "";
 	var $inTrazerMater = false;
+	var $sqEspecieMaximoNaoIncluso;
 	
 	function getFiltroFormulario() {
 		$this->vocontrato = new vocontrato();		
@@ -110,6 +111,12 @@ class filtroManterContratoModificacao extends filtroManter {
 		
 			$conector = "\n AND ";
 		}
+		
+		if ($this->sqEspecieMaximoNaoIncluso != null) {
+			$filtro = $filtro . $conector . $nmTabela . "." . voContratoModificacao::$nmAtrSqEspecieContrato . "<" . $this->sqEspecieMaximoNaoIncluso;
+		
+			$conector = "\n AND ";
+		}	
 						
 		/*if ($this->tipo != null) {
 		

@@ -57,6 +57,17 @@ $nmCampoTpDemandaReajuste = voDemanda::$nmAtrInTpDemandaReajusteComMontanteA;
 <SCRIPT language="JavaScript" type="text/javascript" src="<?=caminho_js?>biblioteca_funcoes_checkbox.js"></SCRIPT>
 
 <SCRIPT language="JavaScript" type="text/javascript">
+function formataPrioridade() {
+	campoPrioridade = document.frm_principal.<?=voDemandaTramitacao::$nmAtrPrioridade?>;
+		//alert(pCampoSituacao.type);
+		if(campoPrioridade.value == <?=dominioPrioridadeDemanda::$CD_PRIORI_BAIXA?>){
+			var continuar = confirm("Esta prioridade retira o monitoramento da demanda pelo sistema. Deseja continuar?");
+			if(!continuar){
+				campoPrioridade.value = "<?=$vo->prioridade?>";
+			}		
+		}		
+}	
+
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
 function isFormularioValido() {
 
@@ -192,7 +203,7 @@ function iniciar(){
 	            <TD class="campoformulario" >
 	            <?php 
 	            //o setor destino da ultima tramitacao sera o origem da nova
-	            echo $comboPrioridade->getHtmlCombo(voDemanda::$nmAtrPrioridade,voDemanda::$nmAtrPrioridade, $vo->prioridade, true, "campoobrigatorio", false, " required ");
+	            echo $comboPrioridade->getHtmlCombo(voDemanda::$nmAtrPrioridade,voDemanda::$nmAtrPrioridade, $vo->prioridade, true, "campoobrigatorio", false, " onChange='formataPrioridade();' required ");
 	            include_once(caminho_util. "dominioSimNao.php");
 	            $comboSimNao = new select(dominioSimNao::getColecao());
 	            echo " | " . getTextoHTMLTagMouseOver(getTextoHTMLDestacado("Monitorar?"), voDemanda::$MSG_IN_MONITORAR) . ": ";

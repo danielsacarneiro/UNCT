@@ -94,6 +94,8 @@
                         		dominioTipoContrato::getDescricao($voAtual->tipo));  
                         
                         $procLicitatorio = $voAtual->procLic;
+                        $objeto = $voAtual->objeto;
+                        //$objeto = truncarStringHTMLComDivExpansivel(vocontrato::$nmAtrObjetoContrato, $objeto);
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados" <?=$msgAlertaSq?>>
@@ -111,7 +113,7 @@
                     <TD class="tabeladados"><?php echo $procLicitatorio?></TD>
                     <TD class="tabeladados"><?php echo $colecao[$i]["ct_contratada"]?></TD>                    
                     <!-- <TD class="tabeladados" nowrap><?php echo documentoPessoa::getNumeroDocFormatado($colecao[$i]["ct_doc_contratada"])?></TD> -->
-                    <TD class="tabeladados"><?php echo $colecao[$i]["ct_objeto"]?></TD>
+                    <TD class="tabeladados"><?php echo $objeto?></TD>
                     <TD class="tabeladados"><?php echo getData($voAtual->dtAssinatura)?></TD>
                     <TD class="tabeladados"><?php echo getData($voAtual->dtPublicacao)?></TD>
                     <TD class="tabeladados"><?php echo getData($datainiSQL)?></TD>

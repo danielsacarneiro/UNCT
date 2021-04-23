@@ -162,6 +162,7 @@ function retornarValoresCheckBoxesSelecionadosComoArray(pNmCheckBox) {
 
 function isItemCheckBoxSelecionado(pNmCheckBox, pValorItem) {
 	var itens = retornarValoresCheckBoxesSelecionadosComoString(pNmCheckBox);
+	//alert(itens);
 	return 	itens.indexOf(pValorItem) != -1;
 }
 

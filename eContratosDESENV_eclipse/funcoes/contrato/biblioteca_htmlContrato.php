@@ -62,6 +62,7 @@ function getContratoDetalhamentoParam($arrayParametro) {
 	$detalharContratoInfo = $arrayParametro[2];
 	$isDetalharChaveCompleta=$arrayParametro[3];
 	$complementoDet=$arrayParametro[4];
+	$trazerPrazoUltimaProrrogacao=$arrayParametro[5];
 	
 	if($colecao == null){
 		$colecao = consultarPessoasContrato ( $voContrato );
@@ -99,6 +100,10 @@ function getContratoDetalhamentoParam($arrayParametro) {
 			}
 		}
 
+		if($trazerPrazoUltimaProrrogacao){
+			$numMesesUltimaProrrog = getNumMesesUltimaProrrogacao($voContrato);
+			echo getInputHidden(vocontrato::$ID_REQ_NumMesesUltimaProrrogacao, vocontrato::$ID_REQ_NumMesesUltimaProrrogacao, $numMesesUltimaProrrog);
+		}
 		?>
 <TR>
 	<INPUT type="hidden" id="<?=vocontrato::$nmAtrAnoContrato?>"
@@ -1933,6 +1938,36 @@ function getCodigoContratoPublicacao($vocontrato){
 	$contrato = getTextoHTMLNegrito(getTextoGridContrato($vocontrato, null, false, true, $exibirEspecie));
 	
 	return $contrato;	
+}
+
+function getNumMesesUltimaProrrogacao($votermo){
+	$vocontrato = clone $votermo;
+	$vocontrato->cdEspecie = null;
+	$vocontrato->sqEspecie = null;
+	$filtro = new filtroManterContratoModificacao();
+	$filtro->vocontrato = $vocontrato;
+	$filtro->tipo = dominioTpContratoModificacao::$CD_TIPO_PRORROGACAO;
+	$filtro->sqEspecieMaximoNaoIncluso = $votermo->sqEspecie;
+	$filtro->cdAtrOrdenacao = voContratoModificacao::$nmAtrSqEspecieContrato;
+	$filtro->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
+	
+	$dbContratoMod = new dbContratoModificacao();
+	$colecao = $dbContratoMod->consultarTelaConsultaFiltro($filtro);
+	
+	$retorno = vocontrato::$NUM_PRAZO_PADRAO;
+	if(!isColecaoVazia($colecao)){
+		$registro = $colecao[0];
+		$vocontratomod = new voContratoModificacao();
+		$vocontratomod->getDadosBanco($registro);
+		$retorno = getQtdMesesEntreDatas($vocontratomod->dtModificacao, $vocontratomod->dtModificacaoFim);		
+	}else{
+		$vocontrato = getContratoMater($votermo);
+		//$vocontrato = new vocontrato();
+		$retorno = getQtdMesesEntreDatas($vocontrato->dtVigenciaInicial , $vocontrato->dtVigenciaFinal);
+	}
+	
+	return $retorno;
+	
 }
 
 

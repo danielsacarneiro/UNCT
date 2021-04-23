@@ -79,16 +79,6 @@ include_once(caminho_util. "dominio.class.php");
 	 * @return string[]
 	 */
 	static function getColecaoFiltroContratoConsolidacao(){
-		/*return array(
-				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER,
-				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_TERMOADITIVO,
-				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_RERRATIFICACAO,
-				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_RESCISAO_AMIGAVEL,
-				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_RESCISAO_ENCERRAMENTO,
-				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_RESCISAO_UNILATERAL,
-		
-		);*/
-		
 		return static::getColecaoTermosQuePodemAlterarVigencia();
 	}	
 	
@@ -120,23 +110,22 @@ include_once(caminho_util. "dominio.class.php");
 	
 	static function getColecaoTermosQuePodemAlterarVigencia(){
 		return array(
-				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER,
-				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_TERMOADITIVO,
-				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_ORDEM_PARALISACAO,
-				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_RERRATIFICACAO,
-				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_RESCISAO_AMIGAVEL,
-				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_RESCISAO_ENCERRAMENTO,
-				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_RESCISAO_UNILATERAL,
-	
+				self::$CD_ESPECIE_CONTRATO_MATER,
+				self::$CD_ESPECIE_CONTRATO_TERMOADITIVO,
+				self::$CD_ESPECIE_CONTRATO_ORDEM_PARALISACAO,
+				self::$CD_ESPECIE_CONTRATO_RERRATIFICACAO,
+				self::$CD_ESPECIE_CONTRATO_RESCISAO_AMIGAVEL,
+				self::$CD_ESPECIE_CONTRATO_RESCISAO_ENCERRAMENTO,
+				self::$CD_ESPECIE_CONTRATO_RESCISAO_UNILATERAL,	
 		);
 	}
 	
 	static function getColecaoTermosNaoNumeradosPublicacao(){
 		return array(
-				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER,
-				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_RESCISAO_AMIGAVEL,
-				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_RESCISAO_UNILATERAL,
-				dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_RESCISAO_ENCERRAMENTO,
+				self::$CD_ESPECIE_CONTRATO_MATER,
+				self::$CD_ESPECIE_CONTRATO_RESCISAO_AMIGAVEL,
+				self::$CD_ESPECIE_CONTRATO_RESCISAO_UNILATERAL,
+				self::$CD_ESPECIE_CONTRATO_RESCISAO_ENCERRAMENTO,
 		);
 	}
 	

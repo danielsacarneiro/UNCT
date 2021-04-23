@@ -524,7 +524,7 @@ class dbDemanda extends dbprocesso {
 		$dtreferencia = filtroConsultarDemandaGestao::getSQLDataBaseTempoVida($nmTabela); //"$nmTabela." . voDemanda::$nmAtrDtReferencia;
 		 
 		//mostra a data do contrato da demanda que venceu ou vencera
-		$atributoDataLimiteDemandaContratoAVencer = filtroManterDemanda::getNmAtributosDataACompararDemandasContratoAVencer($nmTabelaContrato);
+		$atributoDataLimiteDemandaContratoAVencer = filtroManterDemanda::getNmAtributosDataACompararDemandasContratoAVencer();
 		$atributoDataLimiteDemandaContratoAVencer = getSQLCOALESCE($atributoDataLimiteDemandaContratoAVencer, filtroManterDemanda::$NmColDtLimiteContratoAVencer);
 		
 		//echo "atributos a verificar $atributoDataLimiteDemandaContratoAVencer";
@@ -596,25 +596,24 @@ class dbDemanda extends dbprocesso {
 		// o proximo join eh p pegar o registro de contrato mais atual na planilha
 		// faz o join apenas com os contratos de maximo sequencial (mais atual)
 		// e com pessoa contratada diferente de nulo
-		$nmTabelaMAXContrato = "TABELA_MAX_CONTRATO";
+		$nmTabelaMAXContratoTEMP = "NM_TAB_MAX_CONTRATO_TEMP";
 		$atributosGroupContrato = vocontrato::$nmAtrAnoContrato . "," . vocontrato::$nmAtrTipoContrato . "," . vocontrato::$nmAtrCdContrato;
 		$queryJoin .= "\n LEFT JOIN (";
 		$queryJoin .= " \n\nSELECT MAX(" . vocontrato::$nmAtrSqContrato . ") AS " . vocontrato::$nmAtrSqContrato . "," . $atributosGroupContrato
 		. " FROM " . $nmTabelaContrato
 		. " WHERE " . vocontrato::$nmAtrContratadaContrato . " IS NOT NULL "
 				. " GROUP BY " . $atributosGroupContrato;
-				$queryJoin .= ") $nmTabelaMAXContrato";
+				$queryJoin .= ") $nmTabelaMAXContratoTEMP";
 				$queryJoin .= "\n ON ";
-				$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato . "=" . $nmTabelaMAXContrato . "." . vocontrato::$nmAtrAnoContrato;
+				$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato . "=" . $nmTabelaMAXContratoTEMP . "." . vocontrato::$nmAtrAnoContrato;
 				$queryJoin .= "\n AND ";
-				$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato . "=" . $nmTabelaMAXContrato . "." . vocontrato::$nmAtrTipoContrato;
+				$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato . "=" . $nmTabelaMAXContratoTEMP . "." . vocontrato::$nmAtrTipoContrato;
 				$queryJoin .= "\n AND ";
-				$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato . "=" . $nmTabelaMAXContrato . "." . vocontrato::$nmAtrCdContrato;
+				$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato . "=" . $nmTabelaMAXContratoTEMP . "." . vocontrato::$nmAtrCdContrato;
 	
 		// agora pega dos dados do MAX contrato
-		$queryJoin .= "\n LEFT JOIN ";
-		$queryJoin .= $nmTabelaContrato;
-		$queryJoin .= "\n ON " . $nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato . " = $nmTabelaMAXContrato." . vocontrato::$nmAtrSqContrato;
+		$queryJoin .= "\n LEFT JOIN $nmTabelaContrato ";
+		$queryJoin .= "\n ON " . $nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato . " = $nmTabelaMAXContratoTEMP." . vocontrato::$nmAtrSqContrato;
 	
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaContratoInfo;
 		$queryJoin .= "\n ON ";
@@ -1098,19 +1097,26 @@ class dbDemanda extends dbprocesso {
 		$array = $voContrato->getValoresAtributosObrigatorios($vocontratoInfo);
 		//var_dump($array);
 		static::validarDadosEntidadeArray($array);
-		/*if($array!= null && !isColecaoVazia($array)){
-			foreach ($array as $valor => $descricao){
-				if(!isAtributoValido($valor)){
-					throw new excecaoAtributoObrigatorio("Verifique o campo '$descricao' do termo relacionado.");
-				}				
-			}
+		
+	}
+	
+	static function validarDadosContratoModificacao($voDemanda) {
+		if(isDemandaContratoModificacaoObrigatorio($voDemanda)){
+			$vocontratoDemanda = $voDemanda->getContrato();	
 			
-		}else{
-			throw new excecaoGenerica("Verifique os campos obrigatórios do contrato.");
-		}*/		
-		
-		//throw new excecaoGenerica("Verifique os campos obrigatórios do contrato.");
-		
+			$filtro = new filtroManterContratoModificacao(false);
+			$filtro->vocontrato = $vocontratoDemanda;
+			$filtro->inDesativado = 'N';
+			$dbcontratomod = new dbContratoModificacao();
+			$vocontratomod = new voContratoModificacao();
+			$colecao = $dbcontratomod->consultarTelaConsultaFiltro($filtro);
+			
+			$qtdtipoContratoMod = dominioTipoDemandaContrato::getNumChavesColecaoNoArrayOuStrSeparador(array_keys(dominioTipoDemandaContrato::getColecaoAlteraValorContrato()), $voDemanda->tpDemandaContrato);
+			$tam = sizeof($colecao);
+			if(isColecaoVazia($colecao) || $qtdtipoContratoMod > $tam){
+				throw new excecaoGenerica("Necessário regularizar o presente termo na função '".voContratoModificacao::getTituloJSP()."'. Exigem-se, pelo menos, $qtdtipoContratoMod registros de modificação.");
+			}
+		}	
 	}
 	
 	static function validarGenerico(&$vo) {
@@ -1222,8 +1228,10 @@ class dbDemanda extends dbprocesso {
 					throw new excecaoGenerica("Fechamento não permitido: indique o responsável UNCT pela demanda.");
 				}
 				
-				$this->validarDadosContrato($vocontratoDemanda, $vocontratoInfo);
+				static::validarDadosContrato($vocontratoDemanda, $vocontratoInfo);
 				
+				static::validarDadosContratoModificacao($vo); 
+								
 			}
 			
 			// verifica se tem PAAP para encerrar

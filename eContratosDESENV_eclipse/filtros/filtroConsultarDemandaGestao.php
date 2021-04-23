@@ -102,9 +102,7 @@ class filtroConsultarDemandaGestao extends filtroManterDemanda{
 	static function getSQLNuTempoVida($nmTabelaDemanda){
 		//return getDataSQLDiferencaDias(static::getSQLDataBaseTempoVida($nmTabelaDemanda), "DATE(".static::getSQLDataUltimaMovimentacao($nmTabelaTramitacao, $nmTabelaDemanda).")");
 		//return getDataSQLDiferencaDias(static::getSQLDataBaseTempoVida($nmTabelaDemanda), "DATE(now())");
-		return getDataSQLDiferencaDias(static::getSQLDataBaseTempoVida($nmTabelaDemanda), static::getSQLDataUltimoSuspiro($nmTabelaDemanda));
-		
-		
+		return getDataSQLDiferencaDias(static::getSQLDataBaseTempoVida($nmTabelaDemanda), static::getSQLDataUltimoSuspiro($nmTabelaDemanda));		
 	}
 	 	
 	static function getSQLNuTempoUltimaTram($nmTabelaTramitacao, $nmTabelaDemanda){

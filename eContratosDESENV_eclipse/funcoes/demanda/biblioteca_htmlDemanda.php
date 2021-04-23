@@ -795,5 +795,12 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDad
 	return $retorno;
 }
 
+function isDemandaContratoModificacaoObrigatorio($vodemanda){
+	if($vodemanda->tpDemandaContrato == null){
+		throw new excecaoAtributoInvalido("tpDemandaContrato nao pode ser nulo.");		
+	}	
+	return dominioTipoDemandaContrato::existePeloMenosUmaChaveColecaoNoArrayOuStrSeparador(array_keys(dominioTipoDemandaContrato::getColecaoAlteraValorContrato()), $vodemanda->tpDemandaContrato);
+}
+
 
 ?>

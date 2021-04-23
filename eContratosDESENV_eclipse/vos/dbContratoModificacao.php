@@ -84,13 +84,17 @@ class dbContratoModificacao extends dbprocesso {
 		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryJoin, $isHistorico );
 	}
 	
+	function consultarTelaConsulta($vo, $filtro) {
+		return $this->consultarTelaConsultaFiltro($filtro);		
+	}
+		
 	/**
 	 * metodo tem formato distinto porque exige um UNION com a tabela de contrato para trazer, no minimo, o contrato mater
 	 * ainda que nao tenha nenhuma modificacao, o valor do contrato mater serah o valor atual da execucao
 	 * {@inheritDoc}
-	 * @see dbprocesso::consultarTelaConsulta()
+	 * @see dbprocesso::consultarTelaConsultaFiltro()
 	 */
-	function consultarTelaConsulta($vo, $filtro) {
+	function consultarTelaConsultaFiltro($filtro) {	
 		//mudando o vo para vocontrato porque esta passarah a ser a tabela base da consulta
 		$vo = new vocontrato();
 		$isHistorico = $filtro->isHistorico;
@@ -234,76 +238,8 @@ class dbContratoModificacao extends dbprocesso {
 		return $retorno;
 	}
 	
-	/*function consultarTelaConsulta($vo, $filtro) {
-		$isHistorico = $filtro->isHistorico;
-		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
-		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
-		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
-		$nmTabContratoMATER = filtroManterContratoModificacao::$NmTabContratoMATER;
-		$nmTabReajustes = filtroManterContratoModificacao::$NmTabReajustes;
-	
-		$colecaoAtributoCoalesceNmPessoa = array (
-				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
-				$nmTabelaContrato . "." . vocontrato::$nmAtrContratadaContrato
-		);
-	
-		$arrayColunasRetornadas = array (
-				$nmTabela . ".*",
-				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
-				$nmTabelaContrato . "." . vocontrato::$nmAtrDtPublicacaoContrato,
-				$nmTabelaContrato . "." . vocontrato::$nmAtrDtAssinaturaContrato,
-				$nmTabelaContrato . "." . vocontrato::$nmAtrDtVigenciaFinalContrato,
-				$nmTabelaContrato . "." . vocontrato::$nmAtrDtVigenciaInicialContrato,
-				$nmTabelaContrato . "." . vocontrato::$nmAtrVlMensalContrato,
-				$nmTabelaContrato . "." . vocontrato::$nmAtrVlGlobalContrato,
-				$nmTabContratoMATER . "." . vocontrato::$nmAtrVlMensalContrato . " AS " . filtroManterContratoModificacao::$NmColVlMensalMater,
-				$nmTabContratoMATER . "." . vocontrato::$nmAtrVlGlobalContrato . " AS " . filtroManterContratoModificacao::$NmColVlGlobalMater,
-				getSQLCOALESCE ( $colecaoAtributoCoalesceNmPessoa, vopessoa::$nmAtrNome ),
-				vousuario::$nmAtrName
-		);
-	
-		$queryJoin .= "\n LEFT JOIN " . $nmTabelaContrato;
-		$queryJoin .= "\n ON ";
-		$queryJoin .= $nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabela . "." . voContratoModificacao::$nmAtrAnoContrato;
-		$queryJoin .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato . "=" . $nmTabela . "." . voContratoModificacao::$nmAtrCdContrato;
-		$queryJoin .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabela . "." . voContratoModificacao::$nmAtrTipoContrato;
-		$queryJoin .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrCdEspecieContrato . "=" . $nmTabela . "." . voContratoModificacao::$nmAtrCdEspecieContrato;
-		$queryJoin .= " AND " . $nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato . "=" . $nmTabela . "." . voContratoModificacao::$nmAtrSqEspecieContrato;
-	
-		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoaContrato;
-		$queryJoin .= "\n ON ";
-		$queryJoin .= $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
-	
-		// SERVE PARA PEGAR O VALOR INICIAL DO CONTRATO
-		$nmTabContratoInterna = vocontrato::getNmTabelaStatic ( false );
-		$groupbyinterno = vocontrato::$nmAtrAnoContrato . "," . vocontrato::$nmAtrCdContrato . "," . vocontrato::$nmAtrTipoContrato . "," . vocontrato::$nmAtrCdEspecieContrato . "," . vocontrato::$nmAtrSqEspecieContrato . "," . vocontrato::$nmAtrVlMensalContrato . "," . vocontrato::$nmAtrVlGlobalContrato;
-	
-		$queryJoin .= "\n LEFT JOIN ";
-		$queryJoin .= "\n\n (SELECT $groupbyinterno ";
-		$queryJoin .= " FROM " . $nmTabContratoInterna;
-		$queryJoin .= " WHERE ";
-		$queryJoin .= vocontrato::$nmAtrCdEspecieContrato . "=" . getVarComoString ( dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER );
-		$queryJoin .= "\n) " . $nmTabContratoMATER;
-		$queryJoin .= "\n ON ";
-		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabContratoMATER . "." . voContratoModificacao::$nmAtrAnoContrato;
-		$queryJoin .= "\n AND ";
-		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrCdContrato . "=" . $nmTabContratoMATER . "." . voContratoModificacao::$nmAtrCdContrato;
-		$queryJoin .= "\n AND ";
-		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabContratoMATER . "." . voContratoModificacao::$nmAtrTipoContrato;
-	
-		return parent::consultarMontandoQueryTelaConsulta ( $vo, $filtro, $arrayColunasRetornadas, $queryJoin );
-	}*/
-	
 	function validarInclusao($vo) {
 		$vocontratoTemp = $vo->vocontrato;
-		/*
-		// verifica se o contrato ja foi adicionado a planilha		
-		$dbcontrato = new dbcontrato ();
-		try {
-			$vocontratoTemp = $dbcontrato->consultarPorChaveVO ( $vocontratoTemp, false );
-		} catch ( excecaoChaveRegistroInexistente $ex ) {
-			throw new excecaoChaveRegistroInexistente ( "Contrato selecionado: " . $vocontratoTemp->getCodigoContratoFormatado ( true ) . " não existe na planilha.", $ex );
-		}*/
 				
 		$vocontratoinfo = voContratoInfo::getVOContratoInfoDeUmVoContrato($vocontratoTemp);
 		$vocontratoinfo = $vocontratoinfo->dbprocesso->consultarPorChaveVO($vocontratoinfo);
@@ -312,30 +248,8 @@ class dbContratoModificacao extends dbprocesso {
 			throw new excecaoGenerica("Informação 'contrato por escopo' inexistente. Requer seja informada no cadastro do contrato em 'Informações Adicionais'.");
 		}		
 	
-		/*
-		 * $registro = $this->getRegistroDataTermoComDataPosterior($vo);
-		 * $termo = new voContratoModificacao();
-		 * $termo->getDadosBanco($registro);
-		 * $data = $termo->dtModificacao;
-		 *
-		 * $isOrdemIncorreta = $data != null;
-		 * if($isOrdemIncorreta){
-		 * $dtProducaoEfeito = $vo->dtModificacao;
-		 * $detContrato = $termo->vocontrato->getCodigoContratoFormatado(true);
-		 * throw new excecaoGenerica("A data de produção de efeitos do termo em questão ($dtProducaoEfeito) é anterior a do termo já existente ($detContrato): " . getData($data) . ". Verifique a ordem das modificações contratuais.");
-		 * }
-		 */
 	}
 	
-	/*function alterarTermoRelacionado($voMod){
-		//$voMod = new voContratoModificacao();
-		$vocontrato = $voMod->vocontrato;
-		
-		$dbcontrato = new dbcontrato(); 
-		$vocontrato = $dbcontrato->consultarContratoPorChave($vocontrato, false);
-		
-	}*/
-
 	function incluir($vo) {
 		$this->validarInclusao ( $vo );
 		$this->cDb->retiraAutoCommit ();		

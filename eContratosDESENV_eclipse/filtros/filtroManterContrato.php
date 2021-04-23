@@ -9,6 +9,7 @@ class filtroManterContrato extends filtroManter {
 	public static $NM_TAB_MAXSQCONTRATO = "NM_TAB_MAXSQCONTRATO";
 	public static $ID_REQ_InGestor= "ID_REQ_InGestor";	
 	public static $ID_REQ_InPublicado = "ID_REQ_InPublicado";
+
 	public static $nmAtrInTrazerConsolidadoPorVigencia = "nmAtrInTrazerConsolidadoPorVigencia";	
 	public static $nmAtrAnoArquivo = "nmAtrAnoArquivo";
 	public static $nmAtrTpDemanda = "nmAtrTpDemanda";
@@ -68,6 +69,7 @@ class filtroManterContrato extends filtroManter {
 	var $vlGlobalFinal;
 	
 	var $inSQLJoinContratoInfo;
+	var $sqEspecieMaximoNaoIncluso;
 	
 	// ...............................................................
 	// construtor
@@ -212,6 +214,11 @@ class filtroManterContrato extends filtroManter {
 			$conector = "\n AND ";
 		}
 		
+		if ($this->sqEspecieMaximoNaoIncluso != null) {
+			$filtro = $filtro . $conector . $nmTabela . "." . vocontrato::$nmAtrSqEspecieContrato . "<" . $this->sqEspecieMaximoNaoIncluso;
+				
+			$conector = "\n AND ";
+		}
 				
 		if ($this->cdModalidade != null) {
 			$filtro = $filtro . $conector . $nmTabela . "." . vocontrato::$nmAtrCdModalidadeProcessoLicContrato . "='" . $this->cdModalidade . "'";

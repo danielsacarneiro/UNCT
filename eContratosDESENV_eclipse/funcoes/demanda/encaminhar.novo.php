@@ -80,6 +80,15 @@ function formataPrioridade() {
 	if(campoTipoDemanda.value == "<?=dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL?>"){
 		campoPrioridade.value = <?=dominioPrioridadeDemanda::$CD_PRIORI_ALTA?>;
 	}
+	
+		//alert(pCampoSituacao.type);
+		if(campoPrioridade.value == <?=dominioPrioridadeDemanda::$CD_PRIORI_BAIXA?>){
+			var continuar = confirm("Esta prioridade retira o monitoramento da demanda pelo sistema. Deseja continuar?");
+			if(!continuar){
+				campoPrioridade.value = <?=dominioPrioridadeDemanda::$CD_PRIORI_MEDIA?>;
+			}		
+		}
+		
 }	
 
 function isFormularioValido() {
@@ -136,6 +145,14 @@ function isFormularioValido() {
 	}
 			
 	return true;
+}
+
+function formatarSituacao(pCampoSituacao){	
+	//alert(pCampoSituacao.type);
+	if(pCampoSituacao != null && pCampoSituacao.value == "<?=dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_ABERTA?>"){
+		//exibirMensagem("Situação não permitida. Alterando para '<?=dominioSituacaoDemanda::$DS_SITUACAO_DEMANDA_EM_ANDAMENTO?>'.");
+		pCampoSituacao.value = "<?=dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO?>";		
+	}
 }
 
 function cancelar() {
@@ -265,7 +282,7 @@ function iniciar(){
 	            <TD class="campoformulario" >
 	            <?php 
 	            //o setor destino da ultima tramitacao sera o origem da nova
-	            echo $comboPrioridade->getHtmlCombo(voDemanda::$nmAtrPrioridade,voDemanda::$nmAtrPrioridade, $vo->prioridade, true, "camporeadonly", false, " disabled ");
+	            echo $comboPrioridade->getHtmlCombo(voDemanda::$nmAtrPrioridade,voDemanda::$nmAtrPrioridade, $vo->prioridade, true, "camporeadonly", false, " onChange='formataPrioridade();' disabled ");
 	            $comboSimNao = new select(dominioSimNao::getColecao());
 	            echo " | " . getTextoHTMLTagMouseOver(getTextoHTMLDestacado("Monitorar?"), voDemanda::$MSG_IN_MONITORAR) . ": ";
 	            echo $comboSimNao->getHtmlCombo(voDemanda::$nmAtrInMonitorar,voDemanda::$nmAtrInMonitorar, $vo->inMonitorar, true, "camponaoobrigatorio", false, "");
@@ -285,7 +302,8 @@ function iniciar(){
 	            <TD class="campoformulario" width="1%">
 	            <?php 
 	            //echo $comboSituacao->getHtmlCombo("","", $vo->situacao, true, "camporeadonly", false, " disabled ");
-	            echo $comboSituacao->getHtmlCombo(voDemandaTramitacao::$nmAtrSituacao,voDemandaTramitacao::$nmAtrSituacao, $vo->situacao, true, "campoobrigatorio", false, " required ");
+	            echo $comboSituacao->getHtmlCombo(voDemandaTramitacao::$nmAtrSituacao,voDemandaTramitacao::$nmAtrSituacao, $vo->situacao, true, "campoobrigatorio"
+					, false, " onChange='formatarSituacao(this)' required ");
 	             ?>
 	            </TD>            		        
 	            <TH class="campoformulario" width="1%">Data.Demanda:</TH>

@@ -299,7 +299,7 @@ class dbContratoInfo extends dbprocesso {
 		$atributoProrrogavel = filtroConsultarContratoConsolidacao::getSQLComparacaoPrazoProrrogacao(dominioProrrogacaoFiltroConsolidacao::$CD_PRORROGAVEL);
 		$atributoProrrogavelExcepcional = filtroConsultarContratoConsolidacao::getSQLComparacaoPrazoProrrogacao(dominioProrrogacaoFiltroConsolidacao::$CD_PERMITE_EXCEPCIONAL);
 		$inAtributoSeraProrrogado = "$nmTabelaContratoInfo." . voContratoInfo::$nmAtrInSeraProrrogado;
-		$inPrazoProrrogacao = "$nmTabelaContratoInfo." . voContratoInfo::$nmAtrInPrazoProrrogacao;
+		$inPrazoProrrogacao = voContratoInfo::$nmAtrInPrazoProrrogacao;
 		
 		$arrayCoalesceGestor = array(
 				"$nmTabelaPessoaGestorContratoInfo." . vopessoa::$nmAtrNome,

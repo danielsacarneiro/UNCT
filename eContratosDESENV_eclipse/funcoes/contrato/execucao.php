@@ -312,7 +312,7 @@ function detalhar(isExcluir) {
 	                    	$percMargemErro = 100*(1-$percMargemErro);
 	                    	//echoo($percMargemErro );
 	                    	if($percMargemErro != 0){
-	                    		echo "Margem de erro é " . getTextoHTMLDestacado(getMoeda($percMargemErro)."%") .", por conta das aproximações.<br>";
+	                    		echo "Margem de erro é " . getTextoHTMLDestacado(getMoeda($percMargemErro)."%") .", por conta das aproximações (ou cadastro incorreto).<br>";
 	                    	}
 	                    }catch (excecaoGenerica $exTem){
 	                    	echo "Erro ao calcular margem de erro<br>.";

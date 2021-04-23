@@ -1674,7 +1674,8 @@ function getQtMesesAuxiliar(pDataInicial, pDataFinal, pSemMensagem){
 	}
 	
 	if(!pSemMensagem){
-		exibirMensagem("O termo tem duração aproximada de "+mesesExatos + " meses, ou "+ anos +" anos. Confirme se está correto.");
+		//exibirMensagem("O período aproximado é de "+mesesExatos + " mese(s), ou "+ anos +" ano(s). Confirme se está correto.");
+		exibirMensagem("O período aproximado é de "+mesesExatos + " mese(s). Confirme se está correto.");
 	}
 	
 	return mesesExatos ;

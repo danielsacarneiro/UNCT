@@ -456,25 +456,60 @@ function getValorGlobalDoMensal(pCampoValorMensal, pCampoValorGlobal, pQtCasasDe
 	var vlGlobal = eval(pNumMesesContrato*vlMensal);
 	setValorCampoMoedaComSeparadorMilhar(pCampoValorGlobal, vlGlobal, pQtCasasDecimais);
 }
-
-function setaValorCampoPorFator(pCampoChamada, pIdCampoACorrigir, pFator, pQtCasasDecimais){
+	
+function setaValorCampoPorFator(pArray){
+	var pIdCampoChamada = pArray[0];
+	var pIdCampoACorrigir = pArray[1];
+	var pIdCampoDataInicial = pArray[2];
+	var pIdCampoDataFinal = pArray[3];
+	var pIdCampoPrazo = pArray[4];
+	var pIdCheckCaracteristica = pArray[5];
+	var pCdItemProrrogacao = pArray[6];
+	var pQtCasasDecimais = pArray[7];
+	var pOperacao = pArray[8];
+		
+	//biblio.checkbox.js
+	var isProrrogacao = isItemCheckBoxSelecionado(pIdCheckCaracteristica, pCdItemProrrogacao);
+	var pCampoChamada = document.getElementById(pIdCampoChamada);
 	var pCampoACorrigir = document.getElementById(pIdCampoACorrigir);
+	var pCampoPrazo = document.getElementById(pIdCampoPrazo);
+
+	//o campoprazo define o prazo da ultima prorrogacao, para os termos que alteram o valor do contrato
+	//nao fará diferenca se o termo for uma prorrogacao, pois esta determina um novo periodo de duracao do contrato,
+	//determinado, exatamente, pela diferenca entre as datas	
+	if(pCampoPrazo != null && !isProrrogacao){
+		pFator = pCampoPrazo.value;
+		exibirMensagem("Prazo considerado da última prorrogação ("+pFator+" meses) para cálculo do valor");
+	}else{
+		//biblio.datahora.js
+		pFator = getNumMesesNoPeriodo(pIdCampoDataInicial, pIdCampoDataFinal, true, true);
+	}
+	
+	if(pFator == null){
+		pFator = 12;
+		exibirMensagem("Prazo não informado: considerado o padrão de "+pFator+" meses");
+	}
+
+	if(pOperacao == "/"){
+		pFator = eval(1/pFator);
+	}
+	
 	if(pQtCasasDecimais == null){
 		pQtCasasDecimais = 2;
 	}
 	
+	//alert(pQtCasasDecimais);
+	
 	//alert("antes mensagem." + pCampoChamada.name);
-	var isCorrigirValor = confirm("Corrigir valor relacionado?");
+	var isCorrigirValor = confirm("Corrigir valor relacionado?\nATENÇÃO: somente válido para prorrogações. " +
+			"Para termos que alterem o valor contratual, tais como acréscimos, supressões e reajustes, o valor mensal e global devem ser detalhadamente conferidos!");
 	if(!isCorrigirValor){
-		return;	
+		return false;	
 	}
 	
 	if(pFator === false && isCorrigirValor){
 		exibirMensagem("Preencha o campo indicado e tente novamente.");
-		return;
-	}
-	if(pFator == null){
-		pFator = 12;
+		return false;
 	}
 	//alert(pFator);
 	

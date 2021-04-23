@@ -578,7 +578,7 @@ function getMensagemDemandasDeContratosAVencer(&$count = 0){
 				constantes::$CD_COLUNA_CHAVE => 'NO SETOR(dias)',
 				constantes::$CD_COLUNA_VALOR => filtroConsultarDemandaGestao::$NmColNuTempoUltimaTram,
 				constantes::$CD_COLUNA_TP_DADO =>  constantes::$TAMANHO_CODIGOS_SAFI,
-				constantes::$CD_COLUNA_VL_REFERENCIA =>  15,
+				constantes::$CD_COLUNA_VL_REFERENCIA =>  constantes::$qts_dias_ALERTA_DEMANDA_CONTRATO_AVENCER,
 				constantes::$CD_COLUNA_TP_VALIDACAO =>  constantes::$CD_ALERTA_TP_VALIDACAO_MAIORQUE,
 		);
 		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);

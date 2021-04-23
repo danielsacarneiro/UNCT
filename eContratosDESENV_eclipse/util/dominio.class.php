@@ -111,14 +111,14 @@ class dominio extends multiplosConstrutores {
 	}
 	
 	/**
-	 * verifica se existe qualquer item em $chaveColecao dentro de $arrayOuStringSeparador (que pode ser array ou string com camposeparador)
+	 * verifica se existe qualquer item em $chaveColecao UNIDIMENSIONAL dentro de $arrayOuStringSeparador (que pode ser array ou string com camposeparador)
 	 * @param unknown $chaveColecao
 	 * @param unknown $arrayOuStringSeparador
 	 * @param string $isChaveStringNumeroComZeroAEsquerda
 	 * @return boolean
 	 */
 	static function existePeloMenosUmaChaveColecaoNoArrayOuStrSeparador($chaveColecao, $arrayOuStringSeparador, $isChaveStringNumeroComZeroAEsquerda=false) {
-		$retorno = false;	
+		/*$retorno = false;	
 		if(!is_array($arrayOuStringSeparador)){
 			$arrayOuStringSeparador = voentidade::getStringCampoSeparadorComoArray($arrayOuStringSeparador);			
 		}
@@ -135,8 +135,38 @@ class dominio extends multiplosConstrutores {
 			}
 		}
 			
-		return $retorno;
+		return $retorno;*/
+		return static::getNumChavesColecaoNoArrayOuStrSeparador($chaveColecao, $arrayOuStringSeparador, $isChaveStringNumeroComZeroAEsquerda) > 0;
 	}
+	/**
+	 * indica quantas chaves dentro do array ou string separador existem para uma determinada colecao UNIDIMENSIONAL
+	 * @param unknown $chaveColecao
+	 * @param unknown $arrayOuStringSeparador
+	 * @param string $isChaveStringNumeroComZeroAEsquerda
+	 * @return boolean
+	 */
+	static function getNumChavesColecaoNoArrayOuStrSeparador($chaveColecao, $arrayOuStringSeparador, $isChaveStringNumeroComZeroAEsquerda=false) {
+		$retorno = false;
+		if(!is_array($arrayOuStringSeparador)){
+			$arrayOuStringSeparador = voentidade::getStringCampoSeparadorComoArray($arrayOuStringSeparador);
+		}
+		
+		$count = 0;
+		foreach ($chaveColecao as $chave){
+			if($isChaveStringNumeroComZeroAEsquerda){
+				$tam = sizeof($arrayOuStringSeparador[0]);
+				$chave = complementarCharAEsquerda($chave, "0", $tam);
+			}
+			$retorno = in_array($chave, $arrayOuStringSeparador);
+			//echoo("$chave|$arrayOuStringSeparador[0]");
+			if($retorno){
+				$count++;
+			}
+		}
+					
+		return $count;
+	}
+	
 	static function existeItem($chave, $colecao=null) {
 		if($colecao==null){
 			$colecao = static::getColecao();
@@ -682,8 +712,7 @@ class dominio extends multiplosConstrutores {
 		}
 		
 		return static::getColecaoCdsSeparador(constantes::$CD_CAMPO_SEPARADOR, $limitador, $colecao);		
-	}
-	
+	}	
 	
 	/*
 	 * function ordenaSetor( $a, $b ) {

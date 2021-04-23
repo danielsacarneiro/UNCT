@@ -566,6 +566,7 @@ function convocarAssinatura(){
                     <TH class="headertabeladados"width="1%" nowrap rowspan=2>Abertura</TH>
                     <TH class="headertabeladados"width="1%" nowrap rowspan=2>Últ.Movim</TH>
                     <TH class="headertabeladadosalinhadocentro"width="1%" nowrap colspan="2">Prazo</TH>
+                    <TH class="headertabeladados" width="10%" rowspan=2>Resp.</TH>
                     <TH class="headertabeladados" width="1%" rowspan=2>Situação</TH>                    
                 </TR>
                 <TR>
@@ -583,7 +584,7 @@ function convocarAssinatura(){
                 $dominioSetor = new dominioSetor();
                 //$dominioPrioridade = new dominioPrioridadeDemanda();
                                 
-                $colspan=14;
+                $colspan=15;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -694,7 +695,8 @@ function convocarAssinatura(){
                     <TD class="tabeladados" nowrap><?php echo getData($voAtual->dtReferencia);?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($dataUltimaMovimentacao);?></TD>
 					<TD class="tabeladadosalinhadodireita" nowrap><?php echo complementarCharAEsquerda($tempoUltTram, "0", 3);?></TD>
-					<TD class="tabeladadosalinhadodireita" nowrap><?php echo complementarCharAEsquerda($tempovida, "0", 3);?></TD>                    
+					<TD class="tabeladadosalinhadodireita" nowrap><?php echo complementarCharAEsquerda($tempovida, "0", 3);?></TD>
+					<TD class="tabeladados" ><?php echo $registro[filtroManterDemanda::$NM_COL_NOME_RESP_UNCT]?></TD>                    
                     <TD class="<?=$classColunaSituacao;?>" ><?php echo $situacao?></TD>                    
                 </TR>					
                 <?php

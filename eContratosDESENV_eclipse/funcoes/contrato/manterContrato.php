@@ -394,7 +394,17 @@ function getDiferencaDiasVigencia(){
 	        </TR>			
 		<?php 
 		}else{
-			getContratoDet($voContrato, false, true);
+			//getContratoDet($voContrato, false, true);
+			
+			$arrayParametro[0] = $voContrato;
+			$arrayParametro[1] = null;
+			$arrayParametro[2] = false;
+			$arrayParametro[3] = true;
+			$arrayParametro[4] = null;
+			$arrayParametro[5] = true;
+			
+			getContratoDetalhamentoParam($arrayParametro);
+				
 		}
 		?>
 		<TR>
@@ -442,7 +452,7 @@ function getDiferencaDiasVigencia(){
 	            <TH class="campoformulario" nowrap width="1%">Características:</TH>
 	            <TD class="campoformulario" colspan=1>
 	            <?php 
-	            $arrayParamCarac = array($nmCampoCarac, $vo->inCaracteristicas, dominioTipoDemandaContrato::getColecaoAlteraValorContrato(), 1, false, "", false, " ");
+	            $arrayParamCarac = array($nmCampoCarac, $vo->inCaracteristicas, dominioTipoDemandaContrato::getColecaoCaracteristicasContrato(), 2, false, "", false, " ");
 	            $arrayParamCarac[12] = true;
 	            echo dominioAutorizacao::getHtmlChecksBoxArray($arrayParamCarac);
 	             ?>
@@ -515,15 +525,40 @@ function getDiferencaDiasVigencia(){
     		</TD>
            </TR>
 		<TR>
-            <TH class="campoformulario" nowrap>Valor Mensal:</TH>
+<SCRIPT language="JavaScript" type="text/javascript">
+	var pArrayCalcularValorMensal = new Array();
+	pArrayCalcularValorMensal[0] = "<?=vocontrato::$nmAtrVlMensalContrato?>"; 
+	pArrayCalcularValorMensal[1] = "<?=vocontrato::$nmAtrVlGlobalContrato?>";
+	pArrayCalcularValorMensal[2] = "<?=vocontrato::$nmAtrDtVigenciaInicialContrato?>";
+	pArrayCalcularValorMensal[3] = "<?=vocontrato::$nmAtrDtVigenciaFinalContrato?>";
+	pArrayCalcularValorMensal[4] = "<?=vocontrato::$ID_REQ_NumMesesUltimaProrrogacao?>";
+	pArrayCalcularValorMensal[5] = "<?=$nmCampoCarac?>";
+	pArrayCalcularValorMensal[6] = "<?=dominioTipoDemandaContrato::$CD_TIPO_PRORROGACAO?>";
+	pArrayCalcularValorMensal[7] = null;
+	pArrayCalcularValorMensal[8] = "*";
+
+	var pArrayCalcularValorGlobal = new Array();
+	pArrayCalcularValorGlobal[0] = "<?=vocontrato::$nmAtrVlGlobalContrato?>"; 
+	pArrayCalcularValorGlobal[1] = "<?=vocontrato::$nmAtrVlMensalContrato?>";
+	pArrayCalcularValorGlobal[2] = "<?=vocontrato::$nmAtrDtVigenciaInicialContrato?>";
+	pArrayCalcularValorGlobal[3] = "<?=vocontrato::$nmAtrDtVigenciaFinalContrato?>";
+	pArrayCalcularValorGlobal[4] = "<?=vocontrato::$ID_REQ_NumMesesUltimaProrrogacao?>";
+	pArrayCalcularValorGlobal[5] = "<?=$nmCampoCarac?>";
+	pArrayCalcularValorGlobal[6] = "<?=dominioTipoDemandaContrato::$CD_TIPO_PRORROGACAO?>";
+	pArrayCalcularValorGlobal[7] = null;
+	pArrayCalcularValorGlobal[8] = "/";
+	
+</SCRIPT>
+	
+	<TH class="campoformulario" nowrap>Valor Mensal:</TH>
             <TD class="campoformulario" ><INPUT type="text" id="<?=vocontrato::$nmAtrVlMensalContrato?>" name="<?=vocontrato::$nmAtrVlMensalContrato?>"  value="<?php echo($vlMensal);?>"
             onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" 
-            onBlur="setaValorCampoPorFator(this, '<?=vocontrato::$nmAtrVlGlobalContrato?>', getNumMesesNoPeriodo('<?=vocontrato::$nmAtrDtVigenciaInicialContrato?>', '<?=vocontrato::$nmAtrDtVigenciaFinalContrato?>', true, true));"
+            onBlur="setaValorCampoPorFator(pArrayCalcularValorMensal);"
             class="camponaoobrigatorioalinhadodireita" size="15" required></TD>
             <TH class="campoformulario" nowrap>Valor Global:</TH>
             <TD class="campoformulario"><INPUT type="text" id="<?=vocontrato::$nmAtrVlGlobalContrato?>" name="<?=vocontrato::$nmAtrVlGlobalContrato?>"  value="<?php echo($vlGlobal);?>"
             onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" 
-           	onChange="setaValorCampoPorFator(this, '<?=vocontrato::$nmAtrVlMensalContrato?>', eval(1/(getNumMesesNoPeriodo('<?=vocontrato::$nmAtrDtVigenciaInicialContrato?>', '<?=vocontrato::$nmAtrDtVigenciaFinalContrato?>')), true, true));"
+           	onChange="setaValorCampoPorFator(pArrayCalcularValorGlobal);"
             class="camponaoobrigatorioalinhadodireita" size="15" required></TD>
         </TR>
            
