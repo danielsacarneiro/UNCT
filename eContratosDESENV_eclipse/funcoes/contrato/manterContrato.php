@@ -37,6 +37,7 @@ if($isInclusao){
 	$colecao = $dbprocesso->limpaResultado();
 	$colecao = $dbprocesso->consultarContratoPorChave($voContrato, $isHistorico);	
 	$voContrato->getDadosBanco($colecao[0]);
+	//var_dump($voContrato);
 	$vopessoacontratada = new vopessoa();
 	$vopessoacontratada->getDadosBanco($colecao[0]);
 	//var_dump($vopessoacontratada);
@@ -143,7 +144,8 @@ function isFormularioValido() {
 	if(!isCheckBoxSelecionado(nmCampoCaracteristicas, true)){
 		exibirMensagem("Selecione pelo menos um item 'Características'.");		
 		return false;		
-	}else if(!isItemCheckBoxSelecionado(nmCampoCaracteristicas, "<?=constantes::$CD_OPCAO_NENHUM?>")){
+	}else if(!(isItemCheckBoxSelecionado(nmCampoCaracteristicas, "<?=constantes::$CD_OPCAO_NENHUM?>")
+			|| isItemCheckBoxSelecionado(nmCampoCaracteristicas, "<?=dominioTipoDemandaContrato::$CD_TIPO_PRORROGACAO?>"))){
 
 		var pArrayNomeCamposOriginais = [
 			"<?=vocontrato::$nmAtrVlMensalContrato?>",
@@ -152,6 +154,8 @@ function isFormularioValido() {
 		//so valida na inclusao
 		if(isInclusao && !isValoresCamposAlternativosAlterados(pArrayNomeCamposOriginais, <?=$varNomesAlternativos?>, true)){
 			exibirMensagem("O termo em questão altera o valor do contrato, revise o valor inserido.");
+			var campoValorGlobal = document.getElementById("<?=vocontrato::$nmAtrVlGlobalContrato?>");
+			campoValorGlobal.focus();
 			return false;	
 		}
 		
@@ -401,8 +405,8 @@ function getDiferencaDiasVigencia(){
 			$arrayParametro[2] = false;
 			$arrayParametro[3] = true;
 			$arrayParametro[4] = null;
-			$arrayParametro[5] = true;
-			
+			$arrayParametro[5] = true;			
+			//var_dump($voContrato);			
 			getContratoDetalhamentoParam($arrayParametro);
 				
 		}
@@ -452,7 +456,9 @@ function getDiferencaDiasVigencia(){
 	            <TH class="campoformulario" nowrap width="1%">Características:</TH>
 	            <TD class="campoformulario" colspan=1>
 	            <?php 
-	            $arrayParamCarac = array($nmCampoCarac, $vo->inCaracteristicas, dominioTipoDemandaContrato::getColecaoCaracteristicasContrato(), 2, false, "", false, " ");
+	            $itemNenhum = constantes::$CD_OPCAO_NENHUM;
+	            $javaScript = "onClick=marcarCheckBoxesExcludentes(this, '$nmCampoCarac', '$itemNenhum');";
+	            $arrayParamCarac = array($nmCampoCarac, $vo->inCaracteristicas, dominioTipoDemandaContrato::getColecaoCaracteristicasContrato(), 2, false, $javaScript, false, " ");
 	            $arrayParamCarac[12] = true;
 	            echo dominioAutorizacao::getHtmlChecksBoxArray($arrayParamCarac);
 	             ?>

@@ -124,6 +124,7 @@ function getContratoDetalhamentoParam($arrayParametro) {
 	
 		if($isDetalharChaveCompleta){
 			$str = getContratoDescricaoEspecie($voContrato);
+			//var_dump($voContrato);
 			echo getDetalhamentoHTML("", "", $str);
 			echo getInputHidden(vocontrato::$nmAtrCdEspecieContrato, vocontrato::$nmAtrCdEspecieContrato, $voContrato->cdEspecie);
 			echo getInputHidden(vocontrato::$nmAtrSqEspecieContrato, vocontrato::$nmAtrSqEspecieContrato, $voContrato->sqEspecie);
@@ -1068,17 +1069,8 @@ function getDadosContratoLicon($chave) {
 
 function getContratoMater($vocontrato){
 	$db = new dbcontrato();
-	//$vocontrato = new vocontrato();
-	/*$filtro = new filtroManterContrato();
-	$filtro->tipo = $vocontrato->tipo;
-	$filtro->cdContrato = $vocontrato->cdContrato;
-	$filtro->anoContrato = $vocontrato->anoContrato;
-	$filtro->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
-	//$filtro->sqEspecie = 1
 	
-	$recordset = $db->consultarFiltroManter($filtro, false);	
-	*/
-	
+	$vocontrato = clone $vocontrato;
 	$vocontrato->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
 	$vocontrato->sqEspecie = 1;
 	$recordset = $db->consultarContratoPorChave($vocontrato, false);	

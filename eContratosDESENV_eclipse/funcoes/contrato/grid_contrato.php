@@ -95,7 +95,9 @@
                         
                         $procLicitatorio = $voAtual->procLic;
                         $objeto = $voAtual->objeto;
-                        //$objeto = truncarStringHTMLComDivExpansivel(vocontrato::$nmAtrObjetoContrato, $objeto);
+                        $chaveContratoTemp = $voAtual->getValorChaveHTML();
+                        $nmDivObjeto = "div".$chaveContratoTemp;
+                        $objeto = truncarStringHTMLComDivExpansivel($nmDivObjeto, $objeto, 200);
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados" <?=$msgAlertaSq?>>

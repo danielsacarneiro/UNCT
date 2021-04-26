@@ -731,6 +731,13 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDad
  	
  	$vocontrato = new vocontrato();
  	$vocontrato->getDadosBanco($registro);
+ 	$dbcontrato = new dbcontrato();
+ 	try{
+	 	$colecao = $dbcontrato->consultarContratoPorChave($vocontrato, false);
+	 	$vocontrato->getDadosBanco($colecao[0]);
+ 	}catch (excecaoChaveRegistroInexistente $ex){
+ 		throw new excecaoChaveRegistroInexistente("Inclua o termo em questão na função de contratos."); 		
+ 	}
  	
  	$vodemanda = new voDemanda();
  	$vodemanda->getDadosBanco($registro);
@@ -748,7 +755,9 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDad
  	}
  	$dtInicioVigencia = getData($vocontrato->dtVigenciaInicial);
  	if($dtInicioVigencia == null){
- 		$dtInicioVigencia = $a_preencher;
+ 		$dtAssinaturaDigital = $dtInicioVigencia = $a_preencher;
+ 	}else{
+ 		$dtAssinaturaDigital = somarOuSubtrairDias($dtInicioVigencia, 1, "-", false);
  	}
  	$str_confirmar = getTextoHTMLDestacado("[CONFIRMAR]");
 
@@ -778,7 +787,7 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDad
 			à autenticação do documento digital.$str_confirmar";
 		
 			if(isDataValidaNaoVazia($dtInicioVigencia)){
-				$retorno .= getTextoHTMLDestacado("<br>ATENÇÃO"). ": sob pena de inadmissibilidade, a assinatura digital deve ocorrer até ".getTextoHTMLDestacado($dtInicioVigencia).".$str_confirmar";
+				$retorno .= getTextoHTMLDestacado("<br>ATENÇÃO"). ": sob pena de inadmissibilidade, a assinatura digital deve ocorrer até ".getTextoHTMLDestacado($dtAssinaturaDigital).".$str_confirmar";
 			}
 		}
 	

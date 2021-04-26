@@ -672,6 +672,9 @@ function convocarAssinatura(){
                         $dataUltimaMovimentacao = $registro[filtroManterDemanda::$NmColDhUltimaMovimentacao];
                         $tempovida = $registro[filtroManterDemanda::$NmColNuTempoVida];
                         $tempoUltTram = $registro[filtroManterDemanda::$NmColNuTempoUltimaTram];
+                        
+                        $respUNCT = $registro[filtroManterDemanda::$NM_COL_NOME_RESP_UNCT];
+                        $respUNCT = truncarStringHTML($respUNCT, 15, true);
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados">
@@ -696,7 +699,7 @@ function convocarAssinatura(){
                     <TD class="tabeladados" nowrap><?php echo getData($dataUltimaMovimentacao);?></TD>
 					<TD class="tabeladadosalinhadodireita" nowrap><?php echo complementarCharAEsquerda($tempoUltTram, "0", 3);?></TD>
 					<TD class="tabeladadosalinhadodireita" nowrap><?php echo complementarCharAEsquerda($tempovida, "0", 3);?></TD>
-					<TD class="tabeladados" ><?php echo $registro[filtroManterDemanda::$NM_COL_NOME_RESP_UNCT]?></TD>                    
+					<TD class="tabeladados" ><?php echo $respUNCT?></TD>                    
                     <TD class="<?=$classColunaSituacao;?>" ><?php echo $situacao?></TD>                    
                 </TR>					
                 <?php

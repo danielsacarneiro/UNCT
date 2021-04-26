@@ -1668,7 +1668,7 @@ function getQtMesesAuxiliar(pDataInicial, pDataFinal, pSemMensagem){
 	//caso contrario, a corrige
 	var restodivisaoAnoMes = meses % 12;
 	//alert(restodivisaoAnoMes);
-	if(restodivisaoAnoMes >= 0.55){
+	if(restodivisaoAnoMes >= 0.5){
 		//arredonda para baixo
 		mesesExatos = Math.floor(meses); 
 	}
@@ -1753,4 +1753,43 @@ function getStringTimestampComoStringHora(pStringTimestamp) {
 	mm = pStringTimestamp.substring(14, 16);
 
 	return (hh + ':' + mm);
+}
+
+function getNumMesesNoPeriodo(pIDCampoDataInicial, pIDCampoDataFinal, pValidarDatas, pSemMensagem){
+	var campoDataInicial = document.getElementById(pIDCampoDataInicial);
+	var campoDataFinal = document.getElementById(pIDCampoDataFinal);
+	
+	var dataInicial = campoDataInicial.value;
+	var dataFinal = campoDataFinal.value;
+	
+	var numMeses = 1;	
+	if(pValidarDatas){
+		//funcao datahora.js
+		if(!isPeriodoValido(campoDataInicial, campoDataFinal, true, false, true, pSemMensagem, true)){
+			return false;
+		}		
+	}
+	//funcao datahora.js
+	if(isPeriodoValido(campoDataInicial, campoDataFinal, false, false, false, true, false)) {
+		//alert("Data.Ini: " + dataInicial + "|Data.Fim: " + dataFinal);
+		//ambas as funcoes abaixo estao em bibli*.datahora.js
+		var numDias = getQtDias(dataInicial, dataFinal);
+		numMeses = getQtMesesAuxiliar(dataInicial, dataFinal);
+		//numMeses = getQtMeses(dataInicial, dataFinal);
+				
+		//alert("numDias: " + numDias + "|Num.Meses: " + numMeses);
+	}	
+	
+	//alert("numeses" + numMeses);
+	if(isNaN(numMeses)){
+		numMeses = 0
+	}			
+	numMesesAoFinal = arredondarValorMoedaParaBaixo(Math.abs(numMeses), 0);
+	
+	//pelo menos 1 mes deve ser considerado
+	if(numMesesAoFinal == 0){
+		numMesesAoFinal = 1;
+	}
+	
+	return numMesesAoFinal;
 }

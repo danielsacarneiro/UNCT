@@ -378,45 +378,6 @@ function calcularModificacaoNovo(pArrayCampos) {
 	}
 }
 
-function getNumMesesNoPeriodo(pIDCampoDataInicial, pIDCampoDataFinal, pValidarDatas, pSemMensagem){
-	var campoDataInicial = document.getElementById(pIDCampoDataInicial);
-	var campoDataFinal = document.getElementById(pIDCampoDataFinal);
-	
-	var dataInicial = campoDataInicial.value;
-	var dataFinal = campoDataFinal.value;
-	
-	var numMeses = 1;	
-	if(pValidarDatas){
-		//funcao datahora.js
-		if(!isPeriodoValido(campoDataInicial, campoDataFinal, true, false, true, pSemMensagem, true)){
-			return false;
-		}		
-	}
-	//funcao datahora.js
-	if(isPeriodoValido(campoDataInicial, campoDataFinal, false, false, false, true, false)) {
-		//alert("Data.Ini: " + dataInicial + "|Data.Fim: " + dataFinal);
-		//ambas as funcoes abaixo estao em bibli*.datahora.js
-		var numDias = getQtDias(dataInicial, dataFinal);
-		numMeses = getQtMesesAuxiliar(dataInicial, dataFinal);
-		//numMeses = getQtMeses(dataInicial, dataFinal);
-				
-		//alert("numDias: " + numDias + "|Num.Meses: " + numMeses);
-	}	
-	
-	//alert("numeses" + numMeses);
-	if(isNaN(numMeses)){
-		numMeses = 0
-	}			
-	numMesesAoFinal = arredondarValorMoedaParaBaixo(Math.abs(numMeses), 0);
-	
-	//pelo menos 1 mes deve ser considerado
-	if(numMesesAoFinal == 0){
-		numMesesAoFinal = 1;
-	}
-	
-	return numMesesAoFinal;
-}
-
 function calcularValorModificacaoAtualizado(pArrayCampos) {
 	campoVlReferencial = pArrayCampos[0];
 	campoVlModAoContrato = pArrayCampos[1];
@@ -477,7 +438,7 @@ function setaValorCampoPorFator(pArray){
 	//o campoprazo define o prazo da ultima prorrogacao, para os termos que alteram o valor do contrato
 	//nao fará diferenca se o termo for uma prorrogacao, pois esta determina um novo periodo de duracao do contrato,
 	//determinado, exatamente, pela diferenca entre as datas	
-	if(pCampoPrazo != null && !isProrrogacao){
+	if(pCampoPrazo != null && !isProrrogacao && pCampoPrazo.value != null && pCampoPrazo.value != "" && pCampoPrazo.value != 0){
 		pFator = pCampoPrazo.value;
 		exibirMensagem("Prazo considerado da última prorrogação ("+pFator+" meses) para cálculo do valor");
 	}else{

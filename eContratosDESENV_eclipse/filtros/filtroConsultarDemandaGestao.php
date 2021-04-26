@@ -148,7 +148,8 @@ class filtroConsultarDemandaGestao extends filtroManterDemanda{
 		$nmTabelaDemandaSaida = static::$NmTabelaDemandaTramEntrada;
 		//a data de saida sera igual a data de referencia da tramitacao seguinte à atual
 		//para tanto usa-se o subselect abaixo com a opcao do LIMIT 1 (pega o proximo registro maior que o atual)
-		$subSelectTramSaida = "(SELECT ".voDemandaTramitacao::$nmAtrDtReferencia." FROM $nmTabelaTramitacao $nmTabelaDemandaSaida ";
+		$colunaData =  voDemandaTramitacao::$nmAtrDtReferencia;
+		$subSelectTramSaida = "(SELECT $colunaData FROM $nmTabelaTramitacao $nmTabelaDemandaSaida ";
 		$subSelectTramSaida .= " WHERE ";
 		$subSelectTramSaida .= " $nmTabelaTramitacao." . voDemandaTramitacao::$nmAtrAno . " = $nmTabelaDemandaSaida." . voDemandaTramitacao::$nmAtrAno;
 		$subSelectTramSaida .= " AND $nmTabelaTramitacao." . voDemandaTramitacao::$nmAtrCd . " = $nmTabelaDemandaSaida." . voDemandaTramitacao::$nmAtrCd;

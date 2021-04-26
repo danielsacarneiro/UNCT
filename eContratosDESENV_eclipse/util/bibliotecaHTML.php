@@ -1121,8 +1121,8 @@ function tratarExcecaoHTML($ex, $vo = null, $paginaErro="../mensagemErro.php") {
 		putObjetoSessao ( constantes::$ID_REQ_SESSAO_VO, $vo );
 	}
 	$msg = $ex->getMessage ();
-	$msg = str_replace ( "\n", "", $msg );
-	$msg = str_replace ( "<br>", "", $msg );
+	$msg = str_replace ( "\n", ".", $msg );
+	$msg = str_replace ( "<br>", ".", $msg );
 	echo $msg;
 
 	$queryComplemento = constantes::$ID_REQ_CD_LUPA . "=" . getAtributoBooleanoComoString(isLupa());

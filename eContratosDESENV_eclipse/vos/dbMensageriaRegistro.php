@@ -97,12 +97,11 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		}  		
   		
   		$codigo = formatarCodigoContrato($vocontratoinfo->cdContrato, $vocontratoinfo->anoContrato, $vocontratoinfo->tipo);
-  		$assunto = "$codigo - $assunto";
   		$dsPessoa = $registro[vopessoa::$nmAtrNome];
   		if($dsPessoa != null && $dsPessoa != ""){
   			$codigo = "$codigo - $dsPessoa";
-  			$assunto .= ": $dsPessoa";
   		}
+  		$assunto = "$assunto:$codigo.";
   		
   		if(!$isContratoImprorrogavel){
   			$msg .= voMensageriaRegistro::getMensagemGestor($codigo,$numFrequencia);

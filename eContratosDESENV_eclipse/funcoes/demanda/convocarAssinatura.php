@@ -4,6 +4,7 @@ include_once(caminho_util."bibliotecaHTML.php");
 include_once(caminho_util."constantes.class.php");
 include_once(caminho_util."selectExercicio.php");
 
+try{
 //inicia os parametros
 inicio();
 
@@ -79,3 +80,8 @@ setCabecalho($titulo);
 		</FORM>
 </BODY>
 </HTML>
+<?php 
+}catch(Exception $ex){
+	tratarExcecaoHTML($ex, $vo);
+}
+?>

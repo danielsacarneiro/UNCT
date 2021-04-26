@@ -85,7 +85,7 @@ class dbDemanda extends dbprocesso {
 				$nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrCdCPL,
 				// $nmTabelaPessoa . "." . vopessoa::$nmAtrNome,
 				getSQLNmContratada (),
-				"COALESCE (" . " . $nmTabelaTramitacao." . voDemandaTramitacao::$nmAtrCdSetorDestino . "," . $nmTabela . "." . voDemanda::$nmAtrCdSetor . ") AS " . voDemanda::$nmAtrCdSetorAtual 
+				"COALESCE ($nmTabelaTramitacao." . voDemandaTramitacao::$nmAtrCdSetorDestino . ",$nmTabela." . voDemanda::$nmAtrCdSetor . ") AS " . voDemanda::$nmAtrCdSetorAtual 
 		);
 		
 		if($isTrazerMaisDadosContrato){
@@ -757,13 +757,20 @@ class dbDemanda extends dbprocesso {
 	function consultarDemandaGestaoTramitacao($vo) {
 		$nmTabela = voDemandaTramitacao::getNmTabelaStatic ( false );
 		$nmTabelaDemanda = voDemanda::getNmTabelaStatic ( false );	
+		$nmTabelaDemandaContadorTram = "NM_TAB_DEMANDA_CONTADOR_TRAM";
 		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );	
 		$nmTabelaUsuario = vousuario::getNmTabela ();
 				
 		/*$dtDemandaTramSaida = filtroConsultarDemandaGestao::getSQLDtDemandaTramitacaoSaida($nmTabela, $nmTabelaDemanda);
 		$dtDemandaTramEntrada = "$nmTabela." . voDemandaTramitacao::$nmAtrDtReferencia;*/
 		
+		$nmAtributoCountDemanda = "NM_COL_COUNT_DEMANDA";
+		$colecaoINSituacaoFechada = getSQLStringFormatadaColecaoIN(array_keys(dominioSituacaoDemanda::getColecaoFechada()));
 		$dtDemandaTramSaida = "$nmTabela." . voDemandaTramitacao::$nmAtrDtReferencia;
+		$dtDemandaTramSaida = getSQLCASEBooleano("$nmAtributoCountDemanda > 1", $dtDemandaTramSaida 
+				, getSQLCASEBooleano("$nmTabelaDemandaContadorTram." . voDemanda::$nmAtrSituacao . " IN ($colecaoINSituacaoFechada)" 
+						, $dtDemandaTramSaida , "DATE(NOW())")
+				);
 		$dtDemandaTramEntrada = filtroConsultarDemandaGestao::getSQLDtDemandaTramitacaoEntrada($nmTabela, $nmTabelaDemanda);
 		
 		$querySelect = "SELECT ";
@@ -775,10 +782,19 @@ class dbDemanda extends dbprocesso {
 		$querySelect .= "  AS " . voDemanda::$nmAtrNmUsuarioInclusao;
 		$queryFrom = " FROM " . $nmTabela;
 		
-		$queryFrom .= "\n INNER JOIN " . $nmTabelaDemanda;
+		$queryFromTemp .= "\n INNER JOIN " . $nmTabelaDemanda;
+		$queryFromTemp .= "\n ON ";
+		$queryFromTemp .= $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $nmTabela . "." . voDemandaTramitacao::$nmAtrAno;
+		$queryFromTemp .= "\n AND " . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd . "=" . $nmTabela . "." . voDemandaTramitacao::$nmAtrCd;
+		
+		$queryFrom .= $queryFromTemp;
+		
+		$groupinterno = "$nmTabela.". voDemanda::$nmAtrAno . "," . "$nmTabela.".voDemanda::$nmAtrCd . "," . "$nmTabelaDemanda.".voDemanda::$nmAtrSituacao; 
+		$subSelect = "(SELECT COUNT(*) AS $nmAtributoCountDemanda, $groupinterno FROM $nmTabela $queryFromTemp group by $groupinterno)";		
+		$queryFrom .= "\n INNER JOIN $subSelect $nmTabelaDemandaContadorTram ";
 		$queryFrom .= "\n ON ";
-		$queryFrom .= $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . "=" . $nmTabela . "." . voDemandaTramitacao::$nmAtrAno;
-		$queryFrom .= "\n AND " . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd . "=" . $nmTabela . "." . voDemandaTramitacao::$nmAtrCd;
+		$queryFrom .= $nmTabelaDemandaContadorTram . "." . voDemanda::$nmAtrAno . "=" . $nmTabela . "." . voDemandaTramitacao::$nmAtrAno;
+		$queryFrom .= "\n AND " . $nmTabelaDemandaContadorTram . "." . voDemanda::$nmAtrCd . "=" . $nmTabela . "." . voDemandaTramitacao::$nmAtrCd;
 		
 		$queryFrom .= "\n INNER JOIN " . $nmTabelaUsuario;
 		$queryFrom .= "\n ON ";

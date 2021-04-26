@@ -427,3 +427,16 @@ function isCheckBoxPermiteAlteracao(pCampoCheckBox, pPropriedadeValorCondicao, p
 
 	return retorno;
 }
+
+function marcarCheckBoxesExcludentes(pCampoThis, pNmCheckBox, pIdItemExcludente){
+	var colecaocheckBox = document.getElementsByName(pNmCheckBox);
+	var campoCheckExcludente = document.getElementById(pIdItemExcludente);
+	
+	var itemExcludenteChecado = pCampoThis.checked && pCampoThis.id == pIdItemExcludente;
+	if(itemExcludenteChecado){
+		desmarcarTodosCheckBoxes(pNmCheckBox);
+		campoCheckExcludente.checked = true;
+	}else{
+		campoCheckExcludente.checked = false;
+	}	
+}
