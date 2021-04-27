@@ -1633,22 +1633,25 @@ class dbcontrato extends dbprocesso {
 			. " AND $nmTabela." . voDemandaContrato::$nmAtrCdContrato . "= $nmTabelaContrato.". vocontrato::$nmAtrCdContrato
 			. " AND $nmTabela." . voDemandaContrato::$nmAtrCdEspecieContrato . "= $nmTabelaContrato.". vocontrato::$nmAtrCdEspecieContrato
 			. " AND $nmTabela." . voDemandaContrato::$nmAtrSqEspecieContrato . "= $nmTabelaContrato.". vocontrato::$nmAtrSqEspecieContrato
-			/*. " AND ($nmTabelaContrato." . vocontrato::$nmAtrCdEspecieContrato . " NOT LIKE '%CANCELADO%' "
-			. " OR $nmTabelaContrato." . vocontrato::$nmAtrContratadaContrato . " NOT LIKE '%CANCELADO%' "
-			. " OR $nmTabelaContrato." . vocontrato::$nmAtrObjetoContrato . " NOT LIKE '%CANCELADO%' )"*/
 			. ")\n";
 			
-			//so consulta a aberta porque presume que se a demanda foi fechada, o contrato foi incluido na planilha
-			//$query .= " AND $nmTabelaDemanda." . voDemanda::$nmAtrSituacao . "<> ".dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA ." ";
-			$query .= " AND $nmTabelaDemanda." . voDemanda::$nmAtrSituacao . " NOT IN (". getSQLStringFormatadaColecaoIN(array_keys(dominioSituacaoDemanda::getColecaoFechada())).") ";
+			//$query .= " AND $nmTabelaDemanda." . voDemanda::$nmAtrSituacao . " NOT IN (". getSQLStringFormatadaColecaoIN(array_keys(dominioSituacaoDemanda::getColecaoFechada())).") ";
+			$query .= " AND $nmTabelaDemanda." . voDemanda::$nmAtrAno . " >= 2020 ";
 			$query .= " AND $nmTabelaDemanda." . voDemanda::$nmAtrInDesativado . "= 'N' ";
+			
+			$usulogado = getIdUsuarioLogado();
+			if(!isUsuarioAdmin() && $usulogado != null){
+				$usuUNCT = "$nmTabelaDemanda." . voDemanda::$nmAtrCdPessoaRespUNCT;
+				$query .= " AND ($usuUNCT IS NULL OR $usuUNCT = $usulogado) ";
+			}
 						
 			$query .= " group by $groupby";
 			$arrayGroupby = array(voDemandaContrato::$nmAtrAnoContrato . " DESC ",
 					voDemandaContrato::$nmAtrTipoContrato,
+					voDemandaContrato::$nmAtrCdContrato,
 					voDemandaContrato::$nmAtrCdEspecieContrato,
 			);
-			$orderby = voDemanda::$nmAtrDtReferencia . " DESC, " . voDemanda::$nmAtrCdPessoaRespUNCT . " ASC, "; 
+			//$orderby = voDemanda::$nmAtrDtReferencia . " DESC, " . voDemanda::$nmAtrCdPessoaRespUNCT . " ASC, "; 
 			$query .= " order by $orderby". getSQLStringFormatadaColecaoIN($arrayGroupby);
 						
 		static::printarSQL($query);	

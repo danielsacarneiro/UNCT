@@ -1055,6 +1055,7 @@ class filtroManterDemanda extends filtroManter{
 		
 		$nmTabelaDadosDemandaContrato = static::$NM_TABELA_DADOS_CONTRATO_DEMANDA;
 		$nmTabelaDadosDemandaContratoMAX = vocontrato::getNmTabela();
+		//se nao tiver data inicial no contrato da demanda, pega a data final do ultimo termo vigente 
 		$nmAtrDataAcompararContratoDemanda = "$nmTabelaDadosDemandaContrato." . vocontrato::$nmAtrDtVigenciaInicialContrato;
 		$nmAtrDataAcompararContratoMAX = "$nmTabelaDadosDemandaContratoMAX." . vocontrato::$nmAtrDtVigenciaFinalContrato;
 		

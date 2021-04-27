@@ -1898,9 +1898,10 @@ function usarDocumentosContratoDaPlanilha($voContrato){
 function existeReajusteRetroativoComEfeitos($vocontrato, $recordset){
 	$retorno = false;
 	$dtAssinaturaTermo = $vocontrato->dtAssinatura;
+	//$vocontrato = new vocontrato();
 	
 	if($dtAssinaturaTermo == null){
-		throw new excecaoGenerica("Data assinatura inválida para validação do valor da prorrogação em contrato modificação.");		
+		throw new excecaoGenerica("Data assinatura inválida para validação do valor da prorrogação em contrato modificação|". $vocontrato->getCodigoContratoFormatado(true));		
 	}	
 	foreach ($recordset as $registro){
 		$voTemp = new voContratoModificacao ();

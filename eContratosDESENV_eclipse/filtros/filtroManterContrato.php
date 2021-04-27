@@ -516,6 +516,8 @@ class filtroManterContrato extends filtroManter {
 		
 		if($filtro != null){
 			$sqlFiltroInternoMaiorSq = " WHERE $filtro ";
+			$indesativadointerno = vocontrato::$nmAtrInDesativado . " = 'N' ";
+			$sqlFiltroInternoMaiorSq .= " AND $indesativadointerno";
 		}
 		
 		$pChaveTuplaComparacaoSemSequencial = array(

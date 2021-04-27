@@ -307,8 +307,8 @@ function iniciar(){
 				</TD>
 	        </TR>	        	        	        
 			<TR>
-	            <TH class="campoformulario" nowrap>Data início dos efeitos:</TH>
-	            <TD class="campoformulario" width=1%>
+	            <TH class="campoformulario" nowrap>Período efeitos:</TH>
+	            <TD class="campoformulario" colspan=3>
 	            	<INPUT type="text" 
 	            	       id="<?=voContratoModificacao::$nmAtrDtModificacao?>" 
 	            	       name="<?=voContratoModificacao::$nmAtrDtModificacao?>" 
@@ -318,9 +318,7 @@ function iniciar(){
 	            			class="camponaoobrigatorio"	            			 
 	            			size="10" 
 	            			maxlength="10" required>
-				</TD>
-	            <TH class="campoformulario" width=1% nowrap>Data Final(Prazo restante):</TH>
-	            <TD class="campoformulario" colspan="3">
+	            			a 
 	            <INPUT type="text" 
 		            id="<?=voContratoModificacao::$nmAtrDtModificacaoFim?>" 
 		            name="<?=voContratoModificacao::$nmAtrDtModificacaoFim?>" 
@@ -356,7 +354,7 @@ function iniciar(){
 	            </TD>	            
 	        </TR>	        
 			<TR>
-	            <TH class="campoformulario" nowrap>Valor Modificação ao Contrato<br>(em caso de prorrogação):</TH>
+	            <TH class="campoformulario" nowrap>Valor Global Referencial:</TH>
 	            <TD class="campoformulario"><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlModificacaoAoContrato?>" name="<?=voContratoModificacao::$nmAtrVlModificacaoAoContrato?>"  value="<?php echo(getMoeda($vo->vlModificacaoAoContrato));?>"
 	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" onBlur='calcular(this, false);' class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly></TD>
 	            <TH class="campoformulario">Valor Global Atualizado:</TH>
