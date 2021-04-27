@@ -310,6 +310,7 @@ function detalhar(isExcluir) {
 	                    	}
 	                    	
 	                    	$percMargemErro = 100*(1-$percMargemErro);
+	                    	$percMargemErro = round($val, 2);
 	                    	//echoo($percMargemErro );
 	                    	if($percMargemErro != 0){
 	                    		echo "Margem de erro é " . getTextoHTMLDestacado(getMoeda($percMargemErro)."%") .", por conta das aproximações (ou cadastro incorreto).<br>";
