@@ -595,13 +595,13 @@ class dbDemanda extends dbprocesso {
 				
 		// o proximo join eh p pegar o registro de contrato mais atual na planilha
 		// faz o join apenas com os contratos de maximo sequencial (mais atual)
-		// e com pessoa contratada diferente de nulo
 		$nmTabelaMAXContratoTEMP = "NM_TAB_MAX_CONTRATO_TEMP";
+		$especiesinternas = getSQLStringFormatadaColecaoIN(dominioEspeciesContrato::getColecaoTermosQuePodemAlterarVigencia(), true);
 		$atributosGroupContrato = vocontrato::$nmAtrAnoContrato . "," . vocontrato::$nmAtrTipoContrato . "," . vocontrato::$nmAtrCdContrato;
 		$queryJoin .= "\n LEFT JOIN (";
 		$queryJoin .= " \n\nSELECT MAX(" . vocontrato::$nmAtrSqContrato . ") AS " . vocontrato::$nmAtrSqContrato . "," . $atributosGroupContrato
 		. " FROM " . $nmTabelaContrato
-		. " WHERE " . vocontrato::$nmAtrContratadaContrato . " IS NOT NULL "
+		. " WHERE " . vocontrato::$nmAtrCdEspecieContrato . " IN ($especiesinternas) "
 				. " GROUP BY " . $atributosGroupContrato;
 				$queryJoin .= ") $nmTabelaMAXContratoTEMP";
 				$queryJoin .= "\n ON ";
