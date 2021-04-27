@@ -106,7 +106,7 @@ function truncarStringHTMLArray($pArray){
 	$truncou = strlen($retorno) < strlen($string);
 
 	if($truncou){
-		$complem = getTextoHTMLNegrito("[TEXTO TRUNCADO]");
+		$complem = getTextoHTMLNegrito("[...]");
 		if($usarReticencia){
 			$complem = "...";
 		}
