@@ -315,8 +315,12 @@ function detalhar(isExcluir) {
 	                    		echo "Margem de erro é " . getTextoHTMLDestacado(getMoeda($percMargemErro)."%") .", por conta das aproximações (ou cadastro incorreto).<br>";
 	                    	}
 	                    }catch (excecaoGenerica $exTem){
-	                    	echo "Erro ao calcular margem de erro<br>.";
-	                    }
+	                    	if($exTem instanceof excecaoAtributoInvalido){
+	                    		throw $exTem;
+	                    	}else{
+	                    		echo "Erro ao calcular margem de erro<br>.";
+	                    	}
+	                    }	                    	
 	                    
 		                    $complementoDet = " Valor ATUAL (havendo prorrogação): Mensal " . getInputText("", "", $vlMensalAtualStrInput, constantes::$CD_CLASS_CAMPO_READONLY);
 		                    $complementoDet .= " Global: " . getInputText("", "", getMoeda($vlGlobalSeProrrogado), constantes::$CD_CLASS_CAMPO_READONLY);
