@@ -756,14 +756,12 @@ class dbcontrato extends dbprocesso {
 			$sqlConector = ",";
 		}
 		
-		if ($voContrato->vlMensal != null) {
 			$retorno .= $sqlConector . vocontrato::$nmAtrVlMensalContrato . " = " . $this->getVarComoDecimal( $voContrato->vlMensal );
 			$sqlConector = ",";
-		}
-		if ($voContrato->vlGlobal != null) {
+		
+
 			$retorno .= $sqlConector . vocontrato::$nmAtrVlGlobalContrato . " = " . $this->getVarComoDecimal ( $voContrato->vlGlobal );
 			$sqlConector = ",";
-		}
 		
 		if ($voContrato->dtVigenciaInicial != null) {
 			$retorno .= $sqlConector . vocontrato::$nmAtrDtVigenciaInicialContrato . " = " . $this->getVarComoData($voContrato->dtVigenciaInicial );
@@ -774,25 +772,21 @@ class dbcontrato extends dbprocesso {
 			$sqlConector = ",";
 		}
 		
-		if ($voContrato->dtAssinatura != null) {
+
 			$retorno .= $sqlConector . vocontrato::$nmAtrDtAssinaturaContrato . " = " . $this->getVarComoData ( $voContrato->dtAssinatura );
 			$sqlConector = ",";
-		}
-		if ($voContrato->dtPublicacao != null) {
+
+
 			$retorno .= $sqlConector . vocontrato::$nmAtrDtPublicacaoContrato . " = " . $this->getVarComoData ( $voContrato->dtPublicacao );
 			$sqlConector = ",";
-		}
 		
-		if ($voContrato->empenho != null) {
 			$retorno .= $sqlConector . vocontrato::$nmAtrNumEmpenhoContrato . " = " . $this->getVarComoString ( $voContrato->empenho );
 			$sqlConector = ",";
-		}
 		
-		if ($voContrato->obs != null) {
 			$retorno .= $sqlConector . vocontrato::$nmAtrObservacaoContrato . " = " . $this->getVarComoString ( $voContrato->obs );
 			$sqlConector = ",";
-		}
-		 //throw new excecaoGenerica("link:" . $voContrato->linkDoc);
+		
+		//throw new excecaoGenerica("link:" . $voContrato->linkDoc);
 		if ($voContrato->linkDoc != null) {
 			$retorno .= $sqlConector . vocontrato::$nmAtrLinkDoc . " = " . $this->getVarComoString ( $voContrato->linkDoc );
 			$sqlConector = ",";

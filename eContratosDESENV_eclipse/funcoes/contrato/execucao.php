@@ -146,7 +146,6 @@ function detalhar(isExcluir) {
                         <TH class='headertabeladadosalinhadocentro' width='1%'>Prorrog.</TH>
                     </TR>
                     <?php
-                    
                     $colecaoMov = $dbContratoMod->consultarExecucaoValorGlobalReferencial($colecao);
                     
                     if (is_array($colecaoMov))
@@ -316,11 +315,7 @@ function detalhar(isExcluir) {
 	                    		echo "Margem de erro é " . getTextoHTMLDestacado(getMoeda($percMargemErro)."%") .", por conta das aproximações (ou cadastro incorreto).<br>";
 	                    	}
 	                    }catch (excecaoGenerica $exTem){
-	                    	if($exTem instanceof excecaoAtributoInvalido){
-	                    		throw $exTem;
-	                    	}else{
 	                    		echo "Erro ao calcular margem de erro<br>.";
-	                    	}
 	                    }	                    	
 	                    
 		                    $complementoDet = " Valor ATUAL (havendo prorrogação): Mensal " . getInputText("", "", $vlMensalAtualStrInput, constantes::$CD_CLASS_CAMPO_READONLY);

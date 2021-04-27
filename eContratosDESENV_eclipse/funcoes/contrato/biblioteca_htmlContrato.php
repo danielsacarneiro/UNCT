@@ -1901,25 +1901,29 @@ function existeReajusteRetroativoComEfeitos($vocontrato, $recordset){
 	//$vocontrato = new vocontrato();
 	
 	if($dtAssinaturaTermo == null){
-		throw new excecaoAtributoInvalido("Data assinatura inválida para validação do valor da prorrogação em contrato modificação|". $vocontrato->getCodigoContratoFormatado(true));		
-	}	
-	foreach ($recordset as $registro){
-		$voTemp = new voContratoModificacao ();
-		$voTemp->getDadosBanco ( $registro );
-		
-		if($voTemp->tpModificacao == dominioTpContratoModificacao::$CD_TIPO_REAJUSTE){
-			$dtAssinaturaReajuste = $voTemp->vocontrato->dtAssinatura; 
+		//$msg = "Data assinatura inválida para validação do valor da prorrogação em contrato modificação|". $vocontrato->getCodigoContratoFormatado(true);
+		$msg = "ATENÇÃO: Para correta exibição dos valores, verifique a data de assinatura do ". $vocontrato->getCodigoContratoFormatado(true);
+		echoo(getTextoHTMLDestacado($msg));
+		//throw new excecaoAtributoInvalido($msg);		
+	}else{	
+		foreach ($recordset as $registro){
+			$voTemp = new voContratoModificacao ();
+			$voTemp->getDadosBanco ( $registro );
 			
-			//echoo($vocontrato->toString() . "|data inicio $dtAssinaturaTermo e data fim reajuste $dtAssinaturaReajuste|" . $voTemp->vocontrato->toString());
-			
-			if(isDataFimMaiorDataInicio($dtAssinaturaTermo, $dtAssinaturaReajuste)){
-				$retorno = true;
-				//echoo("data maior: reajuste retroativo.");
-				break;
+			if($voTemp->tpModificacao == dominioTpContratoModificacao::$CD_TIPO_REAJUSTE){
+				$dtAssinaturaReajuste = $voTemp->vocontrato->dtAssinatura; 
+				
+				//echoo($vocontrato->toString() . "|data inicio $dtAssinaturaTermo e data fim reajuste $dtAssinaturaReajuste|" . $voTemp->vocontrato->toString());
+				
+				if(isDataFimMaiorDataInicio($dtAssinaturaTermo, $dtAssinaturaReajuste)){
+					$retorno = true;
+					//echoo("data maior: reajuste retroativo.");
+					break;
+				}
+				
 			}
 			
 		}
-		
 	}
 	
 	return $retorno;
