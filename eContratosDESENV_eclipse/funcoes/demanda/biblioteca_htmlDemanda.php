@@ -766,7 +766,7 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDad
 	ASSUNTO: ".getTextoHTMLNegrito("ASSINATURA DO $codigoContratoCompleto")."
 	<br><br>".getTextoHTMLDestacado("Ref. SEI nº $numSEI", "blue").". $str_confirmar
 	
-	<br><br><br>Prezado(s) Senhor(es),
+	<br><br><br>Prezado(s) Senhor(es),<br><br><br>
 	Em decorrência da Pandemia do Coronavírus e, cumprindo determinação do Governo do Estado de Pernambuco, o atendimento presencial, 
 	na SEFAZ/PE foi substituído pelo trabalho remoto. Por esse motivo, estamos encaminhando para assinatura, em formato digital, 01(uma) via do supramencionado contrato,
 	cujo objeto é ".getTextoHTMLNegrito($vocontrato->objeto)."$str_confirmar, com vigência a partir de ".getTextoHTMLNegrito($dtInicioVigencia).".
@@ -792,7 +792,7 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDad
 		}
 	
 	}catch (excecaoAtributoInvalido $ex){
-		$retorno .= getTextoHTMLDestacado("<br><br>ATENÇÃO: verifique a data de início de vigência do contrato.<br><br>");
+		$retorno .= getTextoHTMLDestacado("<br><br>*****ATENÇÃO: verifique a data de início de vigência do contrato.*****<br><br>");
 	}
 	//echo compararDatas($dthtmlassinatura, getDataHoje()) . " $dthtmlassinatura  e " . getDataHoje(); 
 	

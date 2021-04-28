@@ -307,7 +307,7 @@ function iniciar(){
 				</TD>
 	        </TR>	        	        	        
 			<TR>
-	            <TH class="campoformulario" nowrap>Período efeitos:</TH>
+	            <TH class="campoformulario" nowrap>Período Vigência:</TH>
 	            <TD class="campoformulario" colspan=3>
 	            	<INPUT type="text" 
 	            	       id="<?=voContratoModificacao::$nmAtrDtModificacao?>" 
@@ -334,10 +334,14 @@ function iniciar(){
 	            </TD>				
         	</TR>
 			<TR>
-	            <TH class="campoformulario" nowrap>Valor Mensal Referencial:</TH>
+	            <TH class="campoformulario" nowrap>
+	            <?php
+	            $textValor = "Valor Mensal Referencial";
+	            $textTag = "Valor Mensal acrescido/suprimido. Difere do valor Mensal atualizado!";
+	            echo getTextoHTMLTagMouseOver($textValor,$textTag )?>:</TH>
 	            <TD class="campoformulario" ><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlModificacaoReferencial?>" name="<?=voContratoModificacao::$nmAtrVlModificacaoReferencial?>"  value="<?php echo(getMoeda($vo->vlModificacaoReferencial,4));?>"
 	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 4, event);" onBlur='calcular(this, false);' class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly></TD>
-	            <TH class="campoformulario" nowrap>Valor Mensal Atualizado:</TH>
+	            <TH class="campoformulario" nowrap width="1%">Valor Mensal Atualizado:</TH>
 	            <TD class="campoformulario"><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlMensalAtualizado?>" name="<?=voContratoModificacao::$nmAtrVlMensalAtualizado?>"  value="<?php echo(getMoeda($vo->vlMensalAtual));?>"
 	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" onBlur='calcular(this, false);' class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly>
 	            <?php 
@@ -354,18 +358,22 @@ function iniciar(){
 	            </TD>	            
 	        </TR>	        
 			<TR>
-	            <TH class="campoformulario" nowrap>Valor Global Referencial:</TH>
+	            <TH class="campoformulario" nowrap>
+	            <?php
+	            $textValor = str_replace("Mensal", "Global", $textValor);
+	            $textTag = str_replace("Mensal", "Global", $textTag);
+	            echo getTextoHTMLTagMouseOver($textValor,$textTag )?>:</TH>
 	            <TD class="campoformulario"><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlModificacaoAoContrato?>" name="<?=voContratoModificacao::$nmAtrVlModificacaoAoContrato?>"  value="<?php echo(getMoeda($vo->vlModificacaoAoContrato));?>"
 	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" onBlur='calcular(this, false);' class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly></TD>
-	            <TH class="campoformulario">Valor Global Atualizado:</TH>
+	            <TH class="campoformulario" width="1%">Valor Global Atualizado:</TH>
 	            <TD class="campoformulario"><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlGlobalAtualizado?>" name="<?=voContratoModificacao::$nmAtrVlGlobalAtualizado?>"  value="<?php echo(getMoeda($vo->vlGlobalAtual));?>"
 	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" onBlur='calcular(this, false);' class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly></TD>	            
 	        </TR>	        
 			<TR>
-	            <TH class="campoformulario" nowrap>Valor Real alterado no período (LICON):</TH>
+	            <TH class="campoformulario">Valor Real alterado no período (LICON):</TH>
 	            <TD class="campoformulario" ><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlModificacaoReal?>" name="<?=voContratoModificacao::$nmAtrVlModificacaoReal?>"  value="<?php echo(getMoeda($vo->vlModificacaoReal));?>"
 	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly></TD>
-	            <TH class="campoformulario" nowrap>Valor Real do Contrato no período:</TH>
+	            <TH class="campoformulario" nowrap width="1%">Valor Real do Contrato no período:</TH>
 	            <TD class="campoformulario"><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlGlobalReal?>" name="<?=voContratoModificacao::$nmAtrVlGlobalReal?>"  value="<?php echo(getMoeda($vo->vlGlobalReal));?>"
 	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly>
 	            <SCRIPT language="JavaScript" type="text/javascript">

@@ -13,7 +13,7 @@ class email_sefaz extends multiplosConstrutores{
 	static $REMETENTE_UNCT = "unct@sefaz.pe.gov.br";
 	static $REMETENTE_DILC = "carlos.pereira@sefaz.pe.gov.br";
 	
-	static $REMETENTE_COPIA = "eduardo.s-goncalves@sefaz.pe.gov.br";
+	static $REMETENTE_COPIA = "contratos.unct@sefaz.pe.gov.br";
 	static $REMETENTE_PRINCIPAL = "unct@sefaz.pe.gov.br";
 	
 	private $Host;
@@ -81,7 +81,6 @@ class email_sefaz extends multiplosConstrutores{
 				static::$REMETENTE_COPIA,
 				static::$REMETENTE_DILC,
 				//"rogerio.f-carvalho@sefaz.pe.gov.br",
-				//"eduardo.s-goncalves@sefaz.pe.gov.br",
 				//"daniel.ribeiro@sefaz.pe.gov.br",				
 				//"margarida.vasconcelos@sefaz.pe.gov.br"
 		);
@@ -91,12 +90,12 @@ class email_sefaz extends multiplosConstrutores{
 		return array(
 				"eduardo.s-goncalves@sefaz.pe.gov.br",
 				"daniel.ribeiro@sefaz.pe.gov.br",
+				static::$REMETENTE_COPIA,
 		);
 	}
 	
 	static function getListaEmailContratosAVencer(){
 		return array(
-				"eduardo.s-goncalves@sefaz.pe.gov.br",
 				"daniel.ribeiro@sefaz.pe.gov.br",
 				static::$REMETENTE_DILC,
 				//"rogerio.f-carvalho@sefaz.pe.gov.br",
@@ -111,6 +110,7 @@ class email_sefaz extends multiplosConstrutores{
 				"juliene.paiva@sefaz.pe.gov.br",
 				"Andrea.c-oliveira@sefaz.pe.gov.br",
 				"andrielle.rodrigues@sefaz.pe.gov.br",
+				"micilene.cardoso@sefaz.pe.gov.br",
 		);
 	}
 	
