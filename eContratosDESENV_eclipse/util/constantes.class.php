@@ -13,7 +13,7 @@ include_once 'normativos.php';
 	
 	static $qts_dias_ALERTA_VERMELHO = 20;
 	static $qts_dias_ALERTA_AMARELO = 45;
-	static $qts_dias_ALERTA_DEMANDA_CONTRATO_AVENCER = 15;
+	static $qts_dias_ALERTA_DEMANDA_CONTRATO_AVENCER = 10;
     
     static $CD_TIPO_CONTRATO  = "C";
     static $CD_TIPO_CONVENIO  = "V";
