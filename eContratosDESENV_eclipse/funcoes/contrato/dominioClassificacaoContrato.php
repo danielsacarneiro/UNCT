@@ -27,10 +27,10 @@ Class dominioClassificacaoContrato extends dominio{
 	static function getColecao(){
 		return array(
 				self::$CD_MAO_OBRA => self::$DS_MAO_OBRA,
-				self::$CD_SERVICOS => self::$DS_SERVICOS,
 				self::$CD_FORNECIMENTO_AQUISICAO => self::$DS_FORNECIMENTO_AQUISICAO,
 				self::$CD_LOCACAO_IMOVEL => self::$DS_LOCACAO_IMOVEL,
 				self::$CD_LOCACAO_VEICULO => self::$DS_LOCACAO_VEICULO,
+				self::$CD_SERVICOS => self::$DS_SERVICOS,
 				self::$CD_A_CLASSIFICAR => self::$DS_A_CLASSIFICAR,
 		);
 	}

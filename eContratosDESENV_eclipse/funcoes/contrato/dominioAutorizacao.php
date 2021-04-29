@@ -31,6 +31,20 @@ class dominioAutorizacao extends dominio {
 				self::$CD_AUTORIZ_SAD_PGE_GOV => self::$DS_AUTORIZ_SAD_PGE_GOV 
 		);
 	}
+	static function getColecaoAutorizacaoSAD() {
+		return array (
+				self::$CD_AUTORIZ_SAD,
+				self::$CD_AUTORIZ_SAD_PGE,
+				self::$CD_AUTORIZ_SAD_PGE_GOV,
+		);
+	}
+	static function getColecaoAutorizacaoPGE() {
+		return array (
+				self::$CD_AUTORIZ_PGE,
+				self::$CD_AUTORIZ_SAD_PGE,
+				self::$CD_AUTORIZ_SAD_PGE_GOV,
+		);
+	}
 	static function temAutorizacao($cdAutorizacao, $colecaoAutorizacao) {
 		return in_array ( $cdAutorizacao, $colecaoAutorizacao );
 	}

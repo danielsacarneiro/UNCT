@@ -121,6 +121,7 @@ function formataFormClassificacao(pCampoChamada) {
 	campoClassificacao = document.frm_principal.<?=voContratoInfo::$nmAtrCdClassificacao?>;
 	campoMaodeObra = document.frm_principal.<?=voContratoInfo::$nmAtrInMaoDeObra?>;
 	campoTipoContrato = document.frm_principal.<?=voContratoInfo::$nmAtrTipoContrato?>;
+	campoAutorizacao = document.frm_principal.<?=voContratoInfo::$nmAtrCdAutorizacaoContrato?>;
 
 	var classificacao = campoClassificacao.value;
 	var tipoContrato = campoTipoContrato.value;
@@ -141,6 +142,10 @@ function formataFormClassificacao(pCampoChamada) {
 	if(classificacao == "<?=dominioClassificacaoContrato::$CD_LOCACAO_IMOVEL?>"){
 		exibirMensagem("<?=voContratoInfo::getTextoAlertaContratoLocação()?>");
 		campoProrrogacao.value = "<?=dominioProrrogacaoContrato::$CD_NAO_SEAPLICA?>";			
+	}else if(classificacao == "<?=dominioClassificacaoContrato::$CD_LOCACAO_VEICULO?>"
+		&& "<?=getArrayComoStringCampoSeparador(dominioAutorizacao::getColecaoAutorizacaoSAD())?>".indexOf(campoAutorizacao.value) == -1){
+		exibirMensagem("<?=voContratoInfo::getTextoAlertaContratoLocacaoVeiculo()?>");
+		campoAutorizacao.value = "<?=dominioAutorizacao::$CD_AUTORIZ_SAD?>";			
 	}
 
 	if(tipoContrato == "<?=dominioTipoContrato::$CD_TIPO_CONVENIO?>"){

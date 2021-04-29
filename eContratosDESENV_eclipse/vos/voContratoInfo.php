@@ -327,6 +327,12 @@ Class voContratoInfo extends voentidade{
 		
 	}
 	
+	static function getTextoAlertaContratoLocacaoVeiculo(){
+		$retorno .=	"ATENÇÃO: Contratos de locação de veículos devem se submeter à apreciação da SAD. Verifique se é caso também de envio à PGE.";
+	
+		return $retorno;
+	}
+	
 	static function getTextoAlertaContratoLocação(){
 		$retorno .=	"ATENÇÃO: Contratos de locação de imóvel NÃO se submetem ao art. 57, II, lei 8666/93.";
 		$retorno .= " Tais contratos vão para a SAD em qualquer situação de RENOVAÇÃO/PRORROGAÇÃO,";
