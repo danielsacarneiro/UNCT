@@ -158,15 +158,6 @@ function formataForm(pLimparCampos) {
 	tornarReadOnlyCamposColecaoFormulario(colecaoIDCamposVlMensal, tornarReadOnlyVlMensal, true, true);
 	tornarReadOnlyCamposColecaoFormulario(colecaoIDCamposVlGlobal, tornarReadOnlyVlGlobal, true, true);
 	tornarReadOnlyCamposColecaoFormulario(colecaoIDCamposVlReferenciais, tornarReadOnlyReferenciais, true, true);	
-	
-	/*if(isReajuste){
-		tornarReadOnlyCamposColecaoFormulario(colecaoIDCamposVlReferenciais, true, true, true);
-		tornarReadOnlyCamposColecaoFormulario(colecaoIDCamposVlContrato, false, true, true);
-	}else{
-		tornarReadOnlyCamposColecaoFormulario(colecaoIDCamposVlReferenciais, false, true, true);
-		tornarReadOnlyCamposColecaoFormulario(colecaoIDCamposVlContrato, true, true, true);
-	}*/	
-
 }
 
 function calcular(eElement){
@@ -187,11 +178,16 @@ function calcular(eElement){
 	//valor base referencia
 	pArrayCampos[6] = document.frm_principal.<?=vocontrato::$nmAtrVlMensalContrato?>;
 	pArrayCampos[7] = document.frm_principal.<?=vocontrato::$nmAtrVlGlobalContrato?>;
-	
-	pArrayCampos[8] = document.frm_principal.<?=voContratoModificacao::$nmAtrDtModificacaoFim?>;
+
+	var pCampoDtFim = document.frm_principal.<?=voContratoModificacao::$nmAtrDtModificacaoFim?>;
+	pArrayCampos[8] = pCampoDtFim;
 	pArrayCampos[9] = document.frm_principal.<?=voContratoModificacao::$nmAtrDtModificacao?>;
 	pArrayCampos[10] = document.frm_principal.<?=voContratoModificacao::$nmAtrNumMesesParaOFimPeriodo?>;
-	pArrayCampos[11] = document.frm_principal.<?=voContratoModificacao::$nmAtrTpModificacao?>;
+	var pCampoTipoMod = document.frm_principal.<?=voContratoModificacao::$nmAtrTpModificacao?>;
+	pArrayCampos[11] = pCampoTipoMod;
+	if(eElement == pCampoTipoMod){
+		pCampoDtFim.value = "";
+	}
 	pArrayCampos[12] = document.frm_principal.<?=voContratoModificacao::$nmAtrNumPercentual?>;
 	pArrayCampos[13] = document.frm_principal.<?=voContratoInfo::$nmAtrNumPrazo?>;
 	pArrayCampos[14] = <?=dominioTpContratoModificacao::$CD_TIPO_SUPRESSAO?>;	

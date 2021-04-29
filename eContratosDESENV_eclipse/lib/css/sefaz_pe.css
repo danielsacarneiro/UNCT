@@ -325,6 +325,7 @@ input[type="radio"]:disabled:not(:checked), input[type="checkbox"]:disabled:not(
 .campoobrigatorioalinhadodireita {
 	border: 1px solid #FFA500;
 	text-align: right;
+	background: white;
 }
 
 /* Representa um campo somente leitura no formulário alinhado a direita */

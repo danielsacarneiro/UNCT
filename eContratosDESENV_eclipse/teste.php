@@ -10,30 +10,6 @@ inicio();
 $titulo = "TESTE de Funções UNCT";
 setCabecalho($titulo);
 
-$nmFiltroExportar = "filtroConsultarContratoConsolidacao";
-//$filtro  = new $nmFiltroExportar(false);
-$filtro = getObjetoSessao($nmFiltroExportar);
-//$filtro = filtroManter::verificaFiltroSessao($filtro);
-//var_dump($filtro);
-//$filtro = new filtroManter();
-$nmVo = $filtro->getNmVOEntidadeExportarPlanilha();
-$voExportar = new $nmVo();
-//var_dump($voExportar);
-$nmClasseDbProcesso = $voExportar->getNmClassProcesso();
-$dbprocesso = new $nmClasseDbProcesso();
-var_dump($nmClasseDbProcesso);
-$nmMetodoExportarPlanilha = $filtro->getNmMetodoExportarPlanilha();
-
-//$colecaoPlanilha = getObjetoSessao(constantes::$ID_REQ_COLECAO_EXPORTAR_PLANILHA);
-//$filtro = new filtroManter();
-$filtro->setaFiltroConsultaSemLimiteRegistro();
-$filtro->isValidarConsulta = false;
-$colecaoPlanilha = $dbprocesso->$nmMetodoExportarPlanilha($filtro);
-
-if(isColecaoVazia($colecaoPlanilha)){
-	throw new excecaoConsultaVazia("Erro ao exportar.");
-}
-
 
 ?>
 
@@ -72,6 +48,7 @@ if(isColecaoVazia($colecaoPlanilha)){
 							<?php
 							echo dominioTipoDemanda::getHtmlChecksBox("teste", "4", dominioTipoDemanda::getColecaoTipoDemandaContratoValido(), 2, true);
 							?>
+							<input type="text" value = "" class="campoobrigatorioalinhadodireita">
 						</TH>
 		            </TR>							
 

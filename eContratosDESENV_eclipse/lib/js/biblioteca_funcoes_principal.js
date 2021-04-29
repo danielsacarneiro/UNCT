@@ -174,22 +174,25 @@ function tornarCampoObrigatorio(campoForm, pIsRequired){
 }
 
 function tornarCampoReadOnly(campoForm, pIsReadOnly, pIsRequired, pIsAlinhadoDireita){
-	var validar = pIsReadOnly;
-	campoForm.readOnly = validar;
+	campoForm.readOnly = pIsReadOnly;
 	
 	var complementoClasse = "";
-	if(pIsAlinhadoDireita)
+	if(pIsAlinhadoDireita){
 		complementoClasse = "alinhadodireita";
+	}
 
-	if(validar){
+	var classe = "camponaoobrigatorio";
+	if(pIsReadOnly){
 		classe="camporeadonly";
 	}else{
-		var classe = "camponaoobrigatorio";
+		classe = "camponaoobrigatorio";
 		if(pIsRequired)
 			classe = "campoobrigatorio";		
 	}
 	
-	campoForm.className=classe+complementoClasse;
+	var nmClasse = classe+complementoClasse;
+	//alert(campoForm.name + " " + nmClasse);
+	campoForm.className= nmClasse;
 }
 
 function tornarRequiredCamposColecaoFormulario(colecaoIDCampos, pIsRequired, pExibirAlertErro = false){	

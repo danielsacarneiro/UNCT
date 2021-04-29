@@ -163,54 +163,56 @@ function calcularModificacaoNovo(pArrayCampos) {
 		}
 	}
 	
+	var numMeses = 0;
+	var numPrazoUltimaProrrogacao = null; 
+	var permiteCalcularNumMeses = !(campoDtModificacao.value == "" || campoDtModificacaoFim.value == "");
+	if(permiteCalcularNumMeses){
+		numPrazo = getValorCampoMoedaComoNumeroValido(campoNumPrazo, 0);
+		numPrazoMater = getValorCampoMoedaComoNumeroValido(campoNumPrazoMater, 0);
+		//alert(campoNumPrazoMater.value + " " + campoNumPrazoMater.name);
+		numPrazoUltimaProrrogacao = getValorCampoMoedaComoNumeroValido(campoNumPrazoUltimaProrrogacao, 0);
+		//alert(numPrazoUltimaProrrogacao);
+			
+		numMeses = getQtMesesAuxiliar(campoDtModificacao.value, campoDtModificacaoFim.value);
+		
+		if(isNaN(numMeses)){
+			numMeses = 0
+		}			
+		numMesesAoFinal = arredondarValorMoedaParaBaixo(Math.abs(numMeses), 0);
+		
+		//pelo menos 1 mes deve ser considerado
+		if(numMesesAoFinal == 0){
+			numMesesAoFinal = 1;
+		}
+		
+		//o numero de meses ao fim nao pode ser maior que o prazo referencial do contrato
+		//alert(numMesesAoFinal + " meses ao final");
+		//alert(numPrazoMater + " meses mater");
+		if(numMesesAoFinal > numPrazoMater && numPrazoMater > 0){
+			exibirMensagem("Prazo restante ("+numMesesAoFinal+" meses) acima do prazo referencial do contrato("+numPrazoMater+" meses). Alterando o prazo restante.");
+			numMesesAoFinal = numPrazoMater;
+		}
+		
+		setValorCampoMoedaComSeparadorMilhar(campoNumMesesAoFim, numMesesAoFinal, 2);		
+	}
+	
 	//so executa se satisfizer as condicoes abaixo
-	if(!
-		(campoDtModificacao.value == ""
-		|| campoDtModificacaoFim.value == ""
-			|| campoTpModificacao.value == ""
+	var isExecutar = permiteCalcularNumMeses &&
+		!(campoTpModificacao.value == ""
 		|| (
 				!isCampoValidoParaCalcular(campoVlReferencial)
 				&& !isCampoValidoParaCalcular(campoVlModAoContrato)
 				&& !isCampoValidoParaCalcular(campoVlMensalAtualizado)
 				&& !isCampoValidoParaCalcular(campoVlGlobalAtualizado)
 			)
-		)
-	){	
-		
+		);
+	
+	if(isExecutar){		
 		var vlMensalModAtual = 0;
 		var vlGlobalModAtual = 0;
 		vlMensalModAtual = getValorCampoMoedaComoNumeroValido(campoVlMensalModAtual);
 		vlGlobalModAtual = getValorCampoMoedaComoNumeroValido(campoVlGlobalModAtual);
-		
-		numPrazo = getValorCampoMoedaComoNumeroValido(campoNumPrazo, 0);
-		numPrazoMater = getValorCampoMoedaComoNumeroValido(campoNumPrazoMater, 0);
-		var numPrazoUltimaProrrogacao = getValorCampoMoedaComoNumeroValido(campoNumPrazoUltimaProrrogacao, 0);
-		//alert(numPrazoUltimaProrrogacao);
-	
-		/*var numMesesAoFinal = getValorCampoMoedaComoNumeroValido(campoNumMesesAoFim,0);	
-		if(numMesesAoFinal == 0){*/
-			//var numMeses = getQtDias(campoDtModificacao.value, campoDtModificacaoFim.value)/28;
-			var numMeses = getQtMesesAuxiliar(campoDtModificacao.value, campoDtModificacaoFim.value);
-			
-			if(isNaN(numMeses)){
-				numMeses = 0
-			}			
-			numMesesAoFinal = arredondarValorMoedaParaBaixo(Math.abs(numMeses), 0);
-			
-			//pelo menos 1 mes deve ser considerado
-			if(numMesesAoFinal == 0){
-				numMesesAoFinal = 1;
-			}
-		//}		
-		
-		//o numero de meses ao fim nao pode ser maior que o prazo referencial do contrato
-		//alert(numMesesAoFinal + " meses ao final");
-		//alert(numPrazoMater + " meses mater");
-		if(numMesesAoFinal > numPrazoMater > 0){
-			exibirMensagem("Prazo restante ("+numMesesAoFinal+" meses) acima do prazo referencial do contrato("+numPrazoMater+" meses). Alterando o prazo restante.");
-			numMesesAoFinal = numPrazoMater;
-		}
-		
+				
 		var vlReferencialNovo = 0;
 		var vlModAoContratoNovo = 0;
 		var vlMensalAtualizadoNovo = 0;
@@ -304,7 +306,6 @@ function calcularModificacaoNovo(pArrayCampos) {
 		}
 
 		setValorCampoMoedaComSeparadorMilhar(campoVlRealAoContrato, vlModReal, 2);
-		setValorCampoMoedaComSeparadorMilhar(campoNumMesesAoFim, numMesesAoFinal, 2);
 		
 		//atualiza o percentual 
 		//percentual = eval((vlMensalAtualizadoNovo-vlMensalBase)/vlMensalBase);
@@ -350,10 +351,6 @@ function calcularModificacaoNovo(pArrayCampos) {
 				percentual = eval(vlReferencialNovo/vlMensalModAtual);
 			}
 		}
-
-		/*setValorCampoMoedaComSeparadorMilhar(campoNumPercentual, 100*percentual, 4);
-		setValorCampoMoedaComSeparadorMilhar(campoVlBasePercentual, vlMensalModAtual, 2);		
-		setValorCampoMoedaComSeparadorMilhar(campoNumPercentualGestor, 100*(vlReferencialNovo/vlBasePercentualGestor), 4);*/
 	
 		setValorCampoMoedaComSeparadorMilhar(campoNumPercentual, 100*percentual, 4);
 		setValorCampoMoedaComSeparadorMilhar(campoVlBasePercentual, vlBasePercentual, 2);		
