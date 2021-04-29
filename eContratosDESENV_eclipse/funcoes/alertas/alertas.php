@@ -406,6 +406,47 @@ function getMensagemContratosAVencer(&$count = 0){
 
 /** ALERTAS DILC **/
 
+function getMensagemEmailsGestorNaoRespondidos(&$count = 0){
+	$assunto = "CONTRATOS COM "
+			. getTextoHTMLDestacado(complementarCharAEsquerda(voMensageria::$NUM_MSGS_MAX_NAO_RESPONDIDAS, "0",3). "(OU MAIS) EMAILS  NAO RESPONDIDOS") 
+			." PELO GESTOR."
+			. getTextoHTMLDestacado("<br>*** Sugere-se gestão junto aos responsáveis.");
+	$assunto = getSequenciaAssunto($assunto, $count);
+	try {
+		$filtro = new filtroManterMensageria(false );
+		$vo = new voMensageria();
+		$dbprocesso = new dbMensageria();
+		
+		$filtro->voPrincipal = $vo;
+		//$filtro->isValidarConsulta = false;
+		$filtro->setaFiltroConsultaSemLimiteRegistro ();
+		
+		$filtro->tpVigencia = dominioTpVigencia::$CD_OPCAO_VIGENTES;
+		$filtro->inHabilitado = constantes::$CD_SIM;
+		$filtro->numMsgsEnviadas = voMensageria::$NUM_MSGS_MAX_NAO_RESPONDIDAS;
+		$filtro->inSeraProrrogado = constantes::$CD_SIM;
+		
+		$nmTabelaMsgMax = filtroManterMensageria::$NM_TAB_MSGREGISTRO_MAX_SQ;
+		$nmColunaNumMsgsEnviadas = voMensageriaRegistro::$nmAtrSq;
+		$filtro->cdAtrOrdenacao = $nmColunaNumMsgsEnviadas . " DESC";		
+
+		$colecao = $dbprocesso->consultarTelaConsulta($vo, $filtro);
+		
+		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, constantes::$CD_COLUNA_CONTRATO, null);
+		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Gestor', voContratoInfo::$IDREQNmPessoaGestor);
+		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Email', vopessoa::$nmAtrEmail);
+		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Encerramento', voMensageria::$nmAtrDtFim, constantes::$CD_TP_DADO_DATA);
+		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Num.Emails', $nmColunaNumMsgsEnviadas);
+
+		$msg = getCorpoMensagemPorColecao($assunto, $colecao, $colunasAAcrescentar);
+
+	} catch ( Exception $ex ) {
+		$msg = $ex->getMessage ();
+	}
+
+	return $msg;
+}
+
 function getMensagemContratosAVencerGestor(&$count = 0){
 	$assunto = "CONTRATOS A VENCER (".voMensageria::$NUM_DIAS_CONTRATOS_A_VENCER." dias) SEM DEMANDA INICIADA (COMUNICAR AO GESTOR):";
 	$assunto = getSequenciaAssunto($assunto, $count);
@@ -414,27 +455,13 @@ function getMensagemContratosAVencerGestor(&$count = 0){
 
 		$dbprocesso = new dbContratoInfo();
 		$colecao = $dbprocesso->consultarTelaConsultaConsolidacao ($filtro);
-
-		/*$array =array(
-		 constantes::$CD_COLUNA_CHAVE => 'RESPONSÁVEL',
-		 constantes::$CD_COLUNA_VALOR => voDemanda::$nmAtrCdPessoaRespUNCT,
-		 );
-		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);
-
-		$array =array(
-		constantes::$CD_COLUNA_CHAVE => 'PRAZO',
-		constantes::$CD_COLUNA_VALOR => filtroConsultarDemandaGestao::$NmColNuTempoUltimaTram,
-		constantes::$CD_COLUNA_TP_DADO =>  constantes::$TAMANHO_CODIGOS_SAFI,
-		constantes::$CD_COLUNA_VL_REFERENCIA =>  15,
-		constantes::$CD_COLUNA_TP_VALIDACAO =>  constantes::$CD_ALERTA_TP_VALIDACAO_MAIORQUE,
-		);
-		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);*/
-
+		
+		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, constantes::$CD_COLUNA_CONTRATO, null);
 		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Início.Vigência', filtroConsultarContratoConsolidacao::$NmColDtInicioVigencia, constantes::$CD_TP_DADO_DATA);
 		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Fim.Vigência', filtroConsultarContratoConsolidacao::$NmColDtFimVigencia, constantes::$CD_TP_DADO_DATA);
 		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Prazo(dias)', filtroConsultarContratoConsolidacao::$NmColQtdDiasParaVencimento);
 
-		$msg = getCorpoMensagemDemandaContratoColecao($assunto, $colecao, $colunasAAcrescentar);
+		$msg = getCorpoMensagemPorColecao($assunto, $colecao, $colunasAAcrescentar);
 
 	} catch ( Exception $ex ) {
 		$msg = $ex->getMessage ();
@@ -452,11 +479,12 @@ function getMensagemContratosAVencerImprorrogaveisGestor(&$count = 0){
 		$dbprocesso = new dbContratoInfo();
 		$colecao = $dbprocesso->consultarTelaConsultaConsolidacao ($filtro);
 
+		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, constantes::$CD_COLUNA_CONTRATO, null);
 		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Início.Vigência', filtroConsultarContratoConsolidacao::$NmColDtInicioVigencia, constantes::$CD_TP_DADO_DATA);
 		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Fim.Vigência', filtroConsultarContratoConsolidacao::$NmColDtFimVigencia, constantes::$CD_TP_DADO_DATA);
 		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Prazo(dias)', filtroConsultarContratoConsolidacao::$NmColQtdDiasParaVencimento);
 		
-		$msg = getCorpoMensagemDemandaContratoColecao($assunto, $colecao, $colunasAAcrescentar);
+		$msg = getCorpoMensagemPorColecao($assunto, $colecao, $colunasAAcrescentar);
 
 	} catch ( Exception $ex ) {
 		$msg = $ex->getMessage ();

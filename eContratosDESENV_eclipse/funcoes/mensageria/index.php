@@ -153,6 +153,7 @@ function alterar() {
 	            <TD class="campoformulario" colspan="3">
 				<?php				                        
 				echo getInputText(voMensageria::$nmAtrSq, voMensageria::$nmAtrSq, $filtro->sq, constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO, 3, 3, " onkeyup='validarCampoNumerico(this, event, false);'");
+				echo " |Num. Mínimo de Msgs: " . getInputText(filtroManterMensageria::$ID_REQ_NumMsgsEnviadas, filtroManterMensageria::$ID_REQ_NumMsgsEnviadas, $filtro->numMsgsEnviadas, constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO, 3, 3, " onkeyup='validarCampoNumerico(this, event, false);'");
 				?>
 				</TD>
 	        </TR>			

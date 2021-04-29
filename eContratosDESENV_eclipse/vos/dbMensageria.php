@@ -49,8 +49,9 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
   		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
   		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
-  		$nmTabelaPessoaGestor = "NM_TAB_PESSOAGESTOR";
+  		$nmTabelaPessoaGestor = filtroManterMensageria::$NM_TAB_GESTOR;
   		$nmTabelaMsgRegistro = voMensageriaRegistro::getNmTabelaStatic ( false );
+  		$nmTabMsgRegistroMAXSq = filtroManterMensageria::$NM_TAB_MSGREGISTRO_MAX_SQ;
   	
   		$colecaoAtributoCoalesceNmPessoa = array(
   				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
@@ -60,6 +61,7 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		$arrayColunasRetornadas = array (
   				$nmTabela . ".*",
   				filtroManterMensageria::getColunaDtUltimoEnvio(). " AS " . voMensageria::$nmCOLDhUltimoEnvio,
+  				$nmTabMsgRegistroMAXSq . "." . voMensageriaRegistro::$nmAtrSq,
   				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
   				$nmTabelaContrato . "." . vocontrato::$nmAtrDtPublicacaoContrato,
   				//$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
@@ -89,7 +91,6 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		$queryJoin .= "\n ON ";
   		$queryJoin .= $nmTabelaPessoaGestor . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrCdPessoaGestor;
   		
-  		$nmTabMsgRegistroMAXSq = "TAB_MSGREGISTRO_MAX_SQ";
   		$groupbyinterno = "$nmTabelaMsgRegistro." . voMensageriaRegistro::$nmAtrSqMensageria;
   		
   		$queryJoin .= "\n LEFT JOIN ";

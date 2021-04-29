@@ -6,6 +6,10 @@ class filtroManterMensageria extends filtroManter {
 	//public static $nmFiltro = "filtroManterContratoLicon";
 	public $nmFiltro = "filtroManterMensageria";
 	
+	static $NM_TAB_MSGREGISTRO_MAX_SQ = "NM_TAB_MSGREGISTRO_MAX_SQ";
+	static $NM_TAB_GESTOR = "NM_TAB_PESSOAGESTOR";
+	static $ID_REQ_NumMsgsEnviadas = "ID_REQ_NumMsgsEnviadas";
+	
 	var $cdContrato = "";
 	var $anoContrato = "";
 	var $tipoContrato = "";
@@ -19,6 +23,7 @@ class filtroManterMensageria extends filtroManter {
 	var $inVerificarPeriodoVigente = null;	
 	var $inVerificarFrequencia = null;
 	var $inSeraProrrogado = "";
+	var $numMsgsEnviadas = "";
 	var $sq = "";
 	
 	function getFiltroFormulario() {
@@ -35,6 +40,7 @@ class filtroManterMensageria extends filtroManter {
 		$this->dtFim = @$_POST [voMensageria::$nmAtrDtFim];
 		$this->tpVigencia = @$_POST [static::$nmAtrTpVigencia];
 		$this->inSeraProrrogado = @$_POST [voContratoInfo::$nmAtrInSeraProrrogado];
+		$this->numMsgsEnviadas = @$_POST [static::$ID_REQ_NumMsgsEnviadas];
 		
 		if ($this->cdOrdenacao == null) {
 			$this->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
@@ -49,6 +55,7 @@ class filtroManterMensageria extends filtroManter {
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
+		$nmTabelaMsgRegistroMax = static::$NM_TAB_MSGREGISTRO_MAX_SQ;
 		
 		// seta os filtros obrigatorios
 		if ($this->isSetaValorDefault ()) {
@@ -150,13 +157,16 @@ class filtroManterMensageria extends filtroManter {
 			$conector = "\n AND ";
 		}
 		
-		if (isAtributoValido($this->inSeraProrrogado)) {
-		
-			$filtro = $filtro . $conector . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrInSeraProrrogado . " = " . getVarComoString ( $this->inSeraProrrogado );
-		
+		if (isAtributoValido($this->inSeraProrrogado)) {		
+			$filtro = $filtro . $conector . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrInSeraProrrogado . " = " . getVarComoString ( $this->inSeraProrrogado );		
 			$conector = "\n AND ";
 		}
 						
+		if (isAtributoValido($this->numMsgsEnviadas)) {		
+			$filtro = $filtro . $conector . $nmTabelaMsgRegistroMax . "." . voMensageriaRegistro::$nmAtrSq . " >= " . $this->numMsgsEnviadas;		
+			$conector = "\n AND ";
+		}
+		
 		$this->formataCampoOrdenacao ( new voMensageria());
 		// finaliza o filtro
 		$filtro = parent::getFiltroSQL ( $filtro, $comAtributoOrdenacao );

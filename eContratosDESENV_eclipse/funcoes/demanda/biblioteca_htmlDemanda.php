@@ -732,6 +732,10 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDad
  	$vocontrato = new vocontrato();
  	$vocontrato->getDadosBanco($registro);
  	$dbcontrato = new dbcontrato();
+ 	
+ 	if(!isContratoValido($vocontrato))
+ 		throw new excecaoAtributoInvalido("Demanda sem contrato. Verifique o contrato da demanda.");
+ 	
  	try{
 	 	$colecao = $dbcontrato->consultarContratoPorChave($vocontrato, false);
 	 	$vocontrato->getDadosBanco($colecao[0]);

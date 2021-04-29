@@ -554,8 +554,8 @@ function enviarEmailDiretoria($enviarEmail, $count = 0, $msgAproveitavel = null)
 	$setor = "DILC";
 	imprimeTituloalerta($enviarEmail, $setor);
 
-	//envia contratos a vencer TODOS
-	//$mensagem .= getMensagemContratosAVencer($count);
+	//mensagens nao respondidas pelo gestor
+	$mensagem .= getMensagemEmailsGestorNaoRespondidos($count);
 	//envia contratos a vencer SEM DEMANDA
 	$mensagem .= getMensagemContratosAVencerGestor($count);
 	//envia contratos a vencer SEM DEMANDA QUE NAO ADMITEM PRORROGACAO
