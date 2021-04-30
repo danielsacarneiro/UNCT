@@ -571,7 +571,7 @@ function getDiferencaDiasVigencia(){
 		<TR>
             <TH class="campoformulario" nowrap><?=getTextoHTMLTagMouseOver("Empenho", "Separar por ; em caso de múltiplos empenhos.")?>:</TH>
             <TD class="campoformulario" colspan="3">
-            <INPUT type="text" placeholder="Separar por ; em caso de múltiplos empenhos." id="<?=vocontrato::$nmAtrNumEmpenhoContrato?>" onKeyUp="this.value = this.value.replaceAll(' ', '');" name="<?=vocontrato::$nmAtrNumEmpenhoContrato?>"  value="<?php echo($empenho);?>"  class="camponaoobrigatorio" size="40" required></TD>
+            <INPUT type="text" <?=getMsgPadraoInputText();?> id="<?=vocontrato::$nmAtrNumEmpenhoContrato?>" onKeyUp="this.value = this.value.replaceAll(' ', '');" name="<?=vocontrato::$nmAtrNumEmpenhoContrato?>"  value="<?php echo($empenho);?>"  class="camponaoobrigatorio" size="40" required></TD>
         </TR>
         <?php
         if(!$isInclusao){

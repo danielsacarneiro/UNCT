@@ -1557,3 +1557,7 @@ function getFuncaoOperacaoHTML(){
 	$funcao = @$_GET ["funcao"];
 	return $funcao;
 }
+
+function getMsgPadraoInputText(){
+	return "placeholder=\"Separar por ; para mais de um registro.\"";
+}

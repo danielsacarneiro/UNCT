@@ -102,7 +102,10 @@ include_once (caminho_funcoes . "pessoa/biblioteca_htmlPessoa.php");
 		$this->nome = $registrobanco[vopessoa::$nmAtrNome];
         $this->doc = $registrobanco[vopessoa::$nmAtrDoc];
         $this->tel = $registrobanco[vopessoa::$nmAtrTel];
-        $this->email = $registrobanco[vopessoa::$nmAtrEmail];        		
+        
+        $this->email = $registrobanco[vopessoa::$nmAtrEmail];
+        $this->email = str_replace(" ", "", $this->email);
+        
         $this->endereco = $registrobanco[vopessoa::$nmAtrEndereco];
         $this->obs = $registrobanco[vopessoa::$nmAtrObservacao];
         $this->inPAT = $registrobanco[vopessoa::$nmAtrInPAT];

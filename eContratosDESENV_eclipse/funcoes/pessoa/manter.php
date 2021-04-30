@@ -189,7 +189,7 @@ function abrirJanelaAuxiliarGestor(){
             </TR>
 			<TR>
                 <TH class="campoformulario" nowrap width=1%>Email:</TH>
-                <TD class="campoformulario" width="1%" colspan=3><INPUT type="text" id="<?=vopessoa::$nmAtrEmail?>" name="<?=vopessoa::$nmAtrEmail?>"  value="<?php echo($email);?>"  class="camponaoobrigatorio" size="50" required></TD>
+                <TD class="campoformulario" width="1%" colspan=3><INPUT type="text" id="<?=vopessoa::$nmAtrEmail?>" name="<?=vopessoa::$nmAtrEmail?>"  value="<?php echo($email);?>" <?=getMsgPadraoInputText();?> class="camponaoobrigatorio" size="50" required></TD>
             </TR>
 			<TR>
                 <TH class="campoformulario" nowrap width=1%>Telefone:</TH>
