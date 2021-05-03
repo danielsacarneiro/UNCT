@@ -327,8 +327,8 @@ Class voContratoInfo extends voentidade{
 		
 	}
 	
-	static function getTextoAlertaContratoLocacaoVeiculo(){
-		$retorno .=	"ATENÇÃO: Contratos de locação de veículos devem se submeter à apreciação da SAD. Verifique se é caso também de envio à PGE.";
+	static function getTextoAlertaManifestacaoSAD(){
+		$retorno .=	"ATENÇÃO: contrato exige apreciação da SAD. Verifique se é caso também de envio à PGE.";
 	
 		return $retorno;
 	}

@@ -297,7 +297,7 @@ function convocarAssinatura(){
 	            			maxlength="10">
 	            			
 	            <?php 
-	            echo "| Monitorar?: " . $comboSimNao->getHtmlCombo(filtroManterDemanda::$ID_REQ_InMonitorar,
+	            echo "|".getTextoHTMLDestacado("Monitorar", "red", false).": " . $comboSimNao->getHtmlCombo(filtroManterDemanda::$ID_REQ_InMonitorar,
 	            								filtroManterDemanda::$ID_REQ_InMonitorar, 
 	            								$filtro->inMonitorar, true, "camponaoobrigatorio", false,"");
 	            ?>

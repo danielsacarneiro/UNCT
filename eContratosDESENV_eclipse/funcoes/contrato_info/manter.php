@@ -65,6 +65,9 @@ function isFormularioValido() {
 	var inProrrog = campoProrrogacao.value;
 	var campoTemGarantia = document.frm_principal.<?=voContratoInfo::$nmAtrInTemGarantia?>;
 	var inTemGarantia = campoTemGarantia.value;	
+	var campoAutorizacao = document.frm_principal.<?=voContratoInfo::$nmAtrCdAutorizacaoContrato?>;
+	var campoEstudoTecnicoSAD = document.frm_principal.<?=voContratoInfo::$nmAtrInEstudoTecnicoSAD?>;
+	var inEstudoTecnicoSAD = campoEstudoTecnicoSAD.value;
 
 	if(classificacao == "<?=dominioClassificacaoContrato::$CD_LOCACAO_IMOVEL?>"
 		&& inProrrog != "<?=dominioProrrogacaoContrato::$CD_NAO_SEAPLICA?>"){
@@ -83,6 +86,20 @@ function isFormularioValido() {
 		return false;			
 	}	
 
+	if(classificacao == "<?=dominioClassificacaoContrato::$CD_LOCACAO_VEICULO?>"
+		&& "<?=getArrayComoStringCampoSeparador(dominioAutorizacao::getColecaoAutorizacaoSAD())?>".indexOf(campoAutorizacao.value) == -1){
+		exibirMensagem("<?=voContratoInfo::getTextoAlertaManifestacaoSAD()?>");
+		return false;
+		//campoAutorizacao.value = "<?=dominioAutorizacao::$CD_AUTORIZ_SAD?>";			
+	}		
+
+	if(inEstudoTecnicoSAD != "" && inEstudoTecnicoSAD != "<?=dominioEstudoTecnicoSAD::$CD_NAO_SEAPLICA?>"
+		&& "<?=getArrayComoStringCampoSeparador(dominioAutorizacao::getColecaoAutorizacaoSAD())?>".indexOf(campoAutorizacao.value) == -1){
+		exibirMensagem("<?=voContratoInfo::getTextoAlertaManifestacaoSAD()?>");
+		return false;
+		//campoAutorizacao.value = "<?=dominioAutorizacao::$CD_AUTORIZ_SAD?>";			
+	}
+	
 	return true;
 }
 
@@ -118,10 +135,10 @@ function formataFormEscopo() {
 
 
 function formataFormClassificacao(pCampoChamada) {
-	campoClassificacao = document.frm_principal.<?=voContratoInfo::$nmAtrCdClassificacao?>;
-	campoMaodeObra = document.frm_principal.<?=voContratoInfo::$nmAtrInMaoDeObra?>;
-	campoTipoContrato = document.frm_principal.<?=voContratoInfo::$nmAtrTipoContrato?>;
-	campoAutorizacao = document.frm_principal.<?=voContratoInfo::$nmAtrCdAutorizacaoContrato?>;
+	var campoClassificacao = document.frm_principal.<?=voContratoInfo::$nmAtrCdClassificacao?>;
+	var campoMaodeObra = document.frm_principal.<?=voContratoInfo::$nmAtrInMaoDeObra?>;
+	var campoTipoContrato = document.frm_principal.<?=voContratoInfo::$nmAtrTipoContrato?>;
+	var campoAutorizacao = document.frm_principal.<?=voContratoInfo::$nmAtrCdAutorizacaoContrato?>;
 
 	var classificacao = campoClassificacao.value;
 	var tipoContrato = campoTipoContrato.value;
@@ -142,10 +159,6 @@ function formataFormClassificacao(pCampoChamada) {
 	if(classificacao == "<?=dominioClassificacaoContrato::$CD_LOCACAO_IMOVEL?>"){
 		exibirMensagem("<?=voContratoInfo::getTextoAlertaContratoLocação()?>");
 		campoProrrogacao.value = "<?=dominioProrrogacaoContrato::$CD_NAO_SEAPLICA?>";			
-	}else if(classificacao == "<?=dominioClassificacaoContrato::$CD_LOCACAO_VEICULO?>"
-		&& "<?=getArrayComoStringCampoSeparador(dominioAutorizacao::getColecaoAutorizacaoSAD())?>".indexOf(campoAutorizacao.value) == -1){
-		exibirMensagem("<?=voContratoInfo::getTextoAlertaContratoLocacaoVeiculo()?>");
-		campoAutorizacao.value = "<?=dominioAutorizacao::$CD_AUTORIZ_SAD?>";			
 	}
 
 	if(tipoContrato == "<?=dominioTipoContrato::$CD_TIPO_CONVENIO?>"){
