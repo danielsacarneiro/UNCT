@@ -129,17 +129,17 @@ function iniciar(){
 				<?php
 				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioAutorizacao.php");
 				$combo = new select(dominioAutorizacao::getColecao());
-				$dadosContratoCompilado = consultarDadosContratoCompilado($voContrato);
+				/*$dadosContratoCompilado = consultarDadosContratoCompilado($voContrato);
 				//por enquanto ta pegando do registro mais antigo (na teoria eh o contrato mater)
 				//MELHORAR
 				if($dadosContratoCompilado!=null){
 					$cdAutorizacaoPlanilha =  $dadosContratoCompilado[vocontrato::$nmAtrCdAutorizacaoContrato];
-				}
+				}*/
 				?>
 	            <TH class="campoformulario" width="1%" nowrap>Autorização:</TH>
 	            <TD class="campoformulario" nowrap>
-	            Planilha: <?php echo $combo->getHtmlCombo("","", $cdAutorizacaoPlanilha, true, "camporeadonly", true, " disabled ");?>	            
-	            Atual: <?php echo $combo->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato,voContratoInfo::$nmAtrCdAutorizacaoContrato, $vo->cdAutorizacao, true, "camporeadonly", true, " disabled ");?>
+	            <?php //echo "Planilha:" . $combo->getHtmlCombo("","", $cdAutorizacaoPlanilha, true, "camporeadonly", true, " disabled ");?>	            
+	            <?php echo $combo->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato,voContratoInfo::$nmAtrCdAutorizacaoContrato, $vo->cdAutorizacao, true, "camporeadonly", true, " disabled ");?>
 				</TD>	            	
 	        </TR>	        
 			<TR>
