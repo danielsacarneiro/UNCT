@@ -360,6 +360,31 @@ function getDiferencaDiasVigencia(){
 	campoNumDias.value = getQtDias(pDataInicial, pDataFinal);
 }
 
+function formatarEmpenho(pCampo){
+	var valor = pCampo.value;
+	var primeira = null;
+	if(valor != null && valor != ""){
+		primeira = valor[0];
+		//var numero = eval(primeira);
+
+		if (isNaN(primeira)) {
+			removerCaracterer(pCampo, primeira, '');
+			exibirMensagem("Verifique o formato correto.");
+			focarCampo(pCampo);
+		}
+
+		/*var filtro = "/^([0-9])*$";
+		if (!filtro.test(primeira)) {
+			removerCaracterer(pCampo, primeira, '');
+			exibirMensagem("Formato incorreto.");
+			focarCampo(pCampo);
+		}*/
+			
+	}
+
+	removerCaracterer(pCampo, ' ', '');
+}
+
 </SCRIPT>
 <?=setTituloPagina($titulo)?>
 </HEAD>
@@ -571,7 +596,7 @@ function getDiferencaDiasVigencia(){
 		<TR>
             <TH class="campoformulario" nowrap><?=getTextoHTMLTagMouseOver("Empenho", "Separar por ; em caso de múltiplos empenhos.")?>:</TH>
             <TD class="campoformulario" colspan="3">
-            <INPUT type="text" <?=getMsgPadraoInputText();?> id="<?=vocontrato::$nmAtrNumEmpenhoContrato?>" onKeyUp="this.value = this.value.replaceAll(' ', '');" name="<?=vocontrato::$nmAtrNumEmpenhoContrato?>"  value="<?php echo($empenho);?>"  class="camponaoobrigatorio" size="40" required></TD>
+            <INPUT type="text" <?=getMsgPadraoInputText();?> id="<?=vocontrato::$nmAtrNumEmpenhoContrato?>" onKeyUp="formatarEmpenho(this);" name="<?=vocontrato::$nmAtrNumEmpenhoContrato?>"  value="<?php echo($empenho);?>"  class="camponaoobrigatorio" size="40" required></TD>
         </TR>
         <?php
         if(!$isInclusao){

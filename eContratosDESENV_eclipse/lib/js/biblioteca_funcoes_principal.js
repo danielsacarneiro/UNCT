@@ -2498,3 +2498,7 @@ function indexOfChaveArray(chave, pArray, pSemMensagem) {
 
 	return retorno;
 }
+
+function removerCaracterer(pCampo, strbusca, strsubstituta){
+	pCampo.value = pCampo.value.replaceAll(strbusca, strsubstituta);
+}
