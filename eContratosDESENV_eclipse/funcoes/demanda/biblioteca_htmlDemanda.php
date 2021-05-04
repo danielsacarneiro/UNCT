@@ -779,7 +779,8 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDad
 	contados a partir do recebimento do presente email, sendo posteriormente devolvidas pelos Correios ou protocoladas na  recepção do prédio desta SEFAZ,
 	situada na Av. Cruz Cabugá, N° 1419, Térreo, Santo Amaro, Recife/PE, CEP.: 50.040-000, no horário de atendimento presencial ".getTextoHTMLNegrito("excepcional: 9h as 15h.");
 	
-	if($vocontratoinfo->inTemGarantia == "N"){
+	//echo "garantia: " . $vocontratoinfo->inTemGarantia;
+	if($vocontratoinfo->inTemGarantia == "S"){
 		$retorno .= "<br><br>Por oportuno, informamos que será necessária a PRESTAÇÃO, ou REFORÇO, se acréscimo, ".getTextoHTMLNegrito("DA GARANTIA CONTRATUAL").", 
 		conforme previsão editalícia, devendo esta ser apresentada no prazo de até ".getTextoHTMLNegrito("10(dez) dias úteis").".". getTextoHTMLDestacado("[CONFIRMAR PRAZO NO EDITAL]");
 	}

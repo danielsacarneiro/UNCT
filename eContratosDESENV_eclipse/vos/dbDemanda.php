@@ -55,6 +55,7 @@ class dbDemanda extends dbprocesso {
 		$nmTabelaPA = voPA::getNmTabelaStatic ( false );
 		$nmTabelaPessoa = vopessoa::getNmTabelaStatic ( false );
 		$nmTabelaTramitacao = voDemandaTramitacao::getNmTabela ();
+		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
 		// $nmTabelaPAAP = voPA::getNmTabelaStatic ( false );
 		
 		$arrayColunasRetornadas = array (
@@ -69,6 +70,7 @@ class dbDemanda extends dbprocesso {
 				$nmTabelaContrato . "." . vocontrato::$nmAtrVlMensalContrato,
 				//$nmTabelaContrato . "." . vocontrato::$nmAtrVlGlobalContrato,
 				$nmTabelaContrato . "." . vocontrato::$nmAtrDtVigenciaInicialContrato,
+				$nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrInTemGarantia,
 				$nmTabelaPessoa . "." . vopessoa::$nmAtrDoc,
 				
 				$nmTabelaSolicCompra . "." . voSolicCompra::$nmAtrCd,
@@ -122,6 +124,16 @@ class dbDemanda extends dbprocesso {
 		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdEspecieContrato;
 		$queryJoin .= "\n AND ";
 		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato;
+		
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaContratoInfo;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaContratoInfo . "." . voDemandaContrato::$nmAtrAnoContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaContratoInfo . "." . voDemandaContrato::$nmAtrTipoContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaContratoInfo . "." . voDemandaContrato::$nmAtrCdContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaContratoInfo . "." . voDemandaContrato::$nmAtrInDesativado . "= 'N'";
 		
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaDemandaProcLic;
 		$queryJoin .= "\n ON ";

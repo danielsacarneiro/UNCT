@@ -53,7 +53,17 @@ function getCorpoMensagemDemandaPorColecao($assunto, $filtro, $colunasAAcrescent
 }
 
 function getCorpoMensagemDemandaContratoColecao($assunto, $colecao, $colunasAAcrescentar=null, $semTitulo=false) {
+	$pArray = array($assunto, $colecao, $colunasAAcrescentar, $semTitulo);
+	return getCorpoMensagemDemandaContratoArray($pArray);
+}
 
+function getCorpoMensagemDemandaContratoArray($pArray) {
+	$assunto = $pArray[0];
+	$colecao = $pArray[1];
+	$colunasAAcrescentar = $pArray[2];
+	$semTitulo = $pArray[3];
+	$nmFuncaoValidacaoDestaqueRegistro = $pArray[4];
+	
 	$colunas = incluirColunaColecao($colunas, 'SEI', voDemanda::$nmAtrProtocolo);
 	$colunas = incluirColunaColecao($colunas, 'ANO DEMANDA', voDemanda::$nmAtrAno);
 	$colunas = incluirColunaColecao($colunas, 'NÚMERO', voDemanda::$nmAtrCd, constantes::$TAMANHO_CODIGOS);
@@ -75,10 +85,35 @@ function getCorpoMensagemDemandaContratoColecao($assunto, $colecao, $colunasAAcr
 		$colunas = array_merge($colunas, $colunasAAcrescentar);
 	}
 
-	return getCorpoMensagemPorColecao($assunto, $colecao, $colunas);
+	$pArray = array($assunto, $colecao, $colunas, false, $nmFuncaoValidacaoDestaqueRegistro);
+	return getCorpoMensagemPorColecaoArray($pArray);
 }
 
 function getCorpoMensagemPorColecao($titulo, $colecao, $colunasAExibir, $isPrioritario=false) {
+	$pArray = array($titulo, $colecao, $colunasAExibir, $isPrioritario);
+	return getCorpoMensagemPorColecaoArray($pArray);
+}
+
+function isFormatarCelularRegistro($nmFuncaoValidacaoDestaqueRegistro, $registro){
+	$validacao = false;
+	//ECHO "entrou aqui!";
+	if(isAtributoValido($nmFuncaoValidacaoDestaqueRegistro)){
+		try{
+			$validacao = $nmFuncaoValidacaoDestaqueRegistro($registro);
+		}catch(Exception $ex){
+			;
+		}
+	}
+	return $validacao;	
+}
+
+function getCorpoMensagemPorColecaoArray($pArray) {
+	$titulo = $pArray[0];
+	$colecao = $pArray[1];
+	$colunasAExibir = $pArray[2];
+	$isPrioritario = $pArray[3];
+	$nmFuncaoValidacaoDestaqueRegistro = $pArray[4];
+	
 	if($colunasAExibir == null){
 		throw new excecaoGenerica("Indique pelo menos uma coluna dos dados consultados para exibir.");
 	}
@@ -88,8 +123,22 @@ function getCorpoMensagemPorColecao($titulo, $colecao, $colunasAExibir, $isPrior
 	try {
 
 		$mensagem = "PARABÉNS! Não há pendências.<br>";
+		$nmClassCelulaTitulo = 'tabeladadosdestacadonegrito';
+		$classColunaGeral = 'tabeladados';
 
 		if (! isColecaoVazia ( $colecao )) {
+			$registro = $colecao[0];
+			
+			if(isFormatarCelularRegistro($nmFuncaoValidacaoDestaqueRegistro, $registro)){
+				$classColunaGeral = 'tabeladadosdestacadoamarelo';
+				//echo "ENTROU AQUI!";
+			}
+			
+			if($isPrioritario){
+				//echo "prioritario VERDADEIRO";
+				$classColunaGeral = "tabeladadosdestacadovermelho";
+			}
+				
 			$mensagem = "HÁ PENDÊNCIAS.<BR>";				
 			$colspan = count($colunasAExibir)+1;				
 			// enviar o email com os registros a serem analisados
@@ -98,22 +147,24 @@ function getCorpoMensagemPorColecao($titulo, $colecao, $colunasAExibir, $isPrior
 				
 			$mensagem .= "<TR>\n";
 			
-			$mensagem .= "<TD class='tabeladadosdestacadonegrito' width='1%'>X</TD>\n";
+			$mensagem .= "<TD class='$nmClassCelulaTitulo' width='1%'>X</TD>\n";
 				
 			foreach ($colunasAExibir as $coluna){
-				$mensagem .= "<TD class='tabeladadosdestacadonegrito'>". $coluna[constantes::$CD_COLUNA_CHAVE] ."</TD>\n";
+				$mensagem .= "<TD class='$nmClassCelulaTitulo'>". $coluna[constantes::$CD_COLUNA_CHAVE] ."</TD>\n";
 			}
 
 			$mensagem .= "</TR>\n";
 				
 			$contador = 0;
 			foreach ( $colecao as $registro ) {
+				//zera a cor da coluna para a padrao
+				$classColuna = $classColunaGeral;
 
 				$mensagem .= "<TR>\n";
 				
 				$voDemandaChave = new voDemanda();
 				$voDemandaChave->getDadosBanco ( $registro );				
-				$mensagem .= "<TD class='tabeladadosdestacadonegrito'>".getHTMLRadioButtonConsulta("rdb_consulta", "rdb_consulta", $voDemandaChave, false)."</TD>\n";
+				$mensagem .= "<TD class='$nmClassCelula'>".getHTMLRadioButtonConsulta("rdb_consulta", "rdb_consulta", $voDemandaChave, false)."</TD>\n";
 
 				foreach ($colunasAExibir as $coluna){
 					$coluna_valor = $registro[$coluna[constantes::$CD_COLUNA_VALOR]];
@@ -133,12 +184,7 @@ function getCorpoMensagemPorColecao($titulo, $colecao, $colunasAExibir, $isPrior
 
 					$colunaVlReferencia = $coluna[constantes::$CD_COLUNA_VL_REFERENCIA];
 					$colunaTpValidacao = $coluna[constantes::$CD_COLUNA_TP_VALIDACAO];
-					
-					if($isPrioritario)
-						$classColuna = "tabeladadosdestacadovermelho";
-					else					
-						$classColuna = "tabeladados";
-					
+										
 					if($colunaVlReferencia != null){						
 						if($colunaTpValidacao == constantes::$CD_ALERTA_TP_VALIDACAO_MAIORQUE){
 							if($coluna_valor > $colunaVlReferencia){
@@ -175,8 +221,9 @@ function getCorpoMensagemPorColecao($titulo, $colecao, $colunasAExibir, $isPrior
 								if($sqEspeciaAtual != null){
 									$contrato .= "|";
 									$strtemp = $cdEspeciaAtual==dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER?dominioEspeciesContrato::$DS_ESPECIE_CONTRATO_MATER:$sqEspeciaAtual ."o$cdEspeciaAtual";
-									$contrato .= getTextoHTMLNegrito($strtemp);
+									$contrato .= $strtemp;
 								}
+								$contrato = getTextoHTMLNegrito($contrato);
 								
 								$conectorContrato = ": ";
 							}
@@ -733,4 +780,7 @@ function getLogComFlagImpressao($log, $imprimir=false){
 	return $log;	
 }
 
+function isAlertaFormatarCelulaDemandaMonitorada($registro){
+	return $registro[voDemandaTramitacao::$nmAtrCdSetorDestino] == dominioSetor::$CD_SETOR_UNCT;	
+}
 ?>

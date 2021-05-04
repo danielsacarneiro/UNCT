@@ -540,7 +540,8 @@ function getMensagemDemandasMonitoradas(&$count = 0){
 		);
 		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);
 
-		$msg = getCorpoMensagemDemandaContratoColecao($assunto, $colecao, $colunasAAcrescentar);
+		$pArray = array($assunto, $colecao, $colunasAAcrescentar, false, "isAlertaFormatarCelulaDemandaMonitorada");
+		$msg = getCorpoMensagemDemandaContratoArray($pArray);
 
 	} catch ( Exception $ex ) {
 		$msg = $ex->getMessage ();
