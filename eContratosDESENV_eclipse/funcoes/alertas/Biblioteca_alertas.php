@@ -173,7 +173,7 @@ function getCorpoMensagemPorColecaoArray($pArray) {
 				
 				$voDemandaChave = new voDemanda();
 				$voDemandaChave->getDadosBanco ( $registro );				
-				$mensagem .= "<TD class='$nmClassCelula'>".getHTMLRadioButtonConsulta("rdb_consulta", "rdb_consulta", $voDemandaChave, false)."</TD>\n";
+				$mensagem .= "<TD class='$classColuna'>".getHTMLRadioButtonConsulta("rdb_consulta", "rdb_consulta", $voDemandaChave, false)."</TD>\n";
 
 				foreach ($colunasAExibir as $coluna){
 					$coluna_valor = $registro[$coluna[constantes::$CD_COLUNA_VALOR]];
