@@ -2,6 +2,7 @@
 // include_once ("../../config_lib.php");
 require_once (caminho_funcoes . vocontrato::getNmTabela () . "/dominioAutorizacao.php");
 require_once (caminho_lib . "phpmailer/config_email.php");
+require_once (caminho_vos . "voDemandaTramitacao.php");
 
 function incluirColunaColecaoArray($colecao, $array){		
 	$colecao[] = $array;
@@ -64,7 +65,15 @@ function getCorpoMensagemDemandaContratoArray($pArray) {
 	$semTitulo = $pArray[3];
 	$nmFuncaoValidacaoDestaqueRegistro = $pArray[4];
 	
-	$colunas = incluirColunaColecao($colunas, 'SEI', voDemanda::$nmAtrProtocolo);
+	//$colunas = incluirColunaColecao($colunas, 'SEI', voDemanda::$nmAtrProtocolo);
+	
+	$array =array(
+			constantes::$CD_COLUNA_CHAVE => 'SEI',
+			constantes::$CD_COLUNA_TP_VALIDACAO => "formatarSEI", 
+			constantes::$CD_COLUNA_VALOR => voDemanda::$nmAtrProtocolo,
+	);
+	$colunas = incluirColunaColecaoArray($colunas, $array);
+	
 	$colunas = incluirColunaColecao($colunas, 'ANO DEMANDA', voDemanda::$nmAtrAno);
 	$colunas = incluirColunaColecao($colunas, 'NÚMERO', voDemanda::$nmAtrCd, constantes::$TAMANHO_CODIGOS);
 	
@@ -198,6 +207,9 @@ function getCorpoMensagemPorColecaoArray($pArray) {
 							//$coluna_valor = complementarCharAEsquerda ( $coluna_valor, '0', $colunaTipoDado );
 						}						
 						
+					}else if(isAtributoValido($colunaTpValidacao)){
+						//executa qualquer funcao que vier dentro da validacao
+						$coluna_valor = $colunaTpValidacao($coluna_valor);						
 					}
 						
 					//para o caso de ter dados do contrato
@@ -782,5 +794,9 @@ function getLogComFlagImpressao($log, $imprimir=false){
 
 function isAlertaFormatarCelulaDemandaMonitorada($registro){
 	return $registro[voDemandaTramitacao::$nmAtrCdSetorDestino] == dominioSetor::$CD_SETOR_UNCT;	
+}
+
+function formatarSEI($sei){
+	return voDemandaTramitacao::getNumeroPRTComMascara($sei, false);
 }
 ?>
