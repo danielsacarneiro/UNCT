@@ -1227,7 +1227,8 @@ class dbDemanda extends dbprocesso {
 				$temGarantia = $vocontratoInfo->inTemGarantia == constantes::$CD_SIM;				
 				//$vo = new voDemandaTramitacao();
 				$garantiaOk = !$temGarantia  || (isAtributoValido($vo->fase) && in_array(dominioFaseDemanda::$CD_GARANTIA_PRESTADA, $vo->fase));
-				if(!$garantiaOk){ 
+				$isApostilamento = $vocontratoDemanda->cdEspecie == dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_APOSTILAMENTO;
+				if(!$garantiaOk && !$isApostilamento){ 
 					throw new excecaoGenerica("Fechamento não permitido: verifique a garantia do contrato. |"
 							. $vocontratoDemanda->getCodigoContratoFormatado(true));						
 				}
