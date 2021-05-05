@@ -110,6 +110,7 @@ class dbContratoInfo extends dbprocesso {
 				"$nmTabela.". voContratoInfo::$nmAtrTipoContrato,
 				"$nmTabela.". voContratoInfo::$nmAtrCdContrato,
 				"$nmTabela.". voContratoInfo::$nmAtrDtProposta,
+				"$nmTabela.". voContratoInfo::$nmAtrInSeraProrrogado,
 				$filtro->getSqlAtributoCoalesceAutorizacao() . " AS " . filtroManterContratoInfo::$NmColAutorizacao,
 				getSQLNmContratada(),
 				//getSQLCOALESCE($colecaoAtributoCoalesceNmPessoa,vopessoa::$nmAtrNome),
