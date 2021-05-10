@@ -534,7 +534,13 @@ class filtroManter extends multiplosConstrutores {
 	 * @return string
 	 */	 
 	function getAtributoOrdenacaoAnteriorDefault() {
-		return "";
+		$retorno = "";
+		//filtro de historico na tela, para facilitar a implementacao, so permitira ordenar pelo historico. Ver alteracao futura!
+		if($this->isHistorico() && $this->pegarFiltroDaTela()){
+			//$retorno = voentidade::$nmAtrSqHist;
+			$this->cdAtrOrdenacao = voentidade::$nmAtrSqHist; 
+		}
+		return $retorno;
 	}
 	function setaFiltroConsultaSemLimiteRegistro() {
 		$this->qtdRegistrosPorPag = null;
@@ -594,7 +600,7 @@ class filtroManter extends multiplosConstrutores {
 	
 	function setFiltroOrdenacaoComplemento(&$varAtributos){
 		if($this->isHistorico()){
-			$atributo = array(voentidade::$nmAtrSqHist => "Sq.Hist");
+			$atributo = array(voentidade::$nmAtrSqHist => voentidade::$DS_HISTORICO);
 			$varAtributos = putElementoArray2NoArray1ComChaves ($atributo, $varAtributos);
 		}
 	}

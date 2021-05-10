@@ -352,25 +352,23 @@ class dbcontrato extends dbprocesso {
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
 		$nmTabelaContratoLicon = voContratoLicon::getNmTabelaStatic ( false );
 		$nmTabelaPessoa = vopessoa::getNmTabelaStatic ( false );
+		$nmTabelaPessoaGestor = "NM_TAB_GESTOR";
 		
 		$nmTabContratoLiconSqMAX = "TAB_MAX_LICON_CONTRATO";
 		
+		$arrayCoalesceResponsavel = array(
+				"$nmTabelaPessoaGestor.". vopessoa::$nmAtrNome,
+				vocontrato::$nmAtrGestorPessoaContrato
+		);
 		$arrayColunasRetornadas = array("$nmTabela.*",
 			"$nmTabelaPessoa." . vopessoa::$nmAtrDoc,
 			"$nmTabelaContratoInfo." . voContratoInfo::$nmAtrDtProposta,
 			"$nmTabelaContratoInfo." . voContratoInfo::$nmAtrInEscopo,
+			getSQLCOALESCE($arrayCoalesceResponsavel, vocontrato::$nmAtrGestorPessoaContrato),
 			"$nmTabelaContratoLicon." . voContratoLicon::$nmAtrSituacao,
 			"TAB1." . vousuario::$nmAtrName . " AS " . voentidade::$nmAtrNmUsuarioInclusao,
 			"TAB2." . vousuario::$nmAtrName . " AS " . voentidade::$nmAtrNmUsuarioUltAlteracao,
 		);
-
-		/*$queryJoin = "SELECT $nmTabela.*";
-		$queryJoin .= ", $nmTabelaContratoInfo." . voContratoInfo::$nmAtrDtProposta;
-		$queryJoin .= ", $nmTabelaContratoInfo." . voContratoInfo::$nmAtrInEscopo;
-		$queryJoin .= ", $nmTabelaContratoLicon." . voContratoLicon::$nmAtrSituacao;
-		$queryJoin .= ", TAB1." . vousuario::$nmAtrName . " AS " . voentidade::$nmAtrNmUsuarioInclusao;
-		$queryJoin .= ", TAB2." . vousuario::$nmAtrName . " AS " . voentidade::$nmAtrNmUsuarioUltAlteracao;
-		$queryJoin .= " FROM " . $nmTabela;*/
 
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaContratoInfo;
 		$queryJoin .= "\n ON ";
@@ -379,6 +377,10 @@ class dbcontrato extends dbprocesso {
 		$queryJoin .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrAnoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrAnoContrato;
 		$queryJoin .= "\n AND ";
 		$queryJoin .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrTipoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
+		
+		$queryJoin .= "\n LEFT JOIN $nmTabelaPessoa $nmTabelaPessoaGestor " ;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaPessoaGestor . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrCdPessoaGestor;
 
 		$groupbyinterno = $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrAnoContrato
 		. "," . $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrCdContrato

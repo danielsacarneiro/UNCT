@@ -295,7 +295,7 @@ function incluirUsuarioDataHoraDetalhamento($voEntidade) {
 	if ($voEntidade->sqHist != null) {
 		$nmusuHistorico = $voEntidade->nmUsuarioOperacao;
 		
-		$retorno .= "\n<TR>\n" . "<TH class='textoseparadorgrupocampos' halign='left' colspan='4'>" . "<DIV class='campoformulario' id='div_tramitacao'>&nbsp;&nbsp;Dados do Histórico" . "</DIV>" . "</TH>" . "</TR>";
+		$retorno .= "\n<TR>\n" . "<TH class='textoseparadorgrupocampos' halign='left' colspan='4'>" . "<DIV class='campoformulario' id='div_tramitacao'>&nbsp;&nbsp;Dados da Operação</DIV>" . "</TH>" . "</TR>";
 		
 		$retorno .= "<TR>
 		            <TH class='campoformulario' nowrap>Data:</TH>

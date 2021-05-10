@@ -828,7 +828,8 @@ class dbprocesso {
 		// $query.= vogestorpessoa::$nmAtrSqContrato . " = " . $voContrato->sq;
 		
 		$query .= $voEntidade->getValoresWhereSQLChave ( false );
-		// echo $query;
+
+		 //echo $query;
 		
 		return $query;
 	}

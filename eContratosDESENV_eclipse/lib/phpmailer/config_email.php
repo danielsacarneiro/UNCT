@@ -87,9 +87,9 @@ class email_sefaz extends multiplosConstrutores{
 	}
 	
 	static function getListaEmailLogAlertasGestor(){
-		return array(
+		return array( 
 				"eduardo.s-goncalves@sefaz.pe.gov.br",
-				"daniel.ribeiro@sefaz.pe.gov.br",
+				static::$REMETENTE_PRINCIPAL,
 				static::$REMETENTE_COPIA,
 		);
 	}

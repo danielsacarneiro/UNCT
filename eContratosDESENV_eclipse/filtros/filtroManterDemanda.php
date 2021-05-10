@@ -1136,7 +1136,7 @@ class filtroManterDemanda extends filtroManter{
 	function getAtributoOrdenacaoAnteriorDefault(){
 		$nmTabelaDemanda = voDemanda::getNmTabelaStatic($this->isHistorico);
 		//$retorno = $nmTabelaDemanda . "." . voDemanda::$nmAtrAno . " " . $this->cdOrdenacao; 
-		return $retorno; 		
+		return parent::getAtributoOrdenacaoAnteriorDefault(); 		
 	}
 	
 	function getAtributoOrdenacaoDefault(){

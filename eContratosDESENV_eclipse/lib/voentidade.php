@@ -1,6 +1,8 @@
 <?php
 include_once (caminho_util . "bibliotecaFuncoesPrincipal.php");
 class voentidade extends multiplosConstrutores {
+	static $DS_HISTORICO = "Hist.";
+	static $DS_OPERACAO = "Operação";
 	static $nmTabelaSufixoHistorico = "_hist";
 	static $nmTabelaSufixoSequencial = "_seq";
 	
@@ -91,7 +93,8 @@ class voentidade extends multiplosConstrutores {
 	// ...............................................................
 	// Funcoes ( Propriedades e metodos da classe )
 	function getSQLValuesInsertEntidade() {
-		$userManutencao = $this->cdUsuarioUltAlteracao;
+		//$userManutencao = $this->cdUsuarioUltAlteracao;
+		$userManutencao = id_user;
 		if ($this->cdUsuarioInclusao == null || $this->cdUsuarioInclusao == "" || $this->cdUsuarioInclusao == "null"){
 			$this->cdUsuarioInclusao = $userManutencao;
 		}
@@ -118,6 +121,7 @@ class voentidade extends multiplosConstrutores {
 			 //ECHO "TEM USU INCLUSAO";
 		} // ELSE ECHO "NAO TEM USU INCLUSAO";
 		
+		//a principio, o sistema entende que a inclusao tambem equivale a uma ultima alteracao
 		if ($temUsuarioAlt) {
 			$retorno .= $conector . $this->cdUsuarioUltAlteracao;
 			//ECHO "TEM USU ALTERACAO";
@@ -133,11 +137,8 @@ class voentidade extends multiplosConstrutores {
 	 *
 	 */
 	function getSQLValuesUpdate() {		
-		$idUsuarioAlteracao = $this->cdUsuarioUltAlteracao;				
-		if($idUsuarioAlteracao == null){
-			$idUsuarioAlteracao = id_user;
-		}
-		
+		$idUsuarioAlteracao = id_user;
+
 		$retorno = "";
 		$retorno .= self::$nmAtrDhUltAlteracao . " = now() ";
 		$retorno .= ",";
@@ -148,7 +149,6 @@ class voentidade extends multiplosConstrutores {
 		return $retorno;
 	}
 	function getSQLValuesEntidadeUpdate($idUsuarioAlteracao = null) {
-		$idUsuarioAlteracao = $this->cdUsuarioUltAlteracao;
 		if($idUsuarioAlteracao == null){
 			$idUsuarioAlteracao = id_user;
 		}
@@ -159,10 +159,12 @@ class voentidade extends multiplosConstrutores {
 		$retorno = "";
 		$conector = ",";
 		if ($temUsuarioAlt) {
+			//echo "TEM USUARIO ALTERACAO";
 			$retorno .= $conector . self::$nmAtrCdUsuarioUltAlteracao . " = " . $idUsuarioAlteracao;
 			$conector = ",";
 		}
 		if ($temDtAlt) {
+			//echo "TEM DATA ALTERACAO";
 			$retorno .= $conector . self::$nmAtrDhUltAlteracao . " = now() ";
 		}
 		
@@ -230,9 +232,9 @@ class voentidade extends multiplosConstrutores {
 		}
 	}
 	function setaAtributosRemocaoEInclusaoDBDefault($arrayAtribRemover=null, $arrayAtributosDBDefault=null) {
-		/*$this->varAtributos = removeColecaoAtributos ( $this->varAtributos, $arrayAtribRemover );
-		$this->varAtributosARemover = $arrayAtribRemover;*/		
-		$this->varAtributosDBDefault = $arrayAtributosDBDefault;		
+		//atributos que devem ser incluidos automaticamente
+		$this->varAtributosDBDefault = $arrayAtributosDBDefault;
+		//atributos que a entidade nao possui
 		$this->removeAtributos($arrayAtribRemover);
 	}
 	function removeAtributos($arrayAtribRemover) {

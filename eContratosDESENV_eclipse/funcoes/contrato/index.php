@@ -86,22 +86,27 @@ $numTotalRegistros = $filtro->numTotalRegistros;
 <SCRIPT language="JavaScript" type="text/javascript">
 
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
-function formataForm() {
-	isConsultarArquivo = document.frm_principal.cdConsultarArquivo.value;
-
-	if(isConsultarArquivo != "<?=dominioConsultaArquivoContrato::$CD_CONSULTA_COMUM?>"){
-		document.frm_principal.<?=filtroManterContrato::$nmAtrAnoArquivo?>.disabled = false;
-	}else{
-		document.frm_principal.<?=filtroManterContrato::$nmAtrAnoArquivo?>.disabled = true;
-	}
+/*function formataForm() {
+	var campoConsultarArquivo = null;
+	try{
+		campoConsultarArquivo = document.frm_principal.cdConsultarArquivo;
+	}catch(ex){
+		var isConsultarArquivo = campoConsultarArquivo.value;
 	
-	//if(isConsultarArquivo == "<?=dominioConsultaArquivoContrato::$CD_CONSULTA_ARQUIVO_CONTRATO_ASSINADO?>"){
-	if(isConsultarArquivo != "<?=dominioConsultaArquivoContrato::$CD_CONSULTA_COMUM?>"){	
-			//por conta da estrutura de arquivos da _dag$/UNCT, deve-se obrigar o nome da contratada			
-		document.frm_principal.<?=vocontrato::$nmAtrContratadaContrato?>.required = true;
-	}else{
-		document.frm_principal.<?=vocontrato::$nmAtrContratadaContrato?>.required = false;
-	}
+		if(isConsultarArquivo != "<?=dominioConsultaArquivoContrato::$CD_CONSULTA_COMUM?>"){
+			document.frm_principal.<?=filtroManterContrato::$nmAtrAnoArquivo?>.disabled = false;
+		}else{
+			document.frm_principal.<?=filtroManterContrato::$nmAtrAnoArquivo?>.disabled = true;
+		}
+		
+		//if(isConsultarArquivo == "<?=dominioConsultaArquivoContrato::$CD_CONSULTA_ARQUIVO_CONTRATO_ASSINADO?>"){
+		if(isConsultarArquivo != "<?=dominioConsultaArquivoContrato::$CD_CONSULTA_COMUM?>"){	
+				//por conta da estrutura de arquivos da _dag$/UNCT, deve-se obrigar o nome da contratada			
+			document.frm_principal.<?=vocontrato::$nmAtrContratadaContrato?>.required = true;
+		}else{
+			document.frm_principal.<?=vocontrato::$nmAtrContratadaContrato?>.required = false;
+		}
+	
 }
 
 function validaFormulario() {
@@ -115,7 +120,7 @@ function validaFormulario() {
 	}
 
 	return true;			
-}
+}*/
 
 // Transfere dados selecionados para a janela principal
 function selecionar() {
@@ -192,9 +197,9 @@ function alterar() {
 }
 
 function confirmar() {
-	if (!validaFormulario()) {
+	/*if (!validaFormulario()) {
 		return false;
-	}	
+	}*/	
 	    
 	return true;
 }
@@ -218,7 +223,7 @@ function estatisticas(){
 </SCRIPT>
 <?=setTituloPagina(vocontrato::getTituloJSP().$complementoTitulo)?>
 </HEAD>
-<BODY class="paginadados" onload="formataForm();">	  
+<BODY class="paginadados" onload="">	  
 <FORM name="frm_principal" method="post" action="index.php?consultar=S" onSubmit="return confirmar();">
 
 <INPUT type="hidden" id="evento" name="<%=PRManterReferenciaLegal.ID_REQ_EVENTO%>" value=""> 
@@ -246,8 +251,12 @@ function estatisticas(){
 	        
 	        ?>
             <TR>
-	            <TH class="campoformulario" nowrap width="1%" ROWSPAN=2>Contrato:</TH>
-	            <TD class="campoformulario" ROWSPAN=2>
+            <TD class="campoformulario" colspan=4>
+	            <TABLE class="filtro" cellpadding="0" cellspacing="0">
+	        	<TBODY>
+	        	<TR>
+	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
+	            <TD class="campoformulario" width="1%" nowrap>
 	            <?php
 	            
 	            $voContratoFiltro = new vocontrato();
@@ -294,41 +303,65 @@ function estatisticas(){
 	            );
 	            
 	            getContratoEntradaArrayGenerico($pArray);
-	            
-	            $comboConsultaArquivo = new select(dominioConsultaArquivoContrato::getColecao());
-	            $selectExercicio = new selectExercicio();
 	            ?>
 	            </TD>
-    			<TH class="campoformulario" nowrap>Procurar em arquivos:</TH>
-               	<TD class="campoformulario" nowrap> 
-               	<?php 
-               	echo $comboConsultaArquivo->getHtmlCombo("cdConsultarArquivo","cdConsultarArquivo", $filtro->cdConsultarArquivo, false, "camponaoobrigatorio", false, " onChange='formataForm();' ");              	               	
-               	echo "Ano Arquivo: " . $selectExercicio->getHtmlCombo(filtroManterContrato::$nmAtrAnoArquivo,filtroManterContrato::$nmAtrAnoArquivo, $filtro->anoArquivo, true, "camponaoobrigatorio", false, "");
-               	?>
-				</TD>	            
-	        </TR>	             
-            <!--  <TR>
-	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" width="1%" nowrap><?php getContratoEntradaDeDados($tipo, $cdContrato, $anoContrato, $arrayCssClass, null, null, false);?></TD>
-    			<TH class="campoformulario" nowrap>Procurar em arquivos:</TH>
-               	<TD class="campoformulario" nowrap> 
-               	<?php 
-               	echo $comboConsultaArquivo->getHtmlCombo("cdConsultarArquivo","cdConsultarArquivo", $filtro->cdConsultarArquivo, false, "camponaoobrigatorio", false, " onChange='formataForm();' ");              	               	
-               	echo "Ano Arquivo: " . $selectExercicio->getHtmlCombo(filtroManterContrato::$nmAtrAnoArquivo,filtroManterContrato::$nmAtrAnoArquivo, $filtro->anoArquivo, true, "camponaoobrigatorio", false, "");
-               	?>
-				</TD>
-            </TR>  -->
-			<?php
-            $dominioTipoContrato = new dominioTipoContrato();            
-			$tiposContrato = new select($dominioTipoContrato->colecao);            
-			
-			//$comboEspecies = new select(dominioEspeciesContrato::getColecao());
-			$comboTpDemanda = new select(dominioTipoDemanda::getColecaoTipoDemandaContrato());				
-			?>
-                <TH class="campoformulario" nowrap>Demandas:</TH>
-                <TD class="campoformulario"><?php echo $comboTpDemanda->getHtmlCombo(filtroManterContrato::$nmAtrTpDemanda, filtroManterContrato::$nmAtrTpDemanda."[]", $filtro->tpDemanda, true, "camponaoobrigatorio", false, " multiple ")?>
-                </TD>                												                
-	        </TR>
+	            <TD class="campoformulario">
+	                <TABLE class="filtro" cellpadding="0" cellspacing="0">
+        			<TBODY>
+						<TR>
+			                 <TH class="campoformulario" nowrap>Gestor:</TH>
+			                 <TD class="campoformulario">				                 
+				            <?php 
+				            include_once(caminho_util. "dominioSimNao.php");
+				            $comboSimNao = new select(dominioSimNao::getColecao());
+				             
+				            echo "E-mail? " . $comboSimNao->getHtmlCombo(
+				            		filtroManterContratoInfo::$ID_REQ_InGestor,
+				            		filtroManterContratoInfo::$ID_REQ_InGestor, 
+				            		$filtro->inGestor, true, "camponaoobrigatorio", false,
+				            	"");
+				            ?>
+							Nome: <INPUT type="text" id="<?=vocontrato::$nmAtrGestorContrato?>" name="<?=vocontrato::$nmAtrGestorContrato?>"  value="<?php echo($nmGestor);?>"  class="camponaoobrigatorio" size="20" >	            
+							</TD>
+						</TR>
+						<TR>
+							<?php
+							require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioAutorizacao.php");				
+							$nmCheckAutorizacaoArray = vocontrato::$nmAtrCdAutorizacaoContrato . "[]";
+							$colecaoAutorizacao = $filtro->cdAutorizacao;
+											
+							require_once (caminho_util . "/selectOR_AND.php");
+							$comboOuE = new selectOR_AND();
+							?>
+				            <TH class="campoformulario" width="1%" nowrap>Autorização:</TH>
+				            <TD class="campoformulario">
+				            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_SAD?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_SAD?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_SAD, $colecaoAutorizacao)?> >SAD
+				            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_PGE?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_PGE?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_PGE, $colecaoAutorizacao)?>>PGE
+				            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_GOV?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_GOV?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_GOV, $colecaoAutorizacao)?>>GOV
+				            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_NENHUM?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_NENHUM?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_NENHUM, $colecaoAutorizacao)?>>Nenhum
+				            <?php echo $comboOuE->getHtmlSelect(filtroManterContrato::$NmAtrInOR_AND,filtroManterContrato::$NmAtrInOR_AND, $filtro->InOR_AND, false, "camponaoobrigatorio", false);?>
+							</TD>
+						</TR>
+						<TR>
+			               <TH class="campoformulario" width="1%" nowrap>Empenho:</TH>
+			               <TD class="campoformulario"><?=getInputText(vocontrato::$nmAtrNumEmpenhoContrato, vocontrato::$nmAtrNumEmpenhoContrato, $filtro->empenho)?>
+			               </TD>	            
+			            </TR>
+						<TR>
+				            <TH class="campoformulario" width="1%" nowrap>Licon:</TH>
+				            <TD class="campoformulario">
+				            <?php 	            
+				            echo $comboSimNao->getHtmlCombo(vocontrato::$nmAtrInLicomContrato,vocontrato::$nmAtrInLicomContrato, $filtro->licon, true, "camponaoobrigatorio", false,"");
+				            ?>
+						</TR>        			
+        			</TBODY>
+        			</TABLE>	            
+	            </TD>	            	        	
+	        	</TR>
+	        	</TBODY>
+	        	</TABLE>
+            </TD>	            
+ 	        </TR>
 	        <?php	        
 	        require_once (caminho_funcoes . voProcLicitatorio::getNmTabela() . "/biblioteca_htmlProcLicitatorio.php");
 	        ?>
@@ -340,62 +373,20 @@ function estatisticas(){
 	            </TD>
 	        </TR>	        
 			<TR>
-                 <TH class="campoformulario" nowrap>Gestor:</TH>
-                 <TD class="campoformulario">				                 
-	            <?php 
-	            include_once(caminho_util. "dominioSimNao.php");
-	            $comboSimNao = new select(dominioSimNao::getColecao());
-	             
-	            echo "E-mail? " . $comboSimNao->getHtmlCombo(
-	            		filtroManterContratoInfo::$ID_REQ_InGestor,
-	            		filtroManterContratoInfo::$ID_REQ_InGestor, 
-	            		$filtro->inGestor, true, "camponaoobrigatorio", false,
-	            	"");
-	            ?>
-				Nome: <INPUT type="text" id="<?=vocontrato::$nmAtrGestorContrato?>" name="<?=vocontrato::$nmAtrGestorContrato?>"  value="<?php echo($nmGestor);?>"  class="camponaoobrigatorio" size="20" >	            
-				</TD>
-				<?php
-				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioAutorizacao.php");				
-				$nmCheckAutorizacaoArray = vocontrato::$nmAtrCdAutorizacaoContrato . "[]";
-				$colecaoAutorizacao = $filtro->cdAutorizacao;
-								
-				require_once (caminho_util . "/selectOR_AND.php");
-				$comboOuE = new selectOR_AND();
-				?>
-	            <TH class="campoformulario" width="1%" nowrap>Autorização:</TH>
-	            <TD class="campoformulario">
-	            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_SAD?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_SAD?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_SAD, $colecaoAutorizacao)?> >SAD
-	            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_PGE?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_PGE?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_PGE, $colecaoAutorizacao)?>>PGE
-	            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_GOV?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_GOV?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_GOV, $colecaoAutorizacao)?>>GOV
-	            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_NENHUM?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_NENHUM?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_NENHUM, $colecaoAutorizacao)?>>Nenhum
-	            <?php echo $comboOuE->getHtmlSelect(filtroManterContrato::$NmAtrInOR_AND,filtroManterContrato::$NmAtrInOR_AND, $filtro->InOR_AND, false, "camponaoobrigatorio", false);?>
-				</TD>
-			</TR>
-			<TR>
-                <TH class="campoformulario" nowrap>Contratada:</TH>
+                <TH class="campoformulario" nowrap >Contratada:</TH>
                 <TD class="campoformulario" width="1%">
                 Nome: 
                 <INPUT type="text" id="<?=vocontrato::$nmAtrContratadaContrato?>" name="<?=vocontrato::$nmAtrContratadaContrato?>"  value="<?php echo($nmContratada);?>"  class="camponaoobrigatorio" size="20" <?=$requiredArquivo?>>
                 |CPF/CNPJ: 
                 <INPUT type="text" id="<?=vocontrato::$nmAtrDocContratadaContrato?>" name="<?=vocontrato::$nmAtrDocContratadaContrato?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($docContratada);?>" class="camponaoobrigatorio" size="20" maxlength="18">
                 </TD>
-               <TH class="campoformulario" width="1%" nowrap>Empenho:</TH>
-               <TD class="campoformulario"><?=getInputText(vocontrato::$nmAtrNumEmpenhoContrato, vocontrato::$nmAtrNumEmpenhoContrato, $filtro->empenho)?>
-               </TD>	            
-            </TR>
-			<TR>
-				<TH class="campoformulario" nowrap>Objeto:</TH>
-				<TD class="campoformulario" width="1%">
+				<TH class="campoformulario" width="1%">Objeto:</TH>
+				<TD class="campoformulario" >
 				<INPUT type="text" id="<?=vocontrato::$nmAtrObjetoContrato?>" name="<?=vocontrato::$nmAtrObjetoContrato?>"  value="<?php echo($dsObjeto);?>"  class="camponaoobrigatorio" size="30">
 				</TD>
-	            <TH class="campoformulario" width="1%" nowrap>Licon:</TH>
-	            <TD class="campoformulario">
-	            <?php 	            
-	            echo $comboSimNao->getHtmlCombo(vocontrato::$nmAtrInLicomContrato,vocontrato::$nmAtrInLicomContrato, $filtro->licon, true, "camponaoobrigatorio", false,"");
-	            ?>
-			</TR>
+            </TR>
 			<TR>
-				<TH class="campoformulario" nowrap>Intervalo</TH>
+				<TH class="campoformulario" nowrap>Intervalo:</TH>
 				<TD class="campoformulario" colspan=3>
                           	Data Inicial: <INPUT type="text" 
                         	       id="dtInicio1" 
@@ -438,7 +429,7 @@ function estatisticas(){
 				</TD>
          </TR>	    		
 			<TR>
-				<TH class="campoformulario" nowrap>Assinatura</TH>
+				<TH class="campoformulario" nowrap>Assinatura:</TH>
 				<TD class="campoformulario" colspan=3>
                           	De <INPUT type="text" 
                         	       id="<?=filtroManterContrato::$ID_REQ_DtAssinaturaInicial?>" 

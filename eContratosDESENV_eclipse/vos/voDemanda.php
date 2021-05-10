@@ -84,12 +84,19 @@ class voDemanda extends voentidade {
 		
 		// retira os atributos padrao que nao possui
 		// remove tambem os que o banco deve incluir default
-		$arrayAtribRemover = array (
+		/*$arrayAtribRemover = array (
 				self::$nmAtrDhInclusao,
 				self::$nmAtrDhUltAlteracao 
 		);
 		$this->removeAtributos ( $arrayAtribRemover );
-		$this->varAtributosARemover = $arrayAtribRemover;
+		$this->varAtributosARemover = $arrayAtribRemover;*/
+				
+		$arrayAtribInclusaoDBDefault = array (
+				self::$nmAtrDhInclusao,
+				self::$nmAtrDhUltAlteracao,		
+		);
+		$this->setaAtributosRemocaoEInclusaoDBDefault(null, $arrayAtribInclusaoDBDefault);
+		
 	}
 	public static function getTituloDemandaGestaoPorSetor() {
 		return "DEMANDA GESTÃO POR SETOR";

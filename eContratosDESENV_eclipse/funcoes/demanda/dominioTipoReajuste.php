@@ -6,7 +6,7 @@ class dominioTipoReajuste extends dominio {
 	static $CD_REAJUSTE_AMBOS = 'S';
 	static $CD_REAJUSTE_OUTROS = 'N';
 	
-	static $DS_REAJUSTE_MONTANTE_A= 'Mont.A/Convenção.Coletiva';
+	static $DS_REAJUSTE_MONTANTE_A= 'Mont.A/CCT';
 	static $DS_REAJUSTE_MONTANTE_B= 'Mont.B';
 	static $DS_REAJUSTE_AMBOS = 'Ambos';
 	static $DS_REAJUSTE_OUTROS = 'Outros índices';

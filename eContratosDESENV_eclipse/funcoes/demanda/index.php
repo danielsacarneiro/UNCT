@@ -551,7 +551,8 @@ function convocarAssinatura(){
                   <?php 
                   if($isHistorico){					                  	
                   	?>
-                  	<TH class="headertabeladados" width="1%" rowspan=2>Sq.Hist</TH>
+                  	<TH class="headertabeladados" width="1%" rowspan=2><?=voentidade::$DS_HISTORICO?></TH>
+                  	<TH class="headertabeladados" width="1%" rowspan=2><?=voentidade::$DS_OPERACAO?></TH>
                   <?php 
                   }
                   ?>
@@ -566,7 +567,7 @@ function convocarAssinatura(){
                     <TH class="headertabeladados"width="1%" nowrap rowspan=2>Abertura</TH>
                     <TH class="headertabeladados"width="1%" nowrap rowspan=2>Últ.Movim</TH>
                     <TH class="headertabeladadosalinhadocentro"width="1%" nowrap colspan="2">Prazo</TH>
-                    <TH class="headertabeladados" width="10%" rowspan=2>Resp.</TH>
+                    <TH class="headertabeladados" width="10%" rowspan=2>UNCT</TH>
                     <TH class="headertabeladados" width="1%" rowspan=2>Situação</TH>                    
                 </TR>
                 <TR>
@@ -586,7 +587,7 @@ function convocarAssinatura(){
                                 
                 $colspan=15;
                 if($isHistorico){
-                	$colspan++;
+                	$colspan=$colspan+2;
                 }
                 
                 $dominioTipoContrato = new dominioTipoContrato();
@@ -684,6 +685,7 @@ function convocarAssinatura(){
                   if($isHistorico){                  	
                   	?>
                   	<TD class="tabeladados"><?php echo complementarCharAEsquerda($colecao[$i][$voAtual::$nmAtrSqHist], "0", TAMANHO_CODIGOS);?></TD>
+                  	<TD class="tabeladados"><?php echo getDataHora($colecao[$i][$voAtual::$nmAtrDhOperacao]);?></TD>
                   <?php 
                   }
                   ?>                    

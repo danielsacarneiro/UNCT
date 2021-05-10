@@ -2,7 +2,7 @@
 include_once (caminho_lib . "dbprocesso.obj.php");
 include_once ("vocontrato.php");
 class dbDemanda extends dbprocesso {
-	static $FLAG_PRINTAR_SQL = false;
+	static $FLAG_PRINTAR_SQL = FALSE;
 	
 	function consultarPorChaveTelaColecaoContrato($vo, $isHistorico) {
 		try {
@@ -754,7 +754,7 @@ class dbDemanda extends dbprocesso {
 		$filtro->vodemanda->ano = $vo->ano;
 		
 		$filtro->TemPaginacao = false;
-		$filtro->cdAtrOrdenacao = voDemandaTramitacao::$nmAtrDhInclusao;
+		$filtro->cdAtrOrdenacao = "$nmTabela.".voDemandaTramitacao::$nmAtrDhInclusao;
 		$filtro->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
 		// echo $vo->texto;
 		
@@ -819,7 +819,7 @@ class dbDemanda extends dbprocesso {
 		$filtro->vodemanda->ano = $vo->ano;
 	
 		$filtro->TemPaginacao = false;
-		$filtro->cdAtrOrdenacao = voDemandaTramitacao::$nmAtrDhInclusao;
+		$filtro->cdAtrOrdenacao = "$nmTabela." . voDemandaTramitacao::$nmAtrDhInclusao;
 		$filtro->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
 		// echo $vo->texto;
 	
@@ -1466,7 +1466,8 @@ class dbDemanda extends dbprocesso {
 				$retorno = !isColecaoVazia($colecao);
 				//$vocontrato = new vocontrato();			
 				if($retorno){
-					throw new excecaoGenerica("Já existe uma demanda ABERTA para o Contrato ".$vocontrato->getCodigoContratoFormatado().". Verifique se o TERMO/ADITIVO indicado está correto.");
+					throw new excecaoGenerica("Já existe uma demanda ABERTA para o Contrato ".$vocontrato->getCodigoContratoFormatado()
+							.", que deve ser utilizada. Verifique se o TERMO/ADITIVO indicado está correto.");
 				}
 			}
 		}
@@ -1621,7 +1622,8 @@ class dbDemanda extends dbprocesso {
 		$retorno .= $sqlConector . voDemanda::$nmAtrProtocolo . " = " . $this->getVarComoString ( voDemanda::getNumeroPRTSemMascara($vo->prt));
 		$sqlConector = ",";
 				
-		$retorno = $retorno . $sqlConector . $vo->getSQLValuesUpdate ();
+		//$retorno = $retorno . $sqlConector . $vo->getSQLValuesUpdate ();
+		$retorno = $retorno . $vo->getSQLValuesEntidadeUpdate ();
 		
 		return $retorno;
 	}
