@@ -474,7 +474,7 @@ function iniciar(){
 				</TD>
 	        </TR>
 			<TR>
-	            <TH class="campoformulario" nowrap width="1%">Texto:</TH>
+	            <TH class="campoformulario" nowrap width="1%">Despacho:</TH>
 	            <TD class="campoformulario" colspan="3"><textarea rows="5" cols="80" id="<?=voDemandaTramitacao::$nmAtrTexto?>" name="<?=voDemandaTramitacao::$nmAtrTexto?>" class="camponaoobrigatorio" <?=$complementoHTML?>></textarea>
 				</TD>
 	        </TR>
@@ -497,7 +497,7 @@ function iniciar(){
 				</TD>
 	        </TR>	        
 			<TR>
-	            <TH class="campoformulario" nowrap>Data:</TH>
+	            <TH class="campoformulario" nowrap width="1%">Data:</TH>
 	            <TD class="campoformulario" colspan="3">
 	            	<INPUT type="text" 
 	            	       id="<?=voDemandaTramitacao::$nmAtrDtReferencia?>" 

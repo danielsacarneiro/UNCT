@@ -1183,8 +1183,7 @@ class dbDemanda extends dbprocesso {
 		}*/
 		
 	}
-		
-	
+			
 	function validarAlteracao($vo) {
 		$this->validarGenerico($vo);
 		
@@ -1226,15 +1225,22 @@ class dbDemanda extends dbprocesso {
 				
 				$temGarantia = $vocontratoInfo->inTemGarantia == constantes::$CD_SIM;				
 				//$vo = new voDemandaTramitacao();
-				$garantiaOk = !$temGarantia  || (isAtributoValido($vo->fase) && in_array(dominioFaseDemanda::$CD_GARANTIA_PRESTADA, $vo->fase));
+				//var_dump($vo->fase);
+				//$garantiaOk = !$temGarantia  || (isAtributoValido($vo->fase) && in_array(dominioFaseDemanda::$CD_GARANTIA_PRESTADA, $vo->fase));
+				$garantiaOk = !$temGarantia  || (isAtributoValido($vo->fase) && existeItemNoArrayOuString(dominioFaseDemanda::$CD_GARANTIA_PRESTADA, $vo->fase));  
 				$isApostilamento = $vocontratoDemanda->cdEspecie == dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_APOSTILAMENTO;
 				if(!$garantiaOk && !$isApostilamento){ 
 					throw new excecaoGenerica("Fechamento não permitido: verifique a garantia do contrato. |"
 							. $vocontratoDemanda->getCodigoContratoFormatado(true));						
 				}
 				
-				$temPendenciaContratoEnvioSAD = isAtributoValido($vocontratoInfo->inPendencias) && in_array(dominioAutorizacao::$CD_AUTORIZ_SAD, $vocontratoInfo->inPendencias);
-				$temPendenciaContratoEnvioPGE = isAtributoValido($vocontratoInfo->inPendencias) && in_array(dominioAutorizacao::$CD_AUTORIZ_PGE, $vocontratoInfo->inPendencias);
+				
+				//$temPendenciaContratoEnvioSAD = isAtributoValido($vocontratoInfo->inPendencias) && in_array(dominioAutorizacao::$CD_AUTORIZ_SAD, $vocontratoInfo->inPendencias);
+				$temPendenciaContratoEnvioSAD = isAtributoValido($vocontratoInfo->inPendencias) 
+					&& existeItemNoArrayOuString(dominioAutorizacao::$CD_AUTORIZ_SAD, $vocontratoInfo->inPendencias);
+				//$temPendenciaContratoEnvioPGE = isAtributoValido($vocontratoInfo->inPendencias) && in_array(dominioAutorizacao::$CD_AUTORIZ_PGE, $vocontratoInfo->inPendencias);
+				$temPendenciaContratoEnvioPGE = isAtributoValido($vocontratoInfo->inPendencias) 
+					&& existeItemNoArrayOuString(dominioAutorizacao::$CD_AUTORIZ_PGE, $vocontratoInfo->inPendencias);
 				
 				$isContratoEnvioSAD = !$temPendenciaContratoEnvioSAD && isContratoEnvioSADPGE($vocontratoDemanda, dominioSetor::$CD_SETOR_SAD, $vocontratoInfo);
 				$isContratoEnvioPGE = !$temPendenciaContratoEnvioPGE && isContratoEnvioSADPGE($vocontratoDemanda, dominioSetor::$CD_SETOR_PGE, $vocontratoInfo);				

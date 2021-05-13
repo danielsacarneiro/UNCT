@@ -183,7 +183,7 @@ function getCorpoMensagemPorColecaoArray($pArray) {
 					}else if(constantes::$CD_TP_DADO_DOMINIO == $coluna[constantes::$CD_COLUNA_TP_DADO]){
 						$nmClasseDominio = $coluna[constantes::$CD_COLUNA_NM_CLASSE_DOMINIO];
 						$dominio = new $nmClasseDominio();
-						$coluna_valor = $dominio->getDescricaoStatic($coluna_valor);
+						$coluna_valor = $dominio->getDescricaoChaveArrayOuComSeparador($coluna_valor);
 					}
 					
 					$colunaTipoDado = $coluna[constantes::$CD_COLUNA_TP_DADO];

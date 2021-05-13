@@ -117,7 +117,7 @@ class voMensageriaRegistro extends voentidade {
 	
 		<br><br>A resposta deve ser enviada para o seguinte correio eletrônico: <b><u>$emailPrincipal</u></b>, com cópia para <u>$emailCopia</u> .
 		<br><br><b>Sem prejuízo quanto à responsabilidade referente à gestão contratual própria do setor demandante,
-		é imprescindível a resposta deste email, ainda que inexista interesse na prorrogação, para fins de controle e registro desta UNCT</b>.
+		é imprescindível a resposta deste email, ainda que inexista interesse na prorrogação, para fins de controle e registro desta unidade</b>.
 	
 		<br><br>Caso o pedido de prorrogação já tenha sido formalizado, <b>favor informar o número do SEI que trata da presente questão</b>.
 		<br><br>Na ausência de manifestação, este e-mail será reenviado a cada <b>$numFrequencia dia(s)</b>.";
@@ -141,7 +141,7 @@ class voMensageriaRegistro extends voentidade {
 		 
 		<br><br>A resposta deve ser enviada para o seguinte correio eletrônico: <b><u>$emailPrincipal</u></b>, com cópia para <u>$emailCopia</u> .
 		<br><br><b>Sem prejuízo quanto à responsabilidade referente à gestão contratual própria do setor demandante,
-		é imprescindível a resposta deste email, ainda que inexista interesse na prorrogação, para fins de controle e registro desta UNCT</b>.
+		é imprescindível a resposta deste email, ainda que inexista interesse na prorrogação, para fins de controle e registro desta unidade</b>.
 		 
 		<br><br>Caso esta solicitação já tenha sido respondida, <b>favor informar o número do SEI que trata da presente questão</b>.
 	

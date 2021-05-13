@@ -163,14 +163,19 @@ function tornarCampoObrigatorio(campoForm, pIsRequired){
 	campoForm.required = validar;			
 	/*var isCampoObrigatorioDefault = element.required;
 	var validar = isCampoObrigatorioDefault && pIsRequired;
-	element.required = validar;*/			 
-	if(validar){
-		campoForm.className="campoobrigatorio";
-		//alert("campo tornado obrigatorio");
-	}else{
-		campoForm.className="camponaoobrigatorio";
-		//alert("campo tornado NAO obrigatorio");
+	element.required = validar;*/	
+	var classAlinhado = "alinhadodireita";
+	var isAlinhadoDireita = campoForm.className.indexOf(classAlinhado) != -1; 
+	var classFinal = "campoobrigatorio";
+	if(!validar){
+		classFinal="camponaoobrigatorio";
 	}
+	
+	if(isAlinhadoDireita){
+		classFinal = classFinal + classAlinhado;
+	}
+	
+	campoForm.className = classFinal;
 }
 
 function tornarCampoReadOnly(campoForm, pIsReadOnly, pIsRequired, pIsAlinhadoDireita){

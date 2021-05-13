@@ -110,7 +110,7 @@ function truncarStringHTMLArray($pArray){
 		if($usarReticencia){
 			$complem = "...";
 		}
-		$retorno .= $complem;
+		$retorno = rtrim($retorno) . $complem;
 
 		if($comDivExpansivel){
 			//$retorno .= getDivHtmlExpansivel($nmDiv, $string);
@@ -714,6 +714,19 @@ function removerNaoNumericos($str){
 	return preg_replace("/[^0-9]/", "", $str);
 }
 
+function existeItemNoArrayOuString($item, $arrayOuString){
+	if(is_array($arrayOuString)){
+		$retorno = in_array($item, $arrayOuString);
+	}else{
+		$retorno = existeStr1NaStr2($item, $arrayOuString);
+	}
+
+	return $retorno;
+}
+
+function getAtributoFormularioHTML($name){
+	return @$_POST[$name];
+}
 /*function isArrayMultiDimensional($array){
 	return count($array) == count($array, COUNT_RECURSIVE);
 }*/

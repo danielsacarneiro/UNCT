@@ -47,14 +47,18 @@ $funcao = @$_GET["funcao"];
 $titulo = vocontrato::getTituloJSP() . "-MOVIMENTAÇÕES";
 setCabecalho($titulo);
 
-$colecaoMov = $dbprocesso->consultarContratoMovimentacoes($voContrato, $isHistorico);
-if (is_array($colecaoMov))
+$cdEspecieSelecionada = getAtributoFormularioHTML(vocontrato::$nmAtrCdEspecieContrato);
+$pAtributos = array($voContrato, $isHistorico, $cdEspecieSelecionada);
+$colecaoMov = $dbprocesso->consultarContratoMovimentacoesArray($pAtributos);
+if (!isColecaoVazia($colecaoMov)){
     $tamanho = sizeof($colecaoMov);
-else 
+    //pega a ultima data, que seria a mais recente
+    $dtFinalAConsiderar = $colecaoMov[$tamanho-1][vocontrato::$nmAtrDtVigenciaFinalContrato];
+    
+}else 
     $tamanho = 0;
 
-//pega a ultima data, que seria a mais recente
-$dtFinalAConsiderar = $colecaoMov[$tamanho-1][vocontrato::$nmAtrDtVigenciaFinalContrato];
+$chaveContrato = $voContrato->getValorChaveHTML(); // "hist*" + document.frm_principal.rdb_consulta.value + "CM*1";
 
 ?>
 <!DOCTYPE html>
@@ -92,7 +96,7 @@ function detalhar(isExcluir) {
 </HEAD>
 <BODY class="paginadados" onload="">
 	  
-<FORM name="frm_principal" method="post" action="confirmarManterContrato.php">
+<FORM name="frm_principal" method="post" action="movimentacaoContrato.php?lupa=S&chave=<?=$chaveContrato?>">
 
 <INPUT type="hidden" id="funcao" name="funcao" value="<?=$funcao?>">
 <INPUT type="hidden" id="<?=vousuario::$nmAtrID?>" name="<?=vousuario::$nmAtrID?>" value="<?=id_user?>">
@@ -115,15 +119,14 @@ function detalhar(isExcluir) {
         ?>
 		<TR>
             <TH class="campoformulario" nowrap>Gestor:</TH>
-            <TD class="campoformulario" colspan="3"><INPUT type="text" id="nmGestor" name="nmGestor"  value="<?php echo($nmGestor);?>"  class="camporeadonly" size="50" <?=$readonly?>></TD>
-        </TR>
-		<TR>
-            <TH class="campoformulario" nowrap>Responsavel:</TH>
-            <TD class="campoformulario" colspan="3"><INPUT type="text" id="nmGestor" name="nmGestor"  value="<?php echo($nmGestorPessoa);?>"  class="camporeadonly" size="50" <?=$readonly?>></TD>
+            <TD class="campoformulario" colspan="3">
+            <?php echo "Unidade: " . getTextoHTMLNegrito($nmGestor) 
+            		. "| Responsável: " . getTextoHTMLNegrito($nmGestorPessoa)?> 
+            </TD> 
         </TR>
 		<TR>
             <TH class="campoformulario" nowrap>Data Proposta:</TH>
-            <TD class="campoformulario" colspan="3">
+            <TD class="campoformulario" width='1%'>
             	<INPUT type="text" 
             	       id="<?=vocontrato::$nmAtrDtProposta?>" 
             	       name="<?=vocontrato::$nmAtrDtProposta?>" 
@@ -131,6 +134,13 @@ function detalhar(isExcluir) {
             			class="camporeadonly" 
             			size="10" 
             			maxlength="10" <?=$readonly?>>
+			</TD>
+            <TH class="campoformulario" nowrap width='1%'>Termo:</TH>
+            <TD class="campoformulario">
+            	<?php
+            	$comboEspecie = new select(dominioEspeciesContrato::getColecao());
+            	echo $comboEspecie->getHtmlCombo(vocontrato::$nmAtrCdEspecieContrato,vocontrato::$nmAtrCdEspecieContrato, $cdEspecieSelecionada, true, "camponaoobrigatorio", false, " onChange='form.submit();'");            	
+            	?>
 			</TD>
         </TR>
 		<!--  <TR>

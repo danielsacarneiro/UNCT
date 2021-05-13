@@ -320,6 +320,7 @@ function marcaApenasUmCheckBox(checkBox, pSemMensagem) {
 
 function validaFormRequiredCheckBox(campoCheckBoxValidacao, colecaoIDCampos, pSetarVazio, pExibirAlertErro = false){
 	pIsRequired = !campoCheckBoxValidacao.checked;
+	//bibli.principal....
 	tornarRequiredCamposColecaoFormulario(colecaoIDCampos, pIsRequired, pExibirAlertErro);
 	
 	if(pSetarVazio != null && pSetarVazio){

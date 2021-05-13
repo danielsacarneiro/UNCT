@@ -441,7 +441,7 @@ function mostrarGridDemanda($colecaoTramitacao, $isDetalhamento) {
 		$html .= "<TH class='headertabeladados' width='1%' nowrap>Número</TH>   \n";
 		$html .= "<TH class='headertabeladados' width='1%'>Origem</TH> \n";
 		$html .= "<TH class='headertabeladados' width='1%'>Destino</TH> \n";
-		$html .= "<TH class='headertabeladados' width='90%'>Texto</TH> \n";
+		$html .= "<TH class='headertabeladados' >Despacho</TH> \n";
 		$html .= "<TH class='headertabeladados' width='1%' nowrap>Anexo</TH> \n";
 		$html .= "<TH class='headertabeladados' width='1%' nowrap>PRT/SEI</TH> \n";
 		$html .= "<TH class='headertabeladados' width='1%' nowrap>Usuário</TH> \n";
@@ -471,6 +471,9 @@ function mostrarGridDemanda($colecaoTramitacao, $isDetalhamento) {
 				
 				//$textoTram = truncarStringHTML($voAtual->textoTram,300, false);
 				$textoTram = truncarStringHTMLComDivExpansivel($voAtual->getValorChaveHTML(),$voAtual->textoTram,220, false);
+				$respUNCT = $voAtual->nmUsuarioInclusao;
+				$respUNCT = truncarStringHTML($respUNCT, 15, true);
+				
 				
 				$html .= "<TD class='tabeladados' nowrap>" . complementarCharAEsquerda ( $sq, "0", TAMANHO_CODIGOS ) . "</TD> \n";
 				$html .= "<TD class='tabeladados' nowrap>" . $dominioSetor->getDescricao ( $voAtual->cdSetorOrigem ) . "</TD> \n";
@@ -478,7 +481,7 @@ function mostrarGridDemanda($colecaoTramitacao, $isDetalhamento) {
 				$html .= "<TD class='tabeladados' >" . $textoTram . "</TD> \n";				
 				$html .= getHtmlDocumento($voAtual);				
 				$html .= "<TD class='tabeladados' nowrap>" . $voAtual->prt . "</TD> \n";
-				$html .= "<TD class='tabeladados' nowrap>" . $voAtual->nmUsuarioInclusao . "</TD> \n";
+				$html .= "<TD class='tabeladados'>" . $respUNCT . "</TD> \n";
 				$html .= "<TD class='tabeladados' nowrap>" . getData ( $voAtual->dtReferencia ) . "</TD> \n";
 				$html .= "<TD class='tabeladados' nowrap>" . getData ( $voAtual->dhInclusao ) . "</TD> \n";
 				
@@ -541,7 +544,7 @@ function mostrarGridDemandaGestao($colecaoTramitacao, $isDetalhamento) {
 		}
 		$html .= "<TH class='headertabeladados' width='1%' nowrap>Número</TH>   \n";
 		$html .= "<TH class='headertabeladados' width='1%'>Destino</TH> \n";
-		$html .= "<TH class='headertabeladados' width='90%'>Texto</TH> \n";
+		$html .= "<TH class='headertabeladados' >Despacho</TH> \n";
 		$html .= "<TH class='headertabeladados' width='1%' nowrap>PRT/SEI</TH> \n";
 		$html .= "<TH class='headertabeladados' width='1%' nowrap>Usuário</TH> \n";
 		$html .= "<TH class='headertabeladados' width='1%' nowrap>Dt.Início</TH> \n";
@@ -655,9 +658,9 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDad
 		// $html .= "<TH class='headertabeladados' width='1%'>Destino</TH> \n";
 		$html .= "<TH class='headertabeladados' width='1%'>Tipo</TH> \n";		
 		if($comDadosDemanda){			
-			$html .= "<TH class='headertabeladados' width='90%'>Título</TH> \n";
+			$html .= "<TH class='headertabeladados' width='30%'>Título</TH> \n";
 		}
-		$html .= "<TH class='headertabeladados' width='90%'>Texto</TH> \n";
+		$html .= "<TH class='headertabeladados' width='90%'>Despacho</TH> \n";
 		$html .= "<TH class='headertabeladados' width='1%' >Anexo</TH> \n";
 		$html .= "<TH class='headertabeladados' width='1%' >Usuário</TH> \n";
 		$html .= "<TH class='headertabeladados' width='1%' >Referência</TH> \n";

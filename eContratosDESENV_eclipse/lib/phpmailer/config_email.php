@@ -96,7 +96,7 @@ class email_sefaz extends multiplosConstrutores{
 	
 	static function getListaEmailContratosAVencer(){
 		return array(
-				"daniel.ribeiro@sefaz.pe.gov.br",
+				static::$REMETENTE_PRINCIPAL,
 				static::$REMETENTE_DILC,
 				//"rogerio.f-carvalho@sefaz.pe.gov.br",
 		);

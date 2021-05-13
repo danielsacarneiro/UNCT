@@ -31,6 +31,7 @@ class dominio extends multiplosConstrutores {
 	static function getDescricaoStaticTeste($chave) {
 		return static::getDescricaoStatic ( $chave );
 	}
+	
 	static function getDescricaoStatic($chave, $colecao = null, $isDescricaoMaiuscula=false) {
 		$retorno = $chave;
 		if ($colecao == null) {
@@ -59,6 +60,34 @@ class dominio extends multiplosConstrutores {
 		
 		return $retorno;
 	}
+	
+	static function getDescricaoChaveArrayOuComSeparador($chave, $colecao = null, $isDescricaoMaiuscula=false) {
+		$tamMaximo = 15;
+		$chaveTemp = explode(constantes::$CD_CAMPO_SEPARADOR, $chave);
+		$tam = sizeof($chaveTemp);
+		$retorno = "";
+		$strSeparador = ".";
+		if($tam > 1){
+			foreach ($chaveTemp as $item){
+				if(strlen($retorno) >= $tamMaximo){
+					$strSeparador = "<br>";
+					//echoo(strlen($retorno));
+				}
+	
+				//$retorno = $retorno . static::getDescricaoStatic($item, $colecao, $isDescricaoMaiuscula) . $strSeparador;
+				$retorno = $retorno . $strSeparador . static::getDescricaoStatic($item, $colecao, $isDescricaoMaiuscula);
+			}
+				
+			//retira o primeiro ponto
+			$retorno = substr($retorno, 1);
+				
+		}else{
+			$retorno = static::getDescricaoStatic($chave, $colecao, $isDescricaoMaiuscula);
+		}
+	
+		return $retorno;
+	}
+	
 	/**
 	 * 
 	 * @param unknown $colecaochave
@@ -66,7 +95,7 @@ class dominio extends multiplosConstrutores {
 	 * @return string
 	 */
 	static function getDescricaoColecaoChave($colecaochave, $isDescricaoMaiuscula=false, $pColecaoDominioOpcional=null) {
-		$tamMaximo = 15;
+		/*$tamMaximo = 15;
 		
 		if($colecaochave != null){
 			if(!is_array($colecaochave)){
@@ -88,7 +117,9 @@ class dominio extends multiplosConstrutores {
 			}
 		}
 	
-		return $retorno;
+		return $retorno;*/
+		
+		return static::getDescricaoChaveArrayOuComSeparador($colecaochave, $pColecaoDominioOpcional, $isDescricaoMaiuscula);
 	}
 	
 	//$colecao tem que ser ou string separada por CAMPO_SEPARADOR

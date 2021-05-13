@@ -133,7 +133,14 @@ function isFormularioValido() {
 
 	var campoDataInicial = documento.<?=vocontrato::$nmAtrDtVigenciaInicialContrato?>;
 	var campoDataFinal = documento.<?=vocontrato::$nmAtrDtVigenciaFinalContrato?>;
+	var campoDataAssinatura = documento.<?=vocontrato::$nmAtrDtAssinaturaContrato?>;
 	if(!isPeriodoValido(campoDataInicial, campoDataFinal, true)){
+		return false;
+	}
+
+	if(!isPeriodoValido(campoDataAssinatura, campoDataInicial, false, true, false, true)){
+		//(pCampoDataInicial, pCampoDataFinal, pColocarFocoNaDataFinal, pInCampoDataFinalOpcional, pInCampoDataInicialObrigatoria, pSemMensagem, pInNaoPermitirDatasIguais) {
+		exibirMensagem("A data de assinatura deve ser igual ou anterior ao início da vigência.");
 		return false;
 	}
 
@@ -263,9 +270,10 @@ function carregaDadosContrato(pCampoChamada=null){
 
 		if(cdEspecie == '<?=dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER?>'){
 			sqEspecie = 1;
-		}else if(cdEspecie == '<?=dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_APOSTILAMENTO?>'
-			&& dataVigencia == ""){
-			exibirMensagem("Para carregar dados anteriores do apostilamento, insira a data de assinatura.");
+		/*}else if(cdEspecie == '<?=dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_APOSTILAMENTO?>'
+			&& dataVigencia == ""){*/
+		}else if(dataVigencia == ""){			
+			exibirMensagem("Para carregar dados anteriores, insira a data de assinatura.");
 			limpaDadosContrato(pCampoChamada);
 			return;
 		}
@@ -323,21 +331,22 @@ function limpaDadosContrato(pCampoChamada=null){
 		isCampoChamadaDataAssinatura = pCampoChamada.id = "<?=vocontrato::$nmAtrDtAssinaturaContrato?>";
 	}
 	
-	 <?php
+	<?php
 			 $varCamposExcecao = "varJSCamposExcecao";
 			 $colecaoExcecao = vocontrato::getAtributosChaveLogica();
 			 echo getColecaoComoVariavelJS($colecaoExcecao, $varCamposExcecao);
 			 ?>
-	if(cdEspecie == "<?=dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_APOSTILAMENTO?>"){
-		//<?=$varCamposExcecao?>[(<?=$varCamposExcecao?>.length)-1] = "<?=vocontrato::$nmAtrDtAssinaturaContrato?>";
+	/*if(cdEspecie == "<?=dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_APOSTILAMENTO?>"){
 		<?=$varCamposExcecao?>.push("<?=vocontrato::$nmAtrDtAssinaturaContrato?>");
-	}
+	}*/
 
 	if(isCampoChamadaDataAssinatura){
 		//nao apaga os campos com name='', posto que servem apenas pra detalhamento
 		<?=$varCamposExcecao?>.push("");
 	}
-	
+
+	//para nunca apagar a data de assinatura;
+	<?=$varCamposExcecao?>.push("<?=vocontrato::$nmAtrDtAssinaturaContrato?>");
 	limparFormularioGeral(<?=$varCamposExcecao?>);
 }
 
@@ -538,7 +547,7 @@ function formatarEmpenho(pCampo){
             	       name="<?=vocontrato::$nmAtrDtAssinaturaContrato?>" 
             			value="<?php echo($dtAssinatura);?>"
             			onkeyup="formatarCampoData(this, event, false);" 
-                		onChange="if(document.getElementById('<?=vocontrato::$nmAtrCdEspecieContrato?>').value=='<?=dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_APOSTILAMENTO?>'){carregaDadosContrato(this);}"
+                		onChange="carregaDadosContrato(this);"
             			class="camponaoobrigatorio" 
             			size="10" 
             			maxlength="10" required>

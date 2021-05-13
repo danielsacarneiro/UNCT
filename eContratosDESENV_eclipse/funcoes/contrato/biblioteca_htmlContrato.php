@@ -1134,8 +1134,9 @@ function getContratoVigentePorArray($pArray){
 	$isTpVigenciaMAxSq = $pArray[2];
 	$inTrazerVigenciaFutura = $pArray[3];
 	$inTermoARetornarSeDataNula = $pArray[4];
+	$inTrazerApostilamento = $pArray[5];
 	//$cdEspecie = $pArray[5];
-	//echo $pData;
+	//echo "data:" . $pData;
 	
 	if($inTermoARetornarSeDataNula == null){
 		$inTermoARetornarSeDataNula = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
@@ -1147,12 +1148,14 @@ function getContratoVigentePorArray($pArray){
 	$filtro->cdContrato = $vocontrato->cdContrato;
 	$filtro->anoContrato = $vocontrato->anoContrato;
 	
-	//if($cdEspecie == null){
-		$cdEspecie = array(
-			dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER,
-			dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_TERMOADITIVO
-		);
-	//}
+	$cdEspecie = dominioEspeciesContrato::getColecaoTermosQuePodemAlterarVigencia();
+	/*$cdEspecie = array(
+		dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER,
+		dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_TERMOADITIVO
+	);*/		
+	if($inTrazerApostilamento){
+		$cdEspecie[] =  dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_APOSTILAMENTO;		
+	}
 		
 	$filtro->cdEspecie = $cdEspecie;
 
@@ -1736,7 +1739,11 @@ function getDadosManterContrato($chave) {
 		
 		$isInclusao = true;
 		try{				
-			$recordSet = getUltimoContratoVigente($vo, $dataVigencia);			
+			
+			$pArrayContratoRetorno = array($vo, $dataVigencia, true, false, null, true);
+			$recordSet = getContratoVigentePorArray($pArrayContratoRetorno);
+				
+			//$recordSet = getUltimoContratoVigente($vo, $dataVigencia);			
 		}catch(excecaoChaveRegistroInexistente $ex){
 			$retorno = "Dados: <INPUT type='text' class='camporeadonly' size=50 readonly value='Último termo vigente não encontrado.'>\n";
 			;

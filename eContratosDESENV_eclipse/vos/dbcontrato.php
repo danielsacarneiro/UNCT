@@ -459,6 +459,15 @@ class dbcontrato extends dbprocesso {
 	}
 
 	function consultarContratoMovimentacoes($voContrato, $isHistorico=false) {
+		$pArray = array($voContrato, $isHistorico);
+		return $this->consultarContratoMovimentacoesArray($pArray);
+		
+	}
+	function consultarContratoMovimentacoesArray($pArray) {
+		$voContrato = $pArray[0];
+		$isHistorico=$pArray[1];
+		$cdEspecie =$pArray[2];
+		
 		$nmTabela = $voContrato->getNmTabelaEntidade ( $isHistorico );
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( $isHistorico );
 
@@ -480,8 +489,14 @@ class dbcontrato extends dbprocesso {
 				"$nmTabela.".vocontrato::$nmAtrCdContrato => $voContrato->cdContrato,
 				"$nmTabela.".vocontrato::$nmAtrTipoContrato => "'$voContrato->tipo'"
 		);
+		
+		if(isAtributoValido($cdEspecie)){
+			$nmAtributosWhere["$nmTabela.".vocontrato::$nmAtrCdEspecieContrato] = "'$cdEspecie'";
+			//$queryWhere .= "\n AND " . vocontrato::$nmAtrCdEspecieContrato . "=" . getVarComoString($cdEspecie);
+		}
+		
 		$queryWhere = "\n WHERE " . $voContrato->getValoresWhereSQL ( $voContrato, $nmAtributosWhere );
-
+				
 		//$orderby = "\n ORDER BY " . vocontrato::$nmAtrSqContrato . " " . constantes::$CD_ORDEM_CRESCENTE;
 		$orderby = "\n ORDER BY " . vocontrato::$nmAtrDtAssinaturaContrato . " " . constantes::$CD_ORDEM_CRESCENTE;
 
