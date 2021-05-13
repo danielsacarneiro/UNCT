@@ -9,6 +9,7 @@
 */
 
 // Constantes
+CD_SITUACAO_DEMANDA_EM_ANDAMENTO = "3";
 TAMANHO_CODIGOS = 5;
 TAMANHO_CODIGOS_DOCUMENTOS = 3;
 CD_CAMPO_SUBSTITUICAO = "[[*]]"; // Deve ser igual à constante br.gov.pe.sefaz.sfi.util.Constantes.CD_CAMPO_SUBSTITUICAO
@@ -2506,4 +2507,14 @@ function indexOfChaveArray(chave, pArray, pSemMensagem) {
 
 function removerCaracterer(pCampo, strbusca, strsubstituta){
 	pCampo.value = pCampo.value.replaceAll(strbusca, strsubstituta);
+}
+
+function getUltimoCampoRenderizado(id){
+	var arrayCampo = document.getElementsByName(id);
+	var retorno = null;
+	if(arrayCampo != null && arrayCampo.length > 0){
+		retorno = arrayCampo[arrayCampo.length-1];
+	}
+	//se houver mais de um campo com o mesmo ID, pega o ultimo renderizado
+	return retorno;
 }

@@ -188,3 +188,25 @@ function formatarCampoPRT(pCampo, pEvento) {
 	pCampo.value = vlCampo;
 
 }
+
+function formatarSituacaoDemanda(pIdCampoSituacao, pIdCampoCheckBoxRevisado, pCampoCheckBoxRevisadoOpcional){
+	//se houver mais de um campo com o mesmo ID, pega o ultimo renderizado
+	//getUltimoCampoRenderizado fica em bibli.principal...
+	var campoSituacao = getUltimoCampoRenderizado(pIdCampoSituacao);
+	var campoCheckRevisado = document.getElementById(pIdCampoCheckBoxRevisado);
+	
+	if(campoCheckRevisado.type != "checkbox"){
+		exibirMensagem("Verifique o campo que chamou a validação.");
+		return;
+	}
+	
+	var isMudarSituacaoParaEmAndamento = (pCampoCheckBoxRevisadoOpcional != null && pCampoCheckBoxRevisadoOpcional.checked) 
+		|| campoCheckRevisado.checked;
+		
+	if(campoSituacao != null && isMudarSituacaoParaEmAndamento){
+		//alert(CD_SITUACAO_DEMANDA_EM_ANDAMENTO);
+		// a const CD_SITUACAO_DEMANDA_EM_ANDAMENTO esta em bibli.principal....
+		exibirMensagem("Alterando situação...");
+		campoSituacao.value = CD_SITUACAO_DEMANDA_EM_ANDAMENTO;
+	}	
+}

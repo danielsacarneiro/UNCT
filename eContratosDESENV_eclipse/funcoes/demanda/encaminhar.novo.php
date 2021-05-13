@@ -147,7 +147,7 @@ function isFormularioValido() {
 	return true;
 }
 
-function formatarSituacao(pCampoSituacao){	
+function formatarSituacaoEncaminhar(pCampoSituacao){	
 	//alert(pCampoSituacao.type);
 	if(pCampoSituacao != null && pCampoSituacao.value == "<?=dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_ABERTA?>"){
 		//exibirMensagem("Situação não permitida. Alterando para '<?=dominioSituacaoDemanda::$DS_SITUACAO_DEMANDA_EM_ANDAMENTO?>'.");
@@ -305,7 +305,7 @@ function iniciar(){
 	            <?php 
 	            //echo $comboSituacao->getHtmlCombo("","", $vo->situacao, true, "camporeadonly", false, " disabled ");
 	            echo $comboSituacao->getHtmlCombo(voDemandaTramitacao::$nmAtrSituacao,voDemandaTramitacao::$nmAtrSituacao, $vo->situacao, true, "campoobrigatorio"
-					, false, " onChange='formatarSituacao(this)' required ");
+					, false, " onChange='formatarSituacaoEncaminhar(this)' required ");
 	             ?>
 	            </TD>            		        
 	            <TH class="campoformulario" width="1%">Data.Demanda:</TH>
@@ -320,8 +320,11 @@ function iniciar(){
 	            $varCamposPermiteAlteracao = "varJSCamposCaracteristicasPermitidos";
 	            echo getTagHtmlJavaScript(getColecaoComoVariavelJS(dominioFaseDemanda::getColecaoPermissaoCaracteristicasUsuario(), 
 	            		$varCamposPermiteAlteracao, true));	             
-	            $pPropriedadeValorCondicao = getVarComoString(getCaracteristicasUsuarioLogado());	            
-	            $jsOnClickAdicional = "isCheckBoxPermiteAlteracao(this, $pPropriedadeValorCondicao, $varCamposPermiteAlteracao);";
+	            $pPropriedadeValorCondicao = getVarComoString(getCaracteristicasUsuarioLogado());	        
+	            //formatarSituacaoDemanda esta em bibli.demanda...js
+	            //formatarSituacaoDemanda(pIdCampoSituacao, pIdCampoCheckBoxRevisado, pCampoCheckBoxRevisadoOpcional)
+	            $jsMudarSituacao = "formatarSituacaoDemanda('".voDemanda::$nmAtrSituacao."','".dominioFaseDemanda::$CD_REVISAO_UNCT."', this);";
+	            $jsOnClickAdicional = "isCheckBoxPermiteAlteracao(this, $pPropriedadeValorCondicao, $varCamposPermiteAlteracao);$jsMudarSituacao";
 	             
 	            $nmCampoFaseHtml = voDemanda::$nmAtrFase."[]";
 	            //echo dominioFaseDemanda::getHtmlChecksBoxDetalhamento($nmCampoFaseHtml, $vo->fase, 1);
