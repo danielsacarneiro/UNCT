@@ -2,7 +2,7 @@
 include_once (caminho_lib . "dbprocesso.obj.php");
 include_once ("vocontrato.php");
 class dbDemanda extends dbprocesso {
-	static $FLAG_PRINTAR_SQL = FALSE;
+	static $FLAG_PRINTAR_SQL = false;
 	
 	function consultarPorChaveTelaColecaoContrato($vo, $isHistorico) {
 		try {
@@ -558,7 +558,7 @@ class dbDemanda extends dbprocesso {
 				getSQLNmContratada (),
 				// $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . " AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,
 				"COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . "," . $nmTabela . "." . voDemanda::$nmAtrCdSetor . ") AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,
-				"COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrDhInclusao . "," . $nmTabela . "." . voDemanda::$nmAtrDhUltAlteracao . ") AS " . filtroManterDemanda::$NmColDhUltimaMovimentacao,
+				//"COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrDhInclusao . "," . $nmTabela . "." . voDemanda::$nmAtrDhUltAlteracao . ") AS " . filtroManterDemanda::$NmColDhUltimaMovimentacao,
 				" $dhUltimaMov AS " . filtroManterDemanda::$NmColDhUltimaMovimentacao,
 				$colunaUsuHistorico,
 				$colunaDtReferenciaSetorAtual,

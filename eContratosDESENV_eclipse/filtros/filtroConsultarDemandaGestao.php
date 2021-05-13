@@ -73,8 +73,15 @@ class filtroConsultarDemandaGestao extends filtroManterDemanda{
 	 * @return string
 	 */
 	
-	static function getSQLDataUltimaMovimentacao($nmTabelaTramitacao, $nmTabelaDemanda){		
-		return "COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrDtReferencia . "," . $nmTabelaDemanda . "." . voDemanda::$nmAtrDhUltAlteracao . ")";		
+	static function getSQLDataUltimaMovimentacao($nmTabelaTramitacao, $nmTabelaDemanda){	
+		$nmAtribDataTramitacao = "$nmTabelaTramitacao." . voDemandaTramitacao::$nmAtrDtReferencia;
+		$nmAtribDataDemanda = "$nmTabelaDemanda." . voDemanda::$nmAtrDtReferencia;
+		
+		$arrayAtributos = array($nmAtribDataTramitacao, $nmAtribDataDemanda);
+		$nmDataReferenciaDemanda = getSQLCOALESCE($arrayAtributos);
+		$nmAtribDataUltAlteracao = "DATE($nmTabelaDemanda." . voDemanda::$nmAtrDhUltAlteracao . ")";
+		//return "COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrDtReferencia . "," . $nmTabelaDemanda . "." . voDemanda::$nmAtrDhUltAlteracao . ")";
+		return getSQLCASEBooleano("$nmDataReferenciaDemanda > $nmAtribDataUltAlteracao", $nmDataReferenciaDemanda, $nmAtribDataUltAlteracao);
 	}
 	
 	/**
