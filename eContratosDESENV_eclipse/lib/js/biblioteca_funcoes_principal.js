@@ -10,6 +10,7 @@
 
 // Constantes
 CD_SITUACAO_DEMANDA_EM_ANDAMENTO = "3";
+CD_SITUACAO_DEMANDA_A_REVISAR = "6";
 TAMANHO_CODIGOS = 5;
 TAMANHO_CODIGOS_DOCUMENTOS = 3;
 CD_CAMPO_SUBSTITUICAO = "[[*]]"; // Deve ser igual à constante br.gov.pe.sefaz.sfi.util.Constantes.CD_CAMPO_SUBSTITUICAO

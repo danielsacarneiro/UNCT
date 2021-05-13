@@ -206,7 +206,7 @@ function formatarSituacaoDemanda(pIdCampoSituacao, pIdCampoCheckBoxRevisado, pCa
 	if(campoSituacao != null && isMudarSituacaoParaEmAndamento){
 		//alert(CD_SITUACAO_DEMANDA_EM_ANDAMENTO);
 		// a const CD_SITUACAO_DEMANDA_EM_ANDAMENTO esta em bibli.principal....
-		if(campoSituacao.value != CD_SITUACAO_DEMANDA_EM_ANDAMENTO){
+		if(campoSituacao.value == CD_SITUACAO_DEMANDA_A_REVISAR){
 			exibirMensagem("Alterando situação...");
 			campoSituacao.value = CD_SITUACAO_DEMANDA_EM_ANDAMENTO;			
 		}
