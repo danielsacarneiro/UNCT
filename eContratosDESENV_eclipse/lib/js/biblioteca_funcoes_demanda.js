@@ -68,7 +68,7 @@ function formataFormTpDemandaReajuste(pIDCampoTipo, pIDCampoDivMontanteA, pColec
 		}
 	
 		if(pExibirMensagemErro){
-			exibirMensagem(nmCampo + " n√£o encontrado.");
+			exibirMensagem(nmCampo + " n„o encontrado.");
 		}
 		
 		return;
@@ -116,7 +116,7 @@ function formataFormTpDemandaReajusteContrato(pIDCampoTipoDemanda,
 		}
 	
 		if(pExibirMensagemErro){
-			exibirMensagem(nmCampo + " n√£o encontrado.");
+			exibirMensagem(nmCampo + " n„o encontrado.");
 		}
 		
 		return;
@@ -196,7 +196,7 @@ function formatarSituacaoDemanda(pIdCampoSituacao, pIdCampoCheckBoxRevisado, pCa
 	var campoCheckRevisado = document.getElementById(pIdCampoCheckBoxRevisado);
 	
 	if(campoCheckRevisado.type != "checkbox"){
-		exibirMensagem("Verifique o campo que chamou a valida√ß√£o.");
+		exibirMensagem("Verifique o campo que chamou a validaÁ„o.");
 		return;
 	}
 	
@@ -206,7 +206,9 @@ function formatarSituacaoDemanda(pIdCampoSituacao, pIdCampoCheckBoxRevisado, pCa
 	if(campoSituacao != null && isMudarSituacaoParaEmAndamento){
 		//alert(CD_SITUACAO_DEMANDA_EM_ANDAMENTO);
 		// a const CD_SITUACAO_DEMANDA_EM_ANDAMENTO esta em bibli.principal....
-		exibirMensagem("Alterando situa√ß√£o...");
-		campoSituacao.value = CD_SITUACAO_DEMANDA_EM_ANDAMENTO;
+		if(campoSituacao.value != CD_SITUACAO_DEMANDA_EM_ANDAMENTO){
+			exibirMensagem("Alterando situaÁ„o...");
+			campoSituacao.value = CD_SITUACAO_DEMANDA_EM_ANDAMENTO;			
+		}
 	}	
 }
