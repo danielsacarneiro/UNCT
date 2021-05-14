@@ -28,11 +28,11 @@ class dbcontrato extends dbprocesso {
 	static $NM_PLANILHA_CONVENIOS= "ConvÃªnios";
 
 	function consultarFiltroManterContrato($filtro) {
-		$isArquivo = ("S" == $filtro->cdConsultarArquivo);
+		/*$isArquivo = ("S" == $filtro->cdConsultarArquivo);
 
 		if ($isArquivo) {
 			return "";
-		} else {
+		} else {*/
 			$groupby = array (
 					vocontrato::$nmAtrSqContrato
 			);
@@ -43,7 +43,7 @@ class dbcontrato extends dbprocesso {
 			$retorno = $this->consultarTelaConsulta($arrayParamConsulta);
 				
 			return $retorno;
-		}
+		//}
 	}
 	
 	function consultarTelaConsulta($arrayParamConsulta){
@@ -487,7 +487,8 @@ class dbcontrato extends dbprocesso {
 		$nmAtributosWhere = array (
 				"$nmTabela.".vocontrato::$nmAtrAnoContrato => $voContrato->anoContrato,
 				"$nmTabela.".vocontrato::$nmAtrCdContrato => $voContrato->cdContrato,
-				"$nmTabela.".vocontrato::$nmAtrTipoContrato => "'$voContrato->tipo'"
+				"$nmTabela.".vocontrato::$nmAtrTipoContrato => "'$voContrato->tipo'",
+				"$nmTabela.".vocontrato::$nmAtrInDesativado => "'N'"
 		);
 		
 		if(isAtributoValido($cdEspecie)){
@@ -495,7 +496,7 @@ class dbcontrato extends dbprocesso {
 			//$queryWhere .= "\n AND " . vocontrato::$nmAtrCdEspecieContrato . "=" . getVarComoString($cdEspecie);
 		}
 		
-		$queryWhere = "\n WHERE " . $voContrato->getValoresWhereSQL ( $voContrato, $nmAtributosWhere );
+		$queryWhere = "\n WHERE " . voentidade::getValoresWhereSQL ( $voContrato, $nmAtributosWhere );
 				
 		//$orderby = "\n ORDER BY " . vocontrato::$nmAtrSqContrato . " " . constantes::$CD_ORDEM_CRESCENTE;
 		$orderby = "\n ORDER BY " . vocontrato::$nmAtrDtAssinaturaContrato . " " . constantes::$CD_ORDEM_CRESCENTE;
@@ -602,10 +603,16 @@ class dbcontrato extends dbprocesso {
 	
 	function alterar($vo) {
 		$vo = $this->setDadosNormalizados($vo);
+		$this->validarInclusao($vo);
 		parent::alterar ( $vo );
 	}
 	
 	function validarInclusao($vo){
+		//$vo = new vocontrato();
+		$dtAssinatura = $vo->dtAssinatura;
+		if(isAtributoValido($dtAssinatura) && isFeriado($dtAssinatura)){
+			throw new excecaoAtributoInvalido("Data de assinatura inválida: FERIADO.");			
+		}
 		//$recordSet = getUltimoContratoVigente($vo, $dataVigencia);
 		;
 	}

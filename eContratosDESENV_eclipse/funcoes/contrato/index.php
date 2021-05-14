@@ -556,11 +556,11 @@ function estatisticas(){
 </TR>
 <?php 
 
-if($filtro->cdConsultarArquivo != "N"){
+/*if($filtro->cdConsultarArquivo != "N"){
 	include("grid_arquivo.php");
-}else{
+}else{*/
 	include("grid_contrato.php");
-}
+//}
 
 ?>
     </TBODY>

@@ -114,8 +114,10 @@ setCabecalho($titulo);
 function isFormularioValido() {
 	var documento = document.frm_principal;
 	var campoFormularioValido = documento.<?=voentidade::$ID_REQ_IN_FORMULARIO_VALIDO?>;
+	var campoEspecieContrato = documento.<?=vocontrato::$nmAtrCdEspecieContrato?>;
 	var campoCaracteristicas = documento.<?=$idCampoCarac?>;
 	var nmCampoCaracteristicas = "<?=$nmCampoCarac?>";
+	var isTA = campoEspecieContrato.value == "<?=dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_TERMOADITIVO?>";
 	
 	if (campoFormularioValido != null && campoFormularioValido.value == 'N'){
 		exibirMensagem("Para continuar, corriga os ALERTAS no topo da página.");
@@ -138,9 +140,9 @@ function isFormularioValido() {
 		return false;
 	}
 
-	if(!isPeriodoValido(campoDataAssinatura, campoDataInicial, false, true, false, true)){
+	if(!isPeriodoValido(campoDataAssinatura, campoDataInicial, false, true, false, true, isTA)){
 		//(pCampoDataInicial, pCampoDataFinal, pColocarFocoNaDataFinal, pInCampoDataFinalOpcional, pInCampoDataInicialObrigatoria, pSemMensagem, pInNaoPermitirDatasIguais) {
-		exibirMensagem("A data de assinatura deve ser igual ou anterior ao início da vigência.");
+		exibirMensagem("A data de assinatura deve ser anterior ao início da vigência.");
 		return false;
 	}
 
@@ -263,22 +265,35 @@ function carregaDadosContrato(pCampoChamada=null){
 	var cdEspecie = document.frm_principal.<?=vocontrato::$nmAtrCdEspecieContrato?>.value;
 	var sqEspecie = document.frm_principal.<?=vocontrato::$nmAtrSqEspecieContrato?>.value;
 	var dataVigencia = document.frm_principal.<?=vocontrato::$nmAtrDtAssinaturaContrato?>.value;
+
 	var funcao = document.frm_principal.funcao.value;
 	var isAlteracao = funcao == "<?=constantes::$CD_FUNCAO_ALTERAR?>";
 		
 	if(!isAlteracao && cdContrato != "" && anoContrato != "" && tipoContrato != "" && cdEspecie != ""){
+		var carregarDados = (sqEspecie != null && sqEspecie != "");
 
 		if(cdEspecie == '<?=dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER?>'){
 			sqEspecie = 1;
 		/*}else if(cdEspecie == '<?=dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_APOSTILAMENTO?>'
 			&& dataVigencia == ""){*/
-		}else if(dataVigencia == ""){			
-			exibirMensagem("Para carregar dados anteriores, insira a data de assinatura.");
-			limpaDadosContrato(pCampoChamada);
-			return;
 		}
+		
+		if(carregarDados){
 
-		if(sqEspecie != ""){		
+			/*var msg = "Para carregar dados anteriores, insira a data de assinatura.";
+			msg = msg + "\nSe desconhecida, utilize a data de hoje para carregar os dados, lembrando de alterar posteriormente.";*/					
+
+			/*if(dataVigencia == null || dataVigencia == ""){	
+				var msg = "Data Assinatura em branco, serão carregados os dados do termo mais atual.";
+				dataVigencia = "<?=getDataHoje()?>";
+				exibirMensagem(msg);
+			}*/
+					
+			var recarregar = confirm("Deseja recarregar os dados?");
+			if(!recarregar){
+				return;
+			}
+				
 			str = "null"+ '<?=CAMPO_SEPARADOR?>' + anoContrato + '<?=CAMPO_SEPARADOR?>' + cdContrato + '<?=CAMPO_SEPARADOR?>' 
 			+ tipoContrato + '<?=CAMPO_SEPARADOR?>' + cdEspecie
 			+ '<?=CAMPO_SEPARADOR?>' + sqEspecie
@@ -414,7 +429,21 @@ function formatarEmpenho(pCampo){
             <TD class="conteinerfiltro">
             <DIV id="div_filtro" class="div_filtro">
             <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
-                <TBODY>		
+                <TBODY>
+		<TR>
+            <TH class="campoformulario" nowrap>Data Assinatura:</TH>
+            <TD class="campoformulario"  colspan="3">
+            	<INPUT type="text" 
+            	       id="<?=vocontrato::$nmAtrDtAssinaturaContrato?>" 
+            	       name="<?=vocontrato::$nmAtrDtAssinaturaContrato?>" 
+            			value="<?php echo($dtAssinatura);?>"
+            			onkeyup="formatarCampoData(this, event, false);" 
+                		onChange="carregaDadosContrato(this);"
+            			class="camponaoobrigatorio" 
+            			size="10" 
+            			maxlength="10" required><font size=2><b>* preencha para carregar os dados atualizados.</b></font>
+			</TD>
+           </TR>                		
 		<?php 
 		if($isInclusao){
 		?>
@@ -506,7 +535,7 @@ function formatarEmpenho(pCampo){
 		?>
 		<TR>
             <TH class="campoformulario" nowrap>Periodo de Vigencia:</TH>
-            <TD class="campoformulario" colspan="3">
+            <TD class="campoformulario">
             	<INPUT type="text" 
             	       id="<?=vocontrato::$nmAtrDtVigenciaInicialContrato?>" 
             	       name="<?=vocontrato::$nmAtrDtVigenciaInicialContrato?>" 
@@ -538,21 +567,7 @@ function formatarEmpenho(pCampo){
             			readonly> (dias aprox.)
             			
 			</TD>
-        </TR>
-		<TR>
-            <TH class="campoformulario" nowrap>Data Assinatura:</TH>
-            <TD class="campoformulario">
-            	<INPUT type="text" 
-            	       id="<?=vocontrato::$nmAtrDtAssinaturaContrato?>" 
-            	       name="<?=vocontrato::$nmAtrDtAssinaturaContrato?>" 
-            			value="<?php echo($dtAssinatura);?>"
-            			onkeyup="formatarCampoData(this, event, false);" 
-                		onChange="carregaDadosContrato(this);"
-            			class="camponaoobrigatorio" 
-            			size="10" 
-            			maxlength="10" required>
-			</TD>
-               <TH class="campoformulario" nowrap>Data Publicacao:</TH>
+			<TH class="campoformulario" nowrap>Data Publicacao:</TH>
                <TD class="campoformulario">
                     	<INPUT type="text" 
                     	       id="<?=vocontrato::$nmAtrDtPublicacaoContrato?>" 
@@ -563,7 +578,7 @@ function formatarEmpenho(pCampo){
                     			size="10" 
                     			maxlength="10" required>
     		</TD>
-           </TR>
+        </TR>
 		<TR>
 <SCRIPT language="JavaScript" type="text/javascript">
 	var pArrayCalcularValorMensal = new Array();

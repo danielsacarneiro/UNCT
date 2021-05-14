@@ -170,7 +170,7 @@ class voentidade extends multiplosConstrutores {
 		
 		return $retorno;
 	}
-	function getValoresWhereSQL($voEntidade, $colecaoAtributos) {
+	static function getValoresWhereSQL($voEntidade, $colecaoAtributos) {
 		$sqlConector = "";
 		$retorno = "";
 		$nmTabela = $voEntidade->getNmTabelaEntidade ( false );
@@ -180,12 +180,12 @@ class voentidade extends multiplosConstrutores {
 		
 		for($i = 0; $i < $tamanho; $i ++) {
 			$nmAtributo = $chaves [$i];
-			$retorno .= $sqlConector . $this->getAtributoValorSQL ( $nmAtributo, $colecaoAtributos [$nmAtributo] );
+			$retorno .= $sqlConector . static::getAtributoValorSQL ( $nmAtributo, $colecaoAtributos [$nmAtributo] );
 			$sqlConector = " AND ";
 		}
 		return $retorno;
 	}
-	function getAtributoValorSQL($atributo, $valor) {
+	static function getAtributoValorSQL($atributo, $valor) {
 		return $atributo . " = " . $valor;
 	}
 	function getDadosFormularioEntidade() {		

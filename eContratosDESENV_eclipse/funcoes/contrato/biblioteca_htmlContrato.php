@@ -1735,6 +1735,8 @@ function getDadosManterContrato($chave) {
 		$dataVigencia = $arrayChave[6];	
 		if(isAtributoValido($dataVigencia)){
 			$vo->dtAssinatura = $dataVigencia;
+			$msg = " na data $dataVigencia";
+			//echo $msg;
 		}
 		
 		$isInclusao = true;
@@ -1745,7 +1747,7 @@ function getDadosManterContrato($chave) {
 				
 			//$recordSet = getUltimoContratoVigente($vo, $dataVigencia);			
 		}catch(excecaoChaveRegistroInexistente $ex){
-			$retorno = "Dados: <INPUT type='text' class='camporeadonly' size=50 readonly value='Último termo vigente não encontrado.'>\n";
+			$retorno = "Dados: <INPUT type='text' class='camporeadonly' size=50 readonly value='Último termo vigente não encontrado$msg.'>\n";
 			;
 		}
 		
