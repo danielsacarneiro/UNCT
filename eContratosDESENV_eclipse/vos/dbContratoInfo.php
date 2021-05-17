@@ -285,7 +285,7 @@ class dbContratoInfo extends dbprocesso {
 		$nmTabela = $vo->getNmTabelaEntidade ( false );			
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( $isHistorico );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
-		$nmTabelaPessoaGestorContratoInfo = "TAB_GESTOR_CONTRATO_INFO";
+		$nmTabelaPessoaGestorContratoInfo = filtroManterContrato::$NM_TAB_PESSOA_GESTOR;
 		$nmTabDadosOrdemParalisacao = filtroConsultarContratoConsolidacao::$NmTABDadosOrdemParalisacao;
 		//echo "tabela vo: $nmTabela | tabela contrato_info: $nmTabelaContratoInfo";
 		

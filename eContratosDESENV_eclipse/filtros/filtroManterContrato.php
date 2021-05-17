@@ -7,6 +7,7 @@ class filtroManterContrato extends filtroManter {
 	public $nmFiltro = "filtroManterContrato";
 	
 	public static $NM_TAB_MAXSQCONTRATO = "NM_TAB_MAXSQCONTRATO";
+	public static $NM_TAB_PESSOA_GESTOR = "NM_TAB_PESSOA_GESTOR";
 	public static $ID_REQ_InGestor= "ID_REQ_InGestor";	
 	public static $ID_REQ_InPublicado = "ID_REQ_InPublicado";
 
@@ -267,7 +268,12 @@ class filtroManterContrato extends filtroManter {
 		}
 		
 		if ($this->gestor != null) {
-			$filtro = $filtro . $conector . $nmTabela . "." . vocontrato::$nmAtrGestorContrato . " LIKE '%" . utf8_encode ( $this->gestor ) . "%'";
+			$arrayAtributos = array(
+					static::$NM_TAB_PESSOA_GESTOR . "." . vopessoa::$nmAtrNome,
+					$nmTabela . "." . vocontrato::$nmAtrGestorContrato,
+			);
+			$nmAtributo = getSQLCOALESCE($arrayAtributos);
+			$filtro = $filtro . $conector . " $nmAtributo LIKE '%" . utf8_encode ( $this->gestor ) . "%'";
 			
 			$conector = "\n AND ";
 		}

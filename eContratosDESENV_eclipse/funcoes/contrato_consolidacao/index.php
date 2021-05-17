@@ -167,7 +167,8 @@ function movimentacoes(){
 	            <?php 
 	            echo "Tem? ".$comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrCdPessoaGestor,voContratoInfo::$nmAtrCdPessoaGestor
 							, $filtro->inGestor, true, "camponaoobrigatorio", false,"");
-	            ?>
+	            ?>	            
+	            |Nome: <INPUT type="text" id="<?=vocontrato::$nmAtrGestorContrato?>" name="<?=vocontrato::$nmAtrGestorContrato?>"  value="<?php echo($filtro->gestor);?>"  class="camponaoobrigatorio" size="20" >
 	            </TD>	            
 			</TR>
 			<TR>

@@ -23,6 +23,7 @@ class filtroManterContratoInfo extends filtroManter {
 	var $cdClassificacao = "";
 	var $inMaoDeObra = "";
 	var $inGestor = "";
+	var $gestor = "";
 	var $objeto = "";
 	var $obs = "";
 	
@@ -45,6 +46,7 @@ class filtroManterContratoInfo extends filtroManter {
 		$this->cdClassificacao = @$_POST [voContratoInfo::$nmAtrCdClassificacao];
 		$this->inMaoDeObra = @$_POST [voContratoInfo::$nmAtrInMaoDeObra];
 		$this->inGestor = @$_POST [STATIC::$ID_REQ_InGestor];
+		$this->gestor = @$_POST [vocontrato::$nmAtrGestorContrato];
 		$this->objeto = @$_POST [vocontrato::$nmAtrObjetoContrato];
 		$this->obs = @$_POST [voContratoInfo::$nmAtrObs];
 		$this->inPrazoProrrogacao = @$_POST [voContratoInfo::$nmAtrInPrazoProrrogacao];

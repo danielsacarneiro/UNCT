@@ -1736,6 +1736,12 @@ function getDadosManterContrato($chave) {
 		if(isAtributoValido($dataVigencia)){
 			$vo->dtAssinatura = $dataVigencia;
 			$msg = " na data $dataVigencia";
+			
+			if(!isDiaUtil($dataVigencia)){
+				//throw new excecaoAtributoInvalido("Data de assinatura inválida: verifique se o dia é útil.");
+				return  "Dados: <INPUT type='text' class='camporeadonly' size=50 readonly value='Data de assinatura inválida: verifique se o dia é útil.'>\n";
+			}
+				
 			//echo $msg;
 		}
 		

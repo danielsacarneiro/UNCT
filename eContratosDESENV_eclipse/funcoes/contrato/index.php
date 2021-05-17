@@ -321,7 +321,7 @@ function estatisticas(){
 				            		$filtro->inGestor, true, "camponaoobrigatorio", false,
 				            	"");
 				            ?>
-							Nome: <INPUT type="text" id="<?=vocontrato::$nmAtrGestorContrato?>" name="<?=vocontrato::$nmAtrGestorContrato?>"  value="<?php echo($nmGestor);?>"  class="camponaoobrigatorio" size="20" >	            
+							|Nome: <INPUT type="text" id="<?=vocontrato::$nmAtrGestorContrato?>" name="<?=vocontrato::$nmAtrGestorContrato?>"  value="<?php echo($nmGestor);?>"  class="camponaoobrigatorio" size="20" >	            
 							</TD>
 						</TR>
 						<TR>

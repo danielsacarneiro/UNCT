@@ -57,6 +57,7 @@ class dbcontrato extends dbprocesso {
 		
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic(false);
 		$nmTabelaPessoa = vopessoa::getNmTabelaStatic ( false );
+		$nmTabelaPessoaGestor = filtroManterContrato::$NM_TAB_PESSOA_GESTOR;
 		//$nmTabelaLicon = voContratoLicon::getNmTabelaStatic ( false );
 		//$nmTabelaDemandaSolicCompra = voDemandaPL::getNmTabelaStatic(false);
 		
@@ -99,6 +100,10 @@ class dbcontrato extends dbprocesso {
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaPessoa . "." . vopessoa::$nmAtrCd . "=" . $nmTabela . "." . vocontrato::$nmAtrCdPessoaContratada;
 	
+		$queryJoin .= "\n LEFT JOIN $nmTabelaPessoa $nmTabelaPessoaGestor ";
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaPessoaGestor . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrCdPessoaGestor;
+		
 		return parent::consultarMontandoQueryTelaConsulta ( $vo, $filtro, $arrayColunasRetornadas, $queryJoin );
 	}
 	
@@ -610,8 +615,13 @@ class dbcontrato extends dbprocesso {
 	function validarInclusao($vo){
 		//$vo = new vocontrato();
 		$dtAssinatura = $vo->dtAssinatura;
-		if(isAtributoValido($dtAssinatura) && isFeriado($dtAssinatura)){
-			throw new excecaoAtributoInvalido("Data de assinatura inválida: FERIADO.");			
+		
+		if(isAtributoValido($dtAssinatura)){
+			
+			if(!isDiaUtil($dtAssinatura)){
+				throw new excecaoAtributoInvalido("Data de assinatura inválida: verifique se o dia é útil.");
+			}
+				
 		}
 		//$recordSet = getUltimoContratoVigente($vo, $dataVigencia);
 		;

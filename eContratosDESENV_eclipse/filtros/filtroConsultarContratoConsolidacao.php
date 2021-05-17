@@ -387,6 +387,17 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 			$conector = "\n AND ";
 		}	
 		
+		if ($this->gestor != null) {
+			$arrayAtributos = array(
+					filtroManterContrato::$NM_TAB_PESSOA_GESTOR . "." . vopessoa::$nmAtrNome,
+					$nmTabelaContrato . "." . vocontrato::$nmAtrGestorContrato,
+			);
+			$nmAtributo = getSQLCOALESCE($arrayAtributos);
+			$filtro = $filtro . $conector . " $nmAtributo LIKE '%" . utf8_encode ( $this->gestor ) . "%'";
+				
+			$conector = "\n AND ";
+		}
+		
 		if ($this->mesIntervaloFimVigencia != null) {
 			if($this->anoIntervaloFimVigencia == null){
 				$this->anoIntervaloFimVigencia = getAnoHoje();
