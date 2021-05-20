@@ -25,6 +25,7 @@ $isAlteracao = $funcao == constantes::$CD_FUNCAO_ALTERAR;
 if($isInclusao){
     $classChaves = "campoobrigatorio";    	
     $titComplemento = "INCLUIR";
+    $msgAssinatura = getTextoHTMLDestacado("*preencha para carregar os dados atualizados. Se incerta, para o carregamento, utilize o último dia de vigência do termo atual.", "blue", false);
 	
 }else{
     $classChaves = "camporeadonly";
@@ -442,7 +443,7 @@ function formatarEmpenho(pCampo){
                 		onChange="carregaDadosContrato(this);"
             			class="camponaoobrigatorio" 
             			size="10" 
-            			maxlength="10" required><font size=2><b>*preencha para carregar os dados atualizados. Se incerta, utilize o último dia de vigência do termo atual.</b></font>
+            			maxlength="10" required><?=$msgAssinatura?>
 			</TD>
            </TR>                		
 		<?php 

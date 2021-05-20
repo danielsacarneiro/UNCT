@@ -120,6 +120,7 @@ class filtroManter extends multiplosConstrutores {
 		}
 		
 		$this->isHistorico = "S" == $this->cdHistorico;
+		//echoo ("historico:" . $this->cdHistorico);
 		// para o caso de ser necessario setar um filtro default para nao trazer todos os registros
 		$this->temValorDefaultSetado = false;
 		$this->inDesativado = null;
@@ -536,10 +537,10 @@ class filtroManter extends multiplosConstrutores {
 	function getAtributoOrdenacaoAnteriorDefault() {
 		$retorno = "";
 		//filtro de historico na tela, para facilitar a implementacao, so permitira ordenar pelo historico. Ver alteracao futura!
-		if($this->isHistorico() && $this->pegarFiltroDaTela()){
+		/*if($this->isHistorico() && $this->pegarFiltroDaTela()){
 			//$retorno = voentidade::$nmAtrSqHist;
 			$this->cdAtrOrdenacao = voentidade::$nmAtrSqHist; 
-		}
+		}*/
 		return $retorno;
 	}
 	function setaFiltroConsultaSemLimiteRegistro() {
