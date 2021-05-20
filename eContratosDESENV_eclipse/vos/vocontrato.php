@@ -654,6 +654,18 @@ include_once ("voDemanda.php");
 		return $retorno;
 	}
 	
+	function getChaveHTMLContratoExecucao(){
+		$retorno = $this->anoContrato
+		. constantes::$CD_CAMPO_SEPARADOR
+		. $this->cdContrato
+		. constantes::$CD_CAMPO_SEPARADOR
+		. $this->tipo
+		. constantes::$CD_CAMPO_SEPARADOR
+		. "1";
+		
+		return $retorno;		
+	}
+	
 }
 
 ?>

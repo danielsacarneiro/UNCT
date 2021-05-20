@@ -1766,7 +1766,7 @@ function getNumMesesNoPeriodo(pIDCampoDataInicial, pIDCampoDataFinal, pValidarDa
 	if(pValidarDatas){
 		//funcao datahora.js
 		if(!isPeriodoValido(campoDataInicial, campoDataFinal, true, false, true, pSemMensagem, true)){
-			return false;
+			return null;
 		}		
 	}
 	//funcao datahora.js

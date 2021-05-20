@@ -200,21 +200,24 @@ function getContratoDetalhamentoParam($arrayParametro) {
 			$vlPercentualAcrescimo = getValorNumPercentualAcrescimoContrato(clone $voContrato);
 			$vlPercentualSupressao = getValorNumPercentualAcrescimoContrato(clone $voContrato, true);
 
-			echo getTextoHTMLNegrito(" Acréscimo: " . getMoeda($vlPercentualAcrescimo, 2) . "%");
-			if($vlPercentualAcrescimo > normativos::$LIMITE_ACRESCIMO){
+			echo getTextoHTMLNegrito(" Acréscimo: " . getMoeda($vlPercentualAcrescimo, 2) . "%");			
+			//$voContratoInfo = new voContratoInfo();
+			$isContratoReforma = $voContratoInfo->cdClassificacao == dominioClassificacaoContrato::$CD_SERV_REFORMA_EDIFICIO;
+			if((!$isContratoReforma && $vlPercentualAcrescimo > normativos::$LIMITE_ACRESCIMO)
+					|| ($isContratoReforma && $vlPercentualAcrescimo > normativos::$LIMITE_ACRESCIMO_REFORMA)){
 				echo getTextoHTMLDestacado("(ATENÇÃO: LIMITE EXCEDIDO)", "red", true);
 			}
 			echo getTextoHTMLNegrito(" |Supressão: " . getMoeda(abs($vlPercentualSupressao), 2) . "%");
 			
 			if(!existeStr1NaStr2("execucao.php", $nmPaginaChamada)){
-				//if(!existeStr1NaStr2("execucao.php", $nmPaginaChamada)){
-				$chaveContratoExecucao = $voContrato->anoContrato
+				/*$chaveContratoExecucao = $voContrato->anoContrato
 				. constantes::$CD_CAMPO_SEPARADOR
 				. $voContrato->cdContrato
 				. constantes::$CD_CAMPO_SEPARADOR
 				. $voContrato->tipo
 				. constantes::$CD_CAMPO_SEPARADOR
-				. "1";
+				. "1";*/				
+				$chaveContratoExecucao = $voContrato->getChaveHTMLContratoExecucao();
 				echo getTextoLink("Execução", "../contrato/execucao.php?chave=$chaveContratoExecucao", null, true);
 			}
 		}

@@ -136,7 +136,8 @@ function isFormularioValido() {
 	var campoDataInicial = documento.<?=vocontrato::$nmAtrDtVigenciaInicialContrato?>;
 	var campoDataFinal = documento.<?=vocontrato::$nmAtrDtVigenciaFinalContrato?>;
 	var campoDataAssinatura = documento.<?=vocontrato::$nmAtrDtAssinaturaContrato?>;
-	if(!isPeriodoValido(campoDataInicial, campoDataFinal, true)){
+	//function isPeriodoValido(pCampoDataInicial, pCampoDataFinal, pColocarFocoNaDataFinal, pInCampoDataFinalOpcional, pInCampoDataInicialObrigatoria, pSemMensagem, pInNaoPermitirDatasIguais) {
+	if(!isPeriodoValido(campoDataInicial, campoDataFinal, true, true)){
 		return false;
 	}
 
@@ -245,7 +246,7 @@ function confirmar() {
 		return false;
 	}
 	
-	return confirm("Confirmar Alteracoes?");    
+	return confirm("Confirmar Alteracoes?\n*Se a data de assinatura é incerta, deixe-a em branco, para incluí-la posteriormente.");    
 }
 
 function carregaGestorPessoa(){    
@@ -441,7 +442,7 @@ function formatarEmpenho(pCampo){
                 		onChange="carregaDadosContrato(this);"
             			class="camponaoobrigatorio" 
             			size="10" 
-            			maxlength="10" required><font size=2><b>* preencha para carregar os dados atualizados.</b></font>
+            			maxlength="10" required><font size=2><b>*preencha para carregar os dados atualizados. Se incerta, utilize o último dia de vigência do termo atual.</b></font>
 			</TD>
            </TR>                		
 		<?php 
@@ -690,6 +691,7 @@ function formatarEmpenho(pCampo){
 				$pArrayResponsabilidade = array(vocontrato::$nmAtrDtAssinaturaContrato,
 						vocontrato::$nmAtrDtPublicacaoContrato,
 						vocontrato::$nmAtrDtVigenciaInicialContrato,
+						vocontrato::$nmAtrDtVigenciaFinalContrato,
 						vocontrato::$nmAtrNumEmpenhoContrato,
 						vocontrato::$nmAtrVlMensalContrato,
 						vocontrato::$nmAtrVlGlobalContrato,

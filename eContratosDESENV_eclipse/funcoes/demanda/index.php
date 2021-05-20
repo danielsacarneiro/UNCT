@@ -450,22 +450,7 @@ function convocarAssinatura(){
             <TR>            
 	            <TH class="campoformulario" nowrap width="1%">Resp.:</TH>
 				<TD class="campoformulario" width="1%" colspan=3>
-				<?php 
-				//echo "Tram.:&nbsp;".$comboUsuTramitacao->getHtmlSelect(filtroManterDemanda::$NmAtrCdUsuarioTramitacao,filtroManterDemanda::$NmAtrCdUsuarioTramitacao, $filtro->cdUsuarioTramitacao, true, "camponaoobrigatorio", false). "&nbsp";
-				$arrayParamUsuarioTram = array(
-						filtroManterDemanda::$NmAtrCdUsuarioTramitacao,
-						filtroManterDemanda::$NmAtrCdUsuarioTramitacao,
-						$filtro->cdUsuarioTramitacao,
-						true,
-						true,
-						"camponaoobrigatorio",
-						false,
-						"",
-						20
-				);				
-				echo "Tram.:&nbsp;".$comboUsuTramitacao->getHtmlComboArray($arrayParamUsuarioTram);
-				
-				
+				<?php				
 				$arrayParamUsuario = array(
 						voDemanda::$nmAtrCdPessoaRespUNCT,
 						voDemanda::$nmAtrCdPessoaRespUNCT,
@@ -492,6 +477,20 @@ function convocarAssinatura(){
 				);
 				
 				echo "ATJA.:&nbsp;".getComboPessoaRespATJAConsulta($arrayATJAResp);
+				
+				$arrayParamUsuarioTram = array(
+						filtroManterDemanda::$NmAtrCdUsuarioTramitacao,
+						filtroManterDemanda::$NmAtrCdUsuarioTramitacao,
+						$filtro->cdUsuarioTramitacao,
+						true,
+						true,
+						"camponaoobrigatorio",
+						false,
+						"",
+						20
+				);
+				echo "Tram.:&nbsp;".$comboUsuTramitacao->getHtmlComboArray($arrayParamUsuarioTram);
+				
 				?>				
 				</TD>			
 			</TR>

@@ -226,6 +226,12 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 	
 	$countATENCAO = 1;
 	$isVODemandaNaoNulo = $voDemanda != null;
+	$exibirAlertas = false;
+	if($isVODemandaNaoNulo){
+		//$exibirInfoProrrog = $voDemanda->situacao != dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA;
+		$exibirAlertas = !isSituacaoDemandaFechada($voDemanda->situacao);
+	}
+	
 	//$conectorAlerta = "<BR>";
 	
 	$html .= dominioTipoDemandaContrato::getHtmlChecksBoxDetalhamento($nmCampoTpDemandaContrato, $pCdOpcaoSelecionadaTpDemandaContrato, 2, true);
@@ -242,7 +248,14 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 			$countATENCAO++;
 		}
 	}
-	
+
+	//$voContratoDemanda = new vocontrato();
+	$dtInicioContrato = $voContratoDemanda->dtVigenciaInicial;
+	$isContratoRetroativo = $dtInicioContrato != null && isDataRetroativa($dtInicioContrato);	
+	if($exibirAlertas && $isContratoRetroativo){
+		$html .= getAlertaOrientacao("Contrato RETROATIVO: ATENÇÃO AOS DESPACHOS NO SEI.", $countATENCAO, $conectorAlerta);
+		$conectorAlerta = "<BR>";
+	}
 	
 	try{
 		//if(!$temReajustePendente){echo "teste";}		
@@ -280,31 +293,14 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 		$conectorAlerta = "<BR>";
 		$countATENCAO++;		
 	}
-	
-	/*$html .= dominioTipoDemandaContrato::getHtmlChecksBoxDetalhamento($nmCampoTpDemandaContrato, $pCdOpcaoSelecionadaTpDemandaContrato, 2, true);
-	if(dominioTipoDemandaContrato::existeItemArrayOuStrCampoSeparador(dominioTipoDemandaContrato::$CD_TIPO_REAJUSTE, $pCdOpcaoSelecionadaTpDemandaContrato)){
-		//eh reajuste
-		$html .= "Reajuste: " . dominioTipoReajuste::getHtmlDetalhamento($nmCampoTpDemandaReajuste, $nmCampoTpDemandaReajuste, $pCdOpcaoSelecionadaReajuste, false);		
 		
-		if(isSinalizarDemandaReajustePeriodoNaoTranscorrido($voDemanda)){
-			$html .= getTextoHTMLDestacado("ATENÇÃO$countATENCAO: o período contratual necessário para o cálculo do reajuste(índice contratual) ainda não transcorreu. Verifique a Data Base de Reajuste do contrato.");
-			$conectorAlerta = "<BR>";
-			$countATENCAO++;
-		}				
-	}*/
-
-	if($isVODemandaNaoNulo){
-		//$exibirInfoProrrog = $voDemanda->situacao != dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA;
-		$exibirInfoProrrog = !isSituacaoDemandaFechada($voDemanda->situacao);		
-	}
-	
 	if(dominioTipoDemandaContrato::existeItemArrayOuStrCampoSeparador(dominioTipoDemandaContrato::$CD_TIPO_PRORROGACAO, $pCdOpcaoSelecionadaTpDemandaContrato)){
 		//var_dump($voDemanda->getContrato());		
 		$arrayPermiteProrrogacao = isContratoPermiteProrrogacao($voContratoDemanda);
 		$permiteProrrogacao = $arrayPermiteProrrogacao[0];
 		$ehServicoContinuo = $arrayPermiteProrrogacao[1];
 		$ehServicoInformatica = $arrayPermiteProrrogacao[2];
-		if($exibirInfoProrrog){
+		if($exibirAlertas){
 			if(!($ehServicoContinuo || $ehServicoInformatica)){
 				$texto = "ATENÇÃO$countATENCAO: verifique a fundamentação legal para a prorrogação em 'Contratos-Consolidação'";
 				//$html .= $conectorAlerta . getTextoHTMLDestacado($texto);
@@ -330,7 +326,7 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 	if($dtinicioContrato >= normativos::$DATA_PUBLICACAO_RESOLUCAOCPF0012020){
 		//var_dump($voDemanda->getContrato());
 
-		if($exibirInfoProrrog){
+		if($exibirAlertas){
 			$html .= $conectorAlerta . getTextoHTMLDestacado("ATENÇÃO$countATENCAO: verifique se o contrato não está suspenso pela RESOLUÇÃO CPF 001.2020 ou 002.2020(CORONAVIRUS)");
 			$conectorAlerta = "<BR>";
 			$countATENCAO++;
@@ -471,8 +467,18 @@ function mostrarGridDemanda($colecaoTramitacao, $isDetalhamento) {
 				
 				//$textoTram = truncarStringHTML($voAtual->textoTram,300, false);
 				$textoTram = truncarStringHTMLComDivExpansivel($voAtual->getValorChaveHTML(),$voAtual->textoTram,220, false);
-				$respUNCT = $voAtual->nmUsuarioInclusao;
-				$respUNCT = truncarStringHTML($respUNCT, 15, true);
+				$respUNCT = $voAtual->nmUsuarioInclusao;				
+				
+				//$respUNCT = truncarStringHTML($respUNCT, 15, true);
+				$arrayParam = array(null, $respUNCT, 15, true, false, "", 2);
+				$respUNCT = truncarStringHTMLArray($arrayParam);
+					/*$nmDiv = $pArray[0];
+					$string = $pArray[1];
+					$tamMAximo = $pArray[2];
+					$usarReticencia = $pArray[3];
+					$comDivExpansivel = $pArray[4];
+					$corTextoTruncado = $pArray[5];
+					$numMaximoPalavras = $pArray[6];*/			
 				
 				
 				$html .= "<TD class='tabeladados' nowrap>" . complementarCharAEsquerda ( $sq, "0", TAMANHO_CODIGOS ) . "</TD> \n";

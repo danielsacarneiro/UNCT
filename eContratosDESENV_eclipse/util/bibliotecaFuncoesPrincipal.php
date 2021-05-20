@@ -89,6 +89,7 @@ function truncarStringHTMLArray($pArray){
 	$usarReticencia = $pArray[3];
 	$comDivExpansivel = $pArray[4];
 	$corTextoTruncado = $pArray[5];
+	$numMaximoPalavras = $pArray[6];
 
 	/*$separador = " ";
 	 $array = explode($separador, $string);
@@ -117,7 +118,40 @@ function truncarStringHTMLArray($pArray){
 			$retorno .= getDivHtmlExpansivel($nmDiv, $string, false, 'campoformulario', $corTextoTruncado);
 		}
 	}
+	
+	$retorno = getStringMaximoPalavras($retorno, $numMaximoPalavras);
+	
+	/*if($numMaximoPalavras != null){
+		$array = explode(" ", $retorno);
+		$tam = sizeof($array);
+		if($tam > $numMaximoPalavras){
+			for($i=0;$i<$numMaximoPalavras;$i++){
+				$retornoTemp .= $array[$i] . " ";			
+			}
+			
+			$retornoTemp = removerUltimaString(" ", $retornoTemp);
+		}
+		$retorno = $retornoTemp;		
+	}*/
 
+	return $retorno;
+}
+
+function getStringMaximoPalavras($string, $numMaximoPalavras){
+	$retorno = $string;
+	if($numMaximoPalavras != null){
+		$array = explode(" ", $retorno);
+		$tam = sizeof($array);
+		if($tam > $numMaximoPalavras){
+			for($i=0;$i<$numMaximoPalavras;$i++){
+				$retornoTemp .= $array[$i] . " ";
+			}
+				
+			$retornoTemp = removerUltimaString(" ", $retornoTemp);
+			$retorno = $retornoTemp;
+		}		
+	}
+	
 	return $retorno;
 }
 
