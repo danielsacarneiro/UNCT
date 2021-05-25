@@ -288,6 +288,21 @@ class voContratoModificacao extends voentidade {
 
 	function getMensagemComplementarTelaSucesso() {
 		$retorno = "Contrato-Modificação: " . $this->toString();
+		
+		try{
+			$vocontrato = $this->vocontrato;		
+			$dbcontrato = new dbcontrato();
+			$vocontrato = $dbcontrato->consultarPorChaveVO($vocontrato);
+			//$vocontrato = new vocontrato();
+			$vlGlobalMod = getValorMoedaComoDecimal($this->vlGlobalAtual);
+			$vlGlobalContrato = getValorMoedaComoDecimal($vocontrato->vlGlobal);
+			
+			if($vlGlobalMod != $vlGlobalContrato){
+				$retorno .= "<br><br>ATENÇÃO: verifique se o valor do contrato deve ser alterado na funcao 'Contratos."; 
+			}
+		}catch (Exception $ex){
+			$retorno .= "<br><br>" . $ex->getMessage();
+		}
 		return $retorno;
 	}
 	

@@ -69,6 +69,7 @@ class dbcontrato extends dbprocesso {
 		$arrayColunasRetornadas = array (
 				$nmTabela . ".*",
 				$nmTabelaPessoa . "." . vopessoa::$nmAtrDoc,
+				"$nmTabelaContratoInfo." . voContratoInfo::$nmAtrInEscopo,
 				getSQLCOALESCE($arrayCoalesceNmContratada, vopessoa::$nmAtrNome),
 				getSQLCASEIsNULL("$nmTabelaContratoInfo.".voContratoInfo::$nmAtrCdContrato
 						, getVarComoString(constantes::$CD_NAO)
@@ -358,17 +359,19 @@ class dbcontrato extends dbprocesso {
 		$nmTabelaContratoLicon = voContratoLicon::getNmTabelaStatic ( false );
 		$nmTabelaPessoa = vopessoa::getNmTabelaStatic ( false );
 		$nmTabelaPessoaGestor = "NM_TAB_GESTOR";
+		$nmTabelaContratoMater = "NM_TAB_CONTRATO_MATER";
 		
 		$nmTabContratoLiconSqMAX = "TAB_MAX_LICON_CONTRATO";
 		
 		$arrayCoalesceResponsavel = array(
 				"$nmTabelaPessoaGestor.". vopessoa::$nmAtrNome,
-				vocontrato::$nmAtrGestorPessoaContrato
+				"$nmTabela." . vocontrato::$nmAtrGestorPessoaContrato
 		);
 		$arrayColunasRetornadas = array("$nmTabela.*",
 			"$nmTabelaPessoa." . vopessoa::$nmAtrDoc,
 			"$nmTabelaContratoInfo." . voContratoInfo::$nmAtrDtProposta,
 			"$nmTabelaContratoInfo." . voContratoInfo::$nmAtrInEscopo,
+			"$nmTabelaContratoMater." . vocontrato::$nmAtrDtVigenciaInicialContrato . " AS " . vocontrato::$NmColDtInicioVigenciaMater,
 			getSQLCOALESCE($arrayCoalesceResponsavel, vocontrato::$nmAtrGestorPessoaContrato),
 			"$nmTabelaContratoLicon." . voContratoLicon::$nmAtrSituacao,
 			"TAB1." . vousuario::$nmAtrName . " AS " . voentidade::$nmAtrNmUsuarioInclusao,
@@ -442,6 +445,18 @@ class dbcontrato extends dbprocesso {
 		$queryJoin .= $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrAnoDemanda . "=" . $nmTabContratoLiconSqMAX . "." . voContratoLicon::$nmAtrAnoDemanda;
 		$queryJoin .= "\n AND ";
 		$queryJoin .= $nmTabelaContratoLicon . "." . voContratoLicon::$nmAtrCdDemanda . "=" . $nmTabContratoLiconSqMAX . "." . voContratoLicon::$nmAtrCdDemanda;
+		
+		$queryJoin .= "\n LEFT JOIN $nmTabela $nmTabelaContratoMater ";
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaContratoMater . "." . vocontrato::$nmAtrCdContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrCdContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaContratoMater . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrAnoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaContratoMater . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaContratoMater . "." . vocontrato::$nmAtrCdEspecieContrato . "=" . getVarComoString(dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER);
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaContratoMater . "." . vocontrato::$nmAtrInDesativado . "='N' ";
 		
 		$queryJoin .= "\n LEFT JOIN $nmTabelaPessoa " ;
 		$queryJoin .= "\n ON ";

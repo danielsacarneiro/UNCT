@@ -312,7 +312,6 @@ function getPadraoHTMLMensagem($corpoMensagem, &$mail){
 	</HEAD>"
 	. setTituloPagina($titulo) 
 	//.
-	//"\n<LINK href='http://sf300451/wordpress/UNCT/eContratosDesenv_eclipse/lib/css/sefaz_pe.css' rel='stylesheet' type='text/css'>\n"
 	.
 	"<BODY CLASS='paginadados'>
 		<FORM name='frm_principal' method='post' action='index.php?consultar=S'>

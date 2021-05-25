@@ -112,6 +112,7 @@ function setCabecalhoPorNivel($titulo, $qtdNiveisAcimaEmSeEncontraPagina, $mail 
 	// se precisar fazer o mesmo para pasta menu
 	$pastaImagens = getPastaImagensPorNivel ( $qtdNiveisAcimaEmSeEncontraPagina );
 	$pastaMenu = subirNivelPasta ( caminho_menu, $qtdNiveisAcimaEmSeEncontraPagina );
+	$nmServidor = constantes::$NM_SERVIDOR;
 	
 	define ( 'pasta_imagens', $pastaImagens );
 	if ($titulo != null) {
@@ -153,7 +154,7 @@ function setCabecalhoPorNivel($titulo, $qtdNiveisAcimaEmSeEncontraPagina, $mail 
 		<a href='" . $pastaMenu . "login.php?funcao=O' >$imagemSair</a>";
 		
 		if (isUsuarioAdmin ()) {
-			$linkmenu .= "<a href='http://sf300451/wordpress/wp-admin/' target='_blank'>$imagemWordPress</a>";
+			$linkmenu .= "<a href='http://$nmServidor/wordpress/wp-admin/' target='_blank'>$imagemWordPress</a>";
 		}
 		
 	}
@@ -1413,7 +1414,8 @@ function getTagHTMLFechaFormulario(){
 }
 
 function getFuncaoJSDetalharEmailPorVO($vo){
-	$caminhoPagina = 'http://sf300451/wordpress/UNCT/eContratosDESENV_eclipse/funcoes/' . $vo->getNmTabela() . "/";
+	$nmServidor = constantes::$NM_SERVIDOR;
+	$caminhoPagina = 'http://$nmServidor/wordpress/UNCT/eContratosDESENV_eclipse/funcoes/' . $vo->getNmTabela() . "/";
 	return	getFuncaoJSDetalhar($caminhoPagina, true);
 }
 

@@ -1,4 +1,6 @@
 <?php
+include_once("util/constantes.class.php");
+
 error_reporting(E_ALL);
 ini_set('display_errors',1);
 /*ini_set('log_errors', 1);
@@ -99,7 +101,8 @@ function getPastaRoot(){
     
     $path .= $aplicacao;
     
-    define('url_sistema', 'http://sf300451/wordpress/UNCT/eContratosDesenv_eclipse/');
+    $nmServidor = constantes::$NM_SERVIDOR;
+    define('url_sistema', 'http://$nmServidor/wordpress/UNCT/eContratosDesenv_eclipse/');
     
     return $path;
 }

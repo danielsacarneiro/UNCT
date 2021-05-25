@@ -4,6 +4,7 @@ include_once 'normativos.php';
 
   Class constantes {	
 	
+  	static $NM_SERVIDOR = 'sf300451';
 	static $nomeSistema = "e-C@NTi";
 	static $TAMANHO_MAXIMO_NM_ARQUIVO = 40;
 	

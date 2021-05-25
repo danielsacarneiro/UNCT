@@ -425,12 +425,24 @@ function setaValorCampoPorFator(pArray){
 	var pCdItemProrrogacao = pArray[6];
 	var pQtCasasDecimais = pArray[7];
 	var pOperacao = pArray[8];
+	var pIdCampoInContratoEscopo = pArray[9];
 		
 	//biblio.checkbox.js
 	var isProrrogacao = isItemCheckBoxSelecionado(pIdCheckCaracteristica, pCdItemProrrogacao);
 	var pCampoChamada = document.getElementById(pIdCampoChamada);
 	var pCampoACorrigir = document.getElementById(pIdCampoACorrigir);
 	var pCampoPrazo = document.getElementById(pIdCampoPrazo);
+	
+	var campoInEscopo = getElementByIdValido(pIdCampoInContratoEscopo);
+	var inEscopo = null;
+	if(campoInEscopo != null){
+		inEscopo = campoInEscopo.value;
+	}
+	
+	if(inEscopo == 'S'){
+		exibirMensagem("Contrato por escopo. Calculo do valor é feito manualmente.");
+		return false;
+	}
 
 	//o campoprazo define o prazo da ultima prorrogacao, para os termos que alteram o valor do contrato
 	//nao fará diferenca se o termo for uma prorrogacao, pois esta determina um novo periodo de duracao do contrato,

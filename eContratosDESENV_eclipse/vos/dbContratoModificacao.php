@@ -441,7 +441,9 @@ class dbContratoModificacao extends dbprocesso {
 		$filtro = new filtroManterContratoModificacao ( false );
 		$filtro->inTrazerMater = true;
 		$filtro->setaFiltroConsultaSemLimiteRegistro ();
-		$atributoOrdenacao = voContratoModificacao::$nmAtrDtModificacao . " " . constantes::$CD_ORDEM_CRESCENTE;
+		//ordena pela data em que ocorreram, e pelo sequencial
+		$atributoOrdenacao = voContratoModificacao::$nmAtrDtModificacao . " " . constantes::$CD_ORDEM_CRESCENTE .
+		 "," . voContratoModificacao::$nmAtrSq . " " . constantes::$CD_ORDEM_CRESCENTE;
 		$filtro->cdAtrOrdenacao = $atributoOrdenacao;
 		$filtro->vocontrato = $voContratoFiltro;		
 		$filtro->dtVigencia = $dataVigencia;

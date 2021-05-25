@@ -50,6 +50,12 @@ function getContratoDetalhamento($voContrato, $colecao=null,  $detalharContratoI
 }
 function getContratoDetalhamentoParam($arrayParametro) {
 	$voContrato = $arrayParametro[0];
+	$colecao = $arrayParametro[1];
+	$detalharContratoInfo = $arrayParametro[2];
+	$isDetalharChaveCompleta=$arrayParametro[3];
+	$complementoDet=$arrayParametro[4];
+	$trazerPrazoUltimaProrrogacao=$arrayParametro[5];
+	
 	// $voContrato = new vocontrato();
 	if ($voContrato->cdEspecie == null) {
 		$voContrato->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
@@ -57,13 +63,7 @@ function getContratoDetalhamentoParam($arrayParametro) {
 	if ($voContrato->sqEspecie == null) {
 		$voContrato->sqEspecie = 1;
 	}
-	
-	$colecao = $arrayParametro[1];
-	$detalharContratoInfo = $arrayParametro[2];
-	$isDetalharChaveCompleta=$arrayParametro[3];
-	$complementoDet=$arrayParametro[4];
-	$trazerPrazoUltimaProrrogacao=$arrayParametro[5];
-	
+		
 	if($colecao == null){
 		$colecao = consultarPessoasContrato ( $voContrato );
 	}
@@ -1309,7 +1309,7 @@ function getHTMLContratoPorEscopo($vocontratoinfo){
 	$textoContratoEscopo = "Informação 'Contrato por Escopo' inexistente";
 	if($inEscopo != null){
 		if($isContratoPorEscopo){
-			$textoContratoEscopo = "Contrato por Escopo (incluir valor adicional/suprimido em 'Valor Modificação ao Contrato')";
+			$textoContratoEscopo = "Contrato por Escopo (incluir valor adicional/suprimido em 'Valor Global Referencial')";
 		}else{
 			$textoContratoEscopo = "NÃO É Contrato por Escopo";
 		}
@@ -1811,12 +1811,13 @@ function getCamposManterContrato($recordSet, $voContratoInseridoNaTela=null){
 					
 				$retorno .= "Vigência: " . getInputText("", "", getData($voContrato->dtVigenciaInicial), constantes::$CD_CLASS_CAMPO_READONLY);
 				$retorno .= " a " . getInputText("", "", getData($voContrato->dtVigenciaFinal), constantes::$CD_CLASS_CAMPO_READONLY);
-				
+								
 				$pArray = array(vocontrato::$nmAtrGestorContrato => $voContrato->gestor,
 						vocontrato::$nmAtrProcessoLicContrato => $voContrato->procLic,
 						vocontrato::$nmAtrContratadaContrato => $voContrato->contratada,
 						vocontrato::$nmAtrVlGlobalContrato => $voContrato->vlGlobal,
 						vocontrato::$nmAtrVlMensalContrato => $voContrato->vlMensal,
+						voContratoInfo::$nmAtrInEscopo => $voContratoInfo->inEscopo,
 						vocontrato::$nmAtrDocContratadaContrato => documentoPessoa::getNumeroDocFormatado($voContrato->docContratada),
 				);
 				

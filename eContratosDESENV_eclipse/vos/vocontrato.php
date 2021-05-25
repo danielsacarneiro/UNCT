@@ -28,11 +28,8 @@ include_once ("voDemanda.php");
 // cria um combo select html
 
   Class vocontrato extends voentidade{
-        //var $nmTable = "contrato_import";
-		//para teste        
-        /*var $nmEntidade = "contrato";
-        var $nmTabela = "contrato";
-		static $nmEntidadeStatic = "contrato";*/
+
+  	static $NmColDtInicioVigenciaMater = "NmColDtInicioVigenciaMater";
   	static $NUM_PRAZO_PADRAO = 12;
   	static $ID_REQ_COLECAO_EXPORTAR_EXCEL = "ID_REQ_COLECAO_EXPORTAR_EXCEL";
   	static $ID_REQ_DIV_DADOS_MANTER_CONTRATO = "ID_REQ_DIV_DADOS_MANTER_CONTRATO";

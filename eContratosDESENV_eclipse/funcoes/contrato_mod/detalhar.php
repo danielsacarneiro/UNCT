@@ -134,7 +134,7 @@ function confirmar() {
 	            </TD>				
         	</TR>
 			<TR>
-	            <TH class="campoformulario" nowrap>Valor Referencial:</TH>
+	            <TH class="campoformulario" nowrap>Valor Mensal Referencial:</TH>
 	            <TD class="campoformulario" ><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlModificacaoReferencial?>" name="<?=voContratoModificacao::$nmAtrVlModificacaoReferencial?>"  value="<?php echo(getMoeda($vo->vlModificacaoReferencial,4));?>"
 	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 4, event);" class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly></TD>
 	            <TH class="campoformulario" nowrap>Valor Mensal Atualizado:</TH>
@@ -142,7 +142,7 @@ function confirmar() {
 	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly></TD>	            
 	        </TR>	        
 			<TR>
-	            <TH class="campoformulario" nowrap>Valor Modificação ao Contrato<br>(em caso de prorrogação):</TH>
+	            <TH class="campoformulario" nowrap>Valor Global Referencial<br>(em caso de prorrogação):</TH>
 	            <TD class="campoformulario"><INPUT type="text" id="<?=voContratoModificacao::$nmAtrVlModificacaoAoContrato?>" name="<?=voContratoModificacao::$nmAtrVlModificacaoAoContrato?>"  value="<?php echo(getMoeda($vo->vlModificacaoAoContrato));?>"
 	            onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="<?=constantes::$CD_CLASS_CAMPO_READONLY_DIREITA?>" size="15" readonly></TD>
 	            <TH class="campoformulario">Valor Global Atualizado:</TH>

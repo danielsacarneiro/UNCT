@@ -303,7 +303,7 @@ function iniciar(){
 				</TD>
 	        </TR>	        	        	        
 			<TR>
-	            <TH class="campoformulario" nowrap>Período Vigência:</TH>
+	            <TH class="campoformulario" nowrap>Vigência:</TH>
 	            <TD class="campoformulario" colspan=3>
 	            	<INPUT type="text" 
 	            	       id="<?=voContratoModificacao::$nmAtrDtModificacao?>" 

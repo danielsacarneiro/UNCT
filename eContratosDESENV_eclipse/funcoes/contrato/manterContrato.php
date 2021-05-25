@@ -12,6 +12,7 @@ include_once(caminho_vos."dbcontrato.php");
 inicioComValidacaoUsuario(true);
 
 $vo=$voContrato = new vocontrato();
+$voContratoInfo = new voContratoInfo();
 //var_dump($voContrato->varAtributos);
 
 $funcao = @$_GET["funcao"];
@@ -38,6 +39,7 @@ if($isInclusao){
 	$colecao = $dbprocesso->limpaResultado();
 	$colecao = $dbprocesso->consultarContratoPorChave($voContrato, $isHistorico);	
 	$voContrato->getDadosBanco($colecao[0]);
+	$voContratoInfo->getDadosBanco($colecao[0]);
 	//var_dump($voContrato);
 	$vopessoacontratada = new vopessoa();
 	$vopessoacontratada->getDadosBanco($colecao[0]);
@@ -106,6 +108,7 @@ setCabecalho($titulo);
 		 		vocontrato::$nmAtrDtVigenciaFinalContrato,
 		 		vocontrato::$nmAtrVlGlobalContrato,
 		 		vocontrato::$nmAtrVlMensalContrato,
+		 		voContratoInfo::$nmAtrInEscopo,
 		 );
 		 		 	
 		 echo montarHashNomeAlternativo($pArrayAtributos, $varNomesAlternativos, true);
@@ -324,7 +327,8 @@ function carregaDadosContrato(pCampoChamada=null){
 			//alert(nmCampoAlternativo);
 			var campoTela = document.getElementById(nmCampoTela);
 			var campoAlternativo = document.getElementById(nmCampoAlternativo);
-			campoTela.value = campoAlternativo.value;				
+			campoTela.value = campoAlternativo.value;			
+			//alert("NOME CAMPO:" + nmCampoTela + "|hidden:"+ nmCampoAlternativo + "|VALOR => campoTela:" + campoTela.value + "|campoAlternativoHidden:" + campoAlternativo.value);	
 		}
 	}
 
@@ -475,6 +479,9 @@ function formatarEmpenho(pCampo){
 			getContratoDetalhamentoParam($arrayParametro);
 				
 		}
+		
+		//inclui a informacao do contrato por escopo quando existente
+		echo getInputHidden(voContratoInfo::$nmAtrInEscopo, voContratoInfo::$nmAtrInEscopo, $voContratoInfo->inEscopo);
 		?>
 		<TR>
             <TH class="campoformulario" width="1%" nowrap>Contratada:</TH>
@@ -582,7 +589,7 @@ function formatarEmpenho(pCampo){
     		</TD>
         </TR>
 		<TR>
-<SCRIPT language="JavaScript" type="text/javascript">
+<SCRIPT language="JavaScript" type="text/javascript">	
 	var pArrayCalcularValorMensal = new Array();
 	pArrayCalcularValorMensal[0] = "<?=vocontrato::$nmAtrVlMensalContrato?>"; 
 	pArrayCalcularValorMensal[1] = "<?=vocontrato::$nmAtrVlGlobalContrato?>";
@@ -593,6 +600,8 @@ function formatarEmpenho(pCampo){
 	pArrayCalcularValorMensal[6] = "<?=dominioTipoDemandaContrato::$CD_TIPO_PRORROGACAO?>";
 	pArrayCalcularValorMensal[7] = null;
 	pArrayCalcularValorMensal[8] = "*";
+	pArrayCalcularValorMensal[9] = "<?=voContratoInfo::$nmAtrInEscopo?>";
+	
 
 	var pArrayCalcularValorGlobal = new Array();
 	pArrayCalcularValorGlobal[0] = "<?=vocontrato::$nmAtrVlGlobalContrato?>"; 
@@ -604,6 +613,8 @@ function formatarEmpenho(pCampo){
 	pArrayCalcularValorGlobal[6] = "<?=dominioTipoDemandaContrato::$CD_TIPO_PRORROGACAO?>";
 	pArrayCalcularValorGlobal[7] = null;
 	pArrayCalcularValorGlobal[8] = "/";
+	pArrayCalcularValorGlobal[9] = "<?=voContratoInfo::$nmAtrInEscopo?>";
+	
 	
 </SCRIPT>
 	
