@@ -202,7 +202,8 @@ function getContratoDetalhamentoParam($arrayParametro) {
 
 			echo getTextoHTMLNegrito(" Acréscimo: " . getMoeda($vlPercentualAcrescimo, 2) . "%");			
 			//$voContratoInfo = new voContratoInfo();
-			$isContratoReforma = $voContratoInfo->cdClassificacao == dominioClassificacaoContrato::$CD_SERV_REFORMA_EDIFICIO;
+			$isContratoReforma = $voContratoInfoPK->cdClassificacao == dominioClassificacaoContrato::$CD_SERV_REFORMA_EDIFICIO;
+			//echo "classificao".$voContratoInfo->cdClassificacao;
 			if((!$isContratoReforma && $vlPercentualAcrescimo > normativos::$LIMITE_ACRESCIMO)
 					|| ($isContratoReforma && $vlPercentualAcrescimo > normativos::$LIMITE_ACRESCIMO_REFORMA)){
 				echo getTextoHTMLDestacado("(ATENÇÃO: LIMITE EXCEDIDO)", "red", true);
