@@ -62,6 +62,16 @@ try{
 <SCRIPT language="JavaScript" type="text/javascript">
 // Verifica se o formulario esta valido para alteracao, exclusao ou detalhamento
 function isFormularioValido() {
+	var campoSituacao = document.frm_principal.<?=voContratoLicon::$nmAtrSituacao?>;
+	var campoObs = document.frm_principal.<?=voContratoLicon::$nmAtrObs?>;
+	var situacao = campoSituacao.value;
+	if(situacao == <?=dominioSituacaoContratoLicon::$CD_SITUACAO_INCLUIDO?>){		
+		var obs = campoObs.value.toUpperCase();
+		if(obs.indexOf("DIGO") == -1 && obs.indexOf("RECEBIMENTO") == -1 ){
+			exibirMensagem("É necessário informar o código de recebimento no formato: 'Código de Recebimento: XXXX...'");
+			return false;
+		}
+	} 
 	
 	return true;
 }
@@ -155,17 +165,17 @@ function carregaDadosContrato(){
 	        </TR>
 	        <TR>	       
 	            <TH class="campoformulario" nowrap width="1%">Dt.Publicação:</TH>
-	            <TD class="campoformulario" width="1%">
+	            <TD class="campoformulario" width="1%"  colspan=3>
 	            <?php echo getDetalhamentoHTML("", "", $voContrato->dtPublicacao)?>
 				</TD>				
+	        </TR>
+	        <TR>	       
 	            <TH class="campoformulario" nowrap width="1%">Dt.Assinatura:</TH>
 	            <TD class="campoformulario">
 	            <?php echo getDetalhamentoHTML("", "", $voContrato->dtAssinatura)?>
 				</TD>
-	        </TR>
-	        <TR>	       
 	            <TH class="campoformulario" nowrap width="1%">PL:</TH>
-	            <TD class="campoformulario" colspan=3>
+	            <TD class="campoformulario">
 	            <?php echo getDetalhamentoHTML("", "", $voContrato->procLic)?>
 				</TD>				
 	        </TR>

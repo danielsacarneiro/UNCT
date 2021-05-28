@@ -1503,6 +1503,33 @@ function getDivHtmlExpansivel($nmDiv, $conteudoDiv=null, $visivel=false, $class 
 	return $html;
 }
 
+function getDivHtmlExpansivelArray($pArray){
+	$nmDiv = $pArray[0];
+	$conteudoDiv = $pArray[1];
+	$titulo = $pArray[2];
+	$visivel = $pArray[3];
+	$class = $pArray[4];
+	$corTexto = $pArray[5];
+	
+	if($class == null){
+		$class = 'campoformulario';
+	}
+	
+	if($corTexto == null){
+		$corTexto="black";
+	} 
+					
+	//biblioteca_funcoes_principal.js
+	$scriptOnLoad = "esconderDiv(document.getElementById('$nmDiv'), null, true);";
+	$scriptOnClick = "esconderDiv(document.getElementById('$nmDiv'), null, document.getElementById('$nmDiv').style.display=='');";
+	$imagem = "<img  title='Entrar' src='" . pasta_imagens . "sinal_mais.gif' width='15' height='15'>";	
+	$link = "<a href=\"javascript:$scriptOnClick\" >$imagem</a>";
+	//$html = "$imagem<DIV class='$class' id='$nmDiv' name='$nmDiv' onLoad='ocultarElemento('$nmDiv')'>$conteudoDiv</DIV>";
+	$html = "$titulo $link<DIV class='$class' id='$nmDiv' name='$nmDiv'>$conteudoDiv</DIV>";
+	$html .= getTagHtmlJavaScript($scriptOnLoad);
+	return $html;
+}
+
 /**
  * recupera um atributo com o valor a comparar entre aquele inserido pelo usuario e o que esta na base de dados
  * @param unknown $nmAtributo

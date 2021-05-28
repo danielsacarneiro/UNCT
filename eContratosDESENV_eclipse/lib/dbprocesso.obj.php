@@ -169,10 +169,11 @@ class dbprocesso {
 		return $queryFrom;
 	}
 	function consultarPorChaveVO($vo, $isHistorico=false) {
-		$registrobanco = $this->consultarPorChave ( $vo, $isHistorico );
-		$vo->getDadosBancoPorChave ( $registrobanco );
+		$voTemp = clone $vo;
+		$registrobanco = $this->consultarPorChave ($voTemp , $isHistorico );
+		$voTemp->getDadosBancoPorChave ( $registrobanco );
 		
-		return $vo;
+		return $voTemp;
 	}
 	function consultarPorChave($vo, $isHistorico) {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );

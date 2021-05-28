@@ -515,7 +515,8 @@ function estatisticas(){
 	    var pArrayIdCamposFiltroLicon = new Array(
 	    		'<?=filtroManterContrato::$ID_REQ_InPublicado?>',
 	    		'<?=vocontrato::$nmAtrInLicomContrato?>',	    		
-	    		'<?=$pNmCampoCdEspecieContrato?>'
+	    		'<?=$pNmCampoCdEspecieContrato?>',
+	    		'<?=filtroManterContrato::$nmAtrIsTpVigenciaMAxSq?>',	    		
 	    		);
 
 	    //alert(pArrayIdCamposFiltroPortalTransparencia);

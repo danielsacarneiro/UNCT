@@ -32,10 +32,11 @@ Class dominioSituacaoContratoLicon extends dominio{
 	}
 	
 	static function getColecaoManter(){
-		$retorno = static::getColecaoComElementosARemover(array(self::$CD_SITUACAO_INCLUIDO_COM_OBS, self::$CD_SITUACAO_INCLUIDO));
+		/*$retorno = static::getColecaoComElementosARemover(array(self::$CD_SITUACAO_INCLUIDO_COM_OBS, self::$CD_SITUACAO_INCLUIDO));
 		if(isUsuarioAdmin()){
 			$retorno = static::getColecao();			
-		}		
+		}		*/
+		$retorno = static::getColecao();
 		return $retorno;
 	}
 	

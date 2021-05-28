@@ -65,6 +65,14 @@ class email_sefaz extends multiplosConstrutores{
 		$this->Username = $user;
 	}
 	
+	static function getListaEmailDIFIN(){
+		return array(
+				"marcio.lins@sefaz.pe.gov.br",
+				"antonio.d-santos@sefaz.pe.gov.br",
+				"uneo@sefaz.pe.gov.br"
+		);
+	}
+	
 	static function getListaEmailJuridico(){
 		return array(static::$REMETENTE_ATJA,
 				//"patricia.farias@sefaz.pe.gov.br",
@@ -75,8 +83,11 @@ class email_sefaz extends multiplosConstrutores{
 		);	
 	}
 	
+	/**
+	 * lista que receberao os emails de contatos ao gestor
+	 */
 	static function getListaEmailAvisoGestorContrato(){
-		return array(
+		$array1 = array(
 				static::$REMETENTE_PRINCIPAL,
 				static::$REMETENTE_COPIA,
 				static::$REMETENTE_DILC,
@@ -84,14 +95,23 @@ class email_sefaz extends multiplosConstrutores{
 				//"daniel.ribeiro@sefaz.pe.gov.br",				
 				//"margarida.vasconcelos@sefaz.pe.gov.br"
 		);
+		
+		$retorno = array_merge($array1, static::getListaEmailDIFIN());
+		return $retorno;		
 	}
 	
+	/**
+	 * lista que receberao os LOGS DO SISTEMA
+	 * @return string[]
+	 */
 	static function getListaEmailLogAlertasGestor(){
-		return array( 
+		$retorno = array( 
 				"eduardo.s-goncalves@sefaz.pe.gov.br",
 				static::$REMETENTE_PRINCIPAL,
 				static::$REMETENTE_COPIA,
 		);
+		
+		return $retorno; 
 	}
 	
 	static function getListaEmailContratosAVencer(){
@@ -105,7 +125,6 @@ class email_sefaz extends multiplosConstrutores{
 	static function getListaEmailUNCT(){
 		return array(
 				"eduardo.s-goncalves@sefaz.pe.gov.br",
-				//"rogerio.f-carvalho@sefaz.pe.gov.br",
 				"juliene.paiva@sefaz.pe.gov.br",
 				"Andrea.c-oliveira@sefaz.pe.gov.br",
 				"andrielle.rodrigues@sefaz.pe.gov.br",

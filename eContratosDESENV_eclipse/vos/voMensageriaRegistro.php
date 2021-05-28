@@ -105,23 +105,14 @@ class voMensageriaRegistro extends voentidade {
 		$emailPrincipal = email_sefaz::$REMETENTE_PRINCIPAL;
 		$emailCopia = email_sefaz::$REMETENTE_COPIA;
 	
-		$retorno = "<br>Prezado gestor,
-		<br><br><br><b>Esta é uma mensagem automática</b> gerada pelo sistema de automação da Unidade de Contratos (UNCT/SAFI),
-		solicitando informações referentes à <b>prorrogação</b> do contrato <b>$codigoContrato</b>, que em breve se encerrará.
-		<br>Havendo interesse da SEFAZ pela prorrogação, requere-se provocação tempestiva, via SEI, à SAFI, junto com as cotações de preços e a anuência da Contratada.
-	
+		$retorno = static::getMensagemPreambulo($codigoContrato);
+		
+		$retorno .= "<br>Havendo interesse da SEFAZ pela prorrogação, requere-se provocação tempestiva, via SEI, à SAFI, junto com as cotações de preços e a anuência da Contratada.	
 		<br><br><b>Não sendo possível nova prorrogação, e persistindo a necessidade da contratação, o gestor deverá solicitar novo processo licitatório
-		em tempo hábil, sob pena de encerramento da prestação do serviço.
-	
-		<br><br>Informamos ainda que o envio da garantia contratual atualizada, sendo este o caso, é necessária à instrução da renovação contratual.</b>
-	
-		<br><br>A resposta deve ser enviada para o seguinte correio eletrônico: <b><u>$emailPrincipal</u></b>, com cópia para <u>$emailCopia</u> .
-		<br><br><b>Sem prejuízo quanto à responsabilidade referente à gestão contratual própria do setor demandante,
-		é imprescindível a resposta deste email, ainda que inexista interesse na prorrogação, para fins de controle e registro desta unidade</b>.
-	
-		<br><br>Caso o pedido de prorrogação já tenha sido formalizado, <b>favor informar o número do SEI que trata da presente questão</b>.
-		<br><br>Na ausência de manifestação, este e-mail será reenviado a cada <b>$numFrequencia dia(s)</b>.";
-	
+		em tempo hábil, sob pena de encerramento da prestação do serviço.";
+		
+		$retorno .= static::getMensagemCorpoGeral($numFrequencia);
+		
 		return $retorno;
 	}
 	 
@@ -130,23 +121,35 @@ class voMensageriaRegistro extends voentidade {
 		$emailPrincipal = email_sefaz::$REMETENTE_PRINCIPAL;
 		$emailCopia = email_sefaz::$REMETENTE_COPIA;
 		 
+		$retorno = static::getMensagemPreambulo($codigoContrato);
+		
+		$retorno .= "<br>Tendo em vista sua <b>improrrogabilidade</b>, havendo interesse da SEFAZ por sua manutenção, requere-se provocação tempestiva, via SEI, à SAFI,
+		pleiteando a abertura de novo processo licitatório.	
+		<br><br>Excepcionalmente, permite-se a análise extraordinária de uma nova prorrogação, desde que atendidos os requisitos legais.</b>";
+		 
+		$retorno .= static::getMensagemCorpoGeral($numFrequencia);
+		 
+		return $retorno;
+	}
+	
+	static function getMensagemPreambulo($codigoContrato){
 		$retorno = "<br>Prezado gestor,
+		<br><br><br><b>Esta é uma mensagem automática</b> gerada pelo sistema de automação da Unidade de Contratos (UNCT/SAFI) - "
+				. getTextoHTMLDestacado(constantes::$nomeSistema) . ",
+				solicitando informações referentes à <b>continuidade</b> do contrato <b>$codigoContrato</b>, que em breve se encerrará.";
+		
+		return $retorno;
+	}
 	
-		<br><br><br><b>Esta é uma mensagem automática</b> gerada pelo sistema de automação da Unidade de Contratos (UNCT/SAFI),
-		comunicando a <b>improrrogabilidade</b> do contrato <b>$codigoContrato</b>, que em breve se encerrará.
-		<br>Havendo interesse da SEFAZ pela manutenção do serviço contratado, requere-se provocação tempestiva, via SEI, à SAFI,
-		pleiteando a abertura de novo processo licitatório.
-	
-		<br><br>Excepcionalmente, permite-se a análise extraordinária de uma nova prorrogação, desde que atendidos os requisitos legais.</b>
-		 
-		<br><br>A resposta deve ser enviada para o seguinte correio eletrônico: <b><u>$emailPrincipal</u></b>, com cópia para <u>$emailCopia</u> .
+	static function getMensagemCorpoGeral($numFrequencia){
+		//<br><br>A resposta deve ser enviada para o seguinte correio eletrônico: <b><u>$emailPrincipal</u></b>, com cópia para <u>$emailCopia</u> .
+		$retorno = "<br><br>A resposta deve ser enviada para <b><u>TODOS OS CONTATOS</u></b> deste email.
 		<br><br><b>Sem prejuízo quanto à responsabilidade referente à gestão contratual própria do setor demandante,
-		é imprescindível a resposta deste email, ainda que inexista interesse na prorrogação, para fins de controle e registro desta unidade</b>.
-		 
+		é imprescindível a resposta deste email, ainda que inexista interesse na prorrogação da prestação dos serviços, para fins de controle e registro desta unidade</b>.
+			
 		<br><br>Caso esta solicitação já tenha sido respondida, <b>favor informar o número do SEI que trata da presente questão</b>.
-	
 		<br><br>Na ausência de manifestação, este e-mail será reenviado a cada <b>$numFrequencia dia(s)</b>.";
-		 
+		
 		return $retorno;
 	}
 }

@@ -73,7 +73,8 @@ if ($enviarEmailAlerta) {
 		$log .= getLogComFlagImpressao("<br>$qtdEmailsErros emails com erro.");
 	}else{
 		//echoo("<br>Mensageria: não existem alertas para o dia de hoje.");
-		$log .= getLogComFlagImpressao("<br>Mensageria: não existem alertas para o dia de hoje.");
+		$msg = getTextoHTMLDestacado("<br>Mensageria: não existem alertas para o dia de hoje.", "blue", false);
+		$log .= getLogComFlagImpressao($msg);
 	}
 	
 	//echoo("<br>FIM Mensageria.");

@@ -274,7 +274,7 @@ function iniciar(){
 					. ", $nmTabelaDemandaTramDoc.".voDemandaTramDoc::$nmAtrDhInclusao . " " . constantes::$CD_ORDEM_DECRESCENTE;
 					
 					$colecaoTramitacao = $vo->dbprocesso->consultarDemandaTramitacaoContrato($filtroTramitacaoContrato);
-					mostrarGridDemandaContrato($colecaoTramitacao, true);
+					mostrarGridDemandaContrato($colecaoTramitacao, true, true, true);
 				}
 				?>	        
 	        

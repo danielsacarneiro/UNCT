@@ -546,6 +546,7 @@ function setFiltroContratosLicon(pArrayIdCampos, pArrayEspeciesContrato){
 	var campoPublicado = document.getElementById(pArrayIdCampos[0]);
 	var campoInLicon = document.getElementById(pArrayIdCampos[1]);
 	var campoEspecieContrato = document.getElementById(pArrayIdCampos[2]);
+	var campoSqMaxEspecie = document.getElementById(pArrayIdCampos[3]);
 	
 	//biblio...principal
 	limparFormularioGeral();
@@ -553,6 +554,7 @@ function setFiltroContratosLicon(pArrayIdCampos, pArrayEspeciesContrato){
 	selecionaSelectMultiple(campoEspecieContrato, pArrayEspeciesContrato);
 	campoPublicado.value = 'S';
 	campoInLicon.value = 'N';
+	//campoSqMaxEspecie.value = 'S';
 	
 	exibirMensagem("Para refinar a busca, selecionar o ano e o tipo de contrato (Ex. C-SAFI, C-PROFISCO...).");
 }

@@ -630,7 +630,7 @@ function mostrarGridDemandaGestao($colecaoTramitacao, $isDetalhamento) {
 	echo $html;
 }
 
-function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDadosDemanda = true) {
+function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDadosDemanda = true, $comDivExpansao = false) {
 	// var_dump($colecaoTramitacao);	
 	if (is_array ( $colecaoTramitacao )) {
 		$tamanho = sizeof ( $colecaoTramitacao );
@@ -648,29 +648,28 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDad
 
 		$html .= "<TR>\n";
 		$html .= "<TH class='textoseparadorgrupocampos' halign='left' colspan='4'>\n";
-		$html .= "<DIV class='campoformulario' id='div_tramitacao'>&nbsp;&nbsp;Anexos/Demandas\n";
-
-		$html .= "<TABLE id='table_tabeladados' class='tabeladados' cellpadding='0' cellspacing='0'> \n";
-		$html .= " <TBODY>  \n";
-		$html .= "        <TR>    \n";
+		
+		$htmlDiv .= "<TABLE id='table_tabeladados' class='tabeladados' cellpadding='0' cellspacing='0'> \n";
+		$htmlDiv .= " <TBODY>  \n";
+		$htmlDiv .= "        <TR>    \n";
 		if (! $isDetalhamento) {
 			$numColunas ++;
-			$html .= "<TH class='headertabeladados' width='1%'>&nbsp;&nbsp;X</TH>  \n";
+			$htmlDiv .= "<TH class='headertabeladados' width='1%'>&nbsp;&nbsp;X</TH>  \n";
 		}
-		$html .= "<TH class='headertabeladados' width='1%'>Ano</TH>   \n";
-		$html .= "<TH class='headertabeladados' width='1%'>Dem.</TH> \n";
-		$html .= "<TH class='headertabeladados' width='1%'>Tram.</TH> \n";
-		// $html .= "<TH class='headertabeladados' width='1%'>Origem</TH> \n";
-		// $html .= "<TH class='headertabeladados' width='1%'>Destino</TH> \n";
-		$html .= "<TH class='headertabeladados' width='1%'>Tipo</TH> \n";		
+		$htmlDiv .= "<TH class='headertabeladados' width='1%'>Ano</TH>   \n";
+		$htmlDiv .= "<TH class='headertabeladados' width='1%'>Dem.</TH> \n";
+		$htmlDiv .= "<TH class='headertabeladados' width='1%'>Tram.</TH> \n";
+		// $htmlDiv .= "<TH class='headertabeladados' width='1%'>Origem</TH> \n";
+		// $htmlDiv .= "<TH class='headertabeladados' width='1%'>Destino</TH> \n";
+		$htmlDiv .= "<TH class='headertabeladados' width='1%'>Tipo</TH> \n";		
 		if($comDadosDemanda){			
-			$html .= "<TH class='headertabeladados' width='30%'>Título</TH> \n";
+			$htmlDiv .= "<TH class='headertabeladados' width='30%'>Título</TH> \n";
 		}
-		$html .= "<TH class='headertabeladados' width='90%'>Despacho</TH> \n";
-		$html .= "<TH class='headertabeladados' width='1%' >Anexo</TH> \n";
-		$html .= "<TH class='headertabeladados' width='1%' >Usuário</TH> \n";
-		$html .= "<TH class='headertabeladados' width='1%' >Referência</TH> \n";
-		$html .= "</TR> \n";
+		$htmlDiv .= "<TH class='headertabeladados' width='90%'>Despacho</TH> \n";
+		$htmlDiv .= "<TH class='headertabeladados' width='1%' >Anexo</TH> \n";
+		$htmlDiv .= "<TH class='headertabeladados' width='1%' >Usuário</TH> \n";
+		$htmlDiv .= "<TH class='headertabeladados' width='1%' >Referência</TH> \n";
+		$htmlDiv .= "</TR> \n";
 
 		$sq = 1;
 
@@ -689,44 +688,60 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDad
 					$tipo = $tipo ."<br>". $dsTpDemandaContrato;
 				}
 				
-				$html .= "<TR class='dados'> \n";
+				$htmlDiv .= "<TR class='dados'> \n";
 
 				if (! $isDetalhamento) {
-					$html .= "<TD class='tabeladados'> \n";
-					$html .= getHTMLRadioButtonConsulta ( "rdb_tramitacao", "rdb_tramitacao", $i );
-					$html .= "</TD> \n";
+					$htmlDiv .= "<TD class='tabeladados'> \n";
+					$htmlDiv .= getHTMLRadioButtonConsulta ( "rdb_tramitacao", "rdb_tramitacao", $i );
+					$htmlDiv .= "</TD> \n";
 				}
 
-				$html .= "<TD class='tabeladados' nowrap>" . $voAtual->ano . "</TD> \n";
-				$html .= "<TD class='tabeladados' nowrap>" . complementarCharAEsquerda ( $voAtual->cd, "0", TAMANHO_CODIGOS ) . "</TD> \n";
-				$html .= "<TD class='tabeladados' nowrap>" . complementarCharAEsquerda ( $voAtual->sq, "0", TAMANHO_CODIGOS ) . "</TD> \n";
-				//$html .= "<TD class='tabeladados' nowrap>" . $dominioSetor->getDescricao ( $voAtual->cdSetorOrigem ) . "</TD> \n";
-				//$html .= "<TD class='tabeladados' nowrap>" . $dominioSetor->getDescricao ( $voAtual->cdSetorDestino ) . "</TD> \n";				
-				$html .= "<TD class='tabeladados'>$tipo</TD> \n";
+				$htmlDiv .= "<TD class='tabeladados' nowrap>" . $voAtual->ano . "</TD> \n";
+				$htmlDiv .= "<TD class='tabeladados' nowrap>" . complementarCharAEsquerda ( $voAtual->cd, "0", TAMANHO_CODIGOS ) . "</TD> \n";
+				$htmlDiv .= "<TD class='tabeladados' nowrap>" . complementarCharAEsquerda ( $voAtual->sq, "0", TAMANHO_CODIGOS ) . "</TD> \n";
+				//$htmlDiv .= "<TD class='tabeladados' nowrap>" . $dominioSetor->getDescricao ( $voAtual->cdSetorOrigem ) . "</TD> \n";
+				//$htmlDiv .= "<TD class='tabeladados' nowrap>" . $dominioSetor->getDescricao ( $voAtual->cdSetorDestino ) . "</TD> \n";				
+				$htmlDiv .= "<TD class='tabeladados'>$tipo</TD> \n";
 				if($comDadosDemanda){
-					$html .= "<TD class='tabeladados'>" .  strtolower($voAtual->texto) . "</TD> \n";
+					$htmlDiv .= "<TD class='tabeladados'>" .  strtolower($voAtual->texto) . "</TD> \n";
 				}
-				$html .= "<TD class='tabeladados' >" . strtolower($voAtual->textoTram) . "</TD> \n";
+				$htmlDiv .= "<TD class='tabeladados' >" . strtolower($voAtual->textoTram) . "</TD> \n";
 				
-				$html .= getHtmlDocumento($voAtual, false);				
+				$htmlDiv .= getHtmlDocumento($voAtual, false);				
 
-				$html .= "<TD class='tabeladados'>" . $voAtual->nmUsuarioInclusao . "</TD> \n";
-				$html .= "<TD class='tabeladados'>" . getData ( $voAtual->dtReferencia) . "</TD> \n";
+				$htmlDiv .= "<TD class='tabeladados'>" . $voAtual->nmUsuarioInclusao . "</TD> \n";
+				$htmlDiv .= "<TD class='tabeladados'>" . getData ( $voAtual->dtReferencia) . "</TD> \n";
 
-				$html .= "</TR> \n";
+				$htmlDiv .= "</TR> \n";
 
 				$sq ++;
 			}
 		}
 		
-		$html .= "<TR>\n
+		$htmlDiv .= "<TR>\n
 		<TD class='totalizadortabeladadosalinhadodireita' colspan=$numColunas> Total registros: $i </TD>\n
 		</TR>\n";
 		
 
-		$html .= "</TBODY> \n";
-		$html .= "</TABLE> \n";
-		$html .= "</DIV> \n";
+		$htmlDiv .= "</TBODY> \n";
+		$htmlDiv .= "</TABLE> \n";
+		
+		$titulo = "&nbsp;&nbsp;Anexos/Demandas";
+		$idDiv = "div_tramitacao";
+		
+		if($tamanho > 0){
+			if(!$comDivExpansao){
+				$html .= "<DIV class='campoformulario' id='$idDiv'>$titulo\n";
+				$html .= $htmlDiv;
+				$html .= "</DIV> \n";
+			}else{
+				$pArray = array($idDiv, $htmlDiv, $titulo);
+				$html .= getDivHtmlExpansivelArray($pArray);
+			}
+		}else{
+			$html .= "Sem tramitações";
+		}
+				
 		$html .= "</TH>\n";
 		$html .= "</TR>\n";
 	}

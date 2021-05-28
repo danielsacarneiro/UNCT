@@ -10,6 +10,8 @@ inicio();
 $titulo = "TESTE de Funções UNCT";
 setCabecalho($titulo);
 
+$vo = new voMensageria();
+var_dump(email_sefaz::getListaEmailLogAlertasGestor());
 
 ?>
 
