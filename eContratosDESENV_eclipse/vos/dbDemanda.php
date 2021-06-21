@@ -1239,8 +1239,7 @@ class dbDemanda extends dbprocesso {
 					if(!$garantiaOk && !$isApostilamento){
 						throw new excecaoGenerica("Fechamento não permitido: verifique a garantia do contrato. |"
 								. $vocontratoDemanda->getCodigoContratoFormatado(true));
-					}
-			
+					}			
 			
 					//$temPendenciaContratoEnvioSAD = isAtributoValido($vocontratoInfo->inPendencias) && in_array(dominioAutorizacao::$CD_AUTORIZ_SAD, $vocontratoInfo->inPendencias);
 					$temPendenciaContratoEnvioSAD = isAtributoValido($vocontratoInfo->inPendencias)
@@ -1254,12 +1253,12 @@ class dbDemanda extends dbprocesso {
 					//$vo = new voDemandaTramitacao();
 					$isAnaliseSADOK = !$isContratoEnvioSAD || (isAtributoValido($vo->fase) && in_array(dominioFaseDemanda::$CD_VISTO_SAD, $vo->fase));
 					$isAnalisePGEOK = !$isContratoEnvioPGE || (isAtributoValido($vo->fase) && in_array(dominioFaseDemanda::$CD_VISTO_PGE, $vo->fase));
-					if(!$isAnaliseSADOK){
+					if(!$isAnaliseSADOK && !$isApostilamento){
 						throw new excecaoGenerica("Fechamento não permitido: ausente análise SAD ao contrato. |"
 								. $vocontratoDemanda->getCodigoContratoFormatado(true));
 					}
 			
-					if(!$isAnalisePGEOK){
+					if(!$isAnalisePGEOK && !$isApostilamento){
 						throw new excecaoGenerica("Fechamento não permitido: ausente análise PGE ao contrato. |"
 								. $vocontratoDemanda->getCodigoContratoFormatado(true));
 					}

@@ -52,20 +52,21 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   	function incluirComEnvioEmail($registroMensageria) {  		
   			$this->cDb->retiraAutoCommit ();  			
   			try {
- 				
-  				if(voMensageria::$ENVIAR_EMAIL_GESTOR_CONTRATO){
-	  				$vomensageria = new voMensageria();
-	  				$vomensageria->getDadosBanco($registroMensageria);
-	  				
-	  				$vomensagemregistro = new voMensageriaRegistro();
-	  				$vomensagemregistro->sqMensageria = $vomensageria->sq;
-	  				$this->incluir ( $vomensagemregistro );
-	  				// End transaction
-	  				$this->cDb->commit ();	  					
-  				}
-  				
+ 				  				
   				$isContratoImprorrogavel = dominioTipoMensageria::$CD_CONTRATO_IMPRORROGAVEL == $registroMensageria[voMensageria::$nmAtrTipo];
   				$log = $this->enviarEmailGestor($registroMensageria, true, $isContratoImprorrogavel);
+  				
+  				//se nao deu erro no envio do email acima, cria o mensageriaregistro
+  				if(voMensageria::$ENVIAR_EMAIL_GESTOR_CONTRATO){
+  					$vomensageria = new voMensageria();
+  					$vomensageria->getDadosBanco($registroMensageria);
+  						
+  					$vomensagemregistro = new voMensageriaRegistro();
+  					$vomensagemregistro->sqMensageria = $vomensageria->sq;
+  					$this->incluir ( $vomensagemregistro );
+  					// End transaction
+  					$this->cDb->commit ();
+  				}  				
   				
   			} catch ( Exception $e ) {
   				$this->cDb->rollback ();
@@ -82,7 +83,8 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		//$numFrequencia = $registro[voMensageria::$nmAtrNumDiasFrequencia];
   		$vocontratoinfo = $vomensageria->vocontratoinfo; 		
   	
-  		$assunto = "COMUNICAÇÃO:";  	
+  		//$assunto = "COMUNICAÇÃO:";  	
+  		$assunto = "SOLICITAÇÃO:";
   		$emailGestor = $registro[vopessoa::$nmAtrEmail];
   		$isEmailGestorValido = $emailGestor != null && $emailGestor != "";
   		
@@ -119,6 +121,8 @@ include_once(caminho_lib. "dbprocesso.obj.php");
 	  			//$array2 = array($emailGestor);
 	  			$array2 = $arrayEmailGestor;	  			
 	  			$listaEmailTemp = array_merge($listaEmailTemp, $array2);
+	  			//inclui a DIFIN
+	  			$listaEmailTemp = array_merge($listaEmailTemp, email_sefaz::getListaEmailDIFIN());
   			}else{
   				$msg .= "<br><br><u><b>Encaminhamento ao gestor desativado. Entre em contato com o administrador do mensageria</b></u>.";
   			}

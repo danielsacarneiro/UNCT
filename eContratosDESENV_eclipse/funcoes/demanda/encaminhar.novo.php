@@ -230,6 +230,24 @@ function formataFormTpDemandaContrato(){
 	formataFormTpDemanda('<?=voDemanda::$nmAtrTipo?>', nmCampoCheckTpDemandaContrato);
 }
 
+function verificaSEIExistente(pNmCampoDiv, pIDCampo){
+	//alert(inDiasUteis);
+	var SEI = "";
+	if(pIDCampo != null){
+		SEI = document.getElementById(pIDCampo).value;
+	}	
+	//alert(SEI);	
+	if(SEI != "" && SEI.length > 5){
+		chave = SEI;				
+		link = "campoDadosSEIExistente.php";
+		//biblio ajax
+		getDadosPorChaveGenerica(chave, link, pNmCampoDiv);
+	}else{
+		//limpa o campodiv da contratada
+		limpaCampoDiv(pNmCampoDiv);		
+	}	
+}
+
 function iniciar(){	
 	formataFormTpDemandaContrato();
 }
@@ -482,10 +500,24 @@ function iniciar(){
 				</TD>
 	        </TR>
 	        <TR>
+ 				<?php
+ 				$idSEI = voDemandaTramitacao::$nmAtrProtocolo;
+ 				$nmDivSEIExistente = voDemanda::$NM_DIV_SEI_EXISTENTE; 					
+ 					if($isInclusao){
+						$javaScriptSEIExistente = "onBlur=\"verificaSEIExistente('$nmDivSEIExistente', '$idSEI');\"";
+ 					}
+				?>				
 	            <TH class="campoformulario" nowrap width="1%">PRT/SEI:</TH>
 	            <TD class="campoformulario" colspan=3>				
-	            <INPUT type="text" onkeyup="formatarCampoPRT(this, event);" id="<?=voDemandaTramitacao::$nmAtrProtocolo?>" name="<?=voDemandaTramitacao::$nmAtrProtocolo?>" value=""  class="camponaoobrigatorio" size="30" <?=$complementoHTML?>>
-	            <!-- <INPUT type="checkbox" id="<?=voDemandaTramitacao::$nmAtrInResponsabilidadePRT?>" name="<?=voDemandaTramitacao::$nmAtrInResponsabilidadePRT?>" value="" onClick="checkResponsabilidade();"> *Assumo a responsabilidade de não incluir PRT/SEI. -->	            	                        	                        
+	            <INPUT type="text" onkeyup="formatarCampoPRT(this, event);" id="<?=voDemandaTramitacao::$nmAtrProtocolo?>" 
+	            name="<?=voDemandaTramitacao::$nmAtrProtocolo?>" <?=$javaScriptSEIExistente?> value="" class="camponaoobrigatorio" size="30" <?=$complementoHTML?>>
+ 				<?php
+					if($isInclusao){
+						$nmCampos = array($idSEI);
+				       echo getBorracha($nmCampos, "verificaSEIExistente('$nmDivSEIExistente');");
+				       echo getTagHTMLDIV($nmDivSEIExistente);
+ 					}
+				?>				
 	        </TR>
 	        <TR>
 		        <TH class="campoformulario" width="1%" nowrap>Documento:</TH>

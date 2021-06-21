@@ -119,6 +119,7 @@ define('caminho_filtros', "$base/filtros/");
 define('caminho_excecoes', "$base/excecoes/");
 define('caminho_funcoesHTML', "funcoes/");
 define('caminho_funcoes', "$base/funcoes/");
+define('caminho_funcoes_alertas', "$base/funcoes/alertas");
 
 
 include_once(caminho_util. "bibliotecaFuncoesPrincipal.php");

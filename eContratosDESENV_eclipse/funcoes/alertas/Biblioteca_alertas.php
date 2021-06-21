@@ -1,8 +1,10 @@
 <?php
 // include_once ("../../config_lib.php");
-require_once (caminho_funcoes . vocontrato::getNmTabela () . "/dominioAutorizacao.php");
+require_once (caminho_vos . "vocontrato.php");
+//require_once (caminho_funcoes . vocontrato::getNmTabela () . "/dominioAutorizacao.php");
 require_once (caminho_lib . "phpmailer/config_email.php");
 require_once (caminho_vos . "voDemandaTramitacao.php");
+require_once (caminho_vos . "voMensageria.php");
 
 function incluirColunaColecaoArray($colecao, $array){		
 	$colecao[] = $array;
@@ -677,7 +679,7 @@ function getFiltroContratosAVencer($inTemDemandaEmTratamento = null){
  * @param unknown $vocontratoinfo
  * @return boolean
  */
-function existeAlertaVigenteContrato($vocontratoinfo){
+function existeAlertaVigenteGestorContrato($vocontratoinfo){
 	//$vocontratoinfo = new voContratoInfo();	
 	$db = new dbMensageria();
 	$filtro = new filtroManterMensageria(false);
@@ -686,6 +688,8 @@ function existeAlertaVigenteContrato($vocontratoinfo){
 	$filtro->tipoContrato = $vocontratoinfo->tipo;
 	//$filtro->inHabilitado = constantes::$CD_SIM;
 	$filtro->inVerificarPeriodoVigente = constantes::$CD_SIM;
+	$filtro->cdHistorico = 'N';
+	$filtro->tipo = dominioTipoMensageria::getColecaoTipoAlertaGestor();
 	
 	$colecao = $db->consultarTelaConsulta(new voMensageria(), $filtro);
 	
@@ -745,7 +749,7 @@ function criarAlertasEmailGestorColecaoContratos($filtro=null, $log=null, $isCon
 			$db = new dbMensageria();
 			$msgIdContrato = $vocontratoinfo->toString();
 			try{
-				if(!existeAlertaVigenteContrato($vocontratoinfo)){
+				if(!existeAlertaVigenteGestorContrato($vocontratoinfo)){
 					//so inclui se nao houver alerta vigente
 					$db->incluir($voAlerta);
 					$log .= "<br>Alerta incluído com sucesso:";

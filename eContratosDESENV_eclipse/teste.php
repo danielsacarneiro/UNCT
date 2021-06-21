@@ -10,8 +10,25 @@ inicio();
 $titulo = "TESTE de Funções UNCT";
 setCabecalho($titulo);
 
-$vo = new voMensageria();
-var_dump(email_sefaz::getListaEmailLogAlertasGestor());
+$filtro = new filtroManterMensageria ( false );
+$filtro->isValidarConsulta = false;
+$filtro->inHabilitado = constantes::$CD_SIM;
+$filtro->inVerificarPeriodoVigente = constantes::$CD_SIM;
+//pega somente os alertas para os contratos que serao prorrogados
+$filtro->inSeraProrrogado = constantes::$CD_SIM;
+//$filtro->inVerificarFrequencia = constantes::$CD_NAO;
+$filtro->inVerificarFrequencia = voMensageria::$IN_VERIFICAR_FREQUENCIA;
+$filtro->cdHistorico = 'N';
+$filtro->tipo = dominioTipoMensageria::getColecaoTipoAlertaGestor();
+//echoo("Verificador de Frequência do email: '$filtro->inVerificarFrequencia'.");
+$log .= getLogComFlagImpressao("<br>Verificador de Frequência do email: '$filtro->inVerificarFrequencia'.");
+
+$filtro->setaFiltroConsultaSemLimiteRegistro ();
+
+$dbMensageria = new dbMensageria ();
+$colecao = $dbMensageria->consultarTelaConsulta ( new voMensageria (), $filtro );
+
+var_dump($colecao);
 
 ?>
 

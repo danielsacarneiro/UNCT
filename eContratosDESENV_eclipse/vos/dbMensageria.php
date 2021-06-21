@@ -45,6 +45,8 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   	}
   	
   	function consultarTelaConsulta($vo, $filtro) {
+  		//echo "<BR>SOMENTE ESSA INTERESSA";
+  		$isHistorico = $filtro->isHistorico();
   		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );  		
   		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
   		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
@@ -107,6 +109,10 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		$queryJoin .= " AND " . $nmTabela . "." . voMensageria::$nmAtrSq . "=" . $nmTabelaMsgRegistro . "." . voMensageriaRegistro::$nmAtrSqMensageria;  		
   		
   		$arrayGroupby = array("$nmTabela.".voMensageria::$nmAtrSq, "$nmTabela.".voMensageria::$nmAtrAnoContrato, "$nmTabela.".voMensageria::$nmAtrCdContrato, "$nmTabela.".voMensageria::$nmAtrTipoContrato);
+
+  		if($isHistorico){
+  			$arrayGroupby[] = voMensageria::$nmAtrSqHist;
+  		}
   		$filtro->groupby = $arrayGroupby; 
   	  	
   		return parent::consultarMontandoQueryTelaConsulta ( $vo, $filtro, $arrayColunasRetornadas, $queryJoin );

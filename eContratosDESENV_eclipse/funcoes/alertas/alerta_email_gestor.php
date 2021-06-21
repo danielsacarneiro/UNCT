@@ -21,12 +21,10 @@ if(!$ativado){
 
 $enviarEmailAlerta = $ativado && $isEnvioEmail;
 if ($enviarEmailAlerta) {	
-	//echoo("___________________________");
 	$log .= getLogComFlagImpressao("<br>___________________________");
 	//consulta os contratos que nao tem alerta para cria-los
 	$log .= criarAlertasEmailGestorColecaoContratosImprorrog();
 	
-	//echoo("___________________________");
 	$log .= getLogComFlagImpressao("<br>___________________________");
 	$log .= criarAlertasEmailGestorColecaoContratos();
 	
@@ -39,6 +37,8 @@ if ($enviarEmailAlerta) {
 	$filtro->inSeraProrrogado = constantes::$CD_SIM;
 	//$filtro->inVerificarFrequencia = constantes::$CD_NAO;
 	$filtro->inVerificarFrequencia = voMensageria::$IN_VERIFICAR_FREQUENCIA;
+	$filtro->cdHistorico = 'N';
+	$filtro->tipo = dominioTipoMensageria::getColecaoTipoAlertaGestor();
 	//echoo("Verificador de Frequência do email: '$filtro->inVerificarFrequencia'.");
 	$log .= getLogComFlagImpressao("<br>Verificador de Frequência do email: '$filtro->inVerificarFrequencia'.");
 	
@@ -49,9 +49,6 @@ if ($enviarEmailAlerta) {
 	
 	$dbMensageriaRegistro = new dbMensageriaRegistro ();
 	if (! isColecaoVazia ( $colecao )) {
-		
-		//echoo("<br>___________________________");
-		//echoo("<br>Enviando email para os contratos cadastrados.");		
 		
 		$log .= getLogComFlagImpressao("<br>___________________________");
 		$log .= getLogComFlagImpressao("<br>Enviando email para os contratos cadastrados.");
@@ -72,12 +69,10 @@ if ($enviarEmailAlerta) {
 		$log .= getLogComFlagImpressao("<br>$qtdEmailsEnviados emails enviados com sucesso.");
 		$log .= getLogComFlagImpressao("<br>$qtdEmailsErros emails com erro.");
 	}else{
-		//echoo("<br>Mensageria: não existem alertas para o dia de hoje.");
 		$msg = getTextoHTMLDestacado("<br>Mensageria: não existem alertas para o dia de hoje.", "blue", false);
 		$log .= getLogComFlagImpressao($msg);
 	}
 	
-	//echoo("<br>FIM Mensageria.");
 	$log .= getLogComFlagImpressao("<br>FIM Mensageria.");
 	
 	//envia email com o log

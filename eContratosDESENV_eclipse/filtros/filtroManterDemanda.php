@@ -771,10 +771,11 @@ class filtroManterDemanda extends filtroManter{
 			. " LIKE '%"
 			. $this->nmContratada
 			. "%'"
-			. " OR $nmTabela." .voDemanda::$nmAtrTexto
+			/*. " OR $nmTabela." .voDemanda::$nmAtrTexto
 			. " LIKE '%"
 			. $this->nmContratada
-			. "%')"
+			. "%')"*/
+			. ")"
 			;		
 			$conector  = "\n AND ";
 		

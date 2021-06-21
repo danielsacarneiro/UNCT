@@ -26,10 +26,12 @@ function getSQLTabelaTrazendoHistorico($vo){
 function getSQLNmContratada($comAliasNoAtributo = true) {
 	$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 	$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
+	//$nmTabelaPessoaPAAP = voPA::getNmTabelaStatic ( false );
 	
 	$colecaoAtributoCoalesceNmPessoa = array (
 			$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
-			$nmTabelaContrato . "." . vocontrato::$nmAtrContratadaContrato 
+			$nmTabelaContrato . "." . vocontrato::$nmAtrContratadaContrato,
+			//$nmTabelaPessoaPAAP . "." . vopessoa::$nmAtrNome,
 	);
 	$alias = vopessoa::$nmAtrNome;
 	if(!$comAliasNoAtributo){

@@ -17,6 +17,8 @@ class dominioTipoDemandaContrato extends dominio {
 	static $CD_TIPO_PRORROGACAO = "08";
 	static $CD_TIPO_APOSTILAMENTO = "10";
 	static $CD_TIPO_REEQUILIBRIO = "11";
+
+	static $CD_NAO_VALIDA_DATA = "98";
 	static $CD_TIPO_OUTROS = "99";
 	
 	static $DS_TIPO_ACRESCIMO = "Acréscimo";
@@ -27,6 +29,8 @@ class dominioTipoDemandaContrato extends dominio {
 	static $DS_TIPO_PRORROGACAO = "Prorrogação";
 	static $DS_TIPO_APOSTILAMENTO = "Apostilamento";
 	static $DS_TIPO_REEQUILIBRIO = "Reequilíbrio";
+	
+	static $DS_NAO_VALIDA_DATA = "Nao.Valida.Data";
 	static $DS_TIPO_OUTROS = "Outros";
 
 	static function getColecaoConsulta() {
@@ -66,6 +70,7 @@ class dominioTipoDemandaContrato extends dominio {
 	
 	static function getColecaoCaracteristicasContrato() {
 		$array1 = array (
+				static::$CD_NAO_VALIDA_DATA => static::$DS_NAO_VALIDA_DATA,
 				static::$CD_TIPO_PRORROGACAO => static::$DS_TIPO_PRORROGACAO,
 		);
 		

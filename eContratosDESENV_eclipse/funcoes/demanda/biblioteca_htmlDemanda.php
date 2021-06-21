@@ -257,24 +257,38 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 		$conectorAlerta = "<BR>";
 	}
 	
+	try{		
+		$colecaoLembreteContrato = consultarLembreteContrato($voContratoDemanda);
+		$exibirAlertaLembrete = !isColecaoVazia($colecaoLembreteContrato);		
+		if($exibirAlertaLembrete){
+			$textoLembrete = getTextoLembreteContrato($colecaoLembreteContrato);
+			$html .= getAlertaOrientacao("LEMBRETE " . $textoLembrete, $countATENCAO, $conectorAlerta);
+			$conectorAlerta = "<BR>";
+		}
+	}catch (excecaoGenerica $exLembrete){
+		$html .= getAlertaOrientacao($exReajuste->getMessage(), $countATENCAO, $conectorAlerta);
+		$conectorAlerta = "<BR>";
+	}
+	
 	try{
-		//if(!$temReajustePendente){echo "teste";}		
+		//if(!$temReajustePendente){echo "teste";}
 		$retornoTemReajustePendente = temReajustePendente($voContratoDemanda);
 		$temReajustePendente = $retornoTemReajustePendente[0];
 		$exibirAlertaReajustePendente = $temReajustePendente &&  !$isReajusteDemanda;
-		
+	
 		if($exibirAlertaReajustePendente){
 			$html .= getAlertaOrientacao("há reajustes pendentes.", $countATENCAO, $conectorAlerta);
 			$conectorAlerta = "<BR>";
 		}
 	}catch (excecaoGenerica $exReajuste){
 		/*$texto = "ATENÇÃO$countATENCAO: " . $exDoc->getMessage();
-		$html .= $conectorAlerta . $texto;
-		$conectorAlerta = "<BR>";
-		$countATENCAO++;*/
+			$html .= $conectorAlerta . $texto;
+			$conectorAlerta = "<BR>";
+			$countATENCAO++;*/
 		$html .= getAlertaOrientacao($exReajuste->getMessage(), $countATENCAO, $conectorAlerta);
 		$conectorAlerta = "<BR>";
 	}
+	
 	
 	//informa que ha PAAPs abertos para o contrato
 	try{
@@ -323,7 +337,7 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 	}
 	
 	$dtinicioContrato = $voContratoDemanda->dtVigenciaInicial;
-	if($dtinicioContrato >= normativos::$DATA_PUBLICACAO_RESOLUCAOCPF0012020){
+	/*if($dtinicioContrato >= normativos::$DATA_PUBLICACAO_RESOLUCAOCPF0012020){
 		//var_dump($voDemanda->getContrato());
 
 		if($exibirAlertas){
@@ -331,7 +345,7 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 			$conectorAlerta = "<BR>";
 			$countATENCAO++;
 		}
-	}
+	}*/
 		
 	return $html;
 }
@@ -838,6 +852,27 @@ function isDemandaContratoModificacaoObrigatorio($vodemanda){
 		throw new excecaoAtributoInvalido("tpDemandaContrato nao pode ser nulo.");		
 	}	
 	return dominioTipoDemandaContrato::existePeloMenosUmaChaveColecaoNoArrayOuStrSeparador(array_keys(dominioTipoDemandaContrato::getColecaoAlteraValorContrato()), $vodemanda->tpDemandaContrato);
+}
+
+function validaSEIExistente($SEI){
+	$retorno = "";
+	if($SEI != null){
+		
+		$SEI = voDemandaTramitacao::getNumeroPRTSemMascara($SEI);
+		$filtro = new filtroManterDemanda(false);
+		//$filtro->inDesativado = constantes::$CD_NAO;
+		$filtro->setCdHistorico(constantes::$CD_NAO, new voDemanda());
+		$filtro->vodemanda->prt = $SEI;
+		//$filtro->vodemanda->situacao = dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_A_FAZER;
+
+		$db = new dbDemanda();
+		$colecao = $db->consultarTelaConsulta(new voDemanda(), $filtro);
+		if(!isColecaoVazia($colecao)){
+			$retorno = getTextoHTMLDestacado("Demanda SEI existente. Confirme se não é o caso de tramitar a demanda econti já inclusa...", "blue", false);
+		}
+
+	}
+	return $retorno;
 }
 
 

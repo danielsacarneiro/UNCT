@@ -87,7 +87,7 @@ class email_sefaz extends multiplosConstrutores{
 	 * lista que receberao os emails de contatos ao gestor
 	 */
 	static function getListaEmailAvisoGestorContrato(){
-		$array1 = array(
+		$retorno = array(
 				static::$REMETENTE_PRINCIPAL,
 				static::$REMETENTE_COPIA,
 				static::$REMETENTE_DILC,
@@ -96,7 +96,7 @@ class email_sefaz extends multiplosConstrutores{
 				//"margarida.vasconcelos@sefaz.pe.gov.br"
 		);
 		
-		$retorno = array_merge($array1, static::getListaEmailDIFIN());
+		//$retorno = array_merge($array1, static::getListaEmailDIFIN());
 		return $retorno;		
 	}
 	
@@ -179,7 +179,7 @@ class email_sefaz extends multiplosConstrutores{
 			$assunto = "AVISO";
 		}
 		
-		$assunto .= " " . constantes::$nomeSistema . " - ALERTA AUTOMÁTICO";
+		$assunto .= " " . constantes::$nomeSistema . " - ATENÇÃO";
 		
 		$mail->Subject  = $assunto; // Assunto da mensagem
 		

@@ -292,6 +292,7 @@ function consultarPessoasContrato($voContrato, $pIsChaveCompleta=false){
 	$filtro->groupby = array(vopessoa::$nmAtrDoc, vopessoa::$nmAtrNome);
 	$filtro->cdAtrOrdenacao = vocontrato::$nmAtrSqContrato;
 	$filtro->cdOrdenacao = constantes::$CD_ORDEM_CRESCENTE;
+	$filtro->inDesativadoContrato = 'N';
 
 	$db = new dbpessoa();
 	$colecao = $db->consultarPessoaContratoFiltro($filtro);

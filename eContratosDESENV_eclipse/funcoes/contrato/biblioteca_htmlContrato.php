@@ -6,6 +6,7 @@ require_once (caminho_funcoes . "contrato/dominioTipoContrato.php");
 require_once (caminho_funcoes . "contrato/dominioEspeciesContrato.php");
 include_once (caminho_funcoes . "pessoa/biblioteca_htmlPessoa.php");
 require_once (caminho_vos . "voProcLicitatorio.php");
+require_once (caminho_vos . "voMensageria.php");
 
 function isContratoValido($voContrato) {
 	// so exibe contrato se tiver
@@ -1985,6 +1986,53 @@ function getNumMesesUltimaProrrogacao($votermo){
 	
 	return $retorno;
 	
+}
+
+/**
+ * verifica se existe algum lembrete a exibir do contrato na demanda
+ * @param unknown $vocontratoinfo
+ * @return unknown|void|string
+ */
+function consultarLembreteContrato($vocontrato){
+	//$vocontratoinfo = new voContratoInfo();
+	$db = new dbMensageria();
+	$filtro = new filtroManterMensageria(false);
+	if(isContratoValido($vocontrato)){
+		$filtro->anoContrato = $vocontrato->anoContrato;
+		$filtro->cdContrato = $vocontrato->cdContrato;
+		$filtro->tipoContrato = $vocontrato->tipo;
+		$filtro->inHabilitado = constantes::$CD_SIM;
+		$filtro->inVerificarPeriodoVigente = constantes::$CD_SIM;
+		$filtro->tipo = dominioTipoMensageria::$CD_CONTRATO_LEMBRETE;
+	
+		$colecao = $db->consultarTelaConsulta(new voMensageria(), $filtro);
+	}
+
+	return $colecao;
+}
+
+function getTextoLembreteContrato($colecao){
+	//var_dump($colecao);
+	if(!isColecaoVazia($colecao)){
+		$conector = "<br><br>";
+		$texto = "";
+		foreach ($colecao as $registro){
+			$voMensageria = new voMensageria();
+			$voMensageria->getDadosBanco($registro);
+			
+			//if(isAtributoValido($voMensageria->obs)){
+				$texto .= $voMensageria->toString() . "|". $voMensageria->obs . $conector;
+			//}
+		}
+		
+		if($texto != null){
+			$texto = removerUltimaString($conector, $texto);
+			$retorno = getDivHtmlExpansivel("divLembrete", $texto);
+		}
+		
+	}
+	
+	return $retorno;	
 }
 
 

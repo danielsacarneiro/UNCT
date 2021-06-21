@@ -180,8 +180,8 @@ function alterar() {
                     <TH class="headertabeladados" width="30%">Contrato</TH>
                     <TH class="headertabeladados"width="70%" >Texto</TH>
                     <TH class="headertabeladados"width="1%" nowrap >Usuário</TH>
-                    <TH class="headertabeladados"width="1%" nowrap >Dt.Referência</TH>
-                    <TH class="headertabeladados"width="1%" nowrap >Dt.Movimentação</TH>
+                    <TH class="headertabeladados"width="1%" nowrap >Data</TH>
+                    <TH class="headertabeladados"width="1%" nowrap >Mov.</TH>
                 </TR>
                 <?php								
                 if (is_array($colecao))
@@ -253,10 +253,10 @@ function alterar() {
                     <TD class="tabeladadosalinhadodireita" ><?php echo complementarCharAEsquerda($voAtual->sq, "0", TAMANHO_CODIGOS)?></TD>
 					<TD class="tabeladados" nowrap><?php echo $setor?></TD>
 					<TD class="tabeladados" nowrap><?php echo $setorDestino?></TD>
-					<TD class="tabeladados" nowrap><?php echo $tipo?></TD>
+					<TD class="tabeladados"><?php echo $tipo?></TD>
 					<TD class="tabeladados" ><?php echo truncarStringHTML($contrato, 60, true)?></TD>					
                     <TD class="tabeladados" ><?php echo $voAtual->textoTram;?></TD>                    
-                    <TD class="tabeladados" nowrap><?php echo $nmUsuario;?></TD>
+                    <TD class="tabeladados"><?php echo $nmUsuario;?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($voAtual->dtReferencia);?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($dataMovimentacao);?></TD>
                 </TR>					

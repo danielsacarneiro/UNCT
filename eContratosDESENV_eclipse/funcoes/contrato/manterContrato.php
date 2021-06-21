@@ -159,7 +159,8 @@ function isFormularioValido() {
 		exibirMensagem("Selecione pelo menos um item 'Características'.");		
 		return false;		
 	}else if(!(isItemCheckBoxSelecionado(nmCampoCaracteristicas, "<?=constantes::$CD_OPCAO_NENHUM?>")
-			|| isItemCheckBoxSelecionado(nmCampoCaracteristicas, "<?=dominioTipoDemandaContrato::$CD_TIPO_PRORROGACAO?>"))){
+					|| isItemCheckBoxSelecionado(nmCampoCaracteristicas, "<?=dominioTipoDemandaContrato::$CD_TIPO_PRORROGACAO?>")
+					|| isItemCheckBoxSelecionado(nmCampoCaracteristicas, "<?=dominioTipoDemandaContrato::$CD_NAO_VALIDA_DATA?>"))){
 
 		var pArrayNomeCamposOriginais = [
 			"<?=vocontrato::$nmAtrVlMensalContrato?>",
@@ -522,7 +523,7 @@ function formatarEmpenho(pCampo){
         </TR>
 		<TR>
             <TH class="campoformulario" nowrap><?=getTextoHTMLTagMouseOver("Proc.Licitatorio", "Para os PLs da SEFAZ, o formato deve seguir o exemplo 0013.2018.CPLI.PE.0009.SEFAZ-PE")?>:</TH>
-            <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vocontrato::$nmAtrProcessoLicContrato?>" name="<?=vocontrato::$nmAtrProcessoLicContrato?>"  value="<?php echo($procLic);?>"  
+            <TD class="campoformulario" width="1%"><INPUT type="text" <?=getMsgPlaceHolder("Se inexistente, digite: NAO.INFORMADO");?> id="<?=vocontrato::$nmAtrProcessoLicContrato?>" name="<?=vocontrato::$nmAtrProcessoLicContrato?>"  value="<?php echo($procLic);?>"  
             onKeyUp='formatarCampoProcLicitatorio(this, event)'class="campoobrigatorio" size="50" required>
             </TD>
 	            <TH class="campoformulario" nowrap width="1%">Características:</TH>

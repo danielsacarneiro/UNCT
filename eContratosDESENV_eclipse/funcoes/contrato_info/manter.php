@@ -407,6 +407,7 @@ function iniciar(){
 		            	"<?=voContratoInfo::$nmAtrDtBaseReajuste?>",
 		            	"<?=voContratoInfo::$nmAtrInPrazoProrrogacao?>"];
 	            </SCRIPT>
+	            <br>
 	            <INPUT type="checkbox" id="checkResponsabilidade" name="checkResponsabilidade" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCamposRequired);"> <?=voMensageria::$DS_RESPONSABILIDADE_CAMPO_OBR?>
 				</TD>
 	        </TR>	        

@@ -21,6 +21,7 @@ class filtroManterMensageriaRegistro extends filtroManter {
 	var $dtInicio = "";
 	var $dtFim = "";
 	var $sq = "";
+	var $tipo = "";
 	var $numEmailsEnviados = "";
 	
 	function getFiltroFormulario() {
@@ -36,6 +37,7 @@ class filtroManterMensageriaRegistro extends filtroManter {
 		$this->dtInicio = @$_POST [static::$ID_REQ_DtReferenciaInicial];
 		$this->dtFim = @$_POST [static::$ID_REQ_DtReferenciaFinal];
 		$this->numEmailsEnviados = @$_POST [static::$ID_REQ_NumEmailsEnviados];
+		$this->tipo = @$_POST [voMensageria::$nmAtrTipo];
 		
 		if ($this->cdOrdenacao == null) {
 			$this->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
@@ -56,6 +58,17 @@ class filtroManterMensageriaRegistro extends filtroManter {
 			// anoDefault foi definido como constante na index.php
 			// echo "setou o ano defaul";
 			;
+		}
+		
+		if (isAtributoValido($this->tipo)) {
+			$comparar = " = '" . $this->tipo. "'";
+			if(is_array($this->tipo)){
+				$comparar = " IN (" . getSQLStringFormatadaColecaoIN($this->tipo, true) . ")";
+			}
+		
+			$filtro = $filtro . $conector . $nmTabelaMensageria . "." . voMensageria::$nmAtrTipo . $comparar;
+		
+			$conector = "\n AND ";
 		}
 				
 		if ($this->sq != null) {

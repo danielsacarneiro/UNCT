@@ -674,7 +674,9 @@ function convocarAssinatura(){
                         $tempoUltTram = $registro[filtroManterDemanda::$NmColNuTempoUltimaTram];
                         
                         $respUNCT = $registro[filtroManterDemanda::$NM_COL_NOME_RESP_UNCT];
-                        $respUNCT = truncarStringHTML($respUNCT, 15, true);
+                        $arrayParam = array(null, $respUNCT, 15, true, false, "", 2);
+                        $respUNCT = truncarStringHTMLArray($arrayParam);
+                        
                 ?>
                 <TR class="dados">
                     <TD class="tabeladados">

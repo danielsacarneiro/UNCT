@@ -19,10 +19,40 @@ CREATE TABLE mensageria (
     dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
     cd_usuario_incl INT,
     cd_usuario_ultalt INT,
+    in_desativado CHAR(1) NOT NULL DEFAULT 'N',    
     
     CONSTRAINT pk PRIMARY KEY (msg_sq)
 );
 ALTER TABLE mensageria ADD COLUMN msg_tipo CHAR(1) NOT NULL DEFAULT 'P' AFTER ct_tipo;
+ALTER TABLE mensageria ADD COLUMN in_desativado CHAR(1) NOT NULL DEFAULT 'N' AFTER cd_usuario_ultalt;
+
+CREATE TABLE mensageria_hist (
+	hist INT NOT NULL AUTO_INCREMENT,
+    
+	msg_sq INT NOT NULL,
+    ct_exercicio INT NOT NULL,
+    ct_numero INT NOT NULL,
+    ct_tipo char(1) NOT NULL,
+    
+    msg_tipo CHAR(1) NOT NULL,
+    msg_dt_inicio DATE NOT NULL,
+    msg_dt_fim DATE NULL,
+    msg_in_habilitado CHAR(1) NOT NULL,
+    msg_num_dias_frequencia INT,
+    msg_obs MEDIUMTEXT NULL,
+    
+    dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    dh_ultima_alt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL,
+    cd_usuario_incl INT,
+    cd_usuario_ultalt INT,
+    
+    in_desativado CHAR(1) NOT NULL,  
+   	dh_operacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    cd_usuario_operacao INT,
+    
+    CONSTRAINT pk PRIMARY KEY (hist)
+);
+
 
 drop table msg_registro;
 CREATE TABLE msg_registro (	

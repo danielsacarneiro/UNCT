@@ -26,7 +26,8 @@ class filtroManterPessoa extends filtroManter{
     var $dtReferenciaContrato ="";
     
     var $cdDemanda ="";
-    var $anoDemanda ="";    
+    var $anoDemanda ="";
+    var $inDesativadoContrato ="";
 	
 	function getFiltroFormulario(){		
 		$this->cd = @$_POST[vopessoa::$nmAtrCd];
@@ -54,6 +55,7 @@ class filtroManterPessoa extends filtroManter{
         
         $nmTabelaPessoaVinculo = $voPessoaVinculo->getNmTabela();        
         $nmTabelaDemanda = voDemanda::getNmTabelaStatic($isHistorico);
+        $nmTabelaContrato = vocontrato::getNmTabela();
         
 		//seta os filtros obrigatorios        
 		if($this->isSetaValorDefault()){
@@ -129,6 +131,15 @@ class filtroManterPessoa extends filtroManter{
 			
 			$conector  = "\n AND ";
 		}	
+		
+		if($this->inDesativadoContrato != null){
+			$filtro = $filtro . $conector
+			. "$nmTabelaContrato." .vocontrato::$nmAtrInDesativado
+			. "="
+					. getVarComoString($this->inDesativadoContrato);
+		
+					$conector  = "\n AND ";
+		}
 		
 		if($this->cdContrato != null){
 			$filtro = $filtro . $conector

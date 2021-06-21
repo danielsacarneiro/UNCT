@@ -25,6 +25,7 @@ class filtroManterMensageria extends filtroManter {
 	var $inSeraProrrogado = "";
 	var $numMsgsEnviadas = "";
 	var $sq = "";
+	var $tipo = "";
 	
 	function getFiltroFormulario() {
 		
@@ -39,6 +40,7 @@ class filtroManterMensageria extends filtroManter {
 		$this->dtInicio = @$_POST [voMensageria::$nmAtrDtInicio];
 		$this->dtFim = @$_POST [voMensageria::$nmAtrDtFim];
 		$this->tpVigencia = @$_POST [static::$nmAtrTpVigencia];
+		$this->tipo = @$_POST [voMensageria::$nmAtrTipo];
 		$this->inSeraProrrogado = @$_POST [voContratoInfo::$nmAtrInSeraProrrogado];
 		$this->numMsgsEnviadas = @$_POST [static::$ID_REQ_NumMsgsEnviadas];
 		
@@ -64,6 +66,17 @@ class filtroManterMensageria extends filtroManter {
 			;
 		}
 				
+		if (isAtributoValido($this->tipo)) {
+			$comparar = " = '" . $this->tipo. "'";
+			if(is_array($this->tipo)){
+				$comparar = " IN (" . getSQLStringFormatadaColecaoIN($this->tipo, true) . ")";
+			}
+		
+			$filtro = $filtro . $conector . $nmTabela . "." . voMensageria::$nmAtrTipo . $comparar;
+		
+			$conector = "\n AND ";
+		}
+		
 		if ($this->sq != null) {
 		
 			$filtro = $filtro . $conector . $nmTabela . "." . voMensageria::$nmAtrSq . " = " . $this->sq;

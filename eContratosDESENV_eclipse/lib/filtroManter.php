@@ -550,7 +550,7 @@ class filtroManter extends multiplosConstrutores {
 		return $this->isHistorico;
 	}	
 	static function isAtributoArrayVazio($colecao) {		
-		return is_array($colecao) && count($colecao)==1 && $colecao[0]=="";		
+		return isAtributoArrayVazio($colecao);		
 	}
 	
 	function getNmFiltro(){

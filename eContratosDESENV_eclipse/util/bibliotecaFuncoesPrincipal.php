@@ -709,6 +709,11 @@ function isAtributoValido($atrib){
 	return $retorno;
 }
 
+function isAtributoArrayVazio($colecao) {
+	return is_array($colecao) && count($colecao)==1 && $colecao[0]=="";
+}
+
+
 function isCampoMoedaFormatadado($valor){
 	$retorno = false;
 	$retorno = !is_numeric($valor);	

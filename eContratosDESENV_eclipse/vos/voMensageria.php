@@ -6,7 +6,7 @@ include_once(caminho_funcoes."mensageria/dominioTipoMensageria.php");
 
 class voMensageria extends voentidade {	
 	
-	static $DS_RESPONSABILIDADE_CAMPO_OBR = "*Assumo a responsabilidade de não incluir os campos obrigatórios.";	
+	static $DS_RESPONSABILIDADE_CAMPO_OBR = "<b>*Assumo a responsabilidade de não incluir os campos obrigatórios.</b>";	
 	static $MSG_IN_VERIFICAR_SERA_PRORROGADO = "Verifique a fundamentação legal da prorrogação do contrato, e se o contrato admite prorrogação.";
 	
 	//ativa o envio da mensageria para a UNCT
@@ -54,7 +54,7 @@ class voMensageria extends voentidade {
 	// Funcoes ( Propriedades e mÃ©todos da classe )
 	function __construct($arrayChave = null) {
 		parent::__construct1 ($arrayChave);
-		$this->temTabHistorico = false;
+		$this->temTabHistorico = true;
 		
 		// retira os atributos padrao que nao possui
 		// remove tambem os que o banco deve incluir default
@@ -67,10 +67,10 @@ class voMensageria extends voentidade {
 		$this->varAtributosARemover = $arrayAtribRemover;*/
 		
 		
-		$arrayAtribRemover = array (
+		/*$arrayAtribRemover = array (
 				self::$nmAtrDhInclusao,
 				self::$nmAtrDhUltAlteracao,
-		);
+		);*/
 		
 		$arrayAtribInclusaoDBDefault = array (
 				self::$nmAtrSq,
@@ -170,10 +170,11 @@ class voMensageria extends voentidade {
 	function getValorChavePrimaria() {
 		$separador = CAMPO_SEPARADOR;
 		// $separador = "b";
-		return $this->sq;
+		return $this->sq . $separador . $this->sqHist;
 	}
 	function getChavePrimariaVOExplode($array) {		
 		$this->sq = $array[0];
+		$this->sqHist = $array[1];
 	}
 	function getMensagemComplementarTelaSucesso() {
 		$retorno = "Mensageria: " . $this->toString();

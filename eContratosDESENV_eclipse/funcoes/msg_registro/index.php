@@ -118,11 +118,18 @@ function alterar() {
 			</TR>
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Sq.Mensageria:</TH>
-	            <TD class="campoformulario" colspan="3">
+	            <TD class="campoformulario" nowrap width="1%">
 				<?php				                        
 				echo getInputText(voMensageria::$nmAtrSq, voMensageria::$nmAtrSq, $filtro->sq, constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO, 3, 3, " onkeyup='validarCampoNumerico(this, event, false);'");
 				?>
 				</TD>
+                <TH class="campoformulario" nowrap width="1%">Tipo:&nbsp;&nbsp;</TH>
+                <TD class="campoformulario">
+                <?php
+                $comboTipo = new select(dominioTipoMensageria::getColecao());
+                echo $comboTipo->getHtmlCombo(voMensageria::$nmAtrTipo,voMensageria::$nmAtrTipo, $filtro->tipo, true, "camponaoobrigatorio", false, "");
+                ?>
+				</TD>								
 	        </TR>	        
 			<TR>
 	            <TH class="campoformulario" nowrap>Envio:</TH>

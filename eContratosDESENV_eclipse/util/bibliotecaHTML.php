@@ -1401,6 +1401,9 @@ function getTagHTMLFechaJavaScript(){
 	return "</SCRIPT>";
 }
 
+function getTagHTMLDIV($nmDiv){
+	return "<div id='$nmDiv'></div>";	
+}
 function getTagHtmlJavaScript($script){
 	return getTagHTMLAbreJavaScript() . "\n" . $script . getTagHTMLFechaJavaScript();
 }
@@ -1585,6 +1588,10 @@ function redirecionarConfirmar($vo){
 function getFuncaoOperacaoHTML(){
 	$funcao = @$_GET ["funcao"];
 	return $funcao;
+}
+
+function getMsgPlaceHolder($msg){
+	return "placeholder=\"$msg\"";
 }
 
 function getMsgPadraoInputText(){

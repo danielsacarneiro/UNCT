@@ -255,7 +255,7 @@ function estatisticas(){
 	            <TABLE class="filtro" cellpadding="0" cellspacing="0">
 	        	<TBODY>
 	        	<TR>
-	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
+	            <TH class="campoformulario" nowrap width="1%">Contrato:&nbsp;</TH>
 	            <TD class="campoformulario" width="1%" nowrap>
 	            <?php
 	            
@@ -374,13 +374,13 @@ function estatisticas(){
 	        </TR>	        
 			<TR>
                 <TH class="campoformulario" nowrap >Contratada:</TH>
-                <TD class="campoformulario" width="1%">
+                <TD class="campoformulario" nowrap width="1%">
                 Nome: 
                 <INPUT type="text" id="<?=vocontrato::$nmAtrContratadaContrato?>" name="<?=vocontrato::$nmAtrContratadaContrato?>"  value="<?php echo($nmContratada);?>"  class="camponaoobrigatorio" size="20" <?=$requiredArquivo?>>
                 |CPF/CNPJ: 
                 <INPUT type="text" id="<?=vocontrato::$nmAtrDocContratadaContrato?>" name="<?=vocontrato::$nmAtrDocContratadaContrato?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($docContratada);?>" class="camponaoobrigatorio" size="20" maxlength="18">
                 </TD>
-				<TH class="campoformulario" width="1%">Objeto:</TH>
+				<TH class="campoformulario" width="1%" nowrap>Objeto:&nbsp;</TH>
 				<TD class="campoformulario" >
 				<INPUT type="text" id="<?=vocontrato::$nmAtrObjetoContrato?>" name="<?=vocontrato::$nmAtrObjetoContrato?>"  value="<?php echo($dsObjeto);?>"  class="camponaoobrigatorio" size="30">
 				</TD>
