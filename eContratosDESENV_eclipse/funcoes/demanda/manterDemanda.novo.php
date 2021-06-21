@@ -302,10 +302,6 @@ function iniciar(){
 	            <TH class="campoformulario" nowrap width="1%">PRT/SEI(principal):</TH>
 	            <TD class="campoformulario" colspan=3>				
 	            <INPUT type="text" onkeyup="formatarCampoPRT(this, event);" id="<?=voDemanda::$nmAtrProtocolo?>" name="<?=voDemanda::$nmAtrProtocolo?>" value="<?=$vo->prt?>"  class="camponaoobrigatorio" size="30" required>
-	        </TR>	        
-			<TR>
-				<TD halign="left" colspan="4">
-				<DIV class="textoseparadorgrupocamposalinhadodireita">
 							<SCRIPT language="JavaScript" type="text/javascript">
 				            	colecaoIDCdNaoObrigatorio = 
 					            	["<?=$nmCampoTpDemandaReajuste?>",
@@ -315,11 +311,8 @@ function iniciar(){
 					            	"<?=voDemanda::$nmAtrProtocolo?>"
 					            	];
 				            </SCRIPT>
-				            <INPUT type="checkbox" id="checkCdNaoObrigatorio" name="checkCdNaoObrigatorio" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCdNaoObrigatorio);"> <?=constantes::$DS_RESPONSABILIDADE_NAO_INCLUSAO_CAMPOS?>
-				
-				&nbsp;</DIV>
-				</TD>
-			</TR>
+				            <INPUT type="checkbox" id="checkCdNaoObrigatorio" name="checkCdNaoObrigatorio" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCdNaoObrigatorio);"> <?=voMensageria::$DS_RESPONSABILIDADE_CAMPO_OBR?>	            
+	        </TR>	        
 			<?php 
 				include_once 'biblioteca_htmlDemanda.php';
 				$colecaoTramitacao = $vo->dbprocesso->consultarDemandaTramitacao($vo);
