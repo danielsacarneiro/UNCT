@@ -134,13 +134,19 @@ function detalharDemandaGestao(){
 }
 
 function convocarAssinatura(){
-	funcao = "<?=constantes::$CD_FUNCAO_DETALHAR?>";
+	var isAssinaturaSEI = confirm("O termo será assinado pelo SEI?\nClique em 'OK' para 'SIM', e em 'Cancelar' para 'NAO'.");
+	var inAssinaturaSEI = "N";
+	if(isAssinaturaSEI){
+		inAssinaturaSEI = "S";
+	}
+	var funcao = "<?=constantes::$CD_FUNCAO_DETALHAR?>";
+	
     if (!isRadioButtonConsultaSelecionado("document.frm_principal.rdb_consulta")){
             return;
     }
 	chave = document.frm_principal.rdb_consulta.value;
-    url = "convocarAssinatura.php?funcao=" + funcao + "&chave=" + chave + "&lupa=S";	
-    abrirJanelaAuxiliar(url, true, false, false);
+    url = "convocarAssinatura.php?inAssinaturaSEI=" + inAssinaturaSEI + "&funcao=" + funcao + "&chave=" + chave + "&lupa=S";	
+    abrirJanelaAuxiliar(url, true, false, false);	    
 }
 
 </SCRIPT>

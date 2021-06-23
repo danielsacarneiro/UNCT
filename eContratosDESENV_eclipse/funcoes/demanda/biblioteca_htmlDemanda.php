@@ -231,8 +231,8 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 		//$exibirInfoProrrog = $voDemanda->situacao != dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA;
 		$exibirAlertas = !isSituacaoDemandaFechada($voDemanda->situacao);
 	}
-	
-	//$conectorAlerta = "<BR>";
+	//$exibirAlertas = false;
+	$conectorAlerta = "<BR>";
 	
 	$html .= dominioTipoDemandaContrato::getHtmlChecksBoxDetalhamento($nmCampoTpDemandaContrato, $pCdOpcaoSelecionadaTpDemandaContrato, 2, true);
 	$isReajusteDemanda = $isVODemandaNaoNulo 
@@ -762,8 +762,9 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDad
 
 	echo $html;
 }
+	
+function getEmailConvocacaoAssinatura($registro, $isAssinaturaSEI=false){
 
- function getEmailConvocacaoAssinatura($registro){
  	$vocontratoinfo = new voContratoInfo();
  	$vocontratoinfo->getDadosBanco($registro);
  	
@@ -785,7 +786,7 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDad
  	$vodemanda->getDadosBanco($registro);
  	//$codigoContrato = getCodigoContratoFormatadoEmail($registro);
  	
- 	$codigoContrato = formatarCodigoContrato($vocontratoinfo->cdContrato, $vocontratoinfo->anoContrato, $vocontratoinfo->tipo);
+ 	//$codigoContrato = formatarCodigoContrato($vocontratoinfo->cdContrato, $vocontratoinfo->anoContrato, $vocontratoinfo->tipo);
  	$codigoContratoCompleto = getTextoHTMLNegrito(getCodigoContratoPublicacao($vocontrato));
  	
  	$dsPessoa = $registro[vopessoa::$nmAtrNome];
@@ -795,31 +796,58 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDad
  	if($numSEI == null){
  		$numSEI = $a_preencher;
  	}
- 	$dtInicioVigencia = getData($vocontrato->dtVigenciaInicial);
- 	if($dtInicioVigencia == null){
- 		$dtAssinaturaDigital = $dtInicioVigencia = $a_preencher;
- 	}else{
- 		$dtAssinaturaDigital = somarOuSubtrairDias($dtInicioVigencia, 1, "-", false);
- 	}
  	$str_confirmar = getTextoHTMLDestacado("[CONFIRMAR]");
+	
+	$pArrayCamposSubstituicao = array($vocontrato, $vocontratoinfo, $dsPessoa, $numSEI, $str_confirmar);
+	if($isAssinaturaSEI){
+		$retorno = getCorpoEmailAssinaturaSEI($pArrayCamposSubstituicao);
+	}else{
+		$retorno = getCorpoEmailAssinatura($pArrayCamposSubstituicao);
+	}
+	
+	return $retorno;
+}
+
+function getDataLimiteAssinaturaDigital($dtInicioVigencia){
+	return somarOuSubtrairDias($dtInicioVigencia, 1, "-", false);
+}
+
+function getCorpoEmailAssinatura($pArrayCamposSubstituicao){
+	
+	$str_confirmar = getTextoHTMLDestacado("[CONFIRMAR]");
+	
+	$vocontrato = $pArrayCamposSubstituicao[0];
+	$vocontratoinfo = $pArrayCamposSubstituicao[1];
+	$dsPessoa = $pArrayCamposSubstituicao[2];
+	$numSEI = $pArrayCamposSubstituicao[3];
+	$str_confirmar = $pArrayCamposSubstituicao[4];
+	
+	$codigoContratoCompleto = getTextoHTMLNegrito(getCodigoContratoPublicacao($vocontrato));
+	
+	$dtInicioVigencia = getData($vocontrato->dtVigenciaInicial);
+	if($dtInicioVigencia == null){
+		$dtAssinaturaDigital = $dtInicioVigencia = $str_confirmar;
+	}else{
+		$dtAssinaturaDigital = somarOuSubtrairDias($dtInicioVigencia, 1, "-", false);
+	}	
 
 	$retorno = "<br>À ".getTextoHTMLNegrito($dsPessoa).",
 	<br><br>
 	ASSUNTO: ".getTextoHTMLNegrito("ASSINATURA DO $codigoContratoCompleto")."
 	<br><br>".getTextoHTMLDestacado("Ref. SEI nº $numSEI", "blue").". $str_confirmar
 	
-	<br><br><br>Prezado(s) Senhor(es),<br><br><br>
-	Em decorrência da Pandemia do Coronavírus e, cumprindo determinação do Governo do Estado de Pernambuco, o atendimento presencial, 
-	na SEFAZ/PE foi substituído pelo trabalho remoto. Por esse motivo, estamos encaminhando para assinatura, em formato digital, 01(uma) via do supramencionado contrato,
-	cujo objeto é ".getTextoHTMLNegrito($vocontrato->objeto)."$str_confirmar, com vigência a partir de ".getTextoHTMLNegrito($dtInicioVigencia).".
+		<br><br><br>Prezado(s) Senhor(es),<br><br><br>
+		Em decorrência da Pandemia do Coronavírus e, cumprindo determinação do Governo do Estado de Pernambuco, o atendimento presencial,
+		na SEFAZ/PE foi substituído pelo trabalho remoto. Por esse motivo, estamos encaminhando para assinatura, em formato digital, 01(uma) via do supramencionado contrato,
+		cujo objeto é ".getTextoHTMLNegrito($vocontrato->objeto)."$str_confirmar, com vigência a partir de ".getTextoHTMLNegrito($dtInicioVigencia).".
 	
-	<br><br>Solicitamos que sejam impressas ".getTextoHTMLNegrito("02(duas) vias").", assinadas e rubricadas pelo representante legal, no prazo de até ".getTextoHTMLNegrito("10(dez) dias")." 
+	<br><br>Solicitamos que sejam impressas ".getTextoHTMLNegrito("02(duas) vias").", assinadas e rubricadas pelo representante legal, no prazo de até ".getTextoHTMLNegrito("10(dez) dias")."
 	contados a partir do recebimento do presente email, sendo posteriormente devolvidas pelos Correios ou protocoladas na  recepção do prédio desta SEFAZ,
 	situada na Av. Cruz Cabugá, N° 1419, Térreo, Santo Amaro, Recife/PE, CEP.: 50.040-000, no horário de atendimento presencial ".getTextoHTMLNegrito("excepcional: 9h as 15h.");
 	
 	//echo "garantia: " . $vocontratoinfo->inTemGarantia;
 	if($vocontratoinfo->inTemGarantia == "S"){
-		$retorno .= "<br><br>Por oportuno, informamos que será necessária a PRESTAÇÃO, ou REFORÇO, se acréscimo, ".getTextoHTMLNegrito("DA GARANTIA CONTRATUAL").", 
+		$retorno .= "<br><br>Por oportuno, informamos que será necessária a PRESTAÇÃO, ou REFORÇO, se acréscimo, ".getTextoHTMLNegrito("DA GARANTIA CONTRATUAL").",
 		conforme previsão editalícia, devendo esta ser apresentada no prazo de até ".getTextoHTMLNegrito("10(dez) dias úteis").".". getTextoHTMLDestacado("[CONFIRMAR PRAZO NO EDITAL]");
 	}
 	
@@ -828,24 +856,89 @@ function mostrarGridDemandaContrato($colecaoTramitacao, $isDetalhamento, $comDad
 		if(!$isDataRetroativa){
 			$retorno .= "<br><br>Permite-se o uso da assinatura digital, desde que sejam também encaminhados os meios necessários
 			à autenticação do documento digital.$str_confirmar";
-		
+	
 			if(isDataValidaNaoVazia($dtInicioVigencia)){
-				$retorno .= getTextoHTMLDestacado("<br>ATENÇÃO"). ": sob pena de inadmissibilidade, a assinatura digital deve ocorrer até ".getTextoHTMLDestacado($dtAssinaturaDigital).".$str_confirmar";
+				$retorno .= getTextoHTMLDestacado("<br>ATENÇÃO"). "<b>: sob pena de inadmissibilidade, a assinatura digital deve ocorrer até ".getTextoHTMLDestacado($dtAssinaturaDigital)."</b>.$str_confirmar";
 			}
 		}
 	
 	}catch (excecaoAtributoInvalido $ex){
 		$retorno .= getTextoHTMLDestacado("<br><br>*****ATENÇÃO: verifique a data de início de vigência do contrato.*****<br><br>");
 	}
-	//echo compararDatas($dthtmlassinatura, getDataHoje()) . " $dthtmlassinatura  e " . getDataHoje(); 
+	//echo compararDatas($dthtmlassinatura, getDataHoje()) . " $dthtmlassinatura  e " . getDataHoje();
 	
 	$retorno .= "<br><br>Favor acusar recebimento, devolvendo a via assinada junto com os documentos que comprovem a legitimidade da representação legal do procurador assinante.";
-
+	
 	$sublinhado = getTextoHTMLDestacado("o número do SEI", "black", true);
 	$retorno .= getTextoHTMLNegrito("<br><br>Para um melhor atendimento, ao comparecer a esta unidade para recolhimento da via contratual, favor trazer, em mãos, $sublinhado a que se refere a presente demanda.");
+	
+	$retorno .= "<br><br>Atenciosamente,";
+	
+	return $retorno;
+}
+
+function getCorpoEmailAssinaturaSEI($pArrayCamposSubstituicao){
+
+	$str_confirmar = getTextoHTMLDestacado("[CONFIRMAR]");
+
+	$vocontrato = $pArrayCamposSubstituicao[0];
+	$vocontratoinfo = $pArrayCamposSubstituicao[1];
+	$dsPessoa = $pArrayCamposSubstituicao[2];
+	$numSEI = $pArrayCamposSubstituicao[3];
+	$str_confirmar = $pArrayCamposSubstituicao[4];
+
+	$codigoContratoCompleto = getTextoHTMLNegrito(getCodigoContratoPublicacao($vocontrato));
+
+	$dtInicioVigencia = getData($vocontrato->dtVigenciaInicial);
+	if($dtInicioVigencia == null){
+		$dtAssinaturaDigital = $dtInicioVigencia = $str_confirmar;
+	}else{
+		$dtAssinaturaDigital = somarOuSubtrairDias($dtInicioVigencia, 1, "-", false);
+	}
+	
+	$linkATI = "http://www.portaisgoverno.pe.gov.br/web/site-ati/cadusuarioorgao";
+	$linkDeclaracao = "http://www.portaisgoverno.pe.gov.br/c/document_library/get_file?uuid=b4cecfd0-b36b-4b4a-894a-cd8f0facd21e&groupId=20653";
+	
+	$retorno = "<br>À ".getTextoHTMLNegrito($dsPessoa).",
+	<br><br>
+	ASSUNTO: ".getTextoHTMLNegrito("ASSINATURA DO $codigoContratoCompleto")."
+	<br><br>".getTextoHTMLDestacado("Ref. SEI nº $numSEI", "blue").". $str_confirmar
+				
+		<br><br><br>A Unidade de Contratos-UNCT/DILC/SEFAZ, vem, por meio deste, convocar para a assinatura do contrato supramencionado, cujo objeto é ".getTextoHTMLNegrito($vocontrato->objeto)
+		."$str_confirmar, com vigência a partir de ".getTextoHTMLNegrito($dtInicioVigencia)."$str_confirmar, fazendo-se necessário
+		o cadastro no <b>Sistema Eletrônico de Informação-SEI</b>, de acordo com os seguintes passos: 
+		
+		<b><br><br>1.	O fornecedor deve realizar o cadastro de usuário externo ao SEI no site da ATI</b>: 
+		<br>	a.Ir em ".getTextoLink($linkATI,$linkATI)." ;
+		<br>	b.Selecionar o órgão ao qual tem seu processo vinculado (nosso caso: SEFAZ);
+		<br>	c.Para se cadastrar, ir em: 'Clique aqui se você ainda não está cadastrado';
+		
+		<b><br><br>2.	Após o cadastro, o fornecedor receberá um e-mail automático solicitando a documentação necessária, dentre as quais</b>:
+		<br>	a.Cópia de comprovante de residência;
+		<br>	b.Cópias de RG e CPF ou de outro documento de identidade no qual conste o CPF;
+		<br>	c.Termo de Declaração de Concordância e Veracidade preenchido e assinado, no link ".getTextoLink($linkDeclaracao,$linkDeclaracao).";"
+			. getTextoHTMLDestacado("<br><br>ATENÇÃO: DESCONSIDERAR as informações contidas no e-mail automático de orientação enviado pelo SEI, após o envio do formulário, a respeito da entrega da documentação, cujas regras a serem seguidas estão detalhadas no item a seguir")
+			
+			. "<b><br><br>3.	Os documentos necessários devem ser enviados como anexos em RESPOSTA A ESTE EMAIL.</b>"
+	
+			. "<b><br><br>4.	O fornecedor deve aguardar o recebimento de email contendo o link para assinatura no sistema SEI.</b>";
+		
+		if(!isAtributoValido($dtAssinaturaDigital)){
+			$msg  = getTextoHTMLDestacado("<br><br>*****ATENÇÃO: verifique a data de início de vigência do contrato.*****<br><br>");
+			throw new excecaoAtributoInvalido($msg);
+		}
+		$retorno .= getTextoHTMLDestacado("<br><br>ATENÇÃO"). "<b>: sob pena de inadmissibilidade, a assinatura digital deve ocorrer até ".getTextoHTMLDestacado($dtAssinaturaDigital)."</b>.$str_confirmar";		
+			
+		if($vocontratoinfo->inTemGarantia == "S"){
+			$retorno .= "<br><br>Por oportuno, informamos que será necessária a PRESTAÇÃO, ou REFORÇO, se acréscimo, ".getTextoHTMLNegrito("DA GARANTIA CONTRATUAL").",
+				conforme previsão editalícia, devendo esta ser apresentada no prazo de até ".getTextoHTMLNegrito("10(dez) dias úteis").".". getTextoHTMLDestacado("[CONFIRMAR PRAZO NO EDITAL]");
+		}
+		
+		$retorno .= "<br><br>Atenciosamente,";
 
 	return $retorno;
 }
+
 
 function isDemandaContratoModificacaoObrigatorio($vodemanda){
 	if($vodemanda->tpDemandaContrato == null){

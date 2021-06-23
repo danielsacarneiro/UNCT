@@ -210,7 +210,8 @@ function abrirJanelaAuxiliarGestor(){
 	            	colecaoIDCamposRequired = ["<?=vopessoa::$nmAtrEmail?>",
 	            							"<?=vopessoa::$nmAtrDoc?>"];
 	            </SCRIPT>
-	            <INPUT type="checkbox" id="checkResponsabilidade" name="checkResponsabilidade" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCamposRequired);"> *Assumo a responsabilidade de não incluir os valores obrigatórios.
+	            <br><INPUT type="checkbox" id="checkResponsabilidade" name="checkResponsabilidade" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCamposRequired);">
+	            <?=voMensageria::$DS_RESPONSABILIDADE_CAMPO_OBR?>
                 				
 				</TD>
             </TR>     

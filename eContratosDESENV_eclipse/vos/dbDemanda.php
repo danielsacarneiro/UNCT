@@ -56,7 +56,8 @@ class dbDemanda extends dbprocesso {
 		$nmTabelaPessoa = vopessoa::getNmTabelaStatic ( false );
 		$nmTabelaTramitacao = voDemandaTramitacao::getNmTabela ();
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
-		// $nmTabelaPAAP = voPA::getNmTabelaStatic ( false );
+		// $nmTabelaPAAP = voPA::getNmTabelaStatic ( false );		
+		$nmTabelaContratadaPAAP = filtroManterDemanda::$NM_TABELA_CONTRATADA_PAAP;		
 		
 		$arrayColunasRetornadas = array (
 				$nmTabela . ".*",
@@ -86,7 +87,7 @@ class dbDemanda extends dbprocesso {
 				$nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrCdPregoeiro,
 				$nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrCdCPL,
 				// $nmTabelaPessoa . "." . vopessoa::$nmAtrNome,
-				getSQLNmContratada (),
+				getSQLNmContratada (true,true),
 				"COALESCE ($nmTabelaTramitacao." . voDemandaTramitacao::$nmAtrCdSetorDestino . ",$nmTabela." . voDemanda::$nmAtrCdSetor . ") AS " . voDemanda::$nmAtrCdSetorAtual 
 		);
 		
@@ -162,6 +163,14 @@ class dbDemanda extends dbprocesso {
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaPA . "." . voPA::$nmAtrAnoDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrAno;
 		$queryJoin .= "\n AND " . $nmTabelaPA . "." . voPA::$nmAtrCdDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrCd;
+		
+		//o join com group by é para o caso de haver 2 ou mais empresas para o mesmo doc (O QUE NAO PODE ACONTECER) 
+		$groupbyPessoaPAAPDOC = vopessoa::$nmAtrDoc; 
+		$queryJoin .= "\n LEFT JOIN (select * from $nmTabelaPessoa group by $groupbyPessoaPAAPDOC) $nmTabelaContratadaPAAP ";
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaContratadaPAAP . "." . vopessoa::$nmAtrDoc . "=" . $nmTabelaPA . "." . voPA::$nmAtrNumDocImputada;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaContratadaPAAP . "." . vopessoa::$nmAtrInDesativado . "= 'N'";
 		
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoa;
 		$queryJoin .= "\n ON ";
@@ -510,8 +519,10 @@ class dbDemanda extends dbprocesso {
 		$nmTabelaProcLic = voProcLicitatorio::getNmTabelaStatic ( false );
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
+		$nmTabelaPessoa = vopessoa::getNmTabelaStatic ( false );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
 		$nmTabelaPA = voPA::getNmTabelaStatic ( false );
+		$nmTabelaContratadaPAAP = filtroManterDemanda::$NM_TABELA_CONTRATADA_PAAP;
 		$nmTabelaWPUsers = vousuario::getNmTabelaStatic ( false);
 	
 		$cdSetorAtual = $filtro->vodemanda->cdSetorDestino;
@@ -555,7 +566,7 @@ class dbDemanda extends dbprocesso {
 				$nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrAnoProcLic,
 				$nmTabelaDemandaProcLic . "." . voDemandaPL::$nmAtrCdModalidadeProcLic,
 				$nmTabelaProcLic . "." . voProcLicitatorio::$nmAtrCdCPL,
-				getSQLNmContratada (),
+				getSQLNmContratada (true, true),
 				// $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . " AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,
 				"COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrCdSetorDestino . "," . $nmTabela . "." . voDemanda::$nmAtrCdSetor . ") AS " . voDemandaTramitacao::$nmAtrCdSetorDestino,
 				//"COALESCE (" . $nmTabelaTramitacao . "." . voDemandaTramitacao::$nmAtrDhInclusao . "," . $nmTabela . "." . voDemanda::$nmAtrDhUltAlteracao . ") AS " . filtroManterDemanda::$NmColDhUltimaMovimentacao,
@@ -653,6 +664,12 @@ class dbDemanda extends dbprocesso {
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaPA . "." . voPA::$nmAtrAnoDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrAno;
 		$queryJoin .= "\n AND " . $nmTabelaPA . "." . voPA::$nmAtrCdDemanda . "=" . $nmTabela . "." . voDemanda::$nmAtrCd;
+		
+		$queryJoin .= "\n LEFT JOIN $nmTabelaPessoa $nmTabelaContratadaPAAP ";
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaContratadaPAAP . "." . vopessoa::$nmAtrDoc . "=" . $nmTabelaPA . "." . voPA::$nmAtrNumDocImputada;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaContratadaPAAP . "." . vopessoa::$nmAtrInDesativado . "= 'N'";		
 		
 		//pega o usuario responsavel da UNCT
 		$queryJoin .= "\n LEFT JOIN $nmTabelaWPUsers $nmTabelaWPUsersUNCT ";

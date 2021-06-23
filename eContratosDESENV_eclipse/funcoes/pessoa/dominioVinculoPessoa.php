@@ -12,7 +12,7 @@ include_once(caminho_util."dominio.class.php");
 // Construtor
   	static function getColecao() {
 		$retorno = array(
-				self::$CD_VINCULO_RESPONSAVEL => "Responsável",
+				self::$CD_VINCULO_RESPONSAVEL => "Gestor",
 				self::$CD_VINCULO_CONTRATADO => "Contratado",
 				self::$CD_VINCULO_USUARIO => "Usuário",
 				self::$CD_VINCULO_SERVIDOR => "Servidor",

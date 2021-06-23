@@ -33,6 +33,7 @@ function getHTMLConsultaPorDemanda($chave, $isFuncaoInserirDados=false){
 			if($isFuncaoInserirDados){
 				$retorno = $retorno . "<br>CNPJ/CPF imputada:" . getHTMLInputNumDocumentoPessoa(voPA::$nmAtrNumDocImputada,
 						voPA::$nmAtrNumDocImputada, "", constantes::$CD_CLASS_CAMPO_OBRIGATORIO);
+				$retorno .= voPA::getMensagemCadastroImputada();
 			}
 		}
 	}else{
@@ -300,7 +301,7 @@ function consultarPessoasContrato($voContrato, $pIsChaveCompleta=false){
 	return $colecao;
 }
 
-function consultarPessoaDocumento($numDoc, $pDataVigencia = null){
+function consultarPessoaDocumento($numDoc, $pDataVigencia = null, $levantarExcecao=true){
 	$filtro = new filtroManterPessoa(false);
 	$numDoc = documentoPessoa::getNumeroDocSemMascara($numDoc);
 	$filtro->doc = $numDoc;
@@ -317,15 +318,20 @@ function consultarPessoaDocumento($numDoc, $pDataVigencia = null){
 	
 	//ECHO "AQUI";
 	
-	if(isColecaoVazia($colecao)){
+	if(isColecaoVazia($colecao) && $levantarExcecao){
 		throw new excecaoConsultaVazia("Não existe pessoa com o documento em questão.");
 	}
 	
-	if(sizeof($colecao)>1){
-		throw new excecaoConsultaVazia("Verifique o cadastro de pessoas. Existe mais de uma pessoa associada ao documento.");
+	if(sizeof($colecao)>1 && $levantarExcecao){
+		throw new excecaoConsultaVazia("Verifique o cadastro de pessoas. Existe mais de um registro associado ao documento.");
 	}
 	
-	return $colecao[0];
+	$retorno = $colecao[0];
+	if(!$levantarExcecao){
+		$retorno = $colecao;
+	}
+	
+	return $retorno;
 }
 
 function getCampoContratada($pNmContratada, $pDocContratada, $pChaveContrato, $complemento=null){

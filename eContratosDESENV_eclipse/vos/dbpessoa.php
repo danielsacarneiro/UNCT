@@ -232,9 +232,34 @@ class dbpessoa extends dbprocesso {
 		return $this->consultarEntidade ( $query, false );
 	}
 	
+	function validar($vopessoa, $isAlteracao = false){
+		//$vopessoa = new vopessoa();
+		$numDoc = documentoPessoa::getNumeroDocSemMascara($vopessoa->doc); 
+		$retorno = consultarPessoaDocumento($numDoc, null, false);
+		if(!isColecaoVazia($retorno)){
+			if(sizeof($retorno) > 1){
+				throw new excecaoGenerica("Existem mais de 1 registro com o mesmo documento $numdocformatado cadastrado. Regularize-os.");
+			}
+			
+			$registro = $retorno[0];
+			$vopessoaatual = new vopessoa();
+			$vopessoaatual->getDadosBanco($registro);
+			
+			//levanta excecao quando eh inclusao ou quando eh alteracao e a pessoa alterada eh diferente da encontrada com o mesmo doc
+			$levantarExcecao = false;			
+			$levantarExcecao = !$isAlteracao || $vopessoaatual->cd != $vopessoa->cd;
+			//echo "cdpessoaBANCO: " . $vopessoaatual->cd . " X cdpessoaTela: " . $vopessoa->cd; 
+			
+			if($levantarExcecao){
+				$numdocformatado = documentoPessoa::getNumeroDocFormatado($vopessoa->doc);
+				throw new excecaoGenerica("Já existe registro com o documento $numdocformatado cadastrado.");
+			}
+		}		
+	}
 	// o incluir eh implementado para nao usar da voentidade
 	// por ser mais complexo
 	function incluir($vopessoa) {
+		$this->validar($vopessoa);
 		// Start transaction
 		$this->cDb->retiraAutoCommit ();
 		try {
@@ -309,6 +334,7 @@ class dbpessoa extends dbprocesso {
 	// o alterar eh implementado para nao usar da voentidade
 	// por ser mais complexo
 	function alterar($vopessoa) {
+		$this->validar($vopessoa, true);
 		// Start transaction
 		$this->cDb->retiraAutoCommit ();
 		try {

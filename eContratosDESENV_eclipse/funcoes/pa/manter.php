@@ -184,7 +184,8 @@ function getDataPrazo(){
 	            <TD class="campoformulario" colspan=3>
 	            <?php 
 	            echo getHTMLInputNumDocumentoPessoa(voPA::$nmAtrNumDocImputada, voPA::$nmAtrNumDocImputada, documentoPessoa::getNumeroDocFormatado($vo->numDocImputada), "campoobrigatorio");
-	            ?>
+	            echo voPA::getMensagemCadastroImputada();
+	            ?> 
 	            </TD>
 	        </TR>
 	        <?php 
@@ -317,7 +318,7 @@ function getDataPrazo(){
 	            		"<?=voPA::$nmAtrNumDiasPrazoUltNotificacao?>"];
 	            </SCRIPT>
 	            <br><INPUT type="checkbox" onClick="if(!this.checked){document.frm_principal.<?=voPA::$nmAtrPublicacao?>.value='';}else{document.frm_principal.<?=voPA::$nmAtrPublicacao?>.value='<?=$modeloPublicacao?>'};"> *incluir Modelo Publicação.
-	            <br><INPUT type="checkbox" id="checkResponsabilidade" name="checkResponsabilidade" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCamposRequired);"> *Assumo a responsabilidade de não incluir os campos obrigatórios.	            				            
+	            <br><INPUT type="checkbox" id="checkResponsabilidade" name="checkResponsabilidade" value="" onClick="validaFormRequiredCheckBox(this, colecaoIDCamposRequired);"> <?=voMensageria::$DS_RESPONSABILIDADE_CAMPO_OBR?>	            				            
 				</TD>
 	        </TR>	        
 <TR>

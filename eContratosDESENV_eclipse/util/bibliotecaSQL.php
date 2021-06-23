@@ -23,16 +23,19 @@ function getSQLTabelaTrazendoHistorico($vo){
 	return "(SELECT $atributos FROM $nmTabelaOriginal UNION SELECT $atributosHist FROM $nmTabelaHist) $nmTabelaGeral ";	
 }
 
-function getSQLNmContratada($comAliasNoAtributo = true) {
+function getSQLNmContratada($comAliasNoAtributo = true, $temConsultaPAAP=false) {
 	$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 	$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
-	//$nmTabelaPessoaPAAP = voPA::getNmTabelaStatic ( false );
+	$nmTabelaContratadaPAAP = filtroManterDemanda::$NM_TABELA_CONTRATADA_PAAP;
 	
 	$colecaoAtributoCoalesceNmPessoa = array (
 			$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
 			$nmTabelaContrato . "." . vocontrato::$nmAtrContratadaContrato,
-			//$nmTabelaPessoaPAAP . "." . vopessoa::$nmAtrNome,
 	);
+	
+	if($temConsultaPAAP){
+		$colecaoAtributoCoalesceNmPessoa[] = $nmTabelaContratadaPAAP . "." . vopessoa::$nmAtrNome;
+	}
 	$alias = vopessoa::$nmAtrNome;
 	if(!$comAliasNoAtributo){
 		$alias = null;		

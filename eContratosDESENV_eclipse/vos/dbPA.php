@@ -431,8 +431,10 @@ include_once (caminho_filtros."filtroManterPA.php");
     
     function consultarVODemanda($vo) {    	
     	//$vo = new voPA();
-    	$vodemanda = new voDemanda(array($vo->anoDemanda, $vo->cdDemanda));
-    	$vodemanda = $vodemanda->dbprocesso->consultarPorChaveVO($vodemanda, false);
+    	$vodemanda = new voDemanda(array($vo->anoDemanda, $vo->cdDemanda));    	
+    	//$vodemanda = $vodemanda->dbprocesso->consultarPorChaveVO($vodemanda, false);
+    	$dbDemanda = new dbDemanda();
+    	$vodemanda = $dbDemanda->consultarPorChaveTelaColecaoContrato($vodemanda, false);
     	return $vodemanda;
     }
     
@@ -444,11 +446,24 @@ include_once (caminho_filtros."filtroManterPA.php");
     function validarInclusao($vo) {    
 		$vodemanda = $this->consultarVODemanda($vo);
 		$isDemandaPAAP = $vodemanda->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_PROCADM;
-		    
+				    
 		if(!$isDemandaPAAP){
 			$tpDemandaPAAP = dominioTipoDemanda::$DS_TIPO_DEMANDA_PROCADM;
 			throw new excecaoGenerica("A demanda selecionada deve ser do tipo $tpDemandaPAAP.");
-		}    	 
+		}
+		
+		//$vodemanda = new voDemanda();
+		$vocontrato = $vodemanda->getContrato();		
+		if(!isContratoValido($vocontrato)){
+			//$vo = new voPA();
+			if(!isAtributoValido($vo->numDocImputada)){
+				throw new excecaoAtributoObrigatorio("Documento da imputada é de preenchimento obrigatório.");				
+			}
+			
+			//levanta excecao se nao existe docpessoa
+			$retorno = consultarPessoaDocumento($vo->numDocImputada);
+		}
+		
     }
     
     function validarAlteracao($vo) {    	

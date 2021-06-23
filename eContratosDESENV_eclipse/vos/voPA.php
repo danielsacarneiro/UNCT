@@ -209,5 +209,10 @@ class voPA extends voentidade {
 		}		
 		return $retorno;
 	}
+	
+	static function getMensagemCadastroImputada(){
+		//getTextoLink($texto, $href, $javascript=null, $isJanelaAuxiliar=false, $isAbrirOutraJanela=false) {
+		return getTextoHTMLNegrito("&nbsp;*lembrar de cadastrar (ou confirmar existência) a imputada na função " . getTextoLink("Cadastro Pessoa", "../pessoa",null, false, true) .".");
+	}
 }
 ?>

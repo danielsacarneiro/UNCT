@@ -20,8 +20,6 @@ $registro = $colecao[0];
 putObjetoSessao($vo->getNmTabela(), $vo);
 
 $funcao = @$_GET["funcao"];
-//$inAssinaturaSEI = ;
-$isAssinaturaSEI = getAtributoComoBooleano(@$_GET["inAssinaturaSEI"]);
 
 $inConsultaHTML = getInConsultarHTMLString();
 
@@ -51,7 +49,7 @@ setCabecalho($titulo);
 					<TABLE id="table_conteudodados" class="conteudodados" cellpadding="0" cellspacing="0">
 					<TR>
 				        <?php				        	
-				        	$mensagem .= getEmailConvocacaoAssinatura($registro, $isAssinaturaSEI);				        	
+				        	$mensagem .= getEmailConvocacaoAssinatura($registro);				        	
 				        	echo $mensagem;				        	 
 						  ?>			            
 		            </TR>							
