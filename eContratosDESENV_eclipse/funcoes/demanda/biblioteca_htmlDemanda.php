@@ -796,7 +796,7 @@ function getEmailConvocacaoAssinatura($registro, $isAssinaturaSEI=false){
  	if($numSEI == null){
  		$numSEI = $a_preencher;
  	}
- 	$str_confirmar = getTextoHTMLDestacado("[CONFIRMAR]");
+ 	$str_confirmar = getTextoEmailAConfirmar();
 	
 	$pArrayCamposSubstituicao = array($vocontrato, $vocontratoinfo, $dsPessoa, $numSEI, $str_confirmar);
 	if($isAssinaturaSEI){
@@ -813,8 +813,6 @@ function getDataLimiteAssinaturaDigital($dtInicioVigencia){
 }
 
 function getCorpoEmailAssinatura($pArrayCamposSubstituicao){
-	
-	$str_confirmar = getTextoHTMLDestacado("[CONFIRMAR]");
 	
 	$vocontrato = $pArrayCamposSubstituicao[0];
 	$vocontratoinfo = $pArrayCamposSubstituicao[1];
@@ -848,7 +846,7 @@ function getCorpoEmailAssinatura($pArrayCamposSubstituicao){
 	//echo "garantia: " . $vocontratoinfo->inTemGarantia;
 	if($vocontratoinfo->inTemGarantia == "S"){
 		$retorno .= "<br><br>Por oportuno, informamos que será necessária a PRESTAÇÃO, ou REFORÇO, se acréscimo, ".getTextoHTMLNegrito("DA GARANTIA CONTRATUAL").",
-		conforme previsão editalícia, devendo esta ser apresentada no prazo de até ".getTextoHTMLNegrito("10(dez) dias úteis").".". getTextoHTMLDestacado("[CONFIRMAR PRAZO NO EDITAL]");
+		conforme previsão editalícia, devendo esta ser apresentada no prazo de até ".getTextoHTMLNegrito("10(dez) dias úteis").".". getTextoEmailAConfirmar("CONFIRMAR PRAZO NO EDITAL");
 	}
 	
 	try{
@@ -879,8 +877,6 @@ function getCorpoEmailAssinatura($pArrayCamposSubstituicao){
 
 function getCorpoEmailAssinaturaSEI($pArrayCamposSubstituicao){
 
-	$str_confirmar = getTextoHTMLDestacado("[CONFIRMAR]");
-
 	$vocontrato = $pArrayCamposSubstituicao[0];
 	$vocontratoinfo = $pArrayCamposSubstituicao[1];
 	$dsPessoa = $pArrayCamposSubstituicao[2];
@@ -905,33 +901,36 @@ function getCorpoEmailAssinaturaSEI($pArrayCamposSubstituicao){
 	<br><br>".getTextoHTMLDestacado("Ref. SEI nº $numSEI", "blue").". $str_confirmar
 				
 		<br><br><br>A Unidade de Contratos-UNCT/DILC/SEFAZ, vem, por meio deste, convocar para a assinatura do contrato supramencionado, cujo objeto é ".getTextoHTMLNegrito($vocontrato->objeto)
-		."$str_confirmar, com vigência a partir de ".getTextoHTMLNegrito($dtInicioVigencia)."$str_confirmar, fazendo-se necessário
+		."$str_confirmar, com vigência a partir de ".getTextoHTMLNegrito($dtInicioVigencia).", fazendo-se necessário
 		o cadastro no <b>Sistema Eletrônico de Informação-SEI</b>, de acordo com os seguintes passos: 
 		
-		<b><br><br>1.	O fornecedor deve realizar o cadastro de usuário externo ao SEI no site da ATI</b>: 
+		<b><br><br>1.	Se o fornecedor já possuir cadastro no sistema, deve apenas responder este email indicando 'nome' e 'email' do 
+		responsável pela assinatura do termo em questão no SEI, <u>ignorando os passos, a seguir, que se referem exclusivamente ao cadastro</u>.</b> 
+
+		<b><br><br>2.	Caso contrário, o fornecedor deve realizar o cadastro de usuário externo ao SEI no site da ATI</b>: 
 		<br>	a.Ir em ".getTextoLink($linkATI,$linkATI)." ;
 		<br>	b.Selecionar o órgão ao qual tem seu processo vinculado (nosso caso: SEFAZ);
 		<br>	c.Para se cadastrar, ir em: 'Clique aqui se você ainda não está cadastrado';
 		
-		<b><br><br>2.	Após o cadastro, o fornecedor receberá um e-mail automático solicitando a documentação necessária, dentre as quais</b>:
+		<b><br><br>3.	Após o cadastro, o fornecedor receberá um e-mail automático solicitando a documentação necessária, dentre as quais</b>:
 		<br>	a.Cópia de comprovante de residência;
 		<br>	b.Cópias de RG e CPF ou de outro documento de identidade no qual conste o CPF;
 		<br>	c.Termo de Declaração de Concordância e Veracidade preenchido e assinado, no link ".getTextoLink($linkDeclaracao,$linkDeclaracao).";"
 			. getTextoHTMLDestacado("<br><br>ATENÇÃO: DESCONSIDERAR as informações contidas no e-mail automático de orientação enviado pelo SEI, após o envio do formulário, a respeito da entrega da documentação, cujas regras a serem seguidas estão detalhadas no item a seguir")
 			
-			. "<b><br><br>3.	Os documentos necessários devem ser enviados como anexos em RESPOSTA A ESTE EMAIL.</b>"
+			. "<b><br><br>4.	Os documentos necessários devem ser enviados como anexos em RESPOSTA A ESTE EMAIL.</b>"
 	
-			. "<b><br><br>4.	O fornecedor deve aguardar o recebimento de email contendo o link para assinatura no sistema SEI.</b>";
+			. "<b><br><br>5.	O fornecedor deve aguardar, via email, as instruções para assinatura do termo.</b>";
 		
 		if(!isAtributoValido($dtAssinaturaDigital)){
 			$msg  = getTextoHTMLDestacado("<br><br>*****ATENÇÃO: verifique a data de início de vigência do contrato.*****<br><br>");
 			throw new excecaoAtributoInvalido($msg);
 		}
-		$retorno .= getTextoHTMLDestacado("<br><br>ATENÇÃO"). "<b>: sob pena de inadmissibilidade, a assinatura digital deve ocorrer até ".getTextoHTMLDestacado($dtAssinaturaDigital)."</b>.$str_confirmar";		
+		$retorno .= getTextoHTMLDestacado("<br><br>ATENÇÃO"). "<b>: sob pena de inadmissibilidade, a assinatura digital deve ocorrer até ".getTextoHTMLDestacado($dtAssinaturaDigital)."</b>.";		
 			
 		if($vocontratoinfo->inTemGarantia == "S"){
 			$retorno .= "<br><br>Por oportuno, informamos que será necessária a PRESTAÇÃO, ou REFORÇO, se acréscimo, ".getTextoHTMLNegrito("DA GARANTIA CONTRATUAL").",
-				conforme previsão editalícia, devendo esta ser apresentada no prazo de até ".getTextoHTMLNegrito("10(dez) dias úteis").".". getTextoHTMLDestacado("[CONFIRMAR PRAZO NO EDITAL]");
+				conforme previsão editalícia, devendo esta ser apresentada no prazo de até ".getTextoHTMLNegrito("10(dez) dias úteis").".". getTextoEmailAConfirmar("CONFIRMAR PRAZO NO EDITAL");
 		}
 		
 		$retorno .= "<br><br>Atenciosamente,";
@@ -966,6 +965,18 @@ function validaSEIExistente($SEI){
 
 	}
 	return $retorno;
+}
+
+function isDemandaContratoAssinado($voDemanda){
+	if(!isAtributoValido($voDemanda->fase)){
+		throw new excecaoAtributoInvalido("Atributo da demanda 'fase' nulo");
+	}
+
+	return existePeloMenosUmItemNoArrayOuString(dominioFaseDemanda::getColecaoFaseContratoAssinado(), $voDemanda->fase);
+}
+
+function getTextoEmailAConfirmar($texto="CONFIRMAR"){
+	return getTextoHTMLDestacado("[$texto, REMOVENDO ESSE TRECHO APÓS A CONFIRMAÇÃO]", "red", false, "amarelo");
 }
 
 

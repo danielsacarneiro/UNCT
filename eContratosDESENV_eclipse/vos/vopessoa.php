@@ -4,6 +4,7 @@ include_once(caminho_vos."vogestor.php");
 include_once(caminho_util."DocumentoPessoa.php");
 include_once (caminho_funcoes . "pessoa/dominioVinculoPessoa.php");
 include_once (caminho_funcoes . "pessoa/biblioteca_htmlPessoa.php");
+include_once (caminho_funcoes . "pessoa/dominioPessoaCaracteristicas.php");
 
   Class vopessoa extends voentidade{
         //var $nmTable = "contrato_import";
@@ -17,8 +18,10 @@ include_once (caminho_funcoes . "pessoa/biblioteca_htmlPessoa.php");
 		static $nmAtrDoc =  "pe_doc";
         static $nmAtrTel =  "pe_tel";
 		static $nmAtrEmail =  "pe_email";
+		static $nmAtrEmailSEI =  "pe_email_SEI";
 		static $nmAtrEndereco =  "pe_endereco";
 		static $nmAtrObservacao =  "pe_obs";
+		static $nmAtrInCaracteristicas =  "pe_in_caracteristicas";
 		//indicador de participacao ao programa de acesso ao trabalhador
 		static $nmAtrInPAT = "pe_in_pat";
 		
@@ -30,12 +33,14 @@ include_once (caminho_funcoes . "pessoa/biblioteca_htmlPessoa.php");
 		var $nome= "";		
 		var $doc =  "";
 		var $email =  "";
+		var $emailSEI =  "";
         var $tel =  "";
         var $obs =  "";
         var $inPAT = "";
         var $cdVinculo = "";
         var $inAtribuicaoPAAP = "";
         var $inAtribuicaoPregoeiro = "";
+        var $inCaracteristicas = "";
 
 // ...............................................................
 // Funções ( Propriedades e métodos da classe )
@@ -79,8 +84,10 @@ include_once (caminho_funcoes . "pessoa/biblioteca_htmlPessoa.php");
             self::$nmAtrDoc,
             self::$nmAtrTel,            
             self::$nmAtrEmail,
+        	self::$nmAtrEmailSEI,
         	self::$nmAtrEndereco,
         	self::$nmAtrObservacao,
+        	self::$nmAtrInCaracteristicas,
         	self::$nmAtrInPAT
         );
         
@@ -104,10 +111,12 @@ include_once (caminho_funcoes . "pessoa/biblioteca_htmlPessoa.php");
         $this->tel = $registrobanco[vopessoa::$nmAtrTel];
         
         $this->email = $registrobanco[vopessoa::$nmAtrEmail];
+        $this->emailSEI = $registrobanco[vopessoa::$nmAtrEmailSEI];
         $this->email = str_replace(" ", "", $this->email);
         
         $this->endereco = $registrobanco[vopessoa::$nmAtrEndereco];
         $this->obs = $registrobanco[vopessoa::$nmAtrObservacao];
+        $this->inCaracteristicas = $registrobanco[vopessoa::$nmAtrInCaracteristicas];
         $this->inPAT = $registrobanco[vopessoa::$nmAtrInPAT];
 	}   
 	
@@ -117,6 +126,7 @@ include_once (caminho_funcoes . "pessoa/biblioteca_htmlPessoa.php");
         
 		$this->nome = @$_POST[vopessoa::$nmAtrNome];
         $this->email = @$_POST[vopessoa::$nmAtrEmail];
+        $this->emailSEI = @$_POST[vopessoa::$nmAtrEmailSEI];
         $this->doc = @$_POST[vopessoa::$nmAtrDoc];
         if($this->doc != null){
         	$this->doc = documentoPessoa::getNumeroDocSemMascara($this->doc);
@@ -124,6 +134,11 @@ include_once (caminho_funcoes . "pessoa/biblioteca_htmlPessoa.php");
         $this->tel = @$_POST[vopessoa::$nmAtrTel]; 
         $this->endereco = @$_POST[vopessoa::$nmAtrEndereco];
         $this->obs= @$_POST[vopessoa::$nmAtrObservacao];
+        $this->inCaracteristicas = @$_POST[vopessoa::$nmAtrInCaracteristicas];
+        if(is_array($this->inCaracteristicas)){
+        	$this->inCaracteristicas = static::getArrayComoStringCampoSeparador($this->inCaracteristicas);
+        }
+        
         $this->inPAT = @$_POST[vopessoa::$nmAtrInPAT];
                 
         //vinculo

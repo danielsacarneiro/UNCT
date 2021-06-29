@@ -1145,6 +1145,20 @@ class dbDemanda extends dbprocesso {
 		
 	}
 	
+	static function validarDadosContratada($voDemanda, $vocontratoDemanda){
+		$registroContratada = getContratadaContratoRegistro($vocontratoDemanda);		
+		$vopessoa = new vopessoa();
+		$vopessoa->getDadosBanco($registroContratada);
+			
+		$isCaracteristicaInvalida = !existeItemNoArrayOuString(dominioPessoaCaracteristicas::$CD_ASSINA_SEI, $vopessoa->inCaracteristicas)
+				|| !isAtributoValido($vopessoa->emailSEI);
+		$isTermoAssinadoSEI = existePeloMenosUmItemNoArrayOuString(dominioFaseDemanda::$CD_ASSINADO_SEI, $voDemanda->fase);
+		if($isContratoAssinadoSEI && $isCaracteristicaInvalida){
+			throw new excecaoGenerica("Fechamento não permitido: preencha os campos da contratada em questão, na funcao '".vopessoa::getTituloJSP()."', que se referem à assinatura no SEI|" 
+					. $vopessoa->toString() . ".");
+		}			
+	}	
+	
 	static function validarDadosContratoModificacao($voDemanda) {
 		if(isDemandaContratoModificacaoObrigatorio($voDemanda)){
 			$vocontratoDemanda = $voDemanda->getContrato();	
@@ -1218,7 +1232,8 @@ class dbDemanda extends dbprocesso {
 				$vocontratoInfo = new voContratoInfo();
 				//$vo = new voDemanda();
 				$vocontratoDemanda = $vo->getContrato();
-				if($vocontratoDemanda != null){
+				$isDemandaTipoContrato = $vo->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO;
+				if($isDemandaTipoContrato && $vocontratoDemanda != null){
 					try{
 						$dbContrato = new dbcontrato();
 						//var_dump($vocontratoDemanda);
@@ -1226,9 +1241,7 @@ class dbDemanda extends dbprocesso {
 					}catch (excecaoChaveRegistroInexistente $ex){
 						throw new excecaoGenerica("Verifique se o termo relacionado foi incluído corretamente na função 'contratos'.");
 					}
-			
-					//throw new excecaoGenerica("Aguardem....");
-			
+						
 					$vocontratoInfo->anoContrato = $vocontratoDemanda->anoContrato;
 					$vocontratoInfo->cdContrato = $vocontratoDemanda->cdContrato;
 					$vocontratoInfo->tipo = $vocontratoDemanda->tipo;
@@ -1238,6 +1251,12 @@ class dbDemanda extends dbprocesso {
 						throw new excecaoChaveRegistroInexistente("Verifique a inclusão das informações adicionais ao contrato relacionado.", null, $vocontratoInfo);
 					}
 			
+					//throw new excecaoGenerica("Aguardem....");
+					if(!isDemandaContratoAssinado($vo)){
+						throw new excecaoGenerica("Fechamento não permitido: indique a FASE em que o termo foi assinado (se físico, digital ou pelo SEI...). |"
+								. $vocontratoDemanda->getCodigoContratoFormatado(true));
+					}
+						
 					$arrayRetorno = getHTMLDocumentosContrato($vocontratoDemanda);
 					$temAmbosDocsAExibir = $arrayRetorno[2];
 					$naovalidaDocs = isAtributoValido($vo->inCaracteristicas) && in_array(dominioCaracteristicasDemanda::$CD_NAO_VALIDA_DOCS, $vo->inCaracteristicas);
@@ -1289,6 +1308,8 @@ class dbDemanda extends dbprocesso {
 					static::validarDadosContrato($vocontratoDemanda, $vocontratoInfo);
 			
 					static::validarDadosContratoModificacao($vo);
+					
+					static::validarDadosContratada($vo, $vocontratoDemanda);
 			
 				}
 					

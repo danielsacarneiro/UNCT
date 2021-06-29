@@ -13,7 +13,7 @@ if($enviarEmail != null){
 }
 $enviarEmail = $enviarEmail && voMensageria::$ATIVADO && voMensageria::$ENVIAR_EMAIL_RELATORIO_DIARIO;
 
-enviarEmailATJA($enviarEmail);
+//enviarEmailATJA($enviarEmail);
 
 $arrayRetorno = enviarEmailUNCT($enviarEmail);
 $count = $arrayRetorno[0];

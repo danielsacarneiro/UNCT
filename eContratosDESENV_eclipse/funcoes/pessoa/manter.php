@@ -167,7 +167,11 @@ function abrirJanelaAuxiliarGestor(){
             <DIV id="div_filtro" class="div_filtro">
             <TABLE id="table_filtro" class="filtro" cellpadding="0" cellspacing="0">
             <TBODY>
-	        <?php if(!$isInclusao){?>
+	        <?php
+	        include_once(caminho_util. "dominioSimNao.php");
+	        $comboSimNao = new select(dominioSimNao::getColecao());
+	         
+	        if(!$isInclusao){?>
 	        	<TR>
 	        	<TH class="campoformulario" nowrap width=1%>Código:</TH>
 	        	<TD class="campoformulario" colspan=3><INPUT type="text" value="<?php echo(complementarCharAEsquerda($vo->cd, "0", TAMANHO_CODIGOS));?>"  class="camporeadonlyalinhadodireita" size="5" readonly></TD>
@@ -228,17 +232,35 @@ function abrirJanelaAuxiliarGestor(){
 	                    <?php echo getLinkPesquisa("../gestor");?>
                     </div>
                     <div id="<?=vopessoa::$ID_REQ_DIV_CONTRATADO?>">
-		                <?php 
-			            include_once(caminho_util. "dominioSimNao.php");
-			            $comboSimNao = new select(dominioSimNao::getColecao());
-			            echo "Participa do PAT (Programa de Alimentação do Trabalhador)?: ";
-			            echo $comboSimNao->getHtmlCombo(vopessoa::$nmAtrInPAT,vopessoa::$nmAtrInPAT, $vo->inPAT, true, "camponaoobrigatorio", false,"");
-			            ?>
+			            <TABLE class="filtro" cellpadding="0" cellspacing="0">
+			            <TBODY>
+				        	<TR>
+				        	<TD class="campoformulario" width="10%" nowrap>
+				                <?php 
+					            $nmCampoCaracteristicasHtml = vopessoa::$nmAtrInCaracteristicas ."[]";
+					            $arrayParamCaracteristicas = array($nmCampoCaracteristicasHtml, $vo->inCaracteristicas , dominioPessoaCaracteristicas::getColecao(), 1, false, "", false, " ");
+					            echo dominio::getHtmlChecksBoxArray($arrayParamCaracteristicas);
+					            ?>
+				        	</TD>
+				        	<TD class="campoformulario" colspan=3>
+				                <?php 
+					            echo "Email.SEI:" .getInputText(vopessoa::$nmAtrEmailSEI, vopessoa::$nmAtrEmailSEI, $vo->emailSEI, constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO, 40, null, getMsgPlaceHolder("inclua o e-mail de quem assina no SEI."));
+					            ?>
+				        	</TD>
+				        	</TR>
+				        	<TR>
+				        	<TD class="campoformulario" colspan=4>
+				                <?php 
+					            echo "Participa do PAT (Programa de Alimentação do Trabalhador)?: ";
+					            echo $comboSimNao->getHtmlCombo(vopessoa::$nmAtrInPAT,vopessoa::$nmAtrInPAT, $vo->inPAT, true, "camponaoobrigatorio", false,"");
+					            ?>				        	
+				        	</TD>
+				        	</TR>
+				        </TBODY>        	 
+			            </TABLE>
                     </div>
                     <div id="<?=vopessoa::$ID_REQ_DIV_SERVIDOR?>">
 		                <?php 
-			            include_once(caminho_util. "dominioSimNao.php");
-			            $comboSimNao = new select(dominioSimNao::getColecao());
 			            echoo("Tem atribuição de instruir PAAP?: ". $comboSimNao->getHtmlCombo(vopessoavinculo::$nmAtrInAtribuicaoPAAP,vopessoavinculo::$nmAtrInAtribuicaoPAAP, $vopessoavinculo->inAtribuicaoPAAP, true, "camponaoobrigatorio", false," required "));
 			            echo "É pregoeiro?: ".$comboSimNao->getHtmlCombo(vopessoavinculo::$nmAtrInAtribuicaoPregoeiro ,vopessoavinculo::$nmAtrInAtribuicaoPregoeiro , $vopessoavinculo->inAtribuicaoPregoeiro, true, "camponaoobrigatorio", false," required ");
 			            ?>

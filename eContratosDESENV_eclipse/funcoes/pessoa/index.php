@@ -6,6 +6,7 @@ include_once(caminho_util. "select.php");
 include_once(caminho_vos . "dbpessoa.php");
 include_once(caminho_filtros . "filtroManterPessoa.php");
 
+try{
 //inicia os parametros
 inicio();
 
@@ -277,3 +278,8 @@ function selecionar() {
 
 </BODY>
 </HTML>
+<?php 
+}catch(Exception $ex){
+	tratarExcecaoHTML($ex, $vo);
+}
+?>

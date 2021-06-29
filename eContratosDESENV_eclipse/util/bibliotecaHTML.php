@@ -1477,12 +1477,17 @@ function getImagem($nmImagem, $tam=15, $titulo=null){
 	return "<img  title='$titulo' src='" . pasta_imagens . "$nmImagem' width='$tam' height='$tam'>";
 }
 
-function getTextoHTMLDestacado($texto, $cor="red", $sublinhado = true){
+function getTextoHTMLDestacado($texto, $cor="red", $sublinhado = true, $cordefundo=null){
 	$retorno = $texto;
 	if($sublinhado){
 		$retorno = "<u>$retorno</u>";
 	}
 	$retorno = "<font color='$cor'>".getTextoHTMLNegrito($retorno)."</font>"; 
+	
+	if($cordefundo != null){
+		$retorno = "<mark>$retorno</mark>";
+	}
+	
 	return $retorno;
 }
 function getTextoHTMLSublinhado($texto){

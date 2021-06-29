@@ -274,6 +274,19 @@ function getComboGestorResponsavel($cdGestor){
 	return $retorno;
 }
 
+function getContratadaContratoRegistro($vocontrato){
+		$colecao = consultarPessoasContrato($vocontrato);
+		if(!isColecaoVazia($colecao)){				
+			if(sizeof($colecao)>1){
+				throw new excecaoGenerica("Mais de uma contratada encontrada. Regularize o contrato e tente novamente.");
+			}
+		}else{
+			throw new excecaoGenerica("Contratada não encontrada.");
+		}
+		
+		return $colecao[0];
+}
+
 function consultarPessoasContrato($voContrato, $pIsChaveCompleta=false){
 	//$voContrato = new vocontrato();
 	$filtro = new filtroManterPessoa(false);

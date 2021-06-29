@@ -11,7 +11,8 @@ class filtroManterPessoa extends filtroManter{
     
     // ...............................................................
 	// construtor
-    var $cd;    
+    var $cd;
+    var $cdGestor;
     var $doc="";
     var $nome="";
     var $cdvinculo="";
@@ -35,6 +36,7 @@ class filtroManterPessoa extends filtroManter{
 		$this->doc = @$_POST[vopessoa::$nmAtrDoc];
 		$this->nome = @$_POST[vopessoa::$nmAtrNome];
 		$this->cdvinculo = @$_POST[vopessoavinculo::$nmAtrCd];
+		$this->cdGestor = @$_POST[vogestor::$nmAtrCd];
 		$this->inAtribuicaoPAAP = @$_POST[vopessoavinculo::$nmAtrInAtribuicaoPAAP];
 		$this->inAtribuicaoPregoeiro = @$_POST[vopessoavinculo::$nmAtrInAtribuicaoPregoeiro];
 		
@@ -54,6 +56,7 @@ class filtroManterPessoa extends filtroManter{
         }
         
         $nmTabelaPessoaVinculo = $voPessoaVinculo->getNmTabela();        
+        $nmTabelaOrgaoGestor = vogestor::getNmTabela();
         $nmTabelaDemanda = voDemanda::getNmTabelaStatic($isHistorico);
         $nmTabelaContrato = vocontrato::getNmTabela();
         
@@ -73,6 +76,15 @@ class filtroManterPessoa extends filtroManter{
 			$conector  = "\n AND ";
 		}
         
+		if($this->cdGestor != null){
+			$filtro = $filtro . $conector
+			. $nmTabelaOrgaoGestor. "." .vogestor::$nmAtrCd
+			. " = "
+					. $this->cdGestor;
+						
+					$conector  = "\n AND ";
+		}
+		
 		if($this->cdvinculo != null){
 			$filtro = $filtro . $conector
 					. $nmTabelaPessoaVinculo. "." .vopessoavinculo::$nmAtrCd
@@ -187,17 +199,7 @@ class filtroManterPessoa extends filtroManter{
 		
 					$conector  = "\n AND ";
 		}
-		
-		if($this->cdGestor != null){
-			$filtro = $filtro . $conector
-						//. $nmTabela. "." .vopessoa::$nmAtrCdGestor
-						. "='"
-						. $this->cdGestor
-						. "'";
-			
-			$conector  = "\n AND ";
-		}
-		
+				
 		if($this->dtReferenciaContrato != null){
 			$filtro = $filtro . $conector
 					.  getSQLDataVigenteSimplesPorData(

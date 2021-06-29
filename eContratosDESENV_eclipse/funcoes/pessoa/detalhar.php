@@ -155,8 +155,7 @@ function confirmar() {
 		                        $cdVinculo = $colecaoVinculo[$i];		                       
 		                ?>
 		                <TR >
-		                    <TD class="tabeladados"><?php echo $cdVinculo;?></TD>
-		                    <TD class="tabeladados"><?php echo $dominioPessoaVinculo->getDescricao($cdVinculo);?></TD>
+		                    <TD class="tabeladados"><?php echo "$cdVinculo - " . $dominioPessoaVinculo->getDescricao($cdVinculo);?></TD>
 			                <?php
 			                if($cdVinculo == dominioVinculoPessoa::$CD_VINCULO_RESPONSAVEL){
 			                ?>		                    
@@ -195,7 +194,27 @@ function confirmar() {
 							<?php
 							}				
 							?>														
-		                </TR>					
+		                </TR>
+		                <TR>
+		                	<TD class="tabeladados">
+		                    <?php 
+		                    echo getTextoHTMLNegrito("Caractérísticas: "); 
+		                    ?>		                	
+		                	</TD>
+		                    <TD class="tabeladados">
+		                    <?php 
+		                    echo dominioPessoaCaracteristicas::getHtmlChecksBoxDetalhamento("", $vo->inCaracteristicas, 1); 
+		                    ?>
+		                    </TD>
+		                </TR>
+		                <TR >
+		                    <TD class="tabeladados" colspan=2 nowrap>
+		                    <?php 
+		                    echo "E-mail.SEI:" . getDetalhamentoHTML("", "", $vo->emailSEI); 
+		                    ?>
+		                    </TD>
+		                </TR>
+		                
 		                <?php
 						}				
 		                ?>

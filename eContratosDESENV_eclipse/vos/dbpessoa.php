@@ -72,6 +72,8 @@ class dbpessoa extends dbprocesso {
 		$atributosConsulta .= "," . getSQLCOALESCE($colecaoAtributoCoalesceNmPessoa,vopessoa::$nmAtrNome);
 		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrDoc;
 		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrObservacao;
+		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrInCaracteristicas;
+		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrEmailSEI;
 		$atributosConsulta .= "," . $nmTabelaPessoaVinculo . "." . vopessoavinculo::$nmAtrCd;
 		//$atributosConsulta .= "," . $nmTabelaContrato . "." . vocontrato::$nmAtrCdAutorizacaoContrato;
 	
@@ -91,10 +93,15 @@ class dbpessoa extends dbprocesso {
 	}
 	function consultarPessoaManter($filtro, $validarConsulta) {		
 		$nmTabela = vopessoa::getNmTabelaStatic($filtro->isHistorico());
+		$nmTabelaOrgaoGestor = vogestor::getNmTabelaStatic(false);
+		$nmTabelaPessoaOrgaoGestor = vopessoagestor::getNmTabelaStatic(false);
+		
 		$atributosConsulta = $nmTabela . "." . vopessoa::$nmAtrCd;
 		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrNome;
 		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrDoc;
 		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrEmail;
+		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrEmailSEI;
+		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrInCaracteristicas;
 		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrTel;
 		$atributosConsulta .= "," . vopessoavinculo::getNmTabela () . "." . vopessoavinculo::$nmAtrCd;
 		$atributosConsulta .= "," . vopessoavinculo::getNmTabela () . "." . vopessoavinculo::$nmAtrInAtribuicaoPAAP;
@@ -114,6 +121,12 @@ class dbpessoa extends dbprocesso {
 		
 		$queryFrom .= "\n LEFT JOIN " . $nmTabelaContrato;
 		$queryFrom .= "\n ON " . $nmTabela . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdPessoaContratada;
+				
+		$queryFrom .= "\n LEFT JOIN " . $nmTabelaPessoaOrgaoGestor;
+		$queryFrom .= "\n ON " . $nmTabela . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaPessoaOrgaoGestor . "." . vopessoagestor::$nmAtrCdPessoa;
+		
+		$queryFrom .= "\n LEFT JOIN " . $nmTabelaOrgaoGestor;
+		$queryFrom .= "\n ON " . $nmTabelaPessoaOrgaoGestor . "." . vopessoagestor::$nmAtrCdGestor . "=" . $nmTabelaOrgaoGestor . "." . vogestor::$nmAtrCd;
 		
 		// echo $querySelect."<br>";
 		// echo $queryFrom;
@@ -236,7 +249,7 @@ class dbpessoa extends dbprocesso {
 		//$vopessoa = new vopessoa();
 		$numDoc = documentoPessoa::getNumeroDocSemMascara($vopessoa->doc); 
 		$retorno = consultarPessoaDocumento($numDoc, null, false);
-		if(!isColecaoVazia($retorno)){
+		if(isAtributoValido($vopessoa->doc) && !isColecaoVazia($retorno)){
 			if(sizeof($retorno) > 1){
 				throw new excecaoGenerica("Existem mais de 1 registro com o mesmo documento $numdocformatado cadastrado. Regularize-os.");
 			}
@@ -388,8 +401,10 @@ class dbpessoa extends dbprocesso {
 		$retorno .= $this->getVarComoString ( $vopessoa->doc ) . ",";
 		$retorno .= $this->getVarComoString ( $vopessoa->tel ) . ",";
 		$retorno .= $this->getVarComoString ( $vopessoa->email ) . ",";
+		$retorno .= $this->getVarComoString ( $vopessoa->emailSEI ) . ",";		
 		$retorno .= $this->getVarComoString ( $vopessoa->endereco ) . ",";
 		$retorno .= $this->getVarComoString ( $vopessoa->obs ) . ",";
+		$retorno .= $this->getVarComoString ( $vopessoa->inCaracteristicas) . ",";
 		$retorno .= $this->getVarComoString ( $vopessoa->inPAT );
 		
 		$retorno .= $vopessoa->getSQLValuesInsertEntidade ();
@@ -430,15 +445,20 @@ class dbpessoa extends dbprocesso {
 			$sqlConector = ",";
 		}
 		
-		if ($vo->obs != null) {
-			$retorno .= $sqlConector . vopessoa::$nmAtrObservacao . " = " . $this->getVarComoString ( $vo->obs );
-			$sqlConector = ",";
-		}
-		
 		if ($vo->inPAT != null) {
 			$retorno .= $sqlConector . vopessoa::$nmAtrInPAT . " = " . $this->getVarComoString ( $vo->inPAT );
 			$sqlConector = ",";
 		}
+		
+		$retorno .= $sqlConector . vopessoa::$nmAtrObservacao . " = " . $this->getVarComoString ( $vo->obs );
+		$sqlConector = ",";
+		
+		
+		$retorno .= $sqlConector . vopessoa::$nmAtrInCaracteristicas . " = " . $this->getVarComoString ( $vo->inCaracteristicas );
+		$sqlConector = ",";
+		
+		$retorno .= $sqlConector . vopessoa::$nmAtrEmailSEI . " = " . $this->getVarComoString ( $vo->emailSEI );
+		$sqlConector = ",";
 		
 		$retorno = $retorno . $sqlConector . $vo->getSQLValuesUpdate ();
 		

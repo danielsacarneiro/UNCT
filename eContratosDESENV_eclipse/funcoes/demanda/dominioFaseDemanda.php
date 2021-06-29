@@ -10,6 +10,7 @@ class dominioFaseDemanda extends dominio {
 	static $CD_VISTO_SAD = "05";
 	static $CD_VISTO_PGE = "06";
 	static $CD_ASSINADO_DIGITAL = "07";
+	static $CD_ASSINADO_SEI = "08";
 		
 	static $DS_VISTO_JURIDICO = "Visado.ATJA";
 	static $DS_REVISAO_UNCT = "Revisado";
@@ -18,6 +19,7 @@ class dominioFaseDemanda extends dominio {
 	static $DS_VISTO_SAD = "Visto.SAD";
 	static $DS_VISTO_PGE = "Visto.PGE";
 	static $DS_ASSINADO_DIGITAL = "Assinado.Digital";
+	static $DS_ASSINADO_SEI = "Assinado.SEI";
 	
 	//usados somente pra consultas
 	static $CD_PUBLICADO = "PUBLICADO";
@@ -42,6 +44,7 @@ class dominioFaseDemanda extends dominio {
 				static::$CD_VISTO_JURIDICO => self::$DS_VISTO_JURIDICO,
 				static::$CD_ASSINADO_FISICO => self::$DS_ASSINADO_FISICO,
 				static::$CD_ASSINADO_DIGITAL => self::$DS_ASSINADO_DIGITAL,
+				static::$CD_ASSINADO_SEI => self::$DS_ASSINADO_SEI,
 				static::$CD_GARANTIA_PRESTADA => self::$DS_GARANTIA_PRESTADA,
 				static::$CD_VISTO_SAD => self::$DS_VISTO_SAD,
 				static::$CD_VISTO_PGE => self::$DS_VISTO_PGE,
@@ -61,6 +64,18 @@ class dominioFaseDemanda extends dominio {
 	
 		return $retorno;
 	}
+	
+	
+	static function getColecaoFaseContratoAssinado() {
+		$retorno = array (
+				static::$CD_ASSINADO_FISICO,
+				static::$CD_ASSINADO_DIGITAL,
+				static::$CD_ASSINADO_SEI,
+		);
+	
+		return $retorno;
+	}
+	
 	
 	/**
 	 * metodo que indica as caracteristicas do usuario que possuem permissao para alterar as opcoes indicadas do dominio

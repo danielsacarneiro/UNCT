@@ -66,6 +66,8 @@ function getCorpoMensagemDemandaContratoArray($pArray) {
 	$colunasAAcrescentar = $pArray[2];
 	$semTitulo = $pArray[3];
 	$nmFuncaoValidacaoDestaqueRegistro = $pArray[4];
+	$isAlertaPrioritario = $pArray[5];
+	$isMudarCorPorSituacaoDemanda = $pArray[6];
 	
 	//$colunas = incluirColunaColecao($colunas, 'SEI', voDemanda::$nmAtrProtocolo);
 	
@@ -96,7 +98,7 @@ function getCorpoMensagemDemandaContratoArray($pArray) {
 		$colunas = array_merge($colunas, $colunasAAcrescentar);
 	}
 
-	$pArray = array($assunto, $colecao, $colunas, false, $nmFuncaoValidacaoDestaqueRegistro);
+	$pArray = array($assunto, $colecao, $colunas, $isAlertaPrioritario, $nmFuncaoValidacaoDestaqueRegistro, $isMudarCorPorSituacaoDemanda);
 	return getCorpoMensagemPorColecaoArray($pArray);
 }
 
@@ -124,6 +126,7 @@ function getCorpoMensagemPorColecaoArray($pArray) {
 	$colunasAExibir = $pArray[2];
 	$isPrioritario = $pArray[3];
 	$nmFuncaoValidacaoDestaqueRegistro = $pArray[4];
+	$isCorCelulaIgualSituacaoDemanda = $pArray[5];
 	
 	if($colunasAExibir == null){
 		throw new excecaoGenerica("Indique pelo menos uma coluna dos dados consultados para exibir.");
@@ -168,13 +171,18 @@ function getCorpoMensagemPorColecaoArray($pArray) {
 				
 			$contador = 0;
 			foreach ( $colecao as $registro ) {
+				$voDemandaChave = new voDemanda();
+				$voDemandaChave->getDadosBanco ( $registro );
+				
 				//zera a cor da coluna para a padrao
 				$classColuna = $classColunaGeral;
+				//echoo("SITUACAO" . $voDemandaChave->situacao);
+				if($isCorCelulaIgualSituacaoDemanda && $voDemandaChave->situacao != null){
+					$classColuna = dominioSituacaoDemanda::getCorColuna($voDemandaChave->situacao);
+				}				
 
 				$mensagem .= "<TR>\n";
 				
-				$voDemandaChave = new voDemanda();
-				$voDemandaChave->getDadosBanco ( $registro );				
 				$mensagem .= "<TD class='$classColuna'>".getHTMLRadioButtonConsulta("rdb_consulta", "rdb_consulta", $voDemandaChave, false)."</TD>\n";
 
 				foreach ($colunasAExibir as $coluna){
@@ -213,7 +221,7 @@ function getCorpoMensagemPorColecaoArray($pArray) {
 						//executa qualquer funcao que vier dentro da validacao
 						$coluna_valor = $colunaTpValidacao($coluna_valor);						
 					}
-						
+											
 					//para o caso de ter dados do contrato
 					if(constantes::$CD_COLUNA_CONTRATO == $coluna[constantes::$CD_COLUNA_CHAVE]){
 
@@ -587,7 +595,11 @@ function enviarEmailATJA($enviarEmail, $count = 0){
 function enviarEmailUNCT($enviarEmail, $count = 0){	
 	$setor = "UNCT";
 	imprimeTituloalerta($enviarEmail, $setor);	
-		
+	
+	//demandas prioritarias
+	$mensagem .= getMensagemAltaPrioridade($count, dominioSetor::$CD_SETOR_UNCT, true);	
+	//demandas a revisar
+	$mensagem .= getMensagemPorSituacao($count, dominioSetor::$CD_SETOR_UNCT, dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_A_REVISAR);
 	//demandas com contratos a vencer
 	$mensagem .= getMensagemDemandasDeContratosAVencer($count);
 	$msgAproveitavel .= $mensagem;
@@ -714,7 +726,7 @@ function criarAlertasEmailGestorColecaoContratos($filtro=null, $log=null, $isCon
 	if($filtro == null){
 		$filtro = getFiltroContratosAVencer(constantes::$CD_NAO);
 	}
-	$log .= "<br>Início de verificação dos contratos a vencer que gerarão alertas.";
+	$log .= "<br>Início de verificação dos contratos a vencer que gerarão alertas - (". $filtro->qtdDiasParaVencimento . ") dias para o vencimento.";
 
 	$dbprocesso = new dbContratoInfo();
 	$colecao = $dbprocesso->consultarTelaConsultaConsolidacao ($filtro);

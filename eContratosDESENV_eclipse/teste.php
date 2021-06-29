@@ -10,25 +10,15 @@ inicio();
 $titulo = "TESTE de Funções UNCT";
 setCabecalho($titulo);
 
-$filtro = new filtroManterMensageria ( false );
-$filtro->isValidarConsulta = false;
-$filtro->inHabilitado = constantes::$CD_SIM;
-$filtro->inVerificarPeriodoVigente = constantes::$CD_SIM;
-//pega somente os alertas para os contratos que serao prorrogados
-$filtro->inSeraProrrogado = constantes::$CD_SIM;
-//$filtro->inVerificarFrequencia = constantes::$CD_NAO;
-$filtro->inVerificarFrequencia = voMensageria::$IN_VERIFICAR_FREQUENCIA;
-$filtro->cdHistorico = 'N';
-$filtro->tipo = dominioTipoMensageria::getColecaoTipoAlertaGestor();
-//echoo("Verificador de Frequência do email: '$filtro->inVerificarFrequencia'.");
-$log .= getLogComFlagImpressao("<br>Verificador de Frequência do email: '$filtro->inVerificarFrequencia'.");
+$vo = new voMensageria();
 
-$filtro->setaFiltroConsultaSemLimiteRegistro ();
+$filtro = getFiltroContratosAVencer(constantes::$CD_NAO);
+$log .= "<br>Início de verificação dos contratos a vencer que gerarão alertas - (". $filtro->qtdDiasParaVencimento . ") dias para o vencimento.";
 
-$dbMensageria = new dbMensageria ();
-$colecao = $dbMensageria->consultarTelaConsulta ( new voMensageria (), $filtro );
+$dbprocesso = new dbContratoInfo();
+$colecao = $dbprocesso->consultarTelaConsultaConsolidacao ($filtro);
 
-var_dump($colecao);
+//var_dump($colecao);
 
 ?>
 

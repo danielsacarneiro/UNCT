@@ -11,8 +11,66 @@ function getSequenciaAssunto($assunto, &$count = 0){
 	return $assunto;
 }
 
-function getMensagemAltaPrioridade(&$count = 0){
-	$assunto = "ALTA PRIORIDADE:";	
+function getMensagemPorSituacao(&$count = 0, $cdSetor=null, $cdSituacao=null){
+	if($cdSituacao==null){
+		$cdSituacao = dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_A_FAZER;
+	}
+
+	if($cdSetor==null){
+		$cdSetor = dominioSetor::$CD_SETOR_UNCT;
+	}
+	
+	$dsSetor = dominioSetor::getDescricao($cdSetor);
+	$dsSetor = "($dsSetor)";
+	
+	$dsSituacao = dominioSituacaoDemanda::getDescricao($cdSituacao);
+	$dsSituacao = "'$dsSituacao'";
+	
+	$assunto = "DEMANDAS $dsSituacao $dsSetor:";
+	$assunto = getSequenciaAssunto($assunto, $count);
+
+	try {
+		$voDemanda = new voDemanda ();
+		$dbprocesso = $voDemanda->dbprocesso;
+
+		$filtro = new filtroManterDemanda( false );
+		$filtro->isValidarConsulta = false;
+		$filtro->voPrincipal = $voDemanda;
+		// $filtro->voPrincipal = $voDemanda;
+		$filtro->setaFiltroConsultaSemLimiteRegistro ();
+		$filtro->vodemanda->situacao = $cdSituacao;
+		//$filtro->inDesativado = constantes::$CD_NAO;
+		//$filtro->vodemanda->tipo = array(dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL);
+		//$filtro->vodemanda->prioridade = dominioPrioridadeDemanda::$CD_PRIORI_ALTA;
+		$filtro->vodemanda->cdSetorDestino = $cdSetor;
+		$filtro->cdAtrOrdenacao = filtroManterDemanda::$NmColDtReferenciaSetorAtual;
+
+		$colecao = $dbprocesso->consultarTelaConsulta ( $voDemanda, $filtro );
+		$array =array(
+					constantes::$CD_COLUNA_CHAVE => 'RESPONSÁVEL',
+					constantes::$CD_COLUNA_VALOR => filtroManterDemanda::$NM_COL_NOME_RESP_UNCT,
+		);
+		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);
+
+		$pArray = array($assunto, $colecao, $colunasAAcrescentar, false, null, false, true);
+		$msg = getCorpoMensagemDemandaContratoArray($pArray);
+
+	} catch ( Exception $ex ) {
+		$msg = $ex->getMessage ();
+	}
+
+	return $msg;
+}
+
+function getMensagemAltaPrioridade(&$count = 0, $cdSetor=null, $comInfoCompletaDemanda=false){
+	if($cdSetor==null){
+		$cdSetor = dominioSetor::$CD_SETOR_ATJA;
+	}
+	
+	$dsSetor = dominioSetor::getDescricao($cdSetor);
+	$dsSetor = "($dsSetor)";
+	
+	$assunto = "ALTA PRIORIDADE $dsSetor:";
 	$assunto = getSequenciaAssunto($assunto, $count);
 	
 	try {
@@ -33,13 +91,25 @@ function getMensagemAltaPrioridade(&$count = 0){
 		//$filtro->vodemanda->tipo = array(dominioTipoDemanda::$CD_TIPO_DEMANDA_EDITAL);
 		$filtro->vodemanda->prioridade = dominioPrioridadeDemanda::$CD_PRIORI_ALTA;
 		$filtro->tipoExcludente = dominioTipoDemanda::$CD_TIPO_DEMANDA_PROCADM;
-		$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_ATJA;
+		$filtro->vodemanda->cdSetorDestino = $cdSetor;
 		$filtro->cdAtrOrdenacao = filtroManterDemanda::$NmColDtReferenciaSetorAtual;
-		
-		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Ano.PL', voProcLicitatorio::$nmAtrAno);
-		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Código.PL', voProcLicitatorio::$nmAtrCd, constantes::$TAMANHO_CODIGOS_SAFI);
-		
-		$msg = getCorpoMensagemDemandaPorColecao($assunto, $filtro, $colunasAAcrescentar, true);
+				
+		if($comInfoCompletaDemanda){
+			$colecao = $dbprocesso->consultarTelaConsulta ( $voDemanda, $filtro );			
+			$array =array(
+					constantes::$CD_COLUNA_CHAVE => 'RESPONSÁVEL',
+					constantes::$CD_COLUNA_VALOR => filtroManterDemanda::$NM_COL_NOME_RESP_UNCT,
+			);
+			$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);
+						
+			$pArray = array($assunto, $colecao, $colunasAAcrescentar, false, null, true);
+			$msg = getCorpoMensagemDemandaContratoArray($pArray);
+			//$msg = getCorpoMensagemDemandaContratoColecao($assunto, $colecao, $colunasAAcrescentar);
+		}else{
+			$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Ano.PL', voProcLicitatorio::$nmAtrAno);
+			$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Código.PL', voProcLicitatorio::$nmAtrCd, constantes::$TAMANHO_CODIGOS_SAFI);				
+			$msg = getCorpoMensagemDemandaPorColecao($assunto, $filtro, $colunasAAcrescentar, true);
+		}
 	
 	} catch ( Exception $ex ) {
 		$msg = $ex->getMessage ();

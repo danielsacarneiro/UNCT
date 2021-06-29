@@ -763,6 +763,21 @@ function existeItemNoArrayOuString($item, $arrayOuString){
 	return $retorno;
 }
 
+function existePeloMenosUmItemNoArrayOuString($item, $arrayOuString){
+	if(!is_array($item)){
+		return existeItemNoArrayOuString($item, $arrayOuString);
+	}else{
+		foreach ($item as $item_atual){
+			$retorno = existeItemNoArrayOuString($item_atual, $arrayOuString);
+			if($retorno){
+				break;
+			}
+		}
+	}
+
+	return $retorno;
+}
+
 function getAtributoFormularioHTML($name){
 	return @$_POST[$name];
 }
