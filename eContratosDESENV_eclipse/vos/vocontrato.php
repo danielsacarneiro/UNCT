@@ -20,7 +20,6 @@ include_once (caminho_util . "DocumentoPessoa.php");
 include_once ("voDemanda.php");
 include_once ("voContratoLicon.php");
 
-//include_once(caminho_vos."vogestor.php");
 //include_once(caminho_vos."vogestorpessoa.php");
 
 // .................................................................................................................
