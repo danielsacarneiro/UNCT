@@ -31,6 +31,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	static $NmTabContratoMater = "TAB_CONTRATO_MATER";
 	static $NmTabContratoATUAL = "TAB_CONTRATO_ATUAL";
 	static $NmTABDadosOrdemParalisacao = "NmTABDadosOrdemParalisacao";
+	static $NmTABDadosContratoOrdemParalisacao = "NmTABDadosContratoOrdemParalisacao";
 	static $NmTabDemandaContratoATUAL = "TAB_DEMANDA_CONTRATO_ATUAL";
 	
 	static $nmAtrQtdDiasParaVencimento = "nmAtrQtdDiasParaVencimento";
@@ -622,13 +623,14 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	
 	static function getAtributoDtFimVigenciaConsolidacao(){
 		$nmTabContratoATUAL = static::$NmTabContratoATUAL;
-		$nmTabDadosOrdemParalisacao = static::$NmTABDadosOrdemParalisacao;
+		//$nmTabDadosOrdemParalisacao = static::$NmTABDadosOrdemParalisacao;
 		
 		$nmTempAtributoDtVigenciaFim = $nmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato;
 		//passa a considerar a mudanca de vigencia devido a ordens de paralisacao
-		$arrayAtributosCoalesceOP[] = "$nmTabDadosOrdemParalisacao." . filtroConsultarContratoConsolidacao::$NmColDtFimVigenciaOP;
+		/*$arrayAtributosCoalesceOP[] = "$nmTabDadosOrdemParalisacao." . filtroConsultarContratoConsolidacao::$NmColDtFimVigenciaOP;
 		$arrayAtributosCoalesceOP[] = $nmTempAtributoDtVigenciaFim;
-		$nmTempAtributoDtVigenciaFim = getSQLCOALESCE($arrayAtributosCoalesceOP);
+		$nmTempAtributoDtVigenciaFim = getSQLCOALESCE($arrayAtributosCoalesceOP);*/		
+		
 		$nmTempAtributoDtVigenciaFim = filtroConsultarContratoConsolidacao::getComparacaoWhereDataVigencia($nmTempAtributoDtVigenciaFim);
 	
 		return $nmTempAtributoDtVigenciaFim;

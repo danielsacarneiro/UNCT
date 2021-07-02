@@ -6,11 +6,14 @@ include_once (caminho_util . "bibliotecaHTML.php");
 class filtroManterContrato extends filtroManter {
 	public $nmFiltro = "filtroManterContrato";
 	
+	public static $ID_REQ_AnoInicial = "ID_REQ_AnoInicial";
+	public static $ID_REQ_AnoFinal = "ID_REQ_AnoFinal";
+	
 	public static $NM_TAB_MAXSQCONTRATO = "NM_TAB_MAXSQCONTRATO";
 	public static $NM_TAB_PESSOA_GESTOR = "NM_TAB_PESSOA_GESTOR";
 	public static $ID_REQ_InGestor= "ID_REQ_InGestor";	
 	public static $ID_REQ_InPublicado = "ID_REQ_InPublicado";
-
+	
 	public static $nmAtrInTrazerConsolidadoPorVigencia = "nmAtrInTrazerConsolidadoPorVigencia";	
 	public static $nmAtrAnoArquivo = "nmAtrAnoArquivo";
 	public static $nmAtrTpDemanda = "nmAtrTpDemanda";
@@ -52,6 +55,9 @@ class filtroManterContrato extends filtroManter {
 	var $dtInicio2;
 	var $dtFim1;
 	var $dtFim2;
+	var $anoInicial;
+	var $anoFinal;
+	
 	var $dtInclusao;
 	
 	var $cdConsultarArquivo;
@@ -129,6 +135,9 @@ class filtroManterContrato extends filtroManter {
 		$this->dtFim2 = @$_POST ["dtFim2"];
 		$this->dtInclusao = @$_POST [voentidade::$nmAtrDhInclusao];
 		
+		$this->anoInicial = @$_POST [static::$ID_REQ_AnoInicial];
+		$this->anoFinal = @$_POST [static::$ID_REQ_AnoFinal];
+		
 		$this->cdConsultarArquivo = @$_POST ["cdConsultarArquivo"];
 		$this->inTrazerConsolidadoVigencia = @$_POST [self::$nmAtrInTrazerConsolidadoPorVigencia];		
 		$this->tpDemanda = @$_POST [self::$nmAtrTpDemanda];
@@ -197,6 +206,15 @@ class filtroManterContrato extends filtroManter {
 			$conector = "\n AND ";
 		}
 		
+		if ($this->anoInicial != null) {
+			$filtro = $filtro . $conector . $nmTabela . "." . vocontrato::$nmAtrAnoContrato . ">=" . $this->anoInicial;				
+			$conector = "\n AND ";
+		}
+		
+		if ($this->anoFinal != null) {
+			$filtro = $filtro . $conector . $nmTabela . "." . vocontrato::$nmAtrAnoContrato . "<=" . $this->anoFinal;
+			$conector = "\n AND ";
+		}
 		/*if ($this->tipo != null) {
 			$filtro = $filtro . $conector . $nmTabela . "." . vocontrato::$nmAtrTipoContrato . "='" . $this->tipo . "'";
 			
@@ -307,9 +325,6 @@ class filtroManterContrato extends filtroManter {
 			$conector = "\n AND ";
 		}
 		
-
-				
-		
 		if ($this->dtInicio1 != null || $this->dtInicio2 != null) {
 			$filtro = $filtro . $conector . getSQLIntervaloDatas ( $nmTabela, vocontrato::$nmAtrDtVigenciaInicialContrato, $this->dtInicio1, $this->dtInicio2 );
 			
@@ -317,8 +332,7 @@ class filtroManterContrato extends filtroManter {
 		}
 		
 		if ($this->dtFim1 != null || $this->dtFim2 != null) {
-			$filtro = $filtro . $conector . getSQLIntervaloDatas ( $nmTabela, vocontrato::$nmAtrDtVigenciaFinalContrato, $this->dtFim1, $this->dtFim2 );
-			
+			$filtro = $filtro . $conector . getSQLIntervaloDatas ( $nmTabela, vocontrato::$nmAtrDtVigenciaFinalContrato, $this->dtFim1, $this->dtFim2 );			
 			$conector = "\n AND ";
 		}
 		
@@ -438,14 +452,24 @@ class filtroManterContrato extends filtroManter {
 			$queryExists .= "$nmTabelaContratoTempLicon." . vocontrato::$nmAtrCdEspecieContrato . "=$nmTabela." . vocontrato::$nmAtrCdEspecieContrato;
 			$queryExists .= "\n AND ";
 			$queryExists .= "$nmTabelaContratoTempLicon." . vocontrato::$nmAtrSqEspecieContrato . "=$nmTabela." . vocontrato::$nmAtrSqEspecieContrato;
-			$queryExists .= "\n AND ";
-			//demanda de prorrogacao
-			$queryExists .= voContratoLicon::$nmAtrSituacao . " IN (" . getSQLStringFormatadaColecaoIN(array_keys(dominioSituacaoContratoLicon::getColecaoIncluidoSucesso())) . ")";
-			
-			$operadorTemp = "EXISTS";
-			if($atribLicon == 'N'){
+			//se a opcao for NAO, interessa apenas se esta cadastrado ou nao (independe da situacao)
+			//a situacao so serah relevante se a opcao selecionada for ERRO ou FORMALIZADO
+			if($atribLicon != constantes::$CD_NAO){
+				$operadorTemp = "EXISTS";
+				$queryExists .= "\n AND ";
+				$strSituacaoLicon = getSQLStringFormatadaColecaoIN(array_keys(dominioSituacaoContratoLicon::getColecaoIncluidoSucesso())); 
+				if($atribLicon == dominioSituacaoContratoLicon::$CD_SITUACAO_ERRO){
+					$operadorTemp = "NOT EXISTS";
+				}
+				$queryExists .= voContratoLicon::$nmAtrSituacao . " IN ($strSituacaoLicon)";
+			}else{
 				$operadorTemp = "NOT EXISTS";
 			}
+			
+			/*$operadorTemp = "EXISTS";
+			if($atribLicon == 'N'){
+				$operadorTemp = "NOT EXISTS";
+			}*/
 			$filtro = $filtro . $conector . " $operadorTemp ($queryExists)\n";
 			$conector = "\n AND ";
 		}

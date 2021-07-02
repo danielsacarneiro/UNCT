@@ -18,7 +18,7 @@ include_once(caminho_funcoes. "contrato/dominioProrrogacaoFiltroConsolidacao.php
 include_once (caminho_util . "biblioteca_htmlArquivo.php");
 include_once (caminho_util . "DocumentoPessoa.php");
 include_once ("voDemanda.php");
-
+include_once ("voContratoLicon.php");
 
 //include_once(caminho_vos."vogestor.php");
 //include_once(caminho_vos."vogestorpessoa.php");

@@ -351,7 +351,13 @@ function estatisticas(){
 				            <TH class="campoformulario" width="1%" nowrap>Licon:</TH>
 				            <TD class="campoformulario">
 				            <?php 	            
-				            echo $comboSimNao->getHtmlCombo(vocontrato::$nmAtrInLicomContrato,vocontrato::$nmAtrInLicomContrato, $filtro->licon, true, "camponaoobrigatorio", false,"");
+				            //echo $comboSimNao->getHtmlCombo(vocontrato::$nmAtrInLicomContrato,vocontrato::$nmAtrInLicomContrato, $filtro->licon, true, "camponaoobrigatorio", false,"");
+				            $comboLiconContrato = new select(dominioSituacaoContratoLicon::getColecaoFiltroManterContrato());
+				            echo $comboLiconContrato->getHtmlCombo(vocontrato::$nmAtrInLicomContrato,vocontrato::$nmAtrInLicomContrato, $filtro->licon, true, "camponaoobrigatorio", false,"");
+				            echo "| Ano Contrato: de" 
+							. getInputText(filtroManterContrato::$ID_REQ_AnoInicial, filtroManterContrato::$ID_REQ_AnoInicial, $filtro->anoInicial, constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO, 5) 
+				            . " a " 
+							. getInputText(filtroManterContrato::$ID_REQ_AnoFinal, filtroManterContrato::$ID_REQ_AnoFinal, $filtro->anoFinal, constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO, 5);
 				            ?>
 						</TR>        			
         			</TBODY>
@@ -503,6 +509,11 @@ function estatisticas(){
 	    $colecaoespecieLAI = dominioEspeciesContrato::getColecaoTermosQuePodemAlterarVigencia();
 	    $nmVariavelJSEspecieContratosLAI = "varNmVariavelJSEspecieContratosLAI";
 	    echo getColecaoComoVariavelJS($colecaoespecieLAI, $nmVariavelJSEspecieContratosLAI);
+	    
+	    $colecaoespecieLICON= dominioEspeciesContrato::getColecaoTermosLICON();
+	    $nmVariavelJSEspecieContratosLICON = "varNmVariavelJSEspecieContratosLICON";
+	    echo getColecaoComoVariavelJS($colecaoespecieLICON, $nmVariavelJSEspecieContratosLICON);
+	     
 	    ?>
 	    var pArrayIdCamposFiltroPortalTransparencia = new Array(
 	    		'<?=filtroManterContrato::$nmAtrTpVigencia?>',
@@ -517,6 +528,7 @@ function estatisticas(){
 	    		'<?=vocontrato::$nmAtrInLicomContrato?>',	    		
 	    		'<?=$pNmCampoCdEspecieContrato?>',
 	    		'<?=filtroManterContrato::$nmAtrIsTpVigenciaMAxSq?>',	    		
+	    		'<?=filtroManterContrato::$ID_REQ_AnoInicial?>',
 	    		);
 
 	    //alert(pArrayIdCamposFiltroPortalTransparencia);
@@ -526,7 +538,7 @@ function estatisticas(){
 		. getTextoLink("|FiltroPortalTransparencia", "#", "onClick='setFiltroContratosPortalTransparencia(pArrayIdCamposFiltroPortalTransparencia, varNmVariavelJSEspecieContratosLAI);'");
 		
 		$linkMontaFiltroLicon = "&nbsp;"
-				. getTextoLink("|FiltroLicon", "#", "onClick='setFiltroContratosLicon(pArrayIdCamposFiltroLicon, varNmVariavelJSEspecieContratosLAI);'");
+				. getTextoLink("|FiltroLicon", "#", "onClick='setFiltroContratosLicon(pArrayIdCamposFiltroLicon, varNmVariavelJSEspecieContratosLICON);'");
 		
 				/*$pArrayFiltroConsulta = array(
 						$filtro->getComboOrdenacao(),

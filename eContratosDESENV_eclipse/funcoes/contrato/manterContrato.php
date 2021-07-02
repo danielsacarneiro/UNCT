@@ -145,9 +145,15 @@ function isFormularioValido() {
 		return false;
 	}
 
-	if(!isPeriodoValido(campoDataAssinatura, campoDataInicial, false, true, false, true, isTA)){
-		//(pCampoDataInicial, pCampoDataFinal, pColocarFocoNaDataFinal, pInCampoDataFinalOpcional, pInCampoDataInicialObrigatoria, pSemMensagem, pInNaoPermitirDatasIguais) {
-		exibirMensagem("A data de assinatura deve ser anterior ao início da vigência.");
+	//a data de assinatura deve ser antes da vigencia para os casos de prorrogacao
+	var isprorrogacao = isItemCheckBoxSelecionado(nmCampoCaracteristicas, "<?=dominioTipoDemandaContrato::$CD_TIPO_PRORROGACAO?>");
+	if(isprorrogacao){
+		if(!isPeriodoValido(campoDataAssinatura, campoDataInicial, false, true, false, true, isTA)){
+			//(pCampoDataInicial, pCampoDataFinal, pColocarFocoNaDataFinal, pInCampoDataFinalOpcional, pInCampoDataInicialObrigatoria, pSemMensagem, pInNaoPermitirDatasIguais) {
+			exibirMensagem("A data de assinatura deve ser anterior ao início da vigência.");
+			return false;
+		}			
+	}else if(!isPeriodoValido(campoDataAssinatura, campoDataInicial, true, true)){
 		return false;
 	}
 

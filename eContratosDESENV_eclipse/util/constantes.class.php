@@ -3,6 +3,7 @@
 include_once 'normativos.php';
 
   Class constantes {	
+  	static $token_git_hub = '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';
 	
   	static $NM_SERVIDOR = 'sf300451';
 	static $nomeSistema = "e-CONTi";

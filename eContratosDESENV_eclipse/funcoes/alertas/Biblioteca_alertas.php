@@ -174,6 +174,14 @@ function getCorpoMensagemPorColecaoArray($pArray) {
 				$voDemandaChave = new voDemanda();
 				$voDemandaChave->getDadosBanco ( $registro );
 				
+				$voDemandaContratoinfo = new voContratoInfo();
+				$voDemandaContratoinfo->getDadosBanco ( $registro );
+				
+				$voChave = $voDemandaChave;
+				if(!isAtributoValido($voDemandaChave->cd)){
+					$voChave = $voDemandaContratoinfo;
+				}
+				
 				//zera a cor da coluna para a padrao
 				$classColuna = $classColunaGeral;
 				//echoo("SITUACAO" . $voDemandaChave->situacao);
@@ -183,7 +191,7 @@ function getCorpoMensagemPorColecaoArray($pArray) {
 
 				$mensagem .= "<TR>\n";
 				
-				$mensagem .= "<TD class='$classColuna'>".getHTMLRadioButtonConsulta("rdb_consulta", "rdb_consulta", $voDemandaChave, false)."</TD>\n";
+				$mensagem .= "<TD class='$classColuna'>".getHTMLRadioButtonConsulta("rdb_consulta", "rdb_consulta", $voChave, false)."</TD>\n";
 
 				foreach ($colunasAExibir as $coluna){
 					$coluna_valor = $registro[$coluna[constantes::$CD_COLUNA_VALOR]];
@@ -547,14 +555,30 @@ function getBotaoDetalharAlertas($vo=null){
 		$vo=new voDemanda();
 	}
 	
+	$voDemanda = new voDemanda();
+	$vocontratoinfo = new voContratoInfo();
+	
+	$nmFuncaoJSDemanda = getNmFuncaoDetalharJSPorVO($voDemanda);
+	$nmFuncaoJSContrato = getNmFuncaoDetalharJSPorVO($vocontratoinfo);
+	
 	$retorno .= getTagHTMLAbreJavaScript();
-	$retorno .= getFuncaoJSDetalharEmailPorVO($vo);
+	$retorno .= getFuncaoJSDetalharEmailPorVO($voDemanda);
+	$retorno .= getFuncaoJSDetalharEmailPorVO($vocontratoinfo);
 	$retorno .= getTagHTMLFechaJavaScript();
 	$retorno .= "\n<TABLE width='100%' id='table_tabeladados' class='tabeladados' cellpadding='2' cellspacing='2' BORDER=0>\n
 				<TBODY>";
-	$retorno .= "<TR>\n
-	<TD class='botaofuncao' colspan=$colspan>" . getBotaoDetalhar () . "</TD>\n
-				</TR>\n";
+	$retorno .= "<TR>\n";	
+	$retorno .= "<TD class='botaofuncao' colspan=$colspan>" 
+			//. getBotaoDetalhar ()
+			. getBotaoValidacaoAcesso("bttDetalharDemanda", "Det.Demanda", "botaofuncaop", false, false,true,false,"onClick='javascript:$nmFuncaoJSDemanda();' accesskey='d'")
+			. "</TD>\n";
+	
+	$retorno .= "<TD class='botaofuncao' colspan=$colspan>"
+			. getBotaoValidacaoAcesso("bttDetalharContrato", "Det.Contrato", "botaofuncaop", false, false,true,false,"onClick='javascript:$nmFuncaoJSContrato();' accesskey='c'")
+			. "</TD>\n";
+				
+			$retorno .= "</TR>\n";
+
 	$retorno .= "</TBODY>\n
 				</TABLE>";
 

@@ -120,6 +120,16 @@ include_once(caminho_util. "dominio.class.php");
 		);
 	}
 	
+	static function getColecaoTermosLICON(){
+		//considerando que o LICON trata das contratacoes pro TCE, se o contrato encerrou antes, melhor pra eles
+		//entao vamos considerar sempre o pior caso, e retirar o cadastro das recisoes, tendo em vista que elas recebem numeracao
+		//diferente de termos aditivos, e nao teria como numera-los no LICON
+		return array(
+				self::$CD_ESPECIE_CONTRATO_MATER,
+				self::$CD_ESPECIE_CONTRATO_TERMOADITIVO,
+		);
+	}
+	
 	static function getColecaoTermosNaoNumeradosPublicacao(){
 		return array(
 				self::$CD_ESPECIE_CONTRATO_MATER,

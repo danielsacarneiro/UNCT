@@ -200,7 +200,9 @@ class dbContratoInfo extends dbprocesso {
 						and contrato.ct_dt_assinatura <= TAB_OP.ct_dt_assinatura";
 		
 		$nmTabelaContrato = vocontrato::getNmTabela();
-		$nmTabContratoATUAL = "NM_TAB_CONTRATO_ATUAL_ORDEM_PARALISACAO";
+		//$nmTabContratoATUAL = "NM_TAB_CONTRATO_ATUAL_ORDEM_PARALISACAO";
+		$nmTabContratoATUAL = filtroConsultarContratoConsolidacao::$NmTABDadosContratoOrdemParalisacao;
+		
 		$nmTabINTERNA_OP = "NM_TAB_INTERNA_OP";
 		$nmDataFinal = vocontrato::$nmAtrDtVigenciaFinalContrato;
 		$nmDataInicial = vocontrato::$nmAtrDtVigenciaInicialContrato;
@@ -213,7 +215,9 @@ class dbContratoInfo extends dbprocesso {
 		$nmCdEspecie = vocontrato::$nmAtrCdEspecieContrato;
 		$nmSqEspecie = vocontrato::$nmAtrSqEspecieContrato;
 		$atributosinterno = "$nmAnoContrato,$nmTipoContrato,$nmNumeroContrato,$nmCdEspecie,$nmSqEspecie";
-		$whereInterno = vocontrato::$nmAtrCdEspecieContrato . " <> " . getVarComoString(dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_ORDEM_PARALISACAO);
+		
+		$whereInterno = vocontrato::$nmAtrCdEspecieContrato . " <> " . getVarComoString(dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_ORDEM_PARALISACAO)
+		. " AND " . vocontrato::$nmAtrCdEspecieContrato . " IN (" . getSQLStringFormatadaColecaoIN(dominioEspeciesContrato::getColecaoTermosQuePodemAlterarVigencia(), true) . ")";
 		
 		$query = " SELECT
 		$nmTabINTERNA_OP.$nmAnoContrato,
@@ -223,11 +227,12 @@ class dbContratoInfo extends dbprocesso {
 		$nmTabINTERNA_OP.$nmSqEspecie,
 		$nmTabContratoATUAL.$nmDataFinal,
 		$qtd,
-		ADDDATE($nmTabContratoATUAL.$nmDataFinal, INTERVAL $qtd day) AS " 
-		. filtroConsultarContratoConsolidacao::$NmColDtFimVigenciaOP
+		
+		ADDDATE($nmTabContratoATUAL.$nmDataFinal, INTERVAL $qtd day) AS " . filtroConsultarContratoConsolidacao::$NmColDtFimVigenciaOP
 		. "
 		FROM $nmTabelaContrato"
-		.static::getQueryContratoTermoAtual($nmTabelaContrato, $nmTabContratoATUAL, " INNER JOIN ", $whereInterno)
+		//o join nao pode ver vigencia porque ordem de paralisacao adia o contrato pra alem de sua vigencia
+		.static::getQueryContratoTermoAtual($nmTabelaContrato, $nmTabContratoATUAL, " INNER JOIN ", $whereInterno, false)
 		." INNER JOIN				
 				(SELECT $nmDataAssinatura, $atributosinterno,
 						SUM(DATEDIFF($nmDataFinal, $nmDataInicial)) as $qtd from $nmTabelaContrato
@@ -251,14 +256,22 @@ class dbContratoInfo extends dbprocesso {
 		
 	}
 	
-	static function getQueryContratoTermoAtual($nmTabelaPrincipal, $nmTabContratoATUAL, $joinTabs, $queryAdicionalWhereInterno=null){
+	static function getQueryContratoTermoAtual($nmTabelaPrincipal, $nmTabContratoATUAL, $joinTabs, $queryAdicionalWhereInterno=null, $mantendoFiltroGeral = true){
 		$nmTabContratoAtual = $nmTabContratoMAXSq = "TAB_CONTRATO_MAX_SQ";
 
-		//acrescenta o query adicional e mantem o campo substituicao pra substituir o filtro interno, quando necessario
+		$campo_subst = constantes::$CD_CAMPO_SUBSTITUICAO;
+				
 		if($queryAdicionalWhereInterno != null){
-			$queryAdicionalWhereInterno = " AND $queryAdicionalWhereInterno ";
+			if(!$mantendoFiltroGeral ){
+				$campo_subst = " WHERE ";
+			}else{
+				//acrescenta o query adicional e mantem o campo substituicao pra substituir o filtro interno, quando necessario
+				//o query externo ja terah o WHERE
+				$queryAdicionalWhereInterno = " AND $queryAdicionalWhereInterno ";				
+			}
 		}
-		$queryAdicionalWhereInterno = constantes::$CD_CAMPO_SUBSTITUICAO . " " . $queryAdicionalWhereInterno;
+		
+		$queryAdicionalWhereInterno = $campo_subst . " " . $queryAdicionalWhereInterno;
 				
 		$nmTabContratoInterna = vocontrato::getNmTabela();
 		$groupbyinterno = $nmTabContratoInterna . "." . vocontrato::$nmAtrAnoContrato . "," . $nmTabContratoInterna . "." . vocontrato::$nmAtrCdContrato . "," . $nmTabContratoInterna . "." . vocontrato::$nmAtrTipoContrato;
@@ -286,7 +299,7 @@ class dbContratoInfo extends dbprocesso {
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( $isHistorico );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
 		$nmTabelaPessoaGestorContratoInfo = filtroManterContrato::$NM_TAB_PESSOA_GESTOR;
-		$nmTabDadosOrdemParalisacao = filtroConsultarContratoConsolidacao::$NmTABDadosOrdemParalisacao;
+		//$nmTabDadosOrdemParalisacao = filtroConsultarContratoConsolidacao::$NmTABDadosOrdemParalisacao;
 		//echo "tabela vo: $nmTabela | tabela contrato_info: $nmTabelaContratoInfo";
 		
 		$nmTabContratoMater = filtroConsultarContratoConsolidacao::$NmTabContratoMater;
@@ -311,7 +324,7 @@ class dbContratoInfo extends dbprocesso {
 		//corrige para o caso da data ser inserida em formato errado antigo da planilha
 		$nmTempAtributoDtVigenciaInicio = filtroConsultarContratoConsolidacao::getComparacaoWhereDataVigencia($nmTempAtributoDtVigenciaInicio);
 		//somente a data de vigencia pode ser alterada pelas ordens de paralisacao
-		$nmTempAtributoDtVigenciaFim = filtroConsultarContratoConsolidacao::getAtributoDtFimVigenciaConsolidacao();		
+		$nmTempAtributoDtVigenciaFim = filtroConsultarContratoConsolidacao::getAtributoDtFimVigenciaConsolidacao();
 				
 		$arrayColunasRetornadas = array (
 				$nmTabela . "." . vocontrato::$nmAtrAnoContrato,
@@ -410,17 +423,6 @@ class dbContratoInfo extends dbprocesso {
 		
 		//$queryJoin .= "\n $jointemp JOIN ";
 		$queryJoin .= static::getQueryContratoTermoAtual($nmTabela, $nmTabContratoATUAL, $joinTabs);
-		/*$queryJoin .= " (SELECT " . $groupbyinterno . ", MAX(" . vocontrato::$nmAtrSqContrato . ") AS " . vocontrato::$nmAtrSqContrato
-		. " FROM " . $nmTabContratoInterna;
-		$queryJoin .= constantes::$CD_CAMPO_SUBSTITUICAO . " GROUP BY " . $groupbyinterno;
-		$queryJoin .= "\n) " . $nmTabContratoMAXSq;
-		$queryJoin .= "\n ON ";
-		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabContratoMAXSq . "." . vocontrato::$nmAtrAnoContrato;
-		$queryJoin .= "\n AND $nmTabela." . vocontrato::$nmAtrCdContrato . "=" . $nmTabContratoMAXSq . "." . vocontrato::$nmAtrCdContrato;
-		$queryJoin .= "\n AND $nmTabela." .vocontrato::$nmAtrTipoContrato . "=" . $nmTabContratoMAXSq . "." . vocontrato::$nmAtrTipoContrato;		
-		$queryJoin .= "\n LEFT JOIN $nmTabela $nmTabContratoATUAL";
-		$queryJoin .= "\n ON ";
-		$queryJoin .= $nmTabContratoMAXSq . "." . vocontrato::$nmAtrSqContrato . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrSqContrato;*/
 			
 		//pega as informacos em contrato_info do contrato atual
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaContratoInfo;
@@ -440,34 +442,9 @@ class dbContratoInfo extends dbprocesso {
 		$queryJoin .= $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrCdPessoaContratada;
 		
 		//PEGA A QTD DE DIAS SOMADAS DE ORDEM DE SUSPENSAO PRA ACRESCENTAR NO TERMO ATUAL
-		//a ordem de suspensao so terao efeito na vigencia quando forem o termo atual
+		//a ordem de suspensao so tera efeito na vigencia quando forem o termo atual
 		//posto que, havendo TA posterior, este ja estara considerando o periodo alterado pela ordem de paralisacao
-		$queryJoin .= static::getQueryContratoOrdemParalisacao($nmTabContratoATUAL, $nmTabDadosOrdemParalisacao, " LEFT JOIN ");
-		
-		//busca se ha proximo termo aditivo de prorrogacao
-			/*$strSQLCaseTemp = getSQLCASE($nmAtrTempContratoAtualCDEspecie
-					, getVarComoString(dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER)
-					, 1
-					, "($nmAtrTempContratoAtualSqEspecie + 1)");
-			$queryJoin .= "\n LEFT JOIN " . $nmTabelaDemandaContrato;
-			$queryJoin .= "\n ON ";
-			$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrAnoContrato;
-			$queryJoin .= "\n AND ";
-			$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrTipoContrato;
-			$queryJoin .= "\n AND ";
-			$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrCdContrato;
-			$queryJoin .= "\n AND ";
-			$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdEspecieContrato . "='" . dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_TERMOADITIVO . "' ";
-			$queryJoin .= "\n AND ";
-			//pega o proximo aditivo
-			$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato . "=$strSQLCaseTemp";				
-			
-			$queryJoin .= "\n LEFT JOIN " . $nmTabelaDemanda;
-			$queryJoin .= "\n ON ";
-			$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoDemanda . "=" . $nmTabelaDemanda . "." . voDemanda::$nmAtrAno;
-			$queryJoin .= "\n AND " . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdDemanda . "=" . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd;				
-			//$queryJoin .= "\n AND " . getSQLBuscarStringCampoSeparador(dominioTipoDemandaContrato::$CD_TIPO_PRORROGACAO, "$nmTabelaDemanda.".voDemanda::$nmAtrTpDemandaContrato, constantes::$CD_OPCAO_AND);
-			*/
+		//$queryJoin .= static::getQueryContratoOrdemParalisacao($nmTabContratoATUAL, $nmTabDadosOrdemParalisacao, " LEFT JOIN ");	
 			
 			$queryJoin .= "\n LEFT JOIN $nmTabDemandaContrato $nmTabDemandaContratoATUAL";
 			$queryJoin .= "\n ON ";

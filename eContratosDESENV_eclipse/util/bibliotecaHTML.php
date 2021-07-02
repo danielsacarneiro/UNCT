@@ -1416,17 +1416,22 @@ function getTagHTMLFechaFormulario(){
 	return "\n</FORM>\n";
 }
 
-function getFuncaoJSDetalharEmailPorVO($vo){
-	$nmServidor = constantes::$NM_SERVIDOR;
-	$caminhoPagina = 'http://$nmServidor/wordpress/UNCT/eContratosDESENV_eclipse/funcoes/' . $vo->getNmTabela() . "/";
-	return	getFuncaoJSDetalhar($caminhoPagina, true);
+function getNmFuncaoDetalharJSPorVO($vo){
+	return "detalhar" . $vo->getNmTabela();	
 }
 
-function getFuncaoJSDetalhar($caminhoPagina=null, $isNovaGuia=false){
+function getFuncaoJSDetalharEmailPorVO($vo){
+	$nmServidor = constantes::$NM_SERVIDOR;
+	$caminhoPagina = "http://$nmServidor/wordpress/UNCT/eContratosDESENV_eclipse/funcoes/" . $vo->getNmTabela() . "/";
+	$nmFuncaoJS = getNmFuncaoDetalharJSPorVO($vo);
+	return	getFuncaoJSDetalhar($caminhoPagina, true, $nmFuncaoJS);
+}
+
+function getFuncaoJSDetalhar($caminhoPagina=null, $isNovaGuia=false, $nmFuncaoJS = "detalhar"){
 	$retorno = "";
 	$isConsultaHML = getInConsultarHTMLString();
 	
-	$retorno = "\nfunction detalhar(isExcluir) {\n
+	$retorno = "\nfunction $nmFuncaoJS(isExcluir) {\n
 					var funcao ='';\n
 					var chave ='';\n
 					var lupa ='';\n

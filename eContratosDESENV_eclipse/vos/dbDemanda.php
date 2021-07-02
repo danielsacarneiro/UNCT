@@ -1159,13 +1159,13 @@ class dbDemanda extends dbprocesso {
 		}			
 	}	
 	
-	static function validarDadosContratoModificacao($voDemanda) {
-		if(isDemandaContratoModificacaoObrigatorio($voDemanda)){
-			$vocontratoDemanda = $voDemanda->getContrato();	
-			
+	static function validarDadosContratoModificacao($voDemanda, $vocontratoDemanda) {
+		if(isDemandaContratoModificacaoObrigatorio($voDemanda)){		
 			$filtro = new filtroManterContratoModificacao(false);
 			$filtro->vocontrato = $vocontratoDemanda;
 			$filtro->inDesativado = 'N';
+			$filtro->cdAtrOrdenacao = voContratoModificacao::$nmAtrSq;
+			$filtro->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
 			$dbcontratomod = new dbContratoModificacao();
 			$vocontratomod = new voContratoModificacao();
 			$colecao = $dbcontratomod->consultarTelaConsultaFiltro($filtro);
@@ -1175,7 +1175,21 @@ class dbDemanda extends dbprocesso {
 			if(isColecaoVazia($colecao) || $qtdtipoContratoMod > $tam){
 				throw new excecaoGenerica("Necessário regularizar o presente termo na função '".voContratoModificacao::getTituloJSP()."'. Exigem-se, pelo menos, $qtdtipoContratoMod registros de modificação.");
 			}
-		}	
+			
+			if(!isColecaoVazia($colecao)){
+				$registrobanco = $colecao[0];
+				$vocontratomod->getDadosBanco($registrobanco);
+				//$vocontratoDemanda = new vocontrato();
+				$vlGlobalmod = $vocontratomod->vlGlobalAtual;
+				$vlGlobal = $vocontratoDemanda->vlGlobalSQL;
+				if($vlGlobalmod != $vlGlobal){
+					throw new excecaoGenerica("Valor GLOBAL do contrato ('$vlGlobal') difere do calculado na função '".voContratoModificacao::getTituloJSP()
+							. "('$vlGlobalmod').|" . $vocontratoDemanda->getCodigoContratoFormatado(true) . ".");
+				}
+			}
+		}
+		
+		//throw new excecaoChaveConstraintViolada("PAU NA MOLEIRA");
 	}
 	
 	static function validarGenerico(&$vo) {
@@ -1307,7 +1321,7 @@ class dbDemanda extends dbprocesso {
 			
 					static::validarDadosContrato($vocontratoDemanda, $vocontratoInfo);
 			
-					static::validarDadosContratoModificacao($vo);
+					static::validarDadosContratoModificacao($vo, $vocontratoDemanda);
 					
 					static::validarDadosContratada($vo, $vocontratoDemanda);
 			

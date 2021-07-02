@@ -856,7 +856,8 @@ function getCorpoEmailAssinatura($pArrayCamposSubstituicao){
 			à autenticação do documento digital.$str_confirmar";
 	
 			if(isDataValidaNaoVazia($dtInicioVigencia)){
-				$retorno .= getTextoHTMLDestacado("<br>ATENÇÃO"). "<b>: sob pena de inadmissibilidade, a assinatura digital deve ocorrer até ".getTextoHTMLDestacado($dtAssinaturaDigital)."</b>.$str_confirmar";
+				//$retorno .= getTextoHTMLDestacado("<br><br>ATENÇÃO"). "<b>: sob pena de inadmissibilidade, a assinatura digital deve ocorrer até ".getTextoHTMLDestacado($dtAssinaturaDigital)."</b>." . getTextoConfirmacaoData();				
+				$retorno .= getTextoDataAssinaturaDigital($dtAssinaturaDigital);
 			}
 		}
 	
@@ -926,7 +927,9 @@ function getCorpoEmailAssinaturaSEI($pArrayCamposSubstituicao){
 			$msg  = getTextoHTMLDestacado("<br><br>*****ATENÇÃO: verifique a data de início de vigência do contrato.*****<br><br>");
 			throw new excecaoAtributoInvalido($msg);
 		}
-		$retorno .= getTextoHTMLDestacado("<br><br>ATENÇÃO"). "<b>: sob pena de inadmissibilidade, a assinatura digital deve ocorrer até ".getTextoHTMLDestacado($dtAssinaturaDigital)."</b>.";		
+		
+		//$retorno .= getTextoHTMLDestacado("<br><br>ATENÇÃO"). "<b>: sob pena de inadmissibilidade, a assinatura digital deve ocorrer até ".getTextoHTMLDestacado($dtAssinaturaDigital)."</b>.$str_confirmar";
+		$retorno .= getTextoDataAssinaturaDigital($dtAssinaturaDigital);
 			
 		if($vocontratoinfo->inTemGarantia == "S"){
 			$retorno .= "<br><br>Por oportuno, informamos que será necessária a PRESTAÇÃO, ou REFORÇO, se acréscimo, ".getTextoHTMLNegrito("DA GARANTIA CONTRATUAL").",
@@ -979,5 +982,12 @@ function getTextoEmailAConfirmar($texto="CONFIRMAR"){
 	return getTextoHTMLDestacado("[$texto, REMOVENDO ESSE TRECHO APÓS A CONFIRMAÇÃO]", "red", false, "amarelo");
 }
 
+function getTextoDataAssinaturaDigital($dtAssinaturaDigital){
+	return getTextoHTMLDestacado("<br><br>ATENÇÃO"). "<b>: sob pena de inadmissibilidade, a assinatura digital deve ocorrer até ".getTextoHTMLDestacado($dtAssinaturaDigital)."</b>." . getTextoEmailAConfirmar();
+}
+
+function getTextoConfirmacaoData(){
+	return getTextoHTMLDestacado("[NÃO HAVENDO DATA PRE-ESTABELECIDA, REMOVER TODO O TRECHO QUE MENCIONA A DATA EM QUESTÃO]", "red", false, "amarelo");
+}
 
 ?>

@@ -31,6 +31,14 @@ Class dominioSituacaoContratoLicon extends dominio{
 		);
 	}
 	
+	static function getColecaoFiltroManterContrato(){
+		return array(
+				constantes::$CD_SIM => "Formalizado",
+				self::$CD_SITUACAO_ERRO => "Pendência",
+				constantes::$CD_NAO => "Sem registro",
+		);
+	}
+	
 	static function getColecaoManter(){
 		/*$retorno = static::getColecaoComElementosARemover(array(self::$CD_SITUACAO_INCLUIDO_COM_OBS, self::$CD_SITUACAO_INCLUIDO));
 		if(isUsuarioAdmin()){
