@@ -2,9 +2,7 @@
 //header ('Content-type: text/html; charset=ISO-8859-1');
 include_once 'normativos.php';
 
-  Class constantes {	
-  	static $token_github = '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';
-	
+  Class constantes {
   	static $NM_SERVIDOR = 'sf300451';
 	static $nomeSistema = "e-CONTi";
 	static $TAMANHO_MAXIMO_NM_ARQUIVO = 40;
