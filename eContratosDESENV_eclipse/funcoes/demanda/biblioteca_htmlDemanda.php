@@ -888,8 +888,13 @@ function getCorpoEmailAssinaturaSEI($pArrayCamposSubstituicao){
 	$str_confirmar = $pArrayCamposSubstituicao[4];
 
 	$codigoContratoCompleto = getTextoHTMLNegrito(getCodigoContratoPublicacao($vocontrato));
+	
+	$dtInicioVigenciaBanco = $vocontrato->dtVigenciaInicial;
+	$dtInicioVigencia = getData($dtInicioVigenciaBanco);
+	if(isDataValidaNaoVazia($dtInicioVigenciaBanco) && isDataRetroativa($dtInicioVigencia)){
+		throw new excecaoGenerica("Contrato retroativo: assinatura não permitida no SEI. Início de vigência é $dtInicioVigencia.");		
+	}
 
-	$dtInicioVigencia = getData($vocontrato->dtVigenciaInicial);
 	if($dtInicioVigencia == null){
 		$dtAssinaturaDigital = $dtInicioVigencia = $str_confirmar;
 	}else{
