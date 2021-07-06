@@ -170,12 +170,13 @@ function selecionar() {
                 <TD class="campoformulario" ><INPUT type="text" id="<?=vopessoa::$nmAtrEmailSEI?>" name="<?=vopessoa::$nmAtrEmailSEI?>"  value="<?php echo($filtro->emailSEI);?>"  class="camponaoobrigatorio" size="40" ></TD>
             </TR>                                   
             <TR>
-                <TH class="campoformulario" nowrap>Unidade:</TH>
+                <TH class="campoformulario" nowrap>Órgão.Gestor:</TH>
                 <TD class="campoformulario" colspan="3">
                      <?php
-                    include_once(caminho_funcoes. "gestor/biblioteca_htmlGestor.php");
-                    echo getComboGestor(null, vogestor::$nmAtrCd, vogestor::$nmAtrCd, $filtro->cdGestor);                    
+                    /*include_once(caminho_funcoes. "gestor/biblioteca_htmlGestor.php");
+                    echo getComboGestor(null, vogestor::$nmAtrCd, vogestor::$nmAtrCd, $filtro->cdGestor);*/                    
                     ?>
+                    <INPUT type="text" id="<?=vogestor::$nmAtrDescricao?>" name="<?=vogestor::$nmAtrDescricao?>"  value="<?php echo($filtro->dsGestor);?>"  class="camponaoobrigatorio" size="40" >
             </TR>
        <?php
        echo getComponenteConsultaFiltro($vo->temTabHistorico, $filtro);
@@ -200,10 +201,10 @@ function selecionar() {
                   }
                   ?>                  
                     <TH class="headertabeladados" width="1%">Código</TH>
-                    <TH class="headertabeladados">Nome</TH>
+                    <TH class="headertabeladados" width="20%">Nome</TH>
                     <TH class="headertabeladados">Doc.</TH>
                     <TH class="headertabeladados">vínculo</TH>
-                    <TH class="headertabeladados" width="1%">Email</TH>
+                    <TH class="headertabeladados" width="50%">Email</TH>
                     <TH class="headertabeladados" width="10%">Telefone</TH>
                 </TR>
                 <?php								

@@ -17,6 +17,7 @@ class filtroManterPessoa extends filtroManter{
     var $nome="";
     var $email="";
     var $emailSEI="";
+    var $dsGestor="";
     var $cdvinculo="";
     var $inAtribuicaoPAAP ="";
     var $inAtribuicaoPregoeiro ="";
@@ -39,6 +40,7 @@ class filtroManterPessoa extends filtroManter{
 		$this->nome = @$_POST[vopessoa::$nmAtrNome];
 		$this->email = @$_POST[vopessoa::$nmAtrEmail];
 		$this->emailSEI = @$_POST[vopessoa::$nmAtrEmailSEI];
+		$this->dsGestor = @$_POST[vogestor::$nmAtrDescricao];
 		$this->cdvinculo = @$_POST[vopessoavinculo::$nmAtrCd];
 		$this->cdGestor = @$_POST[vogestor::$nmAtrCd];
 		$this->inAtribuicaoPAAP = @$_POST[vopessoavinculo::$nmAtrInAtribuicaoPAAP];
@@ -153,6 +155,16 @@ class filtroManterPessoa extends filtroManter{
 			. $nmTabela. "." .vopessoa::$nmAtrEmailSEI
 			. " LIKE '%"
 					. utf8_encode($this->emailSEI)
+					. "%'";
+		
+					$conector  = "\n AND ";
+		}
+		
+		if(isAtributoValido($this->dsGestor)){
+			$filtro = $filtro . $conector
+			. $nmTabelaOrgaoGestor. "." .vogestor::$nmAtrDescricao
+			. " LIKE '%"
+					. $this->dsGestor
 					. "%'";
 		
 					$conector  = "\n AND ";
