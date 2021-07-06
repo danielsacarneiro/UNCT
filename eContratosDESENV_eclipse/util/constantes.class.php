@@ -116,5 +116,6 @@ include_once 'normativos.php';
     static $ID_REQ_CHECK_RESPONSABILIDADE = 'checkResponsabilidade';
     
     static $ID_REQ_COLECAO_EXPORTAR_PLANILHA = "ID_REQ_COLECAO_EXPORTAR_PLANILHA";
+    static $CD_TEXTO_MARCADO = "CD_TEXTO_MARCADO";
 }
 ?>

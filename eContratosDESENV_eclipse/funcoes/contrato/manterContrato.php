@@ -147,14 +147,17 @@ function isFormularioValido() {
 
 	//a data de assinatura deve ser antes da vigencia para os casos de prorrogacao
 	var isprorrogacao = isItemCheckBoxSelecionado(nmCampoCaracteristicas, "<?=dominioTipoDemandaContrato::$CD_TIPO_PRORROGACAO?>");
-	if(isprorrogacao){
-		if(!isPeriodoValido(campoDataAssinatura, campoDataInicial, false, true, false, true, isTA)){
-			//(pCampoDataInicial, pCampoDataFinal, pColocarFocoNaDataFinal, pInCampoDataFinalOpcional, pInCampoDataInicialObrigatoria, pSemMensagem, pInNaoPermitirDatasIguais) {
-			exibirMensagem("A data de assinatura deve ser anterior ao início da vigência.");
+	var naoValidaData = isItemCheckBoxSelecionado(nmCampoCaracteristicas, "<?=dominioTipoDemandaContrato::$CD_NAO_VALIDA_DATA?>");
+	if(!naoValidaData){
+		if(isprorrogacao){
+			if(!isPeriodoValido(campoDataAssinatura, campoDataInicial, false, true, false, true, isTA)){
+				//(pCampoDataInicial, pCampoDataFinal, pColocarFocoNaDataFinal, pInCampoDataFinalOpcional, pInCampoDataInicialObrigatoria, pSemMensagem, pInNaoPermitirDatasIguais) {
+				exibirMensagem("A data de assinatura deve ser anterior ao início da vigência.");
+				return false;
+			}			
+		}else if(!isPeriodoValido(campoDataAssinatura, campoDataInicial, true, true)){
 			return false;
-		}			
-	}else if(!isPeriodoValido(campoDataAssinatura, campoDataInicial, true, true)){
-		return false;
+		}
 	}
 
 	var funcao = document.frm_principal.funcao.value;
@@ -165,8 +168,8 @@ function isFormularioValido() {
 		exibirMensagem("Selecione pelo menos um item 'Características'.");		
 		return false;		
 	}else if(!(isItemCheckBoxSelecionado(nmCampoCaracteristicas, "<?=constantes::$CD_OPCAO_NENHUM?>")
-					|| isItemCheckBoxSelecionado(nmCampoCaracteristicas, "<?=dominioTipoDemandaContrato::$CD_TIPO_PRORROGACAO?>")
-					|| isItemCheckBoxSelecionado(nmCampoCaracteristicas, "<?=dominioTipoDemandaContrato::$CD_NAO_VALIDA_DATA?>"))){
+					|| isprorrogacao
+					|| naoValidaData)){
 
 		var pArrayNomeCamposOriginais = [
 			"<?=vocontrato::$nmAtrVlMensalContrato?>",

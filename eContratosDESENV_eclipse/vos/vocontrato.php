@@ -290,10 +290,13 @@ include_once ("voContratoLicon.php");
     			"Dt.Assinatura" => $this->dtAssinatura,
     			"Dt.Vigencia.Final" => $this->dtVigenciaFinal,
     			"Dt.Vigencia.Inicial" => $this->dtVigenciaInicial,
-    			"Vl.Mensal"=>$this->vlMensal,
-    			"Vl.Global"=>$this->vlGlobal,
     			"Proc.Licitatorio"=> $this->procLic,
     	);
+    	
+    	if($this->tipo != dominioTipoContrato::$CD_TIPO_CONVENIO){
+    		$retorno["Vl.Mensal"] = $this->vlMensal;
+    		$retorno["Vl.Global"] = $this->vlGlobal;    		
+    	}
     	
     	if(in_array($this->cdEspecie, dominioEspeciesContrato::getColecaoTermosPublicacao())){
     		$retorno["Dt.Publicacao"] = $this->dtPublicacao;    		

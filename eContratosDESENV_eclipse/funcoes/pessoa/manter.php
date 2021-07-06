@@ -83,7 +83,8 @@ function isFormularioValido() {
 
 function cancela() {
 	//history.back();
-	location.href="index.php?consultar=S";	
+	//location.href="index.php?consultar=S";	
+	location.href="<?=getLinkRetornoConsulta()?>";
 }
 
 function confirmar() {
@@ -94,7 +95,7 @@ function confirmar() {
 }
 
 function validaVinculo(){
-	vinculo = document.frm_principal.<?=vopessoavinculo::$nmAtrCd?>.value;
+	var vinculo = document.frm_principal.<?=vopessoavinculo::$nmAtrCd?>.value;
 	if(vinculo == <?=dominioVinculoPessoa::$CD_VINCULO_RESPONSAVEL?>){
 		
 		if (!isCampoTextoValido(document.frm_principal.<?=vogestor::$nmAtrCd?>, true, 1, <?=TAMANHO_CODIGOS?>, true)){
@@ -108,10 +109,10 @@ function validaVinculo(){
 }
 
 function verificaVinculo(){
-	vinculo = document.frm_principal.<?=vopessoavinculo::$nmAtrCd?>.value;
-	campoDIVGestor = document.getElementById("<?=vogestor::getNmTabela()?>");
-	campoDIVContratado = document.getElementById("<?=vopessoa::$ID_REQ_DIV_CONTRATADO?>");
-	campoDIVServidor = document.getElementById("<?=vopessoa::$ID_REQ_DIV_SERVIDOR?>");
+	var vinculo = document.frm_principal.<?=vopessoavinculo::$nmAtrCd?>.value;
+	var campoDIVGestor = document.getElementById("<?=vogestor::getNmTabela()?>");
+	var campoDIVContratado = document.getElementById("<?=vopessoa::$ID_REQ_DIV_CONTRATADO?>");
+	var campoDIVServidor = document.getElementById("<?=vopessoa::$ID_REQ_DIV_SERVIDOR?>");
 	if(vinculo == <?=dominioVinculoPessoa::$CD_VINCULO_RESPONSAVEL?>){
 		campoDIVGestor.style.display = "";		
 	}
@@ -127,7 +128,7 @@ function verificaVinculo(){
 		campoDIVContratado.style.display = "none";
 	}	
 
-	pColecaoIDCamposRequired = ["<?=vopessoavinculo::$nmAtrInAtribuicaoPAAP?>",
+	var pColecaoIDCamposRequired = ["<?=vopessoavinculo::$nmAtrInAtribuicaoPAAP?>",
 		"<?=vopessoavinculo::$nmAtrInAtribuicaoPregoeiro?>"];
 	if(vinculo == <?=dominioVinculoPessoa::$CD_VINCULO_SERVIDOR?>){
 		//biblioteca_funcoes_principal.js
@@ -145,6 +146,14 @@ function iniciar(){
 
 function abrirJanelaAuxiliarGestor(){
 	//abrirJanelaAuxiliar('".$link."',true, false, false);\" "		
+}
+
+function alteracaoNome(){
+	var vinculo = document.getElementById("<?=vopessoavinculo::$nmAtrCd?>");
+	var isFornecedor = vinculo.value == <?=dominioVinculoPessoa::$CD_VINCULO_CONTRATADO?>;
+	if(isFornecedor){ 
+		exibirMensagem("Em se tratando de fornecedor, para identificação futura, inclua o nome antigo no campo de observações.");
+	}
 }
 
 </SCRIPT>
@@ -187,7 +196,7 @@ function abrirJanelaAuxiliarGestor(){
             </TR>-->                            
 			<TR>
                 <TH class="campoformulario" nowrap width=1%>Nome:</TH>
-                <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>" onChange="exibirMensagem('Para identificação futura, inclua o nome antigo no campo de observações.')" value="<?php echo($nome);?>"  class="camponaoobrigatorio" size="50" required></TD>
+                <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>" onChange="alteracaoNome();" value="<?php echo($nome);?>"  class="camponaoobrigatorio" size="50" required></TD>
                 <TH class="campoformulario" width="1%" nowrap>CNPJ/CPF:</TH>
                 <TD class="campoformulario" ><INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo(documentoPessoa::getNumeroDocFormatado($doc));?>" required class="camponaoobrigatorio" size="20" maxlength="18"></TD>
             </TR>

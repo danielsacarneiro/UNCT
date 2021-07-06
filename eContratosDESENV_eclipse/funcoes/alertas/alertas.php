@@ -693,7 +693,7 @@ function getMensagemDemandasDeContratosAVencer(&$count = 0){
 }
 
 function getMensagemDemandaIniciais(&$count = 0){
-	$assunto = "DEMANDAS A FAZER:";
+	$assunto = "DEMANDAS A PROVIDENCIAR ANDAMENTO:";
 	$assunto = getSequenciaAssunto($assunto, $count);
 	try {
 		$filtro = new filtroManterDemanda ( false );
@@ -707,15 +707,24 @@ function getMensagemDemandaIniciais(&$count = 0){
 				dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_ABERTA,
 				dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_EM_ANDAMENTO
 		);
-		/*$filtro->vodemanda->tipo = array_keys ( dominioTipoDemanda::getColecaoTipoDemandaSAD () );*/
+		//$filtro->vodemanda->tipo = dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO;
 		$filtro->tipoExcludente = array(
 				dominioTipoDemanda::$CD_TIPO_DEMANDA_LICON,
-				dominioTipoDemanda::$CD_TIPO_DEMANDA_PORTALTRANSPARENCIA
+				dominioTipoDemanda::$CD_TIPO_DEMANDA_PORTALTRANSPARENCIA,
+				dominioTipoDemanda::$CD_TIPO_DEMANDA_GESTAO_PESSOAS,
 		);
-
-		$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_UNCT;
-		//isto porque as monitoradas ja sao exibidas em outra colecao de mensagem
-		//$filtro->inMonitorar = constantes::$CD_NAO;
+		$filtro->cdSetorAtualExcludente = array(
+				dominioSetor::$CD_SETOR_DILC,
+				dominioSetor::$CD_SETOR_SAFI,
+				dominioSetor::$CD_SETOR_ATJA,
+		);
+		$filtro->prioridadeExcludente = dominioPrioridadeDemanda::$CD_PRIORI_BAIXA;
+		
+		$filtro->inCdResponsavelUNCT = constantes::$CD_SIM;
+		//$filtro->vodemanda->cdSetorDestino = dominioSetor::$CD_SETOR_UNCT;
+		//busca das demandas que estao a mais de 15 dias sem movimentacao
+		//$filtro->dtUltMovimentacaoInicial
+		$filtro->nuTempoVidaMinimoUltimaTram = 10;
 
 		$filtro->cdAtrOrdenacao = voDemanda::$nmAtrCdPessoaRespUNCT . "," . filtroManterDemanda::$NmColNuTempoUltimaTram;
 
@@ -736,6 +745,15 @@ function getMensagemDemandaIniciais(&$count = 0){
 				//constantes::$CD_COLUNA_NM_CLASSE_DOMINIO => "dominioSimNao", 				
 		);
 		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);
+		
+		$array =array(
+				constantes::$CD_COLUNA_CHAVE => 'SETOR',
+				constantes::$CD_COLUNA_TP_DADO => constantes::$CD_TP_DADO_DOMINIO,
+				constantes::$CD_COLUNA_NM_CLASSE_DOMINIO => "dominioSetor",
+				constantes::$CD_COLUNA_VALOR => voDemandaTramitacao::$nmAtrCdSetorDestino,
+		);
+		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);
+		
 				
 		$array =array(
 				constantes::$CD_COLUNA_CHAVE => 'PRAZO',

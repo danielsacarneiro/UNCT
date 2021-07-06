@@ -109,12 +109,24 @@ class filtroConsultarDemandaGestao extends filtroManterDemanda{
 	static function getSQLNuTempoVida($nmTabelaDemanda){
 		//return getDataSQLDiferencaDias(static::getSQLDataBaseTempoVida($nmTabelaDemanda), "DATE(".static::getSQLDataUltimaMovimentacao($nmTabelaTramitacao, $nmTabelaDemanda).")");
 		//return getDataSQLDiferencaDias(static::getSQLDataBaseTempoVida($nmTabelaDemanda), "DATE(now())");
-		return getDataSQLDiferencaDias(static::getSQLDataBaseTempoVida($nmTabelaDemanda), static::getSQLDataUltimoSuspiro($nmTabelaDemanda));		
+		$sqlDataTempoVida = static::getSQLDataBaseTempoVida($nmTabelaDemanda);
+		$sqlDataUltimoSuspiro = static::getSQLDataUltimoSuspiro($nmTabelaDemanda);
+		
+		$retorno = getSQLCASE($sqlDataTempoVida, $sqlDataUltimoSuspiro, getDataSQLDiferencaDias($sqlDataTempoVida, "DATE(now())"), getDataSQLDiferencaDias($sqlDataTempoVida, $sqlDataUltimoSuspiro));
+		
+		return $retorno;
+		//return getDataSQLDiferencaDias($sqlDataTempoVida, $sqlDataUltimoSuspiro);		
 	}
 	 	
 	static function getSQLNuTempoUltimaTram($nmTabelaTramitacao, $nmTabelaDemanda){
-		//return getDataSQLDiferencaDias(static::getSQLDataUltimaMovimentacao($nmTabelaTramitacao, $nmTabelaDemanda), "DATE(now())");
-		return getDataSQLDiferencaDias(static::getSQLDataUltimaMovimentacao($nmTabelaTramitacao, $nmTabelaDemanda), static::getSQLDataUltimoSuspiro($nmTabelaDemanda));		
+
+		$sqlDataUltMov = static::getSQLDataUltimaMovimentacao($nmTabelaTramitacao, $nmTabelaDemanda);
+		$sqlDataUltimoSuspiro = static::getSQLDataUltimoSuspiro($nmTabelaDemanda);
+		
+		$retorno = getSQLCASE($sqlDataUltMov, $sqlDataUltimoSuspiro, getDataSQLDiferencaDias($sqlDataUltMov, "DATE(now())"), getDataSQLDiferencaDias($sqlDataUltMov, $sqlDataUltimoSuspiro));
+		
+		return $retorno;			
+		//return getDataSQLDiferencaDias($sqlDataUltMov, $sqlDataUltimoSuspiro);		
 	}
 	
 	/**

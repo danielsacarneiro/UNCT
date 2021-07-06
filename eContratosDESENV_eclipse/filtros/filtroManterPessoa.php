@@ -15,6 +15,8 @@ class filtroManterPessoa extends filtroManter{
     var $cdGestor;
     var $doc="";
     var $nome="";
+    var $email="";
+    var $emailSEI="";
     var $cdvinculo="";
     var $inAtribuicaoPAAP ="";
     var $inAtribuicaoPregoeiro ="";
@@ -35,6 +37,8 @@ class filtroManterPessoa extends filtroManter{
 		//$this->cdGestor = @$_POST[vopessoa::$nmAtrCdGestor];
 		$this->doc = @$_POST[vopessoa::$nmAtrDoc];
 		$this->nome = @$_POST[vopessoa::$nmAtrNome];
+		$this->email = @$_POST[vopessoa::$nmAtrEmail];
+		$this->emailSEI = @$_POST[vopessoa::$nmAtrEmailSEI];
 		$this->cdvinculo = @$_POST[vopessoavinculo::$nmAtrCd];
 		$this->cdGestor = @$_POST[vogestor::$nmAtrCd];
 		$this->inAtribuicaoPAAP = @$_POST[vopessoavinculo::$nmAtrInAtribuicaoPAAP];
@@ -131,6 +135,26 @@ class filtroManterPessoa extends filtroManter{
 					. utf8_encode($this->nome)
 					. "%'";
 						
+					$conector  = "\n AND ";
+		}
+		
+		if(isAtributoValido($this->email)){
+			$filtro = $filtro . $conector
+			. $nmTabela. "." .vopessoa::$nmAtrEmail
+			. " LIKE '%"
+			. utf8_encode($this->email)
+					. "%'";
+		
+					$conector  = "\n AND ";
+		}
+		
+		if(isAtributoValido($this->emailSEI)){
+			$filtro = $filtro . $conector
+			. $nmTabela. "." .vopessoa::$nmAtrEmailSEI
+			. " LIKE '%"
+					. utf8_encode($this->emailSEI)
+					. "%'";
+		
 					$conector  = "\n AND ";
 		}
 		

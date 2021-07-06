@@ -170,7 +170,12 @@ Class voContratoInfo extends voentidade{
 				"Gestor" => $this->cdPessoaGestor,
 		);
 		
-		if(isAtributoValido($this->inCredenciamento) && $this->inCredenciamento == 'N'){
+		$validaDtProposta = false;
+		if($this->tipo != dominioTipoContrato::$CD_TIPO_CONVENIO){
+			$validaDtProposta = true;
+		}		
+		
+		if($validaDtProposta && isAtributoValido($this->inCredenciamento) && $this->inCredenciamento == 'N'){
 			$retorno["Dt.Proposta"] = $this->dtProposta;
 		}
 		

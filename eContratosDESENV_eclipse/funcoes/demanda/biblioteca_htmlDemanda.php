@@ -199,14 +199,17 @@ function isSituacaoDemandaFechada($situacao){
 	return array_key_exists($situacao, dominioSituacaoDemanda::getColecaoFechada());
 }
 
-function getAlertaOrientacao($msgAlerta, &$countATENCAO, $conectorAlerta = null, $link=null){		
+function getAlertaOrientacao($msgAlerta, &$countATENCAO, $conectorAlerta = null, $link=null, $cor="red"){		
 	
 	$texto = "ATENÇÃO$countATENCAO: $msgAlerta";
 	
 	if($link != null){
 		$texto = getTextoLink($texto, $link, null, false, true);
 	}else{
-		$texto = getTextoHTMLDestacado($texto, "red", true);
+		if($cor != constantes::$CD_TEXTO_MARCADO)
+			$texto = getTextoHTMLDestacado($texto, $cor, true);
+		else
+			$texto = getTextoHTMLDestacado($texto, "black", true, constantes::$CD_TEXTO_MARCADO);
 	}
 	
 	$html .= $conectorAlerta . $texto;
@@ -232,7 +235,7 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 		$exibirAlertas = !isSituacaoDemandaFechada($voDemanda->situacao);
 	}
 	//$exibirAlertas = false;
-	$conectorAlerta = "<BR>";
+	//$conectorAlerta = "<BR>";
 	
 	$html .= dominioTipoDemandaContrato::getHtmlChecksBoxDetalhamento($nmCampoTpDemandaContrato, $pCdOpcaoSelecionadaTpDemandaContrato, 2, true);
 	$isReajusteDemanda = $isVODemandaNaoNulo 
@@ -262,7 +265,7 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 		$exibirAlertaLembrete = !isColecaoVazia($colecaoLembreteContrato);		
 		if($exibirAlertaLembrete){
 			$textoLembrete = getTextoLembreteContrato($colecaoLembreteContrato);
-			$html .= getAlertaOrientacao("LEMBRETE " . $textoLembrete, $countATENCAO, $conectorAlerta);
+			$html .= getAlertaOrientacao("LEMBRETE " . $textoLembrete, $countATENCAO, $conectorAlerta, null, constantes::$CD_TEXTO_MARCADO);
 			$conectorAlerta = "<BR>";
 		}
 	}catch (excecaoGenerica $exLembrete){
@@ -972,7 +975,7 @@ function validaSEIExistente($SEI){
 
 function isDemandaContratoAssinado($voDemanda){
 	if(!isAtributoValido($voDemanda->fase)){
-		throw new excecaoAtributoInvalido("Atributo da demanda 'fase' nulo");
+		throw new excecaoAtributoInvalido("Atributo da demanda 'fase' não preenchido.<br>Indique a modalidade de assinatura do termo: se físico, digitla ou pelo SEI...");
 	}
 
 	return existePeloMenosUmItemNoArrayOuString(dominioFaseDemanda::getColecaoFaseContratoAssinado(), $voDemanda->fase);

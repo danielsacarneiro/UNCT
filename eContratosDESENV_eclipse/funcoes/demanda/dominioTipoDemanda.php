@@ -17,7 +17,7 @@ Class dominioTipoDemanda extends dominio{
 	static $CD_TIPO_DEMANDA_CONTROLE_AQUISICAO= 11;
 	static $CD_TIPO_DEMANDA_LICON = 12;
 	static $CD_TIPO_DEMANDA_PORTALTRANSPARENCIA = 13;
-	static $CD_TIPO_DEMANDA_FERIAS = 14;
+	static $CD_TIPO_DEMANDA_GESTAO_PESSOAS = 14;
 	static $CD_TIPO_DEMANDA_TAC = 15;
 	static $CD_TIPO_DEMANDA_SOLIC_COMPRA = 16;
 	static $CD_TIPO_DEMANDA_TERMOADESAO = 17;
@@ -39,7 +39,7 @@ Class dominioTipoDemanda extends dominio{
 	
 	static $DS_TIPO_DEMANDA_LICON = "LICON";
 	static $DS_TIPO_DEMANDA_PORTALTRANSPARENCIA = "Portal Transparência";
-	static $DS_TIPO_DEMANDA_FERIAS = "Gestao Pessoas";
+	static $DS_TIPO_DEMANDA_GESTAO_PESSOAS = "Gestao Pessoas";
 	static $DS_TIPO_DEMANDA_TAC = "TAC";
 	static $DS_TIPO_DEMANDA_SOLIC_COMPRA = 'Solic.Compra';
 	static $DS_TIPO_DEMANDA_TERMOADESAO = "Termo Adesão";
@@ -121,7 +121,7 @@ Class dominioTipoDemanda extends dominio{
 				
 				self::$CD_TIPO_DEMANDA_SOLIC_COMPRA => self::$DS_TIPO_DEMANDA_SOLIC_COMPRA,
 				
-				self::$CD_TIPO_DEMANDA_FERIAS => self::$DS_TIPO_DEMANDA_FERIAS,
+				self::$CD_TIPO_DEMANDA_GESTAO_PESSOAS => self::$DS_TIPO_DEMANDA_GESTAO_PESSOAS,
 				self::$CD_TIPO_DEMANDA_A_CLASSIFICAR => self::$DS_TIPO_DEMANDA_A_CLASSIFICAR,				
 		);
 	}

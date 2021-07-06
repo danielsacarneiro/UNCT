@@ -80,7 +80,8 @@ function excluir() {
 }
 
 function incluir() {
-	location.href="manter.php?funcao=<?=constantes::$CD_FUNCAO_INCLUIR?>";
+	//location.href="manter.php?funcao=<?=constantes::$CD_FUNCAO_INCLUIR?>";
+	location.href="<?=getLinkManter("manter.php", constantes::$CD_FUNCAO_INCLUIR)?>";
 }
 
 function alterar() {
@@ -93,7 +94,8 @@ function alterar() {
     }?>
     
 	chave = document.frm_principal.rdb_consulta.value;	
-	location.href="manter.php?funcao=<?=constantes::$CD_FUNCAO_ALTERAR?>&chave=" + chave;
+	//location.href="manter.php?funcao=<?=constantes::$CD_FUNCAO_ALTERAR?>&chave=" + chave;
+	location.href="<?=getLinkManter("manter.php",constantes::$CD_FUNCAO_ALTERAR)?>&chave=" + chave;
 
 }
 
@@ -160,9 +162,15 @@ function selecionar() {
                     echo $comboSimNao->getHtmlCombo(vopessoavinculo::$nmAtrInAtribuicaoPAAP,vopessoavinculo::$nmAtrInAtribuicaoPAAP, $filtro->inAtribuicaoPAAP, true, "camponaoobrigatorio", false,"");
                     
                     ?>
-            </TR>
+            </TR> 
+			<TR>
+                <TH class="campoformulario" nowrap>Email:</TH>
+                <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vopessoa::$nmAtrEmail?>" name="<?=vopessoa::$nmAtrEmail?>"  value="<?=$filtro->email;?>"  class="camponaoobrigatorio" size="40" ></TD>
+                <TH class="campoformulario" nowrap width="1%">Email.SEI:</TH>
+                <TD class="campoformulario" ><INPUT type="text" id="<?=vopessoa::$nmAtrEmailSEI?>" name="<?=vopessoa::$nmAtrEmailSEI?>"  value="<?php echo($filtro->emailSEI);?>"  class="camponaoobrigatorio" size="40" ></TD>
+            </TR>                                   
             <TR>
-                <TH class="campoformulario" nowrap>Gestor:</TH>
+                <TH class="campoformulario" nowrap>Unidade:</TH>
                 <TD class="campoformulario" colspan="3">
                      <?php
                     include_once(caminho_funcoes. "gestor/biblioteca_htmlGestor.php");

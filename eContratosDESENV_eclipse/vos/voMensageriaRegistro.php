@@ -125,7 +125,7 @@ class voMensageriaRegistro extends voentidade {
 		
 		$retorno .= "<br><br>Tendo em vista sua <b>improrrogabilidade</b>, havendo interesse da SEFAZ por sua manutenção, requere-se provocação tempestiva, via SEI, à SAFI,
 		pleiteando a abertura de novo processo licitatório.	
-		<br><br><b>Excepcionalmente, permite-se a análise extraordinária de uma nova prorrogação, desde que atendidos os requisitos legais.</b>";
+		<br><br><b>Excepcionalmente, permite-se a análise extraordinária da manutenção dos serviços, desde que atendidos os requisitos legais.</b>";
 		 
 		$retorno .= static::getMensagemCorpoGeral($numFrequencia);
 		 

@@ -79,6 +79,7 @@ class filtroManterDemanda extends filtroManter{
 	var $inOR_AND_Fase;
 	var $fasePlanilha;
 	var $tipoExcludente;
+	var $cdSetorAtualExcludente;
 	var $prioridadeExcludente;
 	var $cdClassificacaoContrato;
 	var $inMaoDeObra = "";
@@ -412,19 +413,32 @@ class filtroManterDemanda extends filtroManter{
 				$strComparacaoDestino = " = $cdSetorDestino";
 			}
 			
-			$filtro = $filtro . $conector
+			$filtro = $filtro . $conector . $this->getSetorAtualSQLComparacao($nmTabela, $nmTabelaTramitacao, $strComparacaoDestino);
+				
+			/*$filtro = $filtro . $conector
 			. " (("
-			. $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrCdSetorDestino
-			. " IS NULL AND "
-			.$nmTabela. "." .voDemanda::$nmAtrCdSetor
-			. $strComparacaoDestino			
-			. " ) OR ("
-			. $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrCdSetorDestino
-			. " IS NOT NULL AND "
-			. $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrCdSetorDestino
-			. $strComparacaoDestino
-			. "))";
-										
+					. $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrCdSetorDestino
+					. " IS NULL AND "
+							.$nmTabela. "." .voDemanda::$nmAtrCdSetor
+							. $strComparacaoDestino
+							. " ) OR ("
+									. $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrCdSetorDestino
+									. " IS NOT NULL AND "
+											. $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrCdSetorDestino
+											. $strComparacaoDestino
+											. "))";*/
+		
+			$conector  = "\n AND ";
+		}
+		
+		if(isAtributoValido($this->cdSetorAtualExcludente) && !$this->isAtributoArrayVazio($this->cdSetorAtualExcludente)){			
+			$comparar = " <> " . $this->cdSetorAtualExcludente;
+			if(is_array($this->cdSetorAtualExcludente)){
+				$comparar = " NOT IN (" . getSQLStringFormatadaColecaoIN($this->cdSetorAtualExcludente) . ")";
+			}
+			
+			$filtro = $filtro . $conector . $this->getSetorAtualSQLComparacao($nmTabela, $nmTabelaTramitacao, $comparar);			
+														
 			$conector  = "\n AND ";
 		}
 		
@@ -1174,6 +1188,24 @@ class filtroManterDemanda extends filtroManter{
 		
 		return $varAtributos;
 	}	
+	
+	function getSetorAtualSQLComparacao($nmTabelaDemanda, $nmTabelaTramitacao, $strComparacaoDestino){
+		$retorno = 
+			" (("
+					. $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrCdSetorDestino
+					. " IS NULL AND "
+							.$nmTabelaDemanda. "." .voDemanda::$nmAtrCdSetor
+							. $strComparacaoDestino
+							. " ) OR ("
+									. $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrCdSetorDestino
+									. " IS NOT NULL AND "
+											. $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrCdSetorDestino
+											. $strComparacaoDestino
+											. "))";
+		
+			return $retorno;
+	
+	}
 
 }
 
