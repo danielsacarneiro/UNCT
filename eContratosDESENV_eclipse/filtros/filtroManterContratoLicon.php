@@ -6,7 +6,8 @@ class filtroManterContratoLicon extends filtroManter {
 	//public static $nmFiltro = "filtroManterContratoLicon";
 	public $nmFiltro = "filtroManterContratoLicon";
 	
-	static $ID_REQ_SituacaoExceto = "ID_REQ_SituacaoExceto"; 
+	static $ID_REQ_SituacaoExceto = "ID_REQ_SituacaoExceto";
+	static $ID_REQ_DtPublicacaoFinal = "ID_REQ_DtPublicacaoFinal";
 	
 	var $cdDemanda = "";
 	var $anoDemanda = "";
@@ -21,7 +22,8 @@ class filtroManterContratoLicon extends filtroManter {
 	
 	var $situacao = "";
 	var $situacaoExceto = "";
-	var $dtPublicacao = "";	
+	var $dtPublicacao = "";
+	var $dtPublicacaoFinal = "";
 	
 	function getFiltroFormulario() {
 		$this->anoDemanda = @$_POST [voContratoLicon::$nmAtrAnoDemanda];
@@ -38,6 +40,7 @@ class filtroManterContratoLicon extends filtroManter {
 		$this->situacao = @$_POST [voContratoLicon::$nmAtrSituacao];
 		$this->situacaoExceto = @$_POST [static::$ID_REQ_SituacaoExceto];
 		$this->dtPublicacao = @$_POST [vocontrato::$nmAtrDtPublicacaoContrato];
+		$this->dtPublicacaoFinal = @$_POST [static::$ID_REQ_DtPublicacaoFinal];
 		
 		if ($this->cdOrdenacao == null) {
 			$this->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
@@ -128,7 +131,14 @@ class filtroManterContratoLicon extends filtroManter {
 		
 		if ($this->dtPublicacao != null) {
 		
-			$filtro = $filtro . $conector . $nmTabelaContrato . "." . vocontrato::$nmAtrDtPublicacaoContrato . " = " . getVarComoData($this->dtPublicacao);
+			$filtro = $filtro . $conector . $nmTabelaContrato . "." . vocontrato::$nmAtrDtPublicacaoContrato . " >= " . getVarComoData($this->dtPublicacao);
+		
+			$conector = "\n AND ";
+		}
+		
+		if ($this->dtPublicacaoFinal != null) {
+		
+			$filtro = $filtro . $conector . $nmTabelaContrato . "." . vocontrato::$nmAtrDtPublicacaoContrato . " <= " . getVarComoData($this->dtPublicacaoFinal);
 		
 			$conector = "\n AND ";
 		}

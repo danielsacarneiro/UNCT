@@ -68,7 +68,7 @@ function excluir() {
 }
 
 function incluir() {
-	location.href="manter.php?funcao=<?=constantes::$CD_FUNCAO_INCLUIR?>";
+	location.href="<?=getLinkManter("manter.php", constantes::$CD_FUNCAO_INCLUIR)?>";
 }
 
 function alterar() {
@@ -81,8 +81,7 @@ function alterar() {
     }?>
     
 	chave = document.frm_principal.rdb_consulta.value;	
-	location.href="manter.php?funcao=<?=constantes::$CD_FUNCAO_ALTERAR?>&chave=" + chave;
-
+	location.href="<?=getLinkManter("manter.php",constantes::$CD_FUNCAO_ALTERAR)?>&chave=" + chave;
 }
 
 </SCRIPT>
@@ -177,7 +176,16 @@ function alterar() {
 	            			onkeyup="formatarCampoData(this, event, false);" 
 	            			class="camponaoobrigatorio" 
 	            			size="10" 
-	            			maxlength="10">	            
+	            			maxlength="10">
+	            			a
+	            	            	<INPUT type="text" 
+	            	       id="<?=filtroManterContratoLicon::$ID_REQ_DtPublicacaoFinal?>" 
+	            	       name="<?=filtroManterContratoLicon::$ID_REQ_DtPublicacaoFinal?>" 
+	            			value="<?php echo(getData($filtro->dtPublicacaoFinal));?>"
+	            			onkeyup="formatarCampoData(this, event, false);" 
+	            			class="camponaoobrigatorio" 
+	            			size="10" 
+	            			maxlength="10">
 				</TD>				
             </TR>            
                         

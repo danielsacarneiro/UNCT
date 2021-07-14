@@ -106,9 +106,9 @@ include_once(caminho_lib. "dbprocesso.obj.php");
   		$assunto = "$assunto:$codigo.";
   		
   		if(!$isContratoImprorrogavel){
-  			$msg .= voMensageriaRegistro::getMensagemGestor($codigo,$numFrequencia);
+  			$msg .= voMensageriaRegistro::getMensagemGestor($codigo,$numFrequencia, $vocontratoinfo);
   		}else{
-  			$msg .= voMensageriaRegistro::getMensagemGestorContratoImprorrogavel($codigo,$numFrequencia);
+  			$msg .= voMensageriaRegistro::getMensagemGestorContratoImprorrogavel($codigo,$numFrequencia, $vocontratoinfo);
   		}
   		
   		//$msg .= "<br>O contrato vencerá em dias.";
@@ -136,26 +136,6 @@ include_once(caminho_lib. "dbprocesso.obj.php");
 		//echoo($vomensageria->toString());
 		
 		return $log;
-  	}
-  	
-  	/**
-  	 * @deprecated
-  	 * @param unknown $codigoContrato
-  	 * @param unknown $numFrequencia
-  	 * @return string
-  	 */
-  	static function getMensagemGestor($codigoContrato, $numFrequencia){  		
-  		return voMensageriaRegistro::getMensagemGestor($codigoContrato, $numFrequencia);
-  	}
-  	
-  	/**
-  	 * @deprecated
-  	 * @param unknown $codigoContrato
-  	 * @param unknown $numFrequencia
-  	 * @return string
-  	 */
-  	static function getMensagemGestorContratoImprorrogavel($codigoContrato, $numFrequencia){
-  		return voMensageriaRegistro::getMensagemGestorContratoImprorrogavel($codigoContrato, $numFrequencia);
   	}
   	 
   	function getSQLValuesInsert($vo){

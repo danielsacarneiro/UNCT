@@ -12,7 +12,7 @@
                     <TH class="headertabeladados" width="1%">Espécie</TH>
                     <TH class="headertabeladados" width="1%">Proc.Lic</TH>
 					<TH class="headertabeladados" width="20%">Contratada</TH>
-                    <TH class="headertabeladados" width="70%">Objeto</TH>						
+                    <TH class="headertabeladados" width="80%">Objeto</TH>						
                     <TH class="headertabeladados" width="1%" nowrap>Assinatura</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Publicação</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Início</TH>

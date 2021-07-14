@@ -96,7 +96,10 @@ include_once ("voContratoLicon.php");
 		var $dtVigenciaInicial;
 		var $dtVigenciaFinal;	
 		var $vlMensal;
-		var $vlGlobal ; 			
+		var $vlMensalSQL;
+		var $vlGlobal ; 
+		var $vlGlobalSQL;	
+		
 		var $procLic ;			
 		var $cdProcLic ;
 		var $anoProcLic ;

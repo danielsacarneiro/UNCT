@@ -637,7 +637,9 @@ class dbcontrato extends dbprocesso {
 			$naovalidadata = isAtributoValido($vo->inCaracteristicas) && existeItemNoArrayOuString(dominioTipoDemandaContrato::$CD_NAO_VALIDA_DATA, $caracteristicas);
 			
 			if(!$naovalidadata && !isDiaUtil($dtAssinatura)){
-				throw new excecaoAtributoInvalido("Data de assinatura inválida: verifique se o dia é útil.");
+				$msg = "Data de assinatura inválida: verifique se o dia é útil.";
+				$msg .= "<br><u>ATENÇÃO</u>: se o documento já foi assinado, marque, em 'Características', a opção '".dominioTipoDemandaContrato::$DS_NAO_VALIDA_DATA."'";
+				throw new excecaoAtributoInvalido($msg);
 			}
 				
 		}

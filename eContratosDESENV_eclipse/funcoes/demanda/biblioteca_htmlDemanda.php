@@ -898,7 +898,11 @@ function getCorpoEmailAssinaturaSEI($pArrayCamposSubstituicao){
 	if($dtInicioVigencia == null){
 		$dtAssinaturaDigital = $dtInicioVigencia = $str_confirmar;
 	}else{
-		$dtAssinaturaDigital = somarOuSubtrairDias($dtInicioVigencia, 1, "-", false);
+		$dtAssinaturaDigital = $dtInicioVigencia;
+		//somente o contrato mater permite que a assinatura seja igual ao inicio da vigencia
+		if($vocontrato->cdEspecie != dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER){
+			$dtAssinaturaDigital = somarOuSubtrairDias($dtInicioVigencia, 1, "-", false);
+		}
 	}
 	
 	$linkATI = "http://www.portaisgoverno.pe.gov.br/web/site-ati/cadusuarioorgao";

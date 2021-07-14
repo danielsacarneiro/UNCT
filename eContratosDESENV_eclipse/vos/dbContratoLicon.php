@@ -26,6 +26,8 @@ include_once 'voContratoLicon.php';
   				$nmTabelaContrato . "." . vocontrato::$nmAtrDtVigenciaInicialContrato,
   				$nmTabelaContrato . "." . vocontrato::$nmAtrDtVigenciaFinalContrato,
   				$nmTabelaContrato . "." . vocontrato::$nmAtrProcessoLicContrato,
+  				$nmTabelaContrato . "." . vocontrato::$nmAtrVlMensalContrato,
+  				$nmTabelaContrato . "." . vocontrato::$nmAtrVlGlobalContrato,
   				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
   				//$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
   				getSQLCOALESCE($colecaoAtributoCoalesceNmPessoa,vopessoa::$nmAtrNome),

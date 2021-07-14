@@ -452,16 +452,20 @@ class filtroManterContrato extends filtroManter {
 			$queryExists .= "$nmTabelaContratoTempLicon." . vocontrato::$nmAtrCdEspecieContrato . "=$nmTabela." . vocontrato::$nmAtrCdEspecieContrato;
 			$queryExists .= "\n AND ";
 			$queryExists .= "$nmTabelaContratoTempLicon." . vocontrato::$nmAtrSqEspecieContrato . "=$nmTabela." . vocontrato::$nmAtrSqEspecieContrato;
-			//se a opcao for NAO, interessa apenas se esta cadastrado ou nao (independe da situacao)
-			//a situacao so serah relevante se a opcao selecionada for ERRO ou FORMALIZADO
+			$queryExists .= "\n AND ";
+			$queryExists .= "$nmTabelaLicon." . voContratoLicon::$nmAtrInDesativado . "='N'";
+				//se a opcao for NAO, interessa apenas se esta cadastrado ou nao (independe da situacao)
+			//a situacao so serah relevante se a opcao selecionada for PENDENCIA ou FORMALIZADO
 			if($atribLicon != constantes::$CD_NAO){
 				$operadorTemp = "EXISTS";
 				$queryExists .= "\n AND ";
 				$strSituacaoLicon = getSQLStringFormatadaColecaoIN(array_keys(dominioSituacaoContratoLicon::getColecaoIncluidoSucesso())); 
 				if($atribLicon == dominioSituacaoContratoLicon::$CD_SITUACAO_ERRO){
-					$operadorTemp = "NOT EXISTS";
+					//se a consulta for por pendencia, basta procurar os que NAO ESTAO incluidos com sucesso, mas que foram registrados
+					$not = "NOT";
 				}
-				$queryExists .= voContratoLicon::$nmAtrSituacao . " IN ($strSituacaoLicon)";
+				
+				$queryExists .= voContratoLicon::$nmAtrSituacao . " $not IN ($strSituacaoLicon)";
 			}else{
 				$operadorTemp = "NOT EXISTS";
 			}

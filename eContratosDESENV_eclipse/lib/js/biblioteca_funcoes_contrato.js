@@ -548,6 +548,7 @@ function setFiltroContratosLicon(pArrayIdCampos, pArrayEspeciesContrato){
 	var campoEspecieContrato = document.getElementById(pArrayIdCampos[2]);
 	var campoSqMaxEspecie = document.getElementById(pArrayIdCampos[3]);
 	var campoAnoInicial = document.getElementById(pArrayIdCampos[4]);
+	var campoDtAssinaturaInicial = document.getElementById(pArrayIdCampos[5]);
 	
 	//biblio...principal
 	limparFormularioGeral();
@@ -556,6 +557,7 @@ function setFiltroContratosLicon(pArrayIdCampos, pArrayEspeciesContrato){
 	campoPublicado.value = 'S';
 	campoInLicon.value = 'N';
 	campoAnoInicial.value = 2013;
+	campoDtAssinaturaInicial.value = '01/01/2020';
 	//campoSqMaxEspecie.value = 'S';
 	
 	exibirMensagem("Para refinar a busca, selecionar o ano e o tipo de contrato (Ex. C-SAFI, C-PROFISCO...).\nContratos anteriores a 2013 NÃO SÃO REGISTRADOS no LICON.");

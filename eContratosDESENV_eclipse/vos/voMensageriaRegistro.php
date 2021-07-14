@@ -100,14 +100,19 @@ class voMensageriaRegistro extends voentidade {
 		return $retorno;
 	}
 	
-	static function getMensagemGestor($codigoContrato, $numFrequencia){
+	static function getMensagemGestor($codigoContrato, $numFrequencia, $vocontratoinfo=null){
 
 		$emailPrincipal = email_sefaz::$REMETENTE_PRINCIPAL;
 		$emailCopia = email_sefaz::$REMETENTE_COPIA;
 	
-		$retorno = static::getMensagemPreambulo($codigoContrato);
+		$retorno = static::getMensagemPreambulo($codigoContrato, $vocontratoinfo);
+		$cotacoes = ", junto com as cotações de preços e a anuência da Contratada";
+		//$vocontratoinfo = new voContratoInfo();
+		if($vocontratoinfo != null && $vocontratoinfo->tipo == dominioTipoContrato::$CD_TIPO_CONVENIO){
+			$cotacoes = "";
+		}
 		
-		$retorno .= "<br><br>Havendo interesse da SEFAZ pela prorrogação, requere-se provocação tempestiva, via SEI, à SAFI, junto com as cotações de preços e a anuência da Contratada.	
+		$retorno .= "<br><br>Havendo interesse da SEFAZ pela prorrogação, requere-se provocação tempestiva, via SEI, à SAFI$cotacoes.	
 		<br><br><b>Não sendo possível nova prorrogação, e persistindo a necessidade da contratação, o gestor deverá solicitar novo processo licitatório
 		em tempo hábil, sob pena de encerramento da prestação do serviço</b>.";
 		
@@ -116,12 +121,12 @@ class voMensageriaRegistro extends voentidade {
 		return $retorno;
 	}
 	 
-	static function getMensagemGestorContratoImprorrogavel($codigoContrato, $numFrequencia){
+	static function getMensagemGestorContratoImprorrogavel($codigoContrato, $numFrequencia, $vocontratoinfo = null){
 
 		$emailPrincipal = email_sefaz::$REMETENTE_PRINCIPAL;
 		$emailCopia = email_sefaz::$REMETENTE_COPIA;
 		 
-		$retorno = static::getMensagemPreambulo($codigoContrato);
+		$retorno = static::getMensagemPreambulo($codigoContrato,$vocontratoinfo);
 		
 		$retorno .= "<br><br>Tendo em vista sua <b>improrrogabilidade</b>, havendo interesse da SEFAZ por sua manutenção, requere-se provocação tempestiva, via SEI, à SAFI,
 		pleiteando a abertura de novo processo licitatório.	
@@ -132,14 +137,19 @@ class voMensageriaRegistro extends voentidade {
 		return $retorno;
 	}
 	
-	static function getMensagemPreambulo($codigoContrato){
+	static function getMensagemPreambulo($codigoContrato, $vocontratoinfo = null){
 		/*$retorno = "<br>Prezado gestor,
 		<br><br><br><b>Esta é uma mensagem automática</b> gerada pelo sistema de automação da Unidade de Contratos (UNCT/SAFI) - "
 				. getTextoHTMLDestacado(constantes::$nomeSistema) . ",
 				solicitando informações referentes à <b>continuidade</b> do contrato <b>$codigoContrato</b>, que em breve se encerrará.";*/
 		
+		$dsContrato = "contrato";
+		if($vocontratoinfo != null && $vocontratoinfo->tipo != null){
+			$dsContrato = dominioTipoContrato::getColecaoInstrumentos()[$vocontratoinfo->tipo];
+		}
+		
 		$retorno = "<br>Prezado gestor,
-				<br><br><br>Solicitamos informações referentes à <b>continuidade</b> do contrato <b>$codigoContrato</b>, que em breve se encerrará.";
+				<br><br><br>Solicitamos informações referentes à <b>continuidade</b> do $dsContrato <b>$codigoContrato</b>, que em breve se encerrará.";
 				
 		return $retorno;
 	}

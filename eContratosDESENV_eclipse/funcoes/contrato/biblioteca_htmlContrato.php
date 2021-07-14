@@ -1331,11 +1331,14 @@ function getCamposContratoLicon($recordSet){
 	$voContratoInfo->getDadosBanco($registrobanco);		
 	
 	if($voContrato != null){		
-		$retorno = "Data Vigência Inicial " . getInputText("", "", getData($voContrato->dtVigenciaInicial), constantes::$CD_CLASS_CAMPO_READONLY);
-		$retorno .= " a Data Final " . getInputText("", "", getData($voContrato->dtVigenciaFinal), constantes::$CD_CLASS_CAMPO_READONLY);
-		$retorno .= "<br>Data Publicação " . getInputText("", "", getData($voContrato->dtPublicacao), constantes::$CD_CLASS_CAMPO_READONLY);
-		$retorno .= "<br>Data Assinatura " . getInputText("", "", getData($voContrato->dtAssinatura), constantes::$CD_CLASS_CAMPO_READONLY);
-		$retorno .= "<br>PL " . getInputText("", "", $voContrato->procLic, constantes::$CD_CLASS_CAMPO_READONLY);
+		$retorno .= getTextoHTMLNegrito("PL") .":". getInputText("", "", $voContrato->procLic, constantes::$CD_CLASS_CAMPO_READONLY);
+		$retorno .= "<br>".getTextoHTMLNegrito("Vigência").":" . getInputText("", "", getData($voContrato->dtVigenciaInicial), constantes::$CD_CLASS_CAMPO_READONLY);
+		$retorno .= " a " . getInputText("", "", getData($voContrato->dtVigenciaFinal), constantes::$CD_CLASS_CAMPO_READONLY);
+		$retorno .= "|".getTextoHTMLNegrito("Publicação").": " . getInputText("", "", getData($voContrato->dtPublicacao), constantes::$CD_CLASS_CAMPO_READONLY);
+		$retorno .= "|".getTextoHTMLNegrito("Assinatura").": " . getInputText("", "", getData($voContrato->dtAssinatura), constantes::$CD_CLASS_CAMPO_READONLY);
+		$retorno .= "<br>".getTextoHTMLNegrito("Valores").": Mensal: " . getInputText("", "", getMoeda($voContrato->vlMensalSQL,2), constantes::$CD_CLASS_CAMPO_READONLY);
+		$retorno .= "|Global: " . getInputText("", "", getMoeda($voContrato->vlGlobalSQL,2), constantes::$CD_CLASS_CAMPO_READONLY);
+		
 				
 		if($voContrato->cdEspecie == dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER){
 			/*$portaria = getCPLPorNomePregoeiro($recordSet);

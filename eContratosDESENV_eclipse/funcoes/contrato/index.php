@@ -529,6 +529,7 @@ function estatisticas(){
 	    		'<?=$pNmCampoCdEspecieContrato?>',
 	    		'<?=filtroManterContrato::$nmAtrIsTpVigenciaMAxSq?>',	    		
 	    		'<?=filtroManterContrato::$ID_REQ_AnoInicial?>',
+	    		'<?=filtroManterContrato::$ID_REQ_DtAssinaturaInicial?>',
 	    		);
 
 	    //alert(pArrayIdCamposFiltroPortalTransparencia);

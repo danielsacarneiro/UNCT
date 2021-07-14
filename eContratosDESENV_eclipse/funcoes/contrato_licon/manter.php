@@ -77,9 +77,9 @@ function isFormularioValido() {
 }
 
 function cancelar() {
-	//history.back();
-	location.href="index.php?consultar=S";	
+	location.href="<?=getLinkRetornoConsulta()?>";
 }
+
 
 function confirmar() {
 	if(!isFormularioValido())
@@ -158,26 +158,25 @@ function carregaDadosContrato(){
 	        	getContratoDet($voContrato, false, true);
 	        ?>
 	        <TR>	       
-	            <TH class="campoformulario" nowrap width="1%">Vigência:</TH>
-	            <TD class="campoformulario" colspan=3>
-	            <?php echo getDetalhamentoHTML("", "", $voContrato->dtVigenciaInicial) . " a " . getDetalhamentoHTML("", "", $voContrato->dtVigenciaFinal)?>
-				</TD>
-	        </TR>
-	        <TR>	       
-	            <TH class="campoformulario" nowrap width="1%">Dt.Publicação:</TH>
-	            <TD class="campoformulario" width="1%"  colspan=3>
-	            <?php echo getDetalhamentoHTML("", "", $voContrato->dtPublicacao)?>
-				</TD>				
-	        </TR>
-	        <TR>	       
-	            <TH class="campoformulario" nowrap width="1%">Dt.Assinatura:</TH>
-	            <TD class="campoformulario">
-	            <?php echo getDetalhamentoHTML("", "", $voContrato->dtAssinatura)?>
-				</TD>
 	            <TH class="campoformulario" nowrap width="1%">PL:</TH>
-	            <TD class="campoformulario">
+	            <TD class="campoformulario" colspan=3>
 	            <?php echo getDetalhamentoHTML("", "", $voContrato->procLic)?>
 				</TD>				
+	        </TR>
+	        <TR>	       
+	            <TH class="campoformulario" nowrap width="1%">Datas</TH>
+	            <TD class="campoformulario" width="1%"  colspan=3>
+	            |Vigência: <?php echo getDetalhamentoHTML("", "", $voContrato->dtVigenciaInicial) . " a " . getDetalhamentoHTML("", "", $voContrato->dtVigenciaFinal)?>
+	            |Dt.Publicação: <?php echo getDetalhamentoHTML("", "", $voContrato->dtPublicacao)?>
+	            |Dt.Assinatura: <?php echo getDetalhamentoHTML("", "", $voContrato->dtAssinatura)?>
+				</TD>				
+	        </TR>
+	        <TR>	       
+	            <TH class="campoformulario" nowrap width="1%">Valores:</TH>
+	            <TD class="campoformulario" colspan=3>
+	            |Mensal: <?php echo getDetalhamentoHTML("", "", getMoeda($voContrato->vlMensalSQL,2))?>
+	            |Global: <?php echo getDetalhamentoHTML("", "", getMoeda($voContrato->vlGlobalSQL,2))?>
+				</TD>
 	        </TR>
 	        <?php
 	        }else{

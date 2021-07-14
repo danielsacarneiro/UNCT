@@ -714,7 +714,7 @@ function getMensagemDemandaIniciais(&$count = 0){
 				dominioTipoDemanda::$CD_TIPO_DEMANDA_GESTAO_PESSOAS,
 		);
 		$filtro->cdSetorAtualExcludente = array(
-				dominioSetor::$CD_SETOR_DILC,
+				//dominioSetor::$CD_SETOR_DILC,
 				dominioSetor::$CD_SETOR_SAFI,
 				dominioSetor::$CD_SETOR_ATJA,
 		);
@@ -728,6 +728,7 @@ function getMensagemDemandaIniciais(&$count = 0){
 
 		$filtro->cdAtrOrdenacao = voDemanda::$nmAtrCdPessoaRespUNCT . "," . filtroManterDemanda::$NmColNuTempoUltimaTram;
 
+		//echo "pegar esse aqui";
 		$colecao = $dbprocesso->consultarTelaConsulta ( $voDemanda, $filtro );
 
 		$array =array(
