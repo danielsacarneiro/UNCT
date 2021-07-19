@@ -185,7 +185,7 @@ function confirmar() {
             <TH class="campoformulario" nowrap width="1%">Características:</TH>
             <TD class="campoformulario">
             <?php 
-            echo dominioTipoDemandaContrato::getHtmlChecksBoxDetalhamento("", $voContrato->inCaracteristicas, 1);	             
+            echo dominioTipoDemandaContrato::getHtmlChecksBoxDetalhamento("", $voContrato->inCaracteristicas, 1, false, dominioTipoDemandaContrato::getColecaoCaracteristicasContrato());	             
              ?>
             </TD>            
         </TR>

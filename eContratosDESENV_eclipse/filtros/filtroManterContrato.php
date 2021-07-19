@@ -80,22 +80,7 @@ class filtroManterContrato extends filtroManter {
 	
 	// ...............................................................
 	// construtor
-	
-	/*function __construct1($pegarFiltrosDaTela) {
-		parent::__construct1($pegarFiltrosDaTela);
 		
-		$querySelect = "SELECT * ";
-		$queryJoin = " FROM " . vocontrato::getNmTabelaStatic($this->isHistorico);
-			
-		//ACRESCENTA A CONSULTA
-		$this->setQueryFromJoin($queryJoin);
-		$this->setQuerySelect($querySelect);
-				
-		if($pegarFiltrosDaTela){
-			$this->getFiltroFormulario();		
-		}	
-	}*/
-	
 	function getFiltroFormulario(){
 		$this->voproclic = new voProcLicitatorio();
 		$this->voproclic->getDadosFormulario();
@@ -166,7 +151,8 @@ class filtroManterContrato extends filtroManter {
 		// verifica os filtros obrigatorios
 		if ($this->isValidarConsulta 
 				&& !isUsuarioAdmin() && $this->contratada == null && $this->docContratada == null && $this->anoContrato == null 
-				&& $this->dtVigenciaInicial == null && $this->dtVigenciaFinal == null && $this->objeto == null && $this->dtVigencia == null) {
+				&& $this->dtVigenciaInicial == null && $this->dtVigenciaFinal == null && $this->objeto == null && $this->dtVigencia == null 
+				&& $this->dtAssinaturaInicial == null) {
 			$retorno = true;
 			$this->temValorDefaultSetado = true;			
 		}		
@@ -454,18 +440,28 @@ class filtroManterContrato extends filtroManter {
 			$queryExists .= "$nmTabelaContratoTempLicon." . vocontrato::$nmAtrSqEspecieContrato . "=$nmTabela." . vocontrato::$nmAtrSqEspecieContrato;
 			$queryExists .= "\n AND ";
 			$queryExists .= "$nmTabelaLicon." . voContratoLicon::$nmAtrInDesativado . "='N'";
-				//se a opcao for NAO, interessa apenas se esta cadastrado ou nao (independe da situacao)
+			//se a opcao for NAO, interessa apenas se esta cadastrado ou nao (independe da situacao)
 			//a situacao so serah relevante se a opcao selecionada for PENDENCIA ou FORMALIZADO
 			if($atribLicon != constantes::$CD_NAO){
 				$operadorTemp = "EXISTS";
 				$queryExists .= "\n AND ";
-				$strSituacaoLicon = getSQLStringFormatadaColecaoIN(array_keys(dominioSituacaoContratoLicon::getColecaoIncluidoSucesso())); 
+				$strSituacaoLicon = getSQLStringFormatadaColecaoIN(array_keys(dominioSituacaoContratoLicon::getColecaoIncluidoSucesso()));
+				//SE A SITUACAO FOR 'PENDENCIA'
 				if($atribLicon == dominioSituacaoContratoLicon::$CD_SITUACAO_ERRO){
-					//se a consulta for por pendencia, basta procurar os que NAO ESTAO incluidos com sucesso, mas que foram registrados
-					$not = "NOT";
+					//traz somente os que estao com erro, e que tambem nao foram incluidos com sucesso em outra ocasiao
+					$chaveTuplaContrato = vocontrato::getAtributosChaveLogica($nmTabelaLicon);
+					$chaveTuplaContrato = getSQLStringFormatadaColecaoIN($chaveTuplaContrato);
+					
+					$sqlSelectContratoSucesso = "SELECT $chaveTuplaContrato FROM $nmTabelaLicon WHERE "
+							. voContratoLicon::$nmAtrSituacao . " IN ($strSituacaoLicon)"
+							. " AND " . voContratoLicon::$nmAtrInDesativado . " = 'N'";
+					
+					$queryExists .= "($chaveTuplaContrato) NOT IN ($sqlSelectContratoSucesso)";
+					//$queryExists .= voContratoLicon::$nmAtrSituacao . " $not IN ($strSituacaoLicon)";
+					
+				}else{				
+					$queryExists .= voContratoLicon::$nmAtrSituacao . " IN ($strSituacaoLicon)";
 				}
-				
-				$queryExists .= voContratoLicon::$nmAtrSituacao . " $not IN ($strSituacaoLicon)";
 			}else{
 				$operadorTemp = "NOT EXISTS";
 			}

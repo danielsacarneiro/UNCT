@@ -203,13 +203,16 @@ include_once ("voContratoLicon.php");
     /**
      *  Chave logica
      */
-    static function getAtributosChaveLogica() {
+    static function getAtributosChaveLogica($nmTabelaOpcional = null) {
+    	if($nmTabelaOpcional != null){
+    		$nmTabelaOpcional = "$nmTabelaOpcional.";
+    	}
     	$retorno = array (
-    			vocontrato::$nmAtrAnoContrato,
-    			vocontrato::$nmAtrCdContrato,
-    			vocontrato::$nmAtrTipoContrato,
-    			vocontrato::$nmAtrCdEspecieContrato,
-    			vocontrato::$nmAtrSqEspecieContrato,
+    			$nmTabelaOpcional.vocontrato::$nmAtrAnoContrato,
+    			$nmTabelaOpcional.vocontrato::$nmAtrCdContrato,
+    			$nmTabelaOpcional.vocontrato::$nmAtrTipoContrato,
+    			$nmTabelaOpcional.vocontrato::$nmAtrCdEspecieContrato,
+    			$nmTabelaOpcional.vocontrato::$nmAtrSqEspecieContrato,
     	);
     
     	return $retorno;

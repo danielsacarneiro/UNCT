@@ -9,6 +9,9 @@ class filtroManterContratoLicon extends filtroManter {
 	static $ID_REQ_SituacaoExceto = "ID_REQ_SituacaoExceto";
 	static $ID_REQ_DtPublicacaoFinal = "ID_REQ_DtPublicacaoFinal";
 	
+	static $ID_REQ_DtRegistroInicial = "ID_REQ_DtRegistroInicial";
+	static $ID_REQ_DtRegistroFinal = "ID_REQ_DtRegistroFinal";
+	
 	var $cdDemanda = "";
 	var $anoDemanda = "";
 	
@@ -24,6 +27,9 @@ class filtroManterContratoLicon extends filtroManter {
 	var $situacaoExceto = "";
 	var $dtPublicacao = "";
 	var $dtPublicacaoFinal = "";
+	
+	var $dtRegistroInicial = "";
+	var $dtRegistroFinal = "";
 	
 	function getFiltroFormulario() {
 		$this->anoDemanda = @$_POST [voContratoLicon::$nmAtrAnoDemanda];
@@ -41,6 +47,9 @@ class filtroManterContratoLicon extends filtroManter {
 		$this->situacaoExceto = @$_POST [static::$ID_REQ_SituacaoExceto];
 		$this->dtPublicacao = @$_POST [vocontrato::$nmAtrDtPublicacaoContrato];
 		$this->dtPublicacaoFinal = @$_POST [static::$ID_REQ_DtPublicacaoFinal];
+		
+		$this->dtRegistroInicial = @$_POST [static::$ID_REQ_DtRegistroInicial];
+		$this->dtRegistroFinal = @$_POST [static::$ID_REQ_DtRegistroFinal];
 		
 		if ($this->cdOrdenacao == null) {
 			$this->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
@@ -139,6 +148,20 @@ class filtroManterContratoLicon extends filtroManter {
 		if ($this->dtPublicacaoFinal != null) {
 		
 			$filtro = $filtro . $conector . $nmTabelaContrato . "." . vocontrato::$nmAtrDtPublicacaoContrato . " <= " . getVarComoData($this->dtPublicacaoFinal);
+		
+			$conector = "\n AND ";
+		}
+		
+		if (isAtributoValido($this->dtRegistroInicial)) {
+		
+			$filtro = $filtro . $conector . $nmTabela . "." . voContratoLicon::$nmAtrDhInclusao . " >= " . getVarComoData($this->dtRegistroInicial);
+		
+			$conector = "\n AND ";
+		}
+		
+		if (isAtributoValido($this->dtRegistroFinal)) {
+		
+			$filtro = $filtro . $conector . $nmTabela . "." . voContratoLicon::$nmAtrDhInclusao . " <= " . getVarComoData($this->dtRegistroFinal);
 		
 			$conector = "\n AND ";
 		}

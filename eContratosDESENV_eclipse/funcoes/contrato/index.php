@@ -390,9 +390,36 @@ function estatisticas(){
 				<TD class="campoformulario" >
 				<INPUT type="text" id="<?=vocontrato::$nmAtrObjetoContrato?>" name="<?=vocontrato::$nmAtrObjetoContrato?>"  value="<?php echo($dsObjeto);?>"  class="camponaoobrigatorio" size="30">
 				</TD>
-            </TR>
+            </TR>    		
 			<TR>
-				<TH class="campoformulario" nowrap>Intervalo:</TH>
+				<TH class="campoformulario" nowrap>Assinatura:</TH>
+				<TD class="campoformulario" colspan=3>
+                          	De <INPUT type="text" 
+                        	       id="<?=filtroManterContrato::$ID_REQ_DtAssinaturaInicial?>" 
+                        	       name="<?=filtroManterContrato::$ID_REQ_DtAssinaturaInicial?>" 
+                        			value="<?php echo($filtro->dtAssinaturaInicial);?>" 
+                        			onkeyup="formatarCampoData(this, event, false);" 
+                        			class="camponaoobrigatorio" 
+                        			size="10" 
+                        			maxlength="10" > a
+                        	<INPUT type="text" 
+                        	       id="<?=filtroManterContrato::$ID_REQ_DtAssinaturaFinal?>" 
+                        	       name="<?=filtroManterContrato::$ID_REQ_DtAssinaturaFinal?>"
+                        			value="<?php echo($filtro->dtAssinaturaFinal);?>" 
+                        			onkeyup="formatarCampoData(this, event, false);" 
+                        			class="camponaoobrigatorio" 
+                        			size="10" 
+                        			maxlength="10" >
+                        	| Publicado? 
+                        	<?php
+                        	echo $comboSimNao->getHtmlCombo(filtroManterContrato::$ID_REQ_InPublicado,
+                        			filtroManterContrato::$ID_REQ_InPublicado, 
+                        			$filtro->inPublicado, true, "camponaoobrigatorio", false,"");
+                        	?>
+				</TD>
+         </TR>
+		 <TR>
+				<TH class="campoformulario" nowrap>Intervalo.Vigência:&nbsp;</TH>
 				<TD class="campoformulario" colspan=3>
                           	Data Inicial: <INPUT type="text" 
                         	       id="dtInicio1" 
@@ -427,41 +454,14 @@ function estatisticas(){
                         			class="camponaoobrigatorio" 
                         			size="10" 
                         			maxlength="10" >
-                        	| Vl.Global:
+                        	| <b>Vl.Global</b>:
 							<INPUT type="text" id="<?=filtroManterContrato::$NmAtrVlGlobalInicial?>" name="<?=filtroManterContrato::$NmAtrVlGlobalInicial?>"  value="<?php echo($filtro->vlGlobalInicial);?>"
 	            					onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="camponaoobrigatorioalinhadodireita" size="15" >
 	            				a <INPUT type="text" id="<?=filtroManterContrato::$NmAtrVlGlobalFinal?>" name="<?=filtroManterContrato::$NmAtrVlGlobalFinal?>"  value="<?php echo($filtro->vlGlobalFinal);?>"
 	            					onkeyup="formatarCampoMoedaComSeparadorMilhar(this, 2, event);" class="camponaoobrigatorioalinhadodireita" size="15" >
 				</TD>
-         </TR>	    		
-			<TR>
-				<TH class="campoformulario" nowrap>Assinatura:</TH>
-				<TD class="campoformulario" colspan=3>
-                          	De <INPUT type="text" 
-                        	       id="<?=filtroManterContrato::$ID_REQ_DtAssinaturaInicial?>" 
-                        	       name="<?=filtroManterContrato::$ID_REQ_DtAssinaturaInicial?>" 
-                        			value="<?php echo($filtro->dtAssinaturaInicial);?>" 
-                        			onkeyup="formatarCampoData(this, event, false);" 
-                        			class="camponaoobrigatorio" 
-                        			size="10" 
-                        			maxlength="10" > a
-                        	<INPUT type="text" 
-                        	       id="<?=filtroManterContrato::$ID_REQ_DtAssinaturaFinal?>" 
-                        	       name="<?=filtroManterContrato::$ID_REQ_DtAssinaturaFinal?>"
-                        			value="<?php echo($filtro->dtAssinaturaFinal);?>" 
-                        			onkeyup="formatarCampoData(this, event, false);" 
-                        			class="camponaoobrigatorio" 
-                        			size="10" 
-                        			maxlength="10" >
-                        	| Publicado? 
-                        	<?php
-                        	echo $comboSimNao->getHtmlCombo(filtroManterContrato::$ID_REQ_InPublicado,
-                        			filtroManterContrato::$ID_REQ_InPublicado, 
-                        			$filtro->inPublicado, true, "camponaoobrigatorio", false,"");
-                        	?>
-				</TD>
-         </TR>	
-         		<TR>
+         </TR>	         	
+         <TR>
 			<TH class="campoformulario" nowrap>Tp.Vigência:</TH>
 			<?php
 			include_once(caminho_util."dominioTpVigencia.php");
@@ -530,6 +530,7 @@ function estatisticas(){
 	    		'<?=filtroManterContrato::$nmAtrIsTpVigenciaMAxSq?>',	    		
 	    		'<?=filtroManterContrato::$ID_REQ_AnoInicial?>',
 	    		'<?=filtroManterContrato::$ID_REQ_DtAssinaturaInicial?>',
+	    		'<?=$pNmCampoTipoContrato."[]"?>'
 	    		);
 
 	    //alert(pArrayIdCamposFiltroPortalTransparencia);

@@ -371,12 +371,12 @@ class dominio extends multiplosConstrutores {
 	 * @param string $usarIdCodificado
 	 * @return string
 	 */
-	static function getHtmlChecksBoxDetalhamento($nm, $opcaoSelecionada, $qtdItensPorColuna=4, $usarIdCodificado=false) {
+	static function getHtmlChecksBoxDetalhamento($nm, $opcaoSelecionada, $qtdItensPorColuna=4, $usarIdCodificado=false, $colecaoAlternativa=null) {
 		if(!is_array($opcaoSelecionada)){
 			$opcaoSelecionada = getStringCampoSeparadorComoArray($opcaoSelecionada);
 		}
 		
-		$colecao = static::getColecaoApenasComElementos($opcaoSelecionada);
+		$colecao = static::getColecaoApenasComElementos($opcaoSelecionada, $colecaoAlternativa);
 		
 		//return static::getHtmlChecksBox($nm, $opcaoSelecionada, $colecao, $qtdItensPorColuna, false, null, false, " disabled ");
 		

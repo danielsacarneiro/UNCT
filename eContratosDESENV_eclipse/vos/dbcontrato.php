@@ -817,19 +817,14 @@ class dbcontrato extends dbprocesso {
 			$retorno .= $sqlConector . vocontrato::$nmAtrVlGlobalContrato . " = " . $this->getVarComoDecimal ( $voContrato->vlGlobal );
 			$sqlConector = ",";
 		
-		if ($voContrato->dtVigenciaInicial != null) {
 			$retorno .= $sqlConector . vocontrato::$nmAtrDtVigenciaInicialContrato . " = " . $this->getVarComoData($voContrato->dtVigenciaInicial );
 			$sqlConector = ",";
-		}
-		if ($voContrato->dtVigenciaFinal != null) {
+		
 			$retorno .= $sqlConector . vocontrato::$nmAtrDtVigenciaFinalContrato . " = " . $this->getVarComoData ( $voContrato->dtVigenciaFinal );
 			$sqlConector = ",";
-		}
-		
 
 			$retorno .= $sqlConector . vocontrato::$nmAtrDtAssinaturaContrato . " = " . $this->getVarComoData ( $voContrato->dtAssinatura );
 			$sqlConector = ",";
-
 
 			$retorno .= $sqlConector . vocontrato::$nmAtrDtPublicacaoContrato . " = " . $this->getVarComoData ( $voContrato->dtPublicacao );
 			$sqlConector = ",";

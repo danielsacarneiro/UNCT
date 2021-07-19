@@ -71,8 +71,10 @@ include_once 'voContratoLicon.php';
   				$nmTabelaDemanda . "." . voDemanda::$nmAtrTexto,
   				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
   				$nmTabelaContrato . "." . vocontrato::$nmAtrDtPublicacaoContrato,
+  				$nmTabelaContrato . "." . vocontrato::$nmAtrVlGlobalContrato,
   				//$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrNome,
   				getSQLCOALESCE($colecaoAtributoCoalesceNmPessoa,vopessoa::$nmAtrNome),
+  				static::$nmTabelaUsuarioUltAlteracao . "." . voUsuarioInfo::$nmAtrName,
   		);
   	  	
   		$queryJoin .= "\n left JOIN " . $nmTabelaDemanda;

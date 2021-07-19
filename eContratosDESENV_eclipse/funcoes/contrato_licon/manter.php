@@ -88,7 +88,7 @@ function confirmar() {
 	return confirm("Confirmar Alteracoes?");    
 }
 
-function formataForm() {
+/*function formataForm() {
 	var campoEspecie = document.frm_principal.<?=voContratoLicon::$nmAtrCdEspecieContrato?>;
 	var especie = campoEspecie.value;
 	
@@ -96,16 +96,27 @@ function formataForm() {
 	var required = especie != "<?=dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER?>";
 	
 	tornarRequiredCamposColecaoFormulario(colecaoIDCamposRequired, required);
+}*/
+
+function insereCodigoRecebimento(){
+	var campoObs = document.frm_principal.<?=voContratoLicon::$nmAtrObs?>;
+	var campoSituacao = document.frm_principal.<?=voContratoLicon::$nmAtrSituacao?>;
+	var isSituacaoOK = campoSituacao.value == <?=dominioSituacaoContratoLicon::$CD_SITUACAO_INCLUIDO?> 
+				|| campoSituacao.value == <?=dominioSituacaoContratoLicon::$CD_SITUACAO_INCLUIDO_COM_OBS?>;
+	var obs = campoObs.value;
+	if(isSituacaoOK && (obs == null || obs == "")){
+		campoObs.value = "Código do Recebimento: " + campoObs.value;
+	}	
 }
 
 function carregaDadosContrato(){
 	str = "";
 
-	cdContrato = document.frm_principal.<?=voContratoLicon::$nmAtrCdContrato?>.value;
-	anoContrato = document.frm_principal.<?=voContratoLicon::$nmAtrAnoContrato?>.value;
-	tipoContrato = document.frm_principal.<?=voContratoLicon::$nmAtrTipoContrato?>.value;
-	cdEspecie = document.frm_principal.<?=voContratoLicon::$nmAtrCdEspecieContrato?>.value;
-	sqEspecie = document.frm_principal.<?=voContratoLicon::$nmAtrSqEspecieContrato?>.value;
+	var cdContrato = document.frm_principal.<?=voContratoLicon::$nmAtrCdContrato?>.value;
+	var anoContrato = document.frm_principal.<?=voContratoLicon::$nmAtrAnoContrato?>.value;
+	var tipoContrato = document.frm_principal.<?=voContratoLicon::$nmAtrTipoContrato?>.value;
+	var cdEspecie = document.frm_principal.<?=voContratoLicon::$nmAtrCdEspecieContrato?>.value;
+	var sqEspecie = document.frm_principal.<?=voContratoLicon::$nmAtrSqEspecieContrato?>.value;
 		
 	if(cdContrato != "" && anoContrato != "" && tipoContrato != "" && cdEspecie != ""){
 
@@ -209,7 +220,7 @@ function carregaDadosContrato(){
 				<?php                        
 				$comboSituacaoLicon = new select(dominioSituacaoContratoLicon::getColecaoManter());                        
 				//cria o combo
-				echo $comboSituacaoLicon->getHtmlCombo(voContratoLicon::$nmAtrSituacao, voContratoLicon::$nmAtrSituacao, $vo->situacao, true, "camponaoobrigatorio", false, " required");
+				echo $comboSituacaoLicon->getHtmlCombo(voContratoLicon::$nmAtrSituacao, voContratoLicon::$nmAtrSituacao, $vo->situacao, true, "camponaoobrigatorio", false, " onChange='insereCodigoRecebimento();' required");
 				?>
 				</TD>				
 	        </TR>	        

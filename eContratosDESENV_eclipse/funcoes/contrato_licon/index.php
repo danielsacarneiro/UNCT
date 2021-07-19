@@ -114,61 +114,78 @@ function alterar() {
 	        $selectExercicio = new selectExercicio();
 	        ?>
             <TR>
-				<TH class="campoformulario" nowrap width="1%">Demanda:</TH>
-				<TD class="campoformulario" nowrap colspan="3">
-					<?php echo "Ano: " . $selectExercicio->getHtmlCombo(voContratoLicon::$nmAtrAnoDemanda,voContratoLicon::$nmAtrAnoDemanda, $filtro->anoDemanda, true, "camponaoobrigatorio", false, "");?>
-					Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voContratoLicon::$nmAtrCdDemanda?>" name="<?=voContratoLicon::$nmAtrCdDemanda?>"  value="<?php echo(complementarCharAEsquerda($filtro->cdDemanda, "0", TAMANHO_CODIGOS));?>"  class="camponaoobrigatorio" size="6" maxlength="5">		  
+            <TD class="campoformulario" colspan=4>
+            <?=getTagHTMLAbreTabela()?>
+	            <TR>
+	            <TD class="campoformulario" nowrap width="40%">
+	            <?=getTagHTMLAbreTabela()?>
+	            	<TR>
+	            		<TH class="campoformulario" nowrap width="1%">Demanda:</TH>
+						<TD class="campoformulario" nowrap colspan="3">
+						<?php echo "Ano: " . $selectExercicio->getHtmlCombo(voContratoLicon::$nmAtrAnoDemanda,voContratoLicon::$nmAtrAnoDemanda, $filtro->anoDemanda, true, "camponaoobrigatorio", false, "");?>
+						Número: <INPUT type="text" onkeyup="validarCampoNumericoPositivo(this)" id="<?=voContratoLicon::$nmAtrCdDemanda?>" name="<?=voContratoLicon::$nmAtrCdDemanda?>"  value="<?php echo(complementarCharAEsquerda($filtro->cdDemanda, "0", TAMANHO_CODIGOS));?>"  class="camponaoobrigatorio" size="6" maxlength="5">		  
+						</TD>	            	
+	            	</TR>	 
+		            <TR>
+			            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
+			            <TD class="campoformulario" colspan="3">
+			            <?php 
+			            
+			            $voContratoFiltro = new vocontrato();
+			            $voContratoFiltro->tipo = $filtro->tipoContrato;
+			            $voContratoFiltro->cdContrato = $filtro->cdContrato;
+			            $voContratoFiltro->anoContrato = $filtro->anoContrato;
+			            $voContratoFiltro->cdEspecie = $filtro->cdEspecieContrato;
+			            $voContratoFiltro->sqEspecie = $filtro->sqEspecieContrato;
+			            
+			            $pArray = array($voContratoFiltro,
+			            		constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO,
+			            		false,
+			            		true,
+			            		false,
+			            		null,
+			            		null);
+			            
+			            getContratoEntradaArrayGenerico($pArray);
+			             
+			            //getContratoEntradaDeDados($filtro->tipoContrato, $filtro->cdContrato, $filtro->anoContrato, $arrayCssClass, null, null);
+			            ?></TD>
+					</TR>
+	            <?=getTagHTMLFechaTabela()?>
 				</TD>            
-			</TR>
-            <TR>
-	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" colspan="3">
-	            <?php 
-	            
-	            $voContratoFiltro = new vocontrato();
-	            $voContratoFiltro->tipo = $filtro->tipoContrato;
-	            $voContratoFiltro->cdContrato = $filtro->cdContrato;
-	            $voContratoFiltro->anoContrato = $filtro->anoContrato;
-	            $voContratoFiltro->cdEspecie = $filtro->cdEspecieContrato;
-	            $voContratoFiltro->sqEspecie = $filtro->sqEspecieContrato;
-	            
-	            $pArray = array($voContratoFiltro,
-	            		constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO,
-	            		false,
-	            		true,
-	            		false,
-	            		null,
-	            		null);
-	            
-	            getContratoEntradaArrayGenerico($pArray);
-	             
-	            //getContratoEntradaDeDados($filtro->tipoContrato, $filtro->cdContrato, $filtro->anoContrato, $arrayCssClass, null, null);
-	            ?></TD>
-			</TR>
-			<TR>
-                <TH class="campoformulario" nowrap>Nome Contratada:</TH>
-                <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>"  value="<?php echo($filtro->nmContratada);?>"  class="camponaoobrigatorio" size="50"></TD>
-                <TH class="campoformulario" width="1%" nowrap>CNPJ/CPF Contratada:</TH>
-                <TD class="campoformulario" ><INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($filtro->docContratada);?>" class="camponaoobrigatorio" size="20" maxlength="18"></TD>
-            </TR>
-            <TR>
-                <TH class="campoformulario" nowrap width="1%">Situação:</TH>
-                <TD class="campoformulario" width="1%">
-                <?php
-                $comboSituacao = new select(dominioSituacaoContratoLicon::getColecao());
-                echo $comboSituacao->getHtmlCombo(voContratoLicon::$nmAtrSituacao,voContratoLicon::$nmAtrSituacao, $filtro->situacao, true, "camponaoobrigatorio", false, "");
-                ?>
-				</TD>
-                <TD class="campoformulario" width="1%" colspan=2>
-                Exceto: 
-                <?php
-                echo $comboSituacao->getHtmlCombo(filtroManterContratoLicon::$ID_REQ_SituacaoExceto, filtroManterContratoLicon::$ID_REQ_SituacaoExceto."[]", $filtro->situacaoExceto, true, "camponaoobrigatorio", false, " multiple ");
-                ?>
-				</TD>					       
+	            <TD class="campoformulario">
+	            <?=getTagHTMLAbreTabela()?>
+		            <TR>
+		                <TH class="campoformulario" nowrap width="1%">Situação:</TH>
+		                <TD class="campoformulario" width="1%">
+		                <?php
+		                $comboSituacao = new select(dominioSituacaoContratoLicon::getColecao());
+		                echo $comboSituacao->getHtmlCombo(voContratoLicon::$nmAtrSituacao,voContratoLicon::$nmAtrSituacao, $filtro->situacao, true, "camponaoobrigatorio", false, "");
+		                ?>
+						</TD>
+		                <TD class="campoformulario" colspan=2>
+		                Exceto: 
+		                <?php
+		                echo $comboSituacao->getHtmlCombo(filtroManterContratoLicon::$ID_REQ_SituacaoExceto, filtroManterContratoLicon::$ID_REQ_SituacaoExceto."[]", $filtro->situacaoExceto, true, "camponaoobrigatorio", false, " multiple ");
+		                ?>
+						</TD>					       
+		            </TR>	            
+	            <?=getTagHTMLFechaTabela()?>
+				</TD>            
+				</TR>            
+            <?=getTagHTMLFechaTabela()?>            
+            </TD>
             </TR>
 			<TR>
-	            <TH class="campoformulario" nowrap width="1%">Dt.Publicação:</TH>
-	            <TD class="campoformulario" colspan=3>
+		        <TH class="campoformulario" nowrap width="1%">Contratada:</TH>
+		        <TD class="campoformulario" colspan=3>
+		        Nome: <INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>"  value="<?php echo($filtro->nmContratada);?>"  class="camponaoobrigatorio" size="20">
+				|CNPJ/CPF: <INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($filtro->docContratada);?>" class="camponaoobrigatorio" size="20" maxlength="18">
+		        </TD>
+           </TR>            
+			<TR>
+	            <TH class="campoformulario" nowrap width="1%">Dt.Publicação:&nbsp;</TH>
+	            <TD class="campoformulario" width='1%' nowrap>
 	            	            	<INPUT type="text" 
 	            	       id="<?=vocontrato::$nmAtrDtPublicacaoContrato?>" 
 	            	       name="<?=vocontrato::$nmAtrDtPublicacaoContrato?>" 
@@ -182,6 +199,26 @@ function alterar() {
 	            	       id="<?=filtroManterContratoLicon::$ID_REQ_DtPublicacaoFinal?>" 
 	            	       name="<?=filtroManterContratoLicon::$ID_REQ_DtPublicacaoFinal?>" 
 	            			value="<?php echo(getData($filtro->dtPublicacaoFinal));?>"
+	            			onkeyup="formatarCampoData(this, event, false);" 
+	            			class="camponaoobrigatorio" 
+	            			size="10" 
+	            			maxlength="10">
+				</TD>				
+	            <TH class="campoformulario" nowrap width="1%">Dt.Registro:&nbsp;</TH>
+	            <TD class="campoformulario">
+	            	            	<INPUT type="text" 
+	            	       id="<?=filtroManterContratoLicon::$ID_REQ_DtRegistroInicial?>" 
+	            	       name="<?=filtroManterContratoLicon::$ID_REQ_DtRegistroInicial?>" 
+	            			value="<?php echo(getData($filtro->dtRegistroInicial));?>"
+	            			onkeyup="formatarCampoData(this, event, false);" 
+	            			class="camponaoobrigatorio" 
+	            			size="10" 
+	            			maxlength="10">
+	            			a
+	            	            	<INPUT type="text" 
+	            	       id="<?=filtroManterContratoLicon::$ID_REQ_DtRegistroFinal?>" 
+	            	       name="<?=filtroManterContratoLicon::$ID_REQ_DtRegistroFinal?>" 
+	            			value="<?php echo(getData($filtro->dtRegistroFinal));?>"
 	            			onkeyup="formatarCampoData(this, event, false);" 
 	            			class="camponaoobrigatorio" 
 	            			size="10" 
@@ -219,9 +256,11 @@ function alterar() {
                     <TH class="headertabeladados" width="1%" nowrap>Contrato</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Tipo</TH>
                     <TH class="headertabeladados" width="50%">Contratada</TH>                    
+					<TH class="headertabeladados" width="1%" nowrap>Vl.Global</TH>
 					<TH class="headertabeladados" width="1%" nowrap>Dt.Publicação</TH>
                     <TH class="headertabeladados" width="1%" nowrap>Dt.Registro</TH>
-                    <TH class="headertabeladados" width="1%">Situação</TH>                    
+                    <TH class="headertabeladados" width="1%">Situação</TH>   
+                    <TH class="headertabeladados" width="50%" nowrap>Usu.</TH>                 
                 </TR>
                 <?php								
                 if (is_array($colecao))
@@ -230,7 +269,7 @@ function alterar() {
                         $tamanho = 0;
                 
                 //echoo($tamanho);                                
-                $colspan=10;
+                $colspan=12;
                 if($isHistorico){
                 	$colspan++;
                 }
@@ -243,6 +282,9 @@ function alterar() {
                         $voAtual = new voContratoLicon();
                         $voAtual->getDadosBanco($registroBanco);
 
+                        $voAtualContrato = new vocontrato();
+                        $voAtualContrato->getDadosBanco($registroBanco);
+                        
                         $voAtualDemanda = new voDemanda();
                         $voAtualDemanda->getDadosBanco($registroBanco);
                         
@@ -270,6 +312,12 @@ function alterar() {
                         	$demanda = formatarCodigoAno($voDemandaContrato->cdDemanda, $voDemandaContrato->anoDemanda);                        	 
                         }
                         
+                        $vlGlobal = $voAtualContrato->vlGlobalSQL;
+                        //$nmUsuario = dbContratoLicon::$nmTabelaUsuarioUltAlteracao . "." . vopessoa::$nmAtrNome;
+                        $nmUsuario = voUsuarioInfo::$nmAtrName;
+                        $nmUsuario = $registroBanco[$nmUsuario];
+                        $arrayParam = array(null, $nmUsuario, 15, true, false, "", 2);
+                        $nmUsuario = truncarStringHTMLArray($arrayParam);                        
                    ?>
                 <TR class="dados">
                     <TD class="tabeladados">
@@ -287,10 +335,12 @@ function alterar() {
                   	<TD class="tabeladados"><?php echo $voAtualDemanda->texto?></TD>
                     <TD class="tabeladadosalinhadodireita" nowrap><?php echo $contrato;?></TD>
                     <TD class="tabeladados" nowrap><?php echo $complementoContrato?></TD>                    
-					<TD class="tabeladados"><?php echo $dsPessoa?></TD>					
+					<TD class="tabeladados"><?php echo $dsPessoa?></TD>
+					<TD class="tabeladados"><?php echo getMoeda($vlGlobal, 2)?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($registroBanco[vocontrato::$nmAtrDtPublicacaoContrato])?></TD>
                     <TD class="tabeladados" nowrap><?php echo getData($voAtual->dhUltAlteracao)?></TD>
-                    <TD class="tabeladados" nowrap><?php echo $situacao?></TD>                    
+                    <TD class="tabeladados" nowrap><?php echo $situacao?></TD>
+                    <TD class="tabeladados" ><?php echo $nmUsuario?></TD>
                 </TR>					
                 <?php
 				}                

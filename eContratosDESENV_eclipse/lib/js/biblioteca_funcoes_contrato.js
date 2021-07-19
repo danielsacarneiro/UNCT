@@ -549,6 +549,7 @@ function setFiltroContratosLicon(pArrayIdCampos, pArrayEspeciesContrato){
 	var campoSqMaxEspecie = document.getElementById(pArrayIdCampos[3]);
 	var campoAnoInicial = document.getElementById(pArrayIdCampos[4]);
 	var campoDtAssinaturaInicial = document.getElementById(pArrayIdCampos[5]);
+	var campoTipoContrato = document.getElementById(pArrayIdCampos[6]);
 	
 	//biblio...principal
 	limparFormularioGeral();
@@ -558,9 +559,14 @@ function setFiltroContratosLicon(pArrayIdCampos, pArrayEspeciesContrato){
 	campoInLicon.value = 'N';
 	campoAnoInicial.value = 2013;
 	campoDtAssinaturaInicial.value = '01/01/2020';
+	//somente os contratos CSAFI e PROFISCO
+	var arrayItensTipoContrato = new Array('C', 'P');
+	selecionaSelectMultiple(campoTipoContrato, arrayItensTipoContrato);
 	//campoSqMaxEspecie.value = 'S';
 	
-	exibirMensagem("Para refinar a busca, selecionar o ano e o tipo de contrato (Ex. C-SAFI, C-PROFISCO...).\nContratos anteriores a 2013 NÃO SÃO REGISTRADOS no LICON.");
+	exibirMensagem("Para refinar a busca, selecionar o ano e o tipo de contrato (Ex. C-SAFI, C-PROFISCO...)."
+			+ "\n=> Os campos selecionados trazem somente uma consulta pré-definida."		
+			+ "\n=> Contratos anteriores a 2013 NÃO SÃO REGISTRADOS no LICON.");
 }
 
 //Formata o proclic para o padrao SEFAZ

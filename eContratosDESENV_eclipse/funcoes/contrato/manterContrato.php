@@ -160,6 +160,17 @@ function isFormularioValido() {
 		}
 	}
 
+	//checa valores
+	var campoVlGlobal = documento.<?=vocontrato::$nmAtrVlGlobalContrato?>;
+	var campoVlMensal = documento.<?=vocontrato::$nmAtrVlMensalContrato?>;
+	var vlGlobal = getValorCampoMoedaComoNumero(campoVlGlobal);
+	var vlMensal = getValorCampoMoedaComoNumero(campoVlMensal);
+	if(vlGlobal != null && vlMensal != null
+			&& vlGlobal < vlMensal){
+		exibirMensagem("Valor Global do contrato não pode ser menor que o mensal.\nDeixei-o em branco se não souber.");
+		return false;
+	}
+
 	var funcao = document.frm_principal.funcao.value;
 	var isInclusao = funcao == "<?=constantes::$CD_FUNCAO_INCLUIR?>";
 	
@@ -548,9 +559,9 @@ function formatarEmpenho(pCampo){
         </TR>		
 		<?php 
 		
-		if($dtVigenciaFinal == null){
+		/*if($dtVigenciaFinal == null){
 			$dtVigenciaFinal = "31/12/" . anoDefault;
-		}
+		}*/
 		?>
 		<TR>
             <TH class="campoformulario" nowrap>Periodo de Vigencia:</TH>

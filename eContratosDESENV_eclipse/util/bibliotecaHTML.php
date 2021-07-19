@@ -1607,3 +1607,13 @@ function getMsgPlaceHolder($msg){
 function getMsgPadraoInputText(){
 	return "placeholder=\"Separar por ; para mais de um registro.\"";
 }
+
+function getTagHTMLAbreTabela(){
+	return "    <TABLE id='table_filtro' class='filtro' cellpadding='0' cellspacing='0'>
+        <TBODY>
+				";
+}
+function getTagHTMLFechaTabela(){
+	return "       </TBODY>
+	  </TABLE>";
+}
