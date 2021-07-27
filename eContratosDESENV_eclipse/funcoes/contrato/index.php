@@ -540,7 +540,7 @@ function estatisticas(){
 		. getTextoLink("|FiltroPortalTransparencia", "#", "onClick='setFiltroContratosPortalTransparencia(pArrayIdCamposFiltroPortalTransparencia, varNmVariavelJSEspecieContratosLAI);'");
 		
 		$linkMontaFiltroLicon = "&nbsp;"
-				. getTextoLink("|FiltroLicon", "#", "onClick='setFiltroContratosLicon(pArrayIdCamposFiltroLicon, varNmVariavelJSEspecieContratosLICON);'");
+				. getTextoLink("|<mark>FiltroLicon</mark>", "#", "onClick='setFiltroContratosLicon(pArrayIdCamposFiltroLicon, varNmVariavelJSEspecieContratosLICON);'");
 		
 				/*$pArrayFiltroConsulta = array(
 						$filtro->getComboOrdenacao(),

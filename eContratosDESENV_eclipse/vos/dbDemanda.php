@@ -1228,10 +1228,19 @@ class dbDemanda extends dbprocesso {
 		}*/
 		
 	}
-			
+				
 	function validarAlteracao($vo) {
 		$this->validarGenerico($vo);
 		$isSituacaoNovaFechada = $vo->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA;
+		$isSituacaoARevisar = $vo->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_A_REVISAR;
+		$vocontratoDemanda = $vo->getContrato();
+		
+		$jaconsultoucontrato = false;
+		if($isSituacaoARevisar){
+			//obriga que o contrato esteja incluido para revisao
+			$vocontratoDemanda = getVOContratoDemandaPorChave($vo);
+			$jaconsultoucontrato = true;
+		}
 		
 		if ($isSituacaoNovaFechada) {
 			$voDemandaBase = $this->consultarPorChaveVO($vo);
@@ -1244,16 +1253,11 @@ class dbDemanda extends dbprocesso {
 					
 				//verifica se o contrato foi incluido em contratoinfo
 				$vocontratoInfo = new voContratoInfo();
-				//$vo = new voDemanda();
-				$vocontratoDemanda = $vo->getContrato();
+				//$vo = new voDemanda();				
 				$isDemandaTipoContrato = $vo->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO;
 				if($isDemandaTipoContrato && $vocontratoDemanda != null){
-					try{
-						$dbContrato = new dbcontrato();
-						//var_dump($vocontratoDemanda);
-						$vocontratoDemanda =$dbContrato->consultarPorChaveVO($vocontratoDemanda);
-					}catch (excecaoChaveRegistroInexistente $ex){
-						throw new excecaoGenerica("Verifique se o termo relacionado foi incluído corretamente na função 'contratos'.");
+					if(!$jaconsultoucontrato){
+						$vocontratoDemanda = getVOContratoDemandaPorChave($vo);
 					}
 						
 					$vocontratoInfo->anoContrato = $vocontratoDemanda->anoContrato;

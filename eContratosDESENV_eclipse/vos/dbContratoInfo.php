@@ -256,7 +256,7 @@ class dbContratoInfo extends dbprocesso {
 		
 	}
 	
-	static function getQueryContratoTermoAtual($nmTabelaPrincipal, $nmTabContratoATUAL, $joinTabs, $queryAdicionalWhereInterno=null, $mantendoFiltroGeral = true){
+	static function getQueryContratoTermoAtual($nmTabelaPrincipal, $nmTabContratoATUAL, $joinTabs, $queryAdicionalWhereInterno=null, $mantendoFiltroGeral = true, $semFiltroInterno=false){
 		$nmTabContratoAtual = $nmTabContratoMAXSq = "TAB_CONTRATO_MAX_SQ";
 
 		$campo_subst = constantes::$CD_CAMPO_SUBSTITUICAO;
@@ -285,7 +285,11 @@ class dbContratoInfo extends dbprocesso {
 		$queryJoin .= "\n AND $nmTabelaPrincipal." .vocontrato::$nmAtrTipoContrato . "=" . $nmTabContratoMAXSq . "." . vocontrato::$nmAtrTipoContrato;
 		$queryJoin .= "\n LEFT JOIN $nmTabelaPrincipal $nmTabContratoATUAL";
 		$queryJoin .= "\n ON ";
-		$queryJoin .= $nmTabContratoMAXSq . "." . vocontrato::$nmAtrSqContrato . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrSqContrato;		
+		$queryJoin .= $nmTabContratoMAXSq . "." . vocontrato::$nmAtrSqContrato . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrSqContrato;
+		
+		if($semFiltroInterno){
+			$queryJoin = str_replace(constantes::$CD_CAMPO_SUBSTITUICAO, "", $queryJoin);
+		}
 		
 		return $queryJoin;		
 	} 
@@ -676,6 +680,168 @@ class dbContratoInfo extends dbprocesso {
 		$retorno = $retorno . $vo->getSQLValuesEntidadeUpdate ();
 		
 		return $retorno;
+	}
+	
+	
+	function createViewContratoConsolidacao() {
+		$filtro = new filtroConsultarContratoConsolidacao(false);
+		$vo = new vocontrato();
+		$isHistorico = $filtro->isHistorico;
+		//$isHistorico = false;
+		$nmTabela = $vo->getNmTabelaEntidade ( false );
+		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( $isHistorico );
+		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
+		$nmTabelaPessoaGestorContratoInfo = filtroManterContrato::$NM_TAB_PESSOA_GESTOR;
+		//$nmTabDadosOrdemParalisacao = filtroConsultarContratoConsolidacao::$NmTABDadosOrdemParalisacao;
+		//echo "tabela vo: $nmTabela | tabela contrato_info: $nmTabelaContratoInfo";
+	
+		$nmTabContratoMater = filtroConsultarContratoConsolidacao::$NmTabContratoMater;
+		$nmTabContratoATUAL = filtroConsultarContratoConsolidacao::$NmTabContratoATUAL;
+		$nmTabDemandaContratoATUAL = filtroConsultarContratoConsolidacao::$NmTabDemandaContratoATUAL;
+		$nmTabDemandaContrato = voDemandaContrato::getNmTabelaStatic ( false );
+	
+		$nmAtrTempContratoAtualCDEspecie = $nmTabContratoATUAL . "." . vocontrato::$nmAtrCdEspecieContrato;
+		$nmAtrTempContratoAtualSqEspecie = $nmTabContratoATUAL . "." . vocontrato::$nmAtrSqEspecieContrato;
+	
+		$atributoProrrogavel = filtroConsultarContratoConsolidacao::getSQLComparacaoPrazoProrrogacao(dominioProrrogacaoFiltroConsolidacao::$CD_PRORROGAVEL);
+		$atributoProrrogavelExcepcional = filtroConsultarContratoConsolidacao::getSQLComparacaoPrazoProrrogacao(dominioProrrogacaoFiltroConsolidacao::$CD_PERMITE_EXCEPCIONAL);
+		$inAtributoSeraProrrogado = "$nmTabelaContratoInfo." . voContratoInfo::$nmAtrInSeraProrrogado;
+		$inPrazoProrrogacao = voContratoInfo::$nmAtrInPrazoProrrogacao;
+	
+		$arrayCoalesceGestor = array(
+				"$nmTabelaPessoaGestorContratoInfo." . vopessoa::$nmAtrNome,
+				"$nmTabContratoATUAL." . vocontrato::$nmAtrGestorContrato);
+	
+		//faz as operacoes nas datas de vigencia
+		$nmTempAtributoDtVigenciaInicio = $nmTabContratoMater . "." . vocontrato::$nmAtrDtVigenciaInicialContrato;
+		//corrige para o caso da data ser inserida em formato errado antigo da planilha
+		$nmTempAtributoDtVigenciaInicio = filtroConsultarContratoConsolidacao::getComparacaoWhereDataVigencia($nmTempAtributoDtVigenciaInicio);
+		//somente a data de vigencia pode ser alterada pelas ordens de paralisacao
+		$nmTempAtributoDtVigenciaFim = filtroConsultarContratoConsolidacao::getAtributoDtFimVigenciaConsolidacao();
+	
+		$arrayColunasRetornadas = array (
+				$nmTabela . "." . vocontrato::$nmAtrAnoContrato,
+				$nmTabela . "." . vocontrato::$nmAtrCdContrato,
+				$nmTabela . "." . vocontrato::$nmAtrTipoContrato,
+				$nmTabContratoMater . "." . vocontrato::$nmAtrSqContrato . " AS " . filtroConsultarContratoConsolidacao::$NmColSqContratoMater,
+				$nmTabContratoMater . "." . vocontrato::$nmAtrObjetoContrato,
+				$nmTabContratoATUAL . "." . vocontrato::$nmAtrVlMensalContrato,
+				$nmTabContratoATUAL . "." . vocontrato::$nmAtrVlGlobalContrato,
+				$nmTabContratoATUAL . "." . vocontrato::$nmAtrSqContrato . " AS " . filtroConsultarContratoConsolidacao::$NmColSqContratoAtual,
+
+				"$nmAtrTempContratoAtualCDEspecie AS " . filtroConsultarContratoConsolidacao::$NmColCdEspecieContratoAtual,
+				"$nmAtrTempContratoAtualSqEspecie AS " . filtroConsultarContratoConsolidacao::$NmColSqEspecieContratoAtual,
+	
+				getSQLCOALESCE($arrayCoalesceGestor, vocontrato::$nmAtrGestorContrato),
+	
+				" $nmTempAtributoDtVigenciaInicio AS " . filtroConsultarContratoConsolidacao::$NmColDtInicioVigencia,
+				" $nmTempAtributoDtVigenciaFim AS " . filtroConsultarContratoConsolidacao::$NmColDtFimVigencia,
+				//repete as colunas para trazer com outro nome - usado na consulta por chave de contratoinfo quando precisar consolidar
+				" $nmTempAtributoDtVigenciaInicio AS " . vocontrato::$nmAtrDtVigenciaInicialContrato,
+				" $nmTempAtributoDtVigenciaFim AS " . vocontrato::$nmAtrDtVigenciaFinalContrato,
+		
+				getDataSQLDiferencaDias(getVarComoDataSQL(getDataHoje()), $nmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato) . " AS " . filtroConsultarContratoConsolidacao::$NmColQtdDiasParaVencimento,
+				filtroConsultarContratoConsolidacao::getSQLQtdAnosVigenciaContrato() . " AS " . filtroConsultarContratoConsolidacao::$NmColPeriodoEmAnos,
+	
+				$atributoProrrogavel . " AS " . filtroConsultarContratoConsolidacao::$NmColInProrrogavel,
+				$atributoProrrogavelExcepcional . " AS " . filtroConsultarContratoConsolidacao::$NmColInProrrogacaoExcepcional,
+	
+				filtroConsultarContratoConsolidacao::getDataBaseReajuste($nmTabelaContratoInfo, $nmTabela) . "AS " . voContratoInfo::$nmAtrDtProposta,
+				$inPrazoProrrogacao,
+				$inAtributoSeraProrrogado,
+				//o retorno abaixo se refere ao atributo inseraprorrogado, quando o contrato for improrrogavel: deve mandar um sinal de atencao
+				//considerando que o inseraprorrogado no contratoinfo pode nao ter sido informado
+				//SE $inPrazoProrrogacao for nulo, presume-se prorrogavel
+				getSQLCASEBooleano(
+						"!$atributoProrrogavel"
+						. " AND "
+						. "!$atributoProrrogavelExcepcional"
+						. " AND "
+						. "$inAtributoSeraProrrogado = 'S' ",
+						getVarComoString(filtroConsultarContratoConsolidacao::$CD_ATENCAO),
+						$inAtributoSeraProrrogado,
+						filtroConsultarContratoConsolidacao::$NmColInSeraProrrogadoConsolidado),
+				$filtro->getSqlAtributoCoalesceAutorizacao() . " AS " . filtroManterContratoInfo::$NmColAutorizacao,
+				getSQLNmContratada(),
+				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
+		);
+	
+		if ($isHistorico) {
+			$arrayColunasHistorico = array (
+					"$nmTabelaContratoInfo.". voContratoInfo::$nmAtrSqHist,
+			);
+			$arrayColunasRetornadas = array_merge($arrayColunasRetornadas, $arrayColunasHistorico);
+		}
+			
+		$groupbyinterno = $nmTabela . "." . vocontrato::$nmAtrAnoContrato . "," . $nmTabela . "." . vocontrato::$nmAtrCdContrato . "," . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;
+	
+		$nmTabContratoInterna = $nmTabela;
+		$nmTabContratoMINSq = "TAB_CONTRATO_MIN_SQ";
+		//$nmTabContratoMAXSq = "TAB_CONTRATO_MAX_SQ";
+	
+		//TABELA $nmTabContratoMater
+		$queryJoin .= "\n LEFT JOIN ";
+		$queryJoin .= " (SELECT " . $groupbyinterno . ", MIN(" . vocontrato::$nmAtrSqContrato . ") AS " . vocontrato::$nmAtrSqContrato
+		. " FROM " . $nmTabContratoInterna;
+		$queryJoin .= " GROUP BY " . $groupbyinterno;
+		$queryJoin .= "\n) " . $nmTabContratoMINSq;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabContratoMINSq . "." . vocontrato::$nmAtrAnoContrato;
+		$queryJoin .= "\n AND $nmTabela." . vocontrato::$nmAtrCdContrato . "=" . $nmTabContratoMINSq . "." . vocontrato::$nmAtrCdContrato;
+		$queryJoin .= "\n AND $nmTabela." .vocontrato::$nmAtrTipoContrato . "=" . $nmTabContratoMINSq . "." . vocontrato::$nmAtrTipoContrato;
+		$queryJoin .= "\n LEFT JOIN $nmTabela $nmTabContratoMater";
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabContratoMINSq . "." . vocontrato::$nmAtrSqContrato . "=" . $nmTabContratoMater . "." . vocontrato::$nmAtrSqContrato;
+	
+		$jointemp = "LEFT";
+		$joinTabs = "\n $jointemp JOIN ";	
+
+		//$queryJoin .= static::getQueryContratoTermoAtual($nmTabela, $nmTabContratoATUAL, $joinTabs);
+		$queryJoin .= static::getQueryContratoTermoAtual($nmTabela, $nmTabContratoATUAL, $joinTabs, null, true, true);
+			
+		//pega as informacos em contrato_info do contrato atual
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaContratoInfo;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrAnoContrato . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrAnoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrCdContrato . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrCdContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrTipoContrato . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrTipoContrato;
+			
+		$queryJoin .= "\n LEFT JOIN $nmTabelaPessoaContrato $nmTabelaPessoaGestorContratoInfo ";
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaPessoaGestorContratoInfo . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrCdPessoaGestor;
+	
+		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoaContrato;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaPessoaContrato . "." . vopessoa::$nmAtrCd . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrCdPessoaContratada;
+	
+		//PEGA A QTD DE DIAS SOMADAS DE ORDEM DE SUSPENSAO PRA ACRESCENTAR NO TERMO ATUAL
+		//a ordem de suspensao so tera efeito na vigencia quando forem o termo atual
+		//posto que, havendo TA posterior, este ja estara considerando o periodo alterado pela ordem de paralisacao
+		//$queryJoin .= static::getQueryContratoOrdemParalisacao($nmTabContratoATUAL, $nmTabDadosOrdemParalisacao, " LEFT JOIN ");
+			
+		$queryJoin .= "\n LEFT JOIN $nmTabDemandaContrato $nmTabDemandaContratoATUAL";
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabDemandaContratoATUAL . "." . voDemandaContrato::$nmAtrAnoContrato . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrAnoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabDemandaContratoATUAL . "." . voDemandaContrato::$nmAtrTipoContrato . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrTipoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabDemandaContratoATUAL . "." . voDemandaContrato::$nmAtrCdContrato . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrCdContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabDemandaContratoATUAL . "." . voDemandaContrato::$nmAtrCdEspecieContrato . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrCdEspecieContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabDemandaContratoATUAL . "." . voDemandaContrato::$nmAtrSqEspecieContrato . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrSqEspecieContrato;
+		
+		$filtro->groupby = $groupbyinterno;
+		$filtro->isRetornarQueryCompleta = true;
+	
+		$colecao = parent::consultarMontandoQueryTelaConsulta ( $vo, $filtro, $arrayColunasRetornadas, $queryJoin );
+		
+		$sqlView = $filtro->getSQL_QUERY_COMPLETA();
+		$nmView = filtroConsultarContratoConsolidacao::$NM_VIEW_CONTRATO_CONSOLIDACAO;
+		$sqlView = "CREATE VIEW $nmView AS $sqlView;";
+		$this->atualizarEntidade($sqlView);				
 	}
 }
 ?>

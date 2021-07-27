@@ -3,6 +3,7 @@ include_once (caminho_util . "bibliotecaSQL.php");
 class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	public $nmFiltro = "filtroConsultarContratoConsolidacao";
 	
+	static $NM_VIEW_CONTRATO_CONSOLIDACAO = "VIEW_CONTRATO_CONSOLIDACAO";
 	static $ID_REQ_Caracteristicas = "ID_REQ_Caracteristicas";
 	static $CD_ATENCAO = "CD_ATENCAO";
 
@@ -140,7 +141,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		$nmTabContratoATUAL = static::$NmTabContratoATUAL;	
 		$nmTabDadosOrdemParalisacao = static::$NmTABDadosOrdemParalisacao;
 		$nmTabDemandaContratoATUAL = static::$NmTabDemandaContratoATUAL;
-		//a data final de vigencia passa a considerar as ordens de paralisacao
+
 		$colunaACompararDtFim = filtroConsultarContratoConsolidacao::getAtributoDtFimVigenciaConsolidacao();
 
 		if($this->qtdDiasParaVencimentoProposta != null){	

@@ -326,7 +326,7 @@ function iniciar(){
 	            			class="camponaoobrigatorio" 
 	            			size="10" 
 	            			maxlength="10"
-	            			required>
+	            			>
 				</TD>
 	        </TR>	        
 	        <?php 	        
@@ -404,7 +404,6 @@ function iniciar(){
 		            	"<?=voContratoInfo::$nmAtrCdClassificacao?>",
 		            	"<?=voContratoInfo::$nmAtrInMaoDeObra?>",
 		            	"<?=voContratoInfo::$nmAtrDtProposta?>",
-		            	"<?=voContratoInfo::$nmAtrDtBaseReajuste?>",
 		            	"<?=voContratoInfo::$nmAtrInPrazoProrrogacao?>"];
 	            </SCRIPT>
 	            <br>

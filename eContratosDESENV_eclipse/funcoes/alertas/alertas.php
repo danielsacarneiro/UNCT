@@ -93,6 +93,7 @@ function getMensagemAltaPrioridade(&$count = 0, $cdSetor=null, $comInfoCompletaD
 		$filtro->tipoExcludente = dominioTipoDemanda::$CD_TIPO_DEMANDA_PROCADM;
 		$filtro->vodemanda->cdSetorDestino = $cdSetor;
 		$filtro->cdAtrOrdenacao = filtroManterDemanda::$NmColDtReferenciaSetorAtual;
+		$filtro->fasePlanilha = array(dominioFaseDemanda::$CD_PUBLICADO . CAMPO_SEPARADOR . "N");
 				
 		if($comInfoCompletaDemanda){
 			$colecao = $dbprocesso->consultarTelaConsulta ( $voDemanda, $filtro );			

@@ -1002,4 +1002,25 @@ function getTextoConfirmacaoData(){
 	return getTextoHTMLDestacado("[NÃO HAVENDO DATA PRE-ESTABELECIDA, REMOVER TODO O TRECHO QUE MENCIONA A DATA EM QUESTÃO]", "red", false, "amarelo");
 }
 
+function getVOContratoDemandaPorChave($vo, $levantaExcecao = true){
+	$voTemp = clone $vo;
+	$vocontratoDemanda = $voTemp->getContrato();
+
+	if($vocontratoDemanda != null){
+		try{
+			$dbContrato = new dbcontrato();
+			//var_dump($vocontratoDemanda);
+			$vocontratoDemanda =$dbContrato->consultarPorChaveVO($vocontratoDemanda);
+		}catch (excecaoChaveRegistroInexistente $ex){
+			if($levantaExcecao){
+				throw new excecaoGenerica("Verifique se o termo relacionado foi incluído corretamente na função 'contratos'"
+						."|Contrato:" . $vocontratoDemanda->getCodigoContratoFormatado(true) . ".");
+			}
+		}
+	}
+
+	return $vocontratoDemanda;
+}
+
+
 ?>

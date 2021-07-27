@@ -14,11 +14,12 @@ $vo = new voMensageria();
 
 /*$filtro = getFiltroContratosAVencer(constantes::$CD_NAO);
 $log .= "<br>Início de verificação dos contratos a vencer que gerarão alertas - (". $filtro->qtdDiasParaVencimento . ") dias para o vencimento.";
-
+*/
 $dbprocesso = new dbContratoInfo();
-$colecao = $dbprocesso->consultarTelaConsultaConsolidacao ($filtro);*/
-$COUNT=0;
-ECHO getMensagemDemandaIniciais($COUNT);
+$colecao = $dbprocesso->createViewContratoConsolidacao();
+
+/*$COUNT=0;
+ECHO getMensagemDemandaIniciais($COUNT);*/
 
 //var_dump($colecao);
 
