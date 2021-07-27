@@ -256,7 +256,7 @@ class dbContratoInfo extends dbprocesso {
 		
 	}
 	
-	static function getQueryContratoTermoAtual($nmTabelaPrincipal, $nmTabContratoATUAL, $joinTabs, $queryAdicionalWhereInterno=null, $mantendoFiltroGeral = true, $semFiltroInterno=false){
+	static function getQueryContratoTermoAtual($nmTabelaPrincipal, $nmTabContratoATUAL, $joinTabs, $queryAdicionalWhereInterno=null, $mantendoFiltroGeral = true){
 		$nmTabContratoAtual = $nmTabContratoMAXSq = "TAB_CONTRATO_MAX_SQ";
 
 		$campo_subst = constantes::$CD_CAMPO_SUBSTITUICAO;
@@ -286,11 +286,7 @@ class dbContratoInfo extends dbprocesso {
 		$queryJoin .= "\n LEFT JOIN $nmTabelaPrincipal $nmTabContratoATUAL";
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabContratoMAXSq . "." . vocontrato::$nmAtrSqContrato . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrSqContrato;
-		
-		if($semFiltroInterno){
-			$queryJoin = str_replace(constantes::$CD_CAMPO_SUBSTITUICAO, "", $queryJoin);
-		}
-		
+				
 		return $queryJoin;		
 	} 
 		
@@ -796,8 +792,7 @@ class dbContratoInfo extends dbprocesso {
 		$jointemp = "LEFT";
 		$joinTabs = "\n $jointemp JOIN ";	
 
-		//$queryJoin .= static::getQueryContratoTermoAtual($nmTabela, $nmTabContratoATUAL, $joinTabs);
-		$queryJoin .= static::getQueryContratoTermoAtual($nmTabela, $nmTabContratoATUAL, $joinTabs, null, true, true);
+		$queryJoin .= static::getQueryContratoTermoAtual($nmTabela, $nmTabContratoATUAL, $joinTabs);
 			
 		//pega as informacos em contrato_info do contrato atual
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaContratoInfo;

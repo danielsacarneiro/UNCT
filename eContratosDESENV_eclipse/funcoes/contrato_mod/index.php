@@ -355,6 +355,9 @@ function montarChaveContrato(){
                         $vlConsolidadoMod = $vlConsolidadoMod + floatval($voAtual->vlModificacaoReal);
                         
                         $nmUsuario = $registroBanco[vousuario::$nmAtrName];
+                        $arrayParam = array(null, $nmUsuario, 15, true, false, "", 2);
+                        $nmUsuario = truncarStringHTMLArray($arrayParam);
+                        
                    ?>
                 <TR class="dados">
                     <TD class="tabeladados">					

@@ -682,8 +682,8 @@ function getFiltroContratosAVencer($inTemDemandaEmTratamento = null){
 	$filtro->isValidarConsulta = false;
 	$filtro->setaFiltroConsultaSemLimiteRegistro ();
 
-	//$filtro->tpVigencia = dominioTpVigencia::$CD_OPCAO_VIGENTES;
-	$filtro->dtVigencia = getDataHoje();
+	$filtro->tpVigencia = dominioTpVigencia::$CD_OPCAO_VIGENTES;
+	//$filtro->dtVigencia = getDataHoje();
 	
 	$filtro->inProduzindoEfeitos = constantes::$CD_SIM;
 	//traz somente os contratos a vencer nos dias abaixo
