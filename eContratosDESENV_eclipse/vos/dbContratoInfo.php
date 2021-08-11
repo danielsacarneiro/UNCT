@@ -1,7 +1,7 @@
 <?php
 include_once (caminho_lib . "dbprocesso.obj.php");
 class dbContratoInfo extends dbprocesso {
-	static $FLAG_PRINTAR_SQL = false;
+	static $FLAG_PRINTAR_SQL = FALSE;
 	
 	function consultarPorChaveTela($vo, $isHistorico) {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
@@ -79,6 +79,7 @@ class dbContratoInfo extends dbprocesso {
 		. ", COUNT(*) AS " . voContratoInfo::$NmColNumRerra
 		. " FROM " . $nmTabContratoInterna;
 		$queryJoin .= " WHERE " . vocontrato::$nmAtrCdEspecieContrato . " = " . getVarComoString(dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_RERRATIFICACAO);
+		$queryJoin .= " AND " . voContratoInfo::$nmAtrInDesativado . "='N'";		
 		$queryJoin .= " group by $dadosRerra) $nmTabelaContratoInfoRerra \n ON ";
 		$queryJoin .= $nmTabela . "." . voContratoInfo::$nmAtrAnoContrato . "=" . $nmTabelaContratoInfoRerra . "." . vocontrato::$nmAtrAnoContrato;
 		$queryJoin .= "\n AND ";
@@ -111,6 +112,7 @@ class dbContratoInfo extends dbprocesso {
 				"$nmTabela.". voContratoInfo::$nmAtrCdContrato,
 				"$nmTabela.". voContratoInfo::$nmAtrDtProposta,
 				"$nmTabela.". voContratoInfo::$nmAtrInSeraProrrogado,
+				"$nmTabela.". voContratoInfo::$nmAtrInPrazoProrrogacao,
 				$filtro->getSqlAtributoCoalesceAutorizacao() . " AS " . filtroManterContratoInfo::$NmColAutorizacao,
 				getSQLNmContratada(),
 				//getSQLCOALESCE($colecaoAtributoCoalesceNmPessoa,vopessoa::$nmAtrNome),
@@ -278,6 +280,8 @@ class dbContratoInfo extends dbprocesso {
 		
 		$queryJoin .= " $joinTabs (SELECT " . $groupbyinterno . ", MAX(" . vocontrato::$nmAtrSqContrato . ") AS " . vocontrato::$nmAtrSqContrato
 		. " FROM $nmTabContratoInterna $queryAdicionalWhereInterno GROUP BY " . $groupbyinterno;
+		
+		//echo $queryAdicionalWhereInterno;
 		$queryJoin .= "\n) " . $nmTabContratoMAXSq;
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaPrincipal . "." . vocontrato::$nmAtrAnoContrato . "=" . $nmTabContratoMAXSq . "." . vocontrato::$nmAtrAnoContrato;
@@ -348,18 +352,10 @@ class dbContratoInfo extends dbprocesso {
 				" $nmTempAtributoDtVigenciaInicio AS " . vocontrato::$nmAtrDtVigenciaInicialContrato,
 				" $nmTempAtributoDtVigenciaFim AS " . vocontrato::$nmAtrDtVigenciaFinalContrato,
 
-				/*filtroConsultarContratoConsolidacao::getComparacaoWhereDataVigencia($nmTabContratoMater . "." . vocontrato::$nmAtrDtVigenciaInicialContrato)
-				. " AS " . vocontrato::$nmAtrDtVigenciaInicialContrato,				
-				filtroConsultarContratoConsolidacao::getComparacaoWhereDataVigencia($nmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato)
-				. " AS " . vocontrato::$nmAtrDtVigenciaFinalContrato,*/				
 								
 				getDataSQLDiferencaDias(getVarComoDataSQL(getDataHoje()), $nmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato) . " AS " . filtroConsultarContratoConsolidacao::$NmColQtdDiasParaVencimento,
 				filtroConsultarContratoConsolidacao::getSQLQtdAnosVigenciaContrato() . " AS " . filtroConsultarContratoConsolidacao::$NmColPeriodoEmAnos,
 				
-				/*getSQLCASE("$nmTabelaContratoInfo." . voContratoInfo::$nmAtrInPrazoProrrogacao
-						, " NOT NULL "
-						, filtroConsultarContratoConsolidacao::getSQLComparacaoPrazoProrrogacao(dominioProrrogacaoFiltroConsolidacao::$CD_PRORROGAVEL) 
-						, "NULL") . " AS " . filtroConsultarContratoConsolidacao::$NmColInProrrogavel,*/
 				$atributoProrrogavel . " AS " . filtroConsultarContratoConsolidacao::$NmColInProrrogavel, 
 				$atributoProrrogavelExcepcional . " AS " . filtroConsultarContratoConsolidacao::$NmColInProrrogacaoExcepcional,
 				
@@ -432,7 +428,9 @@ class dbContratoInfo extends dbprocesso {
 		$queryJoin .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrCdContrato . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrCdContrato;
 		$queryJoin .= "\n AND ";
 		$queryJoin .= $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrTipoContrato . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrTipoContrato;
-			
+		/*$queryJoin .= "\n AND ";
+		$queryJoin .= "$nmTabelaContratoInfo." . voContratoInfo::$nmAtrInDesativado . "='N'";*/
+		
 		$queryJoin .= "\n LEFT JOIN $nmTabelaPessoaContrato $nmTabelaPessoaGestorContratoInfo ";
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaPessoaGestorContratoInfo . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrCdPessoaGestor;

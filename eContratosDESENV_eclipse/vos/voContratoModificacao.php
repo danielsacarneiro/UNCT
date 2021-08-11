@@ -94,7 +94,7 @@ class voContratoModificacao extends voentidade {
 		$this->vocontrato = new vocontrato();
 	}
 	public static function getTituloJSP() {
-		return "CONTRATO-MODIFICAÇÃO (Acréscimos e Supressões)";
+		return "CONTRATO-EXECUÇÃO (Acréscimos e Supressões)";
 	}
 	public static function getNmTabela() {
 		return "contrato_mod";

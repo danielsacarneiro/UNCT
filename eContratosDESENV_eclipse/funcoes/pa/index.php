@@ -156,7 +156,7 @@ function validaFormulario() {
 			</TR>        
 			<TR>
                 <TH class="campoformulario" nowrap>Contratada:</TH>
-                <TD class="campoformulario" width="1%">
+                <TD class="campoformulario" width="1%" nowrap>
                 Cód: <INPUT type="text" id="<?=vopessoa::$nmAtrCd?>" name="<?=vopessoa::$nmAtrCd?>"  value="<?php echo complementarCharAEsquerda($filtro->cdPessoa, "0", TAMANHO_CODIGOS);?>"  class="camponaoobrigatorio" size="7" >
                 Nome: <INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>"  value="<?php echo($nome);?>"  class="camponaoobrigatorio" size="30" ></TD>
                 <TH class="campoformulario" width="1%" nowrap>CNPJ/CPF:</TH>

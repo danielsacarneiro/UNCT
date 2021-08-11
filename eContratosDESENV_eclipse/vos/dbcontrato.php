@@ -546,6 +546,7 @@ class dbcontrato extends dbprocesso {
 				$nmTabela . ".*",
 				"$nmTabelaContratoInfo." . voContratoInfo::$nmAtrDtProposta,
 				"$nmTabelaContratoInfo." . voContratoInfo::$nmAtrInEscopo,
+				"$nmTabelaContratoInfo." . voContratoInfo::$nmAtrInPrazoProrrogacao,
 				"$nmTabelaContratoLicon." . voContratoLicon::$nmAtrAnoDemanda, //usado para saber se ha contrato_licon relacionado
 				"$nmTabelaContratoLicon." . voContratoLicon::$nmAtrCdDemanda,
 				getSQLCOALESCE($arrayAtributosContratada, vocontrato::$nmAtrContratadaContrato),
@@ -573,6 +574,32 @@ class dbcontrato extends dbprocesso {
 		
 				
 		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryJoin, $isHistorico , $isConsultaPorChave);
+	}
+	
+	private static function getSQLTabelaContratoDemanda(){
+		$nmTabelaDemandaContrato = voDemandaContrato::getNmTabela();
+		$nmTabelaDemanda = voDemanda::getNmTabela();
+		
+		$queryJoin .= "SELECT $nmTabelaDemandaContrato.* FROM $nmTabelaDemandaContrato";
+		$queryJoin .= "\n INNER JOIN $nmTabelaDemanda ";
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoDemanda . "=" . $nmTabelaDemanda . "." . voDemanda::$nmAtrAno;
+		$queryJoin .= "\n AND " . $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdDemanda . "=" . $nmTabelaDemanda . "." . voDemanda::$nmAtrCd;
+		$queryJoin .= "\n AND " . $nmTabelaDemanda . "." . voDemanda::$nmAtrInDesativado . "='N'";
+		
+		/*$queryJoin .= "\n LEFT JOIN " . $nmTabelaContrato;
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrAnoContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrAnoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrTipoContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrTipoContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrCdEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrCdEspecieContrato;
+		$queryJoin .= "\n AND ";
+		$queryJoin .= $nmTabelaDemandaContrato . "." . voDemandaContrato::$nmAtrSqEspecieContrato . "=" . $nmTabelaContrato . "." . vocontrato::$nmAtrSqEspecieContrato;*/
+		 
+		return $queryJoin;		
 	}
 	
 	/**
@@ -607,12 +634,19 @@ class dbcontrato extends dbprocesso {
 		}
 		if(isAtributoValido($cdEspecie)){
 			$arrayColunasRetornadas[vocontrato::$nmAtrCdEspecieContrato] = getVarComoString($cdEspecie);
-		}		
+		}
+		
+		/*$nmInDesativadoContrato = "$nmTabela." . voentidade::$nmAtrInDesativado;
+		$nmInDesativadoDemandaContrato = "$nmTabelaDemandaContrato." . voentidade::$nmAtrInDesativado;*/
+		
+		$sqlContratoDemanda = static::getSQLTabelaContratoDemanda();
+		$sqlContratoDemanda = "($sqlContratoDemanda) TAB_TEMP ";
 		
 		$query = " SELECT COALESCE(MAX($nmColunaSq),0)+1 AS " . $nmColunaSq . " FROM (";		
 		$query .= $this->getSQLSequencialPorTabela ( $nmColunaSq, $vo, false, $arrayColunasRetornadas);
 		$query .= " UNION ALL ";
-		$query .= $this->getSQLSequencialPorTabela ( $nmColunaSq, $voDemandaContrato, false, $arrayColunasRetornadas);
+		//$query .= $this->getSQLSequencialPorTabela ( $nmColunaSq, $voDemandaContrato, false, $arrayColunasRetornadas);
+		$query .= $this->getSQLSequencialPorTabela ( $nmColunaSq, $voDemandaContrato, false, $arrayColunasRetornadas, $sqlContratoDemanda);
 		$query .= ") TAB ";
 		
 		//echo $query;

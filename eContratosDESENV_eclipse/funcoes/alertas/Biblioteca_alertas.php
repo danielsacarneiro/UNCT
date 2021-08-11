@@ -223,6 +223,11 @@ function getCorpoMensagemPorColecaoArray($pArray) {
 								$classColuna = "tabeladadosdestacadovermelho";
 							}
 							//$coluna_valor = complementarCharAEsquerda ( $coluna_valor, '0', $colunaTipoDado );
+						}else if($colunaTpValidacao == constantes::$CD_ALERTA_TP_VALIDACAO_MENORQUE){
+							if($coluna_valor < $colunaVlReferencia){
+								$classColuna = "tabeladadosdestacadovermelho";
+							}
+								//$coluna_valor = complementarCharAEsquerda ( $coluna_valor, '0', $colunaTipoDado );
 						}						
 						
 					}else if(isAtributoValido($colunaTpValidacao)){
@@ -621,16 +626,23 @@ function enviarEmailUNCT($enviarEmail, $count = 0){
 	imprimeTituloalerta($enviarEmail, $setor);	
 	
 	//demandas prioritarias
-	$mensagem .= getMensagemAltaPrioridade($count, dominioSetor::$CD_SETOR_UNCT, true);	
-	//demandas a revisar
-	$mensagem .= getMensagemPorSituacao($count, dominioSetor::$CD_SETOR_UNCT, dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_A_REVISAR);
-	//demandas com contratos a vencer
-	$mensagem .= getMensagemDemandasDeContratosAVencer($count);
-	$msgAproveitavel .= $mensagem;
-	//envia demandas monitoradas
-	$mensagemX = getMensagemDemandasMonitoradas($count);
+	$mensagemX = getMensagemAltaPrioridade($count, dominioSetor::$CD_SETOR_UNCT, true);
 	$msgAproveitavel .= $mensagemX;
 	$mensagem .= $mensagemX;
+
+	//demandas a revisar
+	$mensagemX = getMensagemPorSituacao($count, dominioSetor::$CD_SETOR_UNCT, dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_A_REVISAR);
+	$mensagem .= $mensagemX;
+	
+	//demandas com contratos a vencer
+	$mensagemX = getMensagemDemandasDeContratosAVencer($count);
+	$msgAproveitavel .= $mensagemX;
+	$mensagem .= $mensagemX;	
+	
+	//envia demandas monitoradas
+	$mensagemX = getMensagemDemandasMonitoradas($count);
+	$mensagem .= $mensagemX;
+	
 	//envia demandas iniciais
 	$mensagem .= getMensagemDemandaIniciais($count);
 	//sistemas licon portal da transparencia

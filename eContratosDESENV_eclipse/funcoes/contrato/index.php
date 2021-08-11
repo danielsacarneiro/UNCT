@@ -377,7 +377,7 @@ function estatisticas(){
 	            |Extenso: 
 	            <INPUT type="text" id="<?=vocontrato::$nmAtrProcessoLicContrato?>" name="<?=vocontrato::$nmAtrProcessoLicContrato?>"  value="<?php echo($filtro->dsproclic);?>"  class="camponaoobrigatorio" size="15" >
 	            </TD>
-	        </TR>	        
+	        </TR>
 			<TR>
                 <TH class="campoformulario" nowrap >Contratada:</TH>
                 <TD class="campoformulario" nowrap width="1%">

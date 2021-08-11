@@ -184,6 +184,7 @@ function isContratoPermiteProrrogacao($voContrato){
 			$tpProrrogacao = $vocontratoinfo->inPrazoProrrogacao;
 			$isPrazoProrrogacaoServicoContinuo = $tpProrrogacao == dominioProrrogacaoContrato::$CD_ART57_II;
 			$isPrazoProrrogacaoServicoInformatica = $tpProrrogacao == dominioProrrogacaoContrato::$CD_ART57_IV;
+			$isContratoNaoSeraProrrogado = $vocontratoinfo->inSeraProrrogado == "N";
 			//echo "$prorrogavel $prorrExcepcional";			
 			//verifica se o contrato permite prorrogacao
 			//$retorno = getAtributoComoBooleano($prorrogavel) || getAtributoComoBooleano($prorrExcepcional); 
@@ -192,7 +193,7 @@ function isContratoPermiteProrrogacao($voContrato){
 		
 	}
 
-	return array($isContratoPermiteProrrogacao, $isPrazoProrrogacaoServicoContinuo, $isPrazoProrrogacaoServicoInformatica);
+	return array($isContratoPermiteProrrogacao, $isPrazoProrrogacaoServicoContinuo, $isPrazoProrrogacaoServicoInformatica, $isContratoNaoSeraProrrogado);
 }
 
 function isSituacaoDemandaFechada($situacao){
@@ -272,7 +273,7 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 		$html .= getAlertaOrientacao($exReajuste->getMessage(), $countATENCAO, $conectorAlerta);
 		$conectorAlerta = "<BR>";
 	}
-	
+		
 	try{
 		//if(!$temReajustePendente){echo "teste";}
 		$retornoTemReajustePendente = temReajustePendente($voContratoDemanda);
@@ -311,12 +312,14 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 		$countATENCAO++;		
 	}
 		
+	$arrayPermiteProrrogacao = isContratoPermiteProrrogacao($voContratoDemanda);
+	$permiteProrrogacao = $arrayPermiteProrrogacao[0];
+	$ehServicoContinuo = $arrayPermiteProrrogacao[1];
+	$ehServicoInformatica = $arrayPermiteProrrogacao[2];
+	$isContratoNaoProrrogado = $arrayPermiteProrrogacao[3];
+	
 	if(dominioTipoDemandaContrato::existeItemArrayOuStrCampoSeparador(dominioTipoDemandaContrato::$CD_TIPO_PRORROGACAO, $pCdOpcaoSelecionadaTpDemandaContrato)){
-		//var_dump($voDemanda->getContrato());		
-		$arrayPermiteProrrogacao = isContratoPermiteProrrogacao($voContratoDemanda);
-		$permiteProrrogacao = $arrayPermiteProrrogacao[0];
-		$ehServicoContinuo = $arrayPermiteProrrogacao[1];
-		$ehServicoInformatica = $arrayPermiteProrrogacao[2];
+		//var_dump($voDemanda->getContrato());
 		if($exibirAlertas){
 			if(!($ehServicoContinuo || $ehServicoInformatica)){
 				$texto = "ATENÇÃO$countATENCAO: verifique a fundamentação legal para a prorrogação em 'Contratos-Consolidação'";
@@ -338,6 +341,11 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 				
 		}	
 	}
+	
+	 if($exibirAlertas && $isContratoNaoProrrogado){
+		 $html .= getAlertaOrientacao("Contrato NÃO SERÁ PRORROGADO: verifique a necessidade da demanda.", $countATENCAO, $conectorAlerta);
+		 $conectorAlerta = "<BR>";
+	 }	
 	
 	$dtinicioContrato = $voContratoDemanda->dtVigenciaInicial;
 	/*if($dtinicioContrato >= normativos::$DATA_PUBLICACAO_RESOLUCAOCPF0012020){
@@ -826,8 +834,10 @@ function getCorpoEmailAssinatura($pArrayCamposSubstituicao){
 	$codigoContratoCompleto = getTextoHTMLNegrito(getCodigoContratoPublicacao($vocontrato));
 	
 	$dtInicioVigencia = getData($vocontrato->dtVigenciaInicial);
+	$isVigenciaAPartirAssinatura = $dtInicioVigencia == null;
 	if($dtInicioVigencia == null){
 		$dtAssinaturaDigital = $dtInicioVigencia = $str_confirmar;
+		$dtInicioVigencia = "<u>SUA ASSINATURA</u>" . $dtInicioVigencia;
 	}else{
 		$dtAssinaturaDigital = somarOuSubtrairDias($dtInicioVigencia, 1, "-", false);
 	}	
@@ -865,7 +875,9 @@ function getCorpoEmailAssinatura($pArrayCamposSubstituicao){
 		}
 	
 	}catch (excecaoAtributoInvalido $ex){
-		$retorno .= getTextoHTMLDestacado("<br><br>*****ATENÇÃO: verifique a data de início de vigência do contrato.*****<br><br>");
+		if(!$isVigenciaAPartirAssinatura){
+			$retorno .= getTextoHTMLDestacado("<br><br>*****ATENÇÃO: verifique a data de início de vigência do contrato.*****<br><br>");
+		}
 	}
 	//echo compararDatas($dthtmlassinatura, getDataHoje()) . " $dthtmlassinatura  e " . getDataHoje();
 	
@@ -892,11 +904,13 @@ function getCorpoEmailAssinaturaSEI($pArrayCamposSubstituicao){
 	$dtInicioVigenciaBanco = $vocontrato->dtVigenciaInicial;
 	$dtInicioVigencia = getData($dtInicioVigenciaBanco);
 	if(isDataValidaNaoVazia($dtInicioVigenciaBanco) && isDataRetroativa($dtInicioVigencia)){
-		throw new excecaoGenerica("Contrato retroativo: assinatura não permitida no SEI. Início de vigência é $dtInicioVigencia.");		
+		throw new excecaoGenerica("Contrato retroativo: assinatura não permitida no SEI. Início de vigência é $dtInicioVigencia.|". $vocontrato->getCodigoContratoFormatado(true));		
 	}
 
+	$isVigenciaAPartirAssinatura = $dtInicioVigencia == null;
 	if($dtInicioVigencia == null){
 		$dtAssinaturaDigital = $dtInicioVigencia = $str_confirmar;
+		$dtInicioVigencia = "<u>SUA ASSINATURA</u>" . $dtInicioVigencia;
 	}else{
 		$dtAssinaturaDigital = $dtInicioVigencia;
 		//somente o contrato mater permite que a assinatura seja igual ao inicio da vigencia
@@ -941,7 +955,9 @@ function getCorpoEmailAssinaturaSEI($pArrayCamposSubstituicao){
 		}
 		
 		//$retorno .= getTextoHTMLDestacado("<br><br>ATENÇÃO"). "<b>: sob pena de inadmissibilidade, a assinatura digital deve ocorrer até ".getTextoHTMLDestacado($dtAssinaturaDigital)."</b>.$str_confirmar";
-		$retorno .= getTextoDataAssinaturaDigital($dtAssinaturaDigital);
+		if(!$isVigenciaAPartirAssinatura){
+			$retorno .= getTextoDataAssinaturaDigital($dtAssinaturaDigital);
+		}
 			
 		if($vocontratoinfo->inTemGarantia == "S"){
 			$retorno .= "<br><br>Por oportuno, informamos que será necessária a PRESTAÇÃO, ou REFORÇO, se acréscimo, ".getTextoHTMLNegrito("DA GARANTIA CONTRATUAL").",
@@ -975,7 +991,9 @@ function validaSEIExistente($SEI){
 		$db = new dbDemanda();
 		$colecao = $db->consultarTelaConsulta(new voDemanda(), $filtro);
 		if(!isColecaoVazia($colecao)){
-			$retorno = getTextoHTMLDestacado("Demanda SEI existente. Confirme se não é o caso de tramitar a demanda econti já inclusa...", "blue", false);
+			$retorno = getTextoHTMLDestacado("Demanda SEI existente. <u>UTILIZE-A SE SE TRATAR DO MESMO 'EVENTO'</u>.", "red", false);
+			
+			//$retorno .= getTagHTMLAbreJavaScript() . "alert(1);" . getTagHTMLFechaJavaScript(); 
 		}
 
 	}
@@ -983,10 +1001,6 @@ function validaSEIExistente($SEI){
 }
 
 function isDemandaContratoAssinado($voDemanda){
-	if(!isAtributoValido($voDemanda->fase)){
-		throw new excecaoAtributoInvalido("Atributo da demanda 'fase' não preenchido.<br>Indique a modalidade de assinatura do termo: se físico, digitla ou pelo SEI...");
-	}
-
 	return existePeloMenosUmItemNoArrayOuString(dominioFaseDemanda::getColecaoFaseContratoAssinado(), $voDemanda->fase);
 }
 

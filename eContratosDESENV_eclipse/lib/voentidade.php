@@ -170,17 +170,25 @@ class voentidade extends multiplosConstrutores {
 		
 		return $retorno;
 	}
-	static function getValoresWhereSQL($voEntidade, $colecaoAtributos) {
+	
+	function getValoresWhereSQLPorAtributo($colecaoAtributos, $nmTabela=null) {
+		return self::getValoresWhereSQL($this, $colecaoAtributos, $nmTabela);		
+	}
+		
+	static function getValoresWhereSQL($voEntidade, $colecaoAtributos, $nmTabela=null) {
 		$sqlConector = "";
 		$retorno = "";
-		$nmTabela = $voEntidade->getNmTabelaEntidade ( false );
 		
 		$tamanho = sizeof ( $colecaoAtributos );
 		$chaves = array_keys ( $colecaoAtributos );
 		
+		if(isAtributoValido($nmTabela)){
+			$strNmTabela = " $nmTabela.";
+		}
+		
 		for($i = 0; $i < $tamanho; $i ++) {
 			$nmAtributo = $chaves [$i];
-			$retorno .= $sqlConector . static::getAtributoValorSQL ( $nmAtributo, $colecaoAtributos [$nmAtributo] );
+			$retorno .= $sqlConector . $strNmTabela. static::getAtributoValorSQL ( $nmAtributo, $colecaoAtributos [$nmAtributo] );
 			$sqlConector = " AND ";
 		}
 		return $retorno;

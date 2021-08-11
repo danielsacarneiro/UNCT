@@ -18,7 +18,10 @@ $isHistorico = ($voContratoMod->sqHist != null && $voContratoMod->sqHist != "");
 
 $dbcontrato = new dbcontrato();
 $dbContratoMod = new dbContratoModificacao();	
-$colecao = $dbContratoMod->consultarPorChaveTela($voContratoMod, $isHistorico);
+$colecao = $dbContratoMod->consultarPorChaveTela($voContratoMod, $isHistorico, true);
+//basta pegar o primeiro registro da consulta
+$colecao = $colecao[0];
+
 $voContratoMod->getDadosBanco($colecao);
 $voContrato->getDadosBanco($colecao);   
 $voContratoInfo->getDadosBanco($colecao);

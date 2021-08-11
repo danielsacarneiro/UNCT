@@ -294,7 +294,6 @@ include_once ("voContratoLicon.php");
     function getValoresAtributosObrigatorios($vocontratoinfo=null){
     	$retorno = array(
     			"Dt.Assinatura" => $this->dtAssinatura,
-    			"Dt.Vigencia.Final" => $this->dtVigenciaFinal,
     			"Dt.Vigencia.Inicial" => $this->dtVigenciaInicial,
     			"Proc.Licitatorio"=> $this->procLic,
     	);
@@ -316,11 +315,19 @@ include_once ("voContratoLicon.php");
     	$retornoTemp = $this->getValoresAtributosObrigatoriosPorEntidade($retorno);
     	//var_dump($retornoTemp);
     	
-    	
+		$validarDataFim = true;
     	if($vocontratoinfo != null){
 	    	$arrayContratoInfo = $vocontratoinfo->getValoresAtributosObrigatorios();
 	    	//var_dump($arrayContratoInfo);
-	    	$retornoTemp = array_merge_keys($retornoTemp, $arrayContratoInfo);    	
+	    	$retornoTemp = array_merge_keys($retornoTemp, $arrayContratoInfo);
+	    	
+	    	if($vocontratoinfo->inPrazoProrrogacao != dominioProrrogacaoContrato::$CD_COVID){
+	    		$validarDataFim = false;
+	    	}
+    	}
+    	
+    	if($validarDataFim){
+    		$retorno["Dt.Vigencia.Final"] = $this->dtVigenciaFinal;
     	}
     	 
     	return $retornoTemp;
@@ -664,9 +671,9 @@ include_once ("voContratoLicon.php");
 		. constantes::$CD_CAMPO_SEPARADOR
 		. $this->cdContrato
 		. constantes::$CD_CAMPO_SEPARADOR
-		. $this->tipo
-		. constantes::$CD_CAMPO_SEPARADOR
-		. "1";
+		. $this->tipo;
+		/*. constantes::$CD_CAMPO_SEPARADOR
+		. "1";*/
 		
 		return $retorno;		
 	}

@@ -18,6 +18,7 @@ class excecaoGenerica extends Exception
 	static $CD_EXCECAO_ERRO_SINTAXE = 1064;
 	
 	var $mensagemSozinha = "";
+	var $msgAdicional;
 	
     // Redefine a exceção de forma que a mensagem não seja opcional
     public function __construct($message, $code = 0, Exception $previous = null) {

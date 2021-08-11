@@ -263,8 +263,13 @@ class dbprocesso {
 		if ($isPorChavePrimaria) {
 			$tamanho = sizeof ( $retorno );
 			
-			if ($retorno == "")
-				throw new excecaoChaveRegistroInexistente (get_class($this) . "|DbProcesso. Consulta Chave Primária");
+			if ($retorno == ""){
+				$ex = new excecaoChaveRegistroInexistente (get_class($this) . "|DbProcesso. Consulta Chave Primária");
+				if($this->isPrintarSQL()){
+					$ex->msgAdicional = $query;
+				}
+				throw $ex;
+			}
 			
 			if ($tamanho > 1)
 				throw new excecaoMaisDeUmRegistroRetornado ();
@@ -881,8 +886,12 @@ class dbprocesso {
 	 * @param unknown $pArrayColunasAlternativas
 	 * @return string
 	 */
-	function getSQLSequencialPorTabela($nmColunaSq, $voEntidade, $isHistorico, $pArrayColunasAlternativas = null) {
+	function getSQLSequencialPorTabela($nmColunaSq, $voEntidade, $isHistorico, $pArrayColunasAlternativas = null, $sqlTabelaTemporaria=null) {
 		$nmTabela = $voEntidade->getNmTabelaEntidade ( $isHistorico );
+		
+		if($sqlTabelaTemporaria != null){
+			$nmTabela = $sqlTabelaTemporaria;
+		}		
 		
 		//$voEntidade = new voentidade();
 		if(!$isHistorico && $voEntidade->temTabHistorico){

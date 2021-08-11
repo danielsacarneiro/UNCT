@@ -162,7 +162,7 @@ function getContratoDetalhamentoParam($arrayParametro) {
 			}
 			
 			$cdAutorizacaoEconti = $voContratoInfoPK->cdAutorizacao;
-			echo getTextoHTMLDestacado("Autorização", "black", true) . ":";
+			echo getTextoHTMLDestacado("<br>Autorização", "black", true) . ":";
 					
 			$isContratoEnvioSAD = isContratoEnvioSADPGE($voContrato, dominioSetor::$CD_SETOR_SAD, $voContratoInfoPK);
 			$isContratoEnvioPGE = isContratoEnvioSADPGE($voContrato, dominioSetor::$CD_SETOR_PGE, $voContratoInfoPK);
@@ -184,7 +184,7 @@ function getContratoDetalhamentoParam($arrayParametro) {
 				echo dominioSetor::getHtmlDetalhamento("", "", $strSetoresTemp, false);
 				
 				if($cdAutorizacaoPorValor != $cdAutorizacaoEconti){
-					echo getTextoHTMLDestacado("Verifique informação adicional sobre 'Autorização' do contrato.<br>", "red", true);				
+					echo getTextoHTMLDestacado("Verifique informação adicional sobre 'Autorização' do contrato.<br>, <u>bem como se o termo está com o valor correto</u>.", "red", true);				
 				}
 				
 			}else{
@@ -2018,13 +2018,14 @@ function getTextoLembreteContrato($colecao){
 	//var_dump($colecao);
 	if(!isColecaoVazia($colecao)){
 		$conector = "<br><br>";
+		//$conector = "";
 		$texto = "";
 		foreach ($colecao as $registro){
 			$voMensageria = new voMensageria();
 			$voMensageria->getDadosBanco($registro);
 			
 			//if(isAtributoValido($voMensageria->obs)){
-				$texto .= $voMensageria->toString() . "|". $voMensageria->obs . $conector;
+				$texto .= "**" . $voMensageria->toString() . "|". $voMensageria->obs . $conector;
 			//}
 		}
 		

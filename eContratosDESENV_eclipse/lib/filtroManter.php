@@ -5,6 +5,8 @@ include_once (caminho_util . "dominioTpVigencia.php");
 require_once (caminho_util . "/selectOR_AND.php");
 class filtroManter extends multiplosConstrutores {
 	
+	static $IN_FILTRO_OCULTO_PADRAO = true;
+	static $NM_DIV_FILTRO_EXPANSIVEL = "NM_DIV_FILTRO_EXPANSIVEL";	
 	static $ID_SESSAO_COUNT_FILTRO_SESSAO = "ID_SESSAO_COUNT_FILTRO_SESSAO";
 	static $ID_REQ_NmFiltroExportarPlanilha = "ID_REQ_NmFiltroExportarPlanilha";
 	static $CD_CAMPO_SUBSTITUICAO = "[[[[QEEWER_CD_CAMPO_SUBSTITUICAO_EREWFDSFS]]]]";
@@ -23,6 +25,7 @@ class filtroManter extends multiplosConstrutores {
 	static $nmAtrCdUtilizarSessao = "utilizarSessao";
 	static $nmAtrCdConsultar = "consultar";
 	static $nmAtrIsTpVigenciaMAxSq = "nmAtrIsTpVigenciaMAxSq";
+	static $nmAtrInFiltroOculto = "nmAtrInFiltroOculto";
 	
 	private $nmMetodoExportarPlanilha = "";
 	private $nmVOEntidadeExportarPlanilha = "";
@@ -45,6 +48,7 @@ class filtroManter extends multiplosConstrutores {
 	var $groupby;
 	var $isConsultaTela;
 	var $isTpVigenciaMAxSq;
+	var $inFiltroOculto;
 	//implementar quando trouxer uma solucao para exibicao de registros considerando o historico
 	//var $inTrazerComHistorico = false;
 	
@@ -173,6 +177,10 @@ class filtroManter extends multiplosConstrutores {
 		$this->qtdRegistrosPorPag = @$_POST [self::$nmAtrQtdRegistrosPorPag];
 		$this->numTotalRegistros = @$_POST [self::$nmAtrNumTotalRegistros];
 		$this->cdConsultarArquivo = @$_POST [self::$nmAtrCdConsultarArquivo];
+		$this->inFiltroOculto = @$_POST [self::$nmAtrInFiltroOculto];
+		/*if(!isAtributoValido($this->inFiltroOculto)){
+			$this->inFiltroOculto = "N";
+		}*/
 		
 		//se o filtro vem da tela, deve por na sessao
 		$this->isIncluirFiltroNaSessao = true;

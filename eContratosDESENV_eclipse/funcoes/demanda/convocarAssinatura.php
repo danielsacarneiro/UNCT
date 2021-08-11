@@ -50,12 +50,13 @@ setCabecalho($titulo);
           			<TD class="conteinerconteudodados">
 					<TABLE id="table_conteudodados" class="conteudodados" cellpadding="0" cellspacing="0">
 					<TR>
+						<TD class="conteinerconteudodados">
 				        <?php				        	
 				        	$mensagem .= getEmailConvocacaoAssinatura($registro, $isAssinaturaSEI);				        	
 				        	echo $mensagem;				        	 
-						  ?>			            
-		            </TR>							
-
+						  ?>
+						</TD>			            
+		            </TR>
 					</TABLE>
             		</TD>
         		</TR>

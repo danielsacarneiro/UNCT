@@ -5,7 +5,7 @@ include_once 'dbContratoModificacao.php';
 class dbContratoModificacao extends dbprocesso {
 	static $FLAG_PRINTAR_SQL = false;
 	
-	function consultarPorChaveTela($vo, $isHistorico) {
+	function consultarPorChaveTela($vo, $isHistorico, $isTelaExecucao=false) {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
 		$nmTabelaContrato = vocontrato::getNmTabelaStatic ( false );
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( false );
@@ -80,8 +80,19 @@ class dbContratoModificacao extends dbprocesso {
 		$queryJoin .= "\n AND ";
 		$queryJoin .= $nmTabela . "." . vocontrato::$nmAtrTipoContrato . "=" . $nmTabContratoMATER . "." . voContratoModificacao::$nmAtrTipoContrato;
 	
-	
-		return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryJoin, $isHistorico );
+		if(!$isTelaExecucao){	
+			return $this->consultarPorChaveMontandoQuery ( $vo, $arrayColunasRetornadas, $queryJoin, $isHistorico );
+		}else{
+			//a consulta pela tela de execucao usa o mesmo retorno da consulta por chave, mas pode trazer varios registros
+			//dai seu tratamento diferente
+			$queryWhereTemp = " WHERE ";			
+			$pArrayAtributos = array(voContratoModificacao::$nmAtrAnoContrato => $vo->vocontrato->anoContrato,
+					voContratoModificacao::$nmAtrTipoContrato => getVarComoString($vo->vocontrato->tipo),
+					voContratoModificacao::$nmAtrCdContrato => $vo->vocontrato->cdContrato,
+			);
+			$queryWhereTemp .= $vo->getValoresWhereSQLPorAtributo($pArrayAtributos, voContratoModificacao::getNmTabelaStatic($isHistorico));
+			return $this->consultarMontandoQuery($vo, $arrayColunasRetornadas, $queryJoin, $queryWhereTemp, $isHistorico, false, null);
+		}
 	}
 	
 	function consultarTelaConsulta($vo, $filtro) {

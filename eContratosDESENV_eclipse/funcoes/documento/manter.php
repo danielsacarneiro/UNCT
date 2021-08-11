@@ -246,7 +246,10 @@ function criarNomeDocumento(campoChamada){
 	
 	complemento = complemento.toUpperCase();
 	//complemento = complemento + ".doc";
-	complemento = complemento + getExtensaoDocumento(tpDoc);	
+	complemento = complemento + getExtensaoDocumento(tpDoc);
+
+	//bibli.principal
+	complemento = removerCaractererEspeciais(complemento);	
 	
 	document.frm_principal.<?=voDocumento::$nmAtrLink?>.value = complemento;
 	getPreviaEnderecoArquivo();

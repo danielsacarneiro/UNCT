@@ -530,7 +530,16 @@ function getMensagemContratosAVencerGestor(&$count = 0){
 		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, constantes::$CD_COLUNA_CONTRATO, null);
 		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Início.Vigência', filtroConsultarContratoConsolidacao::$NmColDtInicioVigencia, constantes::$CD_TP_DADO_DATA);
 		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Fim.Vigência', filtroConsultarContratoConsolidacao::$NmColDtFimVigencia, constantes::$CD_TP_DADO_DATA);
-		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Prazo(dias)', filtroConsultarContratoConsolidacao::$NmColQtdDiasParaVencimento);
+		//$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Prazo(dias)', filtroConsultarContratoConsolidacao::$NmColQtdDiasParaVencimento);
+		
+		$array =array(
+				constantes::$CD_COLUNA_CHAVE => 'Prazo(dias)',
+				constantes::$CD_COLUNA_VALOR => filtroConsultarContratoConsolidacao::$NmColQtdDiasParaVencimento,
+				constantes::$CD_COLUNA_TP_DADO =>  constantes::$TAMANHO_CODIGOS_SAFI,
+				constantes::$CD_COLUNA_VL_REFERENCIA =>  voMensageria::$NUM_DIAS_AVISO_ENCERRAMENTO_CONTRATO_PADRAO,
+				constantes::$CD_COLUNA_TP_VALIDACAO =>  constantes::$CD_ALERTA_TP_VALIDACAO_MENORQUE,
+		);
+		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);
 
 		$msg = getCorpoMensagemPorColecao($assunto, $colecao, $colunasAAcrescentar);
 
@@ -553,7 +562,17 @@ function getMensagemContratosAVencerImprorrogaveisGestor(&$count = 0){
 		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, constantes::$CD_COLUNA_CONTRATO, null);
 		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Início.Vigência', filtroConsultarContratoConsolidacao::$NmColDtInicioVigencia, constantes::$CD_TP_DADO_DATA);
 		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Fim.Vigência', filtroConsultarContratoConsolidacao::$NmColDtFimVigencia, constantes::$CD_TP_DADO_DATA);
-		$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Prazo(dias)', filtroConsultarContratoConsolidacao::$NmColQtdDiasParaVencimento);
+		//$colunasAAcrescentar = incluirColunaColecao($colunasAAcrescentar, 'Prazo(dias)', filtroConsultarContratoConsolidacao::$NmColQtdDiasParaVencimento);
+		
+		$array =array(
+				constantes::$CD_COLUNA_CHAVE => 'Prazo(dias)',
+				constantes::$CD_COLUNA_VALOR => filtroConsultarContratoConsolidacao::$NmColQtdDiasParaVencimento,
+				constantes::$CD_COLUNA_TP_DADO =>  constantes::$TAMANHO_CODIGOS_SAFI,
+				constantes::$CD_COLUNA_VL_REFERENCIA =>  3*(voMensageria::$NUM_DIAS_AVISO_ENCERRAMENTO_CONTRATO_PADRAO),
+				constantes::$CD_COLUNA_TP_VALIDACAO =>  constantes::$CD_ALERTA_TP_VALIDACAO_MENORQUE,
+		);
+		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);
+		
 		
 		$msg = getCorpoMensagemPorColecao($assunto, $colecao, $colunasAAcrescentar);
 
@@ -606,7 +625,7 @@ function getMensagemDemandasMonitoradas(&$count = 0){
 				constantes::$CD_COLUNA_CHAVE => 'PRAZO',
 				constantes::$CD_COLUNA_VALOR => filtroConsultarDemandaGestao::$NmColNuTempoUltimaTram,
 				constantes::$CD_COLUNA_TP_DADO =>  constantes::$TAMANHO_CODIGOS_SAFI,
-				constantes::$CD_COLUNA_VL_REFERENCIA =>  15,
+				constantes::$CD_COLUNA_VL_REFERENCIA =>  voMensageria::$NUM_DIAS_AVISO_ENCERRAMENTO_CONTRATO_PADRAO,
 				constantes::$CD_COLUNA_TP_VALIDACAO =>  constantes::$CD_ALERTA_TP_VALIDACAO_MAIORQUE,
 		);
 		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);
@@ -761,7 +780,7 @@ function getMensagemDemandaIniciais(&$count = 0){
 				constantes::$CD_COLUNA_CHAVE => 'PRAZO',
 				constantes::$CD_COLUNA_VALOR => filtroConsultarDemandaGestao::$NmColNuTempoUltimaTram,
 				constantes::$CD_COLUNA_TP_DADO =>  constantes::$TAMANHO_CODIGOS_SAFI,
-				constantes::$CD_COLUNA_VL_REFERENCIA =>  15,
+				constantes::$CD_COLUNA_VL_REFERENCIA =>  voMensageria::$NUM_DIAS_AVISO_ENCERRAMENTO_CONTRATO_PADRAO,
 				constantes::$CD_COLUNA_TP_VALIDACAO =>  constantes::$CD_ALERTA_TP_VALIDACAO_MAIORQUE,
 		);
 		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);

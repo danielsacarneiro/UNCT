@@ -1153,7 +1153,7 @@ class dbDemanda extends dbprocesso {
 		$isCaracteristicaInvalida = !existeItemNoArrayOuString(dominioPessoaCaracteristicas::$CD_ASSINA_SEI, $vopessoa->inCaracteristicas)
 				|| !isAtributoValido($vopessoa->emailSEI);
 		$isTermoAssinadoSEI = existePeloMenosUmItemNoArrayOuString(dominioFaseDemanda::$CD_ASSINADO_SEI, $voDemanda->fase);
-		if($isContratoAssinadoSEI && $isCaracteristicaInvalida){
+		if($isTermoAssinadoSEI && $isCaracteristicaInvalida){
 			throw new excecaoGenerica("Fechamento não permitido: preencha os campos da contratada em questão, na funcao '".vopessoa::getTituloJSP()."', que se referem à assinatura no SEI|" 
 					. $vopessoa->toString() . ".");
 		}			
@@ -1173,7 +1173,9 @@ class dbDemanda extends dbprocesso {
 			$qtdtipoContratoMod = dominioTipoDemandaContrato::getNumChavesColecaoNoArrayOuStrSeparador(array_keys(dominioTipoDemandaContrato::getColecaoAlteraValorContrato()), $voDemanda->tpDemandaContrato);
 			$tam = sizeof($colecao);
 			if(isColecaoVazia($colecao) || $qtdtipoContratoMod > $tam){
-				throw new excecaoGenerica("Necessário regularizar o presente termo na função '".voContratoModificacao::getTituloJSP()."'. Exigem-se, pelo menos, $qtdtipoContratoMod registros de modificação.");
+				$msg = "Necessário regularizar o presente termo na função '".voContratoModificacao::getTituloJSP()."'. Exige(m)-se, pelo menos, $qtdtipoContratoMod registro(s) de modificação.";
+				$msg .= "|" . $vocontratoDemanda->getCodigoContratoFormatado(true);
+				throw new excecaoGenerica($msg);
 			}
 			
 			if(!isColecaoVazia($colecao)){
@@ -1183,8 +1185,11 @@ class dbDemanda extends dbprocesso {
 				$vlGlobalmod = $vocontratomod->vlGlobalAtual;
 				$vlGlobal = $vocontratoDemanda->vlGlobalSQL;
 				if($vlGlobalmod != $vlGlobal){
-					throw new excecaoGenerica("Valor GLOBAL do contrato ('$vlGlobal') difere do calculado na função '".voContratoModificacao::getTituloJSP()
-							. "('$vlGlobalmod').|" . $vocontratoDemanda->getCodigoContratoFormatado(true) . ".");
+					$msg = "Valor GLOBAL do contrato ('".getMoeda($vlGlobal)."') difere do calculado na função '"
+							.voContratoModificacao::getTituloJSP() 
+					. "('".getMoeda($vlGlobalmod)."'). <br>ATENÇÃO: <u>Confirme se o valor Global do presente termo está de acordo com o 'pdf' gerado.</u>.|" . $vocontratoDemanda->getCodigoContratoFormatado(true) . ".";
+					
+					throw new excecaoGenerica($msg);
 				}
 			}
 		}
@@ -1235,99 +1240,104 @@ class dbDemanda extends dbprocesso {
 		$isSituacaoARevisar = $vo->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_A_REVISAR;
 		$vocontratoDemanda = $vo->getContrato();
 		
+		if($isSituacaoNovaFechada){
+			$voDemandaBase = $this->consultarPorChaveVO($vo);
+			//$voDemandaBase = new voDemanda();
+			$naoValidarFechamento = $voDemandaBase->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA;
+		}
+		
 		$jaconsultoucontrato = false;
-		if($isSituacaoARevisar){
+		//consulta o contrato nas situacoes abaixo para validacoes
+		if($isSituacaoARevisar || ($isSituacaoNovaFechada && !$naoValidarFechamento)){
 			//obriga que o contrato esteja incluido para revisao
-			$vocontratoDemanda = getVOContratoDemandaPorChave($vo);
+			$vocontratoDemanda = getVOContratoDemandaPorChave($vo);			
+			//verifica se o contrato foi incluido em contratoinfo
+			$vocontratoInfo = new voContratoInfo();
+			//$vo = new voDemanda();
+			$isDemandaTipoContrato = $vo->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO;
+			if($isDemandaTipoContrato && $vocontratoDemanda != null){			
+				$vocontratoInfo->anoContrato = $vocontratoDemanda->anoContrato;
+				$vocontratoInfo->cdContrato = $vocontratoDemanda->cdContrato;
+				$vocontratoInfo->tipo = $vocontratoDemanda->tipo;
+				try{
+					$vocontratoInfo = $vocontratoInfo->dbprocesso->consultarPorChaveVO($vocontratoInfo);
+				}catch (excecaoChaveRegistroInexistente $ex){
+					throw new excecaoChaveRegistroInexistente("Verifique a inclusão das informações adicionais ao contrato relacionado|"
+							. $vocontratoDemanda->getCodigoContratoFormatado(true), null, $vocontratoInfo);
+				}
+					
+			}
+			
 			$jaconsultoucontrato = true;
 		}
 		
 		if ($isSituacaoNovaFechada) {
-			$voDemandaBase = $this->consultarPorChaveVO($vo);
-			//$voDemandaBase = new voDemanda();
-			$naoValidarFechamento = $voDemandaBase->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA;
-
 			//se a situacao ja foi fechada um dia, quer dizer que ela é antiga e nao precisa passar pela nova validacao, sob pena de inviabilizar as alteracoes
 			if (!$naoValidarFechamento) {
 				//$this->isExclusaoPermitida ( $vo, "fechamento" );
 					
-				//verifica se o contrato foi incluido em contratoinfo
-				$vocontratoInfo = new voContratoInfo();
-				//$vo = new voDemanda();				
-				$isDemandaTipoContrato = $vo->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO;
-				if($isDemandaTipoContrato && $vocontratoDemanda != null){
-					if(!$jaconsultoucontrato){
-						$vocontratoDemanda = getVOContratoDemandaPorChave($vo);
-					}
-						
-					$vocontratoInfo->anoContrato = $vocontratoDemanda->anoContrato;
-					$vocontratoInfo->cdContrato = $vocontratoDemanda->cdContrato;
-					$vocontratoInfo->tipo = $vocontratoDemanda->tipo;
-					try{
-						$vocontratoInfo = $vocontratoInfo->dbprocesso->consultarPorChaveVO($vocontratoInfo);
-					}catch (excecaoChaveRegistroInexistente $ex){
-						throw new excecaoChaveRegistroInexistente("Verifique a inclusão das informações adicionais ao contrato relacionado.", null, $vocontratoInfo);
-					}
-			
+				if(isContratoValido($vocontratoDemanda)){
 					//throw new excecaoGenerica("Aguardem....");
 					if(!isDemandaContratoAssinado($vo)){
 						throw new excecaoGenerica("Fechamento não permitido: indique a FASE em que o termo foi assinado (se físico, digital ou pelo SEI...). |"
 								. $vocontratoDemanda->getCodigoContratoFormatado(true));
 					}
-						
-					$arrayRetorno = getHTMLDocumentosContrato($vocontratoDemanda);
-					$temAmbosDocsAExibir = $arrayRetorno[2];
-					$naovalidaDocs = isAtributoValido($vo->inCaracteristicas) && in_array(dominioCaracteristicasDemanda::$CD_NAO_VALIDA_DOCS, $vo->inCaracteristicas);
-			
-					if(!$temAmbosDocsAExibir && !$naovalidaDocs){
-						throw new excecaoGenerica("Fechamento não permitido: ambos os documentos 'MINUTA' (em word) e 'CONTRATO' (em pdf) devem ser anexados à demanda. |"
-								. $vocontratoDemanda->getCodigoContratoFormatado(true));
-					}
-			
-					$temGarantia = $vocontratoInfo->inTemGarantia == constantes::$CD_SIM;
-					//$vo = new voDemandaTramitacao();
-					//var_dump($vo->fase);
-					//$garantiaOk = !$temGarantia  || (isAtributoValido($vo->fase) && in_array(dominioFaseDemanda::$CD_GARANTIA_PRESTADA, $vo->fase));
-					$garantiaOk = !$temGarantia  || (isAtributoValido($vo->fase) && existeItemNoArrayOuString(dominioFaseDemanda::$CD_GARANTIA_PRESTADA, $vo->fase));
-					$isApostilamento = $vocontratoDemanda->cdEspecie == dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_APOSTILAMENTO;
-					if(!$garantiaOk && !$isApostilamento){
-						throw new excecaoGenerica("Fechamento não permitido: verifique a garantia do contrato. |"
-								. $vocontratoDemanda->getCodigoContratoFormatado(true));
-					}			
-			
-					//$temPendenciaContratoEnvioSAD = isAtributoValido($vocontratoInfo->inPendencias) && in_array(dominioAutorizacao::$CD_AUTORIZ_SAD, $vocontratoInfo->inPendencias);
-					$temPendenciaContratoEnvioSAD = isAtributoValido($vocontratoInfo->inPendencias)
-					&& existeItemNoArrayOuString(dominioAutorizacao::$CD_AUTORIZ_SAD, $vocontratoInfo->inPendencias);
-					//$temPendenciaContratoEnvioPGE = isAtributoValido($vocontratoInfo->inPendencias) && in_array(dominioAutorizacao::$CD_AUTORIZ_PGE, $vocontratoInfo->inPendencias);
-					$temPendenciaContratoEnvioPGE = isAtributoValido($vocontratoInfo->inPendencias)
-					&& existeItemNoArrayOuString(dominioAutorizacao::$CD_AUTORIZ_PGE, $vocontratoInfo->inPendencias);
-			
-					$isContratoEnvioSAD = !$temPendenciaContratoEnvioSAD && isContratoEnvioSADPGE($vocontratoDemanda, dominioSetor::$CD_SETOR_SAD, $vocontratoInfo);
-					$isContratoEnvioPGE = !$temPendenciaContratoEnvioPGE && isContratoEnvioSADPGE($vocontratoDemanda, dominioSetor::$CD_SETOR_PGE, $vocontratoInfo);
-					//$vo = new voDemandaTramitacao();
-					$isAnaliseSADOK = !$isContratoEnvioSAD || (isAtributoValido($vo->fase) && in_array(dominioFaseDemanda::$CD_VISTO_SAD, $vo->fase));
-					$isAnalisePGEOK = !$isContratoEnvioPGE || (isAtributoValido($vo->fase) && in_array(dominioFaseDemanda::$CD_VISTO_PGE, $vo->fase));
-					if(!$isAnaliseSADOK && !$isApostilamento){
-						throw new excecaoGenerica("Fechamento não permitido: ausente análise SAD ao contrato. |"
-								. $vocontratoDemanda->getCodigoContratoFormatado(true));
-					}
-			
-					if(!$isAnalisePGEOK && !$isApostilamento){
-						throw new excecaoGenerica("Fechamento não permitido: ausente análise PGE ao contrato. |"
-								. $vocontratoDemanda->getCodigoContratoFormatado(true));
-					}
-			
-					//$vo = new voDemandaTramitacao();
-					$temRespUNCT = isAtributoValido($vo->cdPessoaRespUNCT);
-					if(!$temRespUNCT){
-						throw new excecaoGenerica("Fechamento não permitido: indique o responsável UNCT pela demanda.");
-					}
-			
-					static::validarDadosContrato($vocontratoDemanda, $vocontratoInfo);
-			
-					static::validarDadosContratoModificacao($vo, $vocontratoDemanda);
 					
-					static::validarDadosContratada($vo, $vocontratoDemanda);
+					
+						$arrayRetorno = getHTMLDocumentosContrato($vocontratoDemanda);
+						$temAmbosDocsAExibir = $arrayRetorno[2];
+						$naovalidaDocs = isAtributoValido($vo->inCaracteristicas) && in_array(dominioCaracteristicasDemanda::$CD_NAO_VALIDA_DOCS, $vo->inCaracteristicas);
+				
+						if(!$temAmbosDocsAExibir && !$naovalidaDocs){
+							throw new excecaoGenerica("Fechamento não permitido: ambos os documentos 'MINUTA' (em word) e 'CONTRATO' (em pdf) devem ser anexados à demanda. |"
+									. $vocontratoDemanda->getCodigoContratoFormatado(true));
+						}
+				
+						$temGarantia = $vocontratoInfo->inTemGarantia == constantes::$CD_SIM;
+						//$vo = new voDemandaTramitacao();
+						//var_dump($vo->fase);
+						//$garantiaOk = !$temGarantia  || (isAtributoValido($vo->fase) && in_array(dominioFaseDemanda::$CD_GARANTIA_PRESTADA, $vo->fase));
+						$garantiaOk = !$temGarantia  || (isAtributoValido($vo->fase) && existeItemNoArrayOuString(dominioFaseDemanda::$CD_GARANTIA_PRESTADA, $vo->fase));
+						$isApostilamento = $vocontratoDemanda->cdEspecie == dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_APOSTILAMENTO;
+						if(!$garantiaOk && !$isApostilamento){
+							throw new excecaoGenerica("Fechamento não permitido: verifique a garantia do contrato. |"
+									. $vocontratoDemanda->getCodigoContratoFormatado(true));
+						}			
+				
+						//$temPendenciaContratoEnvioSAD = isAtributoValido($vocontratoInfo->inPendencias) && in_array(dominioAutorizacao::$CD_AUTORIZ_SAD, $vocontratoInfo->inPendencias);
+						$temPendenciaContratoEnvioSAD = isAtributoValido($vocontratoInfo->inPendencias)
+						&& existeItemNoArrayOuString(dominioAutorizacao::$CD_AUTORIZ_SAD, $vocontratoInfo->inPendencias);
+						//$temPendenciaContratoEnvioPGE = isAtributoValido($vocontratoInfo->inPendencias) && in_array(dominioAutorizacao::$CD_AUTORIZ_PGE, $vocontratoInfo->inPendencias);
+						$temPendenciaContratoEnvioPGE = isAtributoValido($vocontratoInfo->inPendencias)
+						&& existeItemNoArrayOuString(dominioAutorizacao::$CD_AUTORIZ_PGE, $vocontratoInfo->inPendencias);
+				
+						$isContratoEnvioSAD = !$temPendenciaContratoEnvioSAD && isContratoEnvioSADPGE($vocontratoDemanda, dominioSetor::$CD_SETOR_SAD, $vocontratoInfo);
+						$isContratoEnvioPGE = !$temPendenciaContratoEnvioPGE && isContratoEnvioSADPGE($vocontratoDemanda, dominioSetor::$CD_SETOR_PGE, $vocontratoInfo);
+						//$vo = new voDemandaTramitacao();
+						$isAnaliseSADOK = !$isContratoEnvioSAD || (isAtributoValido($vo->fase) && in_array(dominioFaseDemanda::$CD_VISTO_SAD, $vo->fase));
+						$isAnalisePGEOK = !$isContratoEnvioPGE || (isAtributoValido($vo->fase) && in_array(dominioFaseDemanda::$CD_VISTO_PGE, $vo->fase));
+						if(!$isAnaliseSADOK && !$isApostilamento){
+							throw new excecaoGenerica("Fechamento não permitido: ausente análise SAD ao contrato. |"
+									. $vocontratoDemanda->getCodigoContratoFormatado(true));
+						}
+				
+						if(!$isAnalisePGEOK && !$isApostilamento){
+							throw new excecaoGenerica("Fechamento não permitido: ausente análise PGE ao contrato. |"
+									. $vocontratoDemanda->getCodigoContratoFormatado(true));
+						}
+				
+						//$vo = new voDemandaTramitacao();
+						$temRespUNCT = isAtributoValido($vo->cdPessoaRespUNCT);
+						if(!$temRespUNCT){
+							throw new excecaoGenerica("Fechamento não permitido: indique o responsável UNCT pela demanda.");
+						}
+				
+						static::validarDadosContrato($vocontratoDemanda, $vocontratoInfo);
+				
+						static::validarDadosContratoModificacao($vo, $vocontratoDemanda);
+						
+						static::validarDadosContratada($vo, $vocontratoDemanda);
+					}
 			
 				}
 					
@@ -1342,8 +1352,7 @@ class dbDemanda extends dbprocesso {
 							throw new excecaoGenerica ( "Fechamento não permitido para demanda cujo PAAP esteja ativo." );
 						}
 					}
-				}
-			}
+				}			
 		}
 		
 		// throw new Exception("REMOVER!!:" . $msg);

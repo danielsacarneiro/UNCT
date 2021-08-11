@@ -287,7 +287,8 @@ function limparFormularioGeral(pArrayIDCamposExcecao){
 						|| element.name == "lupa"
 						|| element.name == "rdb_consulta"
 						|| element.name == "funcao"	
-						|| element.name == "cdOrdenacao";
+						|| element.name == "cdOrdenacao"
+						|| element.name == "nmAtrInFiltroOculto";
 		
 		/*if(name == "ct_tipo"){
 			alert(name + " indice colecao:" + pArrayIDCamposExcecao.indexOf(name));
@@ -2508,6 +2509,21 @@ function indexOfChaveArray(chave, pArray, pSemMensagem) {
 
 function removerCaracterer(pCampo, strbusca, strsubstituta){
 	pCampo.value = pCampo.value.replaceAll(strbusca, strsubstituta);
+}
+
+function removerCaractererEspeciais(pStr, pSubstituirCharBranco = false, pCharSubstituicao = ""){
+	/*if(pCharSubstituicao == null){
+		pCharSubstituicao = "";
+	}*/
+	var retorno = pStr.replaceAll(",", pCharSubstituicao);
+	retorno = retorno.replaceAll("*", pCharSubstituicao);
+	retorno = retorno.replaceAll("$", pCharSubstituicao);
+	retorno = retorno.replaceAll("\\", pCharSubstituicao);
+	retorno = retorno.replaceAll("/", pCharSubstituicao);
+	if(pSubstituirCharBranco){
+		retorno = retorno.replaceAll(" ", pCharSubstituicao);
+	}
+	return retorno; 
 }
 
 function getUltimoCampoRenderizado(id){

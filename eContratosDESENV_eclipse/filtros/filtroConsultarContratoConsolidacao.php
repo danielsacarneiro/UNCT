@@ -359,9 +359,9 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 
 		if ($this->inPrazoProrrogacao != null) {
 			if($this->inPrazoProrrogacao == constantes::$CD_OPCAO_NENHUM){
-				$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrInPrazoProrrogacao . " IS NULL ";
+				$filtro = $filtro . $conector . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrInPrazoProrrogacao . " IS NULL ";
 			}else{
-				$filtro = $filtro . $conector . $nmTabela . "." . voContratoInfo::$nmAtrInPrazoProrrogacao . " = " . getVarComoNumero($this->inPrazoProrrogacao);
+				$filtro = $filtro . $conector . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrInPrazoProrrogacao . " = " . getVarComoNumero($this->inPrazoProrrogacao);
 			}
 			$conector = "\n AND ";
 		}
@@ -515,17 +515,31 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		//pega o contrato atual (termo atual), maior sequencial, desde que a data final de vigencia nao seja nula ou '0000-00-00'
 		if($isTabInterna){
 			//para o caso de ser filtro de tabela interna
-			$nmColunaComparacao = "$nmTabContrato." . vocontrato::$nmAtrDtVigenciaFinalContrato;
+			$nmColunaDtFimComparacao = "$nmTabContrato." . vocontrato::$nmAtrDtVigenciaFinalContrato;
 		}else{
 			//para o caso da consulta se referir ao filtro da tela de chamada, sempre deverá ser o campo abaixo
-			$nmColunaComparacao = static::getAtributoDtFimVigenciaConsolidacao();
+			$nmColunaDtFimComparacao = static::getAtributoDtFimVigenciaConsolidacao();
 		}
 
 		$where = "WHERE";
 		if(!$comWhere){
 			$where = "";
 		}
-		$retorno = " $where ($nmColunaComparacao IS NOT NULL AND $nmColunaComparacao <> '0000-00-00')";
+		
+		//$retorno = " $where ($nmColunaDtFimComparacao IS NOT NULL AND $nmColunaDtFimComparacao <> '0000-00-00')";
+		
+		//deve ser permitida data fim nula na tabela interna, posto que ela eh quem traz os contratos que serao comparados
+		//ja na tabela externa, eh onde se restringe a exibicao, permitindo apenas data fim nula para contrato COVID
+		if(!$isTabInterna){
+			//por enquanto so permite data fim nula para contratos CLASSIFICADOS como COVID
+			$nmAtributoInProrrogacao = voContratoInfo::$nmAtrInPrazoProrrogacao;
+			$valorAtributoInProrrogacao = dominioProrrogacaoContrato::$CD_COVID;
+				
+			$sqlPermiteDataFimNula = "AND $nmAtributoInProrrogacao = $valorAtributoInProrrogacao";
+		}
+		$retorno = " $where (($nmColunaDtFimComparacao IS NOT NULL AND $nmColunaDtFimComparacao <> '0000-00-00')"
+				." OR ($nmColunaDtFimComparacao IS NULL $sqlPermiteDataFimNula))";
+		
 
 		$isProduzindoEfeitosSelecionado = $this->inProduzindoEfeitos != null;
 		$inProduzindoEfeitos = $this->inProduzindoEfeitos;

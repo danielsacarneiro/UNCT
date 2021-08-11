@@ -201,11 +201,11 @@ function alteracaoNome(){
                 <TD class="campoformulario" ><INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo(documentoPessoa::getNumeroDocFormatado($doc));?>" required class="camponaoobrigatorio" size="20" maxlength="18"></TD>
             </TR>
 			<TR>
-                <TH class="campoformulario" nowrap width=1%>Email:</TH>
+                <TH class="campoformulario" nowrap width=1%>Email(s):</TH>
                 <TD class="campoformulario" width="1%" colspan=3><INPUT type="text" id="<?=vopessoa::$nmAtrEmail?>" name="<?=vopessoa::$nmAtrEmail?>"  value="<?php echo($email);?>" <?=getMsgPadraoInputText();?> class="camponaoobrigatorio" size="50" required></TD>
             </TR>
 			<TR>
-                <TH class="campoformulario" nowrap width=1%>Telefone:</TH>
+                <TH class="campoformulario" nowrap width=1%>Telefone(s):</TH>
                 <TD class="campoformulario" width="1%" colspan=3><INPUT type="text" id="<?=vopessoa::$nmAtrTel?>" name="<?=vopessoa::$nmAtrTel?>"  value="<?php echo($vo->tel);?>"  class="camponaoobrigatorio" size="50" maxlength="100"></TD>
             </TR>    
 			<TR>
@@ -253,7 +253,7 @@ function alteracaoNome(){
 				        	</TD>
 				        	<TD class="campoformulario" colspan=3>
 				                <?php 
-					            echo "Email.SEI:" .getInputText(vopessoa::$nmAtrEmailSEI, vopessoa::$nmAtrEmailSEI, $vo->emailSEI, constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO, 40, null, getMsgPlaceHolder("inclua o e-mail de quem assina no SEI."));
+					            echo "Email.SEI:" .getInputText(vopessoa::$nmAtrEmailSEI, vopessoa::$nmAtrEmailSEI, $vo->emailSEI, constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO, 40, 60, getMsgPlaceHolder("inclua o e-mail de quem assina no SEI."));
 					            ?>
 				        	</TD>
 				        	</TR>

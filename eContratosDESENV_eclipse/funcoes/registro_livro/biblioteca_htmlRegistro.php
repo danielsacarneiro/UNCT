@@ -10,6 +10,10 @@ function getModeloPublicacaoPreenchido($registrobanco){
 	 */
 	$termo = new vocontrato();
 	$termo->getDadosBanco($registrobanco);
+
+	$voContratoInfo = new voContratoInfo();
+	$voContratoInfo->getDadosBanco($registrobanco);
+	
 	$empresa = $registrobanco[vocontrato::$nmAtrContratadaContrato];
 	
 	$tpdoc = dominioTpDOCPessoa::getDescricao(documentoPessoa::getTpDocSemMascara($termo->docContratada));
@@ -28,7 +32,18 @@ function getModeloPublicacaoPreenchido($registrobanco){
 	if($datainicio == $datafim){
 		$publicacao .= ".Vigência:$datainicio.";
 	}else{
-		$publicacao .= ".Vigência:$datainicio a $datafim.";
+		$publicacao .= ".Vigência:";
+		$conector = "";		
+		//sempre vai ter data de inicio
+		//if(isAtributoValido($datainicio)){
+		$publicacao .= "$datainicio";
+		//}
+		if(isAtributoValido($datafim)){
+			$temDataFimVigencia = true;
+			$conector = " a ";
+			$publicacao .= $conector . $datafim;
+		}
+		$publicacao .= ".";
 	}
 	
 	$arrayValidacao = array(
@@ -36,9 +51,13 @@ function getModeloPublicacaoPreenchido($registrobanco){
 			$tpdoc,
 			$doc,
 			$datainicio,
-			$datafim,
 			$contrato,			
 	);
+	
+	$incluirFimVigencia = !$temDataFimVigencia && $voContratoInfo->inPrazoProrrogacao != dominioProrrogacaoContrato::$CD_COVID;
+	if($incluirFimVigencia){
+		$arrayValidacao[]=$datafim;
+	}
 	
 	if(!isAtributoValido($arrayValidacao)){
 		throw new excecaoAtributoInvalido($publicacao);
@@ -109,7 +128,7 @@ function getDadosPublicacaoContrato($chaveContrato, $indice) {
 		//informa a existencia de publicacao anterior e deixa pro usuario pensar o que fazer.
 		$publicacao = getTextoHTMLDestacado("VERIFIQUE O ". ($indice) ."º REGISTRO. É POSSÍVEL QUE JÁ TENHA SIDO PUBLICADO. APAGUE PARA DESCONSIDERAR.")
 		. $publicacao;
-		//$publicacao .= getModeloPublicacaoPreenchido($registrobanco);
+		
 	}catch (excecaoAtributoInvalido $ex){
 		//informa a existencia de publicacao anterior e deixa pro usuario pensar o que fazer.
 		$publicacao = $ex->getMsgEconti() . "." . getTextoHTMLDestacado("VERIFIQUE O ". ($indice) ."º REGISTRO. HÁ DADOS NÃO PREENCHIDOS DO CONTRATO.");			

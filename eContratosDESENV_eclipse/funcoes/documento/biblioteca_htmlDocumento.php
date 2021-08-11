@@ -227,19 +227,20 @@ function getHTMLDocumentoContratoPorDemandaDoc($voContrato, $tpDoc, $isVersaoRes
 function getHTMLDocumentosContrato($voContrato, $isVersaoResumida=false, $isAlteracaoContrato=false){
 	//$voContrato = new vocontrato();
 	//echo $voContrato->linkDoc;
-	$array = getHTMLDocumentoContratoPorDemandaDoc($voContrato, dominioTpDocumento::$CD_TP_DOC_MINUTA, $isVersaoResumida);
-	$retorno .= $array[0];
-	$temDocMinuta = $array[1]; 
-	
-	$array = getHTMLDocumentoContratoPorDemandaDoc($voContrato, dominioTpDocumento::$CD_TP_DOC_CONTRATO, $isVersaoResumida, $isAlteracaoContrato);
-	$retorno .= "<br>".$array[0];
-	$temDocPDF = $array[1];
-	
-	$temDocsAExibir = $temDocMinuta || $temDocPDF;
-	$temAmbosDocsAExibir = $temDocMinuta && $temDocPDF;
-	$array[0] = $temDocsAExibir;
-	$array[1] = $retorno;
-	$array[2] = $temAmbosDocsAExibir;
+		$array = getHTMLDocumentoContratoPorDemandaDoc($voContrato, dominioTpDocumento::$CD_TP_DOC_MINUTA, $isVersaoResumida);
+		$retorno .= $array[0];
+		$temDocMinuta = $array[1]; 
+		
+		$array = getHTMLDocumentoContratoPorDemandaDoc($voContrato, dominioTpDocumento::$CD_TP_DOC_CONTRATO, $isVersaoResumida, $isAlteracaoContrato);
+		$retorno .= "<br>".$array[0];
+		$temDocPDF = $array[1];
+		
+		
+		$temDocsAExibir = $temDocMinuta || $temDocPDF;
+		$temAmbosDocsAExibir = $temDocMinuta && $temDocPDF;
+		$array[0] = $temDocsAExibir;
+		$array[1] = $retorno;
+		$array[2] = $temAmbosDocsAExibir;
 	
 	return $array;
 	

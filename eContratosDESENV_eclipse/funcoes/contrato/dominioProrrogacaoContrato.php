@@ -8,8 +8,9 @@ Class dominioProrrogacaoContrato extends dominio{
 	static $CD_ART57_PAR_1 = 3;
 	static $CD_ART57_IV = 4;
 	static $CD_ART57_V = 5;
+	static $CD_COVID = 6;
 	static $CD_NAO_SEAPLICA = 99;
-
+	
 	static $DS_ART57_II = "Art.57,II-serv.contínuos em geral";
 
 	// https://www.zenite.blog.br/nos-contratos-de-locacao-de-equipamentos-com-fornecimento-de-insumos-o-prazo-e-a-possibilidade-de-prorrogacao-devem-ser-fundamentados-no-art-57-inc-ii-ou-no-inc-iv/
@@ -18,7 +19,9 @@ Class dominioProrrogacaoContrato extends dominio{
 	static $DS_ART57_PAR_1 = "Art.57,§1-Justificadas";
 	static $DS_NAO_SEAPLICA = "Regido por outra regra";
 	
+	static $DS_COVID = "LC.425/2020-Covid.PrazoIndeterminado";
 	static $DS_IMPRORROGAVEL = "Não.prorrogável";
+	
 	
 	// ...............................................................
 	// Construtor
@@ -32,6 +35,7 @@ Class dominioProrrogacaoContrato extends dominio{
 				self::$CD_ART57_IV => self::$DS_ART57_IV,
 				self::$CD_ART57_V => self::$DS_ART57_V,
 				self::$CD_ART57_PAR_1 => self::$DS_ART57_PAR_1,
+				self::$CD_COVID => self::$DS_COVID,
 				self::$CD_NAO_SEAPLICA  => self::$DS_NAO_SEAPLICA,
 		);
 	}

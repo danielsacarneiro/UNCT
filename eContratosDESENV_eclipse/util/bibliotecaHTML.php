@@ -1006,9 +1006,6 @@ function getIdComponenteHtmlCheckSimNao($idRadio, $tipo){
 }
 
 function getInputText($idText, $nmText, $value, $class = null, $size = null, $maxlength = null, $complementoHTML = null) {
-	if ($maxlength == null) {
-		$maxlength = 20;
-	}
 	
 	if ($size == null) {
 		if($value != null){
@@ -1017,6 +1014,11 @@ function getInputText($idText, $nmText, $value, $class = null, $size = null, $ma
 			$size = 20;
 		}
 	}
+	
+	if ($maxlength == null) {
+		$maxlength = $size;
+	}
+	
 	if ($class == null) {
 		$class = "camponaoobrigatorio";
 	}
@@ -1121,9 +1123,14 @@ function tratarExcecaoHTML($ex, $vo = null, $paginaErro="../mensagemErro.php") {
 		// a debaixo eh para a tela de msg de erro
 		putObjetoSessao ( constantes::$ID_REQ_SESSAO_VO, $vo );
 	}
+	
 	$msg = $ex->getMessage ();
+	if(isAtributoValido($ex->msgAdicional)){
+		$msg .= $ex->msgAdicional;
+	}
 	$msg = str_replace ( "\n", ".", $msg );
 	$msg = str_replace ( "<br>", ".", $msg );
+	
 	echo $msg;
 
 	$queryComplemento = constantes::$ID_REQ_CD_LUPA . "=" . getAtributoBooleanoComoString(isLupa());
@@ -1401,6 +1408,14 @@ function getTagHTMLFechaJavaScript(){
 	return "</SCRIPT>";
 }
 
+function getTagHTMLAbreDIV($nmDiv){
+	return "<div id='$nmDiv'>";
+}
+
+function getTagHTMLFechaDIV(){
+	return "</div>";
+}
+
 function getTagHTMLDIV($nmDiv){
 	return "<div id='$nmDiv'></div>";	
 }
@@ -1516,6 +1531,60 @@ function getDivHtmlExpansivel($nmDiv, $conteudoDiv=null, $visivel=false, $class 
 	return $html;
 }
 
+/**
+ * permite esconder filtros pouco usados nas telas
+ * @param unknown $pArray
+ * @return string
+ */
+function getTagHTMlAbreLDivFiltroExpansivel($pArrayParam){
+	$filtro = $pArrayParam[0];
+	$nmDIV = $pArrayParam[1];
+	$titulo = $pArrayParam[2];
+	
+	if($nmDIV == null){
+		$nmDIV = filtroManter::$NM_DIV_FILTRO_EXPANSIVEL;
+	}
+	if($titulo == null){
+		$titulo = getTextoHTMLNegrito("Expandir/Esconder.Filtro.EXTRA");
+	}
+	
+	$inFiltroOculto = $filtro->inFiltroOculto;
+	if(!isAtributoValido($inFiltroOculto)){
+		$inFiltroOculto = getAtributoBooleanoComoString(filtroManter::$IN_FILTRO_OCULTO_PADRAO);
+	}
+	
+	$visivel = !getAtributoComoBooleano($inFiltroOculto);
+
+	$pArray= array($nmDIV, "",
+			$titulo
+			,$visivel , null, null, true);
+	
+	$html .= getDivHtmlExpansivelArray($pArray);	
+	$html .= getTagHTMLAbreTabela();		
+	$html .= getInputHidden(filtroManter::$nmAtrInFiltroOculto, filtroManter::$nmAtrInFiltroOculto, $inFiltroOculto);
+	return  $html ;
+}
+
+function getTagHTMlFechaDivFiltroExpansivel(){
+	$html .= getTagHTMLFechaTabela();
+	return  $html ;
+}
+
+function setarInFiltroOculto(){
+	$isFiltroOcultoPadrao = filtroManter::$IN_FILTRO_OCULTO_PADRAO;
+	$inFiltroOcultoPAdrao = getAtributoBooleanoComoString($isFiltroOcultoPadrao);
+	$inNOTFiltroOcultoPAdrao = getAtributoBooleanoComoString(!$isFiltroOcultoPadrao);
+	
+	$nmCampoFiltroOculto = filtroManter::$nmAtrInFiltroOculto;
+	
+	$html .= "try{var inFiltroOculto = document.getElementById('$nmCampoFiltroOculto').value;";
+	$html .= "if(inFiltroOculto == '$inFiltroOcultoPAdrao'){inFiltroOculto='$inNOTFiltroOcultoPAdrao';}else{inFiltroOculto='$inFiltroOcultoPAdrao';}";
+	$html .= "document.getElementById('$nmCampoFiltroOculto').value=inFiltroOculto;";
+	$html .= "}catch(ex){;};";
+	
+	return $html;
+}
+
 function getDivHtmlExpansivelArray($pArray){
 	$nmDiv = $pArray[0];
 	$conteudoDiv = $pArray[1];
@@ -1523,6 +1592,7 @@ function getDivHtmlExpansivelArray($pArray){
 	$visivel = $pArray[3];
 	$class = $pArray[4];
 	$corTexto = $pArray[5];
+	$semTagDIVFinal = $pArray[6];
 	
 	if($class == null){
 		$class = 'campoformulario';
@@ -1530,16 +1600,21 @@ function getDivHtmlExpansivelArray($pArray){
 	
 	if($corTexto == null){
 		$corTexto="black";
-	} 
-					
+	}
+						
 	//biblioteca_funcoes_principal.js
 	$scriptOnLoad = "esconderDiv(document.getElementById('$nmDiv'), null, true);";
-	$scriptOnClick = "esconderDiv(document.getElementById('$nmDiv'), null, document.getElementById('$nmDiv').style.display=='');";
+	$scriptOnClick = setarInFiltroOculto() . ";esconderDiv(document.getElementById('$nmDiv'), null, document.getElementById('$nmDiv').style.display=='');";
 	$imagem = "<img  title='Entrar' src='" . pasta_imagens . "sinal_mais.gif' width='15' height='15'>";	
 	$link = "<a href=\"javascript:$scriptOnClick\" >$imagem</a>";
 	//$html = "$imagem<DIV class='$class' id='$nmDiv' name='$nmDiv' onLoad='ocultarElemento('$nmDiv')'>$conteudoDiv</DIV>";
-	$html = "$titulo $link<DIV class='$class' id='$nmDiv' name='$nmDiv'>$conteudoDiv</DIV>";
-	$html .= getTagHtmlJavaScript($scriptOnLoad);
+	$html = "$titulo $link<DIV class='$class' id='$nmDiv' name='$nmDiv'>$conteudoDiv";
+	if($semTagDIVFinal === false){
+		$html .= "</DIV>";
+	}
+	if($visivel !== true){
+		$html .= getTagHtmlJavaScript($scriptOnLoad);
+	}
 	return $html;
 }
 
