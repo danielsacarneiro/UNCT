@@ -168,12 +168,13 @@ function movimentacoes(){
 	            echo "Tem? ".$comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrCdPessoaGestor,voContratoInfo::$nmAtrCdPessoaGestor
 							, $filtro->inGestor, true, "camponaoobrigatorio", false,"");
 	            ?>	            
-	            |Nome: <INPUT type="text" id="<?=vocontrato::$nmAtrGestorContrato?>" name="<?=vocontrato::$nmAtrGestorContrato?>"  value="<?php echo($filtro->gestor);?>"  class="camponaoobrigatorio" size="20" >
+	            |Nome: <INPUT type="text" id="<?=vocontrato::$nmAtrGestorContrato?>" name="<?=vocontrato::$nmAtrGestorContrato?>"  value="<?php echo($filtro->gestor);?>"  class="camponaoobrigatorio" size="10" >
+	            |Órgão: <INPUT type="text" id="<?=vogestor::$nmAtrDescricao?>" name="<?=vogestor::$nmAtrDescricao?>"  value="<?php echo($filtro->orgaoGestor);?>"  class="camponaoobrigatorio" size="10" >
 	            </TD>	            
 			</TR>
 			<TR>
                 <TH class="campoformulario" nowrap>Nome Contratada:</TH>
-                <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>"  value="<?php echo($filtro->nmContratada);?>"  class="camponaoobrigatorio" size="50"></TD>
+                <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>"  value="<?php echo($filtro->nmContratada);?>"  class="camponaoobrigatorio" size="30"></TD>
                 <TH class="campoformulario" width="1%" nowrap>CNPJ/CPF Contratada:</TH>
                 <TD class="campoformulario" ><INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($filtro->docContratada);?>" class="camponaoobrigatorio" size="20" maxlength="18"></TD>
             </TR>

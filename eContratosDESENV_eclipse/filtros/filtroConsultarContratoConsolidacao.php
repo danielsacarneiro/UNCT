@@ -392,7 +392,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		if ($this->gestor != null) {
 			$arrayAtributos = array(
 					filtroManterContrato::$NM_TAB_PESSOA_GESTOR . "." . vopessoa::$nmAtrNome,
-					$nmTabelaContrato . "." . vocontrato::$nmAtrGestorContrato,
+					filtroConsultarContratoConsolidacao::$NmTabContratoATUAL . "." . vocontrato::$nmAtrGestorContrato,
 			);
 			$nmAtributo = getSQLCOALESCE($arrayAtributos);
 			$filtro = $filtro . $conector . " $nmAtributo LIKE '%" . utf8_encode ( $this->gestor ) . "%'";
@@ -400,6 +400,14 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 			$conector = "\n AND ";
 		}
 
+		if ($this->orgaoGestor != null) {
+			$nmTabelaOrgaoGestor = vogestor::getNmTabela();
+			$nmAtributo = "$nmTabelaOrgaoGestor." . vogestor::$nmAtrDescricao;
+			$filtro = $filtro . $conector . " $nmAtributo LIKE '%" . utf8_encode ( $this->orgaoGestor ) . "%'";
+		
+			$conector = "\n AND ";
+		}
+		
 		if ($this->mesIntervaloFimVigencia != null) {
 			if($this->anoIntervaloFimVigencia == null){
 				$this->anoIntervaloFimVigencia = getAnoHoje();

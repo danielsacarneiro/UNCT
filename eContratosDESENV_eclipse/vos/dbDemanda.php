@@ -71,6 +71,7 @@ class dbDemanda extends dbprocesso {
 				$nmTabelaContrato . "." . vocontrato::$nmAtrVlMensalContrato,
 				//$nmTabelaContrato . "." . vocontrato::$nmAtrVlGlobalContrato,
 				$nmTabelaContrato . "." . vocontrato::$nmAtrDtVigenciaInicialContrato,
+				$nmTabelaContrato . "." . vocontrato::$nmAtrInCaracteristicas,
 				$nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrInTemGarantia,
 				$nmTabelaPessoa . "." . vopessoa::$nmAtrDoc,
 				
@@ -1146,12 +1147,9 @@ class dbDemanda extends dbprocesso {
 	}
 	
 	static function validarDadosContratada($voDemanda, $vocontratoDemanda){
-		$registroContratada = getContratadaContratoRegistro($vocontratoDemanda);		
-		$vopessoa = new vopessoa();
-		$vopessoa->getDadosBanco($registroContratada);
-			
-		$isCaracteristicaInvalida = !existeItemNoArrayOuString(dominioPessoaCaracteristicas::$CD_ASSINA_SEI, $vopessoa->inCaracteristicas)
-				|| !isAtributoValido($vopessoa->emailSEI);
+		$vopessoa = getVOPessoaContratadaContrato($vocontratoDemanda);
+		$isCaracteristicaInvalida = !isContratadaAssinaPeloSEI($vopessoa);			
+		
 		$isTermoAssinadoSEI = existePeloMenosUmItemNoArrayOuString(dominioFaseDemanda::$CD_ASSINADO_SEI, $voDemanda->fase);
 		if($isTermoAssinadoSEI && $isCaracteristicaInvalida){
 			throw new excecaoGenerica("Fechamento não permitido: preencha os campos da contratada em questão, na funcao '".vopessoa::getTituloJSP()."', que se referem à assinatura no SEI|" 
@@ -1281,8 +1279,7 @@ class dbDemanda extends dbprocesso {
 					if(!isDemandaContratoAssinado($vo)){
 						throw new excecaoGenerica("Fechamento não permitido: indique a FASE em que o termo foi assinado (se físico, digital ou pelo SEI...). |"
 								. $vocontratoDemanda->getCodigoContratoFormatado(true));
-					}
-					
+					}					
 					
 						$arrayRetorno = getHTMLDocumentosContrato($vocontratoDemanda);
 						$temAmbosDocsAExibir = $arrayRetorno[2];

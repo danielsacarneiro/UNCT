@@ -2039,5 +2039,56 @@ function getTextoLembreteContrato($colecao){
 	return $retorno;	
 }
 
+function isContratadaAssinaPeloSEI($vopessoa=null, $vocontratoDemanda=null){
+	if($vocontratoDemanda == null && $vopessoa == null){
+		$msg = "Pelo menos o contrato ou a contratada devem ser repassados como parametro.";
+		throw new excecaoAtributoInvalido($msg);
+	}
+	
+	if($vopessoa == null){
+		$vopessoa = getVOPessoaContratadaContrato($vocontratoDemanda);
+	}
+	
+	$var = existeItemNoArrayOuString(dominioPessoaCaracteristicas::$CD_ASSINA_SEI, $vopessoa->inCaracteristicas)
+	&& isAtributoValido($vopessoa->emailSEI);
+	
+	return $var;	
+}
+
+function getVOPessoaContratadaContrato($vocontratoDemanda){
+	
+	$registroContratada = getContratadaContratoRegistro($vocontratoDemanda);
+	$vopessoa = new vopessoa();
+	$vopessoa->getDadosBanco($registroContratada);
+					
+	return	$vopessoa;
+}
+
+function getDataAssinaturaLimite($vocontrato){
+	//$vocontrato = new vocontrato();
+	
+	$dtInicioVigencia = $vocontrato->dtVigenciaInicial;
+	if(!isAtributoValido($dtInicioVigencia)){
+		return null;
+	}
+	
+	$dtAssinaturaDigital = $dtInicioVigencia = getData($vocontrato->dtVigenciaInicial);
+	if(isTermoProrrogacaoContrato($vocontrato)){
+		$dtAssinaturaDigital = somarOuSubtrairDias($dtInicioVigencia, 1, "-", false);
+	}	
+	
+	return $dtAssinaturaDigital;
+}
+
+function isTermoProrrogacaoContrato($vocontrato){
+	//$vocontrato = new vocontrato();	
+	$inCaracteristicas = $vocontrato->inCaracteristicas;
+	
+	$retorno = isAtributoValido($inCaracteristicas)
+		&& existeItemNoArrayOuString(dominioTipoDemandaContrato::$CD_TIPO_PRORROGACAO, $inCaracteristicas);
+	
+	return $retorno;
+}
+
 
 ?>

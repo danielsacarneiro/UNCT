@@ -303,6 +303,7 @@ class dbContratoInfo extends dbprocesso {
 		$nmTabelaContratoInfo = voContratoInfo::getNmTabelaStatic ( $isHistorico );
 		$nmTabelaPessoaContrato = vopessoa::getNmTabelaStatic ( false );
 		$nmTabelaPessoaGestorContratoInfo = filtroManterContrato::$NM_TAB_PESSOA_GESTOR;
+		$nmTabelaOrgaoGestor = vogestor::getNmTabela();
 		//$nmTabDadosOrdemParalisacao = filtroConsultarContratoConsolidacao::$NmTABDadosOrdemParalisacao;
 		//echo "tabela vo: $nmTabela | tabela contrato_info: $nmTabelaContratoInfo";
 		
@@ -434,6 +435,16 @@ class dbContratoInfo extends dbprocesso {
 		$queryJoin .= "\n LEFT JOIN $nmTabelaPessoaContrato $nmTabelaPessoaGestorContratoInfo ";
 		$queryJoin .= "\n ON ";
 		$queryJoin .= $nmTabelaPessoaGestorContratoInfo . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrCdPessoaGestor;
+		$queryJoin .= " AND " . $nmTabelaPessoaGestorContratoInfo . "." . vopessoa::$nmAtrInDesativado . "= 'N'";
+		
+		$nmTabelaPessoaGestor = vopessoagestor::getNmTabela();
+		$queryJoin .= "\n LEFT JOIN $nmTabelaPessoaGestor ";
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaPessoaGestorContratoInfo . "." . vopessoa::$nmAtrCd . "=" . $nmTabelaPessoaGestor . "." . vopessoa::$nmAtrCd;
+		
+		$queryJoin .= "\n LEFT JOIN $nmTabelaOrgaoGestor ";
+		$queryJoin .= "\n ON ";
+		$queryJoin .= $nmTabelaPessoaGestor . "." . vopessoagestor::$nmAtrCdGestor . "=" . $nmTabelaOrgaoGestor . "." . vogestor::$nmAtrCd;
 		
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaPessoaContrato;
 		$queryJoin .= "\n ON ";

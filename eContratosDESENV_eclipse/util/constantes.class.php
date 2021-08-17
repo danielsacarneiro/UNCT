@@ -3,6 +3,7 @@
 include_once 'normativos.php';
 
   Class constantes {
+  	STATIC $DATA_INVALIDA_CONVERTIDA_DE_STRING = "31/12/1969";
   	static $NM_SERVIDOR = 'sf300451';
 	static $nomeSistema = "e-CONTi";
 	static $TAMANHO_MAXIMO_NM_ARQUIVO = 40;

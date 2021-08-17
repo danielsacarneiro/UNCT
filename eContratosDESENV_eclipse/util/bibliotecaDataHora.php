@@ -67,10 +67,42 @@ function getData($dataSQL) {
 }
 
 function isDataValidaNaoVazia($dataSQL, $temHora=false) {
-	$retorno = $dataSQL != null && $dataSQL != "" && $dataSQL != "0000-00-00";
+	$retorno = $dataSQL != null && $dataSQL != "" && $dataSQL != "0000-00-00" && isDataValidaHtml(getData($dataSQL));
+	
 	return $retorno;
 }
 
+function isDataValidaHtml($dat){
+	$data = explode("/","$dat"); // fatia a string $dat em pedados, usando / como referência
+	
+	$d = $data[0];
+	$m = $data[1];
+	$y = $data[2];
+
+	/*
+	// verifica se a data é válida!
+	// 1 = true (válida)
+	// 0 = false (inválida)	
+	try{
+		$res = checkdate($m,$d,$y);
+		$res == 1;
+	}catch(Exception $ex){
+		$res = false;
+	}*/
+	
+	$d = DateTime::createFromFormat('d/m/Y', $dat);
+	$retorno = $d && $d->format('d/m/Y') == $dat && constantes::$DATA_INVALIDA_CONVERTIDA_DE_STRING != $dat;
+	
+	/*if($retorno){
+		echo "valida";
+	}else{
+		echo "NAO valida";
+	}
+	
+	echo "<BR>data $dat";*/
+	
+	return $retorno;
+}
 
 function getDataHoraParam($dataSQL, $temHora) {
 	$retorno = null;
@@ -299,6 +331,11 @@ function isDataRetroativa($datahtml , $datafimhtml=null){
 	if($datafimhtml == null){
 		$datafimhtml = getDataHoje();
 	}
+	
+	/*if(!isDataValidaHtml($datahtml)){
+		return false;
+	}*/
+	
 	return isDataValidaNaoVazia($datahtml) && (compararDatas($datahtml, $datafimhtml) == 1);
 }
 

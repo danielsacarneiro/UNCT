@@ -168,6 +168,7 @@ function isContratoPermiteProrrogacao($voContrato){
 		$filtro->anoContrato = $voContrato->anoContrato;
 		$filtro->cdContrato = $voContrato->cdContrato;
 		$filtro->tipoContrato = $voContrato->tipo;
+		$filtro->inProduzindoEfeitos = dominioContratoProducaoEfeitos::$CD_VISTO_COM_EFEITOS;
 		$db = new dbContratoInfo();				
 		$colecao = $db->consultarTelaConsultaConsolidacao($filtro);
 		//echo "eh vazia";
@@ -838,8 +839,9 @@ function getCorpoEmailAssinatura($pArrayCamposSubstituicao){
 	if($dtInicioVigencia == null){
 		$dtAssinaturaDigital = $dtInicioVigencia = $str_confirmar;
 		$dtInicioVigencia = "<u>SUA ASSINATURA</u>" . $dtInicioVigencia;
-	}else{
-		$dtAssinaturaDigital = somarOuSubtrairDias($dtInicioVigencia, 1, "-", false);
+	}else{		
+		//$dtAssinaturaDigital = somarOuSubtrairDias($dtInicioVigencia, 1, "-", false);
+		$dtAssinaturaDigital = getDataAssinaturaLimite($vocontrato);
 	}	
 
 	$retorno = "<br>À ".getTextoHTMLNegrito($dsPessoa).",
@@ -914,40 +916,52 @@ function getCorpoEmailAssinaturaSEI($pArrayCamposSubstituicao){
 	}else{
 		$dtAssinaturaDigital = $dtInicioVigencia;
 		//somente o contrato mater permite que a assinatura seja igual ao inicio da vigencia
-		if($vocontrato->cdEspecie != dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER){
+		/*if($vocontrato->cdEspecie != dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER){
 			$dtAssinaturaDigital = somarOuSubtrairDias($dtInicioVigencia, 1, "-", false);
-		}
+		}*/		
+		$dtAssinaturaDigital = getDataAssinaturaLimite($vocontrato);		
 	}
 	
 	$linkATI = "http://www.portaisgoverno.pe.gov.br/web/site-ati/cadusuarioorgao";
 	$linkDeclaracao = "http://www.portaisgoverno.pe.gov.br/c/document_library/get_file?uuid=b4cecfd0-b36b-4b4a-894a-cd8f0facd21e&groupId=20653";
 	
+	$nomeSEI = "Sistema Eletrônico de Informação-SEI";
 	$retorno = "<br>À ".getTextoHTMLNegrito($dsPessoa).",
 	<br><br>
 	ASSUNTO: ".getTextoHTMLNegrito("ASSINATURA DO $codigoContratoCompleto")."
 	<br><br>".getTextoHTMLDestacado("Ref. SEI nº $numSEI", "blue").". $str_confirmar
 				
 		<br><br><br>A Unidade de Contratos-UNCT/DILC/SEFAZ, vem, por meio deste, convocar para a assinatura do contrato supramencionado, cujo objeto é ".getTextoHTMLNegrito($vocontrato->objeto)
-		."$str_confirmar, com vigência a partir de ".getTextoHTMLNegrito($dtInicioVigencia).", fazendo-se necessário
-		o cadastro no <b>Sistema Eletrônico de Informação-SEI</b>, de acordo com os seguintes passos: 
+		."$str_confirmar, com vigência a partir de ".getTextoHTMLNegrito($dtInicioVigencia);
 		
-		<b><br><br>1.	Se o fornecedor já possuir cadastro no sistema, deve apenas responder este email indicando 'nome' e 'email' do 
-		responsável pela assinatura do termo em questão no SEI, <u>ignorando os passos, a seguir, que se referem exclusivamente ao cadastro</u>.</b> 
-
-		<b><br><br>2.	Caso contrário, o fornecedor deve realizar o cadastro de usuário externo ao SEI no site da ATI</b>: 
-		<br>	a.Ir em ".getTextoLink($linkATI,$linkATI)." ;
-		<br>	b.Selecionar o órgão ao qual tem seu processo vinculado (nosso caso: SEFAZ);
-		<br>	c.Para se cadastrar, ir em: 'Clique aqui se você ainda não está cadastrado';
-		
-		<b><br><br>3.	Após o cadastro, o fornecedor receberá um e-mail automático solicitando a documentação necessária, dentre as quais</b>:
-		<br>	a.Cópia de comprovante de residência;
-		<br>	b.Cópias de RG e CPF ou de outro documento de identidade no qual conste o CPF;
-		<br>	c.Termo de Declaração de Concordância e Veracidade preenchido e assinado, no link ".getTextoLink($linkDeclaracao,$linkDeclaracao).";"
-			. getTextoHTMLDestacado("<br><br>ATENÇÃO: DESCONSIDERAR as informações contidas no e-mail automático de orientação enviado pelo SEI, após o envio do formulário, a respeito da entrega da documentação, cujas regras a serem seguidas estão detalhadas no item a seguir")
-			
-			. "<b><br><br>4.	Os documentos necessários devem ser enviados como anexos em RESPOSTA A ESTE EMAIL.</b>"
+		$vopessoa = getVOPessoaContratadaContrato($vocontrato);
+		$isEmpresaAssinaPeloSEI = isContratadaAssinaPeloSEI($vopessoa);				
+		if($isEmpresaAssinaPeloSEI){
+			//$vopessoa = new vopessoa();
+			$dadosSEI = getTextoHTMLDestacado($vopessoa->emailSEI);
+			$retorno .= ", já disponível no <b>$nomeSEI</b>, conforme cadastro já realizado anteriormente, cujo email assinante é <b><u>'$dadosSEI'</u></b>.
+			<br><br> Havendo qualquer erro ou impedimento, favor
+			nos informar, em resposta a este email.";
+		}else{
+			$retorno .= ", fazendo-se necessário o cadastro no <b>$nomeSEI</b>, de acordo com os seguintes passos:";		
+			$retorno .= "<b><br><br>1.	Se o fornecedor já possuir cadastro no sistema, deve apenas responder este email indicando 'nome' e 'email' do 
+			responsável pela assinatura do termo em questão no SEI, <u>ignorando os passos, a seguir, que se referem exclusivamente ao cadastro</u>.</b> 
 	
-			. "<b><br><br>5.	O fornecedor deve aguardar, via email, as instruções para assinatura do termo.</b>";
+			<b><br><br>2.	Caso contrário, o fornecedor deve realizar o cadastro de usuário externo ao SEI no site da ATI</b>: 
+			<br>	a.Ir em ".getTextoLink($linkATI,$linkATI)." ;
+			<br>	b.Selecionar o órgão ao qual tem seu processo vinculado (nosso caso: SEFAZ);
+			<br>	c.Para se cadastrar, ir em: 'Clique aqui se você ainda não está cadastrado';
+			
+			<b><br><br>3.	Após o cadastro, o fornecedor receberá um e-mail automático solicitando a documentação necessária, dentre as quais</b>:
+			<br>	a.Cópia de comprovante de residência;
+			<br>	b.Cópias de RG e CPF ou de outro documento de identidade no qual conste o CPF;
+			<br>	c.Termo de Declaração de Concordância e Veracidade preenchido e assinado, no link ".getTextoLink($linkDeclaracao,$linkDeclaracao).";"
+				. getTextoHTMLDestacado("<br><br>ATENÇÃO: DESCONSIDERAR as informações contidas no e-mail automático de orientação enviado pelo SEI, após o envio do formulário, a respeito da entrega da documentação, cujas regras a serem seguidas estão detalhadas no item a seguir")
+				
+				. "<b><br><br>4.	Os documentos necessários devem ser enviados como anexos em RESPOSTA A ESTE EMAIL.</b>"
+		
+				. "<b><br><br>5.	O fornecedor deve aguardar, via email, as instruções para assinatura do termo.</b>";
+		}
 		
 		if(!isAtributoValido($dtAssinaturaDigital)){
 			$msg  = getTextoHTMLDestacado("<br><br>*****ATENÇÃO: verifique a data de início de vigência do contrato.*****<br><br>");

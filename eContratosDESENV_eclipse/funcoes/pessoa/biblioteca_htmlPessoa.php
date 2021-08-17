@@ -176,6 +176,7 @@ function getComboUsuarioPorSetor($pArray, $cdSetor){
 	$dbprocesso = new dbUsuarioInfo();
 	$filtro = new filtroManterUsuario(false);
 	$filtro->cdSetor = $cdSetor;
+	$filtro->cdAtrOrdenacao = voUsuarioInfo::$nmAtrName;
 	$colecao = $dbprocesso->consultarSetorUsuario($filtro);	
 	
 	$select = new select(array());
