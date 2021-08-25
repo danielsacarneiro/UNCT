@@ -253,7 +253,7 @@ function alteracaoNome(){
 				        	</TD>
 				        	<TD class="campoformulario" colspan=3>
 				                <?php 
-					            echo "Email.SEI:" .getInputText(vopessoa::$nmAtrEmailSEI, vopessoa::$nmAtrEmailSEI, $vo->emailSEI, constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO, 40, 60, getMsgPlaceHolder("inclua o e-mail de quem assina no SEI."));
+					            echo "Email.SEI:" .getInputText(vopessoa::$nmAtrEmailSEI, vopessoa::$nmAtrEmailSEI, $vo->emailSEI, constantes::$CD_CLASS_CAMPO_NAO_OBRIGATORIO, 60, 60, getMsgPlaceHolder("inclua o e-mail de quem assina no SEI (se mais de um, separe-os por ';')."));
 					            ?>
 				        	</TD>
 				        	</TR>

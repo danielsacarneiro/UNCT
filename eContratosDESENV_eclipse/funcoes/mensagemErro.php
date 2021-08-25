@@ -26,6 +26,16 @@ if($cdTela != null && $cdTela == 1){
 		$paginaEncaminhamento = "../index.php";
 	}	
 	$classMensagem = "campomensagemvermelho";
+
+	$exSessao = getObjetoSessao(excecaoGenerica::$ID_REQ_SESSAO_EX);	
+	if($exSessao != null && isAtributoValido($exSessao->getMessage())){
+		$msgErro = $exSessao->getMessage();
+		if(isAtributoValido($exSessao->msgAdicional)){
+			$msgErro .= $exSessao->msgAdicional;
+		}		
+	}
+	removeObjetoSessao(excecaoGenerica::$ID_REQ_SESSAO_EX);
+	
 	$msg = "OPERACAO $nmFuncao FALHOU.<br>$msgErro";
 }
 

@@ -241,12 +241,18 @@ function iniciar(){
 	        include_once(caminho_funcoes. "contrato/dominioTpGarantiaContrato.php");
 	        $comboGarantia = new select(dominioTpGarantiaContrato::getColecao());
 	        //$jsGarantia = "formataFormTpGarantia('".voContratoInfo::$nmAtrInTemGarantia."', '".voContratoInfo::$nmAtrTpGarantia."');"
+	        
+	        $vopessoagestor = new vopessoa();
+	        $vopessoagestor->cd = $colecao[voContratoInfo::$nmAtrCdPessoaGestor];
 	        ?>	        
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Gestor:</TH>
 	            <TD class="campoformulario" colspan="3">
-                    Código:<INPUT type="text" id="<?=voContratoInfo::$nmAtrCdPessoaGestor?>" name="<?=voContratoInfo::$nmAtrCdPessoaGestor?>" value="<?=complementarCharAEsquerda($colecao[voContratoInfo::$nmAtrCdPessoaGestor], "0", TAMANHO_CODIGOS)?>"  class="camporeadonly" size="5" readonly>
+                    Código:<INPUT type="text" id="<?=voContratoInfo::$nmAtrCdPessoaGestor?>" name="<?=voContratoInfo::$nmAtrCdPessoaGestor?>" value="<?=complementarCharAEsquerda($vopessoagestor->cd, "0", TAMANHO_CODIGOS)?>"  class="camporeadonly" size="5" readonly>
                     Nome: <INPUT type="text" id="<?=voContratoInfo::$IDREQNmPessoaGestor?>" name="<?=voContratoInfo::$IDREQNmPessoaGestor?>" value="<?=$colecao[voContratoInfo::$IDREQNmPessoaGestor]?>"   class="camporeadonly" size="30" readonly>
+                    <?php 
+                    echo getLinkPesquisaVO($vopessoagestor);
+                    ?>
 	            </TD>
 	        </TR>
 			<TR>

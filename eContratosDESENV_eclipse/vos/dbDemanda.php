@@ -1307,9 +1307,10 @@ class dbDemanda extends dbprocesso {
 						//$temPendenciaContratoEnvioPGE = isAtributoValido($vocontratoInfo->inPendencias) && in_array(dominioAutorizacao::$CD_AUTORIZ_PGE, $vocontratoInfo->inPendencias);
 						$temPendenciaContratoEnvioPGE = isAtributoValido($vocontratoInfo->inPendencias)
 						&& existeItemNoArrayOuString(dominioAutorizacao::$CD_AUTORIZ_PGE, $vocontratoInfo->inPendencias);
-				
-						$isContratoEnvioSAD = !$temPendenciaContratoEnvioSAD && isContratoEnvioSADPGE($vocontratoDemanda, dominioSetor::$CD_SETOR_SAD, $vocontratoInfo);
-						$isContratoEnvioPGE = !$temPendenciaContratoEnvioPGE && isContratoEnvioSADPGE($vocontratoDemanda, dominioSetor::$CD_SETOR_PGE, $vocontratoInfo);
+						
+						$voContratoMater = getContratoMater($vocontratoDemanda);
+						$isContratoEnvioSAD = !$temPendenciaContratoEnvioSAD && isContratoEnvioSADPGE($vocontratoDemanda, dominioSetor::$CD_SETOR_SAD, $vocontratoInfo, $voContratoMater);
+						$isContratoEnvioPGE = !$temPendenciaContratoEnvioPGE && isContratoEnvioSADPGE($vocontratoDemanda, dominioSetor::$CD_SETOR_PGE, $vocontratoInfo, $voContratoMater);
 						//$vo = new voDemandaTramitacao();
 						$isAnaliseSADOK = !$isContratoEnvioSAD || (isAtributoValido($vo->fase) && in_array(dominioFaseDemanda::$CD_VISTO_SAD, $vo->fase));
 						$isAnalisePGEOK = !$isContratoEnvioPGE || (isAtributoValido($vo->fase) && in_array(dominioFaseDemanda::$CD_VISTO_PGE, $vo->fase));
@@ -1334,6 +1335,13 @@ class dbDemanda extends dbprocesso {
 						static::validarDadosContratoModificacao($vo, $vocontratoDemanda);
 						
 						static::validarDadosContratada($vo, $vocontratoDemanda);
+						
+						$isContratoRegistradoSEI = (isAtributoValido($vo->fase) && in_array(dominioFaseDemanda::$CD_REGISTRADO, $vo->fase));
+						if(!$isContratoRegistradoSEI){
+							throw new excecaoGenerica("Fechamento não permitido: realize o registro do termo no SEI, conforme item 'Como REGISTRAR um termo' no manual ECONTI. |"
+									. $vocontratoDemanda->getCodigoContratoFormatado(true));
+						}
+						
 					}
 			
 				}

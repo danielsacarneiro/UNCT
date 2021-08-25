@@ -571,6 +571,16 @@ function getBotoesRodapeComRestricao($arrayBotoesARemover, $restringeBotaoSemVal
 function getLinkPesquisa($link) {
 	return getImagemLink ( "javascript:abrirJanelaAuxiliar('" . $link . "',true, false, false);\" ", "lupa.png" );
 }
+
+function getLinkPesquisaVO($voEntidade, $nmPagina=null) {
+	if($nmPagina == null){
+		$nmPagina = "detalhar.php";
+	}	
+	return getLinkPesquisa ( "../".$voEntidade::getNmTabela()."/$nmPagina?funcao=" . constantes::$CD_FUNCAO_DETALHAR 
+			. "&".constantes::$ID_REQ_CD_LUPA."=S&chave=" . $voEntidade->getValorChaveHTML() );
+}
+
+
 function getImagemLink($href, $nmImagem, $nmLink='lnkFramework') {
 	
 	// $pasta = pasta_imagens . "//";
@@ -1122,6 +1132,10 @@ function tratarExcecaoHTML($ex, $vo = null, $paginaErro="../mensagemErro.php") {
 		putObjetoSessao ( $vo->getNmTabela (), $vo );
 		// a debaixo eh para a tela de msg de erro
 		putObjetoSessao ( constantes::$ID_REQ_SESSAO_VO, $vo );
+	}
+	
+	if ($ex != null) {
+		putObjetoSessao ( excecaoGenerica::$ID_REQ_SESSAO_EX, $ex );
 	}
 	
 	$msg = $ex->getMessage ();

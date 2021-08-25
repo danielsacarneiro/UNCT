@@ -66,7 +66,7 @@ function getDadosContratada($chave, $voentidade = null, $funcao = null) {
 			$vo = new vocontrato ();
 			$vo->getChavePrimariaVOExplodeParam ( $chave );
 			//echo $chave;
-			$recordSet = consultarPessoasContrato ( $vo, $vo->sqEspecie != null);
+			$recordSet = consultarPessoasContrato ( $vo, $vo->sqEspecie != null);			
 				
 			$retorno = getCampoContratada ( "", "", $chave );
 			if ($recordSet != "") {
@@ -82,8 +82,10 @@ function getDadosContratada($chave, $voentidade = null, $funcao = null) {
 				
 				for($i = 0; $i < $tam; $i ++) {
 					$registro = $recordSet [$i];
-						
-					$retorno .= getCampoContratada ( $registro [vopessoa::$nmAtrNome], $registro [vopessoa::$nmAtrDoc], $chave ) . "<br>";
+					$vopessoa = new vopessoa();
+					$vopessoa->getDadosBanco($registro);
+					
+					$retorno .= getCampoContratada ( $registro [vopessoa::$nmAtrNome], $registro [vopessoa::$nmAtrDoc], $chave, null, $vopessoa) . "<br>";
 						
 					// guarda para usar na pagina que chamou o metodo
 					$arrayCdAutorizacao [] = $registro [vocontrato::$nmAtrCdAutorizacaoContrato];
@@ -348,13 +350,18 @@ function consultarPessoaDocumento($numDoc, $pDataVigencia = null, $levantarExcec
 	return $retorno;
 }
 
-function getCampoContratada($pNmContratada, $pDocContratada, $pChaveContrato, $complemento=null){
+function getCampoContratada($pNmContratada, $pDocContratada, $pChaveContrato, $complemento=null, $vopessoa=null){
 
 	$retorno = "Contratado: <INPUT type='text' class='camporeadonly' size=50 readonly value='NÃO ENCONTRADO - VERIFIQUE O CONTRATO'>\n";
 	if($pNmContratada != ""){
 		
 		$javaScript = "onLoad=''";
 		$retorno = "Contratado: <INPUT type='text' class='camporeadonly' size=40 readonly value='".$pNmContratada."' ".$javaScript.">\n";
+		if($vopessoa != null){
+			$retorno .= getLinkPesquisaVO($vopessoa);
+			//echo teste;
+		}
+
 		$retorno .= "<INPUT type='hidden' id='" . vopessoa::$ID_NOME_DADOS_CONTRATADA . "' name='".vopessoa::$ID_NOME_DADOS_CONTRATADA."' value='".$pNmContratada."' >\n";
 		
 		if($pDocContratada != null){

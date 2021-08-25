@@ -905,6 +905,12 @@ function getCorpoEmailAssinaturaSEI($pArrayCamposSubstituicao){
 	
 	$dtInicioVigenciaBanco = $vocontrato->dtVigenciaInicial;
 	$dtInicioVigencia = getData($dtInicioVigenciaBanco);
+	//$vocontrato = new vocontrato();
+	
+	if(isDataValidaHtml($vocontrato->dtAssinatura)){
+		throw new excecaoGenerica("Contrato já assinado. Não permitida nova assinatura pelo SEI.|". $vocontrato->getCodigoContratoFormatado(true));
+	}
+	
 	if(isDataValidaNaoVazia($dtInicioVigenciaBanco) && isDataRetroativa($dtInicioVigencia)){
 		throw new excecaoGenerica("Contrato retroativo: assinatura não permitida no SEI. Início de vigência é $dtInicioVigencia.|". $vocontrato->getCodigoContratoFormatado(true));		
 	}

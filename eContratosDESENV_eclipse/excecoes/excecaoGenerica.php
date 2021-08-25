@@ -4,6 +4,8 @@
  */
 class excecaoGenerica extends Exception
 {	
+	static $ID_REQ_SESSAO_EX= "ID_REQ_SESSAO_EX";
+	
 	static $CD_EXCECAO_SUCESSO = 1;
 	static $CD_EXCECAO_OBJETO_SESSAO_INEXISTENTE = 2;
 	static $CD_EXCECAO_CLASS_NAO_ENCONTRADA = 3;

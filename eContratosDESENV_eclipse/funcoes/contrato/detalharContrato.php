@@ -139,7 +139,7 @@ function confirmar() {
                 <TH class="campoformulario" nowrap width=1%>Sq.Hist:</TH>
                 <TD class="campoformulario" colspan=3><INPUT type="text" value="<?php echo(complementarCharAEsquerda($vo->sqHist, "0", TAMANHO_CODIGOS));?>"  class="camporeadonlyalinhadodireita" size="5" readonly></TD>
                 <INPUT type="hidden" id="<?=voRegistroLivro::$nmAtrSqHist?>" name="<?=voRegistroLivro::$nmAtrSqHist?>" value="<?=$vo->sqHist?>">
-            </TR>
+            </TR>            
            <?php
 			}
            if($msgComplementar != null){
@@ -149,6 +149,20 @@ function confirmar() {
 	        </TR>  
         <?php
           }
+          ?>
+		<TR>
+            <TH class="campoformulario" nowrap>Data Assinatura:</TH>
+            <TD class="campoformulario" colspan="3">
+            	<INPUT type="text" 
+            	       id="<?=vocontrato::$nmAtrDtAssinaturaContrato?>" 
+            	       name="<?=vocontrato::$nmAtrDtAssinaturaContrato?>" 
+            			value="<?php echo($voContrato->dtAssinatura);?>" 
+            			class="camporeadonly" 
+            			size="10" 
+            			maxlength="10" <?=$readonly?>>
+			</TD>
+        </TR>          
+        <?php
         require_once (caminho_funcoes."contrato/biblioteca_htmlContrato.php");
         //getContratoDet($voContrato, true);      
         getContratoDet($voContrato, true, true);
@@ -195,11 +209,9 @@ function confirmar() {
         </TR> -->
 		<TR>
             <TH class="campoformulario" nowrap>Valor Mensal:</TH>
-            <TD class="campoformulario" colspan="3"><INPUT type="text" id="<?=vocontrato::$nmAtrVlMensalContrato?>" name="<?=vocontrato::$nmAtrVlMensalContrato?>"  value="<?php echo($vlMensal);?>"  class="camporeadonlyalinhadodireita" size="15" <?=$readonly?>></TD>
-        </TR>					
-		<TR>
+            <TD class="campoformulario" ><INPUT type="text" id="<?=vocontrato::$nmAtrVlMensalContrato?>" name="<?=vocontrato::$nmAtrVlMensalContrato?>"  value="<?php echo($vlMensal);?>"  class="camporeadonlyalinhadodireita" size="15" <?=$readonly?>></TD>
             <TH class="campoformulario" nowrap>Valor Global:</TH>
-            <TD class="campoformulario" colspan="3"><INPUT type="text" id="<?=vocontrato::$nmAtrVlGlobalContrato?>" name="<?=vocontrato::$nmAtrVlGlobalContrato?>"  value="<?php echo($vlGlobal);?>"  class="camporeadonlyalinhadodireita" size="15" <?=$readonly?>></TD>
+            <TD class="campoformulario" ><INPUT type="text" id="<?=vocontrato::$nmAtrVlGlobalContrato?>" name="<?=vocontrato::$nmAtrVlGlobalContrato?>"  value="<?php echo($vlGlobal);?>"  class="camporeadonlyalinhadodireita" size="15" <?=$readonly?>></TD>
         </TR>
 		
 		<TR>
@@ -230,18 +242,6 @@ function confirmar() {
             			class="camporeadonly" 
             			size="4" 
             			readonly> (dias aprox.)            			
-			</TD>
-        </TR>
-		<TR>
-            <TH class="campoformulario" nowrap>Data Assinatura:</TH>
-            <TD class="campoformulario" colspan="3">
-            	<INPUT type="text" 
-            	       id="<?=vocontrato::$nmAtrDtAssinaturaContrato?>" 
-            	       name="<?=vocontrato::$nmAtrDtAssinaturaContrato?>" 
-            			value="<?php echo($voContrato->dtAssinatura);?>" 
-            			class="camporeadonly" 
-            			size="10" 
-            			maxlength="10" <?=$readonly?>>
 			</TD>
         </TR>
 		<TR>
@@ -289,16 +289,13 @@ function confirmar() {
 			?>
 	
         <TH class="campoformulario" nowrap>Autorizacao Previa:</TH>
-        <TD class="campoformulario" colspan="3"><?php echo $combo->getHtmlCombo(vocontrato::$nmAtrCdAutorizacaoContrato,vocontrato::$nmAtrCdAutorizacaoContrato, $voContrato->cdAutorizacao, true, "camporeadonly", true, " disabled");?>
-        <!-- <INPUT type="text" id="<?=vocontrato::$nmAtrTipoAutorizacaoContrato?>" name="<?=vocontrato::$nmAtrTipoAutorizacaoContrato?>"  value="<?php echo($tpAutorizacao);?>"  class="camporeadonly" size="10" <?=$readonly?>>--></TD> 
-    </TR>
+        <TD class="campoformulario"><?php echo $combo->getHtmlCombo(vocontrato::$nmAtrCdAutorizacaoContrato,vocontrato::$nmAtrCdAutorizacaoContrato, $voContrato->cdAutorizacao, true, "camporeadonly", true, " disabled");?> 
     <?php
     $licom = $registrobanco[voContratoLicon::$nmAtrSituacao];
     $incluidoLicon = array_key_exists($licom, dominioSituacaoContratoLicon::getColecaoIncluidoSucesso());
     ?>
-	<TR>
         <TH class="campoformulario" nowrap>LICON:</TH>
-        <TD class="campoformulario" colspan="3"><INPUT type="text" id="<?=vocontrato::$nmAtrInLicomContrato?>" name="<?=vocontrato::$nmAtrInLicomContrato?>"  value="<?php echo dominioSimNao::getDescricao($incluidoLicon);?>"  class="camporeadonly" size="10" <?=$readonly?>></TD>
+        <TD class="campoformulario" ><INPUT type="text" id="<?=vocontrato::$nmAtrInLicomContrato?>" name="<?=vocontrato::$nmAtrInLicomContrato?>"  value="<?php echo dominioSimNao::getDescricao($incluidoLicon);?>"  class="camporeadonly" size="10" <?=$readonly?>></TD>
     </TR>
 	<TR>
         <TH class="campoformulario" nowrap>Observacao:</TH>
@@ -375,7 +372,8 @@ function confirmar() {
 						<TD>
                     		<TABLE class="barraacoesaux" cellpadding="0" cellspacing="0">
 	                    	<TR>
-							<TD class="botaofuncao"><?=getBotao("bttMovimentacao", "Movimentações", null, false, "onClick=\"javascript:movimentacoes('".$voContrato->getValorChaveHTML()."');\" accesskey='m'")?></TD>	                    	
+							<TD class="botaofuncao"><?=getBotao("bttMovimentacao", "Movimentações", null, false, "onClick=\"javascript:movimentacoes('".$voContrato->getValorChaveHTML()."');\" accesskey='m'")?>
+							</TD>	                    	
 							<?=getBotoesRodape();?>						    
 							</TR>
 		                    </TABLE>

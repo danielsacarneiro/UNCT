@@ -27,6 +27,8 @@ function getColecaoContratoDet($colecao,$isDetalharChaveCompleta=false) {
 	}else{
 		$html = "NAO ENCONTRADO";
 	}
+	
+	//echo "teste";
 	return $html;
 }
 function getContratoDetalhamentoAvulso($voContrato, $apenasComplemento=false){
@@ -81,6 +83,8 @@ function getContratoDetalhamentoParam($arrayParametro) {
 		$chaveContrato = $voContrato->getValorChaveHTML ();
 		$campoContratado = getCampoContratada ( "", "", $chaveContrato );
 		$temLupa = false;
+		
+		$voPessoaTemp = new vopessoa();
 		if ($colecao != "") {
 			$temLupa = true;
 			//var_dump($colecao);
@@ -88,7 +92,9 @@ function getContratoDetalhamentoParam($arrayParametro) {
 				$nmpessoa = $colecao [vopessoa::$nmAtrNome];
 				$docpessoa = $colecao [vopessoa::$nmAtrDoc];
 				$complemento = $colecao [vopessoa::$nmAtrObservacao];
-				$campoContratado = getCampoContratada ( $nmpessoa, $docpessoa, $voContrato->sq,$complemento);
+				
+				$voPessoaTemp->getDadosBanco($colecao);
+				$campoContratado = getCampoContratada ( $nmpessoa, $docpessoa, $voContrato->sq,$complemento,$voPessoaTemp);
 			} else {
 				$campoContratado = "";
 				$tamanhoColecao = count ( $colecao );
@@ -96,7 +102,9 @@ function getContratoDetalhamentoParam($arrayParametro) {
 					$nmpessoa = $colecao [$i] [vopessoa::$nmAtrNome];
 					$docpessoa = $colecao [$i] [vopessoa::$nmAtrDoc];
 					$complemento = $colecao [$i] [vopessoa::$nmAtrObservacao];
-					$campoContratado .= getCampoContratada ( $nmpessoa, $docpessoa, $voContrato->sq,$complemento ) . "<br>";
+					
+					$voPessoaTemp->getDadosBanco($colecao [$i]);
+					$campoContratado .= getCampoContratada ( $nmpessoa, $docpessoa, $voContrato->sq,$complemento, $voPessoaTemp) . "<br>";
 				}
 			}
 		}
@@ -163,9 +171,10 @@ function getContratoDetalhamentoParam($arrayParametro) {
 			
 			$cdAutorizacaoEconti = $voContratoInfoPK->cdAutorizacao;
 			echo getTextoHTMLDestacado("<br>Autorização", "black", true) . ":";
-					
-			$isContratoEnvioSAD = isContratoEnvioSADPGE($voContrato, dominioSetor::$CD_SETOR_SAD, $voContratoInfoPK);
-			$isContratoEnvioPGE = isContratoEnvioSADPGE($voContrato, dominioSetor::$CD_SETOR_PGE, $voContratoInfoPK);
+			
+			$voContratoMater = getContratoMater($voContrato);
+			$isContratoEnvioSAD = isContratoEnvioSADPGE($voContrato, dominioSetor::$CD_SETOR_SAD, $voContratoInfoPK, $voContratoMater);
+			$isContratoEnvioPGE = isContratoEnvioSADPGE($voContrato, dominioSetor::$CD_SETOR_PGE, $voContratoInfoPK, $voContratoMater);
 			//verifica se vai pra SAD ou PGE pelo valor e valida se a informacao do econti esta de acordo
 			if($isContratoEnvioSAD || $isContratoEnvioPGE){
 				echo "Pelo Valor ";
@@ -184,7 +193,7 @@ function getContratoDetalhamentoParam($arrayParametro) {
 				echo dominioSetor::getHtmlDetalhamento("", "", $strSetoresTemp, false);
 				
 				if($cdAutorizacaoPorValor != $cdAutorizacaoEconti){
-					echo getTextoHTMLDestacado("Verifique informação adicional sobre 'Autorização' do contrato.<br>, <u>bem como se o termo está com o valor correto</u>.", "red", true);				
+					echo getTextoHTMLDestacado("<br>Verifique informação adicional sobre 'Autorização' do contrato, <u>bem como se o termo está com o valor correto</u>.", "red", true);				
 				}
 				
 			}else{
@@ -201,7 +210,7 @@ function getContratoDetalhamentoParam($arrayParametro) {
 			$vlPercentualAcrescimo = getValorNumPercentualAcrescimoContrato(clone $voContrato);
 			$vlPercentualSupressao = getValorNumPercentualAcrescimoContrato(clone $voContrato, true);
 
-			echo getTextoHTMLNegrito(" Acréscimo: " . getMoeda($vlPercentualAcrescimo, 2) . "%");			
+			echo getTextoHTMLNegrito("<br>Acréscimo: " . getMoeda($vlPercentualAcrescimo, 2) . "%");			
 			//$voContratoInfo = new voContratoInfo();
 			$isContratoReforma = $voContratoInfoPK->cdClassificacao == dominioClassificacaoContrato::$CD_SERV_REFORMA_EDIFICIO;
 			//echo "classificao".$voContratoInfo->cdClassificacao;
@@ -250,7 +259,7 @@ function alertaContratoInfoNaoCadastrado($vocontratoinfo){
 	}
 }
 
-function isContratoEnvioSADPGE($voContrato, $setor, $voContratoInfoPK=null){
+function isContratoEnvioSADPGE($voContrato, $setor, $voContratoInfoPK=null, $voContratoMater=null){
 	$vlAComparar = 0;
 	if($setor == dominioSetor::$CD_SETOR_SAD){
 		$vlAComparar = constantes::$VL_GLOBAL_ENVIO_SAD;
@@ -259,6 +268,10 @@ function isContratoEnvioSADPGE($voContrato, $setor, $voContratoInfoPK=null){
 		$vlAComparar = constantes::$VL_GLOBAL_ENVIO_PGE;
 		$validarValorPGE = true;
 		//echoo ("vl base: $vlAComparar");
+	}
+
+	if($voContratoMater == null){
+		$voContratoMater = getContratoMater($voContrato);
 	}
 	
 	$isContratoCredenciamento = false;
@@ -282,7 +295,7 @@ function isContratoEnvioSADPGE($voContrato, $setor, $voContratoInfoPK=null){
 	//$voContrato = new vocontrato();
 	$retorno = false;
 	if($voContrato != null && ($validarValorSAD || $validarValorPGE)){	
-		$qtMeses = getDuracaoEmMesesContratoAutorizacaoPGE_SAD($voContrato);
+		$qtMeses = getDuracaoEmMesesContratoAutorizacaoPGE_SAD($voContratoMater);
 		//echo $qtMeses;
 		if($qtMeses >= vocontrato::$NUM_PRAZO_PADRAO){
 			$qtMeses = vocontrato::$NUM_PRAZO_PADRAO;
@@ -296,7 +309,7 @@ function isContratoEnvioSADPGE($voContrato, $setor, $voContratoInfoPK=null){
 		//lembrar que o valor de contrato eh recuperado diferente
 		//$vlMensal = getVarComoDecimal($vlMensal);
 		$vlReferencia = $vlMensal*$qtMeses;
-		//echo " Vl.Mensal: $vlMensal, VL.Referencia: $vlReferencia ";
+		//echo " Vl.Mensal: $vlMensal, VL.Referencia: $vlReferencia, Meses $qtMeses<br>";
 		$retorno =  $vlReferencia >= $vlAComparar;
 	}
 	

@@ -344,7 +344,7 @@ function estatisticas(){
 						</TR>
 						<TR>
 			               <TH class="campoformulario" width="1%" nowrap>Empenho:</TH>
-			               <TD class="campoformulario"><?=getInputText(vocontrato::$nmAtrNumEmpenhoContrato, vocontrato::$nmAtrNumEmpenhoContrato, $filtro->empenho)?>
+			               <TD class="campoformulario"><?=getInputText(vocontrato::$nmAtrNumEmpenhoContrato, vocontrato::$nmAtrNumEmpenhoContrato, $filtro->empenho, null, 14)?>
 			               </TD>	            
 			            </TR>
 						<TR>

@@ -11,15 +11,17 @@ class dominioFaseDemanda extends dominio {
 	static $CD_VISTO_PGE = "06";
 	static $CD_ASSINADO_DIGITAL = "07";
 	static $CD_ASSINADO_SEI = "08";
+	static $CD_REGISTRADO = "09";
 		
 	static $DS_VISTO_JURIDICO = "Visado.ATJA";
 	static $DS_REVISAO_UNCT = "Revisado";
-	static $DS_ASSINADO_FISICO = "Assinado.Físico";
+	static $DS_ASSINADO_FISICO = "Físico";
 	static $DS_GARANTIA_PRESTADA = "Garantia.OK";
 	static $DS_VISTO_SAD = "Visto.SAD";
 	static $DS_VISTO_PGE = "Visto.PGE";
-	static $DS_ASSINADO_DIGITAL = "Assinado.Digital";
-	static $DS_ASSINADO_SEI = "Assinado.SEI";
+	static $DS_ASSINADO_DIGITAL = "Cert.Digital";
+	static $DS_ASSINADO_SEI = "SEI";
+	static $DS_REGISTRADO = "Registrado";
 	
 	//usados somente pra consultas
 	static $CD_PUBLICADO = "PUBLICADO";
@@ -48,6 +50,7 @@ class dominioFaseDemanda extends dominio {
 				static::$CD_GARANTIA_PRESTADA => self::$DS_GARANTIA_PRESTADA,
 				static::$CD_VISTO_SAD => self::$DS_VISTO_SAD,
 				static::$CD_VISTO_PGE => self::$DS_VISTO_PGE,
+				static::$CD_REGISTRADO => self::$DS_REGISTRADO,
 		);
 				
 		return $retorno;
