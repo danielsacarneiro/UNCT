@@ -358,7 +358,7 @@ function getCampoContratada($pNmContratada, $pDocContratada, $pChaveContrato, $c
 		$javaScript = "onLoad=''";
 		$retorno = "Contratado: <INPUT type='text' class='camporeadonly' size=40 readonly value='".$pNmContratada."' ".$javaScript.">\n";
 		if($vopessoa != null){
-			$retorno .= getLinkPesquisaVO($vopessoa);
+			$retorno .= getLinkPesquisaVO($vopessoa, null, "pessoa.png");
 			//echo teste;
 		}
 

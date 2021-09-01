@@ -525,6 +525,30 @@ class dbContratoInfo extends dbprocesso {
 		return parent::consultarFiltro ( $filtro, $querySelect, $queryFrom, false );
 	}
 	
+	static function validarGenerico($vo) {
+		//$vo = new voContratoInfo();		
+		if(isAtributoValido($vo->cdPessoaGestor)){
+			$vopessoa = new vopessoa();
+			$vopessoa->cd =	$vo->cdPessoaGestor;			
+			$dbPessoa = new dbpessoa();
+			$vopessoa = $dbPessoa->consultarPorChaveTela($vopessoa);
+			
+			if($vopessoa->cdVinculo != dominioVinculoPessoa::$CD_VINCULO_RESPONSAVEL){
+				throw new excecaoGenerica ( "Registro inválido. Verifique se selecionou o gestor corretamente." );
+			}				
+		}	
+	}
+	
+	function incluir($vo){		
+		static::validarGenerico($vo);
+		parent::incluir($vo);
+	}
+	
+	function alterar($vo){
+		static::validarGenerico($vo);
+		parent::alterar($vo);
+	}
+	
 	function incluirSQL($vo) {
 		return $this->incluirQueryVO ( $vo );
 	}

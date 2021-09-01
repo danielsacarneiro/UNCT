@@ -1661,7 +1661,7 @@ function getQtMesesAuxiliar(pDataInicial, pDataFinal, pSemMensagem){
 	var meses = numDias/30;
 	var anos = meses/12;
 	
-	mesesExatos = Math.round(meses);
+	var mesesExatos = Math.round(meses);
 	anos = Math.round(anos);
 	
 	//a operacao abaixo verifica se o numero de anos esta com a aproximacao correta
@@ -1671,6 +1671,11 @@ function getQtMesesAuxiliar(pDataInicial, pDataFinal, pSemMensagem){
 	if(restodivisaoAnoMes >= 0.5){
 		//arredonda para baixo
 		mesesExatos = Math.floor(meses); 
+	}
+		
+	//pelo menos 1 mes deve ser considerado
+	if(mesesExatos == 0){
+		mesesExatos = 1;
 	}
 	
 	if(!pSemMensagem){

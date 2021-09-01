@@ -486,6 +486,11 @@ function getDataSQLDiferencaDias($data1, $data2) {
 	return " DATEDIFF($data2, $data1) ";
 }
 
+function getDataSQLSomaDias($data1, $dias) {
+	// echoo("data $data1");
+	return " date_add($data1, interval $dias day) ";
+}
+
 /**
  * funcao que serve para indicar o atributo que sera comparado e se sera operacao de igual ou de diferenca
  * via de regra, recebera um array bidirecional: posicao 0 eh a operacao, posicao 1, os dados

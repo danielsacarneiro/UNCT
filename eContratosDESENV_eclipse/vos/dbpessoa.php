@@ -8,7 +8,7 @@ include_once (caminho_util . "bibliotecaFuncoesPrincipal.php");
 class dbpessoa extends dbprocesso {
 	static $FLAG_PRINTAR_SQL = false;
 	
-	function consultarPorChaveTela($vo, $isHistorico) {
+	function consultarPorChaveTela($vo, $isHistorico=false) {
 		return 	$this->consultarPorChave($vo, $isHistorico);
 	}
 	

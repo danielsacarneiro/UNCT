@@ -187,7 +187,9 @@ function getCorpoMensagemPorColecaoArray($pArray) {
 				//echoo("SITUACAO" . $voDemandaChave->situacao);
 				if($isCorCelulaIgualSituacaoDemanda && $voDemandaChave->situacao != null){
 					$classColuna = dominioSituacaoDemanda::getCorColuna($voDemandaChave->situacao);
-				}				
+				}
+				
+				$classColunaPadrao = $classColuna;
 
 				$mensagem .= "<TR>\n";
 				
@@ -211,10 +213,20 @@ function getCorpoMensagemPorColecaoArray($pArray) {
 
 					$colunaVlReferencia = $coluna[constantes::$CD_COLUNA_VL_REFERENCIA];
 					$colunaTpValidacao = $coluna[constantes::$CD_COLUNA_TP_VALIDACAO];
-										
-					if($colunaVlReferencia != null){						
-						if($colunaTpValidacao == constantes::$CD_ALERTA_TP_VALIDACAO_MAIORQUE){
+					$colunaOperacao = $coluna[constantes::$CD_COLUNA_OPERACAO_VALOR_REFERENCIA];
+					$colunaChave = $coluna[constantes::$CD_COLUNA_CHAVE];
+					
+					$classColuna = $classColunaPadrao;
+					if($colunaVlReferencia != null){
+						if(isAtributoValido($colunaOperacao)){
+							if($colunaOperacao($coluna_valor,$colunaVlReferencia)){
+								//echo "<br>tipo dado: $colunaTipoDado|valor: $coluna_valor e |referencia: $colunaVlReferencia";
+								$classColuna = "tabeladadosdestacadovermelho";
+							}								
+						}
+						else if($colunaTpValidacao == constantes::$CD_ALERTA_TP_VALIDACAO_MAIORQUE){
 							if($coluna_valor > $colunaVlReferencia){
+								//echo "<br>chave: $colunaChave|tipo dado: $colunaTipoDado|valor: $coluna_valor e |referencia: $colunaVlReferencia";
 								$classColuna = "tabeladadosdestacadovermelho";
 							}
 							//$coluna_valor = complementarCharAEsquerda ( $coluna_valor, '0', $colunaTipoDado );
@@ -236,7 +248,7 @@ function getCorpoMensagemPorColecaoArray($pArray) {
 					}
 											
 					//para o caso de ter dados do contrato
-					if(constantes::$CD_COLUNA_CONTRATO == $coluna[constantes::$CD_COLUNA_CHAVE]){
+					if(constantes::$CD_COLUNA_CONTRATO == $colunaChave){
 
 						$voDemandaContrato = new voDemandaContrato ();
 						$voDemandaContrato->getDadosBanco ( $registro );

@@ -568,16 +568,16 @@ function getBotoesRodapeComRestricao($arrayBotoesARemover, $restringeBotaoSemVal
 	
 	return $html;
 }
-function getLinkPesquisa($link) {
-	return getImagemLink ( "javascript:abrirJanelaAuxiliar('" . $link . "',true, false, false);\" ", "lupa.png" );
+function getLinkPesquisa($link, $imagem = "lupa.png") {
+	return getImagemLink ( "javascript:abrirJanelaAuxiliar('" . $link . "',true, false, false);\" ",  $imagem);
 }
 
-function getLinkPesquisaVO($voEntidade, $nmPagina=null) {
+function getLinkPesquisaVO($voEntidade, $nmPagina=null, $imagem = "lupa.png") {
 	if($nmPagina == null){
 		$nmPagina = "detalhar.php";
 	}	
 	return getLinkPesquisa ( "../".$voEntidade::getNmTabela()."/$nmPagina?funcao=" . constantes::$CD_FUNCAO_DETALHAR 
-			. "&".constantes::$ID_REQ_CD_LUPA."=S&chave=" . $voEntidade->getValorChaveHTML() );
+			. "&".constantes::$ID_REQ_CD_LUPA."=S&chave=" . $voEntidade->getValorChaveHTML(), $imagem);
 }
 
 

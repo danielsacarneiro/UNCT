@@ -175,6 +175,8 @@ function calcularModificacaoNovo(pArrayCampos) {
 			
 		numMeses = getQtMesesAuxiliar(campoDtModificacao.value, campoDtModificacaoFim.value);
 		
+		//numMeses = 35;
+		
 		if(isNaN(numMeses)){
 			numMeses = 0
 		}			

@@ -690,6 +690,9 @@ function getMensagemDemandasDeContratosAVencer(&$count = 0){
 				constantes::$CD_COLUNA_CHAVE => 'DT.<BR>REFERENCIA',
 				constantes::$CD_COLUNA_VALOR => filtroManterDemanda::$NmColDtLimiteContratoAVencer,
 				constantes::$CD_COLUNA_TP_DADO =>  constantes::$CD_TP_DADO_DATA,
+				constantes::$CD_COLUNA_VL_REFERENCIA =>  somarOuSubtrairDiasNaData(getDataHoje(), 10),
+				constantes::$CD_COLUNA_TP_VALIDACAO =>  constantes::$CD_ALERTA_TP_VALIDACAO_MAIORQUE,
+				constantes::$CD_COLUNA_OPERACAO_VALOR_REFERENCIA =>  "isDataFimMaiorDataInicio",
 		);
 		$colunasAAcrescentar = incluirColunaColecaoArray($colunasAAcrescentar, $array);
 				

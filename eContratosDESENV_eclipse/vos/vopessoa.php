@@ -118,6 +118,7 @@ include_once (caminho_funcoes . "pessoa/dominioPessoaCaracteristicas.php");
         $this->obs = $registrobanco[vopessoa::$nmAtrObservacao];
         $this->inCaracteristicas = $registrobanco[vopessoa::$nmAtrInCaracteristicas];
         $this->inPAT = $registrobanco[vopessoa::$nmAtrInPAT];
+        $this->cdVinculo = $registrobanco[vopessoavinculo::$nmAtrCd];
 	}   
 	
 	function getDadosFormulario(){
