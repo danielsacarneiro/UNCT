@@ -1886,8 +1886,14 @@ function setProcLiciContratoFormatado(&$vocontrato){
 		$cdComissao = $array[2];
 		$tipoModalidade = $array[3];
 		$numModalidade = $array[4];
-				
-		$vocontrato->anoProcLic = removerNaoNumericos($anoPL);
+		
+		$anoPL = removerNaoNumericos($anoPL);
+		//faz com que o ano tenha 4 digitos
+		$anoPL = $anoPL + 0;
+		if($anoPL < 999){
+			$anoPL = $anoPL + getAnoHoje();
+		}
+		$vocontrato->anoProcLic = $anoPL; 
 		$vocontrato->cdProcLic = removerNaoNumericos($cdPL);
 		$vocontrato->cdModalidadeLic = $tipoModalidade;
 	

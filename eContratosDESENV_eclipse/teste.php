@@ -16,7 +16,9 @@ $vo = new voMensageria();
 $log .= "<br>Início de verificação dos contratos a vencer que gerarão alertas - (". $filtro->qtdDiasParaVencimento . ") dias para o vencimento.";
 */
 $dbprocesso = new dbContratoInfo();
-$colecao = $dbprocesso->createViewContratoConsolidacao();
+//$colecao = $dbprocesso->createViewContratoConsolidacao();
+
+echo getAnoHoje();
 
 /*$COUNT=0;
 ECHO getMensagemDemandaIniciais($COUNT);*/

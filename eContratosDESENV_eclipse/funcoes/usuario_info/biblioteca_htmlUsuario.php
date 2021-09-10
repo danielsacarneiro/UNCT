@@ -28,4 +28,8 @@ function isUsuarioChefia() {
 	|| existeStr1NaStr2(dominioUsuarioCaracteristicas::$CD_ATJA, getCaracteristicasUsuarioLogado());
 }
 
+function isUsuarioPorCaracteristica($cdCaracUsu) {
+	return existeStr1NaStr2($cdCaracUsu, getCaracteristicasUsuarioLogado());
+}
+
 ?>

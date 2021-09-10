@@ -531,11 +531,16 @@ class filtroManterContrato extends filtroManter {
 		
 		//echo "global $this->vlGlobalFinal";
 		if($this->vlGlobalFinal != null){
-			$filtro = $filtro . $conector
-			. $nmTabela . "." .vocontrato::$nmAtrVlGlobalContrato
+			$filtroTemp = $nmTabela . "." .vocontrato::$nmAtrVlGlobalContrato
 			. " <= "
-					. getVarComoDecimal($this->vlGlobalFinal);
-					$conector  = "\n AND ";
+			. getVarComoDecimal($this->vlGlobalFinal);			
+			if($this->vlGlobalFinal == 0){
+				$filtroTemp .= " OR $nmTabela." .vocontrato::$nmAtrVlGlobalContrato . " IS NULL ";
+			}
+			
+			$filtro = $filtro . $conector  . "($filtroTemp)";
+						
+			$conector  = "\n AND ";
 		
 		}			
 		

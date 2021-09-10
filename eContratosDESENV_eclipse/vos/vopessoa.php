@@ -41,6 +41,7 @@ include_once (caminho_funcoes . "pessoa/dominioPessoaCaracteristicas.php");
         var $inAtribuicaoPAAP = "";
         var $inAtribuicaoPregoeiro = "";
         var $inCaracteristicas = "";
+        var $endereco = "";
 
 // ...............................................................
 // Funções ( Propriedades e métodos da classe )
@@ -185,6 +186,19 @@ include_once (caminho_funcoes . "pessoa/dominioPessoaCaracteristicas.php");
 				
 	function getMensagemComplementarTelaSucesso(){				
 		$retorno = $this->getMensagemComplementarTelaSucessoPadrao($this->getTituloJSP(), $this->cd, $this->nome);
+		return $retorno;
+	}
+	
+	function getValoresAtributosObrigatorios(){
+		$retorno = array(
+				"Nome" => $this->nome,
+				"E-mail" => $this->email,
+				"Telefone" => $this->tel,
+				"Endereco" => $this->endereco, 
+		);
+		
+		$retorno = $this->getValoresAtributosObrigatoriosPorEntidade($retorno);
+	
 		return $retorno;
 	}
 }

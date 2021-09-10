@@ -29,7 +29,8 @@ function getDemandaDetalhamentoComLupa($voDemanda, $temLupaDet, $exibeTipoDemand
 				echo getLinkPesquisa ( "../demanda/detalhar.php?funcao=" . constantes::$CD_FUNCAO_DETALHAR . "&chave=" . $voDemanda->getValorChaveHTML() );
 			}
 				
-			if(dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO == $voDemanda->tipo){				
+			if(dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO == $voDemanda->tipo){
+				//echo "teste";
 				echo getTpDemandaContratoDetalhamento(voDemanda::$nmAtrTpDemandaContrato, "", "DIV_DETALHAR", $voDemanda);
 			}			
 			echo "<INPUT type='hidden' id='" . voDemanda::$nmAtrTipo . "' name='" . voDemanda::$nmAtrTipo . "' value='$voDemanda->tipo'>";
@@ -228,6 +229,7 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 	$pCdOpcaoSelecionadaReajuste=$voDemanda->inTpDemandaReajusteComMontanteA;
 	//entender porque o contrato perde os valores [BRONCA]
 	$voContratoDemanda = $voDemanda->getContrato();
+	//echo "teste";
 	
 	$countATENCAO = 1;
 	$isVODemandaNaoNulo = $voDemanda != null;
@@ -267,7 +269,9 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 		$exibirAlertaLembrete = !isColecaoVazia($colecaoLembreteContrato);		
 		if($exibirAlertaLembrete){
 			$textoLembrete = getTextoLembreteContrato($colecaoLembreteContrato);
-			$html .= getAlertaOrientacao("LEMBRETE " . $textoLembrete, $countATENCAO, $conectorAlerta, null, constantes::$CD_TEXTO_MARCADO);
+			$lembrete = strtoupper(dominioTipoMensageria::$DS_CONTRATO_LEMBRETE);
+			$html .= getAlertaOrientacao("$lembrete " . $textoLembrete, $countATENCAO, $conectorAlerta, null, constantes::$CD_TEXTO_MARCADO);
+			$html .= getInputHidden(vocontrato::$ID_REQ_InTemLembreteDemanda, vocontrato::$ID_REQ_InTemLembreteDemanda, constantes::$CD_SIM);
 			$conectorAlerta = "<BR>";
 		}
 	}catch (excecaoGenerica $exLembrete){
@@ -844,7 +848,7 @@ function getCorpoEmailAssinatura($pArrayCamposSubstituicao){
 		$dtAssinaturaDigital = getDataAssinaturaLimite($vocontrato);
 	}	
 
-	$retorno = "<br>À ".getTextoHTMLNegrito($dsPessoa).",
+	$retorno = "<br>A ".getTextoHTMLNegrito($dsPessoa).",
 	<br><br>
 	ASSUNTO: ".getTextoHTMLNegrito("ASSINATURA DO $codigoContratoCompleto")."
 	<br><br>".getTextoHTMLDestacado("Ref. SEI nº $numSEI", "blue").". $str_confirmar
@@ -932,7 +936,7 @@ function getCorpoEmailAssinaturaSEI($pArrayCamposSubstituicao){
 	$linkDeclaracao = "http://www.portaisgoverno.pe.gov.br/c/document_library/get_file?uuid=b4cecfd0-b36b-4b4a-894a-cd8f0facd21e&groupId=20653";
 	
 	$nomeSEI = "Sistema Eletrônico de Informação-SEI";
-	$retorno = "<br>À ".getTextoHTMLNegrito($dsPessoa).",
+	$retorno = "<br>A ".getTextoHTMLNegrito($dsPessoa).",
 	<br><br>
 	ASSUNTO: ".getTextoHTMLNegrito("ASSINATURA DO $codigoContratoCompleto")."
 	<br><br>".getTextoHTMLDestacado("Ref. SEI nº $numSEI", "blue").". $str_confirmar

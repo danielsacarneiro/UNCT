@@ -600,7 +600,9 @@ function movimentacoes(){
                          		$dominioTipoContrato->getDescricao($voAtual->tipo));
                          
                          $objeto = $registro[vocontrato::$nmAtrObjetoContrato];
-                                                
+                         $chaveContratoTemp = $voAtual->getValorChaveHTML();
+                         $nmDivObjeto = "div".$chaveContratoTemp;
+                         $objeto = truncarStringHTMLComDivExpansivel($nmDivObjeto, $objeto, 200);                                                
                    ?>
                 <TR class="dados">
                     <TD class="tabeladados">

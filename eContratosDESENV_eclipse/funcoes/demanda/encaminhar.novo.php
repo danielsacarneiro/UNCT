@@ -143,6 +143,11 @@ function isFormularioValido() {
 		campoRespUNCT.focus();
 		return false;
 	}
+
+	//biblio.demanda
+	if(!isContinuarMesmoComLembrete('<?=vocontrato::$ID_REQ_InTemLembreteDemanda?>')){
+		return false
+	}
 			
 	return true;
 }
@@ -449,10 +454,7 @@ function iniciar(){
 	            $classResp = $classRespATJA;
 	            $jsResp = $jsRespATJA;
 	             
-	            /*if(!$isInclusao){
-	            	$classResp = constantes::$CD_CLASS_CAMPO_READONLY;
-	            	$jsResp = "disabled";	            	
-	            }*/
+	            $isUsuATJA = isUsuarioPorCaracteristica(dominioUsuarioCaracteristicas::$CD_ATJA);
 	            $arrayParamUsuario = array(
 	            		voDemanda::$nmAtrCdPessoaRespUNCT,
 	            		voDemanda::$nmAtrCdPessoaRespUNCT,
@@ -463,8 +465,18 @@ function iniciar(){
 	            		false,
 	            		$jsResp,
 	            );
-	            echo getTextoHTMLTagMouseOver("UNCT.", "Colaborador responsável por acompanhar a demanda na UNCT.") . ":&nbsp;"
-    			.getComboUsuarioPorSetor($arrayParamUsuario, dominioSetor::$CD_SETOR_UNCT) . "&nbsp";	             
+	             
+	            echo getTextoHTMLTagMouseOver("UNCT.", "Colaborador responsável por acompanhar a demanda na UNCT.") . ":&nbsp;";
+	            if($isUsuATJA){
+	            	$jsResp .= " disabled ";
+	            	$arrayParamUsuario[0] = "";
+	            	$arrayParamUsuario[1] = "";	            	
+	            	$arrayParamUsuario[7] = $jsResp;
+	            	//retira o id e inclui o id oculto para nao causar alteracao na base
+	            	echo getInputHidden(voDemanda::$nmAtrCdPessoaRespUNCT, voDemanda::$nmAtrCdPessoaRespUNCT, $vo->cdPessoaRespUNCT);
+	            }
+	            
+	            echo getComboUsuarioPorSetor($arrayParamUsuario, dominioSetor::$CD_SETOR_UNCT) . "&nbsp";
 	             
 	            echo getTextoHTMLTagMouseOver("ATJA.", "Assessor responsável por acompanhar a demanda na ATJA.") . ":&nbsp;"
 						.getComboPessoaRespPAConsulta(

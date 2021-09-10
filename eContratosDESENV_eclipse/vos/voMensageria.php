@@ -25,7 +25,7 @@ class voMensageria extends voentidade {
 	static $NUM_DIAS_CONTRATOS_A_VENCER = 45;
 	static $NUM_DIAS_CONTRATOS_A_VENCER_IMPRORROGAVEIS = 180;
 	static $NUM_DIAS_AVISO_ENCERRAMENTO_CONTRATO_PADRAO = 15;
-	static $NUM_MSGS_MAX_NAO_RESPONDIDAS = 4;	
+	static $NUM_MSGS_MAX_NAO_RESPONDIDAS = 4;
 	
 	static $nmCOLDhUltimoEnvio = "nmCOLDhUltimoEnvio";
 	

@@ -5,8 +5,18 @@
 class excecaoMetodoNaoImplementado extends excecaoGenerica
 {
 	// Redefine a exceção de forma que a mensagem não seja opcional
-	public function __construct($message = "Método não implementado.", Exception $previous = null) {
+	public function __construct($nmMetodo = null, $voentidade = null,Exception $previous = null) {
 		// código
+		$message = "Método não implementado";
+		if($voentidade != null){
+			$message .= "|Funcao '".$voentidade::getTituloJSP(). "'";
+		}
+		
+		if(isAtributoValido($nmMetodo)){
+			$message .= "|'$nmMetodo'";
+		}
+		
+		$message .= ".";
 
 		// garante que tudo está corretamente inicializado
 		parent::__construct($message, excecaoGenerica::$CD_EXCECAO_METODO_NAO_IMPLEMENTADO, $previous);

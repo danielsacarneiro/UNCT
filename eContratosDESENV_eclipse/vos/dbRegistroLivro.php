@@ -114,7 +114,8 @@ include_once (caminho_funcoes."contrato/dominioEspeciesContrato.php");
 	}	
         
     function getSQLValuesUpdate($vo){ 
-    	throw new excecaoMetodoNaoImplementado();
+    	throw new excecaoMetodoNaoImplementado("getSQLValuesUpdate", $vo);
+    	
         $retorno = "";
         $sqlConector = "";                                
                

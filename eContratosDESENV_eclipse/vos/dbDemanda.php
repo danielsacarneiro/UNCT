@@ -1148,8 +1148,17 @@ class dbDemanda extends dbprocesso {
 	
 	static function validarDadosContratada($voDemanda, $vocontratoDemanda){
 		$vopessoa = getVOPessoaContratadaContrato($vocontratoDemanda);
-		$isCaracteristicaInvalida = !isContratadaAssinaPeloSEI($vopessoa);			
+		/*$vopessoa = new vopessoa();		
+		if(!isAtributoValido($vopessoa->tel)){
+			throw new excecaoGenerica("Fechamento não permitido: preencha os campos da contratada em questão, na funcao '".vopessoa::getTituloJSP()."', que se referem à assinatura no SEI|"
+					. $vopessoa->toString() . ".");
+		}*/
+		/*$array = $vopessoa->getValoresAtributosObrigatorios();
+		static::validarDadosEntidadeArray($array);*/		
 		
+		static::validarDadosEntidadeVO($vopessoa);		
+		
+		$isCaracteristicaInvalida = !isContratadaAssinaPeloSEI($vopessoa);		
 		$isTermoAssinadoSEI = existePeloMenosUmItemNoArrayOuString(dominioFaseDemanda::$CD_ASSINADO_SEI, $voDemanda->fase);
 		if($isTermoAssinadoSEI && $isCaracteristicaInvalida){
 			throw new excecaoGenerica("Fechamento não permitido: preencha os campos da contratada em questão, na funcao '".vopessoa::getTituloJSP()."', que se referem à assinatura no SEI|" 
@@ -1284,7 +1293,7 @@ class dbDemanda extends dbprocesso {
 						$arrayRetorno = getHTMLDocumentosContrato($vocontratoDemanda);
 						$temAmbosDocsAExibir = $arrayRetorno[2];
 						$naovalidaDocs = isAtributoValido($vo->inCaracteristicas) && in_array(dominioCaracteristicasDemanda::$CD_NAO_VALIDA_DOCS, $vo->inCaracteristicas);
-				
+						
 						if(!$temAmbosDocsAExibir && !$naovalidaDocs){
 							throw new excecaoGenerica("Fechamento não permitido: ambos os documentos 'MINUTA' (em word) e 'CONTRATO' (em pdf) devem ser anexados à demanda. |"
 									. $vocontratoDemanda->getCodigoContratoFormatado(true));
@@ -1336,7 +1345,8 @@ class dbDemanda extends dbprocesso {
 						
 						static::validarDadosContratada($vo, $vocontratoDemanda);
 						
-						$isContratoRegistradoSEI = (isAtributoValido($vo->fase) && in_array(dominioFaseDemanda::$CD_REGISTRADO, $vo->fase));
+						//$isContratoRegistradoSEI = (isAtributoValido($vo->fase) && in_array(dominioFaseDemanda::$CD_REGISTRADO, $vo->fase));
+						$isContratoRegistradoSEI = (isAtributoValido($vo->fase) && existeItemNoArrayOuString(dominioFaseDemanda::$CD_REGISTRADO, $vo->fase));
 						if(!$isContratoRegistradoSEI){
 							throw new excecaoGenerica("Fechamento não permitido: realize o registro do termo no SEI, conforme item 'Como REGISTRAR um termo' no manual ECONTI. |"
 									. $vocontratoDemanda->getCodigoContratoFormatado(true));

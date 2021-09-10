@@ -33,6 +33,8 @@ include_once ("voContratoLicon.php");
   	static $ID_REQ_COLECAO_EXPORTAR_EXCEL = "ID_REQ_COLECAO_EXPORTAR_EXCEL";
   	static $ID_REQ_DIV_DADOS_MANTER_CONTRATO = "ID_REQ_DIV_DADOS_MANTER_CONTRATO";
   	
+  	static $ID_REQ_InTemLembreteDemanda = "ID_REQ_InTemLembreteDemanda";
+  	
   	static $DS_ESPECIE_MATER = "Mater"; 
   		static $ID_REQ_NumDias = "ID_REQ_NumDias";
   		static $ID_REQ_NumMesesUltimaProrrogacao = "ID_REQ_NumMesesUltimaProrrogacao";

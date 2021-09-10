@@ -531,8 +531,9 @@ class dbContratoInfo extends dbprocesso {
 			$vopessoa = new vopessoa();
 			$vopessoa->cd =	$vo->cdPessoaGestor;			
 			$dbPessoa = new dbpessoa();
-			$vopessoa = $dbPessoa->consultarPorChaveTela($vopessoa);
-			
+			$registro = $dbPessoa->consultarPorChaveTela($vopessoa);
+			$vopessoa->getDadosBanco($registro);
+			//echo "vinculo" . $vopessoa->cdVinculo;
 			if($vopessoa->cdVinculo != dominioVinculoPessoa::$CD_VINCULO_RESPONSAVEL){
 				throw new excecaoGenerica ( "Registro inválido. Verifique se selecionou o gestor corretamente." );
 			}				

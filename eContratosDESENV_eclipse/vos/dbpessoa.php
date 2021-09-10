@@ -73,7 +73,10 @@ class dbpessoa extends dbprocesso {
 		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrDoc;
 		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrObservacao;
 		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrInCaracteristicas;
+		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrEmail;
 		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrEmailSEI;
+		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrTel;
+		$atributosConsulta .= "," . $nmTabela . "." . vopessoa::$nmAtrEndereco;
 		$atributosConsulta .= "," . $nmTabelaPessoaVinculo . "." . vopessoavinculo::$nmAtrCd;
 		//$atributosConsulta .= "," . $nmTabelaContrato . "." . vocontrato::$nmAtrCdAutorizacaoContrato;
 	

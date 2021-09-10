@@ -212,3 +212,17 @@ function formatarSituacaoDemanda(pIdCampoSituacao, pIdCampoCheckBoxRevisado, pCa
 		}
 	}	
 }
+
+function isContinuarMesmoComLembrete(pIdCampoTemLembrete){
+	var retorno = true;
+	//biblio.principal
+	var campoTemLembrete = getElementByIdValido(pIdCampoTemLembrete);
+	var temLembreteDemanda = campoTemLembrete != null;
+	/*var campoSituacao = getElementByIdValido('<?=voDemanda::$nmAtrSituacao?>');
+	var isSituacaoFechada = campoSituacao != null && campoSituacao.value == <?=dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA?>;*/
+	//alert("lembrete" + temLembreteDemanda + "|situacao" + isSituacaoFechada);
+	if(temLembreteDemanda){
+		retorno = confirm("Há LEMBRETES PENDENTES para a presente demanda. Continuar mesmo assim?");
+	}	
+	return retorno;
+}

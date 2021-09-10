@@ -666,6 +666,7 @@ function getMensagemDemandasDeContratosAVencer(&$count = 0){
 		//traz as demandas que estao com os contratos vencidos ou prestes a vencer
 		$filtro->inDemandasContratosAVencer = true;		
 		$filtro->prioridadeExcludente = dominioPrioridadeDemanda::$CD_PRIORI_BAIXA;
+		$filtro->inDemandaContratoPresumidaNaoConcluida = 'S';
 
 		//$filtro->cdAtrOrdenacao = voDemanda::$nmAtrCdPessoaRespUNCT . "," . filtroManterDemanda::$NmColNuTempoUltimaTram;		
 		$filtro->cdAtrOrdenacao =  filtroManterDemanda::$NmColNuTempoUltimaTram . " DESC ";

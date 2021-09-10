@@ -96,6 +96,7 @@ class filtroManterDemanda extends filtroManter{
 	var $inMonitorar;
 	var $inDemandasContratosAVencer;
 	var $numPrazoMonitorar;
+	var $inDemandaContratoPresumidaNaoConcluida;
 	
 	// ...............................................................
 	// construtor
@@ -415,20 +416,7 @@ class filtroManterDemanda extends filtroManter{
 			}
 			
 			$filtro = $filtro . $conector . $this->getSetorAtualSQLComparacao($nmTabela, $nmTabelaTramitacao, $strComparacaoDestino);
-				
-			/*$filtro = $filtro . $conector
-			. " (("
-					. $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrCdSetorDestino
-					. " IS NULL AND "
-							.$nmTabela. "." .voDemanda::$nmAtrCdSetor
-							. $strComparacaoDestino
-							. " ) OR ("
-									. $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrCdSetorDestino
-									. " IS NOT NULL AND "
-											. $nmTabelaTramitacao. "." .voDemandaTramitacao::$nmAtrCdSetorDestino
-											. $strComparacaoDestino
-											. "))";*/
-		
+						
 			$conector  = "\n AND ";
 		}
 		
@@ -482,17 +470,7 @@ class filtroManterDemanda extends filtroManter{
 		
 					$conector  = "\n AND ";
 		}
-		
-		/*if($this->vodemanda->situacao != null){
-			$filtro = $filtro . $conector
-			. $nmTabela. "." .voDemanda::$nmAtrSituacao
-			. " = "
-					. $this->vodemanda->situacao
-					;
-		
-					$conector  = "\n AND ";
-		}*/
-		
+				
 		if ($this->vodemanda->situacao != null 
 				&& (!is_array($this->vodemanda->situacao) || (is_array($this->vodemanda->situacao) && !$this->isAtributoArrayVazio($this->vodemanda->situacao)))) {
 						
@@ -553,25 +531,6 @@ class filtroManterDemanda extends filtroManter{
 		}		
 		
 		if(isAtributoValido($this->inMonitorar)){			
-			
-			/*if($this->inMonitorar == constantes::$CD_SIM || $this->inMonitorar == voDemanda::$CD_MONITORAR_POR_DATA){
-				//valida se o campo data de inicio de monitoramento foi preenchido
-				$filtroTempx .= " ($nmTabela." . voDemanda::$nmAtrDtMonitoramento . " IS NULL"
-						." OR ($nmTabela." . voDemanda::$nmAtrDtMonitoramento . " IS NOT NULL"
-								." AND $nmTabela.". voDemanda::$nmAtrDtMonitoramento . " <= DATE(NOW())))";		
-				$conectorInterno  = "\n AND ";
-			}
-			
-			if($this->inMonitorar == constantes::$CD_SIM){
-				if($this->numPrazoMonitorar != null){
-					$filtroTempx .= " $conectorInterno "
-							. filtroConsultarDemandaGestao::getSQLNuTempoUltimaTram($nmTabelaTramitacao, $nmTabela)
-							. " >= " . vodemanda::$NUM_PRAZO_MONITORAMENTO;
-						$conectorInterno  = "\n AND ";
-				}
-			}*/
-				
-			
 			if($this->inMonitorar != voDemanda::$CD_MONITORAR_POR_DATA){
 				if($this->inMonitorar == constantes::$CD_SIM){
 					$filtroTempx = " $nmTabela." .voDemanda::$nmAtrInMonitorar . " = 'S'";
@@ -604,6 +563,20 @@ class filtroManterDemanda extends filtroManter{
 			
 			$conector  = "\n AND ";		
 
+		}
+		
+		if(isAtributoValido($this->inDemandaContratoPresumidaNaoConcluida)){
+			$inDemandaContratoNaoConc = $this->inDemandaContratoPresumidaNaoConcluida;
+			if($inDemandaContratoNaoConc == constantes::$CD_SIM){
+				$arrayfase = dominioFaseDemanda::getColecaoFaseContratoAssinado();
+				$filtro = $filtro . $conector . "($nmTabelaContrato." . vocontrato::$nmAtrDtAssinaturaContrato . " IS NULL ";
+				$filtro .= " OR NOT " . getSQLBuscarStringCampoSeparador($arrayfase, voDemanda::$nmAtrFase, " OR ");
+				//$filtro .= " OR " . getSQLBuscarStringCampoSeparador($arrayfase, voDemanda::$nmAtrFase, " OR ");
+				$filtro .= ")";				
+				//echo "XYZ";
+			}
+
+			$conector  = "\n AND ";
 		}
 		
 		if($this->inSEI != null){			

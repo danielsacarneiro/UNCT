@@ -631,7 +631,7 @@ class dbprocesso {
 		// ta na classe filha
 		$query = $this->incluirSQL ( $voEntidade );
 		// echo "<br>".$query."<br>";
-		$retorno = $this->cDb->atualizar ( $query );
+		$retorno = $this->cDb->atualizar ( $query, $voEntidade );
 		return $voEntidade;
 	}
 	function incluirQueryVO($voEntidade) {
@@ -1171,8 +1171,21 @@ class dbprocesso {
 			
 			if(!isColecaoVazia($arrayRetorno)){
 				$msg = getArrayComoStringCampoSeparador($arrayRetorno, ";<br>");
-				throw new excecaoAtributoObrigatorio("Verifique o(s) seguinte(s) campo(s) do termo relacionado: <br>'$msg' .");
+				throw new excecaoAtributoObrigatorio("Verifique o(s) seguinte(s) campo(s) da função relacionada: <br>'$msg' .");
 			}					
 	}
+	
+	static function validarDadosEntidadeVO($voentidade) {
+		$nmMetodo = "getValoresAtributosObrigatorios";
+		if(method_exists($voentidade, $nmMetodo)){
+			$array = $voentidade->$nmMetodo();
+		}else{
+			//$msg = "Funcao '".$voentidade::getTituloJSP()."'|$nmMetodo";			
+			throw new excecaoMetodoNaoImplementado($nmMetodo, $voentidade);			
+		}
+		
+		return 	static::validarDadosEntidadeArray($array);		
+	}
+	
 	
 }

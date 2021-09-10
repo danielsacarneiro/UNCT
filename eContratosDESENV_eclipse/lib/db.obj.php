@@ -90,17 +90,22 @@ class db {
 		return $this->resultado;
 	}
 	
-	function levantaExcecao($query, $ex = null){	
+	function levantaExcecao($query, $ex = null, $voentidade = null){	
 		$query = str_replace ( constantes::$CD_NOVA_LINHA, "", $query );
 		
 		//$msg = "<br>----ERROR------:<br>" . mysqli_error ( $this->id_conexao ) . "<br>";
-		$msgError = "<br>----ERROR------:<br>";
+		$msgError = "<br>----ERROR-----:<br>";
 		$msg = $msgError . $ex->getMessage (). "<br>";
 		$msg = $msg. "Query: $query";
+		
+		if($voentidade != null){
+			$msg = "Funcao '".$voentidade::getTituloJSP(). "':" .$voentidade->toString()."|" . $msg;
+		}
+
 		$msg = truncarStringHTMLComDivExpansivel("testeDIVErro", $msg, sizeof($msgError), false, true);
 		//$msg = $msg. ".<br>CODIGO:".$ex->getCode()."<br>";		
-		
 		$exRetorno = new excecaoGenerica($msg);
+		
 		if($ex != null){
 			$exCode = $ex->getCode();
 			if($exCode == excecaoGenerica::$CD_EXCECAO_CHAVE_INEXISTENTE){
@@ -128,10 +133,10 @@ class db {
 	Function atualizarImportacao($query) {
 		return $this->atualizarDecode ( $query, false );
 	}
-	Function atualizar($query) {
-		return $this->atualizarDecode ( $query, true );
+	Function atualizar($query, $voentidade = null) {
+		return $this->atualizarDecode ( $query, true, $voentidade);
 	}
-	Function atualizarDecode($query, $iscodificar) {
+	Function atualizarDecode($query, $iscodificar, $voentidade = null) {
 		$this->limpaResultado ();
 		// MARRETA
 		// utf8_encode usado para incluir com acentos no banco
@@ -141,7 +146,7 @@ class db {
 		try{
 			$dados = mysqli_query ( $this->id_conexao, $query );
 		}catch (Exception $ex){
-			$this->levantaExcecao($query, $ex);
+			$this->levantaExcecao($query, $ex, $voentidade);
 		}
 		
 		// MARRETA: volta ao padrao normal
@@ -153,7 +158,7 @@ class db {
 			$resultado = 1; // operacao efetuada com sucesso
 		else {
 			$resultado = 0;
-			$this->levantaExcecao($query);
+			$this->levantaExcecao($query, null, $voentidade);
 		}
 		
 		return $resultado;
