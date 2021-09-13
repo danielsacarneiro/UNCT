@@ -294,7 +294,13 @@ function iniciar(){
 	            <TH class="campoformulario" width="1%">Fases:</TH>
 	            <TD class="campoformulario" colspan=3>
 	            <?php
-	            echo dominioFaseDemanda::getHtmlChecksBox($nmCampoFaseHtml, $vo->fase, null, 1, true, "");
+	            /*$varIdsExcludentesFase = "varIdsExcludentesFase";
+	            $varHTMLJSFase = getColecaoComoVariavelJS(dominioFaseDemanda::getColecaoFaseContratoAssinado(),
+	            		$varIdsExcludentesFase);
+	            echo getTagHtmlJavaScript($varHTMLJSFase);
+	            $jsIdsExcludentesFase = "marcarCheckBoxesExcludentesPorColecao(this,'".$nmCampoFaseHtml."',$varIdsExcludentesFase);";*/
+	            //manterdemanda nao terah validacao das fases para permitir os casos excepcionais (por ex, um termo assinado por certificado e impresso ao mesmo tempo)
+	            echo dominioFaseDemanda::getHtmlChecksBox($nmCampoFaseHtml, $vo->fase, null, 1, true, "$jsIdsExcludentesFase");
 	          	?>
 				</TD>				
 	        </TR>

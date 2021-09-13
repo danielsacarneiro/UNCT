@@ -260,7 +260,7 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 	$dtInicioContrato = $voContratoDemanda->dtVigenciaInicial;
 	$isContratoRetroativo = $dtInicioContrato != null && isDataRetroativa($dtInicioContrato);	
 	if($exibirAlertas && $isContratoRetroativo){
-		$html .= getAlertaOrientacao("Contrato RETROATIVO: ATENÇÃO AOS DESPACHOS NO SEI.", $countATENCAO, $conectorAlerta);
+		$html .= getAlertaOrientacao("Termo RETROATIVO: ATENÇÃO AOS DESPACHOS NO SEI.", $countATENCAO, $conectorAlerta);
 		$conectorAlerta = "<BR>";
 	}
 	

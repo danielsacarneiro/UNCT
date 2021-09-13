@@ -339,17 +339,24 @@ function iniciar(){
 			<TR>
 	            <TH class="campoformulario" width="1%">Fase:</TH>
 	            <TD class="campoformulario" colspan=3>
-	            <?php 
+	            <?php
+	            $nmCampoFaseHtml = voDemanda::$nmAtrFase."[]";
+	            
+	            $varIdsExcludentesFase = "varIdsExcludentesFase";
 	            $varCamposPermiteAlteracao = "varJSCamposCaracteristicasPermitidos";
-	            echo getTagHtmlJavaScript(getColecaoComoVariavelJS(dominioFaseDemanda::getColecaoPermissaoCaracteristicasUsuario(), 
-	            		$varCamposPermiteAlteracao, true));	             
+	            $varHTMLJSFase = getColecaoComoVariavelJS(dominioFaseDemanda::getColecaoFaseContratoAssinado(), 
+	            		$varIdsExcludentesFase);
+	            $varHTMLJSFase .= getColecaoComoVariavelJS(dominioFaseDemanda::getColecaoPermissaoCaracteristicasUsuario(),
+	            		$varCamposPermiteAlteracao, true);
+	            echo getTagHtmlJavaScript($varHTMLJSFase);
+	            
 	            $pPropriedadeValorCondicao = getVarComoString(getCaracteristicasUsuarioLogado());	        
 	            //formatarSituacaoDemanda esta em bibli.demanda...js
 	            //formatarSituacaoDemanda(pIdCampoSituacao, pIdCampoCheckBoxRevisado, pCampoCheckBoxRevisadoOpcional)
 	            $jsMudarSituacao = "formatarSituacaoDemanda('".voDemanda::$nmAtrSituacao."','".dominioFaseDemanda::$CD_REVISAO_UNCT."', this);";
-	            $jsOnClickAdicional = "isCheckBoxPermiteAlteracao(this, $pPropriedadeValorCondicao, $varCamposPermiteAlteracao);$jsMudarSituacao";
+	            $jsIdsExcludentesFase = "marcarCheckBoxesExcludentesPorColecao(this,'".$nmCampoFaseHtml."',$varIdsExcludentesFase);";
+	            $jsOnClickAdicional = "isCheckBoxPermiteAlteracao(this, $pPropriedadeValorCondicao, $varCamposPermiteAlteracao);$jsIdsExcludentesFase;$jsMudarSituacao";
 	             
-	            $nmCampoFaseHtml = voDemanda::$nmAtrFase."[]";
 	            //echo dominioFaseDemanda::getHtmlChecksBoxDetalhamento($nmCampoFaseHtml, $vo->fase, 1);
 	            echo dominioFaseDemanda::getHtmlChecksBox($nmCampoFaseHtml, $vo->fase, null, 1, false, "$jsOnClickAdicional", false, " required ");
 	            //serve para comparar, ao enviar ao banco, se a fase foi alterada no encaminhamento, autorizando a alteracao do vodemanda

@@ -216,7 +216,7 @@ function marcarTodosCheckBoxes(pNmCheckBox) {
 	}	
 }
 
-function desmarcarTodosCheckBoxes(pNmCheckBox) {
+function desmarcarTodosCheckBoxes(pNmCheckBox, pArrayIdItens) {
 	var i = 0;
 
 	//checkBox = eval(pNmCheckBox);
@@ -229,10 +229,20 @@ function desmarcarTodosCheckBoxes(pNmCheckBox) {
 		checkBox.checked = 0;			
 		return;
 	}
-	
-	for (i = 0; i < checkBox.length; i++) {
-		checkBox.item(i).checked = 0;			
-	}	
+	//alert(pArrayIdItens != null);	
+	if(pArrayIdItens == null){
+		for (i = 0; i < checkBox.length; i++) {
+			checkBox.item(i).checked = 0;			
+		}
+	}else{
+		//para o caso de desmarcar apenas os ids passados por parametro
+		for (i = 0; i < pArrayIdItens.length; i++) {
+			var id = pArrayIdItens[i];
+			var checkBoxTemp = document.getElementById(id);
+			//alert(id);			
+			checkBoxTemp.checked = 0;			
+		}	
+	}
 }
 
 // marca um checkbox através de um link
@@ -439,5 +449,16 @@ function marcarCheckBoxesExcludentes(pCampoThis, pNmCheckBox, pIdItemExcludente)
 		campoCheckExcludente.checked = true;
 	}else{
 		campoCheckExcludente.checked = false;
+	}	
+}
+
+function marcarCheckBoxesExcludentesPorColecao(pCampoThis, pNmCheckBox, pArrayIdsItensExcludentes){
+	var colecaocheckBox = document.getElementsByName(pNmCheckBox);
+	var idSelecionado = pCampoThis.id;	
+	var itemExcludenteChecado = pCampoThis.checked && pArrayIdsItensExcludentes.indexOf(idSelecionado) != -1;
+	//alert(itemExcludenteChecado);
+	if(itemExcludenteChecado){
+		desmarcarTodosCheckBoxes(pNmCheckBox, pArrayIdsItensExcludentes);
+		pCampoThis.checked = true;
 	}	
 }
