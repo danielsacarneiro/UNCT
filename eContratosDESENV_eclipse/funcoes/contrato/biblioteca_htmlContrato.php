@@ -1153,6 +1153,7 @@ function getContratoVigentePorArray($pArray){
 	$inTrazerVigenciaFutura = $pArray[3];
 	$inTermoARetornarSeDataNula = $pArray[4];
 	$inTrazerApostilamento = $pArray[5];
+	$inTrazerPublicados = $pArray[6];
 	//$cdEspecie = $pArray[5];
 	//echo "data:" . $pData;
 	
@@ -1187,6 +1188,9 @@ function getContratoVigentePorArray($pArray){
 	$filtro->dtVigencia = $pData;
 	$filtro->inTrazerVigenciaFutura = $inTrazerVigenciaFutura;
 	$filtro->voPrincipal = $vocontrato;
+	if($inTrazerPublicados){
+		$filtro->inPublicado = constantes::$CD_SIM;
+	}
 	
 	$db = new dbcontrato();	
 	//$recordset = $db->consultarFiltroManter($filtro, false);	
