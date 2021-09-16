@@ -69,7 +69,7 @@ class dbDemanda extends dbprocesso {
 				$nmTabelaContrato . "." . vocontrato::$nmAtrSqContrato,
 				$nmTabelaContrato . "." . vocontrato::$nmAtrDtAssinaturaContrato,
 				$nmTabelaContrato . "." . vocontrato::$nmAtrVlMensalContrato,
-				//$nmTabelaContrato . "." . vocontrato::$nmAtrVlGlobalContrato,
+				$nmTabelaContrato . "." . vocontrato::$nmAtrVlGlobalContrato,
 				$nmTabelaContrato . "." . vocontrato::$nmAtrDtVigenciaInicialContrato,
 				$nmTabelaContrato . "." . vocontrato::$nmAtrInCaracteristicas,
 				$nmTabelaContratoInfo . "." . voContratoInfo::$nmAtrInTemGarantia,

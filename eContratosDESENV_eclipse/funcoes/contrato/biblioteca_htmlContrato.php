@@ -275,6 +275,7 @@ function isContratoEnvioSADPGE($voContrato, $setor, $voContratoInfoPK=null, $voC
 	}
 	
 	$isContratoCredenciamento = false;
+	$isContratoPorEscopo = false;
 	if($voContratoInfoPK == null){
 		$voContratoInfoPK = new voContratoInfo();
 		$voContratoInfoPK = voContratoInfo::getVOContratoInfoDeUmVoContrato($voContrato);
@@ -286,8 +287,10 @@ function isContratoEnvioSADPGE($voContrato, $setor, $voContratoInfoPK=null, $voC
 		}
 	}
 	
+	//$voContratoInfoPK = new voContratoInfo();
 	if($voContratoInfoPK != null){
-		$isContratoCredenciamento = $voContratoInfoPK->inCredenciamento == 'S';
+		$isContratoCredenciamento = $voContratoInfoPK->inCredenciamento == constantes::$CD_SIM;
+		$isContratoPorEscopo = $voContratoInfoPK->inEscopo == constantes::$CD_SIM;
 	}
 	
 	$validarValorPGE = $validarValorPGE && !$isContratoCredenciamento;
@@ -301,14 +304,18 @@ function isContratoEnvioSADPGE($voContrato, $setor, $voContratoInfoPK=null, $voC
 			$qtMeses = vocontrato::$NUM_PRAZO_PADRAO;
 		}
 		
-		$vlMensal = $voContrato->vlMensal;
-		if(isCampoMoedaFormatadado($vlMensal)){
-			$vlMensal = getVarComoDecimal($vlMensal);
-			//echo $vlMensal;
+		if($isContratoPorEscopo){
+			$vlReferencia = $voContrato->vlGlobal;
+		}else{
+			$vlMensal = $voContrato->vlMensal;
+			if(isCampoMoedaFormatadado($vlMensal)){
+				$vlMensal = getVarComoDecimal($vlMensal);
+				//echo $vlMensal;
+			}
+			//lembrar que o valor de contrato eh recuperado diferente
+			//$vlMensal = getVarComoDecimal($vlMensal);
+			$vlReferencia = $vlMensal*$qtMeses;
 		}
-		//lembrar que o valor de contrato eh recuperado diferente
-		//$vlMensal = getVarComoDecimal($vlMensal);
-		$vlReferencia = $vlMensal*$qtMeses;
 		//echo " Vl.Mensal: $vlMensal, VL.Referencia: $vlReferencia, Meses $qtMeses<br>";
 		$retorno =  $vlReferencia >= $vlAComparar;
 	}

@@ -200,13 +200,18 @@ function formatarSituacaoDemanda(pIdCampoSituacao, pIdCampoCheckBoxRevisado, pCa
 		return;
 	}
 	
-	var isMudarSituacaoParaEmAndamento = (pCampoCheckBoxRevisadoOpcional != null && pCampoCheckBoxRevisadoOpcional.checked) 
+	var isMudarSituacaoParaEmAndamento = 
+		(pCampoCheckBoxRevisadoOpcional != null 
+				&& pCampoCheckBoxRevisadoOpcional.id == pIdCampoCheckBoxRevisado 
+				&& pCampoCheckBoxRevisadoOpcional.checked) 
 		|| campoCheckRevisado.checked;
-		
+	
 	if(campoSituacao != null && isMudarSituacaoParaEmAndamento){
 		//alert(CD_SITUACAO_DEMANDA_EM_ANDAMENTO);
 		// a const CD_SITUACAO_DEMANDA_EM_ANDAMENTO esta em bibli.principal....
 		if(campoSituacao.value == CD_SITUACAO_DEMANDA_A_REVISAR){
+			//alert(pCampoCheckBoxRevisadoOpcional.name + " " + pCampoCheckBoxRevisadoOpcional.id);
+			
 			exibirMensagem("Alterando situação...");
 			campoSituacao.value = CD_SITUACAO_DEMANDA_EM_ANDAMENTO;			
 		}
