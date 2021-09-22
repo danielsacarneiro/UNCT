@@ -403,6 +403,9 @@ function getHtmlDocumentoArray($pArray) {
 			if(isUsuarioAdmin()){
 				$complementoJS = "onClick=javascript:".$nmFuncaoJavaScript."('" . $chave. "',false);";
 			}
+			
+			$complementoJS .= " onMouseOver=toolTip('$chave') onMouseOut=toolTip() ";
+			 
 			$html .= getTextoLink($textoLink,"#",$complementoJS);
 		}
 	}else{
@@ -417,17 +420,6 @@ function getHtmlDocumentoArray($pArray) {
 function getHtmlDocumento($voAtual, $comDescricaoPorExtenso = false, $nmClassCelula="tabeladadosalinhadodireita") {
 	$html .= "<TD class='$nmClassCelula' nowrap> \n";
 	$html .= getHtmlDocumentoSemTD($voAtual, $comDescricaoPorExtenso, $nmClassCelula);
-	/*if ($voAtual->voDoc->sq != null) {
-		$voDoc = $voAtual->voDoc;
-			
-		$endereco = $voDoc->getEnderecoTpDocumento ();
-		$chave = $voDoc->getValorChavePrimaria ();
-			
-		$html .= $voDoc->formatarCodigo ($comDescricaoPorExtenso) . " \n";
-		$html .= "<input type='hidden' name='" . $chave . "' id='" . $chave . "' value='" . $endereco . "'>" . " \n";
-		// $html .= getBotaoValidacaoAcesso("bttabrir_arq", "Abrir Anexo", "botaofuncaop", false,true,true,true, "onClick=\"javascript:abrirArquivo('".$chave."');\"");
-		$html .= getBotaoAbrirDocumento ( $chave );
-	}*/
 	$html .= "</TD>\n";
 	
 	return $html;	
@@ -998,7 +990,7 @@ function isDemandaContratoModificacaoObrigatorio($vodemanda){
 	if($vodemanda->tpDemandaContrato == null){
 		throw new excecaoAtributoInvalido("tpDemandaContrato nao pode ser nulo.");		
 	}	
-	return dominioTipoDemandaContrato::existePeloMenosUmaChaveColecaoNoArrayOuStrSeparador(array_keys(dominioTipoDemandaContrato::getColecaoAlteraValorContrato()), $vodemanda->tpDemandaContrato);
+	return dominioTipoDemandaContrato::existePeloMenosUmaChaveColecaoNoArrayOuStrSeparador(array_keys(dominioTipoDemandaContrato::getColecaoDemandaContratoExecucaoObrigatorio()), $vodemanda->tpDemandaContrato);
 }
 
 function validaSEIExistente($SEI){

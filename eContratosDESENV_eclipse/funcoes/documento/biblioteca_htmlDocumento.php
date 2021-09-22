@@ -121,6 +121,8 @@ function getBotaoDocumentoArray($pArray){
 	if(isUsuarioAdmin()){
 		$complementoJS = "onClick=javascript:".$nmFuncaoJavaScript."('" . $pNmCampolink. "',$paramIsMenu);";
 	}
+	$complementoJS .= " onMouseOver=toolTip('$pNmCampolink') onMouseOut=toolTip() ";
+	
 	$retorno = getBotaoValidacaoAcesso("bttabrirpasta", $nmBotao, "botaofuncaop", false,true,true,true, "$complementoJS accesskey='m'");
 	return $retorno;
 }

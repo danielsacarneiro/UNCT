@@ -83,6 +83,20 @@ class dominioTipoDemandaContrato extends dominio {
 		return $retorno;
 	}
 	
+	static function getColecaoDemandaContratoExecucaoObrigatorio() {
+		$array1 = static::getColecaoAlteraValorContrato();
+	
+		$array2 = array (
+				static::$CD_TIPO_PRORROGACAO => static::$DS_TIPO_PRORROGACAO,
+		);
+	
+		//o array_merge da erro nao detectado
+		$retorno = array_merge_keys($array1, $array2);
+		//var_dump($temp);
+	
+		return $retorno;
+	}
+	
 	static function getColecaoAlteraValorContrato() {
 		$array1 = static::getColecaoReajustamento();
 				

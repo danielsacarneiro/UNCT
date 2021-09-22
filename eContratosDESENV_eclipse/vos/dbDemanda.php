@@ -1167,60 +1167,62 @@ class dbDemanda extends dbprocesso {
 	}	
 	
 	static function validarDadosContratoModificacao($voDemanda, $vocontratoDemanda) {
-		if(isDemandaContratoModificacaoObrigatorio($voDemanda)){		
-			$filtro = new filtroManterContratoModificacao(false);
-			$filtro->vocontrato = $vocontratoDemanda;
-			$filtro->inDesativado = 'N';
-			$filtro->cdAtrOrdenacao = voContratoModificacao::$nmAtrSq;
-			$filtro->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
-			$dbcontratomod = new dbContratoModificacao();
-			$vocontratomod = new voContratoModificacao();
-			$colecao = $dbcontratomod->consultarTelaConsultaFiltro($filtro);
-			
-			$qtdtipoContratoMod = dominioTipoDemandaContrato::getNumChavesColecaoNoArrayOuStrSeparador(array_keys(dominioTipoDemandaContrato::getColecaoAlteraValorContrato()), $voDemanda->tpDemandaContrato);
-			$tam = sizeof($colecao);
-			if(isColecaoVazia($colecao) || $qtdtipoContratoMod > $tam){
-				$msg = "Necessário regularizar o presente termo na função '".voContratoModificacao::getTituloJSP()."'. Exige(m)-se, pelo menos, $qtdtipoContratoMod registro(s) de modificação.";
-				$msg .= "|" . $vocontratoDemanda->getCodigoContratoFormatado(true);
-				throw new excecaoGenerica($msg);
-			}
-			
-			if(!isColecaoVazia($colecao)){
-				$registrobanco = $colecao[0];
-				$vocontratomod->getDadosBanco($registrobanco);
-				//$vocontratoDemanda = new vocontrato();
-				$vlGlobalmod = $vocontratomod->vlGlobalAtual;
-				$vlGlobal = $vocontratoDemanda->vlGlobalSQL;
-				if($vlGlobalmod != $vlGlobal){
-					$msg = "Valor GLOBAL do contrato ('".getMoeda($vlGlobal)."') difere do calculado na função '"
-							.voContratoModificacao::getTituloJSP() 
-					. "('".getMoeda($vlGlobalmod)."'). <br>ATENÇÃO: <u>Confirme se o valor do presente termo está de acordo com o 'pdf' gerado.</u>.|" . $vocontratoDemanda->getCodigoContratoFormatado(true) . ".";
-					
+		if($vocontratoDemanda != null){
+			if(isDemandaContratoModificacaoObrigatorio($voDemanda)){		
+				$filtro = new filtroManterContratoModificacao(false);
+				$filtro->vocontrato = $vocontratoDemanda;
+				$filtro->inDesativado = 'N';
+				$filtro->cdAtrOrdenacao = voContratoModificacao::$nmAtrSq;
+				$filtro->cdOrdenacao = constantes::$CD_ORDEM_DECRESCENTE;
+				$dbcontratomod = new dbContratoModificacao();
+				$vocontratomod = new voContratoModificacao();
+				$colecao = $dbcontratomod->consultarTelaConsultaFiltro($filtro);
+				
+				$qtdtipoContratoMod = dominioTipoDemandaContrato::getNumChavesColecaoNoArrayOuStrSeparador(array_keys(dominioTipoDemandaContrato::getColecaoAlteraValorContrato()), $voDemanda->tpDemandaContrato);
+				$tam = sizeof($colecao);
+				if(isColecaoVazia($colecao) || $qtdtipoContratoMod > $tam){
+					$msg = "Necessário regularizar o presente termo na função '".voContratoModificacao::getTituloJSP()."'. Exige(m)-se, pelo menos, $qtdtipoContratoMod registro(s) de modificação.";
+					$msg .= "|" . $vocontratoDemanda->getCodigoContratoFormatado(true);
 					throw new excecaoGenerica($msg);
 				}
+				
+				if(!isColecaoVazia($colecao)){
+					$registrobanco = $colecao[0];
+					$vocontratomod->getDadosBanco($registrobanco);
+					//$vocontratoDemanda = new vocontrato();
+					$vlGlobalmod = $vocontratomod->vlGlobalAtual;
+					$vlGlobal = $vocontratoDemanda->vlGlobalSQL;
+					if($vlGlobalmod != $vlGlobal){
+						$msg = "Valor GLOBAL do contrato ('".getMoeda($vlGlobal)."') difere do calculado na função '"
+								.voContratoModificacao::getTituloJSP() 
+						. "('".getMoeda($vlGlobalmod)."'). <br>ATENÇÃO: <u>Confirme se o valor do presente termo está de acordo com o 'pdf' gerado.</u>.|" . $vocontratoDemanda->getCodigoContratoFormatado(true) . ".";
+						
+						throw new excecaoGenerica($msg);
+					}
+				}
+			}else if($vocontratoDemanda->cdEspecie != dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER){
+				//validar se o valor foi alterado...pois nao deveria;
+				//$vocontratoDemanda = new vocontrato();
+				//busca o termo vigente anterior
+				$dataVigencia = somarOuSubtrairDias($vocontratoDemanda->dtVigenciaInicial, 1, "-");
+				$pArrayContratoRetorno = array(clone $vocontratoDemanda, $dataVigencia, true, false, null, true);			
+				$colecao = getContratoVigentePorArray($pArrayContratoRetorno);
+				$registrobanco = $colecao[0];			
+				$voContratoBase = new vocontrato();
+				$voContratoBase->getDadosBanco($registrobanco);
+				
+				$vlGlobalmod = $voContratoBase->vlGlobalSQL;
+				$vlGlobal = $vocontratoDemanda->vlGlobalSQL;
+				if($vlGlobalmod != $vlGlobal){
+					$msg = "Valor GLOBAL do contrato ('".getMoeda($vlGlobal)."') difere do último valor vigente "
+							. $voContratoBase->getCodigoContratoFormatado(true) 
+							. "('".getMoeda($vlGlobalmod)."'). <br>ATENÇÃO: <u>Confirme se o valor do presente termo está de acordo com o 'pdf' gerado.</u>.|" 
+							. $vocontratoDemanda->getCodigoContratoFormatado(true) . ".";
+								
+					throw new excecaoGenerica($msg);
+				}				
 			}
-		}else if($vocontratoDemanda != null){
-			//validar se o valor foi alterado...pois nao deveria;
-			//$vocontratoDemanda = new vocontrato();
-			//busca o termo vigente anterior
-			$dataVigencia = somarOuSubtrairDias($vocontratoDemanda->dtVigenciaInicial, 1, "-");
-			$pArrayContratoRetorno = array(clone $vocontratoDemanda, $dataVigencia, true, false, null, true);
-			$colecao = getContratoVigentePorArray($pArrayContratoRetorno);
-			$registrobanco = $colecao[0];			
-			$voContratoBase = new vocontrato();
-			$voContratoBase->getDadosBanco($registrobanco);
-			
-			$vlGlobalmod = $voContratoBase->vlGlobalSQL;
-			$vlGlobal = $vocontratoDemanda->vlGlobalSQL;
-			if($vlGlobalmod != $vlGlobal){
-				$msg = "Valor GLOBAL do contrato ('".getMoeda($vlGlobal)."') difere do último valor vigente "
-						. $voContratoBase->getCodigoContratoFormatado(true) 
-						. "('".getMoeda($vlGlobalmod)."'). <br>ATENÇÃO: <u>Confirme se o valor do presente termo está de acordo com o 'pdf' gerado.</u>.|" 
-						. $vocontratoDemanda->getCodigoContratoFormatado(true) . ".";
-							
-				throw new excecaoGenerica($msg);
-			}				
-		}		
+		}
 		//throw new excecaoChaveConstraintViolada("PAU NA MOLEIRA");
 	}
 	
@@ -1545,7 +1547,7 @@ class dbDemanda extends dbprocesso {
 	 * @param unknown $voDemanda
 	 * @return boolean
 	 */
-	function existeDemandaAbertaContratoProrrogacao($voDemanda) {
+	function isDemandaTermoExistente($voDemanda) {
 		$retorno = false;
 		//$voDemanda = new voDemanda();
 		//$isSituacaoFechada = $voDemanda->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA;
@@ -1565,6 +1567,7 @@ class dbDemanda extends dbprocesso {
 				$filtro = new filtroManterDemanda(false);
 				$filtro->vocontrato = new vocontrato();
 				$filtro->vodemanda = new voDemanda();
+				$filtro->voPrincipal = $voDemanda;
 				$filtro->vocontrato->anoContrato = $vocontrato->anoContrato;
 				$filtro->vocontrato->cdContrato = $vocontrato->cdContrato;
 				$filtro->vocontrato->tipo = $vocontrato->tipo;
@@ -1591,7 +1594,7 @@ class dbDemanda extends dbprocesso {
 		$colecao = $voDemanda->colecaoContrato;
 		
 		foreach ( $colecao as $voContrato ) {
-			if(!$this->existeDemandaAbertaContratoProrrogacao($voDemanda)){
+			if(!$this->isDemandaTermoExistente($voDemanda)){
 				$voDemContrato = new voDemandaContrato ();
 				$voDemContrato = $voDemanda->getVODemandaContrato ( $voContrato );
 				$this->incluirDemandaContrato ( $voDemContrato );

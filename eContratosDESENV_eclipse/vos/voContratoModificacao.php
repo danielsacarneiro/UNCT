@@ -298,7 +298,7 @@ class voContratoModificacao extends voentidade {
 			$vlGlobalContrato = getValorMoedaComoDecimal($vocontrato->vlGlobal);
 			
 			if($vlGlobalMod != $vlGlobalContrato){
-				$retorno .= "<br><br>ATENÇÃO: verifique se o valor do contrato deve ser alterado na funcao 'Contratos."; 
+				$retorno .= getTextoHTMLSublinhado("<br><br>ATENÇÃO: verifique se o valor do contrato deve ser alterado na funcao 'Contratos."); 
 			}
 		}catch (Exception $ex){
 			$retorno .= "<br><br>" . $ex->getMessage();

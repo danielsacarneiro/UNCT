@@ -176,10 +176,10 @@ function getNumServico($count){
                     				echo imprimeBotaoDocumento($vodocumento, "Manual Visto Edital");*/
                     				
                     				echo imprimeLinkDocumento("https://drive.google.com/open?id=1Iv6zfreYXtT4yttK9betEI-82HoRwWu8"
-                    						, getTextoHTMLNegrito("MANUAL DE BOAS PRÁTICAS ECONTI (em constante evolução)"));
+                    						, getTextoHTMLNegrito("ECONTI - MANUAL (em constante evolução)"));
 
                     				echo imprimeLinkDocumento("https://drive.google.com/open?id=1KqUtXE6Pxq5q7d8vhK3XIuyA4NBQ6jON"
-                    						, getTextoHTMLNegrito("UNCT - MANUAL"));
+                    						, getTextoHTMLNegrito("UNCT - MANUAL (em constante evolução)"));
                     				
                     				/*$vodocumento = new voDocumento(array(2021, dominioSetor::$CD_SETOR_UNCT,dominioTpDocumento::$CD_TP_DOC_CHECKLIST, 1));
                     				echo imprimeBotaoDocumento($vodocumento, getTextoHTMLNegrito("MANUAL DE BOAS PRÁTICAS ECONTI (em constante evolução)"));*/
