@@ -1178,10 +1178,10 @@ class dbDemanda extends dbprocesso {
 				$vocontratomod = new voContratoModificacao();
 				$colecao = $dbcontratomod->consultarTelaConsultaFiltro($filtro);
 				
-				$qtdtipoContratoMod = dominioTipoDemandaContrato::getNumChavesColecaoNoArrayOuStrSeparador(array_keys(dominioTipoDemandaContrato::getColecaoAlteraValorContrato()), $voDemanda->tpDemandaContrato);
+				$qtdtipoContratoMod = dominioTipoDemandaContrato::getNumChavesColecaoNoArrayOuStrSeparador(array_keys(dominioTipoDemandaContrato::getColecaoDemandaContratoExecucaoObrigatorio()), $voDemanda->tpDemandaContrato);
 				$tam = sizeof($colecao);
 				if(isColecaoVazia($colecao) || $qtdtipoContratoMod > $tam){
-					$msg = "Necessário regularizar o presente termo na função '".voContratoModificacao::getTituloJSP()."'. Exige(m)-se, pelo menos, $qtdtipoContratoMod registro(s) de modificação.";
+					$msg = "Necessário regularizar o presente termo na função '".voContratoModificacao::getTituloJSP()."'. Falta(m), pelo menos, $qtdtipoContratoMod registro(s).";
 					$msg .= "|" . $vocontratoDemanda->getCodigoContratoFormatado(true);
 					throw new excecaoGenerica($msg);
 				}
@@ -1195,7 +1195,7 @@ class dbDemanda extends dbprocesso {
 					if($vlGlobalmod != $vlGlobal){
 						$msg = "Valor GLOBAL do contrato ('".getMoeda($vlGlobal)."') difere do calculado na função '"
 								.voContratoModificacao::getTituloJSP() 
-						. "('".getMoeda($vlGlobalmod)."'). <br>ATENÇÃO: <u>Confirme se o valor do presente termo está de acordo com o 'pdf' gerado.</u>.|" . $vocontratoDemanda->getCodigoContratoFormatado(true) . ".";
+						. "('".getMoeda($vlGlobalmod)."'). <br>ATENÇÃO: <u>Confirme se o valor do presente termo está de acordo com o 'pdf' gerado</u>.|" . $vocontratoDemanda->getCodigoContratoFormatado(true) . ".";
 						
 						throw new excecaoGenerica($msg);
 					}
@@ -1216,7 +1216,7 @@ class dbDemanda extends dbprocesso {
 				if($vlGlobalmod != $vlGlobal){
 					$msg = "Valor GLOBAL do contrato ('".getMoeda($vlGlobal)."') difere do último valor vigente "
 							. $voContratoBase->getCodigoContratoFormatado(true) 
-							. "('".getMoeda($vlGlobalmod)."'). <br>ATENÇÃO: <u>Confirme se o valor do presente termo está de acordo com o 'pdf' gerado.</u>.|" 
+							. "('".getMoeda($vlGlobalmod)."'). <br>ATENÇÃO: <u>Confirme se o valor do presente termo está de acordo com o 'pdf' gerado</u>.|" 
 							. $vocontratoDemanda->getCodigoContratoFormatado(true) . ".";
 								
 					throw new excecaoGenerica($msg);
@@ -1340,19 +1340,23 @@ class dbDemanda extends dbprocesso {
 						&& existeItemNoArrayOuString(dominioAutorizacao::$CD_AUTORIZ_PGE, $vocontratoInfo->inPendencias);
 						
 						$voContratoMater = getContratoMater($vocontratoDemanda);
+						$isContratoParecerReferencialPGE = existeItemNoArrayOuString(dominioCaracteristicasContratoInfo::$CD_CONTRATO_PADRONIZADO_PGE, $vocontratoInfo->inCaracteristicas);
 						$isContratoEnvioSAD = !$temPendenciaContratoEnvioSAD && isContratoEnvioSADPGE($vocontratoDemanda, dominioSetor::$CD_SETOR_SAD, $vocontratoInfo, $voContratoMater);
-						$isContratoEnvioPGE = !$temPendenciaContratoEnvioPGE && isContratoEnvioSADPGE($vocontratoDemanda, dominioSetor::$CD_SETOR_PGE, $vocontratoInfo, $voContratoMater);
+						$isContratoEnvioPGE = !$isContratoParecerReferencialPGE && !$temPendenciaContratoEnvioPGE && isContratoEnvioSADPGE($vocontratoDemanda, dominioSetor::$CD_SETOR_PGE, $vocontratoInfo, $voContratoMater);					
+						
 						//$vo = new voDemandaTramitacao();
-						$isAnaliseSADOK = !$isContratoEnvioSAD || (isAtributoValido($vo->fase) && in_array(dominioFaseDemanda::$CD_VISTO_SAD, $vo->fase));
-						$isAnalisePGEOK = !$isContratoEnvioPGE || (isAtributoValido($vo->fase) && in_array(dominioFaseDemanda::$CD_VISTO_PGE, $vo->fase));
-						if(!$isAnaliseSADOK && !$isApostilamento){
-							throw new excecaoGenerica("Fechamento não permitido: ausente análise SAD ao contrato. |"
-									. $vocontratoDemanda->getCodigoContratoFormatado(true));
-						}
-				
-						if(!$isAnalisePGEOK && !$isApostilamento){
-							throw new excecaoGenerica("Fechamento não permitido: ausente análise PGE ao contrato. |"
-									. $vocontratoDemanda->getCodigoContratoFormatado(true));
+						$isAnaliseSADOK = !$isContratoEnvioSAD || (isAtributoValido($vo->fase) && existeItemNoArrayOuString(dominioFaseDemanda::$CD_VISTO_SAD, $vo->fase));
+						$isAnalisePGEOK = !$isContratoEnvioPGE || (isAtributoValido($vo->fase) && existeItemNoArrayOuString(dominioFaseDemanda::$CD_VISTO_PGE, $vo->fase));
+						if(!$isApostilamento){
+							if(!$isAnaliseSADOK){
+								throw new excecaoGenerica("Fechamento não permitido: ausente análise SAD ao contrato. |"
+										. $vocontratoDemanda->getCodigoContratoFormatado(true));
+							}
+					
+							if(!$isAnalisePGEOK){
+								throw new excecaoGenerica("Fechamento não permitido: ausente análise PGE ao contrato. |"
+										. $vocontratoDemanda->getCodigoContratoFormatado(true));
+							}
 						}
 				
 						//$vo = new voDemandaTramitacao();

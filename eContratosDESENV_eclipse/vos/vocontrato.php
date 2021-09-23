@@ -15,6 +15,7 @@ include_once(caminho_funcoes. "contrato/dominioClassificacaoContrato.php");
 include_once(caminho_funcoes. "contrato/dominioProrrogacaoContrato.php");
 include_once(caminho_funcoes. "contrato/dominioEstudoTecnicoSAD.php");
 include_once(caminho_funcoes. "contrato/dominioProrrogacaoFiltroConsolidacao.php");
+include_once(caminho_funcoes. "contrato_info/dominioCaracteristicasContratoInfo.php");
 include_once (caminho_util . "biblioteca_htmlArquivo.php");
 include_once (caminho_util . "DocumentoPessoa.php");
 include_once ("voDemanda.php");

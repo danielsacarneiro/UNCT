@@ -391,5 +391,25 @@ function getCampoContratada($pNmContratada, $pDocContratada, $pChaveContrato, $c
 	return $retorno;
 }
 
+function temPAAPAbertoPorPessoa($docContratada, $pLevantaExcecao = true) {
+	$temPaapPorDoc = false;
+
+	if($docContratada == null){
+		if($pLevantaExcecao){
+			throw new excecaoGenerica("Para consulta de PAAP´s, o documento do fornecedor deve ser informado.");
+		}
+	}else{
+		$filtro = new filtroManterPA(false);
+		$filtro->doc = $docContratada;
+
+		$db = new dbPA();
+		$colecao = $db->consultarPAAP(new voPA(), $filtro);
+		$temPaapPorDoc = !isColecaoVazia($colecao);
+	}
+
+	$retorno = $temPaapPorDoc;
+	return $retorno;
+}
+
 
 ?>

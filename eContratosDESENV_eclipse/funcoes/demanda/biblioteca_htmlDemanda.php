@@ -290,14 +290,9 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 			$conectorAlerta = "<BR>";
 		}
 	}catch (excecaoGenerica $exReajuste){
-		/*$texto = "ATENÇÃO$countATENCAO: " . $exDoc->getMessage();
-			$html .= $conectorAlerta . $texto;
-			$conectorAlerta = "<BR>";
-			$countATENCAO++;*/
 		$html .= getAlertaOrientacao($exReajuste->getMessage(), $countATENCAO, $conectorAlerta);
 		$conectorAlerta = "<BR>";
 	}
-	
 	
 	//informa que ha PAAPs abertos para o contrato
 	try{
@@ -310,11 +305,14 @@ function getTpDemandaContratoDetalhamento($nmCampoTpDemandaContrato, $nmCampoTpD
 			$conectorAlerta = "<BR>";
 			$countATENCAO++;			
 		}
-	}catch (excecaoGenerica $exDoc){
-		$texto = "ATENÇÃO$countATENCAO: " . $exDoc->getMessage();		
+	}catch (excecaoGenerica $exPAAP){
+		/*$texto = "ATENÇÃO$countATENCAO: " . $exPAAP->getMessage();		
 		$html .= $conectorAlerta . getTextoLink($texto, "../pa", null, false, true);
 		$conectorAlerta = "<BR>";
-		$countATENCAO++;		
+		$countATENCAO++;*/	
+				 
+		$html .= getAlertaOrientacao($exPAAP->getMessage(), $countATENCAO, $conectorAlerta);
+		$conectorAlerta = "<BR>";		
 	}
 		
 	$arrayPermiteProrrogacao = isContratoPermiteProrrogacao($voContratoDemanda);
@@ -404,6 +402,7 @@ function getHtmlDocumentoArray($pArray) {
 				$complementoJS = "onClick=javascript:".$nmFuncaoJavaScript."('" . $chave. "',false);";
 			}
 			
+			$html .= "<SCRIPT language='JavaScript' type='text/javascript' src='". caminho_js. "tooltip.js'></SCRIPT>";
 			$complementoJS .= " onMouseOver=toolTip('$chave') onMouseOut=toolTip() ";
 			 
 			$html .= getTextoLink($textoLink,"#",$complementoJS);

@@ -579,6 +579,7 @@ class dbContratoInfo extends dbprocesso {
 		$retorno .= $this->getVarComoNumero($vo->inPrazoProrrogacao). ",";
 		$retorno .= $this->getVarComoNumero($vo->inEstudoTecnicoSAD). ",";
 		$retorno .= $this->getVarComoString($vo->inPendencias). ",";
+		$retorno .= $this->getVarComoString ( $vo->inCaracteristicas) . ",";
 		$retorno .= $this->getVarComoString(voDemanda::getNumeroPRTSemMascara($vo->SEIContratoSubstituto));
 		
 		$retorno .= $vo->getSQLValuesInsertEntidade ();
@@ -692,11 +693,17 @@ class dbContratoInfo extends dbprocesso {
 		if ($vo->inPendencias != null) {
 			$retorno .= $sqlConector . voContratoInfo::$nmAtrInPendencias . " = "
 					. $this->getVarComoString($vo->inPendencias);
-					$sqlConector = ",";
 		}else{
 			$retorno .= $sqlConector . voContratoInfo::$nmAtrInPendencias . " = null ";
-			$sqlConector = ",";
 		}
+		$sqlConector = ",";
+		
+		if ($vo->inCaracteristicas != null) {
+			$retorno .= $sqlConector . voContratoInfo::$nmAtrInCaracteristicas . " = " . $this->getVarComoString ($vo->inCaracteristicas);
+		}else{
+			$retorno .= $sqlConector . voContratoInfo::$nmAtrInCaracteristicas . " = null ";
+		}
+		$sqlConector = ",";		
 		
 		if ($vo->SEIContratoSubstituto != null) {
 			$retorno .= $sqlConector . voContratoInfo::$nmAtrSEIContratoSubstituto . " = " 

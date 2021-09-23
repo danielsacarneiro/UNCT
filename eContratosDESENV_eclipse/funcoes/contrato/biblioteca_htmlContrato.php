@@ -177,7 +177,7 @@ function getContratoDetalhamentoParam($arrayParametro) {
 			$isContratoEnvioPGE = isContratoEnvioSADPGE($voContrato, dominioSetor::$CD_SETOR_PGE, $voContratoInfoPK, $voContratoMater);
 			//verifica se vai pra SAD ou PGE pelo valor e valida se a informacao do econti esta de acordo
 			if($isContratoEnvioSAD || $isContratoEnvioPGE){
-				echo "Pelo Valor ";
+				echo "e-Conti: ";
 				$conector = "";
 				if($isContratoEnvioSAD){
 					$arrayAutorizacao[]=dominioAutorizacao::$CD_AUTORIZ_SAD;
@@ -291,33 +291,40 @@ function isContratoEnvioSADPGE($voContrato, $setor, $voContratoInfoPK=null, $voC
 	if($voContratoInfoPK != null){
 		$isContratoCredenciamento = $voContratoInfoPK->inCredenciamento == constantes::$CD_SIM;
 		$isContratoPorEscopo = $voContratoInfoPK->inEscopo == constantes::$CD_SIM;
+		//$voContratoInfoPK = new voContratoInfo();		
+		$isObjetoPadronizadoSAD = dominioEstudoTecnicoSAD::isObjetoPadronizado($voContratoInfoPK->inEstudoTecnicoSAD);
+		//echo "padronizado $isObjetoPadronizadoSAD";
 	}
 	
 	$validarValorPGE = $validarValorPGE && !$isContratoCredenciamento;
-	$validarValorSAD = $validarValorSAD && !$isContratoCredenciamento;
+	$validarValorSAD = $validarValorSAD && (!$isContratoCredenciamento || $isObjetoPadronizadoSAD);
 	//$voContrato = new vocontrato();
 	$retorno = false;
-	if($voContrato != null && ($validarValorSAD || $validarValorPGE)){	
-		$qtMeses = getDuracaoEmMesesContratoAutorizacaoPGE_SAD($voContratoMater);
-		//echo $qtMeses;
-		if($qtMeses >= vocontrato::$NUM_PRAZO_PADRAO){
-			$qtMeses = vocontrato::$NUM_PRAZO_PADRAO;
-		}
-		
-		if($isContratoPorEscopo){
-			$vlReferencia = $voContrato->vlGlobal;
-		}else{
-			$vlMensal = $voContrato->vlMensal;
-			if(isCampoMoedaFormatadado($vlMensal)){
-				$vlMensal = getVarComoDecimal($vlMensal);
-				//echo $vlMensal;
+	if($voContrato != null){
+		if($validarValorSAD && $isObjetoPadronizadoSAD){
+			$retorno = true;
+		}else if($validarValorSAD || $validarValorPGE){	
+			$qtMeses = getDuracaoEmMesesContratoAutorizacaoPGE_SAD($voContratoMater);
+			//echo $qtMeses;
+			if($qtMeses >= vocontrato::$NUM_PRAZO_PADRAO){
+				$qtMeses = vocontrato::$NUM_PRAZO_PADRAO;
 			}
-			//lembrar que o valor de contrato eh recuperado diferente
-			//$vlMensal = getVarComoDecimal($vlMensal);
-			$vlReferencia = $vlMensal*$qtMeses;
+			
+			if($isContratoPorEscopo){
+				$vlReferencia = $voContrato->vlGlobal;
+			}else{
+				$vlMensal = $voContrato->vlMensal;
+				if(isCampoMoedaFormatadado($vlMensal)){
+					$vlMensal = getVarComoDecimal($vlMensal);
+					//echo $vlMensal;
+				}
+				//lembrar que o valor de contrato eh recuperado diferente
+				//$vlMensal = getVarComoDecimal($vlMensal);
+				$vlReferencia = $vlMensal*$qtMeses;
+			}
+			//echo " Vl.Mensal: $vlMensal, VL.Referencia: $vlReferencia, Meses $qtMeses<br>";
+			$retorno =  $vlReferencia >= $vlAComparar;
 		}
-		//echo " Vl.Mensal: $vlMensal, VL.Referencia: $vlReferencia, Meses $qtMeses<br>";
-		$retorno =  $vlReferencia >= $vlAComparar;
 	}
 	
 	return $retorno;

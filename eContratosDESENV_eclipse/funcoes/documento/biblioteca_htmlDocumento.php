@@ -121,9 +121,10 @@ function getBotaoDocumentoArray($pArray){
 	if(isUsuarioAdmin()){
 		$complementoJS = "onClick=javascript:".$nmFuncaoJavaScript."('" . $pNmCampolink. "',$paramIsMenu);";
 	}
+	$retorno .= "<SCRIPT language='JavaScript' type='text/javascript' src='". caminho_js. "tooltip.js'></SCRIPT>";
 	$complementoJS .= " onMouseOver=toolTip('$pNmCampolink') onMouseOut=toolTip() ";
 	
-	$retorno = getBotaoValidacaoAcesso("bttabrirpasta", $nmBotao, "botaofuncaop", false,true,true,true, "$complementoJS accesskey='m'");
+	$retorno .= getBotaoValidacaoAcesso("bttabrirpasta", $nmBotao, "botaofuncaop", false,true,true,true, "$complementoJS accesskey='m'");
 	return $retorno;
 }
 

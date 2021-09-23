@@ -234,6 +234,7 @@ function iniciar(){
 					. dominioSimNao::getHtmlDetalhamentoRadio(voContratoInfo::$nmAtrInCredenciamento, voContratoInfo::$nmAtrInCredenciamento, $vo->inCredenciamento);
 	            echo " | Será prorrogado?:" 
 					. dominioSimNao::getHtmlDetalhamentoRadio(voContratoInfo::$nmAtrInSeraProrrogado, voContratoInfo::$nmAtrInSeraProrrogado, $vo->inSeraProrrogado);
+				echo dominioCaracteristicasContratoInfo::getHtmlChecksBoxDetalhamento("", $vo->inCaracteristicas, 1, false);
 	            ?>
 	        	</TD>
 	        </TR>	        

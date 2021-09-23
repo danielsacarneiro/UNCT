@@ -373,7 +373,14 @@ function iniciar(){
 	            if($seraProrrogTemp == null){
 	            	$seraProrrogTemp = constantes::$CD_SIM;
 	            }
-	            echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInSeraProrrogado,voContratoInfo::$nmAtrInSeraProrrogado, $seraProrrogTemp, false, "camponaoobrigatorio", false, " required ");?>
+	            echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInSeraProrrogado,voContratoInfo::$nmAtrInSeraProrrogado, $seraProrrogTemp, false, "camponaoobrigatorio", false, " required ");
+	            
+	            $nmCampoCaracteristicasHtml = voContratoInfo::$nmAtrInCaracteristicas ."[]";
+	            echo dominioCaracteristicasContratoInfo::getHtmlChecksBox($nmCampoCaracteristicasHtml, $vo->inCaracteristicas, null, 1, false);
+	          	?>
+				</TD>				
+	        </TR>
+	            
 	        	</TD>
 	        </TR>
 			<TR>

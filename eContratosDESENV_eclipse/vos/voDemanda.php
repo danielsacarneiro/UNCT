@@ -73,6 +73,7 @@ class voDemanda extends voentidade {
 	var $colecaoContrato = null;
 	var $voProcLicitatorio = null;
 	var $voSolicCompra = null;
+	var $voPA = null;
 	
 	// ...............................................................
 	// Funcoes ( Propriedades e métodos da classe )
@@ -254,6 +255,7 @@ class voDemanda extends voentidade {
 		
 		$this->getProcLicitatorioRegistroBanco($registrobanco);
 		$this->getSolicCompraRegistroBanco($registrobanco);
+		$this->getPAAPRegistroBanco($registrobanco);
 		
 		/*
 		 * $chaveContrato = $registrobanco[vocontrato::$nmAtrCdContrato];
@@ -352,6 +354,11 @@ class voDemanda extends voentidade {
 		$voProcLic = new voProcLicitatorio();
 		$voProcLic->getDadosBanco($registrobanco);
 		$this->voProcLicitatorio = $voProcLic;
+	}
+	function getPAAPRegistroBanco($registrobanco) {
+		$vopa = new voPA();
+		$vopa->getDadosBanco($registrobanco);
+		$this->voPA = $vopa;
 	}
 	function getContratoColecaoFormulario($itemColecao) {
 		$voContrato = new vocontrato ();

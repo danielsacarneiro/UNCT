@@ -179,6 +179,7 @@ CREATE TABLE contrato_info (
     ctinf_in_sad_estudotec INT NULL,
     
     ctinf_pendencias VARCHAR(25) NULL,
+    ctinf_in_caracteristicas VARCHAR(100),
     ctinf_SEIcontratosubstituto VARCHAR(25) NULL,
     
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -197,6 +198,7 @@ ALTER TABLE contrato_info ADD COLUMN ctinf_in_seraprorrogado CHAR(1) NULL AFTER 
 alter table contrato_info modify ctinf_in_seraprorrogado CHAR(1) NOT NULL DEFAULT 'S';
 ALTER TABLE contrato_info ADD COLUMN ctinf_SEIcontratosubstituto VARCHAR(25) NULL AFTER ctinf_in_sad_estudotec;
 ALTER TABLE contrato_info ADD COLUMN ctinf_pendencias VARCHAR(25) NULL AFTER ctinf_in_sad_estudotec;
+ALTER TABLE contrato_info ADD COLUMN ctinf_in_caracteristicas VARCHAR(100) NULL AFTER ctinf_pendencias;
 
 
 
@@ -242,6 +244,7 @@ CREATE TABLE contrato_info_hist (
     ctinf_in_sad_estudotec INT NULL,
     
     ctinf_pendencias VARCHAR(25) NULL,
+    ctinf_in_caracteristicas VARCHAR(100),
     ctinf_SEIcontratosubstituto VARCHAR(25) NULL,
     
     dh_inclusao TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -262,6 +265,7 @@ ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_sad_estudotec INT NULL AFTER 
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_credenciamento CHAR(1) NULL AFTER ctinf_cd_classificacao;
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_seraprorrogado CHAR(1) NULL AFTER ctinf_in_credenciamento;
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_SEIcontratosubstituto VARCHAR(25) NULL AFTER ctinf_in_sad_estudotec;
+ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_caracteristicas VARCHAR(100) NULL AFTER ctinf_pendencias;
 /*ALTER TABLE contrato_info_hist DROP COLUMN ctinf_email_gestor;
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_in_garantia CHAR(1) NULL AFTER ctinf_obs;
 ALTER TABLE contrato_info_hist ADD COLUMN ctinf_tp_garantia INT NULL AFTER ctinf_in_garantia;

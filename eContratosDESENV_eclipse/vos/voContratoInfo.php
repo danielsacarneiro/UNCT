@@ -2,6 +2,7 @@
 include_once(caminho_funcoes."contrato_consolidacao/dominioContratoProducaoEfeitos.php");
 include_once (caminho_util."dominioSetor.php");
 include_once ("vocontrato.php");
+//outros php referenciados estao sendo incluidos em vocontrato
 
 Class voContratoInfo extends voentidade{
 	
@@ -39,7 +40,8 @@ Class voContratoInfo extends voentidade{
 	
 	static $nmAtrInPendencias = "ctinf_pendencias";
 	static $nmAtrInPendenciasBANCO = "ctinf_pendenciasBANCO";
-	static $nmAtrSEIContratoSubstituto = "ctinf_SEIcontratosubstituto";
+	static $nmAtrInCaracteristicas = "ctinf_in_caracteristicas";
+	static $nmAtrSEIContratoSubstituto = "ctinf_SEIcontratosubstituto";	
 		
 	var $cdContrato = "";
 	var $anoContrato  = "";
@@ -62,6 +64,7 @@ Class voContratoInfo extends voentidade{
 	var $inEstudoTecnicoSAD = "";
 	var $inPendencias = "";
 	var $SEIContratoSubstituto = "";
+	var $inCaracteristicas;
 	
 	var $dbprocesso = null;
 	// ...............................................................
@@ -119,10 +122,8 @@ Class voContratoInfo extends voentidade{
 	}
 
 	function getAtributosFilho(){
-		$retorno = array(
-				self::$nmAtrAnoContrato,
-				self::$nmAtrCdContrato,
-				self::$nmAtrTipoContrato,
+		$array1 = static::getAtributosChavePrimaria();
+		$array2 = array(
 				self::$nmAtrCdAutorizacaoContrato,
 				self::$nmAtrObs,
 				self::$nmAtrDtProposta,
@@ -139,9 +140,11 @@ Class voContratoInfo extends voentidade{
 				self::$nmAtrInPrazoProrrogacao,
 				self::$nmAtrInEstudoTecnicoSAD,
 				self::$nmAtrInPendencias,
+				self::$nmAtrInCaracteristicas,
 				self::$nmAtrSEIContratoSubstituto,
 		);
 
+		$retorno = array_merge($array1, $array2);
 		return $retorno;
 	}
 
@@ -237,7 +240,8 @@ Class voContratoInfo extends voentidade{
 		$this->inPrazoProrrogacao = $registrobanco[self::$nmAtrInPrazoProrrogacao];
 		$this->inEstudoTecnicoSAD = $registrobanco[self::$nmAtrInEstudoTecnicoSAD];
 		$this->inPendencias = $registrobanco[self::$nmAtrInPendencias];
-		$this->SEIContratoSubstituto = $registrobanco[self::$nmAtrSEIContratoSubstituto];
+		$this->inCaracteristicas = $registrobanco[self::$nmAtrInCaracteristicas];
+		$this->SEIContratoSubstituto = $registrobanco[self::$nmAtrSEIContratoSubstituto];		
 	}
 
 	function getDadosFormulario(){
@@ -264,8 +268,13 @@ Class voContratoInfo extends voentidade{
 		if(is_array($this->inPendencias)){
 			$this->inPendencias = static::getArrayComoStringCampoSeparador($this->inPendencias);
 		}
+		$this->inCaracteristicas = $_POST[self::$nmAtrInCaracteristicas];
+		if(is_array($this->inCaracteristicas)){
+			$this->inCaracteristicas = static::getArrayComoStringCampoSeparador($this->inCaracteristicas);
+		}
 		
 		$this->SEIContratoSubstituto = $_POST[self::$nmAtrSEIContratoSubstituto];
+		
 		//completa com os dados da entidade
 		$this->getDadosFormularioEntidade();
 	}
