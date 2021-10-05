@@ -905,8 +905,9 @@ function getCorpoEmailAssinaturaSEI($pArrayCamposSubstituicao){
 	/*if(isDataValidaHtml($vocontrato->dtAssinatura)){
 		throw new excecaoGenerica("Contrato já assinado. Não permitida nova assinatura pelo SEI.|". $vocontrato->getCodigoContratoFormatado(true));
 	}*/
-	
-	if(isDataValidaNaoVazia($dtInicioVigenciaBanco) && isDataRetroativa($dtInicioVigencia)){
+	//echo "especie " . $vocontrato->cdEspecie;
+	$isRERRA = $vocontrato->cdEspecie == dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_RERRATIFICACAO;	
+	if(isDataValidaNaoVazia($dtInicioVigenciaBanco) && isDataRetroativa($dtInicioVigencia) && !$isRERRA){
 		throw new excecaoGenerica("Contrato retroativo: assinatura não permitida no SEI. Início de vigência é $dtInicioVigencia.|". $vocontrato->getCodigoContratoFormatado(true));		
 	}
 
@@ -970,7 +971,7 @@ function getCorpoEmailAssinaturaSEI($pArrayCamposSubstituicao){
 		}
 		
 		//$retorno .= getTextoHTMLDestacado("<br><br>ATENÇÃO"). "<b>: sob pena de inadmissibilidade, a assinatura digital deve ocorrer até ".getTextoHTMLDestacado($dtAssinaturaDigital)."</b>.$str_confirmar";
-		if(!$isVigenciaAPartirAssinatura){
+		if(!$isVigenciaAPartirAssinatura && !$isRERRA){
 			$retorno .= getTextoDataAssinaturaDigital($dtAssinaturaDigital);
 		}
 			

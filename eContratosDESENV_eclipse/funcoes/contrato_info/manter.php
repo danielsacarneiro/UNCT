@@ -99,6 +99,8 @@ function isFormularioValido() {
 		return false;
 		//campoAutorizacao.value = "<?=dominioAutorizacao::$CD_AUTORIZ_SAD?>";			
 	}
+
+	setaCampoInSeraProrrogado();
 	
 	return true;
 }
@@ -113,6 +115,11 @@ function confirmar() {
 		return false;
 
 	return confirm("Confirmar Alteracoes?");    
+}
+
+function formataFormCampoProrrogacao() {
+	formataFormEscopo();
+	setaCampoInSeraProrrogado();
 }
 
 function formataFormEscopo() {
@@ -133,12 +140,24 @@ function formataFormEscopo() {
 	}
 }
 
+function setaCampoInSeraProrrogado(){
+	var campoSeraProrrogado = document.frm_principal.<?=voContratoInfo::$nmAtrInSeraProrrogado?>;
+	campoProrrogacao = document.frm_principal.<?=voContratoInfo::$nmAtrInPrazoProrrogacao?>;
+	var isNaoProrrogavel = campoProrrogacao.value == <?=dominioProrrogacaoContrato::$CD_IMPRORROGAVEL?>;
+
+	if(isNaoProrrogavel){
+		campoSeraProrrogado.value = "N";
+	}else{
+		campoSeraProrrogado.value = "S";
+	}
+}
+
 
 function formataFormClassificacao(pCampoChamada) {
 	var campoClassificacao = document.frm_principal.<?=voContratoInfo::$nmAtrCdClassificacao?>;
 	var campoMaodeObra = document.frm_principal.<?=voContratoInfo::$nmAtrInMaoDeObra?>;
 	var campoTipoContrato = document.frm_principal.<?=voContratoInfo::$nmAtrTipoContrato?>;
-	var campoAutorizacao = document.frm_principal.<?=voContratoInfo::$nmAtrCdAutorizacaoContrato?>;
+	var campoAutorizacao = document.frm_principal.<?=voContratoInfo::$nmAtrCdAutorizacaoContrato?>;	
 
 	var classificacao = campoClassificacao.value;
 	var tipoContrato = campoTipoContrato.value;
@@ -155,7 +174,7 @@ function formataFormClassificacao(pCampoChamada) {
 		campoMaodeObra.value = "";
 	}
 
-	campoProrrogacao = document.frm_principal.<?=voContratoInfo::$nmAtrInPrazoProrrogacao?>;
+	campoProrrogacao = document.frm_principal.<?=voContratoInfo::$nmAtrInPrazoProrrogacao?>;	
 	if(classificacao == "<?=dominioClassificacaoContrato::$CD_LOCACAO_IMOVEL?>"){
 		exibirMensagem("<?=voContratoInfo::getTextoAlertaContratoLocação()?>");
 		campoProrrogacao.value = "<?=dominioProrrogacaoContrato::$CD_NAO_SEAPLICA?>";			
@@ -171,8 +190,9 @@ function formataFormClassificacao(pCampoChamada) {
 			&& pCampoChamada.value == "<?=constantes::$CD_SIM?>"){
 			
 		exibirMensagem("<?=voContratoInfo::getTextoAlertaContratoCredenciamento()?>");
-	}	
-	
+	}
+
+	setaCampoInSeraProrrogado();
 }
 
 function transferirDadosPessoa(cd, nm) {		
@@ -334,7 +354,7 @@ function iniciar(){
 	        ?>
 			<TR>
 	            <TH class="campoformulario" nowrap width="1%">Prorrogação:</TH>
-	            <TD class="campoformulario" width="1%"><?php echo $comboProrrogacao->getHtmlCombo(voContratoInfo::$nmAtrInPrazoProrrogacao,voContratoInfo::$nmAtrInPrazoProrrogacao, $vo->inPrazoProrrogacao, true, "campoobrigatorio", false," onChange='formataFormEscopo();' ");?>
+	            <TD class="campoformulario" width="1%"><?php echo $comboProrrogacao->getHtmlCombo(voContratoInfo::$nmAtrInPrazoProrrogacao,voContratoInfo::$nmAtrInPrazoProrrogacao, $vo->inPrazoProrrogacao, true, "campoobrigatorio", false," onChange='formataFormCampoProrrogacao();' ");?>
 	            <TH class="campoformulario" nowrap width="1%">
 	            <?=getTextoHTMLTagMouseOver("SEI.Contrato.Substituto", "SEI da demanda do contrato MATER substituto da presente contratação.")?>:
 	            </TH>

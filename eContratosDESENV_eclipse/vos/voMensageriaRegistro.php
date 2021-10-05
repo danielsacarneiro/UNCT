@@ -103,7 +103,7 @@ class voMensageriaRegistro extends voentidade {
 	static function getMensagemGestor($codigoContrato, $numFrequencia, $vocontratoinfo=null){
 
 		$emailPrincipal = email_sefaz::$REMETENTE_PRINCIPAL;
-		$emailCopia = email_sefaz::$REMETENTE_COPIA;
+		$emailCopia = email_sefaz::$REMETENTE_CONTRATOS;
 	
 		$retorno = static::getMensagemPreambulo($codigoContrato, $vocontratoinfo);
 		$cotacoes = ", junto com as cotações de preços e a anuência da Contratada";
@@ -124,7 +124,7 @@ class voMensageriaRegistro extends voentidade {
 	static function getMensagemGestorContratoImprorrogavel($codigoContrato, $numFrequencia, $vocontratoinfo = null){
 
 		$emailPrincipal = email_sefaz::$REMETENTE_PRINCIPAL;
-		$emailCopia = email_sefaz::$REMETENTE_COPIA;
+		$emailCopia = email_sefaz::$REMETENTE_CONTRATOS;
 		 
 		$retorno = static::getMensagemPreambulo($codigoContrato,$vocontratoinfo);
 		

@@ -13,7 +13,7 @@ class email_sefaz extends multiplosConstrutores{
 	static $REMETENTE_UNCT = "unct@sefaz.pe.gov.br";
 	static $REMETENTE_DILC = "carlos.pereira@sefaz.pe.gov.br";
 	
-	static $REMETENTE_COPIA = "contratos.unct@sefaz.pe.gov.br";
+	static $REMETENTE_CONTRATOS = "contratos.unct@sefaz.pe.gov.br";
 	static $REMETENTE_PRINCIPAL = "unct@sefaz.pe.gov.br";
 	
 	private $Host;
@@ -33,7 +33,7 @@ class email_sefaz extends multiplosConstrutores{
 	function __construct1($texto) {
 		$str = $this->getNomeAExibir($texto);
 		//$this->getConfigEmailSefaz("correio.sefaz.pe.gov.br", "25", 'daniel.ribeiro@sefaz.pe.gov.br', 'C@rbeiro03', $str);
-		$this->getConfigEmailSefaz("correio.sefaz.pe.gov.br", "25", static::$REMETENTE_ATJA, '', $str);
+		$this->getConfigEmailSefaz("correio.sefaz.pe.gov.br", "25", static::$REMETENTE_CONTRATOS, '', $str);
 	}
 	function __construct2($texto, $remetente) {
 		$str = $this->getNomeAExibir($texto);
@@ -89,7 +89,7 @@ class email_sefaz extends multiplosConstrutores{
 	static function getListaEmailAvisoGestorContrato(){
 		$retorno = array(
 				static::$REMETENTE_PRINCIPAL,
-				static::$REMETENTE_COPIA,
+				static::$REMETENTE_CONTRATOS,
 				static::$REMETENTE_DILC,
 				//"rogerio.f-carvalho@sefaz.pe.gov.br",
 				//"daniel.ribeiro@sefaz.pe.gov.br",				
@@ -108,7 +108,7 @@ class email_sefaz extends multiplosConstrutores{
 		$retorno = array( 
 				"eduardo.s-goncalves@sefaz.pe.gov.br",
 				static::$REMETENTE_PRINCIPAL,
-				static::$REMETENTE_COPIA,
+				static::$REMETENTE_CONTRATOS,
 		);
 		
 		return $retorno; 

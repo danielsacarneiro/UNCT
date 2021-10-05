@@ -1160,7 +1160,8 @@ class dbDemanda extends dbprocesso {
 		
 		$isCaracteristicaInvalida = !isContratadaAssinaPeloSEI($vopessoa);		
 		$isTermoAssinadoSEI = existePeloMenosUmItemNoArrayOuString(dominioFaseDemanda::$CD_ASSINADO_SEI, $voDemanda->fase);
-		if($isTermoAssinadoSEI && $isCaracteristicaInvalida){
+		$isApostilamento = $vocontratoDemanda->cdEspecie == dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_APOSTILAMENTO;
+		if($isTermoAssinadoSEI && $isCaracteristicaInvalida && !$isApostilamento){
 			throw new excecaoGenerica("Fechamento não permitido: preencha os campos da contratada em questão, na funcao '".vopessoa::getTituloJSP()."', que se referem à assinatura no SEI|" 
 					. $vopessoa->toString() . ".");
 		}			

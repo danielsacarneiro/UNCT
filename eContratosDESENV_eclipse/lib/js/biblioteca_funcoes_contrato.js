@@ -529,6 +529,7 @@ function setFiltroContratosPortalTransparencia(pArrayIdCampos,pArrayEspeciesCont
 	var campoTpVigenciaMaxSq = document.getElementById(pArrayIdCampos[1]);
 	var campoPublicado = document.getElementById(pArrayIdCampos[2]);
 	var campoEspecieContrato = document.getElementById(pArrayIdCampos[3]);	
+	var campoExercicio = document.getElementById(pArrayIdCampos[4]);
 	//var campoQtdRegistrosPagina = document.getElementById(pArrayIdCampos[4]);
 	
 	//biblio...principal
@@ -537,6 +538,7 @@ function setFiltroContratosPortalTransparencia(pArrayIdCampos,pArrayEspeciesCont
 	campoTpVigencia.value = 1;
 	campoTpVigenciaMaxSq.value = 'S';
 	campoPublicado.value = 'S';
+	campoExercicio.value = '';
 	//campoQtdRegistrosPagina.value = 'op_todos';
 	
 	selecionaSelectMultiple(campoEspecieContrato, pArrayEspeciesContratoLAI);

@@ -520,7 +520,7 @@ function estatisticas(){
 	    		'<?=filtroManterContrato::$nmAtrIsTpVigenciaMAxSq?>',
 	    		'<?=filtroManterContrato::$ID_REQ_InPublicado?>',
 	    		'<?=$pNmCampoCdEspecieContrato?>',
-	    		'<?=filtroManter::$nmAtrQtdRegistrosPorPag?>'
+	    		'<?=vocontrato::$nmAtrAnoContrato?>'
 	    		);
 
 	    var pArrayIdCamposFiltroLicon = new Array(

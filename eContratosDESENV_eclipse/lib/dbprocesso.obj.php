@@ -724,7 +724,7 @@ class dbprocesso {
 	}
 	function excluirHistoricoEDesativado($voEntidade) {
 		if (! temPermissaoParamHistorico ( true )) {
-			throw new Exception ( "Usuário não tem permissão para exclusão de histórico." );
+			throw new Exception ( "Usuário não tem permissão para exclusão de histórico." . $voEntidade->toString());
 		}
 		
 		// sempre exclui o historico em questao

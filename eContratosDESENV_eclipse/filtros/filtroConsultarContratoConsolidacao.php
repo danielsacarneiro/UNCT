@@ -101,7 +101,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 
 		$this->inProduzindoEfeitos = @$_POST [static::$ID_REQ_InProduzindoEfeitos];
 		if($this->inProduzindoEfeitos == null || $this->inProduzindoEfeitos == ""){
-			$this->inProduzindoEfeitos = constantes::$CD_SIM;
+			$this->inProduzindoEfeitos = dominioContratoProducaoEfeitos::$CD_VISTO_COM_EFEITOS;
 		}
 
 		$this->inGestor = @$_POST [voContratoInfo::$nmAtrCdPessoaGestor];
@@ -557,7 +557,10 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 			//so vai consultar se for SIM, caso contrario, traz o ultimo registro, independente de ter sido publicado ou nao.
 			if($inProduzindoEfeitos == dominioContratoProducaoEfeitos::$CD_VISTO_COM_EFEITOS){
 				$retorno .= " AND ($nmColunaComparacao IS NOT NULL AND $nmColunaComparacao <> '0000-00-00')";
+			}else if($inProduzindoEfeitos == dominioContratoProducaoEfeitos::$CD_VISTO_SEM_EFEITOS){
+				$retorno .= " AND ($nmColunaComparacao IS NULL OR $nmColunaComparacao = '0000-00-00')";
 			}
+				
 		}
 
 		if($this->cdEspecie != null){

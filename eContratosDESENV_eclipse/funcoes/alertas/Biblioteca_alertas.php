@@ -393,7 +393,7 @@ function enviarEmail($assuntoParam, $mensagemParam, $enviarEmail=true, $listaEma
 	}
 	
 	if($remetente == null){
-		$remetente = email_sefaz::$REMETENTE_ATJA;
+		$remetente = email_sefaz::$REMETENTE_CONTRATOS;
 	}
 	
 	try {
@@ -709,7 +709,7 @@ function getFiltroContratosAVencer($inTemDemandaEmTratamento = null){
 	$filtro->tpVigencia = dominioTpVigencia::$CD_OPCAO_VIGENTES;
 	//$filtro->dtVigencia = getDataHoje();
 	
-	$filtro->inProduzindoEfeitos = constantes::$CD_SIM;
+	$filtro->inProduzindoEfeitos = dominioContratoProducaoEfeitos::$CD_VISTO_COM_EFEITOS;
 	//traz somente os contratos a vencer nos dias abaixo
 	$filtro->qtdDiasParaVencimento = voMensageria::$NUM_DIAS_CONTRATOS_A_VENCER;
 	//traz somente os contratos indicados como "serao prorrogados"
