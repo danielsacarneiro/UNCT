@@ -109,7 +109,7 @@ function detalharDemandaRendimento(){
 	         ?>
 			<TR>
                 <TH class="campoformulario" nowrap width="1%">Demanda:</TH>
-                <TD class="campoformulario" nowrap width="1%" colspan=3>
+                <TD class="campoformulario" nowrap colspan=3>
                 Ano <?php echo $selectExercicio->getHtmlCombo(voDemanda::$nmAtrAno,voDemanda::$nmAtrAno, $filtro->vodemanda->ano, true, "camponaoobrigatorio", false, "");?>
                 | Tp. <?php echo $comboTipoContrato->getHtmlCombo(voDemandaContrato::$nmAtrTipoContrato,voDemandaContrato::$nmAtrTipoContrato, $filtro->vocontrato->tipo, true, "camponaoobrigatorio", false, "");?>
                 &nbsp;<?php echo $comboOR_AND->getHtmlCombo(filtroManterDemanda::$NmAtrInOR_AND,filtroManterDemanda::$NmAtrInOR_AND, $filtro->inOR_AND == null?constantes::$CD_OPCAO_AND:$filtro->inOR_AND, false, "camponaoobrigatorio", false, "");?>  
