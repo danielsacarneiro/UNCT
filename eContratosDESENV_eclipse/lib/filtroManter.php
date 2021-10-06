@@ -59,6 +59,7 @@ class filtroManter extends multiplosConstrutores {
 	private $temSQLFiltrosASubstituir = false;
 	
 	private $inConsultaRealizada = false;
+	private $inConsultaFiltroPlanilhaExportarRealizada = false;
 	private $QUERY_SELECT;
 	private $QUERY_FROM;
 	
@@ -704,6 +705,10 @@ class filtroManter extends multiplosConstrutores {
 		return $this->nmMetodoExportarPlanilha != "";
 	}
 	
+	function isConsultaFiltroPlanilhaExportarRealizada(){
+		return $this->inConsultaFiltroPlanilhaExportarRealizada;
+	}
+	
 	function consultarExportarPlanilha(){
 		$nmVo = $this->getNmVOEntidadeExportarPlanilha();
 		$voExportar = new $nmVo();
@@ -716,6 +721,7 @@ class filtroManter extends multiplosConstrutores {
 		$this->isValidarConsulta = false;
 		$this->setaFiltroConsultaSemLimiteRegistro();
 		
+		$this->inConsultaFiltroPlanilhaExportarRealizada = true;
 		$colecaoPlanilha = $dbprocesso->$nmMetodoExportarPlanilha($this);
 		
 		if(isColecaoVazia($colecaoPlanilha)){

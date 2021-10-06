@@ -1,7 +1,7 @@
 <?php
 include_once (caminho_lib . "dbprocesso.obj.php");
 class dbContratoInfo extends dbprocesso {
-	static $FLAG_PRINTAR_SQL = FALSE;
+	static $FLAG_PRINTAR_SQL = false;
 	
 	function consultarPorChaveTela($vo, $isHistorico) {
 		$nmTabela = $vo->getNmTabelaEntidade ( $isHistorico );
@@ -379,12 +379,18 @@ class dbContratoInfo extends dbprocesso {
 				getSQLNmContratada(),
 				$nmTabelaPessoaContrato . "." . vopessoa::$nmAtrDoc,
 		);
+		
+		if($filtro->isConsultaFiltroPlanilhaExportarRealizada()){
+			$arrayColunasRetornadas[] = voDemanda::getNmTabela() . "." . voDemanda::$nmAtrProtocolo;					
+		}
 				
-		if ($isHistorico) {		
-			$arrayColunasHistorico = array (
+		if ($isHistorico) {
+			$arrayColunasRetornadas[] = "$nmTabelaContratoInfo.". voContratoInfo::$nmAtrSqHist;
+			
+			/*$arrayColunasHistorico = array (
 					"$nmTabelaContratoInfo.". voContratoInfo::$nmAtrSqHist,
 			);				
-			$arrayColunasRetornadas = array_merge($arrayColunasRetornadas, $arrayColunasHistorico);
+			$arrayColunasRetornadas = array_merge($arrayColunasRetornadas, $arrayColunasHistorico);*/
 		}
 			
 		$groupbyinterno = $nmTabela . "." . vocontrato::$nmAtrAnoContrato . "," . $nmTabela . "." . vocontrato::$nmAtrCdContrato . "," . $nmTabela . "." . vocontrato::$nmAtrTipoContrato;	
@@ -467,6 +473,28 @@ class dbContratoInfo extends dbprocesso {
 			$queryJoin .= "\n AND ";
 			$queryJoin .= $nmTabDemandaContratoATUAL . "." . voDemandaContrato::$nmAtrSqEspecieContrato . "=" . $nmTabContratoATUAL . "." . vocontrato::$nmAtrSqEspecieContrato;
 	
+			//$filtro = new filtroConsultarContratoConsolidacao();		
+		if($filtro->isConsultaFiltroPlanilhaExportarRealizada()){
+			$nmTabelaDemandaSEI = voDemanda::getNmTabela();
+			$nmAtributosDemandaSEI = voDemanda::$nmAtrAno . "," . voDemanda::$nmAtrCd;
+				
+			$nmSelectDemandaSEILimit1 = "SELECT $nmAtributosDemandaSEI";
+			$nmSelectDemandaSEILimit1 .= ",MAX(" . voDemanda::$nmAtrProtocolo . ") AS " . voDemanda::$nmAtrProtocolo;
+			$nmSelectDemandaSEILimit1 .= " FROM $nmTabelaDemandaSEI ";
+			$nmSelectDemandaSEILimit1 .= " WHERE ";
+			$nmSelectDemandaSEILimit1 .= voDemanda::$nmAtrProtocolo . " IS NOT NULL ";
+			$nmSelectDemandaSEILimit1 .= " AND ". voDemanda::$nmAtrInDesativado . "='N'";
+			$nmSelectDemandaSEILimit1 .= " GROUP BY $nmAtributosDemandaSEI";
+			//$nmSelectDemandaSEILimit1 .= " ORDER BY " . voDemanda::$nmAtrProtocolo;
+			//$nmSelectDemandaSEILimit1 .= " LIMIT 1";
+			
+			$queryJoin .= "\n LEFT JOIN ($nmSelectDemandaSEILimit1) $nmTabelaDemandaSEI";
+			$queryJoin .= "\n ON ";
+			$queryJoin .= $nmTabDemandaContratoATUAL . "." . voDemandaContrato::$nmAtrAnoDemanda . "=$nmTabelaDemandaSEI." . voDemanda::$nmAtrAno;
+			$queryJoin .= "\n AND ";
+			$queryJoin .= $nmTabDemandaContratoATUAL . "." . voDemandaContrato::$nmAtrCdDemanda . "=$nmTabelaDemandaSEI." . voDemanda::$nmAtrCd;
+		}
+		
 		$cdCampoSubstituir = $filtro->getSQLTermoMaiorSqVigencia($nmTabContratoInterna);
 		//substitui o sql no join do MAXCONTRATO
 		$queryJoin = str_replace(constantes::$CD_CAMPO_SUBSTITUICAO, $cdCampoSubstituir . $filtro::$CD_CAMPO_SUBSTITUICAO, $queryJoin);

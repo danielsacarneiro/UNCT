@@ -42,6 +42,9 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	static $ID_REQ_DtFimVigenciaInicial = "ID_REQ_DtFimVigenciaInicial";
 	static $ID_REQ_DtFimVigenciaFinal = "ID_REQ_DtFimVigenciaFinal";
 
+	static $ID_REQ_DtAssinaturaInicial = "ID_REQ_DtAssinaturaInicial";
+	static $ID_REQ_DtAssinaturaFinal = "ID_REQ_DtAssinaturaFinal";
+	
 	static $ID_REQ_ValorInicial = "ID_REQ_ValorInicial";
 	static $ID_REQ_ValorFinal = "ID_REQ_ValorFinal";
 
@@ -50,6 +53,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 
 	static $ID_REQ_MesIntervaloFimVigencia = "ID_REQ_MesIntervaloFimVigencia";
 	static $ID_REQ_AnoIntervaloFimVigencia = "ID_REQ_AnoIntervaloFimVigencia";
+	static $ID_REQ_AnoAssinatura = "ID_REQ_AnoAssinatura";
 	static $ID_REQ_InProduzindoEfeitos = "ID_REQ_InProduzindoEfeitos";
 
 	var $cdEspecie = "";
@@ -57,9 +61,12 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	var $qtdDiasParaVencimentoProposta = "";
 
 	var $inProrrogacao = "";
+	var $dtAssinaturaInicial = "";
+	var $dtAssinaturaFinal = "";
+
 	var $dtFimVigenciaInicial = "";
 	var $dtFimVigenciaFinal = "";
-
+	
 	var $valorInicial = "";
 	var $valorFinal = "";
 
@@ -68,6 +75,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 
 	var $mesIntervaloFimVigencia= "";
 	var $anoIntervaloFimVigencia= "";
+	var $anoAssinatura = "";
 	var $inProduzindoEfeitos = "";
 	var $inCaracteristicas = "";
 	var $inTemDemandaProrrogacao = "";
@@ -85,9 +93,12 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		$this->qtdDiasParaVencimentoProposta = @$_POST [static::$nmAtrQtdDiasParaVencimentoProposta];
 
 		$this->inProrrogacao = @$_POST [static::$nmAtrInProrrogacao];
+		$this->dtAssinaturaFinal = @$_POST [static::$ID_REQ_DtAssinaturaFinal];
+		$this->dtAssinaturaInicial = @$_POST [static::$ID_REQ_DtAssinaturaInicial];
+
 		$this->dtFimVigenciaFinal = @$_POST [static::$ID_REQ_DtFimVigenciaFinal];
 		$this->dtFimVigenciaInicial = @$_POST [static::$ID_REQ_DtFimVigenciaInicial];
-
+		
 		$this->valorInicial = @$_POST [static::$ID_REQ_ValorInicial];
 		$this->valorFinal = @$_POST [static::$ID_REQ_ValorFinal];
 
@@ -96,6 +107,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 
 		$this->mesIntervaloFimVigencia = @$_POST [static::$ID_REQ_MesIntervaloFimVigencia];
 		$this->anoIntervaloFimVigencia = @$_POST [static::$ID_REQ_AnoIntervaloFimVigencia];
+		$this->anoAssinatura = @$_POST [static::$ID_REQ_AnoAssinatura];
 
 		$this->inCaracteristicas = @$_POST [static::$ID_REQ_Caracteristicas];
 
@@ -418,6 +430,30 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 			$this->dtFimVigenciaInicial = getDataMesHtml("01", $this->mesIntervaloFimVigencia, $anoTemp);
 		}
 
+		if ($this->anoAssinatura != null) {
+			$anoTemp = $this->anoAssinatura;
+		
+			$this->dtAssinaturaFinal = "31/12/$anoTemp";
+			$this->dtAssinaturaInicial = "01/01/$anoTemp";
+		}
+		
+		if ($this->dtAssinaturaInicial != null) {
+			$colunaAComparar = "$nmTabContratoATUAL." . vocontrato::$nmAtrDtAssinaturaContrato;		
+			$sqlFiltroTemp = getSQLConsultaIntervaloData($colunaAComparar, $this->dtAssinaturaInicial, ">=");
+			$filtro = $filtro . $conector . $sqlFiltroTemp;
+				
+			$conector = "\n AND ";
+		}
+		
+		if ($this->dtAssinaturaFinal != null) {
+			$colunaAComparar = "$nmTabContratoATUAL." . vocontrato::$nmAtrDtAssinaturaContrato;
+			$sqlFiltroTemp = getSQLConsultaIntervaloData($colunaAComparar, $this->dtAssinaturaFinal, "<=");
+			$filtro = $filtro . $conector . $sqlFiltroTemp;
+		
+			$conector = "\n AND ";
+		}
+		
+		
 		$sqlSubstituicaoJoinContratoATUAL = "";
 		if ($this->dtFimVigenciaInicial != null) {
 			//$colunaAComparar = static::getComparacaoWhereDataVigencia(static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato);
@@ -730,12 +766,20 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 
 	static function getArrayColunasExportarPlanilha(){
 		$colecaoAtributos[] = new colunaPlanilha("Tipo", vocontrato::$nmAtrTipoContrato, colunaPlanilha::$TP_DADO_DOMINIO, "dominioTipoContrato");
-		$colecaoAtributos[] = new colunaPlanilha("Numero", vocontrato::$nmAtrCdContrato);
+		$colecaoAtributos[] = new colunaPlanilha("Contrato", vocontrato::$nmAtrCdContrato);
 		$colecaoAtributos[] = new colunaPlanilha("Ano", vocontrato::$nmAtrAnoContrato);
+		$colecaoAtributos[] = new colunaPlanilha("Especie", static::$NmColCdEspecieContratoAtual, colunaPlanilha::$TP_DADO_DOMINIO, "dominioEspeciesContrato");
+		$colecaoAtributos[] = new colunaPlanilha("Num.", static::$NmColSqEspecieContratoAtual); 
 		$colecaoAtributos[] = new colunaPlanilha("Objeto", vocontrato::$nmAtrObjetoContrato);
 		$colecaoAtributos[] = new colunaPlanilha("Gestor", vocontrato::$nmAtrGestorContrato);
 		$colecaoAtributos[] = new colunaPlanilha("Inicio", filtroConsultarContratoConsolidacao::$NmColDtInicioVigencia);
 		$colecaoAtributos[] = new colunaPlanilha("Fim", filtroConsultarContratoConsolidacao::$NmColDtFimVigencia);
+		$colecaoAtributos[] = new colunaPlanilha("Vl.Mensal", vocontrato::$nmAtrVlMensalContrato, colunaPlanilha::$TP_DADO_MOEDA);
+		$colecaoAtributos[] = new colunaPlanilha("Vl.Global", vocontrato::$nmAtrVlGlobalContrato, colunaPlanilha::$TP_DADO_MOEDA);		
+		//$colecaoAtributos[] = new colunaPlanilha("SEI", voDemanda::$nmAtrProtocolo, colunaPlanilha::$TP_DADO_STRING);
+		$colunaPlanilhaTemp = new colunaPlanilha("SEI", voDemanda::$nmAtrProtocolo);
+		$colunaPlanilhaTemp->funcaoAExecutar = "getNumeroProtocoloFormatado"; 
+		$colecaoAtributos[] = $colunaPlanilhaTemp;
 
 		return $colecaoAtributos;
 	}

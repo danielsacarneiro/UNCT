@@ -157,84 +157,52 @@ function movimentacoes(){
 	        ?>        
             <TR>
 	            <TH class="campoformulario" nowrap width="1%">Contrato:</TH>
-	            <TD class="campoformulario" nowrap>
+	            <TD class="campoformulario" nowrap width="1%">
 	            <?php 
 	            getContratoEntradaDeDados($filtro->tipoContrato, $filtro->cdContrato, $filtro->anoContrato, $arrayCssClass, null, null);
 	            ?>
-	            </TD>	            
-	            <TH class="campoformulario" nowrap width="1%">Gestor:</TH>
-	            <TD class="campoformulario">
-	            <?php 
-	            echo "Tem? ".$comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrCdPessoaGestor,voContratoInfo::$nmAtrCdPessoaGestor
-							, $filtro->inGestor, true, "camponaoobrigatorio", false,"");
-	            ?>	            
-	            |Nome: <INPUT type="text" id="<?=vocontrato::$nmAtrGestorContrato?>" name="<?=vocontrato::$nmAtrGestorContrato?>"  value="<?php echo($filtro->gestor);?>"  class="camponaoobrigatorio" size="10" >
-	            |Órgão: <INPUT type="text" id="<?=vogestor::$nmAtrDescricao?>" name="<?=vogestor::$nmAtrDescricao?>"  value="<?php echo($filtro->orgaoGestor);?>"  class="camponaoobrigatorio" size="10" >
-	            </TD>	            
-			</TR>
-			<TR>
-                <TH class="campoformulario" nowrap>Nome Contratada:</TH>
-                <TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>"  value="<?php echo($filtro->nmContratada);?>"  class="camponaoobrigatorio" size="30"></TD>
-                <TH class="campoformulario" width="1%" nowrap>CNPJ/CPF Contratada:</TH>
-                <TD class="campoformulario" ><INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($filtro->docContratada);?>" class="camponaoobrigatorio" size="20" maxlength="18"></TD>
-            </TR>
-            <?php 
-            $comboAutorizacao = new select(dominioAutorizacao::getColecao());            
-            include_once(caminho_funcoes. "contrato/dominioTpGarantiaContrato.php");            
-            $comboGarantia = new select(dominioTpGarantiaContrato::getColecao());            
-            ?>                    
-			<TR>
-				<?php
-				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioAutorizacao.php");
-				//$combo = new select(dominioAutorizacao::getColecao());				
-				$nmCheckAutorizacaoArray = voContratoInfo::$nmAtrCdAutorizacaoContrato . "[]";
-				$colecaoAutorizacao = $filtro->cdAutorizacao;
-								
-				require_once (caminho_util . "/selectOR_AND.php");
-				$comboOuE = new selectOR_AND();
-				?>
-	            <TH class="campoformulario" nowrap>Autorização:</TH>
-	            <TD class="campoformulario" width="1%">
-	            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_SAD?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_SAD?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_SAD, $colecaoAutorizacao)?> >SAD
-	            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_PGE?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_PGE?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_PGE, $colecaoAutorizacao)?>>PGE
-	            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_GOV?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_GOV?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_GOV, $colecaoAutorizacao)?>>GOV
-	            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_NENHUM?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_NENHUM?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_NENHUM, $colecaoAutorizacao)?>>Nenhum
-	            <?php echo $comboOuE->getHtmlSelect(filtroConsultarContratoConsolidacao::$NmAtrInOR_AND,filtroConsultarContratoConsolidacao::$NmAtrInOR_AND, $filtro->InOR_AND, false, "camponaoobrigatorio", false);?>
-	            <!-- <TH class="campoformulario" nowrap width="1%">Autorização:</TH>
-	            <TD class="campoformulario" width="1%"><?php echo $comboAutorizacao->getHtmlCombo(voContratoInfo::$nmAtrCdAutorizacaoContrato, voContratoInfo::$nmAtrCdAutorizacaoContrato, $filtro->cdAutorizacao, true, "camponaoobrigatorio", false, "");?></TD>-->	            
-	            <TH class="campoformulario" nowrap width="1%">Garantia:</TH>
-	            <TD class="campoformulario">
-	            Tem?: <?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInTemGarantia,voContratoInfo::$nmAtrInTemGarantia, $filtro->inTemGarantia
-	            		, true, "camponaoobrigatorio", false,"");
-	            
-	            //echo "Tipo:" . $comboGarantia->getHtmlCombo(voContratoInfo::$nmAtrTpGarantia,voContratoInfo::$nmAtrTpGarantia, $filtro->tpGarantia, true, "camponaoobrigatorio", true, "");
-	            ?>
 	            </TD>
+                <TH class="campoformulario" nowrapwidth="1%" >Contratada:</TH>
+                <TD class="campoformulario" >Nome: <INPUT type="text" id="<?=vopessoa::$nmAtrNome?>" name="<?=vopessoa::$nmAtrNome?>"  value="<?php echo($filtro->nmContratada);?>"  class="camponaoobrigatorio" size="15">
+                |CNPJ/CPF: <INPUT type="text" id="<?=vopessoa::$nmAtrDoc?>" name="<?=vopessoa::$nmAtrDoc?>" onkeyup="formatarCampoCNPFouCNPJ(this, event);" value="<?php echo($filtro->docContratada);?>" class="camponaoobrigatorio" size="20" maxlength="18">
+                </TD>
 			</TR>
 			<TR>
-				<?php
-				require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioClassificacaoContrato.php");
-				$comboClassificacao = new select(dominioClassificacaoContrato::getColecao());
-				?>
-	            <TH class="campoformulario" nowrap>Classificação:</TH>
-	            <TD class="campoformulario" width="1%" colspan=3>
 	            <?php 
-	            echo $comboClassificacao->getHtmlCombo(voContratoInfo::$nmAtrCdClassificacao,voContratoInfo::$nmAtrCdClassificacao, $filtro->cdClassificacao, true, "camponaoobrigatorio", true, "");
-	            //$radioMaodeObra = new radiobutton ( dominioSimNao::getColecao());
-	            //echo "&nbsp;&nbsp;Mão de obra incluída (planilha de custos)?: " . $radioMaodeObra->getHtmlRadioButton ( voContratoInfo::$nmAtrInMaoDeObra, voContratoInfo::$nmAtrInMaoDeObra, $vo->inMaoDeObra, false, " required " );
-	            
-	            include_once(caminho_util. "dominioSimNao.php");
-	            $comboSimNao = new select(dominioSimNao::getColecao());	             
-	            echo "&nbsp;&nbsp;Terceirização (planilha de custos)?: ";
-	            echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInMaoDeObra,voContratoInfo::$nmAtrInMaoDeObra, $filtro->inMaoDeObra, true, "camponaoobrigatorio", false,"");
-	            
-	            $comboProrrogacaoContrato = new select(dominioProrrogacaoFiltroConsolidacao::getColecao());
-	            ?>
-	        </TR>
+	            $comboProrrogacaoContrato = new select(dominioProrrogacaoContrato::getColecao());
+	            $comboFiltroProrrogacaoConsolidacao= new select(dominioProrrogacaoFiltroConsolidacao::getColecao());
+	            ?>			
+               <TH class="campoformulario" nowrap>Prorrogação:</TH>
+               <TD class="campoformulario" colspan=3>
+				<?php 
+				$arrayTemp = array(
+						voContratoInfo::$nmAtrInPrazoProrrogacao,
+						voContratoInfo::$nmAtrInPrazoProrrogacao,
+						$filtro->inPrazoProrrogacao,
+						true,
+						true,
+						"camponaoobrigatorio",
+						false,
+						"",
+						select::$TAM_PADRAO
+				);
+				echo $comboProrrogacaoContrato->getHtmlComboArray($arrayTemp);
+				echo "| Situação: ". $comboFiltroProrrogacaoConsolidacao->getHtmlCombo(filtroConsultarContratoConsolidacao::$nmAtrInProrrogacao,filtroConsultarContratoConsolidacao::$nmAtrInProrrogacao, $filtro->inProrrogacao, true, "camponaoobrigatorio", false,"");
+				echo "| Será prorrogado?:";
+				echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInSeraProrrogado,
+						voContratoInfo::$nmAtrInSeraProrrogado,
+						$filtro->inSeraProrrogado, true, "camponaoobrigatorio", false, " ");
+				echo "|" .  getTextoHTMLNegrito("Iniciada?") . ":";
+				echo $comboSimNao->getHtmlCombo(filtroConsultarContratoConsolidacao::$ID_REQ_InTemDemandaProrrogacao,
+						filtroConsultarContratoConsolidacao::$ID_REQ_InTemDemandaProrrogacao,
+						$filtro->inTemDemandaProrrogacao, true, "camponaoobrigatorio", false, " ");
+				?>                        			
+                </TD>
+            </TR>
 			<TR>
 				<TH class="campoformulario" nowrap>Objeto:</TH>
 				<TD class="campoformulario" width="1%"><INPUT type="text" id="<?=vocontrato::$nmAtrObjetoContrato?>" name="<?=vocontrato::$nmAtrObjetoContrato?>"  value="<?php echo($filtro->objeto);?>"  class="camponaoobrigatorio" size="30" ></TD>
-               <TH class="campoformulario" nowrap>Valor(em 12 meses):</TH>
+               <TH class="campoformulario" nowrap width="1%">Valor(em 12 meses):</TH>
                <TD class="campoformulario">               
                				<INPUT type="text" 
                         	       id="<?=filtroConsultarContratoConsolidacao::$ID_REQ_ValorInicial?>" 
@@ -254,100 +222,9 @@ function movimentacoes(){
                         			>
                 </TD>				
 			</TR>
-			<TR>
-       			<TH class="campoformulario" >Características:</TH>
-                <TD class="campoformulario" colspan=3>
-                <?php 
-	            $pArrayCaracteristica = array(
-	            		$nmCampoCaracteristicasHtml,
-	            		$filtro->inCaracteristicas,
-	            		filtroConsultarContratoConsolidacao::getColecaoCaracteristicas(),
-	            		1,
-	            		true,
-	            		"",
-	            		true,
-	            		"",
-	            		false,
-	            		filtroManterDemanda::$NmAtrInOR_AND_Fase,
-	            		$filtro->inOR_AND_Fase,
-	            		false,
-	            		true,
-	            		true
-	            );
-	            echo dominioFaseDemanda::getHtmlChecksBoxArray($pArrayCaracteristica);
-	            ?>                        			
-                </TD>
-            </TR>			
-	            <?php 
-	            $comboProrrogacaoContrato = new select(dominioProrrogacaoContrato::getColecao());
-	            $comboFiltroProrrogacaoConsolidacao= new select(dominioProrrogacaoFiltroConsolidacao::getColecao());
-	            ?>
-			
-			<TR>
-               <TH class="campoformulario" nowrap>Prorrogação:</TH>
-               <TD class="campoformulario" colspan=3>
-				<?php 
-				$arrayTemp = array(
-						voContratoInfo::$nmAtrInPrazoProrrogacao,
-						voContratoInfo::$nmAtrInPrazoProrrogacao,
-						$filtro->inPrazoProrrogacao,
-						true,
-						true,
-						"camponaoobrigatorio",
-						false,
-						"",
-						select::$TAM_PADRAO
-				);
-				
-				//echo $comboProrrogacaoContrato->getHtmlCombo(voContratoInfo::$nmAtrInPrazoProrrogacao,voContratoInfo::$nmAtrInPrazoProrrogacao, $filtro->inPrazoProrrogacao, true, "camponaoobrigatorio", false,"");
-				echo $comboProrrogacaoContrato->getHtmlComboArray($arrayTemp);
-				echo "| Situação: ". $comboFiltroProrrogacaoConsolidacao->getHtmlCombo(filtroConsultarContratoConsolidacao::$nmAtrInProrrogacao,filtroConsultarContratoConsolidacao::$nmAtrInProrrogacao, $filtro->inProrrogacao, true, "camponaoobrigatorio", false,"");
-				echo "| Será prorrogado?:";
-				echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInSeraProrrogado,
-						voContratoInfo::$nmAtrInSeraProrrogado,
-						$filtro->inSeraProrrogado, true, "camponaoobrigatorio", false, " ");
-				echo "|" .  getTextoHTMLNegrito("Iniciada?") . ":";
-				echo $comboSimNao->getHtmlCombo(filtroConsultarContratoConsolidacao::$ID_REQ_InTemDemandaProrrogacao,
-						filtroConsultarContratoConsolidacao::$ID_REQ_InTemDemandaProrrogacao,
-						$filtro->inTemDemandaProrrogacao, true, "camponaoobrigatorio", false, " ");
-				?>                        			
-                </TD>
-            </TR>
-			<TR>
-               <TH class="campoformulario" nowrap>Prazo:</TH>
-               <TD class="campoformulario" >               				
-				Período (anos):
-               				<INPUT type="text" 
-                        	       id="<?=filtroConsultarContratoConsolidacao::$ID_REQ_NumPeriodoEmAnosInicial?>" 
-                        	       name="<?=filtroConsultarContratoConsolidacao::$ID_REQ_NumPeriodoEmAnosInicial?>" 
-                        			value="<?php echo($filtro->numPeriodoEmAnosInicial);?>" 
-                        			onkeyup="validarCampoNumericoPositivo(this, event);" 
-                        			class="camponaoobrigatorio" 
-                        			size="3" 
-                        			maxlength="3" > a               
-                        	<INPUT type="text" 
-                        	       id="<?=filtroConsultarContratoConsolidacao::$ID_REQ_NumPeriodoEmAnosFinal?>" 
-                        	       name="<?=filtroConsultarContratoConsolidacao::$ID_REQ_NumPeriodoEmAnosFinal?>" 
-                        			value="<?php echo($filtro->numPeriodoEmAnosFinal);?>" 
-                        			onkeyup="validarCampoNumericoPositivo(this, event);" 
-                        			class="camponaoobrigatorio" 
-                        			size="3" 
-                        			maxlength="3" >
-               | Dias.Vencimento:
-	            <INPUT type="text" id="<?=filtroConsultarContratoConsolidacao::$nmAtrQtdDiasParaVencimento?>" name="<?=filtroConsultarContratoConsolidacao::$nmAtrQtdDiasParaVencimento?>"  
-								value="<?php echo($filtro->qtdDiasParaVencimento);?>"  class="camponaoobrigatorio" size="3">                        			
-                </TD>
-               <TH class="campoformulario" nowrap>Proposta:</TH>
-               <TD class="campoformulario" >
-               Dias.Vencimento:
-	            <INPUT type="text" id="<?=filtroConsultarContratoConsolidacao::$nmAtrQtdDiasParaVencimentoProposta?>" name="<?=filtroConsultarContratoConsolidacao::$nmAtrQtdDiasParaVencimentoProposta?>"  
-								value="<?php echo($filtro->qtdDiasParaVencimentoProposta);?>"  class="camponaoobrigatorio" size="3">
-                </TD>                
-            </TR>
-            
             <TR>
                <TH class="campoformulario" nowrap>Fim.Vigência:</TH>
-               <TD class="campoformulario" colspan=3> Encerram em:
+               <TD class="campoformulario" colspan=3>
                         	<?php
                         	$comboMeses = new select(dominioMeses::getColecao());
                         	echo "Mês " . $comboMeses->getHtmlCombo(filtroConsultarContratoConsolidacao::$ID_REQ_MesIntervaloFimVigencia
@@ -394,8 +271,7 @@ function movimentacoes(){
                         echo getBorracha($nmCamposDtFimVigencia, "");
                         ?>                        			                        			                	 
                 </TD>
-            </TR>
-			
+            </TR>			
 			<TR>
 				<TH class="campoformulario" nowrap>Tp.Vigência:</TH>
 				<?php
@@ -431,10 +307,166 @@ function movimentacoes(){
                         			maxlength="10" >
                 <?=getBorracha($nmCamposVigencia, "");?>
 	            </TD>
-		    </TR>					
-	        
+		    </TR>			
+			<TR>
+	            <TD class="headertabeladados" colspan=4>
+	            <?php
+	            $pArray= array($filtro);
+	            echo getTagHTMlAbreLDivFiltroExpansivel($pArray);
+	            ?>
+	            </TD>
+	            			
+			<TR>
+       			<TH class="campoformulario" >Características:</TH>
+                <TD class="campoformulario" colspan=3>
+                <?php 
+	            $pArrayCaracteristica = array(
+	            		$nmCampoCaracteristicasHtml,
+	            		$filtro->inCaracteristicas,
+	            		filtroConsultarContratoConsolidacao::getColecaoCaracteristicas(),
+	            		1,
+	            		true,
+	            		"",
+	            		true,
+	            		"",
+	            		false,
+	            		filtroManterDemanda::$NmAtrInOR_AND_Fase,
+	            		$filtro->inOR_AND_Fase,
+	            		false,
+	            		true,
+	            		true
+	            );
+	            echo dominioFaseDemanda::getHtmlChecksBoxArray($pArrayCaracteristica);
+	            ?>                        			
+                </TD>
+            </TR>
+            <TR>
+				<?php
+				$comboClassificacao = new select(dominioClassificacaoContrato::getColecao());
+				?>
+	            <TH class="campoformulario" nowrap>Classificação:</TH>
+	            <TD class="campoformulario" width="1%" colspan=3>
+	            <?php 
+	            echo $comboClassificacao->getHtmlCombo(voContratoInfo::$nmAtrCdClassificacao,voContratoInfo::$nmAtrCdClassificacao, $filtro->cdClassificacao, true, "camponaoobrigatorio", true, "");
+	            //$radioMaodeObra = new radiobutton ( dominioSimNao::getColecao());
+	            //echo "&nbsp;&nbsp;Mão de obra incluída (planilha de custos)?: " . $radioMaodeObra->getHtmlRadioButton ( voContratoInfo::$nmAtrInMaoDeObra, voContratoInfo::$nmAtrInMaoDeObra, $vo->inMaoDeObra, false, " required " );
+	            
+	            include_once(caminho_util. "dominioSimNao.php");
+	            $comboSimNao = new select(dominioSimNao::getColecao());	             
+	            echo "&nbsp;&nbsp;Terceirização (planilha de custos)?: ";
+	            echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInMaoDeObra,voContratoInfo::$nmAtrInMaoDeObra, $filtro->inMaoDeObra, true, "camponaoobrigatorio", false,"");
+	            ?>
+	        </TR>            
+			<TR>
+				<?php
+				//require_once (caminho_funcoes . vocontrato::getNmTabela() . "/dominioAutorizacao.php");
+				//include_once(caminho_funcoes. "contrato/dominioTpGarantiaContrato.php");
+				$comboGarantia = new select(dominioTpGarantiaContrato::getColecao());
+				$comboAutorizacao = new select(dominioAutorizacao::getColecao());				
+				$nmCheckAutorizacaoArray = voContratoInfo::$nmAtrCdAutorizacaoContrato . "[]";
+				$colecaoAutorizacao = $filtro->cdAutorizacao;
+								
+				require_once (caminho_util . "/selectOR_AND.php");
+				$comboOuE = new selectOR_AND();
+				?>
+	            <TH class="campoformulario" width="1%" nowrap >Autorização:</TH>
+	            <TD class="campoformulario" width="1%" nowrap>
+	            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_SAD?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_SAD?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_SAD, $colecaoAutorizacao)?> >SAD
+	            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_PGE?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_PGE?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_PGE, $colecaoAutorizacao)?>>PGE
+	            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_GOV?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_GOV?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_GOV, $colecaoAutorizacao)?>>GOV
+	            <INPUT type="checkbox" id="<?=vocontrato::$nmAtrCdAutorizacaoContrato.dominioAutorizacao::$CD_AUTORIZ_NENHUM?>" name="<?=$nmCheckAutorizacaoArray?>" value="<?=dominioAutorizacao::$CD_AUTORIZ_NENHUM?>>" <?=dominioAutorizacao::checkedTemAutorizacao(dominioAutorizacao::$CD_AUTORIZ_NENHUM, $colecaoAutorizacao)?>>Nenhum
+	            <?php echo $comboOuE->getHtmlSelect(filtroConsultarContratoConsolidacao::$NmAtrInOR_AND,filtroConsultarContratoConsolidacao::$NmAtrInOR_AND, $filtro->InOR_AND, false, "camponaoobrigatorio", false);?>
+               <TH class="campoformulario" nowrap>Assinatura:</TH>
+               <TD class="campoformulario"> 
+               <?php
+               echo " Ano ". $selectExercicio->getHtmlCombo ( filtroConsultarContratoConsolidacao::$ID_REQ_AnoAssinatura,
+               		filtroConsultarContratoConsolidacao::$ID_REQ_AnoAssinatura,
+               		$filtro->anoAssinatura,
+               		true
+               		, "camponaoobrigatorio"
+               		, false
+               		, "");
+                
+               ?>  ou Período:
+               				<INPUT type="text" 
+                        	       id="<?=filtroConsultarContratoConsolidacao::$ID_REQ_DtAssinaturaInicial?>" 
+                        	       name="<?=filtroConsultarContratoConsolidacao::$ID_REQ_DtAssinaturaInicial?>" 
+                        			value="<?php echo($filtro->dtAssinaturaInicial);?>" 
+                        			onkeyup="formatarCampoData(this, event, false);" 
+                        			class="camponaoobrigatorio" 
+                        			size="10" 
+                        			maxlength="10" > a               
+                        	<INPUT type="text" 
+                        	       id="<?=filtroConsultarContratoConsolidacao::$ID_REQ_DtAssinaturaFinal?>" 
+                        	       name="<?=filtroConsultarContratoConsolidacao::$ID_REQ_DtAssinaturaFinal?>" 
+                        			value="<?php echo($filtro->dtAssinaturaFinal);?>" 
+                        			onkeyup="formatarCampoData(this, event, false);" 
+                        			class="camponaoobrigatorio" 
+                        			size="10" 
+                        			maxlength="10" >
+                        <?php 
+                        $nmCamposDtAssinatura = array(
+                        		filtroConsultarContratoConsolidacao::$ID_REQ_DtAssinaturaFinal,
+                        		filtroConsultarContratoConsolidacao::$ID_REQ_DtAssinaturaInicial,
+                        		filtroConsultarContratoConsolidacao::$ID_REQ_AnoAssinatura,
+                        );
+                        echo getBorracha($nmCamposDtAssinatura, "");
+                        ?>                        			                        			                	 
+                </TD>
+			</TR>
+			<TR>
+               <TH class="campoformulario" nowrap>Prazo:</TH>
+               <TD class="campoformulario" nowrap width="1%">               				
+				Período (anos):
+               				<INPUT type="text" 
+                        	       id="<?=filtroConsultarContratoConsolidacao::$ID_REQ_NumPeriodoEmAnosInicial?>" 
+                        	       name="<?=filtroConsultarContratoConsolidacao::$ID_REQ_NumPeriodoEmAnosInicial?>" 
+                        			value="<?php echo($filtro->numPeriodoEmAnosInicial);?>" 
+                        			onkeyup="validarCampoNumericoPositivo(this, event);" 
+                        			class="camponaoobrigatorio" 
+                        			size="3" 
+                        			maxlength="3" > a               
+                        	<INPUT type="text" 
+                        	       id="<?=filtroConsultarContratoConsolidacao::$ID_REQ_NumPeriodoEmAnosFinal?>" 
+                        	       name="<?=filtroConsultarContratoConsolidacao::$ID_REQ_NumPeriodoEmAnosFinal?>" 
+                        			value="<?php echo($filtro->numPeriodoEmAnosFinal);?>" 
+                        			onkeyup="validarCampoNumericoPositivo(this, event);" 
+                        			class="camponaoobrigatorio" 
+                        			size="3" 
+                        			maxlength="3" >
+               | Dias.Vencimento:
+	            <INPUT type="text" id="<?=filtroConsultarContratoConsolidacao::$nmAtrQtdDiasParaVencimento?>" name="<?=filtroConsultarContratoConsolidacao::$nmAtrQtdDiasParaVencimento?>"  
+								value="<?php echo($filtro->qtdDiasParaVencimento);?>"  class="camponaoobrigatorio" size="3">                        			
+                </TD>
+               <TH class="campoformulario" nowrap>Proposta:</TH>
+               <TD class="campoformulario" >
+               Dias.Vencimento:
+	            <INPUT type="text" id="<?=filtroConsultarContratoConsolidacao::$nmAtrQtdDiasParaVencimentoProposta?>" name="<?=filtroConsultarContratoConsolidacao::$nmAtrQtdDiasParaVencimentoProposta?>"  
+								value="<?php echo($filtro->qtdDiasParaVencimentoProposta);?>"  class="camponaoobrigatorio" size="3">
+                </TD>                
+            </TR>
+            
+            <TR>
+	            <TH class="campoformulario" nowrap width="1%">Gestor:</TH>
+	            <TD class="campoformulario" nowrap width="1%">
+	            <?php 
+	            echo "Tem? ".$comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrCdPessoaGestor,voContratoInfo::$nmAtrCdPessoaGestor
+							, $filtro->inGestor, true, "camponaoobrigatorio", false,"");
+	            ?>	            
+	            |Nome: <INPUT type="text" id="<?=vocontrato::$nmAtrGestorContrato?>" name="<?=vocontrato::$nmAtrGestorContrato?>"  value="<?php echo($filtro->gestor);?>"  class="camponaoobrigatorio" size="10" >
+	            |Órgão: <INPUT type="text" id="<?=vogestor::$nmAtrDescricao?>" name="<?=vogestor::$nmAtrDescricao?>"  value="<?php echo($filtro->orgaoGestor);?>"  class="camponaoobrigatorio" size="10" >
+	            </TD>	                        
+	            <TH class="campoformulario" nowrap width="1%">Garantia:</TH>
+	            <TD class="campoformulario">
+	            Tem?: <?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInTemGarantia,voContratoInfo::$nmAtrInTemGarantia, $filtro->inTemGarantia
+	            		, true, "camponaoobrigatorio", false,"");?>
+	            </TD>
+            </TR>
+				<?=getTagHTMlFechaDivFiltroExpansivel();?>
+	            </TD>
+	        </TR>
+	        	        
        <?php
-       
        //$colecaoPlanilha = filtroConsultarContratoConsolidacao::montarColecaoExportarPlanilha($colecao);
        $pArrayFiltroConsulta = array(
        		$filtro,
@@ -483,7 +515,7 @@ function movimentacoes(){
                     <TH class="headertabeladados" width="1%" <?=$rowspan?>>Global</TH>
                 </TR>
                 <TR>
-					<TH class="headertabeladados" width="1%">Indic.</TH>
+					<TH class="headertabeladados" width="1%">Será?</TH>
                     <TH class="headertabeladados" width="1%">Permite?</TH>
                     <TH class="headertabeladados" width="1%">Excep.?</TH>                
                 </TR>

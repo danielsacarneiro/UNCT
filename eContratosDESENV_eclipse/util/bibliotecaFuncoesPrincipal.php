@@ -10,6 +10,7 @@ Class colunaPlanilha extends multiplosConstrutores{
 	var $funcaoAExecutar = "";
 	
 	static $TP_DADO_DATA = "DATA";
+	static $TP_DADO_STRING = "STRING";
 	static $TP_DADO_MOEDA = "MOEDA";
 	static $TP_DADO_DOMINIO= "DOMINIO";
 	
@@ -38,13 +39,14 @@ Class colunaPlanilha extends multiplosConstrutores{
 		if(isAtributoValido($this->nmClasseDominio)){
 			$dominio = new $this->nmClasseDominio();
 			$retorno = $dominio::getDescricao($registro[$this->nmAtributo]);
-		}
-		
-		if($this->tpDado == static::$TP_DADO_MOEDA){
+		}else if($this->tpDado == static::$TP_DADO_MOEDA){
 			$retorno = getMoeda($registro[$this->nmAtributo]);
-		}
 		
-		if(isAtributoValido($this->funcaoAExecutar)){
+		}else if($this->tpDado == static::$TP_DADO_STRING){
+			$retorno = getVarComoString($registro[$this->nmAtributo]);
+			//$retorno = "\"" . $registro[$this->nmAtributo] . "\"";
+					
+		}else if(isAtributoValido($this->funcaoAExecutar)){
 			$funcao = $this->funcaoAExecutar;
 			$retorno = $funcao($registro[$this->nmAtributo]);
 		}
@@ -780,6 +782,9 @@ function existePeloMenosUmItemNoArrayOuString($item, $arrayOuString){
 
 function getAtributoFormularioHTML($name){
 	return @$_POST[$name];
+}
+function getNumeroProtocoloFormatado($sei){
+	return voDemandaTramitacao::getNumeroPRTComMascara($sei, false);
 }
 /*function isArrayMultiDimensional($array){
 	return count($array) == count($array, COUNT_RECURSIVE);
