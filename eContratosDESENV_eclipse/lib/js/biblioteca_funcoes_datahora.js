@@ -1657,6 +1657,15 @@ function getQtDias(pDataInicial, pDataFinal){
 }
 
 function getQtMesesAuxiliar(pDataInicial, pDataFinal, pSemMensagem){
+	var pArray = [pDataInicial, pDataFinal, pSemMensagem];
+	return getQtMesesAuxiliarArray(pArray);
+}
+
+function getQtMesesAuxiliarArray(pArray){
+	var pDataInicial = pArray[0];
+	var pDataFinal = pArray[1];
+	var pSemMensagem = pArray[2];
+	
 	var numDias = getQtDias(pDataInicial, pDataFinal);
 	var meses = numDias/30;
 	var anos = meses/12;
@@ -1680,7 +1689,7 @@ function getQtMesesAuxiliar(pDataInicial, pDataFinal, pSemMensagem){
 	
 	if(!pSemMensagem){
 		//exibirMensagem("O período aproximado é de "+mesesExatos + " mese(s), ou "+ anos +" ano(s). Confirme se está correto.");
-		exibirMensagem("O período aproximado é de "+mesesExatos + " mese(s). Confirme se está correto.");
+		exibirMensagem("O período aproximado é de "+mesesExatos + " mês(es). Confirme se está correto.");
 	}
 	
 	return mesesExatos ;
@@ -1761,6 +1770,16 @@ function getStringTimestampComoStringHora(pStringTimestamp) {
 }
 
 function getNumMesesNoPeriodo(pIDCampoDataInicial, pIDCampoDataFinal, pValidarDatas, pSemMensagem){
+	var pArray = [pIDCampoDataInicial, pIDCampoDataFinal, pValidarDatas, pSemMensagem];
+	return getNumMesesNoPeriodoArray(pArray);
+}
+
+function getNumMesesNoPeriodoArray(pArray){
+	var pIDCampoDataInicial = pArray[0];
+	var pIDCampoDataFinal= pArray[1];
+	var pValidarDatas= pArray[2];
+	var pSemMensagem= pArray[3];
+
 	var campoDataInicial = document.getElementById(pIDCampoDataInicial);
 	var campoDataFinal = document.getElementById(pIDCampoDataFinal);
 	
@@ -1779,9 +1798,7 @@ function getNumMesesNoPeriodo(pIDCampoDataInicial, pIDCampoDataFinal, pValidarDa
 		//alert("Data.Ini: " + dataInicial + "|Data.Fim: " + dataFinal);
 		//ambas as funcoes abaixo estao em bibli*.datahora.js
 		var numDias = getQtDias(dataInicial, dataFinal);
-		numMeses = getQtMesesAuxiliar(dataInicial, dataFinal);
-		//numMeses = getQtMeses(dataInicial, dataFinal);
-				
+		numMeses = getQtMesesAuxiliar(dataInicial, dataFinal);						
 		//alert("numDias: " + numDias + "|Num.Meses: " + numMeses);
 	}	
 	

@@ -336,6 +336,17 @@ include_once ("voContratoLicon.php");
     	 
     	return $retornoTemp;
     }
+    
+    function getValoresAtributosObrigatoriosSituacaoDemanda($situacao=null){
+    	$isSituacaoARevisar = $situacao == dominioSituacaoDemanda::$DS_SITUACAO_DEMANDA_A_REVISAR;
+    	
+    	if($isSituacaoARevisar){
+    		if($this->tipo != dominioTipoContrato::$CD_TIPO_CONVENIO){
+    			$retorno["Vl.Global"] = $this->vlGlobal;
+    		}    		
+    	}    
+    	return $this->getValoresAtributosObrigatoriosPorEntidade($retorno);
+    }
 
     function getAtributosInsertImportacao(){
         $novosAtributos = $this->getAtributosFilho();        

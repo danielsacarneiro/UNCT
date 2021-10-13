@@ -577,6 +577,16 @@ class dominio extends multiplosConstrutores {
 	}
 	
 	/**
+	 * Retorna chave formatada a ser utilizada no checkboxsimnao
+	 * @param unknown $chave
+	 * @param unknown $colecaoSelecionada
+	 * @return unknown
+	 */
+	static function getChaveCheckSimNaoHtml($cd, $simnao="N"){
+		return $cd . constantes::$CD_CAMPO_SEPARADOR . $simnao;
+	}
+	
+	/**
 	 * permite ao html reconhecer a existencia dos checks simnao e seleciona-los corretamente
 	 * @param unknown $colecaoDominio
 	 * @return string

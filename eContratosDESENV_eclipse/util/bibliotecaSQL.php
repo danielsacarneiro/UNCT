@@ -557,4 +557,8 @@ function getSQLConsultaIntervaloData($colunaAComparar, $pValorData, $pOperacaoDa
 	
 }
 
+function getSQLFiltroDataValidaNaoVazia($nmAtributo){
+	return " $nmAtributo IS NOT NULL AND $nmAtributo <> '0000-00-00' ";
+}
+
 ?>

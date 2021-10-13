@@ -707,9 +707,9 @@ function getFiltroContratosAVencer($inTemDemandaEmTratamento = null){
 	$filtro->setaFiltroConsultaSemLimiteRegistro ();
 
 	$filtro->tpVigencia = dominioTpVigencia::$CD_OPCAO_VIGENTES;
-	//$filtro->dtVigencia = getDataHoje();
-	
-	$filtro->inProduzindoEfeitos = dominioContratoProducaoEfeitos::$CD_VISTO_COM_EFEITOS;
+	//$filtro->dtVigencia = getDataHoje();	
+	//$filtro->inProduzindoEfeitos = dominioContratoProducaoEfeitos::$CD_VISTO_COM_EFEITOS;
+	setFiltroConsultarContratoProrrogacaoValido($filtro);
 	//traz somente os contratos a vencer nos dias abaixo
 	$filtro->qtdDiasParaVencimento = voMensageria::$NUM_DIAS_CONTRATOS_A_VENCER;
 	//traz somente os contratos indicados como "serao prorrogados"
@@ -780,6 +780,8 @@ function criarAlertasEmailGestorColecaoContratos($filtro=null, $log=null, $isCon
 
 	$dbprocesso = new dbContratoInfo();
 	$colecao = $dbprocesso->consultarTelaConsultaConsolidacao ($filtro);
+	/*echoo("query completa: " . $filtro->getSQL_QUERY_COMPLETA());
+	echoo("filtro usado: ".$filtro->getSQLFiltro());*/
 	
 	if(!isColecaoVazia($colecao)){
 		//$colecao = array($colecao[0]);

@@ -173,7 +173,7 @@ class dbContratoInfo extends dbprocesso {
 		return parent::consultarMontandoQueryTelaConsulta ( $vo, $filtro, $arrayColunasRetornadas, $queryJoin );
 	}
 	
-	static function getQueryContratoOrdemParalisacao($nmTabelaPrincipal, $nmTabDadosOrdemParalisacao, $joinTabs, $queryAdicionalWhereInterno=null){
+	/*static function getQueryContratoOrdemParalisacao($nmTabelaPrincipal, $nmTabDadosOrdemParalisacao, $joinTabs, $queryAdicionalWhereInterno=null){
 		$query = "select
 		ct_dt_vigencia_fim,
 		qtd,
@@ -256,7 +256,7 @@ class dbContratoInfo extends dbprocesso {
 		//ECHO $query;
 		return	$query;
 		
-	}
+	}*/
 	
 	static function getQueryContratoTermoAtual($nmTabelaPrincipal, $nmTabContratoATUAL, $joinTabs, $queryAdicionalWhereInterno=null, $mantendoFiltroGeral = true){
 		$nmTabContratoAtual = $nmTabContratoMAXSq = "TAB_CONTRATO_MAX_SQ";
@@ -418,14 +418,19 @@ class dbContratoInfo extends dbprocesso {
 		//isto porque, quando consultado o termo atual "com efeitos", e nao houver publicacao (ou seja, sem efeitos), o contrato NAO DEVE SER RETORNADO
 		//$filtro = new filtroConsultarContratoConsolidacao();
 		$jointemp = "LEFT";
-		$tipoJoinINNER = isAtributoValido($filtro->tpVigencia) || $filtro->inProduzindoEfeitos == dominioContratoProducaoEfeitos::$CD_VISTO_COM_EFEITOS;
+		//$tipoJoinINNER = isAtributoValido($filtro->tpVigencia) || $filtro->inProduzindoEfeitos == dominioContratoProducaoEfeitos::$CD_VISTO_COM_EFEITOS;
+		$tipoJoinINNER = isAtributoValido($filtro->tpVigencia);
 		if($tipoJoinINNER){
 			$jointemp = "INNER";
+			//echo "teste";
 		}
-		$joinTabs = "\n $jointemp JOIN ";
+		$joinTabs = "\n $jointemp JOIN ";		
+		
+		$queryInternaContratoTAPermitido .= $filtro->getSQLFiltroCdEspecie();
+		$queryInternaContratoTAPermitido .= " AND " . vocontrato::$nmAtrInDesativado ." = 'N'";
 		
 		//$queryJoin .= "\n $jointemp JOIN ";
-		$queryJoin .= static::getQueryContratoTermoAtual($nmTabela, $nmTabContratoATUAL, $joinTabs);
+		$queryJoin .= static::getQueryContratoTermoAtual($nmTabela, $nmTabContratoATUAL, $joinTabs, $queryInternaContratoTAPermitido, true);
 			
 		//pega as informacos em contrato_info do contrato atual
 		$queryJoin .= "\n LEFT JOIN " . $nmTabelaContratoInfo;
@@ -497,6 +502,7 @@ class dbContratoInfo extends dbprocesso {
 		
 		$cdCampoSubstituir = $filtro->getSQLTermoMaiorSqVigencia($nmTabContratoInterna);
 		//substitui o sql no join do MAXCONTRATO
+		//echo "\n " . $cdCampoSubstituir . "\n";
 		$queryJoin = str_replace(constantes::$CD_CAMPO_SUBSTITUICAO, $cdCampoSubstituir . $filtro::$CD_CAMPO_SUBSTITUICAO, $queryJoin);
 		//$queryJoin = str_replace(constantes::$CD_CAMPO_SUBSTITUICAO, $cdCampoSubstituir, $queryJoin);
 		
@@ -748,7 +754,7 @@ class dbContratoInfo extends dbprocesso {
 	}
 	
 	
-	function createViewContratoConsolidacao() {
+	/*function createViewContratoConsolidacao() {
 		$filtro = new filtroConsultarContratoConsolidacao(false);
 		$vo = new vocontrato();
 		$isHistorico = $filtro->isHistorico;
@@ -906,6 +912,6 @@ class dbContratoInfo extends dbprocesso {
 		$nmView = filtroConsultarContratoConsolidacao::$NM_VIEW_CONTRATO_CONSOLIDACAO;
 		$sqlView = "CREATE VIEW $nmView AS $sqlView;";
 		$this->atualizarEntidade($sqlView);				
-	}
+	}*/
 }
 ?>

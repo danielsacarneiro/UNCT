@@ -1,5 +1,4 @@
 <?php
-include_once(caminho_funcoes."contrato_consolidacao/dominioContratoProducaoEfeitos.php");
 include_once (caminho_util."dominioSetor.php");
 include_once ("vocontrato.php");
 //outros php referenciados estao sendo incluidos em vocontrato

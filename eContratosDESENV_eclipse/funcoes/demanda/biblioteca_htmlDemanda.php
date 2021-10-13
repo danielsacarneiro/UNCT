@@ -169,7 +169,8 @@ function isContratoPermiteProrrogacao($voContrato){
 		$filtro->anoContrato = $voContrato->anoContrato;
 		$filtro->cdContrato = $voContrato->cdContrato;
 		$filtro->tipoContrato = $voContrato->tipo;
-		$filtro->inProduzindoEfeitos = dominioContratoProducaoEfeitos::$CD_VISTO_COM_EFEITOS;
+		//$filtro->inProduzindoEfeitos = dominioContratoProducaoEfeitos::$CD_VISTO_COM_EFEITOS;
+		setFiltroConsultarContratoProrrogacaoValido($filtro);
 		$db = new dbContratoInfo();				
 		$colecao = $db->consultarTelaConsultaConsolidacao($filtro);
 		//echo "eh vazia";

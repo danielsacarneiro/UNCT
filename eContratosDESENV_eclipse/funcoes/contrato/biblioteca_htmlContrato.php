@@ -1,5 +1,6 @@
 <?php
 require_once (caminho_util . "selectExercicio.php");
+require_once (caminho_util . "dominio.class.php");
 // require_once(caminho_util."constantes.class.php");
 include_once (caminho_funcoes . "pessoa/biblioteca_htmlPessoa.php");
 require_once (caminho_funcoes . "contrato/dominioTipoContrato.php");
@@ -110,6 +111,7 @@ function getContratoDetalhamentoParam($arrayParametro) {
 		}
 
 		if($trazerPrazoUltimaProrrogacao){
+			//echo $voContrato->toString();
 			$numMesesUltimaProrrog = getNumMesesUltimaProrrogacao($voContrato);
 			echo getInputHidden(vocontrato::$ID_REQ_NumMesesUltimaProrrogacao, vocontrato::$ID_REQ_NumMesesUltimaProrrogacao, $numMesesUltimaProrrog);
 		}
@@ -1099,13 +1101,24 @@ function getDadosContratoLicon($chave) {
 	return $retorno;
 }
 
+function getContratoMaterVO($vocontrato){
+	//echo $vocontrato->toString();
+	$registro = getContratoMater($vocontrato);	
+	if($registro != null){
+		$retorno = new vocontrato();
+		$retorno->getDadosBanco($registro[0]);
+	}
+	
+	return $retorno;
+}
+
 function getContratoMater($vocontrato){
 	$db = new dbcontrato();
 	
-	$vocontrato = clone $vocontrato;
-	$vocontrato->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
-	$vocontrato->sqEspecie = 1;
-	$recordset = $db->consultarContratoPorChave($vocontrato, false);	
+	$vocontratoTemp = clone $vocontrato;
+	$vocontratoTemp->cdEspecie = dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER;
+	$vocontratoTemp->sqEspecie = 1;
+	$recordset = $db->consultarContratoPorChave($vocontratoTemp, false);	
 	if(isColecaoVazia($recordset)){
 		throw new excecaoChaveRegistroInexistente("BiblioHtmlContrato. getContratoMater.");
 	}
@@ -1113,8 +1126,7 @@ function getContratoMater($vocontrato){
 	if(count($recordset) > 2){
 		throw new excecaoMaisDeUmRegistroRetornado();
 	}
-	return $recordset;
-	
+	return $recordset;	
 }
 
 /**
@@ -1213,7 +1225,7 @@ function getContratoVigentePorArray($pArray){
 	$recordset = $db->consultarTelaConsulta($arrayParamConsulta);
 	
 	if(isColecaoVazia($recordset)){
-		throw new excecaoChaveRegistroInexistente("BiblioHtmlContrato. getContratoVigentePorData.");
+		throw new excecaoChaveRegistroInexistente("BiblioHtmlContrato. getContratoVigentePorArray|" . $vocontrato->getCodigoContratoFormatado(true));
 	}
 	
 	if(count($recordset) > 2){
@@ -2017,11 +2029,13 @@ function getNumMesesUltimaProrrogacao($votermo){
 		$registro = $colecao[0];
 		$vocontratomod = new voContratoModificacao();
 		$vocontratomod->getDadosBanco($registro);
-		$retorno = getQtdMesesEntreDatas($vocontratomod->dtModificacao, $vocontratomod->dtModificacaoFim);		
+		$retorno = getQtdMesesEntreDatas($vocontratomod->dtModificacao, $vocontratomod->dtModificacaoFim);
 	}else{
-		$vocontrato = getContratoMater($votermo);
+		$vocontrato = getContratoMaterVO($votermo);
+		//echo $vocontrato->toString();
 		//$vocontrato = new vocontrato();
 		$retorno = getQtdMesesEntreDatas($vocontrato->dtVigenciaInicial , $vocontrato->dtVigenciaFinal);
+		//echo $retorno;
 	}
 	
 	return $retorno;
@@ -2125,6 +2139,13 @@ function isTermoProrrogacaoContrato($vocontrato){
 		&& existeItemNoArrayOuString(dominioTipoDemandaContrato::$CD_TIPO_PRORROGACAO, $inCaracteristicas);
 	
 	return $retorno;
+}
+
+function setFiltroConsultarContratoProrrogacaoValido($filtro){
+	//$filtro = new filtroConsultarContratoConsolidacao();
+	//o filtro deveria ser PUBLICADO = S, mas pra evitar de alertar praqueles contratos nao publicados acidentalmente, a validacao se dara por assinatura
+	$filtro->faseDemanda = array(dominio::getChaveCheckSimNaoHtml(dominioFaseDemanda::$CD_ASSINADO, constantes::$CD_SIM)); 
+	$filtro->inContratoProrrogacaoValida = "S";	
 }
 
 

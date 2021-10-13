@@ -172,10 +172,8 @@ function calcularModificacaoNovo(pArrayCampos) {
 		//alert(campoNumPrazoMater.value + " " + campoNumPrazoMater.name);
 		numPrazoUltimaProrrogacao = getValorCampoMoedaComoNumeroValido(campoNumPrazoUltimaProrrogacao, 0);
 		//alert(numPrazoUltimaProrrogacao);
-			
-		numMeses = getQtMesesAuxiliar(campoDtModificacao.value, campoDtModificacaoFim.value);
 		
-		//numMeses = 35;
+		numMeses = getQtMesesAuxiliar(campoDtModificacao.value, campoDtModificacaoFim.value);
 		
 		if(isNaN(numMeses)){
 			numMeses = 0
@@ -448,12 +446,18 @@ function setaValorCampoPorFator(pArray){
 
 	//o campoprazo define o prazo da ultima prorrogacao, para os termos que alteram o valor do contrato
 	//nao fará diferenca se o termo for uma prorrogacao, pois esta determina um novo periodo de duracao do contrato,
-	//determinado, exatamente, pela diferenca entre as datas	
+	//determinado, exatamente, pela diferenca entre as datas
+	//alert("ultima prorrg." + pCampoPrazo.value);
 	if(pCampoPrazo != null && !isProrrogacao && pCampoPrazo.value != null && pCampoPrazo.value != "" && pCampoPrazo.value != 0){
 		pFator = pCampoPrazo.value;
-		exibirMensagem("Prazo considerado da última prorrogação ("+pFator+" meses) para cálculo do valor");
+		/*var numPrazoUltimaProrrogacao = pIdCampoPrazo.value;
+		var isUsarNumMesesAtualContratoParaValor = 
+		var pArrayQtMesesTermo = [dataInicial, dataFinal, false, numPrazoUltimaProrrogacao, isUsarNumMesesAtualContratoParaValor];
+		pFator = getQtMesesAuxiliarArray(pArrayQtMesesTermo);*/
+		exibirMensagem("Prazo considerado da última prorrogação, na função 'execução', de "+pFator+" mês(es), para cálculo do valor.");
 	}else{
 		//biblio.datahora.js
+		exibirMensagem("Novo prazo de vigência determinado.");
 		pFator = getNumMesesNoPeriodo(pIdCampoDataInicial, pIdCampoDataFinal, true, true);
 	}
 	

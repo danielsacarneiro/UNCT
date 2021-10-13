@@ -11,6 +11,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	static $DS_ESCOPO= "Escopo";
 	static $DS_DEMANDA = "Tem Demanda Prorrog.";
 	static $DS_PRORROGADO = "Será Prorrog.";
+	static $ID_REQ_FaseDemanda = "ID_REQ_FaseDemanda";
 
 	static $ID_REQ_InTemDemandaProrrogacao = "ID_REQ_InTemDemandaProrrogacao";
 	static $NmColQtdDiasSomadosTermoAtual = "NmColQtdDiasSomadosTermoAtual";
@@ -54,7 +55,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	static $ID_REQ_MesIntervaloFimVigencia = "ID_REQ_MesIntervaloFimVigencia";
 	static $ID_REQ_AnoIntervaloFimVigencia = "ID_REQ_AnoIntervaloFimVigencia";
 	static $ID_REQ_AnoAssinatura = "ID_REQ_AnoAssinatura";
-	static $ID_REQ_InProduzindoEfeitos = "ID_REQ_InProduzindoEfeitos";
+	//static $ID_REQ_InProduzindoEfeitos = "ID_REQ_InProduzindoEfeitos";
 
 	var $cdEspecie = "";
 	var $qtdDiasParaVencimento = "";
@@ -76,9 +77,11 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 	var $mesIntervaloFimVigencia= "";
 	var $anoIntervaloFimVigencia= "";
 	var $anoAssinatura = "";
-	var $inProduzindoEfeitos = "";
+	//var $inProduzindoEfeitos = "";
 	var $inCaracteristicas = "";
 	var $inTemDemandaProrrogacao = "";
+	var $faseDemanda;
+	var $inContratoProrrogacaoValida = "";
 
 	function __construct1($pegarFiltrosDaTela) {
 		parent::__construct1($pegarFiltrosDaTela);
@@ -88,7 +91,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 
 	function getFiltroFormulario() {
 		parent::getFiltroFormulario ();
-		$this->cdEspecie = @$_POST [vocontrato::$nmAtrCdEspecieContrato];
+		//$this->cdEspecie = @$_POST [vocontrato::$nmAtrCdEspecieContrato];
 		$this->qtdDiasParaVencimento = @$_POST [static::$nmAtrQtdDiasParaVencimento];
 		$this->qtdDiasParaVencimentoProposta = @$_POST [static::$nmAtrQtdDiasParaVencimentoProposta];
 
@@ -111,13 +114,14 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 
 		$this->inCaracteristicas = @$_POST [static::$ID_REQ_Caracteristicas];
 
-		$this->inProduzindoEfeitos = @$_POST [static::$ID_REQ_InProduzindoEfeitos];
+		/*$this->inProduzindoEfeitos = @$_POST [static::$ID_REQ_InProduzindoEfeitos];
 		if($this->inProduzindoEfeitos == null || $this->inProduzindoEfeitos == ""){
 			$this->inProduzindoEfeitos = dominioContratoProducaoEfeitos::$CD_VISTO_COM_EFEITOS;
-		}
+		}*/
 
 		$this->inGestor = @$_POST [voContratoInfo::$nmAtrCdPessoaGestor];
 		$this->inTemDemandaProrrogacao = @$_POST [static::$ID_REQ_InTemDemandaProrrogacao];
+		$this->faseDemanda = @$_POST[static::$ID_REQ_FaseDemanda];
 	}
 
 	static function getDataBaseReajuste($nmTabelaContratoInfo, $nmTabelaContrato){
@@ -129,14 +133,18 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		return $atributoDataReajuste;
 
 	}
-	function getSQFiltroCdEspecie($nmTabelaContrato) {
+	function getSQLFiltroCdEspecie($nmTabelaContrato=null) {
+		if(isAtributoValido($nmTabelaContrato)){
+			$nmTabelaContrato = "$nmTabelaContrato.";
+		}
+		
 		if ($this->cdEspecie != null && ! $this->isAtributoArrayVazio ( $this->cdEspecie )) {
 			$comparar = " = '" . $this->cdEspecie . "'";
 			if (is_array ( $this->cdEspecie )) {
 				$comparar = " IN (" . getSQLStringFormatadaColecaoIN ( $this->cdEspecie, true ) . ")";
 			}
 				
-			$filtro = $filtro . $conector . $nmTabelaContrato . "." . vocontrato::$nmAtrCdEspecieContrato . $comparar;
+			$filtro = $filtro . $conector . $nmTabelaContrato . vocontrato::$nmAtrCdEspecieContrato . $comparar;
 		}
 
 		return $filtro;
@@ -189,11 +197,6 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 			$conector = "\n AND ";
 		}
 
-		if ($this->cdEspecie != null && ! $this->isAtributoArrayVazio ( $this->cdEspecie )) {
-			$filtro = $filtro . $conector . $this->getSQFiltroCdEspecie ( $nmTabelaContrato );
-			$conector = "\n AND ";
-		}
-
 		// atributos do filtromanter
 		if ($this->anoContrato != null) {
 				
@@ -215,6 +218,14 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 				
 			$conector = "\n AND ";
 		}
+		
+		if ($this->cdEspecie != null && ! $this->isAtributoArrayVazio ( $this->cdEspecie )) {
+			$filtro = $filtro . $conector . $this->getSQLFiltroCdEspecie ( $nmTabelaContrato );
+		
+			//$sqlSubstituicaoJoinContratoATUAL .= " $conector " . $this->getSQLFiltroCdEspecie();
+		
+			$conector = "\n AND ";
+		}		
 
 		if ($this->nmContratada != null) {
 			$filtro = $filtro . $conector
@@ -392,6 +403,24 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 			$filtro = $filtro . $conector . $strFiltroCaracteristica;
 			$conector = "\n AND ";
 		}
+		
+		$faseDemanda = $this->faseDemanda;
+		if (isAtributoValido($faseDemanda)) {
+			$strFiltroFase = getSQLBuscarAtributoSimOuNaoOuSeNulo (
+					$faseDemanda,
+					static::getDadosContratoDemandaColecaoCheckBox(),
+					constantes::$CD_OPCAO_AND);
+
+			$strFiltroFaseTabInterna = getSQLBuscarAtributoSimOuNaoOuSeNulo (
+					$faseDemanda,
+					static::getDadosContratoDemandaColecaoCheckBox(vocontrato::getNmTabela()),
+					constantes::$CD_OPCAO_AND);
+				// echo $strFiltroTpDemanda;
+			$filtro = $filtro . $conector . $strFiltroFase;
+			//o filtro abaixo serve para fazer valer tambem nas consultas internas de vigencia principalmente
+			$sqlSubstituicaoJoinContratoATUAL .= " $conector $strFiltroFaseTabInterna ";
+			$conector = "\n AND ";
+		}
 
 		if (isAtributoValido($this->inGestor)) {
 			$temp = $this->inGestor == constantes::$CD_SIM? " IS NOT NULL ": " IS NULL ";
@@ -452,9 +481,8 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		
 			$conector = "\n AND ";
 		}
-		
-		
-		$sqlSubstituicaoJoinContratoATUAL = "";
+				
+		//$sqlSubstituicaoJoinContratoATUAL = "";
 		if ($this->dtFimVigenciaInicial != null) {
 			//$colunaAComparar = static::getComparacaoWhereDataVigencia(static::$NmTabContratoATUAL . "." . vocontrato::$nmAtrDtVigenciaFinalContrato);
 			$colunaAComparar = $colunaACompararDtFim;
@@ -503,6 +531,27 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 			);
 
 			$filtro = $filtro . $conector . getSQLDataVigenteArrayParam($pArrayParam);
+			
+			//como o trecho abaixo se trata da vigencia pra pegar o termo de contrato atual
+			//eh importante que considere as especies permitidas, dai a necessidade da especie tambem estar no sql interno
+			$pArrayParam2 = array(
+					vocontrato::getNmTabela(),
+					vocontrato::$nmAtrSqContrato,
+					$pChaveTuplaComparacaoSemSequencial,
+					$pChaveTuplaComparacaoSemSequencial,
+					$this->dtVigencia,
+					vocontrato::$nmAtrDtVigenciaInicialContrato,
+					vocontrato::$nmAtrDtVigenciaFinalContrato,
+					true,
+					$this->getSQLFiltroCdEspecie(),
+					false,			
+			);
+			
+			/*$pArrayParam[5] = vocontrato::$nmAtrDtVigenciaInicialContrato;			
+			$pArrayParam[6] = vocontrato::$nmAtrDtVigenciaFinalContrato;*/
+			$strFiltroVigenciaTabInterna = getSQLDataVigenteArrayParam($pArrayParam2); 
+			//para considerar a data de vigencia tambem nas tabelas internas e trazer o maios sq vigente na data
+			$sqlSubstituicaoJoinContratoATUAL .= " $conector $strFiltroVigenciaTabInterna ";
 
 			//echo $filtro;
 			$conector = "\n AND ";
@@ -533,6 +582,12 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 				$conector = "\n AND ";
 			}
 		}
+				
+		if (isAtributoValido($this->inContratoProrrogacaoValida) && $this->inContratoProrrogacaoValida == 'S'){
+			$sqlFiltroTemp = getSQLFiltroDataValidaNaoVazia("$nmTabContratoATUAL." . vocontrato::$nmAtrDtVigenciaInicialContrato);
+			$filtro = $filtro . $conector . $sqlFiltroTemp;
+			$conector = "\n AND ";
+		}		
 			
 		//substitui $CD_CAMPO_SUBSTITUICAO feito desde a confeccao do join da consulta em dbcontratoinfo
 		$this->setSQLFiltrosASubstituir($sqlSubstituicaoJoinContratoATUAL);
@@ -548,8 +603,26 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		$filtro = parent::getFiltroSQL ( $filtro, $comAtributoOrdenacao );
 
 		// echo "Filtro:$filtro<br>";
+		//echo $sqlSubstituicaoJoinContratoATUAL;
 
 		return $filtro;
+	}
+	
+	/**
+	 * Metodo que relaciona o codigo do dominio ao atributo no banco com cujo valor sera comparado
+	 * eh usado quando a consulta tiver dados check box de uma entidade, cujo filtro eh do tipo sim ou nao via checkbox
+	 * @return string[]
+	 */
+	static function getDadosContratoDemandaColecaoCheckBox($nmTab=null) {
+		if($nmTab == null){
+			$nmTab = static::$NmTabContratoATUAL;
+		}
+		$retorno = array (
+				dominioFaseDemanda::$CD_ASSINADO =>  "$nmTab." . vocontrato::$nmAtrDtAssinaturaContrato,
+				dominioFaseDemanda::$CD_PUBLICADO => "$nmTab." . vocontrato::$nmAtrDtPublicacaoContrato,
+		);
+	
+		return $retorno;
 	}
 
 	function getSQLTermoMaiorSqVigencia($nmTabContrato, $isTabInterna = true){
@@ -585,7 +658,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 				." OR ($nmColunaDtFimComparacao IS NULL $sqlPermiteDataFimNula))";
 		
 
-		$isProduzindoEfeitosSelecionado = $this->inProduzindoEfeitos != null;
+		/*$isProduzindoEfeitosSelecionado = $this->inProduzindoEfeitos != null;
 		$inProduzindoEfeitos = $this->inProduzindoEfeitos;
 		if ($isProduzindoEfeitosSelecionado) {
 			$nmColunaComparacao = "$nmTabContrato." . vocontrato::$nmAtrDtPublicacaoContrato;
@@ -597,10 +670,10 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 				$retorno .= " AND ($nmColunaComparacao IS NULL OR $nmColunaComparacao = '0000-00-00')";
 			}
 				
-		}
+		}*/
 
 		if($this->cdEspecie != null){
-			$retorno .= " AND " . $this->getSQFiltroCdEspecie($nmTabContrato);
+			$retorno .= " AND " . $this->getSQLFiltroCdEspecie($nmTabContrato);
 		}
 
 		return $retorno;
@@ -693,7 +766,7 @@ class filtroConsultarContratoConsolidacao extends filtroManterContratoInfo {
 		 $arrayAtributosCoalesceOP[] = $nmTempAtributoDtVigenciaFim;
 		 $nmTempAtributoDtVigenciaFim = getSQLCOALESCE($arrayAtributosCoalesceOP);*/
 
-		$nmTempAtributoDtVigenciaFim = filtroConsultarContratoConsolidacao::getComparacaoWhereDataVigencia($nmTempAtributoDtVigenciaFim);
+		$nmTempAtributoDtVigenciaFim = static::getComparacaoWhereDataVigencia($nmTempAtributoDtVigenciaFim);
 
 		return $nmTempAtributoDtVigenciaFim;
 	}

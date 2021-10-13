@@ -8,6 +8,7 @@ class voMensageria extends voentidade {
 	
 	static $DS_RESPONSABILIDADE_CAMPO_OBR = "<b>*Assumo a responsabilidade de não incluir os campos obrigatórios.</b>";	
 	static $MSG_IN_VERIFICAR_SERA_PRORROGADO = "Verifique a fundamentação legal da prorrogação do contrato, e se o contrato admite prorrogação.";
+	static $MSG_SEM_DEMANDA_ECONTI = "SEM DEMANDA ECONTI (COMUNICAR AO GESTOR)";
 	
 	//ativa o envio da mensageria para a UNCT
 	static $ATIVADO = true;

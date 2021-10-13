@@ -519,7 +519,9 @@ function getMensagemEmailsGestorNaoRespondidos(&$count = 0){
 }
 
 function getMensagemContratosAVencerGestor(&$count = 0){
-	$assunto = "CONTRATOS A VENCER (".voMensageria::$NUM_DIAS_CONTRATOS_A_VENCER." dias) SEM DEMANDA INICIADA (COMUNICAR AO GESTOR):";
+	$assunto = "CONTRATOS A VENCER (".voMensageria::$NUM_DIAS_CONTRATOS_A_VENCER." dias) "
+			. getTextoHTMLDestacado(voMensageria::$MSG_SEM_DEMANDA_ECONTI, "black", false, constantes::$CD_TEXTO_MARCADO). ":";
+	
 	$assunto = getSequenciaAssunto($assunto, $count);
 	try {
 		$filtro = getFiltroContratosAVencer(constantes::$CD_NAO);
@@ -551,7 +553,9 @@ function getMensagemContratosAVencerGestor(&$count = 0){
 }
 
 function getMensagemContratosAVencerImprorrogaveisGestor(&$count = 0){
-	$assunto = "CONTRATOS A VENCER (". voMensageria::$NUM_DIAS_CONTRATOS_A_VENCER_IMPRORROGAVEIS ." dias)". getTextoHTMLDestacado("IMPRORROGÁVEIS"). " SEM DEMANDA INICIADA (COMUNICAR AO GESTOR):";
+	$assunto = "CONTRATOS A VENCER (". voMensageria::$NUM_DIAS_CONTRATOS_A_VENCER_IMPRORROGAVEIS ." dias)"
+			. getTextoHTMLDestacado("IMPRORROGÁVEIS")
+			. " " . getTextoHTMLDestacado(voMensageria::$MSG_SEM_DEMANDA_ECONTI, "black", false, constantes::$CD_TEXTO_MARCADO). ":";
 	$assunto = getSequenciaAssunto($assunto, $count);
 	try {
 		$filtro = getFiltroContratosAVencerImprorrog(constantes::$CD_NAO);

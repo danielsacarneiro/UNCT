@@ -13,6 +13,7 @@ $titulo = "CONSULTAR " . voContratoInfo::getTituloJSPConsolidacao();
 setCabecalho($titulo);
 
 $filtro  = new filtroConsultarContratoConsolidacao();
+
 //$filtro->voPrincipal = $vo;
 $nmMetodoExportarPlanilha = "consultarTelaConsultaConsolidacao";
 $arrayObjetosExportarPlanilha = array($vo, $nmMetodoExportarPlanilha);
@@ -35,6 +36,12 @@ $qtdRegistrosPorPag = $filtro->qtdRegistrosPorPag;
 $numTotalRegistros = $filtro->numTotalRegistros;
 
 $nmCampoCaracteristicasHtml = filtroConsultarContratoConsolidacao::$ID_REQ_Caracteristicas . "[]";
+$nmCampoFaseDemandaHtml = filtroConsultarContratoConsolidacao::$ID_REQ_FaseDemanda ."[]";
+$isPrimeiraConsulta = !$filtro->isConsultaRealizada();
+if($isPrimeiraConsulta){
+	$filtro->faseDemanda = array(dominioFaseDemanda::$CD_PUBLICADO . constantes::$CD_CAMPO_SEPARADOR . constantes::$CD_SIM);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -222,6 +229,30 @@ function movimentacoes(){
                         			>
                 </TD>				
 			</TR>
+			<TR>
+       			<TH class="campoformulario" ><?=getTextoHTMLDestacado("Efeitos", "red", false)?>:</TH>
+                <TD class="campoformulario" colspan=3>
+                <?php 
+                $pArrayFaseDemanda = array(
+                		$nmCampoFaseDemandaHtml,
+                		$filtro->faseDemanda,
+                		dominioFaseDemanda::getColecaoPlanilha(),
+                		1,
+                		true,
+                		"",
+                		true,
+                		"",
+                		false,
+                		"", //filtroManterDemanda::$NmAtrInOR_AND_Fase,
+                		"", //$filtro->inOR_AND_Fase,
+                		false,
+                		true,
+                		true
+                );
+                echo dominioFaseDemanda::getHtmlChecksBoxArray($pArrayFaseDemanda);
+                ?>                        			
+                </TD>
+            </TR>			
             <TR>
                <TH class="campoformulario" nowrap>Fim.Vigência:</TH>
                <TD class="campoformulario" colspan=3>
@@ -283,18 +314,13 @@ function movimentacoes(){
 	            echo $comboVigencia->getHtmlOpcao($filtro::$nmAtrTpVigencia,$filtro::$nmAtrTpVigencia, $filtro->tpVigencia, false);
 	            
 	            //$comboSimNaoEfeitos = new select(array(constantes::$CD_SIM => "Com efeitos", constantes::$CD_NAO => "Últ.Termo"));
-	            $comboSimNaoEfeitos = new select(dominioContratoProducaoEfeitos::getColecao());
+	            /*$comboSimNaoEfeitos = new select(dominioContratoProducaoEfeitos::getColecao());
 	            $textoTag = getTextoHTMLTagMouseOver("Último Termo: ", "Exibe somente os termos formalizados.");
 	            echo "| $textoTag". $comboSimNaoEfeitos->getHtmlCombo(
 	            		filtroConsultarContratoConsolidacao::$ID_REQ_InProduzindoEfeitos,
 	            		filtroConsultarContratoConsolidacao::$ID_REQ_InProduzindoEfeitos, 
-	            		$filtro->inProduzindoEfeitos, true, "camponaoobrigatorio", false, "");
+	            		$filtro->inProduzindoEfeitos, true, "camponaoobrigatorio", false, "");*/
 	            
-	            $nmCamposVigencia = array(
-	            		filtroConsultarContratoConsolidacao::$nmAtrTpVigencia,
-	            		filtroConsultarContratoConsolidacao::$nmAtrDtVigencia,
-	            		filtroConsultarContratoConsolidacao::$ID_REQ_InProduzindoEfeitos,
-	            );
 	            echo "| Vigente na data: "	             
 	            ?>
                         	<INPUT type="text" 
@@ -305,7 +331,14 @@ function movimentacoes(){
                         			class="camponaoobrigatorio" 
                         			size="10" 
                         			maxlength="10" >
-                <?=getBorracha($nmCamposVigencia, "");?>
+                <?php
+                $nmCamposVigencia = array(
+                		filtroConsultarContratoConsolidacao::$nmAtrTpVigencia,
+                		filtroConsultarContratoConsolidacao::$nmAtrDtVigencia,
+                		//filtroConsultarContratoConsolidacao::$ID_REQ_InProduzindoEfeitos,
+                );
+                
+                echo getBorracha($nmCamposVigencia, "");?>
 	            </TD>
 		    </TR>			
 			<TR>
@@ -315,11 +348,22 @@ function movimentacoes(){
 	            echo getTagHTMlAbreLDivFiltroExpansivel($pArray);
 	            ?>
 	            </TD>
-	            			
-			<TR>
-       			<TH class="campoformulario" >Características:</TH>
-                <TD class="campoformulario" colspan=3>
-                <?php 
+            <TR>
+				<?php
+				$comboClassificacao = new select(dominioClassificacaoContrato::getColecao());
+				?>
+	            <TH class="campoformulario" nowrap>Classificação:</TH>
+	            <TD class="campoformulario" width="1%" colspan=3>
+	            <?php 
+	            echo $comboClassificacao->getHtmlCombo(voContratoInfo::$nmAtrCdClassificacao,voContratoInfo::$nmAtrCdClassificacao, $filtro->cdClassificacao, true, "camponaoobrigatorio", true, "");
+	            //$radioMaodeObra = new radiobutton ( dominioSimNao::getColecao());
+	            //echo "&nbsp;&nbsp;Mão de obra incluída (planilha de custos)?: " . $radioMaodeObra->getHtmlRadioButton ( voContratoInfo::$nmAtrInMaoDeObra, voContratoInfo::$nmAtrInMaoDeObra, $vo->inMaoDeObra, false, " required " );
+	            
+	            include_once(caminho_util. "dominioSimNao.php");
+	            $comboSimNao = new select(dominioSimNao::getColecao());	             
+	            echo "&nbsp;&nbsp;Terceirização (planilha de custos)?: ";
+	            echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInMaoDeObra,voContratoInfo::$nmAtrInMaoDeObra, $filtro->inMaoDeObra, true, "camponaoobrigatorio", false,"");
+	            
 	            $pArrayCaracteristica = array(
 	            		$nmCampoCaracteristicasHtml,
 	            		$filtro->inCaracteristicas,
@@ -336,25 +380,7 @@ function movimentacoes(){
 	            		true,
 	            		true
 	            );
-	            echo dominioFaseDemanda::getHtmlChecksBoxArray($pArrayCaracteristica);
-	            ?>                        			
-                </TD>
-            </TR>
-            <TR>
-				<?php
-				$comboClassificacao = new select(dominioClassificacaoContrato::getColecao());
-				?>
-	            <TH class="campoformulario" nowrap>Classificação:</TH>
-	            <TD class="campoformulario" width="1%" colspan=3>
-	            <?php 
-	            echo $comboClassificacao->getHtmlCombo(voContratoInfo::$nmAtrCdClassificacao,voContratoInfo::$nmAtrCdClassificacao, $filtro->cdClassificacao, true, "camponaoobrigatorio", true, "");
-	            //$radioMaodeObra = new radiobutton ( dominioSimNao::getColecao());
-	            //echo "&nbsp;&nbsp;Mão de obra incluída (planilha de custos)?: " . $radioMaodeObra->getHtmlRadioButton ( voContratoInfo::$nmAtrInMaoDeObra, voContratoInfo::$nmAtrInMaoDeObra, $vo->inMaoDeObra, false, " required " );
-	            
-	            include_once(caminho_util. "dominioSimNao.php");
-	            $comboSimNao = new select(dominioSimNao::getColecao());	             
-	            echo "&nbsp;&nbsp;Terceirização (planilha de custos)?: ";
-	            echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInMaoDeObra,voContratoInfo::$nmAtrInMaoDeObra, $filtro->inMaoDeObra, true, "camponaoobrigatorio", false,"");
+	            echo dominio::getHtmlChecksBoxArray($pArrayCaracteristica);
 	            ?>
 	        </TR>            
 			<TR>
@@ -417,7 +443,7 @@ function movimentacoes(){
 			<TR>
                <TH class="campoformulario" nowrap>Prazo:</TH>
                <TD class="campoformulario" nowrap width="1%">               				
-				Período (anos):
+				Anos:
                				<INPUT type="text" 
                         	       id="<?=filtroConsultarContratoConsolidacao::$ID_REQ_NumPeriodoEmAnosInicial?>" 
                         	       name="<?=filtroConsultarContratoConsolidacao::$ID_REQ_NumPeriodoEmAnosInicial?>" 
@@ -447,8 +473,13 @@ function movimentacoes(){
             </TR>
             
             <TR>
+	            <TH class="campoformulario" nowrap width="1%">Garantia:</TH>
+				<TD class="campoformulario" nowrap width="1%">
+	            Tem?: <?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInTemGarantia,voContratoInfo::$nmAtrInTemGarantia, $filtro->inTemGarantia
+	            		, true, "camponaoobrigatorio", false,"");?>
+	            </TD>
 	            <TH class="campoformulario" nowrap width="1%">Gestor:</TH>
-	            <TD class="campoformulario" nowrap width="1%">
+	            <TD class="campoformulario">
 	            <?php 
 	            echo "Tem? ".$comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrCdPessoaGestor,voContratoInfo::$nmAtrCdPessoaGestor
 							, $filtro->inGestor, true, "camponaoobrigatorio", false,"");
@@ -456,11 +487,6 @@ function movimentacoes(){
 	            |Nome: <INPUT type="text" id="<?=vocontrato::$nmAtrGestorContrato?>" name="<?=vocontrato::$nmAtrGestorContrato?>"  value="<?php echo($filtro->gestor);?>"  class="camponaoobrigatorio" size="10" >
 	            |Órgão: <INPUT type="text" id="<?=vogestor::$nmAtrDescricao?>" name="<?=vogestor::$nmAtrDescricao?>"  value="<?php echo($filtro->orgaoGestor);?>"  class="camponaoobrigatorio" size="10" >
 	            </TD>	                        
-	            <TH class="campoformulario" nowrap width="1%">Garantia:</TH>
-	            <TD class="campoformulario">
-	            Tem?: <?php echo $comboSimNao->getHtmlCombo(voContratoInfo::$nmAtrInTemGarantia,voContratoInfo::$nmAtrInTemGarantia, $filtro->inTemGarantia
-	            		, true, "camponaoobrigatorio", false,"");?>
-	            </TD>
             </TR>
 				<?=getTagHTMlFechaDivFiltroExpansivel();?>
 	            </TD>

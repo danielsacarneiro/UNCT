@@ -1,5 +1,5 @@
 -- Gerar Select count
--- PASSSO 1
+-- PASSO 1
 SELECT CONCAT(
     'SELECT "', 
     table_name, 
@@ -12,7 +12,7 @@ SELECT CONCAT(
 FROM INFORMATION_SCHEMA.TABLES 
 WHERE table_schema = 'UNCT';
 
--- PASSSO 2
+-- PASSO 2
 -- executar a query gerada como resultado do select acima, retirando o ultimo UNION concatenado
 SELECT "contrato" AS table_name, COUNT(*) AS exact_row_count FROM `unct`.`contrato` UNION 
 SELECT "contrato_hist" AS table_name, COUNT(*) AS exact_row_count FROM `unct`.`contrato_hist` UNION 
@@ -62,7 +62,8 @@ SELECT "wp_term_taxonomy" AS table_name, COUNT(*) AS exact_row_count FROM `unct`
 SELECT "wp_termmeta" AS table_name, COUNT(*) AS exact_row_count FROM `unct`.`wp_termmeta` UNION 
 SELECT "wp_terms" AS table_name, COUNT(*) AS exact_row_count FROM `unct`.`wp_terms` UNION 
 SELECT "wp_usermeta" AS table_name, COUNT(*) AS exact_row_count FROM `unct`.`wp_usermeta` UNION 
-SELECT "wp_users" AS table_name, COUNT(*) AS exact_row_count FROM `unct`.`wp_users`
+SELECT "wp_users" AS table_name, COUNT(*) AS exact_row_count FROM `unct`.`wp_users` 
+
 
 
 

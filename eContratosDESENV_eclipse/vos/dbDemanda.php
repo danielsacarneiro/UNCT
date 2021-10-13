@@ -1143,18 +1143,10 @@ class dbDemanda extends dbprocesso {
 		$array = $voContrato->getValoresAtributosObrigatorios($vocontratoInfo);
 		//var_dump($array);
 		static::validarDadosEntidadeArray($array);
-		
 	}
 	
 	static function validarDadosContratada($voDemanda, $vocontratoDemanda){
 		$vopessoa = getVOPessoaContratadaContrato($vocontratoDemanda);
-		/*$vopessoa = new vopessoa();		
-		if(!isAtributoValido($vopessoa->tel)){
-			throw new excecaoGenerica("Fechamento não permitido: preencha os campos da contratada em questão, na funcao '".vopessoa::getTituloJSP()."', que se referem à assinatura no SEI|"
-					. $vopessoa->toString() . ".");
-		}*/
-		/*$array = $vopessoa->getValoresAtributosObrigatorios();
-		static::validarDadosEntidadeArray($array);*/		
 		
 		static::validarDadosEntidadeVO($vopessoa);		
 		
@@ -1162,7 +1154,7 @@ class dbDemanda extends dbprocesso {
 		$isTermoAssinadoSEI = existePeloMenosUmItemNoArrayOuString(dominioFaseDemanda::$CD_ASSINADO_SEI, $voDemanda->fase);
 		$isApostilamento = $vocontratoDemanda->cdEspecie == dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_APOSTILAMENTO;
 		if($isTermoAssinadoSEI && $isCaracteristicaInvalida && !$isApostilamento){
-			throw new excecaoGenerica("Fechamento não permitido: preencha os campos da contratada em questão, na funcao '".vopessoa::getTituloJSP()."', que se referem à assinatura no SEI|" 
+			throw new excecaoGenerica("Fechamento não permitido: preencha os campos da contratada em questão, na funcao '".vopessoa::getTituloJSP()."', que se referem à assinatura no SEI.|" 
 					. $vopessoa->toString() . ".");
 		}			
 	}	
@@ -1204,23 +1196,28 @@ class dbDemanda extends dbprocesso {
 			}else if($vocontratoDemanda->cdEspecie != dominioEspeciesContrato::$CD_ESPECIE_CONTRATO_MATER){
 				//validar se o valor foi alterado...pois nao deveria;
 				//$vocontratoDemanda = new vocontrato();
-				//busca o termo vigente anterior
+				//busca o termo vigente anterior				
 				$dataVigencia = somarOuSubtrairDias($vocontratoDemanda->dtVigenciaInicial, 1, "-");
-				$pArrayContratoRetorno = array(clone $vocontratoDemanda, $dataVigencia, true, false, null, true);			
-				$colecao = getContratoVigentePorArray($pArrayContratoRetorno);
-				$registrobanco = $colecao[0];			
+				$pArrayContratoRetorno = array(clone $vocontratoDemanda, $dataVigencia, true, false, null, true);
+				try{
+					$colecao = getContratoVigentePorArray($pArrayContratoRetorno);
+				}catch(excecaoChaveRegistroInexistente $exNaoExiste){
+					$colecao = getContratoMater(clone $vocontratoDemanda);
+				}				
+				
+				$registrobanco = $colecao[0];
 				$voContratoBase = new vocontrato();
 				$voContratoBase->getDadosBanco($registrobanco);
-				
+					
 				$vlGlobalmod = $voContratoBase->vlGlobalSQL;
 				$vlGlobal = $vocontratoDemanda->vlGlobalSQL;
 				if($vlGlobalmod != $vlGlobal){
 					$msg = "Valor GLOBAL do contrato ('".getMoeda($vlGlobal)."') difere do último valor vigente "
-							. $voContratoBase->getCodigoContratoFormatado(true) 
-							. "('".getMoeda($vlGlobalmod)."'). <br>ATENÇÃO: <u>Confirme se o valor do presente termo está de acordo com o 'pdf' gerado</u>.|" 
-							. $vocontratoDemanda->getCodigoContratoFormatado(true) . ".";
-								
-					throw new excecaoGenerica($msg);
+							. $voContratoBase->getCodigoContratoFormatado(true)
+							. "('".getMoeda($vlGlobalmod)."'). <br>ATENÇÃO: <u>Confirme se o valor do presente termo está de acordo com o 'pdf' gerado</u>.|"
+									. $vocontratoDemanda->getCodigoContratoFormatado(true) . ".";
+										
+									throw new excecaoGenerica($msg);
 				}				
 			}
 		}
@@ -1268,6 +1265,7 @@ class dbDemanda extends dbprocesso {
 		$this->validarGenerico($vo);
 		$isSituacaoNovaFechada = $vo->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_FECHADA;
 		$isSituacaoARevisar = $vo->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_A_REVISAR;
+		$isSituacaoArquivar = $vo->situacao == dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_ARQUIVADA;
 		$vocontratoDemanda = $vo->getContrato();
 		
 		if($isSituacaoNovaFechada){
@@ -1278,14 +1276,26 @@ class dbDemanda extends dbprocesso {
 		
 		$jaconsultoucontrato = false;
 		//consulta o contrato nas situacoes abaixo para validacoes
-		if($isSituacaoARevisar || ($isSituacaoNovaFechada && !$naoValidarFechamento)){
+		if($isSituacaoArquivar || $isSituacaoARevisar || ($isSituacaoNovaFechada && !$naoValidarFechamento)){
 			//obriga que o contrato esteja incluido para revisao
-			$vocontratoDemanda = getVOContratoDemandaPorChave($vo);			
+			//so NAO levanta excecao se nao encontrar o contrato, em caso de arquivamento, quando o termo nao deve estar incluido na funcao contratos
+			//considerando que foi arquivado, e nao formalizado
+			$vocontratoDemanda = getVOContratoDemandaPorChave($vo, !$isSituacaoArquivar);			
 			//verifica se o contrato foi incluido em contratoinfo
 			$vocontratoInfo = new voContratoInfo();
 			//$vo = new voDemanda();
 			$isDemandaTipoContrato = $vo->tipo == dominioTipoDemanda::$CD_TIPO_DEMANDA_CONTRATO;
-			if($isDemandaTipoContrato && $vocontratoDemanda != null){			
+			if($isDemandaTipoContrato && $vocontratoDemanda != null){				
+				//se a situacao eh arquivar, mas tem um registro nao desativado de contrato na funcao contratos, algo esta errado
+				if($isSituacaoArquivar && $vocontratoDemanda->inDesativado == 'N'){
+						throw new excecaoGenerica("Remova o termo relacionado na funcao 'contratos', dado seu arquivamento.|"
+								. $vocontratoDemanda->getCodigoContratoFormatado(true));
+				}else if($isSituacaoARevisar){
+					//se a situacao eh arevisar, indica os campos obrigatorios
+					//$vocontratoDemanda = new vocontrato();
+					static::validarDadosEntidadeArray($vocontratoDemanda->getValoresAtributosObrigatoriosSituacaoDemanda(dominioSituacaoDemanda::$CD_SITUACAO_DEMANDA_A_REVISAR));
+				}
+				
 				$vocontratoInfo->anoContrato = $vocontratoDemanda->anoContrato;
 				$vocontratoInfo->cdContrato = $vocontratoDemanda->cdContrato;
 				$vocontratoInfo->tipo = $vocontratoDemanda->tipo;

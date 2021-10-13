@@ -106,13 +106,13 @@ class voMensageriaRegistro extends voentidade {
 		$emailCopia = email_sefaz::$REMETENTE_CONTRATOS;
 	
 		$retorno = static::getMensagemPreambulo($codigoContrato, $vocontratoinfo);
-		$cotacoes = ", junto com as cotações de preços e a anuência da Contratada";
+		$cotacoes = ", incluindo as cotações de preços e a anuência da Contratada";
 		//$vocontratoinfo = new voContratoInfo();
 		if($vocontratoinfo != null && $vocontratoinfo->tipo == dominioTipoContrato::$CD_TIPO_CONVENIO){
 			$cotacoes = "";
 		}
 		
-		$retorno .= "<br><br>Havendo interesse da SEFAZ pela prorrogação, requere-se provocação tempestiva, via SEI, à SAFI$cotacoes.	
+		$retorno .= "<br><br>Havendo interesse da SEFAZ pela prorrogação, requere-se provocação tempestiva, via SEI, à SAFI, devidamente instruído com a documentação pertinente$cotacoes.	
 		<br><br><b>Não sendo possível nova prorrogação, e persistindo a necessidade da contratação, o gestor deverá solicitar novo processo licitatório
 		em tempo hábil, sob pena de encerramento da prestação do serviço</b>.";
 		
